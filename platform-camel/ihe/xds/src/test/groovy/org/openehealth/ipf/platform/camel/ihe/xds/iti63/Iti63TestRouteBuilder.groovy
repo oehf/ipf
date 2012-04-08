@@ -21,7 +21,6 @@ import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
@@ -46,7 +45,7 @@ class Iti63TestRouteBuilder extends SpringRouteBuilder {
         RESPONSE.status = Status.SUCCESS
         RESPONSE.documents << new Document(
                 RESPONSE.documentEntries.get(0),
-                new DataHandler(new LargeDataSource()))
+                new DataHandler('abcd ' * 1500, "text/plain"));
     }
 
     static final long ASYNC_DELAY = 10 * 1000L

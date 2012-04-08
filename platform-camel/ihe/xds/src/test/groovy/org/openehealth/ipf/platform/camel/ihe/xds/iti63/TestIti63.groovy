@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti63;
 
-
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
@@ -27,7 +26,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.platform.camel.ihe.xds.iti63.Iti63TestRouteBuilder
 
 /**
  * Tests for ITI-63.
@@ -58,7 +56,7 @@ class TestIti63 extends StandardTestContainer {
      *   <li> sync and async requests are possible...
      *   <li> ...and not influence each other (they shouldn't),
      *   <li> async requests are really async (exchanges are InOnly and delays do not matter),
-     *   <li> SOAP headers (WSA ReplyTo + TTL) can be set and read,
+     *   <li> SOAP headers (WSA ReplyTo) can be set and read,
      *   <li> XSD and Schematron validations work...
      *   <li> ...and the messages are valid either,
      *   <li> ATNA auditing works.

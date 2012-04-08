@@ -2,7 +2,7 @@
 <xs:schema xmlns="urn:ihe:iti:xds-b:2007" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:ihe:iti:xds-b:2007" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="Document" type="xs:base64Binary">
 		<xs:annotation>
-			<xs:documentation>document attachment for XCF </xs:documentation>
+			<xs:documentation>document attachment for XCF</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 </xs:schema>

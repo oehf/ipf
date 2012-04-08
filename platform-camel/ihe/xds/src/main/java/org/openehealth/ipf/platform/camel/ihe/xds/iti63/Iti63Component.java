@@ -39,7 +39,7 @@ public class Iti63Component extends AbstractWsComponent<WsTransactionConfigurati
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Service", "ihe"),
             Iti63PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Binding_Soap12", "ihe"),
-            false,
+            true,
             "wsdl/iti63.wsdl",
             true,
             false,

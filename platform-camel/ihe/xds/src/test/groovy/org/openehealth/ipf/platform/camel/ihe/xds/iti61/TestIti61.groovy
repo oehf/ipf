@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti61
 
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.Unmarshaller
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
@@ -24,8 +22,6 @@ import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest
-import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
