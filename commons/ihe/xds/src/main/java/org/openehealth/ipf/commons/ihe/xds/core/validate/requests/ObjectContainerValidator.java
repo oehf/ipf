@@ -69,12 +69,17 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         boolean isContinuaHRN = (profile.getInteractionId() == IpfInteractionId.Continua_HRN);
         boolean isIti61       = (profile.getInteractionId() == IpfInteractionId.ITI_61);
 
+        boolean needHash =
+                isContinuaHRN
+                || (profile.getProfile() == ValidationProfile.InteractionProfile.XCA)
+                || (profile.getProfile() == ValidationProfile.InteractionProfile.XCF);
+
         Collections.addAll(validators,
             new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator, 0, isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_HASH, hashValidator,
-                    isContinuaHRN ? 1 : 0,
+                    needHash ? 1 : 0,
                     isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, isIti61 ? 0 : 1),
