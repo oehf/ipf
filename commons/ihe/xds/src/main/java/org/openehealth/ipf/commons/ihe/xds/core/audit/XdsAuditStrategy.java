@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -53,28 +51,22 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends WsAudi
      * @return outcome code.
      */
     public static RFC3881EventOutcomeCodes getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
-        if(response == null) {
-            return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
-        }
-        
-        if(response.getStatus() == Status.SUCCESS) {
-            return RFC3881EventOutcomeCodes.SUCCESS; 
-        }
-
-        List<EbXMLRegistryError> errors = response.getErrors();
-        
-        // error list is empty
-        if((errors == null) || errors.isEmpty()) {
-            return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
-        }
-        
-        // determine the highest severity 
-        for(EbXMLRegistryError error : errors) {
-            if(error.getSeverity() == Severity.ERROR) {
-                return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+        try {
+            if (response.getStatus() == Status.SUCCESS) {
+                return RFC3881EventOutcomeCodes.SUCCESS;
             }
+
+            // determine the highest error severity
+            for (EbXMLRegistryError error : response.getErrors()) {
+                if (error.getSeverity() == Severity.ERROR) {
+                    return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+                }
+            }
+
+            return RFC3881EventOutcomeCodes.MINOR_FAILURE;
+        } catch (Exception e) {
+            return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
         }
-        return RFC3881EventOutcomeCodes.MINOR_FAILURE;
     }
 
 
