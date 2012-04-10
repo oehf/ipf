@@ -108,6 +108,10 @@ public enum ErrorCode {
     /** A community which would have been contacted was not available */
     @XmlEnumValue("XDSUnavailableCommunity") UNAVAILABLE_COMMUNITY("XDSUnavailableCommunity"),
 
+    /* --- codes for XCF --- */
+    /** The requested document cannot be provided due to a transcoding/translation error. */
+    @XmlEnumValue("TranscodingError") TRANSCODING_ERROR("TranscodingError"),
+
     /* --- codes for ITI-16 (obsolete XDS.a profile) --- */
     /** An error occurred when executing an SQL query. */
     @XmlEnumValue("XDSSqlError") SQL_ERROR("XDSSqlError"),
