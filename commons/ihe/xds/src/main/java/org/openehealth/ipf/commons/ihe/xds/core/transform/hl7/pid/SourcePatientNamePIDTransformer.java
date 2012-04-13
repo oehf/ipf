@@ -44,6 +44,7 @@ public class SourcePatientNamePIDTransformer implements PIDTransformer {
         name.setSecondAndFurtherGivenNames(HL7.get(parts, 3, true));
         name.setSuffix(HL7.get(parts, 4, true));
         name.setPrefix(HL7.get(parts, 5, true));
+        name.setDegree(HL7.get(parts, 6, true));
         
         patientInfo.setName(name);
     }
@@ -59,7 +60,8 @@ public class SourcePatientNamePIDTransformer implements PIDTransformer {
                     HL7.escape(name.getGivenName()),
                     HL7.escape(name.getSecondAndFurtherGivenNames()),
                     HL7.escape(name.getSuffix()),
-                    HL7.escape(name.getPrefix()));
+                    HL7.escape(name.getPrefix()),
+                    HL7.escape(name.getDegree()));
         }
         return null;
     }

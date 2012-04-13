@@ -32,7 +32,7 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 public class PersonTransformer {
-    private final AssigningAuthorityTransformer assigningAuthorityTransformer = 
+    private final AssigningAuthorityTransformer assigningAuthorityTransformer =
         new AssigningAuthorityTransformer();
     
     /**
@@ -62,16 +62,12 @@ public class PersonTransformer {
         String secondAndFurtherGivenNames = HL7.get(parts, 4, true);
         String suffix = HL7.get(parts, 5, true);
         String prefix = HL7.get(parts, 6, true);
-        
+        String degree = HL7.get(parts, 7, true);
+
         Name name = null;
         if (familyName != null || givenName != null || secondAndFurtherGivenNames != null 
-                || suffix != null || prefix != null) {
-            name = new Name();
-            name.setFamilyName(familyName);
-            name.setGivenName(givenName);
-            name.setSecondAndFurtherGivenNames(secondAndFurtherGivenNames);
-            name.setSuffix(suffix);
-            name.setPrefix(prefix);
+                || suffix != null || prefix != null || degree != null) {
+            name = new Name(familyName, givenName, secondAndFurtherGivenNames, suffix, prefix, degree);
         }
 
         if (id != null || name != null) {
@@ -120,7 +116,7 @@ public class PersonTransformer {
                 HL7.escape(name.getSecondAndFurtherGivenNames()),
                 HL7.escape(name.getSuffix()), 
                 HL7.escape(name.getPrefix()),
-                null,
+                HL7.escape(name.getDegree()),
                 null,
                 assigningAuthority);
     }

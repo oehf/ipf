@@ -179,7 +179,7 @@ public abstract class EbrsTestUtils {
      * @return the new name instance.
      */
     public static Name createName(int idx) {
-        return new Name("familyName " + idx, "givenName " + idx, "prefix " + idx, "second " + idx, "suffix " + idx);
+        return new Name("familyName " + idx, "givenName " + idx, "prefix " + idx, "second " + idx, "suffix " + idx, "degree " + idx);
     }
 
     /**

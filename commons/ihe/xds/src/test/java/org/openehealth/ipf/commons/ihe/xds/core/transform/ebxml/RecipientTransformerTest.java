@@ -44,7 +44,7 @@ public class RecipientTransformerTest {
         
         AssigningAuthority assigningAuthority2 = new AssigningAuthority("namespace2", "uni2", "uniType2");        
         Identifiable id = new Identifiable("personId", assigningAuthority2);        
-        Name name = new Name("familyName", "givenName", "second", "suffix", "prefix");
+        Name name = new Name("familyName", "givenName", "second", "suffix", "prefix", "degree");
         Person person = new Person(id, name);
 
         recipient = new Recipient();
@@ -57,7 +57,7 @@ public class RecipientTransformerTest {
         String ebXML = transformer.toEbXML(recipient);
         assertNotNull(ebXML);
         
-        assertEquals("orgName^^^^^namespace1&uni1&uniType1^^^^orgId|personId^familyName^givenName^second^suffix^prefix^^^namespace2&uni2&uniType2", 
+        assertEquals("orgName^^^^^namespace1&uni1&uniType1^^^^orgId|personId^familyName^givenName^second^suffix^prefix^degree^^namespace2&uni2&uniType2",
                 ebXML);
     }
     
@@ -76,7 +76,7 @@ public class RecipientTransformerTest {
         String ebXML = transformer.toEbXML(recipient);
         assertNotNull(ebXML);
         
-        assertEquals("|personId^familyName^givenName^second^suffix^prefix^^^namespace2&uni2&uniType2", 
+        assertEquals("|personId^familyName^givenName^second^suffix^prefix^degree^^namespace2&uni2&uniType2",
                 ebXML);
     }
     
@@ -93,13 +93,13 @@ public class RecipientTransformerTest {
     @Test
     public void testFromEbXML() {
         assertEquals(recipient, 
-                transformer.fromEbXML("orgName^^^^^namespace1&uni1&uniType1^^^^orgId|personId^familyName^givenName^second^suffix^prefix^^^namespace2&uni2&uniType2"));
+                transformer.fromEbXML("orgName^^^^^namespace1&uni1&uniType1^^^^orgId|personId^familyName^givenName^second^suffix^prefix^degree^^namespace2&uni2&uniType2"));
     }
     
     @Test
     public void testFromEbXMLOldStyleXON() {
         assertEquals(recipient, 
-                transformer.fromEbXML("orgName^^orgId^^^namespace1&uni1&uniType1|personId^familyName^givenName^second^suffix^prefix^^^namespace2&uni2&uniType2"));
+                transformer.fromEbXML("orgName^^orgId^^^namespace1&uni1&uniType1|personId^familyName^givenName^second^suffix^prefix^degree^^namespace2&uni2&uniType2"));
     }
     
     @Test
@@ -113,7 +113,7 @@ public class RecipientTransformerTest {
     public void testFromEbXMLNoOrganization() {
         recipient.setOrganization(null);
         assertEquals(recipient, 
-                transformer.fromEbXML("|personId^familyName^givenName^second^suffix^prefix^^^namespace2&uni2&uniType2"));
+                transformer.fromEbXML("|personId^familyName^givenName^second^suffix^prefix^degree^^namespace2&uni2&uniType2"));
     }
     
     @Test

@@ -150,25 +150,25 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertSlot(SLOT_NAME_SIZE, slots, "174");
         assertSlot(SLOT_NAME_SOURCE_PATIENT_ID, slots, "id 4^^^namespace 4&uni 4&uniType 4");
         assertSlot(SLOT_NAME_URI, slots, "1|uri");
-        assertSlot(SLOT_NAME_LEGAL_AUTHENTICATOR, slots, "id 2^familyName 2^givenName 2^prefix 2^second 2^suffix 2^^^namespace 2&uni 2&uniType 2");
+        assertSlot(SLOT_NAME_LEGAL_AUTHENTICATOR, slots, "id 2^familyName 2^givenName 2^prefix 2^second 2^suffix 2^degree 2^^namespace 2&uni 2&uniType 2");
         assertSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, slots, "repo1");
         assertSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slots, 
                 "PID-3|id 5^^^namespace 5&uni 5&uniType 5",
                 "PID-3|id 6^^^namespace 6&uni 6&uniType 6",
-                "PID-5|familyName 3^givenName 3^prefix 3^second 3^suffix 3",
+                "PID-5|familyName 3^givenName 3^prefix 3^second 3^suffix 3^degree 3",
                 "PID-7|dateOfBirth",
                 "PID-8|F",
                 "PID-11|streetAddress^otherDesignation^city^stateOrProvince^zipOrPostalCode^country^^^countyParishCode");
         
         
         EbXMLClassification classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
-        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^^^namespace 1&uni 1&uniType 1");
+        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^degree 1^^namespace 1&uni 1&uniType 1");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
         assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1", "spec2");
         
         classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 1, "", -1);
-        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^^^namespace 30&uni 30&uniType 30");
+        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^degree 30^^namespace 30&uni 30&uniType 30");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst3", "inst4");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role3", "role4");
         assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec3", "spec4");

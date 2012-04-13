@@ -56,6 +56,10 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends WsAudi
                 return RFC3881EventOutcomeCodes.SUCCESS;
             }
 
+            if (response.getErrors().isEmpty()) {
+                return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+            }
+
             // determine the highest error severity
             for (EbXMLRegistryError error : response.getErrors()) {
                 if (error.getSeverity() == Severity.ERROR) {

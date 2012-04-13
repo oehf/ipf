@@ -41,7 +41,7 @@ public class Person implements Serializable {
     private static final long serialVersionUID = 1775227207521668959L;
     
     private Identifiable id;        // XCN.1 and XCN.9
-    private Name name;              // XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6
+    private Name name;              // XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7
 
     /**
      * Constructs a person.
@@ -53,7 +53,7 @@ public class Person implements Serializable {
      * @param id
      *          the id of the person (XCN.1 and XCN.9).
      * @param name
-     *          the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6).
+     *          the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7).
      */
     public Person(Identifiable id, Name name) {
         this.id = id;
@@ -76,7 +76,7 @@ public class Person implements Serializable {
     }
 
     /**
-     * @return the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6).
+     * @return the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7).
      */
     public Name getName() {
         return name;
@@ -84,7 +84,7 @@ public class Person implements Serializable {
 
     /**
      * @param name
-     *          the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6).
+     *          the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7).
      */
     public void setName(Name name) {
         this.name = name;

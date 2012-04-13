@@ -18,6 +18,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -33,18 +36,21 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Name", propOrder = {"prefix", "givenName", "secondAndFurtherGivenNames", "familyName", "suffix"})
+@XmlType(name = "Name", propOrder = {"prefix", "givenName", "secondAndFurtherGivenNames",
+        "familyName", "suffix", "degree"})
+@EqualsAndHashCode(callSuper = false, doNotUseGetters = true)
 public class Name implements Serializable {
     private static final long serialVersionUID = -3455779057944896901L;
 
     @XmlElement(name = "family")
-    private String familyName;                  // XCN.2.1, XPN.1.1
+    @Getter @Setter private String familyName;                  // XCN.2.1, XPN.1.1
     @XmlElement(name = "given")
-    private String givenName;                   // XCN.3, XPN.2
+    @Getter @Setter private String givenName;                   // XCN.3, XPN.2
     @XmlElement(name = "secondAndFurtherGiven")
-    private String secondAndFurtherGivenNames;  // XCN.4, XPN.3
-    private String suffix;                      // XCN.5, XPN.4
-    private String prefix;                      // XCN.6, XPN.5
+    @Getter @Setter private String secondAndFurtherGivenNames;  // XCN.4, XPN.3
+    @Getter @Setter private String suffix;                      // XCN.5, XPN.4
+    @Getter @Setter private String prefix;                      // XCN.6, XPN.5
+    @Getter @Setter private String degree;                      // XCN.7, XPN.6
 
     /**
      * Constructs a name.
@@ -72,141 +78,18 @@ public class Name implements Serializable {
      *          the suffix (XCN.5/XPN.4).
      * @param prefix
      *          the prefix (XCN.6/XPN.5).
+     * @param degree
+     *          academical degree (XCN.7/XPN.6).
      */
-    public Name(String familyName, String givenName, String secondAndFurtherGivenNames, String suffix, String prefix) {
+    public Name(String familyName, String givenName, String secondAndFurtherGivenNames, String suffix, String prefix, String degree) {
         this.familyName = familyName;
         this.givenName = givenName;
         this.secondAndFurtherGivenNames = secondAndFurtherGivenNames;
         this.suffix = suffix;
         this.prefix = prefix;
+        this.degree = degree;
     }
 
-    /**
-     * @return the family name (XCN.2.1/XPN.1.1).
-     */
-    public String getFamilyName() {
-        return familyName;
-    }
-    
-    /**
-     * @param familyName
-     *          the family name (XCN.2.1/XPN.1.1).
-     */
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
-    }
-    
-    /**
-     * @return the given name (XCN.3/XPN.2).
-     */
-    public String getGivenName() {
-        return givenName;
-    }
-    
-    /**
-     * @param givenName
-     *          the given name (XCN.3/XPN.2).
-     */
-    public void setGivenName(String givenName) {
-        this.givenName = givenName;
-    }
-    
-    /**
-     * @return the second and further names (XCN.4/XPN.3).
-     */
-    public String getSecondAndFurtherGivenNames() {
-        return secondAndFurtherGivenNames;
-    }
-
-    /**
-     * @param secondAndFurtherGivenNames
-     *          the second and further names (XCN.4/XPN.3).
-     */
-    public void setSecondAndFurtherGivenNames(String secondAndFurtherGivenNames) {
-        this.secondAndFurtherGivenNames = secondAndFurtherGivenNames;
-    }
-
-    /**
-     * @return the suffix (XCN.5/XPN.4).
-     */
-    public String getSuffix() {
-        return suffix;
-    }
-    
-    /**
-     * @param suffix
-     *          the suffix (XCN.5/XPN.4).
-     */
-    public void setSuffix(String suffix) {
-        this.suffix = suffix;
-    }
-    
-    /**
-     * @return the prefix (XCN.6/XPN.5).
-     */
-    public String getPrefix() {
-        return prefix;
-    }
-
-    /**
-     * @param prefix
-     *          the prefix (XCN.6/XPN.5).
-     */
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((familyName == null) ? 0 : familyName.hashCode());
-        result = prime * result + ((givenName == null) ? 0 : givenName.hashCode());
-        result = prime * result + ((prefix == null) ? 0 : prefix.hashCode());
-        result = prime
-                * result
-                + ((secondAndFurtherGivenNames == null) ? 0 : secondAndFurtherGivenNames.hashCode());
-        result = prime * result + ((suffix == null) ? 0 : suffix.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Name other = (Name) obj;
-        if (familyName == null) {
-            if (other.familyName != null)
-                return false;
-        } else if (!familyName.equals(other.familyName))
-            return false;
-        if (givenName == null) {
-            if (other.givenName != null)
-                return false;
-        } else if (!givenName.equals(other.givenName))
-            return false;
-        if (prefix == null) {
-            if (other.prefix != null)
-                return false;
-        } else if (!prefix.equals(other.prefix))
-            return false;
-        if (secondAndFurtherGivenNames == null) {
-            if (other.secondAndFurtherGivenNames != null)
-                return false;
-        } else if (!secondAndFurtherGivenNames.equals(other.secondAndFurtherGivenNames))
-            return false;
-        if (suffix == null) {
-            if (other.suffix != null)
-                return false;
-        } else if (!suffix.equals(other.suffix))
-            return false;
-        return true;
-    }
-    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

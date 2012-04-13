@@ -40,7 +40,7 @@ public class PersonTransformerTest {
 
         AssigningAuthority assigningAuthority = new AssigningAuthority("he&llo", "1.2&.3.4", "WU&RZ");
         Identifiable id = new Identifiable("u^fz", assigningAuthority);
-        Name name = new Name("Seu&fzer", "Em&il", "Ant|on", "der&7.", "D&r.");
+        Name name = new Name("Seu&fzer", "Em&il", "Ant|on", "der&7.", "D&r.", null);
         person = new Person(id, name);
     }
     
