@@ -67,7 +67,11 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
             doc.setRequestData(requestData);
             doc.setNewRepositoryUniqueId(documentResponse.getNewRepositoryUniqueId());
             doc.setNewDocumentUniqueId(documentResponse.getNewDocumentUniqueId());
-            doc.setMimeType(documentResponse.getMimeType());
+            if (documentResponse.getMimeType() != null) {
+                doc.setMimeType(documentResponse.getMimeType());
+            } else if (documentResponse.getDocument() != null) {
+                doc.setMimeType(documentResponse.getDocument().getContentType());
+            }
 
             docs.add(doc);
         }
@@ -83,7 +87,11 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
                 documentResponse.setDocument(doc.getDataHandler());
                 documentResponse.setNewRepositoryUniqueId(doc.getNewRepositoryUniqueId());
                 documentResponse.setNewDocumentUniqueId(doc.getNewDocumentUniqueId());
-                documentResponse.setMimeType(doc.getMimeType());
+                if (doc.getMimeType() != null) {
+                    documentResponse.setMimeType(doc.getMimeType());
+                } else if (doc.getDataHandler() != null) {
+                    documentResponse.setMimeType(doc.getDataHandler().getContentType());
+                }
                 RetrieveDocument requestData = doc.getRequestData();
                 if (requestData != null) {
                     documentResponse.setDocumentUniqueId(requestData.getDocumentUniqueId());
