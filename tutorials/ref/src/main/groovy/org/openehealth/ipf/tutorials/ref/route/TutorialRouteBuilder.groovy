@@ -53,7 +53,10 @@ class TutorialRouteBuilder extends SpringRouteBuilder {
         // ------------------------------------------------------------
         //  Validate order
         // ------------------------------------------------------------
-        
+            
+        //  The 'validation' DSL in the 'direct:received' route, returns as
+        //  output of 'direct:received', output of the 'direct:validation' route.
+        //  This is how the IPF 'validation' DSL works.    
         from('direct:received')
             .convertBodyTo(String.class)
             .validation('direct:validation')
@@ -61,11 +64,14 @@ class TutorialRouteBuilder extends SpringRouteBuilder {
         
         from('direct:validation')
             .onException(ValidationException.class)
+                .handled(true)
                 .transform().exceptionMessage()
                 .responseCode().constant(400)
-                .to(appErrorUri).end()
+                .to(appErrorUri)
+                .end()
             .to('validator:order/order.xsd')
             .transmogrify {'message valid'}
+           
         
         // ------------------------------------------------------------
         //  Process order
