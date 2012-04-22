@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/tutorials-ref"/>
+<listEntry value="/ipf-tutorials-ref"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
@@ -12,7 +12,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.apache.derby.drda.NetworkServerControl"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="start -noSecurityManager"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="tutorials-ref"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ipf-tutorials-ref"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.maven.ide.eclipse.launchconfig.sourcepathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dderby.drda.maxThreads=50&#13;&#10;-Dcom.sun.management.jmxremote.port=1810&#13;&#10;-Dcom.sun.management.jmxremote.authenticate=false&#13;&#10;-Dcom.sun.management.jmxremote.ssl=false"/>
 </launchConfiguration>
