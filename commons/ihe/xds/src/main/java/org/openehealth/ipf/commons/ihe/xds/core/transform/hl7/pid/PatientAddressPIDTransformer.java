@@ -17,27 +17,29 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Address;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.AddressTransformer;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Transforms a PID-11 conforming string into a {@link PatientInfo} instance. 
  * @author Jens Riemschneider
  */
 public class PatientAddressPIDTransformer implements PIDTransformer {
-    private final AddressTransformer addressTransformer = new AddressTransformer();
 
     @Override
     public void fromHL7(String hl7Data, PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
-        
-        patientInfo.setAddress(addressTransformer.fromHL7(hl7Data));
+        patientInfo.setAddress(Hl7v2Based.parse(hl7Data, Address.class));
     }
 
     @Override
-    public String toHL7(PatientInfo patientInfo) {
+    public List<String> toHL7(PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
-        
-        return addressTransformer.toHL7(patientInfo.getAddress());
+        String address = Hl7v2Based.render(patientInfo.getAddress());
+        return (address == null) ? null : Collections.singletonList(address);
     }
 }

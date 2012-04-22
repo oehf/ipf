@@ -26,13 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExternalIdentifier;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 /**
  * Test framework methods for ebXML related classes.
@@ -179,7 +173,7 @@ public abstract class EbrsTestUtils {
      * @return the new name instance.
      */
     public static Name createName(int idx) {
-        return new Name("familyName " + idx, "givenName " + idx, "prefix " + idx, "second " + idx, "suffix " + idx, "degree " + idx);
+        return new XpnName("familyName " + idx, "givenName " + idx, "prefix " + idx, "second " + idx, "suffix " + idx, "degree " + idx);
     }
 
     /**

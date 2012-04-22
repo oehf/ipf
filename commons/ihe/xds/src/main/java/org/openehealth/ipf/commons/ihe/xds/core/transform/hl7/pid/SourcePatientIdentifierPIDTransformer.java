@@ -15,63 +15,47 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import ca.uhn.hl7v2.parser.PipeParser;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.AssigningAuthorityTransformer;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Transforms a PID-3 conforming string into a {@link PatientInfo} instance. 
  * @author Jens Riemschneider
  */
 public class SourcePatientIdentifierPIDTransformer implements PIDTransformer {
-    private final AssigningAuthorityTransformer assigningAuthorityTransformer = 
-        new AssigningAuthorityTransformer();
 
     @Override
     public void fromHL7(String hl7Data, PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
         
-        List<String> repetitions = HL7.parse(HL7Delimiter.REPETITION, hl7Data);
-        for (String hl7id : repetitions) {        
-            List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7id);
-            
-            String idNumber = HL7.get(parts, 1, true);            
-            AssigningAuthority assigningAuthority = 
-                assigningAuthorityTransformer.fromHL7(HL7.get(parts, 4, false));
-
-            if (idNumber != null || assigningAuthority != null) {
-                Identifiable id = new Identifiable();
-                id.setId(idNumber);
-                id.setAssigningAuthority(assigningAuthority);
-            
+        String[] repetitions = PipeParser.split(hl7Data, "~");
+        for (String hl7id : repetitions) {
+            Identifiable id = Hl7v2Based.parse(hl7id, Identifiable.class);
+            if (id != null) {
                 patientInfo.getIds().add(id);
             }
         }
     }
 
     @Override
-    public String toHL7(PatientInfo patientInfo) {
-        List<String> parts = new ArrayList<String>();
+    public List<String> toHL7(PatientInfo patientInfo) {
+        notNull(patientInfo, "patientInfo cannot be null");
+
+        List<String> result = new ArrayList<String>();
         for (Identifiable id : patientInfo.getIds()) {
-            String part = HL7.render(HL7Delimiter.COMPONENT, 
-                    HL7.escape(id.getId()),
-                    null,
-                    null,
-                    assigningAuthorityTransformer.toHL7(id.getAssigningAuthority()));
-            
+            String part = Hl7v2Based.render(id);
             if (part != null) {
-                parts.add(part);
+                result.add(part);
             }
         }
-        
-        return HL7.render(HL7Delimiter.REPETITION, parts.toArray(new String[parts.size()]));
+
+        return result.isEmpty() ? null : result;
     }
 }

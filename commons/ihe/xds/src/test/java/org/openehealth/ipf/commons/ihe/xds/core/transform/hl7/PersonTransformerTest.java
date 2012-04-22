@@ -20,71 +20,65 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 /**
- * Tests for {@link PersonTransformer}.
+ * Tests for transformations between HL7 v2 and {@link Person}.
  * @author Jens Riemschneider
  */
 public class PersonTransformerTest {
-    private PersonTransformer transformer;
     private Person person;
 
     @Before
     public void setUp() {
-        transformer = new PersonTransformer();
-
         AssigningAuthority assigningAuthority = new AssigningAuthority("he&llo", "1.2&.3.4", "WU&RZ");
         Identifiable id = new Identifiable("u^fz", assigningAuthority);
-        Name name = new Name("Seu&fzer", "Em&il", "Ant|on", "der&7.", "D&r.", null);
+        Name name = new XcnName("Seu&fzer", "Em&il", "Ant|on", "der&7.", "D&r.", null);
         person = new Person(id, name);
     }
     
     @Test
     public void testToHL7() {
         assertEquals("u\\S\\fz^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ", 
-                transformer.toHL7(person));
+                Hl7v2Based.render(person));
     }
 
     @Test
     public void testToHL7NoName() {
         person.setName(null);
         assertEquals("u\\S\\fz^^^^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ", 
-                transformer.toHL7(person));
+                Hl7v2Based.render(person));
     }
 
     @Test
     public void testToHL7NoID() {
         person.setId(null);
-        assertEquals("^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.", transformer.toHL7(person));
+        assertEquals("^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.", Hl7v2Based.render(person));
     }
 
     @Test
     public void testToHL7Empty() {
-        assertNull(transformer.toHL7(new Person()));
+        assertNull(Hl7v2Based.render(new Person()));
     }
     
     @Test
     public void testToHL7WithNullParam() {
-        assertNull(transformer.toHL7(null));
+        assertNull(Hl7v2Based.render(null));
     }
     
 
     @Test
     public void testFromHL7() {
-        Person result = transformer.fromHL7(
-                "u\\S\\fz^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ");
+        Person result = Hl7v2Based.parse(
+                "u\\S\\fz^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ",
+                Person.class);
 
         assertEquals(person, result);
     }
 
     @Test
     public void testFromHL7NoIDNumber() {
-        Person result = transformer.fromHL7("^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.");
+        Person result = Hl7v2Based.parse("^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.", Person.class);
 
         person.setId(null);
         assertEquals(person, result);
@@ -92,7 +86,7 @@ public class PersonTransformerTest {
     
     @Test
     public void testFromHL7NoName() {
-        Person result = transformer.fromHL7("u\\S\\fz^^^^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ");
+        Person result = Hl7v2Based.parse("u\\S\\fz^^^^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ", Person.class);
 
         person.setName(null);
         assertEquals(person, result);
@@ -100,11 +94,11 @@ public class PersonTransformerTest {
     
     @Test
     public void testFromHL7Empty() {
-        assertNull(transformer.fromHL7(""));
+        assertNull(Hl7v2Based.parse("", Person.class));
     }
 
     @Test
     public void testFromHL7WithNullParam() {
-        assertNull(transformer.fromHL7(null));
+        assertNull(Hl7v2Based.parse(null, Person.class));
     }    
 }

@@ -219,7 +219,8 @@ public abstract class SampleData {
         recipient.setOrganization(new Organization("org", null, null));
         
         Author author = new Author();
-        author.setAuthorPerson(new Person(new Identifiable("id1", new AssigningAuthority("1.1")), new Name("Otto")));
+        author.setAuthorPerson(new Person(new Identifiable("id1", new AssigningAuthority("1.1")),
+                new XpnName("Otto", null, null, null, null, null)));
 
         SubmissionSet submissionSet = new SubmissionSet();
         submissionSet.getAuthors().add(author);
@@ -244,7 +245,9 @@ public abstract class SampleData {
      */
     public static DocumentEntry createDocumentEntry(Identifiable patientID) {
         Author author = new Author();
-        author.setAuthorPerson(new Person(new Identifiable("id2", new AssigningAuthority("1.2")), new Name("Norbi")));
+        Name name = new XpnName();
+        name.setFamilyName("Norbi");
+        author.setAuthorPerson(new Person(new Identifiable("id2", new AssigningAuthority("1.2")), name));
         author.getAuthorInstitution().add(new Organization("authorOrg", null, null));
         
         Address address = new Address();
@@ -254,7 +257,7 @@ public abstract class SampleData {
         patientInfo.setAddress(address);
         patientInfo.setDateOfBirth("12334");
         patientInfo.setGender("M");
-        patientInfo.setName(new Name("Susi"));
+        patientInfo.setName(new XpnName("Susi", null, null, null, null, null));
         
         DocumentEntry docEntry = new DocumentEntry();
         docEntry.getAuthors().add(author);
@@ -269,7 +272,8 @@ public abstract class SampleData {
         docEntry.setHash("1234567890123456789012345678901234567890");
         docEntry.setHealthcareFacilityTypeCode(new Code("code4", new LocalizedString("code4"), "scheme4"));
         docEntry.setLanguageCode("en-US");
-        docEntry.setLegalAuthenticator(new Person(new Identifiable("legal", new AssigningAuthority("1.7")), new Name("Gustav")));
+        docEntry.setLegalAuthenticator(new Person(new Identifiable("legal", new AssigningAuthority("1.7")),
+                new XpnName("Gustav", null, null, null, null, null)));
         docEntry.setMimeType("application/octet-stream");
         docEntry.setPatientId(patientID);
         docEntry.setPracticeSettingCode(new Code("code5", new LocalizedString("code5"), "scheme5"));

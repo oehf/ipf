@@ -18,16 +18,15 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindSubmissionSetsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.IdentifiableTransformer;
 
 /**
  * Transforms between {@link FindSubmissionSetsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class FindSubmissionSetsQueryTransformer {
-    private final IdentifiableTransformer identifiableTransformer = 
-        new IdentifiableTransformer();
 
     /**
      * Transforms the query into its EbXML representation.
@@ -48,8 +47,7 @@ public class FindSubmissionSetsQueryTransformer {
         ebXML.setId(query.getType().getId());
         ebXML.setHome(query.getHomeCommunityId());
 
-        String value = identifiableTransformer.toEbXML(query.getPatientId());
-        slots.fromString(SUBMISSION_SET_PATIENT_ID, value);
+        slots.fromString(SUBMISSION_SET_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         
         slots.fromStringList(SUBMISSION_SET_SOURCE_ID, query.getSourceIds());
         
@@ -80,7 +78,7 @@ public class FindSubmissionSetsQueryTransformer {
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         String patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
-        query.setPatientId(identifiableTransformer.fromEbXML(patientId));
+        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
         
         query.setSourceIds(slots.toStringList(SUBMISSION_SET_SOURCE_ID));
         

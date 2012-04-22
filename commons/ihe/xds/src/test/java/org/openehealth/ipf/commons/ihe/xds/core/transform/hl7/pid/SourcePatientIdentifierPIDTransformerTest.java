@@ -24,7 +24,6 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.SourcePatientIdentifierPIDTransformer;
 
 /**
  * Tests for {@link SourcePatientIdentifierPIDTransformer}.
@@ -57,7 +56,11 @@ public class SourcePatientIdentifierPIDTransformerTest {
         
         patientInfo.getIds().add(id1);
         patientInfo.getIds().add(id2);
-        assertEquals("id1^^^1.1.1.1&&ISO~id2^^^2.2.2.2&&ISO", transformer.toHL7(patientInfo));
+
+        List<String> result = transformer.toHL7(patientInfo);
+        assertEquals(2, result.size());
+        assertEquals("id1^^^1.1.1.1&&ISO", result.get(0));
+        assertEquals("id2^^^2.2.2.2&&ISO", result.get(1));
     }
 
     @Test

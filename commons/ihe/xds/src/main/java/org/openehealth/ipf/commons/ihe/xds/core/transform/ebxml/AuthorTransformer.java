@@ -20,11 +20,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.OrganizationTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +33,6 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 public class AuthorTransformer {
-    private final PersonTransformer personTransformer = new PersonTransformer();
-    private final OrganizationTransformer organizationTransformer = new OrganizationTransformer();
     private final EbXMLFactory factory;
     
     /**
@@ -66,14 +63,14 @@ public class AuthorTransformer {
         EbXMLClassification classification = factory.createClassification(objectLibrary);
         classification.setNodeRepresentation("");
 
-        String hl7XCN = personTransformer.toHL7(author.getAuthorPerson());
+        String hl7XCN = Hl7v2Based.render(author.getAuthorPerson());
         if (hl7XCN != null) {
             classification.addSlot(SLOT_NAME_AUTHOR_PERSON, hl7XCN);
         }
 
         List<String> hl7XONs = new ArrayList<String>();
         for (Organization organization : author.getAuthorInstitution()) {
-            String hl7 = organizationTransformer.toHL7(organization);
+            String hl7 = Hl7v2Based.render(organization);
             if (hl7 != null) {
                 hl7XONs.add(hl7);
             }
@@ -108,15 +105,15 @@ public class AuthorTransformer {
         List<String> specialties = classification.getSlotValues(SLOT_NAME_AUTHOR_SPECIALTY);
         
         Person person = null;
-        if (persons.size() > 0 && persons.get(0) != null) {
-            person = personTransformer.fromHL7(persons.get(0));
+        if (persons.size() > 0) {
+            person = Hl7v2Based.parse(persons.get(0), Person.class);
         }
         
         Author author = new Author();        
         author.setAuthorPerson(person);
         
         for (String hl7XON : institutions) {
-            Organization org = organizationTransformer.fromHL7(hl7XON);
+            Organization org = Hl7v2Based.parse(hl7XON, Organization.class);
             if (org != null) {
                 author.getAuthorInstitution().add(org);
             }

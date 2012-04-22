@@ -20,8 +20,6 @@ import org.apache.camel.model.ProcessorDefinition
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException
-import org.openehealth.ipf.tutorials.xds.ContentUtils
-import org.openehealth.ipf.tutorials.xds.SearchDefinition
 import javax.activation.DataHandler
 
 /**

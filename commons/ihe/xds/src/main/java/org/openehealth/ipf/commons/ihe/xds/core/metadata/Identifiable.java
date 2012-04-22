@@ -15,12 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.io.Serializable;
-
+import ca.uhn.hl7v2.model.v25.datatype.CX;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Represents an ID.
@@ -32,23 +35,29 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * to HL7 this indicates that the values are empty. Trailing empty values are 
  * removed from the HL7 string.
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlType(name = "Identifiable", propOrder = {"id", "assigningAuthority"})
-public class Identifiable implements Serializable {
+public class Identifiable extends Hl7v2Based<CX> {
     private static final long serialVersionUID = -3392755556068006520L;
-
-    @XmlAttribute(name = "extension")
-    private String id;                                // CX.1
-    @XmlAttribute(name = "root")
-    @XmlJavaTypeAdapter(value = SimplifiedAssigningAuthorityAdapter.class)
-    private AssigningAuthority assigningAuthority;    // CX.4
 
     /**
      * Constructs an identifiable.
      */
-    public Identifiable() {}
-    
+    public Identifiable() {
+        super(new CX(MESSAGE));
+    }
+
+
+    /**
+     * Constructs an identifiable.
+     */
+    public Identifiable(CX cx) {
+        super(cx);
+    }
+
+
     /**
      * Constructs an identifiable.
      * @param id
@@ -57,38 +66,43 @@ public class Identifiable implements Serializable {
      *          the assigning authority (CX.4).
      */
     public Identifiable(String id, AssigningAuthority assigningAuthority) {
-        this.id = id;
-        this.assigningAuthority = assigningAuthority;
+        this();
+        setId(id);
+        setAssigningAuthority(assigningAuthority);
     }
 
     /**
      * @return the value of the id (CX.1).
      */
+    @XmlAttribute(name = "extension")
     public String getId() {
-        return id;
+        return getHapiObject().getCx1_IDNumber().getValue();
     }
-    
+
     /**
      * @param id
      *          the value of the id (CX.1).
      */
     public void setId(String id) {
-        this.id = id;
+        setValue(getHapiObject().getCx1_IDNumber(), id);
     }
-    
+
     /**
      * @return the assigning authority (CX.4).
      */
+    @XmlAttribute(name = "root")
+    @XmlJavaTypeAdapter(value = SimplifiedAssigningAuthorityAdapter.class)
     public AssigningAuthority getAssigningAuthority() {
-        return assigningAuthority;
+        AssigningAuthority assigningAuthority = new AssigningAuthority(getHapiObject().getCx4_AssigningAuthority());
+        return assigningAuthority.isEmpty() ? null : assigningAuthority;
     }
-    
+
     /**
      * @param assigningAuthority
      *          the assigning authority (CX.4).
      */
     public void setAssigningAuthority(AssigningAuthority assigningAuthority) {
-        this.assigningAuthority = assigningAuthority;
+        setAssigningAuthority(assigningAuthority, getHapiObject().getCx4_AssigningAuthority());
     }
 
     @Override
@@ -96,8 +110,8 @@ public class Identifiable implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result
-                + ((assigningAuthority == null) ? 0 : assigningAuthority.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+                + ((getAssigningAuthority() == null) ? 0 : getAssigningAuthority().hashCode());
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         return result;
     }
 
@@ -110,21 +124,24 @@ public class Identifiable implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Identifiable other = (Identifiable) obj;
-        if (assigningAuthority == null) {
-            if (other.assigningAuthority != null)
+        if (getAssigningAuthority() == null) {
+            if (other.getAssigningAuthority() != null)
                 return false;
-        } else if (!assigningAuthority.equals(other.assigningAuthority))
+        } else if (!getAssigningAuthority().equals(other.getAssigningAuthority()))
             return false;
-        if (id == null) {
-            if (other.id != null)
+        if (getId() == null) {
+            if (other.getId() != null)
                 return false;
-        } else if (!id.equals(other.id))
+        } else if (!getId().equals(other.getId()))
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", getId())
+                .append("assigningAuthority", getAssigningAuthority())
+                .toString();
     }
 }

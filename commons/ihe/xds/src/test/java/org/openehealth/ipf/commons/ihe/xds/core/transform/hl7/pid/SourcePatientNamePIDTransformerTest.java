@@ -21,7 +21,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.SourcePatientNamePIDTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.XcnName;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.XpnName;
 
 /**
  * Tests for {@link SourcePatientNamePIDTransformer}.
@@ -38,7 +39,7 @@ public class SourcePatientNamePIDTransformerTest {
     @Test
     public void testToHL7() {
         PatientInfo patientInfo = new PatientInfo();
-        Name name = new Name();
+        Name name = new XpnName();
         name.setFamilyName("Jo|man");
         name.setGivenName("Jo|chen");
         name.setSecondAndFurtherGivenNames("Jo|achim");
@@ -46,13 +47,13 @@ public class SourcePatientNamePIDTransformerTest {
         name.setPrefix("Jo|dler");
         patientInfo.setName(name);
         assertEquals("Jo\\F\\man^Jo\\F\\chen^Jo\\F\\achim^von Jo\\F\\del^Jo\\F\\dler", 
-                transformer.toHL7(patientInfo));        
+                transformer.toHL7(patientInfo).get(0));
     }
     
     @Test
     public void testToHL7EmptyName() {
         PatientInfo patientInfo = new PatientInfo();
-        patientInfo.setName(new Name());
+        patientInfo.setName(new XcnName());
         assertNull(transformer.toHL7(patientInfo));        
     }
     

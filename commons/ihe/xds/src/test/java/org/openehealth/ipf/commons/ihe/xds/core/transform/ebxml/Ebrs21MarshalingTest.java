@@ -144,14 +144,14 @@ public class Ebrs21MarshalingTest {
     @Test
     public void testFromRealEbXML() throws Exception {
         Author author1 = new Author();
-        author1.setAuthorPerson(new Person(null, new Name("Smitty", "Gerald", null, null, null, null)));
+        author1.setAuthorPerson(new Person(null, new XcnName("Smitty", "Gerald", null, null, null, null)));
         author1.getAuthorInstitution().add(new Organization("Cleveland Clinic"));
         author1.getAuthorInstitution().add(new Organization("Parma Community"));
         author1.getAuthorRole().add("Attending");
         author1.getAuthorSpecialty().add("Orthopedic");
 
         Author author2 = new Author();
-        author2.setAuthorPerson(new Person(null, new Name("Dopplemeyer", "Sherry", null, null, null, null)));
+        author2.setAuthorPerson(new Person(null, new XcnName("Dopplemeyer", "Sherry", null, null, null, null)));
         author2.getAuthorInstitution().add(new Organization("Cleveland Clinic"));
         author2.getAuthorInstitution().add(new Organization("Berea Community"));
         author2.getAuthorRole().add("Primary Surgon");
@@ -169,7 +169,7 @@ public class Ebrs21MarshalingTest {
         sourcePatientInfo.setAddress(address);
         sourcePatientInfo.setDateOfBirth("19560527");
         sourcePatientInfo.setGender("M");
-        sourcePatientInfo.setName(new Name("Doe", "John", null, null, null, null));
+        sourcePatientInfo.setName(new XcnName("Doe", "John", null, null, null, null));
         
         DocumentEntry docEntry = new DocumentEntry();
         docEntry.getAuthors().add(author1);

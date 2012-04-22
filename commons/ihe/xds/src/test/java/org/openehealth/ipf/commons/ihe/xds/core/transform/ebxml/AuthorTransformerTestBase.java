@@ -26,13 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 /**
  * Tests for {@link AuthorTransformer}.
@@ -49,7 +43,7 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         transformer = new AuthorTransformer(factory);
         objectLibrary = factory.createObjectLibrary();
         
-        Name name = new Name();
+        Name name = new XcnName();
         name.setFamilyName("Adams");
 
         AssigningAuthority assigningAuthority = new AssigningAuthority();

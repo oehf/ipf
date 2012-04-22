@@ -22,7 +22,6 @@ import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.UriTransformer;
 
 /**
  * Tests for {@link UriTransformer}.

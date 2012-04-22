@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.xml.bind.annotation.*;
 
 /**
- * Represents an association between two documents.
+ * Represents an XDS association.
  * <p>
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider

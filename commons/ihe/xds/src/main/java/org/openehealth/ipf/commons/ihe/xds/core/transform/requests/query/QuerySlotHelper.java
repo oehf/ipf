@@ -18,12 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import static org.apache.commons.lang3.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 
@@ -96,7 +91,7 @@ public class QuerySlotHelper {
         
         List<String> slotValues = new ArrayList<String>();
         for (Code code : codes) {
-            String hl7CE = fromCodeToHL7CE(code);
+            String hl7CE = Hl7v2Based.render(code);
             slotValues.add(encodeAsStringList(hl7CE));
         }
         ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[slotValues.size()]));
@@ -358,27 +353,6 @@ public class QuerySlotHelper {
         return documentEntryTypes;
     }
 
-    private String fromCodeToHL7CE(Code code) {
-        if (code == null) {
-            return null;
-        }
-        return HL7.render(HL7Delimiter.COMPONENT, 
-                HL7.escape(code.getCode()),
-                null,
-                HL7.escape(code.getSchemeName()));
-    }
-    
-    private Code toCodeFromHL7CE(String hl7CE) {
-        if (hl7CE == null) {
-            return null;
-        }
-        List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7CE);
-        return new Code(
-                HL7.get(parts, 1, true), 
-                null, 
-                HL7.get(parts, 3, true));
-    }
-
     private List<Code> toCode(List<String> slotValues) {
         if (slotValues.isEmpty()) {
             return null;
@@ -387,7 +361,7 @@ public class QuerySlotHelper {
         List<Code> codes = new ArrayList<Code>();
         for (String slotValue : slotValues) {
             for (String hl7CE : decodeStringList(slotValue)) {
-                codes.add(toCodeFromHL7CE(hl7CE));
+                codes.add(Hl7v2Based.parse(hl7CE, Code.class));
             }
         }
         return codes;
@@ -422,7 +396,8 @@ public class QuerySlotHelper {
         if (list == null) {
             return null;
         }
-        
+
+        list = list.trim();
         if (list.startsWith("(") && list.endsWith(")")) {
             list = list.substring(1, list.length() - 1);
         }

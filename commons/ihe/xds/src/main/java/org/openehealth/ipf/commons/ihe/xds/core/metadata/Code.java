@@ -15,38 +15,43 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import java.io.Serializable;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import ca.uhn.hl7v2.model.v25.datatype.CE;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Represents a code.
  * <p> 
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlType(name = "Code", propOrder = {"code", "schemeName", "displayName"})
-public class Code implements Serializable {
+public class Code extends Hl7v2Based<CE> {
     private static final long serialVersionUID = 7603534956639945984L;
-    
-    @XmlAttribute
-    private String code;
-    @XmlAttribute
-    @XmlJavaTypeAdapter(value = SimplifiedLocalizedStringAdapter.class)
-    private LocalizedString displayName;
-    @XmlAttribute(name="codeSystemName")
-    private String schemeName;
-    
+
+    private LocalizedString localizedString;
+
+
     /**
      * Constructs a code.
      */
-    public Code() {}
-    
+    public Code() {
+        super(new CE(MESSAGE));
+    }
+
+    /**
+     * Constructs a code.
+     */
+    public Code(CE ce) {
+        super(ce);
+    }
+
     /**
      * Constructs a code.
      * @param code
@@ -57,16 +62,18 @@ public class Code implements Serializable {
      *          the schema of the code.
      */
     public Code(String code, LocalizedString displayName, String schemeName) {
-        this.code = code;
-        this.displayName = displayName;
-        this.schemeName = schemeName;
+        this();
+        setCode(code);
+        setDisplayName(displayName);
+        setSchemeName(schemeName);
     }
 
     /**
      * @return the value of this code.
      */
+    @XmlAttribute
     public String getCode() {
-        return code;
+        return getHapiObject().getCe1_Identifier().getValue();
     }
     
     /**
@@ -74,14 +81,28 @@ public class Code implements Serializable {
      *          the value of this code.
      */
     public void setCode(String code) {
-        this.code = code;
+        setValue(getHapiObject().getCe1_Identifier(), code);
     }
     
     /**
      * @return the display name of this code.
      */
+    @XmlAttribute
+    @XmlJavaTypeAdapter(value = SimplifiedLocalizedStringAdapter.class)
     public LocalizedString getDisplayName() {
-        return displayName;
+        String value = getHapiObject().getCe2_Text().getValue();
+
+        if (StringUtils.isEmpty(value)) {
+            localizedString = null;
+        }
+        else if (localizedString != null) {
+            localizedString.setValue(value);
+        }
+        else {
+            localizedString = new LocalizedString(value);
+        }
+
+        return localizedString;
     }
     
     /**
@@ -89,14 +110,20 @@ public class Code implements Serializable {
      *          the display name of this code.
      */
     public void setDisplayName(LocalizedString displayName) {
-        this.displayName = displayName;
+        this.localizedString = displayName;
+        if (displayName != null) {
+            setValue(getHapiObject().getCe2_Text(), displayName.getValue());
+        } else {
+            getHapiObject().getCe2_Text().clear();
+        }
     }
     
     /**
      * @return the schema of this code.
      */
+    @XmlAttribute(name = "codeSystemName")
     public String getSchemeName() {
-        return schemeName;
+        return getHapiObject().getCe3_NameOfCodingSystem().getValue();
     }
     
     /**
@@ -104,16 +131,16 @@ public class Code implements Serializable {
      *          the schema of this code.
      */
     public void setSchemeName(String schemeName) {
-        this.schemeName = schemeName;
+        setValue(getHapiObject().getCe3_NameOfCodingSystem(), schemeName);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((code == null) ? 0 : code.hashCode());
-        result = prime * result + ((displayName == null) ? 0 : displayName.hashCode());
-        result = prime * result + ((schemeName == null) ? 0 : schemeName.hashCode());
+        result = prime * result + ((getCode() == null) ? 0 : getCode().hashCode());
+        result = prime * result + ((getDisplayName() == null) ? 0 : getDisplayName().hashCode());
+        result = prime * result + ((getSchemeName() == null) ? 0 : getSchemeName().hashCode());
         return result;
     }
 
@@ -126,26 +153,30 @@ public class Code implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Code other = (Code) obj;
-        if (code == null) {
-            if (other.code != null)
+        if (getCode() == null) {
+            if (other.getCode() != null)
                 return false;
-        } else if (!code.equals(other.code))
+        } else if (!getCode().equals(other.getCode()))
             return false;
-        if (displayName == null) {
-            if (other.displayName != null)
+        if (getDisplayName() == null) {
+            if (other.getDisplayName() != null)
                 return false;
-        } else if (!displayName.equals(other.displayName))
+        } else if (!getDisplayName().equals(other.getDisplayName()))
             return false;
-        if (schemeName == null) {
-            if (other.schemeName != null)
+        if (getSchemeName() == null) {
+            if (other.getSchemeName() != null)
                 return false;
-        } else if (!schemeName.equals(other.schemeName))
+        } else if (!getSchemeName().equals(other.getSchemeName()))
             return false;
         return true;
     }
     
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("code", getCode())
+                .append("displayName", getDisplayName())
+                .append("schemeName", getSchemeName())
+                .toString();
     }
 }

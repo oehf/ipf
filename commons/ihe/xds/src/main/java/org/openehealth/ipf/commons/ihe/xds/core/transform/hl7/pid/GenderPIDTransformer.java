@@ -15,9 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
+
+import java.util.Collections;
+import java.util.List;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Transforms a PID-8 conforming string into a {@link PatientInfo} instance. 
@@ -27,14 +31,15 @@ public class GenderPIDTransformer implements PIDTransformer {
     @Override
     public void fromHL7(String hl7Data, PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
-
-        patientInfo.setGender(hl7Data == null || hl7Data.isEmpty() ? null : hl7Data);
+        if (StringUtils.isNotEmpty(hl7Data)) {
+            patientInfo.setGender(hl7Data);
+        }
     }
 
     @Override
-    public String toHL7(PatientInfo patientInfo) {
+    public List<String> toHL7(PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
-        
-        return patientInfo.getGender();
+        String gender = patientInfo.getGender();
+        return (StringUtils.isEmpty(gender)) ? null : Collections.singletonList(gender);
     }
 }

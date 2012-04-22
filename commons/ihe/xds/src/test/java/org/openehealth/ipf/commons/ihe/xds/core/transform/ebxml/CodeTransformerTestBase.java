@@ -29,7 +29,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.CodeTransformer;
 
 /**
  * Tests for {@link CodeTransformer}. 

@@ -15,11 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import javax.xml.bind.annotation.*;
-import java.io.Serializable;
-
+import ca.uhn.hl7v2.model.v25.datatype.XON;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Represents an organization.
@@ -30,28 +33,37 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * to HL7 this indicates that the values are empty. Trailing empty values are 
  * removed from the HL7 string.
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Organization", propOrder = {"id", "organizationName"})
-public class Organization implements Serializable {
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlType(name = "Organization", propOrder = {"idNumber", "assigningAuthority", "organizationName"})
+public class Organization extends Hl7v2Based<XON> {
     private static final long serialVersionUID = 8283797476558181158L;
-
-    @XmlElement(name = "name")
-    private String organizationName;                // XON.1
-    private Identifiable id;
 
     /**
      * Constructs the organization.
      */
-    public Organization() {}
-    
+    public Organization() {
+        super(new XON(MESSAGE));
+    }
+
+    /**
+     * Constructs the organization.
+     * @param xon
+     *          parsed HL7 v2 element.
+     */
+    public Organization(XON xon) {
+        super(xon);
+    }
+
     /**
      * Constructs the organization.
      * @param organizationName
      *          the name of the organization (XON.1).
      */
     public Organization(String organizationName) {
-        this.organizationName = organizationName;
+        this();
+        setOrganizationName(organizationName);
     }
 
     /**
@@ -64,16 +76,18 @@ public class Organization implements Serializable {
      *          the assigning authority (XON.6).
      */
     public Organization(String organizationName, String idNumber, AssigningAuthority assigningAuthority) {
-        this.organizationName = organizationName;
-        this.id = new Identifiable(idNumber, assigningAuthority);
-        normalizeEmptyId();
+        this();
+        setOrganizationName(organizationName);
+        setIdNumber(idNumber);
+        setAssigningAuthority(assigningAuthority);
     }
 
     /**
      * @return the assigning authority (XON.6).
      */
     public AssigningAuthority getAssigningAuthority() {
-        return id == null ? null : id.getAssigningAuthority();
+        AssigningAuthority authority = new AssigningAuthority(getHapiObject().getXon6_AssigningAuthority());
+        return authority.isEmpty() ? null : authority;
     }
     
     /**
@@ -81,16 +95,15 @@ public class Organization implements Serializable {
      *          the assigning authority (XON.6).
      */
     public void setAssigningAuthority(AssigningAuthority assigningAuthority) {
-        lazilyCreateIdIfNecessary();
-        id.setAssigningAuthority(assigningAuthority);
-        normalizeEmptyId();
+        setAssigningAuthority(assigningAuthority, getHapiObject().getXon6_AssigningAuthority());
     }
 
     /**
      * @return the name of the organization (XON.1).
      */
+    @XmlElement(name = "name")
     public String getOrganizationName() {
-        return organizationName;
+        return getHapiObject().getXon1_OrganizationName().getValue();
     }
 
     /**
@@ -98,14 +111,14 @@ public class Organization implements Serializable {
      *          the name of the organization (XON.1).
      */
     public void setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
+        setValue(getHapiObject().getXon1_OrganizationName(), organizationName);
     }
 
     /**
      * @return the id of the organization (XON.10).
      */
     public String getIdNumber() {
-        return id == null ? null : id.getId();
+        return getHapiObject().getXon10_OrganizationIdentifier().getValue();
     }
 
     /**
@@ -113,17 +126,16 @@ public class Organization implements Serializable {
      *          the id of the organization (XON.10).
      */
     public void setIdNumber(String idNumber) {
-        lazilyCreateIdIfNecessary();
-        id.setId(idNumber);
-        normalizeEmptyId();
+        setValue(getHapiObject().getXon10_OrganizationIdentifier(), idNumber);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((organizationName == null) ? 0 : organizationName.hashCode());
+        result = prime * result + ((getIdNumber() == null) ? 0 : getIdNumber().hashCode());
+        result = prime * result + ((getAssigningAuthority() == null) ? 0 : getAssigningAuthority().hashCode());
+        result = prime * result + ((getOrganizationName() == null) ? 0 : getOrganizationName().hashCode());
         return result;
     }
 
@@ -136,34 +148,30 @@ public class Organization implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Organization other = (Organization) obj;
-        if (id == null) {
-            if (other.id != null)
+        if (getIdNumber() == null) {
+            if (other.getIdNumber() != null)
                 return false;
-        } else if (!id.equals(other.id))
+        } else if (!getIdNumber().equals(other.getIdNumber()))
             return false;
-        if (organizationName == null) {
-            if (other.organizationName != null)
+        if (getAssigningAuthority() == null) {
+            if (other.getAssigningAuthority() != null)
                 return false;
-        } else if (!organizationName.equals(other.organizationName))
+        } else if (!getAssigningAuthority().equals(other.getAssigningAuthority()))
+            return false;
+        if (getOrganizationName() == null) {
+            if (other.getOrganizationName() != null)
+                return false;
+        } else if (!getOrganizationName().equals(other.getOrganizationName()))
             return false;
         return true;
     }
         
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-
-    private void normalizeEmptyId() {
-        if ( id.getId() == null && id.getAssigningAuthority() == null) {
-            id = null;
-        }
-    }
-
-    private void lazilyCreateIdIfNecessary()
-    {
-        if ( id == null ) {
-            id = new Identifiable();
-        }
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("name", getOrganizationName())
+                .append("assigningAuthority", getAssigningAuthority())
+                .append("idNumber", getIdNumber())
+                .toString();
     }
 }

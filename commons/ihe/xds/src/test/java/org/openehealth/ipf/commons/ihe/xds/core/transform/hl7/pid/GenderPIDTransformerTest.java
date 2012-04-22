@@ -38,7 +38,7 @@ public class GenderPIDTransformerTest {
     public void testToHL7() {
         PatientInfo patientInfo = new PatientInfo();        
         patientInfo.setGender("M");
-        assertEquals("M", transformer.toHL7(patientInfo));
+        assertEquals("M", transformer.toHL7(patientInfo).get(0));
     }
     
     @Test

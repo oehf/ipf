@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.beans.BeanUtils;
 
 /**
  * Represents additional info about a patient.
@@ -64,7 +65,12 @@ public class PatientInfo implements Serializable {
      *          the name (PID-5).
      */
     public void setName(Name name) {
-        this.name = name;
+        if (name != null) {
+            this.name = new XpnName();
+            BeanUtils.copyProperties(name, this.name);
+        } else {
+            this.name = null;
+        }
     }
 
     /**

@@ -20,10 +20,10 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Address;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.AddressTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 
 /**
- * Tests for {@link AddressTransformer}.
+ * Tests for transformation between HL7 v2 and {@link Address}.
  * @author Jens Riemschneider
  */
 public class AddressTransformerTest {
@@ -38,26 +38,26 @@ public class AddressTransformerTest {
         address.setStateOrProvince("Lamp|ing");
         address.setZipOrPostalCode("123&WARM");
         assertEquals(
-                "Laliluna Str. 2\\T\\3^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN", 
-                new AddressTransformer().toHL7(address));
+                "Laliluna Str. 2\\T\\3^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN",
+                Hl7v2Based.render(address));
     }
 
     @Test
     public void testToHL7Empty() {
-        Address address = new Address();
-        assertNull(new AddressTransformer().toHL7(address));
+        assertNull(Hl7v2Based.render(new Address()));
     }
 
     @Test
     public void testToHL7WithNullParam() {
-        assertNull(new AddressTransformer().toHL7(null));
+        assertNull(Hl7v2Based.render(null));
     }
     
 
     @Test
     public void testFromHL7() {
-        Address address = new AddressTransformer().fromHL7(
-                "Laliluna Str. 2\\T\\3^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN");
+        Address address = Hl7v2Based.parse(
+                "Laliluna Str. 2\\T\\3^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN",
+                Address.class);
         assertEquals("Laliluna Str. 2&3", address.getStreetAddress());
         assertEquals("Sonn^hofen", address.getCity());
         assertEquals("ECU", address.getCountry());
@@ -69,8 +69,9 @@ public class AddressTransformerTest {
 
     @Test
     public void testFromHL7UsingSAD() {
-        Address address = new AddressTransformer().fromHL7(
-                "Laliluna Str. 2\\T\\3&whatever^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN");
+        Address address = Hl7v2Based.parse(
+                "Laliluna Str. 2\\T\\3&whatever^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN",
+                Address.class);
         assertEquals("Laliluna Str. 2&3", address.getStreetAddress());
         assertEquals("Sonn^hofen", address.getCity());
         assertEquals("ECU", address.getCountry());
@@ -82,11 +83,11 @@ public class AddressTransformerTest {
 
     @Test
     public void testFromHL7Nothing() {
-        assertNull(new AddressTransformer().fromHL7(""));
+        assertNull(Hl7v2Based.parse("", Address.class));
     }
     
     @Test
     public void testFromHL7WithNullParam() {
-        assertNull(new AddressTransformer().fromHL7(null));
+        assertNull(Hl7v2Based.parse(null, Address.class));
     }    
 }

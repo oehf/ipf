@@ -20,14 +20,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PatientInfoTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer;
 
 import java.util.List;
 
@@ -41,8 +38,6 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     private final AuthorTransformer authorTransformer;
     private final CodeTransformer codeTransformer;
     
-    private final PersonTransformer personTransformer = new PersonTransformer();
-    private final IdentifiableTransformer identifiableTransformer = new IdentifiableTransformer();
     private final PatientInfoTransformer patientInfoTransformer = new PatientInfoTransformer();
     private final UriTransformer uriTransformer = new UriTransformer();   
     
@@ -108,10 +103,10 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         docEntry.setSize(size != null ? Long.parseLong(size) : null);
         
         String hl7LegalAuthenticator = extrinsic.getSingleSlotValue(SLOT_NAME_LEGAL_AUTHENTICATOR);
-        docEntry.setLegalAuthenticator(personTransformer.fromHL7(hl7LegalAuthenticator));
+        docEntry.setLegalAuthenticator(Hl7v2Based.parse(hl7LegalAuthenticator, Person.class));
         
         String sourcePatient = extrinsic.getSingleSlotValue(SLOT_NAME_SOURCE_PATIENT_ID);
-        docEntry.setSourcePatientId(identifiableTransformer.fromEbXML(sourcePatient));
+        docEntry.setSourcePatientId(Hl7v2Based.parse(sourcePatient, Identifiable.class));
         
         List<String> slotValues = extrinsic.getSlotValues(SLOT_NAME_SOURCE_PATIENT_INFO);        
         docEntry.setSourcePatientInfo(patientInfoTransformer.fromHL7(slotValues));
@@ -132,10 +127,10 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         Long size = docEntry.getSize();
         extrinsic.addSlot(SLOT_NAME_SIZE, size != null ? size.toString() : null);
         
-        String hl7LegalAuthenticator = personTransformer.toHL7(docEntry.getLegalAuthenticator());
+        String hl7LegalAuthenticator = Hl7v2Based.render(docEntry.getLegalAuthenticator());
         extrinsic.addSlot(SLOT_NAME_LEGAL_AUTHENTICATOR, hl7LegalAuthenticator);
         
-        String sourcePatient = identifiableTransformer.toEbXML(docEntry.getSourcePatientId());
+        String sourcePatient = Hl7v2Based.render(docEntry.getSourcePatientId());
         extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_ID, sourcePatient);
         
         List<String> slotValues = patientInfoTransformer.toHL7(docEntry.getSourcePatientInfo());

@@ -17,6 +17,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 
+import java.util.List;
+
 /**
  * Provides transformation for PID-X strings.
  * @author Jens Riemschneider
@@ -38,5 +40,5 @@ public interface PIDTransformer {
      * @return the HL7 data string. <code>null</code> if the resulting 
      *          string would be empty.
      */
-    String toHL7(PatientInfo patientInfo);
+    List<String> toHL7(PatientInfo patientInfo);
 }

@@ -15,45 +15,35 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.*;
-import static org.apache.commons.lang3.Validate.notNull;
+import ca.uhn.hl7v2.model.v25.datatype.CX;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 
-import java.util.List;
-
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
+import static org.apache.commons.lang3.StringUtils.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.CX_NEEDS_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.CX_TOO_MANY_COMPONENTS;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
  * Validates a CX value.
  * @author Jens Riemschneider
  */
 public class CXValidator implements ValueValidator {
-    private final OIDValidator oidValidator = new OIDValidator();
-    
+    private final HDValidator HD_VALIDATOR = new HDValidator();
+
     @Override
     public void validate(String hl7CX) throws XDSMetaDataException {
-        notNull(hl7CX, "value cannot be null");
-        
-        List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7CX);
-        
-        metaDataAssert(parts.size() <= 4 && HL7.get(parts, 2, false) == null && HL7.get(parts, 3, false) == null,  
-                CX_TOO_MANY_COMPONENTS);
+        Identifiable identifiable = Hl7v2Based.parse(hl7CX, Identifiable.class);
+        metaDataAssert(identifiable != null, CX_NEEDS_ID);
 
-        String idNumber = HL7.get(parts, 1, true);
-        metaDataAssert(idNumber != null, CX_NEEDS_ID);
-        
-        String hl7HD = HL7.get(parts, 4, false);
-        List<String> hd = HL7.parse(HL7Delimiter.SUBCOMPONENT, hl7HD);
-        
-        metaDataAssert(HL7.get(hd, 1, false) == null, HD_MUST_NOT_HAVE_NAMESPACE_ID, hl7CX);
-        
-        String oidType = HL7.get(hd, 3, true);
-        metaDataAssert("ISO".equals(oidType), UNIVERSAL_ID_TYPE_MUST_BE_ISO, hl7CX);  
+        CX cx = identifiable.getHapiObject();
 
-        String oid = HL7.get(hd, 2, true);
-        metaDataAssert(oid != null, HD_NEEDS_UNIVERSAL_ID, hl7CX);
+        metaDataAssert(countMatches(hl7CX, "^") <= 3, CX_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmpty(cx.getCx2_CheckDigit().getValue()), CX_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmpty(cx.getCx3_CheckDigitScheme().getValue()), CX_TOO_MANY_COMPONENTS);
 
-        oidValidator.validate(oid);
+        metaDataAssert(isNotEmpty(cx.getCx1_IDNumber().getValue()), CX_NEEDS_ID);
+
+        HD_VALIDATOR.validate(cx.getCx4_AssigningAuthority(), hl7CX);
     }
 }

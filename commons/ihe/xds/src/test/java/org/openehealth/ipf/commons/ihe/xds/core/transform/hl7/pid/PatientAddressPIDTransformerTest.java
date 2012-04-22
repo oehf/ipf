@@ -42,7 +42,7 @@ public class PatientAddressPIDTransformerTest {
         address.setStreetAddress("I live here 42");
         address.setCountry("ECU");
         patientInfo.setAddress(address);
-        assertEquals("I live here 42^^^^^ECU", transformer.toHL7(patientInfo));
+        assertEquals("I live here 42^^^^^ECU", transformer.toHL7(patientInfo).get(0));
     }
 
     @Test

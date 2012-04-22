@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import java.io.Serializable;
-
+import ca.uhn.hl7v2.model.v25.datatype.HD;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based.Holder;
 
 import javax.xml.bind.annotation.*;
 
@@ -33,26 +33,30 @@ import javax.xml.bind.annotation.*;
  * authorities.
  * <p>
  * All members of this class are allowed to be <code>null</code>. When transforming
- * to HL7 this indicates that the values are empty. Trailing empty values are 
+ * to HL7 this indicates that the values are empty. Trailing empty values are
  * removed from the HL7 string.
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlType(name = "AssigningAuthority")
-public class AssigningAuthority implements Serializable {
+public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     private static final long serialVersionUID = 5350057820250191032L;
-    
-    @XmlAttribute
-    private String namespaceId;     // HD.1
-    @XmlValue
-    private String universalId;     // HD.2
-    @XmlAttribute
-    private String universalIdType; // HD.3
 
-    /**
-     * Constructs an assigning authority.
-     */
-    public AssigningAuthority() {}
+    public AssigningAuthority() {
+        super(new Holder<HD>(new HD(MESSAGE)));
+    }
+
+
+    public AssigningAuthority(Holder<HD> hdHolder) {
+        super(hdHolder);
+    }
+
+
+    public AssigningAuthority(HD hd) {
+        super(new Holder<HD>(hd));
+    }
+
 
     /**
      * Constructs an assigning authority.
@@ -64,9 +68,10 @@ public class AssigningAuthority implements Serializable {
      *          the type of the universal ID (HD.3).
      */
     public AssigningAuthority(String namespaceId, String universalId, String universalIdType) {
-        this.namespaceId = namespaceId;
-        this.universalId = universalId;
-        this.universalIdType = universalIdType;
+        this();
+        setNamespaceId(namespaceId);
+        setUniversalId(universalId);
+        setUniversalIdType(universalIdType);
     }
 
     /**
@@ -75,45 +80,49 @@ public class AssigningAuthority implements Serializable {
      *          the universal ID (HD.2).
      */
     public AssigningAuthority(String universalId) {
-        this.universalId = universalId;
-        universalIdType = "ISO";
+        this();
+        setUniversalId(universalId);
+        setUniversalIdType("ISO");
     }
 
     /**
      * @return the namespace ID (HD.1).
      */
+    @XmlAttribute
     public String getNamespaceId() {
-        return namespaceId;
+        return getHapiObject().getInternal().getHd1_NamespaceID().getValue();
     }
-    
+
     /**
      * @param namespaceId
      *          the namespace ID (HD.1).
      */
     public void setNamespaceId(String namespaceId) {
-        this.namespaceId = namespaceId;
+        setValue(getHapiObject().getInternal().getHd1_NamespaceID(), namespaceId);
     }
-    
+
     /**
      * @return the universal ID (HD.2).
      */
+    @XmlValue
     public String getUniversalId() {
-        return universalId;
+        return getHapiObject().getInternal().getHd2_UniversalID().getValue();
     }
-    
+
     /**
      * @param universalId
      *          the universal ID (HD.2).
      */
     public void setUniversalId(String universalId) {
-        this.universalId = universalId;
+        setValue(getHapiObject().getInternal().getHd2_UniversalID(), universalId);
     }
-    
+
     /**
      * @return the universal type ID (HD.3).
      */
+    @XmlAttribute
     public String getUniversalIdType() {
-        return universalIdType;
+        return getHapiObject().getInternal().getHd3_UniversalIDType().getValue();
     }
 
     /**
@@ -121,16 +130,16 @@ public class AssigningAuthority implements Serializable {
      *          the universal type ID (HD.3).
      */
     public void setUniversalIdType(String universalIdType) {
-        this.universalIdType = universalIdType;
+        setValue(getHapiObject().getInternal().getHd3_UniversalIDType(), universalIdType);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((namespaceId == null) ? 0 : namespaceId.hashCode());
-        result = prime * result + ((universalId == null) ? 0 : universalId.hashCode());
-        result = prime * result + ((universalIdType == null) ? 0 : universalIdType.hashCode());
+        result = prime * result + ((getNamespaceId() == null) ? 0 : getNamespaceId().hashCode());
+        result = prime * result + ((getUniversalId() == null) ? 0 : getUniversalId().hashCode());
+        result = prime * result + ((getUniversalIdType() == null) ? 0 : getUniversalIdType().hashCode());
         return result;
     }
 
@@ -143,26 +152,30 @@ public class AssigningAuthority implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         AssigningAuthority other = (AssigningAuthority) obj;
-        if (namespaceId == null) {
-            if (other.namespaceId != null)
+        if (getNamespaceId() == null) {
+            if (other.getNamespaceId() != null)
                 return false;
-        } else if (!namespaceId.equals(other.namespaceId))
+        } else if (!getNamespaceId().equals(other.getNamespaceId()))
             return false;
-        if (universalId == null) {
-            if (other.universalId != null)
+        if (getUniversalId() == null) {
+            if (other.getUniversalId() != null)
                 return false;
-        } else if (!universalId.equals(other.universalId))
+        } else if (!getUniversalId().equals(other.getUniversalId()))
             return false;
-        if (universalIdType == null) {
-            if (other.universalIdType != null)
+        if (getUniversalIdType() == null) {
+            if (other.getUniversalIdType() != null)
                 return false;
-        } else if (!universalIdType.equals(other.universalIdType))
+        } else if (!getUniversalIdType().equals(other.getUniversalIdType()))
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("namespaceId", getNamespaceId())
+                .append("universalId", getUniversalId())
+                .append("universalIdType", getUniversalIdType())
+                .toString();
     }
 }

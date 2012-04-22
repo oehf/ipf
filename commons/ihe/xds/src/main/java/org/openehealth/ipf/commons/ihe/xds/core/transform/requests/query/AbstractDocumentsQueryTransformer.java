@@ -16,8 +16,9 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.AbstractDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.IdentifiableTransformer;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
@@ -26,9 +27,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  * @author Jens Riemschneider
  */
 abstract class AbstractDocumentsQueryTransformer<T extends AbstractDocumentsQuery> {
-    private final IdentifiableTransformer identifiableTransformer = 
-        new IdentifiableTransformer();
-    
+
     /**
      * Transforms the query into its ebXML representation.
      * <p>
@@ -48,8 +47,7 @@ abstract class AbstractDocumentsQueryTransformer<T extends AbstractDocumentsQuer
         ebXML.setId(query.getType().getId());
         ebXML.setHome(query.getHomeCommunityId());
 
-        String value = identifiableTransformer.toEbXML(query.getPatientId());
-        slots.fromString(DOC_ENTRY_PATIENT_ID, value);
+        slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
 
@@ -89,7 +87,7 @@ abstract class AbstractDocumentsQueryTransformer<T extends AbstractDocumentsQuer
         
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
-        query.setPatientId(identifiableTransformer.fromEbXML(patientId));
+        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
         
         query.setClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE));
         query.setTypeCodes(slots.toCodeList(DOC_ENTRY_TYPE_CODE));

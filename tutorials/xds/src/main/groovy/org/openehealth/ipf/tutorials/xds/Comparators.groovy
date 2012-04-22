@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.OrganizationTransformer
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
-
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based
 
 /**
  * Comparators for datatypes used with XDS.
@@ -65,13 +63,10 @@ public class Comparators {
      }
 
      private static def getAuthorTexts(authors) {
-         def personTransformer = new PersonTransformer()
-         def orgTransformer = new OrganizationTransformer()
-         
-         def texts = []         
+         def texts = []
          authors.each { author ->
-             texts.add(personTransformer.toHL7(author.authorPerson))
-             author.authorInstitution.each { texts.add(orgTransformer.toHL7(it)) }             
+             texts.add(Hl7v2Based.render(author.authorPerson))
+             author.authorInstitution.each { texts.add(Hl7v2Based.render(it))  }
              texts.addAll(author.authorRole)
              texts.addAll(author.authorSpecialty)
          }

@@ -15,9 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Recipient;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.OrganizationTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer;
 
 /**
  * Transforms between a {@link Recipient} and its ebXML representation.
@@ -27,9 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer;
  * @author Jens Riemschneider
  */
 public class RecipientTransformer {
-    private final PersonTransformer personTransformer = new PersonTransformer();
-    private final OrganizationTransformer organizationTransformer = new OrganizationTransformer();
-    
+
     /**
      * Transforms a recipient into its ebXML representation (a slot value).
      * @param recipient
@@ -41,8 +40,8 @@ public class RecipientTransformer {
             return null;
         }
         
-        String person = personTransformer.toHL7(recipient.getPerson());
-        String organization = organizationTransformer.toHL7(recipient.getOrganization());
+        String person = Hl7v2Based.render(recipient.getPerson());
+        String organization = Hl7v2Based.render(recipient.getOrganization());
         
         if (person == null) {
             return organization;
@@ -69,14 +68,11 @@ public class RecipientTransformer {
         Recipient recipient = new Recipient();
 
         String[] parts = slotValue.split("\\|");
+        recipient.setOrganization(Hl7v2Based.parse(parts[0], Organization.class));
         if (parts.length > 1) {
-            recipient.setOrganization(organizationTransformer.fromHL7(parts[0]));
-            recipient.setPerson(personTransformer.fromHL7(parts[1]));
+            recipient.setPerson(Hl7v2Based.parse(parts[1], Person.class));
         }
-        else {
-            recipient.setOrganization(organizationTransformer.fromHL7(parts[0]));
-        }
-        
+
         return recipient;
     }
 }

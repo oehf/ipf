@@ -38,7 +38,7 @@ public class DateOfBirthPIDTransformerTest {
     public void testToHL7() {
         PatientInfo patientInfo = new PatientInfo();
         patientInfo.setDateOfBirth("123456+0100");
-        assertEquals("123456+0100", transformer.toHL7(patientInfo));
+        assertEquals("123456+0100", transformer.toHL7(patientInfo).get(0));
     }
     
     @Test

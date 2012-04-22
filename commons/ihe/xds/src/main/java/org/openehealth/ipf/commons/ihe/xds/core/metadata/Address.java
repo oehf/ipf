@@ -15,8 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import java.io.Serializable;
-
+import ca.uhn.hl7v2.model.v25.datatype.XAD;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -31,121 +30,123 @@ import javax.xml.bind.annotation.*;
  * to HL7 this indicates that the values are empty. Trailing empty values are 
  * removed from the HL7 string.
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlType(name = "Address", propOrder = {
         "streetAddress", "otherDesignation", "city", "countyParishCode", "stateOrProvince", "country", 
         "zipOrPostalCode"})
-public class Address implements Serializable {
+public class Address extends Hl7v2Based<XAD> {
     private static final long serialVersionUID = -5050715144917393181L;
 
-    private String streetAddress;               // XAD.1  
-    @XmlElement(name = "additionalLocator")
-    private String otherDesignation;            // XAD.2
-    private String city;                        // XAD.3  
-    @XmlElement(name = "state")
-    private String stateOrProvince;             // XAD.4
-    @XmlElement(name = "postalCode")
-    private String zipOrPostalCode;             // XAD.5
-    private String country;                     // XAD.6  
-    @XmlElement(name = "county")
-    private String countyParishCode;            // XAD.9  
+    public Address() {
+        super(new XAD(MESSAGE));
+    }
+
+    public Address(XAD xad) {
+        super(xad);
+    }
+
 
     /**
      * @return the street address (XAD.1).
      */
     public String getStreetAddress() {
-        return streetAddress;
+        return getHapiObject().getXad1_StreetAddress().getSad1_StreetOrMailingAddress().getValue();
     }
-    
+
     /**
      * @param streetAddress
      *          the street address (XAD.1).
      */
     public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
+        setValue(getHapiObject().getXad1_StreetAddress().getSad1_StreetOrMailingAddress(), streetAddress);
     }
-    
+
     /**
      * @return the other designation (XAD.2).
      */
+    @XmlElement(name = "additionalLocator")
     public String getOtherDesignation() {
-        return otherDesignation;
+        return getHapiObject().getXad2_OtherDesignation().getValue();
     }
-    
+
     /**
      * @param otherDesignation
      *          the other designation (XAD.2).
      */
     public void setOtherDesignation(String otherDesignation) {
-        this.otherDesignation = otherDesignation;
+        setValue(getHapiObject().getXad2_OtherDesignation(), otherDesignation);
     }
-    
+
     /**
      * @return the city (XAD.3).
      */
     public String getCity() {
-        return city;
+        return getHapiObject().getXad3_City().getValue();
     }
-    
+
     /**
      * @param city
      *          the city (XAD.3).
      */
     public void setCity(String city) {
-        this.city = city;
+        setValue(getHapiObject().getXad3_City(), city);
     }
-    
+
     /**
      * @return the state or province (XAD.4).
      */
+    @XmlElement(name = "state")
     public String getStateOrProvince() {
-        return stateOrProvince;
+        return getHapiObject().getXad4_StateOrProvince().getValue();
     }
-    
+
     /**
      * @param stateOrProvince
      *          the state or province (XAD.4).
      */
     public void setStateOrProvince(String stateOrProvince) {
-        this.stateOrProvince = stateOrProvince;
+        setValue(getHapiObject().getXad4_StateOrProvince(), stateOrProvince);
     }
-    
+
     /**
      * @return the zip or postal code (XAD.5).
      */
+    @XmlElement(name = "postalCode")
     public String getZipOrPostalCode() {
-        return zipOrPostalCode;
+        return getHapiObject().getXad5_ZipOrPostalCode().getValue();
     }
-    
+
     /**
      * @param zipOrPostalCode
      *          the zip or postal code (XAD.5).
      */
     public void setZipOrPostalCode(String zipOrPostalCode) {
-        this.zipOrPostalCode = zipOrPostalCode;
+        setValue(getHapiObject().getXad5_ZipOrPostalCode(), zipOrPostalCode);
     }
-    
+
     /**
      * @return the country (XAD.6).
      */
     public String getCountry() {
-        return country;
+        return getHapiObject().getXad6_Country().getValue();
     }
-    
+
     /**
      * @param country
      *          the country (XAD.6).
      */
     public void setCountry(String country) {
-        this.country = country;
+        setValue(getHapiObject().getXad6_Country(), country);
     }
-    
+
     /**
      * @return the county parish code (XAD.9).
      */
+    @XmlElement(name = "county")
     public String getCountyParishCode() {
-        return countyParishCode;
+        return getHapiObject().getXad9_CountyParishCode().getValue();
     }
 
     /**
@@ -153,20 +154,20 @@ public class Address implements Serializable {
      *          the county parish code (XAD.9).
      */
     public void setCountyParishCode(String countyParishCode) {
-        this.countyParishCode = countyParishCode;
+        setValue(getHapiObject().getXad9_CountyParishCode(), countyParishCode);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((city == null) ? 0 : city.hashCode());
-        result = prime * result + ((country == null) ? 0 : country.hashCode());
-        result = prime * result + ((countyParishCode == null) ? 0 : countyParishCode.hashCode());
-        result = prime * result + ((otherDesignation == null) ? 0 : otherDesignation.hashCode());
-        result = prime * result + ((stateOrProvince == null) ? 0 : stateOrProvince.hashCode());
-        result = prime * result + ((streetAddress == null) ? 0 : streetAddress.hashCode());
-        result = prime * result + ((zipOrPostalCode == null) ? 0 : zipOrPostalCode.hashCode());
+        result = prime * result + ((getCity() == null) ? 0 : getCity().hashCode());
+        result = prime * result + ((getCountry() == null) ? 0 : getCountry().hashCode());
+        result = prime * result + ((getCountyParishCode() == null) ? 0 : getCountyParishCode().hashCode());
+        result = prime * result + ((getOtherDesignation() == null) ? 0 : getOtherDesignation().hashCode());
+        result = prime * result + ((getStateOrProvince() == null) ? 0 : getStateOrProvince().hashCode());
+        result = prime * result + ((getStreetAddress() == null) ? 0 : getStreetAddress().hashCode());
+        result = prime * result + ((getZipOrPostalCode() == null) ? 0 : getZipOrPostalCode().hashCode());
         return result;
     }
 
@@ -179,46 +180,54 @@ public class Address implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Address other = (Address) obj;
-        if (city == null) {
-            if (other.city != null)
+        if (getCity() == null) {
+            if (other.getCity() != null)
                 return false;
-        } else if (!city.equals(other.city))
+        } else if (!getCity().equals(other.getCity()))
             return false;
-        if (country == null) {
-            if (other.country != null)
+        if (getCountry() == null) {
+            if (other.getCountry() != null)
                 return false;
-        } else if (!country.equals(other.country))
+        } else if (!getCountry().equals(other.getCountry()))
             return false;
-        if (countyParishCode == null) {
-            if (other.countyParishCode != null)
+        if (getCountyParishCode() == null) {
+            if (other.getCountyParishCode() != null)
                 return false;
-        } else if (!countyParishCode.equals(other.countyParishCode))
+        } else if (!getCountyParishCode().equals(other.getCountyParishCode()))
             return false;
-        if (otherDesignation == null) {
-            if (other.otherDesignation != null)
+        if (getOtherDesignation() == null) {
+            if (other.getOtherDesignation() != null)
                 return false;
-        } else if (!otherDesignation.equals(other.otherDesignation))
+        } else if (!getOtherDesignation().equals(other.getOtherDesignation()))
             return false;
-        if (stateOrProvince == null) {
-            if (other.stateOrProvince != null)
+        if (getStateOrProvince() == null) {
+            if (other.getStateOrProvince() != null)
                 return false;
-        } else if (!stateOrProvince.equals(other.stateOrProvince))
+        } else if (!getStateOrProvince().equals(other.getStateOrProvince()))
             return false;
-        if (streetAddress == null) {
-            if (other.streetAddress != null)
+        if (getStreetAddress() == null) {
+            if (other.getStreetAddress() != null)
                 return false;
-        } else if (!streetAddress.equals(other.streetAddress))
+        } else if (!getStreetAddress().equals(other.getStreetAddress()))
             return false;
-        if (zipOrPostalCode == null) {
-            if (other.zipOrPostalCode != null)
+        if (getZipOrPostalCode() == null) {
+            if (other.getZipOrPostalCode() != null)
                 return false;
-        } else if (!zipOrPostalCode.equals(other.zipOrPostalCode))
+        } else if (!getZipOrPostalCode().equals(other.getZipOrPostalCode()))
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("street", getStreetAddress())
+                .append("city", getCity())
+                .append("stateOrProvince", getStateOrProvince())
+                .append("zip", getZipOrPostalCode())
+                .append("country", getCountry())
+                .append("countyParishCode", getCountyParishCode())
+                .append("otherDesignation", getOtherDesignation())
+                .toString();
     }
 }

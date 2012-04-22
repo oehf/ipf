@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
+import ca.uhn.hl7v2.model.v25.datatype.HD;
+import ca.uhn.hl7v2.model.v25.datatype.XCN;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
 
-import java.util.List;
-
-import static org.apache.commons.lang3.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PERSON_MISSING_NAME_AND_ID;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
@@ -29,32 +29,27 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * @author Jens Riemschneider
  */
 public class XCNValidator implements ValueValidator {
-    private final OIDValidator oidValidator = new OIDValidator();
+    private static final HDValidator HD_VALIDATOR = new HDValidator();
 
     @Override
     public void validate(String hl7xcn) throws XDSMetaDataException {
-        notNull(hl7xcn, "hl7xcn cannot be null");
-        List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7xcn);
+        Person person = Hl7v2Based.parse(hl7xcn, Person.class);
+        metaDataAssert(person != null, PERSON_MISSING_NAME_AND_ID, hl7xcn);
 
-        String idNumber = HL7.get(parts, 1, true);
-        String hl7fn = HL7.get(parts, 2, false);
-        
-        metaDataAssert(hl7fn != null || idNumber != null, PERSON_MISSING_NAME_AND_ID, hl7xcn);
+        XCN xcn = person.getHapiObject();
+        metaDataAssert(
+                isNotEmpty(xcn.getXcn1_IDNumber().getValue()) ||
+                isNotEmpty(xcn.getXcn2_FamilyName().getFn1_Surname().getValue()),
+                PERSON_MISSING_NAME_AND_ID, hl7xcn);
 
-        String hl7hd = HL7.get(parts, 9, false);
 //        Spec actually allows the assigning authority to be missing:
 //          "If component 1 (ID Number) is specified, component 9 (Assigning Authority) shall be present if available"
 //        metaDataAssert(idNumber == null || hl7hd != null, PERSON_HD_MISSING, hl7xcn);
-        
-        if (hl7hd != null) {
-            List<String> hdParts = HL7.parse(HL7Delimiter.SUBCOMPONENT, hl7hd);
-            metaDataAssert(HL7.get(hdParts, 1, false) == null,
-                    HD_MUST_NOT_HAVE_NAMESPACE_ID, hl7xcn);
-            metaDataAssert("ISO".equals(HL7.get(hdParts, 3, true)), 
-                    UNIVERSAL_ID_TYPE_MUST_BE_ISO, hl7xcn);
-            String oid = HL7.get(hdParts, 2, true);
-            metaDataAssert(oid != null, HD_NEEDS_UNIVERSAL_ID, hl7xcn);
-            oidValidator.validate(oid);
+
+
+        HD hd = xcn.getXcn9_AssigningAuthority();
+        if (! HD_VALIDATOR.isEmpty(hd)) {
+            HD_VALIDATOR.validate(hd, hl7xcn);
         }
     }
 }

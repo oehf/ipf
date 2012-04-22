@@ -20,11 +20,11 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.OrganizationTransformer;
 
 /**
- * Tests for {@link OrganizationTransformer}.
+ * Tests for transformation between HL7 v2 and {@link Organization}.
  * @author Jens Riemschneider
  */
 public class OrganizationTransformerTest {
@@ -41,25 +41,21 @@ public class OrganizationTransformerTest {
         organization.setAssigningAuthority(assigningAuthority);
         
         assertEquals("Untere\\T\\Klinik^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ^^^^a\\F\\number", 
-                new OrganizationTransformer().toHL7(organization));
+                Hl7v2Based.render(organization));
     }
 
     @Test
     public void testToHL7Empty() {
-        assertNull(new OrganizationTransformer().toHL7(new Organization()));
+        assertNull(Hl7v2Based.render(new Organization()));
     }
 
-    @Test
-    public void testToHL7WithNullParam() {
-        assertNull(new OrganizationTransformer().toHL7(null));
-    }
-    
 
     @Test
     public void testFromHL7() {
-        Organization organization = new OrganizationTransformer().fromHL7(
-                "Untere\\T\\Klinik^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ^^^^a\\F\\number");
-        
+        Organization organization = Hl7v2Based.parse(
+                "Untere\\T\\Klinik^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ^^^^a\\F\\number",
+                Organization.class);
+
         assertEquals("Untere&Klinik", organization.getOrganizationName());
         assertEquals("a|number", organization.getIdNumber());
         assertEquals("he&llo", organization.getAssigningAuthority().getNamespaceId());
@@ -69,11 +65,11 @@ public class OrganizationTransformerTest {
 
     @Test
     public void testFromHL7WithNullParam() {
-        assertNull(new OrganizationTransformer().fromHL7(null));
+        assertNull(Hl7v2Based.parse(null, Organization.class));
     }    
 
     @Test
     public void testFromHL7WithEmptyParam() {
-        assertNull(new OrganizationTransformer().fromHL7(""));
+        assertNull(Hl7v2Based.parse("", Organization.class));
     }    
 }

@@ -15,21 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
+import ca.uhn.hl7v2.parser.PipeParser;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.DateOfBirthPIDTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.GenderPIDTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.PIDTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.PatientAddressPIDTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.SourcePatientIdentifierPIDTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.SourcePatientNamePIDTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.*;
+
+import java.util.*;
 
 /**
  * Transformation logic for a {@link PatientInfo}.
@@ -67,13 +57,13 @@ public class PatientInfoTransformer {
         PatientInfo patientInfo = new PatientInfo();
         
         for (String hl7PIDLine : hl7PID) {
-            List<String> fields = HL7.parse(HL7Delimiter.FIELD, hl7PIDLine);
-            if (fields.size() == 2) {
-                String pidNoStr = fields.get(0);
+            String[] fields = PipeParser.split(hl7PIDLine, "|");
+            if (fields.length == 2) {
+                String pidNoStr = fields[0];
                 Integer pidNo = getPidNumber(pidNoStr);
                 PIDTransformer transformer = pidTransformers.get(pidNo);
                 if (transformer != null) {            
-                    transformer.fromHL7(fields.get(1), patientInfo);
+                    transformer.fromHL7(fields[1], patientInfo);
                 }
             }
         }
@@ -95,13 +85,11 @@ public class PatientInfoTransformer {
         
         List<String> hl7Strings = new ArrayList<String>();
         for (Map.Entry<Integer, PIDTransformer> entry : pidTransformers.entrySet()) {
-            String hl7Data = entry.getValue().toHL7(patientInfo);
-            if (hl7Data != null && !hl7Data.isEmpty()) {
-                List<String> repetitions = HL7.parse(HL7Delimiter.REPETITION, hl7Data);
+            String pidNoStr = PID_PREFIX + entry.getKey();
+            List<String> repetitions = entry.getValue().toHL7(patientInfo);
+            if (repetitions != null) {
                 for (String repetition : repetitions) {
-                    String pidNoStr = PID_PREFIX + entry.getKey();
-                    String pidStr = HL7.render(HL7Delimiter.FIELD, pidNoStr, repetition);
-                    hl7Strings.add(pidStr);
+                    hl7Strings.add(pidNoStr + '|' + repetition);
                 }
             }
         }

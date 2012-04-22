@@ -18,17 +18,16 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAllQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.IdentifiableTransformer;
 
 /**
  * Transforms between a {@link GetAllQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class GetAllQueryTransformer {
-    private final IdentifiableTransformer identifiableTransformer = 
-        new IdentifiableTransformer();
-    
+
     /**
      * Transforms the query into its ebXML representation.
      * <p>
@@ -48,8 +47,7 @@ public class GetAllQueryTransformer {
         ebXML.setId(query.getType().getId());
         ebXML.setHome(query.getHomeCommunityId());
 
-        String value = identifiableTransformer.toEbXML(query.getPatientId());
-        slots.fromString(PATIENT_ID, value);
+        slots.fromString(PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         
         slots.fromStatus(DOC_ENTRY_STATUS, query.getStatusDocuments());
         slots.fromStatus(SUBMISSION_SET_STATUS, query.getStatusSubmissionSets());
@@ -77,7 +75,7 @@ public class GetAllQueryTransformer {
         
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         String patientId = slots.toString(PATIENT_ID);
-        query.setPatientId(identifiableTransformer.fromEbXML(patientId));
+        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
 
         query.setStatusDocuments(slots.toStatus(DOC_ENTRY_STATUS));
         query.setStatusFolders(slots.toStatus(FOLDER_STATUS));

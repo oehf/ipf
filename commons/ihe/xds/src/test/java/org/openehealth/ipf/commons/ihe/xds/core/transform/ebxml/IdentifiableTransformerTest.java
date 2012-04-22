@@ -20,21 +20,18 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.IdentifiableTransformer;
 
 /**
- * Tests for {@link IdentifiableTransformer}.
+ * Tests for transformation between HL7 v2 and {@link Identifiable}.
  * @author Jens Riemschneider
  */
 public class IdentifiableTransformerTest {
-    private IdentifiableTransformer transformer;
     private Identifiable identifiable;
     
     @Before
     public void setUp() {
-        transformer = new IdentifiableTransformer();
-
         AssigningAuthority assigningAuthority = new AssigningAuthority();
         assigningAuthority.setNamespaceId("namespace");
         assigningAuthority.setUniversalId("uni");
@@ -47,7 +44,7 @@ public class IdentifiableTransformerTest {
     
     @Test
     public void testToEbXML21SourcePatient() {
-        String result = transformer.toEbXML(identifiable);
+        String result = Hl7v2Based.render(identifiable);
         assertNotNull(result);
         
         assertEquals("21\\T\\3^^^namespace&uni&uniType", result);
@@ -55,22 +52,19 @@ public class IdentifiableTransformerTest {
 
     @Test
     public void testToEbXML21SourcePatientNull() {
-        assertNull(transformer.toEbXML(null));
+        assertNull(Hl7v2Based.render(null));
     }
 
     @Test
     public void testToEbXML21SourcePatientEmpty() {
-        String result = transformer.toEbXML(new Identifiable());
-        assertNotNull(result);
-        assertEquals("", result);
+        String result = Hl7v2Based.render(new Identifiable());
+        assertNull(result);
     }
-
-
 
     @Test
     public void testFromEbXML21SourcePatient() {
-        String ebXML = transformer.toEbXML(identifiable);
-        Identifiable result = transformer.fromEbXML(ebXML);       
+        String ebXML = Hl7v2Based.render(identifiable);
+        Identifiable result = Hl7v2Based.parse(ebXML, Identifiable.class);
         assertNotNull(result);
         
         assertEquals("21&3", result.getId());
@@ -83,14 +77,12 @@ public class IdentifiableTransformerTest {
     
     @Test
     public void testFromEbXML21SourcePatientNull() {
-        assertNull(transformer.fromEbXML(null));
+        assertNull(Hl7v2Based.parse(null, Identifiable.class));
     }
     
     @Test
     public void testFromEbXML21SourcePatientEmpty() {
-        Identifiable result = transformer.fromEbXML("");
-        assertNotNull(result);
-        assertNull(result.getId());
-        assertNull(result.getAssigningAuthority());
+        Identifiable result = Hl7v2Based.parse("", Identifiable.class);
+        assertNull(result);
     }
 }

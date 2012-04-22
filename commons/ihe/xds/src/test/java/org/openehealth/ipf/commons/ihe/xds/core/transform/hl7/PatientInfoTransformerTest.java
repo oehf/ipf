@@ -23,11 +23,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Address;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PatientInfoTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 /**
  * Tests for {@link PatientInfoTransformer}.
@@ -49,7 +45,7 @@ public class PatientInfoTransformerTest {
         id.setId("abcdef");
         patientInfo.getIds().add(id);
         
-        Name name = new Name();
+        Name name = new XcnName();
         name.setFamilyName("Joman");
         patientInfo.setName(name);
 
@@ -81,7 +77,7 @@ public class PatientInfoTransformerTest {
         id2.setId("ghijkl");
         patientInfo.getIds().add(id2);
 
-        Name name = new Name();
+        Name name = new XpnName();
         name.setFamilyName("Joman");
         patientInfo.setName(name);
 

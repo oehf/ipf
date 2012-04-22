@@ -17,22 +17,15 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.AssigningAuthorityTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 
 /**
- * Tests for {@link AssigningAuthorityTransformer}.
+ * Tests for transformation between HL7 v2 and {@link AssigningAuthority}.
  * @author Jens Riemschneider
  */
 public class AssigningAuthorityTransformerTest {
-    private AssigningAuthorityTransformer transformer;
-    
-    @Before
-    public void setUp() {
-        transformer = new AssigningAuthorityTransformer();        
-    }
 
     @Test
     public void testToHL7() {
@@ -40,7 +33,7 @@ public class AssigningAuthorityTransformerTest {
         assigningAuthority.setNamespaceId("nam&ID");
         assigningAuthority.setUniversalId("ui^ID");
         assigningAuthority.setUniversalIdType("type|ID");
-        assertEquals("nam\\T\\ID&ui\\S\\ID&type\\F\\ID", transformer.toHL7(assigningAuthority));
+        assertEquals("nam\\T\\ID&ui\\S\\ID&type\\F\\ID", Hl7v2Based.render(assigningAuthority));
     }
     
     @Test
@@ -48,24 +41,24 @@ public class AssigningAuthorityTransformerTest {
         AssigningAuthority assigningAuthority = new AssigningAuthority();
         assigningAuthority.setNamespaceId("nam&ID");
         assigningAuthority.setUniversalIdType("type|ID");
-        assertEquals("nam\\T\\ID&&type\\F\\ID", transformer.toHL7(assigningAuthority));
+        assertEquals("nam\\T\\ID&&type\\F\\ID", Hl7v2Based.render(assigningAuthority));
     }
     
     @Test
     public void testToHL7NoParams() {
-        AssigningAuthority assigningAuthority = new AssigningAuthority();
-        assertNull(transformer.toHL7(assigningAuthority));
+        assertNull(Hl7v2Based.render(new AssigningAuthority()));
     }
 
     @Test
     public void testToHL7Null() {
-        assertNull(transformer.toHL7(null));
+        assertNull(Hl7v2Based.render(null));
     }
     
 
     @Test
     public void testFromHL7() {
-        AssigningAuthority assigningAuthority = transformer.fromHL7("nam\\T\\ID&ui\\S\\ID&type\\F\\ID");
+        AssigningAuthority assigningAuthority =
+                Hl7v2Based.parse("nam\\T\\ID&ui\\S\\ID&type\\F\\ID", AssigningAuthority.class);
         assertEquals("nam&ID", assigningAuthority.getNamespaceId());
         assertEquals("ui^ID", assigningAuthority.getUniversalId());
         assertEquals("type|ID", assigningAuthority.getUniversalIdType());
@@ -73,12 +66,12 @@ public class AssigningAuthorityTransformerTest {
     
     @Test
     public void testFromHL7NoParams() {
-        assertNull(transformer.fromHL7(""));
+        assertNull(Hl7v2Based.parse("", AssigningAuthority.class));
     }
 
     @Test
     public void testFromHL7OptionalParams() {
-        AssigningAuthority assigningAuthority = transformer.fromHL7("nam\\T\\ID&&type\\F\\ID");
+        AssigningAuthority assigningAuthority = Hl7v2Based.parse("nam\\T\\ID&&type\\F\\ID", AssigningAuthority.class);
         assertEquals("nam&ID", assigningAuthority.getNamespaceId());
         assertNull(assigningAuthority.getUniversalId());
         assertEquals("type|ID", assigningAuthority.getUniversalIdType());
@@ -86,11 +79,11 @@ public class AssigningAuthorityTransformerTest {
     
     @Test
     public void testFromHL7Null() {
-        assertNull(transformer.fromHL7(null));
+        assertNull(Hl7v2Based.parse(null, AssigningAuthority.class));
     }
 
     @Test
     public void testFromHL7Nothing() {
-        assertNull(transformer.fromHL7(""));
+        assertNull(Hl7v2Based.parse("", AssigningAuthority.class));
     }
 }

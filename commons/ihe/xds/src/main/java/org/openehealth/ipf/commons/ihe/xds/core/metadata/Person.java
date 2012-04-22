@@ -15,13 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import ca.uhn.hl7v2.model.v25.datatype.XCN;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.beans.BeanUtils;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import java.io.Serializable;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Represents an identifiable person.
@@ -34,20 +35,29 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * to HL7 this indicates that the values are empty. Trailing empty  
  * values are removed from the HL7 string.
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlType(name = "Person", propOrder = {"id", "name"})
-public class Person implements Serializable {    
+public class Person extends Hl7v2Based<XCN> {
     private static final long serialVersionUID = 1775227207521668959L;
     
-    private Identifiable id;        // XCN.1 and XCN.9
-    private Name name;              // XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7
+    /**
+     * Constructs a person.
+     */
+    public Person() {
+        super(new XCN(MESSAGE));
+    }
+
 
     /**
      * Constructs a person.
      */
-    public Person() {}
-    
+    public Person(XCN xcn) {
+        super(xcn);
+    }
+
+
     /**
      * Constructs a person.
      * @param id
@@ -56,15 +66,18 @@ public class Person implements Serializable {
      *          the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7).
      */
     public Person(Identifiable id, Name name) {
-        this.id = id;
-        this.name = name;
+        this();
+        setId(id);
+        setName(name);
     }
 
     /**
      * @return the id of the person (XCN.1 and XCN.9).
      */
     public Identifiable getId() {
-        return id;
+        return new Identifiable(
+                getHapiObject().getXcn1_IDNumber().getValue(),
+                new AssigningAuthority(getHapiObject().getXcn9_AssigningAuthority()));
     }
 
     /**
@@ -72,14 +85,21 @@ public class Person implements Serializable {
      *          the id of the person (XCN.1 and XCN.9).
      */
     public void setId(Identifiable id) {
-        this.id = id;
+        if (id != null) {
+            setValue(getHapiObject().getXcn1_IDNumber(), id.getId());
+            setAssigningAuthority(id.getAssigningAuthority(), getHapiObject().getXcn9_AssigningAuthority());
+        } else {
+            getHapiObject().getXcn1_IDNumber().clear();
+            getHapiObject().getXcn9_AssigningAuthority().clear();
+        }
     }
 
     /**
      * @return the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7).
      */
     public Name getName() {
-        return name;
+        XcnName name = new XcnName(getHapiObject());
+        return name.isEmpty() ? null : name;
     }
 
     /**
@@ -87,15 +107,26 @@ public class Person implements Serializable {
      *          the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7).
      */
     public void setName(Name name) {
-        this.name = name;
+        if (name != null) {
+            BeanUtils.copyProperties(name, new XcnName(getHapiObject()));
+        }
+        else {
+            XCN xcn = getHapiObject();
+            xcn.getXcn2_FamilyName().clear();
+            xcn.getXcn3_GivenName().clear();
+            xcn.getXcn4_SecondAndFurtherGivenNamesOrInitialsThereof().clear();
+            xcn.getXcn5_SuffixEgJRorIII().clear();
+            xcn.getXcn6_PrefixEgDR().clear();
+            xcn.getXcn7_DegreeEgMD().clear();
+        }
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         return result;
     }
 
@@ -108,21 +139,24 @@ public class Person implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Person other = (Person) obj;
-        if (id == null) {
-            if (other.id != null)
+        if (getId() == null) {
+            if (other.getId() != null)
                 return false;
-        } else if (!id.equals(other.id))
+        } else if (!getId().equals(other.getId()))
             return false;
-        if (name == null) {
-            if (other.name != null)
+        if (getName() == null) {
+            if (other.getName() != null)
                 return false;
-        } else if (!name.equals(other.name))
+        } else if (!getName().equals(other.getName()))
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", getId())
+                .append("name", getName())
+                .toString();
     }
 }

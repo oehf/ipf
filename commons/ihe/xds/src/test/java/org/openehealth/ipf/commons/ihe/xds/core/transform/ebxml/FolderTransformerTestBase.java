@@ -27,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FolderTransformer;
 
 /**
  * Tests for {@link FolderTransformer}.

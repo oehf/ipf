@@ -23,6 +23,14 @@
             <artifactId>ipf-commons-ihe-ws</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v25</artifactId>
+        </dependency>
 
         <!-- Dependencies for test -->
         <dependency>

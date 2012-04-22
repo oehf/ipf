@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XONValidator;
 
 /**
  * Tests for {@link XONValidator}.
@@ -32,7 +30,6 @@ public class XONValidatorTest {
     public void testValidateGoodCases() throws XDSMetaDataException {
         validator.validate("Some Hospital^^^^^&1.2.3.4.5.6.7.8.9.1789&ISO^^^^45");
         validator.validate("Some Hospital^^^^^^^^^1.2.3.4.5.6.7.8.9.1789.45");
-        validator.validate("Some Hospital^^1.2.3.4.5.6.7.8.9.1789.45");
         validator.validate("Some Hospital");
     }
     

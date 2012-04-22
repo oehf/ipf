@@ -17,11 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
-import java.util.List;
-
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Transforms a PID-7 conforming string into a {@link PatientInfo} instance. 
@@ -31,15 +31,18 @@ public class DateOfBirthPIDTransformer implements PIDTransformer {
     @Override
     public void fromHL7(String hl7Data, PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
-        
-        List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7Data);
-        patientInfo.setDateOfBirth(HL7.get(parts, 1, true));
+
+        if (StringUtils.isEmpty(hl7Data)) {
+            return;
+        }
+        int pos = hl7Data.indexOf('^');
+        patientInfo.setDateOfBirth((pos > 0) ? hl7Data.substring(0, pos) : hl7Data);
     }
 
     @Override
-    public String toHL7(PatientInfo patientInfo) {
+    public List<String> toHL7(PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
-
-        return HL7.escape(patientInfo.getDateOfBirth());
+        String date = patientInfo.getDateOfBirth();
+        return StringUtils.isEmpty(date) ? null : Collections.singletonList(date);
     }
 }
