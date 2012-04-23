@@ -90,8 +90,8 @@ class TestIti41 extends StandardTestContainer {
         """
         JAXBContext jaxbContext = JAXBContext.newInstance(ProvideAndRegisterDocumentSetRequestType.class)
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller()
-        def requestWitmMetadata = unmarshaller.unmarshal(XmlUtils.source(pnrRequestString))
-        def response = send(SERVICE3, requestWitmMetadata, Response.class)
+        def requestWithMetadata = unmarshaller.unmarshal(XmlUtils.source(pnrRequestString))
+        def response = send(SERVICE3, requestWithMetadata, Response.class)
         assert response.status == SUCCESS
 
         // request without extra metadata

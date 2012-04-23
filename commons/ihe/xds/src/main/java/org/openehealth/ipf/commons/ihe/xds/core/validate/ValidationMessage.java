@@ -61,6 +61,8 @@ public enum ValidationMessage {
     RECIPIENT_EMPTY("Recipient list value should not be empty"),
     INVALID_RECIPIENT("Invalid format of recipient list element: %1s"),
     SLOT_VALUE_TOO_LONG("Slot value length exceeds ebXML limit in slot: %1s"),
+    MISSING_SLOT_NAME("Missing slot name"),
+    DUPLICATE_SLOT_NAME("Duplicate slot name: %1s"),
     WRONG_NUMBER_OF_SLOT_VALUES("Slot contains incorrect amount of values. Slot = %1s, allowed = [%2s-%3s], Was = %4s"),
     EMPTY_SLOT_VALUE("Slot value is undefined. Slot = %1s"),
     INVALID_TIME("Invalid time format: %1s"),

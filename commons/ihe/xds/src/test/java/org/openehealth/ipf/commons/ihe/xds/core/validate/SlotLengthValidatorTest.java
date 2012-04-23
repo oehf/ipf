@@ -27,8 +27,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.SlotLengthValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
  * Validates slot lengths.
@@ -43,14 +41,14 @@ public class SlotLengthValidatorTest {
 
     @Test
     public void testValidateGoodCase21() throws XDSMetaDataException {
-        new SlotLengthValidator().validate(createContainer(factory21, SLOT_VALUE_21, -1));
+        new SlotLengthAndNameUniquenessValidator().validateContainer(createContainer(factory21, SLOT_VALUE_21, -1));
     }
 
     @Test
     public void testValidateTooLong21() throws XDSMetaDataException {
         for (int idx = 0; idx < 7; ++idx) {
             try {
-                new SlotLengthValidator().validate(createContainer(factory21, SLOT_VALUE_21, idx));
+                new SlotLengthAndNameUniquenessValidator().validateContainer(createContainer(factory21, SLOT_VALUE_21, idx));
                 fail("Expected exception: " + XDSMetaDataException.class + ", index=" + idx);
             }
             catch (XDSMetaDataException e) {
@@ -61,14 +59,14 @@ public class SlotLengthValidatorTest {
 
     @Test
     public void testValidateGoodCase30() throws XDSMetaDataException {
-        new SlotLengthValidator().validate(createContainer(factory30, SLOT_VALUE_30, -1));
+        new SlotLengthAndNameUniquenessValidator().validateContainer(createContainer(factory30, SLOT_VALUE_30, -1));
     }
 
     @Test
     public void testValidateTooLong30() throws XDSMetaDataException {
         for (int idx = 0; idx < 7; ++idx) {
             try {
-                new SlotLengthValidator().validate(createContainer(factory30, SLOT_VALUE_30, idx));
+                new SlotLengthAndNameUniquenessValidator().validateContainer(createContainer(factory30, SLOT_VALUE_30, idx));
                 fail("Expected exception: " + XDSMetaDataException.class + ", index=" + idx);
             }
             catch (XDSMetaDataException e) {
@@ -93,10 +91,10 @@ public class SlotLengthValidatorTest {
         classification2.addSlot("slot", values[1]);
 
         EbXMLClassification classification3 = factory.createClassification(objectLibrary);
-        classification3.addSlot("slot", values[2]);
+        classification3.addSlot("slot1", values[2]);
 
         EbXMLClassification classification4 = factory.createClassification(objectLibrary);
-        classification3.addSlot("slot", values[3]);
+        classification3.addSlot("slot2", values[3]);
         
         EbXMLAssociation association = factory.createAssociation("assoc", objectLibrary);
         association.addSlot("slot", values[4]);

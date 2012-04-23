@@ -36,7 +36,8 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  */
 public class ObjectContainerValidator implements Validator<EbXMLObjectContainer, ValidationProfile> {
 
-    private final SlotLengthValidator slotLengthValidator = new SlotLengthValidator();
+    private final SlotLengthAndNameUniquenessValidator slotLengthAndNameUniquenessValidator =
+            new SlotLengthAndNameUniquenessValidator();
     private final OIDValidator oidValidator = new OIDValidator();
     private final TimeValidator timeValidator = new TimeValidator();
     private final XCNValidator xcnValidator = new XCNValidator();
@@ -138,7 +139,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         notNull(container, "container cannot be null");
         notNull(profile, "profile must be set");
 
-        slotLengthValidator.validate(container);
+        slotLengthAndNameUniquenessValidator.validateContainer(container);
     
         // Note: The order of these checks is important!        
         validateSubmissionSet(container, profile);
@@ -151,7 +152,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         validateFolders(container);
         if (!profile.isQuery()) {
             validatePatientIdsAreIdentical(container);
-        } 
+        }
     }
 
     private void validateFolders(EbXMLObjectContainer container) throws XDSMetaDataException {

@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
 
@@ -41,6 +42,91 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
     private static final CXValidator cxValidator = new CXValidator();
     private static final TimeValidator timeValidator = new TimeValidator();
     private static final NopValidator nopValidator = new NopValidator();
+
+
+    private static void addAllowedMultipleSlots(QueryType queryType, QueryParameter... parameters) {
+        Set<String> slotNames = new HashSet<String>();
+        for (QueryParameter parameter : parameters) {
+            slotNames.add(parameter.getSlotName());
+        }
+        ALLOWED_MULTIPLE_SLOTS.put(queryType, slotNames);
+    }
+
+
+    private static final Map<QueryType, Set<String>> ALLOWED_MULTIPLE_SLOTS;
+    static {
+        ALLOWED_MULTIPLE_SLOTS = new HashMap<QueryType, Set<String>>();
+
+        addAllowedMultipleSlots(FIND_DOCUMENTS, 
+                DOC_ENTRY_CLASS_CODE,
+                DOC_ENTRY_TYPE_CODE,
+                DOC_ENTRY_PRACTICE_SETTING_CODE,
+                DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE,
+                DOC_ENTRY_AUTHOR_PERSON,
+                DOC_ENTRY_FORMAT_CODE,
+                DOC_ENTRY_STATUS);
+
+        addAllowedMultipleSlots(FIND_SUBMISSION_SETS,
+                SUBMISSION_SET_SOURCE_ID,
+                SUBMISSION_SET_CONTENT_TYPE_CODE,
+                SUBMISSION_SET_STATUS);
+
+        addAllowedMultipleSlots(FIND_FOLDERS,
+                FOLDER_CODES,
+                FOLDER_STATUS);
+
+        addAllowedMultipleSlots(GET_ALL,
+                DOC_ENTRY_STATUS,
+                SUBMISSION_SET_STATUS,
+                FOLDER_STATUS,
+                DOC_ENTRY_FORMAT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(GET_DOCUMENTS,
+                DOC_ENTRY_UUID,
+                DOC_ENTRY_UNIQUE_ID);
+
+        addAllowedMultipleSlots(GET_FOLDERS,
+                FOLDER_UUID,
+                FOLDER_UNIQUE_ID);
+
+        addAllowedMultipleSlots(GET_ASSOCIATIONS,
+                UUID);
+
+        addAllowedMultipleSlots(GET_DOCUMENTS_AND_ASSOCIATIONS,
+                DOC_ENTRY_UUID,
+                DOC_ENTRY_UNIQUE_ID);
+
+        addAllowedMultipleSlots(GET_SUBMISSION_SETS,
+                UUID);
+
+        addAllowedMultipleSlots(GET_SUBMISSION_SET_AND_CONTENTS,
+                DOC_ENTRY_FORMAT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(GET_FOLDER_AND_CONTENTS,
+                DOC_ENTRY_FORMAT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+        addAllowedMultipleSlots(GET_FOLDERS_FOR_DOCUMENT
+                /* empty list */);
+
+        addAllowedMultipleSlots(GET_RELATED_DOCUMENTS,
+                ASSOCIATION_TYPE);
+
+        addAllowedMultipleSlots(FETCH,
+                DOC_ENTRY_CLASS_CODE,
+                DOC_ENTRY_TYPE_CODE,
+                DOC_ENTRY_PRACTICE_SETTING_CODE,
+                DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE,
+                DOC_ENTRY_AUTHOR_PERSON,
+                DOC_ENTRY_FORMAT_CODE,
+                DOC_ENTRY_STATUS);
+    }
 
 
     private static final Map<List<InteractionId>, List<QueryType>> ALLOWED_QUERY_TYPES;
@@ -248,6 +334,9 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         if (queryType == QueryType.SQL) {
             metaDataAssert(request.getSql() != null, MISSING_SQL_QUERY_TEXT);
         } else {
+            new SlotLengthAndNameUniquenessValidator().validateSlots(
+                    request.getSlots(),
+                    ALLOWED_MULTIPLE_SLOTS.get(queryType));
             for (QueryParameterValidation validation : getValidators(queryType, profile)) {
                 validation.validate(request);
             }
