@@ -38,6 +38,7 @@ import java.util.List;
 @XmlRootElement(name = "abstractDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 abstract public class AbstractDocumentsQuery extends StoredQuery implements PatientIdBasedStoredQuery {
+    private static final long serialVersionUID = 1162423827844317922L;
 
     @Getter @Setter private List<AvailabilityStatus> status;
     @XmlElement(name = "typeCode")

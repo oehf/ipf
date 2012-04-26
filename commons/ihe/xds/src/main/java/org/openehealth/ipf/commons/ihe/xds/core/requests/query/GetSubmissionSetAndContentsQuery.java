@@ -15,29 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
-
-import javax.xml.bind.annotation.*;
-import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Represents a stored query for GetSubmissionSetAndContents.
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetSubmissionSetAndContentsQuery", propOrder = {"documentEntryTypes"})
+@XmlType(name = "GetSubmissionSetAndContentsQuery")
 @XmlRootElement(name = "getSubmissionSetAndContentsQuery")
-@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
-public class GetSubmissionSetAndContentsQuery extends GetByIdAndCodesQuery
-        implements DocumentEntryTypeAwareStoredQuery
-{
+public class GetSubmissionSetAndContentsQuery extends GetByIdAndCodesQuery {
     private static final long serialVersionUID = -4883836034076616558L;
-
-    @XmlElement(name = "documentEntryType")
-    @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
 
     /**
      * Constructs the query.

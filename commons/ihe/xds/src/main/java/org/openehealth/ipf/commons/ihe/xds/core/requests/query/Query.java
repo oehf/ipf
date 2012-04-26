@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
 import static org.apache.commons.lang3.Validate.notNull;
 

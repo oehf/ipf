@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import lombok.EqualsAndHashCode;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -29,8 +27,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FetchQuery")
 @XmlRootElement(name = "fetchQuery")
-@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class FetchQuery extends AbstractDocumentsQuery {
+    private static final long serialVersionUID = 7171404956090539393L;
 
     /**
      * Constructs the query.

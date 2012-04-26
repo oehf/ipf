@@ -167,7 +167,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case FETCH:
                 return new QueryParameterValidation[] {
                     new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                    new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                    new CodeValidation(DOC_ENTRY_CLASS_CODE, false),
                     new CodeValidation(DOC_ENTRY_TYPE_CODE),
                     new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
                     new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),

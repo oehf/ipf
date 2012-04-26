@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -34,15 +35,21 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetByIdAndCodesQuery", propOrder = {"confidentialityCodes", "formatCodes"})
+@XmlType(name = "GetByIdAndCodesQuery", propOrder = {
+        "confidentialityCodes", "formatCodes", "documentEntryTypes"})
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
-public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery {
+public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery
+        implements DocumentEntryTypeAwareStoredQuery
+{
     private static final long serialVersionUID = -8311996966550912396L;
 
     @XmlElement(name = "confidentialityCode")
     @Getter @Setter private QueryList<Code> confidentialityCodes;
     @XmlElement(name = "formatCode")
     @Getter @Setter private List<Code> formatCodes;
+    @XmlElement(name = "documentEntryType")
+    @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
+
 
     /**
      * For JAXB serialization only.
