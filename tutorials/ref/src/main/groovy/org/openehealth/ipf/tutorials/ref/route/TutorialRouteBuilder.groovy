@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.ref.route
 
-import org.apache.camel.ValidationException;
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.spring.SpringRouteBuilder
+
 /**
  * @author Martin Krasser
  */
@@ -28,7 +28,6 @@ class TutorialRouteBuilder extends SpringRouteBuilder {
     int httpPort
     
     void configure() {
-                
         // ------------------------------------------------------------
         //  Global error handling
         // ------------------------------------------------------------
@@ -54,9 +53,9 @@ class TutorialRouteBuilder extends SpringRouteBuilder {
         //  Validate order
         // ------------------------------------------------------------
             
-        //  The 'validation' DSL in the 'direct:received' route, returns as
-        //  output of 'direct:received', output of the 'direct:validation' route.
-        //  This is how the IPF 'validation' DSL works.    
+        //  The 'validation' DSL intercepts the route, and returns as output 
+        //  the output of the 'direct:validation' route.
+        //  More details in class ValidationDefinition
         from('direct:received')
             .convertBodyTo(String.class)
             .validation('direct:validation')
@@ -78,6 +77,7 @@ class TutorialRouteBuilder extends SpringRouteBuilder {
         // ------------------------------------------------------------
         
         from('jms:queue:validated')
+            .setBody(constant())
             .unmarshal().gnode(false)
             .choice()
                 .when { it.in.body.category.text() == 'animals' }
