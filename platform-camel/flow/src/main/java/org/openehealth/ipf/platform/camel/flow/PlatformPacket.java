@@ -160,6 +160,13 @@ public class PlatformPacket implements Serializable {
     public static Map<String, Object> serializableCopy(Map<String, Object> map) {
         HashMap<String, Object> result = new HashMap<String, Object>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (Exchange.AGGREGATION_STRATEGY.equals(entry.getKey())){
+                // The aggregation strategies are hold in a Map, which is serializable 
+                // Do not serialize the aggregation streategies map. 
+                // See org.apache.camel.Splitter#setAggregationStrategyOnExchange
+                // See GroovyFlowTest for test case
+                continue;
+            }
             if (entry.getValue() instanceof Serializable) {
                 result.put(entry.getKey(), entry.getValue());
             }

@@ -151,7 +151,20 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
         from("direct:out-2")
             .to("mock:mock-2")
             .ackFlow()
-
+            
+        from("direct:init-flow-after-split-with-no-explicit-aggregation-strategy")
+            .split(body())
+                .initFlow("test-split-no-explicit-aggregation-strategy")
+                    .application("test")
+                    .end() //end the flow config
+                 .log('Received part ${in.body}')
+                 .end() //end the split
+            .to("direct:ack")
+        
+        from("direct:ack")
+            .to("mock:mock")
+            .ackFlow()
+        
         // --------------------------------------------------------------
         //  Pipe Flows
         // --------------------------------------------------------------

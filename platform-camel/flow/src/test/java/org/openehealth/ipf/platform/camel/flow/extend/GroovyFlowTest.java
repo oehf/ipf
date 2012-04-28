@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.flow.extend;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
@@ -81,6 +80,17 @@ public class GroovyFlowTest extends AbstractFlowTest {
         assertEquals(1, flow2.getNakCount());
         assertEquals("ERROR", flow1.getStatus());
         assertEquals("ERROR", flow2.getStatus());
+    }
+    
+    
+    @Test
+    public void testInitflowAfterSplitWithNoAggregationStrategy() throws Exception {
+        String body = "test1,test2";
+        mock.expectedMessageCount(1);
+        mock.expectedBodyReceived().constant(body);
+        
+        producerTemplate.sendBody("direct:init-flow-after-split-with-no-explicit-aggregation-strategy", body);
+        mock.assertIsSatisfied();
     }
     
 }
