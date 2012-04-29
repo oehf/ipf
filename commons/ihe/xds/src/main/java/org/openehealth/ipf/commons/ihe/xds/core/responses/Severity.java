@@ -16,6 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.ErrorType;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -80,41 +82,31 @@ public enum Severity {
      * This method looks up the opcode via the ebXML 3.0 representation.
      * @param opcode30
      *          the string representation. Can be <code>null</code>.
-     * @return the severity or <code>null</code> if the opcode was <code>null</code> or
-     *          the value was unknown.
+     * @return the severity.
      */
     public static Severity valueOfOpcode30(String opcode30) {
-        if (opcode30 == null) {
-            return null;
-        }
-        
         for (Severity severity : values()) {
-            if (opcode30.equals(severity.getOpcode30())) {
+            if (severity.getOpcode30().equals(opcode30)) {
                 return severity;
             }
         }
         
-        return null;        
+        throw new XDSMetaDataException(ValidationMessage.INVALID_SEVERITY_IN_RESPONSE);
     }
 
     /**
      * Returns the severity that is represented by the given ebXML 2.1.
      * @param opcode21
      *          the ebXML 2.1 representation. Can be <code>null</code>.
-     * @return the severity or <code>null</code> if the opcode was <code>null</code> or
-     *          the value was unknown.
+     * @return the severity.
      */
     public static Severity valueOfOpcode21(ErrorType opcode21) {
-        if (opcode21 == null) {
-            return null;
-        }
-        
         for (Severity severity : values()) {
-            if (opcode21.equals(severity.getEbXML21())) {
+            if (severity.getEbXML21().equals(opcode21)) {
                 return severity;
             }
         }
         
-        return null;
+        throw new XDSMetaDataException(ValidationMessage.INVALID_SEVERITY_IN_RESPONSE);
     }
 }

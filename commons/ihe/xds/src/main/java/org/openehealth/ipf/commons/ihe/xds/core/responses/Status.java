@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -93,7 +96,7 @@ public enum Status {
             }
         }
         
-        throw new IllegalArgumentException("Unknown status opcode: " + opcode);
+        throw new XDSMetaDataException(ValidationMessage.INVALID_STATUS_IN_RESPONSE);
     }
 }
  

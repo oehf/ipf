@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -87,8 +90,7 @@ public enum AssociationType {
      * This method looks up the opcode via the ebXML 2.1 representations.
      * @param opcode
      *          the string representation. Can be <code>null</code>.
-     * @return the association type or <code>null</code> if the opcode was <code>null</code>
-     *          or not supported.
+     * @return the association type or <code>null</code> if the opcode was <code>null</code>.
      */
     public static AssociationType valueOfOpcode21(String opcode) {
         if (opcode == null) {
@@ -101,7 +103,7 @@ public enum AssociationType {
             }
         }
 
-        return null;
+        throw new XDSMetaDataException(ValidationMessage.INVALID_ASSOCIATION_TYPE);
     }
 
     /**
@@ -110,8 +112,7 @@ public enum AssociationType {
      * This method looks up the opcode via the ebXML 3.0 representations.
      * @param opcode
      *          the string representation. Can be <code>null</code>.
-     * @return the association type or <code>null</code> if the opcode was <code>null</code>
-     *          or not supported.
+     * @return the association type or <code>null</code> if the opcode was <code>null</code>.
      */
     public static AssociationType valueOfOpcode30(String opcode) {
         if (opcode == null) {
@@ -124,7 +125,7 @@ public enum AssociationType {
             }
         }
 
-        return null;
+        throw new XDSMetaDataException(ValidationMessage.INVALID_ASSOCIATION_TYPE);
     }
 
     /**

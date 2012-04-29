@@ -15,13 +15,22 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Type of a document entry.
  * @author Dmytro Rud
  */
+@XmlType(name = "DocumentEntryType")
+@XmlEnum(String.class)
 public enum DocumentEntryType {
-    STABLE("urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1"),
-    ON_DEMAND("urn:uuid:34268e47-fdf5-41a6-ba33-82133c465248");
+    @XmlEnumValue("stable") STABLE("urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1"),
+    @XmlEnumValue("on-demand") ON_DEMAND("urn:uuid:34268e47-fdf5-41a6-ba33-82133c465248");
 
     public static final String[] STABLE_OR_ON_DEMAND = new String[] {
             STABLE.getUuid(),
@@ -48,6 +57,7 @@ public enum DocumentEntryType {
                 return type;
             }
         }
-        return null;
+
+        throw new XDSMetaDataException(ValidationMessage.WRONG_DOCUMENT_ENTRY_TYPE, uuid);
     }
 }

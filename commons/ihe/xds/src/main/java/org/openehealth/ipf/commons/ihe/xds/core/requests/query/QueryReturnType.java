@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -49,6 +52,7 @@ public enum QueryReturnType {
                 return type;
             }
         }
-        return null;
+
+        throw new XDSMetaDataException(ValidationMessage.WRONG_QUERY_RETURN_TYPE, code);
     }
 }

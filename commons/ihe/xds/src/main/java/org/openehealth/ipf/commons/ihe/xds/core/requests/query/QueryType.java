@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -83,19 +86,19 @@ public enum QueryType {
      * Returns a query type by its id.
      * @param id
      *          the id. Can be <code>null</code>.
-     * @return the type. <code>null</code> if the id was not found or is <code>null</code>.
+     * @return the type. <code>null</code> if the id is <code>null</code>.
      */
     public static QueryType valueOfId(String id) {
         if (id == null) {
             return null;
         }
-        
+
         for (QueryType type : values()) {
             if (id.equals(type.getId())) {
                 return type;
             }
         }
         
-        return null;
+        throw new XDSMetaDataException(ValidationMessage.UNKNOWN_QUERY_TYPE, id);
     }
 }

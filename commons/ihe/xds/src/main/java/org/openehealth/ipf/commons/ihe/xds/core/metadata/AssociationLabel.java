@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -62,20 +65,19 @@ public enum AssociationLabel {
      * Returns the association label that is represented by the given opcode.
      * @param opcode
      *          the opcode to look for. Can be <code>null</code>.
-     * @return the label. <code>null</code> if the input was <code>null</code>
-     *          or if the opcode was not found.
+     * @return the label. <code>null</code> if the input was <code>null</code>.
      */
     public static AssociationLabel fromOpcode(String opcode) {
         if (opcode == null) {
             return null;
         }
-        
+
         for (AssociationLabel label : AssociationLabel.values()) {
             if (opcode.equals(label.getOpcode())) {
                 return label;
             }
         }
         
-        return null;
+        throw new XDSMetaDataException(ValidationMessage.INVALID_SUBMISSION_SET_STATUS);
     }
 }

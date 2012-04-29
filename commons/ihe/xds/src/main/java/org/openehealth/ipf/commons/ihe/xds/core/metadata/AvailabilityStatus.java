@@ -63,6 +63,7 @@ public enum AvailabilityStatus {
      *          the opcode to look up. Can be <code>null</code>.
      * @return the status. <code>null</code> if the opcode was <code>null</code>
      *          or could not be found.
+     *          <br>See ITI TF v.8.0 Vol. 2a Section 3.18.4.1.2.3.6.
      */
     public static AvailabilityStatus valueOfOpcode(String opcode) {
         if (opcode == null) {
