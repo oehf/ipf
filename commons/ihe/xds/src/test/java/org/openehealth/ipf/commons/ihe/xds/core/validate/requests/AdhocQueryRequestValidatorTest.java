@@ -85,7 +85,14 @@ public class AdhocQueryRequestValidatorTest {
         ebXML.getSlots(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()).get(0).getValueList().set(0, "lol");
         expectFailure(PARAMETER_VALUE_NOT_STRING, ebXML, iti18Profile);
     }
-    
+
+    @Test
+    public void testParameterValueNotStringList() {
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().add("lol");
+        expectFailure(PARAMETER_VALUE_NOT_STRING_LIST, ebXML, iti18Profile);
+    }
+
     @Test
     public void testCodeListNotEnoughSchemes() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);

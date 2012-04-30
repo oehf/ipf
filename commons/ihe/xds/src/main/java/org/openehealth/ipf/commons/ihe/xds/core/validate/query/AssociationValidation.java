@@ -28,12 +28,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Query parameter validation for parameters that are Code-based. 
+ * Query parameter validation for parameters that are Code-based.
  * @author Jens Riemschneider
  */
 public class AssociationValidation implements QueryParameterValidation {
     private static final Pattern PATTERN =
-            Pattern.compile("\\('.*',\\s('.*')*\\)");
+            Pattern.compile("\\s*\\('.*',\\s('.*')*\\)\\s*");
 
     private final QueryParameter param;
 
@@ -43,7 +43,7 @@ public class AssociationValidation implements QueryParameterValidation {
      *          parameter to validate.
      */
     public AssociationValidation(QueryParameter param) {
-        notNull(param, "param cannot be null");        
+        notNull(param, "param cannot be null");
         this.param = param;
     }
 
@@ -52,11 +52,13 @@ public class AssociationValidation implements QueryParameterValidation {
         List<String> slotValues = request.getSlotValues(param.getSlotName());
         for (String slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
+            metaDataAssert(PATTERN.matcher(slotValue).matches(),
+                    PARAMETER_VALUE_NOT_STRING_LIST, param);
         }
 
         QuerySlotHelper slots = new QuerySlotHelper(request);
         List<AssociationType> associationTypes = slots.toAssociationType(param);
-        
+
         for (AssociationType type : associationTypes) {
             metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);
         }
