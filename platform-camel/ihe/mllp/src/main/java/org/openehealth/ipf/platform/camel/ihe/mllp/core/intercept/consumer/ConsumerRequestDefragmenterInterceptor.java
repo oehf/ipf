@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.keyString;
 
 import ca.uhn.hl7v2.HL7Exception;

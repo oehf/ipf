@@ -33,8 +33,8 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isEmpty;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isPresent;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
 
 
@@ -171,7 +171,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
     {
         Message responseMessage = response.getHapiMessage();
         Terser responseTerser = new Terser(responseMessage);  
-        if (isPresent(responseTerser.get("DSC-1"))) {
+        if (isNotEmpty(responseTerser.get("DSC-1"))) {
             LOG.warn("Cannot perform interactive continuation: DSC-1 already " +
             		 "present in the response message returned from the route");
             return responseMessage;

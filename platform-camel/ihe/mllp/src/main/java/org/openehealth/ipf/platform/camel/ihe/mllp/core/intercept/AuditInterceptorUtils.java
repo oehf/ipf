@@ -18,10 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 import org.apache.camel.Exchange;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
@@ -93,10 +94,8 @@ public class AuditInterceptorUtils  {
             Terser terser = new Terser(message);
             
             // no audit for fragments 2..n
-            for (String name : message.getNames()) {
-                if ("DSC".equals(name) && Hl7v2MarshalUtils.isPresent(terser.get("DSC-1"))) {
-                    return false;
-                }
+            if (ArrayUtils.contains(message.getNames(), "DSC") && StringUtils.isNotEmpty(terser.get("DSC-1"))) {
+                return false;
             }
             
             String messageType = terser.get("MSH-9-1");

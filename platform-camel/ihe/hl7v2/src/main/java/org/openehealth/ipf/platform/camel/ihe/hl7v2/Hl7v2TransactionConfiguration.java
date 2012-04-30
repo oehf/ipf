@@ -16,14 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 import ca.uhn.hl7v2.parser.Parser;
-
-import static org.apache.commons.lang3.Validate.isTrue;
-import static org.apache.commons.lang3.Validate.noNullElements;
-import static org.apache.commons.lang3.Validate.notEmpty;
-import static org.apache.commons.lang3.Validate.notNull;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+import static org.apache.commons.lang3.ArrayUtils.INDEX_NOT_FOUND;
+import static org.apache.commons.lang3.ArrayUtils.contains;
+import static org.apache.commons.lang3.ArrayUtils.indexOf;
+import static org.apache.commons.lang3.Validate.*;
 
 /**
  * Endpoint-agnostic parameters of an HL7v2-based transaction.
@@ -147,7 +147,7 @@ public class Hl7v2TransactionConfiguration {
      * of the given type belong to this transaction. 
      */
     public boolean isSupportedRequestMessageType(String messageType) {
-        return indexOf(messageType, allowedRequestMessageTypes) != -1;
+        return contains(allowedRequestMessageTypes, messageType);
     }
 
     
@@ -156,12 +156,12 @@ public class Hl7v2TransactionConfiguration {
      * is valid for request messages of the given type. 
      */
     public boolean isSupportedRequestTriggerEvent(String messageType, String triggerEvent) {
-        int index = indexOf(messageType, allowedRequestMessageTypes); 
-        if(index != -1) {
-            String triggerEvents = allowedRequestTriggerEvents[index]; 
-            return indexOf(triggerEvent, triggerEvents.split(" ")) != -1;
+        int index = indexOf(allowedRequestMessageTypes, messageType);
+        if (index == INDEX_NOT_FOUND) {
+            throw new IllegalArgumentException("Unknown message type " + messageType);
         }
-        throw new IllegalArgumentException("Unknown message type " + messageType);
+        String triggerEvents = allowedRequestTriggerEvents[index];
+        return contains(StringUtils.split(triggerEvents, ' '), triggerEvent);
     }
 
     
@@ -171,8 +171,7 @@ public class Hl7v2TransactionConfiguration {
      * "ACK" is always supported.
      */
     public boolean isSupportedResponseMessageType(String messageType) {
-        return "ACK".equals(messageType) || 
-               (indexOf(messageType, allowedResponseMessageTypes) != -1);
+        return "ACK".equals(messageType) || contains(allowedResponseMessageTypes, messageType);
     }
 
     
@@ -185,12 +184,12 @@ public class Hl7v2TransactionConfiguration {
         if("ACK".equals(messageType)) {
             return true;
         }
-        int index = indexOf(messageType, allowedResponseMessageTypes); 
-        if(index != -1) {
-            String triggerEvents = allowedResponseTriggerEvents[index];
-            return indexOf(triggerEvent, triggerEvents.split(" ")) != -1;
+        int index = indexOf(allowedResponseMessageTypes, messageType);
+        if (index == INDEX_NOT_FOUND) {
+            throw new IllegalArgumentException("Unknown message type " + messageType);
         }
-        throw new IllegalArgumentException("Unknown message type " + messageType);
+        String triggerEvents = allowedResponseTriggerEvents[index];
+        return contains(StringUtils.split(triggerEvents, ' '), triggerEvent);
     }
     
     
@@ -201,8 +200,8 @@ public class Hl7v2TransactionConfiguration {
         if (auditabilityFlags == null) {
             return false;
         }
-        int index = indexOf(messageType, allowedRequestMessageTypes);
-        if (index != -1) {
+        int index = indexOf(allowedRequestMessageTypes, messageType);
+        if (index != INDEX_NOT_FOUND) {
             return auditabilityFlags[index];
         }
         throw new IllegalArgumentException("Unknown message type " + messageType);
@@ -221,27 +220,13 @@ public class Hl7v2TransactionConfiguration {
         if (responseContinuabilityFlags == null) {
             return false;
         }
-        int index = indexOf(messageType, allowedRequestMessageTypes);
-        if (index != -1) {
+        int index = indexOf(allowedRequestMessageTypes, messageType);
+        if (index != INDEX_NOT_FOUND) {
             return responseContinuabilityFlags[index];
         }
         throw new IllegalArgumentException("Unknown message type " + messageType);
     }
     
-    
-    /**
-     * Helper method that returns the index of the given String 
-     * in the given array, or -1 if not found.
-     */
-    private int indexOf(String s, String[] array) {
-        for(int i = 0; i < array.length; ++i) {
-            if(s.equals(array[i])) {
-                return i;
-            }
-        }        
-        return -1;
-    }
-
     
     /**
      * Returns <code>true</code> if the given element of the given list 

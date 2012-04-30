@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
 
 import java.util.List;
 
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isPresent;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
 
 /**
@@ -59,7 +59,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractMllpIntercepto
         List<String> mshFields = splitString(segments.get(0), request.charAt(3));
         
         // when MSH-14 is already present -- send the message unmodified and return
-        if ((mshFields.size() >= 14) && isPresent(mshFields.get(13))) {
+        if ((mshFields.size() >= 14) && isNotEmpty(mshFields.get(13))) {
             LOG.warn("MSH-14 is not empty, cannot perform automatic message fragmentation");
             getWrappedProcessor().process(exchange);
             return;
@@ -69,8 +69,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractMllpIntercepto
         // and return; otherwise -- delete the DSC segment, if present 
         if (segments.get(segments.size() - 1).startsWith("DSC")) {
             List<String> dscFields = splitString(segments.get(segments.size() - 1), request.charAt(3));
-            String dsc1 = (dscFields.size() >= 2) ? dscFields.get(1) : null;
-            if (isPresent(dsc1)) {
+            if ((dscFields.size() >= 2) && isNotEmpty(dscFields.get(1))) {
                 LOG.warn("DSC-1 is not empty, cannot perform automatic message fragmentation");
                 getWrappedProcessor().process(exchange);
                 return;
@@ -90,7 +89,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractMllpIntercepto
             StringBuilder sb = new StringBuilder();
             
             // add MSH (position 1)
-            appendSplittedSegment(sb, mshFields, fieldSeparator);
+            appendSplitSegment(sb, mshFields, fieldSeparator);
 
             // add data segments (positions 2..MAX-1)
             do {

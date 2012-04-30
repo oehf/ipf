@@ -34,8 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
 
 import java.util.List;
 
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isEmpty;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isPresent;
+import static org.apache.commons.lang3.StringUtils.*;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
 
 /**
@@ -117,9 +116,9 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
                 if (segments.get(segments.size() - 1).startsWith("DSC")) {
                     List<String> dscFields = splitString(segments.get(segments.size() - 1), responseString.charAt(3));
                     
-                    if ((dscFields.size() >= 3) 
-                            && "I".equals(dscFields.get(2)) 
-                            && isPresent(dscFields.get(1))) 
+                    if ((dscFields.size() >= 3)
+                            && "I".equals(dscFields.get(2))
+                            && isNotEmpty(dscFields.get(1)))
                     {
                         continuationPointer = dscFields.get(1);
                         LOG.debug("Automatically query interactive fragment " + continuationPointer);

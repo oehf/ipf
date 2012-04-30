@@ -182,19 +182,5 @@ public class Hl7v2MarshalUtils {
         } 
         return msg;
     }
-    
-    /**
-     * Returns <code>true</code> if the given String is <code>null</code> or empty.
-     */
-    public static boolean isEmpty(String s) {
-        return (s == null) || (s.length() == 0);
-    }
-
-    /**
-     * Returns <code>false</code> if the given String is <code>null</code> or empty.
-     */
-    public static boolean isPresent(String s) {
-        return ! isEmpty(s);
-    }
 
 }

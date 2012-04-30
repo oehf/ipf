@@ -114,9 +114,9 @@ public class FragmentationUtils {
 
 
     /**
-     * Appends a splitted segment to the given StringBuilder.
+     * Appends a split segment to the given StringBuilder.
      */
-    public static void appendSplittedSegment(StringBuilder sb, List<String> fields, char fieldSeparator) {
+    public static void appendSplitSegment(StringBuilder sb, List<String> fields, char fieldSeparator) {
         for (String field : fields) {
             sb.append(field).append(fieldSeparator);
         }
@@ -128,7 +128,7 @@ public class FragmentationUtils {
 
 
     /**
-     * Appends segments from startIndex to endIndex-1 to the given StringBuider.
+     * Appends segments from startIndex to endIndex-1 to the given StringBuilder.
      */
     public static void appendSegments(StringBuilder sb, List<String> segments, int startIndex, int endIndex) {
         for (int i = startIndex; i < endIndex; ++i) {
