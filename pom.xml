@@ -50,7 +50,7 @@
         <!-- Dependency version properties -->
         <activemq-version>5.5.1</activemq-version>
         <aspectj-version>1.6.2</aspectj-version>
-        <camel-version>2.9.1</camel-version>
+        <camel-version>2.9.2</camel-version>
         <commons-codec-version>1.5</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
