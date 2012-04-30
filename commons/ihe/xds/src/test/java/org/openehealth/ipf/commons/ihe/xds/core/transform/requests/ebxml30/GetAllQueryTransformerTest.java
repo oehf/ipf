@@ -53,7 +53,7 @@ public class GetAllQueryTransformerTest {
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
-        query.setFormatCodes(Arrays.asList(new Code("code13", null, null), new Code("code14", null, null)));
+        query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
         query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setStatusFolders(Arrays.asList(AvailabilityStatus.DEPRECATED));
         query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.SUBMITTED));
@@ -77,7 +77,7 @@ public class GetAllQueryTransformerTest {
         assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), slots.get(0).getValueList());
         assertEquals(Arrays.asList("('code12^^scheme12')"), slots.get(1).getValueList());
         
-        assertEquals(Arrays.asList("('code13')", "('code14')"),
+        assertEquals(Arrays.asList("('code13^^scheme13')", "('code14^^scheme14')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()));
 
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),

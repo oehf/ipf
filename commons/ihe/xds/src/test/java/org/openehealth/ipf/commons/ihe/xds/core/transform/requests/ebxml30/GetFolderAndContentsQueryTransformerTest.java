@@ -58,7 +58,7 @@ public class GetFolderAndContentsQueryTransformerTest {
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
-        query.setFormatCodes(Arrays.asList(new Code("code13", null, null), new Code("code14", null, null)));
+        query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
@@ -77,7 +77,7 @@ public class GetFolderAndContentsQueryTransformerTest {
 
         assertEquals("home", ebXML.getHome());
 
-        assertEquals(Arrays.asList("('code13')", "('code14')"),
+        assertEquals(Arrays.asList("('code13^^scheme13')", "('code14^^scheme14')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()));
         
         List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());

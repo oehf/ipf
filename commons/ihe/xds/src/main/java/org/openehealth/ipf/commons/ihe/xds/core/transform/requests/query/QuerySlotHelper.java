@@ -16,11 +16,15 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import static org.apache.commons.lang3.Validate.notNull;
+
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -361,7 +365,11 @@ public class QuerySlotHelper {
         List<Code> codes = new ArrayList<Code>();
         for (String slotValue : slotValues) {
             for (String hl7CE : decodeStringList(slotValue)) {
-                codes.add(Hl7v2Based.parse(hl7CE, Code.class));
+                Code code = Hl7v2Based.parse(hl7CE, Code.class);
+                if (StringUtils.isEmpty(code.getCode()) || StringUtils.isEmpty(code.getSchemeName())) {
+                    throw new XDSMetaDataException(ValidationMessage.INVALID_QUERY_PARAMETER_VALUE, hl7CE);
+                }
+                codes.add(code);
             }
         }
         return codes;

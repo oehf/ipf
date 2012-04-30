@@ -46,7 +46,7 @@ public class FindSubmissionSetsQueryTransformerTest {
         query = new FindSubmissionSetsQuery();
         
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("name1", "uni1", "uniType1")));
-        query.setContentTypeCodes(Arrays.asList(new Code("code1", null, null), new Code("code2", null, null)));
+        query.setContentTypeCodes(Arrays.asList(new Code("code1", null, "system1"), new Code("code2", null, "system2")));
         query.getSubmissionTime().setFrom("1");
         query.getSubmissionTime().setTo("2");
         query.setAuthorPerson("per'son1");
@@ -65,7 +65,7 @@ public class FindSubmissionSetsQueryTransformerTest {
         assertEquals(Arrays.asList("'id1^^^name1&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_PATIENT_ID.getSlotName()));
         
-        assertEquals(Arrays.asList("('code1')", "('code2')"),
+        assertEquals(Arrays.asList("('code1^^system1')", "('code2^^system2')"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_CONTENT_TYPE_CODE.getSlotName()));
 
         assertEquals(Arrays.asList("1"),
