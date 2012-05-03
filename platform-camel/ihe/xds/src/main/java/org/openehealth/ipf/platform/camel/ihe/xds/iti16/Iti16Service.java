@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
@@ -32,11 +33,13 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Convert
  *
  * @author Jens Riemschneider
  */
+@Slf4j
 public class Iti16Service extends AbstractWebService implements Iti16PortType {
     @Override
     public RegistryResponse documentRegistryQueryRegistry(AdhocQueryRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {
+            log.debug("ITI-16 service failed", result.getException());
             QueryResponse errorResponse = new QueryResponse(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML21Converters.convert(errorResponse);
         }

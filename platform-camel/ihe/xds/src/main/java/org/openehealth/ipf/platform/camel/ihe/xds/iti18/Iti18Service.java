@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
@@ -33,11 +34,13 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  * 
  * @author Jens Riemschneider
  */
+@Slf4j
 public class Iti18Service extends AbstractWebService implements Iti18PortType {
     @Override
     public AdhocQueryResponse documentRegistryRegistryStoredQuery(AdhocQueryRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {
+            log.debug("ITI-18 service failed", result.getException());
             QueryResponse errorResponse = new QueryResponse(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }

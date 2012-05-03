@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti61;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
@@ -30,12 +31,14 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
 /**
  * Service implementation for the IHE ITI-61 transaction (Register On-Demand Document Entry).
  */
+@Slf4j
 public class Iti61Service extends AbstractWebService implements Iti61PortType {
 
     @Override
     public RegistryResponseType documentRegistryRegisterOnDemandDocumentEntry(SubmitObjectsRequest body) {
         Exchange result = process(body, XdsJaxbDataBinding.getMap(body), ExchangePattern.InOut);
         if (result.getException() != null) {
+            log.debug("ITI-61 service failed", result.getException());
             Response errorResponse = new Response(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }

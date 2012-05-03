@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti39;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
@@ -29,6 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
 /**
  * Service implementation for the IHE ITI-39 transaction.
  */
+@Slf4j
 public class Iti39Service extends AbstractWebService implements Iti39PortType {
     private final AbstractWsEndpoint endpoint;
 
@@ -41,6 +43,7 @@ public class Iti39Service extends AbstractWebService implements Iti39PortType {
     public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
         Exchange result = process(body);
         if (result.getException() != null) {
+            log.debug("ITI-39 service failed", result.getException());
             RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(
                     result.getException(),
                     ErrorCode.REPOSITORY_METADATA_ERROR,

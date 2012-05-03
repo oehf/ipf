@@ -16,19 +16,18 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import groovy.util.slurpersupport.GPathResult;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
@@ -39,8 +38,8 @@ import javax.xml.ws.handler.MessageContext;
  * Generic Web Service implementation for HL7 v3-based transactions.
  * @author Dmytro Rud
  */
+@Slf4j
 abstract public class AbstractHl7v3WebService extends AbstractWebService {
-    private static final transient Log LOG = LogFactory.getLog(AbstractHl7v3WebService.class);
 
     private final Hl7v3WsTransactionConfiguration wsTransactionConfiguration;
 
@@ -58,9 +57,11 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
      */
     protected String doProcess(String requestString) {
         Exchange result = process(requestString);
-        return (result.getException() != null)
-                ? createNak(requestString, result.getException())
-                : Exchanges.resultMessage(result).getBody(String.class);
+        if (result.getException() != null) {
+            log.debug("HL7 v3 service failed", result.getException());
+            return createNak(requestString, result.getException());
+        }
+        return Exchanges.resultMessage(result).getBody(String.class);
     }
 
     /**
@@ -91,8 +92,8 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
     }
 
 
-    protected WsAuditDataset startAtnaAuditing(String requestString, WsAuditStrategy auditStrategy) {
-        WsAuditDataset auditDataset = null;
+    protected Hl7v3AuditDataset startAtnaAuditing(String requestString, Hl7v3AuditStrategy auditStrategy) {
+        Hl7v3AuditDataset auditDataset = null;
         if (auditStrategy != null) {
             try {
                 auditDataset = auditStrategy.createAuditDataset();
@@ -116,7 +117,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
 
                 auditStrategy.enrichDatasetFromRequest(requestString, auditDataset);
             } catch (Exception e) {
-                LOG.error("Phase 1 of server-side ATNA auditing failed", e);
+                log.error("Phase 1 of server-side ATNA auditing failed", e);
             }
         }
         return auditDataset;
@@ -125,15 +126,15 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
 
     protected void finalizeAtnaAuditing(
             Object response,
-            WsAuditStrategy auditStrategy,
-            WsAuditDataset auditDataset)
+            Hl7v3AuditStrategy auditStrategy,
+            Hl7v3AuditDataset auditDataset)
     {
         if (auditStrategy != null) {
             try {
                 auditStrategy.enrichDatasetFromResponse(response, auditDataset);
                 auditStrategy.audit(auditDataset);
             } catch (Exception e) {
-                LOG.error("Phase 2 of server-side ATNA auditing failed", e);
+                log.error("Phase 2 of server-side ATNA auditing failed", e);
             }
         }
     }

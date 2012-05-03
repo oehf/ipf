@@ -67,7 +67,7 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
          <level value="DEBUG"/>
     </logger>
         
-    <logger name="org.openehealth.ipf.commons.ihe">
+    <logger name="org.openehealth.ipf.platform.camel.ihe">
          <level value="DEBUG"/>
     </logger>
         

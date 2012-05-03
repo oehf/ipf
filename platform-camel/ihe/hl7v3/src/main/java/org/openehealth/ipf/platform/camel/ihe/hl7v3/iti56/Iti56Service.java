@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.cxf.interceptor.Fault;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56PortType;
@@ -25,12 +26,14 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
  * Service implementation for the IHE ITI-56 transaction (XCPD).
  * @author Dmytro Rud
  */
+@Slf4j
 public class Iti56Service extends AbstractWebService implements Iti56PortType {
 
     @Override
     public String locatePatients(String request) {
         Exchange result = process(request);
-        if(result.getException() != null) {
+        if (result.getException() != null) {
+            log.debug("ITI-56 service failed", result.getException());
             throw new Fault(result.getException());
         }
         

@@ -15,19 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
+import javax.activation.DataHandler
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.io.IOUtils
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
+import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import javax.activation.DataHandler
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLProvideAndRegisterDocumentSetRequest30
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType
-import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti41RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti41ResponseValidator
 
 /**
  * @author Jens Riemschneider

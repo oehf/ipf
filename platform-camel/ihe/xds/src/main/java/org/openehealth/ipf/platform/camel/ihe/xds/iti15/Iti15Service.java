@@ -22,6 +22,7 @@ import javax.annotation.Resource;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
@@ -41,6 +42,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Convert
  *
  * @author Jens Riemschneider
  */
+@Slf4j
 public class Iti15Service extends AbstractWebService implements Iti15PortType {
     @Resource
     private WebServiceContext wsc;
@@ -63,6 +65,7 @@ public class Iti15Service extends AbstractWebService implements Iti15PortType {
         
         Exchange result = process(request);
         if (result.getException() != null) {
+            log.debug("ITI-15 service failed", result.getException());
             Response errorResponse = new Response(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
             return EbXML21Converters.convert(errorResponse);
         }

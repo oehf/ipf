@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti63;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
@@ -29,6 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
 /**
  * Service implementation for the IHE ITI-63 transaction.
  */
+@Slf4j
 public class Iti63Service extends AbstractWebService implements Iti63PortType {
     private final AbstractWsEndpoint endpoint;
 
@@ -40,6 +42,7 @@ public class Iti63Service extends AbstractWebService implements Iti63PortType {
     public AdhocQueryResponse crossGatewayFetch(AdhocQueryRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {
+            log.debug("ITI-63 service failed", result.getException());
             QueryResponse errorResponse = new QueryResponse(
                     result.getException(),
                     ErrorCode.REGISTRY_METADATA_ERROR,
