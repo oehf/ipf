@@ -29,6 +29,7 @@ class MessageAdapterValidator extends AbstractMessageAdapterValidator {
           'ADT' : ['A01 A04 A05 A08' : 'MSH EVN PIDx PV1',
                    'A31'             : 'MSH EVN PIDy PV1',
                    'A40'             : 'MSH EVN PIDPD1MRGPV1',
+                   'A43'             : 'MSH EVN PATIENT',
                   ],
           'QBP' : ['Q22 Q23 ZV1'     : 'MSH QPD RCP',
                   ],
@@ -68,6 +69,16 @@ class MessageAdapterValidator extends AbstractMessageAdapterValidator {
          }
          exceptions
      }
+
+
+    /**
+     * Valdates group PATIENT from ADT^A43.
+     */
+    void checkPATIENT(msg,  Collection<Exception> violations) {
+        def group = msg.PATIENT
+        checkPatientIdList(group.PID[3], violations)
+        checkShortPatientId(group.MRG[1], violations)
+    }
      
      /**
       * Valdates group PIDPD1MRGPV1 from ADT^A40.

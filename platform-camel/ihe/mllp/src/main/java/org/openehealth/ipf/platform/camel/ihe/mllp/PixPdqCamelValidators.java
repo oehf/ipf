@@ -23,6 +23,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.iti10.Iti10Component;
 import org.openehealth.ipf.platform.camel.ihe.mllp.iti21.Iti21Component;
 import org.openehealth.ipf.platform.camel.ihe.mllp.iti22.Iti22Component;
+import org.openehealth.ipf.platform.camel.ihe.mllp.iti64.Iti64Component;
 import org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8Component;
 import org.openehealth.ipf.platform.camel.ihe.mllp.iti9.Iti9Component;
 
@@ -42,12 +43,14 @@ abstract public class PixPdqCamelValidators {
     private static final Parser ITI_10_PARSER = Iti10Component.CONFIGURATION.getParser();
     private static final Parser ITI_21_PARSER = Iti21Component.CONFIGURATION.getParser();
     private static final Parser ITI_22_PARSER = Iti22Component.CONFIGURATION.getParser();
+    private static final Parser ITI_64_PARSER = Iti64Component.CONFIGURATION.getParser();
     
     private static final Processor ITI_8_VALIDATOR  = validatingProcessor(ITI_8_PARSER);
     private static final Processor ITI_9_VALIDATOR  = validatingProcessor(ITI_9_PARSER);
     private static final Processor ITI_10_VALIDATOR = validatingProcessor(ITI_10_PARSER);
     private static final Processor ITI_21_VALIDATOR = validatingProcessor(ITI_21_PARSER);
     private static final Processor ITI_22_VALIDATOR = validatingProcessor(ITI_22_PARSER);
+    private static final Processor ITI_64_VALIDATOR = validatingProcessor(ITI_64_PARSER);
 
     /**
      * Returns a validating processor for ITI-8 request messages
@@ -127,7 +130,23 @@ abstract public class PixPdqCamelValidators {
      */
     public static Processor iti22ResponseValidator() {
         return ITI_22_VALIDATOR;
-    }    
+    }
+
+    /**
+     * Returns a validating processor for ITI-64 request messages
+     * (XAD-PID Change Management).
+     */
+    public static Processor iti64RequestValidator() {
+        return ITI_64_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-64 response messages
+     * (XAD-PID Change Management).
+     */
+    public static Processor iti64ResponseValidator() {
+        return ITI_64_VALIDATOR;
+    }
     
     
     private static Processor validatingProcessor(final Parser parser) {
