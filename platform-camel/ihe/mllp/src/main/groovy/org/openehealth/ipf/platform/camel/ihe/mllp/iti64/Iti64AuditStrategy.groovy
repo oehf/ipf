@@ -22,8 +22,9 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy
 
 /**
- * Generic audit strategy for ITI-10 (PIX Update Notification).
- * @author Christian Ohr, Boris Stanojevic
+ * Generic audit strategy for ITI-64 (Notify XAD-PID Link Change).
+ * @author Christian Ohr
+ * @author Boris Stanojevic
  */
 abstract class Iti64AuditStrategy extends MllpAuditStrategy {
 
