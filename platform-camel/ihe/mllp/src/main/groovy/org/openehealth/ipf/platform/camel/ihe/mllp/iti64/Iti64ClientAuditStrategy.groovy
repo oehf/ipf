@@ -20,8 +20,8 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 
 /**
- * Client (aka Camel producer, aka PIX Manager) audit strategy for ITI-10 (PIX Update Notification).
- * @author Dmytro Rud
+ * Client (aka Camel producer, aka XPID Manager) audit strategy for ITI-64 (XAD-PID Change Management).
+ * @author Boris Stanojevic
  */
 class Iti64ClientAuditStrategy extends Iti64AuditStrategy {
 
