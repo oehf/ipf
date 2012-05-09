@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class PidValidator implements ValueValidator {
-    private static final Pattern PID_PATTERN = Pattern.compile("PID-([1-9][0-9]*)\\|(.*)", 0);
+    private static final Pattern PID_PATTERN = Pattern.compile("\\s*PID-([1-9][0-9]*)\\|(.*)\\s*");
 
     @Override
     public void validate(String value) throws XDSMetaDataException {

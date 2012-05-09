@@ -57,10 +57,9 @@ public class PatientInfoTransformer {
         PatientInfo patientInfo = new PatientInfo();
         
         for (String hl7PIDLine : hl7PID) {
-            String[] fields = PipeParser.split(hl7PIDLine, "|");
+            String[] fields = PipeParser.split(hl7PIDLine.trim(), "|");
             if (fields.length == 2) {
-                String pidNoStr = fields[0];
-                Integer pidNo = getPidNumber(pidNoStr);
+                Integer pidNo = getPidNumber(fields[0]);
                 PIDTransformer transformer = pidTransformers.get(pidNo);
                 if (transformer != null) {            
                     transformer.fromHL7(fields[1], patientInfo);
