@@ -34,7 +34,7 @@ import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.ws.addressing.AddressingProperties;
-import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
+import org.apache.cxf.ws.addressing.impl.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Exception;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils;

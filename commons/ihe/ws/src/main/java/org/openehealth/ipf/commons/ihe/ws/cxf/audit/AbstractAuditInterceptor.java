@@ -22,7 +22,7 @@ import org.apache.cxf.binding.soap.Soap12;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
-import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
+import org.apache.cxf.ws.addressing.impl.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
@@ -169,7 +169,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
             boolean inverseWsaDirection,
             WsAuditDataset auditDataset) 
     {
-        AddressingPropertiesImpl wsaProperties = (AddressingPropertiesImpl) message.get(isInbound ? 
+        AddressingPropertiesImpl wsaProperties = (AddressingPropertiesImpl) message.get(isInbound ?
                 JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_INBOUND : 
                 JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_OUTBOUND);
         

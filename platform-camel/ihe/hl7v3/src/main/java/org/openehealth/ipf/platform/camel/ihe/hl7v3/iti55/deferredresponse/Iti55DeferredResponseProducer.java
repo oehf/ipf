@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse;
 
 import org.apache.camel.Exchange;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
-import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
+import org.apache.cxf.ws.addressing.impl.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.RelatesToType;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredResponsePortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
