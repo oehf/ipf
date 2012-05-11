@@ -16,12 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti64
 
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.modules.hl7.AckTypeCode
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.iti8RequestValidator
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.iti8ResponseValidator
 import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.iti64ResponseValidator
 import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.iti64RequestValidator
 

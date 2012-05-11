@@ -19,7 +19,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 
 /**
- * Server (aka Camel consumer, aka XPID Consumer) audit strategy for ITI-64 (XAD-PID Change Management).
+ * Server (aka Camel consumer, aka XPID Consumer) audit strategy for ITI-64 (Notify XAD-PID Link Change).
  * @author Boris Stanojevic
  */
 class Iti64ServerAuditStrategy extends Iti64AuditStrategy {
