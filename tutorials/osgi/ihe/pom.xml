@@ -14,7 +14,7 @@
 
     <properties>
         <aries-blueprint-version>0.4</aries-blueprint-version>
-        <cxf-bundle-version>2.5.1</cxf-bundle-version>
+        <cxf-bundle-version>2.6.0</cxf-bundle-version>
         <equinox-cm-version>1.0.100-v20090520-1800</equinox-cm-version>
         <fileinstall-version>1.0.0</fileinstall-version>
         <geronimo-javamail-api-version>1.2</geronimo-javamail-api-version>
