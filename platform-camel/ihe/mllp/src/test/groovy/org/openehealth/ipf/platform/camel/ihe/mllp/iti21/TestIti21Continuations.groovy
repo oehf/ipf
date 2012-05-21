@@ -80,7 +80,7 @@ class TestIti21Continuations extends MllpTestContainer {
         
         // check whether "autoCancel" parameter works
         EhcacheInteractiveConfigurationStorage storage = appContext.getBean('interactiveContinuationStorage')
-        assert storage.ehcache.size() == 0
+        assert storage.ehcache.size == 0
     }
     
     @Test
