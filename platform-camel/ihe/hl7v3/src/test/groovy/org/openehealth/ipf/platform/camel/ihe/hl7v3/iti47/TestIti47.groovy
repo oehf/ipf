@@ -201,6 +201,6 @@ class TestIti47 extends StandardTestContainer {
         
         // check whether HL7 v2 continuation has really been used
         EhcacheInteractiveConfigurationStorage storage = appContext.getBean('hl7v2ContinuationStorage')
-        assertTrue(storage.ehcache.size() > 0)
+        assertTrue(storage.ehcache.size > 0)
     }
 }
