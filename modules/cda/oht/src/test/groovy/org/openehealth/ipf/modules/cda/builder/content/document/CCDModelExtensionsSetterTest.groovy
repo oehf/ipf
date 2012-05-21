@@ -84,7 +84,7 @@ public class CCDModelExtensionsSetterTest extends AbstractCDAR2BuilderTest{
                 getClass().getResource('/builders/content/section/CCDPayersExample.groovy'))
         ccdDoc.payers = section
         assert ccdDoc.payers != null
-        assert ccdDoc.payers.coverageActivity.size == 1
+        assert ccdDoc.payers.coverageActivity.size() == 1
     }
 
     @Test
@@ -94,15 +94,15 @@ public class CCDModelExtensionsSetterTest extends AbstractCDAR2BuilderTest{
                 getClass().getResource('/builders/content/section/CCDAdvanceDirectivesExample.groovy'))
         ccdDoc.advanceDirectives = section
         assert ccdDoc.advanceDirectives != null
-        assert ccdDoc.advanceDirectives.advanceDirectiveObservation.size == 1
+        assert ccdDoc.advanceDirectives.advanceDirectiveObservation.size()== 1
     }
 
     @Test
     public void testCCDSupportExtensions() {
-        assert ccdDoc.recordTarget.patientRole.patient.guardian.flatten().size == 1
-        assert ccdDoc.nextOfKin.size == 1
-        assert ccdDoc.emergencyContact.size == 1
-        assert ccdDoc.caregiver.size == 1
+        assert ccdDoc.recordTarget.patientRole.patient.guardian.flatten().size()== 1
+        assert ccdDoc.nextOfKin.size()== 1
+        assert ccdDoc.emergencyContact.size()== 1
+        assert ccdDoc.caregiver.size()== 1
     }
 
     @Test

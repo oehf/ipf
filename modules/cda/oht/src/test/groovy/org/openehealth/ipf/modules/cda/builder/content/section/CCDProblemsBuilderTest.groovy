@@ -39,8 +39,8 @@ public class CCDProblemsBuilderTest extends AbstractCDAR2BuilderTest {
 		POCDMT000040Section problems = builder.build(
 	        getClass().getResource('/builders/content/section/CCDProblemsExample.groovy'))
 		new CCDProblemsValidator().validate(problems, null)
-		assert problems.problemAct.size == 2
-		assert problems.problemAct[0].problemObservation.size == 1
+		assert problems.problemAct.size()== 2
+		assert problems.problemAct[0].problemObservation.size()== 1
 		assert problems.problemAct[0].problemObservation[0].problemHealthstatus != null
 		assert problems.problemAct[0].patientAwareness != null
 		assert problems.problemAct[1].problemObservation[0].patientAwareness != null

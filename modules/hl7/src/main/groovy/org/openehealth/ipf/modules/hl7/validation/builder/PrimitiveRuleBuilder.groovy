@@ -77,7 +77,7 @@ public class PrimitiveRuleBuilder extends VersionBuilder{
 	/*
 	 * Adds a rule that restricts the size of a Primitive value. Equivalent with
 	 * <pre>
-	 * checkIf { it.size <= max }
+	 * checkIf { it.size() <= max }
 	 * </pre>
 	 */
 	RuleBuilder maxSize(int max) {

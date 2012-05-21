@@ -33,7 +33,7 @@ class CompositeAdapterTest extends GroovyTestCase {
     
     void testGet() {
         // property access on target
-        assert composite.components.size == 8
+        assert composite.components.size() == 8
     }
 
     void testGetAt() {

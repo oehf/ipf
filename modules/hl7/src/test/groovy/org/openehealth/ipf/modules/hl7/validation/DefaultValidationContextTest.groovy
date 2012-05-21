@@ -22,7 +22,8 @@ import ca.uhn.hl7v2.validation.ValidationContext
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.conf.store.ProfileStoreFactory
 import ca.uhn.hl7v2.model.Message
-import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
+import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
+
 import org.openehealth.ipf.modules.hl7.validation.support.ClassPathProfileStore
 import org.openehealth.ipf.modules.hl7.validation.model.ClosurePrimitiveTypeRule
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureMessageRule
@@ -99,7 +100,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
                 .primitiveType('ST').omitLeadingWhitespace()
                 .primitiveType('TX').omitTrailingWhitespace()
                 .primitiveType('ID')[1..1].withDescription('IDs may not be longer than 1')     // NONSENSE. Will throw
-                .primitiveType('IS').checkIf { it.value.size <= 20 }		    // same as maxSize(20)
+                .primitiveType('IS').checkIf { it.value.size() <= 20 }		    // same as maxSize(20)
                 .primitiveType('SI').matches(/\d*/)							// non-negative integer
                 .primitiveType('NM').matches(/(+|-)?\d*\.?\d*/)				// number
                 .primitiveType('TM')

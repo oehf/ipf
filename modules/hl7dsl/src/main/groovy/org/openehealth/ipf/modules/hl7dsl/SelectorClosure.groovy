@@ -64,7 +64,7 @@ class SelectorClosure extends Closure implements AbstractAdapter {
 	
     def elementAt(argument){
         AbstractAdapter element
-        if (elements.size <= argument){
+        if (elements.size() <= argument){
             element = adapter.nrp(index)
         } else {
             element = elements[argument]
@@ -78,7 +78,7 @@ class SelectorClosure extends Closure implements AbstractAdapter {
     
     boolean isEmpty(){
         boolean result = true;
-        for (int index = 0; index < elements.size; index ++) {
+        for (int index = 0; index < elements.size(); index ++) {
             AbstractAdapter el = elements[index];
             if (el != null && !el.isEmpty()){
                 result = false;

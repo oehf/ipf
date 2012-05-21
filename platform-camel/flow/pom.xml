@@ -60,11 +60,6 @@
             <artifactId>aspectjweaver</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jetty</artifactId>
             <scope>test</scope>
@@ -81,7 +76,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>-Xmx256m -javaagent:${project.build.directory}/lib/spring-agent.jar</argLine>
+                    <argLine>-javaagent:${project.build.directory}/lib/spring-agent.jar</argLine>
                 </configuration>
             </plugin>
             <plugin>

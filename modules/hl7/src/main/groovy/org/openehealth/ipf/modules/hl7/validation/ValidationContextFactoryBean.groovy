@@ -53,7 +53,7 @@ public class ValidationContextFactoryBean extends AbstractFactoryBean implements
      */
     public Object createInstance(){
         def validationContext = new DefaultValidationContext()
-        if (builders == null || builders.size == 0) {
+        if (builders == null || builders.size() == 0) {
             builders = applicationContext.getBeansOfType(ValidationContextBuilder.class)?.values()
         }
         builders?.each { builder ->

@@ -56,7 +56,7 @@ public class SchematronValidator implements Validator {
             new ValidationException("Validation error at $location : $message")
         }
 
-        if (exceptions.size > 0) {
+        if (exceptions.size() > 0) {
             throw new ValidationException("Schematron validation error", exceptions)
         }
     }

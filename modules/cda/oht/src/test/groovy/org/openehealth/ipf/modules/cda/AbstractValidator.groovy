@@ -18,7 +18,9 @@ package org.openehealth.ipf.modules.cda
 import org.openehealth.ipf.commons.core.modules.api.Validator
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Act
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import groovy.util.slurpersupport.GPathResultimport groovy.util.XmlSlurper
+import groovy.util.slurpersupport.GPathResult
+import groovy.util.XmlSlurper
+
 
 /**
  * Abstract validator class from which the CDA validators should inherit from.
@@ -126,21 +128,21 @@ public abstract class AbstractValidator implements Validator {
 	
 	static void assertMinSize(constraint, minSize, List object) {
 		minSize = resolve(minSize, object)
-		if (object.size < minSize) {
+		if (object.size() < minSize) {
 			throw new ValidationException("$constraint violated. Object must have at least $minSize element(s), but has ${object.size}")            
 		}
 	}
 	
 	static void assertMaxSize(constraint, maxSize, List object) {
 		maxSize = resolve(maxSize, object)
-		if (object.size > maxSize) {
+		if (object.size() > maxSize) {
 			throw new ValidationException("$constraint violated. Object must have at most $maxSize element(s), but has ${object.size}")            
 		}
 	}
 	
 	static void assertSize(constraint, size, List object) {
 		size = resolve(size, object)
-		if (object.size != size) {
+		if (object.size() != size) {
 			throw new ValidationException("$constraint violated. Object must have $size element(s), but has ${object.size}")            
 		}
 	}    

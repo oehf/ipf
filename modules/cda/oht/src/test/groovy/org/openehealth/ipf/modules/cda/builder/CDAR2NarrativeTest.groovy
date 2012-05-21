@@ -86,7 +86,7 @@ public class CDAR2NarrativeTest extends AbstractCDAR2BuilderTest {
 		StrucDocText text = builder.build(getClass().getResource('/builders/content/NarrativeExample6.groovy'))
 		Assert.assertNotNull text
 		Assert.assertEquals 'Erythematous rash, palmar surface, left index finger.', text.text
-		Assert.assertEquals 2, text.mixed[1].value.referencedObject.size
+		Assert.assertEquals 2, text.mixed[1].value.referencedObject.size()
 		Assert.assertEquals 'MM1', text.mixed[1].value.referencedObject[0]
 	}
 	

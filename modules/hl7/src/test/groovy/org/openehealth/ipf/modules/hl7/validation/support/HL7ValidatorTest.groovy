@@ -18,7 +18,8 @@ package org.openehealth.ipf.modules.hl7.validation.support
 import ca.uhn.hl7v2.validation.ValidationContext
 import ca.uhn.hl7v2.parser.PipeParser
 import ca.uhn.hl7v2.HL7Exception
-import org.openehealth.ipf.commons.core.modules.api.ValidationException
+import org.openehealth.ipf.commons.core.modules.api.ValidationException
+
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 
 /**
@@ -48,7 +49,7 @@ public class HL7ValidatorTest extends GroovyTestCase{
                     .type('ID').maxSize(1).withDescription('IDs may not be longer than 1')     
                                                                         // NONSENSE. Will throw
                                                                         
-                    .type('IS').checkIf { it.value.size <= 20 }		    // same as maxSize(20)
+                    .type('IS').checkIf { it.value.size() <= 20 }		    // same as maxSize(20)
                     .type('SI').matches(/\d*/)							// non-negative integer
                     .type('NM').matches(/(+|-)?\d*\.?\d*/)				// number
                     .type('TM')
