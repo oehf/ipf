@@ -76,7 +76,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>-javaagent:${project.build.directory}/lib/spring-agent.jar</argLine>
+                    <argLine>-Xmx256m -javaagent:${project.build.directory}/lib/spring-agent.jar</argLine>
                 </configuration>
             </plugin>
             <plugin>
