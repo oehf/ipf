@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore
 
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
 /**
  * Client (aka Camel producer) audit strategy for ITI-21 and ITI-22 (PDQ).
@@ -29,7 +29,7 @@ class PdqClientAuditStrategy extends PdqAuditStrategy {
         super(false, transactionAbbreviation)
     }
      
-    void doAudit(RFC3881EventOutcomeCodes eventOutcome, MllpAuditDataset auditDataset) {
+    void doAudit(RFC3881EventOutcomeCodes eventOutcome, QueryAuditDataset auditDataset) {
         AuditorManager.getPDQConsumerAuditor()."audit${transactionAbbreviation}QueryEvent"(
                 eventOutcome,
                 auditDataset.remoteAddress,

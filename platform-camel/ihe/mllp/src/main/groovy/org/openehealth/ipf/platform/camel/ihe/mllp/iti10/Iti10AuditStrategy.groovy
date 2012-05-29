@@ -17,15 +17,15 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti10
 
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
 /**
  * Generic audit strategy for ITI-10 (PIX Update Notification).
  * @author Dmytro Rud
  */
-abstract class Iti10AuditStrategy extends MllpAuditStrategy {
+abstract class Iti10AuditStrategy extends MllpAuditStrategy<QueryAuditDataset> {
 
     Iti10AuditStrategy(boolean serverSide) {
         super(serverSide)
@@ -37,7 +37,13 @@ abstract class Iti10AuditStrategy extends MllpAuditStrategy {
     }
 
 
-    void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
+    void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
         auditDataset.patientIds = AuditUtils.pidList(msg.PID[3])
+    }
+
+
+    @Override
+    QueryAuditDataset createAuditDataset() {
+        return new QueryAuditDataset(serverSide)
     }
 }

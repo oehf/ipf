@@ -15,33 +15,35 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
-import org.openhealthtools.ihe.atna.auditor.XDSAuditor;
+import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 /**
  * @author Dmytro Rud
  */
-abstract class CustomAuditor extends XDSAuditor {
+abstract class CustomAuditorUtils {
 
-    protected void configureEvent(
+    public static void configureEvent(
+            IHEAuditor auditor,
             boolean serverSide,
             GenericIHEAuditEventMessage event,
-            String replyToUri,
+            String sourceUserId,
             String userName,
-            String serverUri,
-            String clientIpAddress)
+            String destinationUserId,
+            String destinationUri,
+            String sourceIpAddress)
     {
         event.setAuditSourceId(
-                getAuditSourceId(),
-                getAuditEnterpriseSiteId());
+                auditor.getAuditSourceId(),
+                auditor.getAuditEnterpriseSiteId());
 
         // Set the source active participant
         event.addSourceActiveParticipant(
-                replyToUri,
-                serverSide ? null : getSystemAltUserId(),
+                sourceUserId,
+                serverSide ? null : auditor.getSystemAltUserId(),
                 null,
-                serverSide ? clientIpAddress : getSystemNetworkId(),
+                serverSide ? sourceIpAddress : auditor.getSystemNetworkId(),
                 true);
 
         // Set the human requestor active participant (from XUA)
@@ -51,10 +53,10 @@ abstract class CustomAuditor extends XDSAuditor {
 
         // Set the destination active participant
         event.addDestinationActiveParticipant(
-                serverUri,
-                serverSide ? getSystemAltUserId() : null,
+                destinationUserId,
+                serverSide ? auditor.getSystemAltUserId() : null,
                 null,
-                EventUtils.getAddressForUrl(serverUri, false),
+                EventUtils.getAddressForUrl(destinationUri, false),
                 false);
     }
 }

@@ -29,7 +29,7 @@ class Iti64TestRouteBuilder extends SpringRouteBuilder {
 
     void configure() throws Exception {
 
-    from('xpid-iti64://0.0.0.0:18491?audit=false')
+    from('xpid-iti64://0.0.0.0:18491')
         .onException(Exception.class)
             .maximumRedeliveries(0)
         .end()

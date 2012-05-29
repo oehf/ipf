@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
@@ -26,9 +28,9 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * 
  * @author Dmytro Rud
  */
-abstract public class MllpAuditStrategy {
+abstract public class MllpAuditStrategy<T extends MllpAuditDataset> {
     // whether we audit on server (true) or on client (false)
-    private final boolean serverSide;
+    @Getter(AccessLevel.PROTECTED) private final boolean serverSide;
 
 
     /**
@@ -45,9 +47,7 @@ abstract public class MllpAuditStrategy {
     /**
      * Creates a new audit dataset instance.
      */
-    public MllpAuditDataset createAuditDataset() {
-        return new MllpAuditDataset(serverSide);
-    }
+    abstract public T createAuditDataset();
 
 
     /**
@@ -76,7 +76,7 @@ abstract public class MllpAuditStrategy {
      *      Camel exchange
      */
     abstract public void enrichAuditDatasetFromRequest(
-            MllpAuditDataset auditDataset, 
+            T auditDataset,
             MessageAdapter<?> msg,
             Exchange exchange);
     
@@ -90,7 +90,7 @@ abstract public class MllpAuditStrategy {
      *      {@link MessageAdapter} representing the message.
      */
     public void enrichAuditDatasetFromResponse(
-            MllpAuditDataset auditDataset, 
+            T auditDataset,
             MessageAdapter<?> msg)
     {
         // does nothing per default
@@ -106,7 +106,7 @@ abstract public class MllpAuditStrategy {
      */
     abstract public void doAudit(
             RFC3881EventOutcomeCodes eventOutcome, 
-            MllpAuditDataset auditDataset);
+            T auditDataset);
 
 
     /**

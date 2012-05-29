@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti10
 
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 
 /**
  * Client (aka Camel producer, aka PIX Manager) audit strategy for ITI-10 (PIX Update Notification).
@@ -30,7 +30,7 @@ class Iti10ClientAuditStrategy extends Iti10AuditStrategy {
     }
 
 
-    void doAudit(RFC3881EventOutcomeCodes eventOutcome, MllpAuditDataset auditDataset) {
+    void doAudit(RFC3881EventOutcomeCodes eventOutcome, QueryAuditDataset auditDataset) {
         AuditorManager.getPIXManagerAuditor().auditUpdateNotificationEvent(
                 eventOutcome,
                 auditDataset.localAddress,

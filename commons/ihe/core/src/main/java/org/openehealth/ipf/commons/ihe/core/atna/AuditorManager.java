@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
+import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomPixAuditor;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.Hl7v3Auditor;
 import org.openhealthtools.ihe.atna.auditor.*;
@@ -101,6 +102,12 @@ public abstract class AuditorManager {
     public static CustomXdsAuditor getCustomXdsAuditor() {
         synchronized (sync) {
             return CustomXdsAuditor.getAuditor();
+        }
+    }
+
+    public static CustomPixAuditor getCustomPixAuditor() {
+        synchronized (sync) {
+            return CustomPixAuditor.getAuditor();
         }
     }
 

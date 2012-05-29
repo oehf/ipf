@@ -15,11 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
+import org.openhealthtools.ihe.atna.auditor.XDSAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
+
+import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
 /**
  * Implementation of XDS Auditors to send audit messages for
@@ -30,7 +33,7 @@ import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
  *
  * @author Dmytro Rud
  */
-public class CustomXdsAuditor extends CustomAuditor {
+public class CustomXdsAuditor extends XDSAuditor {
 
     public static CustomXdsAuditor getAuditor() {
         AuditorModuleContext ctx = AuditorModuleContext.getContext();
@@ -59,7 +62,7 @@ public class CustomXdsAuditor extends CustomAuditor {
                 serverSide ? new DICOMEventIdCodes.Import() : new DICOMEventIdCodes.Export(),
                 new CustomIHETransactionEventTypeCodes.RegisterOnDemandDocumentEntry());
 
-        configureEvent(serverSide, event, userId, userName, registryEndpointUri, clientIpAddress);
+        configureEvent(this, serverSide, event, userId, userName, registryEndpointUri, registryEndpointUri, clientIpAddress);
         if (!EventUtils.isEmptyOrNull(patientId)) {
             event.addPatientParticipantObject(patientId);
         }

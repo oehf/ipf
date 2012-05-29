@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
@@ -26,7 +25,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Generic audit strategy for ITI-8 (PIX Feed).
  * @author Dmytro Rud
  */
-abstract class Iti8AuditStrategy extends MllpAuditStrategy {
+abstract class Iti8AuditStrategy extends MllpAuditStrategy<Iti8AuditDataset> {
     
     Iti8AuditStrategy(boolean serverSide) {
         super(serverSide)
@@ -40,7 +39,7 @@ abstract class Iti8AuditStrategy extends MllpAuditStrategy {
     }
 
 
-    void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
+    void enrichAuditDatasetFromRequest(Iti8AuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
         def pidSegment
         if(msg.MSH[9][2].value == 'A40') {
             def group = msg.PIDPD1MRGPV1
@@ -53,7 +52,7 @@ abstract class Iti8AuditStrategy extends MllpAuditStrategy {
     }
 
     
-    void doAudit(RFC3881EventOutcomeCodes eventOutcome, MllpAuditDataset auditDataset) {
+    void doAudit(RFC3881EventOutcomeCodes eventOutcome, Iti8AuditDataset auditDataset) {
         if(auditDataset.messageType == 'A08') {
             callAuditRoutine('Update', eventOutcome, auditDataset, true)
         } else if(auditDataset.messageType == 'A40') {
@@ -69,6 +68,12 @@ abstract class Iti8AuditStrategy extends MllpAuditStrategy {
     abstract void callAuditRoutine(
             String action,
             RFC3881EventOutcomeCodes eventOutcome,
-            MllpAuditDataset auditDataset,
+            Iti8AuditDataset auditDataset,
             boolean newPatientId)
+
+
+    @Override
+    Iti8AuditDataset createAuditDataset() {
+        return new Iti8AuditDataset(serverSide)
+    }
 }

@@ -42,10 +42,8 @@ public class Iti64Component extends MllpComponent {
                 new boolean[] {false},
                 new PipeParser());
 
-    private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY =
-        new Iti64ClientAuditStrategy();
-    private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY =
-        new Iti64ServerAuditStrategy();
+    private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = new Iti64AuditStrategy(false);
+    private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = new Iti64AuditStrategy(true);
     private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
 

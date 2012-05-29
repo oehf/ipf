@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti9
 
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
 /**
  * Server (aka Camel consumer, aka PIX Manager) audit strategy for ITI-9 (PIX Query).
@@ -30,7 +30,7 @@ class Iti9ServerAuditStrategy extends Iti9AuditStrategy {
     }
 
 
-    void doAudit(RFC3881EventOutcomeCodes eventOutcome, MllpAuditDataset auditDataset) {
+    void doAudit(RFC3881EventOutcomeCodes eventOutcome, QueryAuditDataset auditDataset) {
         AuditorManager.getPIXManagerAuditor().auditPIXQueryEvent(
                 eventOutcome,
                 auditDataset.remoteAddress,

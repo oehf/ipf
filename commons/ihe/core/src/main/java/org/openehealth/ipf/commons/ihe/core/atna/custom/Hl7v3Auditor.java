@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
+import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
@@ -26,6 +27,8 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 import java.io.UnsupportedEncodingException;
+
+import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
 /**
  * Implementation of HL7v3 Auditors to send audit messages for
@@ -41,7 +44,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Dmytro Rud
  */
-public class Hl7v3Auditor extends CustomAuditor {
+public class Hl7v3Auditor extends IHEAuditor {
 
     public static Hl7v3Auditor getAuditor() {
         AuditorModuleContext ctx = AuditorModuleContext.getContext();
@@ -71,7 +74,7 @@ public class Hl7v3Auditor extends CustomAuditor {
                 eventActionCode,
                 new IHETransactionEventTypeCodes.PatientIdentityFeedV3());
 
-        configureEvent(serverSide, event, replyToUri, userName, pixManagerUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri, pixManagerUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, messageId);
         audit(event);
     }
@@ -149,7 +152,7 @@ public class Hl7v3Auditor extends CustomAuditor {
                 eventOutcome,
                 new IHETransactionEventTypeCodes.PIXQueryV3());
 
-        configureEvent(serverSide, event, replyToUri, userName, pixManagerUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri, pixManagerUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);
         event.addQueryParticipantObject(null, null, payloadBytes(queryPayload), null,
                 new IHETransactionEventTypeCodes.PIXQueryV3());
@@ -178,7 +181,7 @@ public class Hl7v3Auditor extends CustomAuditor {
                 RFC3881EventCodes.RFC3881EventActionCodes.READ,
                 new IHETransactionEventTypeCodes.PIXUpdateNotificationV3());
 
-        configureEvent(serverSide, event, replyToUri, userName, pixManagerUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri, pixManagerUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, messageId);
         audit(event);
     }
@@ -205,7 +208,7 @@ public class Hl7v3Auditor extends CustomAuditor {
                 eventOutcome,
                 new IHETransactionEventTypeCodes.PatientDemographicsQueryV3());
 
-        configureEvent(serverSide, event, replyToUri, userName, pdSupplierUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, pdSupplierUri, pdSupplierUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);
         event.addQueryParticipantObject(null, null, payloadBytes(queryPayload), null,
                 new IHETransactionEventTypeCodes.PatientDemographicsQueryV3());
@@ -235,7 +238,7 @@ public class Hl7v3Auditor extends CustomAuditor {
                 eventOutcome,
                 new IHETransactionEventTypeCodes.CrossGatewayPatientDiscovery());
 
-        configureEvent(serverSide, event, replyToUri, userName, respondingGatewayUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, respondingGatewayUri, respondingGatewayUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);
         event.addXCPDParticipantObject(queryId, homeCommunityId, payloadBytes(queryPayload));
         audit(event);
@@ -262,7 +265,7 @@ public class Hl7v3Auditor extends CustomAuditor {
                 eventOutcome,
                 new CustomIHETransactionEventTypeCodes.PatientLocationQuery());
 
-        configureEvent(serverSide, event, replyToUri, userName, respondingGatewayUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, respondingGatewayUri, respondingGatewayUri, clientIpAddress);
         event.addPatientParticipantObject(patientId);
         event.addQueryParametersObject(queryPayload);
         audit(event);
@@ -290,7 +293,7 @@ public class Hl7v3Auditor extends CustomAuditor {
                 eventOutcome,
                 new CustomIHETransactionEventTypeCodes.QueryExistingData());
 
-        configureEvent(serverSide, event, replyToUri, userName, clinicalDataSourceUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, clinicalDataSourceUri, clinicalDataSourceUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);
         event.addQedParticipantObject(queryId, payloadBytes(queryPayload));
         audit(event);

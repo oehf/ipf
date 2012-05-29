@@ -50,8 +50,8 @@ class TestIti64 extends MllpTestContainer {
         def s = 'MSH|^~\\&|REPOSITORY|ENT|RSP1P8|GOOD HEALTH HOSPITAL|200701051530|' +
                 "SEC|${msh9}|0000009|P|${msh12}\n" +
                 'EVN|A43|200701051530\n' +
-                'PID|1|E2|MR2^^^ABCHMO|||EVERYWOMAN^EVE|\n' +
-                'MRG|MR2^^^ABCHMO|||E1\n'
+                'PID|1|E2|new^^^&1.2.3.4&ISO~source^^^&1.2.3.4&ISO|||EVERYWOMAN^EVE|\n' +
+                'MRG|old^^^&1.2.3.4&ISO|||E1\n'
         s
     }
     
@@ -60,8 +60,8 @@ class TestIti64 extends MllpTestContainer {
      * Expected result: ACK response, two or zero audit items.
      */
     @Test
-    void testHappyCaseWithoutAudit() {
-        doTestHappyCaseAndAudit('xpid-iti64://localhost:18491?audit=false', 0)
+    void testHappyCase() {
+        doTestHappyCaseAndAudit('xpid-iti64://localhost:18491', 2)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {

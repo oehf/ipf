@@ -47,6 +47,12 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
         }
     }
 
+    public static final class NotifyXadPidLinkChange extends IHETransactionEventTypeCodes {
+        public NotifyXadPidLinkChange() {
+            super("ITI-64", "Notify XAD-PID Link Change");
+        }
+    }
+
     public static final class QueryExistingData extends IHETransactionEventTypeCodes {
         public QueryExistingData() {
             super("PCC-1", "Query Existing Data");
