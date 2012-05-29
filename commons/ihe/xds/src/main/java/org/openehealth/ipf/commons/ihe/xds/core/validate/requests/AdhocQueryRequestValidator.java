@@ -124,8 +124,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 DOC_ENTRY_EVENT_CODE,
                 DOC_ENTRY_CONFIDENTIALITY_CODE,
                 DOC_ENTRY_AUTHOR_PERSON,
-                DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_STATUS);
+                DOC_ENTRY_FORMAT_CODE);
     }
 
 
@@ -181,7 +180,6 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
                     new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                     new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                    new StatusValidation(DOC_ENTRY_STATUS),
                     new HomeCommunityIdValidation(true),
                 };
 

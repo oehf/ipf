@@ -60,8 +60,6 @@ abstract class AbstractDocumentsQueryTransformer<T extends AbstractDocumentsQuer
         slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM, query.getServiceStopTime().getFrom());
         slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO, query.getServiceStopTime().getTo());
 
-        slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
-        
         slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
         slots.fromCode(DOC_ENTRY_CLASS_CODE, query.getClassCodes());
         slots.fromCode(DOC_ENTRY_TYPE_CODE, query.getTypeCodes());
@@ -109,7 +107,6 @@ abstract class AbstractDocumentsQueryTransformer<T extends AbstractDocumentsQuer
         query.getServiceStopTime().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM));
         query.getServiceStopTime().setTo(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO));
         
-        query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
         query.setHomeCommunityId(ebXML.getHome());
     }
 }

@@ -600,7 +600,7 @@ public abstract class SampleData {
         query.setConfidentialityCodes(confidentialityCodes);
         query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        //query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
 
         QueryRegistry queryRegistry = new QueryRegistry(query);
         queryRegistry.setReturnType(QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM);

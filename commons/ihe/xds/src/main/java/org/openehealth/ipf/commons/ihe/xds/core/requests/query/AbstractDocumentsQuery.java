@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
@@ -32,7 +31,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AbstractDocumentsQuery", propOrder = {
-        "status", "authorPersons", "creationTime", "serviceStartTime", "serviceStopTime",
+        "authorPersons", "creationTime", "serviceStartTime", "serviceStopTime",
         "classCodes", "confidentialityCodes", "eventCodes", "formatCodes",
         "healthcareFacilityTypeCodes", "practiceSettingCodes", "typeCodes", "patientId"})
 @XmlRootElement(name = "abstractDocumentsQuery")
@@ -40,7 +39,6 @@ import java.util.List;
 abstract public class AbstractDocumentsQuery extends StoredQuery implements PatientIdBasedStoredQuery {
     private static final long serialVersionUID = 1162423827844317922L;
 
-    @Getter @Setter private List<AvailabilityStatus> status;
     @XmlElement(name = "typeCode")
     @Getter @Setter private List<Code> typeCodes;
     @XmlElement(name = "classCode")

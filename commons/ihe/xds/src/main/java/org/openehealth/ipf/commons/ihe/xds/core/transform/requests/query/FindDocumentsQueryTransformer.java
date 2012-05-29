@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
 
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_STATUS;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_TYPE;
 
 /**
@@ -36,6 +37,7 @@ public class FindDocumentsQueryTransformer extends AbstractDocumentsQueryTransfo
 
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
+        slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
     }
 
 
@@ -47,5 +49,6 @@ public class FindDocumentsQueryTransformer extends AbstractDocumentsQueryTransfo
         super.fromEbXML(query, ebXML);
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
+        query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
     }
 }
