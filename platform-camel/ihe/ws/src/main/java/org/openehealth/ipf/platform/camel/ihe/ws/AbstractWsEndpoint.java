@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import javax.xml.namespace.QName;
+import java.util.List;
 
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
@@ -24,6 +25,7 @@ import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.InterceptorProvider;
@@ -97,6 +99,7 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
     private InterceptorProvider customInterceptors = null;
     private String homeCommunityId = null;
     private WsRejectionHandlingStrategy rejectionHandlingStrategy = null;
+    private List<AbstractFeature> features;
 
     /**
      * Constructs the endpoint.
@@ -108,16 +111,20 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
      *          the component creating this endpoint.
      * @param customInterceptors
      *          user-defined set of additional CXF interceptors.
+     * @param features
+     *          user-defined list of CXF features.
      */
     protected AbstractWsEndpoint(
             String endpointUri,
             String address,
             ComponentType component,
-            InterceptorProvider customInterceptors) 
+            InterceptorProvider customInterceptors,
+            List<AbstractFeature> features)
     {
         super(endpointUri, component);
         this.address = address;
         this.customInterceptors = customInterceptors;
+        this.features = features;
         configure();
     }
 
@@ -262,6 +269,14 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
         this.rejectionHandlingStrategy = rejectionHandlingStrategy;
     }
 
+    /**
+     * @return
+     *      CXF features configured for this endpoint.
+     */
+    public List<AbstractFeature> getFeatures() {
+        return features;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public ComponentType getComponent() {
@@ -289,6 +304,10 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
     public Consumer createConsumer(Processor processor) throws Exception {
         AbstractWebService serviceInstance = getComponent().getServiceInstance(this);
         ServerFactoryBean serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
+        if (features != null) {
+            serverFactory.getFeatures().addAll(features);
+        }
+
         Server server = serverFactory.create();
         AbstractWebService service = (AbstractWebService) serverFactory.getServiceBean();
         return new DefaultWsConsumer(this, processor, service, server);

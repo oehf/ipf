@@ -48,7 +48,7 @@ public class Iti38AsyncResponseComponent extends AbstractWsComponent<WsTransacti
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new XdsAsyncResponseEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new XdsAsyncResponseEndpoint(uri, remaining, this, getCustomInterceptors(parameters), getFeatures(parameters));
     }
 
     @Override

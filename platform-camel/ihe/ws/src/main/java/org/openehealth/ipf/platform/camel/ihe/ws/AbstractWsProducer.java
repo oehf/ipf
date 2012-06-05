@@ -122,9 +122,8 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
             String messageId = "urn:uuid:" + UUID.randomUUID().toString();
             configureWSAHeaders(messageId, replyToUri, requestContext);
 
-            AbstractWsEndpoint endpoint = (AbstractWsEndpoint) getEndpoint();
-            AsynchronyCorrelator correlator = endpoint.getCorrelator();
-            correlator.storeServiceEndpointUri(messageId, endpoint.getEndpointUri());
+            AsynchronyCorrelator correlator = getEndpoint().getCorrelator();
+            correlator.storeServiceEndpointUri(messageId, getEndpoint().getEndpointUri());
             
             String correlationKey = exchange.getIn().getHeader(
                     AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME,
@@ -214,7 +213,13 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
         // does nothing per default
     }
 
-    
+
+    @Override
+    public AbstractWsEndpoint getEndpoint() {
+        return (AbstractWsEndpoint) super.getEndpoint();
+    }
+
+
     /**
      * Sets thread safety & timeout options of the given CXF client.  
      */
@@ -222,6 +227,9 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
         ClientImpl client = (ClientImpl) ClientProxy.getClient(o);
         client.setThreadLocalRequestContext(true);
         client.setSynchronousTimeout(Integer.MAX_VALUE);
+        if (getEndpoint().getFeatures() != null) {
+            client.getEndpoint().getActiveFeatures().addAll(getEndpoint().getFeatures());
+        }
     }
     
     

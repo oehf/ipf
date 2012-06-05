@@ -40,7 +40,8 @@ abstract public class AbstractHl7v2WsComponent
                 uri,
                 remaining,
                 this,
-                getCustomInterceptors(parameters));
+                getCustomInterceptors(parameters),
+                getFeatures(parameters));
     }
 
     @Override

@@ -18,10 +18,13 @@ package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+
+import java.util.List;
 
 public class SomeItiEndpoint extends AbstractWsEndpoint<SomeItiComponent> {
     
@@ -30,8 +33,10 @@ public class SomeItiEndpoint extends AbstractWsEndpoint<SomeItiComponent> {
             String endpointUri,
             String address,
             SomeItiComponent someItiComponent,
-            InterceptorProvider interceptorProvider) {
-        super(endpointUri, address, someItiComponent, interceptorProvider);
+            InterceptorProvider interceptorProvider,
+            List<AbstractFeature> features)
+    {
+        super(endpointUri, address, someItiComponent, interceptorProvider, features);
     }
 
     @Override
