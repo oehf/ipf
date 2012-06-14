@@ -20,6 +20,7 @@ import java.util.Collection;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.v25.datatype.CE;
 import ca.uhn.hl7v2.model.v25.datatype.CX;
 import ca.uhn.hl7v2.model.v25.datatype.ST;
@@ -64,6 +65,13 @@ public class QPD extends AbstractSegment {
     }
 
     /**
+     * Returns Message Query Name (QPD-1).
+     */
+    public CE getQpd1_MessageQueryName() {
+        return getTypedField(1, 0);
+    }
+
+    /**
      * Returns Query Tag (QPD-2).
      */
     public ST getQueryTag() {
@@ -71,9 +79,23 @@ public class QPD extends AbstractSegment {
     }
 
     /**
+     * Returns Query Tag (QPD-2).
+     */
+    public ST getQpd2_QueryTag() {
+        return getTypedField(2, 0);
+    }
+
+    /**
      * Returns Person identifier (QPD-3).
      */
     public CX getPersonIdentifier() {
+        return getTypedField(3, 0);
+    }
+
+    /**
+     * Returns Person identifier (QPD-3).
+     */
+    public CX getQpd3_PersonIdentifier() {
         return getTypedField(3, 0);
     }
 
@@ -86,12 +108,28 @@ public class QPD extends AbstractSegment {
 
     /**
      * Returns What Domains to be returned (QPD-4).
-     *
-     * @return movement IDs
+     */
+    public CX getQpd4_WhatDomainsReturned(int rep) {
+        return getTypedField(4, rep);
+    }
+
+    /**
+     * Returns What Domains to be returned (QPD-4).
      */
     public CX[] getWhatDomainsReturned() {
         Collection<CX> result = getTypedField(4);
         return result.toArray(new CX[result.size()]);
+    }
+
+    /** {@inheritDoc} */
+    protected Type createNewTypeWithoutReflection(int field) {
+        switch (field) {
+            case 0: return new CE(getMessage());
+            case 1: return new ST(getMessage());
+            case 2: return new CX(getMessage());
+            case 3: return new CX(getMessage());
+            default: return null;
+        }
     }
 
 }

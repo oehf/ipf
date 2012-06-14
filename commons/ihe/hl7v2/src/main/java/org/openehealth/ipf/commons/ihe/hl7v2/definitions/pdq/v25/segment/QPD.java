@@ -19,6 +19,7 @@ import java.util.Collection;
 
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.Varies;
 import ca.uhn.hl7v2.model.v25.datatype.*;
 
@@ -34,7 +35,8 @@ import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
  * QPD-1: Message Query Name (CE)<br>
  * QPD-2: Query Tag (ST)<br>
  * QPD-3: Query Input Parameter List (QIP)<br>
- * QPD-4,5,6,7: User Parameters (in successive fields) (varies)<br>
+ * QPD-4: Parameters for Fuzzy Search (QIP)<br>
+ * QPD-5,6,7: User Parameters (in successive fields) (varies)<br>
  * QPD-8: Extended Composite ID with Check Digit (CX)<br>
  */
 @SuppressWarnings("serial")
@@ -69,9 +71,23 @@ public class QPD extends AbstractSegment {
     }
 
     /**
+     * Returns Message Query Name (QPD-1).
+     */
+    public CE getQpd1_MessageQueryName() {
+        return getTypedField(1, 0);
+    }
+
+    /**
      * Returns Query Tag (QPD-2).
      */
     public ST getQueryTag() {
+        return getTypedField(2, 0);
+    }
+
+    /**
+     * Returns Query Tag (QPD-2).
+     */
+    public ST getQpd2_QueryTag() {
         return getTypedField(2, 0);
     }
 
@@ -85,9 +101,30 @@ public class QPD extends AbstractSegment {
     /**
      * Returns Demographics Fields (QPD-3).
      */
+    public QIP getQpd3_DemographicsFields(int rep) {
+        return getTypedField(3, rep);
+    }
+
+    /**
+     * Returns Demographics Fields (QPD-3).
+     */
     public QIP[] getDemographicsFields() {
         Collection<QIP> result = getTypedField(3);
         return result.toArray(new QIP[result.size()]);
+    }
+
+    /**
+     * Returns Fuzzy Search parameters (QPD-4).
+     */
+    public QIP getFuzzySearchParameters() {
+        return getTypedField(4, 0);
+    }
+
+    /**
+     * Returns Fuzzy Search parameters (QPD-4).
+     */
+    public QIP getQpd4_FuzzySearchParameters() {
+        return getTypedField(4, 0);
     }
 
     /**
@@ -99,12 +136,34 @@ public class QPD extends AbstractSegment {
 
     /**
      * Returns What Domains to be returned (QPD-8).
+     */
+    public CX getQpd8_WhatDomainsReturned(int rep) {
+        return getTypedField(8, rep);
+    }
+
+    /**
+     * Returns What Domains to be returned (QPD-8).
      *
      * @return movement IDs
      */
     public CX[] getWhatDomainsReturned() {
         Collection<CX> result = getTypedField(8);
         return result.toArray(new CX[result.size()]);
+    }
+
+    /** {@inheritDoc} */
+    protected Type createNewTypeWithoutReflection(int field) {
+        switch (field) {
+            case 0: return new CE(getMessage());
+            case 1: return new ST(getMessage());
+            case 2: return new QIP(getMessage());
+            case 3: return new QIP(getMessage());
+            case 4: return new Varies(getMessage());
+            case 5: return new Varies(getMessage());
+            case 6: return new Varies(getMessage());
+            case 7: return new CX(getMessage());
+            default: return null;
+        }
     }
 
 }

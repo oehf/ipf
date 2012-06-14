@@ -138,7 +138,7 @@ public class RSP_K21 extends AbstractMessage {
     /**
       * Returns  first repetition of RSP_K21_QUERY_RESPONSE (a Group object) - creates it if necessary
       */
-    public RSP_K21_QUERY_RESPONSE getRSP_K21_QUERY_RESPONSE() {
+    public RSP_K21_QUERY_RESPONSE getQUERY_RESPONSE() {
     	return get("QUERY_RESPONSE", RSP_K21_QUERY_RESPONSE.class, 0);
     }
 
@@ -148,14 +148,14 @@ public class RSP_K21 extends AbstractMessage {
       * throws HL7Exception if the repetition requested is more than one
       * greater than the number of existing repetitions.
       */
-    public RSP_K21_QUERY_RESPONSE getRSP_K21_QUERY_RESPONSE(int rep) throws HL7Exception {
+    public RSP_K21_QUERY_RESPONSE getQUERY_RESPONSE(int rep) throws HL7Exception {
         return get("QUERY_RESPONSE", RSP_K21_QUERY_RESPONSE.class, rep);
     }
 
     /**
       * Returns the number of existing repetitions of RSP_K21_QUERY_RESPONSE
       */
-    public int getRSP_K21_QUERY_RESPONSEReps() {
+    public int getQUERY_RESPONSEReps() {
         return getReps("QUERY_RESPONSE", RSP_K21_QUERY_RESPONSE.class);
     }
 

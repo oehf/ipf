@@ -133,8 +133,8 @@ public class RSP_K23 extends AbstractMessage {
     /**
       * Returns RSP_K23_QUERY_RESPONSE (a Group object) - creates it if necessary
       */
-    public RSP_K23_QUERY_RESPONSE getRSP_K23_QUERY_RESPONSE() {
-        return get(RSP_K23_QUERY_RESPONSE.class);
+    public RSP_K23_QUERY_RESPONSE getQUERY_RESPONSE() {
+        return get("QUERY_RESPONSE", RSP_K23_QUERY_RESPONSE.class);
     }
 
     /**
