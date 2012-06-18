@@ -44,6 +44,7 @@
         <gmaven-version>1.2</gmaven-version>
         <jar-plugin-version>2.3.1</jar-plugin-version>
         <javadoc-plugin-version>2.8</javadoc-plugin-version>
+        <jaxb-schemagen-plugin-version>1.2</jaxb-schemagen-plugin-version>
         <release-plugin-version>2.1</release-plugin-version>
         <resources-plugin-version>2.4.3</resources-plugin-version>
         
@@ -947,6 +948,11 @@
                             <version>${groovy-version}</version>
                         </dependency>
                     </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>com.sun.tools.jxc.maven2</groupId>
+                    <artifactId>maven-jaxb-schemagen-plugin</artifactId>
+                    <version>${jaxb-schemagen-plugin-version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

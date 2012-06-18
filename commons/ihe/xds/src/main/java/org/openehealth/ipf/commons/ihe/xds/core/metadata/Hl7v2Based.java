@@ -34,6 +34,7 @@ import java.io.Serializable;
  *
  * @author Dmytro Rud
  */
+@XmlTransient
 abstract public class Hl7v2Based<T extends Composite> implements Serializable {
     private static final long serialVersionUID = 5463666004063275303L;
 
@@ -51,7 +52,6 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
             new EncodingCharacters('|', '^', '~', '\\', '&');
 
 
-    @XmlTransient
     private final T hapiObject;
 
 
@@ -151,7 +151,6 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
      *      HAPI composite holding the HL7 v2 element
      *      which corresponds to this XDS model object.
      */
-    @XmlTransient
     public T getHapiObject() {
         return hapiObject;
     }

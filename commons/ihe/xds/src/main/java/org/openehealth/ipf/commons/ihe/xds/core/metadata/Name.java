@@ -42,6 +42,9 @@ import javax.xml.bind.annotation.XmlType;
 abstract public class Name<T extends Composite> extends Hl7v2Based<T> {
     private static final long serialVersionUID = -3455779057944896901L;
 
+    protected Name() {
+    }
+
     protected Name(T hapiObject) {
         super(hapiObject);
     }

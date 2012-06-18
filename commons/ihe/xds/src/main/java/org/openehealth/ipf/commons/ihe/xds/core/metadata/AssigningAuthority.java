@@ -104,7 +104,7 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     /**
      * @return the universal ID (HD.2).
      */
-    @XmlValue
+    @XmlAttribute
     public String getUniversalId() {
         return getHapiObject().getInternal().getHd2_UniversalID().getValue();
     }
