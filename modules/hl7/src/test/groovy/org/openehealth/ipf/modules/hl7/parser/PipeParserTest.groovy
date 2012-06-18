@@ -15,14 +15,11 @@
  */
 package org.openehealth.ipf.modules.hl7.parser
 
-import org.openehealth.ipf.modules.hl7.parser.PipeParser
-import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
-
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.util.Terser;
 
 /**
- * @author Marek Václavík
+ * @author Marek Vï¿½clavï¿½k
  * @author Christian Ohr
  */
 public class PipeParserTest extends GroovyTestCase {

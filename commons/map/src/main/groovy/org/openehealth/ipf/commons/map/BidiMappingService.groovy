@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.map
 
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.core.io.Resource
+import org.apache.commons.io.IOUtils
 
 /**
  * An simple example of a MappingService implementation, backed by a
@@ -86,7 +87,7 @@ class BidiMappingService implements MappingService, InitializingBean {
     
     private void evaluateResource(Resource resource, GroovyShell shell, Binding binding) {
     	try {
-        	shell.evaluate(resource.inputStream)
+        	shell.evaluate(IOUtils.toString(resource.inputStream))
         	Closure c = binding.mappings
         	def mb = new MappingsBuilder()
         	c?.delegate = this

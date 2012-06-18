@@ -23,6 +23,7 @@ import ca.uhn.hl7v2.model.*;
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.apache.commons.io.IOUtils
 
 /**
  * This ModelClassFactory is used in same way as its superclass, however,
@@ -76,7 +77,7 @@ public class GroovyCustomModelClassFactory extends CustomModelClassFactory{
 				def sep = path.endsWith('/') ? '' : '/'
 				fullyQualifiedName = "/${path}${sep}${subpackage}/${name}.groovy"
 				def stream = getClass().getResourceAsStream(fullyQualifiedName)
-				classLoaded = loader.parseClass(stream)	
+				classLoaded = loader.parseClass(IOUtils.toString(stream))
 				LOG.debug("Found ${fullyQualifiedName} in custom HL7 model definitions")
 			} catch (Exception e) {
 				LOG.debug("Did not find ${fullyQualifiedName} in custom HL7 model definitions")
