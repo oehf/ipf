@@ -26,7 +26,7 @@ import org.openehealth.ipf.modules.hl7.ErrorLocation
 
 /**
  * PIX Query Response translator HL7 v2 to v3.
- * @author Marek V�clav�k, Dmytro Rud
+ * @author Marek Václavík, Dmytro Rud
  */
 class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
 
@@ -68,9 +68,9 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
      * Translates HL7 v2 response messages <tt>RSP^K23</tt> and <tt>ACK</tt> 
      * into HL7 v3 message <tt>PRPA_IN201310UV02</tt>.
      */
-    String translateV2toV3(MessageAdapter rsp, String origMessage) {
+    String translateV2toV3(MessageAdapter rsp, String origMessage, String charset) {
         def output = new ByteArrayOutputStream()
-        def builder = getBuilder(output)
+        def builder = getBuilder(output, charset)
 
         def xml = slurp(origMessage)
 
@@ -129,7 +129,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
             }
         }
 
-        return output.toString()
+        return output.toString(charset)
     }
 
      

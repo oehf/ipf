@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import groovy.util.slurpersupport.GPathResult;
 
-
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
@@ -25,7 +24,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * Translator for PIX Feed Responses v2 to v3.
- * @author Marek V�clav�k, Dmytro Rud
+ * @author Marek Václavík, Dmytro Rud
  */
 class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
 
@@ -51,11 +50,11 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
      * Translates an HL7 v2 <tt>ACK</tt> response message 
      * into HL7 v3 <tt>MCCI_IN000002UV01</tt> message.
      */
-    String translateV2toV3(MessageAdapter rsp, String originalMessage) {    
+    String translateV2toV3(MessageAdapter rsp, String originalMessage, String charset) {
         def xml = slurp(originalMessage)
         
         def output = new ByteArrayOutputStream()
-        def builder = getBuilder(output)
+        def builder = getBuilder(output, charset)
         def status = getStatusInformation(rsp, xml)
         
         builder.MCCI_IN000002UV01(
@@ -74,7 +73,7 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
             createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem, this.ackCodeFirstCharacter)
         }
 
-        return output.toString()
+        return output.toString(charset)
    }
 
 

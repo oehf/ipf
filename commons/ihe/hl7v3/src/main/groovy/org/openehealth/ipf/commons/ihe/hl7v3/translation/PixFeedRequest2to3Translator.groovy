@@ -35,17 +35,17 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
 
 
     private def translators = [
-        A01: { MessageAdapter adt -> translate(adt, CREATE_MSG) },
-        A04: { MessageAdapter adt -> translate(adt, CREATE_MSG) },
-        A08: { MessageAdapter adt -> translate(adt, UPDATE_MSG) },
-        A40: { MessageAdapter adt -> translate(adt, MERGE_MSG) }
+        A01: { MessageAdapter adt, String charset -> translate(adt, CREATE_MSG, charset) },
+        A04: { MessageAdapter adt, String charset -> translate(adt, CREATE_MSG, charset) },
+        A08: { MessageAdapter adt, String charset -> translate(adt, UPDATE_MSG, charset) },
+        A40: { MessageAdapter adt, String charset -> translate(adt, MERGE_MSG, charset) }
     ]
 
 
-    String translateV2toV3(MessageAdapter adt, String dummy = null) {
+    String translateV2toV3(MessageAdapter adt, String dummy, String charset) {
         def triggerEvent = adt.MSH[9][2].value
         if (translators.containsKey(triggerEvent)){
-            return translators[triggerEvent](adt)
+            return translators[triggerEvent](adt, charset)
         } else {
             throw new Hl7TranslationException('Not supported HL7 message event')
         }
@@ -57,9 +57,9 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * into HL7 v3 <tt>PRPA_IN201301UV02</tt> or <tt>PRPA_IN201302UV02</tt>
      * or <tt>PRPA_IN201304UV02</tt> message.
      */
-    String translate(MessageAdapter adt, String interactId) {
+    String translate(MessageAdapter adt, String interactId, String charset) {
         def output = new ByteArrayOutputStream()
-        def builder = getBuilder(output)
+        def builder = getBuilder(output, charset)
 
         builder."$interactId" (
             'ITSVersion' : 'XML_1.0',
@@ -112,7 +112,7 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
                 }
             }
         }
-        return output.toString()
+        return output.toString(charset)
     }
 
 

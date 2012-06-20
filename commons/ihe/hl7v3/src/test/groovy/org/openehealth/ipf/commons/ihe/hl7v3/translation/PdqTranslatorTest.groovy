@@ -15,22 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import static org.junit.Assert.*
-import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_47
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.HL7V3_NSURI
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.getBuilder
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
-import groovy.util.slurpersupport.GPathResult
-import groovy.xml.FactorySupport
-import groovy.xml.MarkupBuilder
-
-import javax.xml.parsers.SAXParserFactory
-
-import org.apache.commons.io.IOUtils
 import org.junit.*
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
-import org.openehealth.ipf.commons.xml.XmlYielder
-import org.springframework.core.io.ClassPathResource
+import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_47
 
 /**
  * Unit test for PDQ translator.

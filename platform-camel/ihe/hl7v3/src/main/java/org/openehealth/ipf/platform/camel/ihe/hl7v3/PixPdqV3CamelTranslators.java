@@ -67,8 +67,9 @@ abstract public class PixPdqV3CamelTranslators {
                 MessageAdapter<?> msg = exchange.getIn().getMandatoryBody(MessageAdapter.class);
                 exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
                 Message resultMessage = Exchanges.resultMessage(exchange);
+                String charset = exchange.getProperty(Exchange.CHARSET_NAME, "UTF-8", String.class);
                 resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-                resultMessage.setBody(translator.translateV2toV3(msg, initial));
+                resultMessage.setBody(translator.translateV2toV3(msg, initial, charset));
             }
         };
     }
