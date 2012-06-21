@@ -27,5 +27,5 @@ interface Hl7TranslatorV2toV3 {
      * Translates the {@link MessageAdapter} containing an HL7v2 message
      * into an HL7v3 XML String, optionally using the initial HL7v3 message.  
      */
-    String translateV2toV3(MessageAdapter messageV2, String initialV3)
+    String translateV2toV3(MessageAdapter messageV2, String initialV3, String charset)
 }

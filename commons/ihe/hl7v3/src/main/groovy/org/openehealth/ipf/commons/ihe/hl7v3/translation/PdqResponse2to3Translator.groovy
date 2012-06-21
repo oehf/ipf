@@ -77,9 +77,9 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * <p>
      * Parameters related to interactive continuation are ignored.
      */
-    String translateV2toV3(MessageAdapter rsp, String origMessage) {
+    String translateV2toV3(MessageAdapter rsp, String origMessage, String charset) {
         def output = new ByteArrayOutputStream()
-        def builder = getBuilder(output)
+        def builder = getBuilder(output, charset)
 
         GPathResult xml = slurp(origMessage)
 
@@ -167,7 +167,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
             }
         }
 
-        return output.toString()
+        return output.toString(charset)
     }
 
      

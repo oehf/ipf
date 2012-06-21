@@ -39,7 +39,7 @@ class PixUpdateNotificationTranslatorTest extends Hl7TranslationTestContainer {
     void test1() {
         String v2notification = getFileContent('adt-a31-1', false, true)
         MessageAdapter msg = MessageAdapters.make(v2notification)
-        String v3notification = v2tov3Translator.translateV2toV3(msg, null)
+        String v3notification = v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')
         V3_VALIDATOR.validate(v3notification, Hl7v3ValidationProfiles.getRequestValidationProfile(ITI_46))
     }
     

@@ -55,13 +55,13 @@
         <commons-codec-version>1.5</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
-        <commons-fileupload-version>1.2.1</commons-fileupload-version>        
+        <commons-fileupload-version>1.2.2</commons-fileupload-version>        
         <commons-httpclient-version>3.1</commons-httpclient-version>
-        <commons-io-version>2.1</commons-io-version>
-        <commons-lang-version>3.0.1</commons-lang-version>
+        <commons-io-version>2.3</commons-io-version>
+        <commons-lang-version>3.1</commons-lang-version>
         <commons-logging-version>1.1.1</commons-logging-version>
         <commons-math-version>2.2</commons-math-version>
-        <cxf-version>2.6.0</cxf-version>
+        <cxf-version>2.6.1</cxf-version>
         <derby-version>10.8.2.2</derby-version>
         <easymock-version>3.1</easymock-version>
         <ehcache-version>2.5.2</ehcache-version>
@@ -75,13 +75,13 @@
         <hibernate-commons-annotations-version>3.2.0.Final</hibernate-commons-annotations-version>
         <hibernate-javassist-version>3.9.0.GA</hibernate-javassist-version>
         <hibernate-search-version>3.1.0.GA</hibernate-search-version>
-        <jasypt-version>1.7</jasypt-version>
+        <jasypt-version>1.9.0</jasypt-version>
         <jaxb-version>2.2.4</jaxb-version>
         <jetty-version>7.5.4.v20111024</jetty-version>
         <joda-time-version>2.1</joda-time-version>
         <junit-version>4.10</junit-version>
         <junitperf-version>1.8</junitperf-version>
-        <log4j-version>1.2.16</log4j-version>
+        <log4j-version>1.2.17</log4j-version>
         <lombok-version>0.11.0</lombok-version>
         <mdht-version>0.7.0.201012100720</mdht-version>
         <metabuilder-version>1.1.6</metabuilder-version>
@@ -89,12 +89,12 @@
         <oht-atna-version>2.0-v20111211</oht-atna-version>
         <oht-cdar-version>1.1.0</oht-cdar-version>
         <osgi-api-version>1.4.0</osgi-api-version>
-        <quartz-version>1.8.5</quartz-version>
+        <quartz-version>1.8.6</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
-        <slf4j-version>1.6.1</slf4j-version>
+        <slf4j-version>1.6.6</slf4j-version>
         <spring-version>3.0.7.RELEASE</spring-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
-        <tomcat-version>7.0.22</tomcat-version>
+        <tomcat-version>7.0.27</tomcat-version>
         <xbean-spring-version>3.5</xbean-spring-version>
         <xerces-impl-version>2.11.0</xerces-impl-version>
         <xmlunit-version>1.3</xmlunit-version>

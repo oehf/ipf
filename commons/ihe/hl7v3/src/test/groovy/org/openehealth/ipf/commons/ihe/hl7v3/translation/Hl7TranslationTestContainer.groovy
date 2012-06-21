@@ -123,7 +123,7 @@ class Hl7TranslationTestContainer {
         V2_VALIDATOR.validate(msg, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
-        String translatedV3response = v2tov3Translator.translateV2toV3(msg, v3request)
+        String translatedV3response = v2tov3Translator.translateV2toV3(msg, v3request, 'UTF-8')
         V3_VALIDATOR.validate(translatedV3response, Hl7v3ValidationProfiles.getResponseValidationProfile(v3Id))
 
         Diff diff = new Diff(expectedV3response, translatedV3response)
@@ -139,7 +139,7 @@ class Hl7TranslationTestContainer {
         V2_VALIDATOR.validate(msg, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
-        String translatedV3response = v2tov3Translator.translateV2toV3(msg, null)
+        String translatedV3response = v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')
         V3_VALIDATOR.validate(translatedV3response, Hl7v3ValidationProfiles.getRequestValidationProfile(v3Id))
 
         org.custommonkey.xmlunit.Diff diff = new org.custommonkey.xmlunit.Diff(expectedV3response, translatedV3response)

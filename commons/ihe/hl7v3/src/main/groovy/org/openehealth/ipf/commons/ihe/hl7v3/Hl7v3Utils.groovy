@@ -43,8 +43,8 @@ class Hl7v3Utils {
     /**
      * Creates and configures an XML builder based on the given output stream.
      */
-    static MarkupBuilder getBuilder(OutputStream output) {
-        Writer writer = new OutputStreamWriter(output, 'UTF-8')
+    static MarkupBuilder getBuilder(OutputStream output, String charset = 'UTF-8') {
+        Writer writer = new OutputStreamWriter(output, charset)
         MarkupBuilder builder = new MarkupBuilder(writer)
         builder.setDoubleQuotes(true)
         builder.setOmitNullAttributes(true)

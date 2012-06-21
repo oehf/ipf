@@ -60,7 +60,7 @@ class PixFeedSourceTranslatorTest extends Hl7TranslationTestContainer {
 		String v2request = getFileContent('A10', false, true)
         MessageAdapter msg = MessageAdapters.make(parser, v2request)
         try{
-            v2tov3Translator.translateV2toV3(msg, null)
+            v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')
         } catch (Exception e){
             assertTrue(e.message.contains('Not supported HL7 message event'))
         }

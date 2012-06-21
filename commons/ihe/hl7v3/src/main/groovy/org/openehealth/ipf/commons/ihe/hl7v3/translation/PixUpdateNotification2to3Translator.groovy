@@ -30,9 +30,9 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * Translates an HL7 v2 <tt>ADT^A31</tt> message 
      * into HL7 v3 <tt>PRPA_IN201302UV02</tt> message.
      */
-    String translateV2toV3(MessageAdapter adt, String dummy = null) {    
+    String translateV2toV3(MessageAdapter adt, String dummy, String charset) {
         def output = new ByteArrayOutputStream()
-        def builder = getBuilder(output)
+        def builder = getBuilder(output, charset)
 
         builder.PRPA_IN201302UV02(
             'ITSVersion' : 'XML_1.0',
@@ -71,7 +71,7 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
             }
         }
 
-        return output.toString()
+        return output.toString(charset)
     }
 	
 }
