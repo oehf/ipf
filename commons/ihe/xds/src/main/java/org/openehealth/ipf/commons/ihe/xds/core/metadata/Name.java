@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * This class represents a name.
@@ -37,6 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Dmytro Rud
  */
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@XmlJavaTypeAdapter(value = IHENameAdapter.class)
 @XmlType(name = "Name", propOrder = {"prefix", "givenName", "secondAndFurtherGivenNames",
         "familyName", "suffix", "degree"})
 abstract public class Name<T extends Composite> extends Hl7v2Based<T> {
