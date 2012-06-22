@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -46,7 +47,7 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
     private final List<Recipient> intendedRecipients = new ArrayList<Recipient>(); 
     private String sourceId;
     @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
+    @XmlJavaTypeAdapter(value = DateAdapter.class)
     private String submissionTime;
 
     /**

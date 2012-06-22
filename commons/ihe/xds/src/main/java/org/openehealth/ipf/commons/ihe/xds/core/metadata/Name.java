@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import ca.uhn.hl7v2.model.Composite;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.NameAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -38,7 +39,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author Dmytro Rud
  */
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
-@XmlJavaTypeAdapter(value = IHENameAdapter.class)
+@XmlJavaTypeAdapter(value = NameAdapter.class)
 @XmlType(name = "Name", propOrder = {"prefix", "givenName", "secondAndFurtherGivenNames",
         "familyName", "suffix", "degree"})
 abstract public class Name<T extends Composite> extends Hl7v2Based<T> {

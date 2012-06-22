@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
 
 /**
  * Represents an XDS folder according to the IHE XDS specification.
@@ -41,7 +42,7 @@ public class Folder extends XDSMetaClass implements Serializable {
     @XmlElement(name = "code")
     private final List<Code> codeList = new ArrayList<Code>();
     @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
+    @XmlJavaTypeAdapter(value = DateAdapter.class)
     private String lastUpdateTime;
 
     /**

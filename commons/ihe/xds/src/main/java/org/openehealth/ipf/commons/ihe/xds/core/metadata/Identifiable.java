@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import ca.uhn.hl7v2.model.v25.datatype.CX;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.AssigningAuthorityAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -91,7 +92,7 @@ public class Identifiable extends Hl7v2Based<CX> {
      * @return the assigning authority (CX.4).
      */
     @XmlAttribute(name = "root")
-    @XmlJavaTypeAdapter(value = SimplifiedAssigningAuthorityAdapter.class)
+    @XmlJavaTypeAdapter(value = AssigningAuthorityAdapter.class)
     public AssigningAuthority getAssigningAuthority() {
         AssigningAuthority assigningAuthority = new AssigningAuthority(getHapiObject().getCx4_AssigningAuthority());
         return assigningAuthority.isEmpty() ? null : assigningAuthority;

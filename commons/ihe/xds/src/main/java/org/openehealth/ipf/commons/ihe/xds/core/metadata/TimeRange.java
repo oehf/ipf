@@ -21,6 +21,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
 
 /**
  * Represents a date and time range used in queries.
@@ -33,11 +34,11 @@ public class TimeRange implements Serializable {
     
     @XmlAttribute
     @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
+    @XmlJavaTypeAdapter(value = DateAdapter.class)
     private String from;
     @XmlAttribute
     @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
+    @XmlJavaTypeAdapter(value = DateAdapter.class)
     private String to;
     
     /**

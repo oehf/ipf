@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -50,7 +51,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     @XmlElement(name = "confidentialityCode")
     @Getter private final List<Code> confidentialityCodes = new ArrayList<Code>();
     @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
+    @XmlJavaTypeAdapter(value = DateAdapter.class)
     @Getter @Setter private String creationTime;
     @XmlElement(name = "eventCode")
     @Getter private final List<Code> eventCodeList = new ArrayList<Code>();
@@ -62,10 +63,10 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     @Getter @Setter private String mimeType;
     @Getter @Setter private Code practiceSettingCode;
     @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
+    @XmlJavaTypeAdapter(value = DateAdapter.class)
     @Getter @Setter private String serviceStartTime;
     @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
+    @XmlJavaTypeAdapter(value = DateAdapter.class)
     @Getter @Setter private String serviceStopTime;
     @Getter @Setter private Long size;
     @Getter @Setter private Identifiable sourcePatientId;

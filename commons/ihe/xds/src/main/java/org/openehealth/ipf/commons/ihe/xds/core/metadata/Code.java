@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.LocalizedStringAdapter;
 
 /**
  * Represents a code.
@@ -88,7 +89,7 @@ public class Code extends Hl7v2Based<CE> {
      * @return the display name of this code.
      */
     @XmlAttribute
-    @XmlJavaTypeAdapter(value = SimplifiedLocalizedStringAdapter.class)
+    @XmlJavaTypeAdapter(value = LocalizedStringAdapter.class)
     public LocalizedString getDisplayName() {
         String value = getHapiObject().getCe2_Text().getValue();
 

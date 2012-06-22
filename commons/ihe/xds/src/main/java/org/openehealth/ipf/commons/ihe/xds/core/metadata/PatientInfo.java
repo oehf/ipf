@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -48,7 +49,7 @@ public class PatientInfo implements Serializable {
     private Name name;                                                      // PID-5
     @XmlElement(name = "birthTime")
     @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
+    @XmlJavaTypeAdapter(value = DateAdapter.class)
     private String dateOfBirth;                                             // PID-7
     private String gender;                                                  // PID-8
     private Address address;                                                // PID-11
