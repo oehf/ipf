@@ -14,7 +14,7 @@
 
     <properties>
         <aries-blueprint-version>0.4</aries-blueprint-version>
-        <cxf-bundle-version>2.6.0</cxf-bundle-version>
+        <cxf-bundle-version>2.6.1</cxf-bundle-version>
         <equinox-cm-version>1.0.100-v20090520-1800</equinox-cm-version>
         <fileinstall-version>1.0.0</fileinstall-version>
         <geronimo-javamail-api-version>1.2</geronimo-javamail-api-version>
@@ -24,7 +24,7 @@
         <hapi-osgi-version>1.2</hapi-osgi-version>
         <jdom-version>1.0.0</jdom-version>
         <jms-version>1.1-p1</jms-version>
-        <neethi-version>3.0.1</neethi-version>
+        <neethi-version>3.0.2</neethi-version>
         <pax-web-version>1.1.2</pax-web-version>
         <servicemix-jaxb-api-version>1.4.0</servicemix-jaxb-api-version>
         <servicemix-jaxws-api-version>1.4.0</servicemix-jaxws-api-version>
@@ -65,7 +65,6 @@
         <springsource-transaction-api-version>1.1.0</springsource-transaction-api-version>
         <springsource-wsdl-version>1.6.1</springsource-wsdl-version>
         <serializer-version>2.7.1-v200806030322</serializer-version>
-        <slf4j-version>1.6.1</slf4j-version>
         <stax2-api-version>3.1.1</stax2-api-version>
         <woodstox-core-asl-version>4.1.1</woodstox-core-asl-version>
         <ws-xmlschema-version>2.0.1</ws-xmlschema-version>
@@ -96,13 +95,13 @@
             <configuration>
                 <provision>
             <param>--platform=equinox</param>
-            <param>--version=3.7.0</param>
+            <param>--version=3.6.1</param>
             <param>--ee=J2SE-1.5</param>
             <param>--vmo=-Dosgi.classloader.lock=classname -Xmx256M</param>
             <param>--startLevel=5</param>
             <param>--bundleStartLevel=4</param>
             <param>--workingDirectory=${project.build.directory}/runtime</param>
-            <param>--repositories=+http://repo1.maven.org/maven2,http://repo.openehealth.org/maven2/snapshots@snapshots,http://repo.openehealth.org/maven2/releases</param>
+            <param>--repositories=+http://repo1.maven.org/maven2,http://repository.springsource.com/maven/bundles/release,http://repository.springsource.com/maven/bundles/external,http://repo.openehealth.org/maven2/snapshots@snapshots,http://repo.openehealth.org/maven2/releases</param>
             <param>mvn:org.eclipse.equinox/cm/${equinox-cm-version}@1</param>
             <param>mvn:javax.persistence/com.springsource.javax.persistence/${springsource-persistence-api-version}@start</param>
             <param>mvn:javax.ejb/com.springsource.javax.ejb/${springsource-ejb-api-version}@start</param>
@@ -119,9 +118,9 @@
             <param>mvn:org.apache.lucene/com.springsource.org.apache.lucene/${springsource-lucene-version}@start</param>
             <param>mvn:org.apache.commons/com.springsource.org.apache.commons.pool/${springsource-commons-pool-version}@start</param>
             <param>mvn:org.apache.commons/com.springsource.org.apache.commons.logging/${springsource-commons-logging-version}@start</param>
-            <param>mvn:org.slf4j/com.springsource.slf4j.api/${slf4j-version}@start</param>
-            <param>mvn:org.slf4j/com.springsource.slf4j.org.apache.commons.logging/${slf4j-version}@start</param>
-            <param>mvn:org.slf4j/com.springsource.slf4j.nop/${slf4j-version}@nostart</param>
+            <param>mvn:org.slf4j/slf4j-api/${slf4j-version}@start</param>
+            <param>mvn:org.slf4j/jcl-over-slf4j/${slf4j-version}@start</param>
+            <param>mvn:org.slf4j/slf4j-nop/${slf4j-version}@nostart</param>
             <param>mvn:org.jasypt/com.springsource.org.jasypt.encryption/${springsource-jasypt-version}@start</param>
             <param>mvn:org.dom4j/com.springsource.org.dom4j/${springsource-dom4j-version}@start</param>
             <param>mvn:javax.annotation/com.springsource.javax.annotation/${springsource-annotations-api-version}@start</param>
@@ -246,16 +245,4 @@
     </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>com.springsource.repository.bundles.release</id>
-            <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
-            <url>http://repository.springsource.com/maven/bundles/release</url>
-        </repository>
-        <repository>
-            <id>com.springsource.repository.bundles.external</id>
-            <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-            <url>http://repository.springsource.com/maven/bundles/external</url>
-        </repository>
-    </repositories>
 </project>

@@ -6,6 +6,10 @@
     <name>ipf-commons-map</name>
     
     <properties>
+        <osgi.import.pkg>
+            org.apache.commons.io,
+            *
+        </osgi.import.pkg>
         <osgi.export.pkg>org.openehealth.ipf.commons.map.*</osgi.export.pkg>
         <ipf.extension.beans>mappingExtension</ipf.extension.beans>
     </properties>
