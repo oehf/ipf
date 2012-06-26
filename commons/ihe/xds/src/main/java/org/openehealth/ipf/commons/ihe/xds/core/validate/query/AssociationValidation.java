@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  */
 public class AssociationValidation implements QueryParameterValidation {
     private static final Pattern PATTERN =
-            Pattern.compile("\\s*\\('.*',\\s('.*')*\\)\\s*");
+            Pattern.compile("\\s*\\(\\s*'.*'(\\s*,\\s*'.*')*\\s*\\)\\s*");
 
     private final QueryParameter param;
 
