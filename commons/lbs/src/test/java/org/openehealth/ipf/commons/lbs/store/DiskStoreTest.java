@@ -113,10 +113,16 @@ public class DiskStoreTest extends LargeBinaryStoreTest {
      
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorWithReadOnlyLocation() {
-        if(storeLocation.setWritable(false) && storeLocation.canWrite()){
-            //In this case both storeLocation.setWritable(false) returned true
-            //and storeLocation.canWrite() returns true, 
-            //which is obviously wrong!
+
+        storeLocation.setWritable(false);
+        if( storeLocation.canWrite()){
+            //In this case storeLocation.setWritable(false) has not succeeded.
+            //This appears to occur in some circumstances under Windows.
+            //Observed on platform:     Windows Server 2008 R2
+            //                          java version "1.6.0_33"
+            //                          Java(TM) SE Runtime Environment (build 1.6.0_33-b03)
+            //                          Java HotSpot(TM) 64-Bit Server VM (build 20.8-b03, mixed mode)
+
             String msg = "Unable to make a location " 
                          + storeLocation 
                          + " non-writable "
@@ -125,16 +131,16 @@ public class DiskStoreTest extends LargeBinaryStoreTest {
             log.error(msg);
             throw new IllegalArgumentException(msg);     
             
-        } else {
-            storeLocation.setWritable(false);
-            final FlatFileSystemLayout invalidLayout = new FlatFileSystemLayout(storeLocation);
-            try {
-                new DiskStore(invalidLayout, diskStoreStrategy);
-            } 
-            finally {
-                storeLocation.setWritable(true);
+        }
+
+        final FlatFileSystemLayout invalidLayout = new FlatFileSystemLayout(storeLocation);
+        try {
+            new DiskStore(invalidLayout, diskStoreStrategy);
+        }
+        finally {
+            storeLocation.setWritable(true);
             }
-        } 
+
     }
     
     @Ignore
