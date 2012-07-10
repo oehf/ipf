@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FetchQuery", propOrder = {"patientId"})
 @XmlRootElement(name = "fetchQuery")
-public class FetchQuery extends AbstractDocumentsQuery implements PatientIdBasedStoredQuery {
+public class FetchQuery extends DocumentsQuery implements PatientIdBasedStoredQuery {
     private static final long serialVersionUID = 7171404956090539393L;
 
     @Getter @Setter private Identifiable patientId;

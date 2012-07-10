@@ -16,17 +16,15 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.AbstractDocumentsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.DocumentsQuery;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
- * Transforms between an {@link AbstractDocumentsQuery} derivative and {@link EbXMLAdhocQueryRequest}.
+ * Transforms between an {@link org.openehealth.ipf.commons.ihe.xds.core.requests.query.DocumentsQuery} derivative and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-abstract class AbstractDocumentsQueryTransformer<T extends AbstractDocumentsQuery> {
+abstract class DocumentsQueryTransformer<T extends DocumentsQuery> {
 
     /**
      * Transforms the query into its ebXML representation.

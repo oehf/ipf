@@ -33,7 +33,7 @@ import java.util.List;
 @XmlType(name = "FindDocumentsQuery", propOrder = {"patientId","status", "documentEntryTypes"})
 @XmlRootElement(name = "findDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
-public class FindDocumentsQuery extends AbstractDocumentsQuery implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery {
+public class FindDocumentsQuery extends DocumentsQuery implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery {
     private static final long serialVersionUID = -5765363916663583605L;
 
     @Getter @Setter private Identifiable patientId;

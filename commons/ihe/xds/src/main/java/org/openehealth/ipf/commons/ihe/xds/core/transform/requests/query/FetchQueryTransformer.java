@@ -19,17 +19,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FetchQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_PATIENT_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_TYPE;
 
 /**
  * Transforms between a {@link FetchQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Dmytro Rud
  */
-public class FetchQueryTransformer extends AbstractDocumentsQueryTransformer<FetchQuery> {
+public class FetchQueryTransformer extends DocumentsQueryTransformer<FetchQuery> {
     @Override
     public void toEbXML(FetchQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {

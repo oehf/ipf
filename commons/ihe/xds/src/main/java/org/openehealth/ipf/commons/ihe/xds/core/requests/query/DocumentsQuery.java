@@ -19,7 +19,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 
 import javax.xml.bind.annotation.*;
@@ -30,13 +29,13 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "AbstractDocumentsQuery", propOrder = {
+@XmlType(name = "DocumentsQuery", propOrder = {
         "authorPersons", "creationTime", "serviceStartTime", "serviceStopTime",
         "classCodes", "confidentialityCodes", "eventCodes", "formatCodes",
         "healthcareFacilityTypeCodes", "practiceSettingCodes", "typeCodes"})
 @XmlRootElement(name = "abstractDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
-abstract public class AbstractDocumentsQuery extends StoredQuery  {
+abstract public class DocumentsQuery extends StoredQuery  {
     private static final long serialVersionUID = 1162423827844317922L;
 
     @XmlElement(name = "typeCode")
@@ -63,11 +62,11 @@ abstract public class AbstractDocumentsQuery extends StoredQuery  {
     /**
      * For JAXB only.
      */
-    protected AbstractDocumentsQuery() {
+    protected DocumentsQuery() {
     }
 
 
-    protected AbstractDocumentsQuery(QueryType type) {
+    protected DocumentsQuery(QueryType type) {
         super(type);
     }
 }
