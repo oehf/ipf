@@ -26,12 +26,13 @@ import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
  * Validation profile for XDS-like transactions.
  * @author Jens Riemschneider
  * @author Dmytro Rud
+ * @author Michael Ottati
  */
 public class ValidationProfile {
 
     public static enum InteractionProfile {
         XDS_A(ITI_14, ITI_15, ITI_16),
-        XDS_B(ITI_18, ITI_41, ITI_42, ITI_43, ITI_61),
+        XDS_B(ITI_18, ITI_41, ITI_42, ITI_43, ITI_51, ITI_61),
         XCA(ITI_38, ITI_39),
         XCF(ITI_63),
         Continua_HRN(IpfInteractionId.Continua_HRN);
@@ -67,6 +68,7 @@ public class ValidationProfile {
         return ((interactionId == ITI_16) ||
                 (interactionId == ITI_18) ||
                 (interactionId == ITI_38) ||
+                (interactionId == ITI_51) ||
                 (interactionId == ITI_63));
     }
 

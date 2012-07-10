@@ -43,7 +43,7 @@ public class AdhocQueryRequestValidatorTest {
     private AdhocQueryRequestValidator validator;
     private QueryRegistry request;
     private QueryRegistryTransformer transformer;
-    private ValidationProfile iti16Profile, iti18Profile;
+    private ValidationProfile iti16Profile, iti18Profile, iti51Profile;
 
     @Before
     public void setUp() {
@@ -52,6 +52,7 @@ public class AdhocQueryRequestValidatorTest {
         request = SampleData.createFindDocumentsQuery();
         iti16Profile = new ValidationProfile(IpfInteractionId.ITI_16);
         iti18Profile = new ValidationProfile(IpfInteractionId.ITI_18);
+        iti51Profile = new ValidationProfile(IpfInteractionId.ITI_51);
     }
     
     @Test

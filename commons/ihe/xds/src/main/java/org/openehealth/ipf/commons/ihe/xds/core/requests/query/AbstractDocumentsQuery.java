@@ -33,10 +33,10 @@ import java.util.List;
 @XmlType(name = "AbstractDocumentsQuery", propOrder = {
         "authorPersons", "creationTime", "serviceStartTime", "serviceStopTime",
         "classCodes", "confidentialityCodes", "eventCodes", "formatCodes",
-        "healthcareFacilityTypeCodes", "practiceSettingCodes", "typeCodes", "patientId"})
+        "healthcareFacilityTypeCodes", "practiceSettingCodes", "typeCodes"})
 @XmlRootElement(name = "abstractDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
-abstract public class AbstractDocumentsQuery extends StoredQuery implements PatientIdBasedStoredQuery {
+abstract public class AbstractDocumentsQuery extends StoredQuery  {
     private static final long serialVersionUID = 1162423827844317922L;
 
     @XmlElement(name = "typeCode")
@@ -55,7 +55,6 @@ abstract public class AbstractDocumentsQuery extends StoredQuery implements Pati
     @Getter @Setter private List<Code> formatCodes;
     @XmlElement(name = "authorPerson")
     @Getter @Setter private List<String> authorPersons;
-    @Getter @Setter private Identifiable patientId;
 
     @Getter private final TimeRange creationTime = new TimeRange();
     @Getter private final TimeRange serviceStartTime = new TimeRange();
