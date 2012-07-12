@@ -350,9 +350,17 @@ public abstract class SampleData {
      */
     public static QueryRegistry createFindDocumentsQuery() {
         FindDocumentsQuery query = new FindDocumentsQuery();
+        populateDocumentsQuery(query);
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        return new QueryRegistry(query);
+    }
+
+    private static void populateDocumentsQuery(DocumentsQuery query) {
         
         query.setHomeCommunityId("12.21.41");
-        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+
         query.setClassCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
         query.setTypeCodes(Arrays.asList(new Code("codet1", null, "schemet1"), new Code("codet2", null, "schemet2")));
         query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
@@ -377,11 +385,23 @@ public abstract class SampleData {
         query.setConfidentialityCodes(confidentialityCodes);
         query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
+
+        
+
+    }
+
+    /**
+     * @return a sample stored query for find documents (Multi Patient).
+     */
+    public static QueryRegistry createFindDocumentsForMultiplePatientsQuery() {
+        FindDocumentsForMultiplePatientsQuery query = new FindDocumentsForMultiplePatientsQuery();
+        populateDocumentsQuery(query);
+        query.setPatientIds(Arrays.asList(new Identifiable("id3", new AssigningAuthority("1.3")),new Identifiable("id4", new AssigningAuthority("1.4"))));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
-        
         return new QueryRegistry(query);
     }
+
 
     /**
      * @return a sample stored query for find folders.

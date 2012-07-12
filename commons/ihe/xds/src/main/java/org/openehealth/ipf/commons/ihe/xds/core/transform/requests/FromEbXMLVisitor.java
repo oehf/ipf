@@ -50,8 +50,18 @@ final class FromEbXMLVisitor implements Visitor {
     }
 
     @Override
+    public void visit(FindDocumentsForMultiplePatientsQuery query) {
+       new FindDocumentsForMultiplePatientsQueryTransformer().fromEbXML(query, ebXML);
+    }
+
+    @Override
     public void visit(FindFoldersQuery query) {
         new FindFoldersQueryTransformer().fromEbXML(query, ebXML);                
+    }
+
+    @Override
+    public void visit(FindFoldersForMultiplePatientsQuery query) {
+       new FindFoldersForMultiplePatientsQueryTransformer().fromEbXML(query, ebXML);
     }
 
     @Override

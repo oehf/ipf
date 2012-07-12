@@ -40,8 +40,10 @@ public class QueryRegistry implements Serializable {
 
     @XmlElementRefs({
             @XmlElementRef(type = FindDocumentsQuery.class),
+            @XmlElementRef(type = FindDocumentsForMultiplePatientsQuery.class),
             @XmlElementRef(type = FetchQuery.class),
             @XmlElementRef(type = FindFoldersQuery.class),
+            @XmlElementRef(type = FindFoldersForMultiplePatientsQuery.class),
             @XmlElementRef(type = FindSubmissionSetsQuery.class),
             @XmlElementRef(type = GetAllQuery.class),
             @XmlElementRef(type = GetAssociationsQuery.class),
