@@ -23,10 +23,7 @@ import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
@@ -43,7 +40,7 @@ import java.util.List;
  */
 public class AdhocQueryRequestValidatorTest {
     private AdhocQueryRequestValidator validator;
-    private QueryRegistry request, requestMpq;
+    private QueryRegistry request, requestMpq, folderRequest, folderRequestMpq;
     private QueryRegistryTransformer transformer;
     private ValidationProfile iti16Profile, iti18Profile, iti51Profile;
 
@@ -53,6 +50,8 @@ public class AdhocQueryRequestValidatorTest {
         transformer = new QueryRegistryTransformer();
         request = SampleData.createFindDocumentsQuery();
         requestMpq = SampleData.createFindDocumentsForMultiplePatientsQuery();
+        folderRequest = SampleData.createFindFoldersQuery();
+        folderRequestMpq = SampleData.createFindFoldersForMultiplePatientsQuery();
 
         iti16Profile = new ValidationProfile(IpfInteractionId.ITI_16);
         iti18Profile = new ValidationProfile(IpfInteractionId.ITI_18);
@@ -172,6 +171,37 @@ public class AdhocQueryRequestValidatorTest {
     public void testPatientIdMustBeISO_MPQ() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(requestMpq);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()).get(0).getValueList().add("('Invalid ISO Patient ID')");
+        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, iti51Profile);
+    }
+
+    // Folder and FolderMPQ test cases
+    @Test
+    public void testGoodCaseFolder() throws XDSMetaDataException {
+        validator.validate(transformer.toEbXML(folderRequest), iti18Profile);
+    }
+
+    @Test
+    public void testMissingPatientIdFolder() throws XDSMetaDataException {
+        ((FindFoldersQuery)folderRequest.getQuery()).setPatientId(null);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER,transformer.toEbXML(folderRequest), iti18Profile );
+    }
+
+    @Test
+    public void testMissingPatientIdFolderMPQ() {
+        ((FindFoldersForMultiplePatientsQuery) folderRequestMpq.getQuery()).setPatientIds(null);
+        validator.validate(transformer.toEbXML(folderRequestMpq), iti51Profile);
+
+    }
+
+    @Test
+    public void testGoodCaseFolderMPQ() throws XDSMetaDataException {
+        validator.validate(transformer.toEbXML(folderRequestMpq), iti18Profile);
+    }
+
+    @Test
+    public void testPatientIdMustBeISOFolder_MPQ() {
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(folderRequestMpq);
+        ebXML.getSlots(QueryParameter.FOLDER_PATIENT_ID.getSlotName()).get(0).getValueList().add("('Invalid ISO Patient ID')");
         expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, iti51Profile);
     }
 
