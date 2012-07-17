@@ -424,6 +424,28 @@ public abstract class SampleData {
         return new QueryRegistry(query);
     }
 
+
+    /**
+     * @return a sample stored query for find folders.
+     */
+    public static QueryRegistry createFindFoldersForMultiplePatientsQuery() {
+        FindFoldersForMultiplePatientsQuery query = new FindFoldersForMultiplePatientsQuery();
+
+        query.setHomeCommunityId("12.21.41");
+        query.setPatientIds(Arrays.asList(new Identifiable("id1", new AssigningAuthority("1.2")), new Identifiable("id2", new AssigningAuthority("1.2"))));
+        query.getLastUpdateTime().setFrom("1980");
+        query.getLastUpdateTime().setTo("1981");
+        QueryList<Code> codes = new QueryList<Code>();
+        codes.getOuterList().add(
+                Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
+        codes.getOuterList().add(
+                Arrays.asList(new Code("code9", null, "scheme9")));
+        query.setCodes(codes);
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+
+        return new QueryRegistry(query);
+    }
+
     /**
      * @return a sample stored query for find submission sets.
      */

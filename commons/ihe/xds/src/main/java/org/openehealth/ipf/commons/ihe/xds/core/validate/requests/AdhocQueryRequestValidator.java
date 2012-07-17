@@ -68,12 +68,29 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 DOC_ENTRY_FORMAT_CODE,
                 DOC_ENTRY_STATUS);
 
+        addAllowedMultipleSlots(FIND_DOCUMENTS_MPQ,
+                DOC_ENTRY_PATIENT_ID,
+                DOC_ENTRY_CLASS_CODE,
+                DOC_ENTRY_TYPE_CODE,
+                DOC_ENTRY_PRACTICE_SETTING_CODE,
+                DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE,
+                DOC_ENTRY_AUTHOR_PERSON,
+                DOC_ENTRY_FORMAT_CODE,
+                DOC_ENTRY_STATUS);
+
         addAllowedMultipleSlots(FIND_SUBMISSION_SETS,
                 SUBMISSION_SET_SOURCE_ID,
                 SUBMISSION_SET_CONTENT_TYPE_CODE,
                 SUBMISSION_SET_STATUS);
 
         addAllowedMultipleSlots(FIND_FOLDERS,
+                FOLDER_CODES,
+                FOLDER_STATUS);
+
+        addAllowedMultipleSlots(FIND_FOLDERS_MPQ,
+                FOLDER_PATIENT_ID,
                 FOLDER_CODES,
                 FOLDER_STATUS);
 
@@ -135,11 +152,13 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 Collections.<InteractionId> singletonList(ITI_16),
                 Collections.singletonList(SQL));
         ALLOWED_QUERY_TYPES.put(
-                Arrays.<InteractionId> asList(ITI_18, ITI_38),
+                Arrays.<InteractionId> asList(ITI_18, ITI_38, ITI_51),
                 Arrays.asList(
                         FIND_DOCUMENTS,
+                        FIND_DOCUMENTS_MPQ,
                         FIND_SUBMISSION_SETS,
                         FIND_FOLDERS,
+                        FIND_FOLDERS_MPQ,
                         GET_ALL,
                         GET_DOCUMENTS,
                         GET_FOLDERS,
@@ -184,8 +203,12 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 };
 
             case FIND_DOCUMENTS:
+            case FIND_DOCUMENTS_MPQ:
                 return new QueryParameterValidation[] {
-                    new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                    // PatientId MUST BE supplied in  single patient query.
+                    // PatientId (list) MAY BE supplied in multi patient query.
+                    // The validators for the two cases are otherwise identical.
+                    queryType.equals(FIND_DOCUMENTS) ? new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false):new StringListValidation(DOC_ENTRY_PATIENT_ID, cxValidator) ,
                     new CodeValidation(DOC_ENTRY_CLASS_CODE),
                     new CodeValidation(DOC_ENTRY_TYPE_CODE),
                     new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
@@ -217,8 +240,12 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 };
 
             case FIND_FOLDERS:
+            case FIND_FOLDERS_MPQ:
                 return new QueryParameterValidation[] {
-                    new StringValidation(FOLDER_PATIENT_ID, cxValidator, false),
+                    // PatientId MUST BE supplied in  single patient query.
+                    // PatientId (list) MAY BE supplied in multi patient query.
+                    // The validators for the two cases are otherwise identical.
+                    queryType.equals(FIND_FOLDERS) ? new StringValidation(FOLDER_PATIENT_ID, cxValidator, false):new StringListValidation(FOLDER_PATIENT_ID, cxValidator),
                     new NumberValidation(FOLDER_LAST_UPDATE_TIME_FROM, timeValidator),
                     new NumberValidation(FOLDER_LAST_UPDATE_TIME_TO, timeValidator),
                     new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME),
