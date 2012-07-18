@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * All possible query types.
  * @author Jens Riemschneider
+ * @author Michael Ottati
  */
 @XmlType(name = "QueryType")
 @XmlEnum(String.class)
