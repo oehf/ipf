@@ -49,15 +49,15 @@
         <resources-plugin-version>2.4.3</resources-plugin-version>
         
         <!-- Dependency version properties -->
-        <activemq-version>5.5.1</activemq-version>
+        <activemq-version>5.6.0</activemq-version>
         <aspectj-version>1.6.2</aspectj-version>
         <camel-version>2.9.2</camel-version>
-        <commons-codec-version>1.5</commons-codec-version>
+        <commons-codec-version>1.6</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
         <commons-fileupload-version>1.2.2</commons-fileupload-version>        
         <commons-httpclient-version>3.1</commons-httpclient-version>
-        <commons-io-version>2.3</commons-io-version>
+        <commons-io-version>2.4</commons-io-version>
         <commons-lang-version>3.1</commons-lang-version>
         <commons-logging-version>1.1.1</commons-logging-version>
         <commons-math-version>2.2</commons-math-version>
@@ -82,7 +82,7 @@
         <junit-version>4.10</junit-version>
         <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.17</log4j-version>
-        <lombok-version>0.11.0</lombok-version>
+        <lombok-version>0.11.2</lombok-version>
         <mdht-version>0.7.0.201012100720</mdht-version>
         <metabuilder-version>1.1.6</metabuilder-version>
         <mina-version>1.1.7</mina-version>
