@@ -23,6 +23,12 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
  */
 public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType {
 
+    public static final class MultiPatientQuery extends IHETransactionEventTypeCodes {
+        public MultiPatientQuery() {
+            super("ITI-51", "Multi-Patient Query");
+        }
+    }
+
     public static final class PatientLocationQuery extends IHETransactionEventTypeCodes {
         public PatientLocationQuery() {
             super("ITI-56", "Patient Location Query");

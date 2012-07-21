@@ -47,7 +47,7 @@ public class Iti51ServerAuditStrategy extends Iti51AuditStrategy {
 
     @Override
     public void doAudit(Iti51AuditDataset auditDataset) {
-        AuditorManager.getRegistryAuditor().auditRegistryStoredQueryEvent(
+        AuditorManager.getCustomXdsAuditor().auditRegistryStoredQueryEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getUserId(), 
                 auditDataset.getUserName(),

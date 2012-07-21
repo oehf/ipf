@@ -19,6 +19,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
@@ -26,6 +28,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParamete
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+
+import java.util.List;
 
 /**
  * Base audit strategy for ITI-51.
@@ -55,7 +59,10 @@ abstract public class Iti51AuditStrategy extends XdsAuditStrategy<Iti51AuditData
             auditDataset.setHomeCommunityId(adHocQuery.getHome());
         }
         QuerySlotHelper slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(request));
-        auditDataset.setPatientId(slotHelper.toString(QueryParameter.DOC_ENTRY_PATIENT_ID));
+        List<Identifiable> patientIdList =  slotHelper.toPatientIdList(QueryParameter.DOC_ENTRY_PATIENT_ID);
+        if (patientIdList != null && !patientIdList.isEmpty())  {
+            auditDataset.setPatientId(Hl7v2Based.render(patientIdList.get(0)));
+        }
     }
 
     @Override
