@@ -47,7 +47,7 @@ public class Iti51ClientAuditStrategy extends Iti51AuditStrategy {
     //TODO Check if this needs its own event type or this one can be used.
     @Override
     public void doAudit(Iti51AuditDataset auditDataset) {
-        AuditorManager.getConsumerAuditor().auditRegistryStoredQueryEvent(
+        AuditorManager.getCustomXdsAuditor().auditIti51(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getUserName(),

@@ -27,6 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import static org.junit.Assert.fail
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType
 
 /**
  * Tests the ITI-51 component with the webservice and the client defined within the URI.
@@ -115,7 +116,7 @@ class TestIti51 extends StandardTestContainer {
             checkSource(message.ActiveParticipant[0], 'true')
             checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
             checkPatient(message.ParticipantObjectIdentification[0])
-            checkQuery(message.ParticipantObjectIdentification[1], 'ITI-51', 'urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d', 'urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d')
+            checkQuery(message.ParticipantObjectIdentification[1], 'ITI-51', QueryType.FIND_DOCUMENTS_MPQ.getId(), QueryType.FIND_DOCUMENTS_MPQ.getId())
         }
     }
     

@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
 import org.openhealthtools.ihe.atna.auditor.XDSAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
@@ -39,6 +40,78 @@ public class CustomXdsAuditor extends XDSAuditor {
         AuditorModuleContext ctx = AuditorModuleContext.getContext();
         return (CustomXdsAuditor) ctx.getAuditor(CustomXdsAuditor.class);
     }
+
+    /**
+     * Audits an ITI-51 Multi-Patient Query event for XDS.a and XDS.b Document Consumer actors.
+     *
+     * @param eventOutcome The event outcome indicator
+     * @param registryEndpointUri The endpoint of the registry in this transaction
+     * @param consumerUserName The Active Participant UserName for the consumer (if using WS-Security / XUA)
+     * @param storedQueryUUID The UUID of the stored query
+     * @param adhocQueryRequestPayload The payload of the adhoc query request element
+     * @param homeCommunityId The home community id of the transaction (if present)
+     * @param patientId The patient ID queried (if query pertained to a patient id)
+     */
+    public void auditIti51(
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String registryEndpointUri,
+            String consumerUserName,
+            String storedQueryUUID, String adhocQueryRequestPayload, String homeCommunityId,
+            String patientId)
+    {
+        if (!isAuditorEnabled()) {
+            return;
+        }
+
+        /*
+           * FIXME:  Overriding endpoint URI with "anonymous", for now
+           */
+        String replyToUri = "http://www.w3.org/2005/08/addressing/anonymous";
+        //String replyToUri = getSystemUserId();
+
+        auditQueryEvent(true,
+                new CustomIHETransactionEventTypeCodes.MultiPatientQuery(), eventOutcome,
+                getAuditSourceId(), getAuditEnterpriseSiteId(),
+                replyToUri, getSystemAltUserId(), getSystemUserName(), getSystemNetworkId(),
+                consumerUserName, consumerUserName, false,
+                registryEndpointUri, null,
+                storedQueryUUID, adhocQueryRequestPayload, homeCommunityId,
+                patientId);
+    }
+
+    /**
+     * Audits an ITI-51 Multi-Patient Query event for XDS.a and XDS.b Document Registry actors.
+     *
+     * @param eventOutcome The event outcome indicator
+     * @param consumerUserId The Active Participant UserID for the consumer (if using WS-Addressing)
+     * @param consumerUserName The Active Participant UserName for the consumer (if using WS-Security / XUA)
+     * @param consumerIpAddress The IP Address of the consumer that initiated the transaction
+     * @param registryEndpointUri The URI of this registry's endpoint that received the transaction
+     * @param storedQueryUUID The UUID of the stored query
+     * @param adhocQueryRequestPayload The payload of the adhoc query request element
+     * @param homeCommunityId The home community id of the transaction (if present)
+     * @param patientId The patient ID queried (if query pertained to a patient id)
+     */
+    public void auditRegistryStoredQueryEvent(
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String consumerUserId, String consumerUserName, String consumerIpAddress,
+            String registryEndpointUri,
+            String storedQueryUUID, String adhocQueryRequestPayload, String homeCommunityId,
+            String patientId)
+    {
+        if (!isAuditorEnabled()) {
+            return;
+        }
+        auditQueryEvent(false,
+                new CustomIHETransactionEventTypeCodes.MultiPatientQuery(), eventOutcome,
+                getAuditSourceId(), getAuditEnterpriseSiteId(),
+                consumerUserId, null, consumerUserName, consumerIpAddress,
+                consumerUserName, consumerUserName, false,
+                registryEndpointUri, getSystemAltUserId(),
+                storedQueryUUID, adhocQueryRequestPayload, homeCommunityId,
+                patientId);
+    }
+
 
 
     public void auditIti61(
