@@ -16,8 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.iti51;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditStrategy;
 
 /**
  * Server audit strategy for ITI-51.
@@ -47,13 +45,13 @@ public class Iti51ServerAuditStrategy extends Iti51AuditStrategy {
 
     @Override
     public void doAudit(Iti51AuditDataset auditDataset) {
-        AuditorManager.getCustomXdsAuditor().auditRegistryStoredQueryEvent(
+        AuditorManager.getCustomXdsAuditor().auditRegistryMultiPatientQueryEvent(
                 auditDataset.getEventOutcomeCode(),
-                auditDataset.getUserId(), 
+                auditDataset.getUserId(),
                 auditDataset.getUserName(),
-                auditDataset.getClientIpAddress(), 
+                auditDataset.getClientIpAddress(),
                 auditDataset.getServiceEndpointUrl(),
-                auditDataset.getQueryUuid(), 
+                auditDataset.getQueryUuid(),
                 auditDataset.getRequestPayload(),
                 auditDataset.getHomeCommunityId(),
                 auditDataset.getPatientId());

@@ -108,7 +108,7 @@ class TestIti51 extends StandardTestContainer {
             assert message.ParticipantObjectIdentification.size() == 2
             assert message.children().size() == 6
             //TODO This test fails because there needs to be a corresponding methods added to
-            // org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor.auditRegistryStoredQueryEvent
+            // org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor.auditRegistryMultiPatientQueryEvent
             // and
             // org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes.RegistryStoredQuery
             // The methods that need to be added are the MPQ variations of the methods listed above.

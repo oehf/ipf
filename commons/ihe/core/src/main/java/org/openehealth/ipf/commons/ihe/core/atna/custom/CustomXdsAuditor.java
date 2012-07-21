@@ -92,7 +92,7 @@ public class CustomXdsAuditor extends XDSAuditor {
      * @param homeCommunityId The home community id of the transaction (if present)
      * @param patientId The patient ID queried (if query pertained to a patient id)
      */
-    public void auditRegistryStoredQueryEvent(
+    public void auditRegistryMultiPatientQueryEvent(
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String consumerUserId, String consumerUserName, String consumerIpAddress,
             String registryEndpointUri,
