@@ -30,7 +30,7 @@
             com.springsource.org.apache.derby.client
         </osgi.require.bundle>
         <osgi.fragment.host>
-            org.openehealth.ipf.commons.commons-flow
+            org.openehealth.ipf.commons.ipf-commons-flow
         </osgi.fragment.host>
     </properties>
     

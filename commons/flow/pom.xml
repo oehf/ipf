@@ -17,6 +17,7 @@
         </osgi.export.pkg>
         <osgi.import.pkg>
             net.sf.cglib.proxy,
+            javassist.util.proxy,
             *
         </osgi.import.pkg>
     </properties>

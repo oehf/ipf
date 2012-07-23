@@ -29,7 +29,7 @@
             org.openehealth.ipf.commons.flow.transfer
         </osgi.import.pkg>
         <osgi.fragment.host>
-            org.openehealth.ipf.platform-camel.platform-camel-flow
+            org.openehealth.ipf.platform-camel.ipf-platform-camel-flow
         </osgi.fragment.host>
     </properties>
     
