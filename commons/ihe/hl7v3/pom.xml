@@ -15,6 +15,7 @@
         <osgi.import.pkg>
             groovy.util,
             org.joda.time,
+            org.joda.time.format,
             org.openehealth.ipf.modules.hl7.message,
             ca.uhn.hl7v2.model,
             *
