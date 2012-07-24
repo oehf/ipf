@@ -34,10 +34,6 @@ http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
 	        <camel:from uri="xds-iti42:xds-iti42?features=#policyFeature" />
             <camel:to uri="log:worked" />
         </camel:route>
-        <camel:route>
-	        <camel:from uri="xds-iti42:xds-iti42-no-feature" />
-            <camel:to uri="log:worked" />
-        </camel:route>
     </camel:camelContext>
 
     <p:policies id="policyFeature" enabled="true">

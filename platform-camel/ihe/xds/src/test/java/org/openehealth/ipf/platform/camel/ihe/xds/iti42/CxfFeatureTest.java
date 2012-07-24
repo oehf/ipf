@@ -20,10 +20,7 @@ import org.apache.cxf.bus.spring.SpringBusFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.apache.cxf.ws.security.SecurityConstants;
 import org.apache.cxf.ws.security.trust.STSClient;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer;
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer;
@@ -77,7 +74,6 @@ public class CxfFeatureTest {
         }
     }
 
-
     @Test
     public void testFeatureEndpointWithPolicy() {
         SpringBusFactory bf = new SpringBusFactory();
@@ -85,10 +81,11 @@ public class CxfFeatureTest {
 	    SpringBusFactory.setDefaultBus(bus);
 	    SpringBusFactory.setThreadDefaultBus(bus);
 
-        URL wsdlURL = getClass().getClassLoader().getResource("feature-test-resources/iti42-with-policy.wsdl");
-        Service service = Service.create(wsdlURL, Iti42Component.WS_CONFIG.getServiceName());
-        Iti42PortType client = (Iti42PortType)service.getPort(Iti42Component.WS_CONFIG.getSei());
-        configureBinding(client, "http://localhost:" + port + "/xds-iti42");
+        Iti42PortType client =
+                getClient("feature-test-resources/iti42-with-policy.wsdl", "http://localhost:" + port + "/xds-iti42");
+
+        STSClient stsClient = (STSClient)((BindingProvider)client).getRequestContext().get(SecurityConstants.STS_CLIENT);
+        stsClient.setWsdlLocation("http://localhost:" + port + "/X509?wsdl");
 
 
         try {
@@ -96,31 +93,21 @@ public class CxfFeatureTest {
         } catch(SOAPFaultException ex) {
             //ex.printStackTrace();
             Assert.fail();
+        } finally {
+            SpringBusFactory.setThreadDefaultBus(null);
+            SpringBusFactory.setDefaultBus(null);
         }
     }
 
+    private Iti42PortType getClient(String wsdlLocation, String serviceURL) {
+        URL wsdlURL = getClass().getClassLoader().getResource(wsdlLocation);
+        Service service = Service.create(wsdlURL, Iti42Component.WS_CONFIG.getServiceName());
+        Iti42PortType client = (Iti42PortType)service.getPort(Iti42Component.WS_CONFIG.getSei());
 
-    @Test
-    public void testSimpleEndpointWithoutPolicy() {
-        JaxWsClientFactory clientFactory = new XdsClientFactory(
-                Iti42Component.WS_CONFIG,
-                "http://localhost:" + port + "/xds-iti42-no-feature",
-                null, null, null);
-        Iti42PortType client = (Iti42PortType) clientFactory.getClient();
-        try {
-            client.documentRegistryRegisterDocumentSetB(new SubmitObjectsRequest());
-        } catch(SOAPFaultException ex) {
-            Assert.fail();
-        }
-    }
-
-    private void configureBinding(Object client, String serviceURL) {
         BindingProvider bindingProvider = (BindingProvider) client;
         Map<String, Object> reqContext = bindingProvider.getRequestContext();
         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceURL);
-
-        STSClient stsClient = (STSClient)bindingProvider.getRequestContext().get(SecurityConstants.STS_CLIENT);
-        stsClient.setWsdlLocation("http://localhost:" + port + "/X509?wsdl");
+        return client;
     }
 
 }
