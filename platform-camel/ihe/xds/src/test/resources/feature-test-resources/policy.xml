@@ -1,0 +1,75 @@
+<wsp:Policy wsu:Id="DocumentRegistryPolicy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:wsp="http://www.w3.org/2006/07/ws-policy"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702"
+	xmlns:t="http://docs.oasis-open.org/ws-sx/ws-trust/200512" xmlns:wsaw="http://www.w3.org/2005/08/addressing"
+	xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+       xsi:schemaLocation="       
+		   http://www.w3.org/2006/07/ws-policy http://www.w3.org/2006/07/ws-policy.xsd">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<wsam:Addressing wsp:Optional="false">
+					<wsp:Policy />
+				</wsam:Addressing>
+				<sp:SymmetricBinding>
+					<wsp:Policy>
+						<sp:ProtectionToken>
+							<wsp:Policy>
+								<sp:IssuedToken
+									sp:IncludeToken="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702/IncludeToken/AlwaysToRecipient">
+									<sp:RequestSecurityTokenTemplate>
+										<t:TokenType>http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV2.0</t:TokenType>
+										<t:KeyType>http://docs.oasis-open.org/ws-sx/ws-trust/200512/SymmetricKey</t:KeyType>
+										<t:KeySize>128</t:KeySize>
+									</sp:RequestSecurityTokenTemplate>
+									<wsp:Policy>
+										<sp:RequireInternalReference />
+									</wsp:Policy>
+									<sp:Issuer>
+										<wsaw:Address>http://localhost:8080/SecurityTokenService/UT
+										</wsaw:Address>
+										<wsaw:Metadata>
+											<wsx:Metadata>
+												<wsx:MetadataSection>
+													<wsx:MetadataReference>
+														<wsaw:Address>http://localhost:8080/SecurityTokenService/UT/mex
+														</wsaw:Address>
+													</wsx:MetadataReference>
+												</wsx:MetadataSection>
+											</wsx:Metadata>
+										</wsaw:Metadata>
+									</sp:Issuer>
+								</sp:IssuedToken>
+							</wsp:Policy>
+						</sp:ProtectionToken>
+						<sp:Layout>
+							<wsp:Policy>
+								<sp:Lax />
+							</wsp:Policy>
+						</sp:Layout>
+						<sp:IncludeTimestamp />
+						<sp:OnlySignEntireHeadersAndBody />
+						<sp:AlgorithmSuite>
+							<wsp:Policy>
+								<sp:Basic128 />
+							</wsp:Policy>
+						</sp:AlgorithmSuite>
+					</wsp:Policy>
+				</sp:SymmetricBinding>
+				<sp:Wss11>
+					<wsp:Policy>
+						<sp:MustSupportRefIssuerSerial />
+						<sp:MustSupportRefThumbprint />
+						<sp:MustSupportRefEncryptedKey />
+					</wsp:Policy>
+				</sp:Wss11>
+				<sp:Trust13>
+					<wsp:Policy>
+						<sp:MustSupportIssuedTokens />
+						<sp:RequireClientEntropy />
+						<sp:RequireServerEntropy />
+					</wsp:Policy>
+				</sp:Trust13>
+			</wsp:All>
+		</wsp:ExactlyOne> 
+	</wsp:Policy>
