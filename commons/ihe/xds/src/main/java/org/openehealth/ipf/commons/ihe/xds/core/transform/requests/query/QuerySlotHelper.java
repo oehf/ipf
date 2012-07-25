@@ -357,7 +357,7 @@ public class QuerySlotHelper {
         return documentEntryTypes;
     }
 
-    private List<Code> toCode(List<String> slotValues) {
+    public static List<Code> toCode(List<String> slotValues) {
         if (slotValues.isEmpty()) {
             return null;
         }
@@ -375,14 +375,14 @@ public class QuerySlotHelper {
         return codes;
     }
     
-    private String encodeAsString(String value) {
+    public static String encodeAsString(String value) {
         if (value == null) {
             return null;
         }
         return "'" + value.replace("'", "''") + "'";
     }
 
-    private String decodeString(String value) {
+    public static String decodeString(String value) {
         if (value == null) {
             return null;
         }
@@ -393,14 +393,14 @@ public class QuerySlotHelper {
         return value.replaceAll("''", "'");
     }
 
-    private String encodeAsStringList(String value) {
+    public static String encodeAsStringList(String value) {
         if (value == null) {
             return null;
         }
         return "('" + value.replace("'", "''") + "')";
     }
 
-    private List<String> decodeStringList(String list) {
+    public static List<String> decodeStringList(String list) {
         if (list == null) {
             return null;
         }

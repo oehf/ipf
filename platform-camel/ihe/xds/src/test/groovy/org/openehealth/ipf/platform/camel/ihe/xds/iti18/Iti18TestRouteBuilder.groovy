@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuer
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest
 
 /**
  * @author Jens Riemschneider
@@ -37,6 +38,11 @@ class Iti18TestRouteBuilder extends SpringRouteBuilder {
             .process(iti18ResponseValidator())
     
         from('xds-iti18:xds-iti18-service2')
+            .process {
+                CodeSlotsNormalizer.normalizeCodeSlots(
+                        it.in.getBody(AdhocQueryRequest.class),
+                        '$XDSDocumentEntryClassCode')
+            }
             .process { checkValue(it, 'service 2') }
 
         // three endpoints intended for SOAP version check
