@@ -14,12 +14,12 @@
     <properties>
         <!-- libraries -->
         <ipf-version>${archetypeVersion}</ipf-version>
-        <groovy-version>1.7.9</groovy-version>
+        <groovy-version>1.8.7</groovy-version>
 
         <!-- plugins -->
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
         <eclipse-plugin-version>2.8</eclipse-plugin-version>
-        <gmaven-version>1.2</gmaven-version>
+        <gmaven-version>1.4</gmaven-version>
     </properties>
 
     <dependencyManagement>
@@ -77,12 +77,12 @@
                     <artifactId>gmaven-plugin</artifactId>
                     <version>${symbol_dollar}{gmaven-version}</version>
                     <configuration>
-                        <providerSelection>1.7</providerSelection>
+                        <providerSelection>1.8</providerSelection>
                     </configuration>
                     <dependencies>
                         <dependency>
                             <groupId>org.codehaus.gmaven.runtime</groupId>
-                            <artifactId>gmaven-runtime-1.7</artifactId>
+                            <artifactId>gmaven-runtime-1.8</artifactId>
                             <version>${symbol_dollar}{gmaven-version}</version>
                             <exclusions>
                                 <exclusion>

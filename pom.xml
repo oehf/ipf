@@ -41,7 +41,7 @@
         <bundle-plugin-version>2.0.1</bundle-plugin-version>
         <eclipse-plugin-version>2.8</eclipse-plugin-version>
         <enforcer-plugin-version>1.0-beta-1</enforcer-plugin-version>
-        <gmaven-version>1.2</gmaven-version>
+        <gmaven-version>1.4</gmaven-version>
         <jar-plugin-version>2.3.1</jar-plugin-version>
         <javadoc-plugin-version>2.8</javadoc-plugin-version>
         <jaxb-schemagen-plugin-version>1.2</jaxb-schemagen-plugin-version>
@@ -69,7 +69,7 @@
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
         <geronimo-spec-servlet-api-30-version>1.0</geronimo-spec-servlet-api-30-version>
-        <groovy-version>1.7.9</groovy-version>
+        <groovy-version>1.8.7</groovy-version>
         <hapi-version>1.2</hapi-version>
         <hibernate-version>3.5.6-Final</hibernate-version>
         <hibernate-commons-annotations-version>3.2.0.Final</hibernate-commons-annotations-version>
@@ -929,12 +929,12 @@
                     <artifactId>gmaven-plugin</artifactId>
                     <version>${gmaven-version}</version>
                     <configuration>
-                        <providerSelection>1.7</providerSelection>
+                        <providerSelection>1.8</providerSelection>
                     </configuration>
                     <dependencies>
                         <dependency>
                             <groupId>org.codehaus.gmaven.runtime</groupId>
-                            <artifactId>gmaven-runtime-1.7</artifactId>
+                            <artifactId>gmaven-runtime-1.8</artifactId>
                             <version>${gmaven-version}</version>
                             <exclusions>
                                 <exclusion>
