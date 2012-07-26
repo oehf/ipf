@@ -97,7 +97,7 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
 
         try {
             C xdsModelObject = xdsModelClass.newInstance();
-            MESSAGE.getParser().parse(xdsModelObject.hapiObject, hl7String, ENCODING_CHARACTERS);
+            MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, ENCODING_CHARACTERS);
             // TODO: can the xdsModelObject be empty when the String is not empty?
             return xdsModelObject.isEmpty() ? null : xdsModelObject;
         } catch (InstantiationException e) {
