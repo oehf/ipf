@@ -133,7 +133,6 @@
             <version>${cxf-version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.apache.cxf.services.sts</groupId>
             <artifactId>cxf-services-sts-core</artifactId>
