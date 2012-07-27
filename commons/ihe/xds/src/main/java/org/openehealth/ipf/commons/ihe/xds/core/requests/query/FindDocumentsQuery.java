@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
@@ -29,12 +30,13 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FindDocumentsQuery", propOrder = {"status", "documentEntryTypes"})
+@XmlType(name = "FindDocumentsQuery", propOrder = {"patientId","status", "documentEntryTypes"})
 @XmlRootElement(name = "findDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
-public class FindDocumentsQuery extends AbstractDocumentsQuery implements DocumentEntryTypeAwareStoredQuery {
+public class FindDocumentsQuery extends DocumentsQuery implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery {
     private static final long serialVersionUID = -5765363916663583605L;
 
+    @Getter @Setter private Identifiable patientId;
     @Getter @Setter private List<AvailabilityStatus> status;
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;

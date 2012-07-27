@@ -21,9 +21,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.DocumentsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDocumentsForMultiplePatientsQueryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDocumentsQueryTransformer;
 
 import java.util.Arrays;
@@ -32,11 +35,14 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for {@link FindDocumentsQueryTransformer}.
+ * Tests for {@link FindDocumentsQueryTransformer} and {@link FindDocumentsForMultiplePatientsQueryTransformer}
  * @author Jens Riemschneider
+ * @author Michael Ottati
  */
 public class FindDocumentsQueryTransformerTest {
     private FindDocumentsQueryTransformer transformer;
+    private FindDocumentsForMultiplePatientsQueryTransformer multiplePatientsQueryTransformer;
+    private FindDocumentsForMultiplePatientsQuery multiplePatientsQuery;
     private FindDocumentsQuery query;
     private EbXMLAdhocQueryRequest ebXML;
     
@@ -44,6 +50,8 @@ public class FindDocumentsQueryTransformerTest {
     public void setUp() {
         transformer = new FindDocumentsQueryTransformer();
         query = (FindDocumentsQuery)SampleData.createFindDocumentsQuery().getQuery();
+        multiplePatientsQueryTransformer = new FindDocumentsForMultiplePatientsQueryTransformer();
+        multiplePatientsQuery = (FindDocumentsForMultiplePatientsQuery)SampleData.createFindDocumentsForMultiplePatientsQuery().getQuery();
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -52,11 +60,24 @@ public class FindDocumentsQueryTransformerTest {
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.FIND_DOCUMENTS.getId(), ebXML.getId());
-        assertEquals("12.21.41", ebXML.getHome());
-
         assertEquals(Arrays.asList("'id3^^^&1.3&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
-        
+        toEbXML(query,ebXML);
+    }
+
+    @Test
+    public void testToEbXML_MPQ() {
+        multiplePatientsQueryTransformer.toEbXML(multiplePatientsQuery,ebXML);
+        assertEquals(QueryType.FIND_DOCUMENTS_MPQ.getId(), ebXML.getId());
+        assertEquals(Arrays.asList("('id3^^^&1.3&ISO')","('id4^^^&1.4&ISO')"),
+                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
+        toEbXML(query,ebXML);
+    }
+
+    public void toEbXML(DocumentsQuery query,EbXMLAdhocQueryRequest ebXML) {
+
+        assertEquals("12.21.41", ebXML.getHome());
+
         assertEquals(Arrays.asList("('code1^^scheme1')", "('code2^^scheme2')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()));
 
@@ -114,22 +135,39 @@ public class FindDocumentsQueryTransformerTest {
         transformer.toEbXML(null, ebXML);
         assertEquals(0, ebXML.getSlots().size());
     }
+
+    @Test
+    public void testToEbXMLNull_MPQ() {
+        multiplePatientsQueryTransformer.toEbXML(null,ebXML);
+        assertEquals(0, ebXML.getSlots().size());
+    }
     
     @Test
     public void testToEbXMLEmpty() {
         transformer.toEbXML(new FindDocumentsQuery(), ebXML);
         assertEquals(0, ebXML.getSlots().size());
     }
+    @Test
+    public void testToEbXMLEmpty_MPQ() {
+        multiplePatientsQueryTransformer.toEbXML(new FindDocumentsForMultiplePatientsQuery(),ebXML);
+        assertEquals(0, ebXML.getSlots().size());
+    }
 
-    
-    
     @Test
     public void testFromEbXML() {
         transformer.toEbXML(query, ebXML);
         FindDocumentsQuery result = new FindDocumentsQuery();
         transformer.fromEbXML(result, ebXML);
-        
         assertEquals(query, result);
+    }
+
+    @Test
+    public void testFromEbXML_MPQ() {
+
+        multiplePatientsQueryTransformer.toEbXML(multiplePatientsQuery,ebXML);
+        FindDocumentsForMultiplePatientsQuery mpResult = new FindDocumentsForMultiplePatientsQuery();
+        multiplePatientsQueryTransformer.fromEbXML(mpResult,ebXML);
+        assertEquals(multiplePatientsQuery,mpResult);
     }
     
     @Test
@@ -138,11 +176,25 @@ public class FindDocumentsQueryTransformerTest {
         transformer.fromEbXML(result, null);        
         assertEquals(new FindDocumentsQuery(), result);
     }
+
+    @Test
+    public void testFromEbXMLNull_MPQ() {
+        FindDocumentsForMultiplePatientsQuery result = new FindDocumentsForMultiplePatientsQuery();
+        multiplePatientsQueryTransformer.fromEbXML(result, null);
+        assertEquals(new FindDocumentsForMultiplePatientsQuery(), result);
+    }
         
     @Test
     public void testFromEbXMLEmpty() {
         FindDocumentsQuery result = new FindDocumentsQuery();
         transformer.fromEbXML(result, ebXML);        
         assertEquals(new FindDocumentsQuery(), result);
+    }
+
+    @Test
+    public void testFromEbXMLEmpty_MPQ() {
+        FindDocumentsForMultiplePatientsQuery result = new FindDocumentsForMultiplePatientsQuery();
+        multiplePatientsQueryTransformer.fromEbXML(result, ebXML);
+        assertEquals(new FindDocumentsForMultiplePatientsQuery(), result);
     }
 }

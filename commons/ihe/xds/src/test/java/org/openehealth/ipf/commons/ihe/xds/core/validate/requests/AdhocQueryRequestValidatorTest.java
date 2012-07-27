@@ -23,9 +23,7 @@ import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
@@ -38,20 +36,26 @@ import java.util.List;
 /**
  * Tests for {@link AdhocQueryRequestValidator}.
  * @author Jens Riemschneider
+ * @author Michael Ottati
  */
 public class AdhocQueryRequestValidatorTest {
     private AdhocQueryRequestValidator validator;
-    private QueryRegistry request;
+    private QueryRegistry request, requestMpq, folderRequest, folderRequestMpq;
     private QueryRegistryTransformer transformer;
-    private ValidationProfile iti16Profile, iti18Profile;
+    private ValidationProfile iti16Profile, iti18Profile, iti51Profile;
 
     @Before
     public void setUp() {
         validator = new AdhocQueryRequestValidator();
         transformer = new QueryRegistryTransformer();
         request = SampleData.createFindDocumentsQuery();
+        requestMpq = SampleData.createFindDocumentsForMultiplePatientsQuery();
+        folderRequest = SampleData.createFindFoldersQuery();
+        folderRequestMpq = SampleData.createFindFoldersForMultiplePatientsQuery();
+
         iti16Profile = new ValidationProfile(IpfInteractionId.ITI_16);
         iti18Profile = new ValidationProfile(IpfInteractionId.ITI_18);
+        iti51Profile = new ValidationProfile(IpfInteractionId.ITI_51);
     }
     
     @Test
@@ -65,7 +69,7 @@ public class AdhocQueryRequestValidatorTest {
         ebXML.setReturnType("lol");
         expectFailure(UNKNOWN_RETURN_TYPE, ebXML, iti18Profile);
     }
-    
+
     @Test
     public void testMissingRequiredQueryParameter() {
         ((FindDocumentsQuery)request.getQuery()).setPatientId(null);
@@ -78,7 +82,7 @@ public class AdhocQueryRequestValidatorTest {
         ebXML.getSlots(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()).get(0).getValueList().add("'lol'");
         expectFailure(TOO_MANY_VALUES_FOR_QUERY_PARAMETER, ebXML, iti18Profile);
     }
-    
+
     @Test
     public void testParameterValueNotString() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
@@ -144,7 +148,63 @@ public class AdhocQueryRequestValidatorTest {
         ((GetDocumentsQuery)request.getQuery()).setUniqueIds(Collections.singletonList("1.2.3"));
         expectFailure(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, iti18Profile);
     }
-    
+
+    /*
+        The validation profiles for ITI-18 and ITI-51 are identical except for how they handle PatientId data. The ITI-18
+        queries MUST contain exactly 1 PatientId. The ITI-51 Mutli Patient Queries MAY contain a (possibly empty) list of
+        patient IDs. The Following set of tests suffixed with "MPQ" test the MPQ PatientId validation code.
+
+     */
+
+    @Test
+    public void testGoodCaseMPQ() throws XDSMetaDataException {
+        validator.validate(transformer.toEbXML(requestMpq), iti51Profile);
+    }
+
+    @Test
+    public void testMissingPatientIdsMPQ() {
+        ((FindDocumentsForMultiplePatientsQuery) requestMpq.getQuery()).setPatientIds(null);
+        validator.validate(transformer.toEbXML(requestMpq), iti51Profile);
+    }
+
+    @Test
+    public void testPatientIdMustBeISO_MPQ() {
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(requestMpq);
+        ebXML.getSlots(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()).get(0).getValueList().add("('Invalid ISO Patient ID')");
+        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, iti51Profile);
+    }
+
+    // Folder and FolderMPQ test cases
+    @Test
+    public void testGoodCaseFolder() throws XDSMetaDataException {
+        validator.validate(transformer.toEbXML(folderRequest), iti18Profile);
+    }
+
+    @Test
+    public void testMissingPatientIdFolder() throws XDSMetaDataException {
+        ((FindFoldersQuery)folderRequest.getQuery()).setPatientId(null);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER,transformer.toEbXML(folderRequest), iti18Profile );
+    }
+
+    @Test
+    public void testMissingPatientIdFolderMPQ() {
+        ((FindFoldersForMultiplePatientsQuery) folderRequestMpq.getQuery()).setPatientIds(null);
+        validator.validate(transformer.toEbXML(folderRequestMpq), iti51Profile);
+
+    }
+
+    @Test
+    public void testGoodCaseFolderMPQ() throws XDSMetaDataException {
+        validator.validate(transformer.toEbXML(folderRequestMpq), iti18Profile);
+    }
+
+    @Test
+    public void testPatientIdMustBeISOFolder_MPQ() {
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(folderRequestMpq);
+        ebXML.getSlots(QueryParameter.FOLDER_PATIENT_ID.getSlotName()).get(0).getValueList().add("('Invalid ISO Patient ID')");
+        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, iti51Profile);
+    }
+
     @Test
     public void testGoodCaseSql() throws XDSMetaDataException {
         validator.validate(transformer.toEbXML(SampleData.createSqlQuery()), iti16Profile);

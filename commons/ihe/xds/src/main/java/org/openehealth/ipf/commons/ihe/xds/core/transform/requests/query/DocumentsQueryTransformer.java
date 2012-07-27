@@ -16,17 +16,15 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.AbstractDocumentsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.DocumentsQuery;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
- * Transforms between an {@link AbstractDocumentsQuery} derivative and {@link EbXMLAdhocQueryRequest}.
+ * Transforms between an {@link org.openehealth.ipf.commons.ihe.xds.core.requests.query.DocumentsQuery} derivative and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-abstract class AbstractDocumentsQueryTransformer<T extends AbstractDocumentsQuery> {
+abstract class DocumentsQueryTransformer<T extends DocumentsQuery> {
 
     /**
      * Transforms the query into its ebXML representation.
@@ -46,8 +44,6 @@ abstract class AbstractDocumentsQueryTransformer<T extends AbstractDocumentsQuer
         
         ebXML.setId(query.getType().getId());
         ebXML.setHome(query.getHomeCommunityId());
-
-        slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
 
@@ -84,8 +80,6 @@ abstract class AbstractDocumentsQueryTransformer<T extends AbstractDocumentsQuer
         }
         
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
-        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
         
         query.setClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE));
         query.setTypeCodes(slots.toCodeList(DOC_ENTRY_TYPE_CODE));

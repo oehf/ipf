@@ -46,7 +46,9 @@ public class SerializationTest {
     @Test
     public void testQueryRegistry() throws Exception {
         checkSerialization(SampleData.createFindDocumentsQuery());
+        checkSerialization(SampleData.createFindDocumentsForMultiplePatientsQuery());
         checkSerialization(SampleData.createFindFoldersQuery());
+        checkSerialization(SampleData.createFindFoldersForMultiplePatientsQuery());
         checkSerialization(SampleData.createFindSubmissionSetsQuery());
         checkSerialization(SampleData.createGetAllQuery());
         checkSerialization(SampleData.createGetAssociationsQuery());

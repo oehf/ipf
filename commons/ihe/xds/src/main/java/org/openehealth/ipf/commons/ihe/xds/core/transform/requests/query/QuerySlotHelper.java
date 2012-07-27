@@ -193,6 +193,50 @@ public class QuerySlotHelper {
         return values;
     }
 
+
+    /**
+     * Stores a list of patientIds into a slot.
+     * @param param
+     *          the parameter.
+     * @param values
+     *          the patientId list.
+     */
+    public void fromPatientIdList(QueryParameter param, List<Identifiable> values) {
+        if (values == null) {
+            return;
+        }
+
+        List<String> slotValues = new ArrayList<String>();
+        for (Identifiable value : values) {
+            slotValues.add(encodeAsStringList(Hl7v2Based.render(value)));
+        }
+        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[slotValues.size()]));
+    }
+
+    /**
+     * Retrieves a list of strings from a slot.
+     * @param param
+     *          the parameter.
+     * @return the string list.
+     */
+    public List<Identifiable> toPatientIdList(QueryParameter param) {
+        List<String> slotValues = ebXML.getSlotValues(param.getSlotName());
+        if (slotValues.isEmpty()) {
+            return null;
+        }
+
+        List<String> values = new ArrayList<String>();
+        for (String slotValue : slotValues) {
+            values.addAll(decodeStringList(slotValue));
+        }
+
+        List<Identifiable> patientIds = new ArrayList<Identifiable>();
+        for (String value : values) {
+            patientIds.add(Hl7v2Based.parse(value, Identifiable.class));
+        }
+        return patientIds;
+    }
+
     /**
      * Retrieves a list of codes from a slot.
      * @param param

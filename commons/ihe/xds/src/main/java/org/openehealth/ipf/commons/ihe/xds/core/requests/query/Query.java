@@ -58,7 +58,9 @@ public abstract class Query implements Serializable {
     public interface Visitor {
         void visit(SqlQuery query);
         void visit(FindDocumentsQuery query);
+        void visit(FindDocumentsForMultiplePatientsQuery query);
         void visit(FindFoldersQuery query);
+        void visit(FindFoldersForMultiplePatientsQuery query);
         void visit(GetSubmissionSetsQuery query);
         void visit(GetSubmissionSetAndContentsQuery query);
         void visit(GetRelatedDocumentsQuery query);

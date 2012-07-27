@@ -195,7 +195,33 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
             ValidationProfile profile = new ValidationProfile(ITI_43);
             new RetrieveDocumentSetResponseValidator().validate(message, profile);
         }
-    };    
+    };
+
+    private static final Processor ITI_51_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLAdhocQueryRequest30 message =
+                    new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
+            ValidationProfile profile = new ValidationProfile(ITI_51);
+            new AdhocQueryRequestValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor ITI_51_RESPONSE_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLQueryResponse30 message =
+                    new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
+            ValidationProfile profile = new ValidationProfile(ITI_51);
+            new QueryResponseValidator().validate(message, profile);
+        }
+    };
 
     private static final Processor ITI_61_REQUEST_VALIDATOR = new Processor() {
         @Override
@@ -333,6 +359,21 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
     public static Processor iti43ResponseValidator() {
         return ITI_43_RESPONSE_VALIDATOR;
     }
+
+    /**
+     * Returns a validating processor for ITI-51 request messages.
+     */
+    public static Processor iti51RequestValidator() {
+        return ITI_51_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-51 response messages.
+     */
+    public static Processor iti51ResponseValidator() {
+        return ITI_51_RESPONSE_VALIDATOR;
+    }
+
 
     /**
      * Returns a validating processor for ITI-61 request messages.

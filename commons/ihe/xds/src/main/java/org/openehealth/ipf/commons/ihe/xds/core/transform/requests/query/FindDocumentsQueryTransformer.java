@@ -16,8 +16,11 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
 
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_PATIENT_ID;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_STATUS;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_TYPE;
 
@@ -25,7 +28,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  * Transforms between a {@link FindDocumentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-public class FindDocumentsQueryTransformer extends AbstractDocumentsQueryTransformer<FindDocumentsQuery> {
+public class FindDocumentsQueryTransformer extends DocumentsQueryTransformer<FindDocumentsQuery> {
 
     @Override
     public void toEbXML(FindDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
@@ -36,6 +39,7 @@ public class FindDocumentsQueryTransformer extends AbstractDocumentsQueryTransfo
         super.toEbXML(query, ebXML);
 
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
     }
@@ -48,6 +52,8 @@ public class FindDocumentsQueryTransformer extends AbstractDocumentsQueryTransfo
 
         super.fromEbXML(query, ebXML);
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
+        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
     }
