@@ -53,7 +53,7 @@ public class Iti56AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTran
     @SuppressWarnings({"rawtypes", "unchecked" }) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Hl7v3AsyncResponseEndpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3AsyncResponseEndpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, getCustomInterceptors(parameters), getFeatures(parameters));
     }
 
     @Override

@@ -69,7 +69,7 @@ public class SomeItiComponent extends AbstractWsComponent<WsTransactionConfigura
 
     @SuppressWarnings("unchecked")
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new SomeItiEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new SomeItiEndpoint(uri, remaining, this, getCustomInterceptors(parameters), getFeatures(parameters));
     }
 
 }

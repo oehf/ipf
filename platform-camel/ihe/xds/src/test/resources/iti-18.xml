@@ -44,4 +44,9 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
             </list>
         </property>
     </bean>
+
+
+    <bean id="policyFeature" class="org.apache.cxf.ws.policy.WSPolicyFeature" />
+    <bean id="gzipFeature" class="org.apache.cxf.transport.common.gzip.GZIPFeature" />
+
 </beans>

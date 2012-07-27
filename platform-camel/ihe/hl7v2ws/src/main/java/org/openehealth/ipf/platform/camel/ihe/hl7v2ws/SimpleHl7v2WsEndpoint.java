@@ -19,6 +19,7 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -51,14 +52,17 @@ public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsCom
      *          the component creating this endpoint.
      * @param customInterceptors
      *          user-defined CXF interceptors.
+     * @param features
+     *          user-defined list of CXF features.
      */
     public SimpleHl7v2WsEndpoint(
             String endpointUri,
             String address,
             AbstractHl7v2WsComponent component,
-            InterceptorProvider customInterceptors)
+            InterceptorProvider customInterceptors,
+            List<AbstractFeature> features)
     {
-        super(endpointUri, address, component, customInterceptors);
+        super(endpointUri, address, component, customInterceptors, features);
     }
 
 

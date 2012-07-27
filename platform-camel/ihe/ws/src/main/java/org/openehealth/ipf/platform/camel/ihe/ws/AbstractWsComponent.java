@@ -15,10 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.camel.impl.DefaultComponent;
+import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
@@ -102,4 +104,9 @@ abstract public class AbstractWsComponent<ConfigType extends WsTransactionConfig
     public abstract AbstractWsProducer getProducer(
             AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory);
+
+
+    protected List<AbstractFeature> getFeatures(Map<String, Object> parameters) {
+        return resolveAndRemoveReferenceListParameter(parameters, "features", AbstractFeature.class);
+    }
 }

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
+import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
@@ -23,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+
+import java.util.List;
 
 /**
  * Camel endpoint implementation for HL7v3-based IHE components.
@@ -36,9 +39,10 @@ public class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
             String endpointUri,
             String address,
             AbstractWsComponent<ConfigType> component,
-            InterceptorProvider customInterceptors)
+            InterceptorProvider customInterceptors,
+            List<AbstractFeature> features)
     {
-        super(endpointUri, address, component, customInterceptors);
+        super(endpointUri, address, component, customInterceptors, features);
     }
 
 

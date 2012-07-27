@@ -51,7 +51,7 @@ public class Iti56Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
     @SuppressWarnings({ "unchecked", "rawtypes" }) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, getCustomInterceptors(parameters), getFeatures(parameters));
     }
 
     @Override

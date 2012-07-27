@@ -67,6 +67,12 @@ class Iti18TestRouteBuilder extends SpringRouteBuilder {
                 // Any other query else is a failure
                 .otherwise()
                     .transform { new QueryResponse(FAILURE) }
+
+        from('xds-iti18:featuresTest?features=#policyFeature,#gzipFeature')
+            .process(iti18RequestValidator())
+            .process { checkValue(it, 'service 1') }
+            .process(iti18ResponseValidator())
+
    }
 
     def checkValue(exchange, expected) {

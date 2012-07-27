@@ -52,7 +52,7 @@ public class Iti38Component extends AbstractWsComponent<WsTransactionConfigurati
     @Override
     @SuppressWarnings("unchecked") // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new XdsEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new XdsEndpoint(uri, remaining, this, getCustomInterceptors(parameters), getFeatures(parameters));
     }
 
     @Override
