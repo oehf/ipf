@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.iti41;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
 /**
  * Client audit strategy for ITI-41.
@@ -42,7 +42,7 @@ public class Iti41ClientAuditStrategy extends Iti41AuditStrategy {
     }
 
     @Override
-    public void doAudit(XdsAuditDataset auditDataset) {
+    public void doAudit(XdsSubmitAuditDataset auditDataset) {
         AuditorManager.getSourceAuditor().auditProvideAndRegisterDocumentSetBEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getServiceEndpointUrl(),

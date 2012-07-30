@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,8 @@ public interface Iti51PortType {
     @WebResult(name = "AdhocQueryResponse",
             targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0",
             partName = "body")
-    @Action(input = "urn:ihe:iti:2007:MultiPatientStoredQuery",
-            output = "urn:ihe:iti:2007:MultiPatientStoredQueryResponse")
+    @Action(input = "urn:ihe:iti:2009:MultiPatientStoredQuery",
+            output = "urn:ihe:iti:2009:MultiPatientStoredQueryResponse")
     @WebMethod(operationName = "DocumentRegistry_MultiPatientStoredQuery")
     public AdhocQueryResponse documentRegistryMultiPatientStoredQuery(
             @WebParam(partName = "body",

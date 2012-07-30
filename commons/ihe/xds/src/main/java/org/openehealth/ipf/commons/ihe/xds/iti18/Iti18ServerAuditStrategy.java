@@ -16,12 +16,14 @@
 package org.openehealth.ipf.commons.ihe.xds.iti18;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditStrategy30;
 
 /**
  * Server audit strategy for ITI-18.
  * @author Dmytro Rud
  */
-public class Iti18ServerAuditStrategy extends Iti18AuditStrategy {
+public class Iti18ServerAuditStrategy extends XdsQueryAuditStrategy30 {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "EventOutcomeCode",
@@ -43,7 +45,7 @@ public class Iti18ServerAuditStrategy extends Iti18AuditStrategy {
     }
 
     @Override
-    public void doAudit(Iti18AuditDataset auditDataset) {
+    public void doAudit(XdsQueryAuditDataset auditDataset) {
         AuditorManager.getRegistryAuditor().auditRegistryStoredQueryEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getUserId(), 

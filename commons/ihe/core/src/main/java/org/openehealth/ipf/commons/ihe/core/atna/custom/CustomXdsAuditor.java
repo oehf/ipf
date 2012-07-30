@@ -28,6 +28,7 @@ import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtil
 /**
  * Implementation of XDS Auditors to send audit messages for
  * <ul>
+ *     <li>ITI-51 (XDS.b Multi-Patient Stored Query)</li>
  *     <li>ITI-61 (XDS.b Register On-Demand Document Entry)</li>
  *     <li>ITI-63 (XCF Cross-Community Fetch)</li>
  * </ul>
@@ -41,77 +42,61 @@ public class CustomXdsAuditor extends XDSAuditor {
         return (CustomXdsAuditor) ctx.getAuditor(CustomXdsAuditor.class);
     }
 
+
     /**
-     * Audits an ITI-51 Multi-Patient Query event for XDS.a and XDS.b Document Consumer actors.
+     * Audits an ITI-51 Multi-Patient Query event.
      *
-     * @param eventOutcome The event outcome indicator
-     * @param registryEndpointUri The endpoint of the registry in this transaction
-     * @param consumerUserName The Active Participant UserName for the consumer (if using WS-Security / XUA)
-     * @param storedQueryUUID The UUID of the stored query
-     * @param adhocQueryRequestPayload The payload of the adhoc query request element
-     * @param homeCommunityId The home community id of the transaction (if present)
-     * @param patientId The patient ID queried (if query pertained to a patient id)
+     * @param serverSide
+     *      <code>true</code> for the Document Registry actor,
+     *      <code>false</code> for the Document Consumer actor.
+     * @param eventOutcome
+     *      event outcome code.
+     * @param userId
+     *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
+     * @param userName
+     *      user name on the Document Consumer side (for XUA).
+     * @param registryEndpointUri
+     *      network endpoint URI of the Document Registry actor.
+     * @param clientIpAddress
+     *      IP adress of the Document Consumer actor.
+     * @param queryUuid
+     *      UUID of the XDS query.
+     * @param requestPayload
+     *      the whole XDS request as an XML String.
+     * @param homeCommunityId
+     *      home community ID (optional).
+     * @param patientId
+     *      patient ID as an HL7 v2 CX string.
      */
     public void auditIti51(
+            boolean serverSide,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String userId,
+            String userName,
             String registryEndpointUri,
-            String consumerUserName,
-            String storedQueryUUID, String adhocQueryRequestPayload, String homeCommunityId,
+            String clientIpAddress,
+            String queryUuid,
+            String requestPayload,
+            String homeCommunityId,
             String patientId)
     {
         if (!isAuditorEnabled()) {
             return;
         }
 
-        /*
-           * FIXME:  Overriding endpoint URI with "anonymous", for now
-           */
-        String replyToUri = "http://www.w3.org/2005/08/addressing/anonymous";
-        //String replyToUri = getSystemUserId();
-
-        auditQueryEvent(true,
-                new CustomIHETransactionEventTypeCodes.MultiPatientQuery(), eventOutcome,
-                getAuditSourceId(), getAuditEnterpriseSiteId(),
-                replyToUri, getSystemAltUserId(), getSystemUserName(), getSystemNetworkId(),
-                consumerUserName, consumerUserName, false,
-                registryEndpointUri, null,
-                storedQueryUUID, adhocQueryRequestPayload, homeCommunityId,
+        doAuditQueryEvent(
+                serverSide,
+                new CustomIHETransactionEventTypeCodes.MultiPatientQuery(),
+                eventOutcome,
+                userId,
+                userName,
+                registryEndpointUri,
+                clientIpAddress,
+                queryUuid,
+                requestPayload,
+                homeCommunityId,
                 patientId);
     }
-
-    /**
-     * Audits an ITI-51 Multi-Patient Query event for XDS.a and XDS.b Document Registry actors.
-     *
-     * @param eventOutcome The event outcome indicator
-     * @param consumerUserId The Active Participant UserID for the consumer (if using WS-Addressing)
-     * @param consumerUserName The Active Participant UserName for the consumer (if using WS-Security / XUA)
-     * @param consumerIpAddress The IP Address of the consumer that initiated the transaction
-     * @param registryEndpointUri The URI of this registry's endpoint that received the transaction
-     * @param storedQueryUUID The UUID of the stored query
-     * @param adhocQueryRequestPayload The payload of the adhoc query request element
-     * @param homeCommunityId The home community id of the transaction (if present)
-     * @param patientId The patient ID queried (if query pertained to a patient id)
-     */
-    public void auditRegistryMultiPatientQueryEvent(
-            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
-            String consumerUserId, String consumerUserName, String consumerIpAddress,
-            String registryEndpointUri,
-            String storedQueryUUID, String adhocQueryRequestPayload, String homeCommunityId,
-            String patientId)
-    {
-        if (!isAuditorEnabled()) {
-            return;
-        }
-        auditQueryEvent(false,
-                new CustomIHETransactionEventTypeCodes.MultiPatientQuery(), eventOutcome,
-                getAuditSourceId(), getAuditEnterpriseSiteId(),
-                consumerUserId, null, consumerUserName, consumerIpAddress,
-                consumerUserName, consumerUserName, false,
-                registryEndpointUri, getSystemAltUserId(),
-                storedQueryUUID, adhocQueryRequestPayload, homeCommunityId,
-                patientId);
-    }
-
 
 
     public void auditIti61(
@@ -156,20 +141,48 @@ public class CustomXdsAuditor extends XDSAuditor {
             String homeCommunityId,
             String patientId)
     {
+        doAuditQueryEvent(
+                serverSide,
+                new CustomIHETransactionEventTypeCodes.CrossCommunityFetch(),
+                eventOutcome,
+                userId,
+                userName,
+                respondingGatewayUri,
+                clientIpAddress,
+                queryUuid,
+                requestPayload,
+                homeCommunityId,
+                patientId);
+    }
+
+
+    private void doAuditQueryEvent(
+            boolean serverSide,
+            IHETransactionEventTypeCodes transactionEventTypeCode,
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String userId,
+            String userName,
+            String serverEndpointUri,
+            String clientIpAddress,
+            String queryUuid,
+            String requestPayload,
+            String homeCommunityId,
+            String patientId)
+    {
         auditQueryEvent(
                 ! serverSide,
-                new CustomIHETransactionEventTypeCodes.CrossCommunityFetch(),
+                transactionEventTypeCode,
                 eventOutcome,
                 getAuditSourceId(),
                 getAuditEnterpriseSiteId(),
                 userId,
                 serverSide ? null : getSystemAltUserId(),
                 null,
-                clientIpAddress,
+                serverSide ? clientIpAddress : getSystemNetworkId(),
                 userName,
                 userName,
                 false,
-                respondingGatewayUri,
+                serverEndpointUri,
                 serverSide ? getSystemAltUserId() : null,
                 queryUuid,
                 requestPayload,

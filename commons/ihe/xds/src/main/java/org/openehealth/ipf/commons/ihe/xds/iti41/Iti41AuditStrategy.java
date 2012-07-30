@@ -15,23 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti41;
 
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
 /**
  * Audit strategy for ITI-41.
  * @author Dmytro Rud
  */
-abstract class Iti41AuditStrategy extends XdsAuditStrategy<XdsAuditDataset> {
+abstract class Iti41AuditStrategy extends XdsSubmitAuditStrategy30 {
 
     /**
      * Constructs the audit strategy.
@@ -46,24 +42,13 @@ abstract class Iti41AuditStrategy extends XdsAuditStrategy<XdsAuditDataset> {
     }
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, XdsAuditDataset auditDataset) {
+    public void enrichDatasetFromRequest(Object pojo, XdsSubmitAuditDataset auditDataset) {
         ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType)pojo;
         SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
-        if(submitObjectsRequest != null) {
+        if (submitObjectsRequest != null) {
             EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
             auditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
         }
     }
 
-    @Override
-    public RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
-        RegistryResponseType response = (RegistryResponseType) pojo;
-        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response); 
-        return getEventOutcomeCodeFromRegistryResponse(ebXML);
-    }
-
-    @Override
-    public XdsAuditDataset createAuditDataset() {
-        return new XdsAuditDataset(isServerSide());
-    }
 }

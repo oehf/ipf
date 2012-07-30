@@ -26,7 +26,7 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 public class XdsAuditorTest extends TestCase {
 
     private static final String REPLY_TO_URI        = "reply-to-uri";
-    private static final String USER_NAME           = "user-name";
+    private static final String USER_NAME           = "alias<user@issuer>";
     private static final String SERVER_URI          = "server-uri";
     private static final String CLIENT_IP_ADDRESS   = "141.44.162.126";
     private static final String PATIENT_ID          = "patientId^^^&1.2.3&ISO";
@@ -45,13 +45,27 @@ public class XdsAuditorTest extends TestCase {
     public void testAuditors() {
         final CustomXdsAuditor auditor = AuditorManager.getCustomXdsAuditor();
 
+        auditor.auditIti51(true,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
+                QUERY_UUID,
+                REQUEST_PAYLOAD,
+                HOME_COMMUNITY_ID,
+                PATIENT_ID);
+
+        auditor.auditIti51(false,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
+                QUERY_UUID,
+                REQUEST_PAYLOAD,
+                HOME_COMMUNITY_ID,
+                PATIENT_ID);
+
         auditor.auditIti61(true,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
                 SUBMISSION_SET_ID,
                 PATIENT_ID);
 
         auditor.auditIti61(false,
-                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 SUBMISSION_SET_ID,
                 PATIENT_ID);
 
@@ -63,7 +77,7 @@ public class XdsAuditorTest extends TestCase {
                 PATIENT_ID);
 
         auditor.auditIti63(false,
-                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 QUERY_UUID,
                 REQUEST_PAYLOAD,
                 HOME_COMMUNITY_ID,

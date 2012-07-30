@@ -16,14 +16,14 @@
 package org.openehealth.ipf.commons.ihe.xds.iti61;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
 /**
  * Audit strategy for ITI-61.
  * @author Dmytro Rud
  */
-public class Iti61AuditStrategy extends Iti42AuditStrategy {
+public class Iti61AuditStrategy extends XdsSubmitAuditStrategy30 {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "EventOutcomeCode",
@@ -38,7 +38,7 @@ public class Iti61AuditStrategy extends Iti42AuditStrategy {
 
 
     @Override
-    public void doAudit(XdsAuditDataset auditDataset) {
+    public void doAudit(XdsSubmitAuditDataset auditDataset) {
         AuditorManager.getCustomXdsAuditor().auditIti61(
                 isServerSide(),
                 auditDataset.getEventOutcomeCode(),

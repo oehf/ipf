@@ -16,14 +16,14 @@
 package org.openehealth.ipf.commons.ihe.xds.iti38;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18AuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ClientAuditStrategy;
 
 /**
  * Client audit strategy for ITI-38.
  * @author Dmytro Rud
  */
-public class Iti38ClientAuditStrategy extends Iti18AuditStrategy {
+public class Iti38ClientAuditStrategy extends Iti18ClientAuditStrategy {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "EventOutcomeCode",
@@ -41,11 +41,11 @@ public class Iti38ClientAuditStrategy extends Iti18AuditStrategy {
      *      (parameter initially configurable via endpoint URL).
      */
     public Iti38ClientAuditStrategy(boolean allowIncompleteAudit) {
-        super(false, allowIncompleteAudit);
+        super(allowIncompleteAudit);
     }
 
     @Override
-    public void doAudit(Iti18AuditDataset auditDataset) {
+    public void doAudit(XdsQueryAuditDataset auditDataset) {
         AuditorManager.getXCAInitiatingGatewayAuditor().auditCrossGatewayQueryEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getServiceEndpointUrl(),

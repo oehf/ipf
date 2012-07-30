@@ -16,14 +16,14 @@
 package org.openehealth.ipf.commons.ihe.xds.iti39;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43AuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditStrategy30;
 
 /**
  * Client audit strategy for ITI-39.
  * @author Dmytro Rud
  */
-public class Iti39ClientAuditStrategy extends Iti43AuditStrategy {
+public class Iti39ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "EventOutcomeCode",
@@ -38,7 +38,7 @@ public class Iti39ClientAuditStrategy extends Iti43AuditStrategy {
     }
 
     @Override
-    public void doAudit(Iti43AuditDataset auditDataset) {
+    public void doAudit(XdsRetrieveAuditDataset auditDataset) {
         String[] homeCommunityIds = auditDataset.getHomeCommunityUuids();
         AuditorManager.getXCAInitiatingGatewayAuditor().auditCrossGatewayRetrieveEvent(
                 auditDataset.getEventOutcomeCode(),

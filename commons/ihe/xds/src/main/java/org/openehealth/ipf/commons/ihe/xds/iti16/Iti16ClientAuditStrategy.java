@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.iti16;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 
 /**
  * Client audit strategy for ITI-16.
@@ -35,7 +35,7 @@ public class Iti16ClientAuditStrategy extends Iti16AuditStrategy {
     }
 
     @Override
-    public void doAudit(XdsAuditDataset auditDataset) {
+    public void doAudit(XdsQueryAuditDataset auditDataset) {
         AuditorManager.getConsumerAuditor().auditRegistryQueryEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getServiceEndpointUrl(),

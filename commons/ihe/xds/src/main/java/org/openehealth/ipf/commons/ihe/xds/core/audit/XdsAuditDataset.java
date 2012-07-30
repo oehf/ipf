@@ -15,25 +15,22 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import java.util.List;
-
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A data structure that contains XDS-specific ATNA audit information pieces
  * in addition to common IHE Web Service-related ones.
  * @author Dmytro Rud
  */
-public class XdsAuditDataset extends WsAuditDataset {
+abstract public class XdsAuditDataset extends WsAuditDataset {
     private static final long serialVersionUID = 652866992858926778L;
 
     // patient ID as HL7 CX datatype, e.g. "1234^^^&1.2.3.4&ISO"
-    private String patientId;
-    // submission set unique ID
-    private String submissionSetUuid;
+    @Getter private final List<String> patientIds = new ArrayList<String>();
 
     /**
      * Constructor.
@@ -48,56 +45,10 @@ public class XdsAuditDataset extends WsAuditDataset {
     }
 
     /**
-     * Sets the patient ID as HL7 CX datatype, e.g. "1234^^^&1.2.3.4&ISO"
-     * @param patientId
-     *          patient ID as HL7 CX datatype, e.g. "1234^^^&1.2.3.4&ISO".
-     */
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
-    }
-
-    /**
-     * @return patient ID as HL7 CX datatype, e.g. "1234^^^&1.2.3.4&ISO".
+     * @return the first present patient ID as HL7 CX string, e.g. "1234^^^&1.2.3.4&ISO",
+     *      or <code>null</code> when no patient IDs have been collected.
      */
     public String getPatientId() {
-        return patientId;
-    }
-
-    /**
-     * Sets the submission set unique ID.
-     * @param submissionSetUuid
-     *          submission set unique ID.
-     */
-    public void setSubmissionSetUniqueID(String submissionSetUuid) {
-        this.submissionSetUuid = submissionSetUuid;
-    }
-
-    /**
-     * @return submission set unique ID.
-     */
-    public String getSubmissionSetUuid() {
-        return submissionSetUuid;
-    }
-
-    /**
-     * Enriches the set with fields extracted from a submit objects request POJO.
-     * 
-     * @param ebXML
-     *      a {@link EbXMLSubmitObjectsRequest} as POJO 
-     */
-    public void enrichDatasetFromSubmitObjectsRequest(EbXMLSubmitObjectsRequest ebXML) 
-    {
-        List<EbXMLRegistryPackage> submissionSets = 
-            ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
-        
-        for (EbXMLRegistryPackage submissionSet : submissionSets) {
-            String patientID = submissionSet.getExternalIdentifierValue(
-                    Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);            
-            setPatientId(patientID);
-            
-            String uniqueID = submissionSet.getExternalIdentifierValue(
-                    Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
-            setSubmissionSetUniqueID(uniqueID);
-        }
+        return patientIds.isEmpty() ? null : patientIds.get(0);
     }
 }

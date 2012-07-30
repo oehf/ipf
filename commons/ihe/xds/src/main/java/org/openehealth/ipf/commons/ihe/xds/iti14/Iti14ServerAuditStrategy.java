@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.iti14;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
 /**
  * Server audit strategy for ITI-14.
@@ -36,7 +36,7 @@ public class Iti14ServerAuditStrategy extends Iti14AuditStrategy {
     }
 
     @Override
-    public void doAudit(XdsAuditDataset auditDataset) {
+    public void doAudit(XdsSubmitAuditDataset auditDataset) {
         AuditorManager.getRegistryAuditor().auditRegisterDocumentSetEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getClientIpAddress(),  // Must be set to something, otherwise schema is broken

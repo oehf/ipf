@@ -58,7 +58,7 @@ public class Hl7v3AuditorTest extends TestCase {
                 MESSAGE_ID);
 
         auditor.auditIti44Add(false,
-                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 PATIENT_IDS,
                 MESSAGE_ID);
 
@@ -68,7 +68,7 @@ public class Hl7v3AuditorTest extends TestCase {
                 MESSAGE_ID);
 
         auditor.auditIti44Revise(false,
-                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 PATIENT_IDS,
                 MESSAGE_ID);
 
@@ -78,7 +78,7 @@ public class Hl7v3AuditorTest extends TestCase {
                 MESSAGE_ID);
 
         auditor.auditIti44Delete(false,
-                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 PATIENT_IDS[0],
                 MESSAGE_ID);
 
@@ -88,7 +88,7 @@ public class Hl7v3AuditorTest extends TestCase {
                 PATIENT_IDS);
 
         auditor.auditIti45(false,
-                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 QUERY_PAYLOAD,
                 PATIENT_IDS);
 
@@ -98,7 +98,7 @@ public class Hl7v3AuditorTest extends TestCase {
                 MESSAGE_ID);
 
         auditor.auditIti46(false,
-                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 PATIENT_IDS,
                 MESSAGE_ID);
 
@@ -108,7 +108,7 @@ public class Hl7v3AuditorTest extends TestCase {
                 PATIENT_IDS);
 
         auditor.auditIti47(false,
-                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 QUERY_PAYLOAD,
                 PATIENT_IDS);
 
@@ -120,7 +120,7 @@ public class Hl7v3AuditorTest extends TestCase {
                 PATIENT_IDS);
 
         auditor.auditIti55(false,
-                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 QUERY_PAYLOAD,
                 QUERY_ID,
                 HOME_COMM_ID,
@@ -132,7 +132,7 @@ public class Hl7v3AuditorTest extends TestCase {
                 PATIENT_IDS[0]);
 
         auditor.auditIti56(false,
-                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 QUERY_PAYLOAD,
                 PATIENT_IDS[0]);
 

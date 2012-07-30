@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti16;
 
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLRegistryResponse21;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
@@ -26,14 +26,14 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Audit strategy for ITI-16.
  * @author Dmytro Rud
  */
-abstract class Iti16AuditStrategy extends XdsAuditStrategy<XdsAuditDataset> {
+abstract class Iti16AuditStrategy extends XdsAuditStrategy<XdsQueryAuditDataset> {
 
     Iti16AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, XdsAuditDataset auditDataset) {
+    public void enrichDatasetFromRequest(Object pojo, XdsQueryAuditDataset auditDataset) {
         // no additional steps necessary
     }
 
@@ -45,7 +45,7 @@ abstract class Iti16AuditStrategy extends XdsAuditStrategy<XdsAuditDataset> {
     }
 
     @Override
-    public XdsAuditDataset createAuditDataset() {
-        return new XdsAuditDataset(isServerSide());
+    public XdsQueryAuditDataset createAuditDataset() {
+        return new XdsQueryAuditDataset(isServerSide());
     }
 }

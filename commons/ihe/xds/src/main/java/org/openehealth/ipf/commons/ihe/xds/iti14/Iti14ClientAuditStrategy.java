@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.iti14;
 import java.net.InetAddress;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
 /**
  * Client audit strategy for ITI-14.
@@ -37,7 +37,7 @@ public class Iti14ClientAuditStrategy extends Iti14AuditStrategy {
     }
 
     @Override
-    public void doAudit(XdsAuditDataset auditDataset) throws Exception {
+    public void doAudit(XdsSubmitAuditDataset auditDataset) throws Exception {
         AuditorManager.getRepositoryAuditor().auditRegisterDocumentSetEvent(
                 auditDataset.getEventOutcomeCode(),
                 InetAddress.getLocalHost().getHostAddress(),
