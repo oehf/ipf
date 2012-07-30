@@ -60,6 +60,7 @@ public class FindDocumentsQueryTransformerTest {
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.FIND_DOCUMENTS.getId(), ebXML.getId());
+        assertEquals("12.21.41", ebXML.getHome());
         assertEquals(Arrays.asList("'id3^^^&1.3&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
         toEbXML(query,ebXML);

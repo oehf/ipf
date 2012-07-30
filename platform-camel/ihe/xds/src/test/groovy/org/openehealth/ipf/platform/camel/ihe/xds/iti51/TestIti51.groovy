@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2012 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType
 
 /**
- * Tests the ITI-51 component with the webservice and the client defined within the URI.
+ * Tests the ITI-51 component with the Web Service and the client defined within the URI.
  * @author Jens Riemschneider
  * @author Michael Ottati
  */
@@ -41,10 +41,6 @@ class TestIti51 extends StandardTestContainer {
     def SERVICE1 = "xds-iti51://localhost:${port}/xds-iti51-service1"
     def SERVICE2 = "xds-iti51://localhost:${port}/xds-iti51-service2"
     def SAMPLE_SERVICE = "xds-iti51://localhost:${port}/myIti51Service"
-    
-    def SERVICE_SOAPDEFAULT = "xds-iti51://localhost:${port}/xds-iti51-service21"
-    def SERVICE_SOAP12 = "xds-iti51://localhost:${port}/xds-iti51-service22?soap11=false"
-    def SERVICE_SOAP11 = "xds-iti51://localhost:${port}/xds-iti51-service23?soap11=true"
     
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti51-service2"
     
@@ -84,39 +80,32 @@ class TestIti51 extends StandardTestContainer {
     void testIti51() {
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
-        assert auditSender.messages.size() == 4
-
-        //TODO AUDIT FAILS See comment in "checkAudit() method.
+        assert auditSender.messages.size() == 8
         checkAudit('0')
     }
     
     @Test
     void testIti51FailureAudit() {
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
-        assert auditSender.messages.size() == 2
-
-        //TODO AUDIT FAILS See comment in "checkAudit() method.
+        assert auditSender.messages.size() == 4
         checkAudit('8')
     }
     
     def checkAudit(outcome) {
         def messages = getAudit('E', SERVICE2_ADDR)
-        assert messages.size() == 2
+        assert messages.size() == 4
         messages.each { message ->
             assert message.AuditSourceIdentification.size() == 1
             assert message.ActiveParticipant.size() == 2
             assert message.ParticipantObjectIdentification.size() == 2
             assert message.children().size() == 6
-            //TODO This test fails because there needs to be a corresponding methods added to
-            // org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor.auditRegistryMultiPatientQueryEvent
-            // and
-            // org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes.RegistryStoredQuery
-            // The methods that need to be added are the MPQ variations of the methods listed above.
             checkEvent(message.EventIdentification, '110112', 'ITI-51', 'E', outcome)
             checkSource(message.ActiveParticipant[0], 'true')
             checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-            checkPatient(message.ParticipantObjectIdentification[0])
-            checkQuery(message.ParticipantObjectIdentification[1], 'ITI-51', QueryType.FIND_DOCUMENTS_MPQ.getId(), QueryType.FIND_DOCUMENTS_MPQ.getId())
+            checkPatient(message.ParticipantObjectIdentification[0], 'id3^^^&1.3&ISO', 'id4^^^&1.4&ISO')
+            checkQuery(message.ParticipantObjectIdentification[1], 'ITI-51',
+                    QueryType.FIND_DOCUMENTS_MPQ.getId(),
+                    QueryType.FIND_DOCUMENTS_MPQ.getId())
         }
     }
     
@@ -131,7 +120,7 @@ class TestIti51 extends StandardTestContainer {
         response = send(SAMPLE_SERVICE, SampleData.createGetDocumentsQuery(), QueryResponse.class)
         assert FAILURE == response.status
         
-        assert auditSender.messages.size() == 4
+        assert auditSender.messages.size() == 6
         [2, 3].each { i ->
             boolean found = false
             def message = new XmlSlurper().parseText(auditSender.messages[i].auditMessage.toString())

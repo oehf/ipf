@@ -152,13 +152,11 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 Collections.<InteractionId> singletonList(ITI_16),
                 Collections.singletonList(SQL));
         ALLOWED_QUERY_TYPES.put(
-                Arrays.<InteractionId> asList(ITI_18, ITI_38, ITI_51),
+                Arrays.<InteractionId> asList(ITI_18, ITI_38),
                 Arrays.asList(
                         FIND_DOCUMENTS,
-                        FIND_DOCUMENTS_MPQ,
                         FIND_SUBMISSION_SETS,
                         FIND_FOLDERS,
-                        FIND_FOLDERS_MPQ,
                         GET_ALL,
                         GET_DOCUMENTS,
                         GET_FOLDERS,
@@ -169,6 +167,12 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                         GET_FOLDER_AND_CONTENTS,
                         GET_FOLDERS_FOR_DOCUMENT,
                         GET_RELATED_DOCUMENTS
+                ));
+        ALLOWED_QUERY_TYPES.put(
+                Collections.<InteractionId> singletonList(ITI_51),
+                Arrays.asList(
+                        FIND_DOCUMENTS_MPQ,
+                        FIND_FOLDERS_MPQ
                 ));
         ALLOWED_QUERY_TYPES.put(
                 Collections.<InteractionId> singletonList(ITI_63),
@@ -208,7 +212,9 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     // PatientId MUST BE supplied in  single patient query.
                     // PatientId (list) MAY BE supplied in multi patient query.
                     // The validators for the two cases are otherwise identical.
-                    queryType.equals(FIND_DOCUMENTS) ? new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false):new StringListValidation(DOC_ENTRY_PATIENT_ID, cxValidator) ,
+                    queryType.equals(FIND_DOCUMENTS)
+                            ? new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false)
+                            : new StringListValidation(DOC_ENTRY_PATIENT_ID, cxValidator),
                     new CodeValidation(DOC_ENTRY_CLASS_CODE),
                     new CodeValidation(DOC_ENTRY_TYPE_CODE),
                     new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
@@ -364,6 +370,15 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     ALLOWED_MULTIPLE_SLOTS.get(queryType));
             for (QueryParameterValidation validation : getValidators(queryType, profile)) {
                 validation.validate(request);
+            }
+
+            if (queryType == FIND_DOCUMENTS_MPQ) {
+                metaDataAssert(
+                        (! request.getSlotValues(DOC_ENTRY_CLASS_CODE.getSlotName()).isEmpty()) ||
+                        (! request.getSlotValues(DOC_ENTRY_EVENT_CODE.getSlotName()).isEmpty()) ||
+                        (! request.getSlotValues(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE.getSlotName()).isEmpty()),
+                        ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER,
+                        "at least one of $XDSDocumentEntryClassCode, $XDSDocumentEntryEventCodeList, $XDSDocumentEntryHealthcareFacilityTypeCode");
             }
         }
     }

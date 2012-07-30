@@ -220,14 +220,9 @@ public class QuerySlotHelper {
      * @return the string list.
      */
     public List<Identifiable> toPatientIdList(QueryParameter param) {
-        List<String> slotValues = ebXML.getSlotValues(param.getSlotName());
-        if (slotValues.isEmpty()) {
+        List<String> values = toStringList(param);
+        if (values == null) {
             return null;
-        }
-
-        List<String> values = new ArrayList<String>();
-        for (String slotValue : slotValues) {
-            values.addAll(decodeStringList(slotValue));
         }
 
         List<Identifiable> patientIds = new ArrayList<Identifiable>();

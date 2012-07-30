@@ -50,4 +50,4 @@ public class FetchQueryTransformer extends DocumentsQueryTransformer<FetchQuery>
         String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
     }
-    }
+}

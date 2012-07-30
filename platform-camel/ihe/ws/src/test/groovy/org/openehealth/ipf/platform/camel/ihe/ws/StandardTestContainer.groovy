@@ -272,11 +272,11 @@ class StandardTestContainer {
          assert human.@UserID != null 
      }
      
-     def checkPatient(patient) {
+     def checkPatient(patient, String... allowedIds = ['id3^^^&1.3&ISO']) {
          assert patient.@ParticipantObjectTypeCode == '1'
          assert patient.@ParticipantObjectTypeCodeRole == '1'
          checkCode(patient.ParticipantObjectIDTypeCode, '2', 'RFC-3881')
-         assert patient.@ParticipantObjectID == 'id3^^^&1.3&ISO'         
+         assert patient.@ParticipantObjectID in allowedIds
      }
      
      def checkQuery(query, iti, queryText, queryUuid) {

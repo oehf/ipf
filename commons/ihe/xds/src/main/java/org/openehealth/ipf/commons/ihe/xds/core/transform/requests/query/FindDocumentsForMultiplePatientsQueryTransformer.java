@@ -1,12 +1,12 @@
 /*
- * Copyright 2009 the original author or authors.
- * 
+ * Copyright 2012 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,18 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
- * Transforms between a {@link org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery} and {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest}.
+ * Transforms between a {@link FindDocumentsForMultiplePatientsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Michael Ottati
  */
 public class FindDocumentsForMultiplePatientsQueryTransformer extends DocumentsQueryTransformer<FindDocumentsForMultiplePatientsQuery> {
@@ -54,9 +48,6 @@ public class FindDocumentsForMultiplePatientsQueryTransformer extends DocumentsQ
 
         super.fromEbXML(query, ebXML);
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-
-//        String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
-//        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
 
         query.setPatientIds(slots.toPatientIdList(DOC_ENTRY_PATIENT_ID));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));

@@ -150,11 +150,11 @@ public class AdhocQueryRequestValidatorTest {
     }
 
     /*
-        The validation profiles for ITI-18 and ITI-51 are identical except for how they handle PatientId data. The ITI-18
-        queries MUST contain exactly 1 PatientId. The ITI-51 Mutli Patient Queries MAY contain a (possibly empty) list of
-        patient IDs. The Following set of tests suffixed with "MPQ" test the MPQ PatientId validation code.
-
-     */
+        The validation profiles for ITI-18 and ITI-51 are identical except for how they handle
+        PatientId data. The ITI-18 queries MUST contain exactly 1 PatientId. The ITI-51 Mutli
+        Patient Queries MAY contain a (possibly empty) list of patient IDs. The Following set
+        of tests suffixed with "MPQ" test the MPQ PatientId validation code.
+    */
 
     @Test
     public void testGoodCaseMPQ() throws XDSMetaDataException {
@@ -195,7 +195,7 @@ public class AdhocQueryRequestValidatorTest {
 
     @Test
     public void testGoodCaseFolderMPQ() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(folderRequestMpq), iti18Profile);
+        validator.validate(transformer.toEbXML(folderRequestMpq), iti51Profile);
     }
 
     @Test

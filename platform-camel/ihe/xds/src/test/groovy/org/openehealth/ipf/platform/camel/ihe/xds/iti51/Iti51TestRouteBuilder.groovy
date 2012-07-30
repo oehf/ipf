@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,15 +42,7 @@ class Iti51TestRouteBuilder extends SpringRouteBuilder {
         from('xds-iti51:xds-iti51-service2')
             .process { checkValue(it, 'service 2') }
 
-        // three endpoints intended for SOAP version check
-        from('xds-iti51:xds-iti51-service21')
-            .process { checkValue(it, 'implicit SOAP 1.2') }
-        from('xds-iti51:xds-iti51-service22')
-            .process { checkValue(it, 'SOAP 1.2') }
-        from('xds-iti51:xds-iti51-service23')
-            .process { checkValue(it, 'SOAP 1.1') }
-           
-            
+
         from('xds-iti51:myIti51Service')
             .convertBodyTo(QueryRegistry.class)
             .choice()

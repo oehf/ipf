@@ -34,14 +34,14 @@ public enum QueryType {
     @XmlEnumValue("Sql") SQL("sql", SqlQuery.class),
     /** Searches for documents. */
     @XmlEnumValue("FindDocuments") FIND_DOCUMENTS("urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d", FindDocumentsQuery.class),
-    /** Searches for documents. (Multi Patient Variety)*/
+    /** Searches for documents (Multi Patient Variety). */
     @XmlEnumValue("FindDocumentsForMultiplePatients") FIND_DOCUMENTS_MPQ("urn:uuid:3d1bdb10-39a2-11de-89c2-2f44d94eaa9f", FindDocumentsForMultiplePatientsQuery.class),
     /** Searches for submission sets. */
     @XmlEnumValue("FindSubmissionSets") FIND_SUBMISSION_SETS("urn:uuid:f26abbcb-ac74-4422-8a30-edb644bbc1a9", FindSubmissionSetsQuery.class),
     /** Searches for folders. */
     @XmlEnumValue("FindFolders") FIND_FOLDERS("urn:uuid:958f3006-baad-4929-a4de-ff1114824431", FindFoldersQuery.class),
-    /** Searches for folders. (Multi Patient Variety) */
-    @XmlEnumValue("FindFoldersForMultiplePatients") FIND_FOLDERS_MPQ("urn:uuid:50d3f5ac-39a2-11de-a1cab366239e58df", FindFoldersForMultiplePatientsQuery.class),
+    /** Searches for folders (Multi Patient Variety). */
+    @XmlEnumValue("FindFoldersForMultiplePatients") FIND_FOLDERS_MPQ("urn:uuid:50d3f5ac-39a2-11de-a1ca-b366239e58df", FindFoldersForMultiplePatientsQuery.class),
     /** Returns everything. */
     @XmlEnumValue("GetAll") GET_ALL("urn:uuid:10b545ea-725c-446d-9b95-8aeb444eddf3", GetAllQuery.class),
     /** Returns specific documents. */

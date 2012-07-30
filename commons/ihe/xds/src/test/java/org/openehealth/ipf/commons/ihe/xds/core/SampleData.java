@@ -396,7 +396,9 @@ public abstract class SampleData {
     public static QueryRegistry createFindDocumentsForMultiplePatientsQuery() {
         FindDocumentsForMultiplePatientsQuery query = new FindDocumentsForMultiplePatientsQuery();
         populateDocumentsQuery(query);
-        query.setPatientIds(Arrays.asList(new Identifiable("id3", new AssigningAuthority("1.3")),new Identifiable("id4", new AssigningAuthority("1.4"))));
+        query.setPatientIds(Arrays.asList(
+                new Identifiable("id3", new AssigningAuthority("1.3")),
+                new Identifiable("id4", new AssigningAuthority("1.4"))));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
         return new QueryRegistry(query);

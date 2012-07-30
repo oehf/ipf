@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.platform.camel.ihe.xds.iti51;
 
 import org.apache.camel.Endpoint;
@@ -22,9 +21,8 @@ import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51PortType;
-import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
@@ -51,7 +49,7 @@ public class Iti51Component extends AbstractWsComponent<WsTransactionConfigurati
     @Override
     @SuppressWarnings("unchecked") // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new XdsEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new XdsEndpoint(uri, remaining, this, getCustomInterceptors(parameters), getFeatures(parameters));
     }
 
     @Override
@@ -61,12 +59,12 @@ public class Iti51Component extends AbstractWsComponent<WsTransactionConfigurati
 
     @Override
     public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti51ClientAuditStrategy(allowIncompleteAudit);
+        return new Iti51AuditStrategy(false, allowIncompleteAudit);
     }
 
     @Override
     public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti51ServerAuditStrategy(allowIncompleteAudit);
+        return new Iti51AuditStrategy(true, allowIncompleteAudit);
     }
 
     @Override
