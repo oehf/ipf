@@ -21,8 +21,8 @@ import org.eclipse.emf.ecore.xmi.XMLResource
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.openehealth.ipf.modules.cda.builder.CDAR2ModelExtension
-import org.openhealthtools.ihe.common.cdar2.*
-import org.openhealthtools.ihe.common.cdar2.impl.*
+import org.eclipse.emf.ecore.resource.URIConverter
+import org.eclipse.emf.common.util.URI
 
 /**
  * @author Christian Ohr
@@ -32,6 +32,13 @@ public abstract class AbstractCDAR2Test {
     private static final Log LOG = LogFactory.getLog(AbstractCDAR2Test.getClass().getName())
     
     static def registered = []
+
+    // Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=364797
+    static {
+        URIConverter.URI_MAP.put(
+            URI.createURI("http://www.eclipse.org/ocl/1.1.0/oclstdlib.ecore"),
+            URI.createPlatformPluginURI("/org.eclipse.ocl.ecore/model/oclstdlib.ecore", true));
+    }
     
     @BeforeClass
     public static void setupBeforeClass() {
