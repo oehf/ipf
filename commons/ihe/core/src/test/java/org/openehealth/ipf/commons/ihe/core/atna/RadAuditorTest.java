@@ -29,11 +29,11 @@ public class RadAuditorTest extends TestCase {
     private static final String USER_NAME               = "user-name";
     private static final String CLIENT_IP_ADDRESS       = "141.44.162.126";
     private static final String SERVER_URI              = "server-uri";
-    private static final String[] STUDY_INSTANCE_UUIDS  = {"study-instance_uuid"};
-    private static final String[] SERIES_INSTANCE_UUIDS = {"series-instance_uuid"};
-    private static final String[] DOCUMENT_UUIDS        = {"document_uuid"};
-    private static final String[] REPOSITORY_UUIDS      = {"repository_uuid"};
-    private static final String[] HOME_COMMUNITY_UUIDS  = {"home-community_uuid"};
+    private static final String[] STUDY_INSTANCE_UUIDS  = {"study-instance_uuid-1", "study-instance_uuid-1", "study-instance_uuid-2"};
+    private static final String[] SERIES_INSTANCE_UUIDS = {"series-instance_uuid-11","series-instance_uuid-12","series-instance_uuid-21"};
+    private static final String[] DOCUMENT_UUIDS        = {"document_uuid-1-11-1","document_uuid1-11-2","document_uuid2-21-1"};
+    private static final String[] REPOSITORY_UUIDS      = {"repository_uuid1","repository_uuid2","repository_uuid1"};
+    private static final String[] HOME_COMMUNITY_UUIDS  = {"home-community_uuid1","home-community_uuid1","home-community_uuid1"};
     private static final String PATIENT_ID              = "patientId^^^&1.2.3&ISO";
 
 
