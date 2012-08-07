@@ -90,6 +90,8 @@ public enum ValidationMessage {
     TOO_MANY_VALUES_FOR_QUERY_PARAMETER("Too many values for query parameter: %1s"),
     PARAMETER_VALUE_NOT_STRING("Query parameter value is not specified as a string: %1s"),
     PARAMETER_VALUE_NOT_STRING_LIST("Query parameter value is not specified as a list of strings: %1s"),
+    STUDY_INSTANCE_UID_MUST_BE_SPECIFIED("The imaging document Study Instance UID is missing"),
+    SERIES_INSTANCE_UID_MUST_BE_SPECIFIED("The imaging document Series Instance UID is missing"),
     REPO_ID_MUST_BE_SPECIFIED("The repository Unique ID is missing"),
     DOC_ID_MUST_BE_SPECIFIED("The document Unique ID is missing"),
     ON_DEMAND_DOC_ID_MUST_DIFFER("New ID of the document should differ from the On-Demand document entry ID"),

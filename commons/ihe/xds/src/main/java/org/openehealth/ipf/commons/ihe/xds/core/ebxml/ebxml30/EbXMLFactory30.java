@@ -115,6 +115,11 @@ public class EbXMLFactory30 implements EbXMLFactory {
     }
     
     @Override
+    public EbXMLRetrieveImagingDocumentSetRequest createRetrieveImagingDocumentSetRequest() {
+        return new EbXMLRetrieveImagingDocumentSetRequest30(new RetrieveImagingDocumentSetRequestType());
+    }
+
+    @Override
     public EbXMLObjectLibrary createObjectLibrary() {
         return new EbXMLObjectLibrary();
     }

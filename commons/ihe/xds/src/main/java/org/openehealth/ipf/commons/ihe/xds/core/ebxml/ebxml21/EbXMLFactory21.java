@@ -169,6 +169,11 @@ public class EbXMLFactory21 implements EbXMLFactory {
     }
     
     @Override
+    public EbXMLRetrieveImagingDocumentSetRequest createRetrieveImagingDocumentSetRequest() {
+        throw new UnsupportedOperationException("Only supported for ebXML 3.0");
+    }
+
+    @Override
     public EbXMLAdhocQueryRequest21 createAdhocQueryRequest() {
         AdhocQueryRequest request = QUERY_FACTORY.createAdhocQueryRequest();
         

@@ -89,6 +89,12 @@ public interface EbXMLFactory {
     EbXMLRetrieveDocumentSetRequest createRetrieveDocumentSetRequest();
 
     /**
+     * Creates a new request to retrieve imaging documents.
+     * @return the created object.
+     */
+    EbXMLRetrieveImagingDocumentSetRequest createRetrieveImagingDocumentSetRequest();
+
+    /**
      * Creates a new request to query a registry.
      * @return the created object.
      */

@@ -20,10 +20,8 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
@@ -81,6 +79,14 @@ public class TestEbXML30Converters {
         RetrieveDocumentSet org = SampleData.createRetrieveDocumentSet();
         RetrieveDocumentSetRequestType converted = EbXML30Converters.convert(org);
         RetrieveDocumentSet copy = EbXML30Converters.convert(converted);
+        assertEquals(org, copy);
+    }
+
+    @Test
+    public void testConvertRetrieveImagingDocumentSet() {
+        RetrieveImagingDocumentSet org = SampleData.createRetrieveImagingDocumentSet();
+        RetrieveImagingDocumentSetRequestType converted = EbXML30Converters.convert(org);
+        RetrieveImagingDocumentSet copy = EbXML30Converters.convert(converted);
         assertEquals(org, copy);
     }
 }

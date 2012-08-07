@@ -23,10 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequ
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.AdhocQueryRequestValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RetrieveDocumentSetRequestValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.QueryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RetrieveDocumentSetResponseValidator;
@@ -403,4 +400,91 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         return ITI_63_RESPONSE_VALIDATOR;
     }
 
+    private static final Processor RAD_69_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLRetrieveImagingDocumentSetRequest30 message =
+                new EbXMLRetrieveImagingDocumentSetRequest30(exchange.getIn().getBody(RetrieveImagingDocumentSetRequestType.class));
+            ValidationProfile profile = new ValidationProfile(RAD_69);
+            new RetrieveImagingDocumentSetRequestValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor RAD_69_RESPONSE_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLRetrieveDocumentSetResponse30 message =
+                new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
+            ValidationProfile profile = new ValidationProfile(RAD_69);
+            new RetrieveDocumentSetResponseValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor RAD_75_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLRetrieveImagingDocumentSetRequest30 message =
+                new EbXMLRetrieveImagingDocumentSetRequest30(exchange.getIn().getBody(RetrieveImagingDocumentSetRequestType.class));
+            ValidationProfile profile = new ValidationProfile(RAD_75);
+            new RetrieveImagingDocumentSetRequestValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor RAD_75_RESPONSE_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLRetrieveDocumentSetResponse30 message =
+                new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
+            ValidationProfile profile = new ValidationProfile(RAD_75);
+            new RetrieveDocumentSetResponseValidator().validate(message, profile);
+        }
+    };
+
+    /**
+     * Returns a validating processor for RAD-69 request messages.
+     *
+     * @return RAD_69_REQUEST_VALIDATOR
+     */
+    public static Processor rad69RequestValidator() {
+        return RAD_69_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for RAD-69 response messages.
+     *
+     * @return RAD_69_RESPONSE_VALIDATOR
+     */
+    public static Processor rad69ResponseValidator() {
+        return RAD_69_RESPONSE_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for RAD-75 request messages.
+     *
+     * @return RAD_75_REQUEST_VALIDATOR
+     */
+    public static Processor rad75RequestValidator() {
+        return RAD_75_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for RAD-75 response messages.
+     *
+     * @return RAD_75_RESPONSE_VALIDATOR
+     */
+    public static Processor rad75ResponseValidator() {
+        return RAD_75_RESPONSE_VALIDATOR;
+    }
 }

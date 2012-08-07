@@ -45,6 +45,8 @@ public enum IpfInteractionId implements InteractionId {
     ITI_56,
     ITI_61,
     ITI_63,
+    RAD_69,
+    RAD_75,
 
     PCC_1,
 

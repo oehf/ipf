@@ -1,0 +1,102 @@
+/*
+ * Copyright 2012 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.openehealth.ipf.commons.ihe.core.atna;
+
+import junit.framework.TestCase;
+import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomRadAuditor;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
+
+/**
+ * @author Clay Sebourn
+ */
+public class RadAuditorTest extends TestCase {
+
+    private static final String USER_ID                 = "user-id";
+    private static final String USER_NAME               = "user-name";
+    private static final String CLIENT_IP_ADDRESS       = "141.44.162.126";
+    private static final String SERVER_URI              = "server-uri";
+    private static final String[] STUDY_INSTANCE_UUIDS  = {"study-instance_uuid"};
+    private static final String[] SERIES_INSTANCE_UUIDS = {"series-instance_uuid"};
+    private static final String[] DOCUMENT_UUIDS        = {"document_uuid"};
+    private static final String[] REPOSITORY_UUIDS      = {"repository_uuid"};
+    private static final String[] HOME_COMMUNITY_UUIDS  = {"home-community_uuid"};
+    private static final String PATIENT_ID              = "patientId^^^&1.2.3&ISO";
+
+
+    protected void setUp() throws Exception {
+        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
+        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
+    }
+
+
+    public void testAuditors() {
+        final CustomRadAuditor auditor = AuditorManager.getCustomRadAuditor();
+
+        // Client RAD-69 event
+        auditor.auditRetrieveImagingDocumentSetEvent(
+            RFC3881EventOutcomeCodes.SUCCESS,
+            USER_ID,
+            USER_NAME,
+            CLIENT_IP_ADDRESS,
+            SERVER_URI,
+            STUDY_INSTANCE_UUIDS,
+            SERIES_INSTANCE_UUIDS,
+            DOCUMENT_UUIDS,
+            REPOSITORY_UUIDS,
+            HOME_COMMUNITY_UUIDS,
+            PATIENT_ID);
+
+        // Server RAD-69 event
+        auditor.auditRetrieveImagingDocumentSetEvent(
+            RFC3881EventOutcomeCodes.SUCCESS,
+            USER_ID,
+            USER_NAME,
+            CLIENT_IP_ADDRESS,
+            SERVER_URI,
+            STUDY_INSTANCE_UUIDS,
+            SERIES_INSTANCE_UUIDS,
+            DOCUMENT_UUIDS,
+            REPOSITORY_UUIDS,
+            HOME_COMMUNITY_UUIDS);
+
+        // Client RAD-75 event
+        auditor.auditCrossGatewayRetrieveImagingDocumentSetEvent(
+            RFC3881EventOutcomeCodes.SUCCESS,
+            USER_ID,
+            USER_NAME,
+            CLIENT_IP_ADDRESS,
+            SERVER_URI,
+            STUDY_INSTANCE_UUIDS,
+            SERIES_INSTANCE_UUIDS,
+            DOCUMENT_UUIDS,
+            REPOSITORY_UUIDS,
+            HOME_COMMUNITY_UUIDS);
+
+        // Server RAD-75
+        auditor.auditCrossGatewayRetrieveImagingDocumentSetEvent(
+            RFC3881EventOutcomeCodes.SUCCESS,
+            USER_ID,
+            USER_NAME,
+            CLIENT_IP_ADDRESS,
+            SERVER_URI,
+            STUDY_INSTANCE_UUIDS,
+            SERIES_INSTANCE_UUIDS,
+            DOCUMENT_UUIDS,
+            REPOSITORY_UUIDS,
+            HOME_COMMUNITY_UUIDS);
+    }
+}

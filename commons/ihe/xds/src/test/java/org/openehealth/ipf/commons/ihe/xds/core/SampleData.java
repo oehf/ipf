@@ -22,8 +22,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
 
 import javax.activation.DataHandler;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Utility class to create sample data used in tests.
@@ -325,6 +327,33 @@ public abstract class SampleData {
         return request;
     }
     
+    /**
+     * @return a sample request to retrieve an imaging document set.
+     */
+    public static RetrieveImagingDocumentSet createRetrieveImagingDocumentSet() {
+        RetrieveImagingDocumentSet request = new RetrieveImagingDocumentSet();
+
+        List<RetrieveDocument> retrieveDocuments = new ArrayList<RetrieveDocument>();
+        RetrieveDocument retrieveDocument1 = new RetrieveDocument("repo1", "doc1", "urn:oid:1.2.3");
+        retrieveDocuments.add(retrieveDocument1);
+        RetrieveDocument retrieveDocument2 = new RetrieveDocument("repo2", "doc2", "urn:oid:1.2.4");
+        retrieveDocuments.add(retrieveDocument2);
+
+        List<RetrieveSeries> retrieveSerieses = new ArrayList<RetrieveSeries>();
+        RetrieveSeries retrieveSeries1 = new RetrieveSeries("urn:oid:1.2.1", retrieveDocuments);
+        retrieveSerieses.add(retrieveSeries1);
+        RetrieveSeries retrieveSeries2 = new RetrieveSeries("urn:oid:1.2.2", retrieveDocuments);
+        retrieveSerieses.add(retrieveSeries2);
+
+        List<RetrieveStudy> retrieveStudies = request.getRetrieveStudies();
+        RetrieveStudy retrieveStudy1 = new RetrieveStudy("urn:oid:1.1.1", retrieveSerieses);
+        retrieveStudies.add(retrieveStudy1);
+        RetrieveStudy retrieveStudy2 = new RetrieveStudy("urn:oid:1.1.2", retrieveSerieses);
+        retrieveStudies.add(retrieveStudy2);
+
+        return request;
+    }
+
     /**
      * @return a sample sql query.
      */

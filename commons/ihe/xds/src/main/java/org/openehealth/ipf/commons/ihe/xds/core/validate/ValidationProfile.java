@@ -32,8 +32,8 @@ public class ValidationProfile {
 
     public static enum InteractionProfile {
         XDS_A(ITI_14, ITI_15, ITI_16),
-        XDS_B(ITI_18, ITI_41, ITI_42, ITI_43, ITI_51, ITI_61),
-        XCA(ITI_38, ITI_39),
+        XDS_B(ITI_18, ITI_41, ITI_42, ITI_43, ITI_51, ITI_61, RAD_69),
+        XCA(ITI_38, ITI_39, RAD_75),
         XCF(ITI_63),
         Continua_HRN(IpfInteractionId.Continua_HRN);
 

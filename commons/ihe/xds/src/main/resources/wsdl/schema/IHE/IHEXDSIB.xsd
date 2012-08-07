@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="urn:ihe:rad:xdsi-b:2009" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" xmlns:query="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0" xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0" xmlns:rs="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0" targetNamespace="urn:ihe:rad:xdsi-b:2009" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0" schemaLocation="../ebRS30/rs.xsd"/>
+	<xs:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" schemaLocation="../ebRS30/rim.xsd"/>
+	<xs:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0" schemaLocation="../ebRS30/lcm.xsd"/>
+    <xs:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0" schemaLocation="../ebRS30/query.xsd"/>
+    <import namespace="urn:ihe:iti:xds-b:2007" schemaLocation="./IHEXDSB.xsd"/>
+    <xs:complexType name="SeriesRequestType">
+        <xs:sequence>
+            <xs:element name="seriesInstanceUID" type="rim:LongName" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>This corresponds to the seriesInstanceUID attribute of the SeriesRequest class)</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DocumentRequest" type="DocumentRequestType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="StudyRequestType">
+        <xs:sequence>
+            <xs:element name="studyInstanceUID" type="rim:LongName" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>This corresponds to the studyInstanceUID attribute of the StudyRequest class)</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SeriesRequest" type="SeriesRequestType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RetrieveImagingDocumentSetRequestType">
+        <xs:sequence>
+            <xs:element name="StudyRequest" type="StudyRequestType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="RetrieveImagingDocumentSetRequest" type="RetrieveImagingDocumentSetRequestType"/>
+</xs:schema>

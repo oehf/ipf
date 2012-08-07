@@ -16,21 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.core.converters;
 
 import org.apache.camel.Converter;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLProvideAndRegisterDocumentSetRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLQueryResponse30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveDocumentSetRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveDocumentSetResponse30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.*;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
@@ -38,10 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsReq
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveDocumentSetRequestTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocumentSetResponseTransformer;
@@ -227,5 +211,27 @@ public class EbXML30Converters {
         RetrieveDocumentSetResponseTransformer transformer = new RetrieveDocumentSetResponseTransformer(factory);
         return transformer.fromEbXML(new EbXMLRetrieveDocumentSetResponse30(in));
     }
+    /**
+     * Standard Camel converter for the Retrieve Imaging Document Set request.
+     * @param in    A version independent request object
+     * @return an ebXML 3.0 object.
+     */
+    @Converter
+    public static RetrieveImagingDocumentSetRequestType convert(RetrieveImagingDocumentSet in) {
+        RetrieveImagingDocumentSetRequestTransformer transformer = new RetrieveImagingDocumentSetRequestTransformer(factory);
+        return (RetrieveImagingDocumentSetRequestType) transformer.toEbXML(in).getInternal();
+    }
+
+    /**
+     * Standard Camel converter for the Retrieve Imaging Document Set request.
+     * @param in    An ebXML 3.0 object.
+     * @return a version independent request object.
+     */
+    @Converter
+    public static RetrieveImagingDocumentSet convert(RetrieveImagingDocumentSetRequestType in) {
+        RetrieveImagingDocumentSetRequestTransformer transformer = new RetrieveImagingDocumentSetRequestTransformer(factory);
+        return transformer.fromEbXML(new EbXMLRetrieveImagingDocumentSetRequest30(in));
+    }
+
 }
 
