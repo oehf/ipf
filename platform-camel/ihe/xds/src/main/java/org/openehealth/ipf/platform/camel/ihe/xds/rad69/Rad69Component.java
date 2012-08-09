@@ -21,9 +21,8 @@ import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69PortType;
-import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
@@ -60,12 +59,12 @@ public class Rad69Component extends AbstractWsComponent<WsTransactionConfigurati
 
     @Override
     public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return new Rad69ClientAuditStrategy(allowIncompleteAudit);
+        return new Rad69AuditStrategy(false, allowIncompleteAudit);
     }
 
     @Override
     public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Rad69ServerAuditStrategy(allowIncompleteAudit);
+        return new Rad69AuditStrategy(true, allowIncompleteAudit);
     }
 
     @Override

@@ -29,9 +29,9 @@ public class Iti39ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
         "EventOutcomeCode",
         "ClientIpAddress",
         "ServiceEndpointUrl",
-        "DocumentUuids",
-        "RepositoryUuids",
-        "HomeCommunityUuids"};
+        "DocumentUniqueIds",
+        "RepositoryUniqueIds",
+        "HomeCommunityIds"};
 
     
     public Iti39ServerAuditStrategy(boolean allowIncompleteAudit) {
@@ -40,15 +40,15 @@ public class Iti39ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
 
     @Override
     public void doAudit(XdsRetrieveAuditDataset auditDataset) {
-        String[] homeCommunityIds = auditDataset.getHomeCommunityUuids();
+        String[] homeCommunityIds = auditDataset.getHomeCommunityIds();
         AuditorManager.getXCARespondingGatewayAuditor().auditCrossGatewayRetrieveEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getUserId(),
                 auditDataset.getClientIpAddress(),
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getUserName(),
-                auditDataset.getDocumentUuids(),
-                auditDataset.getRepositoryUuids(),
+                auditDataset.getDocumentUniqueIds(),
+                auditDataset.getRepositoryUniqueIds(),
                 ((homeCommunityIds != null) && (homeCommunityIds.length != 0)) ? homeCommunityIds[0] : null);
     }
 

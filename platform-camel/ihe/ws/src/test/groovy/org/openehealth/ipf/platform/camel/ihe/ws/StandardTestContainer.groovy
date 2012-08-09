@@ -37,7 +37,6 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.web.context.support.WebApplicationContextUtils
 import org.apache.commons.io.IOUtils
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor
-import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomRadAuditor
 
 /**
  * Base class for tests that are run within an embedded web container.
@@ -122,20 +121,12 @@ class StandardTestContainer {
          Hl7v3Auditor.auditor.config.auditRepositoryPort = auditPort
 
          CustomXdsAuditor.auditor.config = new AuditorModuleConfig()
-         CustomXdsAuditor.auditor.config.auditSourceId = 'registryId'
+         CustomXdsAuditor.auditor.config.auditSourceId = 'customXdsSourceId'
          CustomXdsAuditor.auditor.config.auditRepositoryHost = 'localhost'
          CustomXdsAuditor.auditor.config.auditRepositoryHost = 'localhost'
          CustomXdsAuditor.auditor.config.auditRepositoryPort = auditPort
-         CustomXdsAuditor.auditor.config.systemUserId = 'registryUserId'
-         CustomXdsAuditor.auditor.config.systemAltUserId = 'registryAltUserId'
-
-         CustomRadAuditor.auditor.config = new AuditorModuleConfig()
-         CustomRadAuditor.auditor.config.auditSourceId = 'repositoryId'
-         CustomRadAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         CustomRadAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         CustomRadAuditor.auditor.config.auditRepositoryPort = auditPort
-         CustomRadAuditor.auditor.config.systemUserId = 'repositoryUserId'
-         CustomRadAuditor.auditor.config.systemAltUserId = 'repositoryAltUserId'
+         CustomXdsAuditor.auditor.config.systemUserId = 'customXdsUserId'
+         //CustomXdsAuditor.auditor.config.systemAltUserId = 'customXdsAltUserId'
 
          XCAInitiatingGatewayAuditor.auditor.config = new AuditorModuleConfig()
          XCAInitiatingGatewayAuditor.auditor.config.auditSourceId = 'initiatingGwId'
@@ -306,16 +297,28 @@ class StandardTestContainer {
          assert uri.@ParticipantObjectDetail == docUniqueId
      }
      
-     def checkDocument(uri, docUniqueId, homeId, repoId) {
-         assert uri.@ParticipantObjectTypeCode == '2'
-         assert uri.@ParticipantObjectTypeCodeRole == '3'
-         checkCode(uri.ParticipantObjectIDTypeCode, '9', 'RFC-3881')
-         assert uri.@ParticipantObjectID == docUniqueId
+    def checkDocument(uri, docUniqueId, homeId, repoId) {
+        assert uri.@ParticipantObjectTypeCode == '2'
+        assert uri.@ParticipantObjectTypeCodeRole == '3'
+        checkCode(uri.ParticipantObjectIDTypeCode, '9', 'RFC-3881')
+        assert uri.@ParticipantObjectID == docUniqueId
 
-         checkParticipantObjectDetail(uri.ParticipantObjectDetail[0], 'Repository Unique Id', repoId)
-         checkParticipantObjectDetail(uri.ParticipantObjectDetail[1], 'ihe:homeCommunityID', homeId)
-     }
+        checkParticipantObjectDetail(uri.ParticipantObjectDetail[0], 'Repository Unique Id', repoId)
+        checkParticipantObjectDetail(uri.ParticipantObjectDetail[1], 'ihe:homeCommunityID', homeId)
+    }
      
+    def checkImageDocument(uri, docUniqueId, homeId, repoId, studyId, seriesId) {
+        assert uri.@ParticipantObjectTypeCode == '2'
+        assert uri.@ParticipantObjectTypeCodeRole == '3'
+        checkCode(uri.ParticipantObjectIDTypeCode, '9', 'RFC-3881')
+        assert uri.@ParticipantObjectID == docUniqueId
+
+        checkParticipantObjectDetail(uri.ParticipantObjectDetail[0], 'Study Instance Unique Id', studyId)
+        checkParticipantObjectDetail(uri.ParticipantObjectDetail[1], 'Series Instance Unique Id', seriesId)
+        checkParticipantObjectDetail(uri.ParticipantObjectDetail[2], 'Repository Unique Id', repoId)
+        checkParticipantObjectDetail(uri.ParticipantObjectDetail[3], 'ihe:homeCommunityID', homeId)
+    }
+
      def checkParticipantObjectDetail(detail, expectedType, expectedValue) {
          assert detail.@type == expectedType
          String base64Expected = new String(Base64.encodeBase64(expectedValue.getBytes('UTF8')))

@@ -45,20 +45,20 @@ abstract public class XdsRetrieveAuditStrategy30 extends XdsAuditStrategy<XdsRet
         if (requestedDocuments != null) {
             final int SIZE = requestedDocuments.size();
 
-            String[] documentUuids = new String[SIZE];
-            String[] repositoryUuids = new String[SIZE];
-            String[] homeCommunityUuids = new String[SIZE];
+            String[] documentUniqueIds = new String[SIZE];
+            String[] repositoryUniqueIds = new String[SIZE];
+            String[] homeCommunityIds = new String[SIZE];
 
             for (int i = 0; i < SIZE; ++i) {
                 DocumentRequest document = requestedDocuments.get(i);
-                documentUuids[i] = document.getDocumentUniqueId();
-                repositoryUuids[i] = document.getRepositoryUniqueId();
-                homeCommunityUuids[i] = document.getHomeCommunityId();
+                documentUniqueIds[i] = document.getDocumentUniqueId();
+                repositoryUniqueIds[i] = document.getRepositoryUniqueId();
+                homeCommunityIds[i] = document.getHomeCommunityId();
             }
 
-            auditDataset.setDocumentUuids(documentUuids);
-            auditDataset.setRepositoryUuids(repositoryUuids);
-            auditDataset.setHomeCommunityUuids(homeCommunityUuids);
+            auditDataset.setDocumentUniqueIds(documentUniqueIds);
+            auditDataset.setRepositoryUniqueIds(repositoryUniqueIds);
+            auditDataset.setHomeCommunityIds(homeCommunityIds);
         }
     }
 

@@ -28,9 +28,8 @@ public class Iti43ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "EventOutcomeCode",
         "ServiceEndpointUrl",
-        "DocumentUuids",
-        "RepositoryUuids",
-        "HomeCommunityUuids"};
+        "DocumentUniqueIds",
+        "RepositoryUniqueIds"};
 
     
     public Iti43ClientAuditStrategy(boolean allowIncompleteAudit) {
@@ -43,9 +42,9 @@ public class Iti43ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getUserName(),
-                auditDataset.getDocumentUuids(),
-                auditDataset.getRepositoryUuids(),
-                auditDataset.getHomeCommunityUuids(),
+                auditDataset.getDocumentUniqueIds(),
+                auditDataset.getRepositoryUniqueIds(),
+                auditDataset.getHomeCommunityIds(),
                 auditDataset.getPatientId());
     }
 

@@ -59,6 +59,18 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
         }
     }
 
+    public static final class RetrieveImagingDocumentSet extends IHETransactionEventTypeCodes {
+        public RetrieveImagingDocumentSet() {
+            super("RAD-69", "Retrieve Imaging Document Set");
+        }
+    }
+
+    public static final class CrossGatewayRetrieveImagingDocumentSet extends IHETransactionEventTypeCodes {
+        public CrossGatewayRetrieveImagingDocumentSet() {
+            super("RAD-75", "Cross Gateway Retrieve Imaging Document Set");
+        }
+    }
+
     public static final class QueryExistingData extends IHETransactionEventTypeCodes {
         public QueryExistingData() {
             super("PCC-1", "Query Existing Data");

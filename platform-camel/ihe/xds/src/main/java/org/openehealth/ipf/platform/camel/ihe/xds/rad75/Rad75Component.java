@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,8 @@ import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75PortType;
-import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
@@ -60,12 +59,12 @@ public class Rad75Component extends AbstractWsComponent<WsTransactionConfigurati
 
     @Override
     public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return new Rad75ClientAuditStrategy(allowIncompleteAudit);
+        return new Rad75AuditStrategy(false, allowIncompleteAudit);
     }
 
     @Override
     public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Rad75ServerAuditStrategy(allowIncompleteAudit);
+        return new Rad75AuditStrategy(true, allowIncompleteAudit);
     }
 
     @Override

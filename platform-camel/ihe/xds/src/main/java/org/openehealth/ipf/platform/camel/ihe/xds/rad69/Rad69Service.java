@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  * <p>
  * This implementation delegates to a Camel consumer by creating an exchange.
  *
- * @author Jens Riemschneider
+ * @author Clay Sebourn
  */
 @Slf4j
 public class Rad69Service extends AbstractWebService implements Rad69PortType {

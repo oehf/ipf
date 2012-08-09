@@ -26,11 +26,13 @@ import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
 /**
- * Implementation of XDS Auditors to send audit messages for
+ * Implementation of ATNA Auditors for the following XDS-based transactions:
  * <ul>
- *     <li>ITI-51 (XDS.b Multi-Patient Stored Query)</li>
- *     <li>ITI-61 (XDS.b Register On-Demand Document Entry)</li>
- *     <li>ITI-63 (XCF Cross-Community Fetch)</li>
+ *     <li>ITI-51 -- XDS.b Multi-Patient Stored Query</li>
+ *     <li>ITI-61 -- XDS.b Register On-Demand Document Entry</li>
+ *     <li>ITI-63 -- XCF Cross-Community Fetch</li>
+ *     <li>RAD-69 -- XDS-I.b Retrieve Imaging Document Set</li>
+ *     <li>RAD-75 -- XCA-I Cross-Gateway Retrieve Imaging Document Set</li>
  * </ul>
  *
  * @author Dmytro Rud
@@ -55,10 +57,10 @@ public class CustomXdsAuditor extends XDSAuditor {
      *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
      * @param userName
      *      user name on the Document Consumer side (for XUA).
-     * @param registryEndpointUri
+     * @param serviceEndpointUri
      *      network endpoint URI of the Document Registry actor.
      * @param clientIpAddress
-     *      IP adress of the Document Consumer actor.
+     *      IP address of the Document Consumer actor.
      * @param queryUuid
      *      UUID of the XDS query.
      * @param requestPayload
@@ -73,7 +75,7 @@ public class CustomXdsAuditor extends XDSAuditor {
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String userId,
             String userName,
-            String registryEndpointUri,
+            String serviceEndpointUri,
             String clientIpAddress,
             String queryUuid,
             String requestPayload,
@@ -90,7 +92,7 @@ public class CustomXdsAuditor extends XDSAuditor {
                 eventOutcome,
                 userId,
                 userName,
-                registryEndpointUri,
+                serviceEndpointUri,
                 clientIpAddress,
                 queryUuid,
                 requestPayload,
@@ -99,12 +101,33 @@ public class CustomXdsAuditor extends XDSAuditor {
     }
 
 
+    /**
+     * Audits an ITI-61 Register On-Demand Document Entry event.
+     *
+     * @param serverSide
+     *      <code>true</code> for the Document Registry actor,
+     *      <code>false</code> for the On-Demand Document Source actor.
+     * @param eventOutcome
+     *      event outcome code.
+     * @param userId
+     *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
+     * @param userName
+     *      user name on the Document Consumer side (for XUA).
+     * @param serviceEndpointUri
+     *      network endpoint URI of the Document Registry actor.
+     * @param clientIpAddress
+     *      IP address of the Document On-Demand Document Source actor.
+     * @param submissionSetUniqueId
+     *      unique ID of the XDS submission set.
+     * @param patientId
+     *      patient ID as an HL7 v2 CX string.
+     */
     public void auditIti61(
             boolean serverSide,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String userId,
             String userName,
-            String registryEndpointUri,
+            String serviceEndpointUri,
             String clientIpAddress,
             String submissionSetUniqueId,
             String patientId)
@@ -120,7 +143,7 @@ public class CustomXdsAuditor extends XDSAuditor {
                 serverSide ? new DICOMEventIdCodes.Import() : new DICOMEventIdCodes.Export(),
                 new CustomIHETransactionEventTypeCodes.RegisterOnDemandDocumentEntry());
 
-        configureEvent(this, serverSide, event, userId, userName, registryEndpointUri, registryEndpointUri, clientIpAddress);
+        configureEvent(this, serverSide, event, userId, userName, serviceEndpointUri, serviceEndpointUri, clientIpAddress);
         if (!EventUtils.isEmptyOrNull(patientId)) {
             event.addPatientParticipantObject(patientId);
         }
@@ -129,30 +152,246 @@ public class CustomXdsAuditor extends XDSAuditor {
     }
 
 
+    /**
+     * Audits an ITI-63 XCF Cross-Community Fetch event.
+     *
+     * @param serverSide
+     *      <code>true</code> for the Responding Gateway actor,
+     *      <code>false</code> for the Initiating Gateway actor.
+     * @param eventOutcome
+     *      event outcome code.
+     * @param userId
+     *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
+     * @param userName
+     *      user name on the Document Consumer side (for XUA).
+     * @param serviceEndpointUri
+     *      network endpoint URI of the XCF Responding Gateway actor.
+     * @param clientIpAddress
+     *      IP address of the XCF Initiating Gateway actor.
+     * @param queryUuid
+     *      UUID of the XCF query.
+     * @param requestPayload
+     *      the whole XCF request as an XML String.
+     * @param homeCommunityId
+     *      home community ID.
+     * @param patientId
+     *      patient ID as an HL7 v2 CX string.
+     */
     public void auditIti63(
             boolean serverSide,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String userId,
             String userName,
-            String respondingGatewayUri,
+            String serviceEndpointUri,
             String clientIpAddress,
             String queryUuid,
             String requestPayload,
             String homeCommunityId,
             String patientId)
     {
+        if (! isAuditorEnabled()) {
+            return;
+        }
+
         doAuditQueryEvent(
                 serverSide,
                 new CustomIHETransactionEventTypeCodes.CrossCommunityFetch(),
                 eventOutcome,
                 userId,
                 userName,
-                respondingGatewayUri,
+                serviceEndpointUri,
                 clientIpAddress,
                 queryUuid,
                 requestPayload,
                 homeCommunityId,
                 patientId);
+    }
+
+
+    /**
+     * Audits an RAD-69 Retrieve Imaging Document Set event.
+     *
+     * @param serverSide
+     *      <code>true</code> for the Imaging Document source actor,
+     *      <code>false</code> for the Imaging Document Consumer actor.
+     * @param eventOutcome
+     *      event outcome code.
+     * @param userId
+     *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
+     * @param userName
+     *      user name on the Document Consumer side (for XUA).
+     * @param serviceEndpointUri
+     *      network endpoint URI of the Imaging Document Source actor.
+     * @param clientIpAddress
+     *      IP address of the Imaging Document Consumer actor.
+     * @param studyInstanceUniqueIds,
+     *      list of study instance unique IDs.
+     * @param seriesInstanceUniqueIds,
+     *      list of series instance unique IDs.
+     * @param documentUniqueIds,
+     *      list of document unique IDs.
+     * @param repositoryUniqueIds,
+     *      list of unique IDs of document repositories.
+     * @param homeCommunityIds,
+     *      list of home community IDs.
+     * @param patientId
+     *      patient ID as an HL7 v2 CX string (if known).
+     */
+    public void auditRad69(
+            boolean serverSide,
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String userId,
+            String userName,
+            String serviceEndpointUri,
+            String clientIpAddress,
+            String[] studyInstanceUniqueIds,
+            String[] seriesInstanceUniqueIds,
+            String[] documentUniqueIds,
+            String[] repositoryUniqueIds,
+            String[] homeCommunityIds,
+            String patientId)
+    {
+        if (! isAuditorEnabled()) {
+            return;
+        }
+
+        doAuditImagingEvent(
+                serverSide,
+                new CustomIHETransactionEventTypeCodes.RetrieveImagingDocumentSet(),
+                eventOutcome,
+                userId,
+                userName,
+                serviceEndpointUri,
+                clientIpAddress,
+                studyInstanceUniqueIds,
+                seriesInstanceUniqueIds,
+                documentUniqueIds,
+                repositoryUniqueIds,
+                homeCommunityIds,
+                patientId);
+    }
+
+
+    /**
+     * Audits an RAD-75 Cross-Gateway Retrieve Imaging Document Set event.
+     *
+     * @param serverSide
+     *      <code>true</code> for the Document Registry actor,
+     *      <code>false</code> for the Document Consumer actor.
+     * @param eventOutcome
+     *      event outcome code.
+     * @param userId
+     *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
+     * @param userName
+     *      user name on the Document Consumer side (for XUA).
+     * @param serviceEndpointUri
+     *      network endpoint URI of the Responding Gateway actor.
+     * @param clientIpAddress
+     *      IP address of the Initiating Gateway actor.
+     * @param studyInstanceUniqueIds,
+     *      list of study instance unique IDs.
+     * @param seriesInstanceUniqueIds,
+     *      list of series instance unique IDs.
+     * @param documentUniqueIds,
+     *      list of document unique IDs.
+     * @param repositoryUniqueIds,
+     *      list of unique IDs of document repositories.
+     * @param homeCommunityIds,
+     *      list of home community IDs.
+     * @param patientId
+     *      patient ID as an HL7 v2 CX string (if known).
+     */
+    public void auditRad75(
+            boolean serverSide,
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String userId,
+            String userName,
+            String serviceEndpointUri,
+            String clientIpAddress,
+            String[] studyInstanceUniqueIds,
+            String[] seriesInstanceUniqueIds,
+            String[] documentUniqueIds,
+            String[] repositoryUniqueIds,
+            String[] homeCommunityIds,
+            String patientId)
+    {
+        if (! isAuditorEnabled()) {
+            return;
+        }
+
+        doAuditImagingEvent(
+                serverSide,
+                new CustomIHETransactionEventTypeCodes.CrossGatewayRetrieveImagingDocumentSet(),
+                eventOutcome,
+                userId,
+                userName,
+                serviceEndpointUri,
+                clientIpAddress,
+                studyInstanceUniqueIds,
+                seriesInstanceUniqueIds,
+                documentUniqueIds,
+                repositoryUniqueIds,
+                homeCommunityIds,
+                patientId);
+    }
+
+
+    private void doAuditImagingEvent(
+            boolean serverSide,
+            IHETransactionEventTypeCodes transactionEventTypeCodes,
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String userId,
+            String userName,
+            String serviceEndpointUri,
+            String clientIpAddress,
+            String[] studyInstanceUniqueIds,
+            String[] seriesInstanceUniqueIds,
+            String[] documentUniqueIds,
+            String[] repositoryUniqueIds,
+            String[] homeCommunityIds,
+            String patientId)
+    {
+        ImagingRetrieveEvent event = new ImagingRetrieveEvent(
+                ! serverSide,
+                eventOutcome,
+                transactionEventTypeCodes);
+
+        event.addSourceActiveParticipant(
+                serviceEndpointUri,
+                serverSide ? getSystemAltUserId() : null,
+                null,
+                serverSide ? getSystemNetworkId() : EventUtils.getAddressForUrl(serviceEndpointUri, false),
+                false);
+
+        event.addDestinationActiveParticipant(
+                userId,
+                serverSide ? null : getSystemAltUserId(),
+                null,
+                serverSide ? clientIpAddress : getSystemNetworkId(),
+                true);
+
+        if (! EventUtils.isEmptyOrNull(userName)) {
+            event.addHumanRequestorActiveParticipant(userName, null, userName, null);
+        }
+
+        event.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
+
+        if (! EventUtils.isEmptyOrNull(patientId)) {
+            event.addPatientParticipantObject(patientId);
+        }
+
+        if (! EventUtils.isEmptyOrNull(documentUniqueIds)) {
+            for (int i = 0; i < documentUniqueIds.length; i++) {
+                event.addDocumentParticipantObject(
+                        studyInstanceUniqueIds[i],
+                        seriesInstanceUniqueIds[i],
+                        documentUniqueIds[i],
+                        repositoryUniqueIds[i],
+                        homeCommunityIds[i]);
+            }
+        }
+
+        audit(event);
     }
 
 

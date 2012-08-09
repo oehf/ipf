@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,12 @@ import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.asyncresponse.Rad75AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.xds.rad75.asyncresponse.Rad75AsyncResponseService;
 
 import javax.xml.namespace.QName;
 import java.util.Map;
@@ -63,7 +62,7 @@ public class Rad75AsyncResponseComponent extends AbstractWsComponent<WsTransacti
 
     @Override
     public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Rad75ClientAuditStrategy(allowIncompleteAudit);
+        return new Rad75AuditStrategy(false, allowIncompleteAudit);
     }
 
     @Override

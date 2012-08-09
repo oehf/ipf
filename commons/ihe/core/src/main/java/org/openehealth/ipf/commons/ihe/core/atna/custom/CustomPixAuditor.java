@@ -23,6 +23,11 @@ import org.openhealthtools.ihe.atna.auditor.events.ihe.PatientRecordEvent;
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
 /**
+ * Implementation of ATNA Auditors for the following HL7v2-based transactions:
+ * <ul>
+ *     <li>ITI-64 -- Notify XAD-PID Link Change</li>
+ * </ul>
+ *
  * @author Dmytro Rud
  */
 public class CustomPixAuditor extends PIXAuditor {

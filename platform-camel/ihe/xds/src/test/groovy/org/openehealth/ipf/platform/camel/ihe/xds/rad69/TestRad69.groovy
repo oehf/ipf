@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2012 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License")"
  * you may not use this file except in compliance with the License.
@@ -88,9 +88,9 @@ class TestRad69 extends StandardTestContainer {
         checkEvent(message.EventIdentification, '110106', 'RAD-69', 'R', outcome)
         checkSource(message.ActiveParticipant[0], SERVICE2_ADDR, 'false')
         checkDestination(message.ActiveParticipant[1], 'true')
-        checkAuditSource(message.AuditSourceIdentification, 'repositoryId')
-        checkDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1')
-        checkDocument(message.ParticipantObjectIdentification[1], 'doc2', 'urn:oid:1.2.4', 'repo2')
+        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
+        checkImageDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[1], 'doc2', 'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
         
         message = getAudit('C', SERVICE2_ADDR)[0]
         
@@ -103,8 +103,8 @@ class TestRad69 extends StandardTestContainer {
         checkEvent(message.EventIdentification, '110107', 'RAD-69', 'C', outcome)
         checkSource(message.ActiveParticipant[0], 'false')
         checkDestination(message.ActiveParticipant[1], 'true')
-        checkDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1')
-        checkDocument(message.ParticipantObjectIdentification[1], 'doc2', 'urn:oid:1.2.4', 'repo2')
+        checkImageDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[1], 'doc2', 'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
     }
     
     void checkForMTOM(response) {

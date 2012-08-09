@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public interface Rad69PortType
      * @return the response.
      */
     @WebResult(name = "RetrieveDocumentSetResponse", targetNamespace = "urn:ihe:iti:xds-b:2007", partName = "body")
-    @Action(input = "urn:ihe:rad:2011:CrossGatewayRetrieveImagingDocumentSet", output = "urn:ihe:rad:2011:CrossGatewayRetrieveImagingDocumentSetResponse")
+    @Action(input = "urn:ihe:rad:2009:RetrieveImagingDocumentSet", output = "urn:ihe:iti:2007:RetrieveDocumentSetResponse")
     @WebMethod(operationName = "DocumentRepository_RetrieveImagingDocumentSet")
     public RetrieveDocumentSetResponseType documentRepositoryRetrieveImagingDocumentSet(
         @WebParam(partName = "body", name = "RetrieveImagingDocumentSetRequest", targetNamespace = "urn:ihe:rad:xdsi-b:2009")

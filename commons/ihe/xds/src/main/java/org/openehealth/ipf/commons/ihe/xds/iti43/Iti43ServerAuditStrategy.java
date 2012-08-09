@@ -29,9 +29,8 @@ public class Iti43ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
         "EventOutcomeCode",
         "ClientIpAddress",
         "ServiceEndpointUrl",
-        "DocumentUuids",
-        "RepositoryUuids",
-        "HomeCommunityUuids"};
+        "DocumentUniqueIds",
+        "RepositoryUniqueIds"};
 
     
     public Iti43ServerAuditStrategy(boolean allowIncompleteAudit) {
@@ -46,9 +45,9 @@ public class Iti43ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
                 auditDataset.getUserName(),
                 auditDataset.getClientIpAddress(),
                 auditDataset.getServiceEndpointUrl(),
-                auditDataset.getDocumentUuids(),
-                auditDataset.getRepositoryUuids(),
-                auditDataset.getHomeCommunityUuids());
+                auditDataset.getDocumentUniqueIds(),
+                auditDataset.getRepositoryUniqueIds(),
+                auditDataset.getHomeCommunityIds());
     }
 
     @Override

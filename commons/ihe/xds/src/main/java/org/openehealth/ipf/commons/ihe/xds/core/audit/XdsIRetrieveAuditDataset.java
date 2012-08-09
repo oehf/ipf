@@ -19,17 +19,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * XDS audit dataset specific for retrieval-related transactions.
- * @author Dmytro Rud
+ * XDS-I.b Audit dataset specific for retrieval-related transactions.
+ * @author Clay Sebourn
  */
-public class XdsRetrieveAuditDataset extends XdsAuditDataset {
-    private static final long serialVersionUID = -8776033207572005899L;
+public class XdsIRetrieveAuditDataset extends XdsRetrieveAuditDataset {
+    private static final long serialVersionUID = 7711805912249881145L;
 
-    @Getter @Setter private String[] documentUniqueIds;
-    @Getter @Setter private String[] repositoryUniqueIds;
-    @Getter @Setter private String[] homeCommunityIds;
+    @Getter @Setter private String[] studyInstanceUniqueIds;
+    @Getter @Setter private String[] seriesInstanceUniqueIds;
 
-    public XdsRetrieveAuditDataset(boolean serverSide) {
+    public XdsIRetrieveAuditDataset(boolean serverSide) {
         super(serverSide);
     }
 }

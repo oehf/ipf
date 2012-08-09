@@ -1,12 +1,12 @@
 /*
- * Copyright 2009 the original author or authors.
- * 
+ * Copyright 2012 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
- * Validates a {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest}.
+ * Validates a {@link EbXMLRetrieveImagingDocumentSetRequest}.
  * 
  * @author Clay Sebourn
  */
@@ -48,7 +48,7 @@ public class RetrieveImagingDocumentSetRequestValidator implements Validator<EbX
                 metaDataAssert(seriesInstanceUID != null && !seriesInstanceUID.isEmpty(), SERIES_INSTANCE_UID_MUST_BE_SPECIFIED);
 
                 for (RetrieveDocument document : retrieveSeries.getDocuments()) {
-                    //todo: Elimate this duplicate code from DocumentRequest?
+                    //todo: Eliminate this duplicate code from DocumentRequest?
                     String repoId = document.getRepositoryUniqueId();
                     metaDataAssert(repoId != null && !repoId.isEmpty(), REPO_ID_MUST_BE_SPECIFIED);
 

@@ -96,7 +96,7 @@ class TestIti61 extends StandardTestContainer {
         checkEvent(message.EventIdentification, '110107', 'ITI-61', 'C', outcome)
         checkSource(message.ActiveParticipant[0], 'true')
         checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'registryId')
+        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
         checkPatient(message.ParticipantObjectIdentification[0])
         checkSubmissionSet(message.ParticipantObjectIdentification[1])
         
@@ -111,7 +111,7 @@ class TestIti61 extends StandardTestContainer {
         checkEvent(message.EventIdentification, '110106', 'ITI-61', 'R', outcome)
         checkSource(message.ActiveParticipant[0], 'true')
         checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-        checkAuditSource(message.AuditSourceIdentification, 'registryId')
+        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
         checkPatient(message.ParticipantObjectIdentification[0])
         checkSubmissionSet(message.ParticipantObjectIdentification[1])
     }
