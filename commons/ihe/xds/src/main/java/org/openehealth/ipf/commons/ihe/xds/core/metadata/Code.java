@@ -135,6 +135,29 @@ public class Code extends Hl7v2Based<CE> {
         setValue(getHapiObject().getCe3_NameOfCodingSystem(), schemeName);
     }
 
+    /**
+     * According to IHE ITI TF Vol. 2 Section 3.18.4.1.2.3.4 "Coding of Code/Code-Scheme",
+     * excludes the second code component (display name) from the rendered representation.
+     * @return
+     *      this code rendered as HL7 v2 CE element.
+     */
+    @Override
+    protected String render() {
+        String s = super.render();
+        int pos1 = s.indexOf(ENCODING_CHARACTERS.getComponentSeparator());
+        if (pos1 < 0) {
+            return s;
+        }
+        int pos2 = s.indexOf(ENCODING_CHARACTERS.getComponentSeparator(), pos1 + 1);
+        if (pos2 < 0) {
+            return s.substring(0, pos1);
+        }
+        if (pos2 == pos1 + 1) {
+            return s;
+        }
+        return s.substring(0, pos1 + 1) + s.substring(pos2);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
