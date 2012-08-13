@@ -36,7 +36,7 @@ import java.util.List;
 public class RetrieveImagingDocumentSet implements Serializable {
     private static final long serialVersionUID = -8999352499981099419L;
 
-    @XmlElement(name = "RetrieveStudies", required = true)
+    @XmlElementRef
     private final List<RetrieveStudy> retrieveStudies = new ArrayList<RetrieveStudy>();
 
     /**
@@ -63,6 +63,7 @@ public class RetrieveImagingDocumentSet implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         RetrieveImagingDocumentSet other = (RetrieveImagingDocumentSet) obj;
+
         if (retrieveStudies == null) {
             if (other.retrieveStudies != null)
                 return false;

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.*;
@@ -28,16 +29,15 @@ import javax.xml.bind.annotation.*;
  * All members of this class are allowed to be <code>null</code>.
  * @author Clay Sebourn
  */
-@XmlRootElement(name = "RetrieveStudy")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RetrieveStudyType", propOrder = {"studyInstanceUID", "retrieveSerieses"})
-public class RetrieveStudy
+@XmlType(name = "RetrieveStudy", propOrder = {"studyInstanceUID", "retrieveSerieses"})
+@XmlRootElement(name = "retrieveStudy")
+public class RetrieveStudy implements Serializable
 {
+    private static final long serialVersionUID = 8999352499981099420L;
 
-    @XmlAttribute(name = "studyInstanceUID", required = true)
     protected String studyInstanceUID;
-
-    @XmlElement(name = "RetrieveSeries", required = true)
+    @XmlElementRef
     protected List<RetrieveSeries> retrieveSerieses;
 
     /**
@@ -76,7 +76,7 @@ public class RetrieveStudy
 
     /**
      * Gets the value of the retrieveSerieses property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
@@ -119,7 +119,7 @@ public class RetrieveStudy
         RetrieveStudy other = (RetrieveStudy) obj;
 
         if (studyInstanceUID == null) {
-            if (other.retrieveSerieses != null)
+            if (other.studyInstanceUID != null)
                 return false;
         } else if (!studyInstanceUID.equals(other.studyInstanceUID))
             return false;
