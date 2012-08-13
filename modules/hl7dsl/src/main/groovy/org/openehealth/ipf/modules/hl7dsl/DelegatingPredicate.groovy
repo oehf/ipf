@@ -17,8 +17,7 @@ package org.openehealth.ipf.modules.hl7dsl;
 
 import org.codehaus.groovy.runtime.InvokerInvocationException;
 
-import groovy.lang.Closure;
-import ca.uhn.hl7v2.util.FilterIterator 
+import ca.uhn.hl7v2.util.FilterIterator
 
 /**
  * Bridge between HAPI Predicate and Closure

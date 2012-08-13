@@ -18,7 +18,7 @@ package org.openehealth.ipf.modules.hl7dsl
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+
 /**
  * @author Martin Krasser
  */

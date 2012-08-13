@@ -15,15 +15,9 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.isVariesEmpty
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.typePath
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentValue
-
-import org.codehaus.groovy.runtime.InvokerHelper
-
 import ca.uhn.hl7v2.model.ExtraComponents
+import org.codehaus.groovy.runtime.InvokerHelper
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.*
 
 /**
  * @author Christian Ohr

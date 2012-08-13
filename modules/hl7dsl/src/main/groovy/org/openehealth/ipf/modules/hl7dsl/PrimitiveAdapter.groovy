@@ -15,16 +15,10 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentIndex
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.stringValue
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.originalStringValue
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
-
-import org.codehaus.groovy.runtime.InvokerHelper
-
 import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Type
 import ca.uhn.hl7v2.util.DeepCopy
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.originalStringValue
 
 /**
  * @author Martin Krasser

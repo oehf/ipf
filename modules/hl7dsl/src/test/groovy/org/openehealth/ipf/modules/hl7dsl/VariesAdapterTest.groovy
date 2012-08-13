@@ -18,7 +18,7 @@ package org.openehealth.ipf.modules.hl7dsl
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 
 /**
- * @author Marek Václavík
+ * @author Marek VÃ¡clavik
  */
 class VariesAdapterTest extends GroovyTestCase {
 

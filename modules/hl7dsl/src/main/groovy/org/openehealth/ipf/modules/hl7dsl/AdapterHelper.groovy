@@ -15,16 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import ca.uhn.hl7v2.model.AbstractType
-import ca.uhn.hl7v2.model.Composite
-import ca.uhn.hl7v2.model.ExtraComponents
-import ca.uhn.hl7v2.model.Group
-import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.model.Primitive
-import ca.uhn.hl7v2.model.Segment
-import ca.uhn.hl7v2.model.Structure
-import ca.uhn.hl7v2.model.Type
-import ca.uhn.hl7v2.model.Varies
+import ca.uhn.hl7v2.model.*
 
 /**
  * @author Martin Krasser
@@ -135,11 +126,11 @@ class AdapterHelper {
                 firstElement.originalValue
     }
 
-   static boolean isEmpty(Type t){
-       return !t.encode() 
-   }
+    static boolean isEmpty(Type t){
+        return !t.encode()
+    }
  
     static boolean isEmpty(Varies varies){
-         isEmpty(varies.data)
+        isEmpty(varies.data)
     }
 }
