@@ -15,16 +15,10 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import ca.uhn.hl7v2.model.Group;
-import ca.uhn.hl7v2.model.Structure;
-import ca.uhn.hl7v2.util.FilterIterator 
+import ca.uhn.hl7v2.util.FilterIterator
 import ca.uhn.hl7v2.parser.EncodingCharacters
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
-
-import java.util.List;
 
 /**
  * Iterator class that does a depth-first traversal over message classes.

@@ -15,18 +15,10 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptTypes
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentIndex
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentValue
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.typePath
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentOriginalValue
-
 import ca.uhn.hl7v2.model.Composite
-import ca.uhn.hl7v2.model.DataTypeException
-import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Type
 import ca.uhn.hl7v2.util.DeepCopy
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.*
 
 /**
  * @author Martin Krasser
