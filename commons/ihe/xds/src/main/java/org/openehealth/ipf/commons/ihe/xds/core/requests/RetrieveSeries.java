@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.*;
@@ -30,15 +31,14 @@ import javax.xml.bind.annotation.*;
  * @author Clay Sebourn
  */
 
-@XmlRootElement(name = "RetrieveSeries")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RetrieveSeriesType", propOrder = {"seriesInstanceUID", "documents"})
-public class RetrieveSeries
+@XmlType(name = "RetrieveSeries", propOrder = {"seriesInstanceUID", "documents"})
+@XmlRootElement(name = "retrieveSeries")
+public class RetrieveSeries implements Serializable
 {
+    private static final long serialVersionUID = 8999352499981099421L;
 
-    @XmlAttribute(name = "seriesInstanceUID", required = true)
     protected String seriesInstanceUID;
-
     @XmlElementRef
     private List<RetrieveDocument> documents = new ArrayList<RetrieveDocument>();
 
