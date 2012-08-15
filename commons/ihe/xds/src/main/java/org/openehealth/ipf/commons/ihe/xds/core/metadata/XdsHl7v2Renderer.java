@@ -21,10 +21,7 @@ import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.v25.datatype.*;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.Escape;
-import ca.uhn.hl7v2.parser.PipeParser;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 /**
@@ -35,21 +32,6 @@ import java.util.*;
  * @author Dmytro Rud
  */
 abstract public class XdsHl7v2Renderer {
-
-    /**
-     * Invoker of the private method {@link PipeParser#stripExtraDelimiters(String, char)}.
-     */
-    private static final Method STRIP_EXTRA_DELIMITERS;
-
-    static {
-        try {
-            STRIP_EXTRA_DELIMITERS = PipeParser.class.getDeclaredMethod("stripExtraDelimiters", String.class, char.class);
-            STRIP_EXTRA_DELIMITERS.setAccessible(true);
-        } catch (NoSuchMethodException e) {
-            throw new LinkageError("HAPI 1.2 is expected in the class path");
-        }
-    }
-
 
     /**
      * Encoding characters for HL7 v2 messages.
@@ -77,23 +59,8 @@ abstract public class XdsHl7v2Renderer {
     }
 
 
-    /**
-     * Invokes the private method {@link PipeParser#stripExtraDelimiters(String, char)}.
-     * @param source
-     *      source HL7 v2 string.
-     * @param delimiter
-     *      delimiter character to be stripped.
-     * @return
-     *      source string with stripped redundant trailing delimiter characters.
-     */
-    protected static String stripExtraDelimiters(String source, char delimiter) {
-        try {
-            return (String) STRIP_EXTRA_DELIMITERS.invoke(null, source, delimiter);
-        } catch (IllegalAccessException e) {
-            throw new LinkageError("HAPI 1.2 is expected in the class path");
-        } catch (InvocationTargetException e) {
-            throw new LinkageError("HAPI 1.2 is expected in the class path");
-        }
+    private XdsHl7v2Renderer() {
+        throw new IllegalStateException("cannot instantiate helper class");
     }
 
 
@@ -129,7 +96,7 @@ abstract public class XdsHl7v2Renderer {
             sb.append(delimiter);
         }
 
-        return stripExtraDelimiters(sb.toString(), delimiter);
+        return StringUtils.stripEnd(sb.toString(), String.valueOf(delimiter));
     }
 
 
