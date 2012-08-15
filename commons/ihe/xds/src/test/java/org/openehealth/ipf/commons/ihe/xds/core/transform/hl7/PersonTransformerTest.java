@@ -31,7 +31,7 @@ public class PersonTransformerTest {
 
     @Before
     public void setUp() {
-        AssigningAuthority assigningAuthority = new AssigningAuthority("he&llo", "1.2&.3.4", "WU&RZ");
+        AssigningAuthority assigningAuthority = new AssigningAuthority("he&llo", "1.2&.3.4", "he&llo_WU&RZ");
         Identifiable id = new Identifiable("u^fz", assigningAuthority);
         Name name = new XcnName("Seu&fzer", "Em&il", "Ant|on", "der&7.", "D&r.", null);
         person = new Person(id, name);
@@ -39,14 +39,14 @@ public class PersonTransformerTest {
     
     @Test
     public void testToHL7() {
-        assertEquals("u\\S\\fz^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ", 
+        assertEquals("u\\S\\fz^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.^^^&1.2\\T\\.3.4&he\\T\\llo_WU\\T\\RZ",
                 Hl7v2Based.render(person));
     }
 
     @Test
     public void testToHL7NoName() {
         person.setName(null);
-        assertEquals("u\\S\\fz^^^^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ", 
+        assertEquals("u\\S\\fz^^^^^^^^&1.2\\T\\.3.4&he\\T\\llo_WU\\T\\RZ",
                 Hl7v2Based.render(person));
     }
 
@@ -70,7 +70,7 @@ public class PersonTransformerTest {
     @Test
     public void testFromHL7() {
         Person result = Hl7v2Based.parse(
-                "u\\S\\fz^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ",
+                "u\\S\\fz^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.^^^&1.2\\T\\.3.4&he\\T\\llo_WU\\T\\RZ",
                 Person.class);
 
         assertEquals(person, result);
@@ -86,7 +86,7 @@ public class PersonTransformerTest {
     
     @Test
     public void testFromHL7NoName() {
-        Person result = Hl7v2Based.parse("u\\S\\fz^^^^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ", Person.class);
+        Person result = Hl7v2Based.parse("u\\S\\fz^^^^^^^^&1.2\\T\\.3.4&he\\T\\llo_WU\\T\\RZ", Person.class);
 
         person.setName(null);
         assertEquals(person, result);

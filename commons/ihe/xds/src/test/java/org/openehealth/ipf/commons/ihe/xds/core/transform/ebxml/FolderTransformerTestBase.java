@@ -93,7 +93,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 7");
         
         assertExternalIdentifier(Vocabulary.FOLDER_PATIENT_ID_EXTERNAL_ID, ebXML, 
-                "id 3^^^namespace 3&uni 3&uniType 3", Vocabulary.FOLDER_LOCALIZED_STRING_PATIENT_ID);
+                "id 3^^^&uni 3&uniType 3", Vocabulary.FOLDER_LOCALIZED_STRING_PATIENT_ID);
 
         assertExternalIdentifier(Vocabulary.FOLDER_UNIQUE_ID_EXTERNAL_ID, ebXML, 
                 "uniqueId", Vocabulary.FOLDER_LOCALIZED_STRING_UNIQUE_ID);

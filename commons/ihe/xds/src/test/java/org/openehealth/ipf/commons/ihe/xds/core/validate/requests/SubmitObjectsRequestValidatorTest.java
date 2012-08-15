@@ -219,7 +219,7 @@ public class SubmitObjectsRequestValidatorTest {
     @Test    
     public void testCXTooManyComponents() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getExternalIdentifiers().get(0).setValue("^^^^^^^^^lol");
+        ebXML.getExtrinsicObjects().get(0).getExternalIdentifiers().get(0).setValue("rotfl^^^^^^^^^lol");
         expectFailure(CX_TOO_MANY_COMPONENTS, ebXML);
     }
     
