@@ -33,14 +33,14 @@ public class OrganizationTransformerTest {
         AssigningAuthority assigningAuthority = new AssigningAuthority();
         assigningAuthority.setNamespaceId("he&llo");
         assigningAuthority.setUniversalId("1.2&.3.4");
-        assigningAuthority.setUniversalIdType("WU&RZ");
+        assigningAuthority.setUniversalIdType("he&llo_WU&RZ");
 
         Organization organization = new Organization();
         organization.setOrganizationName("Untere&Klinik");
         organization.setIdNumber("a|number");
         organization.setAssigningAuthority(assigningAuthority);
         
-        assertEquals("Untere\\T\\Klinik^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ^^^^a\\F\\number", 
+        assertEquals("Untere\\T\\Klinik^^^^^&1.2\\T\\.3.4&he\\T\\llo_WU\\T\\RZ^^^^a\\F\\number",
                 Hl7v2Based.render(organization));
     }
 

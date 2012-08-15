@@ -70,7 +70,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         assertEquals(QueryType.FIND_FOLDERS_MPQ.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
 
-        assertEquals(Arrays.asList("('id1^^^name1&uni1&uniType1')","('id2^^^name2&uni2&uniType2')"),
+        assertEquals(Arrays.asList("('id1^^^&uni1&uniType1')","('id2^^^&uni2&uniType2')"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_PATIENT_ID.getSlotName()));
         
         assertEquals(Arrays.asList("1"),
@@ -109,7 +109,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         FindFoldersForMultiplePatientsQuery result = new FindFoldersForMultiplePatientsQuery();
         transformer.fromEbXML(result, ebXML);
         
-        assertEquals(query.toString(), result.toString());
+        assertEquals(query, result);
     }
     
     @Test
@@ -120,7 +120,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         FindFoldersForMultiplePatientsQuery result = new FindFoldersForMultiplePatientsQuery();
         transformer.fromEbXML(result, ebXML);
         
-        assertEquals(query.toString(), result.toString());
+        assertEquals(query, result);
     }
     
     @Test

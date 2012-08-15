@@ -43,14 +43,14 @@ public class SourcePatientIdentifierPIDTransformerTest {
         Identifiable id1 = new Identifiable();
         id1.setId("id1");
         AssigningAuthority assigningAuthority1 = new AssigningAuthority();
-        assigningAuthority1.setNamespaceId("1.1.1.1");
+        assigningAuthority1.setUniversalId("1.1.1.1");
         assigningAuthority1.setUniversalIdType("ISO");
         id1.setAssigningAuthority(assigningAuthority1);
         
         Identifiable id2 = new Identifiable();
         id2.setId("id2");
         AssigningAuthority assigningAuthority2 = new AssigningAuthority();
-        assigningAuthority2.setNamespaceId("2.2.2.2");
+        assigningAuthority2.setUniversalId("2.2.2.2");
         assigningAuthority2.setUniversalIdType("ISO");
         id2.setAssigningAuthority(assigningAuthority2);
         
@@ -59,8 +59,8 @@ public class SourcePatientIdentifierPIDTransformerTest {
 
         List<String> result = transformer.toHL7(patientInfo);
         assertEquals(2, result.size());
-        assertEquals("id1^^^1.1.1.1&&ISO", result.get(0));
-        assertEquals("id2^^^2.2.2.2&&ISO", result.get(1));
+        assertEquals("id1^^^&1.1.1.1&ISO", result.get(0));
+        assertEquals("id2^^^&2.2.2.2&ISO", result.get(1));
     }
 
     @Test
@@ -80,30 +80,30 @@ public class SourcePatientIdentifierPIDTransformerTest {
     @Test
     public void testFromHL7() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7("id1^^^1.1.1.1&&ISO~id2^^^2.2.2.2&&ISO", patientInfo);
+        transformer.fromHL7("id1^^^&1.1.1.1&ISO~id2^^^&2.2.2.2&ISO", patientInfo);
         
         List<Identifiable> ids = patientInfo.getIds();        
         assertEquals(2, ids.size());
         
         assertEquals("id1", ids.get(0).getId());
-        assertEquals("1.1.1.1", ids.get(0).getAssigningAuthority().getNamespaceId());
+        assertEquals("1.1.1.1", ids.get(0).getAssigningAuthority().getUniversalId());
         assertEquals("ISO", ids.get(0).getAssigningAuthority().getUniversalIdType());
 
         assertEquals("id2", ids.get(1).getId());
-        assertEquals("2.2.2.2", ids.get(1).getAssigningAuthority().getNamespaceId());
+        assertEquals("2.2.2.2", ids.get(1).getAssigningAuthority().getUniversalId());
         assertEquals("ISO", ids.get(1).getAssigningAuthority().getUniversalIdType());
     }
     
     @Test
     public void testFromHL7OneEmptyId() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7("^^^~id2^^^2.2.2.2&&ISO", patientInfo);
+        transformer.fromHL7("^^^~id2^^^&2.2.2.2&ISO", patientInfo);
         
         List<Identifiable> ids = patientInfo.getIds();        
         assertEquals(1, ids.size());
         
         assertEquals("id2", ids.get(0).getId());
-        assertEquals("2.2.2.2", ids.get(0).getAssigningAuthority().getNamespaceId());
+        assertEquals("2.2.2.2", ids.get(0).getAssigningAuthority().getUniversalId());
         assertEquals("ISO", ids.get(0).getAssigningAuthority().getUniversalIdType());
     }
     

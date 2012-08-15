@@ -62,7 +62,7 @@ public class FindSubmissionSetsQueryTransformerTest {
         assertEquals(QueryType.FIND_SUBMISSION_SETS.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
 
-        assertEquals(Arrays.asList("'id1^^^name1&uni1&uniType1'"),
+        assertEquals(Arrays.asList("'id1^^^&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_PATIENT_ID.getSlotName()));
         
         assertEquals(Arrays.asList("('code1^^system1')", "('code2^^system2')"),

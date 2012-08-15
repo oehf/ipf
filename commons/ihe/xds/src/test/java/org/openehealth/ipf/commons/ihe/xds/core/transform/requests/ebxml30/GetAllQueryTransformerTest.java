@@ -69,7 +69,7 @@ public class GetAllQueryTransformerTest {
         assertEquals(QueryType.GET_ALL.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
 
-        assertEquals(Arrays.asList("'id1^^^name1&uni1&uniType1'"),
+        assertEquals(Arrays.asList("'id1^^^&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.PATIENT_ID.getSlotName()));
         
         List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());

@@ -47,7 +47,7 @@ public class IdentifiableTransformerTest {
         String result = Hl7v2Based.render(identifiable);
         assertNotNull(result);
         
-        assertEquals("21\\T\\3^^^namespace&uni&uniType", result);
+        assertEquals("21\\T\\3^^^&uni&uniType", result);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class IdentifiableTransformerTest {
         assertEquals("21&3", result.getId());
         
         AssigningAuthority assigningAuthority = result.getAssigningAuthority();
-        assertEquals("namespace", assigningAuthority.getNamespaceId());
+        assertEquals(null, assigningAuthority.getNamespaceId());
         assertEquals("uni", assigningAuthority.getUniversalId());
         assertEquals("uniType", assigningAuthority.getUniversalIdType());
     }

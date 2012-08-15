@@ -125,19 +125,19 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         assertSlot(SLOT_NAME_SUBMISSION_TIME, ebXML.getSlots(), "123");
         
         assertSlot(SLOT_NAME_INTENDED_RECIPIENT, ebXML.getSlots(),
-                "orgName 20^^^^^namespace 20&uni 20&uniType 20^^^^id 20|id 22^familyName 22^givenName 22^prefix 22^second 22^suffix 22^degree 22^^namespace 22&uni 22&uniType 22",
-                "orgName 21^^^^^namespace 21&uni 21&uniType 21^^^^id 21",
-                "|id 23^familyName 23^givenName 23^prefix 23^second 23^suffix 23^degree 23^^namespace 23&uni 23&uniType 23");
+                "orgName 20^^^^^&uni 20&uniType 20^^^^id 20|id 22^familyName 22^givenName 22^prefix 22^second 22^suffix 22^degree 22^^&uni 22&uniType 22",
+                "orgName 21^^^^^&uni 21&uniType 21^^^^id 21",
+                "|id 23^familyName 23^givenName 23^prefix 23^second 23^suffix 23^degree 23^^&uni 23&uniType 23");
 
         
         EbXMLClassification classification = assertClassification(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
-        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^degree 1^^namespace 1&uni 1&uniType 1");
+        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^degree 1^^&uni 1&uniType 1");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
         assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1", "spec2");
         
         classification = assertClassification(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 1, "", -1);
-        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^degree 30^^namespace 30&uni 30&uniType 30");
+        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^degree 30^^&uni 30&uniType 30");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst3", "inst4");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role3", "role4");
         assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec3", "spec4");
@@ -147,7 +147,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         
         
         assertExternalIdentifier(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, ebXML,
-                "id 3^^^namespace 3&uni 3&uniType 3", SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID);
+                "id 3^^^&uni 3&uniType 3", SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID);
 
         assertExternalIdentifier(SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, ebXML,
                 "uniqueId", SUBMISSION_SET_LOCALIZED_STRING_UNIQUE_ID);

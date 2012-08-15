@@ -19,7 +19,6 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.*;
 import ca.uhn.hl7v2.model.v25.datatype.HD;
 import ca.uhn.hl7v2.model.v25.message.ACK;
-import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.PipeParser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -43,13 +42,6 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
         MESSAGE = new ACK();
         MESSAGE.setValidationContext(null);
     }
-
-
-    /**
-     * Encoding characters for HL7 v2 messages.
-     */
-    public static final EncodingCharacters ENCODING_CHARACTERS =
-            new EncodingCharacters('|', '^', '~', '\\', '&');
 
 
     private final T hapiObject;
@@ -97,7 +89,7 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
 
         try {
             C xdsModelObject = xdsModelClass.newInstance();
-            MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, ENCODING_CHARACTERS);
+            MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, XdsHl7v2Renderer.ENCODING_CHARACTERS);
             // TODO: can the xdsModelObject be empty when the String is not empty?
             return xdsModelObject.isEmpty() ? null : xdsModelObject;
         } catch (InstantiationException e) {
@@ -111,17 +103,21 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
 
 
     /**
-     * Renders this XDS model object as an HL7 v2 element.
+     * Renders this XDS model object using the XDS-specific
+     * {@link XdsHl7v2Renderer#encode(ca.uhn.hl7v2.model.Composite) HL7 v2 renderer},
+     * i.e. with applying IHE TF rules regarding unwanted components.
      * @return
      *      HL7 v2 representation of this XDS model object, may be an empty String.
      */
     protected String render() {
-        return PipeParser.encode(hapiObject, ENCODING_CHARACTERS);
+        return XdsHl7v2Renderer.encode(hapiObject);
     }
 
 
     /**
-     * Renders the given XDS model object as an HL7 v2 element.
+     * Renders the given XDS model object as an HL7 v2 element according to the
+     * XDS specification, i.e. with applying IHE TF rules regarding unwanted components.
+     *
      * @param xdsModelObject
      *      XDS model object.
      * @return
@@ -129,11 +125,24 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
      *      when the given object is <code>null</code> or empty.
      */
     public static String render(Hl7v2Based xdsModelObject) {
-        if (xdsModelObject == null) {
-            return null;
-        }
-        String s = xdsModelObject.render();
-        return s.isEmpty() ? null : s;
+        return (xdsModelObject != null) ? StringUtils.trimToNull(xdsModelObject.render()) : null;
+    }
+
+
+    /**
+     * Renders the given XDS model object as an HL7 v2 element
+     * without applying IHE TF rules regarding unwanted components.
+     *
+     * @param xdsModelObject
+     *      XDS model object.
+     * @return
+     *      HL7 v2 representation of the given object, or an empty string
+     *      when the given object is <code>null</code> or empty.
+     */
+    public static String rawRender(Hl7v2Based xdsModelObject) {
+        return (xdsModelObject != null)
+                ? PipeParser.encode(xdsModelObject.getHapiObject(), XdsHl7v2Renderer.ENCODING_CHARACTERS)
+                : "";
     }
 
 

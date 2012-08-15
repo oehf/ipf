@@ -51,7 +51,7 @@ public class RecipientTransformerTest {
         String ebXML = transformer.toEbXML(recipient);
         assertNotNull(ebXML);
         
-        assertEquals("orgName^^^^^namespace1&uni1&uniType1^^^^orgId|personId^familyName^givenName^second^suffix^prefix^degree^^namespace2&uni2&uniType2",
+        assertEquals("orgName^^^^^&uni1&uniType1^^^^orgId|personId^familyName^givenName^second^suffix^prefix^degree^^&uni2&uniType2",
                 ebXML);
     }
     
@@ -61,7 +61,7 @@ public class RecipientTransformerTest {
         String ebXML = transformer.toEbXML(recipient);
         assertNotNull(ebXML);
         
-        assertEquals("orgName^^^^^namespace1&uni1&uniType1^^^^orgId", ebXML);
+        assertEquals("orgName^^^^^&uni1&uniType1^^^^orgId", ebXML);
     }
     
     @Test
@@ -70,7 +70,7 @@ public class RecipientTransformerTest {
         String ebXML = transformer.toEbXML(recipient);
         assertNotNull(ebXML);
         
-        assertEquals("|personId^familyName^givenName^second^suffix^prefix^degree^^namespace2&uni2&uniType2",
+        assertEquals("|personId^familyName^givenName^second^suffix^prefix^degree^^&uni2&uniType2",
                 ebXML);
     }
     

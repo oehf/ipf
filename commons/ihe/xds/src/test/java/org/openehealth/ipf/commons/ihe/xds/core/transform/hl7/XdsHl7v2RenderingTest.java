@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 /**
  * @author Dmytro Rud
  */
-public class CodeRenderingTest {
+public class XdsHl7v2RenderingTest {
 
     @Test
     public void testCodeRendering() {
