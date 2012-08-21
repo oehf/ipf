@@ -16,8 +16,6 @@
         <module>test</module>
         <module>core</module>
         <module>flow</module>
-        <module>lbs</module>
-        <module>event</module>
         <module>ihe</module>
         <module>xml</module>
         <module>map</module>

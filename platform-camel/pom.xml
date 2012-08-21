@@ -16,10 +16,8 @@
         <module>core</module>
         <module>flow</module>
         <module>ihe</module>
-        <module>event</module>
         <module>hl7</module>
         <module>test</module>
-        <module>lbs</module>
         <module>cda</module>
     </modules>
 
