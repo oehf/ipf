@@ -43,13 +43,21 @@
             <groupId>org.openhealthtools.ihe</groupId>
             <artifactId>org.openhealthtools.ihe.common.cdar2</artifactId>
         </dependency>
+
+        <!-- dependencies for test -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-xml</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
