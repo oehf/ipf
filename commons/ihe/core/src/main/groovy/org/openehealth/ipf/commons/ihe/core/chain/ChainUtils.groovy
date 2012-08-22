@@ -26,48 +26,51 @@ class ChainUtils {
 
 
     /**
-     * Creates a chain from the given lists of standard and custom interceptors.
+     * Extends an initial chain with elements from a custom collection.
+     *
      * @param initial
-     *      list of standard interceptors.
+     *      initial chain, may be empty, but not <code>null</code>.
      * @param custom
-     *      list of custom interceptors.
+     *      collection of objects to be added to the initial chain,
+     *      may be empty, but not <code>null</code>.
      * @return
-     *      merged list.
+     *      merged chain.
      * @throws ChainException.
+     *      when chain extension fails, e.g. when cyclic dependencies are discovered.
      */
     static <T extends Chainable> List<T> createChain(List<T> initial, Collection<T> custom) {
-        ArrayList<Chainable> chain = new ArrayList<Chainable>(initial)
-        ArrayList<Chainable> unprocessed = new ArrayList<Chainable>(custom)
+        ArrayList<T> chain = new ArrayList<T>(initial)
+        ArrayList<T> unprocessed = new ArrayList<T>(custom)
 
         ArrayList<String> chainIds = chain*.id
 
         while (unprocessed) {
             boolean successful = false
 
-            Iterator<Chainable> iter = unprocessed.iterator()
+            Iterator<T> iter = unprocessed.iterator()
             while (iter.hasNext()) {
-                final Chainable c = iter.next()
+                final T c = iter.next()
                 final String cid = c.id
 
-                // check whether interceptor with this ID is already in the chain
+                // check whether element with this ID is already in the chain
                 if (cid in chainIds) {
-                    LOG.debug("Interceptor with ID='${cid}' is already in the chain, ignore it")
+                    LOG.debug("Element '${cid}' is already in the chain, ignore it")
                     iter.remove()
                     continue
                 }
 
-                // check whether this interceptor depends on some other unprocessed ones
+                // check whether this element depends on some other unprocessed ones
                 def unprocessedDependencies = (unprocessed - c).findAll { other ->
                     ((other.id in c.before) && ! (cid in other.after)) ||
                     ((other.id in c.after) && ! (cid in other.before))
                 }
 
                 if (unprocessedDependencies) {
-                    LOG.debug("Interceptor '${cid}' depends on ${chainString(unprocessedDependencies)}")
+                    LOG.debug("Element '${cid}' depends on '${unprocessedDependencies*.id.join(' ')}'")
                     continue
                 }
 
-                // Look where to insert this interceptor.  When neither "before" nor "after"
+                // Look where to insert this element.  When neither "before" nor "after"
                 // are known -- insert at the end, i.e. directly before the standard Camel
                 // consumer -- this corresponds to the old behaviour.
                 int position = chain.size()
@@ -96,47 +99,27 @@ class ChainUtils {
                             .append(chainIds[maxAfterPosition])
                             .append('\' and  \'')
                             .append(chainIds[minBeforePosition])
-                            .append('\' in ')
-                            .append(chainString(chainIds))
+                            .append('\' in \'')
+                            .append(chainIds.join(' '))
+                            .append('\'')
                             .toString())
                 }
 
                 chain.add(position, c)
                 chainIds.add(position, cid)
                 iter.remove()
-                LOG.debug("Inserted interceptor '${cid}' at position ${position}")
+                LOG.debug("Inserted element '${cid}' at position ${position}")
                 successful = true
             }
 
             if (successful) {
-                LOG.debug("Iteration result: ${chain.size()} interceptors in the chain, ${unprocessed.size()} interceptors left")
+                LOG.debug("Iteration result: ${chain.size()} elements in the chain, ${unprocessed.size()} elements left")
             } else {
-                throw new ChainException("Cannot build a chain, probably there is a dependency loop in ${chainString(unprocessed)}")
+                throw new ChainException("Cannot build a chain, probably there is a dependency loop in '${unprocessed*.id.join(' ')}'")
             }
         }
 
         return chain
-    }
-
-
-    /**
-     * Returns string representation of the given collection
-     * of interceptors or interceptor IDs.
-     * @param collection
-     *      list of interceptors or interceptor IDs.
-     * @return
-     *      string representation of the given list.
-     */
-    static String chainString(Collection collection) {
-        if (! collection) {
-            return ''
-        }
-
-        if (collection[0] instanceof Chainable) {
-            return chainString(collection*.id)
-        }
-
-        return "'${collection.join(' ')}'"
     }
 
 }
