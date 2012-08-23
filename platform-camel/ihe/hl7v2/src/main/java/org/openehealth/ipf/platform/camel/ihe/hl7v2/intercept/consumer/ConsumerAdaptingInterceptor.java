@@ -125,8 +125,8 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
      */
     @SuppressWarnings("rawtypes")
     private MessageAdapter analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) {
-        Object header = m.getHeader(ACK_TYPE_CODE_HEADER, AckTypeCode.class);
-        if (header == null) {
+        Object header = m.getHeader(ACK_TYPE_CODE_HEADER);
+        if ((header == null) || ! (header instanceof AckTypeCode)) {
             return null;
         }
 

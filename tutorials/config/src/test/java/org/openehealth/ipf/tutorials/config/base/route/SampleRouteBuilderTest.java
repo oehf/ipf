@@ -56,19 +56,19 @@ public class SampleRouteBuilderTest {
     @Test
     public void testReverse() throws Exception {
         mockFile.expectedMessageCount(1);
-        String s = "BLAH";
-        Object o = producerTemplate.requestBody(JETTY_URI + "/reverse", s);
-        assertEquals("reversed response: HALB", o.toString());
+        String request = "BLAH";
+        String response = producerTemplate.requestBody(JETTY_URI + "/reverse", request, String.class);
+        assertEquals("reversed response: HALB", response);
         mockFile.assertIsSatisfied();
-        assertEquals(s, mockFile.getExchanges().get(0).getIn().getBody(String.class));
+        assertEquals(request, mockFile.getExchanges().get(0).getIn().getBody(String.class));
     }
 
     @Test
     public void testMap() throws Exception {
         mockFile.expectedMessageCount(1);        
         String hl7 = IOUtils.toString(this.getClass().getResourceAsStream("/message.hl7"));
-        Object o = producerTemplate.requestBody(JETTY_URI + "/map", hl7);
-        assertTrue(o.toString().contains("Nachname||W|||Blahplatz"));
+        String response = producerTemplate.requestBody(JETTY_URI + "/map", hl7, String.class);
+        assertTrue(response.contains("Nachname||W|||Blahplatz"));
         mockFile.assertIsSatisfied();
     }
     

@@ -606,11 +606,6 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     }
 
     @Override
-    public Class<Exchange> getExchangeType() {
-        return wrappedEndpoint.getExchangeType();
-    }
-
-    @Override
     public int hashCode() {
         return wrappedEndpoint.hashCode();
     }
