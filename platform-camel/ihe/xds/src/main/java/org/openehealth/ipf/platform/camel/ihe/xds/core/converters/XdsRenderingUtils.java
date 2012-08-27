@@ -54,6 +54,7 @@ abstract public class XdsRenderingUtils {
                 /* ITI-41 */   org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet.class,
                 /* ITI-42 */   org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet.class,
                 /* ITI-43 */   org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet.class,
+                /* RAD-69 */   org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet.class,
 
                 // responses
                 /* ITI-14 */   org.openehealth.ipf.commons.ihe.xds.core.responses.Response.class,
@@ -74,6 +75,7 @@ abstract public class XdsRenderingUtils {
                 /* ITI-41 */   org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType.class,
                 /* ITI-42 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest.class,
                 /* ITI-43 */   org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType.class,
+                /* RAD-69 */   org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType.class,
 
                 // responses
                 /* ITI-14 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse.class,

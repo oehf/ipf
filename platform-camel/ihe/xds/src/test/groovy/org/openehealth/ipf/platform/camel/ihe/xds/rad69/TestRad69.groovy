@@ -24,6 +24,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.XdsRenderingUtils
+import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.Exchange
 
 /**
  * Tests the RAD-69 transaction with a webservice and client adapter defined via URIs.
@@ -52,7 +55,15 @@ class TestRad69 extends StandardTestContainer {
         request = SampleData.createRetrieveImagingDocumentSet()
         doc = request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().get(0)
     }
-    
+
+    @Test
+    void testRendering() {
+        Exchange exchange = new DefaultExchange(camelContext)
+        exchange.in.body = request
+        String rendered = XdsRenderingUtils.render(exchange)
+        assert rendered.contains('RetrieveImagingDocumentSetRequest>')
+    }
+
     @Test
     void testRad69() {
         def response1 = sendIt(SERVICE1, 'service 1')
