@@ -78,7 +78,7 @@ class Iti47TestRouteBuilder extends SpringRouteBuilder {
 
         from('pdqv3-iti47:pdqv3-iti47-serviceIntercept')
             .process {
-                Exchanges.resultMessage(it).body = '<response from="PDSupplier"/>'
+                Exchanges.resultMessage(it).body = '<PRPA_IN201306UV02 xmlns="urn:hl7-org:v3" from="PDSupplier"/>'
             }
 
 

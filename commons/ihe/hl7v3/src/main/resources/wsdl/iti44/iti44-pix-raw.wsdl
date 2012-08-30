@@ -24,25 +24,28 @@
     <documentation>IHE PIX Manager = ITI-44 adaptor = PIX Feed v3</documentation>
 
     <types>
-        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:ihe:iti:pixv3:2007">
-            <xsd:element name="rawData" type="xsd:anyType"/>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+            <xsd:element name="PRPA_IN201301UV02" type="xsd:anyType"/>
+            <xsd:element name="PRPA_IN201302UV02" type="xsd:anyType"/>
+            <xsd:element name="PRPA_IN201304UV02" type="xsd:anyType"/>
+            <xsd:element name="MCCI_IN000002UV01" type="xsd:anyType"/>
         </xsd:schema>
     </types>
 
     <message name="PRPA_IN201301UV02_Message">
-        <part name="Body" element="ihe:rawData"/>
+        <part name="Body" element="hl7:PRPA_IN201301UV02"/>
     </message>
 
     <message name="PRPA_IN201302UV02_Message">
-        <part name="Body" element="ihe:rawData"/>
+        <part name="Body" element="hl7:PRPA_IN201302UV02"/>
     </message>
 
     <message name="PRPA_IN201304UV02_Message">
-        <part name="Body" element="ihe:rawData"/>
+        <part name="Body" element="hl7:PRPA_IN201304UV02"/>
     </message>
 
     <message name="MCCI_IN000002UV01_Message">
-        <part name="Body" element="ihe:rawData"/>
+        <part name="Body" element="hl7:MCCI_IN000002UV01"/>
     </message>
 
     <portType name="PIXManager_PortType">

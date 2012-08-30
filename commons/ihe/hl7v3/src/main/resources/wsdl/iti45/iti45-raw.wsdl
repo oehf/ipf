@@ -24,17 +24,18 @@
     <documentation>IHE PIX v3 Manager = ITI-45 adaptor = PIX Query v3</documentation>
 
     <types>
-        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:ihe:iti:pixv3:2007">
-            <xsd:element name="rawData" type="xsd:anyType"/>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+            <xsd:element name="PRPA_IN201309UV02" type="xsd:anyType"/>
+            <xsd:element name="PRPA_IN201310UV02" type="xsd:anyType"/>
         </xsd:schema>
     </types>
 
     <message name="PRPA_IN201309UV02_Message">
-        <part name="Body" element="ihe:rawData"/>
+        <part name="Body" element="hl7:PRPA_IN201309UV02"/>
     </message>
 
     <message name="PRPA_IN201310UV02_Message">
-        <part name="Body" element="ihe:rawData"/>
+        <part name="Body" element="hl7:PRPA_IN201310UV02"/>
     </message>
 
     <portType name="PIXManager_PortType">

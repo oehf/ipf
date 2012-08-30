@@ -14,7 +14,7 @@
         name="InitiatingGateway"
         targetNamespace="urn:ihe:iti:xcpd:2009"
         xmlns:xcpd="urn:ihe:iti:xcpd:2009" 
-        xmlns:hl7v3="urn:hl7-org:v3"
+        xmlns:hl7="urn:hl7-org:v3"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
@@ -26,13 +26,13 @@
     </documentation>
     
     <types>
-        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:ihe:iti:xcpd:2009">
-            <xsd:element name="rawData" type="xsd:anyType" />
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+            <xsd:element name="PRPA_IN201306UV02" type="xsd:anyType" />
         </xsd:schema>
     </types>
     
     <message name="PRPA_IN201306UV02_Message">
-        <part name="Body" element="xcpd:rawData" />
+        <part name="Body" element="hl7:PRPA_IN201306UV02" />
     </message>
 
     <portType name="InitiatingGateway_PortType">
