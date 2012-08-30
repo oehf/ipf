@@ -14,7 +14,7 @@
         name="ClinicalDataSource"
         targetNamespace="urn:ihe:pcc:qed:2007"
         xmlns:qed="urn:ihe:pcc:qed:2007"
-        xmlns:hl7v3="urn:hl7-org:v3"
+        xmlns:hl7="urn:hl7-org:v3"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         xmlns:wsoap11="http://schemas.xmlsoap.org/wsdl/soap/"
@@ -25,25 +25,29 @@
     <documentation>IHE Patient Care Coordination (PCC) Query for Existing Data (QED) = PCC-1</documentation>
 
     <types>
-        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:ihe:pcc:qed:2007">
-            <xsd:element name="rawData" type="xsd:anyType"/>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+            <xsd:element name="QUPC_IN043100UV01"        type="xsd:anyType"/>
+            <xsd:element name="QUPC_IN043200UV01"        type="xsd:anyType"/>
+            <xsd:element name="QUQI_IN000003UV01"        type="xsd:anyType"/>
+            <xsd:element name="QUQI_IN000003UV01_Cancel" type="xsd:anyType"/>
+            <xsd:element name="MCCI_IN000002UV01"        type="xsd:anyType"/>
         </xsd:schema>
     </types>
 
     <message name="QUPC_IN043100UV01_Message">
-        <part name="Body" element="qed:rawData"/>
+        <part name="Body" element="hl7:QUPC_IN043100UV01"/>
     </message>
     <message name="QUPC_IN043200UV01_Message">
-        <part name="Body" element="qed:rawData"/>
+        <part name="Body" element="hl7:QUPC_IN043200UV01"/>
     </message>
     <message name="QUQI_IN000003UV01_Message">
-        <part name="Body" element="qed:rawData"/>
+        <part name="Body" element="hl7:QUQI_IN000003UV01"/>
     </message>
     <message name="QUQI_IN000003UV01_Cancel_Message">
-        <part name="Body" element="qed:rawData"/>
+        <part name="Body" element="hl7:QUQI_IN000003UV01_Cancel"/>
     </message>
     <message name="MCCI_IN000002UV01_Message">
-        <part name="Body" element="qed:rawData"/>
+        <part name="Body" element="hl7:MCCI_IN000002UV01"/>
     </message>
 
     <portType name="ClinicalDataSource_PortType">

@@ -58,7 +58,7 @@ class TestIti45 extends StandardTestContainer {
 
     @Test
     void testIti45XmlProcessing() {
-        def response = send(SERVICE2, '<request/>', String.class)
+        def response = send(SERVICE2, '<PRPA_IN201309UV02 xmlns="urn:hl7-org:v3"/>', String.class)
         def slurper = new XmlSlurper().parseText(response)
         assert slurper.@from == 'PIX Manager'
     }
@@ -66,7 +66,7 @@ class TestIti45 extends StandardTestContainer {
 
     @Test
     void testDatatypes() {
-        String request = '<request/>'
+        String request = '<PRPA_IN201309UV02 xmlns="urn:hl7-org:v3"/>'
 
         // String
         send(SERVICE2, request, String.class)

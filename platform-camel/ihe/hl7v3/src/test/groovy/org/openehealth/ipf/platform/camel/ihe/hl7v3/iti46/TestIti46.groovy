@@ -63,7 +63,7 @@ class TestIti46 extends StandardTestContainer {
     @Test
     void testCharsets() {
         def exchange = new DefaultExchange(camelContext)
-        exchange.in.body = '<request/>'
+        exchange.in.body = '<PRPA_IN201302UV02 xmlns="urn:hl7-org:v3"/>'
         exchange.properties[Exchange.CHARSET_NAME] = "koi8-r"
         Exchange result = producerTemplate.send(SERVICE_CHARSET, exchange)
         if (result.exception) {

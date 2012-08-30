@@ -43,7 +43,7 @@ class Iti46TestRouteBuilder extends SpringRouteBuilder {
                     throw new RuntimeException('KOI-8 character set expected')
                 }
                 it.properties[Exchange.CHARSET_NAME] = 'Windows-1251'
-                Exchanges.resultMessage(it).body = '<response from="PIX Consumer"/>'
+                Exchanges.resultMessage(it).body = '<MCCI_IN000002UV01 xmlns="urn:hl7-org:v3" from="PIX Consumer"/>'
             }
     }
 }

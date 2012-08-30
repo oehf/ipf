@@ -42,7 +42,7 @@ class Iti45TestRouteBuilder extends SpringRouteBuilder {
                 Exchanges.resultMessage(it).body = '''
                     <!-- comment 1 -->
                     <!-- comment 2 -->
-                    <response from="PIX Manager"/>
+                    <PRPA_IN201310UV02 xmlns="urn:hl7-org:v3" from="PIX Manager"/>
                     <!-- comment 3 -->
                 '''
             }

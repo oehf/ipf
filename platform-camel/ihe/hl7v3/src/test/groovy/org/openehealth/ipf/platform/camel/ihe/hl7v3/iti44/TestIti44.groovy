@@ -188,13 +188,13 @@ class TestIti44 extends StandardTestContainer {
         }).consumer
         
         // consumer is not yet stopped and should be still able to serve requests
-        send(SERVICE1_PIX, '<PRPA_IN201301UV02 />', String.class)
+        send(SERVICE1_PIX, '<PRPA_IN201301UV02 xmlns="urn:hl7-org:v3"/>', String.class)
         
         // stop and check whether actually deactivated
         consumer.stop()
         boolean failed = false
         try {
-            send(SERVICE1_PIX, '<PRPA_IN201301UV02 />', String.class)
+            send(SERVICE1_PIX, '<PRPA_IN201301UV02  xmlns="urn:hl7-org:v3"/>', String.class)
         } catch (Exception e) {
             failed = true
         }
@@ -202,7 +202,7 @@ class TestIti44 extends StandardTestContainer {
         
         // restart and check whether actually reactivated
         consumer.start()
-        send(SERVICE1_PIX, '<PRPA_IN201301UV02 />', String.class)
+        send(SERVICE1_PIX, '<PRPA_IN201301UV02  xmlns="urn:hl7-org:v3"/>', String.class)
     }
     
 }

@@ -113,7 +113,7 @@ class TestIti47 extends StandardTestContainer {
     
     @Test
     void testCustomInterceptors() {
-        String responseString = send(SERVICE_INTERCEPT, '<PRPA_IN201305UV02 />', String.class)
+        String responseString = send(SERVICE_INTERCEPT, '<PRPA_IN201305UV02 xmlns="urn:hl7-org:v3"/>', String.class)
         def response = Hl7v3Utils.slurp(responseString)
         assert response.@from == 'PDSupplier'
         
