@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
@@ -110,9 +111,9 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
 
         // unable to create a MessageAdaper :-(
         if(msg == null) {
-            String className = (body == null) ? "null" : body.getClass().getName();
             throw new Hl7v2AdaptingException("Cannot create HL7v2 message from " +
-                    className + " returned from the route");
+                    ClassUtils.getSimpleName(body, "<null>") +
+                    " returned from the route");
         }
         
         m.setBody(msg);
