@@ -19,6 +19,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.endpoint.ClientImpl;
@@ -109,11 +110,8 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
         // get and analyse WS-Addressing asynchrony configuration
         String replyToUri =
                 getWsTransactionConfiguration().isAllowAsynchrony()
-                    ? exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class)
+                    ? StringUtils.trimToNull(exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class))
                     : null; 
-        if ((replyToUri != null) && replyToUri.trim().isEmpty()) {
-            replyToUri = null;
-        }
 
         // for asynchronous interaction: configure WSA headers and store correlation data
         if ((replyToUri != null) ||

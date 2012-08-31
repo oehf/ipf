@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
+import org.apache.commons.lang3.ClassUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
@@ -73,9 +74,8 @@ public class ProducerAdaptingInterceptor extends AbstractHl7v2Interceptor {
                 getHl7v2TransactionConfiguration().getParser());
         
         if (msg == null) {
-            Object body = exchange.getIn().getBody();
-            String className = (body == null) ? "null" : body.getClass().getName();
-            throw new Hl7v2AdaptingException("Cannot create HL7v2 message from the given " + className);
+            throw new Hl7v2AdaptingException("Cannot create HL7v2 message from the given " +
+                    ClassUtils.getSimpleName(exchange.getIn().getBody(), "<null>"));
         }
         
         exchange.getIn().setBody(msg);
