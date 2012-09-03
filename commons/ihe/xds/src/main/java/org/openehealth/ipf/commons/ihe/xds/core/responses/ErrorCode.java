@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.responses;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
 /**
  * Error codes specified by the XDS specification.
  * @author Jens Riemschneider
@@ -50,6 +51,9 @@ public enum ErrorCode {
     /** Document being registered was a duplicate (unique ID already in registry) but the hash codes 
      *  do not match. The code context indicates the unique ID. */
     @XmlEnumValue("XDSNonIdenticalHash") NON_IDENTICAL_HASH("XDSNonIdenticalHash"),
+    /** Document being registered was a duplicate (uniqueId already in registry)
+     *  but size does not match. CodeContext indicates UniqueId. */
+    @XmlEnumValue("XDSNonIdenticalSize") NON_IDENTICAL_SIZE("XDSNonIdenticalSize"),
     /** Too much activity in the registry to process the request. */
     @XmlEnumValue("XDSRegistryBusy") REGISTRY_BUSY("XDSRegistryBusy"),
     /** Too much activity in the repository to process the request. */
@@ -88,17 +92,30 @@ public enum ErrorCode {
     /** The unique ID of a repository could not be resolved to a valid document repository
      *  or the value does not match that of the document repository. */
     @XmlEnumValue("XDSUnknownRepositoryId") UNKNOWN_REPOSITORY_ID("XDSUnknownRepositoryId"),
-    /** The document associated with the DocumentUniqueId is not available.*/
+    /** The document associated with the DocumentUniqueId is not available. */
     @XmlEnumValue("XDSDocumentUniqueIdError") DOCUMENT_UNIQUE_ID_ERROR("XDSDocumentUniqueIdError"),
-    /** A query resulted in returning information about multiple patients, which is forbidden
-     *  because of security reasons. */ 
+    /** A query resulted in returning information about multiple patients,
+     *  which is forbidden because of security reasons. */
     @XmlEnumValue("XDSResultNotSinglePatient") RESULT_NOT_SINGLE_PATIENT("XDSResultNotSinglePatient"),
+
+    /* --- codes for XDR --- */
     /** An XDR Document Recipient did not process some part of the content.
-      * Specifically the parts not processed are Folder semantics */
+     *  Specifically the parts not processed are Folder semantics. */
     @XmlEnumValue("PartialFolderContentNotProcessed") PARTIAL_FOLDER_CONTENT_NOT_PROCESSED("PartialFolderContentNotProcessed"),
     /** An XDR Document Recipient did not process some part of the content.
-      * Specifically the parts not processed are Replacement semantics */
+     *  Specifically the parts not processed are Replacement semantics. */
     @XmlEnumValue("PartialReplaceContentNotProcessed") PARTIAL_REPLACE_CONTENT_NOT_PROCESSED("PartialReplaceContentNotProcessed"),
+    /** An XDR Document Recipient did not process some part of the content.
+     *  Specifically the parts not processed are Transform semantics. */
+    @XmlEnumValue("PartialTransformNotProcessed") PARTIAL_TRANSFORM_NOT_PROCESSED("PartialTransformNotProcessed"),
+    /** An XDR Document Recipient did not process some part of the content.
+     *  Specifically the parts not processed are Append semantics. */
+    @XmlEnumValue("PartialAppendContentNotProcessed") PARTIAL_APPEND_CONTENT_NOT_PROCESSED("PartialAppendContentNotProcessed"),
+    /** An XDR Document Recipient did not process some part of the content.
+     *  Specifically the parts not processed are Transform and Replace semantics. */
+    @XmlEnumValue("PartialTransformReplaceNotProcessed") PARTIAL_TRANSFORM_REPLACE_NOT_PROCESSED("PartialTransformReplaceNotProcessed"),
+    /** An XDR Recipient queued the document for future manual matching to a patient. */
+    @XmlEnumValue("DocumentQueued") DOCUMENT_QUEUED("DocumentQueued"),
 
     /* --- codes for XCA --- */
     /** A value for the homeCommunityId is not recognized */
