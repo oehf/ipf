@@ -19,10 +19,8 @@ import static org.apache.commons.lang3.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 
 import java.util.ArrayList;
@@ -85,6 +83,17 @@ public class AuthorTransformer {
         classification.addSlot(SLOT_NAME_AUTHOR_SPECIALTY,
                 author.getAuthorSpecialty().toArray(new String[author.getAuthorSpecialty().size()]));
         
+        List<String> hl7XTNs = new ArrayList<String>();
+        for (Telecom telecom : author.getAuthorTelecom()) {
+            String hl7 = Hl7v2Based.render(telecom);
+            if (hl7 != null) {
+                hl7XTNs.add(hl7);
+            }
+        }
+
+        classification.addSlot(SLOT_NAME_AUTHOR_TELECOM,
+                hl7XTNs.toArray(new String[hl7XTNs.size()]));
+
         return classification;
     }
     
@@ -103,7 +112,8 @@ public class AuthorTransformer {
         List<String> institutions = classification.getSlotValues(SLOT_NAME_AUTHOR_INSTITUTION);
         List<String> roles = classification.getSlotValues(SLOT_NAME_AUTHOR_ROLE);
         List<String> specialties = classification.getSlotValues(SLOT_NAME_AUTHOR_SPECIALTY);
-        
+        List<String> telecoms = classification.getSlotValues(SLOT_NAME_AUTHOR_TELECOM);
+
         Person person = null;
         if (persons.size() > 0) {
             person = Hl7v2Based.parse(persons.get(0), Person.class);
@@ -111,16 +121,23 @@ public class AuthorTransformer {
         
         Author author = new Author();        
         author.setAuthorPerson(person);
-        
+        author.getAuthorRole().addAll(roles);
+        author.getAuthorSpecialty().addAll(specialties);
+
         for (String hl7XON : institutions) {
             Organization org = Hl7v2Based.parse(hl7XON, Organization.class);
             if (org != null) {
                 author.getAuthorInstitution().add(org);
             }
         }
-        author.getAuthorRole().addAll(roles);
-        author.getAuthorSpecialty().addAll(specialties);
-        
+
+        for (String hl7XTN : telecoms) {
+            Telecom telecom = Hl7v2Based.parse(hl7XTN, Telecom.class);
+            if (telecom != null) {
+                author.getAuthorTelecom().add(telecom);
+            }
+        }
+
         return author;
     }
 }

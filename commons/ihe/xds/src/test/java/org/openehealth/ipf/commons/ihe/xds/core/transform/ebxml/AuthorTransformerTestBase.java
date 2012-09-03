@@ -69,6 +69,9 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         
         author.getAuthorSpecialty().add("spec1");
         author.getAuthorSpecialty().add("spec2");
+
+        author.getAuthorTelecom().add(new Telecom("5.25 in", "Floppynet"));
+        author.getAuthorTelecom().add(new Telecom("2:465/46.40", "Fidonet"));
     }
     
     @Test
@@ -79,7 +82,7 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         assertEquals("", ebXML.getNodeRepresentation());
         
         List<EbXMLSlot> slots = ebXML.getSlots();
-        assertEquals(4, slots.size());
+        assertEquals(5, slots.size());
         
         assertEquals(Vocabulary.SLOT_NAME_AUTHOR_PERSON, slots.get(0).getName());
         assertEquals("123^Adams^^^^^^^&1.2.840.113619.6.197&ISO", slots.get(0).getValueList().get(0));
@@ -92,6 +95,9 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
 
         assertEquals(Vocabulary.SLOT_NAME_AUTHOR_SPECIALTY, slots.get(3).getName());
         assertEquals(Arrays.asList("spec1", "spec2"), slots.get(3).getValueList());
+
+        assertEquals(Vocabulary.SLOT_NAME_AUTHOR_TELECOM, slots.get(4).getName());
+        assertEquals(Arrays.asList("^^Floppynet^5.25 in", "^^Fidonet^2:465/46.40"), slots.get(4).getValueList());
     }
     
     @Test

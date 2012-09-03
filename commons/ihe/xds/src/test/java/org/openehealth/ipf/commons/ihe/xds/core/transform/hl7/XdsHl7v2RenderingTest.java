@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Telecom;
+import static org.junit.Assert.*;
 
 /**
  * @author Dmytro Rud
@@ -28,19 +29,27 @@ public class XdsHl7v2RenderingTest {
 
     @Test
     public void testCodeRendering() {
-        check("a",  "b",  "c",  "a^^c");
-        check("a",  "b",  null, "a");
-        check("a", null,  "c",  "a^^c");
-        check("a", null,  null, "a");
-        check(null, "b",  "c",  "^^c");
-        check(null, "b",  null, null);
-        check(null, null, "c",  "^^c");
-        check(null, null, null, null);
+        doCheckCodeRendering("a", "b", "c", "a^^c");
+        doCheckCodeRendering("a", "b", null, "a");
+        doCheckCodeRendering("a", null, "c", "a^^c");
+        doCheckCodeRendering("a", null, null, "a");
+        doCheckCodeRendering(null, "b", "c", "^^c");
+        doCheckCodeRendering(null, "b", null, null);
+        doCheckCodeRendering(null, null, "c", "^^c");
+        doCheckCodeRendering(null, null, null, null);
     }
 
-    private static void check(String id, String displayName, String schemeName, String expected) {
+    private static void doCheckCodeRendering(String id, String displayName, String schemeName, String expected) {
         Code code = new Code(id, new LocalizedString(displayName), schemeName);
         String rendered = Hl7v2Based.render(code);
-        Assert.assertEquals(expected, rendered);
+        assertEquals(expected, rendered);
+    }
+
+    @Test
+    public void testTelecomRendering() {
+        String xtn = "1^2^3^4^5^6^7^8^9^0^a^b^c^d^^^";
+        Telecom telecom = Hl7v2Based.parse(xtn, Telecom.class);
+        assertEquals("^^3^4", Hl7v2Based.render(telecom));
+        assertEquals("1^2^3^4^5^6^7^8^9^0^a^b^c^d", Hl7v2Based.rawRender(telecom));
     }
 }

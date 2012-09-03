@@ -20,6 +20,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -33,12 +36,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Recipient", propOrder = {"person", "organization"})
+@XmlType(name = "Recipient", propOrder = {"person", "organization", "telecom"})
+@EqualsAndHashCode(doNotUseGetters = true)
 public class Recipient implements Serializable {
     private static final long serialVersionUID = -8192511869759795939L;
-    
-    private Person person;
-    private Organization organization;
+
+    @Getter @Setter private Person person;
+    @Getter @Setter private Organization organization;
+    @Getter @Setter private Telecom telecom;
 
     /**
      * Constructs a recipient.
@@ -51,72 +56,27 @@ public class Recipient implements Serializable {
      *          the organization.
      * @param person
      *          the person.
+     * @deprecated please use {@link #Recipient(Organization, Person, Telecom)} instead.
      */
+    @Deprecated
     public Recipient(Organization organization, Person person) {
-        this.organization = organization;
-        this.person = person;
+        this(organization, person, null);
     }
 
     /**
-     * @return the person.
-     */
-    public Person getPerson() {
-        return person;
-    }
-
-    /**
-     * @param person
-     *          the person.
-     */
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
-    /**
-     * @return the organization.
-     */
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    /**
+     * Constructs a recipient.
      * @param organization
      *          the organization.
+     * @param person
+     *          the person.
+     * @param telecom
+     *          telecommunication address.
      */
-    public void setOrganization(Organization organization) {
+    public Recipient(Organization organization, Person person, Telecom telecom) {
         this.organization = organization;
+        this.person = person;
+        this.telecom = telecom;
     }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((organization == null) ? 0 : organization.hashCode());
-        result = prime * result + ((person == null) ? 0 : person.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Recipient other = (Recipient) obj;
-        if (organization == null) {
-            if (other.organization != null)
-                return false;
-        } else if (!organization.equals(other.organization))
-            return false;
-        if (person == null) {
-            if (other.person != null)
-                return false;
-        } else if (!person.equals(other.person))
-            return false;
-        return true;
-    }    
 
     @Override
     public String toString() {

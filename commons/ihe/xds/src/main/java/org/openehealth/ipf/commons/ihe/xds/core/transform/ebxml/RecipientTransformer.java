@@ -15,10 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Recipient;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 /**
  * Transforms between a {@link Recipient} and its ebXML representation.
@@ -42,16 +39,27 @@ public class RecipientTransformer {
         
         String person = Hl7v2Based.render(recipient.getPerson());
         String organization = Hl7v2Based.render(recipient.getOrganization());
-        
-        if (person == null) {
-            return organization;
+        String telecom = Hl7v2Based.render(recipient.getTelecom());
+
+        if ((person == null) && (organization == null) && (telecom == null)) {
+            return null;
         }
-        
-        if (organization == null) {
-            return "|" + person;
+
+        StringBuilder sb = new StringBuilder();
+        if (organization != null) {
+            sb.append(organization);
         }
-        
-        return organization + "|" + person;
+        if ((person != null) || (telecom != null)) {
+            sb.append('|');
+            if (person != null) {
+                sb.append(person);
+            }
+            if (telecom != null) {
+                sb.append('|').append(telecom);
+            }
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -71,6 +79,9 @@ public class RecipientTransformer {
         recipient.setOrganization(Hl7v2Based.parse(parts[0], Organization.class));
         if (parts.length > 1) {
             recipient.setPerson(Hl7v2Based.parse(parts[1], Person.class));
+        }
+        if (parts.length > 2) {
+            recipient.setTelecom(Hl7v2Based.parse(parts[2], Telecom.class));
         }
 
         return recipient;

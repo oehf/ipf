@@ -35,7 +35,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Author", propOrder = {"authorPerson", "authorInstitution", "authorSpecialty", "authorRole"})
+@XmlType(name = "Author", propOrder = {"authorPerson", "authorInstitution",
+        "authorSpecialty", "authorRole", "authorTelecom"})
 public class Author implements Serializable {
     private static final long serialVersionUID = 6731221295927724760L;
     
@@ -43,6 +44,7 @@ public class Author implements Serializable {
     private final List<Organization> authorInstitution = new ArrayList<Organization>();
     private final List<String> authorRole = new ArrayList<String>(); 
     private final List<String> authorSpecialty = new ArrayList<String>();
+    private final List<Telecom> authorTelecom = new ArrayList<Telecom>();
 
     /**
      * @return basic information about the author.
@@ -83,6 +85,14 @@ public class Author implements Serializable {
         return authorSpecialty;
     }
 
+    /**
+     * @return the list of author telecommunication addresses.
+     *          Never <code>null</code>, but can be empty.
+     */
+    public List<Telecom> getAuthorTelecom() {
+        return authorTelecom;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -91,6 +101,7 @@ public class Author implements Serializable {
         result = prime * result + ((authorPerson == null) ? 0 : authorPerson.hashCode());
         result = prime * result + ((authorRole == null) ? 0 : authorRole.hashCode());
         result = prime * result + ((authorSpecialty == null) ? 0 : authorSpecialty.hashCode());
+        result = prime * result + ((authorTelecom == null) ? 0 : authorTelecom.hashCode());
         return result;
     }
 
@@ -122,6 +133,11 @@ public class Author implements Serializable {
             if (other.authorSpecialty != null)
                 return false;
         } else if (!authorSpecialty.equals(other.authorSpecialty))
+            return false;
+        if (authorTelecom == null) {
+            if (other.authorTelecom != null)
+                return false;
+        } else if (!authorTelecom.equals(other.authorTelecom))
             return false;
         return true;
     }

@@ -251,7 +251,7 @@ public abstract class SampleData {
         name.setFamilyName("Norbi");
         author.setAuthorPerson(new Person(new Identifiable("id2", new AssigningAuthority("1.2")), name));
         author.getAuthorInstitution().add(new Organization("authorOrg", null, null));
-        
+
         Address address = new Address();
         address.setStreetAddress("hier");
         
@@ -414,9 +414,6 @@ public abstract class SampleData {
         query.setConfidentialityCodes(confidentialityCodes);
         query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
-
-        
-
     }
 
     /**

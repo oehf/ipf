@@ -44,8 +44,8 @@ public class RecipientListValidatorTest {
 //        assertFails(Arrays.<String>asList());
         assertFails(Arrays.asList(""));
         assertFails(Arrays.asList("^LOL"));
-        assertFails(Arrays.asList("Some Hospital|^Welby|"));
-        assertFails(Arrays.asList("|Some Hospital|^Welby"));
+        assertFails(Arrays.asList("Some Hospital|^Welby||"));
+        assertFails(Arrays.asList("|Some Hospital|^Welby|"));
         assertFails(Arrays.asList("Some Hospital", ""));
     }
 

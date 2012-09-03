@@ -56,6 +56,7 @@ abstract public class XdsHl7v2Renderer {
         addInclusion(CX.class,  0, 3);
         addInclusion(HD.class,  1, 2);
         addInclusion(XON.class, 0, 5, 9);
+        addInclusion(XTN.class, 2, 3);
     }
 
 

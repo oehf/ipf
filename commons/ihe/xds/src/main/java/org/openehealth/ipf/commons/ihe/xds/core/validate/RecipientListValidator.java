@@ -23,7 +23,8 @@ import java.util.List;
 
 
 /**
- * Validates a list of recipients containing organizations and/or persons. 
+ * Validates a list of recipients containing organizations and/or persons
+ * and/or telecommunication addresses.
  * @author Jens Riemschneider
  */
 public class RecipientListValidator implements ValueListValidator {
@@ -39,16 +40,14 @@ public class RecipientListValidator implements ValueListValidator {
         for (String value : values) {
             metaDataAssert(!value.isEmpty(), RECIPIENT_EMPTY);
 
-            String[] parts = value.split("\\|", 3);
-            metaDataAssert(parts.length == 1 || parts.length == 2,
-                    INVALID_RECIPIENT, value);
-            
-            String hl7XON = parts[0];
-            if (!hl7XON.isEmpty()) {
-                xonValidator.validate(hl7XON);
+            String[] parts = value.split("\\|", 4);
+            metaDataAssert((parts.length > 0) && (parts.length <= 3), INVALID_RECIPIENT, value);
+
+            if (! parts[0].isEmpty()) {
+                xonValidator.validate(parts[0]);
             }
-            
-            if (parts.length == 2) {
+
+            if ((parts.length > 1) && (! parts[1].isEmpty())) {
                 xcnValidator.validate(parts[1]);
             }
         }
