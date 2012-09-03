@@ -52,7 +52,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final CXValidator cxValidator = new CXValidator();
 
     private final SlotValueValidation[] authorValidations = new SlotValueValidation[] {
-        new SlotValueValidation(SLOT_NAME_AUTHOR_PERSON, xcnValidator),
+        new SlotValueValidation(SLOT_NAME_AUTHOR_PERSON, xcnValidator, 0, 1),
         new SlotValueValidation(SLOT_NAME_AUTHOR_INSTITUTION, xonValidator, 0, Integer.MAX_VALUE),
         new SlotValueValidation(SLOT_NAME_AUTHOR_ROLE, nopValidator, 0, Integer.MAX_VALUE),
         new SlotValueValidation(SLOT_NAME_AUTHOR_SPECIALTY, nopValidator, 0, Integer.MAX_VALUE)};
@@ -92,7 +92,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
                     isContinuaHRN ? 1 : 0, Integer.MAX_VALUE),
             new SlotValidation(SLOT_NAME_URI, uriValidator),
-            new ClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, 0, Integer.MAX_VALUE, OPTIONAL, authorValidations),
+            new AuthorClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, authorValidations),
             new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE,
                                          isContinuaHRN ? REQUIRED : OPTIONAL,
@@ -120,7 +120,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final List<RegistryObjectValidator> submissionSetSlotValidations = Arrays.asList(
         new SlotValidation(SLOT_NAME_INTENDED_RECIPIENT, recipientListValidator),
         new SlotValueValidation(SLOT_NAME_SUBMISSION_TIME, timeValidator),
-        new ClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, 0, Integer.MAX_VALUE, OPTIONAL, authorValidations),
+        new AuthorClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, authorValidations),
         new ClassificationValidation(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
         new ExternalIdentifierValidation(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, cxValidator),
         new ExternalIdentifierValidation(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, oidValidator));

@@ -16,9 +16,11 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
@@ -62,7 +64,9 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         author1.getAuthorRole().add("role2");
         author1.getAuthorSpecialty().add("spec1");
         author1.getAuthorSpecialty().add("spec2");
-        
+        author1.getAuthorTelecom().add(new Telecom("5.25 in", "Floppynet"));
+        author1.getAuthorTelecom().add(new Telecom("2:465/46.40", "Fidonet"));
+
         Author author2 = new Author();
         author2.setAuthorPerson(createPerson(30));
         author2.getAuthorInstitution().add(new Organization("inst3"));
@@ -71,7 +75,9 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         author2.getAuthorRole().add("role4");
         author2.getAuthorSpecialty().add("spec3");
         author2.getAuthorSpecialty().add("spec4");
-        
+        author2.getAuthorTelecom().add(new Telecom("3.5 in", "Floppynet"));
+        author2.getAuthorTelecom().add(new Telecom("2:465/168.8", "Fidonet"));
+
         Address address = new Address();
         address.setCity("city");
         address.setCountry("country");
@@ -166,13 +172,15 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
         assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1", "spec2");
-        
+        assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), "^^Floppynet^5.25 in", "^^Fidonet^2:465/46.40");
+
         classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 1, "", -1);
         assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^degree 30^^&uni 30&uniType 30");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst3", "inst4");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role3", "role4");
         assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec3", "spec4");
-        
+        assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), "^^Floppynet^3.5 in", "^^Fidonet^2:465/168.8");
+
         classification = assertClassification(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, ebXML, 0, "code 1", 1);
         assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 1");
         

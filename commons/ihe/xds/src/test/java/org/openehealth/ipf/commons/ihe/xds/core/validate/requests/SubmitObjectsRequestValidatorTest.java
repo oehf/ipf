@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndReg
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
@@ -327,7 +328,7 @@ public class SubmitObjectsRequestValidatorTest {
     @Test    
     public void testInvalidRecipient() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE).get(0).getSlots(Vocabulary.SLOT_NAME_INTENDED_RECIPIENT).get(0).getValueList().add("||");
+        ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE).get(0).getSlots(Vocabulary.SLOT_NAME_INTENDED_RECIPIENT).get(0).getValueList().add("|||");
         expectFailure(INVALID_RECIPIENT, ebXML);
     }
     
@@ -433,7 +434,29 @@ public class SubmitObjectsRequestValidatorTest {
         docEntry.setRepositoryUniqueId(null);
         expectFailure(WRONG_NUMBER_OF_SLOT_VALUES);
     }
-    
+
+    @Test
+    public void testAuthorValidation() {
+        request.getSubmissionSet().getAuthors().clear();
+        EbXMLProvideAndRegisterDocumentSetRequest ebXml = transformer.toEbXML(request);
+        new ObjectContainerValidator().validate(ebXml, profile);
+
+        Author author = new Author();
+        author.getAuthorRole().add("clown");
+        request.getSubmissionSet().setAuthor(author);
+        ebXml = transformer.toEbXML(request);
+
+        boolean failed = false;
+        try {
+            new ObjectContainerValidator().validate(ebXml, profile);
+        } catch (XDSMetaDataException e) {
+            failed = true;
+        }
+
+        assertTrue(failed);
+    }
+
+
     private void expectFailure(ValidationMessage expectedMessage) {
         expectFailure(expectedMessage, transformer.toEbXML(request));
     }
