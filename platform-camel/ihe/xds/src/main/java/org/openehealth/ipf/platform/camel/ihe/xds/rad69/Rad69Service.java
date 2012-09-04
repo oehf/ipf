@@ -38,9 +38,10 @@ public class Rad69Service extends AbstractWebService implements Rad69PortType {
     @Override
     public RetrieveDocumentSetResponseType documentRepositoryRetrieveImagingDocumentSet(RetrieveImagingDocumentSetRequestType body) {
         Exchange result = process(body);
-        if (result.getException() != null) {
-            log.debug("RAD-69 service failed", result.getException());
-            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("RAD-69 service failed", exception);
+            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(exception, ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
         

@@ -165,8 +165,9 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
                     responseEndpoint.setAllowIncompleteAudit(endpoint.isAllowIncompleteAudit());
 
                     exchange = producerTemplate.send(responseEndpoint, exchange);
-                    if (exchange.isFailed()) {
-                        LOG.error("Sending deferred response failed", exchange.getException());
+                    Exception exception = Exchanges.extractException(exchange);
+                    if (exception != null) {
+                        LOG.error("Sending deferred response failed", exception);
                     }
                }
             };
@@ -191,8 +192,9 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
     private String doProcess0(String requestString, GPathResult requestXml) {
         Exchange result = process(requestString);
-        return (result.getException() != null) ?
-            nak(result.getException(), requestXml) :
+        Exception exception = Exchanges.extractException(result);
+        return (exception != null) ?
+            nak(exception, requestXml) :
             Exchanges.resultMessage(result).getBody(String.class);
     }
 

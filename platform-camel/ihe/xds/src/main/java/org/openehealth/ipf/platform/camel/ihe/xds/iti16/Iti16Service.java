@@ -38,9 +38,10 @@ public class Iti16Service extends AbstractWebService implements Iti16PortType {
     @Override
     public RegistryResponse documentRegistryQueryRegistry(AdhocQueryRequest body) {
         Exchange result = process(body);
-        if (result.getException() != null) {
-            log.debug("ITI-16 service failed", result.getException());
-            QueryResponse errorResponse = new QueryResponse(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-16 service failed", exception);
+            QueryResponse errorResponse = new QueryResponse(exception, ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML21Converters.convert(errorResponse);
         }
         

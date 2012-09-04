@@ -41,10 +41,11 @@ public class Iti63Service extends AbstractWebService implements Iti63PortType {
     @Override
     public AdhocQueryResponse crossGatewayFetch(AdhocQueryRequest body) {
         Exchange result = process(body);
-        if (result.getException() != null) {
-            log.debug("ITI-63 service failed", result.getException());
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-63 service failed", exception);
             QueryResponse errorResponse = new QueryResponse(
-                    result.getException(),
+                    exception,
                     ErrorCode.REGISTRY_METADATA_ERROR,
                     ErrorCode.REGISTRY_ERROR,
                     endpoint.getHomeCommunityId());

@@ -37,9 +37,10 @@ public class Iti61Service extends AbstractWebService implements Iti61PortType {
     @Override
     public RegistryResponseType documentRegistryRegisterOnDemandDocumentEntry(SubmitObjectsRequest body) {
         Exchange result = process(body, XdsJaxbDataBinding.getMap(body), ExchangePattern.InOut);
-        if (result.getException() != null) {
-            log.debug("ITI-61 service failed", result.getException());
-            Response errorResponse = new Response(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-61 service failed", exception);
+            Response errorResponse = new Response(exception, ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
         

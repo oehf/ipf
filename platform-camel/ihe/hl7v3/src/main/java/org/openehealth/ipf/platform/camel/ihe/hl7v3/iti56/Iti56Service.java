@@ -32,9 +32,10 @@ public class Iti56Service extends AbstractWebService implements Iti56PortType {
     @Override
     public String locatePatients(String request) {
         Exchange result = process(request);
-        if (result.getException() != null) {
-            log.debug("ITI-56 service failed", result.getException());
-            throw new Fault(result.getException());
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-56 service failed", exception);
+            throw new Fault(exception);
         }
         
         return Exchanges.resultMessage(result).getBody(String.class);
