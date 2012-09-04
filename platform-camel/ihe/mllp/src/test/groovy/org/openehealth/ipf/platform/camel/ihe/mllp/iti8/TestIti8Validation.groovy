@@ -70,6 +70,6 @@ class TestIti8Validation extends MllpTestContainer {
         def endpointUri = 'pix-iti8://localhost:18089?audit=false'
         def body = getMessageString('ADT^A01', '2.3.1', false)
         def msg = send(endpointUri, body)
-        assertACK(msg)
+        assertNAK(msg)
     }
 }

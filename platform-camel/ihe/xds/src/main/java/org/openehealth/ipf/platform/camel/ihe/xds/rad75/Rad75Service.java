@@ -42,10 +42,11 @@ public class Rad75Service extends AbstractWebService implements Rad75PortType {
     @Override
     public RetrieveDocumentSetResponseType documentRepositoryRetrieveImagingDocumentSet(RetrieveImagingDocumentSetRequestType body) {
         Exchange result = process(body);
-        if (result.getException() != null) {
-            log.debug("RAD-75 service failed", result.getException());
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("RAD-75 service failed", exception);
             RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(
-                    result.getException(),
+                    exception,
                     ErrorCode.REPOSITORY_METADATA_ERROR,
                     ErrorCode.REPOSITORY_ERROR,
                     endpoint.getHomeCommunityId());

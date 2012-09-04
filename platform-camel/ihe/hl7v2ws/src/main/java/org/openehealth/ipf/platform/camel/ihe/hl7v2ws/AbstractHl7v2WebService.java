@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
@@ -80,8 +81,9 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
         // play the route, handle its outcomes and check response acceptance
         try {
             Exchange exchange = super.process(msg);
-            if (exchange.getException() != null) {
-                throw exchange.getException();
+            Exception exception = Exchanges.extractException(exchange);
+            if (exception != null) {
+                throw exception;
             }
 
             // check response existence and acceptance

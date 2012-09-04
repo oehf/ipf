@@ -38,9 +38,10 @@ public class Iti43Service extends AbstractWebService implements Iti43PortType {
     @Override
     public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
         Exchange result = process(body);
-        if (result.getException() != null) {
-            log.debug("ITI-43 service failed", result.getException());
-            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-43 service failed", exception);
+            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(exception, ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
         

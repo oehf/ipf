@@ -40,9 +40,10 @@ public class Iti41Service extends AbstractWebService implements Iti41PortType {
     @Override
     public RegistryResponseType documentRepositoryProvideAndRegisterDocumentSetB(ProvideAndRegisterDocumentSetRequestType body) {
         Exchange result = process(body, XdsJaxbDataBinding.getMap(body.getSubmitObjectsRequest()), ExchangePattern.InOut);
-        if (result.getException() != null) {
-            log.debug("ITI-41 service failed", result.getException());
-            Response errorResponse = new Response(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-41 service failed", exception);
+            Response errorResponse = new Response(exception, ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
         

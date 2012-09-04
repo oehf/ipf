@@ -54,8 +54,9 @@ public class Iti17Consumer extends DefaultConsumer {
         Exchange exchange = Exchanges.createExchange(getEndpoint().getCamelContext(), ExchangePattern.InOut);
         exchange.getIn().setBody(requestURI);
         getProcessor().process(exchange);
-        if (exchange.getException() != null) {
-            throw exchange.getException();
+        Exception exception = Exchanges.extractException(exchange);
+        if (exception != null) {
+            throw exception;
         }
         return Exchanges.resultMessage(exchange).getBody(InputStream.class);
     }

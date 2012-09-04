@@ -64,9 +64,10 @@ public class Iti15Service extends AbstractWebService implements Iti15PortType {
         }
         
         Exchange result = process(request);
-        if (result.getException() != null) {
-            log.debug("ITI-15 service failed", result.getException());
-            Response errorResponse = new Response(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-15 service failed", exception);
+            Response errorResponse = new Response(exception, ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
             return EbXML21Converters.convert(errorResponse);
         }
         

@@ -39,9 +39,10 @@ public class Iti18Service extends AbstractWebService implements Iti18PortType {
     @Override
     public AdhocQueryResponse documentRegistryRegistryStoredQuery(AdhocQueryRequest body) {
         Exchange result = process(body);
-        if (result.getException() != null) {
-            log.debug("ITI-18 service failed", result.getException());
-            QueryResponse errorResponse = new QueryResponse(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-18 service failed", exception);
+            QueryResponse errorResponse = new QueryResponse(exception, ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
         

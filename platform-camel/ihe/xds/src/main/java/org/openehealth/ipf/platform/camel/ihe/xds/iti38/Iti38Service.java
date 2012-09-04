@@ -41,10 +41,11 @@ public class Iti38Service extends AbstractWebService implements Iti38PortType {
     @Override
     public AdhocQueryResponse documentRegistryRegistryStoredQuery(AdhocQueryRequest body) {
         Exchange result = process(body);
-        if (result.getException() != null) {
-            log.debug("ITI-38 service failed", result.getException());
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-38 service failed", exception);
             QueryResponse errorResponse = new QueryResponse(
-                    result.getException(),
+                    exception,
                     ErrorCode.REGISTRY_METADATA_ERROR,
                     ErrorCode.REGISTRY_ERROR,
                     endpoint.getHomeCommunityId());

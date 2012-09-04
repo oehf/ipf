@@ -57,9 +57,10 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
      */
     protected String doProcess(String requestString) {
         Exchange result = process(requestString);
-        if (result.getException() != null) {
-            log.debug("HL7 v3 service failed", result.getException());
-            return createNak(requestString, result.getException());
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("HL7 v3 service failed", exception);
+            return createNak(requestString, exception);
         }
         return Exchanges.resultMessage(result).getBody(String.class);
     }

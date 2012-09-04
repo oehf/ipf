@@ -41,9 +41,10 @@ public class Iti42Service extends AbstractWebService implements Iti42PortType {
     @Override
     public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest body) {
         Exchange result = process(body, XdsJaxbDataBinding.getMap(body), ExchangePattern.InOut);
-        if (result.getException() != null) {
-            log.debug("ITI-42 service failed", result.getException());
-            Response errorResponse = new Response(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-42 service failed", exception);
+            Response errorResponse = new Response(exception, ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
         

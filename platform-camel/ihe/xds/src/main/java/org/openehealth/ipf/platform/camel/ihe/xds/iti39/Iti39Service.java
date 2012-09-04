@@ -42,10 +42,11 @@ public class Iti39Service extends AbstractWebService implements Iti39PortType {
     @Override
     public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
         Exchange result = process(body);
-        if (result.getException() != null) {
-            log.debug("ITI-39 service failed", result.getException());
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug("ITI-39 service failed", exception);
             RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(
-                    result.getException(),
+                    exception,
                     ErrorCode.REPOSITORY_METADATA_ERROR,
                     ErrorCode.REPOSITORY_ERROR,
                     endpoint.getHomeCommunityId());
