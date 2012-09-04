@@ -100,11 +100,11 @@
         <xmlunit-version>1.3</xmlunit-version>
     </properties>
 
-    <url>http://repo.openehealth.org/confluence/display/ipf2</url>
+    <url>http://www.openehealth.org/display/ipf2</url>
 
     <organization>
         <name>Open eHealth Foundation</name>
-        <url>http://gforge.openehealth.org/</url>
+        <url>http://www.openehealth.org/</url>
     </organization>
 
     <developers>
@@ -116,7 +116,6 @@
             <organizationUrl>http://www.icw-global.com/</organizationUrl>
             <roles>
                 <role>Developer</role>
-                <role>Administrator</role>
             </roles>
             <timezone>+1</timezone>
         </developer>
@@ -145,7 +144,7 @@
         <developer>
             <id>mkolev</id>
             <name>Mitko Kolev</name>
-            <email>mitko.kolev@icw.de</email>
+            <email>me2stk@gmail.com</email>
             <organization>InterComponentWare AG</organization>
             <organizationUrl>http://www.icw-global.com/</organizationUrl>
             <roles>
@@ -167,7 +166,7 @@
         <developer>
             <id>rnd</id>
             <name>Dmytro Rud</name>
-            <email>unixoid@web.de</email>
+            <email>dmytro.rud@gmail.com</email>
             <organization>InterComponentWare AG</organization>
             <organizationUrl>http://www.icw-global.com/</organizationUrl>
             <roles>
@@ -178,18 +177,7 @@
         <developer>
             <id>4effo</id>
             <name>Stefan Ivanov</name>
-            <email>stefan.ivanov@icw.de</email>
-            <organization>InterComponentWare AG</organization>
-            <organizationUrl>http://www.icw-global.com/</organizationUrl>
-            <roles>
-                <role>Developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>mirkojahn</id>
-            <name>Mirko Jahn</name>
-            <email>mirko.jahn@icw.de</email>
+            <email>stefko.ivanov@gmail.com</email>
             <organization>InterComponentWare AG</organization>
             <organizationUrl>http://www.icw-global.com/</organizationUrl>
             <roles>
@@ -239,9 +227,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git@github.com:krasserm/ipf.git</connection>
-        <developerConnection>scm:git:git@github.com:krasserm/ipf.git</developerConnection>
-        <url>scm:git:git@github.com:krasserm/ipf.git</url>
+        <connection>scm:git:git@github.com:oehf/ipf.git</connection>
+        <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
+        <url>scm:git:git@github.com:oehf/ipf.git</url>
     </scm>
 
     <modules>
