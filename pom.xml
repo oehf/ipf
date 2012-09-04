@@ -86,7 +86,7 @@
         <mdht-version>0.7.0.201012100720-p1</mdht-version>
         <metabuilder-version>1.1.6-p2</metabuilder-version>
         <mina-version>1.1.7</mina-version>
-        <oht-atna-version>2.0-v20120807</oht-atna-version>
+        <oht-atna-version>2.0.0</oht-atna-version>
         <oht-cdar-version>1.1.0-p2</oht-cdar-version>
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>1.8.6</quartz-version>
