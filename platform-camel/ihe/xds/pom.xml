@@ -19,7 +19,6 @@
             org.openehealth.ipf.platform.camel.core.process,
             *
         </osgi.import.pkg>
-        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.xds.core.extend.XDSModelExtension</ipf.extension.classes>
     </properties>
     
     <dependencies>

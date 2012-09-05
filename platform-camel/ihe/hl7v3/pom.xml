@@ -16,7 +16,6 @@
             org.openehealth.ipf.platform.camel.core.process,
             *
         </osgi.import.pkg>
-        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.hl7v3.extend.PixPdqV3ModelExtension</ipf.extension.classes>
     </properties>
 
     <dependencies>

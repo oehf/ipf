@@ -14,7 +14,6 @@
             org.openehealth.ipf.platform.camel.core.process,
             *
         </osgi.import.pkg>
-        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.mllp.core.extend.MllpModelExtension</ipf.extension.classes>		
     </properties>
 
     <parent>
