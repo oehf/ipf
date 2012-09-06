@@ -27,7 +27,7 @@
             schematron.*,
             wsdl.*
         </osgi.export.pkg>
-        <osgi.fragment.host>org.apache.cxf.bundle</osgi.fragment.host>
+        <osgi.fragment.host>org.apache.cxf.cxf-api</osgi.fragment.host>
     </properties>
     
     <dependencies>

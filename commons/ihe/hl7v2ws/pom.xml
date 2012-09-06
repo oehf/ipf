@@ -26,7 +26,7 @@
             ca.uhn.hl7v2,
             *
         </osgi.import.pkg>
-        <osgi.fragment.host>org.apache.cxf.bundle</osgi.fragment.host>
+        <osgi.fragment.host>org.apache.cxf.cxf-api</osgi.fragment.host>
     </properties>
     
     <dependencies>
