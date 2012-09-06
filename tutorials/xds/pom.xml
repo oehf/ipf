@@ -29,6 +29,7 @@
             javax.activation,
             javax.mail.util,
             META-INF.cxf,
+            !org.openehealth.ipf.commons.ihe.ws.server,
             *
         </osgi.import.pkg>
         <ipf.extension.beans>regRepModelExtension</ipf.extension.beans>
