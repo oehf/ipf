@@ -248,7 +248,7 @@
             <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-hl7v3/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-atna/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-xds/${project.version}@start</param>
-            <param>mvn:org.openhealthtools.ihe/atna-bundle/2.0-v20111211@start</param>
+            <param>mvn:org.openhealthtools.ihe/atna-bundle/${oht-atna-version}@start</param>
                 </provision>
             </configuration>
         </plugin>
