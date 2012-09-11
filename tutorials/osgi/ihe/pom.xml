@@ -203,7 +203,7 @@
             <param>mvn:xml-apis/xml-apis/${xml-apis-version}@start</param>
             <param>mvn:xalan/xalan/${xalan-version}@start</param>
             <param>mvn:joda-time/joda-time/${joda-time-version}@start</param>
-            <param>mvn:org.codehaus.groovy/groovy/${groovy-version}@1</param>
+            <param>mvn:org.codehaus.groovy/groovy-all/${groovy-version}@1</param>
             <param>mvn:org.ops4j.pax.web/pax-web-extender-whiteboard/${pax-web-version}@2</param>
             <param>mvn:org.ops4j.pax.web/pax-web-jetty/${pax-web-version}@2</param>
             <param>mvn:org.ops4j.pax.web/pax-web-runtime/${pax-web-version}@2</param>

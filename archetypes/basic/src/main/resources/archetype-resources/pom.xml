@@ -14,7 +14,7 @@
     <properties>
         <!-- libraries -->
         <ipf-version>${archetypeVersion}</ipf-version>
-        <groovy-version>2.0.1</groovy-version>
+        <groovy-version>2.0.2</groovy-version>
 
         <!-- plugins -->
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>

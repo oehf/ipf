@@ -27,7 +27,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * Represents a recipient containing a person and/or organization.
+ * Represents a recipient containing a person and/or organization
+ * and/or telecommunication address.
  * <p>
  * All members of this class are allowed to be <code>null</code>.
  * <p>
