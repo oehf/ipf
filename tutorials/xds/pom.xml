@@ -20,7 +20,6 @@
             org.openehealth.ipf.platform.camel.core.extend,
             org.openehealth.ipf.platform.camel.core.util,
             org.openehealth.ipf.platform.camel.ihe.xds,
-            org.openehealth.ipf.platform.camel.ihe.xds.core.extend,
             org.openehealth.ipf.commons.ihe.xds.core.requests,
             org.openehealth.ipf.commons.ihe.xds.core.responses,
             org.openehealth.ipf.commons.ihe.xds.core.validate,
@@ -29,6 +28,7 @@
             javax.activation,
             javax.mail.util,
             META-INF.cxf,
+            !org.openehealth.ipf.commons.ihe.ws.server,
             *
         </osgi.import.pkg>
         <ipf.extension.beans>regRepModelExtension</ipf.extension.beans>
