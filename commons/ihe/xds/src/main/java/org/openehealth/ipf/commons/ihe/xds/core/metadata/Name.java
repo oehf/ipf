@@ -81,6 +81,7 @@ abstract public class Name<T extends Composite> extends Hl7v2Based<T> {
                 * result
                 + ((getSecondAndFurtherGivenNames() == null) ? 0 : getSecondAndFurtherGivenNames().hashCode());
         result = prime * result + ((getSuffix() == null) ? 0 : getSuffix().hashCode());
+        result = prime * result + ((getDegree() == null) ? 0 : getDegree().hashCode());
         return result;
     }
 

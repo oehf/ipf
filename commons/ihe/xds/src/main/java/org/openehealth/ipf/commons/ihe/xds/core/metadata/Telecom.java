@@ -100,8 +100,10 @@ public class Telecom extends Hl7v2Based<XTN> {
 
     @Override
     public int hashCode() {
-        int result = getAddress() != null ? getAddress().hashCode() : 0;
-        result = 31 * result + (getAddressType() != null ? getAddressType().hashCode() : 0);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (getAddress() != null ? getAddress().hashCode() : 0);
+        result = prime * result + (getAddressType() != null ? getAddressType().hashCode() : 0);
         return result;
     }
 
