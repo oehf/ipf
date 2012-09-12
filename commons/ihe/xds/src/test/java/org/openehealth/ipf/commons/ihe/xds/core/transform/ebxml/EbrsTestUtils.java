@@ -195,7 +195,7 @@ public abstract class EbrsTestUtils {
      * @return the new assigning authority instance.
      */
     public static AssigningAuthority createAssigningAuthority(int idx) {
-        return new AssigningAuthority("namespace " + idx, "uni " + idx, "uniType " + idx);
+        return new AssigningAuthority("uni " + idx, "uniType " + idx);
     }
 
     /**

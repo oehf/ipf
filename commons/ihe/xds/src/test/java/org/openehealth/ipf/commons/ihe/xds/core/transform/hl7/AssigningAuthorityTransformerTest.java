@@ -38,7 +38,6 @@ public class AssigningAuthorityTransformerTest {
     @Test
     public void testToHL7OptionalParams() {
         AssigningAuthority assigningAuthority = new AssigningAuthority();
-        assigningAuthority.setNamespaceId("nam&ID");
         assigningAuthority.setUniversalIdType("type|ID");
         assertEquals("&&type\\F\\ID", Hl7v2Based.render(assigningAuthority));
     }
@@ -58,7 +57,6 @@ public class AssigningAuthorityTransformerTest {
     public void testFromHL7() {
         AssigningAuthority assigningAuthority =
                 Hl7v2Based.parse("nam\\T\\ID&ui\\S\\ID&type\\F\\ID", AssigningAuthority.class);
-        assertEquals("nam&ID", assigningAuthority.getNamespaceId());
         assertEquals("ui^ID", assigningAuthority.getUniversalId());
         assertEquals("type|ID", assigningAuthority.getUniversalIdType());
     }
@@ -71,7 +69,6 @@ public class AssigningAuthorityTransformerTest {
     @Test
     public void testFromHL7OptionalParams() {
         AssigningAuthority assigningAuthority = Hl7v2Based.parse("nam\\T\\ID&&type\\F\\ID", AssigningAuthority.class);
-        assertEquals("nam&ID", assigningAuthority.getNamespaceId());
         assertNull(assigningAuthority.getUniversalId());
         assertEquals("type|ID", assigningAuthority.getUniversalIdType());
     }

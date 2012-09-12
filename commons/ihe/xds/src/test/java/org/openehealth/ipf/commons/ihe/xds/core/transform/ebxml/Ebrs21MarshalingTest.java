@@ -165,7 +165,7 @@ public class Ebrs21MarshalingTest {
         address.setZipOrPostalCode("44130");
         
         PatientInfo sourcePatientInfo = new PatientInfo();
-        sourcePatientInfo.getIds().add(new Identifiable("pid1", new AssigningAuthority("domain", null, null)));
+        sourcePatientInfo.getIds().add(new Identifiable("pid1", new AssigningAuthority(null, null)));
         sourcePatientInfo.setAddress(address);
         sourcePatientInfo.setDateOfBirth("19560527");
         sourcePatientInfo.setGender("M");
@@ -187,11 +187,11 @@ public class Ebrs21MarshalingTest {
         docEntry.setServiceStartTime("200412230800");
         docEntry.setServiceStopTime("200412241600");
         docEntry.setSize(36L);
-        docEntry.setSourcePatientId(new Identifiable("89765a87b", new AssigningAuthority("fj34r", null, null)));
+        docEntry.setSourcePatientId(new Identifiable("89765a87b", new AssigningAuthority(null, null)));
         docEntry.setSourcePatientInfo(sourcePatientInfo);
         docEntry.setTypeCode(new Code("34108-1", new LocalizedString("Outpatient Evaluation And Management", "en-us", "UTF-8"), "LOINC"));
         docEntry.setEntryUuid("Document01");
-        docEntry.setPatientId(new Identifiable("SELF-5", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
+        docEntry.setPatientId(new Identifiable("SELF-5", new AssigningAuthority("1.3.6.1.4.1.21367.2005.3.7", "ISO")));
         docEntry.setTitle(new LocalizedString("Physical", "en-us", "UTF-8"));
         docEntry.setUniqueId("Document01_uniqueid");
         docEntry.setUri("http://129.6.58.92:9080/Repository/129.6.58.92.3492.txt");
@@ -204,14 +204,14 @@ public class Ebrs21MarshalingTest {
         submissionSet.setSubmissionTime("20041225235050");
         submissionSet.setComments(new LocalizedString("Annual physical", "en-us", "UTF-8"));
         submissionSet.setEntryUuid("SubmissionSet01");
-        submissionSet.setPatientId(new Identifiable("SELF-5", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
+        submissionSet.setPatientId(new Identifiable("SELF-5", new AssigningAuthority("1.3.6.1.4.1.21367.2005.3.7", "ISO")));
         submissionSet.setTitle(new LocalizedString("Physical", "en-us", "UTF-8"));
         submissionSet.setUniqueId("SubmissionSet01_uniqueid");
 
         Folder folder = new Folder();
         folder.setComments(new LocalizedString("comments go here", "en-us", "UTF-8"));
         folder.setEntryUuid("Folder");
-        folder.setPatientId(new Identifiable("ST-1000", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
+        folder.setPatientId(new Identifiable("ST-1000", new AssigningAuthority("1.3.6.1.4.1.21367.2005.3.7", "ISO")));
         folder.setUniqueId("folder_uniqueid");
         folder.setTitle(new LocalizedString("FOLDER", "en-us", "UTF-8"));
         

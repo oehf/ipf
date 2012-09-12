@@ -45,7 +45,7 @@ public class FindSubmissionSetsQueryTransformerTest {
         transformer = new FindSubmissionSetsQueryTransformer();
         query = new FindSubmissionSetsQuery();
         
-        query.setPatientId(new Identifiable("id1", new AssigningAuthority("name1", "uni1", "uniType1")));
+        query.setPatientId(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")));
         query.setContentTypeCodes(Arrays.asList(new Code("code1", null, "system1"), new Code("code2", null, "system2")));
         query.getSubmissionTime().setFrom("1");
         query.getSubmissionTime().setTo("2");

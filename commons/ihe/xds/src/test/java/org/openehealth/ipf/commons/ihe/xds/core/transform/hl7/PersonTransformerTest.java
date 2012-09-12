@@ -31,7 +31,7 @@ public class PersonTransformerTest {
 
     @Before
     public void setUp() {
-        AssigningAuthority assigningAuthority = new AssigningAuthority("he&llo", "1.2&.3.4", "he&llo_WU&RZ");
+        AssigningAuthority assigningAuthority = new AssigningAuthority("1.2&.3.4", "he&llo_WU&RZ");
         Identifiable id = new Identifiable("u^fz", assigningAuthority);
         Name name = new XcnName("Seu&fzer", "Em&il", "Ant|on", "der&7.", "D&r.", null);
         person = new Person(id, name);

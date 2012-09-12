@@ -57,25 +57,6 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
         super(new Holder<HD>(hd));
     }
 
-
-    /**
-     * Constructs an assigning authority.
-     * @param namespaceId
-     *          the namespace ID (HD.1) &mdash; actually not used in XDS context.
-     * @param universalId
-     *          the universal ID (HD.2).
-     * @param universalIdType
-     *          the type of the universal ID (HD.3).
-     * @deprecated namespace ID is not used in XDS.
-     */
-    @Deprecated
-    public AssigningAuthority(String namespaceId, String universalId, String universalIdType) {
-        this();
-        setNamespaceId(namespaceId);
-        setUniversalId(universalId);
-        setUniversalIdType(universalIdType);
-    }
-
     /**
      * Constructs an assigning authority.
      * @param universalId
@@ -98,26 +79,6 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
         this();
         setUniversalId(universalId);
         setUniversalIdType("ISO");
-    }
-
-    /**
-     * @return the namespace ID (HD.1).
-     * @deprecated namespace ID is not used in XDS.
-     */
-    @Deprecated
-    @XmlAttribute
-    public String getNamespaceId() {
-        return getHapiObject().getInternal().getHd1_NamespaceID().getValue();
-    }
-
-    /**
-     * @param namespaceId
-     *          the namespace ID (HD.1).
-     * @deprecated namespace ID is not used in XDS.
-     */
-    @Deprecated
-    public void setNamespaceId(String namespaceId) {
-        setValue(getHapiObject().getInternal().getHd1_NamespaceID(), namespaceId);
     }
 
     /**
@@ -156,10 +117,6 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        /*
-        assigning authority namespace ID is not allowed in XDS messages and therefore is not considered
-        result = prime * result + ((getNamespaceId() == null) ? 0 : getNamespaceId().hashCode());
-        */
         result = prime * result + ((getUniversalId() == null) ? 0 : getUniversalId().hashCode());
         result = prime * result + ((getUniversalIdType() == null) ? 0 : getUniversalIdType().hashCode());
         return result;
@@ -174,14 +131,6 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
         if (getClass() != obj.getClass())
             return false;
         AssigningAuthority other = (AssigningAuthority) obj;
-        /*
-        assigning authority namespace ID is not allowed in XDS messages and therefore is not considered
-        if (getNamespaceId() == null) {
-            if (other.getNamespaceId() != null)
-                return false;
-        } else if (!getNamespaceId().equals(other.getNamespaceId()))
-            return false;
-        */
         if (getUniversalId() == null) {
             if (other.getUniversalId() != null)
                 return false;
@@ -198,7 +147,6 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("namespaceId", getNamespaceId())
                 .append("universalId", getUniversalId())
                 .append("universalIdType", getUniversalIdType())
                 .toString();

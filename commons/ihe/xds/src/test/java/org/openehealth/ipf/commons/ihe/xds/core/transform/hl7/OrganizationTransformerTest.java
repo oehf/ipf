@@ -31,7 +31,6 @@ public class OrganizationTransformerTest {
     @Test
     public void testToHL7() {
         AssigningAuthority assigningAuthority = new AssigningAuthority();
-        assigningAuthority.setNamespaceId("he&llo");
         assigningAuthority.setUniversalId("1.2&.3.4");
         assigningAuthority.setUniversalIdType("he&llo_WU&RZ");
 
@@ -58,7 +57,6 @@ public class OrganizationTransformerTest {
 
         assertEquals("Untere&Klinik", organization.getOrganizationName());
         assertEquals("a|number", organization.getIdNumber());
-        assertEquals("he&llo", organization.getAssigningAuthority().getNamespaceId());
         assertEquals("1.2&.3.4", organization.getAssigningAuthority().getUniversalId());
         assertEquals("WU&RZ", organization.getAssigningAuthority().getUniversalIdType());
     }

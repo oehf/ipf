@@ -33,7 +33,6 @@ public class IdentifiableTransformerTest {
     @Before
     public void setUp() {
         AssigningAuthority assigningAuthority = new AssigningAuthority();
-        assigningAuthority.setNamespaceId("namespace");
         assigningAuthority.setUniversalId("uni");
         assigningAuthority.setUniversalIdType("uniType");
         
@@ -70,7 +69,6 @@ public class IdentifiableTransformerTest {
         assertEquals("21&3", result.getId());
         
         AssigningAuthority assigningAuthority = result.getAssigningAuthority();
-        assertEquals(null, assigningAuthority.getNamespaceId());
         assertEquals("uni", assigningAuthority.getUniversalId());
         assertEquals("uniType", assigningAuthority.getUniversalIdType());
     }

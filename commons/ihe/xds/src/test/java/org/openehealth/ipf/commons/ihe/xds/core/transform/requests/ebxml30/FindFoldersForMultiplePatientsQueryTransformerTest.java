@@ -49,7 +49,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         transformer = new FindFoldersForMultiplePatientsQueryTransformer();
         query = new FindFoldersForMultiplePatientsQuery();
 
-        query.setPatientIds(Arrays.asList(new Identifiable("id1", new AssigningAuthority("name1", "uni1", "uniType1")), new Identifiable("id2", new AssigningAuthority("name2", "uni2", "uniType2"))));
+        query.setPatientIds(Arrays.asList(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")), new Identifiable("id2", new AssigningAuthority("uni2", "uniType2"))));
         query.getLastUpdateTime().setFrom("1");
         query.getLastUpdateTime().setTo("2");
         QueryList<Code> codes = new QueryList<Code>();

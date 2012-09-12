@@ -33,10 +33,10 @@ public class RecipientTransformerTest {
     public void setUp() {
         transformer = new RecipientTransformer();
 
-        AssigningAuthority assigningAuthority1 = new AssigningAuthority("namespace1", "uni1", "uniType1");        
+        AssigningAuthority assigningAuthority1 = new AssigningAuthority("uni1", "uniType1");
         Organization organization = new Organization("orgName", "orgId", assigningAuthority1);
         
-        AssigningAuthority assigningAuthority2 = new AssigningAuthority("namespace2", "uni2", "uniType2");        
+        AssigningAuthority assigningAuthority2 = new AssigningAuthority("uni2", "uniType2");
         Identifiable id = new Identifiable("personId", assigningAuthority2);        
         Name name = new XpnName("familyName", "givenName", "second", "suffix", "prefix", "degree");
         Person person = new Person(id, name);
