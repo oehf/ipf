@@ -16,6 +16,7 @@
 package org.openehealth.ipf.tutorials.ref.route
 
 import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.ValidationException
 
 /**
  * @author Martin Krasser
@@ -77,7 +78,6 @@ class TutorialRouteBuilder extends SpringRouteBuilder {
         // ------------------------------------------------------------
         
         from('jms:queue:validated')
-            .setBody(constant())
             .unmarshal().gnode(false)
             .choice()
                 .when { it.in.body.category.text() == 'animals' }
