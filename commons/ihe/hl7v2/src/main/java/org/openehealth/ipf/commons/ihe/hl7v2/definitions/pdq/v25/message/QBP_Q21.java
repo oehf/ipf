@@ -29,8 +29,10 @@ import ca.uhn.hl7v2.model.v25.segment.SFT;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 
 /**
- * <p>Represents a QBP_Q21 message structure (see chapter 3.3.56). This structure contains the
- * following elements: </p>
+ * <p>
+ * Represents a QBP_Q21 message structure (see chapter 3.3.56). This structure
+ * contains the following elements:
+ * </p>
  * 0: MSH (Message Header) <b></b><br>
  * 1: SFT (Software Segment) <b>optional repeating</b><br>
  * 2: QPD (Query Parameter Definition) <b></b><br>
@@ -54,70 +56,68 @@ public class QBP_Q21 extends AbstractMessage {
         super();
     }
 
-	@Override
-	protected Map<Class<? extends Structure>, Cardinality> structures(
-			Map<Class<? extends Structure>, Cardinality> s) {
-		s.put(MSH.class, Cardinality.REQUIRED);
-		s.put(SFT.class, Cardinality.OPTIONAL_REPEATING);
-		s.put(QPD.class, Cardinality.REQUIRED);
-		s.put(RCP.class, Cardinality.REQUIRED);
-		s.put(DSC.class, Cardinality.OPTIONAL);
-		return s;
-	}
-
+    @Override
+    protected Map<Class<? extends Structure>, Cardinality> structures(
+            Map<Class<? extends Structure>, Cardinality> s) {
+        s.put(MSH.class, Cardinality.REQUIRED);
+        s.put(SFT.class, Cardinality.OPTIONAL_REPEATING);
+        s.put(QPD.class, Cardinality.REQUIRED);
+        s.put(RCP.class, Cardinality.REQUIRED);
+        s.put(DSC.class, Cardinality.OPTIONAL);
+        return s;
+    }
 
     /**
      * Returns MSH (Message Header) - creates it if necessary
      */
     public MSH getMSH() {
-        return get(MSH.class);
+        return getTyped("MSH", MSH.class);
     }
 
     /**
-     * Returns  first repetition of SFT (Software Segment) - creates it if necessary
+     * Returns first repetition of SFT (Software Segment) - creates it if
+     * necessary
      */
     public SFT getSFT() {
-        return get(SFT.class);
+        return getTyped("SFT", SFT.class);
     }
 
     /**
-     * Returns a specific repetition of SFT
-     * (Software Segment) - creates it if necessary
-     * throws HL7Exception if the repetition requested is more than one
-     * greater than the number of existing repetitions.
+     * Returns a specific repetition of SFT (Software Segment) - creates it if
+     * necessary throws HL7Exception if the repetition requested is more than
+     * one greater than the number of existing repetitions.
      */
     public SFT getSFT(int rep) throws HL7Exception {
-        return get(SFT.class, rep);
+        return getTyped("SFT", rep, SFT.class);
     }
 
     /**
      * Returns the number of existing repetitions of SFT
      */
     public int getSFTReps() {
-        return getReps(SFT.class);
+        return getReps("SFT");
     }
 
     /**
      * Returns QPD (Query Parameter Definition) - creates it if necessary
      */
     public QPD getQPD() {
-        return get(QPD.class);
+        return getTyped("QPD", QPD.class);
     }
 
     /**
      * Returns RCP (Response Control Parameter) - creates it if necessary
      */
     public RCP getRCP() {
-        return get(RCP.class);
+        return getTyped("RCP", RCP.class);
     }
 
     /**
      * Returns DSC (Continuation Pointer) - creates it if necessary
      */
     public DSC getDSC() {
-        return get(DSC.class);
+        return getTyped("DSC", DSC.class);
 
     }
-
 
 }

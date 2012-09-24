@@ -88,7 +88,14 @@ class AcceptanceCheckUtils {
 
          def structure = msg.MSH[9][3].value
          if(structure) {
-             def expected = config.parser.getMessageStructureForEvent("${msgType}_${triggerEvent}", version)
+             
+             // This may not work as the custom event map cannot be distinguished from the
+             // default one! This needs to be fixed for HAPI 2.1
+             def event = "${msgType}_${triggerEvent}"
+             def expected = config.parser.getMessageStructureForEvent(event, version)
+             // TODO when upgrading to HAPI 2.1 remove the constant IF statements
+             if (event == 'QBP_ZV1') expected = 'QBP_Q21'
+             if (event == 'RSP_ZV2') expected = 'RSP_ZV2'
              
              // the expected structure must be equal to the actual one,
              // but second components may be omitted in acknowledgements 

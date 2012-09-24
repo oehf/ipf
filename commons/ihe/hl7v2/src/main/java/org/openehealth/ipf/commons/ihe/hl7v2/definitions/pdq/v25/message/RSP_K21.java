@@ -32,8 +32,10 @@ import ca.uhn.hl7v2.model.v25.segment.SFT;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 
 /**
- * <p>Represents a RSP_K21 message structure (see chapter 3.3.56). This structure contains the
- * following elements: </p>
+ * <p>
+ * Represents a RSP_K21 message structure (see chapter 3.3.56). This structure
+ * contains the following elements:
+ * </p>
  * 0: MSH (Message Header) <b></b><br>
  * 1: SFT (Software Segment) <b>optional repeating</b><br>
  * 2: MSA (Message Acknowledgment) <b></b><br>
@@ -50,7 +52,6 @@ public class RSP_K21 extends AbstractMessage {
      * Creates a new RSP_K21 Group with custom ModelClassFactory.
      */
     public RSP_K21(ModelClassFactory factory) {
-        super(factory);
     }
 
     /**
@@ -60,10 +61,9 @@ public class RSP_K21 extends AbstractMessage {
         super();
     }
 
-
     @Override
     protected Map<Class<? extends Structure>, Cardinality> structures(
-             Map<Class<? extends Structure>, Cardinality> s) {
+            Map<Class<? extends Structure>, Cardinality> s) {
         s.put(MSH.class, Cardinality.REQUIRED);
         s.put(SFT.class, Cardinality.OPTIONAL_REPEATING);
         s.put(MSA.class, Cardinality.REQUIRED);
@@ -75,95 +75,95 @@ public class RSP_K21 extends AbstractMessage {
         return s;
     }
 
-
     /**
-      * Returns MSH (Message Header) - creates it if necessary
-      */
+     * Returns MSH (Message Header) - creates it if necessary
+     */
     public MSH getMSH() {
-        return get(MSH.class);
+        return getTyped("MSH", MSH.class);
     }
 
     /**
-      * Returns  first repetition of SFT (Software Segment) - creates it if necessary
-      */
+     * Returns first repetition of SFT (Software Segment) - creates it if
+     * necessary
+     */
     public SFT getSFT() {
-        return get(SFT.class);
+        return getTyped("SFT", SFT.class);
     }
 
     /**
-      * Returns a specific repetition of SFT
-      * (Software Segment) - creates it if necessary
-      * throws HL7Exception if the repetition requested is more than one
-      * greater than the number of existing repetitions.
-      */
+     * Returns a specific repetition of SFT (Software Segment) - creates it if
+     * necessary throws HL7Exception if the repetition requested is more than
+     * one greater than the number of existing repetitions.
+     */
     public SFT getSFT(int rep) throws HL7Exception {
-        return get(SFT.class, rep);
+        return getTyped("STF", rep, SFT.class);
     }
 
     /**
-      * Returns the number of existing repetitions of SFT
-      */
+     * Returns the number of existing repetitions of SFT
+     */
     public int getSFTReps() {
-        return getReps(SFT.class);
+        return getReps("SFT");
     }
 
     /**
-      * Returns MSA (Message Acknowledgment) - creates it if necessary
-      */
+     * Returns MSA (Message Acknowledgment) - creates it if necessary
+     */
     public MSA getMSA() {
-        return get(MSA.class);
+        return getTyped("MSA", MSA.class);
     }
 
     /**
-      * Returns ERR (Error) - creates it if necessary
-      */
+     * Returns ERR (Error) - creates it if necessary
+     */
     public ERR getERR() {
-        return get(ERR.class);
+        return getTyped("ERR", ERR.class);
     }
 
     /**
-      * Returns QAK (Query Acknowledgment) - creates it if necessary
-      */
+     * Returns QAK (Query Acknowledgment) - creates it if necessary
+     */
     public QAK getQAK() {
-        return get(QAK.class);
+        return getTyped("QAK", QAK.class);
     }
 
     /**
-      * Returns QPD (Query Parameter Definition) - creates it if necessary
-      */
+     * Returns QPD (Query Parameter Definition) - creates it if necessary
+     */
     public QPD getQPD() {
-        return get(QPD.class);
+        return getTyped("QPD", QPD.class);
     }
 
     /**
-      * Returns  first repetition of RSP_K21_QUERY_RESPONSE (a Group object) - creates it if necessary
-      */
+     * Returns first repetition of RSP_K21_QUERY_RESPONSE (a Group object) -
+     * creates it if necessary
+     */
     public RSP_K21_QUERY_RESPONSE getQUERY_RESPONSE() {
-    	return get("QUERY_RESPONSE", RSP_K21_QUERY_RESPONSE.class, 0);
+        return getTyped("QUERY_RESPONSE", 0, RSP_K21_QUERY_RESPONSE.class);
     }
 
     /**
-      * Returns a specific repetition of RSP_K21_QUERY_RESPONSE
-      * (a Group object) - creates it if necessary
-      * throws HL7Exception if the repetition requested is more than one
-      * greater than the number of existing repetitions.
-      */
-    public RSP_K21_QUERY_RESPONSE getQUERY_RESPONSE(int rep) throws HL7Exception {
-        return get("QUERY_RESPONSE", RSP_K21_QUERY_RESPONSE.class, rep);
+     * Returns a specific repetition of RSP_K21_QUERY_RESPONSE (a Group object)
+     * - creates it if necessary throws HL7Exception if the repetition requested
+     * is more than one greater than the number of existing repetitions.
+     */
+    public RSP_K21_QUERY_RESPONSE getQUERY_RESPONSE(int rep)
+            throws HL7Exception {
+        return getTyped("QUERY_RESPONSE", rep, RSP_K21_QUERY_RESPONSE.class);
     }
 
     /**
-      * Returns the number of existing repetitions of RSP_K21_QUERY_RESPONSE
-      */
+     * Returns the number of existing repetitions of RSP_K21_QUERY_RESPONSE
+     */
     public int getQUERY_RESPONSEReps() {
-        return getReps("QUERY_RESPONSE", RSP_K21_QUERY_RESPONSE.class);
+        return getReps("QUERY_RESPONSE");
     }
 
     /**
-      * Returns DSC (Continuation Pointer) - creates it if necessary
-      */
+     * Returns DSC (Continuation Pointer) - creates it if necessary
+     */
     public DSC getDSC() {
-        return get(DSC.class);
+        return getTyped("DSC", DSC.class);
     }
 
 }

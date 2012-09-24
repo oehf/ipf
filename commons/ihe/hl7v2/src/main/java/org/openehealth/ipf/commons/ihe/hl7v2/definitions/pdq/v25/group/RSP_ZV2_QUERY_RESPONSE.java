@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.group;
 
+import org.openehealth.ipf.modules.hl7.HL7v2Exception;
+
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.AbstractGroup;
 import ca.uhn.hl7v2.model.Group;
@@ -24,7 +26,6 @@ import ca.uhn.hl7v2.model.v25.segment.PV1;
 import ca.uhn.hl7v2.model.v25.segment.PV2;
 import ca.uhn.hl7v2.model.v25.segment.QRI;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.log.HapiLogFactory;
 
 
 /**
@@ -53,7 +54,7 @@ public class RSP_ZV2_QUERY_RESPONSE extends AbstractGroup {
             add(PV2.class, false, false);
             add(QRI.class, false, false);
         } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error creating " + getClass().getName(), e);
+            throw new HL7v2Exception(e);
         }
     }
 
@@ -61,24 +62,14 @@ public class RSP_ZV2_QUERY_RESPONSE extends AbstractGroup {
      * Returns PID (Patient Identification) - creates it if necessary
      */
     public PID getPID() {
-        try {
-            return (PID) get("PID");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data", e);
-            throw new RuntimeException(e);
-        }
+        return getTyped("PID", PID.class);
     }
 
     /**
      * Returns PD1 (Patient Additional Demographic) - creates it if necessary
      */
     public PD1 getPD1() {
-        try {
-            return (PD1) get("PD1");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data", e);
-            throw new RuntimeException(e);
-        }
+        return getTyped("PD1", PD1.class);
     }
 
 
@@ -86,35 +77,20 @@ public class RSP_ZV2_QUERY_RESPONSE extends AbstractGroup {
      * Returns PV1 - creates it if necessary
      */
     public PV1 getPV1() {
-        try {
-            return (PV1) get("PV1");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data", e);
-            throw new RuntimeException(e);
-        }
+        return getTyped("PV1", PV1.class);
     }
 
     /**
      * Returns PV2 - creates it if necessary
      */
     public PV2 getPV2() {
-        try {
-            return (PV2) get("PV2");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data", e);
-            throw new RuntimeException(e);
-        }
+        return getTyped("PV2", PV2.class);
     }
 
     /**
      * Returns QRI (Query Response Instance) - creates it if necessary
      */
     public QRI getQRI() {
-        try {
-            return (QRI) get("QRI");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data", e);
-            throw new RuntimeException(e);
-        }
+        return getTyped("QRI", QRI.class);
     }
 }

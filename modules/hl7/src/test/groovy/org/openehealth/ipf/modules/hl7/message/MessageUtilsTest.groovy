@@ -83,7 +83,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         def origMsgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         def origMsg = parser.parse(origMsgText)
         def respMsg = MessageUtils.response(factory, origMsg, 'ACK', null)
-        assert parser.encode(respMsg).contains('|ACK^Q22^ACK|')
+        assert parser.encode(respMsg).contains('|ACK^Q22|')
     }
     
     void testResponseVersion25MappedStructureName() {
@@ -125,7 +125,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         def nak = MessageUtils.nak(factory, msg, 'Some bad |&^\r\n mistake', AckTypeCode.AR)
         assert nak instanceof ACK
         def encoded = parser.encode(nak)
-        assert encoded.contains('|ACK^R01^ACK|')
+        assert encoded.contains('|ACK^R01|')
     }
     
     void testMakeCECompositeVersion25() {
@@ -189,7 +189,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-04.hl7')?.text
         def msg = parser.parse(msgText)
-        assert '2.5' == msg.version
+        assert '2.6' == msg.version
     }
     
     void testEventTypeUnknownMessage() {

@@ -147,6 +147,7 @@ class TestIti10 extends MllpTestContainer {
         def endpointUri = 'pix-iti10://localhost:18108'
         def body = getMessageString(msh9, msh12)
         def failed = true;
+        def ex
         
         try {
             send(endpointUri, body)
@@ -156,8 +157,9 @@ class TestIti10 extends MllpTestContainer {
             (e instanceof AbstractHL7v2Exception) || (cause instanceof AbstractHL7v2Exception)) {
                 failed = false
             }
+            ex = e
         }
-        assertFalse(failed)
+        assertFalse("Expected HL7Exception but got ${ex} with cause ${ex.cause}", failed)
         assertEquals(0, auditSender.messages.size())
     }
     

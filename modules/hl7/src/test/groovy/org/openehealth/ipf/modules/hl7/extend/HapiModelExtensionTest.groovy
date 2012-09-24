@@ -15,20 +15,19 @@
  */
 package org.openehealth.ipf.modules.hl7.extend
 
-import ca.uhn.hl7v2.parser.*
-import ca.uhn.hl7v2.model.*
-import ca.uhn.hl7v2.model.v25.segment.NK1
-import ca.uhn.hl7v2.util.Terser
-
 import org.openehealth.ipf.commons.core.extend.DefaultActivator
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.extend.MappingExtension
 import org.openehealth.ipf.modules.hl7.AckTypeCode
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7.HL7v2Exception
-
-import org.springframework.core.io.ClassPathResource
 import org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory
+import org.springframework.core.io.ClassPathResource
+
+import ca.uhn.hl7v2.model.*
+import ca.uhn.hl7v2.model.v25.segment.NK1
+import ca.uhn.hl7v2.model.v22.message.ADT_A01
+import ca.uhn.hl7v2.parser.*
+import ca.uhn.hl7v2.util.Terser
 
 /**
  * @author Christian Ohr
@@ -231,8 +230,10 @@ public class HapiModelExtensionTest extends GroovyTestCase {
         assert ['x','y'].map('listTest', ['a','b']) == (['x','y'].map('listTest') ?: ['a','b'])
         assert ['x','y'].map('listTest2') == ['c','d']
         assert ['x','y'].map('listTest2', ['a','b']) == ['c','d']
-        def x = new ca.uhn.hl7v2.model.v22.datatype.ID(null, 100)
-    	def y = new ca.uhn.hl7v2.model.v22.datatype.ID(null, 100)
+        ADT_A01 msg = new ADT_A01()
+        msg.initQuickstart('ADT', 'A01', 'P')
+        def x = new ca.uhn.hl7v2.model.v22.datatype.ID(msg, 100)
+    	def y = new ca.uhn.hl7v2.model.v22.datatype.ID(msg, 100)
     	x.setValue('a')
     	y.setValue('b')
     	assert [x,y].map('listTest') == ['c','d']    	

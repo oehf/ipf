@@ -15,19 +15,16 @@
  */
 package org.openehealth.ipf.modules.hl7.parser.test.hl7v2.def.v25.segment;
 
-import java.util.Collection;
-
-import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
-
+import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.AbstractSegment;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.v25.datatype.EI;
 import ca.uhn.hl7v2.model.v25.datatype.ST;
 import ca.uhn.hl7v2.model.v25.datatype.TS;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.log.HapiLogFactory;
 
 /**
  * The ZBE segment is intended to be used for information that details ADT
@@ -58,8 +55,7 @@ public class ZBE extends AbstractSegment {
             add(TS.class, false, 1, 26, new Object[] { message }, null);
             add(ST.class, true, 1, 10, new Object[] { message }, null);
         } catch (HL7Exception he) {
-            HapiLogFactory.getHapiLog(this.getClass()).error(
-                    "Can't instantiate " + this.getClass().getName(), he);
+            throw new HL7v2Exception(he);
         }
     }
 
@@ -79,8 +75,7 @@ public class ZBE extends AbstractSegment {
      * @return movement IDs
      */
     public EI[] getMovementID() {
-        Collection<EI> result = getTypedField(1);
-        return (EI[]) result.toArray(new EI[result.size()]);
+        return getTypedField(1, new EI[0]);
     }
 
     /**

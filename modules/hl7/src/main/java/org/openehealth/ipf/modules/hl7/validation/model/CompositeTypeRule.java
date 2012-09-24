@@ -22,7 +22,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * Rule for validating {@link Composite} types.
- * FIXME declared as abstract class to work arround compile problems in Eclipse
+ * FIXME declared as abstract class to work around compile problems in Eclipse
  * 
  * @author Mitko Kolev
  * 

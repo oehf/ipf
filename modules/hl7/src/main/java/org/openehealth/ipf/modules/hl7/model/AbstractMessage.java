@@ -1,4 +1,3 @@
-package org.openehealth.ipf.modules.hl7.model;
 /*
  * Copyright 2011 the original author or authors.
  *
@@ -14,14 +13,17 @@ package org.openehealth.ipf.modules.hl7.model;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.openehealth.ipf.modules.hl7.model;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Structure;
 import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.log.HapiLogFactory;
 
 /**
  * 
@@ -70,55 +72,51 @@ public abstract class AbstractMessage extends
 
             }
         } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error(
-                    "Unexpected error creating structures for "
-                            + getClass().getName(), e);
-            throw new RuntimeException(e);
+            throw new HL7v2Exception(e);
         }
     }
 
+
+    /**
+     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, Class)
+     */
     protected <T extends Structure> T get(Class<T> structureClass) {
-        return get(structureClass.getSimpleName(), structureClass);
+        return super.getTyped(structureClass.getSimpleName(), structureClass);
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, Class)
+     */
     protected <T extends Structure> T get(String structure, Class<T> structureClass) {
-        try {
-            return (T) get(structure);
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error(
-                    "Error accessing structure " + structure, e);
-            throw new RuntimeException(e);
-        }
+        return super.getTyped(structure, structureClass);
     }
 
+    /**
+     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, int, Class)
+     */
     protected <T extends Structure> T get(Class<T> structureClass, int rep) {
-        return get(structureClass.getSimpleName(), structureClass, rep);
+        return super.getTyped(structureClass.getSimpleName(), rep, structureClass);
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, int, Class)
+     */
     protected <T extends Structure> T get(String structure, Class<T> structureClass, int rep) {
-        try {
-            return (T) get(structure, rep);
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error(
-                    "Error accessing structure " + structure, e);
-            throw new RuntimeException(e);
-        }
+    	return super.getTyped(structure, rep, structureClass);
     }
 
+    /**
+     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractGroup#getReps(String)}
+     */
     protected <T extends Structure> int getReps(Class<T> structureClass) {
-        return getReps(structureClass.getSimpleName(), structureClass);
+        return super.getReps(structureClass.getSimpleName());
     }
 
+    /**
+     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractGroup#getReps(String)}
+     */
     protected <T extends Structure> int getReps(String structure, Class<T> structureClass) {
-        try {
-            return getAll(structure).length;
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error(
-                    "Error accessing structure " + structure, e);
-            throw new RuntimeException(e);
-        }
+        return super.getReps(structure);
     }
 
     abstract protected Map<Class<? extends Structure>, Cardinality> structures(

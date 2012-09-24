@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.modules.hl7.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ca.uhn.hl7v2.HL7Exception;
@@ -23,13 +22,13 @@ import ca.uhn.hl7v2.model.AbstractMessage;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.log.HapiLogFactory;
 
 /**
  * Convenience subclass that uses Java 5 Generics to abbreviate tedious HL7v2
  * parsing.
  * 
  * @author Christian Ohr
+ * @deprecated use {@link ca.uhn.hl7v2.model.AbstractSegment} directly
  */
 @SuppressWarnings("serial")
 public abstract class AbstractSegment extends ca.uhn.hl7v2.model.AbstractSegment {
@@ -58,20 +57,8 @@ public abstract class AbstractSegment extends ca.uhn.hl7v2.model.AbstractSegment
      * @param rep
      * @return the field content casted to a specified type
      */
-    @SuppressWarnings("unchecked")
     protected <T extends Type> T getTypedField(int c, int rep) {
-        try {
-            Type t = getField(c, rep);
-            return (T) t;
-        } catch (ClassCastException cce) {
-            HapiLogFactory.getHapiLog(getClass()).error(
-                    "Unexpected problem obtaining field value.  This is a bug.", cce);
-            throw new RuntimeException(cce);
-        } catch (HL7Exception he) {
-            HapiLogFactory.getHapiLog(getClass()).error(
-                    "Unexpected problem obtaining field value.  This is a bug.", he);
-            throw new RuntimeException(he);
-        }
+        return super.getTypedField(c, rep);
     }
 
     /**
@@ -82,24 +69,8 @@ public abstract class AbstractSegment extends ca.uhn.hl7v2.model.AbstractSegment
      * @param c
      * @return the multivalued field content casted to a specified type
      */
-    @SuppressWarnings("unchecked")
     protected <T extends Type> List<T> getTypedField(int c) {
-        try {
-            Type[] t = getField(c);
-            List<T> result = new ArrayList<T>(t.length);
-            for (Type aT : t) {
-                result.add((T) aT);
-            }
-            return result;
-        } catch (ClassCastException cce) {
-            HapiLogFactory.getHapiLog(getClass()).error(
-                    "Unexpected problem obtaining field value.  This is a bug.", cce);
-            throw new RuntimeException(cce);
-        } catch (HL7Exception he) {
-            HapiLogFactory.getHapiLog(getClass()).error(
-                    "Unexpected problem obtaining field value.  This is a bug.", he);
-            throw new RuntimeException(he);
-        }
+        return getTypedField(c);
     }
 
 }

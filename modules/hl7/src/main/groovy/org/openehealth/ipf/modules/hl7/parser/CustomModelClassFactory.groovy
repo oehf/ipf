@@ -34,13 +34,15 @@ import org.apache.commons.logging.LogFactory
  * "segment", "datatype" or "group" to the package name, respectively. If no
  * custom class could be found, it delegates to the default HAPI implementation
  * (DefaultModelClassFactory).
+ * <p>
+ * TODO deprecate as of HAPI 2.1, which will have a configurable defaultFactory
  * 
  * @author Christian Ohr
  * @author Marek Vaclavik
  * @author Boris Stanojevic
  * 
  */
-public class CustomModelClassFactory implements ModelClassFactory{
+public class CustomModelClassFactory implements ModelClassFactory {
 	
 	ModelClassFactory defaultFactory
 	Map<String, String[]> customModelClasses
@@ -142,5 +144,12 @@ public class CustomModelClassFactory implements ModelClassFactory{
             }
         }
     }
+
+	@Override
+	public Class<? extends Message> getMessageClassInASpecificPackage(
+			String theName, String theVersion, boolean isExplicit,
+			String packageName) throws HL7Exception {
+		return defaultFactory.getMessageClassInASpecificPackage(theName, theVersion, isExplicit, packageName)
+	}
 	
 }

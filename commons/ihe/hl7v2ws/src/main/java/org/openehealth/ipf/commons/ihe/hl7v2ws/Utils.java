@@ -31,7 +31,7 @@ abstract public class Utils {
      */
     public static String render(Message message) {
         try {
-            return message.getParser().encode(message).replaceAll("\r", "\r\n");
+            return message.encode().replaceAll("\r", "\r\n");
         } catch (HL7Exception e) {
             throw new RuntimeException(e);
         }

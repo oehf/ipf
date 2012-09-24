@@ -69,14 +69,14 @@ public class QBP_Q21 extends AbstractMessage {
       * Returns MSH (Message Header) - creates it if necessary
       */
     public MSH getMSH() {
-        return get(MSH.class);
+        return getTyped("MSH", MSH.class);
     }
 
     /**
       * Returns  first repetition of SFT (Software Segment) - creates it if necessary
       */
     public SFT getSFT() {
-        return get(SFT.class);
+        return getTyped("SFT", SFT.class);
     }
 
     /**
@@ -86,35 +86,35 @@ public class QBP_Q21 extends AbstractMessage {
       * greater than the number of existing repetitions.
       */
     public SFT getSFT(int rep) throws HL7Exception {
-        return get(SFT.class, rep);
+        return getTyped("SFT", rep, SFT.class);
     }
 
     /**
       * Returns the number of existing repetitions of SFT
       */
     public int getSFTReps() {
-        return getReps(SFT.class);
+        return getReps("SFT");
     }
 
     /**
       * Returns QPD (Query Parameter Definition) - creates it if necessary
       */
     public QPD getQPD() {
-        return get(QPD.class);
+        return getTyped("QPD", QPD.class);
     }
 
     /**
       * Returns RCP (Response Control Parameter) - creates it if necessary
       */
     public RCP getRCP() {
-        return get(RCP.class);
+        return getTyped("RCP", RCP.class);
     }
 
     /**
       * Returns DSC (Continuation Pointer) - creates it if necessary
       */
     public DSC getDSC() {
-        return get(DSC.class);
+        return getTyped("DSC", DSC.class);
     }
 
 }

@@ -15,13 +15,18 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.support
 
-import ca.uhn.hl7v2.conf.check.DefaultValidator
-import ca.uhn.hl7v2.conf.spec.message.Seg
-import ca.uhn.hl7v2.conf.ProfileException
-import ca.uhn.hl7v2.conf.spec.message.StaticDef
 import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.conf.ProfileException
+import ca.uhn.hl7v2.conf.check.DefaultValidator
+import ca.uhn.hl7v2.conf.check.ProfileNotHL7CompliantException
+import ca.uhn.hl7v2.conf.spec.message.ProfileStructure
+import ca.uhn.hl7v2.conf.spec.message.Seg
+import ca.uhn.hl7v2.conf.spec.message.SegGroup
+import ca.uhn.hl7v2.conf.spec.message.StaticDef
+import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.util.Terser;
+import ca.uhn.hl7v2.model.Segment
+import ca.uhn.hl7v2.model.Structure
 
 /**
  * Subclass of HAPI's conformance validator, that stops checking at the segment level, i.e. the
@@ -34,16 +39,21 @@ public class AbstractSyntaxValidator extends DefaultValidator {
     /**
      * Omit the checks for correct version, trigger event and structure
      */
-     public HL7Exception[] validate(Message message, StaticDef profile) throws ProfileException, HL7Exception {
-         def exceptionList = testGroup(message, profile, profile.getIdentifier());         
-         exceptionList as HL7Exception[]    
-     }
-     
-     /**
-      * Always succeeds, because the fields of a segment are not validated in this implementation
-      */
-     public HL7Exception[] testSegment(ca.uhn.hl7v2.model.Segment segment, Seg profile, String profileID) throws ProfileException {
-         new HL7Exception[0]
-     }
-    
+    public HL7Exception[] validate(Message message, StaticDef profile) throws ProfileException, HL7Exception {
+        testGroup(message, profile, profile.getIdentifier());
+    }
+
+    public HL7Exception[] testStructure(Structure s, ProfileStructure profile, String profileID) throws ProfileException {
+        List<HL7Exception> exList = []
+        if (profile instanceof SegGroup) {
+            if (s instanceof Group) {
+                exList.addAll(testGroup(s, profile, profileID))
+            } else {
+                exList.add(new ProfileNotHL7CompliantException(
+                        "Mismatch between a group in the profile and the structure ${s.class.name} in the message"));
+            }
+        }
+        // Skip testing of segments
+        return exList.toArray(new HL7Exception[exList.size()])
+    }
 }

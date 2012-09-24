@@ -15,9 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.segment;
 
-import java.util.Collection;
+import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.AbstractSegment;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Type;
@@ -25,8 +26,7 @@ import ca.uhn.hl7v2.model.v25.datatype.CE;
 import ca.uhn.hl7v2.model.v25.datatype.CX;
 import ca.uhn.hl7v2.model.v25.datatype.ST;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.log.HapiLogFactory;
-import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
+
 
 
 /**
@@ -48,12 +48,12 @@ public class QPD extends AbstractSegment {
         super(parentGroup, modelFactory);
         Message msg = getMessage();
         try {
-        	add("CE", true, 1, 250, new Object[]{msg});
-            add("ST", true, 1, 32, new Object[]{msg});
-            add("CX", true, 1, 256, new Object[]{msg});
-            add("CX", false, 0, 256, new Object[]{msg});
+        	add(CE.class, true, 1, 250, new Object[]{msg}, "Message Query Name");
+            add(ST.class, true, 1, 32, new Object[]{msg}, "Query Tag");
+            add(CX.class, true, 1, 256, new Object[]{msg}, "Person Identifier");
+            add(CX.class, false, 0, 256, new Object[]{msg}, "What domains returned");
         } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Can't instantiate " + getClass().getName(), e);
+            throw new HL7v2Exception(e);
         }
     }
 
@@ -117,8 +117,7 @@ public class QPD extends AbstractSegment {
      * Returns What Domains to be returned (QPD-4).
      */
     public CX[] getWhatDomainsReturned() {
-        Collection<CX> result = getTypedField(4);
-        return result.toArray(new CX[result.size()]);
+        return getTypedField(4, new CX[0]);
     }
 
     /** {@inheritDoc} */

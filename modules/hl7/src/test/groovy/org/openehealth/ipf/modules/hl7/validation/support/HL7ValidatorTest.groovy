@@ -33,26 +33,26 @@ public class HL7ValidatorTest extends GroovyTestCase{
     	void testValidateWhileParsing(){
     	    ValidationContext context = new DefaultValidationContext().configure()        
                 .forVersion().asOf('2.3')
-                    .type('DT')
+                    .primitiveType('DT')
                         .matches(/(\d{4}([01]\d(\d{2})?)?)?/)				// YYYY[MM[DD]]
                         .withReference('Version 2.5 Section 2.A.21')
                     
                 .forVersion().before('2.3')
-                    .type('DT')
+                    .primitiveType('DT')
                         .matches(/(\d{4}[01]\d(\d{2})?/)					// YYYYMMDD
                                 .withReference('Version 2.5 Section 2.A.21')
           
                 .forAllVersions()
-                    .type('FT').maxSize(65536)
-                    .type('ST').omitLeadingWhitespace()
-                    .type('TX').omitTrailingWhitespace()
-                    .type('ID').maxSize(1).withDescription('IDs may not be longer than 1')     
+                    .primitiveType('FT').maxSize(65536)
+                    .primitiveType('ST').omitLeadingWhitespace()
+                    .primitiveType('TX').omitTrailingWhitespace()
+                    .primitiveType('ID').maxSize(1).withDescription('IDs may not be longer than 1')     
                                                                         // NONSENSE. Will throw
                                                                         
-                    .type('IS').checkIf { it.value.size() <= 20 }		    // same as maxSize(20)
-                    .type('SI').matches(/\d*/)							// non-negative integer
-                    .type('NM').matches(/(+|-)?\d*\.?\d*/)				// number
-                    .type('TM')
+                    .primitiveType('IS').checkIf { it.value.size() <= 20 }		    // same as maxSize(20)
+                    .primitiveType('SI').matches(/\d*/)							// non-negative integer
+                    .primitiveType('NM').matches(/(+|-)?\d*\.?\d*/)				// number
+                    .primitiveType('TM')
                         .matches(/([012]\d([0-5]\d([0-5]\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?([+-]\d{4})?/)	
                         .withReference('Version 2.5 Section 2.16.79')   // HH[MM[SS[.S[S[S[S]]]]]][+/-ZZZZ]
                 .context
@@ -67,7 +67,7 @@ public class HL7ValidatorTest extends GroovyTestCase{
             } catch (Exception e) {
                 assert e instanceof HL7Exception
                 assert e.message.contains('IDs may not be longer than 1')
-                assert e.message.contains('MSH (rep 0) Field #8')
+                assert e.message.contains('MSH Field #8')
             }    
     }
     	

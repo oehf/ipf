@@ -20,6 +20,7 @@ import org.openehealth.ipf.modules.hl7.validation.model.CompositeTypeRule
 import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
+import ca.uhn.hl7v2.Version;
 import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.validation.EncodingRule
@@ -58,7 +59,7 @@ import ca.uhn.hl7v2.validation.ValidationContext
  */
 public class DefaultValidationContext implements ValidationContext, Serializable {
 	    
-	private Map ruleMap = MessageUtils.HL7V2_VERSIONS.collectEntries { version -> [version, [:]] }
+	private Map ruleMap = Version.values().collectEntries { Version version -> [version.version, [:]] }
 
 	private def nestedValidationContexts = []
 	boolean requireMessageRule = false

@@ -46,7 +46,7 @@ public class RuleBuilder {
 	 */    
     @Deprecated
 	PrimitiveRuleBuilder forVersionAndType(String version, String typeName) {
-		new VersionBuilder(version, context).type(typeName)
+		forVersionAndPrimitiveType(version, context)
 	}
     
     /**

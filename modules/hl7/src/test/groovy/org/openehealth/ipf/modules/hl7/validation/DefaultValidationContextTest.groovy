@@ -115,7 +115,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
         } catch (Exception e) {
             assert e instanceof HL7Exception
             assert e.message.contains('IDs may not be longer than 1')
-            assert e.message.contains('MSH (rep 0) Field #8')
+            assert e.message.contains('MSH Field #8')
         }
 
 	}

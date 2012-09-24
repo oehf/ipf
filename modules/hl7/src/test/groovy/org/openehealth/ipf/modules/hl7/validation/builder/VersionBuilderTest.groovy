@@ -22,7 +22,7 @@ package org.openehealth.ipf.modules.hl7.validation.builder
 public class VersionBuilderTest extends GroovyTestCase {
     
      void testType() {
-         def builder = new VersionBuilder('2.4', null).type('ST')
+         def builder = new VersionBuilder('2.4', null).primitiveType('ST')
          assert builder.version == '2.4'
          assert builder.typeName == 'ST'
      }     

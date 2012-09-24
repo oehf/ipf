@@ -17,8 +17,8 @@ package org.openehealth.ipf.modules.hl7.validation.builder
 
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 
+import ca.uhn.hl7v2.Version;
 import ca.uhn.hl7v2.validation.Rule
-import static org.openehealth.ipf.modules.hl7.message.MessageUtils.HL7V2_VERSIONS
 
 /**
  * @author Christian Ohr
@@ -38,7 +38,7 @@ public class VersionBuilder extends RuleBuilder{
 	    if (!version) {
 	        throw new IllegalArgumentException("Version must not be empty")
 	    } else if (version == '*') {
-		    this.version = HL7V2_VERSIONS.join(' ')
+		    this.version = Version.values()*.version.join(' ')
         } else {
 		    this.version = version
         }
@@ -49,8 +49,8 @@ public class VersionBuilder extends RuleBuilder{
      * @return restricts the rules to message versions starting with the passed version
      */
 	VersionBuilder asOf(String version) {
-	    def matchingVersions = HL7V2_VERSIONS.findAll { version <= it }
-	    this.version = matchingVersions.join(' ')
+	    List<Version> matchingVersions = Version.values().findAll { Version.versionOf(version) <= it }
+	    this.version = matchingVersions*.version.join(' ')
 	    this
 	}
 	
@@ -59,8 +59,8 @@ public class VersionBuilder extends RuleBuilder{
      * @return restricts the rules to message versions older than the passed version
      */
 	VersionBuilder before(String version) {
-	    def matchingVersions = HL7V2_VERSIONS.findAll { version > it }
-	    this.version = matchingVersions.join(' ')	
+	    List<Version> matchingVersions = Version.values().findAll { Version.versionOf(version) > it }
+	    this.version = matchingVersions*.version.join(' ')	
 	    this
 	}
 
@@ -69,8 +69,8 @@ public class VersionBuilder extends RuleBuilder{
       * @return restricts the rules to all message versions but the passed version
       */
 	VersionBuilder except(String version) {
-	    def matchingVersions = HL7V2_VERSIONS.findAll { version != it }
-	    this.version = matchingVersions.join(' ')
+	    List<Version> matchingVersions = Version.values().findAll { Version.versionOf(version) != it }
+	    this.version = matchingVersions*.version.join(' ')
 	    this
 	}
 	

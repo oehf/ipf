@@ -15,18 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment;
 
-import java.util.Collection;
+import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.AbstractSegment;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.Varies;
-import ca.uhn.hl7v2.model.v25.datatype.*;
-
-import ca.uhn.log.HapiLogFactory;
+import ca.uhn.hl7v2.model.v25.datatype.CE;
+import ca.uhn.hl7v2.model.v25.datatype.CX;
+import ca.uhn.hl7v2.model.v25.datatype.QIP;
+import ca.uhn.hl7v2.model.v25.datatype.ST;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.hl7v2.HL7Exception;
-import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
 
 
 /**
@@ -50,16 +51,16 @@ public class QPD extends AbstractSegment {
         super(parentGroup, modelFactory);
         Message msg = getMessage();
         try {
-            add("CE", true, 1, 250, new Object[]{msg});
-            add("ST", true, 1, 32, new Object[]{msg});
-            add("QIP", true, 0, 256, new Object[]{msg});
-            add("QIP", false, 0, 256, new Object[]{msg});       // for fuzzy search
+            add(CE.class, true, 1, 250, new Object[]{msg}, "Message Query Name");
+            add(ST.class, true, 1, 32, new Object[]{msg}, "Query Tag");
+            add(QIP.class, true, 0, 256, new Object[]{msg}, "Demographics Fields");
+            add(QIP.class, false, 0, 256, new Object[]{msg}, "Fuzzy Search Parameters");
             add(Varies.class, false, 0, 256, new Object[]{msg}, null);
             add(Varies.class, false, 0, 256, new Object[]{msg}, null);
             add(Varies.class, false, 0, 256, new Object[]{msg}, null);
-            add("CX", false, 0, 256, new Object[]{msg}, null);
+            add(CX.class, false, 0, 256, new Object[]{msg}, "What domains returned");
         } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Can't instantiate " + getClass().getName(), e);
+            throw new HL7v2Exception(e);
         }
     }
 
@@ -109,8 +110,7 @@ public class QPD extends AbstractSegment {
      * Returns Demographics Fields (QPD-3).
      */
     public QIP[] getDemographicsFields() {
-        Collection<QIP> result = getTypedField(3);
-        return result.toArray(new QIP[result.size()]);
+        return getTypedField(3, new QIP[0]);
     }
 
     /**
@@ -147,8 +147,7 @@ public class QPD extends AbstractSegment {
      * @return movement IDs
      */
     public CX[] getWhatDomainsReturned() {
-        Collection<CX> result = getTypedField(8);
-        return result.toArray(new CX[result.size()]);
+        return getTypedField(8, new CX[0]);
     }
 
     /** {@inheritDoc} */
