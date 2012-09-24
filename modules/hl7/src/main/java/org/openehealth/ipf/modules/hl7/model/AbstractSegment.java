@@ -45,32 +45,6 @@ public abstract class AbstractSegment extends ca.uhn.hl7v2.model.AbstractSegment
     	AbstractMessage message = (AbstractMessage)getMessage();
     	Class<? extends Type> typeClass = message.getModelClassFactory().getTypeClass(typeName, message.getVersion());
     	add(typeClass, required, maxReps, length, constructorArgs, name);
-    }    
-
-    /**
-     * Returns the field content casted to the type that is specified by the
-     * caller. This boils down the typed field accessor methods of subclasses to
-     * just 1 line of code.
-     * 
-     * @param <T>
-     * @param c
-     * @param rep
-     * @return the field content casted to a specified type
-     */
-    protected <T extends Type> T getTypedField(int c, int rep) {
-        return super.getTypedField(c, rep);
-    }
-
-    /**
-     * Returns a repeated field content casted to the type that is specified by
-     * the caller.
-     * 
-     * @param <T>
-     * @param c
-     * @return the multivalued field content casted to a specified type
-     */
-    protected <T extends Type> List<T> getTypedField(int c) {
-        return getTypedField(c);
     }
 
 }
