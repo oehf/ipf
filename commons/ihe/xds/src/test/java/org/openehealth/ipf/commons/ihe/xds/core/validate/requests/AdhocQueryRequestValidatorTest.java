@@ -75,7 +75,7 @@ public class AdhocQueryRequestValidatorTest {
         ((FindDocumentsQuery)request.getQuery()).setPatientId(null);
         expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, iti18Profile);
     }
-        
+
     @Test
     public void testTooManyQueryParameterValues() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
@@ -169,6 +169,13 @@ public class AdhocQueryRequestValidatorTest {
         request = SampleData.createGetDocumentsQuery();        
         ((GetDocumentsQuery)request.getQuery()).setUniqueIds(Collections.singletonList("1.2.3"));
         expectFailure(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, iti18Profile);
+    }
+
+    @Test
+    public void testQueryParametersEitherOrChoiceMissing() {
+        request = SampleData.createGetDocumentsQuery();
+        ((GetDocumentsQuery)request.getQuery()).setUuids(null);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, iti18Profile);
     }
 
     /*
