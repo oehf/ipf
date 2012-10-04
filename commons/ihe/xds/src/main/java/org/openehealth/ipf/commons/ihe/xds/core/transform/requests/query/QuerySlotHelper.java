@@ -405,7 +405,7 @@ public class QuerySlotHelper {
         for (String slotValue : slotValues) {
             for (String hl7CE : decodeStringList(slotValue)) {
                 Code code = Hl7v2Based.parse(hl7CE, Code.class);
-                if (StringUtils.isEmpty(code.getCode()) || StringUtils.isEmpty(code.getSchemeName())) {
+                if (code == null || StringUtils.isEmpty(code.getCode()) || StringUtils.isEmpty(code.getSchemeName())) {
                     throw new XDSMetaDataException(ValidationMessage.INVALID_QUERY_PARAMETER_VALUE, hl7CE);
                 }
                 codes.add(code);

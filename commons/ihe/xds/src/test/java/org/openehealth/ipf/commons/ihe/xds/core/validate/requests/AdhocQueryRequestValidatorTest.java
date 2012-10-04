@@ -132,6 +132,7 @@ public class AdhocQueryRequestValidatorTest {
         expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML, iti18Profile);
 
         // only unknown codes -- should fail
+        valueList.clear();
         valueList.add("('lol')");
         valueList.add("('foo')");
         expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML, iti18Profile);
@@ -140,6 +141,27 @@ public class AdhocQueryRequestValidatorTest {
         valueList.set(0, "('bar')");
         valueList.set(1, "('Approved')");
         validator.validate(ebXML, iti18Profile);
+    }
+    
+    @Test public void testUnknownFormatCode() {
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        List<String> valueList = ebXML.getSlots(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()).get(0).getValueList();
+
+        // invalid code without code -- should fail
+        valueList.clear();
+        valueList.add("('^^gablorg')");
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+
+        // invalid code without scheme -- should fail
+        valueList.clear();
+        valueList.add("('x^')");
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+
+        // empty code -- should fail
+        valueList.clear();
+        valueList.add("('')");
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+
     }
     
     @Test
