@@ -143,6 +143,28 @@ public class AdhocQueryRequestValidatorTest {
     }
     
     @Test
+    public void testUnknownFormatCodes() {
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        List<String> valueList = ebXML.getSlots(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()).get(0).getValueList();
+
+        // codes without code -- should fail
+        valueList.clear();
+        valueList.add("('^^gablorg')");
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+
+        // codes without scheme -- should fail
+        valueList.clear();
+        valueList.add("('s^')");
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+
+        // codes without anything -- should fail
+        valueList.clear();
+        valueList.add("('')");
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+
+    }    
+    
+    @Test
     public void testQueryParametersCannotBeSetTogether() {
         request = SampleData.createGetDocumentsQuery();        
         ((GetDocumentsQuery)request.getQuery()).setUniqueIds(Collections.singletonList("1.2.3"));
