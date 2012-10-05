@@ -29,8 +29,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import javax.xml.bind.Unmarshaller
 import org.openehealth.ipf.commons.xml.XmlUtils
-import org.apache.cxf.jaxws.EndpointImpl
-import org.springframework.context.support.ClassPathXmlApplicationContext
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint
 
 /**
