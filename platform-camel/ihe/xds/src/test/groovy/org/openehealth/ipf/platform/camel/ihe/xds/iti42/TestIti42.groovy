@@ -29,6 +29,9 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import javax.xml.bind.Unmarshaller
 import org.openehealth.ipf.commons.xml.XmlUtils
+import org.apache.cxf.jaxws.EndpointImpl
+import org.springframework.context.support.ClassPathXmlApplicationContext
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint
 
 /**
  * Tests the ITI-42 transaction with a webservice and client adapter defined via URIs.
@@ -77,6 +80,16 @@ class TestIti42 extends StandardTestContainer {
         assert auditSender.messages.size() == 2
         
         checkAudit('8')
+    }
+
+    @Test
+    void checkIti42AdditionalPropertiesSet(){
+        XdsEndpoint endpoint = StandardTestContainer.camelContext.getEndpoint(
+            'xds-iti42:xds-iti42-service4?schemaLocations=#schemaLocations&properties=#props', XdsEndpoint.class)
+        assert endpoint != null
+        assert endpoint.schemaLocations.size() == 1
+        assert endpoint.properties.size() == 2
+        assert Boolean.valueOf(endpoint.properties['mtom-enabled']) == true
     }
 
     @Test

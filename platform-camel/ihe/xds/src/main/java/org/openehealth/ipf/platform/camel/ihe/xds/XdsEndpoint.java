@@ -25,6 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Camel Endpoint implementation for XDS-like transactions
@@ -38,9 +39,11 @@ public class XdsEndpoint extends AbstractWsEndpoint<AbstractWsComponent<?>> {
             String address,
             AbstractWsComponent<?> component,
             InterceptorProvider customInterceptors,
-            List<AbstractFeature> features)
+            List<AbstractFeature> features,
+            List<String> schemaLocations,
+            Map<String, Object> properties)
     {
-        super(endpointUri, address, component, customInterceptors, features);
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties);
     }
 
 

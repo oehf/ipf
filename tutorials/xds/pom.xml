@@ -14,7 +14,7 @@
 
     <properties>
         <osgi.export.pkg>
-            org.openehealth.ipf.tutorials.xds.*;version="${pom.version}"
+            org.openehealth.ipf.tutorials.xds.*;version="${project.version}"
         </osgi.export.pkg>
         <osgi.import.pkg>
             org.openehealth.ipf.platform.camel.core.extend,

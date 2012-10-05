@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
 import java.util.List;
+import java.util.Map;
 
 public class SomeItiEndpoint extends AbstractWsEndpoint<SomeItiComponent> {
     
@@ -34,9 +35,11 @@ public class SomeItiEndpoint extends AbstractWsEndpoint<SomeItiComponent> {
             String address,
             SomeItiComponent someItiComponent,
             InterceptorProvider interceptorProvider,
-            List<AbstractFeature> features)
+            List<AbstractFeature> features,
+            List<String> schemaLocations,
+            Map<String, Object> properties)
     {
-        super(endpointUri, address, someItiComponent, interceptorProvider, features);
+        super(endpointUri, address, someItiComponent, interceptorProvider, features, schemaLocations, properties);
     }
 
     @Override

@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import javax.xml.namespace.QName;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
@@ -100,6 +101,8 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
     private String homeCommunityId = null;
     private WsRejectionHandlingStrategy rejectionHandlingStrategy = null;
     private List<AbstractFeature> features;
+    private List<String> schemaLocations;
+    private Map<String, Object> properties;
 
     /**
      * Constructs the endpoint.
@@ -119,12 +122,16 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
             String address,
             ComponentType component,
             InterceptorProvider customInterceptors,
-            List<AbstractFeature> features)
+            List<AbstractFeature> features,
+            List<String> schemaLocations,
+            Map<String, Object> properties)
     {
         super(endpointUri, component);
         this.address = address;
         this.customInterceptors = customInterceptors;
         this.features = features;
+        this.schemaLocations = schemaLocations;
+        this.properties = properties;
         configure();
     }
 
@@ -277,6 +284,22 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
         return features;
     }
 
+    /**
+     * @return
+     *      CXF schema locations configured for this endpoint.
+     */
+    public List<String> getSchemaLocations() {
+        return schemaLocations;
+    }
+
+    /**
+     * @return
+     *      CXF schema locations configured for this endpoint.
+     */
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public ComponentType getComponent() {
@@ -306,6 +329,20 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
         ServerFactoryBean serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
         if (features != null) {
             serverFactory.getFeatures().addAll(features);
+        }
+        if (schemaLocations != null) {
+            if (serverFactory.getSchemaLocations() == null) {
+                serverFactory.setSchemaLocations(schemaLocations);
+            } else if (getProperties() != null) {
+                serverFactory.getSchemaLocations().addAll(schemaLocations);
+            }
+        }
+        if (properties != null){
+            if (serverFactory.getProperties() == null) {
+                serverFactory.setProperties(properties);
+            } else if (getProperties() != null) {
+                serverFactory.getProperties().putAll(properties);
+            }
         }
 
         Server server = serverFactory.create();

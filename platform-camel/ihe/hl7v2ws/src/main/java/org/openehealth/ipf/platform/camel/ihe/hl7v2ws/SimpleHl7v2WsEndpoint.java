@@ -36,6 +36,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsConsumer;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Camel endpoint for HL7v2-WS transaction with a single operation.
@@ -60,9 +61,11 @@ public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsCom
             String address,
             AbstractHl7v2WsComponent component,
             InterceptorProvider customInterceptors,
-            List<AbstractFeature> features)
+            List<AbstractFeature> features,
+            List<String> schemaLocations,
+            Map<String, Object> properties)
     {
-        super(endpointUri, address, component, customInterceptors, features);
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties);
     }
 
 

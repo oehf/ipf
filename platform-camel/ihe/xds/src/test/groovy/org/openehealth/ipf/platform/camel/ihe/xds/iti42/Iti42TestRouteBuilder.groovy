@@ -46,6 +46,9 @@ public class Iti42TestRouteBuilder extends SpringRouteBuilder {
                 Exchanges.resultMessage(it).body = response
             }
 
+        from('xds-iti42:xds-iti42-service4?schemaLocations=#schemaLocations&properties=#props')
+             .process { checkValue(it, 'service 4') }
+
     }
 
     void checkValue(exchange, expected) {

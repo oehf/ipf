@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.endpoint.ClientImpl;
+import org.apache.cxf.endpoint.EndpointImpl;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
@@ -227,6 +228,9 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
         client.setSynchronousTimeout(Integer.MAX_VALUE);
         if (getEndpoint().getFeatures() != null) {
             client.getEndpoint().getActiveFeatures().addAll(getEndpoint().getFeatures());
+        }
+        if (getEndpoint().getProperties() != null) {
+            client.getEndpoint().putAll(getEndpoint().getProperties());
         }
     }
     

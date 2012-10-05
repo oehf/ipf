@@ -41,7 +41,9 @@ abstract public class AbstractHl7v2WsComponent
                 remaining,
                 this,
                 getCustomInterceptors(parameters),
-                getFeatures(parameters));
+                getFeatures(parameters),
+                getSchemaLocations(parameters),
+                getProperties(parameters));
     }
 
     @Override

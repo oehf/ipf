@@ -55,7 +55,11 @@ public class Iti47Component extends AbstractWsComponent<Hl7v3ContinuationAwareWs
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this, getCustomInterceptors(parameters), getFeatures(parameters));
+        return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this,
+                getCustomInterceptors(parameters),
+                getFeatures(parameters),
+                getSchemaLocations(parameters),
+                getProperties(parameters));
     }
 
     @Override
