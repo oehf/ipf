@@ -333,14 +333,14 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
         if (schemaLocations != null) {
             if (serverFactory.getSchemaLocations() == null) {
                 serverFactory.setSchemaLocations(schemaLocations);
-            } else if (getProperties() != null) {
+            } else {
                 serverFactory.getSchemaLocations().addAll(schemaLocations);
             }
         }
         if (properties != null){
             if (serverFactory.getProperties() == null) {
                 serverFactory.setProperties(properties);
-            } else if (getProperties() != null) {
+            } else {
                 serverFactory.getProperties().putAll(properties);
             }
         }
