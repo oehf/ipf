@@ -13,7 +13,7 @@
         
         <!-- Report version properties -->
         <site-plugin-version>3.0</site-plugin-version>
-        <surefire-report-plugin-version>2.12.4</surefire-report-plugin-version>
+        <surefire-report-plugin-version>2.8.1</surefire-report-plugin-version>
         <jxr-plugin-version>2.1</jxr-plugin-version>
         <project-info-reports-plugin-version>2.1.2</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.3</maven-dsldoc-plugin-version>
