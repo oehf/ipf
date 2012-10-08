@@ -28,6 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import java.util.concurrent.TimeUnit
 
 /**
  * Tests for RAD-75.
@@ -85,8 +86,8 @@ class TestRad75 extends StandardTestContainer {
         // wait for completion of asynchronous routes
         Rad75TestRouteBuilder routeBuilder = StandardTestContainer.appContext
                 .getBean(Rad75TestRouteBuilder.class)
-        routeBuilder.countDownLatch.await()
-        routeBuilder.asyncCountDownLatch.await()
+        routeBuilder.countDownLatch.await(1000 + Rad75TestRouteBuilder.ASYNC_DELAY, TimeUnit.MILLISECONDS)
+        routeBuilder.asyncCountDownLatch.await(1000 + Rad75TestRouteBuilder.ASYNC_DELAY, TimeUnit.MILLISECONDS)
 
         assert Rad75TestRouteBuilder.responseCount.get() == N * 2
         assert Rad75TestRouteBuilder.asyncResponseCount.get() == N
