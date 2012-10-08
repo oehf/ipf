@@ -30,6 +30,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad75RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad75ResponseValidator
+import java.util.concurrent.CountDownLatch
 
 /**
  * Test routes for RAD-75.
@@ -44,7 +45,24 @@ class Rad75TestRouteBuilder extends SpringRouteBuilder {
     static final long ASYNC_DELAY = 10 * 1000L
 
     static boolean errorOccurred = false
-    
+
+    private final CountDownLatch countDownLatch, asyncCountDownLatch;
+
+    static final int TASKS_COUNT = 5
+
+    Rad75TestRouteBuilder(){
+        countDownLatch      = new CountDownLatch(TASKS_COUNT)
+        asyncCountDownLatch = new CountDownLatch(TASKS_COUNT)
+    }
+
+    CountDownLatch getCountDownLatch(){
+        this.countDownLatch
+    }
+
+    CountDownLatch getAsyncCountDownLatch(){
+        this.asyncCountDownLatch
+    }
+
     @Override
     public void configure() throws Exception {
 
@@ -67,6 +85,7 @@ class Rad75TestRouteBuilder extends SpringRouteBuilder {
                         "corr ${asyncResponseCount.getAndIncrement() * 2}"
 
                     assert it.in.getBody(RetrievedDocumentSet.class).status == Status.SUCCESS
+                    asyncCountDownLatch.countDown()
                 } catch (Exception e) {
                     errorOccurred = true
                     LOG.error(e)
@@ -101,6 +120,7 @@ class Rad75TestRouteBuilder extends SpringRouteBuilder {
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
                 
                 responseCount.incrementAndGet()
+                countDownLatch.countDown()
             }
             .process(rad75ResponseValidator())
     }

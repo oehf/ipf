@@ -34,7 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
  * @author Clay Sebourn
  */
 class TestRad75 extends StandardTestContainer {
-    
+
     def static CONTEXT_DESCRIPTOR = 'rad-75.xml'
     final String SERVICE1_URI =
             "xcai-rad75://localhost:${port}/rad75service" +
@@ -74,7 +74,7 @@ class TestRad75 extends StandardTestContainer {
      */
     @Test
     void testRad75() {
-        final int N = 5
+        final int N = Rad75TestRouteBuilder.TASKS_COUNT
         int i = 0
         
         N.times {
@@ -83,7 +83,10 @@ class TestRad75 extends StandardTestContainer {
         }
 
         // wait for completion of asynchronous routes
-        Thread.currentThread().sleep(1000 + Rad75TestRouteBuilder.ASYNC_DELAY)
+        Rad75TestRouteBuilder routeBuilder = StandardTestContainer.appContext
+                .getBean(Rad75TestRouteBuilder.class)
+        routeBuilder.countDownLatch.await()
+        routeBuilder.asyncCountDownLatch.await()
 
         assert Rad75TestRouteBuilder.responseCount.get() == N * 2
         assert Rad75TestRouteBuilder.asyncResponseCount.get() == N
