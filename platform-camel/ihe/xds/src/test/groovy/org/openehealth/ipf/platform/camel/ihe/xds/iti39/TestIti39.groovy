@@ -27,11 +27,13 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
+import org.springframework.test.annotation.DirtiesContext
 
 /**
  * Tests for ITI-39.
  * @author Dmytro Rud
  */
+@DirtiesContext
 class TestIti39 extends StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-39.xml'

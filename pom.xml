@@ -66,7 +66,7 @@
         <cxf-version>2.6.2</cxf-version>
         <derby-version>10.8.2.2</derby-version>
         <easymock-version>3.1</easymock-version>
-        <ehcache-version>2.5.2</ehcache-version>
+        <ehcache-version>2.5.5</ehcache-version>
         <geronimo-jpa_2.0_spec.version>1.1</geronimo-jpa_2.0_spec.version>
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>

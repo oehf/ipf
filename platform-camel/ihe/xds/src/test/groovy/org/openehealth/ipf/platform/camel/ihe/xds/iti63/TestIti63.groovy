@@ -26,11 +26,13 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.springframework.test.annotation.DirtiesContext
 
 /**
  * Tests for ITI-63.
  * @author Dmytro Rud
  */
+@DirtiesContext
 class TestIti63 extends StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-63.xml'

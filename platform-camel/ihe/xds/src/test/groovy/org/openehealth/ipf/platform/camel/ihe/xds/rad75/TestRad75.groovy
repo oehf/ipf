@@ -29,11 +29,13 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import java.util.concurrent.TimeUnit
+import org.springframework.test.annotation.DirtiesContext
 
 /**
  * Tests for RAD-75.
  * @author Clay Sebourn
  */
+@DirtiesContext
 class TestRad75 extends StandardTestContainer {
 
     def static CONTEXT_DESCRIPTOR = 'rad-75.xml'
