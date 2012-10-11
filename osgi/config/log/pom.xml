@@ -12,7 +12,7 @@
     </parent>
     
     <properties>
-        <osgi.fragment.host>com.springsource.org.apache.log4j</osgi.fragment.host>
+        <osgi.fragment.host>log4j</osgi.fragment.host>
     </properties>
         
 </project>
