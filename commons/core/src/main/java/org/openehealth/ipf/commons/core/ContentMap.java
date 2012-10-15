@@ -89,6 +89,7 @@ public class ContentMap {
      * @return
      *      the given content, as convenience.
      */
+    @SuppressWarnings("unchecked")
     public <T> T setContent(Class<T> key, T content) {
         Validate.notNull(key, "content type must be provided");
         Validate.notNull(content, "null content is not allowed");
@@ -108,6 +109,7 @@ public class ContentMap {
      *      Obsolete content of the given type, or <code>null</code>,
      *      when no content of the given type was present.
      */
+    @SuppressWarnings("unchecked")
     public <T> T removeContent(Class<T> key) {
         synchronized (map) {
             return (T) map.remove(key);

@@ -38,9 +38,9 @@ class BidiMappingService implements MappingService, InitializingBean {
 	private static final String ELSE = '_%ELSE%_'
    	private static final String SEPARATOR = '~'
 	
-	def map = [:]	
-    def reverseMap = [:]
-	def separator
+	Map<Object, Map> map = [:]	
+    Map reverseMap = [:]
+	String separator
 
     boolean ignoreResourceNotFound = false
     List<Resource> resources = []
@@ -139,7 +139,8 @@ class BidiMappingService implements MappingService, InitializingBean {
 
  	public Set<?> keys(Object mappingKey){
  		checkMappingKey(map, mappingKey)
- 		map[mappingKey].keySet().findAll { !(it.startsWith('_%')) }
+ 		Set<?> result = map[mappingKey].keySet().findAll { !(it.startsWith('_%')) }
+        result
  	}
  	
  	public Collection<?> values(Object mappingKey){
@@ -149,12 +150,12 @@ class BidiMappingService implements MappingService, InitializingBean {
         }).values()
  	}
  	
- 	private Object retrieve(Map m, Object mappingKey, Object key) {
- 		checkMappingKey(m, mappingKey)
- 		m[mappingKey].get(key, retrieveElse(m, mappingKey, key))
+ 	private Object retrieve(Map<Object, Map> m, Object mappingKey, Object key) {
+ 		checkMappingKey(m, mappingKey) 
+ 		m[mappingKey][key] ?: retrieveElse(m, mappingKey, key)
  	}
  	
- 	private Object retrieveElse(Map m, Object mappingKey, Object key) {
+ 	private Object retrieveElse(Map<Object, Map> m, Object mappingKey, Object key) {
  		def elseClause = m[mappingKey][ELSE]
  		if (elseClause instanceof Closure) {
  			return elseClause.call(key)
@@ -185,7 +186,7 @@ class BidiMappingService implements MappingService, InitializingBean {
     	}
     }
     
- 	private void checkMappingKey(Map map, Object mappingKey) {
+ 	private void checkMappingKey(Map<Object, Map> map, Object mappingKey) {
  		if (!map[mappingKey])
  			throw new IllegalArgumentException("Unknown key $mappingKey")
  	} 	

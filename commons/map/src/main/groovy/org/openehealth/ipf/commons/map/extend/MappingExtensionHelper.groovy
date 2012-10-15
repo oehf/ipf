@@ -26,10 +26,10 @@ class MappingExtensionHelper {
     static def methodMissingLogic = { MappingService mappingService, def normalizer, String name, args ->
         def result
         if (name.startsWith('mapReverse')) {
-            def key = name.minus('mapReverse').firstLower()
+            def key = name.substring('mapReverse'.length()).firstLower()
             result = InvokerHelper.invokeMethod(mappingService, 'getKey', [key, normalizer(delegate), *args])
         } else if (name.startsWith('map')) {
-            def key = name.minus('map').firstLower()
+            def key = name.substring('map'.length()).firstLower()
             result = InvokerHelper.invokeMethod(mappingService, 'get', [key, normalizer(delegate), *args])
         } else {
             throw new RuntimeException(new MissingMethodException(name, delegate.class, args))

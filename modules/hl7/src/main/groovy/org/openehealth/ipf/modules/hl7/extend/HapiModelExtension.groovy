@@ -35,9 +35,6 @@ import ca.uhn.hl7v2.parser.ModelClassFactory
  */
 class HapiModelExtension {
 
-	ModelClassFactory factory = new CustomModelClassFactory()
-
-	MappingService mappingService
 
 	def extensions = {
 
@@ -47,22 +44,24 @@ class HapiModelExtension {
 		// ----------------------------------------------------------------
 
 		Collection.metaClass.map = {
-			mappingService?.get(it, normalizeCollection(delegate))
+			Hl7ExtensionModule.map(delegate, it)
 		}
 
 		Collection.metaClass.map = { mappingKey, defaultValue ->
-			mappingService?.get(mappingKey, normalizeCollection(delegate), defaultValue)
+			Hl7ExtensionModule.map(delegate, mappingKey, defaultValue)
 		}
 
 		Collection.metaClass.mapReverse = {
-			mappingService?.getKey(it, normalizeCollection(delegate))
+			Hl7ExtensionModule.mapReverse(delegate, it)
 		}
 
 		Collection.metaClass.mapReverse = { mappingKey, defaultValue ->
-			mappingService?.getKey(mappingKey, normalizeCollection(delegate), defaultValue)
+			Hl7ExtensionModule.mapReverse(delegate, mappingKey, defaultValue)
 		}
 
-		Collection.metaClass.methodMissing = MappingExtensionHelper.methodMissingLogic.curry(mappingService, normalizeCollection)
+		Collection.metaClass.methodMissing { String name, args ->
+            Hl7ExtensionModule.methodMissing(delegate, name, args)
+		}
 
 		// ----------------------------------------------------------------
 		//  Extensions to HAPI Primitives
@@ -70,128 +69,118 @@ class HapiModelExtension {
 		// ----------------------------------------------------------------
 
 		Type.metaClass.map = {
-			mappingService?.get(it, delegate.encode())
+			Hl7ExtensionModule.map(delegate, it)
 		}
 
 		Type.metaClass.map = { mappingKey, defaultValue ->
-			mappingService?.get(mappingKey, delegate.encode(), defaultValue)
+            Hl7ExtensionModule.map(delegate, mappingKey, defaultValue)
 		}
 
 		Type.metaClass.mapReverse = {
-			mappingService?.getKey(it, delegate.encode())
+            Hl7ExtensionModule.mapReverse(delegate, it)
 		}
 
 		Type.metaClass.mapReverse = { mappingKey, defaultValue ->
-			mappingService?.getKey(mappingKey, delegate.encode(), defaultValue)
+            Hl7ExtensionModule.mapReverse(delegate, mappingKey, defaultValue)
 		}
 
-		Type.metaClass.methodMissing = MappingExtensionHelper.methodMissingLogic.curry(mappingService, {it.encode()})
-
-		// ################################################################
-		//
-		//  TODO: refactor to extension methods
-		//
-		// ################################################################
+		Type.metaClass.methodMissing = {String name, args ->
+            Hl7ExtensionModule.methodMissing(delegate, name, args)
+        }
 
 		// ----------------------------------------------------------------
 		//  Extensions to HAPI messages
 		// ----------------------------------------------------------------
 
 		Message.metaClass.matches = { String type, String event, String version ->
-			(type == '*' || type == MessageUtils.eventType(delegate)) &&
-					(event == '*' || event == MessageUtils.triggerEvent(delegate)) &&
-					(version == '*' || version == delegate.version)
+			Hl7ExtensionModule.matches(delegate, type, event, version)
 		}
 
-		Message.metaClass.getEventType = {
-			->
-			MessageUtils.eventType(delegate)
+		Message.metaClass.getEventType = { ->
+			Hl7ExtensionModule.getEventType(delegate)
 		}
 
-		Message.metaClass.getTriggerEvent = {
-			->
-			MessageUtils.triggerEvent(delegate)
+		Message.metaClass.getTriggerEvent = { ->
+			Hl7ExtensionModule.getTriggerEvent(delegate)
 		}
 
-		Message.metaClass.getMessageStructure = {
-			->
-			MessageUtils.messageStructure(delegate)
+		Message.metaClass.getMessageStructure = { ->
+			Hl7ExtensionModule.getMessageStructure(delegate)
 		}
-
+        
 		Message.metaClass.'static'.methodMissing = { String name, args ->
-			MessageUtils.newMessage(factory, name, args[0])
+            Hl7StaticExtensionModule.methodMissing(delegate, name, args)
 		}
 
 		/**
 		 * Positive acknowledgement for the message. The MessageAdapter
 		 * is populated with the same Parser instance.
 		 **/
-		Message.metaClass.respond =  { String eventType, String triggerEvent ->
-			MessageUtils.response(factory, delegate, eventType, triggerEvent)
+		AbstractMessage.metaClass.respond =  { String eventType, String triggerEvent ->
+			Hl7ExtensionModule.respond(delegate, eventType, triggerEvent)
 		}
 
 		/**
 		 * Positive acknowledgement for the message. The MessageAdapter
 		 * is populated with the same Parser instance.
 		 **/
-		Message.metaClass.ack =  {
-			MessageUtils.ack(factory, delegate)
+		AbstractMessage.metaClass.ack =  {
+			Hl7ExtensionModule.ack(delegate)
 		}
 
 		/**
 		 * Negative acknowledgement for the underlying message. The MessageAdapter
 		 * is populated with the same Parser instance.
 		 **/
-		Message.metaClass.nak = { String cause, AckTypeCode ackTypeCode ->
-			MessageUtils.nak(factory, delegate, cause, ackTypeCode)
+		AbstractMessage.metaClass.nak = { String cause, AckTypeCode ackTypeCode ->
+			Hl7ExtensionModule.nak(delegate, cause, ackTypeCode)
 		}
 
 		/**
 		 * Negative acknowledgement for the underlying message. The MessageAdapter
 		 * is populated with the same Parser instance.
 		 **/
-		Message.metaClass.nak = { AbstractHL7v2Exception e, AckTypeCode ackTypeCode ->
-			MessageUtils.nak(factory, delegate, e, ackTypeCode)
+		AbstractMessage.metaClass.nak = { AbstractHL7v2Exception e, AckTypeCode ackTypeCode ->
+			Hl7ExtensionModule.nak(delegate, e, ackTypeCode)
 		}
 
 		/**
 		 * Negative acknowledgement from scratch. The MessageAdapter
 		 * is populated with the same Parser instance.
 		 **/
-		Message.metaClass.'static'.defaultNak = { AbstractHL7v2Exception e, AckTypeCode ackTypeCode, String version  ->
-			MessageUtils.defaultNak(e, ackTypeCode, version)
+		AbstractMessage.metaClass.'static'.defaultNak = { AbstractHL7v2Exception e, AckTypeCode ackTypeCode, String version  ->
+			Hl7StaticExtensionModule.defaultNak(delegate, e, ackTypeCode, version)
 		}
 
 		/**
 		 * Dumps the message for debugging purposes using a 
 		 * hierarchical structure
 		 **/
-		Message.metaClass.dump = {
-			->
-			MessageUtils.dump(delegate)
+		Message.metaClass.dump = { ->
+			Hl7ExtensionModule.dump(delegate)
 		}
 
 		/**
 		 * Validates a message against a validation context 
 		 **/
 		Message.metaClass.validate = { validationContext ->
-			MessageUtils.validate(delegate, validationContext)
+			Hl7ExtensionModule.validate(delegate, validationContext)
 		}
 
-		Message.metaClass.addSegment = { String name, boolean required, boolean repeating ->
-			delegate.add(delegate.modelClassFactory.getSegmentClass(name, getVersion()), required, repeating)
+		AbstractMessage.metaClass.addSegment = { String name, boolean required, boolean repeating ->
+            Hl7ExtensionModule.addSegment(delegate, name, required, repeating)
 		}
 
-		Message.metaClass.addSegment = { String name, boolean required, boolean repeating, int index ->
-			delegate.add(delegate.modelClassFactory.getSegmentClass(name, getVersion()), required, repeating, index)
+		AbstractMessage.metaClass.addSegment = { String name, boolean required, boolean repeating, int index ->
+            Hl7ExtensionModule.addSegment(delegate, name, required, repeating, index)
 		}
 
-		Message.metaClass.addGroup = { String name, boolean required, boolean repeating ->
-			delegate.add(delegate.modelClassFactory.getGroupClass(name, getVersion()), required, repeating)
+		AbstractMessage.metaClass.addGroup = { String name, boolean required, boolean repeating ->
+            Hl7ExtensionModule.addGroup(delegate, name, required, repeating)
 		}
 
-		Message.metaClass.addGroup = { String name, boolean required, boolean repeating, int index ->
-			delegate.add(delegate.modelClassFactory.getGroupClass(name, getVersion()), required, repeating, index)
+		AbstractMessage.metaClass.addGroup = { String name, boolean required, boolean repeating, int index ->
+            Hl7ExtensionModule.addGroup(delegate, name, required, repeating, index)
 		}
 
 		// ----------------------------------------------------------------
@@ -199,7 +188,7 @@ class HapiModelExtension {
 		// ----------------------------------------------------------------
 
 		Segment.metaClass.'static'.methodMissing = { String segmentName, args ->
-			MessageUtils.newSegment(factory, segmentName, args[0])
+            Hl7StaticExtensionModule.methodMissing(delegate, segmentName, args)
 		}
 
 		// ----------------------------------------------------------------
@@ -207,11 +196,7 @@ class HapiModelExtension {
 		// ----------------------------------------------------------------
 
 		Composite.metaClass.'static'.methodMissing = { String compositeName, args ->
-			if (args.size() > 1 && args[1] instanceof Map) {
-				MessageUtils.newComposite(factory, compositeName, args[0], args[1])
-			} else {
-				MessageUtils.newComposite(factory, compositeName, args[0], null)
-			}
+            Hl7StaticExtensionModule.methodMissing(delegate, compositeName, args)
 		}
 
 		// ----------------------------------------------------------------
@@ -219,25 +204,9 @@ class HapiModelExtension {
 		// ----------------------------------------------------------------
 
 		Primitive.metaClass.'static'.methodMissing = { String primitiveName, args ->
-			if (args.size() > 1 && args[1] instanceof String) {
-				MessageUtils.newPrimitive(factory, primitiveName, args[0], args[1])
-			} else {
-				MessageUtils.newPrimitive(factory, primitiveName, args[0], null)
-			}
+            Hl7StaticExtensionModule.methodMissing(delegate, primitiveName, args)
 		}
 
-	}
-
-	// ################################################################
-	//
-	//  Place extension methods here ...
-	//
-	// ################################################################
-
-	private static def normalizeCollection = { Collection c ->
-		c.collect {
-			it instanceof Type ? it.encode() : it.toString()
-		}
 	}
 
 }

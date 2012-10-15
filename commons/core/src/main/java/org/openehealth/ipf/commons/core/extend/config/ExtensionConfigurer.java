@@ -56,10 +56,9 @@ public class ExtensionConfigurer extends SpringConfigurer<Extension>{
         LOG.debug("Extension configured..." + configuration);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<Extension> lookup(ListableBeanFactory source) {
-        List list = new ArrayList(
+        List<Extension> list = new ArrayList<Extension>(
                 BeanFactoryUtils.beansOfTypeIncludingAncestors(source,
                         Extension.class).values());
         return list;        

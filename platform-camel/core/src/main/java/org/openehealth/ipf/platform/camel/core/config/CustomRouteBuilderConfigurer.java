@@ -45,7 +45,7 @@ public class CustomRouteBuilderConfigurer extends SpringConfigurer<CustomRouteBu
 
     @Override
     public Collection<CustomRouteBuilder> lookup(ListableBeanFactory source) {        
-        List list = new ArrayList(
+        List<CustomRouteBuilder> list = new ArrayList<CustomRouteBuilder>(
                 BeanFactoryUtils.beansOfTypeIncludingAncestors(source,
                         CustomRouteBuilder.class).values());
         Collections.sort(list);

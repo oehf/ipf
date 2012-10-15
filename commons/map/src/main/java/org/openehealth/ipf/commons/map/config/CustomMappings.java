@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openehealth.ipf.commons.core.config.Customized;
 import org.springframework.core.io.Resource;
 
 /**
@@ -49,7 +50,7 @@ import org.springframework.core.io.Resource;
  * @author Boris Stanojevic
  * 
  */
-public class CustomMappings {
+public class CustomMappings implements Customized {
 
     private Collection<Resource> mappingScripts;
 

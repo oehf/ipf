@@ -15,17 +15,23 @@
  */
 package org.openehealth.ipf.modules.hl7.extend
 
-import org.openehealth.ipf.commons.core.extend.DefaultActivator
+import static org.easymock.EasyMock.*
+import static org.junit.Assert.*
+
+import org.junit.BeforeClass
+import org.junit.Test
+import org.openehealth.ipf.commons.core.config.ContextFacade
+import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.extend.MappingExtension
+import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.modules.hl7.AckTypeCode
 import org.openehealth.ipf.modules.hl7.HL7v2Exception
 import org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory
 import org.springframework.core.io.ClassPathResource
 
 import ca.uhn.hl7v2.model.*
-import ca.uhn.hl7v2.model.v25.segment.NK1
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
+import ca.uhn.hl7v2.model.v25.segment.NK1
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.util.Terser
 
@@ -33,142 +39,137 @@ import ca.uhn.hl7v2.util.Terser
  * @author Christian Ohr
  * @author Martin Krasser
  */
-public class HapiModelExtensionTest extends GroovyTestCase {
+public class HapiModelExtensionTest {
 	
-    static def mappingService
-	static def defMappingExtension
-    static def hl7MappingExtension
 	static def customGroovyPackageName = 'org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v25'
 
-    static {
-        ExpandoMetaClass.enableGlobally()
-    }
-    
-    void setUp() {
-        if (mappingService) return
-        mappingService = new BidiMappingService()
+    @BeforeClass
+    static void setUp() {
+        BidiMappingService mappingService = new BidiMappingService()
         mappingService.addMappingScript(new ClassPathResource("example2.map"))
-        defMappingExtension = new MappingExtension()
-        hl7MappingExtension = new HapiModelExtension()
-        defMappingExtension.mappingService = mappingService
-        hl7MappingExtension.mappingService = mappingService
-        DefaultActivator activator = new DefaultActivator()
-        activator.activate(defMappingExtension)
-        activator.activate(hl7MappingExtension)
+        ModelClassFactory mcf = new CustomModelClassFactory()
+        Registry registry = createMock(Registry)
+        ContextFacade facade = new ContextFacade(registry)
+        expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        expect(registry.bean(ModelClassFactory)).andReturn(mcf).anyTimes()
+        replay(registry)
     }
 	
+    @Test
     void testMatches() {
-        def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
-        def msg = new GenericParser().parse(msgText)        
-    	assert msg.matches('*', '*', '*')
-    	assert msg.matches('ADT', 'A01', '*')
-    	assert msg.matches('ADT', 'A01', '2.2')
-    	assert msg.matches('ADT', 'A02', '*') == false
-    	assert msg.matches('ADT', 'A01', '2.3') == false
+        String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)        
+    	assertTrue msg.matches('*', '*', '*')
+    	assertTrue msg.matches('ADT', 'A01', '*')
+    	assertTrue msg.matches('ADT', 'A01', '2.2')
+    	assertFalse msg.matches('ADT', 'A02', '*') 
+    	assertFalse msg.matches('ADT', 'A01', '2.3') 
         msgText = this.class.classLoader.getResource('msg-02.hl7')?.text
         msg = new GenericParser().parse(msgText)        
-    	assert msg.matches('*', '*', '*')
-    	assert msg.matches('ORU', 'R01', '*')
-    	assert msg.matches('ORU', 'R01', '2.4')
-    	assert msg.matches('ORU', 'A02', '*') == false
-    	assert msg.matches('ORU', 'R01', '2.3') == false
+    	assertTrue msg.matches('*', '*', '*')
+    	assertTrue msg.matches('ORU', 'R01', '*')
+    	assertTrue msg.matches('ORU', 'R01', '2.4')
+    	assertFalse msg.matches('ORU', 'A02', '*')
+    	assertFalse msg.matches('ORU', 'R01', '2.3')
     }
     
+    @Test
     void testAck() {
-        def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
-        def msg = new GenericParser().parse(msgText)        
-    	def ack = msg.ack()
-    	assert ack.MSH.messageType.messageType.value == 'ACK'
-    	assert ack.MSA.acknowledgementCode.value == 'AA'
+        String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)        
+    	Message ack = msg.ack()
+    	assertEquals 'ACK', ack.MSH.messageType.messageType.value
+    	assertEquals 'AA', ack.MSA.acknowledgementCode.value
     }
 
+    @Test
     void testNak() {
-        def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
-        def msg = new GenericParser().parse(msgText)        
-    	def nak = msg.nak(new HL7v2Exception("blarg", 204), AckTypeCode.AR)
-    	assert nak.MSH.messageType.messageType.value == 'ACK'
-    	assert nak.MSA.acknowledgementCode.value == 'AR'
-    	assert nak.MSA.acknowledgementCode.value == 'AR'
-    	//assert nak.MSA.textMessage.value == "blarg"
-    	//println new GenericParser().encode(nak)
+        String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)        
+    	Message nak = msg.nak(new HL7v2Exception("blarg", 204), AckTypeCode.AR)
+    	assertEquals 'ACK', nak.MSH.messageType.messageType.value
+    	assertEquals 'AR', nak.MSA.acknowledgementCode.value 
+    	assertEquals 'AR', nak.MSA.acknowledgementCode.value
     }
     
+    @Test
     void testNakCause() {
-        def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
-        def msg = new GenericParser().parse(msgText)        
-    	def nak = msg.nak("blarg", AckTypeCode.AR)
-    	assert nak.MSH.messageType.messageType.value == 'ACK'
-    	assert nak.MSA.acknowledgementCode.value == 'AR'
-    	//assert nak.MSA.textMessage.value == "blarg"
-        //println new GenericParser().encode(nak)
+        String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)        
+    	Message nak = msg.nak("blarg", AckTypeCode.AR)
+    	assertEquals 'ACK', nak.MSH.messageType.messageType.value
+    	assertEquals 'AR', nak.MSA.acknowledgementCode.value
     }
 
+    @Test
     void testNak25() {
-        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
-        def msg = new GenericParser().parse(msgText)        
-    	def nak = msg.nak(new HL7v2Exception("blarg", 204), AckTypeCode.AR)
-    	assert nak.MSH.messageType.messageCode.value == 'ACK'
-    	assert nak.MSA.acknowledgmentCode.value == 'AR'
-    	//assert nak.MSA.textMessage.value == "blarg"
-        //println new GenericParser().encode(nak)
+        String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)        
+    	Message nak = msg.nak(new HL7v2Exception("blarg", 204), AckTypeCode.AR)
+    	assertEquals 'ACK', nak.MSH.messageType.messageCode.value
+    	assertEquals 'AR', nak.MSA.acknowledgmentCode.value
     }
     
+    @Test
     void testNak25Cause() {
-        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
-        def msg = new GenericParser().parse(msgText)        
-    	def nak = msg.nak("blarg", AckTypeCode.AR)
-    	assert nak.MSH.messageType.messageCode.value == 'ACK'
-    	assert nak.MSA.acknowledgmentCode.value == 'AR'
-    	//assert nak.MSA.textMessage.value == "blarg"
-        //println new GenericParser().encode(nak)
+        String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)        
+    	Message nak = msg.nak("blarg", AckTypeCode.AR)
+    	assertEquals 'ACK', nak.MSH.messageType.messageCode.value
+    	assertEquals 'AR', nak.MSA.acknowledgmentCode.value
     }
     
+    @Test
     void testDefaultNak() {
-    	def nak = Message.defaultNak(new HL7v2Exception("blarg", 204), AckTypeCode.AE, "2.4")
-    	assert nak.MSH.messageType.messageType.value == 'ACK'
-    	assert nak.MSA.acknowledgementCode.value == 'AE'
-    	assert nak.MSA.textMessage.value == "blarg"
-        //println new GenericParser().encode(nak)
+    	Message nak = Message.defaultNak(new HL7v2Exception("blarg", 204), AckTypeCode.AE, "2.4")
+    	assertEquals 'ACK', nak.MSH.messageType.messageType.value
+    	assertEquals 'AE', nak.MSA.acknowledgementCode.value
+    	assertEquals 'blarg', nak.MSA.textMessage.value
     }
 
+    @Test
     void testDefaultNak25() {
-    	def nak = Message.defaultNak(new HL7v2Exception("blarg", 204), AckTypeCode.AE, "2.5")
-    	assert nak.MSH.messageType.messageCode.value == 'ACK'
-    	assert nak.MSA.acknowledgmentCode.value == 'AE'
-    	assert nak.MSA.textMessage.value == "blarg"
-        //println new GenericParser().encode(nak)
+    	Message nak = Message.defaultNak(new HL7v2Exception("blarg", 204), AckTypeCode.AE, "2.5")
+    	assertEquals 'ACK', nak.MSH.messageType.messageCode.value
+    	assertEquals 'AE', nak.MSA.acknowledgmentCode.value
+    	assertEquals 'blarg', nak.MSA.textMessage.value
     }
     
+    @Test
     void testMakeMessage() {
-        def msg = Message.ADT_A01('2.5')
-    	assert msg.MSH.messageType.messageCode.value == 'ADT'
-        assert msg.MSH.messageType.triggerEvent.value == 'A01'
-        assert msg.MSH.versionID.versionID.value == '2.5'
+        Message msg = Message.ADT_A01('2.5')
+    	assertEquals 'ADT', msg.MSH.messageType.messageCode.value
+        assertEquals 'A01', msg.MSH.messageType.triggerEvent.value
+        assertEquals '2.5', msg.MSH.versionID.versionID.value
     }
 
+    @Test
     void testMakeSegment() {
-        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
-        def msg = new GenericParser().parse(msgText)
-        def nk1 = Segment.NK1(msg)
-    	assert nk1 instanceof NK1
+        String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)
+        Segment nk1 = Segment.NK1(msg)
+    	assertTrue nk1 instanceof NK1
     }
 
+    @Test
     void testMakeComposite() {
-        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
-        def msg = new GenericParser().parse(msgText)        
-        def ce = Composite.CE(msg, [identifier:'BRO'])
-        assert ce.identifier.value == 'BRO'
+        String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)        
+        Composite ce = Composite.CE(msg, [identifier:'BRO'])
+        assertEquals 'BRO', ce.identifier.value
    }
 
+    @Test
     void testMakePrimitive() {
-        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
-        def msg = new GenericParser().parse(msgText)        
-        def si = Primitive.SI(msg, '1')
-        assert si.value == '1'
+        String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)        
+        Primitive si = Primitive.SI(msg, '1')
+        assertEquals '1', si.value
     }
 
+    @Test
     void testHAPIExampleCreateMessageFromScratch() {
-        def msg = Message.ADT_A01('2.4')
+        Message msg = Message.ADT_A01('2.4')
         msg.MSH.with {
             sendingApplication.namespaceID.value = 'TestSendingSystem' 
             sequenceNumber.value = '123'
@@ -178,12 +179,11 @@ public class HapiModelExtensionTest extends GroovyTestCase {
             getPatientName(0).givenName.value = 'John'
         	getPatientIdentifierList(0).ID.value = '123456'
         }
-        // println "Printing ER7 Encoded Message:"
-        // println new PipeParser().encode(msg)
     }
     
+    @Test
     void testHAPIExamplePopulateOBX() {
-        def msg = Message.ORU_R01('2.5')
+        Message msg = Message.ORU_R01('2.5')
         msg.PATIENT_RESULT.ORDER_OBSERVATION.with {
         // Populate OBR
             OBR.with {
@@ -198,7 +198,7 @@ public class HapiModelExtensionTest extends GroovyTestCase {
                 observationSubID.value = '1'
                 // The first OBX has a value type of CE. So first, we populate OBX-2 with "CE"...
                 valueType.value = 'CE'
-                def ce = Composite.CE(msg, [identifier:'T57000', text:'GALLBLADDER', nameOfCodingSystem:'SNM'])
+                Composite ce = Composite.CE(msg, [identifier:'T57000', text:'GALLBLADDER', nameOfCodingSystem:'SNM'])
                 getObservationValue(0).data = ce
             }
             // Now we populate the second OBX
@@ -211,20 +211,18 @@ public class HapiModelExtensionTest extends GroovyTestCase {
                 // extra subcomponents to be tacked on to the end of a component. This is
                 // uncommon, but HAPI nontheless allows it.
                 observationIdentifier.identifier.value = 88304
-                def st = Primitive.ST(msg, 'MDT')
+                Primitive st = Primitive.ST(msg, 'MDT')
                 observationIdentifier.identifier.extraComponents.getComponent(0).data = st
                 
                 // The first OBX has a value type of TX. So first, we populate OBX-2 with "TX"...
                 valueType.value = 'TX'
-                def tx = Primitive.TX(msg, 'MICROSCOPIC EXAM SHOWS HISTOLOGICALLY NORMAL GALLBLADDER TISSUE')
+                Primitive tx = Primitive.TX(msg, 'MICROSCOPIC EXAM SHOWS HISTOLOGICALLY NORMAL GALLBLADDER TISSUE')
                 getObservationValue(0).data = tx
             }
         }
-        // println "Printing ER7 Encoded Message:"
-        // println new PipeParser().encode(msg)
     }
             
-        
+    @Test
     void testList() {
         assert ['a','b'].map('listTest') == ['c','d'] 
         assert ['x','y'].map('listTest', ['a','b']) == (['x','y'].map('listTest') ?: ['a','b'])
@@ -239,43 +237,47 @@ public class HapiModelExtensionTest extends GroovyTestCase {
     	assert [x,y].map('listTest') == ['c','d']    	
     }
     
+    @Test
     void testTypeMap() {
-        def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
-        def msg = new GenericParser().parse(msgText)        
-        assert msg.PV1.patientClass.map('encounterType') == 'IMP'
+        String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)        
+        assertEquals 'IMP', msg.PV1.patientClass.map('encounterType')
         //assert msg.PV1.patientClass.mapEncounterType() == 'IMP'
         //assert msg.MSH.messageType.mapMessageType() == 'PRPA_IN402001'
     }
         
+    @Test
     void testKeyAndValueSystems() {
-        assert 'encounterType'.keySystem() == '2.16.840.1.113883.12.4'
-        assert 'encounterType'.valueSystem() == '2.16.840.1.113883.5.4'
-        try {
-        	assert 'Y'.keySystem()
-        	fail()
-        } catch (IllegalArgumentException e) {
-        	// o.k.
-        }
+        assertEquals '2.16.840.1.113883.12.4', 'encounterType'.keySystem()
+        assertEquals '2.16.840.1.113883.5.4', 'encounterType'.valueSystem()
+    }
+    
+    @Test(expected=IllegalArgumentException)
+    void testUnknownKeySystem() {
+        'Y'.keySystem()
     }
 
+    @Test
     void testEncode() {
-        def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
-        def msg = new GenericParser().parse(msgText)
-        assert msg.MSH.messageType.encode() == 'ADT^A01'
-        assert msg.MSH.encode() == 'MSH|^~\\&|SAP-ISH|HZL|||20040805152637||ADT^A01|123456|T|2.2|||ER'    	
+        String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+        Message msg = new GenericParser().parse(msgText)
+        assertEquals 'ADT^A01', msg.MSH.messageType.encode() 
+        assertEquals 'MSH|^~\\&|SAP-ISH|HZL|||20040805152637||ADT^A01|123456|T|2.2|||ER', msg.MSH.encode()     	
     }
 	
 	// Parse a message with a ModelClassFactory that dynamically loads Groovy HL7 Model Classes.
 	// This tests the Message#addSegment extension
+    // TODO dynamically loaded Groovy files seem 
+    @Test
 	void testParseWithCustomGroovyClasses() {
-		def msgText = this.class.classLoader.getResource('msg-09.hl7')?.text
+		String msgText = this.class.classLoader.getResource('msg-09.hl7')?.text
 		def customModelClasses = ['2.5' : [customGroovyPackageName]]
-		def customFactory = new GroovyCustomModelClassFactory(customModelClasses)
-		def parser = new PipeParser(customFactory)
-		def hapiMessage = parser.parse(msgText)
+		ModelClassFactory customFactory = new GroovyCustomModelClassFactory(customModelClasses)
+		Parser parser = new PipeParser(customFactory)
+		Message hapiMessage = parser.parse(msgText)
 		Segment s = hapiMessage.get('ZBE')
-		assert s.class.name.contains(customGroovyPackageName)
-		assert '1234' == Terser.get(s, 1, 0, 1, 1)
+		assertTrue s.class.name.contains(customGroovyPackageName)
+		assertEquals '1234', Terser.get(s, 1, 0, 1, 1)
 	}
 }
 

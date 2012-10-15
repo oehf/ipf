@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.builder
 
+import org.junit.Test;
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import groovy.util.GroovyTestCase
 
@@ -22,8 +23,9 @@ import groovy.util.GroovyTestCase
 /**
  * @author Christian Ohr
  */
-public class RuleBuilderTest extends GroovyTestCase {
+public class RuleBuilderTest  {
     
+    @Test
      void testForVersion() {
          def context = new DefaultValidationContext()
          def builder = context.configure().forVersion('2.4')
@@ -31,6 +33,7 @@ public class RuleBuilderTest extends GroovyTestCase {
          assert builder.version == '2.4'
      }
      
+     @Test
      void testForAllVersions() {
          def context = new DefaultValidationContext()
          def builder = context.configure().forAllVersions()
@@ -38,6 +41,7 @@ public class RuleBuilderTest extends GroovyTestCase {
          assert builder.version == '2.1 2.2 2.3 2.3.1 2.4 2.5 2.5.1 2.6'
      }
      
+     @Test
      void testForVersionAsOf() {
          def context = new DefaultValidationContext()
          def builder = context.configure().forVersion().asOf('2.3')
@@ -45,6 +49,7 @@ public class RuleBuilderTest extends GroovyTestCase {
          assert builder.version == '2.3 2.3.1 2.4 2.5 2.5.1 2.6'
      }
      
+     @Test
      void testForVersionBefore() {
          def context = new DefaultValidationContext()
          def builder = context.configure().forVersion().before('2.3')
@@ -52,6 +57,7 @@ public class RuleBuilderTest extends GroovyTestCase {
          assert builder.version == '2.1 2.2'
      }
      
+     @Test
      void testForVersionExcept() {
          def context = new DefaultValidationContext()
          def builder = context.configure().forVersion().except('2.3.1')
@@ -59,6 +65,7 @@ public class RuleBuilderTest extends GroovyTestCase {
          assert builder.version == '2.1 2.2 2.3 2.4 2.5 2.5.1 2.6'
      }
      
+     @Test
      void testForVersionAndType() {
          def context = new DefaultValidationContext()
          def builder = context.configure().forVersionAndPrimitiveType('2.4', 'ST')

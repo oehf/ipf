@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 package org.openehealth.ipf.modules.hl7.validation.builder
-import groovy.util.GroovyTestCase
+import org.junit.Test;
+
+import groovy.util.GroovyTestCase
 
 /**
  * @author Christian Ohr
  */
-public class VersionBuilderTest extends GroovyTestCase {
+public class VersionBuilderTest  {
     
+    @Test
      void testType() {
          def builder = new VersionBuilder('2.4', null).primitiveType('ST')
          assert builder.version == '2.4'
          assert builder.typeName == 'ST'
      }     
      
+     @Test
      void testMessage() {
          def builder = new VersionBuilder('2.4', null).message('ADT', 'A01')
          assert builder.version == '2.4'
@@ -34,6 +38,7 @@ public class VersionBuilderTest extends GroovyTestCase {
          assert builder.triggerEvent == 'A01'
      }
      
+     @Test
      void testMessage2() {
          def builder = new VersionBuilder('2.4', null).message('ADT', 'A01 A02 A03')
          assert builder.version == '2.4'
@@ -41,6 +46,7 @@ public class VersionBuilderTest extends GroovyTestCase {
          assert builder.triggerEvent == 'A01 A02 A03'
      }
      
+     @Test
      void testMessage3() {
          def builder = new VersionBuilder('2.4', null).message('ADT', ['A01','A02','A03'])
          assert builder.version == '2.4'
@@ -48,6 +54,7 @@ public class VersionBuilderTest extends GroovyTestCase {
          assert builder.triggerEvent == ['A01','A02','A03']
      }
      
+     @Test
      void testEncoding() {
          def builder = new VersionBuilder('2.4', null).encoding('blorg')
          assert builder.version == '2.4'

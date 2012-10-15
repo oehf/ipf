@@ -17,6 +17,8 @@ package org.openehealth.ipf.modules.hl7.config;
 
 import java.util.Map;
 
+import org.openehealth.ipf.commons.core.config.Customized;
+
 /**
  * 
  * This class should be used to define the custom HL7 model classes
@@ -39,7 +41,7 @@ import java.util.Map;
  * 
  * @author Boris Stanojevic
  */
-public class CustomModelClasses {
+public class CustomModelClasses implements Customized {
 
     private Map<String, String[]> modelClasses;
 

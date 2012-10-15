@@ -44,7 +44,6 @@ public class CustomMappingsConfigurer extends SpringConfigurer<CustomMappings> {
      * 
      * @see SpringConfigurer
      */
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<CustomMappings> lookup(ListableBeanFactory source) {
         return BeanFactoryUtils.beansOfTypeIncludingAncestors(source,

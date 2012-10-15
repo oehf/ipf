@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.modules.hl7.message
 
+import org.junit.Before;
+import org.junit.Test;
 import org.openehealth.ipf.modules.hl7.AckTypeCode
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
 
@@ -31,14 +33,16 @@ import ca.uhn.hl7v2.parser.*
  * @author Christian Ohr
  *
  */
-public class MessageUtilsTest extends GroovyTestCase {
+public class MessageUtilsTest {
     
     private ModelClassFactory factory
     
+    @Before
     void setUp() throws Exception {
         factory = new CustomModelClassFactory()
     }
     
+    @Test
     void testAck() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
@@ -48,6 +52,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert response.MSH.messageType.triggerEvent.value == 'A01'
     }
     
+    @Test
     void testNak() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
@@ -61,6 +66,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert reparsed instanceof Message
     }
     
+    @Test
     void testAck25() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -70,6 +76,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert response.MSH.messageType.triggerEvent.value == 'Q22'
     }
     
+    @Test
     void testResponseVersion22AckStructure() {
         def parser = new GenericParser()
         def origMsgText = this.class.classLoader.getResource('msg-01.hl7')?.text
@@ -78,6 +85,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert parser.encode(respMsg).contains('|ACK^A01|')
     }
     
+    @Test
     void testResponseVersion25AckStructure() {
         def parser = new GenericParser()
         def origMsgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -86,6 +94,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert parser.encode(respMsg).contains('|ACK^Q22|')
     }
     
+    @Test
     void testResponseVersion25MappedStructureName() {
         def parser = new GenericParser()
         def origMsgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -94,6 +103,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert parser.encode(respMsg).contains('|RSP^K22^RSP_K21|')
     }
     
+    @Test
     void testMakeMessageVersion22() {
         def msg = MessageUtils.newMessage(factory, 'ADT_A04', '2.2')
         def parser = new GenericParser()
@@ -102,6 +112,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert encoded.contains('|ADT^A04|')
     }
     
+    @Test
     void testMakeMessageVersion25() {
         def msg = MessageUtils.newMessage(factory, 'ADT_A04', '2.5')
         def parser = new GenericParser()
@@ -110,6 +121,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert encoded.contains('|ADT^A04^ADT_A01|')
     }
     
+    @Test
     void testMakeNK1SegmentVersion25() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -118,6 +130,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert segment instanceof NK1
     }
     
+    @Test
     void testMakeNAKVersion251() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-10.hl7')?.text
@@ -128,6 +141,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert encoded.contains('|ACK^R01|')
     }
     
+    @Test
     void testMakeCECompositeVersion25() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -137,6 +151,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert type.identifier.value == 'BRO'
     }
     
+    @Test
     void testMakeSIPrimitiveVersion25() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -146,6 +161,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert si.value == '1'
     }
     
+    @Test
     void testPipeEncode() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -154,6 +170,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert MessageUtils.pipeEncode(msg.MSH.messageType) == 'QBP^Q22'
     }
     
+    @Test
     void testDump() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-02.hl7')?.text
@@ -161,6 +178,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         String s = MessageUtils.dump(msg)
     }
     
+    @Test
     void testEventType() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -168,6 +186,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert 'QBP' == MessageUtils.eventType(msg)
     }
     
+    @Test
     void testTriggerEvent() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -175,6 +194,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert 'Q22' == MessageUtils.triggerEvent(msg)
     }
     
+    @Test
     void testMessageStructure() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -185,6 +205,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert 'ADT_A01' == MessageUtils.messageStructure(msg)
     }
     
+    @Test
     void testVersionUnknownMessage() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-04.hl7')?.text
@@ -192,6 +213,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert '2.6' == msg.version
     }
     
+    @Test
     void testEventTypeUnknownMessage() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-04.hl7')?.text
@@ -199,6 +221,7 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert 'ABC' == MessageUtils.eventType(msg)
     }
     
+    @Test
     void testTriggerEventUnknownMessage() {
         def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-04.hl7')?.text

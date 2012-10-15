@@ -1,0 +1,3 @@
+moduleName = MappingExtension
+moduleVersion = 2.5
+extensionClasses = org.openehealth.ipf.commons.map.extend.MappingExtensionModule

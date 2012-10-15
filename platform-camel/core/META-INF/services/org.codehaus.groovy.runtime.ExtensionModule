@@ -1,0 +1,3 @@
+moduleName = CoreExtension
+moduleVersion = 2.5
+extensionClasses = org.openehealth.ipf.platform.camel.core.extend.CoreExtension

@@ -15,13 +15,18 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.builder
 
-import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContextimport groovy.util.GroovyTestCase
+import static org.junit.Assert.*
+
+import org.junit.Test
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
+
 
 /**
  * @author Christian Ohr
  */
-public class PrimitiveRuleBuilderTest extends GroovyTestCase {
+public class PrimitiveRuleBuilderTest  {
 	
+    @Test
 	void testCheckIf() {
 		def builder = new PrimitiveRuleBuilder('2.4', new DefaultValidationContext(), 'ST').checkIf { 'blarg' }
 		assert builder.version == '2.4'
@@ -30,6 +35,7 @@ public class PrimitiveRuleBuilderTest extends GroovyTestCase {
 		assert builder.rule.testClosure.call() == 'blarg'
 	}     
 	
+    @Test
 	void testOmitLeadingWhitespace() {
 		def builder = new PrimitiveRuleBuilder('2.4', new DefaultValidationContext(), 'ST').omitLeadingWhitespace()
 		assert builder.version == '2.4'
@@ -38,6 +44,7 @@ public class PrimitiveRuleBuilderTest extends GroovyTestCase {
 		assert builder.rule.omitLeadingWhitespace
 	}     
 	
+    @Test
 	void testMaxSize() {
 		def builder = new PrimitiveRuleBuilder('2.4', new DefaultValidationContext(), 'ST').maxSize(10)
 		assert builder.version == '2.4'
@@ -47,6 +54,7 @@ public class PrimitiveRuleBuilderTest extends GroovyTestCase {
 		assertFalse builder.rule.testClosure.call('12345678901')
 	} 
 	
+    @Test
 	void testNotEmpty() {
 		def builder = new PrimitiveRuleBuilder('2.4', new DefaultValidationContext(), 'ST').notEmpty()
 		assert builder.version == '2.4'
@@ -56,6 +64,7 @@ public class PrimitiveRuleBuilderTest extends GroovyTestCase {
 		assertFalse builder.rule.testClosure.call('')
 	} 
 	
+    @Test
 	void testMatches() {
 		def builder = new PrimitiveRuleBuilder('2.4', new DefaultValidationContext(), 'ST').matches(/[abc]123/)
 		assert builder.version == '2.4'

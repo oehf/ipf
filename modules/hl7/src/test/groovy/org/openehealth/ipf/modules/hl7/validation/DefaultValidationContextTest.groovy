@@ -22,6 +22,8 @@ import ca.uhn.hl7v2.validation.ValidationContext
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.conf.store.ProfileStoreFactory
 import ca.uhn.hl7v2.model.Message
+
+import org.junit.Test;
 import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
 
 import org.openehealth.ipf.modules.hl7.validation.support.ClassPathProfileStore
@@ -33,10 +35,11 @@ import org.openehealth.ipf.modules.hl7.parser.PipeParser
 /**
  * @author Christian Ohr
  */
-public class DefaultValidationContextTest extends GroovyTestCase{
+public class DefaultValidationContextTest {
    
     def noop = { String -> }
     
+    @Test
 	void testGetPrimitiveRules(){
 	    DefaultValidationContext r = new DefaultValidationContext();
 	    PrimitiveTypeRule rule1 = new ClosurePrimitiveTypeRule(noop)
@@ -48,6 +51,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	    assert r.getPrimitiveRules('2.4', 'ST', null).size() == 0
 	}
 	
+    @Test
 	void testGetMessageRules(){
 	    DefaultValidationContext r = new DefaultValidationContext();
 	    MessageRule rule1 = new ClosureMessageRule (noop)
@@ -59,6 +63,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	    assert r.getMessageRules('2.4', 'ADT', 'A01').size() == 0
 	}
 	
+    @Test
 	void testGetMissingMessageRule(){
 	    DefaultValidationContext r = new DefaultValidationContext(requireMessageRule:true);
 	    MessageRule rule1 = new ClosureMessageRule(noop)
@@ -69,7 +74,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 		assert r.getMessageRules('2.4', 'ADT', 'A01')[0] instanceof MissingMessageRule
 	}
 	
-	
+    @Test
 	void testGetEncodingRules(){
 	    DefaultValidationContext r = new DefaultValidationContext();
 	    EncodingRule rule1 = new ClosureEncodingRule(noop)
@@ -84,6 +89,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	// A test that builds up rules and applies them to the parser
 	// while it parses a message. It fails because of the nonsense
 	// rule that IDs may not be longer than 1
+    @Test
 	void testComplete(){
 	    ValidationContext context = new DefaultValidationContext().configure()        
             .forVersion().asOf('2.3')
@@ -120,7 +126,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 
 	}
 
-	/*
+	@Test
 	void testConformanceProfile() {
 	    DefaultValidationContext context = new DefaultValidationContext()
 	    ProfileStoreFactory.setStore(new ClassPathProfileStore())
@@ -137,8 +143,9 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	        println e.cause
 	    }
 	}
-*/
 
+
+    @Test
     void testWildcardMessageRule() {
         DefaultValidationContext context = new DefaultValidationContext()
         context.configure()        
@@ -149,6 +156,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
         assert context.getMessageRules('2.5', 'ADT', 'A02').size() == 1
     }
 
+    @Test
     void testMultiMessageRule1() {
         DefaultValidationContext context = new DefaultValidationContext()
         context.configure()        
@@ -160,6 +168,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
         assert context.getMessageRules('2.5', 'ADT', 'A03').size() == 0
     }
 
+    @Test
     void testMultiMessageRule2() {
         DefaultValidationContext context = new DefaultValidationContext()
         context.configure()        
@@ -171,6 +180,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
         assert context.getMessageRules('2.5', 'ADT', 'A03').size() == 0
     }
     
+    @Test
 	void testValidAbstractSyntax1() {
 	    DefaultValidationContext context = new DefaultValidationContext()
 	    context.configure()        
@@ -210,6 +220,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	    parser.parse(msgText)
 	}
 
+    @Test
     void testValidAbstractSyntax2() {
         DefaultValidationContext context = new DefaultValidationContext()
         context.configure()        
@@ -257,6 +268,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
         Message m = parser.parse(msgText)
     }
 
+    @Test(expected=HL7Exception)
 	void testInvalidAbstractSyntax() {
 	    DefaultValidationContext context = new DefaultValidationContext()
 	    context.configure()
@@ -267,14 +279,9 @@ public class DefaultValidationContextTest extends GroovyTestCase{
                 'PID',
                 [{ 'NK1' }])
 
-         def msgText = this.class.classLoader.getResource('msg-06.hl7')?.text
-         def parser = new PipeParser(context)
-	    try {
-	        Message m = parser.parse(msgText)
-	        fail("Should throw an HL7Exception")
-	    } catch (HL7Exception e) {
-	        // o.k.
-	    }	    
+        def msgText = this.class.classLoader.getResource('msg-06.hl7')?.text
+        def parser = new PipeParser(context)
+	    parser.parse(msgText)
      }
 
 }

@@ -52,6 +52,7 @@
         <activemq-version>5.6.0</activemq-version>
         <aspectj-version>1.6.2</aspectj-version>
         <camel-version>2.10.1</camel-version>
+		<cglib-version>2.2.2</cglib-version>
         <commons-codec-version>1.6</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
@@ -89,6 +90,7 @@
         <oht-atna-version>2.0.0</oht-atna-version>
         <oht-cdar-version>1.1.0-p2</oht-cdar-version>
         <osgi-api-version>1.4.0</osgi-api-version>
+		<powermock-version>1.4.12</powermock-version>
         <quartz-version>1.8.6</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.6.6</slf4j-version>
@@ -834,6 +836,30 @@
                 <version>${xmlunit-version}</version>
                 <scope>test</scope>
             </dependency>
+			<dependency>
+			  <groupId>org.powermock</groupId>
+			  <artifactId>powermock-module-junit4</artifactId>
+			  <version>${powermock-version}</version>
+			  <scope>test</scope>
+			</dependency>
+			<dependency>
+			  <groupId>org.powermock</groupId>
+			  <artifactId>powermock-api-easymock</artifactId>
+			  <version>${powermock-version}</version>
+			  <scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-module-junit4-rule-agent</artifactId>
+				<version>${powermock-version}</version>
+				<scope>test</scope>
+			</dependency>			
+			<dependency>
+			  <groupId>cglib</groupId>
+			  <artifactId>cglib-nodep</artifactId>
+			  <version>${cglib-version}</version>
+			  <scope>test</scope>
+			</dependency>			
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
