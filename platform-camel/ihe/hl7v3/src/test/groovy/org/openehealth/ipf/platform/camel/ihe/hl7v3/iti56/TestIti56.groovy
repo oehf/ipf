@@ -24,11 +24,13 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.apache.cxf.binding.soap.SoapFault
+import org.springframework.test.annotation.DirtiesContext
 
 /**
  * Tests for ITI-56.
  * @author Dmytro Rud
  */
+@DirtiesContext
 class TestIti56 extends StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti56/iti-56.xml'

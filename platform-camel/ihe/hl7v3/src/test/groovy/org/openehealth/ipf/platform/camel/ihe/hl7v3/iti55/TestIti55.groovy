@@ -31,11 +31,13 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy
 
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-    
+import org.springframework.test.annotation.DirtiesContext
+
 /**
  * Tests for ITI-55.
  * @author Dmytro Rud
  */
+@DirtiesContext
 class TestIti55 extends StandardTestContainer {
     enum RequestType {REGULAR, ASYNC, DEFERRED}
 

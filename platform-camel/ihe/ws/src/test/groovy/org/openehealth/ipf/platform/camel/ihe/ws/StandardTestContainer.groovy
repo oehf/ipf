@@ -74,9 +74,9 @@ class StandardTestContainer {
                  servletPath: '/*',
                  servlet: servlet,
                  secure: secure,
-                 keystoreFile: 'keystore',
+                 keystoreFile: 'server.jks',
                  keystorePass: 'changeit',
-                 truststoreFile: 'keystore',
+                 truststoreFile: 'server.jks',
                  truststorePass: 'changeit')
          
          servletServer.start()

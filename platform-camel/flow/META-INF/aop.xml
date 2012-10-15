@@ -3,6 +3,7 @@
 
     <weaver>
         <include within="org.apache.camel..*" />
+        <include within="org.openehealth.ipf.platform.camel.flow.aspect..*" />
     </weaver>
 
     <aspects>
