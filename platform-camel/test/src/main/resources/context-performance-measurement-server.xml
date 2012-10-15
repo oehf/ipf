@@ -14,9 +14,12 @@
     limitations under the License.
 -->
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ctx="http://www.springframework.org/schema/context" xmlns:lang="http://www.springframework.org/schema/lang"
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ctx="http://www.springframework.org/schema/context" 
+    xmlns:lang="http://www.springframework.org/schema/lang"
     xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
@@ -25,7 +28,9 @@ http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-2.5.xsd
 http://camel.apache.org/schema/spring 
-http://camel.apache.org/schema/spring/camel-spring.xsd 
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd
 ">
 
     <!-- ============================================================== -->
@@ -38,25 +43,14 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <camel:jmxAgent id="agent" disabled="true"/>
         <camel:routeBuilder ref="performanceMeasurmentRouteBuilder"/>
     </camel:camelContext>
-
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension"/>
-            </list>
-        </property>
-    </bean>
+    
+    <ipf:globalContext id="globalContext"/>
 
     <!-- =============================================================== -->
     <!-- Configuration of the performance measurement component          -->
     <!-- =============================================================== -->
 
-    <bean id="performanceMeasurmentRouteBuilder" depends-on="routeModelExtender"
+    <bean id="performanceMeasurmentRouteBuilder"
         class="org.openehealth.ipf.platform.camel.test.performance.route.PerformanceRouteBuilder">
         <property name="httpPort" value="${pms.http.port}"/>
         <property name="overrideMeasurementHistoryReferenceDate"

@@ -13,6 +13,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:camel="http://camel.apache.org/schema/spring"
     xmlns:http="http://cxf.apache.org/transports/http/configuration"
+    xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"    
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
@@ -20,6 +21,8 @@ http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 http://cxf.apache.org/transports/http/configuration
 http://cxf.apache.org/schemas/configuration/http-conf.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd
 ">
 
     <!-- Importing the CXF configuration -->
@@ -30,22 +33,11 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd
         <camel:jmxAgent id="agent" disabled="true"/>
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
+    
+	<ipf:globalContext id="globalContext"/>
 
-    <bean id="routeBuilder" depends-on="routeModelExtender"
+    <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.Iti55TestRouteBuilder">
-    </bean>
-
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="routeModelExtender" 
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-            </list>
-        </property>
     </bean>
 
     <import resource="../ehcache-spring.xml" />
