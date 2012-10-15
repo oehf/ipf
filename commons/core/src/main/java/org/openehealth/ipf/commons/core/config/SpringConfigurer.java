@@ -8,7 +8,7 @@ import org.springframework.beans.factory.ListableBeanFactory;
  * 
  * @author Boris Stanojevic
  */
-public abstract class SpringConfigurer<T extends Customized> implements Configurer<T>, Comparable<SpringConfigurer<T>>{
+public abstract class SpringConfigurer<T> implements Configurer<T>, Comparable<SpringConfigurer<T>>{
 
     private int order = Integer.MAX_VALUE;
     

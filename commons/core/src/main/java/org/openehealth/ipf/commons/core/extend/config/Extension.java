@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.core.extend.config;
 
-import org.openehealth.ipf.commons.core.config.Customized;
-
 /**
  * DSL extensions implementing this marker interface can be
  * auto discovered by IPF's configuration framework. Works for
@@ -24,6 +22,6 @@ import org.openehealth.ipf.commons.core.config.Customized;
  * 
  * @author Boris Stanojevic
  */
-public interface Extension extends Customized {
+public interface Extension {
 
 }

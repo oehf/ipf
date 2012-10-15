@@ -20,7 +20,7 @@ package org.openehealth.ipf.commons.core.config;
  * 
  * @author Boris Stanojevic
  */
-public interface Configurer<T extends Customized> {
+public interface Configurer<T> {
 
     /**
      * @param configuration custom configuration object

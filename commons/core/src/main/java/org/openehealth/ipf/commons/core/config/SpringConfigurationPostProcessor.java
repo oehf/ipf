@@ -32,28 +32,29 @@ import org.springframework.beans.factory.ListableBeanFactory;
  * 
  * @author Boris Stanojevic
  */
+@SuppressWarnings("unchecked")
 public class SpringConfigurationPostProcessor implements InitializingBean, BeanFactoryAware {
 
-    private List<SpringConfigurer<Customized>> springConfigurers;
+    private List<SpringConfigurer> springConfigurers;
     
     private BeanFactory beanFactory;
     
     protected void configure(ListableBeanFactory lbf){
-        for (SpringConfigurer<Customized> sc: springConfigurers){
-            Collection<? extends Customized> configurations = sc.lookup(lbf);
+        for (SpringConfigurer sc: springConfigurers){
+            Collection configurations = sc.lookup(lbf);
             if (configurations != null && configurations.size() > 0){
-                for (Customized configuration: configurations){
+                for (Object configuration: configurations){
                     sc.configure(configuration);
                 }
             }
         }
     }
 
-    public List<SpringConfigurer<Customized>> getSpringConfigurers() {
+    public List<SpringConfigurer> getSpringConfigurers() {
         return springConfigurers;
     }
 
-    public void setSpringConfigurers(List<SpringConfigurer<Customized>> springConfigurers) {
+    public void setSpringConfigurers(List<SpringConfigurer> springConfigurers) {
         this.springConfigurers = springConfigurers;
         Collections.sort(springConfigurers);
     }
