@@ -22,19 +22,15 @@ import org.apache.camel.model.ProcessorDefinition
  */
 public class SampleModelExtension {
 
-     static extensions = {
-         
-         ProcessorDefinition.metaClass.reverse = {
-             delegate.transmogrify { it.reverse() }
-         }
-      
-         ProcessorDefinition.metaClass.setFileHeaderFrom = { String sourceHeader ->  
-             delegate.setHeader(Exchange.FILE_NAME) { exchange -> 
-                 def destination = exchange.in.headers."$sourceHeader"
-                 destination ? "${destination}.txt" : 'default.txt'
-             }
-         }
-         
-     }
+    static ProcessorDefinition reverse(ProcessorDefinition self) {
+        self.transmogrify { it.reverse() }
+    }
+    
+    static ProcessorDefinition setFileHeaderFrom(ProcessorDefinition self, String sourceHeader) {
+        self.setHeader(Exchange.FILE_NAME) { exchange -> 
+            def destination = exchange.in.headers."$sourceHeader"
+            destination ? "${destination}.txt" : 'default.txt'
+        }
+    }
      
 }

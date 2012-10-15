@@ -1,0 +1,3 @@
+moduleName = TutorialsBasicExtension
+moduleVersion = 2.5
+extensionClasses = ${package}.SampleModelExtension
