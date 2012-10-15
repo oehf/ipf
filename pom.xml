@@ -835,25 +835,7 @@
                 <artifactId>xmlunit</artifactId>
                 <version>${xmlunit-version}</version>
                 <scope>test</scope>
-            </dependency>
-			<dependency>
-			  <groupId>org.powermock</groupId>
-			  <artifactId>powermock-module-junit4</artifactId>
-			  <version>${powermock-version}</version>
-			  <scope>test</scope>
-			</dependency>
-			<dependency>
-			  <groupId>org.powermock</groupId>
-			  <artifactId>powermock-api-easymock</artifactId>
-			  <version>${powermock-version}</version>
-			  <scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.powermock</groupId>
-				<artifactId>powermock-module-junit4-rule-agent</artifactId>
-				<version>${powermock-version}</version>
-				<scope>test</scope>
-			</dependency>			
+            </dependency>			
 			<dependency>
 			  <groupId>cglib</groupId>
 			  <artifactId>cglib-nodep</artifactId>
