@@ -33,18 +33,12 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
       <camel:jmxAgent id="agent" disabled="true" />
   </camel:camelContext>
 
-  <bean id="coreModelExtension" 
-      class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-  </bean>
 
-  <bean id="routeModelExtender" 
-      class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-      <property name="routeModelExtensions">
-          <list>
-              <ref bean="coreModelExtension" />
-          </list>
-      </property>
-  </bean>
+  <bean class="org.openehealth.ipf.commons.core.config.ContextFacade">
+    <constructor-arg>
+      <bean class="org.openehealth.ipf.commons.core.config.SpringRegistry" />
+    </constructor-arg>
+   </bean>
 
   <bean id="testPredicate" 
       class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestPredicate">

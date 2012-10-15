@@ -27,6 +27,12 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         <camel:jmxAgent id="agent" disabled="true" />
         <camel:routeBuilder ref="routeBuilder"/>
     </camel:camelContext>
+    
+    <bean class="org.openehealth.ipf.commons.core.config.ContextFacade">
+    	<constructor-arg>
+    		<bean class="org.openehealth.ipf.commons.core.config.SpringRegistry"/>
+    	</constructor-arg>
+    </bean>    
 
     <bean id="routeBuilder" 
         class="org.openehealth.ipf.platform.camel.core.extend.UseRouteBuilder">

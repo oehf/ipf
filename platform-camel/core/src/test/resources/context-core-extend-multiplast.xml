@@ -18,20 +18,14 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd
         <camel:jmxAgent id="agent" disabled="true"/>
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
+    
+    <bean class="org.openehealth.ipf.commons.core.config.ContextFacade">
+    	<constructor-arg>
+    		<bean class="org.openehealth.ipf.commons.core.config.SpringRegistry"/>
+    	</constructor-arg>
+    </bean>    
 
-    <bean id="routeBuilder" depends-on="routeModelExtender" 
+    <bean id="routeBuilder"
           class="org.openehealth.ipf.platform.camel.core.multiplast.MultiplastRouteBuilder" />
-
-    <bean id="coreModelExtension"
-          class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension" />
-
-    <bean id="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-            </list>
-        </property>
-    </bean>
 
 </beans>
