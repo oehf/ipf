@@ -1,0 +1,3 @@
+moduleName = RegRepModelExtension
+moduleVersion = 2.5
+extensionClasses = org.openehealth.ipf.tutorials.RegRepModelExtension
