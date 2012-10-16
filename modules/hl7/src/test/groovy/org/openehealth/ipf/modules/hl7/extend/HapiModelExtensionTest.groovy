@@ -49,7 +49,7 @@ public class HapiModelExtensionTest {
         mappingService.addMappingScript(new ClassPathResource("example2.map"))
         ModelClassFactory mcf = new CustomModelClassFactory()
         Registry registry = createMock(Registry)
-        ContextFacade facade = new ContextFacade(registry)
+        ContextFacade.setRegistry(registry)
         expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
         expect(registry.bean(ModelClassFactory)).andReturn(mcf).anyTimes()
         replay(registry)

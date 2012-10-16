@@ -37,7 +37,7 @@ public class MappingExtensionTest {
         BidiMappingService mappingService = new BidiMappingService()
         mappingService.addMappingScript(new ClassPathResource("example2.map"))
         Registry registry = createMock(Registry)
-        ContextFacade facade = new ContextFacade(registry)
+        ContextFacade.setRegistry(registry)
         expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
         replay(registry)
     }

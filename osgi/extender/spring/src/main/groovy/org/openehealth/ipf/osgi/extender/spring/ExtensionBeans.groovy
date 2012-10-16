@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.osgi.extender.spring
 
+import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.osgi.commons.bundle.BundleHeaders
 import org.osgi.framework.Bundle
-import org.springframework.beans.factory.BeanFactory
 
 /**
  * @author Martin Krasser
  */
 class ExtensionBeans {
 
-     static List<Object> loadAll(Bundle bundle, BeanFactory beanFactory) {
+     static List<Object> loadAll(Bundle bundle, Registry registry) {
          BundleHeaders.extensionBeans(bundle).collect {
-             beanFactory.getBean(it)
+             registry.bean(it)
          }
      }
 

@@ -17,14 +17,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:camel="http://camel.apache.org/schema/spring"
-       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core" 
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://camel.apache.org/schema/spring 
-http://camel.apache.org/schema/spring/camel-spring.xsd
-http://openehealth.org/schema/ipf-commons-core
-http://openehealth.org/schema/ipf-commons-core-2.5.xsd">
+http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <!--
         Auditor config 
@@ -58,6 +55,4 @@ http://openehealth.org/schema/ipf-commons-core-2.5.xsd">
         class="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSenderRoute">
     </bean>
     
-    <ipf:globalContext id="globalContext"/>
-
 </beans>

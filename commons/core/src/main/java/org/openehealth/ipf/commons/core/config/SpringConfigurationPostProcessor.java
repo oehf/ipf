@@ -15,65 +15,63 @@
  */
 package org.openehealth.ipf.commons.core.config;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.ListableBeanFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
 /**
- * PostProcessor which holds the instances of all {@link SpringConfigurer}.
- * In the Method afterPropertiesSet will be assumed that all &lt;bean .. /&gt;
- * and &lt;lang:groovy ... /&gt; defined beans are loaded and can be configured.
+ * Spring Listener which holds the instances of all {@link OrderedConfigurer}.
  * 
  * @author Boris Stanojevic
  */
-@SuppressWarnings("unchecked")
-public class SpringConfigurationPostProcessor implements InitializingBean, BeanFactoryAware {
+@SuppressWarnings({ "rawtypes", "unchecked" })
+public class SpringConfigurationPostProcessor implements
+        ApplicationListener<ContextRefreshedEvent> {
+    
+    private static Log LOG = LogFactory.getLog(SpringConfigurationPostProcessor.class);
 
-    private List<SpringConfigurer> springConfigurers;
-    
-    private BeanFactory beanFactory;
-    
-    protected void configure(ListableBeanFactory lbf){
-        for (SpringConfigurer sc: springConfigurers){
-            Collection configurations = sc.lookup(lbf);
-            if (configurations != null && configurations.size() > 0){
-                for (Object configuration: configurations){
+    private List<OrderedConfigurer> springConfigurers;
+
+    protected void configure(Registry registry) {
+        for (OrderedConfigurer sc : springConfigurers) {
+            Collection configurations = sc.lookup(registry);
+            if (configurations != null && configurations.size() > 0) {
+                for (Object configuration : configurations) {
+                    LOG.debug("Configuring extension " + configuration);
                     sc.configure(configuration);
                 }
             }
         }
     }
 
-    public List<SpringConfigurer> getSpringConfigurers() {
+    public List<OrderedConfigurer> getSpringConfigurers() {
         return springConfigurers;
     }
 
-    public void setSpringConfigurers(List<SpringConfigurer> springConfigurers) {
+    public void setSpringConfigurers(List<OrderedConfigurer> springConfigurers) {
         this.springConfigurers = springConfigurers;
         Collections.sort(springConfigurers);
     }
 
-
     @Override
-    public void afterPropertiesSet() throws Exception {
-        if (this.beanFactory instanceof ListableBeanFactory){
-            ListableBeanFactory lbf = (ListableBeanFactory)beanFactory;
-            configure(lbf);
-        }else {
-            throw new IllegalStateException(
-                    "SpringConfigurationPostProcessor doesn't work with a BeanFactory " +
-                    "which does not implement ListableBeanFactory: " + beanFactory.getClass());
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        SpringRegistry registry = new SpringRegistry();
+        registry.setBeanFactory(event.getApplicationContext());
+        // If there are no configurers set, we look them up
+        if (getSpringConfigurers() == null) {
+            LOG.info("No extension beans configured, will look up registry for extension beans");
+            springConfigurers = new ArrayList(registry.beans(
+                    OrderedConfigurer.class).values());
+            Collections.sort(springConfigurers);
         }
-    }
+        LOG.info("Number of extension beans: " + springConfigurers.size());
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
+        configure(registry);
     }
 }

@@ -2,7 +2,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:camel="http://camel.apache.org/schema/spring"
     xmlns:ctx="http://www.springframework.org/schema/context"
-    xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
@@ -10,8 +9,6 @@ http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-2.5.xsd
-http://openehealth.org/schema/ipf-commons-core
-http://openehealth.org/schema/ipf-commons-core-2.5.xsd
 ">
 
     <camel:camelContext id="camelContext">
@@ -22,8 +19,6 @@ http://openehealth.org/schema/ipf-commons-core-2.5.xsd
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
     
-    <ipf:globalContext id="globalContext"/>    
-
     <bean id="routeBuilder"
           class="org.openehealth.ipf.platform.camel.core.multiplast.MultiplastRouteBuilder" />
 

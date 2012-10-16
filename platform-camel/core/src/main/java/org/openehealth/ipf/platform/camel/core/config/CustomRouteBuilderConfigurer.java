@@ -24,9 +24,8 @@ import java.util.List;
 import org.apache.camel.CamelContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.commons.core.config.SpringConfigurer;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.ListableBeanFactory;
+import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
+import org.openehealth.ipf.commons.core.config.Registry;
 
 /**
  * 
@@ -36,7 +35,7 @@ import org.springframework.beans.factory.ListableBeanFactory;
  * @author Boris Stanojevic
  * 
  */
-public class CustomRouteBuilderConfigurer extends SpringConfigurer<CustomRouteBuilder> 
+public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedConfigurer<CustomRouteBuilder, R> 
        implements Comparator<CustomRouteBuilder> {
 
     private CamelContext camelContext;
@@ -44,10 +43,9 @@ public class CustomRouteBuilderConfigurer extends SpringConfigurer<CustomRouteBu
     private static final Log LOG = LogFactory.getLog(CustomRouteBuilderConfigurer.class);
 
     @Override
-    public Collection<CustomRouteBuilder> lookup(ListableBeanFactory source) {        
+    public Collection<CustomRouteBuilder> lookup(R registry) {        
         List<CustomRouteBuilder> list = new ArrayList<CustomRouteBuilder>(
-                BeanFactoryUtils.beansOfTypeIncludingAncestors(source,
-                        CustomRouteBuilder.class).values());
+                registry.beans(CustomRouteBuilder.class).values());
         Collections.sort(list);
         return list;
     }

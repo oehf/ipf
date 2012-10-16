@@ -15,10 +15,37 @@
  */
 package org.openehealth.ipf.commons.core.config;
 
+import java.util.Map;
+
+/**
+ * Technology-independent bean registry interface
+ * 
+ * @since 2.5
+ */
 public interface Registry {
 
-    public <T> T bean(String name, Class<T> requiredType);
+    /**
+     * @param name
+     * @return bean of given name
+     * 
+     * @since 2.5
+     */
+    public Object bean(String name);
 
+    /**
+     * @param requiredType
+     * @return first bean of given type
+     * 
+     * @since 2.5
+     */
     public <T> T bean(Class<T> requiredType);
+    
+    /**
+     * @param requiredType
+     * @return all beans of given type
+     * 
+     * @since 2.5
+     */
+    public <T> Map<String, T> beans(Class <T> requiredType);
     
 }

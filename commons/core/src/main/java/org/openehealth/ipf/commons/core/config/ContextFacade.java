@@ -18,21 +18,32 @@ package org.openehealth.ipf.commons.core.config;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class ContextFacade {
+/**
+ * Facade to an active registry, providing static access to their registered
+ * beans.
+ * <p>
+ * You have to create an instance in order to pass in the {@link Registry}
+ * object.
+ * 
+ * @since 2.5
+ */
+public class ContextFacade<R extends Registry> {
 
     private static Registry instance;
     private static Log LOG = LogFactory.getLog(ContextFacade.class);
-
-    public ContextFacade(Registry registry) {
-        if (instance != null)
-            LOG.warn("Re-initializing the application context");
-        instance = registry;        
-    }
     
-    public static <B> B getBean(String name, Class<B> requiredType) {
-        return instance.bean(name, requiredType);
+    public static synchronized void setRegistry(Registry registry) {
+        if (instance != null && !registry.equals(instance))
+            LOG.warn("Re-initializing the registry");
+        instance = registry;       
     }
 
+    /**
+     * @param requiredType
+     * @return bean of the required type
+     * 
+     * @since 2.5
+     */
     public static <B> B getBean(Class<B> requiredType) {
         return instance.bean(requiredType);
     }

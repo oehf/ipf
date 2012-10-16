@@ -12,18 +12,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:camel="http://camel.apache.org/schema/spring"
-    xmlns:http="http://cxf.apache.org/transports/http/configuration"
-    xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"    
+    xmlns:http="http://cxf.apache.org/transports/http/configuration"  
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://camel.apache.org/schema/spring 
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 http://cxf.apache.org/transports/http/configuration
-http://cxf.apache.org/schemas/configuration/http-conf.xsd
-http://openehealth.org/schema/ipf-commons-core
-http://openehealth.org/schema/ipf-commons-core-2.5.xsd
-">
+http://cxf.apache.org/schemas/configuration/http-conf.xsd">
 
     <!-- Importing the CXF configuration -->
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
@@ -34,8 +30,6 @@ http://openehealth.org/schema/ipf-commons-core-2.5.xsd
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
     
-	<ipf:globalContext id="globalContext"/>
-
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.Iti55TestRouteBuilder">
     </bean>

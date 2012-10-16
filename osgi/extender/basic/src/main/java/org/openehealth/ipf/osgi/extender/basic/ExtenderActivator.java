@@ -84,8 +84,7 @@ public class ExtenderActivator implements BundleActivator, SynchronousBundleList
         LOG.debug("destroyed extender activator");
     }
     
-    @SuppressWarnings("unchecked")
-    private void activateExtensionClasses(List<Class> classes) {
+    private void activateExtensionClasses(List<Class<?>> classes) {
         for (Class<?> clazz : classes) {
             try {
                 extensionActivator.activate(clazz);

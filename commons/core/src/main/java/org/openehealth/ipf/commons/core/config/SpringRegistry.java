@@ -15,29 +15,69 @@
  */
 package org.openehealth.ipf.commons.core.config;
 
+import java.util.Map;
+
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.beans.factory.ListableBeanFactory;
 
-public class SpringRegistry implements Registry, ApplicationContextAware {
+/**
+ * Class that bridges the {@link Registry} interface to a Spring
+ * {@link ListableBeanFactory}.
+ * 
+ * @since 2.5
+ */
+public class SpringRegistry implements Registry, BeanFactoryAware {
 
-    private ApplicationContext context;
+    private ListableBeanFactory beanFactory;
+
+    public SpringRegistry() {
+    }
 
     @Override
-    public <T> T bean(String name, Class<T> requiredType) {
-        return context.getBean(name, requiredType);
+    public Object bean(String name) {
+        return beanFactory.getBean(name);
     }
 
     @Override
     public <T> T bean(Class<T> requiredType) {
-        return BeanFactoryUtils.beanOfType(context, requiredType);
+        return beanFactory.getBean(requiredType);
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
-            throws BeansException {
-        this.context = applicationContext;
+    public <T> Map<String, T> beans(Class<T> requiredType) {
+        return BeanFactoryUtils.beansOfTypeIncludingAncestors(beanFactory,
+                requiredType);
+    }
+
+    /**
+     * Stores the beanFactory and initialized the {@link ContextFacade}.
+     * 
+     * @see org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
+     */
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = (ListableBeanFactory) beanFactory;
+        ContextFacade.setRegistry(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SpringRegistry other = (SpringRegistry) obj;
+        if (beanFactory == null) {
+            if (other.beanFactory != null)
+                return false;
+        } else if (beanFactory != other.beanFactory)
+            return false;
+        return true;
     }
 
 }

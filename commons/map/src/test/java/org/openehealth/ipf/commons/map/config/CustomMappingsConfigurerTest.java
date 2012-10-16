@@ -29,7 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class CustomMappingsConfigurerTest {
 
     @Autowired
-    private CustomMappingsConfigurer configurer;
+    private CustomMappingsConfigurer<?> configurer;
     
     @Test
     public void testMappings() {

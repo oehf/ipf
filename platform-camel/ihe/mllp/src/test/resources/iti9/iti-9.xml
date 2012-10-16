@@ -13,8 +13,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:lang="http://www.springframework.org/schema/lang"
     xmlns:camel="http://camel.apache.org/schema/spring" 
-    xmlns:util="http://www.springframework.org/schema/util"
-    xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"    
+    xmlns:util="http://www.springframework.org/schema/util"   
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
@@ -24,16 +23,12 @@ http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://camel.apache.org/schema/spring 
 http://camel.apache.org/schema/spring/camel-spring.xsd
-http://openehealth.org/schema/ipf-commons-core
-http://openehealth.org/schema/ipf-commons-core-2.5.xsd
 ">
 
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true" />
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
-    
-	<ipf:globalContext id="globalContext"/>   
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.mllp.iti9.Iti9TestRouteBuilder">

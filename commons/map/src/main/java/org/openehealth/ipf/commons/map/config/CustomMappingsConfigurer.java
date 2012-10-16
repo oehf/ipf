@@ -19,10 +19,10 @@ import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.commons.core.config.SpringConfigurer;
+import org.openehealth.ipf.commons.core.config.Configurer;
+import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
+import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.commons.map.BidiMappingService;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.core.io.Resource;
 
 /**
@@ -32,7 +32,7 @@ import org.springframework.core.io.Resource;
  * 
  * @author Boris Stanojevic
  */
-public class CustomMappingsConfigurer extends SpringConfigurer<CustomMappings> {
+public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigurer<CustomMappings, R> {
 
     private BidiMappingService mappingService;
     
@@ -42,12 +42,11 @@ public class CustomMappingsConfigurer extends SpringConfigurer<CustomMappings> {
      * lookup for the specific {@link CustomMappings} objects inside
      * the given beanFactory
      * 
-     * @see SpringConfigurer
+     * @see OrderedConfigurer
      */
     @Override
-    public Collection<CustomMappings> lookup(ListableBeanFactory source) {
-        return BeanFactoryUtils.beansOfTypeIncludingAncestors(source,
-                CustomMappings.class).values();
+    public Collection<CustomMappings> lookup(Registry registry) {
+        return registry.beans(CustomMappings.class).values();
     }
 
     /**

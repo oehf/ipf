@@ -14,8 +14,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:camel="http://camel.apache.org/schema/spring"
     xmlns:http="http://cxf.apache.org/transports/http/configuration" 
-    xmlns:sec="http://cxf.apache.org/configuration/security" 
-    xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"    
+    xmlns:sec="http://cxf.apache.org/configuration/security"   
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
@@ -25,8 +24,6 @@ http://cxf.apache.org/transports/http/configuration
 http://cxf.apache.org/schemas/configuration/http-conf.xsd 
 http://cxf.apache.org/configuration/security 
 http://cxf.apache.org/schemas/configuration/security.xsd 
-http://openehealth.org/schema/ipf-commons-core
-http://openehealth.org/schema/ipf-commons-core-2.5.xsd
 ">
 
     <import resource="classpath:META-INF/cxf/cxf.xml" />
@@ -58,9 +55,7 @@ http://openehealth.org/schema/ipf-commons-core-2.5.xsd
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true" />
         <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>
-    
-	<ipf:globalContext id="globalContext"/>    
+    </camel:camelContext>  
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.xds.iti41.Iti41TestRouteBuilder">

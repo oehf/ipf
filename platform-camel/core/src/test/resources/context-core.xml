@@ -16,15 +16,12 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:camel="http://camel.apache.org/schema/spring"
-       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"       
+       xmlns:camel="http://camel.apache.org/schema/spring"     
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://camel.apache.org/schema/spring
-http://camel.apache.org/schema/spring/camel-spring.xsd
-http://openehealth.org/schema/ipf-commons-core
-http://openehealth.org/schema/ipf-commons-core-2.5.xsd">
+http://camel.apache.org/schema/spring/camel-spring.xsd">
 
   <!-- ================================================================== -->
   <!--  Camel Setup                                                       -->
@@ -35,9 +32,6 @@ http://openehealth.org/schema/ipf-commons-core-2.5.xsd">
       <camel:package>org.openehealth.ipf.platform.camel.core.process.builder</camel:package>
       <camel:jmxAgent id="agent" disabled="true" />
   </camel:camelContext>
-
-
-  <ipf:globalContext id="globalContext"/>
 
   <bean id="testPredicate" 
       class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestPredicate">
