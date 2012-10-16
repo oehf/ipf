@@ -53,7 +53,7 @@
         <!-- Dependency version properties -->
         <activemq-version>5.6.0</activemq-version>
         <aspectj-version>1.7.1</aspectj-version>
-        <camel-version>2.10.1</camel-version>
+        <camel-version>2.10.2</camel-version>
         <commons-codec-version>1.6</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
@@ -63,7 +63,7 @@
         <commons-lang-version>3.1</commons-lang-version>
         <commons-logging-version>1.1.1</commons-logging-version>
         <commons-math-version>2.2</commons-math-version>
-        <cxf-version>2.6.2</cxf-version>
+        <cxf-version>2.6.3</cxf-version>
         <derby-version>10.8.2.2</derby-version>
         <easymock-version>3.1</easymock-version>
         <ehcache-version>2.5.5</ehcache-version>
