@@ -39,16 +39,14 @@ http://cxf.apache.org/schemas/configuration/security.xsd
             </sec:trustManagers>
             <sec:cipherSuitesFilter>
                 <!--
-                    these filters ensure that a ciphersuite with export-suitable or
-                    null encryption is used, but exclude anonymous Diffie-Hellman
+                    these filters ensure that a required RSA ciphersuite with AES
+                    encryption is used, but exclude anonymous Diffie-Hellman
                     key change as this is vulnerable to man-in-the-middle attacks
+                    See the list of SUN supported ciphersuites under:
+                    docs.oracle.com/javase/7/docs/technotes/guides/security/SunProviders.html
                 -->
-                <sec:include>.*.*</sec:include>
-                <!--sec:include>.*_EXPORT_.*</sec:include>
-                <sec:include>.*_EXPORT1024_.*</sec:include>
-                <sec:include>.*_WITH_DES_.*</sec:include>
-                <sec:include>.*_WITH_NULL_.*</sec:include>
-                <sec:exclude>.*_DH_anon_.*</sec:exclude-->
+                <sec:include>.*_RSA_WITH_AES_.*</sec:include>
+                <sec:exclude>.*_DH_anon_.*</sec:exclude>
             </sec:cipherSuitesFilter>
         </http:tlsClientParameters>
     </http:conduit>
