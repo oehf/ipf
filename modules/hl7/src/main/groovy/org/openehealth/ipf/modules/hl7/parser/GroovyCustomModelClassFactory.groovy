@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.modules.hl7.parser
 
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovyShell;
+
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.*
-import ca.uhn.hl7v2.model.*;
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
@@ -46,7 +44,9 @@ public class GroovyCustomModelClassFactory extends CustomModelClassFactory{
 	private static Log LOG = LogFactory.getLog(CustomModelClassFactory.class)
 	
 	private GroovyClassLoader loader = new GroovyClassLoader(getClass().getClassLoader())
-	
+
+    boolean cacheSources = true
+
 	GroovyCustomModelClassFactory() {
 		super()
 	}
@@ -76,8 +76,10 @@ public class GroovyCustomModelClassFactory extends CustomModelClassFactory{
 				def path = it.replaceAll('\\.', '/')
 				def sep = path.endsWith('/') ? '' : '/'
 				fullyQualifiedName = "/${path}${sep}${subpackage}/${name}.groovy"
-				def stream = getClass().getResourceAsStream(fullyQualifiedName)
-				classLoaded = loader.parseClass(IOUtils.toString(stream))
+                def stream = getClass().getResourceAsStream(fullyQualifiedName)
+                GroovyCodeSource gcs = new GroovyCodeSource(
+                        IOUtils.toString(stream), fullyQualifiedName, ".")
+                classLoaded = loader.parseClass(gcs, cacheSources)
 				LOG.debug("Found ${fullyQualifiedName} in custom HL7 model definitions")
 			} catch (Exception e) {
 				LOG.debug("Did not find ${fullyQualifiedName} in custom HL7 model definitions")
