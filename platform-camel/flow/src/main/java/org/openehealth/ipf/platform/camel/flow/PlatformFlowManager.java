@@ -19,8 +19,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.commons.flow.FlowManagerBase;
 import org.openehealth.ipf.commons.flow.FlowReplayException;
@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class PlatformFlowManager extends FlowManagerBase implements ReplayStrategyRegistry {
 
-    private static final Log LOG = LogFactory.getLog(PlatformFlowManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PlatformFlowManager.class);
     
     private final Map<String, ReplayStrategy> replayStrategies;
     

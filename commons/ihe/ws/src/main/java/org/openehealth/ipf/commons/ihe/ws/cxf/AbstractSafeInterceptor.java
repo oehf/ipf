@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
 import org.apache.cxf.message.Message;
@@ -27,7 +27,7 @@ import org.apache.cxf.message.Message;
  * @author Dmytro Rud
  */
 abstract public class AbstractSafeInterceptor extends AbstractSoapInterceptor {
-    private static final transient Log LOG = LogFactory.getLog(AbstractSafeInterceptor.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(AbstractSafeInterceptor.class);
 
     /**
      * Constructs the interceptor.
@@ -59,7 +59,7 @@ abstract public class AbstractSafeInterceptor extends AbstractSoapInterceptor {
         try {
             process(message);
         } catch(Exception e) {
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
         }
     }
 

@@ -18,8 +18,8 @@ package org.openehealth.ipf.commons.map.config;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
 /**
@@ -55,7 +55,7 @@ public class CustomMappings {
 
     private Resource mappingScript;
 
-    private static final Log LOG = LogFactory.getLog(CustomMappings.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomMappings.class);
 
     public Collection<Resource> getMappingScripts() {
         return mappingScripts;

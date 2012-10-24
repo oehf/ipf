@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.ServiceInvokerInterceptor;
@@ -38,7 +38,7 @@ import org.w3c.dom.Element;
  * @author Dmytro Rud
  */
 public class AuditResponseInterceptor extends AbstractAuditInterceptor {
-    private static final transient Log LOG = LogFactory.getLog(AuditResponseInterceptor.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(AuditResponseInterceptor.class);
 
     private final AsynchronyCorrelator correlator;
     private final boolean asyncReceiver;

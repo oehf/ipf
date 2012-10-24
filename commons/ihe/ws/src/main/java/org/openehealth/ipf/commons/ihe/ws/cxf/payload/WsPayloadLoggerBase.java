@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
@@ -46,7 +46,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
 public class WsPayloadLoggerBase
         extends PayloadLoggerBase<WsPayloadLoggerBase.WsPayloadLoggingSpelContext>
 {
-    private static final Log LOG = LogFactory.getLog(WsPayloadLoggerBase.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WsPayloadLoggerBase.class);
 
 
     public void logPayload(Message message) {

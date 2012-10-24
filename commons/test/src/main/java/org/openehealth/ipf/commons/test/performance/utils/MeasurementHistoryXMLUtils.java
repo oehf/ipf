@@ -26,8 +26,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.test.performance.Measurement;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.openehealth.ipf.commons.test.performance.MeasurementLostException;
@@ -41,8 +41,7 @@ import org.openehealth.ipf.commons.test.performance.Timestamp;
  */
 public class MeasurementHistoryXMLUtils {
 
-    private final static Log LOG = LogFactory
-            .getLog(MeasurementHistoryXMLUtils.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MeasurementHistoryXMLUtils.class);
 
     private final static JAXBContext context;
 

@@ -20,8 +20,8 @@ import static org.openehealth.ipf.commons.flow.util.Flows.createFlow;
 import java.io.IOException;
 import java.util.Date;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.flow.domain.Flow;
@@ -47,7 +47,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public class FlowLockTest {
 
-    private static final Log LOG = LogFactory.getLog(FlowLockTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FlowLockTest.class);
     
     @Autowired
     private PlatformTransactionManager platformTransactionManager;

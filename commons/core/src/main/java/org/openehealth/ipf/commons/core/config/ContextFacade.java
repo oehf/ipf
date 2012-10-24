@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.core.config;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Facade to an active registry, providing static access to their registered
@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 public class ContextFacade {
 
     private static Registry instance;
-    private static Log LOG = LogFactory.getLog(ContextFacade.class);
+    private static Logger LOG = LoggerFactory.getLogger(ContextFacade.class);
     
     public static synchronized void setRegistry(Registry registry) {
         if (instance != null && !registry.equals(instance))

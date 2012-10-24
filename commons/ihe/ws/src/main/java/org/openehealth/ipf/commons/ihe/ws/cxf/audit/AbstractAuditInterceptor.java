@@ -16,8 +16,8 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.binding.soap.Soap12;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.Message;
@@ -41,7 +41,7 @@ import java.util.List;
  * @author Dmytro Rud
  */
 abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
-    private static final transient Log LOG = LogFactory.getLog(AbstractAuditInterceptor.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(AbstractAuditInterceptor.class);
     
     /**
      * Key used to store audit datasets in Web Service contexts.

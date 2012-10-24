@@ -17,8 +17,8 @@ package org.openehealth.ipf.osgi.config.ihe.atna;
 
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender;
 import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
@@ -34,7 +34,7 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
  */
 public class CamelEndpointSenderRegistration {
 
-    private static final Log LOG = LogFactory
+    private static final Logger LOG = LogFactory
             .getLog(CamelEndpointSenderRegistration.class);
 
     private AuditorModuleContext iheAuditorContext;

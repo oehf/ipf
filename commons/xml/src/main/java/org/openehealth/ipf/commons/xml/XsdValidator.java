@@ -29,8 +29,8 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -48,7 +48,7 @@ import org.xml.sax.SAXParseException;
  */
 public class XsdValidator implements Validator<Source, String> {
 
-    private final static Log LOG = LogFactory.getLog(XsdValidator.class);
+    private final static Logger LOG = LoggerFactory.getLogger(XsdValidator.class);
     private ResourceLoader resourceLoader;
     private final static LSResourceResolverImpl lrri = new LSResourceResolverImpl();
     private String schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;

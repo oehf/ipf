@@ -24,8 +24,8 @@ import static org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria.Purg
 import java.text.ParseException;
 import java.util.Date;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.datetime.Duration;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
@@ -55,7 +55,7 @@ public class FlowPurgeJob implements Job {
     
     private static final String FLOW_MANAGER_KEY = "flowManager";
     private static final String APP_CONFIG_KEY = "appConfig";
-    private static final Log LOG = LogFactory.getLog(FlowPurgeJob.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FlowPurgeJob.class);
     
     private final FlowManager flowManager;
     private final Scheduler scheduler;

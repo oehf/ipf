@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.test.http.server.RequestHandler;
 
 /**
@@ -31,7 +31,7 @@ import org.openehealth.ipf.commons.test.http.server.RequestHandler;
  */
 public class DefaultHandler implements RequestHandler {
 
-    private static final Log LOG = LogFactory.getLog(DefaultHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultHandler.class);
     
 
     @Override

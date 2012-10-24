@@ -20,8 +20,8 @@ import org.apache.catalina.Wrapper;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.loader.VirtualWebappLoader;
 import org.apache.catalina.startup.Tomcat;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Jens Riemschneider
  */
 public class TomcatServer extends ServletServer {
-    private static final Log log = LogFactory.getLog(TomcatServer.class);
+    private static final Logger log = LoggerFactory.getLogger(TomcatServer.class);
 
     private static final AtomicInteger SERVLET_COUNTER = new AtomicInteger(0);
     private Tomcat embedded;

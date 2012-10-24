@@ -18,8 +18,8 @@ package org.openehealth.ipf.commons.ihe.core.payload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.common.TemplateParserContext;
@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Dmytro Rud
  */
 abstract public class PayloadLoggerBase<T extends PayloadLoggingSpelContext> {
-    private static final transient Log LOG = LogFactory.getLog(PayloadLoggerBase.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(PayloadLoggerBase.class);
 
     private static final AtomicLong SEQUENCE_ID_GENERATOR = new AtomicLong(0L);
 

@@ -18,8 +18,8 @@ package org.openehealth.ipf.platform.camel.flow.process;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.commons.flow.ManagedMessage;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
@@ -39,7 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy {
 
-    private static final Log LOG = LogFactory.getLog(FlowBeginProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FlowBeginProcessor.class);
 
     @Autowired
     private ReplayStrategyRegistry registry;
@@ -211,7 +211,7 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
             // apply conversions defined in route 
             message.createPacket();
             // keep processing exchange (only log error)
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
         }
         
     }

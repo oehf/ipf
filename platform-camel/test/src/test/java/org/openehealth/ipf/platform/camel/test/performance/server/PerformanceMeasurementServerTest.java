@@ -35,8 +35,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -84,8 +84,7 @@ public class PerformanceMeasurementServerTest {
 
     private final String EMPTY_BODY = "";
 
-    private final static Log LOG = LogFactory
-            .getLog(PerformanceMeasurementServerTest.class);
+    private final static Logger LOG = LoggerFactory.getLogger(PerformanceMeasurementServerTest.class);
 
     @Resource
     ThroughputStatistics throughputStatistics;

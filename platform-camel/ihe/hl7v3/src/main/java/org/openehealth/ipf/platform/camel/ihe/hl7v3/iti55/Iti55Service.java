@@ -28,8 +28,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.spi.ExecutorServiceManager;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
 import org.apache.cxf.message.Message;
@@ -56,7 +56,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
  * @author Dmytro Rud
  */
 public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortType {
-    private static final transient Log LOG = LogFactory.getLog(Iti55Service.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(Iti55Service.class);
 
     private final ProducerTemplate producerTemplate;
     private final ExecutorService executorService;

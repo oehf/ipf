@@ -21,8 +21,8 @@ import java.io.IOException;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 
 /**
@@ -31,7 +31,7 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
  * @author Martin Krasser
  */
 public class ValidatorAdapter extends ProcessorAdapter {
-    private static final transient Log LOG = LogFactory.getLog(ValidatorAdapter.class.getName());
+    private static final transient Logger LOG = LoggerFactory.getLogger(ValidatorAdapter.class.getName());
 
     /**
      * Validators may check whether the Camel message header is set

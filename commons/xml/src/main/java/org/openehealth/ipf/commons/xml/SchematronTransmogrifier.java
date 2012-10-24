@@ -26,8 +26,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Converts a XML document into a Schematron validation report by applying
@@ -60,7 +60,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
 
-    private final static Log LOG = LogFactory.getLog(SchematronTransmogrifier.class);
+    private final static Logger LOG = LoggerFactory.getLogger(SchematronTransmogrifier.class);
 
     private final XsltTransmogrifier<String> xsltTransmogrifier;
 

@@ -18,8 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
@@ -38,7 +38,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  * @author Dmytro Rud
  */
 public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
-    private static final transient Log LOG = LogFactory.getLog(ConsumerAdaptingInterceptor.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerAdaptingInterceptor.class);
     public static final String ACK_TYPE_CODE_HEADER = "ipf.hl7v2.AckTypeCode";
 
     private final String charsetName;

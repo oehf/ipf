@@ -20,8 +20,8 @@ import groovy.util.Factory;
 import groovytools.builder.MetaBuilder;
 import groovytools.builder.MetaObjectGraphBuilder;
 import groovytools.builder.SchemaNode;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EObject;
@@ -34,8 +34,7 @@ import java.util.Map;
 public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
 
     static final CDAR2Package ePackage = CDAR2Package.eINSTANCE;
-    private static final Log LOG = LogFactory
-            .getLog(CDAR2MetaObjectGraphBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CDAR2MetaObjectGraphBuilder.class);
     
     public CDAR2MetaObjectGraphBuilder(MetaBuilder metaBuilder,
             SchemaNode defaultSchema, Factory defaultFactory) {

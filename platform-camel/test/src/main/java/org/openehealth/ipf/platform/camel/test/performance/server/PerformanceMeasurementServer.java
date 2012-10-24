@@ -16,16 +16,15 @@
 package org.openehealth.ipf.platform.camel.test.performance.server;
 
 import org.apache.camel.spring.Main;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mitko Kolev
  */
 public class PerformanceMeasurementServer {
 
-    private final static Log LOG = LogFactory
-            .getLog(PerformanceMeasurementServer.class);
+    private final static Logger LOG = LoggerFactory.getLogger(PerformanceMeasurementServer.class);
 
     public static void main(String[] args) throws Exception {
         LOG.info("Starting performance measurement server");

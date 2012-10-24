@@ -20,8 +20,8 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
@@ -37,7 +37,7 @@ import ca.uhn.hl7v2.util.Terser;
  * @author Dmytro Rud
  */
 public class AuditInterceptorUtils  {
-    private static final transient Log LOG = LogFactory.getLog(AuditInterceptorUtils.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(AuditInterceptorUtils.class);
 
     private AuditInterceptorUtils() {
         throw new IllegalStateException("Helper class");

@@ -18,8 +18,8 @@ package org.openehealth.ipf.commons.xml;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
@@ -36,7 +36,7 @@ import org.w3c.dom.ls.LSResourceResolver;
  */
 public class LSResourceResolverImpl implements LSResourceResolver {
 
-    private final static Log LOG = LogFactory.getLog(LSResourceResolverImpl.class);
+    private final static Logger LOG = LoggerFactory.getLogger(LSResourceResolverImpl.class);
 
     /**
      * @see org.w3c.dom.ls.LSResourceResolver#resolveResource(String, String,

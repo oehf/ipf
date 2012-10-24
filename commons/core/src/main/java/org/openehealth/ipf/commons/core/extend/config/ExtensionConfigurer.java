@@ -19,8 +19,8 @@ import groovy.lang.ExpandoMetaClass;
 
 import java.util.Collection;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.commons.core.extend.DefaultActivator;
@@ -39,7 +39,7 @@ import org.openehealth.ipf.commons.core.extend.ExtensionActivator;
 public class ExtensionConfigurer<R extends Registry> extends
         OrderedConfigurer<Extension, R> {
 
-    private static final Log LOG = LogFactory.getLog(ExtensionConfigurer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtensionConfigurer.class);
 
     private ExtensionActivator extensionActivator;
 

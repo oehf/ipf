@@ -21,8 +21,8 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
 import ca.uhn.hl7v2.HL7Exception;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
@@ -41,7 +41,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
  * @author Dmytro Rud
  */
 public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpInterceptor {
-    private static final transient Log LOG = LogFactory.getLog(ConsumerRequestDefragmenterInterceptor.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerRequestDefragmenterInterceptor.class);
     
     // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  
     private UnsolicitedFragmentationStorage storage;

@@ -22,8 +22,8 @@ import javax.xml.ws.handler.MessageContext;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.ws.addressing.impl.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
@@ -34,7 +34,7 @@ import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
  * @author Dmytro Rud
  */
 abstract public class AbstractAsyncResponseWebService extends AbstractWebService {
-    private static final transient Log LOG = LogFactory.getLog(AbstractAsyncResponseWebService.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(AbstractAsyncResponseWebService.class);
 
     /**
      * Determines whether correlation items related to the given message can be dropped.

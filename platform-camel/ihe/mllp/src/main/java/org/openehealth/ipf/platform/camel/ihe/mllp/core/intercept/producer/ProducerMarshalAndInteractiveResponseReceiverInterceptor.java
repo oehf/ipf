@@ -22,8 +22,8 @@ import ca.uhn.hl7v2.model.v25.message.QCN_J01;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
@@ -46,7 +46,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * @author Dmytro Rud
  */
 public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends AbstractMllpInterceptor {
-    private static final transient Log LOG = LogFactory.getLog(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
 
     public ProducerMarshalAndInteractiveResponseReceiverInterceptor() {
         setId(ProducerMarshalInterceptor.class.getName());

@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.message.Exchange;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsRejectionHandlingStrategy;
@@ -31,7 +31,7 @@ import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.extractOutgoing
  * @author Dmytro Rud
  */
 public class MyRejectionHandlingStrategy extends AbstractHl7v2WsRejectionHandlingStrategy {
-    private static final Log LOG = LogFactory.getLog(MyRejectionHandlingStrategy.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MyRejectionHandlingStrategy.class);
 
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
@@ -61,6 +61,6 @@ public class MyRejectionHandlingStrategy extends AbstractHl7v2WsRejectionHandlin
             sb.append("HL7v2 NAK:\n").append(extractOutgoingPayload(cxfExchange));
         }
 
-        LOG.error(sb, exception);
+        LOG.error(sb.toString(), exception);
     }
 }

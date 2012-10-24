@@ -17,8 +17,8 @@ package org.openehealth.ipf.osgi.extender.config.extend;
 
 import java.util.Collection;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.commons.core.extend.DefaultActivator;
 import org.openehealth.ipf.commons.core.extend.ExtensionActivator;
@@ -31,7 +31,7 @@ import org.osgi.framework.BundleContext;
  */
 public class OsgiExtensionConfigurer<R extends Registry> extends OsgiSpringConfigurer<Object, R>{
 
-    private static final Log LOG = LogFactory.getLog(OsgiExtensionConfigurer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OsgiExtensionConfigurer.class);
     
     private final ExtensionActivator extensionActivator;
     

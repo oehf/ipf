@@ -22,8 +22,8 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.test.http.client.Client;
 import org.openehealth.ipf.commons.test.http.client.ResponseHandler;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
@@ -47,8 +47,7 @@ public abstract class MeasurementDispatcher implements InitializingBean {
 
     public final static String CONTENT_ENCODING = "UTF-8";
 
-    private final static Log LOG = LogFactory
-            .getLog(MeasurementDispatcher.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MeasurementDispatcher.class);
 
     private StatisticsManager statisticsManager;
 

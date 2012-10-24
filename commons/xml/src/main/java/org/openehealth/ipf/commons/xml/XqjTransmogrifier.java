@@ -37,8 +37,8 @@ import javax.xml.xquery.XQResultSequence;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.xqj.SaxonXQDataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 
 /**
@@ -49,7 +49,7 @@ import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
  * @param <T>
  */
 public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
-    private final static Log LOG = LogFactory.getLog(XqjTransmogrifier.class);
+    private final static Logger LOG = LoggerFactory.getLogger(XqjTransmogrifier.class);
 
     private final Map<Object, XQPreparedExpression> cache = new HashMap<Object, XQPreparedExpression>();
     private final XQDataSource ds;

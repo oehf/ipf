@@ -17,8 +17,8 @@ package org.openehealth.ipf.platform.camel.flow.osgi;
 
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategy;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistration;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry;
@@ -31,7 +31,7 @@ import org.springframework.osgi.context.BundleContextAware;
  */
 public class OsgiReplayStrategyRegistry implements ReplayStrategyRegistry, BundleContextAware {
 
-    private static final Log LOG = LogFactory.getLog(OsgiReplayStrategyRegistry.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OsgiReplayStrategyRegistry.class);
     
     public static final String REPLAY_STRATEGY_IDENTIFIER_KEY = 
         OsgiReplayStrategyRegistry.class.getPackage().getName();

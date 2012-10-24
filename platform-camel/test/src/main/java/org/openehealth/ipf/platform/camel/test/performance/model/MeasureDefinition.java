@@ -18,8 +18,8 @@ package org.openehealth.ipf.platform.camel.test.performance.model;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Processor;
 import org.apache.camel.spi.RouteContext;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.test.performance.dispatcher.MeasurementDispatcher;
 import org.openehealth.ipf.platform.camel.core.model.DelegateDefinition;
 import org.openehealth.ipf.platform.camel.core.util.Contexts;
@@ -35,7 +35,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  * @author Mitko Kolev
  */
 public class MeasureDefinition extends DelegateDefinition {
-    private final static Log LOG = LogFactory.getLog(MeasureDefinition.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MeasureDefinition.class);
 
     private TimeProcessor delegate;
 

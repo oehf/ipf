@@ -2,8 +2,8 @@ package org.openehealth.ipf.modules.cda;
 
 import java.io.InputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.junit.After;
@@ -14,7 +14,7 @@ import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
 
 public class CDAR2ValidatorTest {
-    private static final Log LOG = LogFactory.getLog(CDAR2ValidatorTest.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(CDAR2ValidatorTest.class.getName());
 
     CDAR2Validator validator;
 

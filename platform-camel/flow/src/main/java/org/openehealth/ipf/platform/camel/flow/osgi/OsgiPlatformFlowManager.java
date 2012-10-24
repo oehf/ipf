@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.flow.osgi;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.flow.FlowReplayException;
 import org.openehealth.ipf.platform.camel.flow.PlatformFlowManager;
 import org.openehealth.ipf.platform.camel.flow.PlatformPacket;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class OsgiPlatformFlowManager extends PlatformFlowManager {
 
-    private static final Log LOG = LogFactory.getLog(OsgiPlatformFlowManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OsgiPlatformFlowManager.class);
 
     private List<ReplayStrategy> replayStrategies;
 

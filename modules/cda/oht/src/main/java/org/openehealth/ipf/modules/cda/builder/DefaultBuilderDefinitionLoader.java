@@ -21,14 +21,13 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class DefaultBuilderDefinitionLoader implements
         BuilderDefinitionLoader {
 
-    private static final Log LOG = LogFactory
-            .getLog(DefaultBuilderDefinitionLoader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultBuilderDefinitionLoader.class);
 
     private final MetaBuilder builder;
 

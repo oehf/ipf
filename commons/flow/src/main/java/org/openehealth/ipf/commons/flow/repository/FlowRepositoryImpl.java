@@ -20,8 +20,8 @@ import static org.hibernate.criterion.Restrictions.*;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.HibernateException;
@@ -49,7 +49,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  */
 public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepository {
 
-    private static final Log LOG = LogFactory.getLog(FlowRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FlowRepositoryImpl.class);
 
     @Autowired(required = false)
     private SequenceRepository sequenceRepository;

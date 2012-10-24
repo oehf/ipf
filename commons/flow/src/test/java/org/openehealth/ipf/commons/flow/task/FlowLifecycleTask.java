@@ -17,8 +17,8 @@ package org.openehealth.ipf.commons.flow.task;
 
 import java.util.Date;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.flow.domain.Flow;
 import org.openehealth.ipf.commons.flow.repository.FlowRepository;
 import org.openehealth.ipf.commons.flow.tx.TestTransactionManager;
@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.flow.tx.TestTransactionManager;
  */
 public class FlowLifecycleTask extends FlowTaskSupport {
     
-    private static final Log LOG = LogFactory.getLog(FlowLifecycleTask.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FlowLifecycleTask.class);
     
     private FlowRepository flowRepository;
 

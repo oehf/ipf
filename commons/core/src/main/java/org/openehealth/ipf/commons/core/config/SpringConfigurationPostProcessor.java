@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -34,7 +34,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 public class SpringConfigurationPostProcessor implements
         ApplicationListener<ContextRefreshedEvent> {
     
-    private static Log LOG = LogFactory.getLog(SpringConfigurationPostProcessor.class);
+    private static Logger LOG = LoggerFactory.getLogger(SpringConfigurationPostProcessor.class);
 
     private List<OrderedConfigurer> springConfigurers;
 

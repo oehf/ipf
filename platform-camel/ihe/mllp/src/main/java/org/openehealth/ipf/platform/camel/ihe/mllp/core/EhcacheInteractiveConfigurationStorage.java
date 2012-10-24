@@ -19,8 +19,8 @@ import ca.uhn.hl7v2.model.Message;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class EhcacheInteractiveConfigurationStorage implements InteractiveContinuationStorage {
 
-    private static final transient Log LOG = LogFactory.getLog(EhcacheInteractiveConfigurationStorage.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(EhcacheInteractiveConfigurationStorage.class);
     private final Ehcache ehcache;
 
 

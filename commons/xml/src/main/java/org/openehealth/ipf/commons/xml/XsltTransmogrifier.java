@@ -30,8 +30,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 
 /**
@@ -46,7 +46,7 @@ import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
  * @author Christian Ohr
  */
 public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
-    private final static Log LOG = LogFactory.getLog(XsltTransmogrifier.class);
+    private final static Logger LOG = LoggerFactory.getLogger(XsltTransmogrifier.class);
 
     private final Map<Object, Templates> templateCache = new HashMap<Object, Templates>();
 

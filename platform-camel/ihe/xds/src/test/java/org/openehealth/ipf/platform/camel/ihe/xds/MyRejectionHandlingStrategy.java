@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.message.Exchange;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractWsRejectionHandlingStrategy;
 
@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Dmytro Rud
  */
 public class MyRejectionHandlingStrategy extends AbstractWsRejectionHandlingStrategy {
-    private static final Log LOG = LogFactory.getLog(MyRejectionHandlingStrategy.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MyRejectionHandlingStrategy.class);
 
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
 

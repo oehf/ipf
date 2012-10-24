@@ -18,8 +18,8 @@ package org.openehealth.ipf.commons.test.http.client.handler;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.test.http.client.ResponseHandler;
 
 /**
@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.test.http.client.ResponseHandler;
  */
 public class DefaultHandler implements ResponseHandler {
 
-    private static final Log LOG = LogFactory.getLog(DefaultHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultHandler.class);
     
     @Override
     public void handleResponse(InputStream response) throws Exception {

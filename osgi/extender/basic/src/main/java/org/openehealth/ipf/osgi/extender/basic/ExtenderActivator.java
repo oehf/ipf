@@ -20,8 +20,8 @@ import groovy.lang.ExpandoMetaClass;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.extend.DefaultActivator;
 import org.openehealth.ipf.commons.core.extend.ExtensionActivator;
 import org.osgi.framework.Bundle;
@@ -35,7 +35,7 @@ import org.osgi.framework.SynchronousBundleListener;
  */
 public class ExtenderActivator implements BundleActivator, SynchronousBundleListener {
 
-    private static final Log LOG = LogFactory.getLog(ExtenderActivator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtenderActivator.class);
     
     private final ExtensionActivator extensionActivator;
     

@@ -17,8 +17,8 @@ package org.openehealth.ipf.commons.map.config;
 
 import java.util.Collection;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.config.Configurer;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
@@ -36,7 +36,7 @@ public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigu
 
     private BidiMappingService mappingService;
     
-    private static final Log LOG = LogFactory.getLog(CustomMappingsConfigurer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomMappingsConfigurer.class);
     
     /**
      * lookup for the specific {@link CustomMappings} objects inside

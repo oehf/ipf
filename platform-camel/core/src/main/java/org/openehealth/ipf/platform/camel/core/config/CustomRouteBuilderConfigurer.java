@@ -22,8 +22,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.camel.CamelContext;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
 
@@ -40,7 +40,7 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
 
     private CamelContext camelContext;
     
-    private static final Log LOG = LogFactory.getLog(CustomRouteBuilderConfigurer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomRouteBuilderConfigurer.class);
 
     @Override
     public Collection<CustomRouteBuilder> lookup(R registry) {        

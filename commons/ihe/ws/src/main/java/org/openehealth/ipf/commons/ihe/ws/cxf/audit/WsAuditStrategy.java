@@ -17,8 +17,8 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
@@ -32,7 +32,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * @author Dmytro Rud
  */
 public abstract class WsAuditStrategy<T extends WsAuditDataset> {
-    private static final transient Log LOG = LogFactory.getLog(WsAuditStrategy.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(WsAuditStrategy.class);
 
     /**
      * Whether this is a server-side or a client-side strategy. 

@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.utils;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.binding.soap.Soap11;
 import org.apache.cxf.binding.soap.Soap12;
 import org.apache.cxf.message.Exchange;
@@ -36,7 +36,7 @@ import java.util.Set;
  * @author Dmytro Rud
  */
 public abstract class SoapUtils {
-    private static final transient Log LOG = LogFactory.getLog(SoapUtils.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(SoapUtils.class);
 
     private SoapUtils() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");

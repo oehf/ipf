@@ -16,8 +16,8 @@
 package org.openehealth.ipf.commons.core;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 
 import java.util.HashMap;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public class ContentMap {
-    private static transient Log LOG = LogFactory.getLog(ContentMap.class);
+    private static transient Logger LOG = LoggerFactory.getLogger(ContentMap.class);
 
     // synchronized manually
     private transient final Map<Class<?>, Object> map = new HashMap<Class<?>, Object>();

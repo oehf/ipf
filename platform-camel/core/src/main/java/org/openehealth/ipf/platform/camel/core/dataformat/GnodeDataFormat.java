@@ -24,8 +24,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import org.apache.camel.Exchange;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.xml.SimpleSaxErrorHandler;
 
 /**
@@ -34,7 +34,7 @@ import org.springframework.util.xml.SimpleSaxErrorHandler;
  */
 public class GnodeDataFormat extends AbstractXmlDataFormat {
 
-    private final static Log LOG = LogFactory.getLog(GnodeDataFormat.class);
+    private final static Logger LOG = LoggerFactory.getLogger(GnodeDataFormat.class);
 
     private boolean namespaceAware;
 

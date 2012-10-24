@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.modules.cda;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.openhealthtools.mdht.uml.cda.util.CDAUtil.ValidationHandler;
 
@@ -26,7 +26,7 @@ import org.openhealthtools.mdht.uml.cda.util.CDAUtil.ValidationHandler;
  *
  */
 public class DefaultValidationHandler implements ValidationHandler {
-    private static final Log LOG = LogFactory.getLog(DefaultValidationHandler.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultValidationHandler.class.getName());
     
     @Override
     public void handleError(Diagnostic diagnostic) {

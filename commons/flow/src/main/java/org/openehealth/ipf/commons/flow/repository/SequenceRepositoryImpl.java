@@ -17,8 +17,8 @@ package org.openehealth.ipf.commons.flow.repository;
 
 import static org.openehealth.ipf.commons.flow.domain.FlowNumber.DEFAULT_SEQUENCE;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.LockMode;
 import org.openehealth.ipf.commons.flow.domain.FlowNumber;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
@@ -28,7 +28,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  */
 public class SequenceRepositoryImpl extends HibernateDaoSupport implements SequenceRepository {
 
-    private static final Log LOG = LogFactory.getLog(SequenceRepositoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SequenceRepositoryImpl.class);
     
     @Override
     public void initSequence() {

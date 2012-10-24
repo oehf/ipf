@@ -21,8 +21,8 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.checkResponseAcceptance;
 
 import org.apache.camel.Exchange;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -40,7 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
  * @author Stefan Ivanov
  */
 public abstract class AbstractHl7v2WebService extends AbstractWebService {
-    private static final Log LOG = LogFactory.getLog(AbstractHl7v2WebService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractHl7v2WebService.class);
 
     private Hl7v2TransactionConfiguration config = null;
     private NakFactory nakFactory = null;

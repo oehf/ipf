@@ -20,8 +20,8 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina.MinaComponent;
 import org.apache.camel.component.mina.MinaEndpoint;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
@@ -42,7 +42,7 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public abstract class MllpComponent extends MinaComponent implements Hl7v2ConfigurationHolder {
-    private static final transient Log LOG = LogFactory.getLog(MllpComponent.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(MllpComponent.class);
     
     public static final String ACK_TYPE_CODE_HEADER = ConsumerAdaptingInterceptor.ACK_TYPE_CODE_HEADER;
     

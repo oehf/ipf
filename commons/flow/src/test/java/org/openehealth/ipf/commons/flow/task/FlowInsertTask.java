@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.commons.flow.task;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Martin Krasser
  */
 public class FlowInsertTask extends FlowTaskSupport {
 
-    private static final Log LOG = LogFactory.getLog(FlowInsertTask.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FlowInsertTask.class);
     
     @Override
     protected void doRun() {

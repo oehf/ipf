@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.flow.process;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.flow.FlowException;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.commons.flow.ManagedMessage;
@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
  */
 public class FlowErrorProcessor extends FlowProcessor {
 
-    private static final Log LOG = LogFactory.getLog(FlowErrorProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FlowErrorProcessor.class);
     
     @Override
     public String toString() {
@@ -52,7 +52,7 @@ public class FlowErrorProcessor extends FlowProcessor {
             LOG.warn("invalidate flow operation failed", e);
         } catch (Exception e) {
             // keep processing exchange (only log error)
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
         }
     }
 

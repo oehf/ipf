@@ -18,8 +18,8 @@ package org.openehealth.ipf.commons.flow;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public class FlowManagerImplLoadTest {
     
-    private static final Log LOG = LogFactory.getLog(FlowManagerImplLoadTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FlowManagerImplLoadTest.class);
     
     private static final int NUM_THREADS = 10;
     private static final int NUM_LOOPS = 100;

@@ -20,8 +20,8 @@ import static org.apache.commons.lang3.Validate.notNull;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 
 /**
@@ -40,8 +40,7 @@ public class AsynchronousMeasurementDispatcher extends MeasurementDispatcher
 
     private final Thread consumerThread;
 
-    private final static Log LOG = LogFactory
-            .getLog(AsynchronousMeasurementDispatcher.class);
+    private final static Logger LOG = LoggerFactory.getLogger(AsynchronousMeasurementDispatcher.class);
 
     /**
      * Creates a <code>AsynchronousMeasurementDispatcher</code> instance

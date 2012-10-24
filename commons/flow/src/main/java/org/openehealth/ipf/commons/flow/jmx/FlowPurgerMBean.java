@@ -18,8 +18,8 @@ package org.openehealth.ipf.commons.flow.jmx;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
 import org.openehealth.ipf.commons.flow.purge.FlowPurgeJob;
@@ -45,7 +45,7 @@ import org.springframework.jmx.export.annotation.ManagedResource;
         description="Flow purge service") 
 public class FlowPurgerMBean implements InitializingBean, DisposableBean {
 
-    private static final Log LOG = LogFactory.getLog(FlowPurgerMBean.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FlowPurgerMBean.class);
 
     @Autowired
     private FlowManager flowManager; 

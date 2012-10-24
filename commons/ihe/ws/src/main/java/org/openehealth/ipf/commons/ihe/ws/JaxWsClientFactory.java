@@ -26,8 +26,8 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.interceptor.InterceptorProvider;
@@ -47,7 +47,7 @@ import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
  * @author Jens Riemschneider
  */
 public class JaxWsClientFactory {
-    private static final Log LOG = LogFactory.getLog(JaxWsClientFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JaxWsClientFactory.class);
 
     protected final ThreadLocal<Object> threadLocalPort = new ThreadLocal<Object>();
     protected final WsTransactionConfiguration wsTransactionConfiguration;

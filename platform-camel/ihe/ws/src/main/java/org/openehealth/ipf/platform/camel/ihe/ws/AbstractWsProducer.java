@@ -20,8 +20,8 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.cxf.endpoint.ClientImpl;
 import org.apache.cxf.endpoint.EndpointImpl;
 import org.apache.cxf.frontend.ClientProxy;
@@ -54,7 +54,7 @@ import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserD
  * @author Dmytro Rud
  */
 public abstract class AbstractWsProducer<InType, OutType> extends DefaultProducer {
-    private static final Log LOG = LogFactory.getLog(AbstractWsProducer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractWsProducer.class);
 
     private final JaxWsClientFactory clientFactory;
     private final Class<InType> requestClass;

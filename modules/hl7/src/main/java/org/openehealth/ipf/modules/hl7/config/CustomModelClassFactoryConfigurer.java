@@ -17,8 +17,8 @@ package org.openehealth.ipf.modules.hl7.config;
 
 import java.util.Collection;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
@@ -40,7 +40,7 @@ public class CustomModelClassFactoryConfigurer<R extends Registry> extends Order
 
     private CustomModelClassFactory customModelClassFactory;
     
-    private static final Log LOG = LogFactory.getLog(CustomModelClassFactoryConfigurer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomModelClassFactoryConfigurer.class);
 
     boolean configureRecursively = true;
     

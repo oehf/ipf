@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Composite;
@@ -44,7 +44,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
 
     public static final String EUI_64_PATTERN = "[0-9a-zA-Z]+";
     
-    private static final Log LOG = LogFactory.getLog(AbstractCompositeTypeRule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractCompositeTypeRule.class);
 
     public AbstractCompositeTypeRule(Class<T> compositeTypeClass) {
         this.appliesFor = compositeTypeClass.getSimpleName();
