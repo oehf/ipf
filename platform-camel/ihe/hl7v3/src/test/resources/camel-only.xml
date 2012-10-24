@@ -22,6 +22,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <import resource="common-beans.xml" />
 
     <bean id="routeBuilder" 
-        class="org.openehealth.ipf.platform.camel.ihe.hl7v3.CamelOnlyRouteBuilder" />
+        class="org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47.CamelOnlyRouteBuilder" />
 
 </beans>
