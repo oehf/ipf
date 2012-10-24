@@ -124,8 +124,8 @@ class RegRepModelExtension {
     static ProcessorDefinition processBody(ProcessorDefinition self, closure) {
         self.process {closure(it.in.body)}
     }
-    
-    static ProcessorDefinition processBody(ProcessorDefinition self, log, closure) {
+
+    static ProcessorDefinition log(ProcessorDefinition self, log, closure) {
         self.process {log.info(closure.call(it)) }
     }
 

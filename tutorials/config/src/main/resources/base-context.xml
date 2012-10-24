@@ -12,38 +12,10 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
   <bean id="bidiMappingService"
       class="org.openehealth.ipf.commons.map.BidiMappingService" />
 
-  <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension" />
-
-  <bean id="hapiModelExtension" 
-        class="org.openehealth.ipf.modules.hl7.extend.HapiModelExtension">
-        <property name="mappingService" ref="bidiMappingService" />
-  </bean>
-        
-  <bean id="hl7ModelExtension" 
-        class="org.openehealth.ipf.platform.camel.hl7.extend.Hl7ModelExtension" />
-        
-  <bean id="mappingExtension"
-        class="org.openehealth.ipf.commons.map.extend.MappingExtension">
-        <property name="mappingService" ref="bidiMappingService" />
-  </bean>
-
-  <bean id="baseRoute" depends-on="routeModelExtender"
+  <bean id="baseRoute"
         class="org.openehealth.ipf.tutorials.config.base.route.SampleRouteBuilder" />
     
   <bean id="baseExtension"
         class="org.openehealth.ipf.tutorials.config.base.extend.SampleModelExtension" />
-	
-  <bean id="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-    <property name="routeModelExtensions">
-      <list>
-        <ref bean="coreModelExtension" />
-        <ref bean="hapiModelExtension" />
-        <ref bean="hl7ModelExtension" />
-        <ref bean="mappingExtension" />
-      </list>
-    </property>
-  </bean>
-	
+
 </beans>

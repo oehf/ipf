@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @since 2.5
  */
-public class ContextFacade<R extends Registry> {
+public class ContextFacade {
 
     private static Registry instance;
     private static Log LOG = LogFactory.getLog(ContextFacade.class);

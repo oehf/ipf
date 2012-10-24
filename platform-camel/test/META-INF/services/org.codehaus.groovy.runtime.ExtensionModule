@@ -1,0 +1,3 @@
+moduleName = PerformanceExtension
+moduleVersion = 2.5
+extensionClasses = org.openehealth.ipf.platform.camel.test.performance.extend.PerformanceExtension
