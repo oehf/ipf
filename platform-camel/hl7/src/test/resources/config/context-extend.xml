@@ -24,7 +24,7 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://www.springframework.org/schema/lang 
 http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
 http://camel.apache.org/schema/spring 
-http://camel.apache.org/schema/spring/camel-spring.xsd 
+http://camel.apache.org/schema/spring/camel-spring.xsd
 ">
 
     <camel:camelContext id="camelContext">
@@ -32,26 +32,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
 
-    <bean id="routeBuilder" depends-on="routeModelExtender"
+    <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.hl7.extend.Ghl7RouteBuilder">
-    </bean>
-
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="hl7ModelExtension"
-        class="org.openehealth.ipf.platform.camel.hl7.extend.Hl7ModelExtension">
-    </bean>
-
-    <bean id="routeModelExtender" 
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-                <ref bean="hl7ModelExtension" />
-            </list>
-        </property>
     </bean>
 
 </beans>

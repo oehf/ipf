@@ -36,10 +36,5 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
   
   <bean id="postProcessor" 
         class="org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor">
-    <property name="springConfigurers" >
-      <list>
-        <ref bean="configurer" />
-      </list>
-    </property>
   </bean>   
 </beans>

@@ -16,11 +16,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"    
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd
 ">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
@@ -30,34 +33,13 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <camel:jmxAgent id="agent" disabled="false"/>
         <camel:routeBuilder ref="routeBuilder"/>
     </camel:camelContext>
-
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
+    
+	<ipf:globalContext id="globalContext"/>    
 
     <bean id="mappingService" class="org.openehealth.ipf.commons.map.BidiMappingService">
         <property name="mappingScripts">
             <list>
                  <value>classpath:META-INF/map/hl7-v2-v3-translation.map</value>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="hapiModelExtension" class="org.openehealth.ipf.modules.hl7.extend.HapiModelExtension">
-        <property name="mappingService" ref="mappingService" />
-    </bean>
-
-    <bean id="mappingModelExtension" class="org.openehealth.ipf.commons.map.extend.MappingExtension">
-        <property name="mappingService" ref="mappingService" />
-    </bean>
-
-    <bean id="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-                <ref bean="hapiModelExtension" />
-                <ref bean="mappingModelExtension" />
             </list>
         </property>
     </bean>

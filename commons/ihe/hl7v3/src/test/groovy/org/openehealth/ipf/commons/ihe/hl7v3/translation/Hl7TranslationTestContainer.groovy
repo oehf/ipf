@@ -15,22 +15,30 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import ca.uhn.hl7v2.parser.Parser
 import org.apache.commons.io.IOUtils
 import org.custommonkey.xmlunit.DetailedDiff
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLUnit
-import org.openehealth.ipf.commons.ihe.core.InteractionId
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
+import static org.easymock.EasyMock.*
 
+import org.junit.BeforeClass;
+import org.junit.runner.RunWith
+import org.openehealth.ipf.commons.core.config.ContextFacade
+import org.openehealth.ipf.commons.core.config.Registry
+import org.openehealth.ipf.commons.ihe.core.InteractionId
 import org.openehealth.ipf.commons.ihe.hl7v2.MessageAdapterValidator
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.extend.MappingExtension
+import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
-import org.openehealth.ipf.modules.hl7.extend.HapiModelExtension
+import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
+
 import org.springframework.core.io.ClassPathResource
+
+import ca.uhn.hl7v2.parser.ModelClassFactory
+import ca.uhn.hl7v2.parser.Parser
 
 /**
  * Test container for HL7 v3-v2 transformation routines.
@@ -41,10 +49,6 @@ class Hl7TranslationTestContainer {
     private static final boolean V2       = false
     private static final boolean REQUEST  = true
     private static final boolean RESPONSE = false
-
-    static {
-        ExpandoMetaClass.enableGlobally()
-    }
     
     protected static final MessageAdapterValidator V2_VALIDATOR = new MessageAdapterValidator()
     protected static final CombinedXmlValidator V3_VALIDATOR = new CombinedXmlValidator()
@@ -53,21 +57,23 @@ class Hl7TranslationTestContainer {
     static Hl7TranslatorV3toV2 v3tov2Translator
     static Hl7TranslatorV2toV3 v2tov3Translator
     
+    @BeforeClass
+    static void before() {
+        BidiMappingService mappingService = new BidiMappingService()
+        mappingService.addMappingScript(new ClassPathResource('META-INF/map/hl7-v2-v3-translation.map'))
+        ModelClassFactory mcf = new CustomModelClassFactory()
+        Registry registry = createMock(Registry)
+        ContextFacade.setRegistry(registry)
+        expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        expect(registry.bean(ModelClassFactory)).andReturn(mcf).anyTimes()
+        replay(registry)
+    }
+    
     static void doSetUp(
             String transactionName, 
             Hl7TranslatorV3toV2 v3tov2Translator,
             Hl7TranslatorV2toV3 v2tov3Translator)
     {
-        def mappingService = new BidiMappingService()
-        mappingService.addMappingScript(new ClassPathResource('META-INF/map/hl7-v2-v3-translation.map'))
-        def mappingExtension = new MappingExtension()
-        mappingExtension.mappingService = mappingService
-        mappingExtension.extensions()
-
-        def hapiExtension = new HapiModelExtension()
-        hapiExtension.setMappingService(mappingService)
-        hapiExtension.extensions()
-
         Hl7TranslationTestContainer.transactionName = transactionName
         
         XMLUnit.setCompareUnmatched(true)

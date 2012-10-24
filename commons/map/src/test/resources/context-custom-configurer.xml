@@ -29,12 +29,8 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
         <property name="mappingService" ref="bidiMappingService" />
     </bean>
     
+    <!-- configurer bean is collected automatically -->
     <bean id="postProcessor" 
         class="org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor">
-        <property name="springConfigurers" >
-          <list>
-            <ref bean="configurer" />
-          </list>
-        </property>
     </bean>    
 </beans>

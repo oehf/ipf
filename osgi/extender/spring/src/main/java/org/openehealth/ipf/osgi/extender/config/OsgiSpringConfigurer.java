@@ -18,17 +18,18 @@ package org.openehealth.ipf.osgi.extender.config;
 import java.util.Collection;
 
 import org.openehealth.ipf.commons.core.config.Configurer;
+import org.openehealth.ipf.commons.core.config.Registry;
 import org.osgi.framework.BundleContext;
-import org.springframework.beans.factory.ListableBeanFactory;
 
 /**
- * Base class for all custom configurers which have to implement their own strategy
- * for lookup and configure inside of the OSGi environment.
+ * Base class for all custom configurers which have to implement their own
+ * strategy for lookup and configure inside of the OSGi environment.
  * 
  * @author Boris Stanojevic
  */
-public abstract class OsgiSpringConfigurer<T> implements Configurer<T>{
+public abstract class OsgiSpringConfigurer<T, R extends Registry> implements
+        Configurer<T, R> {
 
-    public abstract Collection<T> lookup(BundleContext bc, ListableBeanFactory beanFactory);
+    public abstract Collection<T> lookup(BundleContext bc, R registry);
 
 }

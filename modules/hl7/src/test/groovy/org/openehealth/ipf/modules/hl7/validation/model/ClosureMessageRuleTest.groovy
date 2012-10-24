@@ -24,7 +24,7 @@ import ca.uhn.hl7v2.validation.ValidationException
 /**
  * @author Christian Ohr
  */
-public class ClosureMessageRuleTest extends GroovyTestCase{
+public class ClosureMessageRuleTest {
 	
 		
 	@Test

@@ -51,21 +51,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
 
-    <bean id="routeBuilder" depends-on="routeModelExtender"
+    <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSenderRoute">
     </bean>
-
-    <bean id="coreModelExtension" 
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-            </list>
-        </property>
-    </bean>
-
+    
 </beans>

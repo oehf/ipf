@@ -17,6 +17,7 @@ package org.openehealth.ipf.tutorials.xds
 
 import java.text.SimpleDateFormat
 import org.apache.camel.model.ProcessorDefinition
+import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException
@@ -27,106 +28,108 @@ import javax.activation.DataHandler
  * @author Jens Riemschneider
  */
 class RegRepModelExtension {
-    def dataStore
      
-    def extensions = {
-        ProcessorDefinition.metaClass.store = {
-            delegate.process {
-                dataStore.store(it.in.body.entry)
-            }
-        }
-        
-        ProcessorDefinition.metaClass.retrieve = {
-            delegate.transform {
-                [ new RetrievedDocument(dataStore.get(it.in.body.documentUniqueId), it.in.body, null, null, 'text/plain') ]
-            }
-        }
-        
-        ProcessorDefinition.metaClass.search = { resultTypes ->
-            def answer = new SearchDefinition(resultTypes)
-            delegate.addOutput(answer)
-            answer
-        }
-        
-        ProcessorDefinition.metaClass.fail = { message ->
-            delegate.process { 
-                throw new XDSMetaDataException(message)
-            }
-        }
-
-        ProcessorDefinition.metaClass.updateWithRepositoryData = {
-            delegate.process {
-                def documentEntry = it.in.body.entry.documentEntry
-                def dataHandler = it.in.body.entry.getContent(DataHandler)
-                documentEntry.hash = ContentUtils.sha1(dataHandler)
-                documentEntry.size = ContentUtils.size(dataHandler)
-                documentEntry.repositoryUniqueId = '1.19.6.24.109.42.1'
-            }
-        }
-        
-        ProcessorDefinition.metaClass.splitEntries = { entriesClosure ->
-            delegate.ipf().split { exchange ->
-                def body = exchange.in.body
-                def entries = entriesClosure(body) 
-                entries.collect { entry -> body.clone() + [entry: entry] }
-            }
-        }
-        
-        // Assigns a new UUID. New entries might define this UUID already
-        ProcessorDefinition.metaClass.assignUuid = {
-            delegate.process {
-                def entry = it.in.body.entry
-                if (!entry.entryUuid.startsWith('urn:uuid:')) {
-                    def newEntryUuid = 'urn:uuid:' + UUID.randomUUID()
-                    it.in.body.uuidMap[entry.entryUuid] = newEntryUuid
-                    entry.entryUuid = newEntryUuid
-                }
-            }
-        }
-        
-        // Changes the source and target UUIDs based on the UUID map
-        ProcessorDefinition.metaClass.changeAssociationUuids = {
-            delegate.process {
-                def assoc = it.in.body.entry
-                def uuidMap = it.in.body.uuidMap
-                def sourceUuid = uuidMap[assoc.sourceUuid]
-                if (sourceUuid != null) assoc.sourceUuid = sourceUuid
-                def targetUuid = uuidMap[assoc.targetUuid]
-                if (targetUuid != null) assoc.targetUuid = targetUuid
-            }
-        }
-        
-        // Sets the availability status of an entry
-        ProcessorDefinition.metaClass.status = { status ->
-            delegate.process {
-                it.in.body.entry.availabilityStatus = status
-            }
-        }
-        
-        // Updates the last update time and ensures that the time is actually changed
-        ProcessorDefinition.metaClass.updateTimeStamp = {
-            delegate.process {
-                def formatter = new SimpleDateFormat('yyyyMMddHHmmss')
-                def newTime = formatter.format(new Date())
-                it.in.body.entry.lastUpdateTime = newTime
-            }
-        }
-        
-        // Converts entries to ObjectReferences
-        ProcessorDefinition.metaClass.convertToObjectRefs = { closure ->
-            delegate.process { 
-                def entries = closure.call(it.in.body)
-                it.in.body.resp.references.addAll(entries.collect { 
-                    new ObjectReference(it.entryUuid)
-                })
-                entries.clear()
-            }
-        }
-
-        ProcessorDefinition.metaClass.processBody = { closure ->  
-            delegate.process { closure(it.in.body) }
-        }
+    static ProcessorDefinition store(ProcessorDefinition self) {
+        self.process { dataStore().store(it.in.body.entry) }
+    }
     
-        ProcessorDefinition.metaClass.log = { log, closure -> delegate.process { log.info(closure.call(it)) } }
+    static ProcessorDefinition retrieve(ProcessorDefinition self) {
+        self.transform { 
+            [ new RetrievedDocument(dataStore().get(
+                it.in.body.documentUniqueId), 
+                it.in.body, 
+                null, 
+                null, 
+                'text/plain') 
+            ]
+        }
+    }
+    
+    static ProcessorDefinition search(ProcessorDefinition self, resultTypes) {
+       def answer = new SearchDefinition(resultTypes)
+       self.addOutput(answer)
+       answer    
+    }
+    
+    static ProcessorDefinition fail(ProcessorDefinition self, message) {
+        self.process { throw new XDSMetaDataException(message) }
+    }
+    
+    static ProcessorDefinition updateWithRepositoryData(ProcessorDefinition self) {
+        self.process {
+            def documentEntry = it.in.body.entry.documentEntry
+            def dataHandler = it.in.body.entry.getContent(DataHandler)
+            documentEntry.hash = ContentUtils.sha1(dataHandler)
+            documentEntry.size = ContentUtils.size(dataHandler)
+            documentEntry.repositoryUniqueId = '1.19.6.24.109.42.1'
+        }
+    }
+    
+    static ProcessorDefinition splitEntries(ProcessorDefinition self, entriesClosure) {
+        self.ipf().split { exchange ->
+            def body = exchange.in.body
+            def entries = entriesClosure(body) 
+            entries.collect { entry -> body.clone() + [entry: entry] }
+        }    
+    }
+
+    static ProcessorDefinition assignUuid(ProcessorDefinition self) {
+        self.process {
+            def entry = it.in.body.entry
+            if (!entry.entryUuid.startsWith('urn:uuid:')) {
+                def newEntryUuid = 'urn:uuid:' + UUID.randomUUID()
+                it.in.body.uuidMap[entry.entryUuid] = newEntryUuid
+                entry.entryUuid = newEntryUuid
+            }
+        }
+    }
+    
+    static ProcessorDefinition changeAssociationUuids(ProcessorDefinition self) {
+        self.process {
+            def assoc = it.in.body.entry
+            def uuidMap = it.in.body.uuidMap
+            def sourceUuid = uuidMap[assoc.sourceUuid]
+            if (sourceUuid != null) assoc.sourceUuid = sourceUuid
+            def targetUuid = uuidMap[assoc.targetUuid]
+            if (targetUuid != null) assoc.targetUuid = targetUuid
+        }
+    }
+    
+    static ProcessorDefinition status(ProcessorDefinition self, status) {
+        self.process {
+            it.in.body.entry.availabilityStatus = status
+        }
+    }
+
+    // Updates the last update time and ensures that the time is actually changed
+    static ProcessorDefinition updateTimeStamp(ProcessorDefinition self) {
+        self.process {
+            def formatter = new SimpleDateFormat('yyyyMMddHHmmss')
+            def newTime = formatter.format(new Date())
+            it.in.body.entry.lastUpdateTime = newTime
+        }
+    }
+    
+        // Converts entries to ObjectReferences
+    static ProcessorDefinition convertToObjectRefs(ProcessorDefinition self, closure) {
+        self.process {
+            def entries = closure.call(it.in.body)
+            it.in.body.resp.references.addAll(entries.collect { 
+                new ObjectReference(it.entryUuid)
+            })
+            entries.clear()
+        }
+    }
+    
+    static ProcessorDefinition processBody(ProcessorDefinition self, closure) {
+        self.process {closure(it.in.body)}
+    }
+
+    static ProcessorDefinition log(ProcessorDefinition self, log, closure) {
+        self.process {log.info(closure.call(it)) }
+    }
+
+    private static DataStore dataStore() {
+        ContextFacade.getBean(DataStore)
     }
 }

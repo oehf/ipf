@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://openehealth.org/schema/ipf-commons-core"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    targetNamespace="http://openehealth.org/schema/ipf-commons-core"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+   <xsd:element name="globalContext">
+      <xsd:complexType>
+         <xsd:attribute name="id" type="xsd:ID"/>
+      </xsd:complexType>   
+   </xsd:element>
+
+</xsd:schema>

@@ -16,7 +16,7 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:camel="http://camel.apache.org/schema/spring"     
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
@@ -32,19 +32,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
       <camel:package>org.openehealth.ipf.platform.camel.core.process.builder</camel:package>
       <camel:jmxAgent id="agent" disabled="true" />
   </camel:camelContext>
-
-  <bean id="coreModelExtension" 
-      class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-  </bean>
-
-  <bean id="routeModelExtender" 
-      class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-      <property name="routeModelExtensions">
-          <list>
-              <ref bean="coreModelExtension" />
-          </list>
-      </property>
-  </bean>
 
   <bean id="testPredicate" 
       class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestPredicate">

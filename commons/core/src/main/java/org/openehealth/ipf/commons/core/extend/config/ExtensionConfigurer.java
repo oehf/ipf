@@ -17,35 +17,37 @@ package org.openehealth.ipf.commons.core.extend.config;
 
 import groovy.lang.ExpandoMetaClass;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.commons.core.config.SpringConfigurer;
+import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
+import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.commons.core.extend.DefaultActivator;
 import org.openehealth.ipf.commons.core.extend.ExtensionActivator;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.ListableBeanFactory;
 
 /**
- * Configurer used to autowire all classes implementing
- * the {@link Extension} interface.
+ * Configurer used to autowire all classes implementing the {@link Extension}
+ * interface.
+ * 
+ * As of Groovy 2.0, you should use Groovy's built-in extension mechanism in
+ * order to register custom extensions.
  * 
  * @author Boris Stanojevic
+ * @see http://docs.codehaus.org/display/GROOVY/Creating+an+extension+module
  */
-public class ExtensionConfigurer extends SpringConfigurer<Extension>{
+public class ExtensionConfigurer<R extends Registry> extends
+        OrderedConfigurer<Extension, R> {
 
     private static final Log LOG = LogFactory.getLog(ExtensionConfigurer.class);
-    
+
     private ExtensionActivator extensionActivator;
 
     static {
         ExpandoMetaClass.enableGlobally();
     }
 
-    public ExtensionConfigurer(){
+    public ExtensionConfigurer() {
         this.extensionActivator = new DefaultActivator();
         setOrder(2);
     }
@@ -56,13 +58,9 @@ public class ExtensionConfigurer extends SpringConfigurer<Extension>{
         LOG.debug("Extension configured..." + configuration);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Collection<Extension> lookup(ListableBeanFactory source) {
-        List list = new ArrayList(
-                BeanFactoryUtils.beansOfTypeIncludingAncestors(source,
-                        Extension.class).values());
-        return list;        
+    public Collection<Extension> lookup(Registry registry) {
+        return registry.beans(Extension.class).values();
     }
 
 }

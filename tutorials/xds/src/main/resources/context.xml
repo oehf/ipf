@@ -14,8 +14,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:lang="http://www.springframework.org/schema/lang" 
-       xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:camel="http://camel.apache.org/schema/spring"
     xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"    
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
@@ -25,6 +26,8 @@ http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://camel.apache.org/schema/spring 
 http://camel.apache.org/schema/spring/camel-spring.xsd 
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd
 ">
 
     <!-- The following imports are required to configure CXF. cxf-servlet
@@ -42,37 +45,19 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <camel:routeBuilder ref="iti18RouteBuilder"/>        
     </camel:camelContext>
     
+	<ipf:globalContext id="globalContext"/>     
+    
     <!-- Our route builders for the ITI transactions -->
-    <bean id="iti4142RouteBuilder" depends-on="routeModelExtender"
+    <bean id="iti4142RouteBuilder"
         class="org.openehealth.ipf.tutorials.xds.Iti4142RouteBuilder">
     </bean>
 
-    <bean id="iti43RouteBuilder" depends-on="routeModelExtender"
+    <bean id="iti43RouteBuilder"
         class="org.openehealth.ipf.tutorials.xds.Iti43RouteBuilder">
     </bean>
 
-    <bean id="iti18RouteBuilder" depends-on="routeModelExtender"
+    <bean id="iti18RouteBuilder"
         class="org.openehealth.ipf.tutorials.xds.Iti18RouteBuilder">
-    </bean>
-
-    <!-- The DSL extensions. We use the core extension of the IPF and the ones 
-         that come with the XDS components. In addition, we also define our own. -->
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="regRepModelExtension" class="org.openehealth.ipf.tutorials.xds.RegRepModelExtension">
-        <property name="dataStore" ref="dataStore"/>
-    </bean>
-
-    <bean id="routeModelExtender" 
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-                <ref bean="regRepModelExtension" />
-            </list>
-        </property>
     </bean>
 
     <!-- The store that contains all the in-memory documents and their meta data -->    

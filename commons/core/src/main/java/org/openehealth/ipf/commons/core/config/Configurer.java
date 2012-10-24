@@ -15,17 +15,21 @@
  */
 package org.openehealth.ipf.commons.core.config;
 
+import java.util.Collection;
+
 /**
  * Base interface to implement for any custom configurers.  
  * 
  * @author Boris Stanojevic
  */
-public interface Configurer<T> {
+public interface Configurer<T, R extends Registry> {
 
     /**
      * @param configuration custom configuration object
      * used for specific configuration task
      */
     public void configure(T configuration);
+    
+    public Collection<T> lookup(R registry);
 
 }

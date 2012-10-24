@@ -15,20 +15,23 @@
  */
 package org.openehealth.ipf.modules.hl7.parser
 
+import org.junit.Test;
+
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.util.Terser;
 
 /**
- * @author Marek V�clav�k
+ * @author Marek Vaclavik
  * @author Christian Ohr
  */
-public class PipeParserTest extends GroovyTestCase {
+public class PipeParserTest {
 
   def msgText = this.class.classLoader.getResource('msg-08.hl7')?.text
   def customPackageVersion = '2.5'
   def customPackageName = 'org.openehealth.ipf.modules.hl7.parser.test.hl7v2.def.v25' 
   def customGroovyPackageName = 'org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v25'
      
+  @Test
   void testParseWithCustomClasses() {
       def customModelClasses = [(customPackageVersion ): [customPackageName]]
       def customFactory = new CustomModelClassFactory(customModelClasses)
@@ -36,7 +39,8 @@ public class PipeParserTest extends GroovyTestCase {
       def hapiMessage = parser.parse(msgText)      
       assert hapiMessage.get('ZBE').getClass().getName().contains(customPackageName)
   }
-    
+  
+  @Test
   void testParseWithoutCustomClasses() {
       def customFactory = new CustomModelClassFactory([:])
       def parser = new PipeParser(customFactory)
@@ -48,6 +52,7 @@ public class PipeParserTest extends GroovyTestCase {
       }     
   }
   
+  @Test
   void testParseWithNullCustomClasses() {
       def customFactory = new CustomModelClassFactory()
       def parser = new PipeParser(customFactory)
@@ -59,6 +64,7 @@ public class PipeParserTest extends GroovyTestCase {
       }     
   }
   
+  @Test
   void testParseWithCustomGroovyClasses() {
 	  def customModelClasses = [(customPackageVersion ): [customGroovyPackageName]]
 	  def customFactory = new GroovyCustomModelClassFactory(customModelClasses)
@@ -69,6 +75,7 @@ public class PipeParserTest extends GroovyTestCase {
 	  assert '1234' == Terser.get(s, 1, 0, 1, 1)
   }
 	
+  @Test
   void testParseWithoutCustomGroovyClasses() {
 	  def customFactory = new GroovyCustomModelClassFactory([:])
 	  def parser = new PipeParser(customFactory)

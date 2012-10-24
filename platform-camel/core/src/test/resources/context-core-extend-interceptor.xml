@@ -20,11 +20,8 @@
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-    <bean id="testModelExtension" 
-        class="org.openehealth.ipf.platform.camel.core.extend.EmptyModelExtension">
-    </bean>
 
-    <bean id="routeBuilder" depends-on="routeModelExtender"
+    <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.core.extend.InterceptorRouteBuilder">
     </bean>
 

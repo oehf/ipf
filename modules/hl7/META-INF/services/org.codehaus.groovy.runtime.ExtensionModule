@@ -1,0 +1,4 @@
+moduleName=Hl7Extension
+moduleVersion=2.5
+extensionClasses=org.openehealth.ipf.modules.hl7.extend.Hl7ExtensionModule
+staticExtensionClasses=org.openehealth.ipf.modules.hl7.extend.Hl7StaticExtensionModule

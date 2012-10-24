@@ -58,7 +58,11 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-test</artifactId>
             <scope>test</scope>
-        </dependency>
+        </dependency>		
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+        </dependency> 		        
     </dependencies>
     
     <build>

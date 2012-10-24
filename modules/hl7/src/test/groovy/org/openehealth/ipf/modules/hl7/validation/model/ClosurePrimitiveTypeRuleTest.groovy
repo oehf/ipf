@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.model
 
-import org.junit.Assert
+import static org.junit.Assert.*
 import org.junit.Test
 
 
 /**
  * @author Christian Ohr
  */
-public class ClosurePrimitiveTypeRuleTest extends GroovyTestCase{
+public class ClosurePrimitiveTypeRuleTest {
     
     @Test
     void testCorrect(){

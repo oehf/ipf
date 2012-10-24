@@ -16,6 +16,7 @@
         <resource>.settings\org.maven.ide.eclipse.prefs</resource>
         <resource>.classpath</resource>
         <resource>.project</resource>
+        <resource>META-INF\services\org.codehaus.groovy.runtime.ExtensionModule</resource>
         <resource>startup.bat</resource>
         <resource>startup.sh</resource>
     </resources>

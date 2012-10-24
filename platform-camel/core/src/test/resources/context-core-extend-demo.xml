@@ -27,5 +27,14 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
     <bean id="routeBuilder" depends-on="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.core.extend.SampleRouteBuilder">
     </bean>
+    
+	<bean id="routeModelExtender"
+		class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+		<property name="routeModelExtensions">
+			<list>
+				<ref bean="testModelExtension" />
+			</list>
+		</property>
+	</bean>    
 
 </beans>

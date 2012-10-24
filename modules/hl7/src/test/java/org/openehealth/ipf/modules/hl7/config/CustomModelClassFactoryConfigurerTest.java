@@ -32,7 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class CustomModelClassFactoryConfigurerTest {
 
     @Autowired
-    private CustomModelClassFactoryConfigurer configurer;
+    private CustomModelClassFactoryConfigurer<?> configurer;
     
     @Test
     public void testMappings() {

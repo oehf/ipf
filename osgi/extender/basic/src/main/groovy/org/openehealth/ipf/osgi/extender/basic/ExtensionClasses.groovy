@@ -22,7 +22,7 @@ import org.osgi.framework.Bundle
  */
 class ExtensionClasses {
 
-     static List<Class> loadAll(Bundle bundle) {
+     static List<Class<?>> loadAll(Bundle bundle) {
          BundleHeaders.extensionClasses(bundle).collect {
              bundle.loadClass(it)
          }

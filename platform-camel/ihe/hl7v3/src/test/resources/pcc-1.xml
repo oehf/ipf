@@ -21,7 +21,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
     <import resource="common-beans.xml" />
 
-    <bean id="routeBuilder" depends-on="routeModelExtender"
+    <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.hl7v3.pcc1.Pcc1TestRouteBuilder">
     </bean>
 </beans>

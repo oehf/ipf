@@ -19,7 +19,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.openehealth.ipf.commons.core.config.SpringConfigurer;
+import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
+import org.openehealth.ipf.commons.core.config.SpringRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.InvalidSyntaxException;
@@ -28,7 +29,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.osgi.extender.OsgiBeanFactoryPostProcessor;
 
 /**
- * OSGi-Extender which holds the instances of all {@link SpringConfigurer}
+ * OSGi-Extender which holds the instances of all {@link OrderedConfigurer}
  * and {@link OsgiSpringConfigurer}. Every time a new bundle with existing
  * spring definition is registered inside of the BundleContext, this
  * extender loops through its defined configurers and looks-up for
@@ -36,10 +37,10 @@ import org.springframework.osgi.extender.OsgiBeanFactoryPostProcessor;
  * 
  * @author Boris Stanojevic
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class OsgiSpringConfigurationPostProcessor implements OsgiBeanFactoryPostProcessor {
 
-    private List<SpringConfigurer> springConfigurers;
+    private List<OrderedConfigurer> springConfigurers;
     
     private List<OsgiSpringConfigurer> osgiSpringConfigurers;
 
@@ -48,8 +49,11 @@ public class OsgiSpringConfigurationPostProcessor implements OsgiBeanFactoryPost
             ConfigurableListableBeanFactory beanFactory) throws BeansException,
             InvalidSyntaxException, BundleException {
 
+        SpringRegistry registry = new SpringRegistry();
+        registry.setBeanFactory(beanFactory);
+        
         for (OsgiSpringConfigurer osc: osgiSpringConfigurers){
-            Collection configurations = osc.lookup(bundleContext, beanFactory);
+            Collection configurations = osc.lookup(bundleContext, registry);
             if (configurations != null && configurations.size() > 0){
                 for (Object configuration: configurations){
                     osc.configure(configuration);
@@ -57,8 +61,8 @@ public class OsgiSpringConfigurationPostProcessor implements OsgiBeanFactoryPost
             }
         }
         
-        for (SpringConfigurer sc: springConfigurers){
-            Collection configurations = sc.lookup(beanFactory);
+        for (OrderedConfigurer sc: springConfigurers){
+            Collection configurations = sc.lookup(registry);
             if (configurations != null && configurations.size() > 0){
                 for (Object configuration: configurations){
                     sc.configure(configuration);
@@ -67,11 +71,11 @@ public class OsgiSpringConfigurationPostProcessor implements OsgiBeanFactoryPost
         }
     }
 
-    public List<SpringConfigurer> getSpringConfigurers() {
+    public List<OrderedConfigurer> getSpringConfigurers() {
         return springConfigurers;
     }
 
-    public void setSpringConfigurers(List<SpringConfigurer> springConfigurers) {
+    public void setSpringConfigurers(List<OrderedConfigurer> springConfigurers) {
         this.springConfigurers = springConfigurers;
         Collections.sort(springConfigurers);
     }

@@ -29,6 +29,7 @@ import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.model.FilterDefinition;
 import org.apache.camel.model.OnExceptionDefinition;
 import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.RouteDefinition
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.spi.DataFormat;
@@ -494,6 +495,17 @@ public class CoreExtension {
     }
 
     /**
+     * Send exchange to a mock endpoint
+     * @param endpointName
+     *          endpoint name of the mock 
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-TODO
+     */
+     public static ProcessorDefinition mock(ProcessorDefinition self, String endpointName) {
+        return self.to("mock:${endpointName}");
+    }
+    
+
+    /**
      * Retrieves the exception object from a handled exception in an exception route
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Exceptionobjectsandmessages 
      */
@@ -517,6 +529,16 @@ public class CoreExtension {
      */
     public static OnExceptionDefinition onWhen(OnExceptionDefinition self, Closure predicate) {
         return self.onWhen(new DelegatingCamelPredicate(predicate));
+    }
+
+    /**
+     * Defines a direct consumer endpoint
+     * @param endpointName
+     *          endpoint name of the direct consumer
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features-TODO
+     */
+    public static RouteDefinition direct(RouteBuilder self, String endpointName) {
+        return self.from("direct:${endpointName}")
     }
     
     /**

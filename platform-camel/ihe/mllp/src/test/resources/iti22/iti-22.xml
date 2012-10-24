@@ -13,7 +13,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:lang="http://www.springframework.org/schema/lang"
     xmlns:camel="http://camel.apache.org/schema/spring" 
-    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:util="http://www.springframework.org/schema/util"  
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
@@ -22,29 +22,16 @@ http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
 http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://camel.apache.org/schema/spring 
-http://camel.apache.org/schema/spring/camel-spring.xsd 
+http://camel.apache.org/schema/spring/camel-spring.xsd
 ">
 
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true" />
         <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>
+    </camel:camelContext>   
 
-    <bean id="routeBuilder" depends-on="routeModelExtender"
+    <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.mllp.iti22.Iti22TestRouteBuilder">
-    </bean>
-
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-            </list>
-        </property>
     </bean>
     
     <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">

@@ -19,10 +19,9 @@ import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.commons.core.config.SpringConfigurer;
+import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
+import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.ListableBeanFactory;
 
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 
@@ -37,7 +36,7 @@ import ca.uhn.hl7v2.parser.ModelClassFactory;
  * @author Christian Ohr
  * 
  */
-public class CustomModelClassFactoryConfigurer extends SpringConfigurer<CustomModelClasses> {
+public class CustomModelClassFactoryConfigurer<R extends Registry> extends OrderedConfigurer<CustomModelClasses, R> {
 
     private CustomModelClassFactory customModelClassFactory;
     
@@ -46,9 +45,8 @@ public class CustomModelClassFactoryConfigurer extends SpringConfigurer<CustomMo
     boolean configureRecursively = true;
     
     @Override
-    public Collection<CustomModelClasses> lookup(ListableBeanFactory source) {
-        return BeanFactoryUtils.beansOfTypeIncludingAncestors(source,
-                CustomModelClasses.class).values();
+    public Collection<CustomModelClasses> lookup(R registry) {
+        return registry.beans(CustomModelClasses.class).values();
     }
 
     @Override

@@ -32,6 +32,7 @@ import org.openehealth.ipf.platform.camel.flow.process.Splitter;
  *
  * @author Martin Krasser
  */
+@Deprecated
 public class RouteBuilder extends org.openehealth.ipf.platform.camel.core.builder.RouteBuilder {
 
     private final RouteHelper routeHelper;

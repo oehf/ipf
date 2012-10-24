@@ -19,18 +19,17 @@ import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.commons.core.extend.DefaultActivator;
 import org.openehealth.ipf.commons.core.extend.ExtensionActivator;
 import org.openehealth.ipf.osgi.extender.config.OsgiSpringConfigurer;
 import org.openehealth.ipf.osgi.extender.spring.ExtensionBeans;
 import org.osgi.framework.BundleContext;
-import org.springframework.beans.factory.ListableBeanFactory;
 
 /**
- * 
  * @author Boris Stanojevic
  */
-public class OsgiExtensionConfigurer extends OsgiSpringConfigurer<Object>{
+public class OsgiExtensionConfigurer<R extends Registry> extends OsgiSpringConfigurer<Object, R>{
 
     private static final Log LOG = LogFactory.getLog(OsgiExtensionConfigurer.class);
     
@@ -42,14 +41,19 @@ public class OsgiExtensionConfigurer extends OsgiSpringConfigurer<Object>{
     
     @Override
     public Collection<Object> lookup(BundleContext bc,
-            ListableBeanFactory beanFactory) {
-        return ExtensionBeans.loadAll(bc.getBundle(), beanFactory);
+            R registry) {
+        return ExtensionBeans.loadAll(bc.getBundle(), registry);
     }
 
     @Override
     public void configure(Object configuration) {
         extensionActivator.activate(configuration);
         LOG.info("Activated extension bean " + configuration);
+    }
+
+    @Override
+    public Collection<Object> lookup(R registry) {
+        throw new UnsupportedOperationException();
     }
 
 }

@@ -18,6 +18,8 @@ package org.openehealth.ipf.modules.hl7.validation.support
 import ca.uhn.hl7v2.validation.ValidationContext
 import ca.uhn.hl7v2.parser.PipeParser
 import ca.uhn.hl7v2.HL7Exception
+
+import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
@@ -25,11 +27,13 @@ import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 /**
  * @author Christian Ohr
  */
-public class HL7ValidatorTest extends GroovyTestCase{
+public class HL7ValidatorTest {
     
     	// A test that builds up rules and applies them to the parser
     	// while it parses a message. It fails because of the nonsense
     	// rule that IDs may not be longer than 1
+    
+    @Test
     	void testValidateWhileParsing(){
     	    ValidationContext context = new DefaultValidationContext().configure()        
                 .forVersion().asOf('2.3')
@@ -71,6 +75,8 @@ public class HL7ValidatorTest extends GroovyTestCase{
             }    
     }
     	
+        
+    @Test
     void testValidateMessageByValidatorSuccess() {
         ValidationContext context = new DefaultValidationContext()
     	context.configure()        
@@ -95,7 +101,8 @@ public class HL7ValidatorTest extends GroovyTestCase{
         new HL7Validator().validate(msg, context)
     	    
     }
-
+    
+    @Test
     void testValidateMessageByValidatorFail() {
         ValidationContext context = new DefaultValidationContext()
     	context.configure()        

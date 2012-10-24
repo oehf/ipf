@@ -17,6 +17,8 @@ package org.openehealth.ipf.commons.map.extend
 
 import org.codehaus.groovy.runtime.InvokerHelperimport org.openehealth.ipf.commons.map.MappingService
 
+import static org.openehealth.ipf.commons.map.extend.MappingExtensionModule.*
+
 /**
  * Adds a couple of methods to common HAPI model classes. This makes HAPI
  * features accessible via the HL7 DSL, which only works with adapters of
@@ -36,50 +38,52 @@ class MappingExtension {
         // ----------------------------------------------------------------
 
         String.metaClass.firstLower = {
-        	delegate.replaceAll('^.') { it ? it[0].toLowerCase() : it } 
+        	firstLower(delegate)
         }
         
         String.metaClass.map = { 
-        	mappingService?.get(it, delegate)
+        	map(it, delegate)
         }
 
         String.metaClass.map = { mappingKey, defaultValue ->
-    		mappingService?.get(mappingKey, delegate, defaultValue)
+            map(it, delegate, defaultValue)
         }
 
         String.metaClass.mapReverse = {
-    		mappingService?.getKey(it, delegate)
+            mapReverse(it, delegate)
         }
 
         String.metaClass.mapReverse = { mappingKey, defaultValue ->
-			mappingService?.getKey(mappingKey, delegate, defaultValue)
+            mapReverse(it, delegate, defaultValue)
         }
         
         String.metaClass.keySystem = {
-        		mappingService?.getKeySystem(delegate)
+        	keySystem(delegate)
         }
 
         String.metaClass.valueSystem = {
-        		mappingService?.getValueSystem(delegate)
+        	valueSystem(delegate)
         }
 
         String.metaClass.keys = { 
-        		mappingService?.keys(delegate)
+        	keys(delegate)
         }
 
         String.metaClass.values = { 
-				mappingService?.values(delegate)
+			values(delegate)
         }
         
         String.metaClass.hasKey = { 
-        		mappingService?.keys(delegate)?.contains(it)
+        	hasKey(delegate, it)
         }
 
         String.metaClass.hasValue = { 
-				mappingService?.values(delegate)?.contains(it)
+			hasValue(delegate, it)
         }
 
-        String.metaClass.methodMissing = MappingExtensionHelper.methodMissingLogic.curry(mappingService, {it})
+        String.metaClass.methodMissing = { String name, args
+            methodMissing(delegate, name, args)
+        }
         
 	}
 	

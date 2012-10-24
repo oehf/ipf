@@ -15,91 +15,102 @@
  */
 package org.openehealth.ipf.commons.map.extend
 
-import org.openehealth.ipf.commons.map.BidiMappingService
+import static org.easymock.EasyMock.*
 
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openehealth.ipf.commons.core.config.ContextFacade;
+import org.openehealth.ipf.commons.core.config.Registry
+import org.openehealth.ipf.commons.map.BidiMappingService
+import org.openehealth.ipf.commons.map.MappingService;
 import org.springframework.core.io.ClassPathResource
 
 /**
  * @author Christian Ohr
  * @author Martin Krasser
  */
-public class MappingExtensionTest extends GroovyTestCase {
-	
-     def mappingService
-     def extension
-	 
-    static {
-        ExpandoMetaClass.enableGlobally()
-    }
-	
-    void setUp() {
-        mappingService = new BidiMappingService()
+public class MappingExtensionTest {
+    
+    @BeforeClass
+    static void setupClass() {
+        BidiMappingService mappingService = new BidiMappingService()
         mappingService.addMappingScript(new ClassPathResource("example2.map"))
-        extension = new MappingExtension()
-        extension.mappingService = mappingService
-        extension.extensions()
+        Registry registry = createMock(Registry)
+        ContextFacade.setRegistry(registry)
+        expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        replay(registry)
     }
 	
+    @Test
     void testMap() {
         assert 'E'.map('encounterType') == 'EMER'
         assert 'X'.map('encounterType') == null
         assert 'X'.map('encounterType', 'WRONG') == 'WRONG'
-        
+    }
+    
+    @Test 
+    void testMapWithKey() {
         assert 'E'.mapEncounterType() == 'EMER'
         assert 'X'.mapEncounterType() == null
         assert 'X'.mapEncounterType('WRONG') == 'WRONG'
         assert 'Y'.mapVip() == 'VIP'
-        
-        try {
-        	assert 'Y'.map('BLABLA')
-        	fail()
-        } catch (IllegalArgumentException e) {
-        	// o.k.
-        }
     }
     
+    @Test(expected=IllegalArgumentException)
+    void testUnknownKey() {
+        'Y'.map('BLABLA')
+    }
+    
+    @Test
     void testMapReverse() {
         assert 'EMER'.mapReverse('encounterType') == 'E'
         assert 'X'.mapReverse('encounterType') == null
         assert 'X'.mapReverse('encounterType', 'WRONG') == 'WRONG'
-        
+    }
+    
+    @Test
+    void testMapReverseWithKey() {
         assert 'EMER'.mapReverseEncounterType() == 'E'
         assert 'X'.mapReverseEncounterType() == null
         assert 'X'.mapReverseEncounterType('WRONG') == 'WRONG'
         assert 'VIP'.mapReverseVip() == 'Y'
-        try {
-        	assert 'Y'.mapReverse('BLABLA')
-        	fail()
-        } catch (IllegalArgumentException e) {
-        	// o.k.
-        }
     }
     
+    @Test(expected=IllegalArgumentException)
+    void testMapReverseUnknownKey() {
+        'Y'.mapReverse('BLABLA')
+    }
+    
+    @Test
     void testKeyAndValueSystems() {
         assert 'encounterType'.keySystem() == '2.16.840.1.113883.12.4'
         assert 'encounterType'.valueSystem() == '2.16.840.1.113883.5.4'
-            try {
-            	assert 'Y'.keySystem()
-            	fail()
-            } catch (IllegalArgumentException e) {
-            	// o.k.
-            }
+    }
+    
+    @Test(expected=IllegalArgumentException)
+    void testUnknownKeySystem() {
+        'Y'.keySystem()
     }
 
+    @Test
     void testKeys() {
         assert 'encounterType'.keys().sort() == ['E','I','O']
         assert 'vip'.keys() == ['Y'] as Set
     }
     
+    @Test
     void testValues() {
         assert 'encounterType'.values().sort() == ['AMB','EMER','IMP']
     }
     
+    @Test
     void testHasKey() {
         assert 'encounterType'.hasKey('E')
         assert 'encounterType'.hasKey('Y') == false
     }
     
+    @Test
     void testHasValue() {
         assert 'encounterType'.hasValue('EMER')
         assert 'encounterType'.hasValue('Y') == false

@@ -36,26 +36,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <camel:routeBuilder ref="performanceRouteBuilder"/>        
     </camel:camelContext>
 
-
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension"/>
-                <!--
-                    To measure the performance include the performance model
-                    extensions
-                -->
-                <ref bean="performanceModelExtension"/>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="routeBuilder" depends-on="routeModelExtender"
+    <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.test.performance.route.MeasureRouteBuilder">
     </bean>
 
@@ -64,7 +45,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <!-- =============================================================== -->
 
 
-    <bean id="performanceRouteBuilder" depends-on="routeModelExtender"
+    <bean id="performanceRouteBuilder"
         class="org.openehealth.ipf.platform.camel.test.performance.route.PerformanceRouteBuilder">
         <property name="httpPort" value="8651"/>
         <property name="requestHandlerBean" value="performanceRequestHandler"/>
@@ -78,10 +59,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <!-- =============================================================== -->
     <!-- Configuration of the performance measurement component          -->
     <!-- =============================================================== -->
-
-    <bean id="performanceModelExtension"
-        class="org.openehealth.ipf.platform.camel.test.performance.extend.PerformanceModelExtension">
-    </bean>
 
     <!-- Using synchronous dispatching for the tests  -->
     <bean id="measurementDataDispatcher"
