@@ -43,7 +43,7 @@ public class SpringConfigurationPostProcessor implements
             Collection configurations = sc.lookup(registry);
             if (configurations != null && configurations.size() > 0) {
                 for (Object configuration : configurations) {
-                    LOG.debug("Configuring extension " + configuration);
+                    LOG.debug("Configuring extension {}", configuration);
                     sc.configure(configuration);
                 }
             }

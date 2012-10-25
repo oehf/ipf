@@ -19,7 +19,6 @@ import org.openehealth.ipf.modules.hl7.parser.test.hl7v2.def.v25.segment.ZBE;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.log.HapiLogFactory;
 
 @SuppressWarnings("serial")
 public class MDM_T02 extends ca.uhn.hl7v2.model.v25.message.MDM_T02 {
@@ -42,8 +41,7 @@ public class MDM_T02 extends ca.uhn.hl7v2.model.v25.message.MDM_T02 {
         try {
             add(ZBE.class, false, false);
         } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(this.getClass()).error(
-                    "Unexpected error creating message structure", e);
+           log.error("Unexpected error creating message structure", e);
         }
     }
 

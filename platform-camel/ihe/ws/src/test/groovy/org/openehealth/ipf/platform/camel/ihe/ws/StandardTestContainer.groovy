@@ -20,11 +20,11 @@ import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
 import org.apache.camel.impl.DefaultExchange
 import org.apache.commons.codec.binary.Base64
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import org.apache.commons.io.IOUtils
 import org.junit.After
 import org.junit.AfterClass
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender
+import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor
 import org.openehealth.ipf.commons.ihe.core.atna.custom.Hl7v3Auditor
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
@@ -32,11 +32,11 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openhealthtools.ihe.atna.auditor.*
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
 import org.springframework.web.context.support.WebApplicationContextUtils
-import org.apache.commons.io.IOUtils
-import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor
 
 /**
  * Base class for tests that are run within an embedded web container.
@@ -45,7 +45,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor
  * @author Jens Riemschneider
  */
 class StandardTestContainer {
-     private static final transient Log log = LogFactory.getLog(StandardTestContainer.class)
+     private static final transient Logger log = LoggerFactory.getLogger(StandardTestContainer.class)
      
      static ProducerTemplate producerTemplate
      static ServletServer servletServer

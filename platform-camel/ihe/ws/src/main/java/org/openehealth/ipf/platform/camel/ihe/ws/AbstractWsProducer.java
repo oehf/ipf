@@ -261,7 +261,7 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
         AttributedURIType uri = new AttributedURIType();
         uri.setValue(messageId);
         apropos.setMessageID(uri);
-        LOG.debug("Set WS-Addressing message ID: " + messageId);
+        LOG.debug("Set WS-Addressing message ID: {}", messageId);
 
         // ReplyTo header
         if (replyToUri != null) {

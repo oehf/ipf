@@ -149,8 +149,7 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
             return;
         }
         for (Entry<?, ?> entry : ((Map<?, ?>) param).entrySet()) {
-            LOG.debug("Add new parameter for transformer: "
-                    + entry.getKey().toString());
+            LOG.debug("Add new parameter for transformer: {}", entry.getKey().toString());
             transformer.setParameter(entry.getKey().toString(), entry
                     .getValue());
         }
@@ -180,7 +179,7 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
      */
     protected Templates doCreateTemplate(Object... params) {
         String resourceLocation = resource(params);
-        LOG.debug("Create new template for " + resourceLocation);
+        LOG.debug("Create new template for {}", resourceLocation);
         try {
             return factory.newTemplates(source(resourceLocation));
         } catch (Exception e) {

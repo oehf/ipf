@@ -121,7 +121,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
                             && isNotEmpty(dscFields.get(1)))
                     {
                         continuationPointer = dscFields.get(1);
-                        LOG.debug("Automatically query interactive fragment " + continuationPointer);
+                        LOG.debug("Automatically query interactive fragment {}", continuationPointer);
                         requestTerser.set("DSC-1", continuationPointer);
                         requestTerser.set("DSC-2", "I");
                         requestTerser.set("MSH-7", MessageUtils.hl7Now());

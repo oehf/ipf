@@ -111,7 +111,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractMllpIntercepto
                   .append(fieldSeparator)
                   .append("F\r");
 
-                LOG.debug("Send next fragment, continuation pointer = " + continuationPointer);
+                LOG.debug("Send next fragment, continuation pointer = {}", continuationPointer);
             }
             
             // send the generated fragment to the receiver
@@ -146,7 +146,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractMllpIntercepto
                     }
                 } else {
                     // NAKs will go to the route
-                    LOG.debug("Got NAK response for fragment with control ID" + controlId); 
+                    LOG.debug("Got NAK response for fragment with control ID {}", controlId); 
                     break;
                 }
     

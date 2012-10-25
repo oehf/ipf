@@ -93,7 +93,7 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
         } else {
             accumulator = storage.getAndRemove(keyString(msh14, msh31, msh32, msh33));
             if (accumulator == null) {
-                LOG.warn("Pass unknown fragment with MSH-14==" + msh14 + " to the route");
+                LOG.warn("Pass unknown fragment with MSH-14=={} to the route", msh14);
                 getWrappedProcessor().process(exchange);
                 return;
             }
@@ -106,19 +106,14 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
         
         // DSC-1 is empty -- finish accumulation, pass message to the marshaller
         if (isEmpty(dsc1)) {
-            LOG.debug("Finished fragment chain " + msh14);
+            LOG.debug("Finished fragment chain {}", msh14);
             exchange.getIn().setBody(accumulator.toString());
             getWrappedProcessor().process(exchange);
             return;
         } 
 
         // DSC-1 is not empty -- update accumulators map, request the next fragment
-        LOG.debug(new StringBuilder()
-            .append("Processed fragment ")
-            .append(msh14)
-            .append(", requesting ")
-            .append(dsc1)
-            .toString());
+        LOG.debug("Processed fragment {} requesting {}", msh14, dsc1);
             
         storage.put(keyString(dsc1, msh31, msh32, msh33), accumulator);
         Message ack = MessageUtils.response(

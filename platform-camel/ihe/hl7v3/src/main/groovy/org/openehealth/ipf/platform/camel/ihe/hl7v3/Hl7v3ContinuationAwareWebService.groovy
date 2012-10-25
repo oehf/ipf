@@ -15,11 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
+import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
+import static org.openehealth.ipf.commons.xml.XmlUtils.source
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
 import groovy.util.slurpersupport.GPathResult
+
 import javax.xml.transform.Source
+
 import org.apache.commons.lang3.Validate
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import org.apache.log4j.Logger
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory
@@ -28,10 +33,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
-import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
-import static org.openehealth.ipf.commons.xml.XmlUtils.source
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
+import org.slf4j.LoggerFactory
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions
@@ -43,7 +45,7 @@ abstract public class Hl7v3ContinuationAwareWebService
         extends AbstractHl7v3WebService
         implements Hl7v3ContinuationsPortType
 {
-    private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareWebService.class)
+    private static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3ContinuationAwareWebService.class)
 
     private static final String XSLT_TEMPLATE = 'xslt/hl7v3-continuations-fragmentize.xslt'
     private static final XsltTransmogrifier XSLT_TRANSMOGRIFIER = new XsltTransmogrifier(String.class)
@@ -329,7 +331,7 @@ abstract public class Hl7v3ContinuationAwareWebService
      * Logs an error and creates HL7v3 NAK message for it.
      */
     private String error(GPathResult request, String message, String key) {
-        LOG.warn("${message} ${key}")
+        LOG.warn("{} {}", message, key)
         return createNak(request, new Exception(message))
     }
 

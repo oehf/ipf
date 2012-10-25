@@ -28,10 +28,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.openhealthtools.mdht</groupId>
             <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
         </dependency>

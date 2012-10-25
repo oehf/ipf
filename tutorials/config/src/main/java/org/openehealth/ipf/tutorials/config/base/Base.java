@@ -21,13 +21,13 @@ public class Base {
             if (Base.class.getClassLoader().getResource(customContext) != null) {
                 customContextFiles += customContext + ";";
             } else {
-                LOG.warn("Did not find " + customContext + " on the classpath.");
+                LOG.warn("Did not find {} on the classpath.", customContext);
             }
         }
         descriptorList = customContextFiles + descriptorList;
 
         try {
-            LOG.info("Starting base application with descriptor list:\n" + descriptorList);
+            LOG.info("Starting base application with descriptor list:\n{}", descriptorList);
             Main.main("-ac", descriptorList);
         } catch (Exception e) {
             LOG.error("An error occurred", e);

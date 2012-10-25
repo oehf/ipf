@@ -56,12 +56,12 @@ public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigu
     public void configure(CustomMappings configuration) {
         if (configuration.getMappingScript() != null) {
             mappingService.addMappingScript(configuration.getMappingScript());
-            LOG.debug("Mapping script added" + configuration);
+            LOG.debug("Mapping script added {}", configuration);
         }
         if (configuration.getMappingScripts() != null) {
             mappingService.addMappingScripts(configuration.getMappingScripts()
                 .toArray(new Resource[configuration.getMappingScripts().size()]));
-            LOG.debug("Mapping scripts added" + configuration);
+            LOG.debug("Mapping scripts added {}", configuration);
         }        
     }
     

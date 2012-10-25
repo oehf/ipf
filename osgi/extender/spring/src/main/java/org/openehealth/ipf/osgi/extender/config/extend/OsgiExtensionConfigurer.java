@@ -48,7 +48,7 @@ public class OsgiExtensionConfigurer<R extends Registry> extends OsgiSpringConfi
     @Override
     public void configure(Object configuration) {
         extensionActivator.activate(configuration);
-        LOG.info("Activated extension bean " + configuration);
+        LOG.info("Activated extension bean {}", configuration);
     }
 
     @Override

@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.modules.hl7.parser
 
-import ca.uhn.hl7v2.HL7Exception
-import ca.uhn.hl7v2.parser.*
-import ca.uhn.hl7v2.model.*;
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.model.*
+import ca.uhn.hl7v2.parser.*
 
 /**
  * Custom ModelClassFactory that allows to overrule or augment the default HL7 model
@@ -47,7 +47,7 @@ public class CustomModelClassFactory implements ModelClassFactory {
 	ModelClassFactory defaultFactory
 	Map<String, String[]> customModelClasses
 	
-	private static Log LOG = LogFactory.getLog(CustomModelClassFactory.class)
+	private static Logger LOG = LoggerFactory.getLogger(CustomModelClassFactory.class)
 	
 	CustomModelClassFactory() {
 		this(new DefaultModelClassFactory())
@@ -109,7 +109,7 @@ public class CustomModelClassFactory implements ModelClassFactory {
 				def sep = it.endsWith('.') ? '' : '.'
 				fullyQualifiedName = "${it}${sep}${subpackage}.${name}"        		
 				classLoaded = Class.forName(fullyQualifiedName)
-				LOG.debug("Found ${fullyQualifiedName} in custom HL7 model definitions")
+				LOG.debug("Found {} in custom HL7 model definitions", fullyQualifiedName)
 			} catch (Exception e) {
 				// No warning. Caller searches in DefaultModelClassFactory
 			}

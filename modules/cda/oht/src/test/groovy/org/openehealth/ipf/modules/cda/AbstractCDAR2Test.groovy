@@ -15,21 +15,21 @@
  */
 package org.openehealth.ipf.modules.cda
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.resource.URIConverter
 import org.eclipse.emf.ecore.xmi.XMLResource
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.openehealth.ipf.modules.cda.builder.CDAR2ModelExtension
-import org.eclipse.emf.ecore.resource.URIConverter
-import org.eclipse.emf.common.util.URI
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * @author Christian Ohr
  */
 public abstract class AbstractCDAR2Test {
     
-    private static final Log LOG = LogFactory.getLog(AbstractCDAR2Test.getClass().getName())
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractCDAR2Test)
     
     static def registered = []
 

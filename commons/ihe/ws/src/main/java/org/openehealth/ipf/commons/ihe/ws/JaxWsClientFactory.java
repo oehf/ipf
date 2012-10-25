@@ -95,7 +95,7 @@ public class JaxWsClientFactory {
             configureInterceptors(client);
 
             threadLocalPort.set(port);
-            LOG.debug("Created client adapter for: " + wsTransactionConfiguration.getServiceName());
+            LOG.debug("Created client adapter for: {}", wsTransactionConfiguration.getServiceName());
         }        
         return threadLocalPort.get();
     }

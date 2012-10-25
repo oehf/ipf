@@ -15,14 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.core.chain
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 
 /**
  * @author Dmytro Rud
  */
 class ChainUtils {
-    private static final transient Log LOG = LogFactory.getLog(ChainUtils.class)
+    private static final transient Logger LOG = LoggerFactory.getLogger(ChainUtils.class)
 
 
     /**
@@ -54,7 +55,7 @@ class ChainUtils {
 
                 // check whether element with this ID is already in the chain
                 if (cid in chainIds) {
-                    LOG.debug("Element '${cid}' is already in the chain, ignore it")
+                    LOG.debug("Element '{}' is already in the chain, ignore it", cid)
                     iter.remove()
                     continue
                 }
@@ -66,7 +67,7 @@ class ChainUtils {
                 }
 
                 if (unprocessedDependencies) {
-                    LOG.debug("Element '${cid}' depends on '${unprocessedDependencies*.id.join(' ')}'")
+                    LOG.debug("Element '{}' depends on '{}'", cid, unprocessedDependencies*.id.join(' '))
                     continue
                 }
 
@@ -108,12 +109,12 @@ class ChainUtils {
                 chain.add(position, c)
                 chainIds.add(position, cid)
                 iter.remove()
-                LOG.debug("Inserted element '${cid}' at position ${position}")
+                LOG.debug("Inserted element '{}' at position {}", cid, position)
                 successful = true
             }
 
             if (successful) {
-                LOG.debug("Iteration result: ${chain.size()} elements in the chain, ${unprocessed.size()} elements left")
+                LOG.debug("Iteration result: {} elements in the chain, {} elements left", chain.size(), unprocessed.size())
             } else {
                 throw new ChainException("Cannot build a chain, probably there is a dependency loop in '${unprocessed*.id.join(' ')}'")
             }

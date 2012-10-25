@@ -47,8 +47,8 @@ public class OsgiReplayStrategyRegistry implements ReplayStrategyRegistry, Bundl
     public ReplayStrategyRegistration register(ReplayStrategy replayStrategy) {
         ServiceRegistration registration = bundleContext.registerService(ReplayStrategy.class.getName(), 
                 replayStrategy, createRegistrationProperties(replayStrategy.getIdentifier()));
-        LOG.info("Registered replay strategy with identifier " + 
-                replayStrategy.getIdentifier() + " at OSGi service registry");
+        LOG.info("Registered replay strategy with identifier {} at OSGi service registry",
+                replayStrategy.getIdentifier());
         return new OsgiReplayStrategyRegistration(registration, replayStrategy.getIdentifier());
     }
 
@@ -72,8 +72,7 @@ public class OsgiReplayStrategyRegistry implements ReplayStrategyRegistry, Bundl
         @Override
         public void terminate() {
             serviceRegistration.unregister();
-            LOG.info("Unregistered replay strategy with identifier " + 
-                    replayStrategyId + " from OSGi service registry");
+            LOG.info("Unregistered replay strategy with identifier {} from OSGi service registry", replayStrategyId);
         }
         
     }

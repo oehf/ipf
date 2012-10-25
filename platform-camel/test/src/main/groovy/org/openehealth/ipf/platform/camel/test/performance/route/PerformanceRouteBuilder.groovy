@@ -15,26 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.test.performance.route
 
-import org.openehealth.ipf.commons.test.performance.MeasurementHistory
-
-import java.io.InputStreamReader
-import java.util.Date
-
-import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
-
 import static org.apache.camel.Exchange.HTTP_METHOD
 import static org.apache.camel.Exchange.HTTP_RESPONSE_CODE
-import static org.apache.camel.component.http.HttpMethods.GET
 import static org.apache.camel.component.http.HttpMethods.DELETE
+import static org.apache.camel.component.http.HttpMethods.GET
 import static org.apache.camel.component.http.HttpMethods.POST
 import static org.apache.commons.httpclient.HttpStatus.SC_METHOD_NOT_ALLOWED
-
 import static org.apache.commons.io.IOUtils.closeQuietly
 import static org.apache.commons.io.IOUtils.toString
-import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.unmarshall
 import static org.openehealth.ipf.commons.test.performance.dispatcher.MeasurementDispatcher.CONTENT_ENCODING
+import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.unmarshall
+
+import org.apache.camel.spring.SpringRouteBuilder
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * A route builder that provides REST style interface for accessing the statistics. 
@@ -46,7 +40,7 @@ import static org.openehealth.ipf.commons.test.performance.dispatcher.Measuremen
 public class PerformanceRouteBuilder extends SpringRouteBuilder {
     
     private final static String LOCALHOST = '0.0.0.0'
-    private final static Log LOG = LogFactory.getLog(PerformanceRouteBuilder.class.getName())
+    private final static Logger LOG = LoggerFactory.getLogger(PerformanceRouteBuilder.class.getName())
     
     /**
      * The URI path to access statistcs related resources

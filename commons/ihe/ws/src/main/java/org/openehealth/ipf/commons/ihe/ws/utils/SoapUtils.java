@@ -189,13 +189,13 @@ public abstract class SoapUtils {
         try {
             int pos1 = document.lastIndexOf(elementName + '>');
             if (pos1 < 0) {
-                LOG.warn("Cannot find end of the closing tag of " + elementName);
+                LOG.warn("Cannot find end of the closing tag of {}", elementName);
                 return null;
             }
 
             int pos2 = document.lastIndexOf('<', pos1 - 1);
             if (pos2 < 0) {
-                LOG.warn("Cannot find start of the closing tag of " + elementName);
+                LOG.warn("Cannot find start of the closing tag of {}", elementName);
                 return null;
             }
 
@@ -205,7 +205,7 @@ public abstract class SoapUtils {
             }
             int pos3 = document.indexOf(sb.append(elementName).toString());
             if (pos3 < 0) {
-                LOG.warn("Cannot find start of the opening tag of " + elementName);
+                LOG.warn("Cannot find start of the opening tag of {}", elementName);
                 return null;
             }
 

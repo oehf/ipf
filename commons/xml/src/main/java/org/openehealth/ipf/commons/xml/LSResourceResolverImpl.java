@@ -52,9 +52,8 @@ public class LSResourceResolverImpl implements LSResourceResolver {
             InputStream is = resource.getInputStream();
             lsInput = new LSInputImpl(is);
         } catch (IOException e) {
-            LOG.info("Referenced external file " + systemId
-                    + " could not be found. Falling back to "
-                    + "default resolution.");
+            LOG.debug("Referenced external file {} could not be found. Falling back to "
+                    + "default resolution.", systemId);
         }
         return lsInput;
     }

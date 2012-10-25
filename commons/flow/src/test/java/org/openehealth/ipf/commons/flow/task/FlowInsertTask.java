@@ -29,6 +29,6 @@ public class FlowInsertTask extends FlowTaskSupport {
     protected void doRun() {
         long id = getFlowManager().beginFlow(getMessage(), "test");
         getMessage().setFlowId(null); // do not pretend replay
-        LOG.info("generated id = " + id + "(" + Thread.currentThread() + ")");
+        LOG.info("generated id = {} ({})", id, Thread.currentThread().getName());
     }
 }

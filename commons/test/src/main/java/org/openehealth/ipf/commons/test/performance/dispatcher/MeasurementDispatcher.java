@@ -236,11 +236,10 @@ public abstract class MeasurementDispatcher implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         if (isUsingStatisticsManager()) {
-            LOG.info("The " + getClass().getSimpleName()
-                    + " is using a statistics manager ");
+            LOG.info("The class {} is using a statistics manager ", getClass().getSimpleName());
         } else {
-            LOG.info("The " + MeasurementDispatcher.class.getSimpleName()
-                    + " is not configured to use a statistics manager ");
+            LOG.info("The class {} is not configured to use a statistics manager ", 
+                    MeasurementDispatcher.class.getSimpleName());
         }
         // initialize the performance measurement server client
         if (isUsingPerformanceMeasurementServer()) {
@@ -249,9 +248,8 @@ public abstract class MeasurementDispatcher implements InitializingBean {
                             + " is configured to use a performance measurement server with URL "
                             + getPerformanceMeasurementServerURL());
         } else {
-            LOG.info("Performance measurement server will not be used, "
-                    + "because no URL is configured in "
-                    + getClass().getSimpleName());
+            LOG.info("Performance measurement server will not be used, because no URL is configured in {}",
+                    getClass().getSimpleName());
         }
     }
 }

@@ -69,7 +69,7 @@ public class AsynchronousMeasurementDispatcher extends MeasurementDispatcher
             queue.put(measurementHistory);
 
         } catch (InterruptedException e) {
-            LOG.warn("Inserting a measurement history object in the "
+            LOG.warn("Inserting a measurement history object in the {}"
                     + AsynchronousMeasurementDispatcher.class.getSimpleName()
                     + " queue interrupted!", e);
         }

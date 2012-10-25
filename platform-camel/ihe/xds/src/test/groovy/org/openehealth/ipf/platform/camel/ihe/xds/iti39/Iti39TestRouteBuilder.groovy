@@ -15,26 +15,29 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti39;
 
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
+
 import java.util.concurrent.atomic.AtomicInteger
+
 import javax.activation.DataHandler
+
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
 import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
+import org.slf4j.LoggerFactory
 
 /**
  * Test routes for ITI-39.
  * @author Dmytro Rud
  */
 class Iti39TestRouteBuilder extends SpringRouteBuilder {
-    private static final transient LOG = LogFactory.getLog(Iti39TestRouteBuilder.class)
+    private static final transient LOG = LoggerFactory.getLogger(Iti39TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()

@@ -55,7 +55,7 @@ public class OsgiPlatformFlowManager extends PlatformFlowManager {
             throw new FlowReplayException("replay strategy " + replayStrategyId
                     + " not found in OSGi service registry");
         }
-        LOG.debug("Using replay strategy " + replayStrategyId + " from OSGi service registry");
+        LOG.debug("Using replay strategy {} from OSGi service registry", replayStrategyId);
         return replayStrategy.replay(packet);
     }
 

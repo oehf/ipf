@@ -37,7 +37,7 @@ abstract class CompositeModelExtension extends BaseModelExtension {
          super.register(registered)
          modelExtensions().each {
              if (registered.contains(it.templateId())) {
-                 LOG.debug("Skip ${it.templateId()}")
+                 LOG.debug("Skip {}", it.templateId())
              } else {
                  it.builder = builder
                  it.register(registered)

@@ -55,7 +55,7 @@ public class ExtensionConfigurer<R extends Registry> extends
     @Override
     public void configure(Extension configuration) {
         extensionActivator.activate(configuration);
-        LOG.debug("Extension configured..." + configuration);
+        LOG.debug("Extension configured... {}", configuration);
     }
 
     @Override

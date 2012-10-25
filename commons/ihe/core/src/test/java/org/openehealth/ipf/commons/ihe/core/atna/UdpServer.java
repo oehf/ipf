@@ -82,7 +82,7 @@ public class UdpServer extends Thread {
 
         try {
             socket = new DatagramSocket(port);
-            LOG.debug("UDP server started on port " + port);
+            LOG.debug("UDP server started on port {}", port);
         } catch (SocketException e) {
             LOG.error("cannot open datagram socket", e);
             return;
@@ -98,7 +98,7 @@ public class UdpServer extends Thread {
         } catch (SocketException e) {
             LOG.debug("socket closed");
         } catch (IOException e) {
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
         }
 
     }

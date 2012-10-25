@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * @author Christian Ohr
@@ -24,7 +24,7 @@ import org.apache.commons.logging.LogFactory
 
 abstract class BaseModelExtension {
 
-   protected static final Log LOG = LogFactory.getLog(BaseModelExtension.class)
+   protected static final Logger LOG = LoggerFactory.getLogger(BaseModelExtension.class)
 
    def builder
 
@@ -44,7 +44,7 @@ abstract class BaseModelExtension {
    abstract String extensionName()
 
    def register(Collection registered) {
-      LOG.debug("Initializing extension ${extensionName()} (${templateId()})")
+      LOG.debug("Initializing extension {} ({})", extensionName(), templateId())
       registered.add(templateId())
    }
 

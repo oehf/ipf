@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.map
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
 import org.osgi.framework.Bundle
 import org.osgi.framework.BundleContext
 import org.osgi.framework.BundleEvent
 import org.osgi.framework.BundleListener
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.core.io.Resource
 import org.springframework.core.io.UrlResource
 
@@ -33,7 +33,7 @@ import org.springframework.core.io.UrlResource
  */
 class BidiMappingServiceOsgiConfigurer implements BundleListener { 
 
-    static Log LOG = LogFactory.getLog(BidiMappingServiceOsgiConfigurer.class)
+    static Logger LOG = LoggerFactory.getLogger(BidiMappingServiceOsgiConfigurer.class)
      
     BidiMappingService service
     
@@ -89,11 +89,9 @@ class BidiMappingServiceOsgiConfigurer implements BundleListener {
         if (resources != null && resources.size() > 0) {
             service.addMappingScripts(resources as Resource[])
             resources.each { 
-                LOG.info("Added mapping resource ${it} to mapping service")
+                LOG.info("Added mapping resource {} to mapping service", it)
             }
-            if (LOG.debugEnabled){
-                LOG.debug("Current mappings: ${service.reverseMap}")
-            }
+            LOG.debug("Current mappings: {}", service.reverseMap)
         }
     }
          

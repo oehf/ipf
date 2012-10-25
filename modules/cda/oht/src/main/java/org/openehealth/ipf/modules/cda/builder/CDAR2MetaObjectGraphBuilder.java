@@ -119,8 +119,8 @@ public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
                 return createAttributeByNameFromString(node.getClass(),
                         name, val.toString());
             } catch (Exception e) {
-                LOG.warn("Can't evaluate the value from String for the property "
-                                + name + " : " + e.getMessage());
+                LOG.warn("Can't evaluate the value from String for the property {} : {}",
+                                name, e.getMessage());
                 return val;
             }
         } else {

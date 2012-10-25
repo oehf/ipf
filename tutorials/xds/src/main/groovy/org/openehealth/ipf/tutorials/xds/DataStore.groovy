@@ -19,19 +19,20 @@ package org.openehealth.ipf.tutorials.xds
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
+
 import javax.activation.DataHandler
 import javax.mail.util.ByteArrayDataSource
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document
-import org.openehealth.ipf.tutorials.xds.ContentUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * A simple store for meta data and documents.
  * @author Jens Riemschneider
  */
 public class DataStore {
-     private final static Log log = LogFactory.getLog(DataStore.class)
+     private final static Logger log = LoggerFactory.getLogger(DataStore.class)
      
      def entries = new CopyOnWriteArrayList()
      def documents = new ConcurrentHashMap()

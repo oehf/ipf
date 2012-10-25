@@ -15,27 +15,30 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti63;
 
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti63RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti63ResponseValidator
+
 import java.util.concurrent.atomic.AtomicInteger
+
 import javax.activation.DataHandler
+
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
 import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti63RequestValidator
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti63ResponseValidator
+import org.slf4j.LoggerFactory
 
 /**
  * Test routes for ITI-63.
  * @author Dmytro Rud
  */
 class Iti63TestRouteBuilder extends SpringRouteBuilder {
-    private static final transient LOG = LogFactory.getLog(Iti63TestRouteBuilder.class)
+    private static final transient LOG = LoggerFactory.getLogger(Iti63TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()

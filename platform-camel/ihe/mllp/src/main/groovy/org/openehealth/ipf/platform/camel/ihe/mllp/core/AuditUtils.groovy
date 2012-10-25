@@ -16,13 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
 import org.apache.camel.Exchange
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Various ATNA-auditing related utilities.
@@ -32,7 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor
  * @author Dmytro Rud
  */
 class AuditUtils {
-    private static final transient Log LOG = LogFactory.getLog(AuditUtils.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(AuditUtils.class);
     
     private AuditUtils() {
         throw new IllegalStateException('Helper class, do not instantiate');

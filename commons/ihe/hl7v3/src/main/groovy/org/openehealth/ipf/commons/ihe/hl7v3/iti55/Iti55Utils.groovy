@@ -16,16 +16,17 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti55
 
 import groovy.util.slurpersupport.GPathResult
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Helper class for ITI-55 XCPD transaction.
  * @author Dmytro Rud
  */
 abstract class Iti55Utils {
-    private static final transient Log LOG = LogFactory.getLog(Iti55Utils.class)
+    private static final transient Logger LOG = LoggerFactory.getLogger(Iti55Utils.class)
 
     private Iti55Utils() {
         throw new IllegalStateException('cannot istantiate helper class')

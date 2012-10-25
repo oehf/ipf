@@ -75,7 +75,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
                     requestTerser.get("QID-1") :
                     requestTerser.get("QPD-2");
             if (storage.delete(keyString(queryTag, msh31, msh32, msh33))) {
-                LOG.debug("Dropped response chain for query tag " + queryTag);
+                LOG.debug("Dropped response chain for query tag {}", queryTag);
                 Message ack = MessageUtils.ack(parser.getFactory(), requestMessage);
                 Exchanges.resultMessage(exchange).setBody(parser.encode(ack));
             } else {
@@ -93,7 +93,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         // check whether requested unit type is supported
         String rcp22 = requestTerser.get("RCP-2-2");
         if (! "RD".equals(rcp22)) {
-            LOG.warn("Unit '" + rcp22 + "' in RCP-2-2 is not supported");
+            LOG.warn("Unit '{}' in RCP-2-2 is not supported", rcp22);
             getWrappedProcessor().process(exchange);
             return;
         }
@@ -138,7 +138,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         Message responseMessage = storage.get(continuationPointer, chainId);
         if (responseMessage != null) {
             // a prepared response fragment found -- perform some post-processing and send it to the user
-            LOG.debug("Use prepared fragment for " + continuationPointer);
+            LOG.debug("Use prepared fragment for {}", continuationPointer);
             synchronized (responseMessage) {
                 Terser responseTerser = new Terser(responseMessage);
                 responseTerser.set("MSH-7", MessageUtils.hl7Now());
@@ -227,11 +227,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
                 responseMessage = fragment;
             }
         }
-        LOG.debug(new StringBuilder("Prepared ")
-                        .append(fragmentsCount)
-                        .append(" interactive fragments for query tag ")
-                        .append(queryTag)
-                        .toString());
+        LOG.debug("Prepared {} interactive fragments for query tag {}", fragmentsCount, queryTag);
         return responseMessage;
     }
 

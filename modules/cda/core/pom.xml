@@ -23,11 +23,6 @@
             <version>${project.version}</version>
         </dependency>  
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-        </dependency>
-       
-        <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-xml</artifactId>
             <version>${project.version}</version>

@@ -53,7 +53,7 @@ public class PlatformFlowManager extends FlowManagerBase implements ReplayStrate
     @Override
     public ReplayStrategyRegistration register(ReplayStrategy replayStrategy) {
         replayStrategies.put(replayStrategy.getIdentifier(), replayStrategy);
-        LOG.info("Registered replay strategy with identifier " + replayStrategy.getIdentifier() + " at flow manager");
+        LOG.info("Registered replay strategy with identifier {} at flow manager", replayStrategy.getIdentifier());
         return new LocalReplayStrategyRegistration(replayStrategy);
     }
     
@@ -109,7 +109,7 @@ public class PlatformFlowManager extends FlowManagerBase implements ReplayStrate
         @Override
         public void terminate() {
             replayStrategies.remove(replayStrategy.getIdentifier());
-            LOG.info("Unregistered replay strategy with identifier " + replayStrategy.getIdentifier() + " from flow manager");
+            LOG.info("Unregistered replay strategy with identifier {} from flow manager", replayStrategy.getIdentifier());
         }
         
     }

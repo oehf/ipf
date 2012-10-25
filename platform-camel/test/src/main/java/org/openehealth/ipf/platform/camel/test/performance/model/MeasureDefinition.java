@@ -53,7 +53,7 @@ public class MeasureDefinition extends DelegateDefinition {
         CamelContext camelContext = routeContext.getCamelContext();
         MeasurementDispatcher measurementDispatcher = Contexts.bean(
                 MeasurementDispatcher.class, camelContext);
-        LOG.debug(MeasurementDispatcher.class.getName() + " found.");
+        LOG.debug("{} found.", MeasurementDispatcher.class.getName());
         delegate.setMeasurementDispatcher(measurementDispatcher);
 
         return delegate;
@@ -64,7 +64,7 @@ public class MeasureDefinition extends DelegateDefinition {
      */
     public MeasureDefinition time() {
         delegate = new TimeProcessor();
-        LOG.debug("Using " + TimeProcessor.class.getName());
+        LOG.debug("Using {}", TimeProcessor.class.getName());
         return this;
     }
 
@@ -74,8 +74,7 @@ public class MeasureDefinition extends DelegateDefinition {
     public MeasureDefinition checkpoint(String name) {
         notNull(name, "The name must not be null!");
         delegate = new CheckpointProcessor(name);
-        LOG.debug("Using " + CheckpointProcessor.class.getName() + " with name "
-                + name);
+        LOG.debug("Using {} with name {}", CheckpointProcessor.class.getName(), name);
         return this;
     }
 
@@ -85,8 +84,7 @@ public class MeasureDefinition extends DelegateDefinition {
     public MeasureDefinition finish(String name) {
         notNull(name, "The name must not be null!");
         delegate = new FinishProcessor(name);
-        LOG.debug("Using " + FinishProcessor.class.getName() + " with name "
-                + name);
+        LOG.debug("Using {} with name {}", FinishProcessor.class.getName(), name);
         return this;
     }
 

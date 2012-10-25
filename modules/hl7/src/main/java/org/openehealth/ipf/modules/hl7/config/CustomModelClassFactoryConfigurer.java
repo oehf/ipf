@@ -59,7 +59,7 @@ public class CustomModelClassFactoryConfigurer<R extends Registry> extends Order
             currentFactory = (CustomModelClassFactory)delegateFactory;
             delegateFactory = configureAndDelegate(currentFactory, configuration);
         }
-        LOG.debug("Custom model classes configured: " + configuration);
+        LOG.debug("Custom model classes configured: {}", configuration);
     }
 
     private ModelClassFactory configureAndDelegate(CustomModelClassFactory factory,

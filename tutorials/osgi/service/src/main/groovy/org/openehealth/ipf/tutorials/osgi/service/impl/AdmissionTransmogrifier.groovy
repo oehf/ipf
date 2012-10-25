@@ -16,14 +16,16 @@
 package org.openehealth.ipf.tutorials.osgi.service.impl
 
 import javax.annotation.PostConstruct
-import org.apache.commons.logging.Logimport org.apache.commons.logging.LogFactory
+
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 /**
  * @author Martin Krasser
  */
 public class AdmissionTransmogrifier  implements Transmogrifier {
 
-    static Log LOG = LogFactory.getLog(AdmissionTransmogrifier.class)
+    static Logger LOG = LoggerFactory.getLogger(AdmissionTransmogrifier.class)
      
     String sendingFacility = 'UNK'
      

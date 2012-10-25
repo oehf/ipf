@@ -237,7 +237,7 @@ public class PerformanceMeasurementServerTest {
         public void updateStatistics(MeasurementHistory measurementHistory) {
             delegate.updateStatistics(measurementHistory);
 
-            LOG.info(MyStatisticsManager.class.getName() + " updated!");
+            LOG.info("{} updated!", MyStatisticsManager.class.getName());
             sync.countDown();
 
         }

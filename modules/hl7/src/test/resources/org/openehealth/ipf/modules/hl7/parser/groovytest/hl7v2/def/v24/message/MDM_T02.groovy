@@ -17,7 +17,6 @@ package org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v24.message
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.ModelClassFactory
-import ca.uhn.log.HapiLogFactory
 
 /**
 * This custom message is compiled and loaded at runtime (unlike Java custom
@@ -46,8 +45,7 @@ public class MDM_T02 extends ca.uhn.hl7v2.model.v24.message.MDM_T02 {
 	   try {
 		   addSegment('ZBE', false, false)
 	   } catch (HL7Exception e) {
-		   HapiLogFactory.getHapiLog(this.getClass()).error(
-				   "Unexpected error creating message structure", e)
+           log.error("Unexpected error creating message structure", e)
 	   }
    }
 

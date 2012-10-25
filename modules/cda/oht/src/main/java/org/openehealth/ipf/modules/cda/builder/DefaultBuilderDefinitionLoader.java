@@ -49,12 +49,12 @@ public abstract class DefaultBuilderDefinitionLoader implements
     synchronized protected boolean doLoad(String resource,
             Collection<String> loaded) throws IOException {
         if (!loaded.contains(resource)) {
-            LOG.debug("Loading builder from " + resource);
+            LOG.debug("Loading builder from {} ", resource);
             builder.define(getClass().getResource(resource));
             loaded.add(resource);
             return true;
         } else {
-            LOG.debug("Skip loading from " + resource);
+            LOG.debug("Skip loading from {}", resource);
             return false;
         }
     }

@@ -67,7 +67,7 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
         } catch (Exception e) {
             LOG.error("Custom route configuration failed: " + e);
         }
-        LOG.debug("Custom route builder configured: " + configuration);
+        LOG.debug("Custom route builder configured: {}", configuration);
     }
 
     public CamelContext getCamelContext() {

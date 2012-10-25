@@ -67,8 +67,7 @@ public class CustomMappings {
             if (mappingScript.exists() && mappingScript.isReadable()) {
                 this.mappingScripts.add(mappingScript);
             } else {
-                LOG.warn("Could not read mapping script "
-                        + mappingScript.getFilename());
+                LOG.warn("Could not read mapping script {}", mappingScript.getFilename());
             }
         }
         this.mappingScripts = mappingScripts;
@@ -82,8 +81,7 @@ public class CustomMappings {
         if (mappingScript.exists() && mappingScript.isReadable()) {
             this.mappingScript = mappingScript;
         } else {
-            LOG.warn("Could not read mapping script "
-                    + mappingScript.getFilename());
+            LOG.warn("Could not read mapping script {}", mappingScript.getFilename());
         }
     }
 

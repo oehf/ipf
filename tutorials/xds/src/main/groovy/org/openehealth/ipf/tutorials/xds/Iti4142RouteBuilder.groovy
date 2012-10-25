@@ -15,27 +15,28 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import static org.openehealth.ipf.tutorials.xds.SearchResult.*
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.*
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
+import static org.openehealth.ipf.tutorials.xds.SearchResult.*
+
+import javax.activation.DataHandler
+import javax.mail.util.ByteArrayDataSource
 
 import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*
 import org.openehealth.ipf.commons.ihe.xds.core.responses.*
-import javax.activation.DataHandler
-import javax.mail.util.ByteArrayDataSource
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Route builder for ITI-41 and -42.
  * @author Jens Riemschneider
  */
 class Iti4142RouteBuilder extends SpringRouteBuilder {
-    private final static Log log = LogFactory.getLog(Iti4142RouteBuilder.class);
+    private final static Logger log = LoggerFactory.getLogger(Iti4142RouteBuilder.class);
     
     @Override
     public void configure() throws Exception {

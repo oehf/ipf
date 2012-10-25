@@ -101,11 +101,11 @@ public class FlowManagerImplLoadTest {
     private void startThreadsAndJoin() throws InterruptedException {
         for (Thread thread : threads) {
             thread.start();
-            LOG.info("thread " + thread + " started");
+            LOG.info("thread {} started", thread.getName());
         }
         for (Thread thread : threads) {
             thread.join();
-            LOG.info("join on " + thread + " returned");
+            LOG.info("join on {} returned", thread.getName());
         }
     }
 

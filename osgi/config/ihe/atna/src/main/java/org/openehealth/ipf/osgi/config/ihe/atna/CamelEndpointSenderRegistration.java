@@ -34,8 +34,7 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
  */
 public class CamelEndpointSenderRegistration {
 
-    private static final Logger LOG = LogFactory
-            .getLog(CamelEndpointSenderRegistration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CamelEndpointSenderRegistration.class);
 
     private AuditorModuleContext iheAuditorContext;
 

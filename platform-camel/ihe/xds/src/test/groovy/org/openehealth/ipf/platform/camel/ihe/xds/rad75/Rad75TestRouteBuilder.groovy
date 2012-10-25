@@ -16,28 +16,31 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.rad75;
 
 
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad75RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad75ResponseValidator
+
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
+
 import javax.activation.DataHandler
+
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
 import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad75RequestValidator
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad75ResponseValidator
-import java.util.concurrent.CountDownLatch
+import org.slf4j.LoggerFactory
 
 /**
  * Test routes for RAD-75.
  * @author Clay Sebourn
  */
 class Rad75TestRouteBuilder extends SpringRouteBuilder {
-    private static final transient LOG = LogFactory.getLog(Rad75TestRouteBuilder.class)
+    private static final transient LOG = LoggerFactory.getLogger(Rad75TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()

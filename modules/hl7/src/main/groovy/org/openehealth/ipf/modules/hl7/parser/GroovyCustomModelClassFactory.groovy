@@ -16,12 +16,12 @@
 package org.openehealth.ipf.modules.hl7.parser
 
 
+import org.apache.commons.io.IOUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.*
-
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
-import org.apache.commons.io.IOUtils
 
 /**
  * This ModelClassFactory is used in same way as its superclass, however,
@@ -41,7 +41,7 @@ import org.apache.commons.io.IOUtils
  */
 public class GroovyCustomModelClassFactory extends CustomModelClassFactory{
 	
-	private static Log LOG = LogFactory.getLog(CustomModelClassFactory.class)
+	private static Logger LOG = LoggerFactory.getLogger(CustomModelClassFactory.class)
 	
 	private GroovyClassLoader loader = new GroovyClassLoader(getClass().getClassLoader())
 
@@ -80,9 +80,9 @@ public class GroovyCustomModelClassFactory extends CustomModelClassFactory{
                 GroovyCodeSource gcs = new GroovyCodeSource(
                         IOUtils.toString(stream), fullyQualifiedName, ".")
                 classLoaded = loader.parseClass(gcs, cacheSources)
-				LOG.debug("Found ${fullyQualifiedName} in custom HL7 model definitions")
+				LOG.debug("Found {} in custom HL7 model definitions", fullyQualifiedName)
 			} catch (Exception e) {
-				LOG.debug("Did not find ${fullyQualifiedName} in custom HL7 model definitions")
+				LOG.debug("Did not find {} in custom HL7 model definitions", fullyQualifiedName)
 			}
 		}
 		return classLoaded

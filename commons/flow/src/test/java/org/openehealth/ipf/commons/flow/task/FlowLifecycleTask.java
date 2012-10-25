@@ -85,7 +85,7 @@ public class FlowLifecycleTask extends FlowTaskSupport {
         // clear flow id from exchange
         getMessage().setFlowId(null);
         
-        LOG.info("generated id = " + id + "(" + Thread.currentThread() + ")");
+        LOG.info("generated id = {} ({})", id, Thread.currentThread().getName());
     }
 
 }

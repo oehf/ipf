@@ -177,7 +177,7 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
 
     private XQPreparedExpression doPreparedExpression(Object... params) {
         String resourceLocation = resource(params);
-        LOG.debug("Create new template for " + resourceLocation);
+        LOG.debug("Create new template for {}", resourceLocation);
         try {
             initConnection();
             XQPreparedExpression expression = connection

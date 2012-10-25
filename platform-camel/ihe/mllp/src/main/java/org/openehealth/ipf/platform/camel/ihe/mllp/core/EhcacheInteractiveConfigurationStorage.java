@@ -52,7 +52,7 @@ public class EhcacheInteractiveConfigurationStorage implements InteractiveContin
         if (element != null) {
             chain = (InteractiveContinuationChain) element.getValue();
         } else {
-            LOG.debug("Create chain for storage key " + chainId);
+            LOG.debug("Create chain for storage key {}", chainId);
             chain = new InteractiveContinuationChain();
             ehcache.put(new Element(chainId, chain));
         }

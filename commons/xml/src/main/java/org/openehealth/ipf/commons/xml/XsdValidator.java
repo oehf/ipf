@@ -90,8 +90,7 @@ public class XsdValidator implements Validator<Source, String> {
             validator.validate(message);
             List<ValidationException> exceptions = errorHandler.getExceptions();
             if (exceptions.size() > 0) {
-                LOG.debug("Message validation found " + exceptions.size()
-                        + " problems");
+                LOG.debug("Message validation found {} problems", exceptions.size());
             } else {
                 LOG.debug("Message validation successful");
             }

@@ -15,24 +15,25 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
-import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import static org.openehealth.ipf.tutorials.xds.SearchResult.*
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
+import static org.openehealth.ipf.tutorials.xds.SearchResult.*
+
+import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
+import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Route builder for ITI-18.
  * @author Jens Riemschneider
  */
 class Iti18RouteBuilder extends SpringRouteBuilder {
-    private final static Log log = LogFactory.getLog(Iti18RouteBuilder.class);
+    private final static Logger log = LoggerFactory.getLogger(Iti18RouteBuilder.class);
     
     static final def DOCS = 'resp.documentEntries'
     static final def FOLDERS = 'resp.folders'

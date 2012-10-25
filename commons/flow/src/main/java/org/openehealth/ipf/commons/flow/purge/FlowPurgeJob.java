@@ -153,13 +153,13 @@ public class FlowPurgeJob implements Job {
     
         int purgeCountTotal = 0;
         int purgeCount;
-        LOG.info("Start purging flows for application " + config.getApplication());
+        LOG.info("Start purging flows for application {}", config.getApplication());
         do {
             purgeCount = manager.purgeFlows(criteria);
             purgeCountTotal += purgeCount;
-            LOG.info("Purged " + purgeCountTotal + " flows (application=" + config.getApplication() + ")");
+            LOG.info("Purged {} flows (application={})", purgeCountTotal, config.getApplication());
         } while (purgeCount >= criteria.getMaxPurgeCount()); 
-        LOG.info("Finished purging flows for application " + config.getApplication());
+        LOG.info("Finished purging flows for application {}", config.getApplication());
     }
 
     /**
@@ -172,7 +172,7 @@ public class FlowPurgeJob implements Job {
     public void execute(ApplicationConfig config) {
         String name = "once";
         schedule(config, new SimpleTrigger(name, (String) null), name);
-        LOG.info("Execute purge job once for application " + application);
+        LOG.info("Execute purge job once for application {}", application);
     }
     
     /**
@@ -186,7 +186,7 @@ public class FlowPurgeJob implements Job {
         try {
             schedule(config, new CronTrigger(application, null, flowPurgeSchedule), application);
             setFlowPurgeScheduled(true);
-            LOG.info("Scheduled purge job for application " + application);
+            LOG.info("Scheduled purge job for application {}", application);
         } catch (ParseException e) {
             throw new FlowPurgeJobException("Cannot parse schedule: " + e.getMessage());
         }
@@ -214,7 +214,7 @@ public class FlowPurgeJob implements Job {
         try {
             scheduler.deleteJob(application, null);
             setFlowPurgeScheduled(false);
-            LOG.info("Unscheduled purge job for application " + application);
+            LOG.info("Unscheduled purge job for application {}", application);
         } catch (SchedulerException e) {
             throw new FlowPurgeJobException("Cannot unschedule job: " + e.getMessage());
         }

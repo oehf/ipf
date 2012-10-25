@@ -138,7 +138,7 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
     	if (!scheduler.isStarted()){ 
             scheduler.start();
         }
-        LOG.info("Scheduler started:" + scheduler.isStarted());
+        LOG.info("Scheduler started: {}", scheduler.isStarted());
         initJobs();
     }
 
@@ -170,7 +170,7 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
             if (config.isFlowPurgeScheduled()) {
                 scheduleJob(config);
             } else {
-                LOG.info("Skip scheduling of job for application " + config.getApplication());
+                LOG.info("Skip scheduling of job for application {}", config.getApplication());
             }
         }
         LOG.info("Initialization done. ");

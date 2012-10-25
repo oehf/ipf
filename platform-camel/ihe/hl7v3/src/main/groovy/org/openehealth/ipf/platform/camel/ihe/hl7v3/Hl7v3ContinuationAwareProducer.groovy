@@ -15,12 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS
+import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
+import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.*
 import groovy.util.slurpersupport.GPathResult
 import groovy.xml.XmlUtil
+
 import javax.xml.ws.BindingProvider
+
 import org.apache.camel.Exchange
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
 import org.apache.cxf.message.Message
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
@@ -32,14 +37,11 @@ import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.NodeList
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
-import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS
-import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
-import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.*
 
 /**
  * Camel producer HL7 v3-based IHE transactions with Continuation support.
@@ -48,7 +50,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
  * in the IHE PIXv3/PDQv3 Supplement August 2010, pp. 85-87 and 117-119.
  */
 class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> {
-    private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareProducer.class)
+    private static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3ContinuationAwareProducer.class)
 
     private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal()
     private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
@@ -254,7 +256,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> 
             startResultNumber += currentQuantity
             String continuationRequest = createQuqiRequest(
                     request, false, startResultNumber, continuationQuantity)
-            LOG.debug('Sending continuation request\n' + continuationRequest)
+            LOG.debug('Sending continuation request\n {}', continuationRequest)
             fragmentString = client.continuation(continuationRequest)
         }
 
@@ -263,7 +265,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> 
             if (autoCancel) {
                 // TODO: cancel on errors as well
                 String cancelRequest = createQuqiRequest(request, true, 0, 0)
-                LOG.debug('Sending automatical cancel request\n' + cancelRequest)
+                LOG.debug('Sending automatical cancel request\n {}', cancelRequest)
                 client.cancel(cancelRequest)
             }
 

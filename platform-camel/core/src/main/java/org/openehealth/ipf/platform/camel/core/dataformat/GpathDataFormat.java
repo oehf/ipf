@@ -23,7 +23,6 @@ import java.io.OutputStream;
 import org.apache.camel.Exchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.xml.SimpleSaxErrorHandler;
 
 /**
  * @author Martin Krasser

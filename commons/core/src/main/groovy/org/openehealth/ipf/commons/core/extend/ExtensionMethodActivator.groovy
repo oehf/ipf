@@ -17,13 +17,14 @@ package org.openehealth.ipf.commons.core.extend
 
 import java.lang.reflect.Modifier
 
-import org.apache.commons.logging.Logimport org.apache.commons.logging.LogFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 /**
  * @author Martin Krasser
  */
 class ExtensionMethodActivator implements ConditionalActivator {
     
-     private static final Log LOG = LogFactory.getLog(ExtensionMethodActivator.class);
+     private static final Logger LOG = LoggerFactory.getLogger(ExtensionMethodActivator.class);
      
      boolean supports(Class<?> extensionClass) {
          getExtensionMethods(extensionClass).size() > 0
@@ -59,7 +60,7 @@ class ExtensionMethodActivator implements ConditionalActivator {
      }
 
      private static def activateExtensionCode(def clazz, def code) {
-         LOG.debug("Activate extension code: ${code}")
+         LOG.debug("Activate extension code: {}", code)
          new GroovyShell(clazz.classLoader).evaluate(code)
      }
      

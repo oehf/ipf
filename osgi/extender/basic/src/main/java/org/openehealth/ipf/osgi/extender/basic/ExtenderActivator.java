@@ -88,7 +88,7 @@ public class ExtenderActivator implements BundleActivator, SynchronousBundleList
         for (Class<?> clazz : classes) {
             try {
                 extensionActivator.activate(clazz);
-                LOG.info("Activated extension class " + clazz);
+                LOG.info("Activated extension class {}", clazz);
             } catch (Exception e) {
                 LOG.error("Couldn't activate extension class " + clazz, e);
             }
