@@ -24,7 +24,6 @@ import groovy.util.slurpersupport.GPathResult
 import javax.xml.transform.Source
 
 import org.apache.commons.lang3.Validate
-import org.apache.log4j.Logger
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory
@@ -34,6 +33,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
 import org.slf4j.LoggerFactory
+import org.slf4j.Logger
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions

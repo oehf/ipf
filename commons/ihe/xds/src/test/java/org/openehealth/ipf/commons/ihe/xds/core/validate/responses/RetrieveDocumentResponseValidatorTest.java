@@ -22,6 +22,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveDocumentSetResponse30;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
@@ -61,6 +63,14 @@ public class RetrieveDocumentResponseValidatorTest {
         // Test a failure that is detected by the RegistryResponseValidator
         response.setStatus(null);
         expectFailure(INVALID_STATUS_IN_RESPONSE);
+    }
+
+    @Test
+    public void testDelegatesToRegistryResponseValidatorEmptyInternalRegistryResponse() {
+        // Test a failure that is detected by the RegistryResponseValidator
+        RetrieveDocumentSetResponseType responseType = new RetrieveDocumentSetResponseType();
+        responseType.setRegistryResponse(null);
+        expectFailure(INVALID_STATUS_IN_RESPONSE, new EbXMLRetrieveDocumentSetResponse30(responseType));
     }
     
     @Test
