@@ -105,12 +105,18 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
 
     @Override
     public void setStatus(Status status) {
-        response.getRegistryResponse().setStatus(Status.getOpcode30(status));
+        if (response.getRegistryResponse() != null){
+            response.getRegistryResponse().setStatus(Status.getOpcode30(status));
+        }
     }
 
     @Override
     public Status getStatus() {
-        return Status.valueOfOpcode(response.getRegistryResponse().getStatus());
+        Status status = null;
+        if (response.getRegistryResponse() != null){
+            status = Status.valueOfOpcode(response.getRegistryResponse().getStatus());
+        }
+        return status;
     }
 
     @Override
