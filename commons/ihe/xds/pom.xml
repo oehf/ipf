@@ -62,31 +62,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>com.sun.tools.jxc.maven2</groupId>
-                <artifactId>maven-jaxb-schemagen-plugin</artifactId>
-                <configuration>
-                    <srcdir>${project.basedir}/src/main/java</srcdir>
-                    <includes>
-                        <include>org/openehealth/ipf/commons/ihe/xds/core/requests/*</include>
-                        <include>org/openehealth/ipf/commons/ihe/xds/core/responses/*</include>
-                    </includes>
-                    <schemas>
-                        <schema>
-                            <namespace>http://www.openehealth.org/ipf/xds</namespace>
-                            <file>${project.name}-${project.version}.xsd</file>
-                        </schema>
-                    </schemas>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 </project>

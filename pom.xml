@@ -45,7 +45,6 @@
         <gmaven-version>1.4</gmaven-version>
         <jar-plugin-version>2.3.1</jar-plugin-version>
         <javadoc-plugin-version>2.8</javadoc-plugin-version>
-        <jaxb-schemagen-plugin-version>1.2</jaxb-schemagen-plugin-version>
         <release-plugin-version>2.1</release-plugin-version>
         <resources-plugin-version>2.4.3</resources-plugin-version>
         <sources-plugin-version>2.2</sources-plugin-version>
@@ -78,7 +77,6 @@
         <hibernate-javassist-version>3.9.0.GA</hibernate-javassist-version>
         <hibernate-search-version>3.1.0.GA</hibernate-search-version>
         <jasypt-version>1.9.0</jasypt-version>
-        <jaxb-version>2.2.4</jaxb-version>
         <jetty-version>7.5.4.v20111024</jetty-version>
         <joda-time-version>2.1</joda-time-version>
         <junit-version>4.10</junit-version>
@@ -1356,65 +1354,6 @@
                         </executions>
                     </plugin>
                 </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>jdk7-jaxb-fix</id>
-            <activation>
-                <jdk>1.7</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>com.sun.tools.jxc.maven2</groupId>
-                            <artifactId>maven-jaxb-schemagen-plugin</artifactId>
-                            <dependencies>
-                                <dependency>
-                                    <groupId>com.sun</groupId>
-                                    <artifactId>tools</artifactId>
-                                    <version>1.7</version>
-                                    <scope>system</scope>
-                                    <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                                </dependency>
-                            </dependencies>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
-            <id>normal-jaxb</id>
-            <activation>
-                <jdk>[1.4,1.7)</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>com.sun.tools.jxc.maven2</groupId>
-                            <artifactId>maven-jaxb-schemagen-plugin</artifactId>
-                            <version>${jaxb-schemagen-plugin-version}</version>
-                            <dependencies>
-                                <dependency>
-                                    <groupId>javax.xml.bind</groupId>
-                                    <artifactId>jaxb-api</artifactId>
-                                    <version>${jaxb-version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>com.sun.xml.bind</groupId>
-                                    <artifactId>jaxb-xjc</artifactId>
-                                    <version>${jaxb-version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>com.sun.xml.bind</groupId>
-                                    <artifactId>jaxb-impl</artifactId>
-                                    <version>${jaxb-version}</version>
-                                </dependency>
-                            </dependencies>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
             </build>
         </profile>
     </profiles>
