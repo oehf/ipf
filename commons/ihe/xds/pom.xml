@@ -32,13 +32,6 @@
             <artifactId>hapi-structures-v25</artifactId>
         </dependency>
 
-        <!-- necessary as a source of annotation descriptions
-             for apt called from the JAXB schemagen plugin -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
         <!-- Dependencies for test -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
