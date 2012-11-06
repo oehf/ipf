@@ -26,8 +26,7 @@
             is split across these two bundles.
          -->
         <osgi.require.bundle>
-            com.springsource.org.apache.derby,
-            com.springsource.org.apache.derby.client
+            org.apache.servicemix.bundles.derby
         </osgi.require.bundle>
         <osgi.fragment.host>
             org.openehealth.ipf.commons.ipf-commons-flow

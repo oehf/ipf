@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.core.extend;
 /**
  * @author Martin Krasser
  */
+@Deprecated
 public interface ConditionalActivator extends ExtensionActivator {
 
     boolean supports(Class<?> extensionClass);

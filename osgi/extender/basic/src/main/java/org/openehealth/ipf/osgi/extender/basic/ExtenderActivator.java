@@ -33,6 +33,7 @@ import org.osgi.framework.SynchronousBundleListener;
 /**
  * @author Martin Krasser
  */
+@Deprecated
 public class ExtenderActivator implements BundleActivator, SynchronousBundleListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExtenderActivator.class);

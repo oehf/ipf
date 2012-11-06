@@ -22,6 +22,7 @@ import java.util.List;
 /**
  * @author Martin Krasser
  */
+@Deprecated
 public class DefaultActivator implements ExtensionActivator {
 
     private final List<ConditionalActivator> activators;

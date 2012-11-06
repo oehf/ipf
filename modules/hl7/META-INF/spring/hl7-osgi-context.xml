@@ -16,7 +16,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
     </osgi:reference>
 
     <osgi:service ref="customModelClassFactoryConfigurer" 
-        interface="org.openehealth.ipf.commons.core.config.SpringConfigurer" />
+        interface="org.openehealth.ipf.commons.core.config.OrderedConfigurer" />
         
     <osgi:service ref="customModelClassFactory" 
         interface="org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory" />        

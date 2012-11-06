@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.core.extend
 /**
  * @author Martin Krasser
  */
+@Deprecated
 class ExtensionBlockActivator implements ConditionalActivator {
 
     boolean supports(Class<?> extensionClass) {

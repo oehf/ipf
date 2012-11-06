@@ -20,7 +20,7 @@
             *
         </osgi.import.pkg>
         <osgi.require.bundle>
-            com.springsource.org.aspectj.runtime;visibility:=reexport
+            org.apache.servicemix.bundles.aspectj;visibility:=reexport
         </osgi.require.bundle>
         <ipf.extension.classes>
             org.openehealth.ipf.platform.camel.flow.extend.FlowModelExtension

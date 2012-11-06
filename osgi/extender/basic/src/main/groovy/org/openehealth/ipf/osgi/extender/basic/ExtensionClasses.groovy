@@ -16,10 +16,12 @@
 package org.openehealth.ipf.osgi.extender.basic
 
 import org.openehealth.ipf.osgi.commons.bundle.BundleHeaders
-import org.osgi.framework.Bundle
+import org.osgi.framework.Bundle
+
 /**
  * @author Martin Krasser
  */
+@Deprecated
 class ExtensionClasses {
 
      static List<Class<?>> loadAll(Bundle bundle) {

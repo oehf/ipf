@@ -14,17 +14,12 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
     <bean class="org.openehealth.ipf.osgi.extender.config.OsgiSpringConfigurationPostProcessor" >
         <property name="springConfigurers" ref="springConfigurers" />
         <property name="osgiSpringConfigurers">
-          <list>
-            <ref bean="osgiExtensionConfigurer" />
-          </list>
+          <list/>
         </property>
     </bean>
     
     <osgi:list id="springConfigurers"
-        interface="org.openehealth.ipf.commons.core.config.SpringConfigurer"
+        interface="org.openehealth.ipf.commons.core.config.OrderedConfigurer"
         cardinality="0..N" />
-
-    <bean id="osgiExtensionConfigurer"
-          class="org.openehealth.ipf.osgi.extender.config.extend.OsgiExtensionConfigurer" />
 
 </beans>

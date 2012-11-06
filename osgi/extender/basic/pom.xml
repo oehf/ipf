@@ -20,7 +20,6 @@
             org.openehealth.ipf.osgi.commons.bundle,
             *
         </osgi.import.pkg>
-        <osgi.bundle.activator>org.openehealth.ipf.osgi.extender.basic.ExtenderActivator</osgi.bundle.activator>
     </properties>
 
     <dependencies>

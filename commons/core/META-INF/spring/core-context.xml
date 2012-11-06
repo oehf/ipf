@@ -11,9 +11,9 @@ http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-    <bean id="extensionConfigurer"
+    <!--bean id="extensionConfigurer"
         class="org.openehealth.ipf.commons.core.extend.config.ExtensionConfigurer">
         <property name="order" value="2" />
-    </bean>
+    </bean-->
     
 </beans>

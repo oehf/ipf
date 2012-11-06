@@ -19,9 +19,11 @@ import java.lang.reflect.Modifier
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-/**
+
+/**
  * @author Martin Krasser
  */
+@Deprecated
 class ExtensionMethodActivator implements ConditionalActivator {
     
      private static final Logger LOG = LoggerFactory.getLogger(ExtensionMethodActivator.class);

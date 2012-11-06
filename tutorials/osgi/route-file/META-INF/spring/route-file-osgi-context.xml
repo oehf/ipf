@@ -20,6 +20,10 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
         interface="org.apache.camel.Component">
     </osgi:reference>
 
+    <osgi:reference id="mappingService" bean-name="mappingService" timeout="30000"
+        interface="org.openehealth.ipf.commons.map.MappingService">
+    </osgi:reference>
+
     <bean class="org.openehealth.ipf.platform.camel.flow.osgi.OsgiReplayStrategyRegistry" />
 
 </beans>

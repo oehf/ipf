@@ -29,6 +29,7 @@ import org.osgi.framework.BundleContext;
 /**
  * @author Boris Stanojevic
  */
+@Deprecated
 public class OsgiExtensionConfigurer<R extends Registry> extends OsgiSpringConfigurer<Object, R>{
 
     private static final Logger LOG = LoggerFactory.getLogger(OsgiExtensionConfigurer.class);
