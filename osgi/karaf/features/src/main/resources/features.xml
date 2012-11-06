@@ -18,16 +18,29 @@
 -->
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.0.0" name="ipf-${project.version}">
 
-    <feature name="ipf-core" version="${project.version}">
+    <feature name="ipf" version="${project.version}" resolver="(obr)">
         <feature>spring-dm</feature>
-        <feature>spring31</feature>
-        <feature>spring31-aspects</feature>
-        <feature>spring31-jdbc</feature>
-        <feature>spring31-jms</feature>
-        <feature>spring31-orm</feature>
-        <feature>spring31-tx</feature>
         <feature version="${project.version}">ipf-specs</feature>
-        <bundle start-level='20' dependency="true">mvn:org.aopalliance/com.springsource.org.aopalliance/1.0.0</bundle>
+        <feature version="${project.version}">ipf-spring</feature>
+        <feature version="${project.version}">ipf-core</feature>
+        <feature version="${project.version}">ipf-core-extenders</feature>
+        <feature version="${project.version}">ipf-core-map</feature>
+        <feature version="${project.version}">ipf-core-flow</feature>
+        <feature version="${project.version}">ipf-cxf</feature>
+        <feature version="${project.version}">ipf-core-ihe</feature>
+        <feature version="${project.version}">ipf-modules-hl7</feature>
+        <feature version="${project.version}">ipf-amq</feature>
+        <feature version="${project.version}">ipf-camel</feature>
+        <feature version="${project.version}">ipf-platform-camel</feature>
+        <feature version="${project.version}">ipf-platform-camel-flow</feature>
+        <feature version="${project.version}">ipf-platform-camel-ihe</feature>
+        <feature version="${project.version}">ipf-osgi</feature>
+    </feature>
+
+    <feature name="ipf-core" version="${project.version}" resolver="(obr)">
+        <feature>spring-dm</feature>
+        <feature version="${project.version}">ipf-specs</feature>
+        <feature version="${project.version}">ipf-spring</feature>
         <bundle start-level='20' dependency="true">mvn:org.apache.commons/com.springsource.org.apache.commons.httpclient/3.1.0</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.commons/com.springsource.org.apache.commons.lang/2.5.0</bundle>
         <bundle start-level='20' dependency="true">mvn:net.sourceforge.ehcache/com.springsource.net.sf.ehcache/1.6.2</bundle>
@@ -47,7 +60,6 @@
     <feature name="ipf-core-extenders" version="${project.version}">
         <feature version="${project.version}">ipf-core</feature>
         <bundle start-level='50'>mvn:org.openehealth.ipf.osgi/ipf-osgi-commons/${project.version}</bundle>
-        <!--bundle start-level='50'>mvn:org.openehealth.ipf.osgi/ipf-osgi-extender-basic/${project.version}</bundle-->
         <bundle start-level='50'>mvn:org.openehealth.ipf.osgi/ipf-osgi-extender-spring/${project.version}</bundle>
     </feature>
 
@@ -164,7 +176,6 @@
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-pixpdq/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-pixpdqv3/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-xds/${project.version}</bundle>
-        <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-xds/${project.version}</bundle>
     </feature>
 
     <feature name="ipf-spring" version="${project.version}">
@@ -176,6 +187,7 @@
         <bundle start-level='20'>mvn:org.springframework/spring-aop/${spring-version}</bundle>
         <bundle start-level='20'>mvn:org.springframework/spring-asm/${spring-version}</bundle>
         <bundle start-level='20'>mvn:org.springframework/spring-jdbc/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-jms/${spring-version}</bundle>
         <bundle start-level='20'>mvn:org.springframework/spring-tx/${spring-version}</bundle>
         <bundle start-level='20'>mvn:org.springframework/spring-orm/${spring-version}</bundle>
         <bundle start-level='20'>mvn:org.springframework/spring-web/${spring-version}</bundle>
