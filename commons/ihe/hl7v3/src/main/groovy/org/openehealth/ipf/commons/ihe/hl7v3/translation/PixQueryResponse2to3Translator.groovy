@@ -140,7 +140,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
 
         // collect error locations
         def errorLocations = rsp.ERR[2]()?.collect { err ->
-            if ((err[1].value == 'QPD') && (err[2].value == '1')) {
+            if (err[1].value == 'QPD') {
                 String rootPath = '/' + xml.interactionId.@extension.text() +
                     '/controlActProcess/queryByParameter/parameterList/'
 
@@ -150,7 +150,8 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 case '4':
                     String elementIndexString = ''
                     if (err[4].value) {
-                        elementIndexString = "[${Integer.parseInt(err[4].value) + 1 - ErrorLocation.fieldRepetitionIndexingBase}]"
+						int index = Math.max(0, Integer.parseInt(err[4].value) - ErrorLocation.fieldRepetitionIndexingBase)
+						elementIndexString += "[${index}]"
                     }
                     return rootPath + 'dataSource' + elementIndexString + '/value'
                 }
