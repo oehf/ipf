@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import java.util.List;
@@ -33,7 +34,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * fragmentation as described in paragraph 2.10.2.2 of the HL7 v.2.5 specification.
  * @author Dmytro Rud
  */
-public class ProducerRequestFragmenterInterceptor extends AbstractMllpInterceptor {
+public class ProducerRequestFragmenterInterceptor extends AbstractMllpInterceptor<MllpAuditDataset> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ProducerRequestFragmenterInterceptor.class);
     
 

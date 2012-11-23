@@ -28,6 +28,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * as described in paragraph 5.6.3 of the HL7 v2.5 specification.
  * @author Dmytro Rud
  */
-public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpInterceptor {
+public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpInterceptor<MllpAuditDataset> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerInteractiveResponseSenderInterceptor.class);
     private InteractiveContinuationStorage storage;
 

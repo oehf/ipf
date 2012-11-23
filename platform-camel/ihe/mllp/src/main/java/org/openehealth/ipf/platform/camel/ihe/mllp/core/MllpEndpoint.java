@@ -57,9 +57,9 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 @ManagedResource(description = "Managed IPF MLLP ITI Endpoint")
-public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationHolder {
+public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint implements Hl7v2ConfigurationHolder {
 
-    private final MllpComponent mllpComponent;
+    private final MllpComponent<T> mllpComponent;
     private final MinaEndpoint wrappedEndpoint;
     private final boolean audit;
     private final boolean allowIncompleteAudit;
@@ -124,7 +124,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
      *      after it has collected all interactive continuation pieces.
      */
     public MllpEndpoint(
-            MllpComponent mllpComponent,
+            MllpComponent<T> mllpComponent,
             MinaEndpoint wrappedEndpoint,
             boolean audit,
             boolean allowIncompleteAudit,
@@ -184,7 +184,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
                 initialChain.add(new ConsumerInteractiveResponseSenderInterceptor());
             }
             if (isAudit()) {
-                initialChain.add(new ConsumerAuditInterceptor());
+                initialChain.add(new ConsumerAuditInterceptor<T>());
             }
             initialChain.add(new ConsumerResponseAcceptanceInterceptor());
             initialChain.add(new ConsumerAdaptingInterceptor(getCharsetName()));
@@ -215,7 +215,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
                     : new ProducerMarshalInterceptor());
             initialChain.add(new ProducerResponseAcceptanceInterceptor());
             if (isAudit()) {
-                initialChain.add(new ProducerAuditInterceptor());
+                initialChain.add(new ProducerAuditInterceptor<T>());
             }
             initialChain.add(new ProducerRequestAcceptanceInterceptor());
             initialChain.add(new ProducerAdaptingInterceptor());
@@ -320,14 +320,14 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     /**
      * Returns client-side audit strategy instance.
      */
-    public MllpAuditStrategy getClientAuditStrategy() {
+    public MllpAuditStrategy<T> getClientAuditStrategy() {
         return mllpComponent.getClientAuditStrategy();
     }
 
     /**
      * Returns server-side audit strategy instance.
      */
-    public MllpAuditStrategy getServerAuditStrategy() {
+    public MllpAuditStrategy<T> getServerAuditStrategy() {
         return mllpComponent.getServerAuditStrategy();
     }
 
@@ -569,7 +569,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     @Override
     public boolean equals(Object object) {
         if (object instanceof MllpEndpoint) {
-            MllpEndpoint that = (MllpEndpoint) object;
+            MllpEndpoint<?> that = (MllpEndpoint<?>) object;
             return this.getWrappedEndpoint().equals(that.getWrappedEndpoint());
         }
         else

@@ -30,6 +30,7 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import java.util.List;
@@ -45,7 +46,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  *
  * @author Dmytro Rud
  */
-public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends AbstractMllpInterceptor {
+public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends AbstractMllpInterceptor<MllpAuditDataset> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
 
     public ProducerMarshalAndInteractiveResponseReceiverInterceptor() {

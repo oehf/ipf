@@ -20,30 +20,18 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
- * Generic audit strategy for ITI-10 (PIX Update Notification).
+ * Groovy audit strategy util for ITI-10 (PIX Update Notification).
  * @author Dmytro Rud
  */
-abstract class Iti10AuditStrategy extends MllpAuditStrategy<QueryAuditDataset> {
-
-    Iti10AuditStrategy(boolean serverSide) {
-        super(serverSide)
-    }
+class Iti10AuditStrategyUtils  {
 
 
-    String[] getNecessaryFields(String messageType) {
-        return ['PatientIds'] as String[]
-    }
-
-
-    void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
+    static void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
         auditDataset.patientIds = AuditUtils.pidList(msg.PID[3])
     }
 
-
-    @Override
-    QueryAuditDataset createAuditDataset() {
-        return new QueryAuditDataset(serverSide)
-    }
+        
 }

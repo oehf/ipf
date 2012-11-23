@@ -24,6 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerS
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +33,7 @@ import java.util.List;
  * Camel component for ITI-9 (PIX Query).
  * @author Dmytro Rud
  */
-public class Iti9Component extends MllpComponent {
+public class Iti9Component extends MllpComponent<QueryAuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
                 "2.5", 
@@ -48,9 +49,9 @@ public class Iti9Component extends MllpComponent {
                 new boolean[] {false},
                 CustomModelClassUtils.createParser("pix", "2.5"));
   
-    private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
+    private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY = 
         new Iti9ClientAuditStrategy();
-    private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
+    private static final MllpAuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY = 
         new Iti9ServerAuditStrategy();
     private static final NakFactory NAK_FACTORY =
         new QpdAwareNakFactory(CONFIGURATION, "RSP", "K23");
@@ -65,12 +66,12 @@ public class Iti9Component extends MllpComponent {
     }
     
     @Override
-    public MllpAuditStrategy getClientAuditStrategy() {
+    public MllpAuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
-    public MllpAuditStrategy getServerAuditStrategy() {
+    public MllpAuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
     

@@ -20,41 +20,16 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * Generic audit strategy for ITI-21 and ITI-22 (PDQ).
  * @author Dmytro Rud
  */
-abstract class PdqAuditStrategy extends MllpAuditStrategy<QueryAuditDataset> {
+abstract class PdqAuditStrategyUtils  {
     
-    /**
-     * Whether this strategy serves 
-     * an ITI-21 Patient Demographic Query ("PDQ") or 
-     * an ITI-22 Patient Demographic and Visit Query ("PDVQ"). 
-     */
-    final String transactionAbbreviation
-    
-    PdqAuditStrategy(boolean serverSide, String transactionAbbreviation) {
-        super(serverSide)
 
-        if( ! ['PDQ', 'PDVQ'].contains(transactionAbbreviation)) {
-            throw new IllegalStateException('Bad transaction abbreviation')
-        }
-        
-        this.transactionAbbreviation = transactionAbbreviation
-    }
-
-    
-    // patient ID list is obligatory for auditing, but might
-    // be not available in reality -- particularly when search
-    // criteria were not based on patient ID and no patients
-    // have been found
-    String[] getNecessaryFields(String messageType) {
-        return ['Payload', /*'PatientIds'*/] as String[]
-    }
-
-
-    void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
+    static void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
         if(msg.QPD?.value) {
             // Try to extract a complete patient ID from query pieces.  
             // Double occurrences of components are not allowed, 
@@ -90,7 +65,7 @@ abstract class PdqAuditStrategy extends MllpAuditStrategy<QueryAuditDataset> {
     }
 
     
-    void enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, MessageAdapter msg) {
+    static void enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, MessageAdapter msg) {
         if(msg.MSH[9][1].value == 'RSP') {
             def patientIds = []
             for(group in msg.QUERY_RESPONSE()) {
@@ -105,8 +80,4 @@ abstract class PdqAuditStrategy extends MllpAuditStrategy<QueryAuditDataset> {
     }
 
 
-    @Override
-    QueryAuditDataset createAuditDataset() {
-        return new QueryAuditDataset(serverSide)
-    }
 }

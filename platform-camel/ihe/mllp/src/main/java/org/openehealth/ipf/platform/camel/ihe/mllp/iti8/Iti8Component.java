@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.*;
  * Camel component for ITI-8 (PIX Feed).
  * @author Dmytro Rud
  */
-public class Iti8Component extends MllpComponent {
+public class Iti8Component extends MllpComponent<Iti8AuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
                 "2.3.1", 
@@ -41,9 +41,9 @@ public class Iti8Component extends MllpComponent {
                 new boolean[] {false},
                 new PipeParser());
   
-    private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
+    private static final MllpAuditStrategy<Iti8AuditDataset> CLIENT_AUDIT_STRATEGY = 
         new Iti8ClientAuditStrategy();
-    private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
+    private static final MllpAuditStrategy<Iti8AuditDataset> SERVER_AUDIT_STRATEGY = 
         new Iti8ServerAuditStrategy();
     private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
@@ -57,12 +57,12 @@ public class Iti8Component extends MllpComponent {
     }
     
     @Override
-    public MllpAuditStrategy getClientAuditStrategy() {
+    public MllpAuditStrategy<Iti8AuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
-    public MllpAuditStrategy getServerAuditStrategy() {
+    public MllpAuditStrategy<Iti8AuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
     

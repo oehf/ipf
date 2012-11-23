@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
  * Camel component for ITI-64 (XAD-PID Change Management - XPID).
  * @author Boris Stanojevic
  */
-public class Iti64Component extends MllpComponent {
+public class Iti64Component extends MllpComponent<Iti64AuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
                 "2.5",
@@ -42,8 +42,8 @@ public class Iti64Component extends MllpComponent {
                 new boolean[] {false},
                 new PipeParser());
 
-    private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = new Iti64AuditStrategy(false);
-    private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = new Iti64AuditStrategy(true);
+    private static final MllpAuditStrategy<Iti64AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti64AuditStrategy(false);
+    private static final MllpAuditStrategy<Iti64AuditDataset> SERVER_AUDIT_STRATEGY = new Iti64AuditStrategy(true);
     private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
 
@@ -56,12 +56,12 @@ public class Iti64Component extends MllpComponent {
     }
     
     @Override
-    public MllpAuditStrategy getClientAuditStrategy() {
+    public MllpAuditStrategy<Iti64AuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
-    public MllpAuditStrategy getServerAuditStrategy() {
+    public MllpAuditStrategy<Iti64AuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
     

@@ -21,6 +21,7 @@ import lombok.Setter;
 /**
  * @author Dmytro Rud
  */
+@SuppressWarnings("serial")
 public class QueryAuditDataset extends MllpAuditDataset {
 
     /** Patient ID list from PID-3. */

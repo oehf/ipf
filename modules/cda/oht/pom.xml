@@ -73,20 +73,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <!-- Additionally to the groovy compilation generate stubs here -->
-                        <id>generateStubs</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>generateStubs</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>  

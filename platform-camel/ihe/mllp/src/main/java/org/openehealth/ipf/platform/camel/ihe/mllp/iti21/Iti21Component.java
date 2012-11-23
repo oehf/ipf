@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
@@ -24,18 +27,14 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerS
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqClientAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqServerAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqTransactionConfiguration;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Camel component for ITI-21 (PDQ).
  * @author Dmytro Rud
  */
-public class Iti21Component extends MllpComponent {
+public class Iti21Component extends MllpComponent<QueryAuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new PdqTransactionConfiguration(
                 "2.5", 
@@ -51,10 +50,10 @@ public class Iti21Component extends MllpComponent {
                 new boolean[] {true, false},
                 CustomModelClassUtils.createParser("pdq", "2.5"));
         
-    private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
-        new PdqClientAuditStrategy("PDQ");
-    private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
-        new PdqServerAuditStrategy("PDQ");
+    private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY = 
+        new Iti21ClientAuditStrategy();
+    private static final MllpAuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY = 
+        new Iti21ServerAuditStrategy();
     private static final NakFactory NAK_FACTORY =
         new QpdAwareNakFactory(CONFIGURATION, "RSP", "K22");
 
@@ -68,12 +67,12 @@ public class Iti21Component extends MllpComponent {
     }
     
     @Override
-    public MllpAuditStrategy getClientAuditStrategy() {
+    public MllpAuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
-    public MllpAuditStrategy getServerAuditStrategy() {
+    public MllpAuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
     

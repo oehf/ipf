@@ -58,7 +58,6 @@ public class QpdAwareNakFactory extends NakFactory {
     }
 
 
-    @SuppressWarnings("unchecked")
     public Message createNak0(Message originalMessage, Throwable t, AckTypeCode ackTypeCode)
         throws HL7Exception, IllegalAccessException, NoSuchFieldException
     {

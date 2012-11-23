@@ -21,12 +21,13 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguratio
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
 /**
  * Camel component for ITI-10 (PIX Update Notification).
  * @author Dmytro Rud
  */
-public class Iti10Component extends MllpComponent {
+public class Iti10Component extends MllpComponent<QueryAuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
                 "2.5", 
@@ -42,9 +43,9 @@ public class Iti10Component extends MllpComponent {
                 new boolean[] {false},
                 new PipeParser());
   
-    private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
+    private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY = 
         new Iti10ClientAuditStrategy();
-    private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
+    private static final MllpAuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY = 
         new Iti10ServerAuditStrategy();
     private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
@@ -58,12 +59,12 @@ public class Iti10Component extends MllpComponent {
     }
     
     @Override
-    public MllpAuditStrategy getClientAuditStrategy() {
+    public MllpAuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
-    public MllpAuditStrategy getServerAuditStrategy() {
+    public MllpAuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
     

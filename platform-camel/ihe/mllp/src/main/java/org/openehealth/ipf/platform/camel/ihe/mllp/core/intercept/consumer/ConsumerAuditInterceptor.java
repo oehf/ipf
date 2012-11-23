@@ -31,9 +31,9 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditIntercept
  * Consumer-side ATNA auditing Camel interceptor.
  * @author Dmytro Rud
  */
-public class ConsumerAuditInterceptor 
-        extends AbstractMllpInterceptor 
-        implements AuditInterceptor 
+public class ConsumerAuditInterceptor<T extends MllpAuditDataset> 
+        extends AbstractMllpInterceptor<T> 
+        implements AuditInterceptor<T> 
 {
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -41,7 +41,7 @@ public class ConsumerAuditInterceptor
     }
 
     @Override
-    public MllpAuditStrategy getAuditStrategy() {
+    public MllpAuditStrategy<T> getAuditStrategy() {
         return getMllpEndpoint().getServerAuditStrategy();
     }
 

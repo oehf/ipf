@@ -41,7 +41,7 @@ import java.util.Map;
  * 
  * @author Dmytro Rud
  */
-public abstract class MllpComponent extends MinaComponent implements Hl7v2ConfigurationHolder {
+public abstract class MllpComponent<T extends MllpAuditDataset> extends MinaComponent implements Hl7v2ConfigurationHolder {
     private static final transient Logger LOG = LoggerFactory.getLogger(MllpComponent.class);
     
     public static final String ACK_TYPE_CODE_HEADER = ConsumerAdaptingInterceptor.ACK_TYPE_CODE_HEADER;
@@ -162,7 +162,7 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
         String[] sslCiphers = sslCiphersString != null ? sslCiphersString.split(",") : null;
 
         // wrap and return
-        return new MllpEndpoint(
+        return new MllpEndpoint<T>(
                 this,
                 minaEndpoint,
                 audit,
@@ -229,11 +229,11 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
     /**
      * Returns server-side ATNA audit strategy. 
      */
-    public abstract MllpAuditStrategy getServerAuditStrategy();
+    public abstract MllpAuditStrategy<T> getServerAuditStrategy();
 
     /**
      * Returns client-side ATNA audit strategy. 
      */
-    public abstract MllpAuditStrategy getClientAuditStrategy();
+    public abstract MllpAuditStrategy<T> getClientAuditStrategy();
 
 }

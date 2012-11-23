@@ -22,6 +22,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 /**
  * @author Dmytro Rud
  */
+@SuppressWarnings("serial")
 public class Iti64AuditDataset extends MllpAuditDataset {
 
     @Getter @Setter private String sourcePatientId;

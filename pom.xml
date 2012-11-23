@@ -39,10 +39,10 @@
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
         <bundle-plugin-version>2.0.1</bundle-plugin-version>
-        <compiler-plugin-version>2.5.1</compiler-plugin-version>
+        <compiler-plugin-version>3.0</compiler-plugin-version>
         <eclipse-plugin-version>2.8</eclipse-plugin-version>
         <enforcer-plugin-version>1.0-beta-1</enforcer-plugin-version>
-        <gmaven-version>1.4</gmaven-version>
+		<groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
         <jar-plugin-version>2.3.1</jar-plugin-version>
         <javadoc-plugin-version>2.8</javadoc-plugin-version>
         <release-plugin-version>2.1</release-plugin-version>
@@ -964,37 +964,6 @@
                     <artifactId>maven-eclipse-plugin</artifactId>
                     <version>${eclipse-plugin-version}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.codehaus.gmaven</groupId>
-                    <artifactId>gmaven-plugin</artifactId>
-                    <version>${gmaven-version}</version>
-                    <configuration>
-                        <providerSelection>2.0</providerSelection>
-                    </configuration>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.codehaus.gmaven.runtime</groupId>
-                            <artifactId>gmaven-runtime-2.0</artifactId>
-                            <version>${gmaven-version}</version>
-                            <exclusions>
-                                <exclusion>
-                                    <groupId>org.codehaus.groovy</groupId>
-                                    <artifactId>groovy-all</artifactId>
-                                </exclusion>
-                            </exclusions>
-                        </dependency>
-						<dependency>
-							<groupId>commons-logging</groupId>
-							<artifactId>commons-logging</artifactId>
-							<version>1.1.1</version>
-						</dependency>
-                        <dependency>
-                            <groupId>org.codehaus.groovy</groupId>
-                            <artifactId>groovy</artifactId>
-                            <version>${groovy-version}</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -1003,9 +972,27 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin-version}</version>
                 <configuration>
+					<compilerId>groovy-eclipse-compiler</compilerId>
                     <source>1.6</source>
                     <target>1.6</target>
+					<fork>true</fork>
+					<verbose>false</verbose>
+					<compilerArguments>
+						<javaAgentClass>lombok.core.Agent</javaAgentClass>
+					</compilerArguments>
                 </configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.groovy</groupId>
+						<artifactId>groovy-eclipse-compiler</artifactId>
+						<version>${groovy-eclipse-compiler-version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.projectlombok</groupId>
+						<artifactId>lombok</artifactId>
+						<version>${lombok-version}</version>
+					</dependency>					
+				</dependencies>				
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1147,26 +1134,6 @@
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
                     </classpathContainers>
                  </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>testCompile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
         <resources>
@@ -1328,33 +1295,4 @@
             <url>http://svn.apache.org/repos/asf/servicemix/m2-repo/</url>
         </repository>
     </repositories>
-    <profiles>
-        <profile>
-            <!-- This profile generates groovystubs with last gmaven plugin        -->
-            <!-- which still respects the javadocs annotations on stub generation. -->
-            <!-- Should be run only together with 'javadoc:aggregate -Pgapidoc'    -->
-            <id>gapidoc</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.groovy.maven</groupId>
-                        <artifactId>gmaven-plugin</artifactId>
-                        <version>1.0</version>
-                        <executions>
-                            <execution>
-                                <id>generate-stubs</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>generateStubs</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>

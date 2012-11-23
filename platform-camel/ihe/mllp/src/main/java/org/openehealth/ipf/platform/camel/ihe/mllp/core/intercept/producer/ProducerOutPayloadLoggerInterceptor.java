@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
 import lombok.Delegate;
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLoggerBase;
 
@@ -28,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLog
  *
  * @author Dmytro Rud
  */
-public class ProducerOutPayloadLoggerInterceptor extends AbstractMllpInterceptor {
+public class ProducerOutPayloadLoggerInterceptor extends AbstractMllpInterceptor<MllpAuditDataset> {
     @Delegate private final MllpPayloadLoggerBase base = new MllpPayloadLoggerBase();
 
     public ProducerOutPayloadLoggerInterceptor(String fileNamePattern) {

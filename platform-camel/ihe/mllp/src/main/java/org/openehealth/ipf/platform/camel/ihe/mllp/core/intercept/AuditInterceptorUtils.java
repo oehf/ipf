@@ -51,7 +51,7 @@ public class AuditInterceptorUtils  {
      * Does not produce any own exceptions, only rethrows exceptions
      * raised during the proper call.
      */
-    public static void doProcess(AuditInterceptor interceptor, Exchange exchange) throws Exception {
+    public static <T extends MllpAuditDataset> void doProcess(AuditInterceptor<T> interceptor, Exchange exchange) throws Exception {
         MessageAdapter<?> msg = exchange.getIn().getBody(MessageAdapter.class);
 
         // pass in case of non-auditable message types
@@ -60,9 +60,8 @@ public class AuditInterceptorUtils  {
             return;
         }
         
-        MllpAuditStrategy strategy = interceptor.getAuditStrategy();
-        MllpAuditDataset auditDataset = 
-            createAndEnrichAuditDatasetFromRequest(strategy, exchange, msg);
+        MllpAuditStrategy<T> strategy = interceptor.getAuditStrategy();
+        T auditDataset = createAndEnrichAuditDatasetFromRequest(strategy, exchange, msg);
         determineParticipantsAddresses(interceptor, exchange, auditDataset);
 
         boolean failed = false;
@@ -88,7 +87,7 @@ public class AuditInterceptorUtils  {
      * Checks whether the given message should be audited.
      * All exceptions are ignored. 
      */
-    private static boolean isAuditable(AuditInterceptor interceptor, MessageAdapter<?> msg) {
+    private static <T extends MllpAuditDataset> boolean isAuditable(AuditInterceptor<T> interceptor, MessageAdapter<?> msg) {
         try {
             Message message = msg.getHapiMessage();
             Terser terser = new Terser(message);
@@ -113,13 +112,13 @@ public class AuditInterceptorUtils  {
      * @return
      *      newly created audit dataset or <code>null</code> when creation failed.
      */
-    private static MllpAuditDataset createAndEnrichAuditDatasetFromRequest(
-            MllpAuditStrategy strategy,
+    private static <T extends MllpAuditDataset> T createAndEnrichAuditDatasetFromRequest(
+            MllpAuditStrategy<T> strategy,
             Exchange exchange,
             MessageAdapter<?> msg)
     {
         try {
-            MllpAuditDataset auditDataset = strategy.createAuditDataset();
+            T auditDataset = strategy.createAuditDataset();
             AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
             strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);
             return auditDataset;
@@ -134,9 +133,9 @@ public class AuditInterceptorUtils  {
      * Enriches the given audit dataset with data from the response message.
      * All exception are ignored.
      */
-    private static void enrichAuditDatasetFromResponse(
-            MllpAuditStrategy strategy,
-            MllpAuditDataset auditDataset,
+    private static <T extends MllpAuditDataset> void enrichAuditDatasetFromResponse(
+            MllpAuditStrategy<T> strategy,
+            T auditDataset,
             MessageAdapter<?> msg) 
     {
         try {
@@ -151,10 +150,10 @@ public class AuditInterceptorUtils  {
      * Determines addresses of local and remote participants and stores them 
      * into the audit dataset.  All exception are ignored.
      */
-    private static void determineParticipantsAddresses(
-            AuditInterceptor interceptor,
+    private static <T extends MllpAuditDataset> void determineParticipantsAddresses(
+            AuditInterceptor<T> interceptor,
             Exchange exchange, 
-            MllpAuditDataset auditDataset) 
+            T auditDataset) 
     {
         try {
             interceptor.determineParticipantsAddresses(exchange, auditDataset);
