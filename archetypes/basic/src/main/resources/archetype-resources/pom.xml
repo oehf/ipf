@@ -19,7 +19,9 @@
         <!-- plugins -->
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
         <eclipse-plugin-version>2.8</eclipse-plugin-version>
-        <gmaven-version>1.4</gmaven-version>
+        <compiler-plugin-version>3.0</compiler-plugin-version>
+        <groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
+        <lombok-version>0.11.4</lombok-version>
     </properties>
 
     <dependencyManagement>
@@ -72,32 +74,33 @@
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>${symbol_dollar}{assembly-plugin-version}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.codehaus.gmaven</groupId>
-                    <artifactId>gmaven-plugin</artifactId>
-                    <version>${symbol_dollar}{gmaven-version}</version>
-                    <configuration>
-                        <providerSelection>2.0</providerSelection>
-                    </configuration>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.codehaus.gmaven.runtime</groupId>
-                            <artifactId>gmaven-runtime-2.0</artifactId>
-                            <version>${symbol_dollar}{gmaven-version}</version>
-                            <exclusions>
-                                <exclusion>
-                                    <groupId>org.codehaus.groovy</groupId>
-                                    <artifactId>groovy-all</artifactId>
-                                </exclusion>
-                            </exclusions>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.codehaus.groovy</groupId>
-                            <artifactId>groovy-all</artifactId>
-                            <version>${symbol_dollar}{groovy-version}</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
+	            <plugin>
+	                <groupId>org.apache.maven.plugins</groupId>
+	                <artifactId>maven-compiler-plugin</artifactId>
+	                <version>${symbol_dollar}{compiler-plugin-version}</version>
+	                <configuration>
+						<compilerId>groovy-eclipse-compiler</compilerId>
+	                    <source>1.6</source>
+	                    <target>1.6</target>
+						<fork>true</fork>
+						<verbose>false</verbose>
+						<compilerArguments>
+							<javaAgentClass>lombok.core.Agent</javaAgentClass>
+						</compilerArguments>
+	                </configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.codehaus.groovy</groupId>
+							<artifactId>groovy-eclipse-compiler</artifactId>
+							<version>${symbol_dollar}{groovy-eclipse-compiler-version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${symbol_dollar}{lombok-version}</version>
+						</dependency>					
+					</dependencies>				
+	            </plugin>                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-eclipse-plugin</artifactId>
@@ -131,11 +134,8 @@
 
         <plugins>
             <plugin>
+            	<groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -144,33 +144,6 @@
                         <descriptor>src/main/assembly/bin.xml</descriptor>
                     </descriptors>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generateStubs</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>generateStubs</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>testCompile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
