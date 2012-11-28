@@ -15,9 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.flow.extend;
 
-import org.apache.camel.model.ProcessorDefinition
-import org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder
-import org.openehealth.ipf.platform.camel.flow.model.*
+import org.apache.camel.model.ProcessorDefinition;
+import org.openehealth.ipf.platform.camel.flow.model.*;
 
 /**
  * Flow DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
