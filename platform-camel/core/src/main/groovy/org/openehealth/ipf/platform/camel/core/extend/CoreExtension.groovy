@@ -29,7 +29,7 @@ import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.model.FilterDefinition;
 import org.apache.camel.model.OnExceptionDefinition;
 import org.apache.camel.model.ProcessorDefinition;
-import org.apache.camel.model.RouteDefinition
+import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.spi.DataFormat;
@@ -548,7 +548,7 @@ public class CoreExtension {
      *          the aggregator implementation
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Aggregator
      */
-    public static AggregatorAdapter aggregationStrategy(SpringRouteBuilder self, Aggregator aggregator) {
+    public static AggregatorAdapter aggregationStrategy(RouteBuilder self, Aggregator aggregator) {
         return new AggregatorAdapter(aggregator);
     }
 
@@ -559,7 +559,7 @@ public class CoreExtension {
      *          name of the bean
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Aggregator
      */
-    public static AggregatorAdapter aggregationStrategy(SpringRouteBuilder self, String aggregatorBeanName) {
+    public static AggregatorAdapter aggregationStrategy(RouteBuilder self, String aggregatorBeanName) {
         return aggregationStrategy(self, self.lookup(aggregatorBeanName, Aggregator.class));
     }
 
@@ -570,7 +570,7 @@ public class CoreExtension {
      *          closure implementing the aggregation logic
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Aggregator
      */
-    public static AggregatorAdapter aggregationStrategy(SpringRouteBuilder self, Closure aggregationLogic) {
+    public static AggregatorAdapter aggregationStrategy(RouteBuilder self, Closure aggregationLogic) {
         return aggregationStrategy(self, new DelegatingAggregator(aggregationLogic));
     }
     
@@ -581,7 +581,7 @@ public class CoreExtension {
      *          the predicate instance
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-predicateextension
      */
-    public static PredicateAdapter predicate(SpringRouteBuilder self, Predicate predicate) {
+    public static PredicateAdapter predicate(RouteBuilder self, Predicate predicate) {
         return new PredicateAdapter(predicate);
     }
 
@@ -592,7 +592,7 @@ public class CoreExtension {
      *          name of the bean
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-predicateextension
      */
-    public static PredicateAdapter predicate(SpringRouteBuilder self, String predicateBeanName) {
+    public static PredicateAdapter predicate(RouteBuilder self, String predicateBeanName) {
         return predicate(self, self.lookup(predicateBeanName, Predicate.class));
     }
 
@@ -603,7 +603,7 @@ public class CoreExtension {
      *          closure implementing the logic of the predicate
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-predicateextension
      */
-    public static PredicateAdapter predicate(SpringRouteBuilder self, Closure predicateLogic) {
+    public static PredicateAdapter predicate(RouteBuilder self, Closure predicateLogic) {
         return predicate(self, new DelegatingPredicate(predicateLogic));
     }
     
