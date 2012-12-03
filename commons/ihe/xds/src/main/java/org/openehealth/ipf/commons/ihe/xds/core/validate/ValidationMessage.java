@@ -111,7 +111,9 @@ public enum ValidationMessage {
     RESULT_NOT_SINGLE_PATIENT("Query result contains entries for multiple patients", ErrorCode.RESULT_NOT_SINGLE_PATIENT),
     HOME_COMMUNITY_ID_MUST_BE_SPECIFIED("Home community ID is missing", ErrorCode.MISSING_HOME_COMMUNITY_ID),
     WRONG_QUERY_RETURN_TYPE("Wrong query return type: %s"),
-    AUTHOR_INCOMPLETE("At least an authorPerson, authorTelecommunication, or authorInstitution sub-attribute must be present in %s");
+    AUTHOR_INCOMPLETE("At least an authorPerson, authorTelecommunication, or authorInstitution sub-attribute must be present in %s"),
+    MISSING_SNAPSHOT_ASSOCIATION("IsSnapshot Association specifies an %s document entry, but it was not provided: %s"),
+    WRONG_SNAPSHOT_ASSOCIATION_STATUS("The targetObject DocumentEntry has not availabilityStatus of Approved");
 
 
     private final String text;
