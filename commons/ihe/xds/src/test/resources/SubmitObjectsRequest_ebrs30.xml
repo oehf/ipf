@@ -227,12 +227,13 @@
         </rim:RegistryPackage>
         <rim:Classification id="cl10" classifiedObject="SubmissionSet01"
             classificationNode="urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd"/>
-        <rim:Association id="as01" associationType="HasMember" sourceObject="SubmissionSet01" targetObject="Document01">
+        <rim:Association id="as01" associationType="urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember" sourceObject="SubmissionSet01" targetObject="Document01">
             <rim:Slot name="SubmissionSetStatus">
                 <rim:ValueList>
                     <rim:Value>Original</rim:Value>
                 </rim:ValueList>
             </rim:Slot>
         </rim:Association>
+        <rim:Association id="as02" associationType="urn:ihe:iti:2010:AssociationType:IsSnapshotOf" sourceObject="SubmissionSet01" targetObject="Document01" />
     </rim:RegistryObjectList>
 </lcm:SubmitObjectsRequest>
