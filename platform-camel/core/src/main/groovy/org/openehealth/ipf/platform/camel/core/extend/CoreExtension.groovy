@@ -61,7 +61,9 @@ import org.openehealth.ipf.platform.camel.core.model.RendererAdapterDefinition;
 import org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefinition;
 import org.openehealth.ipf.platform.camel.core.model.ValidationDefinition;
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
-import org.openehealth.ipf.platform.camel.core.util.Expressions;
+import org.openehealth.ipf.platform.camel.core.util.Expressions
+import java.util.concurrent.ExecutorService
+import static org.apache.camel.builder.Builder.body
 
 /**
  * Core DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
@@ -658,15 +660,26 @@ public class CoreExtension {
             RouteBuilder routeBuilder,
             Expression splittingExpression,
             Expression recipientListExpression,
-            AggregationStrategy aggregationStrategy)
+            AggregationStrategy aggregationStrategy,
+            ExecutorService executorService = null)
     {
-        String dispatcherEndpointUri = 'direct:multiplast-' + UUID.randomUUID().toString();
+        String uuid = UUID.randomUUID().toString();
+        String dispatcherEndpointUri = 'direct:multiplast-' + uuid;
         routeBuilder.from(dispatcherEndpointUri)
             .process {
                 int index = it.properties[Exchange.SPLIT_INDEX];
                 it.in.headers['multiplast.uri'] = it.properties['multiplast.endpointUris'][index];
             }
-            .recipientList(Builder.header('multiplast.uri'));
+            .recipientList(Builder.header('multiplast.uri'))
+
+        def fromNode = routeBuilder.from('direct:split-execution-' + uuid).split(body()).parallelProcessing()
+        if (executorService){
+            fromNode = fromNode.executorService(executorService)
+        }
+        fromNode
+            .aggregationStrategy(aggregationStrategy)
+            .to(dispatcherEndpointUri)
+            .end();
 
         return self.process {
             List bodies = splittingExpression.evaluate(it, List.class);
@@ -677,12 +690,7 @@ public class CoreExtension {
 
             it.in.body = bodies;
             it.properties['multiplast.endpointUris'] = endpointUris;
-        }
-        .split(Builder.body())
-            .parallelProcessing()
-            .aggregationStrategy(aggregationStrategy)
-            .to(dispatcherEndpointUri)
-            .end();
+        }.to('direct:split-execution-' + uuid)
     }
 
 }

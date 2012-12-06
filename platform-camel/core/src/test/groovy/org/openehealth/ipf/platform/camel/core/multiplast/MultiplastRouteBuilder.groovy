@@ -17,17 +17,30 @@ package org.openehealth.ipf.platform.camel.core.multiplast
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.LinkedBlockingQueue
+import java.security.AccessController
+import javax.security.auth.SubjectDomainCombiner
+import static junit.framework.Assert.assertNotNull
 
 class MultiplastRouteBuilder extends SpringRouteBuilder {
 
     void configure() throws Exception {
+
+        ThreadPoolExecutor privilegedThreadPool = new PrivilegedTestExecutorService(3,
+                3, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                Executors.defaultThreadFactory());
 
         from('direct:start')
             .multiplast(
                 this,
                 body().tokenize(', '),
                 header('recipients').tokenize(';'),
-                new MultiplastAggregationStrategy())
+                new MultiplastAggregationStrategy(),
+                privilegedThreadPool)
 
         from('mina:tcp://localhost:8000?textline=true&sync=true')
             .process {
@@ -49,6 +62,36 @@ class MultiplastRouteBuilder extends SpringRouteBuilder {
                 Exchanges.resultMessage(it).body = '789'
             }
             .delay(3000L)
-            
+
+        from('direct:abc')
+            .process {
+                assert it.in.body == 'ear'
+                assertSubject()
+                Exchanges.resultMessage(it).body = 'ijk'
+            }
+            .delay(3000L)
+
+        from('direct:def')
+            .process {
+                assert it.in.body == 'war'
+                assertSubject()
+                Exchanges.resultMessage(it).body = 'lmn'
+            }
+            .delay(3000L)
+
+        from('direct:ghi')
+            .process {
+                assert it.in.body == 'jar'
+                assertSubject()
+                Exchanges.resultMessage(it).body = 'opr'
+            }
+            .delay(3000L)
     }
+
+    private void assertSubject(){
+        SubjectDomainCombiner combiner = AccessController.getContext().domainCombiner
+        assertNotNull combiner.getSubject()
+        println "Subject: ${combiner.getSubject().toString()}"
+    }
+
 }
