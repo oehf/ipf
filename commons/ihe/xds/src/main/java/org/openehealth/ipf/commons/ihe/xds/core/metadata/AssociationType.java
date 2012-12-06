@@ -42,7 +42,7 @@ public enum AssociationType {
     /** An entry that represents a signature of another one. */
     @XmlEnumValue("signs") SIGNS("signs", "urn:ihe:iti:2007:AssociationType:signs"),
     /** An entry that represents a link to the On-Demand DocumentEntry. */
-    @XmlEnumValue("isSnapshotOf") IS_SNAPSHOT_OF("isSnapshotOf", "urn:ihe:iti:2007:AssociationType:isSnapshotOf");
+    @XmlEnumValue("isSnapshotOf") IS_SNAPSHOT_OF("isSnapshotOf", "urn:ihe:iti:2010:AssociationType:IsSnapshotOf");
 
     private final String opcode21;
     private final String opcode30;
