@@ -230,7 +230,12 @@ public class Ebrs21MarshalingTest {
         assoc3.setSourceUuid("SubmissionSet01");
         assoc3.setTargetUuid("Document01");
         assoc3.setLabel(AssociationLabel.ORIGINAL);
-        
+
+        Association assoc4 = new Association();
+        assoc4.setAssociationType(AssociationType.IS_SNAPSHOT_OF);
+        assoc4.setSourceUuid("Document01");
+        assoc4.setTargetUuid("Folder");
+
         RegisterDocumentSet expected = new RegisterDocumentSet();
         expected.setSubmissionSet(submissionSet);
         expected.getDocumentEntries().add(docEntry);
@@ -238,6 +243,7 @@ public class Ebrs21MarshalingTest {
         expected.getAssociations().add(assoc1);
         expected.getAssociations().add(assoc2);
         expected.getAssociations().add(assoc3);
+        expected.getAssociations().add(assoc4);
         
         File file = new File(getClass().getClassLoader().getResource("SubmitObjectsRequest_ebrs21.xml").toURI());
         
