@@ -26,6 +26,7 @@ import org.apache.camel.processor.DelegateProcessor
 import org.apache.camel.processor.aggregate.AggregationStrategy
 import org.openehealth.ipf.commons.core.modules.api.*
 import org.apache.camel.builder.RouteBuilder
+import java.util.concurrent.ExecutorService
 
 /**
  * @author Martin Krasser
@@ -276,14 +277,16 @@ class CoreModelExtension {
             RouteBuilder routeBuilder,
             Expression splittingExpression,
             Expression recipientListExpression,
-            AggregationStrategy aggregationStrategy ->
+            AggregationStrategy aggregationStrategy,
+            ExecutorService executorService = null ->
 
             return CoreExtension.multiplast(
                     delegate,
                     routeBuilder,
                     splittingExpression,
                     recipientListExpression,
-                    aggregationStrategy)
+                    aggregationStrategy,
+                    executorService)
         }
 
     }

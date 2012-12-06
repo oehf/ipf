@@ -26,6 +26,15 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.security.AccessControlContext
+import javax.security.auth.login.LoginContext
+import javax.security.auth.Subject
+import java.security.AccessController
+import javax.security.auth.SubjectDomainCombiner
+
+import static junit.framework.Assert.assertTrue
+import java.security.PrivilegedAction
+
 /**
  * @author Dmytro Rud
  */
@@ -34,7 +43,10 @@ class TestMultiplast {
     private static ApplicationContext appContext
     private static ProducerTemplate producerTemplate
     private static CamelContext camelContext
-    
+
+    public static final String KEYSTORE_PROPERTY = "keystore.target";
+    public static final String LOGIN_PROPERTY    = "java.security.auth.login.config";
+
     @BeforeClass
     static void setUpClass() {
         appContext       = new ClassPathXmlApplicationContext('context-core-extend-multiplast.xml')
@@ -55,23 +67,26 @@ class TestMultiplast {
     private String endpoint(int port) {
         return "mina:tcp://localhost:${port}?sync=true&lazySessionCreation=true&minaLogger=true&textline=true"
     }
-    
-    
+
+    private String ep(String key) {
+        return "direct:${key}"
+    }
+
     @Test
     void testMultiplast() {
         Exchange resultExchange
-        
+
         // normal parallel processing
         long startTimestamp = System.currentTimeMillis()
-        resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';')) 
+        resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';'))
         assert Exchanges.resultMessage(resultExchange).body == '123456789'
 
         // TODO: the check below fails on nodes with high CPU load
         // assert System.currentTimeMillis() - startTimestamp < 4000L
 
         // normal parallel processing again -- to check in logs whether redundant sessions are being created
-        resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';')) 
-        resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';')) 
+        resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';'))
+        resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';'))
 
         // different lengths of bodies' and recipients' lists -- should fail
         resultExchange = send('abc, def, ghi', [endpoint(8000), endpoint(8001)].join(';'))
@@ -80,5 +95,27 @@ class TestMultiplast {
         resultExchange = send('abc, def', [endpoint(8000), endpoint(8001), endpoint(8002)].join(';'))
         assert resultExchange.failed
     }
-    
+
+    @Test
+    void testMultiplastWithAccessContext() {
+        PrivilegedAction action = new PrivilegedAction() {
+            public Object run() throws Exception{
+                Exchange resultExchange = send('ear, war, jar', [ep('abc'), ep('def'), ep('ghi')].join(';'))
+                return Exchanges.resultMessage(resultExchange).body == 'ijklmnopr'
+            }
+        };
+
+        def uriPath = {String filename -> TestMultiplast.classLoader.getResource(filename).path}
+
+        System.properties[LOGIN_PROPERTY]    = uriPath('login.conf')
+        System.properties[KEYSTORE_PROPERTY] = uriPath('client.jks')
+
+        LoginContext lc = new LoginContext('DF', new TestCallbackHandler())
+        lc.login();
+        Subject subject = lc.subject
+
+        AccessControlContext acc = new AccessControlContext (AccessController.getContext(), new SubjectDomainCombiner(subject))
+        assertTrue Subject.doAsPrivileged(subject, action, acc)
+    }
+
 }
