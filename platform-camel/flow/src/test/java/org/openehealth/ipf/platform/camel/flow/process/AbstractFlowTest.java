@@ -35,7 +35,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 @ContextConfiguration(locations = { 
         "/context-flow-platform.xml",
         "/context-flow-processor.xml",
-        "/context-flow-support.xml"
+        "/context-flow-support.xml",
+        "/context-weaver.xml"
 })
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public abstract class AbstractFlowTest {
