@@ -1,0 +1,53 @@
+<!--  IHE PCC Antepartum Visit Summary Battery: 1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2-errors">
+    <title>IHE PCC Antepartum Visit Summary Battery - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2"]'>
+    <assert test='self::cda:organizer[@classCode="BATTERY" and @moodCode="EVN"]'>
+	Error: In IHE PCC Antepartum Visit Summary Battery (1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2), each row in the visit Summary 
+        flowsheet of the Antepartum Summary SHALL be represented by an organizer 
+        with the classCode of 'BATTERY' and the moodCode of 'EVN'.
+    </assert>
+    <assert test='cda:id'>
+        Error: In IHE PCC Antepartum Visit Summary Battery (1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2), each battery SHALL have a
+        globally unique identifier.
+    </assert>
+    <assert test='cda:code[@code="(xx-acog-battery)" and @codeSystem="2.16.840.1.113883.6.1"]'>
+	Error: In IHE PCC Antepartum Visit Summary Battery (1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2), the &lt;code&gt; element 
+        specifies the loinc code that represents the content of the battery. The codeSystem attribute SHALL contain the 
+        value '2.16.840.1.113883.6.1'. The code attribute SHALL contain the value='(xx-acog-battery)'.
+    </assert>
+    <assert test='cda:statusCode[@code="completed"]'>
+        Error: In IHE PCC Antepartum Visit Summary Battery (1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2), the status code for all 
+        batteries SHALL be 'completed'.
+    </assert>
+
+<!-- 
+     TODO: Determine if chart on http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2 
+           can/should be encoded into schematron rules. 
+-->
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2-warnings">
+    <title>IHE PCC Antepartum Visit Summary Battery - warning validation phase</title>
+
+
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2"]'>
+    <assert test='cda:code[@displayName="ACOG VISIT SUMMARY BATTERY--PT--" and @codeSystemName="LOINC"]'>
+        Warning: In IHE PCC Antepartum Visit Summary Battery (1.3.6.1.4.1.19376.1.5.3.1.1.11.2.3.2), the &lt;code&gt; element 
+        specifies the loinc code that represents the content of the battery.  It is good practice to include displayName and
+        codeSystemName for clarity and debugging. The corresponding values are 'ACOG VISIT SUMMARY BATTERY--PT--' and 'LOINC' 
+        respectively. 
+    </assert>      
+    </rule>
+
+
+  </pattern>
+

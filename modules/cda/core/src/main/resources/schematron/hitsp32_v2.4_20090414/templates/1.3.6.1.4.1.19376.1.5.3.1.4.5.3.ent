@@ -1,0 +1,38 @@
+<!--  IHE PCC Allergy and Intolerance Concern: 1.3.6.1.4.1.19376.1.5.3.1.4.5.3 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.5.3-errors">
+    <title>IHE PCC Allergy and Intolerance Concern - errors validation phase</title>
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.5.3&quot;]">
+    <assert test='cda:templateId[@root = "2.16.840.1.113883.10.20.1.27"] and
+	          cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.5.1"]'>
+       Error: In IHE PCC Allergy and Intolerance Concern: 1.3.6.1.4.1.19376.1.5.3.1.4.5.3), the parent CCD template ID 
+       (2.16.840.1.113883.10.20.1.27) and the parent PCC template ID (1.3.6.1.4.1.19376.1.5.3.1.4.5.1) shall be present 
+       in the Allergy and Intolerance Concern.
+    </assert>
+    <assert test='(cda:entryRelationship[@typeCode="SUBJ" and @inversionInd="false"]//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.6"]) or
+                  (cda:sourceOf[@typeCode="SUBJ" and @inversionInd="false"]//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.6"])'>
+
+       Error: In IHE PCC Allergy and Intolerance Concern: 1.3.6.1.4.1.19376.1.5.3.1.4.5.3), this Allergy and Intolerance 
+       Concern shall contain one or more allergy or intolerance entries that conform to the Allergy and Intolerance Entry. 
+       For CDA this SHALL be represented with the &lt;entryRelationship&gt; element. For HL7 Version 3 Messages, this SHALL 
+       be represented as a &lt;sourceOf&gt; element. The typeCode SHALL be 'SUBJ' and inversionInd SHALL be 'false'.
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.5.3-warnings">
+    <title>IHE PCC Allergy and Intolerance Concern - warning validation phase</title>
+
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.5.3&quot;]">
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>

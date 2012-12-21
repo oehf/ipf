@@ -1,0 +1,152 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 11 (filtered)">
+<title>ONC Meaningful Use</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Times New Roman Bold";
+	panose-1:0 0 0 0 0 0 0 0 0 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+h1
+	{margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Times New Roman Bold";}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=Section1>
+
+<p class=MsoNormal align=center style='text-align:center'><b>ONC Meaningful Use</b></p>
+
+<p class=MsoNormal align=center style='text-align:center'><b>HITSP C32/C83
+Examples</b></p>
+
+<p class=MsoNormal align=center style='text-align:center'>January 25, 2011</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>This folder contains a collection of examples relevant to
+the current ONC Meaningful Use requirements. The ONC requirements point to the
+HITSP C32 v2.5 specification, which in turn points to various other HITSP, IHE
+and HL7 specifications for clinical documents. A complete listing of
+specification dependencies can be found at <a
+href="http://healthcare.nist.gov/use_testing/faq.html">http://healthcare.nist.gov/use_testing/faq.html</a>
+.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>This folder also contains an XML transform, WebViewLayout_CDA,
+that when invoked produces a human readable html view of the data. The
+transform only presents data that appears in the &lt;text&gt; element of each &lt;section&gt;;
+it does not reach down into the &lt;entry&gt; elements for specific coded
+information. In particular, it does not check for consistency of information in
+&lt;section&gt;/&lt;text&gt; with coded data in the &lt;entry&gt;s. There may
+be some unintended &lt;section&gt;/&lt;text&gt; versus &lt;entry&gt; inconsistencies
+in these examples.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b>MU_Rev0_HITSP_BaseC32v2.5_RequiredTemplateIds_FourErrors</b></p>
+
+<p class=MsoNormal>This example clinical document contains the four templateIds
+in the document header that are required by HITSP/C32 and its referenced
+specifications. Note that the HL7 CCD templateId is not required in the document
+header; instead, the other templateIds require that CCD templateIds be used in
+certain section and entry elements of the document. Also note that a HITSP C32
+valid document is not required to contain any sections, so a valid document can
+be almost completely vacuous. This example document validates to the HITSP C32
+v2.0 validator at: <a
+href="http://xreg2.nist.gov/cda-validation/validation.html">http://xreg2.nist.gov/cda-validation/validation.html</a>
+. However, when validated against the NIST Meaningful Use validator at the same
+web site, <a href="http://xreg2.nist.gov/cda-validation/mu.html">http://xreg2.nist.gov/cda-validation/mu.html</a>
+, returns exactly four errors. This is because ONC Meaningful Use requires that
+every valid document minimally contain at least Allergies, Problems,
+Medications and Results sections. This 4-section requirement raises an issue
+not faced by a general C32 document, i.e how to code a valid section for which
+there is no known information. The next example shows one way this can be
+achieved.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b>MU_Rev1_HITSP_C32C83_4Sections_NoInformationEntries_NoErrors</b></p>
+
+<p class=MsoNormal>This example clinical document adds the four ONC Meaningful
+Use required sections to the previous example, i.e. it has explicit Allergies,
+Problems, Medications and Results sections. It addresses the problem of how to
+satisfy all of the requirements of a required C32 section in the absence of
+known medical information for that topic. Where appropriate it relies on SNOMED
+identifiers for “no known allergies”, “no current problems or disabilities”, or
+“drug treatment unknown”. For laboratory or diagnostic results we could not
+find an appropriate SNOMED or LOINC code that explicitly states “no known
+results”; instead we chose a LOINC code for “care area assessment (CAA) results”
+in an &lt;observation&gt; element with the &lt;value&gt; element of that
+observation containing the original text “no known results”. There may be other
+more appropriate LOINC or SNOMED codes to record an absence of information on a
+specific topic, and there may be other more appropriate XML structures to use
+for presentation, but this example does not violate any HITSP, IHE or HL7
+requirements for these four sections.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b>MU_Rev2_HITSP_C32C83_4Sections_MeaningfulEntryContent_NoErrors</b></p>
+
+<p class=MsoNormal>This example deletes the four “no known information”
+sections from the previous example and replaces them with sections that have
+meaningful clinical content. The information included in the &lt;entry&gt;
+elements of each &lt;section&gt; is minimal in that some information that is
+recommended but not required by the referenced specifications is not included. Sometimes
+information presented in &lt;section&gt;/&lt;text&gt; will not be captured in
+any subordinate &lt;entry&gt;. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b>MU_Rev3_HITSP_C32C83_4Sections_RobustEntries_NoErrors</b></p>
+
+<p class=MsoNormal>This example adds to the above “Rev2” document additional
+information that is sometimes recommended by HITAP and/or IHE specifications
+for the four required sections. In situations where HITSP and IHE recommend
+different potential vocabularies, a code from one vocabulary is given with a
+&lt;translation&gt; to a code from a different vocabulary.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>

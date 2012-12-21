@@ -1,0 +1,51 @@
+<!--  IHE PCC Natural Father of Fetus: 1.3.6.1.4.1.19376.1.5.3.1.2.4.2 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.2.4.2-errors">
+    <title>IHE PCC Natural Father of Fetus - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.4.2"]'>
+    <assert test='@nullFlavor or cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.4"'>
+       Error: In IHE PCC Natural Father of Fetus (1.3.6.1.4.1.19376.1.5.3.1.2.4.2), parent of this template is Patient Contacts
+       and must be recorded exactly as shown.
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.2.4.2 
+    </assert>
+
+    <assert test='@nullFlavor or cda:associatedEntity/@classCode="PRS"'>
+       Error: In IHE PCC Natural Father of Fetus (1.3.6.1.4.1.19376.1.5.3.1.2.4.2), the classCode attribute of the associated 
+       entity shall be PRS.
+    </assert>
+<!--
+  Edited 12/09/2008:  Requiring the codeSystem to be SNOMED conflicts with the parent, Patient
+  Contacts which requires the use of HL7 PersonalRelationshipRoleType.  Removing requirement
+  for codeSystem.  Of course, this does mean there will be an issue where a SNOMED code is labelled
+  in an incorrect codeSystem.  Awaiting clarification.
+
+
+    <assert test='@nullFlavor or cda:associatedEntity/cda:code[@code="xx-fatherofbaby" and @codeSystem="2.16.840.1.113883.6.96"]'>
+       Error: In IHE PCC Natural Father of Fetus (1.3.6.1.4.1.19376.1.5.3.1.2.4.2), the code SHALL be xx-fatherofbaby 
+       (requested). The code system name is SNOMED CT. 
+    </assert>
+-->
+
+    <assert test='@nullFlavor or cda:associatedEntity/cda:code[@code="xx-fatherofbaby"]'>
+       Error: In IHE PCC Natural Father of Fetus (1.3.6.1.4.1.19376.1.5.3.1.2.4.2), the code SHALL be xx-fatherofbaby
+       (requested).
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.2.4.2-warnings">
+    <title>IHE PCC Natural Father of Fetus - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.4.2"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>

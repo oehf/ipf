@@ -1,0 +1,49 @@
+<!--  CDA4CDT Assessment and Plan Section: 2.16.840.1.113883.10.20.2.7  -->
+
+<!-- Please note that the rules contained within only apply to the Assessment and Plan
+     section as it is used by HITSP C83 Plan of Care Section (2.2.1.24) and should not
+     be expected to check for all variations not used in the HITSP Construct. -->
+
+<!-- errors -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.2.7-errors">
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.7"]'>
+
+<!-- Please note that the following two rules only represent a restictioned version
+     placed upon CDA4CDT Assessment and Plan Section by HITSP C83. -->
+
+       <assert test='cda:code[@code="18776-5" and @codeSystem="2.16.840.1.113883.6.1"]'>
+          Error: In CDA4CDT Assessment and Plan section (2.16.840.1.113883.10.20.2.7), as used by HITSP/C83,
+          the code value for”SHALL be 18776-5 and the code System SHALL be 2.16.840.1.113883.6.1.
+       </assert>
+       <assert test='not(/.//cda:section/cda:code/@code="51847-2")'>
+          Error: In CDA4CDT Assessment and Plan section (2.16.840.1.113883.10.20.2.7), as used by HITSP/C83,
+          there SHALL NOT be a section whose value for“code is 51847-2.”
+       </assert>
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.2.7-warning">
+
+<!--
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.7"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.2.7-manual">
+
+<!--
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.7"]'>
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

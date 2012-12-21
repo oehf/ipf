@@ -1,0 +1,65 @@
+<!--  IHE PCC Coded Results Section: 1.3.6.1.4.1.19376.1.5.3.1.3.28 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.3.28-errors">
+    <title>IHE PCC Coded Results Section - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.28"]'>
+     <!-- Verify that the template id is used on the appropriate type of
+    object --> 
+   <assert test='../cda:section'> 
+      Error: In IHE PCC Coded Results Section (1.3.6.1.4.1.19376.1.5.3.1.3.28), the Coded Results can only be used on sections. 
+   </assert> 
+   <!-- Verify the section type code --> 
+   <assert test='cda:code[@code = "30954-2"]'> 
+      Error: In IHE PCC Coded Results Section (1.3.6.1.4.1.19376.1.5.3.1.3.28), the section type code of a Coded Results must be
+      30954-2 
+   </assert> 
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'> 
+      Error: In IHE PCC Coded Results Section (1.3.6.1.4.1.19376.1.5.3.1.3.28), the section type code must come from the LOINC code  
+      system (2.16.840.1.113883.6.1). 
+   </assert>
+
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.19"]'> 
+     <!-- Verify that all required data elements are present -->
+      Error: In IHE PCC Coded Results Section (1.3.6.1.4.1.19376.1.5.3.1.3.28), the Coded Results Section must contain a(n) 
+      Procedure Entry Entry.
+      See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.3.28
+   </assert> 
+ 
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.3.28-warnings">
+    <title>IHE PCC Coded Results Section - warning validation phase</title>
+
+
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.28"]'>
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.4"]'> 
+     <!-- Alert on any missing required if known elements -->
+     Warning: In IHE PCC Coded Results Section (1.3.6.1.4.1.19376.1.5.3.1.3.28), a Coded Results should contain References Entry.
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.3.28
+   </assert> 
+    </rule>
+
+
+  </pattern>
+
+  <!-- notes  -->
+
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.3.28-notes">
+    <title>IHE PCC Coded Results Section - notes validation phase</title>
+
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.28"]'>
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.13"]'> 
+     <!-- Note any missing optional elements -->
+     Note: This Coded Results Section does not contain a(n) Simple Observation Entry.
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.3.28
+   </assert> 
+    </rule>
+  </pattern>
+
