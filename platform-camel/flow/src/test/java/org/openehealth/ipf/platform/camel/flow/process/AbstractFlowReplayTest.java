@@ -45,7 +45,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { 
         "/context-flow-platform.xml",
-        "/context-flow-support.xml"
+        "/context-flow-support.xml",
+        "/context-weaver.xml"
 })
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public abstract class AbstractFlowReplayTest {

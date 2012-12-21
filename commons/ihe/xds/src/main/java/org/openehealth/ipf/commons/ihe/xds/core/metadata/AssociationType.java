@@ -40,7 +40,9 @@ public enum AssociationType {
     /** An entry that is a member of another one. */
     @XmlEnumValue("HasMember") HAS_MEMBER("HasMember", "urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember"),
     /** An entry that represents a signature of another one. */
-    @XmlEnumValue("signs") SIGNS("signs", "urn:ihe:iti:2007:AssociationType:signs");
+    @XmlEnumValue("signs") SIGNS("signs", "urn:ihe:iti:2007:AssociationType:signs"),
+    /** An entry that represents a link to the On-Demand DocumentEntry. */
+    @XmlEnumValue("IsSnapshotOf") IS_SNAPSHOT_OF("IsSnapshotOf", "urn:ihe:iti:2010:AssociationType:IsSnapshotOf");
 
     private final String opcode21;
     private final String opcode30;

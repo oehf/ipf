@@ -284,6 +284,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     
             if (type != AssociationType.HAS_MEMBER) {
                 validateDocumentRelationship(association, docEntryIds, profile);
+                validateIsSnapshotRelationship(container, association);
             }
             else {
                 validateAssociation(association, docEntryIds, profile);
@@ -312,5 +313,26 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         if (!profile.isQuery()) {
             metaDataAssert(docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
         }
+    }
+
+    private void validateIsSnapshotRelationship(EbXMLObjectContainer container, EbXMLAssociation association){
+        if (association.getAssociationType() == AssociationType.IS_SNAPSHOT_OF){
+            EbXMLExtrinsicObject sourceDocEntry = getExtrinsicObject(
+                    container, association.getSource(), DocumentEntryType.STABLE.getUuid());
+            EbXMLExtrinsicObject targetDocEntry = getExtrinsicObject(
+                    container, association.getTarget(), DocumentEntryType.ON_DEMAND.getUuid());
+            metaDataAssert(sourceDocEntry != null, MISSING_SNAPSHOT_ASSOCIATION, "sourceObject", association.getSource());
+            metaDataAssert(targetDocEntry != null, MISSING_SNAPSHOT_ASSOCIATION, "targetObject", association.getTarget());
+            metaDataAssert(targetDocEntry.getStatus().equals(AvailabilityStatus.APPROVED), WRONG_SNAPSHOT_ASSOCIATION_STATUS);
+        }
+    }
+
+    private EbXMLExtrinsicObject getExtrinsicObject(EbXMLObjectContainer container, String docEntryId, String... objectTypes){
+        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(objectTypes)) {
+            if (docEntry.getId() != null && docEntry.getId().equals(docEntryId)) {
+                return docEntry;
+            }
+        }
+        return null;
     }
 }

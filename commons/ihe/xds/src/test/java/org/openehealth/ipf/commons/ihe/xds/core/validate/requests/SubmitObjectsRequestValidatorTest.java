@@ -190,6 +190,17 @@ public class SubmitObjectsRequestValidatorTest {
         expectFailure(SOURCE_UUID_NOT_FOUND);
     }
 
+    @Test
+    public void testSourceIsSnapshotAssociation() {
+        Association association = new Association();
+        association.setTargetUuid("BLAH");
+        association.setSourceUuid("document01");
+        association.setAssociationType(AssociationType.IS_SNAPSHOT_OF);
+        association.setEntryUuid("isSnapshotEntryId");
+        request.getAssociations().add(association);
+        expectFailure(MISSING_SNAPSHOT_ASSOCIATION);
+    }
+
     @Test    
     public void testWrongNumberOfClassifications() {
         docEntry.setFormatCode(null);

@@ -323,5 +323,7 @@
                 </ValueList>
             </Slot>
         </Association>
+        <Association associationType="IsSnapshotOf" sourceObject="Document01"
+                     targetObject="Folder" />
     </LeafRegistryObjectList>
 </rs:SubmitObjectsRequest>

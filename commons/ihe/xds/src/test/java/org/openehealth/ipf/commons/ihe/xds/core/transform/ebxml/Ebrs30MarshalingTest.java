@@ -24,17 +24,20 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLExtrinsicObject30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
 
 import javax.xml.bind.*;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -118,6 +121,32 @@ public class Ebrs30MarshalingTest {
         assertTrue(values.contains("a"));
         assertTrue(values.contains("b"));
         assertTrue(values.contains("c"));
+    }
+
+    @Test
+    public void testFromRealEbXML() throws Exception {
+        File file = new File(getClass().getClassLoader().getResource("SubmitObjectsRequest_ebrs30.xml").toURI());
+
+        JAXBContext context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+
+        Object unmarshalled = unmarshaller.unmarshal(file);
+        SubmitObjectsRequest original = (SubmitObjectsRequest) unmarshalled;
+
+        RegisterDocumentSetTransformer transformer = new RegisterDocumentSetTransformer(factory);
+        RegisterDocumentSet result = transformer.fromEbXML(new EbXMLSubmitObjectsRequest30(original));
+
+        DocumentEntry documentEntry = result.getDocumentEntries().get(0);
+        assertEquals("Document01", documentEntry.getEntryUuid());
+        assertEquals(DocumentEntryType.STABLE, documentEntry.getType());
+        assertEquals("Gerald Smitty", documentEntry.getAuthor().getAuthorPerson().getId().getId());
+
+        SubmissionSet submissionSet = result.getSubmissionSet();
+        assertEquals("SubmissionSet01", submissionSet.getEntryUuid());
+        assertEquals("Sherry Dopplemeyer", submissionSet.getAuthor().getAuthorPerson().getId().getId());
+
+        assertEquals(result.getAssociations().get(0).getAssociationType(), AssociationType.HAS_MEMBER);
+        assertEquals(result.getAssociations().get(1).getAssociationType(), AssociationType.IS_SNAPSHOT_OF);
     }
 
     private SubmitObjectsRequest send() throws JAXBException {
