@@ -200,7 +200,7 @@ class MessageUtils {
             String sendingFacility,
             String msh9)
     {
-        def cause = encodeHL7String(e.message, null)
+        def cause = encodeHL7String(e.message ?: e.class.simpleName, null)
         def now = hl7Now()
         
         def cannedNak = "MSH|^~\\&|${sendingApplication}|${sendingFacility}|unknown|unknown|$now||${msh9}|unknown|T|$version|\r" +

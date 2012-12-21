@@ -426,8 +426,64 @@
 <!-- This program implements ISO Schematron, except for abstract patterns 
 which require a preprocess.
 -->
-  
 
+ <xsl:variable name="errorMessages">
+    <xhtml:div class="ErrorMessages">
+        <!-- Where the error message contains dynamic information, the message has been split into an "a" and a "b" section.
+             This has been done even when the English does not require it, in order to accomodate different language grammars
+             that might position the dynamic information differently.
+        -->
+        <xhtml:p id="sch-message-1">Schema error: Schematron elements in old and new namespaces found</xhtml:p>
+        <xhtml:p id="sch-message-2">Schema error: in the queryBinding attribute, use 'xslt'</xhtml:p>
+        <xhtml:p id="sch-message-3a">Fail: This implementation of ISO Schematron does not work with schemas using the query language </xhtml:p>
+        <xhtml:p id="sch-message-3b"/>
+        <xhtml:p id="sch-message-4a">Phase Error: no phase has been defined with name </xhtml:p>
+        <xhtml:p id="sch-message-4b" />
+        <xhtml:p id="sch-message-5">Markup Error: no pattern attribute in &lt;active></xhtml:p>
+        <xhtml:p id="sch-message-6a">Reference Error: the pattern  "</xhtml:p>
+        <xhtml:p id="sch-message-6b">" has been activated but is not declared</xhtml:p>
+        <xhtml:p id="sch-message-7">Markup Error: no test attribute in &lt;assert</xhtml:p>
+        <xhtml:p id="sch-message-8">Markup Error: no test attribute in &lt;report></xhtml:p>
+        <xhtml:p id="sch-message-9">Markup Error: no id attribute in &lt;diagnostic></xhtml:p>
+        <xhtml:p id="sch-message-10">Markup Error: no rule attribute in &lt;extends></xhtml:p>
+        <xhtml:p id="sch-message-11a">Reference Error: the abstract rule  "</xhtml:p>
+        <xhtml:p id="sch-message-11b">" has been referenced but is not declared</xhtml:p>
+        <xhtml:p id="sch-message-12">Markup Error: no name attribute in &lt;key></xhtml:p>
+        <xhtml:p id="sch-message-13">Markup Error: no path or use attribute in &lt;key></xhtml:p>
+        <xhtml:p id="sch-message-14">Markup Error: no path or use attribute in &lt;key></xhtml:p>
+        <xhtml:p id="sch-message-15">Schema error: The key element is not in the ISO Schematron namespace. Use the XSLT namespace.</xhtml:p>
+        <xhtml:p id="sch-message-16">Markup Error: no name attribute in &lt;function></xhtml:p>
+        <xhtml:p id="sch-message-17">Schema error: The function element is not in the ISO Schematron namespace. Use the XSLT namespace.</xhtml:p>
+        <xhtml:p id="sch-message-18">Schema error: Empty href= attribute for include directive.</xhtml:p>
+        <xhtml:p id="sch-message-19">Error: Impossible URL in Schematron include</xhtml:p>
+        <xhtml:p id="sch-message-20a">Unable to open referenced included file: </xhtml:p>
+        <xhtml:p id="sch-message-20b" />
+        <xhtml:p id="sch-message-21">Schema error: Use include to include fragments, not a whole schema</xhtml:p>
+        <xhtml:p id="sch-message-22">Schema error: XSD schemas may only be imported if you are using the 'xslt2' query language binding</xhtml:p>
+        <xhtml:p id="sch-message-23">Schema error: The import-schema element is not available in the ISO Schematron namespace. Use the XSLT namespace.</xhtml:p>
+        <xhtml:p id="sch-message-24">Warning: Variables should not be used with the "xpath" query language binding.</xhtml:p>
+        <xhtml:p id="sch-message-25">Warning: Variables should not be used with the "xpath2" query language binding.</xhtml:p>
+        <xhtml:p id="sch-message-26">Markup Error: no uri attribute in &lt;ns></xhtml:p>
+        <xhtml:p id="sch-message-27">Markup Error: no prefix attribute in &lt;ns></xhtml:p>
+        <xhtml:p id="sch-message-28">Schema implementation error: This schema has abstract patterns, yet they are supposed to be preprocessed out already</xhtml:p>
+        <xhtml:p id="sch-message-29">Markup Error: no id attribute in &lt;phase></xhtml:p>
+        <xhtml:p id="sch-message-30">Markup Error: no context attribute in &lt;rule></xhtml:p>
+        <xhtml:p id="sch-message-31">Markup Error: no id attribute on abstract &lt;rule></xhtml:p>
+        <xhtml:p id="sch-message-32">Markup Error: (2) context attribute on abstract &lt;rule></xhtml:p>
+        <xhtml:p id="sch-message-33">Markup Error: context attribute on abstract &lt;rule></xhtml:p>
+        <xhtml:p id="sch-message-34">Markup Error: no select attribute in &lt;value-of></xhtml:p>
+        <xhtml:p id="sch-message-35a">Warning: </xhtml:p>
+        <xhtml:p id="sch-message-35b"> must not contain any child elements</xhtml:p>
+        <xhtml:p id="sch-message-36a">Reference error: A diagnostic "</xhtml:p>
+        <xhtml:p id="sch-message-36b">" has been referenced but is not declared</xhtml:p>
+        <xhtml:p id="sch-message-37a">Using the XSLT namespace with a prefix other than "xsl" in Schematron rules is not supported in this processor:</xhtml:p>
+        <xhtml:p id="sch-message-37b" />
+        <xhtml:p id="sch-message-38a">Error: unrecognized element in ISO Schematron namespace: check spelling and capitalization</xhtml:p>
+        <xhtml:p id="sch-message-38b" />
+        <xhtml:p id="sch-message-39a">Warning: unrecognized element </xhtml:p>
+        <xhtml:p id="sch-message-39b" />
+    </xhtml:div>
+ </xsl:variable>
 <xsl:namespace-alias stylesheet-prefix="axsl" result-prefix="xsl"/>
 
 
@@ -2153,92 +2209,12 @@ which require a preprocess.
 		see what the dynamically generated information is.  
 	-->
 	<xsl:template name="outputLocalizedMessage">
-		<xsl:param name="number" />  
-		 
-		<xsl:choose>
-		   <xsl:when test="string-length( $langCode ) = 0 or $langCode = 'default'" > 	   	 
-				<xsl:value-of select='document("")//xhtml:p[@id=concat("sch-message-", $number)]/text()' />
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:variable name="localizationDocumentFilename" >
-					<xsl:value-of select="concat('sch-messages-', $langCode, '.xhtml')" />
-				</xsl:variable>
-				<xsl:variable name="theLocalizedMessage" >
-					<xsl:value-of select=
-				'document( $localizationDocumentFilename, /)//xhtml:p[@id=concat("sch-message-", $number, "-", $langCode)]/text()' />
-				</xsl:variable>
-				
-				<xsl:choose>
-					<!-- if we found any external message with that id, use it -->
-					<xsl:when test=" string-length($theLocalizedMessage) &gt; 0">
-						<xsl:value-of select="$theLocalizedMessage" />
-					</xsl:when>
-					<xsl:otherwise>
-						<!-- otherwise use the default strings -->		
-						<xsl:value-of select='document("")//xhtml:p[@id=concat("sch-message-", $number)]/text()' />
-					</xsl:otherwise>
-				</xsl:choose>	
-				
-				 
-			</xsl:otherwise>
-		</xsl:choose>
+		<xsl:param name="number" />
+		<xsl:value-of select="$errorMessages//xhtml:p[@id=concat('sch-message-', $number)]/text()" />
 	</xsl:template>
-	
-<xhtml:div class="ErrorMessages">	
-	<!-- Where the error message contains dynamic information, the message has been split into an "a" and a "b" section.
-	     This has been done even when the English does not require it, in order to accomodate different language grammars
-	     that might position the dynamic information differently.
-	-->
-	<xhtml:p id="sch-message-1">Schema error: Schematron elements in old and new namespaces found</xhtml:p>
-	<xhtml:p id="sch-message-2">Schema error: in the queryBinding attribute, use 'xslt'</xhtml:p>
-	<xhtml:p id="sch-message-3a">Fail: This implementation of ISO Schematron does not work with schemas using the query language </xhtml:p>
-	<xhtml:p id="sch-message-3b"/>
-	<xhtml:p id="sch-message-4a">Phase Error: no phase has been defined with name </xhtml:p>
-	<xhtml:p id="sch-message-4b" />
-	<xhtml:p id="sch-message-5">Markup Error: no pattern attribute in &lt;active></xhtml:p>
-	<xhtml:p id="sch-message-6a">Reference Error: the pattern  "</xhtml:p>
-	<xhtml:p id="sch-message-6b">" has been activated but is not declared</xhtml:p>
-	<xhtml:p id="sch-message-7">Markup Error: no test attribute in &lt;assert</xhtml:p>
-	<xhtml:p id="sch-message-8">Markup Error: no test attribute in &lt;report></xhtml:p>
-	<xhtml:p id="sch-message-9">Markup Error: no id attribute in &lt;diagnostic></xhtml:p>
-	<xhtml:p id="sch-message-10">Markup Error: no rule attribute in &lt;extends></xhtml:p>				   
-	<xhtml:p id="sch-message-11a">Reference Error: the abstract rule  "</xhtml:p>
-	<xhtml:p id="sch-message-11b">" has been referenced but is not declared</xhtml:p>				
-	<xhtml:p id="sch-message-12">Markup Error: no name attribute in &lt;key></xhtml:p>
-	<xhtml:p id="sch-message-13">Markup Error: no path or use attribute in &lt;key></xhtml:p>
-	<xhtml:p id="sch-message-14">Markup Error: no path or use attribute in &lt;key></xhtml:p>
-	<xhtml:p id="sch-message-15">Schema error: The key element is not in the ISO Schematron namespace. Use the XSLT namespace.</xhtml:p>
-	<xhtml:p id="sch-message-16">Markup Error: no name attribute in &lt;function></xhtml:p>
-	<xhtml:p id="sch-message-17">Schema error: The function element is not in the ISO Schematron namespace. Use the XSLT namespace.</xhtml:p>
-	<xhtml:p id="sch-message-18">Schema error: Empty href= attribute for include directive.</xhtml:p>
-	<xhtml:p id="sch-message-19">Error: Impossible URL in Schematron include</xhtml:p>
-	<xhtml:p id="sch-message-20a">Unable to open referenced included file: </xhtml:p>
-	<xhtml:p id="sch-message-20b" />
-	<xhtml:p id="sch-message-21">Schema error: Use include to include fragments, not a whole schema</xhtml:p>
-	<xhtml:p id="sch-message-22">Schema error: XSD schemas may only be imported if you are using the 'xslt2' query language binding</xhtml:p>
-	<xhtml:p id="sch-message-23">Schema error: The import-schema element is not available in the ISO Schematron namespace. Use the XSLT namespace.</xhtml:p>
-	<xhtml:p id="sch-message-24">Warning: Variables should not be used with the "xpath" query language binding.</xhtml:p>
-	<xhtml:p id="sch-message-25">Warning: Variables should not be used with the "xpath2" query language binding.</xhtml:p>
-	<xhtml:p id="sch-message-26">Markup Error: no uri attribute in &lt;ns></xhtml:p>
-	<xhtml:p id="sch-message-27">Markup Error: no prefix attribute in &lt;ns></xhtml:p>
-	<xhtml:p id="sch-message-28">Schema implementation error: This schema has abstract patterns, yet they are supposed to be preprocessed out already</xhtml:p>
-    <xhtml:p id="sch-message-29">Markup Error: no id attribute in &lt;phase></xhtml:p>
-    <xhtml:p id="sch-message-30">Markup Error: no context attribute in &lt;rule></xhtml:p>
-    <xhtml:p id="sch-message-31">Markup Error: no id attribute on abstract &lt;rule></xhtml:p>
-    <xhtml:p id="sch-message-32">Markup Error: (2) context attribute on abstract &lt;rule></xhtml:p>
-    <xhtml:p id="sch-message-33">Markup Error: context attribute on abstract &lt;rule></xhtml:p>
-    <xhtml:p id="sch-message-34">Markup Error: no select attribute in &lt;value-of></xhtml:p>
-    <xhtml:p id="sch-message-35a">Warning: </xhtml:p>
-	<xhtml:p id="sch-message-35b"> must not contain any child elements</xhtml:p>
-    <xhtml:p id="sch-message-36a">Reference error: A diagnostic "</xhtml:p>
-	<xhtml:p id="sch-message-36b">" has been referenced but is not declared</xhtml:p>
-	<xhtml:p id="sch-message-37a">Using the XSLT namespace with a prefix other than "xsl" in Schematron rules is not supported in this processor:</xhtml:p>
-    <xhtml:p id="sch-message-37b" />
-    <xhtml:p id="sch-message-38a">Error: unrecognized element in ISO Schematron namespace: check spelling and capitalization</xhtml:p>
-	<xhtml:p id="sch-message-38b" />
-	<xhtml:p id="sch-message-39a">Warning: unrecognized element </xhtml:p>
-	<xhtml:p id="sch-message-39b" />
- </xhtml:div>
+
+
+
 </xsl:stylesheet>
 
 

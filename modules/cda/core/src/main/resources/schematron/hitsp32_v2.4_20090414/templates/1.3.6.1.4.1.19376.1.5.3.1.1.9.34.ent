@@ -1,0 +1,39 @@
+<!--  IHE PCC Musculoskeletal System Section: 1.3.6.1.4.1.19376.1.5.3.1.1.9.34 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.9.34-errors">
+    <title>IHE PCC Musculoskeletal System Section - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.9.34"]'>
+     <!-- Verify that the template id is used on the appropriate type of
+    object --> 
+   <assert test='../cda:section'> 
+      Error: In IHE PCC Musculoskeletal System Section (1.3.6.1.4.1.19376.1.5.3.1.1.9.34), the Musculoskeletal System 
+      can only be used on sections. 
+   </assert> 
+   <!-- Verify the section type code --> 
+   <assert test='cda:code[@code = "11410-8"]'> 
+      Error: In IHE PCC Musculoskeletal System Section (1.3.6.1.4.1.19376.1.5.3.1.1.9.34), the section type code of a 
+      Musculoskeletal System must be 11410-8 
+   </assert> 
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'> 
+      Error: In IHE PCC Musculoskeletal System Section (1.3.6.1.4.1.19376.1.5.3.1.1.9.34), the section type code must 
+      come from the LOINC code system (2.16.840.1.113883.6.1). 
+   </assert> 
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.9.34-warnings">
+    <title>IHE PCC Musculoskeletal System Section - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.9.34"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>

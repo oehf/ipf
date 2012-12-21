@@ -1,0 +1,44 @@
+<!--  IHE PCC Pregnancy History Section: 1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4-errors">
+    <title>IHE PCC Pregnancy History Section - errors validation phase</title>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4"]'> 
+     <!-- Verify that the template id is used on the appropriate type of
+     object --> 
+   <assert test='../cda:section'> 
+      Error: In IHE PCC Pregnancy History Section (1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4), the Pregnancy History can only 
+      be used on sections. 
+   </assert> 
+   <!-- Verify the section type code --> 
+   <assert test='cda:code[@code = "10162-6"]'> 
+      Error: In IHE PCC Pregnancy History Section (1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4), the section type code of a 
+      Pregnancy History must be 10162-6 
+   </assert> 
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'> 
+      Error: In IHE PCC Pregnancy History Section (1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4), the section type code must 
+      come from the LOINC code system (2.16.840.1.113883.6.1). 
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.13.5"]'> 
+     <!-- Verify that all required data elements are present -->
+      Error: In IHE PCC Pregnancy History Section (1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4), a Pregnancy History must 
+      contain Pregnancy Observation.
+      See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4
+   </assert> 
+ </rule> 
+
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4-warnings">
+    <title>IHE PCC Pregnancy History Section - warning validation phase</title>
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4&quot;]">
+      <report test="."/>
+    </rule>
+-->
+  </pattern>

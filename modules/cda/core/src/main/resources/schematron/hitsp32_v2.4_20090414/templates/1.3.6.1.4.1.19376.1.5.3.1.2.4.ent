@@ -1,0 +1,47 @@
+<!--  IHE PCC Patient Contacts: 1.3.6.1.4.1.19376.1.5.3.1.2.4 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.2.4-errors">
+    <title>IHE PCC Patient Contacts - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.4"]'>
+    <assert test='not(../cda:participant) or ../cda:participant[@typeCode="IND"]'>
+       Error: In IHE PCC Patient Contacts (1.3.6.1.4.1.19376.1.5.3.1.2.4), contacts that are recorded as participant
+       elements shall have the classCode attribute shall set to 'IND'.
+    </assert>
+    <assert test='not(../cda:participant) or
+                  cda:associatedEntity[@classCode = "AGNT" or
+                                       @classCode = "CAREGIVER" or
+                                       @classCode = "ECON" or
+                                       @classCode = "NOK" or
+                                       @classCode = "PRS"]'>
+      Error: In IHE PCC Patient Contacts (1.3.6.1.4.1.19376.1.5.3.1.2.4), the associatedEntity element identifies the 
+      type of contact. The classCode attribute shall be present, and contains a value from the set AGNT, CAREGIVER, 
+      ECON, NOK, or PRS to identify contacts that are agents of the patient, care givers, emergency contacts, next 
+      of kin, or other relations respectively.
+    </assert>
+    <assert test='not(../cda:participant) or
+                  not(cda:associatedEntity/cda:code) or 
+                  cda:associatedEntity/cda:code[@code and @codeSystem="2.16.840.1.113883.5.111"]'>
+       Error: In IHE PCC Patient Contacts (1.3.6.1.4.1.19376.1.5.3.1.2.4), in the associatedEntity code, the code 
+       attribute is required and comes from the HL7 PersonalRelationshipRoleType vocabulary. The codeSystem attribute 
+       is required and shall be represented exactly as shown.  
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.2.4
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.2.4-warnings">
+    <title>IHE PCC Patient Contacts - warning validation phase</title>
+
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.4"]'>
+    <assert test='not(../cda:participant) or cda:associatedEntity/cda:code'>
+       Warning: In IHE PCC Patient Contacts (1.3.6.1.4.1.19376.1.5.3.1.2.4), the code of the associatedEntity should exist.
+    </assert>
+    </rule>
+
+  </pattern>

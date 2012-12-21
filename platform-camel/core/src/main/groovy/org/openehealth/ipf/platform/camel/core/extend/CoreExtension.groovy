@@ -33,7 +33,6 @@ import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.spi.DataFormat;
-import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.commons.core.modules.api.Aggregator;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
 import org.openehealth.ipf.commons.core.modules.api.Predicate;

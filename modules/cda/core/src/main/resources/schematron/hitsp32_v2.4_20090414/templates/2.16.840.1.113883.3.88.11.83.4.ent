@@ -1,0 +1,164 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.4 -->
+<!-- HITSP/C83 Healthcare Provider Module -->
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.4-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.4"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='ancestor::cda:documentationOf
+             and parent::cda:serviceEvent
+             and self::cda:performer[@typeCode="PRF"]'>
+      Error: The HITSP/C83 templateId for Healthcare Provider (2.16.840.1.113883.3.88.11.83.4) 
+      is in the wrong location. The Healthcare Provider data element shall be represented as a
+      cda:performer element under a cda:serviceEvent under a cda:documentationOf element.
+      See HITSP/C83 Table 2.2.2.4-2.
+   </assert> 
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.3"'>
+      Error: HITSP/C83 Healthcare Provider module SHALL declare conformance to the IHE Healthcare 
+      Providers and Pharmacies specification by including a templateId element with the root 
+      attribute set to the value 1.3.6.1.4.1.19376.1.5.3.1.2.3.
+      See HITSP/C83 Section 2.2.2.4.1 Rule C83-[115].
+   </assert>
+
+   <!-- Verify that the Required (R) items of Table 2.2.1.5-2 are satisfied --> 
+
+   <!-- item 4.01 -->
+   <assert test='count(cda:time) = 1'>
+      Error: HITSP/C83 Healthcare Provider, Date Range is a required, non-repeatable element
+      See HITSP/C83 Table 2.2.2.4-2, Data Element 4.01.
+   </assert>  
+
+   <!-- Provider Entity -->
+   <assert test='cda:assignedEntity'>
+      Error: HITSP/C83 Healthcare Provider, Provider Entity is a required, repeatable data element
+      See HITSP/C83 Table 2.2.2.4-2
+   </assert>
+
+
+   <!-- Verify that the requirements of Section 2.2.2.4.2 are satisfied -->
+
+   <assert test='parent::cda:serviceEvent[@classCode="PCPR"]'>
+      Error: HITSP/C83 Healthcare Providers are encoded within beneath a &lt;serviceEvent
+      classCode='PCPR'&gt; element as shown in Figure 2.2.2.4-1.  The value "PCPR" is required, 
+      and is a code meaning "provision of care".
+      See HITSP/C83 Section 2.2.2.4.2.  
+   </assert>
+
+
+   <!-- Verify that the requirements of Section 2.2.2.4.3 are satisfied -->  
+
+   <assert test='not(cda:functionCode) 
+              or cda:functionCode[@codeSystem="2.16.840.1.113883.12.443" and (@code="CP" or @code="PP" or @code="RP")]'>
+      Error: HITSP/C83 Healthcare Provider, Provider Role Coded data element (i.e. CDA functionCode), 
+      if present, SHALL be coded as specified in HITSP/C80 section 2.2.3.8.1 Provider Role.  The allowed
+      values are Consulting Provider (CP), Primary Care Provider (PP) and Referring Provider (RP), a 
+      limited subset taken from the HL7 v2 Provider Role code system (2.16.840.1.113883.12.443).
+      See HITSP/C83 Section 2.2.2.4.3 Rule C83-[116].
+   </assert>
+
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.4"]/cda:assignedEntity'>
+
+   <!-- Verify that the requirements of Section 2.2.2.4.4 are satisfied -->  
+
+   <assert test='not(cda:code) 
+              or (cda:code[@codeSystem="2.16.840.1.113883.6.101"] 
+                 and cda:code[substring(@code,3,10)="0000000X"]
+                 and not(cda:code[substring(@code,1,2)="17"])
+                 and not(cda:code[substring(@code,1,2)="19"])
+                 and not(cda:code[substring(@code,1,2)="24"])
+                 and not(cda:code[substring(@code,1,2)="27"])
+                 and not(cda:code[substring(@code,1,2)="34"]))'>
+     Error: HITSP/C83 Healthcare Provider, Provider Type data element, if present, SHALL be coded 
+     as specified in HITSP/C80 section 2.2.3.8.2 Provider Type.  It shall be one of 
+     23 selected top-level values (format dd0000000X) taken from the NUCC ProviderCodes code 
+     system (2.16.840.1.113883.6.101).
+     See HITSP/C83 Section 2.2.2.4.4 Rule C83-[117].
+   </assert>   
+
+ </rule>
+
+</pattern>
+
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.4-warning'>
+
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.4"]'>
+
+
+   <!-- item 4.02 -->
+   <assert test='count(cda:functionCode) = 1'>
+      Warning: HITSP/C83 Healthcare Provider, Provider Role Coded is a required if known non-repeatable 
+      data element.
+      See HITSP/C83 Table 2.2.2.4-2, Data Element 4.02
+   </assert>
+
+   <!-- item 4.03 -->
+   <assert test='not(cda:functionCode) or (count(cda:functionCode/cda:originalText) = 1)'>
+      Warning: HITSP/C83 Healthcare Provider, Provider Role Free Text is a required if known, non-repeatable
+      data element.
+      See HITSP/C83 Table 2.2.2.4-2, Data Element 4.03
+   </assert> 
+
+
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.4"]/cda:assignedEntity'>
+
+   <!-- item 4.04 -->
+   <assert test='count(cda:code) = 1'>
+      Warning: HITSP/C83 Healthcare Provider, Provider Entity Type is a required if known,
+      non-repeatable data element.
+      See HITSP/C83 Table 2.2.2.4-2, Data Element 4.04.
+   </assert> 
+
+   <!-- item 4.05 -->
+   <assert test='cda:addr'>
+      Warning: HITSP/C83 Healthcare Provider, Provider Entity Address is a required if known,
+      repeatable data element.
+      See HITSP/C83 Table 2.2.2.4-2, Data Element 4.05.
+   </assert> 
+
+   <!-- item 4.06 -->
+   <assert test='cda:telecom'>
+      Warning: HITSP/C83 Healthcare Provider, Provider Entity Phone / Email / Url is a required
+      if known, repeatable.
+      See HITSP/C83 Table 2.2.2.4-2, Data Element 4.06.
+   </assert> 
+
+   <!-- item 4.07 -->
+   <assert test='count(cda:assignedPerson/cda:name) = 1'>
+      Warning: HITSP/C83 Healthcare Provider, Provider Entity Name is a required if known, non-repeatable
+      data element.
+      See HITSP/C83 Table 2.2.2.4-2, Data Element 4.07.
+   </assert> 
+
+   <!-- item 4.08 -->
+   <assert test='cda:representedOrganization/cda:name'>
+      Warning: HITSP/C83 Healthcare Provider, Provider's Organization Name is a required if known, repeatable
+      data element.
+      See HITSP/C83 Table 2.2.2.4-2, Data Element 4.08.
+   </assert> 
+
+   <!-- item 4.09 -->
+   <assert test='count(sdtc:patient/sdtc:id) = 1'>
+      Warning: HITSP/C83 Healthcare Provider, Provider's Patient ID is a required if known, non-repeatable
+      data element (i.e. sdtc:patient/sdtc:id).
+      See HITSP/C83 Table 2.2.2.4-2, Data Element 4.09.
+   </assert>
+
+</rule>
+
+</pattern>
+
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.4-note'>
+   <!-- No Content at present -->
+</pattern>

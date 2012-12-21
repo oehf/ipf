@@ -26,7 +26,7 @@ public interface CDAR2Constants {
     
     static final String IHE_LAB_SCHEMA = "schema/ihe_lab/infrastructure/cda/LabCDA.xsd";
 
-    static final String HITSP_24_SCHEMA = "schema/itspc32_v2.4_20090414/infrastructure/cda/C32_CDA.xsd";
+    static final String HITSP_24_SCHEMA = "schema/itspc32_v2.hitsp32_v2.4_20090414/infrastructure/cda/C32_CDA.xsd";
 
     // Schematron
 
@@ -34,7 +34,7 @@ public interface CDAR2Constants {
     
     static final String CDA_PHMR_SCHEMATRON_RULES = "schematron/cda_phmr/PHMR.sch";
 
-    static final String HITSP_24_SCHEMATRON_RULES = "schematron/hitspc32_v2.4_20090414/HITSP_C32.sch";
+    static final String HITSP_24_SCHEMATRON_RULES = "schematron/hitsp32_v2.4_20090414/HITSP_C32.sch";
     
     static final String HITSP_37_SCHEMATRON_RULES = "schematron/hitspc37_20080211/HITSP_C37.sch";
 

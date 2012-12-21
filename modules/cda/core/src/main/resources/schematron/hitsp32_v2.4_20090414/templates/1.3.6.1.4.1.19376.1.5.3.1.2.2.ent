@@ -1,0 +1,52 @@
+<!--  IHE PCC Employer and School Contacts: 1.3.6.1.4.1.19376.1.5.3.1.2.2 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.2.2-errors">
+    <title>IHE PCC Employer and School Contacts - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.2"]'>
+
+    <assert test='self::cda:participant[@typeCode = "IND"]'>
+       Error: In IHE PCC Employer and School Contacts (1.3.6.1.4.1.19376.1.5.3.1.2.2), the typeCode of the participant
+       shall be IND.
+    </assert>
+    <assert test='cda:time/cda:low and cda:time/cda:high'>
+       Error: In IHE PCC Employer and School Contacts (1.3.6.1.4.1.19376.1.5.3.1.2.2), time element indicates the start 
+       and stop time range for this contact. These dates shall correspond to the start and stop dates for employment, 
+       enrollment, or other affiliation with the organization described.
+    </assert>
+
+    <assert test='descendant::cda:code[@code]'>
+       Error: In IHE PCC Employer and School Contacts (1.3.6.1.4.1.19376.1.5.3.1.2.2), the code value shall indicate 
+       whether the participant is the employer, school or other affiliated (e.g., volunteer) organization.
+    </assert>
+    <assert test='count(.//cda:associatedPerson) = 0 or
+                  count(.//cda:associatedPerson) = count(.//cda:associatedPerson/cda:name)'>
+       Error: In IHE PCC Employer and School Contacts (1.3.6.1.4.1.19376.1.5.3.1.2.2), when an associatedPerson is
+       present, it shall provide the name of a contact person within the organization.
+    </assert>
+    <assert test='.//cda:scopingOrganization/cda:name and
+                  .//cda:scopingOrganization/cda:telecom and
+                  .//cda:scopingOrganization/cda:addr'>
+       Error: In IHE PCC Employer and School Contacts (1.3.6.1.4.1.19376.1.5.3.1.2.2), a scopingOrganization element 
+       shall be present and shall provide the name, address and phone number of the organization.
+    </assert>    
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.2.2-warnings">
+    <title>IHE PCC Employer and School Contacts - warning validation phase</title>
+
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.2"]'>
+      <assert test='.//cda:associatedPerson'>
+         Warning: In IHE PCC Employer and School Contacts (1.3.6.1.4.1.19376.1.5.3.1.2.2), an associatedPerson element
+	 should be present.
+      </assert>
+
+    </rule>
+
+
+  </pattern>
