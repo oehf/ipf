@@ -52,8 +52,8 @@
         <!-- Dependency version properties -->
         <activemq-version>5.6.0</activemq-version>
         <aspectj-version>1.7.1</aspectj-version>
-        <camel-version>2.10.2</camel-version>
-		<cglib-version>2.2.2</cglib-version>
+        <camel-version>2.10.3</camel-version>
+        <cglib-version>2.2.2</cglib-version>
         <commons-codec-version>1.6</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
