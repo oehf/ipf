@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.xml
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.Node
 import groovy.xml.MarkupBuilder
+import groovy.xml.QName
+
 import javax.xml.XMLConstants
 
 /**
@@ -64,9 +66,11 @@ class XmlYielder {
                 createNsPrefix(attributeNsUri, knownNamespaces, attributes) :
                 getNsPrefix(attributeNsUri, knownNamespaces, attributes)
 
-            boolean isXsiTypeAttribute = ((attributeNsUri == XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI) && (attribute.key == 'type'))
+            QName attrQname = QName.valueOf(attribute.key)
+            boolean isXsiTypeAttribute = attributeNsUri == XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI &&
+                                         attrQname.localPart == 'type'
 
-            attributes[attributeNsPrefix + attribute.key] = isXsiTypeAttribute ?
+            attributes[attributeNsPrefix + attrQname.localPart] = isXsiTypeAttribute ?
                 normalizeXsiTypeAttribute(origin, attribute.value, attributes, knownNamespaces) :
                 attribute.value
         }
