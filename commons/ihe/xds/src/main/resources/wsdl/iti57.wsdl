@@ -12,12 +12,12 @@
 -->
         
 <definitions 
-        targetNamespace="urn:ihe:iti:xds-b:2007" 
+        targetNamespace="urn:ihe:iti:xds-b:2010"
         name="DocumentRegistry"
         xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:ihe="urn:ihe:iti:xds-b:2007"
+        xmlns:ihe="urn:ihe:iti:xds-b:2010"
         xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0"
         xmlns:rs="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0"
         xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
