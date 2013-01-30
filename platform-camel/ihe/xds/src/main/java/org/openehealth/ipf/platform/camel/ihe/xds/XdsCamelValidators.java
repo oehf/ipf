@@ -220,6 +220,31 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         }
     };
 
+    private static final Processor ITI_57_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLSubmitObjectsRequest30 message =
+                    new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
+            ValidationProfile profile = new ValidationProfile(ITI_57);
+            new SubmitObjectsRequestValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor ITI_57_RESPONSE_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
+            ValidationProfile profile = new ValidationProfile(ITI_57);
+            new RegistryResponseValidator().validate(message, profile);
+        }
+    };
+
     private static final Processor ITI_61_REQUEST_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
@@ -371,6 +396,19 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         return ITI_51_RESPONSE_VALIDATOR;
     }
 
+    /**
+     * Returns a validating processor for ITI-42 request messages.
+     */
+    public static Processor iti57RequestValidator() {
+        return ITI_57_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-42 response messages.
+     */
+    public static Processor iti57ResponseValidator() {
+        return ITI_57_RESPONSE_VALIDATOR;
+    }
 
     /**
      * Returns a validating processor for ITI-61 request messages.

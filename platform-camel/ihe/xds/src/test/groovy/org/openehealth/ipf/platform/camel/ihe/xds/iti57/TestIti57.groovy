@@ -68,7 +68,10 @@ class TestIti57 extends StandardTestContainer {
     @Test
     void testIti57() {
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
-        assert auditSender.messages.size() == 2
+        assert SUCCESS == sendIt(SERVICE2, 'service 2').status
+        assert auditSender.messages.size() == 4
+
+        checkAudit("0")
     }
     
     @Test
@@ -78,6 +81,37 @@ class TestIti57 extends StandardTestContainer {
         
     }
 
+    void checkAudit(outcome) {
+        def message = getAudit('U', SERVICE2_ADDR)[0]
+
+        assert message.EventIdentification.size() == 1
+        assert message.AuditSourceIdentification.size() == 1
+        assert message.ActiveParticipant.size() == 2
+        assert message.ParticipantObjectIdentification.size() == 2
+        assert message.children().size() == 6
+
+        checkEvent(message.EventIdentification, '110107', 'ITI-57', 'U', outcome)
+        checkSource(message.ActiveParticipant[0], 'true')
+        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
+        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
+        checkPatient(message.ParticipantObjectIdentification[0])
+        checkSubmissionSet(message.ParticipantObjectIdentification[1])
+
+        message = getAudit('U', SERVICE2_ADDR)[1]
+
+        assert message.EventIdentification.size() == 1
+        assert message.AuditSourceIdentification.size() == 1
+        assert message.ActiveParticipant.size() == 2
+        assert message.ParticipantObjectIdentification.size() == 2
+        assert message.children().size() == 6
+
+        checkEvent(message.EventIdentification, '110106', 'ITI-57', 'U', outcome)
+        checkSource(message.ActiveParticipant[0], 'true')
+        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
+        checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
+        checkPatient(message.ParticipantObjectIdentification[0])
+        checkSubmissionSet(message.ParticipantObjectIdentification[1])
+    }
 
     def sendIt(endpoint, value) {
         docEntry.comments = new LocalizedString(value)

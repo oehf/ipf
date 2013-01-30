@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.iti57;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
@@ -44,7 +45,7 @@ public class Iti57ClientAuditStrategy extends XdsSubmitAuditStrategy30 {
 
     @Override
     public void doAudit(XdsSubmitAuditDataset auditDataset) {
-        AuditorManager.getRepositoryAuditor().auditRegisterDocumentSetBEvent(
+        AuditorManager.getCustomXdsAuditor().auditClientIti57(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getUserId(),
                 auditDataset.getUserName(),

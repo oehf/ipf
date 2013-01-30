@@ -25,14 +25,17 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
- * @author Jens Riemschneider
+ * @author Boris Stanojevic
  */
 public class Iti57TestRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti57:xds-iti57-service1')
-            .process { checkValue(it, 'service 1') }
-        }
+            .process { checkValue(it, 'service 1')}
+
+        from('xds-iti57:xds-iti57-service2')
+            .process { checkValue(it, 'service 2')}
+    }
 
     void checkValue(exchange, expected) {
         def value = exchange.in.getBody(RegisterDocumentSet.class).documentEntries[0].comments.value        

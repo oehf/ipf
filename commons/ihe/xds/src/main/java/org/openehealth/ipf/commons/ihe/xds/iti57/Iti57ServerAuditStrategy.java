@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
 /**
  * Server audit strategy for ITI-57.
- * @author Dmytro Rud
+ * @author Boris Stanojevic
  */
 public class Iti57ServerAuditStrategy extends XdsSubmitAuditStrategy30 {
 
@@ -45,7 +45,7 @@ public class Iti57ServerAuditStrategy extends XdsSubmitAuditStrategy30 {
 
     @Override
     public void doAudit(XdsSubmitAuditDataset auditDataset) {
-        AuditorManager.getRegistryAuditor().auditRegisterDocumentSetBEvent(
+        AuditorManager.getCustomXdsAuditor().auditServerIti57(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getUserId(),
                 auditDataset.getClientIpAddress(),

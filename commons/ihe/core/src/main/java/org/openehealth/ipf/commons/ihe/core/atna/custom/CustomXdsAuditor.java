@@ -21,6 +21,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCod
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
+import org.openhealthtools.ihe.atna.auditor.events.ihe.ImportEvent;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
@@ -98,6 +99,93 @@ public class CustomXdsAuditor extends XDSAuditor {
                 requestPayload,
                 homeCommunityId,
                 patientId);
+    }
+
+    /**
+     * Generically sends audit messages for XDS Document Administrator Update Document Set events
+     *
+     * @param eventOutcome The event outcome indicator
+     * @param repositoryUserId The Active Participant UserID for the document repository (if using WS-Addressing)
+     * @param registryEndpointUri  The Web service endpoint URI for the document registry
+     * @param submissionSetUniqueId The UniqueID of the Submission Set registered
+     * @param patientId The Patient Id that this submission pertains to
+     */
+    public void auditClientIti57(
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String repositoryUserId,
+            String userName,
+            String registryEndpointUri,
+            String submissionSetUniqueId,
+            String patientId)
+    {
+        if (! isAuditorEnabled()) {
+            return;
+        }
+
+        GenericIHEAuditEventMessage iti57ExportEvent = new GenericIHEAuditEventMessage(
+                true,
+                eventOutcome,
+                RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
+                new DICOMEventIdCodes.Export(),
+                new CustomIHETransactionEventTypeCodes.UpdateDocumentSet());
+
+        iti57ExportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
+        iti57ExportEvent.addSourceActiveParticipant(
+                repositoryUserId, getSystemAltUserId(), null, getSystemNetworkId(), true);
+
+        if (!EventUtils.isEmptyOrNull(userName)) {
+            iti57ExportEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
+        }
+
+        iti57ExportEvent.addDestinationActiveParticipant(
+                registryEndpointUri, null, null, EventUtils.getAddressForUrl(registryEndpointUri, false), false);
+        if (!EventUtils.isEmptyOrNull(patientId)) {
+            iti57ExportEvent.addPatientParticipantObject(patientId);
+        }
+        iti57ExportEvent.addSubmissionSetParticipantObject(submissionSetUniqueId);
+        audit(iti57ExportEvent);
+    }
+
+    /**
+     * Generically sends audit messages for XDS Update Document Set events
+     *
+     * @param eventOutcome The event outcome indicator
+     * @param sourceUserId The Active Participant UserID for the document consumer (if using WS-Addressing)
+     * @param sourceIpAddress The IP address of the document source that initiated the transaction
+     * @param repositoryEndpointUri The Web service endpoint URI for this document repository
+     * @param submissionSetUniqueId The UniqueID of the Submission Set registered
+     * @param patientId The Patient Id that this submission pertains to
+     */
+    public void auditServerIti57 (
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String sourceUserId,
+            String sourceIpAddress,
+            String userName,
+            String repositoryEndpointUri,
+            String submissionSetUniqueId,
+            String patientId)
+    {
+        GenericIHEAuditEventMessage iti57ImportEvent = new GenericIHEAuditEventMessage(
+                false,
+                eventOutcome,
+                RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
+                new DICOMEventIdCodes.Import(),
+                new CustomIHETransactionEventTypeCodes.UpdateDocumentSet());
+
+        iti57ImportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
+        iti57ImportEvent.addSourceActiveParticipant(sourceUserId, null, null, sourceIpAddress, true);
+        if (!EventUtils.isEmptyOrNull(userName)) {
+            iti57ImportEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
+        }
+
+        iti57ImportEvent.addDestinationActiveParticipant(repositoryEndpointUri, getSystemAltUserId(), null,
+                EventUtils.getAddressForUrl(repositoryEndpointUri, false), false);
+        if (!EventUtils.isEmptyOrNull(patientId)) {
+            iti57ImportEvent.addPatientParticipantObject(patientId);
+        }
+
+        iti57ImportEvent.addSubmissionSetParticipantObject(submissionSetUniqueId);
+        audit(iti57ImportEvent);
     }
 
 
