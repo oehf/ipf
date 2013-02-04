@@ -21,7 +21,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.openehealth.ipf.commons.core.datetime.Duration;
-import org.quartz.CronTrigger;
+import org.quartz.spi.OperableTrigger;
+
+import static org.quartz.CronScheduleBuilder.cronSchedule;
+import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
  * Persistent configuration data for an application.
@@ -211,7 +214,11 @@ public class ApplicationConfig {
     private static void validateFlowPurgeSchedule(String flowPurgeSchedule) {
         String name = "default";
         try {
-            new CronTrigger(name, name, name, name, flowPurgeSchedule).validate();
+            ((OperableTrigger)newTrigger()
+                .withIdentity(name, name)
+                .forJob(name, name)
+                .build())
+                .validate();
         } catch (Exception e) {
             throw new ApplicationConfigException("invalid schedule definition: " + e.getMessage());
         }

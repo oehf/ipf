@@ -94,7 +94,7 @@ public class FlowPurgerMBeanTest {
     public void testDoNotPurgeErrorFlows() throws Exception {
         persistFlowHistory();
         assertEquals(6, flowRepository.findFlows(allFlows).size());
-        flowPurgerMBean.getScheduler().addGlobalJobListener(new PurgeJobListener(latch));
+        flowPurgerMBean.getScheduler().getListenerManager().addJobListener(new PurgeJobListener(latch));
         flowPurgerMBean.setPurgeSchedule(PURGE_SCHEDULE_EXPRESSION);
         flowPurgerMBean.setDoNotPurgeErrorFlows(true);
         flowPurgerMBean.setPurgeFlowsOlderThan("9d");
@@ -108,7 +108,7 @@ public class FlowPurgerMBeanTest {
     public void testPurgeFlowsOlderThan() throws Exception {
         persistFlowHistory();
         assertEquals(6, flowRepository.findFlows(allFlows).size());
-        flowPurgerMBean.getScheduler().addGlobalJobListener(new PurgeJobListener(latch));
+        flowPurgerMBean.getScheduler().getListenerManager().addJobListener(new PurgeJobListener(latch));
         flowPurgerMBean.setPurgeSchedule(PURGE_SCHEDULE_EXPRESSION);
         flowPurgerMBean.setDoNotPurgeErrorFlows(false);
         flowPurgerMBean.setPurgeFlowsOlderThan("7d");
@@ -122,7 +122,7 @@ public class FlowPurgerMBeanTest {
     public void testExecute() throws Exception {
         persistFlowHistory();
         assertEquals(6, flowRepository.findFlows(allFlows).size());
-        flowPurgerMBean.getScheduler().addGlobalJobListener(new PurgeJobListener(latch));        
+        flowPurgerMBean.getScheduler().getListenerManager().addJobListener(new PurgeJobListener(latch));
         flowPurgerMBean.setDoNotPurgeErrorFlows(false);
         flowPurgerMBean.setPurgeFlowsOlderThan("9d");
         flowPurgerMBean.execute();
