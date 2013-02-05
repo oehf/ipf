@@ -1,0 +1,384 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.5 -->
+<!-- HITSP/C83 Insurance Provider Module -->
+
+
+<!-- Errors Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.5-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.5"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='self::cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.26"]'>
+      Error: The HITSP/C83 templateId for Insurance Payment Provider (2.16.840.1.113883.3.88.11.83.5)
+      is in the wrong location. A C83 Insurance Payment Providers data element shall be represented as
+      a CCD Policy Activity act (2.16.840.1.113883.10.20.1.26).
+      See HITSP/C83 Section 2.2.2.5, Table 2-9 and Section 2.2.2.5.1, rule C83-[DE-5-CDA-1].
+   </assert>
+
+   <assert test='ancestor::cda:act[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.17"]'>
+      Error: HITSP/C83 Insurance Provider modules SHALL declare conformance to the IHE Coverage 
+      Entry by including a templateId element with the root attribute set to the value 
+      1.3.6.1.4.1.19376.1.5.3.1.4.17.
+      See HITSP/C83 Section 2.2.2.5.1, rule C83-[DE-5-CDA-2].
+   </assert>
+
+   <assert test='count(cda:id) = 1'>
+      Error: HITSP/C38 Insurance Provider, Payment Provider Event Entry Group Number is a required,
+      non-repeating data element. The root attribute SHOULD be the OID of the assigning authority
+      for the identifier; however, determining the assigning authority is not feasible in all settings.
+      A GUID MAY be used in place of the OID of the assigning authority.  Implementers SHOULD use the
+      same GUID for each instance of the same group or contract number.
+      See HITSP/C83 Table 2-9, Data Element 5.01 and Section 2.2.2.5.3 rules C83-[DE-5.01-CDA-2], 
+      C83-[DE-5.01-CDA-3] and C83-[DE-5.01-CDA-4].
+   </assert>
+
+   <assert test='not(cda:code[@code and @codeSystem]) or cda:code[@code and @codeSystem="2.16.840.1.113883.6.255.1336"]'>
+      Error: HITSP/C83 Insurance Provider, Health Insurance Type, the code attribute value SHALL 
+      be coded as specified in HITSP/C80 Section 2.2.2.1 Health Insurance Type.
+      See HITSP/C83 Section 2.2.2.5.4 Rule C154-[DE-5.02-1].
+   </assert>
+
+   <assert test='count(cda:performer/cda:assignedEntity) = 1'>
+      Error: HITSP/C83 Insurance Providers shall contain a non-repeating Payer element.
+      See HITSP/C83 Table 2-9, Payer.
+   </assert>
+
+   <assert test='count(cda:participant[@typeCode="COV"]) = 1'>
+      Error: HITSP/C83 Insurance Providers shall contain a non-repeating Member Information element.
+      See HITSP/C83 Table 2-9, Member Information.
+   </assert>
+
+   <assert test='count(cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]) = 1'>
+      Error: HITSP/C83 Insurance Providers, Member Information shall contain a non-repeating Patient
+      element.
+      See HITSP/C83 Table 2-9, Patient. 
+   </assert>
+
+   <assert test='not(cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:id) or
+                 cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:id/@extension'>
+      Error: HITSP/C83 Insurance Providers, Member Information Identifier number SHALL be recorded 
+      in the extension attribute of the id element found in the participantRole element.
+      See HITSP/C83 Section 2.2.2.5.8, rule C83-[DE-5.08-CDA-1].
+   </assert>
+
+   <assert test='count(cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:code) = 1'>
+      Error: HITSP/C83 Insurance Providers, Member Information Patient shall contain a non-repeating Patient
+      Relationship to Subscriber code element.
+      See HITSP/C83 Table 2-9, Data Element 5.09 and Section 2.2.2.5.10 Rule C83-[DE-5.09-CDA-1].
+   </assert>
+
+   <assert test='not(cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:code) or
+                 cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:code[
+                 @codeSystem="2.16.840.1.113883.5.111" and (
+                 @code="FAMDEP" or
+                 @code="HANDIC" or
+                 @code="INJ" or
+                 @code="SELF" or
+                 @code="SPON" or
+                 @code="STUD" or
+                 @code="FSTUD" or
+                 @code="PSTUD")]'>
+      Error: HITSP/C83 Insurance Providers, Member Information Patient Relationship to Subscriber Code, the 
+      code attribute SHALL be present, and SHALL be coded as specified in HITSP/C80 section 2.2.2.2
+      Subscriber Relationship.
+      See HITSP/C83 Section 2.2.2.5.10, rule C154-[DE-5.09-1].
+   </assert>
+
+   <assert test='count(cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:playingEntity/cda:name) = 1'>
+      Error: HITSP/C83 Insurance Providers, Member Information Patient shall contain a non-repeating Patient
+      Name element.
+      See HITSP/C83 Table 2-9, Data Element 5.12 and Section 2.2.2.5.12, rule C83-[DE-5.12-CDA-1].
+   </assert>
+
+   <assert test='count(cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:playingEntity/sdtc:birthTime) = 1'>
+      Error: HITSP/C83 Insurance Providers, Member Information Patient shall contain a non-repeating Patient
+      Date of Birth element (i.e. sdtc:birthTime).
+      Note: The sdtc:birthTime represents an extension to HL7 CDA Release 2.0.
+      See HITSP/C83 Table 2-9, Data Element 5.13 and Section 2.2.2.5.13, rule C83-[DE-5.13-CDA-1].
+   </assert>
+
+   <assert test='not(cda:performer/cda:assignedEntity/cda:code[@code and @codeSystem]) or 
+                 cda:performer/cda:assignedEntity/cda:code[@code and @codeSystem="2.16.840.1.113883.5.110"]'>
+     Error: HITSP/C83 Insurance Providers, Financial Responsibility Party Type element, the code attribute
+     SHALL be coded as specified in HITSP/C80 Section 2.2.2.3 Financially Responsible Party Type.
+     See HITSP/C83 Section 2.2.2.5.14, rule C83-[DE-5.14-CDA-1].
+   </assert>
+
+   <assert test='not(cda:code[@code and @codeSystem]) or 
+                 not(cda:code[@code="PP"]) or 
+                 cda:performer/cda:assignedEntity/cda:code[@code="GUAR" or @code="PAT"]'>
+     Error: HITSP/C83 Insurance Providers, Financial Responsibility Party Type element, if the Health 
+     Insurance Type of the encompassing Payment Provider (i.e. cda:code) is PP, then the Financial
+     Responsibility Party Type code attribute shall be set to GUAR or PAT to indicate a Guarantor 
+     or self-paying patient, respectively.
+     See HITSP/C83 Section 2.2.2.5.14, rule C83-[DE-5.14-CDA-2].
+   </assert>
+
+   <assert test='not(cda:code[@code and @codeSystem]) or 
+                 cda:code[@code="PP"] or 
+                 cda:performer/cda:assignedEntity/cda:code[@code="PAYOR"]'>
+     Error: HITSP/C83 Insurance Providers, Financial Responsibility Party Type element, if the Health
+     Insurance Type of the encompassing Payment Provider (i.e. cda:code) is anything other than PP, then the
+     Financial Responsibility Party Type code attribute shall be set to PAYOR.
+     See HITSP/C83 Section 2.2.2.5.14, rule C83-[DE-5.14-CDA-3].
+   </assert>
+
+
+
+ </rule>
+
+
+ <!-- New context for Subscriber Information / Subscriber -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.5"]/cda:participant[@typeCode="HLD"]/cda:participantRole'>
+
+   <assert test='count(cda:id) = 1'>
+      Error: HITSP/C83 Insurance Provider, Subscriber Information data element shall contain a 
+      non-repeating Subscriber ID element.  The root attribute SHOULD be the OID of the assigning authority 
+      for the identifier; however, determining the assigning authority is not feasible in all
+      settings.  A GUID MAY be used in place of the OID of the assigning authority. Implementers 
+      SHOULD use the same GUID for each instance of a subscriber identifier from the same health
+      plan.
+      See HITSP/C83 Table 2-9, Data Element 5.15 and Section 2.2.2.5.16, rules C83-[DE-5.15-CDA-1] 
+      and C83-[DE-5.15-CDA-2].
+   </assert>
+
+   <assert test='count(cda:addr) = 1'>
+     Error: HITSP/C83 Insurance Provider, Subscriber Information data element shall contain a
+     non-repeating Subscriber Address data element.
+     See HITSP/C83 Table 2-9, Data Element 5.16.
+   </assert>
+
+   <assert test='count(cda:playingEntity/cda:name) = 1'>
+     Error: HITSP/C83 Insurance Provider, Subscriber Information data element shall contain a non-repeating
+     Subscriber Name data element.
+     See HITSP/C83 Table 2-9, Data Element 5.18.
+   </assert>
+
+   <assert test='count(cda:playingEntity/sdtc:birthTime) = 1'>
+     Error: HITSP/C83 Insurance Provider, Subscriber Information data element shall contain a non-repeating
+     Subscriber Date of Birth element (sdtc:birthTime). 
+     Note: The sdtc:birthTime represents an extension to HL7 CDA Release 2.0.
+     See HITSP/C83 Table 2-9, Data Element 5.19 and Section 2.2.2.5.17, rule C83-[DE-5.19-CDA-1].
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+<!-- Warnings Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.5-warning'>
+
+
+ <!-- Base context Payment Provider -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.5"]'>
+
+   <!-- Group Number Constraints -->
+   <assert test='cda:id/@root'>
+      Warning: HITSP/C83 Insurance Provider, in the Group Number the root attribute SHOULD be the 
+      OID of the assigning authority for the identifier; however, determining the assigning 
+      authority is not feasible in all settings.
+      See HITSP/C83 Section 2.2.2.5.3, rule C83-[DE-5.01-CDA-2].
+   </assert>
+
+
+   <!-- Health Insurance Type -->
+   <assert test='count(cda:code/@code) = 1'>
+      Warning: HITSP/C83 Insurance Provider, Health Insurance Type is a required if known, non-repeating
+      data element.
+      See HITSP/C83 Table 2-9, Data Element 5.02.
+   </assert>
+
+   <assert test='count(cda:performer/cda:assignedEntity/cda:representedOrganization/cda:name) = 1'>
+      Warning: HITSP/C83 Insurance Provider, Health Plan Insurance Information Source Name is a required
+      if known, non-repeating data element.
+      See HITSP/C83 Table 2-9, Data Element 5.06.
+   </assert>
+
+   <assert test='count(cda:participant[@typeCode="COV"]/cda:time) = 1'>
+      Warning: HITSP/C83 Insurance Provider, Member Information Health Plan Coverage Dates is a required
+      if known, non-repeating data element.
+      See HITSP/C83 Table 2-9, Data Element 5.07.
+   </assert>
+
+   <assert test='not(cda:participant[@typeCode="COV"]/cda:time) or cda:participant[@typeCode="COV"]/cda:time/cda:low'>
+      Warning: HITSP/C83 Insurance Provider, Member Information Health Plan Coverage Date, the date when 
+      the plan began covering the member SHOULD be recorded in the low element of the time element beneath 
+      the participant element.
+      See HITSP/C83 Section 2.2.2.5.7, rule C83-[DE-5.07-CDA-1].
+   </assert>
+
+   <assert test='not(cda:participant[@typeCode="COV"]/cda:time) or cda:participant[@typeCode="COV"]/cda:time/cda:high'>
+      Warning: HITSP/C83 Insurance Provider, Member Information Health Plan Coverage Date, the date when 
+      the plan stops covering the member SHOULD be recorded in the high element of the time element beneath
+      the participant element.
+      See HITSP/C83 Section 2.2.2.5.7, rule C83-[DE-5.07-CDA-2].
+   </assert>
+
+   <assert test='count(cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:id) = 1'>
+      Warning: HITSP/C83 Insurance Provider, Member Information, Patient Member ID is a required if known
+      non-repeating data element.
+      See HITSP/C83 Table 2-9, Data Element 5.08.
+   </assert>
+
+   <assert test='not(cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:id) or
+                 cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:id/@root'>
+      Warning: HITSP/C83 Insurance Provider, Member Information, Patient Member ID, the root attribute 
+      SHOULD be the OID of the assigning authority for the identifier; however, determining the
+      assigning authority is not feasible in all settings.  A GUID MAY be used in place of the OID of 
+      the assigning authority.  Implementers SHOULD use the same GUID for each instance of a member 
+      identifier from the same health plan.
+      See HITSP/C83 Section 2-9, rules C83-[DE-5.08-CDA-2], C83-[DE-5.08-CDA-3] and C83-[DE-5.08-CDA-4].
+   </assert>
+
+   <assert test='cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:addr'>
+      Warning: HITSP/C83 Insurance Provider, Member Information, Patient Address is a required if known
+      repeatable data element.
+      See HITSP/C83 Table 2-9, Data Element 5.10.
+   </assert>
+
+   <assert test='cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]/cda:telecom'>
+      Warning: HITSP/C83 Insurance Provider, Member Information, Patient Phone / Email / URL  is a 
+      required if known repeatable data element.
+      See HITSP/C83 Table 2-9, Data Element 5.11.
+   </assert>
+
+   <assert test='count(cda:performer/cda:assignedEntity/cda:code/@code) = 1'>
+     Warning: HITSP/C83 Insurance Providers, Financial Responsibility Party Type is a required if known, 
+     non-repeatable element.
+     See HITSP/C83 Table 2-9, Data Element 5.14.
+   </assert>
+
+   <assert test='cda:participant[@typeCode="HLD"]/cda:participantRole'>
+      Warning: HITSP/C83 Insurance Provider, Subscriber Information is a required if known, repeatable
+      data element.
+      See HITSP/C83 Table 2-9, Subscriber Information.
+   </assert>
+   <assert test='cda:performer[cda:assignedEntity/cda:code[@code and @codeSystem]]'>
+      Warning: HITSP/C83 Insurance Provider, Guarantor Information is a required if known, repeatable
+      data element.
+      See HITSP/C83 Table 2-9, Guarantor Information.
+   </assert>
+   <assert test='count(cda:entryRelationship[@typeCode="REFR"]/cda:act[@classCode="ACT" and @moodCode="DEF"]) = 1'>
+      Warning: HITSP/C83 Insurance Provider, Health Plan is a required if known, non-repeatable
+      data element.
+      See HITSP/C83 Table 2-9, Health Plan.
+   </assert>
+   <assert test='not(cda:entryRelationship[@typeCode="REFR"]/cda:act[@classCode="ACT" and @moodCode="DEF"]) or
+                 count(cda:entryRelationship[@typeCode="REFR"]/cda:act[@classCode="ACT" and @moodCode="DEF"]/cda:text) = 1'>
+      Warning: HITSP/C83 Insurance Provider, Health Plan Name is a required if known,
+      non-repeatable data element.
+      See HITSP/C83 Table 2-9, Data Element 5.24.
+   </assert>
+ </rule>
+
+
+<!-- Changing context for Subscriber Information -->
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.5"]/cda:participant[@typeCode="HLD"]/cda:participantRole'>
+
+   <assert test='cda:id/@root'>
+      Warning: HITSP/C83 Insurance Provider, Subscriber Information ID, the root attribute SHOULD be 
+      the OID of the assigning authority for the identifier; however, determining the assigning 
+      authority is not feasible in all settings.  A GUID MAY be used in place of the OID of the
+      assigning authority. Implementers SHOULD use the same GUID for each instance of a subscriber
+      identifier from the same health plan.
+      See HITSP/C83 Table 2-9, Data Element 5.15 and Section 2.2.2.5.16, rules C83-[DE-5.15-CDA-1]
+      and C83-[DE-5.15-CDA-2].
+   </assert>
+   <assert test='cda:telecom'>
+      Warning: HITSP/C83 Insurance Provider, Subscriber Information, Subscriber Phone / Email / URL is
+      a required if known, repeatable data element.
+      See HITSP/C83 Table 2-9, Data Element 5.17.
+   </assert>
+ </rule>
+<!-- Changing context for Guarantor Information -->
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.5"]/cda:performer[cda:assignedEntity/cda:code[@code and @codeSystem]]'>
+   <assert test='count(cda:time) = 1'>
+      Warning: HITSP/C83 Insurance Provider, Guarantor Information Effective Date of Financial
+      Responsibility is a required if known, non-repeatable data element.
+      See HITSP/C83 Table 2-9, Data Element 5.20.
+   </assert>
+
+   <assert test='cda:assignedEntity/cda:addr'>
+      Warning: HITSP/C83 Insurance Provider, Guarantor Information Financial Responsibility Party 
+      Address is a required if known, repeatable data element.
+      See HITSP/C83 Table 2-9, Data Element 5.21.
+   </assert>
+   <assert test='cda:assignedEntity/cda:telecom'>
+      Warning: HITSP/C83 Insurance Provider, Guarantor Information Financial Responsibility Party
+      Phone / Email / URL is a required if known, repeatable data element.
+      See HITSP/C83 Table 2-9, Data Element 5.22.
+   </assert>
+   <assert test='count(cda:assignedEntity/cda:assignedPerson/cda:name | cda:assignedEntity/cda:representedOrganization/cda:name) = 1'>
+      Warning: HITSP/C83 Insurance Provider, Guarantor Information Financial Responsibility Party
+      Name is a required if known, non-repeatable data element.
+      See HITSP/C83 Table 2-9, Data Element 5.23.
+   </assert>
+
+ </rule>
+</pattern>
+
+   
+
+<!-- Notes Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.5-note'>
+
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.5"]'>
+
+   <assert test='cda:performer/cda:assignedEntity/cda:id'>
+      Note: HITSP/C83 Insurance Provider, Payer may have an optional, repeatable Health Plan Insurance
+      Information Source ID.
+      See HITSP/C83 Table 2-9, Data Element 5.03.
+   </assert>
+
+   <assert test='cda:performer/cda:assignedEntity/cda:addr'>
+      Note: HITSP/C83 Insurance Provider, Payer may have an optional, repeatable Health Plan Insurance
+      Information Source Address.
+      See HITSP/C83 Table 2-9, Data Element 5.04.
+   </assert>
+
+   <assert test='cda:performer/cda:assignedEntity/cda:telecom'>
+      Note: HITSP/C83 Insurance Provider, Payer may have an optional, repeatable Health Plan Insurance
+      Information Source Phone / Email / URL.
+      See HITSP/C83 Table 2-9, Data Element 5.05.
+   </assert>
+
+</rule>
+
+
+ <!-- New context for Financial Responsibility Party Type of GUAR -->
+
+ <rule context='*[ancestor::cda:section[cda:templateId/@root="2.16.840.1.113883.10.20.1.9"]
+             and ancestor::cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.20"]
+             and self::cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.26"]]/cda:performer[cda:assignedEntity/cda:code/@code="GUAR"]'>
+
+ </rule>
+
+
+ <!-- New context for Patient Information / Patient -->
+
+ <rule context='*[ancestor::cda:section[cda:templateId/@root="2.16.840.1.113883.10.20.1.9"]
+             and ancestor::cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.20"]
+             and self::cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.26"]]/cda:participant[@typeCode="COV"]/cda:participantRole[@classCode="PAT"]'>
+
+ </rule>
+
+
+   <!-- New Context for Subscriber Information / Subscriber -->
+
+ <rule context='*[ancestor::cda:section[cda:templateId/@root="2.16.840.1.113883.10.20.1.9"]
+             and ancestor::cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.20"]
+             and self::cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.26"]]/cda:participant[@typeCode="HLD"]/cda:participantRole'>
+
+ </rule>
+
+</pattern>
+
+

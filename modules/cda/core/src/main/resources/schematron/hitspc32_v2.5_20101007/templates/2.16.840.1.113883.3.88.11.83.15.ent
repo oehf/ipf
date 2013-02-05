@@ -1,0 +1,97 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.15 -->
+<!-- HITSP/C83 Result Module -->
+
+
+<!-- Errors Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.15-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.15"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='self::cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.31"]'>
+      Error: The HITSP/C83 templateId for a Result entry (2.16.840.1.113883.3.88.11.83.15) is in the wrong 
+      location. A HITSP/C83 Result entry data element shall be represented as a CCD Result observation 
+      (2.16.840.1.113883.10.20.1.31). 
+      See HITSP/C83 Section 2.2.2.15 and rules C83-[DE-15-CDA-1] and C83-[DE-15-CDA-3].
+   </assert>   
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.13"'>
+      Error: HITSP/C83 Result data elements SHALL declare conformance to the IHE Simple Observation
+      entry by including a templateId element with the root attribute set to the value
+      1.3.6.1.4.1.19376.1.5.3.1.4.13. 
+      See HITSP/C83 Section 2.2.2.15, rule C83-[DE-15-CDA-2].
+   </assert>
+
+   <assert test='cda:id'>
+     Error: HITSP/C83 Results, Result ID is a required, repeatable data element. 
+     See HITSP/C83 Table 2-20, Data Element 15.01.
+   </assert>
+
+   <assert test='count(cda:effectiveTime) = 1'>
+     Error: HITSP/C83 Results, Result Date / Time is a required, non-repeating data element. 
+     See HITSP/C83 Table 2-20, Data Element 15.02.
+   </assert>
+
+   <assert test='count(cda:code/@code) = 1'>
+     Error: HITSP/C83 Result, Result Type is a required, non-repeating data element. 
+     See HITSP/C83 Table 2-20, Data Element 15.03.
+   </assert>
+
+   <assert test='count(cda:statusCode) = 1'>
+     Error: HITSP/C83 Result, a Result Status is a required, non-repeating data element.
+     See HITSP/C83 Table 2-20, Data Element 15.04.
+   </assert>
+
+   <assert test='(self::observation[@moodCode="EVN" or @moodCode="GOL"] and count(cda:value) = 1) or
+                 (self::observation[@moodCode="INT" or @moodCode="PRP"] and not(cda:value))'>
+     Error: HITSP/C83 Result, Result Value is a non-repeatable data element of conditional optionality. 
+     Result Value SHALL be present when the observation/@moodCode is EVN or GOL,
+     and SHALL NOT be present when observation/@moodCode is INT or PRP.
+     See HITSP/C83 Table 2-20, Data Element 15.05 and Section 2.2.2.15.3, rule C83-[DE-15.05-CDA-1].
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+<!-- Warnings Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.15-warning'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.15"]'>
+
+   <assert test='cda:code[@code and (@codeSystem="2.16.840.1.113883.6.1" or @codeSystem="2.16.840.1.113883.6.96")]'>
+      Warning: HITSP/C83 Result, Result Type SHOULD be selected from LOINC (codeSystem 2.16.840.1.113883.6.1)
+      or SNOMED CT (codeSystem 2.16.840.1.113883.6.96).
+      See HITSP/C83 Table 2-20, Data Element 15.03 and Section 2.2.2.15.2, rule C154-[DE-15.03-1].
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+
+<!-- Notes Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.15-note'> 
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.15"]'>
+   <assert test='count(cda:interpretationCode/@code) = 1'>
+      Note: HITSP/C83 Result, Result Interpretation is an optional, non-repeatable data element.
+      See HITSP/C83 Table 2-20, Data Element 15.06.
+   </assert>
+
+   <assert test='cda:referenceRange'>
+      Note: HITSP/C83 Result, Result Reference Range is an optional, repeatable data element.
+      See HITSP/C83 Table 2-20, Data Element 15.07.
+   </assert>
+
+ </rule>
+
+</pattern>
+
+

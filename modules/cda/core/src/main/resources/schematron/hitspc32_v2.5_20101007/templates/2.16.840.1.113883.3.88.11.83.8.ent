@@ -1,0 +1,435 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.8 -->
+<!-- HITSP/C83 Medications - Administration Information Module -->
+
+
+<!-- Error Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.8-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='self::cda:substanceAdministration[cda:templateId/@root="2.16.840.1.113883.10.20.1.24"]'>
+      Error: The HITSP/C83 templateId for Medications - Administration Information 
+      (2.16.840.1.113883.3.88.11.83.8) is in the wrong location. The HITSP/C83 Medications - 
+      Administration Information data element shall be represented as a CCD Medication Activity 
+      substanceAdministration (2.16.840.1.113883.10.20.1.24).
+      See HITSP/C83 Section 2.2.2.8, Section 2.2.2.8.1 rule C83-[DE-8-CDA-1] and Table 2-12.    
+   </assert>
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.7"'>
+      Error: HITSP/C83 Medication module Substance Administration SHALL also declare conformance to the IHE
+      Medications entity by including a templateId element with the root attribute set to the value
+      1.3.6.1.4.1.19376.1.5.3.1.4.7.
+      See HITSP/C83 Section 2.2.2.8.1, rule C83-[DE-8-CDA-2].
+   </assert>
+
+ <!-- Medication Information  Required (R) -->
+   <assert test='cda:consumable/cda:manufacturedProduct[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8.2"]'>
+     Error: HITSP/C83 Medication module shall contain a C83 Medication Information element represented 
+     as a CCD Manufactured Product (2.16.840.1.113883.10.20.1.53). The HITSP/C83 templateId for Medication 
+     Information (2.16.840.1.113883.3.88.11.83.8.2) SHALL be included on the CCD Manufactured Product.
+     See HITSP/C83 Table 2-12 and Section 2.2.2.8.10.
+   </assert>
+
+   <assert test='not(cda:effectiveTime[1]) or cda:effectiveTime[1][@nullFlavor or @xsi:type="IVL_TS" or @xsi:type="TS"]'>
+      Error: HITSP/C83 Medication module, the first effectiveTime SHALL use the IVL_TS data type unless
+      for a single administration, in which case, it SHALL use the TS data type.
+      See HITSP/C83 Section 2.2.2.8.4, rule C83-[DE-8-CDA-3].
+   </assert>
+
+   <assert test='not(cda:effectiveTime[2]) or cda:effectiveTime[2][@nullFlavor or @xsi:type="PIVL_TS" or @xsi:type="EIVL_TS"]'>
+      Error: HITSP/C83 Medication module, the second effectiveTime shall use the PIVL_TS data type to 
+      record details about frequency, interval, and duration and shall use the EIVL_TS data type to 
+      record administration based on activities of daily living.
+      See HITSP/C83 Table 2.2.2.8-2 and Section 2.2.2.8.4, rules C83-[DE-8.03-CDA-1], C83-[DE-8.04-CDA-1],
+      and C83-[DE-8.05-CDA-1].
+   </assert>
+
+   <assert test='not(cda:effectiveTime[2][@xsi:type="PIVL_TS"]) or cda:effectiveTime[2][@xsi:type="PIVL_TS" and @institutionSpecified]/cda:period'>
+      Error: HITSP/C83 Medication module, the second effectiveTime shall use the PIVL_TS data type to 
+      record details about frequency, interval, and duration, shall use the institutionSpecified attribute 
+      to distinguish between interval and frequency (true is frequency and false is interval), and shall 
+      contain a period element to provide the timing of the interval or frequency.
+      See HITSP/C83 Table 2.2.2.8-2 and Section 2.2.2.8.4, rules C83-[DE-8.03-CDA-1], C83-[DE-8.04-CDA-1].
+   </assert>
+
+   <assert test='not(cda:effectiveTime[2][@xsi:type="EIVL_TS"]) or cda:effectiveTime[2][@xsi:type="EIVL_TS"]/cda:event'>
+      Error: HITSP/C83 Medication module, the second effectiveTime shall use the EIVL_TS data type to 
+      indicate administration based on activities of daily living and shall identify the events which 
+      trigger administration in a cda:event element beneath the effectiveTime element.
+      See HITSP/C83 Table 2.2.2.8-2 and Section 2.2.2.8.4, rule C83-[DE-8.05-CDA-1].
+   </assert>
+
+   <assert test='not(cda:routeCode[@code and @codeSystem]) or cda:routeCode[@code and @codeSystem="2.16.840.1.113883.3.26.1.1"]'>
+      Error: HITSP/C83 Medication module, Route of Administration SHALL be coded as specified in
+      HITSP/C80 Section 2.2.3.3.4.1 Medication Route FDA.
+      See HITSP/C83 Section 2.2.2.8.5, rule C83-[DE-8.07-CDA-1].
+   </assert>
+
+   <assert test='not(cda:approachSiteCode[@code and @codeSystem]) or cda:approachSiteCode[@code and @codeSystem="2.16.840.1.113883.6.96"]'>
+      Error: HITSP/C83 Medication module, the Site SHALL be coded as specified in HITSP/C80 Section
+      2.2.3.2.1 Body Site.
+      See HITSP/C83 Section 2.2.2.8.7, rule C154-[DE-8.09-1].
+   </assert>
+
+   <assert test='not(cda:administrationUnitCode[@code and @codeSystem]) or cda:administrationUnitCode[@code and @codeSystem="2.16.840.1.113883.3.26.1.1"]'>
+      Error: HITSP/C83 Medication module, the Product Form SHALL be coded as specified in HITSP/C80 Section
+      2.2.3.3.3 Medication Product Form.
+      See HITSP/C83 Section 2.2.2.8.8, rule C154-[DE-8.11-1].
+   </assert>
+
+
+ </rule>
+
+
+<!-- Changing context to Indication -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:entryRelationship[@typeCode="RSON"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.28"]'>
+
+   <assert test='cda:text/cda:reference/@value'>
+      Error: HITSP/C83 Medication module, the indication observation SHALL contain a text element
+      that includes a reference element whose value attribute points to the narrative text that is 
+      the indication for the medication
+      See HITSP/C83 Section 2.2.2.8.18, rule C83-[DE-8.20-CDA-2].
+   </assert>
+
+   <assert test='cda:code[@codeSystem="2.16.840.1.113883.6.96" and @code]'>
+      Error: HITSP/C83 Medication module, the indication SHALL be coded as specified in HITSP/C80 
+      Section 2.2.3.1.1 Problem.
+      See HITSP/C83 Section 2.2.2.8.18, rule C154-[DE-8.20-1].
+   </assert> 
+
+ </rule>
+
+
+<!-- Changing context to Patient Instructions -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:entryRelationship/cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.49"]'>
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.3"'>
+      Error: HITSP/C83 Medication module, Medication Information data elements SHALL declare conformance 
+      to the IHE Patient Medication Instructions template by including a templateId element with the root 
+      attribute set to the value 1.3.6.1.4.1.19376.1.5.3.1.4.3.
+      See HITSP/C83 Section 2.2.2.8.1, rule C83-[DE-8.22-CDA-1].
+
+   </assert>
+
+
+ </rule>
+
+
+<!-- Set new context for Vehicle -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:participant/cda:participantRole[cda:code/@code="412307009" and cda:code/@codeSystem="2.16.840.1.113883.6.96"]'>
+
+   <assert test='parent::cda:participant[@typeCode="CSM"]'>
+      Error: HITSP/C83 Medication module, Vehicle, the typeCode attribute of the participant element SHALL
+      be CSM.
+      See HITSP/C83 Section 2.2.2.8.20, rule C83-[DE-8.24-CDA-2].
+   </assert>
+
+   <assert test='self::cda:participantRole[@classCode="MANU"]'>
+      Error: HITSP/C83 Medication module, Vehicle, the classCode of the participantRole SHALL be MANU.
+      See HITSP/C83 Section 2.2.2.8.20, rule C83-[DE-8.24-CDA-3].
+   </assert>
+
+   <assert test='cda:playingEntity/cda:name'>
+      Error: HITSP/C83 Medication module, Vehicle, the name element in the playingEntity element SHALL 
+      record the name of the drug vehicle.
+      See HITSP/C83 Section 2.2.2.8.20, rule C83-[DE-8.24-CDA-5].
+   </assert>
+
+ </rule>
+
+
+<!-- Changing context for Fulfillment Instructions -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:entryRelationship/cda:act[cda:templateId/@root="2.16.840.1.113883"]'>
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.3.1"'>
+      Error: HITSP/C83 Medication module, Fulfillment instructions data elements SHALL declare conformance 
+      to the IHE Medication Fulfillment Instructions template by including a templateId element with the root
+      attribute set to the value 1.3.6.1.4.1.19376.1.5.3.1.4.3.1.
+      See HITSP/C83 Section 2.2.2.8.24, rule C83-[DE-8.32-CDA-1].
+   </assert>
+
+ </rule>
+
+
+ <!-- Set new Context for Fulfillment History Prescription Number -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:entryRelationship/cda:supply[@moodCode="EVN"]/cda:id'>
+
+   <assert test='@extension'>
+      Error: HITSP/C83 Medication module, Fulfillment History prescription number SHALL be recorded in the 
+      extension attribute of the id element within a supply element having a moodCode attribute of EVN.
+      See HITSP/C83 Section 2.2.2.8.25, rule C83-[DE-8.34.CDA-1].
+   </assert>
+ </rule>
+
+
+ <!-- Set new Context for Fulfillment History Provider -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:entryRelationship/cda:supply[@moodCode="EVN"]/cda:performer/cda:assignedEntity'>
+
+   <assert test='cda:assignedPerson or cda:representedOrganization'>
+      Error: HITSP/C83 Medication module, in Fulfillment History Provider at least one of assignedPerson
+      or representedOrganization elements SHALL appear inside the assignedEntity to indicate the name of
+      the person or the organization fulfilling the prescription.
+      See HITSP/C83 Section 2.2.2.8.22, rule C83-[DE-8.35-CDA-2].
+   </assert>
+
+   <assert test='not(cda:assignedPerson) or cda:assignedPerson/cda:name'>
+      Error: HITSP/C83 Medication module, in Fulfillment History Provider the name of the person SHALL 
+      appear in the name element of the assignedPerson element beneath the assignedEntity element.
+      See HITSP/C83 Section 2.2.2.8.22, rule C83-[DE-8.35-CDA-3].
+   </assert>
+
+   <assert test='not(cda:representedOrganization) or cda:representedOrganization/cda:name'>
+      Error: HITSP/C83 Medication module, in Fulfillment History Provider the name of the organization 
+      SHALL appear in the name element of the representedOrganization element beneath the assignedEntity
+      element.
+      See HITSP/C83 Section 2.2.2.8.22 Rule C83-[DE-8.35-CDA-4].
+   </assert>
+ </rule>
+
+
+<!-- Changing context for Fulfillment History, Fill Status -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:entryRelationship/cda:supply[@moodCode="EVN"]/cda:statusCode'>
+   <assert test='@code="completed" or @code="aborted"'>
+      Error: HITSP/C83 Medication module, in Fill Status the statusCode attribute SHALL contain be coded 
+      as specified in HITSP/C80 Section 2.2.3.3.1 Medication Fill Status (completed or aborted ONLY).
+      See HITSP/C83 Section 2.2.2.8.25 Rule C83-[DE-8.40-CDA-2].
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+
+<!-- Warning pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.8-warning'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]'>
+
+   <!-- item 8.19 Type of Medication -->
+   <assert test='cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8.1"]/cda:value/@code'>
+      Warning: HITSP/C83 Medication module should contain a SUBJ entryRelationship whose target 
+      is a HITSP/C83 Type of Medication observation to classify the Medication as prescription or 
+      over-the-counter. The observation element carries the HITSP/C83 template Id for Type of 
+      Medication (2.16.840.1.113883.3.88.11.83.8.1).
+      See HITSP/C83 Table 2-12, Data Element 8.19 and Section 2.2.2.8.16.
+   </assert>
+
+   <!-- item 8.20 Status of Medication -->
+   <assert test='cda:entryRelationship[@typeCode="REFR"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.47"]/cda:value/@code'>
+      Warning: HITSP/C83 Medication module should contain a CCD Representation of Status 
+      (2.16.840.1.113883.10.20.1.47) observation containg the Status of Medication data
+      element.
+      See HITSP/C83 Table 2-12, Data Element 8.20 and Section 2.2.2.8.18, rule C83-[DE-8.20-CDA-1].
+   </assert>
+
+   <!-- Order Information Required-if-Known (R2) -->
+   <assert test='cda:entryRelationship[@typeCode="REFR"]/cda:supply[@moodCode="INT"]/cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8.3"'>
+      Warning: HITSP/C83 Medication module, Order Information supply element is required if known.
+      See HITSP/C83 Table 2-12, Order Information and Section 2.2.2.8.21.
+   </assert>
+
+ </rule>
+
+
+ <!-- Set new Context for Fulfillment History -->
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:entryRelationship/cda:supply[@moodCode="EVN"]'>
+
+   <assert test='count(cda:id) = 1'>
+      Warning: HITSP/C83 Medication module, Fulfillment History Prescription Number is a required if 
+      known, non-repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.34. 
+   </assert>
+
+   <assert test='count(cda:quantity) = 1'>
+      Warning: HITSP/C83 Medication module, Fulfillment History Quantity Dispensed is a required if known,
+      non-repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.38.
+   </assert>
+
+   <assert test='count(cda:entryRelationship[@typeCode="COMP"]/cda:sequenceNumber) = 1'>
+      Warning: HITSP/C83 Medication module, Fulfillment History Fill Number is a required if known,
+      non-repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.39.
+   </assert>
+
+ </rule>
+
+
+ <!-- Set new Context for Fulfillment History Prescription Number -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:entryRelationship/cda:supply[@moodCode="EVN"]/cda:id'>
+
+   <assert test='@root'>
+      Warning: HITSP/C83 Medication module, Fulfillment History prescription number, the root attribute of 
+      the id element SHOULD be the OID of the assigning authority for the identifier; however, determining 
+      the assigning authority is not feasible in all settings.  A GUID MAY be used in place of the OID of 
+      the assigning authority.
+      See HITSP/C83 Section 2.2.2.8.25, rule C83-[DE-8.34-CDA-2] and C83-[DE-8.34.CDA-3].
+   </assert>
+ </rule>
+
+</pattern>
+
+
+<!-- Notes pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.8-note'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]'>
+
+   <assert test='count(cda:text) = 1'>
+      Note: HITSP/C83 Medication, Free Text Sig is an optional, non-repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.01.
+   </assert>
+
+   <assert test='count(cda:effectiveTime[1]/cda:high) = 1'>
+      Note: HITSP/C83 Medication, Indicate Medication Stopped is an optional, non-repeatable
+      data element.
+      See HITSP/C83 Table 2-12, Data Element 8.02.
+   </assert>
+
+   <assert test='cda:effectiveTime[2]'>
+      Note: HITSP/C83 Medication, Administration Timing / Frequency / Interval / Duration are
+      optional, repeatable data elements.
+      See HITSP/C83 Table 2-12, Data Elements 8.03, 8.04, 8.05 and 8.06.
+   </assert>
+
+   <assert test='cda:routeCode/@code'>
+      Note: HITSP/C83 Medication, Route is an optional, repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.07.
+   </assert>
+
+   <assert test='cda:doseQuantity'>
+      Note: HITSP/C83 Medication, Dose is an optional, repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.08 and Section 2.2.2.8.6, rule C154-[DE-8.08-1].
+   </assert>
+
+   <assert test='cda:approachSiteCode/@code'>
+      Note: HITSP/C83 Medication, Site is an optional, repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.09.
+   </assert>
+
+   <assert test='cda:maxDoseQuantity'>
+      Note: HITSP/C83 Medication, Dose Restriction is an optional, repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.10.
+   </assert>
+
+   <assert test='count(cda:administrationUnitCode/@code) = 1'>
+      Note: HITSP/C83 Medication, Product Form is an optional, non-repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.11.
+   </assert>
+
+   <assert test='cda:code/@code'>
+      Note: HITSP/C83 Medication, Delivery Method is an optional, repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.12 and Section 2.2.2.8.9 rule C83-[DE-8.12-CDA-1].
+   </assert>
+
+   <assert test='not(cda:code) or cda:code/cda:originalText'>
+      Note: HITSP/C83 Medication, Delivery Method may include a free text description of the delivery 
+      method within a cda:orginalText element beneath the cda:code element.
+      See HITSP/C83 Section 2.2.2.8.9 Rule C83-[DE-8.12-CDA-2].
+   </assert>
+
+   <assert test='cda:entryRelationship[@typeCode="RSON"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.28"]'>
+      Note: HITSP/C83 Medication, Indication is an optional, repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.21.
+   </assert>
+
+   <assert test='count(cda:entryRelationship/cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.49"]/cda:text) = 1'>
+      Note: HITSP/C83 Medication, Patient Instructions is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-12, Data Element 8.22.
+   </assert>
+
+   <assert test='count(cda:entryRelationship[@typeCode="CAUS"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]) = 1'>
+     Note: HITSP/C83 Medication, Reaction is an optional, non-repeating data element.
+     See HITSP/C83 Table 2-12, Data Element 8.23.
+   </assert>
+
+   <assert test='cda:participant[@typeCode="CSM"]/cda:participantRole[cda:code/@code="412307009" and cda:code/@codeSystem="2.16.840.1.113
+883.6.96"]'>
+     Note: HITSP/C83 Medication, Vehicle is an optional, repeatable data element.
+     See HITSP/C83 Table 2-12, Data Element 8.24 and Section 2.2.2.8.20 rules C83-[DE-8.24-CDA-1], 
+     C83-[DE-8.24-CDA-2], C83-[DE-8.24-CDA-3] and C83-[DE-8.24-CDA-4]. 
+   </assert>
+
+   <assert test='cda:precondition/cda:criterion'>
+      Note: HITSP/C83 Medication, Dose Indicator is an optional, repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.25.
+   </assert>
+<!--
+
+Should be in ...11.83.8.3
+
+   <assert test='count(cda:author/cda:assignedEntity/cda:assignedPerson/cda:name) = 1'>
+      Note: HITSP/C83 Medication, Ordering Provider is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-12, Data Element 8.31.
+   </assert>
+-->
+   <assert test='count(cda:entryRelationship/cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.43"]/cda:text) = 1'>
+      Note: HITSP/C83 Medication, Fulfillment Instructions is an optional, non-repeating data element. 
+      See HITSP/C83 Table 2-12, Data Element 8.32.
+   </assert>
+
+   <assert test='cda:entryRelationship/cda:supply[@moodCode="EVN"]'>
+      Note: HITSP/C83 Medication, Fulfillment History is an optional, repeatable data element.
+      See HITSP/C83 Table 2-12, Data Element 8.33.
+   </assert>
+
+ </rule>
+
+<!-- Changing context for Fulfillment History -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:entryRelationship/cda:supply[@moodCode="EVN"]'>
+
+   <assert test='count(cda:performer/cda:assignedEntity) = 1'>
+      Note: HITSP/C83 Medication module, Fulfillment History, Provider is an optional, non-repeating
+      data element.
+      See HITSP/C83 Table 2-12, Data Element 8.35 and Section 2.2.2.8.26 rule C83-[DE-8.35-CDA-1].
+   </assert>
+
+   <assert test='count(cda:performer/cda:assignedEntity/cda:addr) = 1'>
+      Note: HITSP/C83 Medication module, Fulfillment History, Dispensing Pharmacy Location is an optional,
+      non-repeating data element.
+      See HITSP/C83 Table 2-12, Data Element 8.36.
+   </assert>
+
+   <assert test='count(cda:effectiveTime) = 1'>
+      Note: HITSP/C83 Medication module, Fulfillment History, Dispense Date is an optional, non-repeating 
+      data element.
+      See HITSP/C83 Table 2-12, Data Element 8.37.
+   </assert>
+
+   <assert test='count(cda:statusCode) = 1'>
+      Note: HITSP/C83 Medication module, Fulfillment Hisitory Fill Status is an optional, non-repeating
+      data element.
+      See HITSP/C83 Table 2-12, Data Element 8.40 and Section 2.2.2.8.29, rule C83-[DE-8.40-CDA-1].
+   </assert>
+
+ </rule>
+
+<!-- Set new context for Vehicle -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"]/cda:participant[@typeCode="CSM"]/cda:participantRole[cda:code/@code="412307009" and cda:code/@codeSystem="2.16.840.1.113883.6.96"]'>
+
+   <assert test='cda:playingEntity/cda:name'>
+      Note: HITSP/C83 Medication module, Vehicle, the code element in the playingEntity element MAY be 
+      used to supply a coded term for the drug vehicle.
+      See HITSP/C83 Section 2.2.2.8.20, rule C83-[DE-8.24-CDA-6].
+   </assert>
+
+ </rule>
+
+</pattern>
+
+

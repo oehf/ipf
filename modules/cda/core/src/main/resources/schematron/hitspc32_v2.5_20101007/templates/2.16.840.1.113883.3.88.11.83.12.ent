@@ -1,0 +1,135 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.12 -->
+<!-- HITSP/C83 Advance Directives Module -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.12-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.12"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='self::cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.17"]'>
+      Error: The HITSP/C83 templateId for Advance Directives (2.16.840.1.113883.3.88.11.83.12) is in the wrong location. 
+      A HITSP/C83 Advance Directive data element shall be represented as a CCD Advance Directive Observation 
+      (2.16.840.1.113883.10.20.1.17).
+      See HITSP/C83 Section 2.2.2.12 and Section 2.2.2.12.1, rule C83-[DE-12-CDA-1].
+   </assert>
+
+   <assert test='not(cda:code) or cda:code/cda:originalText/cda:reference/@value'>
+      Error: HITSP/C83 Advance Directive, Advance Directive Free Text Type is a required, non-repeating data
+      element.  The human readable description of the type of Advance Directive SHALL appear in the 
+      narrative text and SHALL be pointed to by the value attribute of the reference element instead the
+      originalText element of the code.
+      See HITSP/C83 Table 2-17, Data Element 12.02 and Section 2.2.2.12.3 Rule C83-[DE-12.02-1].
+   </assert>
+
+   <assert test='count(cda:effectiveTime) = 1'>
+      Error: HITSP/C83 Advance Directive, Effective Date is a required, non-repeating data element.
+      See HITSP/C83 Table 2-17, Data Element 12.03.
+   </assert>
+
+   <assert test='count(cda:participant[@typeCode="CST"]/cda:participantRole[@classCode="AGNT"]) = 1'>
+      Error: HITSP/C83 Advance Directive, Custodian of the Document is a required, non-repeating data element.   
+      See HITSP/C83 Table 2-17, Data Element 12.04 and Section 2.2.2.12.5, rules C83-[DE-12.04-1] and
+      C83-[DE-12.04-2] and C83-[DE-12.04-3].
+   </assert>
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.13.7"'>
+      Error: HITSP/C83 Advance Directive data element SHALL declare conformance to the IHE Advance Directive
+      Observation by including a templateId element with the root attribute set to the value
+      1.3.6.1.4.1.19376.1.5.3.1.4.13.7.
+      See HITSP/C83 Section 2.2.2.12.1, rule C83-[DE-12-CDA-2].
+   </assert>
+
+   <assert test='not(cda:code[@code and @codeSystem]) or cda:code[@codeSystem="2.16.840.1.113883.6.96" and (
+                 @code="304251008" or
+                 @code="52765003" or
+                 @code="225204009" or
+                 @code="89666000" or
+                 @code="281789004" or
+                 @code="78823007")]'>
+      Error: HITSP/C83 Advance Directive, the code SHALL be coded as specified in HITSP/C80 Section 
+      2.2.3.10.1 Advance Directive Type.
+      See HITSP/C83 Section 2.2.2.12.2, rule C154-[DE-12.01-1].
+   </assert>
+
+   <assert test='cda:effectiveTime/cda:low'>
+      Error: HITSP/C83 Advance Directive, the starting time of the Advance Directive SHALL be recorded in the 
+      low element of the effectiveTime element in the Advance Directive observation.
+      See HITSP/C83 Section 2.2.2.12.4, rule C83-[DE-12.03-1].
+   </assert>
+
+   <assert test='cda:effectiveTime/cda:low[@value or @nullFlavor="UNK"]'>
+      Error: HITSP/C83 Advance Directive, if the starting time of an Advance Directive is unknown, then the low element 
+      of its Effective Date shall have a nullFlavor attribute set to UNK.   
+      See HITSP/C83 Section 2.2.2.12.4, rule C83-[DE-12.03-2].
+   </assert>
+
+   <assert test='cda:effectiveTime/cda:high'>
+      Error: HITSP/C83 Advance Directive, the ending time of the Advance Directive shall be recorded in the high element 
+      of the Effective Date.   
+      See HITSP/C83 Section 2.2.2.12.4, rule C83-[DE-12.03-3].
+   </assert>
+
+   <assert test='cda:effectiveTime/cda:high[@value or @nullFlavor="UNK" or @nullFlavor="NA"]'>
+      Error: HITSP/C83 Advance Directive, if the ending time of an Advance Directive is unknown, then the high element 
+      of its effectiveTime shall have a nullFlavor attribute set to UNK. If the Advance Directive does not have a 
+      specified ending time, then the high element of its effectiveTime shall have a nullFlavor attribute set to NA.
+      See HITSP/C83 Section 2.2.2.12.4, rules C83-[DE-12.03-4] and C83-[DE-12.03-5].
+   </assert>
+
+   <assert test='cda:participant/cda:participantRole/cda:playingEntity/cda:name'>
+      Error: HITSP/C83 Advance Directive, in Custodian of the Document data element the name of the agent who 
+      can provide a copy of the Advance Directive SHALL be recorded in the name element inside the 
+      playingEntity element.
+      See HITSP/C83 Section 2.2.2.12.5 Rule C83-[DE-12.04-6].
+   </assert>
+      
+ </rule>
+
+</pattern>
+
+
+<!-- Advance Directive Warnings -->
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.12-warning'>
+
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.12"]'>
+
+   <assert test='count(cda:code/@code) = 1'>
+      Warning: HITSP/C83 Advance Directive, Advance Directive Type is a required if known, non-repeating data 
+      element.
+      See HITSP/C83 Table 2-17, Data Element 12.01 
+   </assert>
+
+   <assert test='not(cda:participant[@typeCode="CST"]/cda:participantRole[@classCode="AGNT"]) or 
+                     cda:participant[@typeCode="CST"]/cda:participantRole[@classCode="AGNT"]/cda:addr'>
+      Warning: HITSP/C83 Advance Directive, the address of the agent SHALL be recorded in an addr element when known.
+      See HITSP/C83 Section 2.2.2.12.5, rule C83-[DE-12.04-4].
+   </assert>
+
+   <assert test='not(cda:participant[@typeCode="CST"]/cda:participantRole[@classCode="AGNT"]) or
+                     cda:participant[@typeCode="CST"]/cda:participantRole[@classCode="AGNT"]/cda:telecom'>
+      Warning: HITSP/C83 Advance Directive, the telephone number or other electronic communications address 
+      for the agent SHALL be recorded in a telecom element when known.
+      See HITSP/C83 Section 2.2.2.12.5, rule C83-[DE-12.04-5].
+   </assert>
+      
+ </rule>
+
+</pattern>
+
+
+
+<!-- Advance Directive notes -->
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.12-note'>
+
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.12"]'>
+      
+ </rule>
+
+</pattern>
+

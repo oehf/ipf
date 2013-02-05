@@ -1,0 +1,83 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.2 -->
+<!-- HITSP/C83 Language Spoken Module -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.2-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.2"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='self::cda:languageCommunication'>
+      Error: The HITSP/C83 templateId for Spoken Language (2.16.840.1.113883.3.88.11.83.2)
+      is in the wrong location. The HITSP/C83 Language Spoken module is represented as a 
+      CDA languageCommunication element.
+      See Table 2-6, Data Element 2.01 and Section 2.2.2.2.1, rules C83-[DE-2.01-CDA-1] and
+      C83-[DE-2.01-CDA-2].
+   </assert>
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.1"'>
+      Error: HITSP/C83 Language Spoken entries SHALL declare conformance to the IHE Language
+      Communication module by including a templateId element with the root attribute set to 
+      the value 1.3.6.1.4.1.19376.1.5.3.1.2.1.
+      See Section 2.2.2.2.1, rule C83-[DE-2.01-CDA-3].
+   </assert>   
+
+   <assert test='not(cda:modeCode) or cda:modeCode[(@code="ESGN" or @code="ESP" or @code="EWR" 
+                                                 or @code="RSGN" or @code="RSP" or @code="RWR") 
+                                              and @codeSystem="2.16.840.1.113883.5.60"]'>
+      Error: HITSP/C83 Language Spoken, if the Patient Language element contains a modeCode element 
+      to express  types of language expression, then that code shall come from the HL7 
+      LanguageAbilityMode code system (2.16.840.1.113883.5.60), which specifies the following 
+      codes: ESGN (expressed signed), ESP (expressed spoken), EWR (expressed written), RSGN 
+      (received signed), RSP (received spoken), RWR (received written).
+      See Section 2.2.2.2.1, rule C83-[DE-2.01-CDA-4].
+   </assert>
+
+
+
+ </rule>
+</pattern>
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.2-warning'> 
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.2"]'>
+
+   <assert test='not(cda:proficiencyLevelCode)'>
+     Warning: HITSP/C83 Language Spoken, while this HL7 CDA allows for the specification of 
+     proficiency using the proficiencyLevelCode element, this element SHOULD NOT be used 
+     because it is considered too subjective and could have a negative impact on consumers.
+     See Section 2.2.2.1, rule C83-[DE-2.01-CDA-5]. 
+   </assert>
+
+ </rule>
+</pattern>
+
+
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.2-note'> 
+
+
+ <!-- Checking Notes for Language of communication on Patient -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.2"]'>
+
+   <assert test='cda:languageCode[@code="sgn-US"]'>
+      Note: HITSP/C83 Language Spoken, the Patient Language element may indicate that sign 
+      language is spoken by treating it as a separate language code, e.g. sgn-US.
+      See Section 2.2.2.2.1, rule C83-[DE-2.01-CDA-4].
+   </assert>
+   <assert test='cda:modeCode'>
+      Note: HITSP/C83 Language Spoken, to indicate only a specific mode of communication (e.g written, verbal, 
+      signed, etc.), a modeCode element may be included on a languageCommunication element. 
+      If present, the code shall come from the HL7 LanguageAbilityMode code system 
+      (2.16.840.1.113883.5.60), which specifies the following codes: ESGN (expressed signed), 
+      ESP (expressed spoken), EWR (expressed written), RSGN (received signed), RSP (received 
+      spoken), RWR (received written).
+      See Section 2.2.2.2.1, rule C83-[DE-2.01-CDA-4].
+   </assert>
+
+ </rule>
+
+</pattern>
+

@@ -1,0 +1,116 @@
+<!--  IHE PCC Medications: 1.3.6.1.4.1.19376.1.5.3.1.4.7 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7-errors">
+    <title>IHE PCC Medications - errors validation phase</title>
+
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.7"]'>
+
+      <assert test='cda:templateId[@root = "2.16.840.1.113883.10.20.1.24"]'>
+        Error: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), all Medications entries use the templateId element 
+        specified (2.16.840.1.113883.10.20.1.24) to indicate that they are medication acts. This element is required.
+      </assert>
+
+      <assert test='count(cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.7.1"] | 
+                          cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.8"] |
+                          cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.9"] |
+                          cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.10"] |
+                          cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.11"])  = 1'>
+         Error: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), the &lt;templateId&gt; element identifies this 
+         Medications &lt;entry&gt; as a particular type of medication event, allowing for validation of the content. 
+         As a side effect, readers of the CDA can quickly locate and identify medication events. The templateId must
+         use one of the values in the table on: http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.7
+      </assert>
+
+      <assert test='not(cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.7.1"]) or 
+                    count(.//cda:substanceAdministration) = 0'>
+         Error: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), template ID 1.3.6.1.4.1.19376.1.5.3.1.4.7.1 indicates a
+         &quot;normal&quot; &lt;substanceAdministration&gt; act that may not contain any subordinate 
+         &lt;substanceAdministration&gt; acts.
+      </assert>
+
+      <assert test='cda:id'>
+         Error: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), a top level &lt;substanceAdministration&gt; element 
+         must be uniquely identified in Medications. If there is no explicit identifier for this observation in the source 
+         EMR system, a GUID may be used for the root attribute, and the extension may be omitted. 
+      </assert>
+
+      <assert test='cda:statusCode[@code = "completed"]'>
+         Error: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), the status of all Medications 
+         &lt;substanceAdministration&gt; elements must be "completed". The act has either occurred, or the request or order 
+         has been placed.
+      </assert>
+
+      <assert test='cda:consumable/cda:manufacturedProduct/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.7.2"]'>
+         Error: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), the &lt;consumable&gt; element shall be present, and 
+         shall contain a &lt;manufacturedProduct&gt; entry conforming to the Product Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.2) 
+         template.
+      </assert>      
+
+    </rule>
+
+
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7-warnings">
+    <title>IHE PCC Medications - warning validation phase</title>
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.7&quot;]">
+
+
+      <assert test='(cda:effectiveTime[1][@xsi:type="IVL_TS"]) and
+                  cda:effectiveTime[1]/cda:low[@value or @nullFlavor="UNK"] and
+                  cda:effectiveTime[1]/cda:high[@value or @nullFlavor="UNK"]'>
+         Warning: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), the first &lt;effectiveTime&gt; of Medications 
+         is required if known and encodes the start and stop time of the medication regimen. This an interval of time 
+         (xsi:type='IVL_TS'), and must be specified as shown. The &lt;low&gt; and &lt;high&gt; values of the first 
+         &lt;effectiveTime&gt; element represent the start and stop times for the medication. The &lt;low&gt; value 
+         represents the start time, and the &lt;high&gt; value represents the stop time. If either the &lt;low&gt; or the 
+         &lt;high&gt; value is unknown, this shall be recorded by setting the nullFlavor attribute to UNK.
+      </assert>
+
+      
+      <assert test='cda:effectiveTime[@operator="A"]'>
+         Warning: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), the frequency of medication in Medications to be 
+         administered is required if known.  It shall be recorded as an effectiveTime element with an operator attribute 
+         equal to "A".
+	 See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.7
+      </assert>
+
+      <assert test='cda:routeCode'>
+         Warning: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), a routeCode for Medications must be specified if 
+         the route is known.
+      </assert>
+
+      <assert test='not(cda:routeCode) or cda:routeCode[@codeSystem = "2.16.840.1.113883.5.112"]'>
+         Warning: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), the routeCode for Medications should use the HL7 
+         RouteOfAdministration vocabulary.
+      </assert>
+
+      <assert test='cda:doseQuantity'>
+         Warning: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), the doseQuantity is required if known.
+      </assert>
+
+      <assert test='cda:rateQuantity'>
+         Warning: In IHE PCC Medications (1.3.6.1.4.1.19376.1.5.3.1.4.7), the rateQuantity is required if known. 
+      </assert>
+
+<!--
+12/17/2007
+Removing this check because the template ID for Medication Instructions is
+never actually stated in the document...
+
+      <assert test='count(cda:entryRelationship//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.3"]) = 1'>
+         Warning: In Medications, Medication Instructions are required if
+         known and can appear at most once.  The instructions shall contain
+         any special case dosing instructions (e.g., split, tapered, or
+         conditional dosing), and may contain other information (take with
+         food, et cetera).
+      </assert>
+-->
+
+    </rule>
+  </pattern>

@@ -1,0 +1,99 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.8.3 -->
+<!-- HITSP/C83 Medication Order Information data element -->
+
+
+<!-- Errors pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.8.3-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8.3"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='self::cda:supply'>
+      Error: The HITSP/C83 templateId for Medication Order Information (2.16.840.1.113883.3.88.11.83.8.3) is in 
+      the wrong location. A HITSP/C83 Order Information data element shall be represented as a CCD supply entry. 
+      See HITSP/C83 Section 2.2.2.8.21 and C83-[DE-8-CDA-6].
+   </assert>
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.7.3"'>
+      Error: HITSP/C83 Medication Order Information data elements SHALL declare conformance to the IHE Supply 
+      Entry template by including a templateId element with the root attribute set to the value 
+      1.3.6.1.4.1.19376.1.5.3.1.4.7.3.
+      See HITSP/C83 Section 2.2.2.8.21, rule C83-[DE-8-CDA-7].
+   </assert>
+      
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8.3"]/cda:quantity'>
+
+   <assert test='@value'>
+      Error: HITSP/C83 Medication module, the quantity ordered SHALL be recorded in the value attribute
+      of quantity element inside a supply element used to record order information.
+      See HITSP/C83 Section 2.2.2.8.23, rule C83-[DE-8.26-CDA-1].
+   </assert>
+
+   <assert test='@unit'>
+      Error: HITSP/C83 Medication Order Information, in Quantity the unit attribute SHALL be present.
+      See HITSP/C83 Section 2.2.2.8.23, rule C83-[DE-8.26-CDA-2].
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+<!-- Warnings pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.8.3-warning'>
+
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8.3"]'>
+
+   <assert test='count(cda:id) = 1'>
+      Warning: HITSP/C83 Medication Order Information, Order Number is a required if known, non-repeating
+      data element.
+      See HITSP/C83 Table 2-50 Data Element 8.26 and Section 2.2.2.8.21 rule C83-[DE-8.26-CDA-1].
+   </assert>
+
+   <assert test='count(cda:quantity) = 1'>
+      Warning: HITSP/C83 Medication Order Information, Quantity Ordered is a required if known, non-repeating 
+      data element.
+      See HITSP/C83 Table 2-50 Data Element 8.28.
+   </assert>
+
+   <assert test='cda:effectiveTime/cda:high'>
+      Warning: HITSP/C83 Medication Order Information, Order Expiration Date / Time is a required if known,
+      non-repeating data element.
+      See HITSP/C83 Table 2-50 Data Element 8.29.
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+
+<!-- Notes pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.8.3-note'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8.3"]'>
+
+   <assert test='count(cda:repeatNumber) = 1'>
+      Note: HITSP/C83 Medication Order Information, Fills is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-50 Data Element 8.27.
+   </assert>
+
+   <assert test='count(cda:author/cda:time) = 1'>
+      Note: HITSP/C83 Medication Order Information, Order Date / Time is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-50 Data Element 8.30.
+   </assert>
+
+   <assert test='count(cda:author/cda:assignedEntity/cda:assignedPerson/cda:name) = 1'>
+      Note: HITSP/C83 Medication Order Information, Ordering Provider is an optional non-repeating data element.
+      See HITSP/C83 Table 2-50 Data Element 8.31.
+   </assert>
+
+ </rule>
+
+</pattern>

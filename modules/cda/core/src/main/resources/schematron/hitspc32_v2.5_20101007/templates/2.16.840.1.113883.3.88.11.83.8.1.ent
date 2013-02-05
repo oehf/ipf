@@ -1,0 +1,51 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.8.1 -->
+<!-- HITSP/C83 Medications Module, Type of Medication data element -->
+
+
+<!-- Errors pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.8.1-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8.1"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='parent::cda:entryRelationship and self::cda:observation'>
+      Error: The HITSP/C83 templateId for Type of Medication (2.16.840.1.113883.3.88.11.83.8.1) is in the wrong 
+      location.  A HITSP/C83 Type of Medication data element shall be represented as an observation element in
+      an entryRelationship.
+      See HITSP/C83 Section 2.2.2.8.16, rules C83-[DE-8.19-CDA-1], C83-[DE-8.19-CDA-3] and C83-[DE-8.19-CDA-4].
+   </assert>
+   
+   <assert test='cda:code'>
+      Error: HITSP/C83 Type of Medication observation SHALL have a code element that represents the kind of 
+      medication actually or intended to be administered or supplied.
+      See HITSP/C83 Section 2.2.2.8.12 Rule C83-[DE-8.19-CDA-5].
+   </assert>
+   
+   <assert test='cda:code[@codeSystem="2.16.840.1.113883.6.96" and (@code="329505003" or @code="73639000")]'>
+      Error: HITSP/C83 Type of Medication observation code attribute SHALL be coded as specified in HITSP/C80 
+      Section 2.2.3.3.5 Medication Type.
+      See HITSP/C83 Section 2.2.2.8.12 Rule C154-[DE-8.19-1].
+   </assert>
+
+ </rule>
+
+</pattern>
+   
+<!-- Warnings pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.8.1-warning'>
+
+</pattern>
+   
+
+
+<!-- Notes pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.8.1-note'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8.1"]'>
+
+ </rule>
+</pattern>

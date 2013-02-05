@@ -1,0 +1,74 @@
+
+<!-- Pattern for Errors -->
+
+<pattern id='p-C83_2.2.2.10-errors'>
+
+ <rule context='cda:ClinicalDocument/cda:author[1] |
+                //cda:encounter/cda:author[1] |
+                //cda:observation/cda:author[1] |
+                //cda:organizer/cda:author[1] |
+                //cda:procedure/cda:author[1] |
+                //cda:section/cda:author[1] |
+                //cda:substanceAdministration/cda:author[1] |
+                //cda:supply/cda:author[1]'>
+
+   <assert test='count(cda:time) = 1'>
+      Error: HITSP/C83 Information Source, Author Time is a required, non-repeating data element.
+      See HITSP/C83 Table 2-52, Data Element 10.01.
+   </assert>
+
+   <assert test='count(cda:assignedAuthor/cda:assignedPerson/cda:name) = 1'>
+      Error: HITSP/C83 Information Source, Author Name is a required, non-repeating data element.
+      See HITSP/C83 Table 2-52, Data Element 10.02.
+   </assert>
+
+ </rule>
+
+ <rule context='*[self::cda:externalDocument][parent::cda:reference]'>
+
+   <assert test='count(cda:id) = 1'>
+      Error: HITSP/C83 Information Source, Reference Document ID is a required, non-repeating data element.
+      See HITSP/C83 Table 2-52, Data Element 10.04.
+   </assert>
+
+ </rule>
+
+ <rule context='*[self::cda:informant]'>
+
+   <assert test='cda:assignedEntity/cda:assignedPerson/cda:name or
+                 cda:assignedEntity/cda:representedOrganization/cda:name or 
+                 cda:relatedEntity/cda:relatedPerson/cda:name'>
+      Error: HITSP/C83 Information Source, Information Source Name is a required, non-repeating data element.
+      See HITSP/C83 Table 2-52, Data Element 10.06 and Section 2.2.2.10.1 rules C83-[DE-10.02-CDA-1] and
+      C83-[DE-10.02-CDA-2].
+   </assert>
+
+ </rule>
+
+
+</pattern>
+
+
+<!-- Pattern for Warnings -->
+
+<pattern id='p-C83_2.2.2.10-warning'>
+
+
+
+</pattern>
+
+
+
+<!-- Pattern for Notes -->
+
+<pattern id='p-C83_2.2.2.10-note'>
+
+ <rule context='*[self::cda:externalDocument][parent::cda:reference]'>
+   <assert test='cda:text/cda:reference/@value'>
+      Note: HITSP/C83 Information Source, Reference Document URL is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-52, Data Element 10.05
+   </assert>
+
+ </rule>
+
+</pattern>

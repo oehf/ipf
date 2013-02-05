@@ -1,0 +1,207 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.6 -->
+<!-- HITSP/C83 Allergies and Drug Sensitivities Module -->
+
+
+<!-- Pattern for Errors -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.6-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='ancestor::cda:section[cda:templateId/@root="2.16.840.1.113883.10.20.1.2"]
+             and self::cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.27"]'>
+      Error: The HITSP/C83 templateId for Allergy and Drug Sensitivities (2.16.840.1.113883.3.88.11.83.6) 
+      is in the wrong location. A HITSP C83 Allergy and Drug Sensitivities module (2.16.840.1.113883.3.88.11.83.6) 
+      shall be represented as a CCD Problem act (2.16.840.1.113883.10.20.1.27) under a CCD Alerts section 
+      (2.16.840.1.113883.10.20.1.2).
+      See HITSP/C83 Section 2.2.2.6, Table 2-10 and Section 2.2.2.6.1, rule C83-[DE-6-CDA-1].
+   </assert>
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.5.3"'>
+      Error:  HITSP/C83 Allergy/Drug Sensitivity entries SHALL conform to the IHE PCC Allergy and Intolerance 
+      Concern template by including a templateId element with the root attribute set to the value 
+      1.3.6.1.4.1.19376.1.5.3.1.4.5.3.
+      See HITSP/C83 Section 2.2.2.6.1, Rule C83-[DE-6-CDA-2].
+   </assert>
+
+ </rule>
+
+   <!-- Verify that the Required (R) items of Table 2.2.1.7-2 are satisfied -->
+
+   <!-- Change Context to Adverse Event Entry -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]'>
+
+   <!-- Item 6.02 Adverse Event Type -->
+   <assert test='count(cda:code/@code) = 1'>
+      Error: HITSP/C83 Allergy/Drug Sensitivity, Adverse Event Type is a required, non-repeatable data
+      element.
+      See HITSP/C83 Table 2-10, Data Element 6.02.
+   </assert>
+
+   <assert test='cda:code[@codeSystem="2.16.840.1.113883.6.96"] and
+                 cda:code[@code="420134006" or @code="418038007" or @code="419511003" or @code="418471000" or
+                          @code="419199007" or @code="416098002" or @code="414285001" or @code="59037007" or
+                          @code="235719002"]'>
+     Error: HITSP/C83 Allergy/Drug Sensitivity, the vocabulary used for adverse event types SHALL be coded 
+     as specified in HITSP/C80 Section 2.2.3.4.2 Allergy/Adverse Event Type Adverse Event Entry data element. 
+     See HITSP/C83 Section 2.2.2.6.2 Rule C154-[DE-6.02-1].   
+   </assert>
+
+ </rule>
+
+   <!-- Change Context to Product -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]/cda:participant[@typeCode="CSM"]'>
+
+   <assert test='count(cda:participantRole[@classCode="MANU"]/cda:playingEntity[@classCode="MMAT"]) = 1'>
+      Error: HITSP/C83 Allergy/Drug Sensitivity, Product Detail is a required, non-repeatable data element
+      under Product.
+      See HITSP/C83 Table 2-10, Product Detail.
+   </assert>
+
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]/cda:participant[@typeCode="CSM"]/cda:participantRole[@classCode="MANU"]/cda:playingEntity[@classCode="MMAT"]'>
+
+   <!-- Item 6.03 Product - FreeText -->
+   <assert test='count(cda:name) = 1'>
+     Error: HITSP/C83 Allergy/Drug Sensitivity, Product Free-Text is a required, non-repeatable data element.
+     See HITSP/C83 Table 2-10, Data Element 6.03.
+   </assert>
+
+ </rule>
+
+   <!-- Change Context to Reaction -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]/cda:entryRelationship[@typeCode="MFST"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]'>
+
+   <assert test='not(cda:value[@code and @codeSystem]) or cda:value[@codeSystem="2.16.840.1.113883.6.96" and @code]'>
+      Error: HITSP/C83 Allergy/Drug Sensitivity, the reaction SHALL be coded as specified in HITSP/C80 
+      Section 2.2.3.4.1 Allergy/Adverse Event (Reaction)
+      See Section 2.2.2.6.4, rule C154-[DE-6.06-1].
+   </assert>
+
+ </rule>
+
+
+<!-- Change Context to Severity -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]/cda:entryRelationship[@typeCode="MFST"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.55"]'>
+
+   <assert test='not(cda:value[@code and @codeSystem])
+                 or cda:value[@codeSystem="2.16.840.1.113883.6.96"
+                 and (@code="255604002" or @code="371923003" or @code="6736007"
+                   or @code="371924009" or @code="24484000" or @code="399166001")]'>
+      Error: HITSP/C83 Allergy/Drug Sensitivity, the terminology used for severity of the adverse event SHALL
+      be coded as specified in HITSP/C80 Section 2.2.3.4.3 Allergy/Adverse Event Severity.
+      See Section 2.2.2.6.5 rule C154-[DE-6.08-1].
+   </assert>
+
+ </rule>
+
+
+</pattern>
+
+
+
+<!-- Pattern for Warnings -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.6-warning'>
+
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]'>
+
+   <!-- Item 6.01 Adverse Event Type -->
+   <assert test='count(cda:effectiveTime) = 1'>
+      Warning: HITSP/C83 Allergy/Drug Sensitivity, Adverse Event Date is a required if known, non-repeatable 
+      data element.
+      See HITSP/C83 Table 2-10, Data Element 6.01.
+   </assert>
+
+   <!-- Product -->
+   <assert test='cda:participant[@typeCode="CSM"]'>
+      Warning: HITSP/C83 Allergy/Drug Sensitivity, Product is a required if known, repeatable data element.
+      See HITSP/C83 Table 2-10, Product.
+   </assert>
+
+ </rule>
+
+   <!-- Change Context to Product -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]/cda:participant[@typeCode="CSM"]/cda:participantRole[@classCode="MANU"]/cda:playingEntity[@classCode="MMAT"]'>
+
+   <!-- Item 6.04 Product Coded -->
+   <assert test='count(cda:code/@code) = 1'>
+     Warning: HITSP/C83 Allergy/Drug Sensitivity, Product Coded is a required if known, non-repeatable
+     data element.
+     See HITSP/C83 Table 2-10, Data Element 6.04.
+   </assert>
+
+ </rule>
+
+   <!-- Change Context to Reaction -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]/cda:entryRelationship[@typeCode="MFST"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]'>
+
+   <assert test='count(cda:text) = 1'>
+      Warning: HITSP/C83 Allergy/Drug Sensitivity Reaction Free-Text is a required if known, non-repeating
+      data element.
+      See HITSP/C83 Table 2-10, Data Element 6.05.
+   </assert>
+
+   <assert test='count(cda:value/@code) = 1'>
+      Warning: HITSP/C83 Allergy/Drug Sensitivity Reaction Coded is a required if known, non-repeating data 
+      element.
+      See HITSP/C83 Table 2-10, Data Element 6.06.
+   </assert>
+
+   <!-- Item Severity  -->
+   <assert test='count(cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.55"]) = 1'>
+      Warning: HITSP/C83 Allergy/Drug Sensitivity Severity is a required if known, non-repeatable data
+      element.
+      See HITSP/C83 Table 2-10, Severity.
+   </assert>
+
+ </rule>
+
+   <!-- Change Context to Reaction Severity -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]/cda:entryRelationship[@typeCode="MFST"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.55"]'>
+
+   <assert test='count(cda:text) = 1'>
+      Warning: HITSP/C83 Allergy/Drug Sensitivity, Severity Free-Text is a required if known, non-repeatable
+      data element.
+      See HITSP/C83 Table 2-10, Data Element 6.07.
+   </assert>
+
+   <assert test='count(cda:value/@code) = 1'>
+      Warning: HITSP/C83 Allergy/Drug Sensitivity, Severity Coded is a required if known, non-repeatable 
+      data element.
+      See HITSP/C83 Table 2-10, Data Element 6.08.
+   </assert>
+
+ </rule>
+ 
+</pattern>
+
+
+
+<!-- Pattern for Notes -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.6-note'>
+
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]'>
+
+
+   <!-- Item Reaction -->
+   <assert test='cda:entryRelationship[@typeCode="MFST"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]'>
+      Note: HITSP/C83 Allergy/Drug Sensitivity may contain a repeatable Reaction data element.
+      See HITSP/C83 Table 2-10, Reaction.
+   </assert>
+ </rule>
+</pattern>
+

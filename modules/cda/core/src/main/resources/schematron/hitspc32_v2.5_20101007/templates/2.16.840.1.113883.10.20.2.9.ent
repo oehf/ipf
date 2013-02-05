@@ -1,0 +1,45 @@
+<!--  Past Medical History: 2.16.840.1.113883.10.20.2.9 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.2.9-errors' see='#p-2.16.840.1.113883.10.20.2.9-errors'>
+	<title>Past Medical History - errors validation phase</title>
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.9"]'>
+    <assert test="cda:text">
+       Error: HL7 History and Physical Note, the Past Medical History section SHALL contain a narrative block.
+       See HL7 History and Physical Note, Section 4.2.3, CONF-HP-77.
+    </assert>
+
+    <assert test="cda:code[@code='11348-0']">
+       Error: HL7 History and Physical Note, the section code for the section describing Past Medical History 
+       SHALL be 11348-0 (HISTORY OF PAST ILLNESS).
+       See HL7 History and Physical Note, Section 4.2.3, CONF-HP-78.
+    </assert>
+
+ </rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.2.9-warning' see='#p-2.16.840.1.113883.10.20.2.9-warning'>
+	<title>Past Medical History - warning validation phase</title>
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.9"]'>
+
+    <assert test=".//cda:entry">
+       Warning: HL7 History and Physical Note, the Past Medical History section SHOULD contain clinical 
+       statements.
+       See HL7 History and Physical Note, Section 4.2.3, CONF-HP-77.
+    </assert>
+
+ </rule>
+</pattern>
+
+<!-- manual -->
+<!--
+<pattern id='p-2.16.840.1.113883.10.20.2.9-manual' see='#p-2.16.840.1.113883.10.20.2.9-manual'>
+	<title>Past Medical History - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.9"]'>
+	<report test='.'>TBD</report>
+	</rule>
+</pattern>
+-->

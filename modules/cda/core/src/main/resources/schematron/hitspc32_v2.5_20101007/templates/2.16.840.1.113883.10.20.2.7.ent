@@ -1,0 +1,45 @@
+<!--  Assessment and Plan: 2.16.840.1.113883.10.20.2.7 -->
+<!--
+
+   Note: This Assessment and Plan only applies to the HL7 History and Physical Note
+   specification as used by HITSP/C83 2.2.1.24 Plan of Care Section.  This schematron
+   would not necessarily be useful for a complete implementation of HL7 History and
+   Physical rules.
+
+-->
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.2.7-errors' see='#p-2.16.840.1.113883.10.20.2.7-errors'>
+	<title>Assessment and Plan - errors validation phase</title>
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.7"]'>
+
+    <assert test="cda:code/@code='18776-5'">
+       Error: HL7 History and Physical Note, in the Plan of Care Section as used by HITSP/C83 2.2.1.24
+       Plan of Care Section SHALL have a section / code set to "18776-5".
+       See HL7 History and Physical Note, Section 4.2.13 Assessment and Plan, rules CONF-HP-91 and
+       rules CONF-HP-92.  See also HITSP/C83, Section 2.2.1.24.
+    </assert>
+ </rule>
+
+</pattern>
+
+<!-- warning -->
+<pattern id='p-2.16.840.1.113883.10.20.2.7-warning'>
+</pattern>
+<!--
+<pattern id='p-2.16.840.1.113883.10.20.2.7-warning' see='#p-2.16.840.1.113883.10.20.2.7-warning'>
+	<title>Assessment and Plan - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.7"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+-->
+<!-- manual -->
+<!--
+<pattern id='p-2.16.840.1.113883.10.20.2.7-manual' see='#p-2.16.840.1.113883.10.20.2.7-manual'>
+	<title>Assessment and Plan - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.7"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+-->

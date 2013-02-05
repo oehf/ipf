@@ -1,0 +1,257 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.7 -->
+<!-- HITSP/C83 Conditions Module -->
+
+<!-- Errors Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.7-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='self::cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.27"]'>
+      Error: The HITSP/C83 templateId for Condition - Problem entry (2.16.840.1.113883.3.88.11.83.7) 
+      is in the wrong location. The HITSP/C83 Conditions module (2.16.840.1.113883.3.88.11.83.7) shall 
+      be represented as a CCD Problem act (2.16.840.1.113883.10.20.1.27).
+      See HITSP/C83 Section 2.2.2.7 and Section 2.2.2.7.1, rule C83-[DE-7-CDA-1].
+   </assert>
+
+    <!-- Problem Entry -->
+   <assert test='cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.28"]'>
+      Error: HITSP/C83 Condition module (2.16.840.1.113883.3.88.11.83.7) represented as a CCD 
+      Problem Act (2.16.840.1.113883.10.20.1.27) shall contain a subject (SUBJ) entryRelationship 
+      with target a Problem Entry data element represented as a CCD Problem Observation 
+      (2.16.840.1.113883.10.20.1.28).
+      See HITSP/C83 Table 2-11, Problem Entry.
+   </assert>
+  
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2"'>
+      Error: HITSP/C83 Condition Problem Entries SHALL also declare conformance to the IHE Problem 
+      Concern by including a templateId element with the root attribute set to the value 
+      1.3.6.1.4.1.19376.1.5.3.1.4.5.2.
+      See HITSP/C83 Section 2.2.2.7.1 Rule C83-[DE-7-CDA-2].
+   </assert>
+ 
+ </rule>
+
+
+ <!-- New Context for Problem Entry -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.28"]'>
+
+   <!-- Item 7.03 Problem Name -->
+   <assert test='cda:text/cda:reference/@value'>
+     Error: HITSP/C83 Condition, Problem Entry data element element shall contain a free text 
+     element to record the Problem Name. The Problem Name element shall contain a reference 
+     element whose value attribute points to narrative text in the parent section containing 
+     the name of the problem.
+     See HITSP/C83 Table 2-11, Data Element 7.03 and Section 2.2.2.7.4
+   </assert>
+
+   <assert test='not(cda:code[@code and @codeSystem]) or (cda:code/@codeSystem="2.16.840.1.113883.6.96")'>
+      Error: HITSP/C83 Conditions Problem Type SHALL be coded as specified in HITSP/C80 Section 2.2.3.1.2 
+      Problem Type.  The code SHALL contain a codeSystem attribute that identifies the SNOMED CT 
+      codeSystem (2.16.840.1.113883.6.96).
+      See HITSP/C83 Section 2.2.2.7.3, rule C154-[DE-7.02-1].
+   </assert>
+
+   <assert test='not(cda:code[@code and @codeSystem]) or
+                 cda:code[@code="404684003" or @code="418799008" or @code="55607006" or
+                          @code="409586006" or @code="64572001" or @code="282291009" or
+                          @code="248536006"]'>
+      Error: HITSP/C83 Conditions Problem Type SHALL be coded as specified in HITSP/C80 Section 2.2.3.1.2
+      Problem Type.  The Problem Type code element SHALL contain a code attribute that identifies the 
+      SNOMED CT code for one of the following seven conditions: Finding (404684003), Symptom (418799008),
+      Problem (55607006), Complaint (409586006), Condition (64572001), Diagnosis (282291009, Functional 
+      limitation (248536006).
+      See HITSP/C83 Section 2.2.2.7.3, rule C83-[DE-7.02-1].
+   </assert>
+
+   <assert test='not(cda:value[@code and @codeSystem]) or 
+                 cda:value[@codeSystem="2.16.840.1.113883.6.96" and @code]'>
+      Error: HITSP/C83 Condition Problem Code SHALL be coded as specified in HITSP/C80 Section 
+      2.2.3.1.1 Problem.
+     See HITSP/C83 Section 2.2.2.7.5, rule C154-[DE-7.04-1].
+   </assert>
+
+ </rule>
+
+ <!-- New Context for Treating Provider -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:performer'>
+
+   <assert test='cda:assignedEntity/cda:id'>
+     Error: HITSP/C83 Condition Treating Provider, the identifier of the treating provider SHALL be 
+     present in the id element beneath the assignedEntity. This identifier SHALL be the identifier
+     of one of the providers listed in the healthcare providers module described in Section 2.2.2.4
+     See HITSP/C83 Section 2.2.2.7.6, rule C83-[DE-7.05-CDA-2].
+   </assert>
+
+ <!-- The following XPath 2.0 expression cannot be evaluated in XPath 1.0; Schematron won't accept the "concat" function in a path!
+
+   <assert test='cda:assignedEntity/cda:id/concat(@root,@extension) = /cda:ClinicalDocument/cda:documentationOf/cda:serviceEvent/cda:performer/cda:assignedEntity/cda:id/concat(@root,@extension)'>
+     Error: A C83 Treating Provider data element shall contain a cda:assignedEntity/cda:id element 
+     to identify the treating provider. This identifier shall be the identifier of one of the 
+     providers listed in the C83 Providers module.
+     See HITSP/C83 Section 2.2.2.7.6, rule C83-[DE-7.05-CDA-2].
+   </assert>
+
+So I commented out this Assert until we can figure out an equivalent XPath 1.0 expression. I've replaced it below with a compound test on @root and @extension knowing that this could return valid even if there is a mis-match among provider ids.
+ -->
+
+   <assert test='(cda:assignedEntity/cda:id/@root = /cda:ClinicalDocument/cda:documentationOf/cda:serviceEvent/cda:performer/cda:assignedEntity/cda:id/@root)
+              and (cda:assignedEntity/cda:id/@extension = /cda:ClinicalDocument/cda:documentationOf/cda:serviceEvent/cda:performer/cda:assignedEntity/cda:id/@extension)'>
+     Error: HITSP/C83 Condition Treating Provider, the identifier of the treating provider SHALL be
+     present in the id element beneath the assignedEntity. This identifier SHALL be the identifier
+     of one of the providers listed in the healthcare providers module described in Section 2.2.2.4
+     See HITSP/C83 Section 2.2.2.7.6, rule C83-[DE-7.05-CDA-2].
+   </assert>
+
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:entryRelationship/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.38"]'>
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.13.3"'>
+      Error: HITSP/C83 Condition Age (at onset) SHALL declare conformance to the IHE Family History
+      Observation entry by including a templateId element with the root attribute set to the value
+      1.3.6.1.4.1.19376.1.5.3.1.4.13.3.
+      See HITSP/C83 Table 2-11, Data Element 7.06 and Section 2.2.2.18.11, rule C83-[DE-18.13-CDA-1]. 
+   </assert>
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:entryRelationship[@typeCode="CAUS"]/cda:observation/cda:entryRelationship/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.38"]'>
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.13.3"'>
+      Error: HITSP/C83 Condition Age (at death) SHALL declare conformance to the IHE Family History
+      Observation entry by including a templateId element with the root attribute set to the value
+      1.3.6.1.4.1.19376.1.5.3.1.4.13.3.
+      See HITSP/C83 Table 2-11, Data Element 7.08 and Section 2.2.2.18.11, rule C83-[DE-18.13-CDA-1].
+   </assert>
+</rule>
+
+</pattern>
+
+
+<!-- Warnings Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.7-warning'>
+
+
+
+ <!-- New Context for Problem Entry -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.28"]'>
+
+
+   <assert test='count(cda:effectiveTime) = 1'>
+      Warning: HITSP/C83 Conditions, Problem Date is a required if known, non-repeatable data element.
+      See HITSP/C83 Table 2-11, Data Element 7.01.
+   </assert>
+
+   <assert test='not(cda:effectiveTime) or cda:effectiveTime/cda:low'>
+      Warning: HITSP/C83 Condition Problem Entry data element should contain a Problem Date element.  
+      The problem date constraints include the onset and resolution dates for the problem. The onset 
+      date shall be recorded in the low element of the effectiveTime element when known.
+      See HITSP/C83 Table 2-11 and Section 2.2.2.7.2.
+   </assert>
+
+   <assert test='not(cda:effectiveTime/cda:high) or cda:effectiveTime/cda:high[@value or @nullFlavor="UNK"]'>
+      Warning: HITSP/C83 Condition Problem Entry data element should contain a Problem Date element.
+      The problem date constraints include the onset and resolution dates for the problem.  The 
+      resolution data shall be recorded in the high element of the effectiveTime element when known.  
+      If the problem is known to be resolved, but the date of resolution is not known, then the high
+      element shall be present, and the nullFlavor attribute shall be set to 'UNK'. Therefore, the 
+      existence of an high element within a problem does indicate that the problem has been resolved.  
+      See HITSP/C83 Table 2-11 and Section 2.2.2.7.2.
+   </assert>
+
+   <assert test='count(cda:code/@code) = 1'>
+      Warning: HITSP/C83 Conditions, Problem Type is a required if known, non-repeatable data element.
+      See HITSP/C83 Table 2-11, Data Element 7.02.
+   </assert>
+   
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]'>
+
+   <assert test='cda:entryRelationship[@typeCode="SUBJ"]/cda:sequenceNumber'>
+      Warning: HITSP/C83 Conditions, Diagnosis Priority is a required if known, non-repeatable data element.
+      See HITSP/C83 Table 2-11, Data Element 7.10.
+   </assert>
+
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:performer'>
+
+   <assert test='count(cda:assignedEntity/cda:id) = 1'>
+      Warning: HITSP/C83 Conditions, Treating Provider ID is a required if known, non-repeatable data element.
+      See HITSP/C83 Table 2-11, Data Element 7.11.
+   </assert>
+ </rule>
+
+</pattern>
+
+
+
+<!-- Notes Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.7-note'>
+
+ <!-- New Context for Problem Entry -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:entryRelationship[@typeCode="SUBJ"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.28"]'>
+
+   <assert test='count(cda:value/@code) = 1'>
+      Note: HITSP/C83 Conditions, Problem Entry may contain an optional, non-repeating Problem Code.
+      See HITSP/C83 Table 2-11, Data Element 7.04.
+   </assert>
+
+ </rule>
+
+
+ <!-- Initial Context for HITSP/C83 Conditions Module -->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]'>
+
+   <assert test='cda:performer'>
+      Note: HITSP/C83 Conditions module may contain an optional, repeatable Treating Provider element.
+      See HITSP/C83 Table 2-11, Data Element 7.05 and Section 2.2.2.7.6, rule C83-[DE-7.05-CDA-3].
+   </assert>
+
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:performer'>
+
+   <assert test='cda:entryRelationship/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.38"]'>
+      Note: HITSP/C83 Conditions module may contain an optional, non-repeating Age (at Onset) data element.
+      See HITSP/C83 Table 2-11, Data Element 7.06.
+   </assert>
+ 
+   <assert test='cda:entryRelationship[@typeCode="CAUS"]/cda:observation'>
+      Note: HITSP/C83 Conditions module may contain an optional, non-repeating Cause of Death data element.
+      See HITSP/C83 Table 2-11, Data Element 7.07.
+   </assert>
+
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:performer/cda:entryRelationship[@typeCode="CAUS"]/cda:observation'>
+
+   <assert test='cda:effectiveTime'>
+      Note: HITSP/C83 Conditions module may contain an optional, non-repeating Time of Death data element.
+      See HITSP/C83 Table 2-11, Data Element 7.09.
+   </assert>
+
+   <assert test='cda:entryRelationship/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.38"]'>
+      Note: HITSP/C83 Conditions module may contain an optional, non-repeating Age (at Death) data element.
+      See HITSP/C83 Table 2-11, Data Element 7.08.
+   </assert>
+ </rule>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:performer'>
+   <assert test='cda:time'>
+      Note: HITSP/C83 Conditions, Treating Provider, the time over which this provider treated 
+      the condition MAY be recorded in the time element beneath the performer element.
+      See HITSP/C83 Section 2.2.2.7.6, rule C83-[DE-7.05-CDA-1].
+   </assert>  
+ </rule>
+
+
+</pattern>
+

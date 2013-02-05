@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created from 'Patient Record Definition (XML)' (c) 2012 EHR Doctors'-->
+<ClinicalDocument xsi:schemaLocation="urn:hl7-org:v3 http://xreg2.nist.gov:8080/hitspValidation/schema/cdar2c32/infrastructure/cda/C32_CDA.xsd" xmlns="urn:hl7-org:v3" xmlns:sdtc="urn:hl7-org:sdtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<realmCode code="US" />
+<typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040" />
+<templateId root="2.16.840.1.113883.10.20.1" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.1.1" />
+<templateId root="2.16.840.1.113883.10.20.3" />
+<templateId root="2.16.840.1.113883.3.88.11.32.1" />
+<id root="916F4EE3-54CE-42CF-868A-2743411F9A88" />
+<code code="34133-9" displayName="Summarization of episode note" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" />
+<title>Continuity of Care Document from EHR Doctors</title>
+<effectiveTime value="20110923000000-0800" />
+<confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" />
+<languageCode code="en-US" />
+<recordTarget typeCode="RCT" contextControlCode="OP">
+<patientRole>
+<id root="2.16.840.1.113883.3.608.1.1" extension="12334" />
+<addr use="HP">
+<streetAddressLine>W4447 MUSSER DRIVE</streetAddressLine>
+<city>PHILLIPS</city>
+<state>WI</state>
+<postalCode>544555000</postalCode>
+</addr>
+<telecom use="HP" value="tel:+1-7159110000" />
+<telecom use="WP" nullFlavor="UNK" />
+<patient>
+<name use="L">
+<given qualifier="CL">Phillip</given>
+<given>R</given>
+<family>Jones</family>
+</name>
+<administrativeGenderCode code="UN" displayName="UNKNOWN" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7 AdministrativeGender" />
+<birthTime value="19630121000000" />
+<maritalStatusCode>
+<originalText>MARRIED (M)</originalText>
+</maritalStatusCode>
+</patient>
+</patientRole>
+</recordTarget>
+<author>
+<time value="20110923000000" />
+<assignedAuthor>
+<id root="E81E943B-1D48-4A68-839D-D3883E06E768" />
+<addr use="WP">
+<streetAddressLine>1 AUTHOR LANE</streetAddressLine>
+<city>PHILLIPS</city>
+<state>WI</state>
+<postalCode>544555000</postalCode>
+</addr>
+<telecom use="WP" value="tel:+1-71538707843" />
+<assignedPerson>
+<name>
+<given>Richard</given>
+<family>Braman</family>
+</name>
+</assignedPerson>
+</assignedAuthor>
+</author>
+<custodian>
+<assignedCustodian />
+</custodian>
+<documentationOf>
+<serviceEvent classCode="PCPR">
+<effectiveTime>
+<low value="20090923000000" />
+<high value="20110606000000" />
+</effectiveTime>
+</serviceEvent>
+</documentationOf>
+<component>
+<structuredBody>
+<!--
+            ********************************************************
+                4.5 Problems
+            ********************************************************
+            -->
+<component>
+<section>
+<templateId root="2.16.840.1.113883.3.83.11.83.103" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.6" />
+<templateId root="2.16.840.1.113883.10.20.1.11" />
+<code code="11450-4" displayName="Problem list" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" />
+<title>Problem list</title>
+<text>
+<list>
+<item ID="prob-7E743234-C260-4DD5-AEA0-803CB1A54717">HYPERLIPIDEMIA NEC/NOS, Inactive problem</item>
+<item ID="prob-5F57549E-7F4B-4B7C-BA9E-23915AF627EB">HYPERTENSION NOS, Active Problem</item>
+</list>
+</text>
+<entry typeCode="DRIV">
+<act classCode="ACT" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.27" />
+<templateId root="2.16.840.1.113883.3.88.11.83.7" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2" />
+<id root="7E743234-C260-4DD5-AEA0-803CB1A54717" />
+<code nullFlavor="NA" />
+<statusCode code="active"></statusCode>
+<effectiveTime>
+<low value="20100206000000" />
+</effectiveTime>
+<entryRelationship typeCode="SUBJ" inversionInd="false">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" />
+<id root="7E743234-C260-4DD5-AEA0-803CB1A54717" />
+<code code="282291009" displayName="Diagnosis" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT"></code>
+<text>
+<reference value="#prob-7E743234-C260-4DD5-AEA0-803CB1A54717" />
+</text>
+<statusCode code="completed" />
+<effectiveTime>
+<low value="20091217000000" />
+<high nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" nullFlavor="UNK">
+<translation code="272.4" codeSystem="2.16.840.1.113883.6.2" displayName="HYPERLIPIDEMIA NEC/NOS" />
+</value>
+<entryRelationship typeCode="REFR" inversionInd="false">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.50"></templateId>
+<code code="33999-4" displayName="Status" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" />
+<text />
+<statusCode code="completed" />
+<value xsi:type="CE" code="73425007" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Inactive" />
+</observation>
+</entryRelationship>
+</observation>
+</entryRelationship>
+</act>
+</entry>
+<entry typeCode="DRIV">
+<act classCode="ACT" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.27" />
+<templateId root="2.16.840.1.113883.3.88.11.83.7" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.2" />
+<id root="5F57549E-7F4B-4B7C-BA9E-23915AF627EB" />
+<code nullFlavor="NA" />
+<statusCode code="active"></statusCode>
+<effectiveTime>
+<low value="20100206000000" />
+</effectiveTime>
+<entryRelationship typeCode="SUBJ" inversionInd="false">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" />
+<id root="5F57549E-7F4B-4B7C-BA9E-23915AF627EB" />
+<code code="282291009" displayName="Diagnosis" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT"></code>
+<text>
+<reference value="#prob-5F57549E-7F4B-4B7C-BA9E-23915AF627EB" />
+</text>
+<statusCode code="completed" />
+<effectiveTime>
+<low value="20091217000000" />
+<high nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" nullFlavor="UNK">
+<translation code="401.9" codeSystem="2.16.840.1.113883.6.2" displayName="HYPERTENSION NOS" />
+</value>
+<entryRelationship typeCode="REFR" inversionInd="false">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.50"></templateId>
+<code code="33999-4" displayName="Status" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" />
+<text />
+<statusCode code="completed" />
+<value xsi:type="CE" code="55561003" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Active" />
+</observation>
+</entryRelationship>
+</observation>
+</entryRelationship>
+</act>
+</entry>
+</section>
+</component>
+<!--
+            ********************************************************
+                4.9 Results
+            ********************************************************
+            -->
+<component>
+<section>
+<templateId root="2.16.840.1.113883.10.20.1.14" />
+<templateId root="2.16.840.1.113883.3.88.11.83.122" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.28" />
+<code code="30954-2" displayName="Relevant diagnostic tests and/or laboratory data" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" />
+<title>Results</title>
+<text>
+<list>
+<item ID="res-6B348E75-BA4A-4264-A207-459036BE99D2">On 20091216052200, HEMOGLOBIN. is 11.2</item>
+<item ID="res-D28FAEF0-7FF8-4ECB-9D3B-EA6A8E8AFAAB">On 20091215100100, ANTIBODY SCREEN. is NEGATIVE</item>
+<item ID="res-D28FAEF0-7FF8-4ECB-9D3B-EA6A8E8AFAAX">On 20091215100100, CT, head is Small high right occipital lobe contusion. No evidence of extra-axial blood. Significant sinus disease.</item>
+</list>
+</text>
+<entry typeCode="DRIV">
+<organizer classCode="BATTERY" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.32" />
+<id root="6B348E75-BA4A-4264-A207-459036BE99D2" />
+<code code="15220000" codeSystem="2.16.840.1.113883.6.96" displayName="Laboratory Test" />
+<statusCode code="completed" />
+<effectiveTime value="20091216052200" />
+<component>
+<procedure classCode="PROC" moodCode="EVN">
+<templateId root="2.16.840.1.113883.3.88.11.83.17" assigningAuthorityName="HITSP C83" />
+<templateId root="2.16.840.1.113883.10.20.1.29" assigningAuthorityName="CCD" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.19" assigningAuthorityName="IHE PCC" />
+<id />
+<code code="15220000" codeSystem="2.16.840.1.113883.6.96" displayName="Laboratory Test">
+<originalText><reference value=" " /></originalText>
+</code>
+<text><reference value="" /></text>
+<statusCode code="completed" />
+<effectiveTime value="20091216052200" />
+</procedure>
+</component>
+<component>
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.31" assigningAuthorityName="CCD" />
+<templateId root="2.16.840.1.113883.3.88.11.83.15.1" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13" />
+<id />
+<code code="718-7" codeSystem="2.16.840.1.113883.6.1" displayName="HEMOGLOBIN." />
+<text>
+<reference value="#res-6B348E75-BA4A-4264-A207-459036BE99D2" />
+</text>
+<statusCode code="completed" />
+<effectiveTime value="20091216052200" />
+<value xsi:type="PQ" value="11.2" unit="g/dL" />
+<interpretationCode code="L" codeSystem="2.16.840.1.113883.5.83" codeSystemName="Observation Interpretation" displayName="Low" />
+<referenceRange>
+<observationRange>
+<text>12.9-17.3</text>
+</observationRange>
+</referenceRange>
+</observation>
+</component>
+</organizer>
+</entry>
+<entry typeCode="DRIV">
+<organizer classCode="BATTERY" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.32" />
+<id root="D28FAEF0-7FF8-4ECB-9D3B-EA6A8E8AFAAB" />
+<code code="15220000" codeSystem="2.16.840.1.113883.6.96" displayName="Laboratory Test" />
+<statusCode code="completed" />
+<effectiveTime value="20091215100100" />
+<component>
+<procedure classCode="PROC" moodCode="EVN">
+<templateId root="2.16.840.1.113883.3.88.11.83.17" assigningAuthorityName="HITSP C83" />
+<templateId root="2.16.840.1.113883.10.20.1.29" assigningAuthorityName="CCD" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.19" assigningAuthorityName="IHE PCC" />
+<id />
+<code code="15220000" codeSystem="2.16.840.1.113883.6.96" displayName="Laboratory Test">
+<originalText><reference value=" " /></originalText>
+</code>
+<text><reference value="" /></text>
+<statusCode code="completed" />
+<effectiveTime value="20091215100100" />
+</procedure>
+</component>
+<component>
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.31" assigningAuthorityName="CCD" />
+<templateId root="2.16.840.1.113883.3.88.11.83.15.1" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13" />
+<id />
+<code code="890-4" codeSystem="2.16.840.1.113883.6.1" displayName="ANTIBODY SCREEN." />
+<text>
+<reference value="#res-D28FAEF0-7FF8-4ECB-9D3B-EA6A8E8AFAAB" />
+</text>
+<statusCode code="completed" />
+<effectiveTime value="20091215100100" />
+<value xsi:type="CV" nullFlavor="NA" />
+</observation>
+</component>
+</organizer>
+</entry>
+<entry typeCode="DRIV">
+<organizer classCode="BATTERY" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.32" />
+<id root="D28FAEF0-7FF8-4ECB-9D3B-EA6A8E8AFAAX" />
+<code code="363679005" codeSystem="2.16.840.1.113883.6.96" displayName="Diagnostic Imaging" />
+<statusCode code="completed" />
+<effectiveTime value="20091215100100" />
+<component>
+<procedure classCode="PROC" moodCode="EVN">
+<templateId root="2.16.840.1.113883.3.88.11.83.17" assigningAuthorityName="HITSP C83" />
+<templateId root="2.16.840.1.113883.10.20.1.29" assigningAuthorityName="CCD" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.19" assigningAuthorityName="IHE PCC" />
+<id />
+<code code="363679005" codeSystem="2.16.840.1.113883.6.96" displayName="Diagnostic Imaging">
+<originalText><reference value=" " /></originalText>
+</code>
+<text><reference value="" /></text>
+<statusCode code="completed" />
+<effectiveTime value="20091215100100" />
+</procedure>
+</component>
+<component>
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.31" assigningAuthorityName="CCD" />
+<templateId root="2.16.840.1.113883.3.88.11.83.15.1" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.13" />
+<id />
+<code code="11539-4" codeSystem="2.16.840.1.113883.6.1" displayName="CT, head" />
+<text>
+<reference value="#res-D28FAEF0-7FF8-4ECB-9D3B-EA6A8E8AFAAX" />
+</text>
+<statusCode code="completed" />
+<effectiveTime value="20091215100100" />
+<value xsi:type="CV" nullFlavor="NA" />
+</observation>
+</component>
+</organizer>
+</entry>
+</section>
+</component>
+<!--
+            ********************************************************
+                4.10 Procedures
+            ********************************************************
+            -->
+<component>
+<section>
+<templateId root="2.16.840.1.113883.10.20.1.12" />
+<templateId root="2.16.840.1.113883.3.88.11.83.108" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.11" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.12" />
+<code code="47519-4" displayName="History of procedures" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" />
+<title>History of procedures</title>
+<text>
+<list>
+<item ID="proc-8FCFD21D-A39D-4251-8B6B-C1256F7973F1">20091215000000, TOTAL KNEE REPLACEMENT</item>
+<item ID="proc-5D5B26C7-28D3-4917-B1D1-972468224F91">20091215000000, OTHER COMPUTER ASSISTED SURGERY</item>
+</list>
+</text>
+<entry typeCode="DRIV">
+<procedure classCode="PROC" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.29" />
+<templateId root="2.16.840.1.113883.3.88.11.83.17" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.19" />
+<id root="8FCFD21D-A39D-4251-8B6B-C1256F7973F1" />
+<code code="81.54" codeSystem="2.16.840.1.113883.6.2" displayName="TOTAL KNEE REPLACEMENT">
+<originalText><reference value=" " /></originalText>
+</code>
+<text>
+<reference value="#proc-8FCFD21D-A39D-4251-8B6B-C1256F7973F1" />
+</text>
+<statusCode code="completed" />
+<effectiveTime value="20091215000000" />
+</procedure>
+</entry>
+<entry typeCode="DRIV">
+<procedure classCode="PROC" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.29" />
+<templateId root="2.16.840.1.113883.3.88.11.83.17" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.19" />
+<id root="5D5B26C7-28D3-4917-B1D1-972468224F91" />
+<code code="00.39" codeSystem="2.16.840.1.113883.6.2" displayName="OTHER COMPUTER ASSISTED SURGERY">
+<originalText><reference value=" " /></originalText>
+</code>
+<text>
+<reference value="#proc-5D5B26C7-28D3-4917-B1D1-972468224F91" />
+</text>
+<statusCode code="completed" />
+<effectiveTime value="20091215000000" />
+</procedure>
+</entry>
+</section>
+</component>
+<!--
+            ********************************************************
+                4.13 (Alerts) Allergy/Drug Sensitivity
+            ********************************************************
+            -->
+<component>
+<section>
+<templateId root="2.16.840.1.113883.10.20.1.2" />
+<templateId root="2.16.840.1.113883.3.88.11.83.102" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.13" />
+<code code="48765-2" displayName="Allergies, adverse reactions, alerts" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" />
+<title>Allergies and Adverse Reactions</title>
+<text>
+<list>
+<item ID="allergy-99572DB5-876A-49B2-88FE-B82B45E858D4">Allergic to Amoxicillin Pot Clavulanate, hives, Active Problem</item>
+<item ID="allergy-572EF839-62FC-4253-BD95-0D80A0F48ABD">Allergic to Amoxicillin, Rash, Active Problem</item>
+<item ID="allergy-F61E6C28-4D3D-4A28-B3EC-643C879A9BCF">Allergic to bee stings, swelling, Active Problem</item>
+</list>
+</text>
+<entry typeCode="DRIV">
+<act classCode="ACT" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.27" />
+<templateId root="2.16.840.1.113883.3.88.11.83.6" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.3" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" />
+<id root="99572DB5-876A-49B2-88FE-B82B45E858D4" />
+<code nullFlavor="NA" />
+<statusCode code="completed" />
+<effectiveTime>
+<low value="20080529062556" />
+<high nullFlavor="UNK" />
+</effectiveTime>
+<entryRelationship typeCode="SUBJ" inversionInd="false">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.18" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" />
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<id />
+<code code="416098002" displayName="Allergy to Drug" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED" />
+<text>
+<reference value="#allergy-99572DB5-876A-49B2-88FE-B82B45E858D4" />
+</text>
+<statusCode code="completed" />
+<effectiveTime>
+<low nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" />
+<participant typeCode="CSM">
+<participantRole classCode="MANU">
+<playingEntity classCode="MMAT">
+<code code="1901" codeSystem="FDB" displayName="Amoxicillin Pot Clavulanate" />
+<name>Amoxicillin Pot Clavulanate</name>
+</playingEntity>
+</participantRole>
+</participant>
+<entryRelationship typeCode="MFST" inversionInd="true">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.54"></templateId>
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<id root="99572DB5-876A-49B2-88FE-B82B45E858D4" extension="1" />
+<code code="282291009" displayName="Diagnosis" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" />
+<statusCode code="completed" />
+<effectiveTime>
+<low nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" nullFlavor="UNK">
+<originalText>hives<reference />
+</originalText>
+</value>
+</observation>
+</entryRelationship>
+<entryRelationship typeCode="REFR">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.39" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.6" />
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<id root="99572DB5-876A-49B2-88FE-B82B45E858D4" />
+<code code="33999-4" codeSystem="2.16.840.1.113883.6.1" displayName="Status" codeSystemName="LOINC" />
+<statusCode code="completed" />
+<effectiveTime>
+<low nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" code="55561003" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Active" />
+</observation>
+</entryRelationship>
+</observation>
+</entryRelationship>
+</act>
+</entry>
+<entry typeCode="DRIV">
+<act classCode="ACT" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.27" />
+<templateId root="2.16.840.1.113883.3.88.11.83.6" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.3" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" />
+<id root="572EF839-62FC-4253-BD95-0D80A0F48ABD" />
+<code nullFlavor="NA" />
+<statusCode code="completed" />
+<effectiveTime>
+<low value="20080529062729.090000" />
+<high nullFlavor="UNK" />
+</effectiveTime>
+<entryRelationship typeCode="SUBJ" inversionInd="false">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.18" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" />
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<id />
+<code code="419199007" displayName="Allergy to Substance" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED" />
+<text>
+<reference value="#allergy-572EF839-62FC-4253-BD95-0D80A0F48ABD" />
+</text>
+<statusCode code="completed" />
+<effectiveTime>
+<low nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" />
+<participant typeCode="CSM">
+<participantRole classCode="MANU">
+<playingEntity classCode="MMAT">
+<code code="3675" codeSystem="FDB" displayName="Amoxicillin" />
+<name>Amoxicillin</name>
+</playingEntity>
+</participantRole>
+</participant>
+<entryRelationship typeCode="MFST" inversionInd="true">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.54"></templateId>
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<id root="572EF839-62FC-4253-BD95-0D80A0F48ABD" extension="1" />
+<code code="282291009" displayName="Diagnosis" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" />
+<statusCode code="completed" />
+<effectiveTime>
+<low nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" nullFlavor="UNK">
+<originalText>Rash<reference />
+</originalText>
+</value>
+</observation>
+</entryRelationship>
+<entryRelationship typeCode="REFR">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.39" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.6" />
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<id root="572EF839-62FC-4253-BD95-0D80A0F48ABD" />
+<code code="33999-4" codeSystem="2.16.840.1.113883.6.1" displayName="Status" codeSystemName="LOINC" />
+<statusCode code="completed" />
+<effectiveTime>
+<low nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" code="55561003" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Active" />
+</observation>
+</entryRelationship>
+</observation>
+</entryRelationship>
+</act>
+</entry>
+<entry typeCode="DRIV">
+<act classCode="ACT" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.27" />
+<templateId root="2.16.840.1.113883.3.88.11.83.6" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.3" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1" />
+<id root="F61E6C28-4D3D-4A28-B3EC-643C879A9BCF" />
+<code nullFlavor="NA" />
+<statusCode code="completed" />
+<effectiveTime>
+<low nullFlavor="UNK" />
+<high nullFlavor="UNK" />
+</effectiveTime>
+<entryRelationship typeCode="SUBJ" inversionInd="false">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.18" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" />
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<id />
+<code code="419199007" displayName="Allergy to Substance" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED" />
+<text>
+<reference value="#allergy-F61E6C28-4D3D-4A28-B3EC-643C879A9BCF" />
+</text>
+<statusCode code="completed" />
+<effectiveTime>
+<low nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" />
+<participant typeCode="CSM">
+<participantRole classCode="MANU">
+<playingEntity classCode="MMAT">
+<code nullFlavor="NA" />
+<name>bee stings</name>
+</playingEntity>
+</participantRole>
+</participant>
+<entryRelationship typeCode="MFST" inversionInd="true">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.54"></templateId>
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<id root="F61E6C28-4D3D-4A28-B3EC-643C879A9BCF" extension="1" />
+<code code="282291009" displayName="Diagnosis" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" />
+<statusCode code="completed" />
+<effectiveTime>
+<low nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" nullFlavor="UNK">
+<originalText>swelling<reference />
+</originalText>
+</value>
+</observation>
+</entryRelationship>
+<entryRelationship typeCode="REFR">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.39" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.5" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.6" />
+<templateId root="2.16.840.1.113883.10.20.1.28" />
+<id root="F61E6C28-4D3D-4A28-B3EC-643C879A9BCF" />
+<code code="33999-4" codeSystem="2.16.840.1.113883.6.1" displayName="Status" codeSystemName="LOINC" />
+<statusCode code="completed" />
+<effectiveTime>
+<low nullFlavor="UNK" />
+</effectiveTime>
+<value xsi:type="CD" code="55561003" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Active" />
+</observation>
+</entryRelationship>
+</observation>
+</entryRelationship>
+</act>
+</entry>
+</section>
+</component>
+<!--
+            ********************************************************
+                4.14 Medications
+            ********************************************************
+            -->
+<component>
+<section>
+<templateId root="2.16.840.1.113883.10.20.1.8" />
+<templateId root="2.16.840.1.113883.3.88.11.83.112" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.3.19" />
+<code code="10160-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of medication use" />
+<title>Medications</title>
+<text>
+<list>
+<item ID="med-5F5C4FB1-D86D-4123-8729-D5F9AFBE967F">20091215130300, ACETAMINOPHEN 500MG CAP, ACTIVE</item>
+<item ID="med-51F69C30-FDC1-42A2-8FA6-D6E2FB76DC53">20091215130200, DIPHENHYDRAMINE HCL 25MG TAB, INACTIVE</item>
+</list>
+</text>
+<entry typeCode="DRIV">
+<substanceAdministration classCode="SBADM" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.24" />
+<templateId root="2.16.840.1.113883.3.88.11.83.8" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7.1" />
+<id root="5F5C4FB1-D86D-4123-8729-D5F9AFBE967F" />
+<statusCode code="completed" />
+<effectiveTime xsi:type="IVL_TS">
+<low value="20091215130300" />
+<high nullFlavor="UNK" />
+</effectiveTime>
+<routeCode>
+<originalText>PO</originalText>
+</routeCode>
+<doseQuantity value="1" unit="TABLET" />
+<administrationUnitCode code="C42998" displayName="TABLET" codeSystem="2.16.840.1.113883.3.26.1.1" codeSystemName="NCI Thesaurus" />
+<consumable>
+<manufacturedProduct>
+<templateId root="2.16.840.1.113883.10.20.1.53" assigningAuthorityName="CCD" />
+<templateId root="2.16.840.1.113883.3.88.11.83.8.2" assigningAuthorityName="HITSP C83" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7.2" assigningAuthorityName="IHE PCC" />
+<manufacturedMaterial>
+<code code="198439" codeSystem="2.16.840.1.113883.6.88" displayName="ACETAMINOPHEN 500MG CAP">
+<originalText>ACETAMINOPHEN 500MG CAP<reference></reference></originalText>
+</code>
+</manufacturedMaterial>
+</manufacturedProduct>
+</consumable>
+<entryRelationship typeCode="REFR" inversionInd="false">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.47"></templateId>
+<code code="33999-4" displayName="Status" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" />
+<text />
+<statusCode code="completed" />
+<value xsi:type="CE" code="55561003" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Active" />
+</observation>
+</entryRelationship>
+</substanceAdministration>
+</entry>
+<entry typeCode="DRIV">
+<substanceAdministration classCode="SBADM" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.24" />
+<templateId root="2.16.840.1.113883.3.88.11.83.8" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7.1" />
+<id root="51F69C30-FDC1-42A2-8FA6-D6E2FB76DC53" />
+<statusCode code="completed" />
+<effectiveTime xsi:type="IVL_TS">
+<low value="20091215130200" />
+<high nullFlavor="UNK" />
+</effectiveTime>
+<doseQuantity><translation><originalText>1 TABLET</originalText></translation></doseQuantity>
+<consumable>
+<manufacturedProduct>
+<templateId root="2.16.840.1.113883.10.20.1.53" assigningAuthorityName="CCD" />
+<templateId root="2.16.840.1.113883.3.88.11.83.8.2" assigningAuthorityName="HITSP C83" />
+<templateId root="1.3.6.1.4.1.19376.1.5.3.1.4.7.2" assigningAuthorityName="IHE PCC" />
+<manufacturedMaterial>
+<code code="197620" codeSystem="2.16.840.1.113883.6.88" displayName="DIPHENHYDRAMINE HCL 25MG TAB">
+<originalText>DIPHENHYDRAMINE HCL 25MG TAB<reference></reference></originalText>
+</code>
+</manufacturedMaterial>
+</manufacturedProduct>
+</consumable>
+<entryRelationship typeCode="REFR" inversionInd="false">
+<observation classCode="OBS" moodCode="EVN">
+<templateId root="2.16.840.1.113883.10.20.1.47"></templateId>
+<code code="33999-4" displayName="Status" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" />
+<text />
+<statusCode code="completed" />
+<value xsi:type="CE" code="73425007" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Inactive" />
+</observation>
+</entryRelationship>
+</substanceAdministration>
+</entry>
+</section>
+</component>
+</structuredBody>
+</component>
+</ClinicalDocument>

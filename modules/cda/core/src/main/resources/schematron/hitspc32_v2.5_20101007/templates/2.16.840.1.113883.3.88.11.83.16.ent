@@ -1,0 +1,177 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.16 -->
+<!-- HITSP/C83 Encounters Module -->
+
+
+<!-- Errors Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.16-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.16"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <!-- Encounter Template ID Location -->
+   <assert test='self::cda:encounter[cda:templateId/@root="2.16.840.1.113883.10.20.1.21"]'>
+      Error: The HITSP/C83 templateId for Encounter entry (2.16.840.1.113883.3.88.11.83.16) is in the wrong 
+      location. A HITSP/C83 Encounter entry data element shall be represented as a CCD Encounter activity 
+      (2.16.840.1.113883.10.20.1.21).
+      See HITSP/C83 Section 2.2.2.16 and Section 2.2.2.16.1, rule C83-[DE-16-CDA-1].
+   </assert>   
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.14"'>
+      Error: HITSP/C83 Encounter data elements SHALL declare conformance to the IHE Encounter entry by including a
+      templateIs element with the root attribute set to the value 1.3.6.1.4.1.19376.1.5.3.1.4.14.
+      See HITSP/C83 Section 2.2.2.16.1, rule C83-[DE-16-CDA-2].
+   </assert>
+   
+   <assert test='cda:id'>
+      Error: HITSP/C83 Encounter, Encounter ID is a required, repeatable data element.
+      See HITSP/C83 Table 2-21, Data Element 16.01.
+   </assert>
+
+   <assert test='not(cda:code/@code) or count(cda:code/cda:originalText/cda:reference/@value) = 1'>
+      Error: HITSP/C83 Encounter, Encounter Free Text Type is a required, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.03. 
+   </assert>
+
+   <assert test='count(cda:effectiveTime) = 1'>
+      Error: HITSP/C83 Encounter, Encounter Date / Time is a required, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.04.
+   </assert>
+
+   <assert test='not(cda:priorityCode[@code and @codeSystem]) or
+                 cda:priorityCode[@code and @codeSystem="2.16.840.1.113883.6.21"]'>
+      Error: HITSP/C83 Encounter, Admission Type SHALL be coded as specified in HITSP/C80 Section 2.2.3.9.2
+      Admission Type.
+      See HITSP/C83 Section 2.2.2.16.3, rule C154-[DE-16.07-1].
+   </assert>
+
+   <assert test='not(cda:participant[@typeCode="ORG"]/cda:code[@code and @codeSystem]) or
+                 cda:participant[@typeCode="ORG"]/cda:code[@code and @codeSystem="2.16.840.1.113883.6.21"]'>
+      Error: HITSP/C83 Encounter, Admission Source SHALL be coded as specified in HITSP/C80 Section 2.2.3.9.1
+      Admission Source.
+      See HITSP/C83 Section 2.2.2.16.4, rule C154-[DE-16.06-1].
+   </assert>
+
+ </rule>
+
+
+ <rule context='/cda:ClinicalDocument/cda:componentOf/cda:encompassingEncounter'>
+
+   <assert test='not(cda:code[@code]) or
+                 cda:code[@code="EMER" or @code="IMP" or @code="AMB"]'>
+      Error: HITSP/C83 Encounter, Patient Class SHALL be coded as specified in HITSP/C80 Section 2.2.3.9.5
+      Patient Class.
+      See HITSP/C83 Section 2.2.2.16.5, rule C154-[DE-16.10-1].
+   </assert>
+ 
+ </rule>
+
+</pattern>
+
+
+<!-- Warnings Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.16-warning'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.16"]'>
+
+   <assert test='count(cda:code/@code) = 1'>
+      Warning: HITSP/C83 Encounter, Encounter Type is a required if known, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.02.
+   </assert>
+
+   <assert test='cda:performer/cda:assignedEntity'>
+      Warning: HITSP/C83 Encounter, Encounter Provider is a required if known, repeatable data element.
+      See HITSP/C83 Table 2-21, Data Element 16.05.
+   </assert>  
+
+   <assert test='cda:code[@code and @codeSystem="2.16.840.1.113883.6.12"]'>
+      Warning: HITSP/C83 Encounter, Encounter Type SHOULD be coded as specified in HITSP/C80 Section 2.2.3.9.3 
+      Encounter Type.
+      See HITSP/C83 Section 2.2.2.16.2, rule C83-[DE-16.02-1]. 
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+
+<!-- Notes Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.16-note'> 
+<!--
+ <rule context='*[ancestor::cda:section[cda:templateId/@root="2.16.840.1.113883.10.20.1.3"]
+             and self::cda:encounter[cda:templateId/@root="2.16.840.1.113883.10.20.1.21"]]'>
+-->
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.16"]'>
+
+   <assert test='count(cda:participant[@typeCode="ORG"]/cda:code) = 1'>
+      Note: HITSP/C83 Encounter, Admission Source is an optional, non-repeatable data element.
+      See HITSP/C83 Table 2-21, Data Element 16.06.
+   </assert>
+ 
+   <assert test='count(cda:priorityCode) = 1'>
+      Note: HITSP/C83 Encounter, Admission Type is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.07.
+   </assert>
+
+   <assert test='count(sdtc:dischargeDispositionCode) = 1'>
+      Note: HITSP/C83 Encounter, Discharge Disposition is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.09.
+   </assert>
+
+   <assert test='count(cda:participant[@typeCode="LOC"]) = 1'>
+      Note: HITSP/C83 Encounter, Facility Location is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.11.
+   </assert>
+
+   <assert test='not(cda:participant[@typeCode="LOC"]/cda:time) or
+                 cda:participant[@typeCode="LOC"]/cda:time/cda:low'>
+      Note: HITSP/C83 Encounter, Arrival Date / Time is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.12.
+   </assert>
+
+   <assert test='cda:entryRelationship[@typeCode="RSON"]'>
+      Note: HITSP/C83 Encounter, Reason For Visit is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.13.
+   </assert>
+
+
+ </rule>
+
+ <rule context='/cda:ClinicalDocument/cda:componentOf/cda:encompassingEncounter'>
+
+   <assert test='count(cda:code/@code) = 1'>
+      Note: HITSP/C83 Encounter, Patient Class is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.10
+   </assert>
+   <assert test='count(cda:dischargeDispositionCode) = 1'>
+      Note: HITSP/C83 Encounter, Discharge Disposition is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.09.
+   </assert>
+ </rule>
+
+ <rule context='/cda:ClinicalDocument/cda:componentOf/cda:encompassingEncounter/cda:location/cda:healthCareFacility/cda:location'>
+ 
+   <assert test='cda:id'>
+      Note: HITSP/C83 Encounter, Facility ID is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.17.
+   </assert>
+   <assert test='cda:addr'>
+      Note: HITSP/C83 Encounter, Facility Address is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.19.
+   </assert>
+   <assert test='cda:name'>
+      Note: HITSP/C83 Encounter, Facility Name is an optional, non-repeating data element.
+      See HITSP/C83 Table 2-21, Data Element 16.20.
+   </assert>
+
+
+ </rule>
+
+</pattern>
+
+

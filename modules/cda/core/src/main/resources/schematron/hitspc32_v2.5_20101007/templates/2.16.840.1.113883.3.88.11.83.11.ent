@@ -1,0 +1,55 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.11 -->
+<!-- HITSP/C83 Comment Module -->
+
+
+<!-- Errors pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.11-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.11"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='self::cda:act[cda:templateId/@root="2.16.840.1.113883.10.20.1.40"]'>
+      Error: The HITSP/C83 templateId for a Comments Module (2.16.840.1.113883.3.88.11.83.11) is in the wrong location. 
+      A HITSP/C83 Comments Module shall be represented as a CCD Comment act (2.16.840.1.113883.10.20.1.40).
+      See HITSP/C83 Section 2.2.2.11 and C83-[DE-10-CDA-2].
+   </assert>
+
+   <assert test='ancestor-or-self::*/cda:author[1]'>
+      Error: HITSP/C83 Comment module, Author is a required, non-repeating element.
+      See HITSP/C83 Table 2-16, Author.
+   </assert>
+
+   <assert test='cda:text/cda:reference/@value'>
+     Error: HITSP/C83 Comments module, Free Text Comment (cda:text/cda:reference/@value) is a required, 
+     non-repeatable data element.
+     See HITSP/C83 Table 2-16, Data Element 11.01.
+   </assert>
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.2"'>
+      Error: HITSP/C83 Comment module SHALL be conformant with the IHE Comment module and SHALL include a
+      templateId element with the root attribute set to the value 1.3.6.1.4.1.19376.1.5.3.1.4.2.
+      See HITSP/C83 Section 2.2.2.11.1, rule C83-[DE-10-CDA-3].
+   </assert>
+      
+ </rule>
+
+</pattern>
+
+
+<!-- Warnings pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.11-warning'>
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.11"]'>
+ </rule>
+</pattern>
+
+   
+
+<!-- Notes pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.11-note'>
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.11"]'>
+ </rule>
+</pattern>

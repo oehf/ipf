@@ -1,0 +1,47 @@
+<!--  Reason for Referral/Visit: 2.16.840.1.113883.10.20.4.8 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.4.8-errors' see='#p-2.16.840.1.113883.10.20.4.8-errors'>
+	<title>Reason for Referral/Visit - errors validation phase</title>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.4.8"]'>
+
+    <assert test="cda:code[@code='42349-1'] | cda:code[@code='29299-5']">
+       Error: HL7 Consulation Note, the section code for the section describing the reason for
+       referral/visit SHALL be 42349-1 (REASON FOR REFERRAL) or 29299-5 (REASON FOR VISIT).  A
+       Consultation Note that uses the latter code SHALL NOT use the former code and vice versa.
+       See HL7 Consultation Node, Section 4.2.1, CONF-CO-26.
+    </assert>
+
+    <assert test="not(//cda:section/cda:code[@code='42349-1'] and //cda:section/cda:code[@code='29299-5'])">
+       Error: HL7 Consulation Note, the section code for the section describing the reason for
+       referral/visit SHALL be 42349-1 (REASON FOR REFERRAL) or 29299-5 (REASON FOR VISIT).  A
+       Consultation Note that uses the latter code SHALL NOT use the former code and vice versa.
+       See HL7 Consultation Node, Section 4.2.1, CONF-CO-26.
+    </assert>
+
+ </rule>
+
+</pattern>
+
+<!-- warning -->
+<pattern id='p-2.16.840.1.113883.10.20.4.8-warning'>
+</pattern>
+<!--
+<pattern id='p-2.16.840.1.113883.10.20.4.8-warning' see='#p-2.16.840.1.113883.10.20.4.8-warning'>
+	<title>Reason for Referral/Visit - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.4.8"]'>
+	<report test='.'>TBD</report>
+	</rule>
+</pattern>
+-->
+<!-- manual -->
+<!--
+<pattern id='p-2.16.840.1.113883.10.20.4.8-manual' see='#p-2.16.840.1.113883.10.20.4.8-manual'>
+	<title>Reason for Referral/Visit - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.4.8"]'>
+	<report test='.'>TBD</report>
+	</rule>
+</pattern>
+-->

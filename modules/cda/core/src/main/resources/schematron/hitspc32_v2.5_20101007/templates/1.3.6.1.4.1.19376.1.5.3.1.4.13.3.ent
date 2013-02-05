@@ -1,0 +1,43 @@
+<!--  IHE PCC Family History Observation: 1.3.6.1.4.1.19376.1.5.3.1.4.13.3 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.13.3-errors">
+    <title>IHE PCC Family History Observation - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.13.3"]'>
+    <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.13"] and 
+                  cda:templateId[@root="2.16.840.1.113883.10.20.1.22"]'>
+       Error: In IHE PCC Family History Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.3), Family History Observations is a 
+       Simple Observation and inherits constraints from CCD.  It must include two addition template IDs: 
+       1.3.6.1.4.1.19376.1.5.3.1.4.13 and 2.16.840.1.113883.10.20.1.22.
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.3
+    </assert>
+    </rule>
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.13.3-warnings">
+    <title>IHE PCC Family History Observation - warning validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.13.3"]'>
+    <assert test='cda:code[@code = "64572001" or
+                           @code = "418799008" or
+                           @code = "404684003" or
+                           @code = "409586006" or
+                           @code = "248536006" or
+                           @code = "55607006" or
+                           @code = "282291009"]'>
+       Warning: In IHE PCC Family History Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.3), the suggested codes are
+       available at http://wiki.ihe.net/index.php?title=Problem_Entry_code
+    </assert>
+    <assert test='cda:value[@codeSystem="2.16.840.1.113883.6.96" or
+                            @codeSystem="2.16.840.1.113883.6.103" or
+			    @codeSystem="2.16.840.1.113883.6.26"]'>
+       Warning: In IHE PCC Family History Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.3), the suggested value code
+       systems are available at http://wiki.ihe.net/index.php?title=Problem_Entry_value
+    </assert>
+    
+    </rule>
+
+
+  </pattern>

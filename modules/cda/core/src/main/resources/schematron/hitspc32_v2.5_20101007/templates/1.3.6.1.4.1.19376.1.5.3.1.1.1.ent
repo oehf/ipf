@@ -1,0 +1,40 @@
+<!--  IHE PCC Medical Documents Specification: 1.3.6.1.4.1.19376.1.5.3.1.1.1 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.1-errors">
+    <title>IHE PCC Medical Documents Specification - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.1"]'>
+
+    <assert test='self::cda:ClinicalDocument'>
+       Error: IHE PCC Medical Document Specification template ID (1.3.6.1.4.1.19376.1.5.3.1.1.1) is in the
+       wrong location.  An IHE PCC Medical Document Specification template ID shall be only used on a 
+       ClinicalDocument.
+    </assert>
+
+<!--
+   <assert test='cda:code[@code = "{{{LOINC}}}"]'>
+     Error: The document type code of a Medical Documents must be {{{LOINC}}}
+   </assert>
+-->
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'>
+     Error: In IHE PCC Medical Document Specification template ID (1.3.6.1.4.1.19376.1.5.3.1.1.1), the document 
+     type code must come from the LOINC code system (2.16.840.1.113883.6.1).
+   </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.1-warnings">
+    <title>IHE PCC Medical Documents Specification - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.1"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>

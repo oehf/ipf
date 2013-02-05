@@ -1,0 +1,47 @@
+<!--  Reason for Visit / Chief Complaint: 2.16.840.1.113883.10.20.2.8 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.2.8-errors' see='#p-2.16.840.1.113883.10.20.2.8-errors'>
+	<title>Reason for Visit / Chief Complaint - errors validation phase</title>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.8"]'>
+
+   <assert test="cda:code[@codeSystem='2.16.840.1.113883.6.1'][@code='29299-5' or @code='10154-3' or @code='46239-0']">
+      Error: HL7 History and Physical Note, when the Chief Complaint and the Reason for Visit are
+      recorded separately, LOINC codes 29299-5 (REASON FOR VISIT) and 10154-3 (CHIEF COMPLAINT)
+      SHALL be used to record them.  When the Chief Complaint and Reason for Visit are recorded
+      together, LOINC code 46239-0 (REASON FOR VISIT+CHIEF COMPLAINT) SHALL be used.
+      See HL7 History and Physical Note, Section 4.2.1, CONF-HP-74 and CONF-HP-75.
+   </assert>
+
+   <assert test="not(//cda:code[@code='46239-0'] and //cda:code[@code='29299-5' or @code='10154-3'])">
+      Error: HL7 History and Physical Note, a History and Physical document that contains a section
+      with a code value of 46239-0 (REASON FOR VISIT+CHIEF COMPLAINT) SHALL NOT contain sections
+      with a code value of 29299-5 (REASON FOR VISIT) or 10154-3 (CHIEF COMPLAINT) and vice versa.
+      See HL7 History and Physical Note, Section 4.2.1, CONF-HP-74 and CONF-HP-75.
+   </assert>
+ </rule>
+
+</pattern>
+
+<!-- warning -->
+<pattern id='p-2.16.840.1.113883.10.20.2.8-warning'>
+</pattern>
+<!--
+<pattern id='p-2.16.840.1.113883.10.20.2.8-warning' see='#p-2.16.840.1.113883.10.20.2.8-warning'>
+	<title>Reason for Visit / Chief Complaint - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.8"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+-->
+<!-- manual -->
+<!--
+<pattern id='p-2.16.840.1.113883.10.20.2.8-manual' see='#p-2.16.840.1.113883.10.20.2.8-manual'>
+	<title>Reason for Visit / Chief Complaint - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.8"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+-->

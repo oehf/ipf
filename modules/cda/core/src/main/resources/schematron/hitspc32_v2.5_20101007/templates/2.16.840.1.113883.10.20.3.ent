@@ -1,0 +1,525 @@
+<!--  CDA for common document type: 2.16.840.1.113883.10.20.3 -->
+<!--  General Header Constraints -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.3-errors' see='#p-2.16.840.1.113883.10.20.3-errors'>
+	<title>CDA for CDT - General Header Constraints - errors validation phase</title>
+
+
+    <rule context='/'>
+
+    <!-- Verify that CDA4CDT conformance is declared -->
+    <assert test='//cda:templateId/@root="2.16.840.1.113883.10.20.3" or //cda:templateId/@root="2.16.840.1.113883.10.20.2"'>
+    Error: A CDA R2 Document that claims conformance to the general header
+    constraints for Clinical Document Template (CDT) SHALL indicate so by including
+    the following template id in the header of the document, or by including a template
+    id in the header for a template that requires use of the general header constraint
+    template: &lt;templateId root=”2.16.840.1.113883.10.20.3”/&gt;.
+    See HL7 History and Physical Note, CONF-HP-1.
+    </assert>
+    </rule>
+
+    <rule context="*[cda:templateId/@root='2.16.840.1.113883.10.20.3']">
+    <assert test='self::cda:ClinicalDocument'>
+    Error: The root of a History and Physical SHALL be a ClinicalDocument element
+    from the urn:hl7-org:v3 namespace.
+    See HL7 History and Physical Note, CONF-HP-2.
+    </assert>
+
+    <assert test="cda:realmCode[@code='US']">
+    Error: The ClinicalDocument/realmCode element SHALL be present.  It SHALL
+    use the fixed value US.
+    See HL7 History and Physical Note, CONF-HP-15.
+    </assert>
+
+    <assert test="cda:typeId[@extension='POCD_HD000040']">
+    Error: The extension attribute of the typeId element SHALL be
+    POCD_HD000040.
+    See HL7 History and Physical Note, CONF-HP-16.
+    </assert>
+
+    <assert test="matches(cda:id/@root,'([0-2])(.([1-9][0-9]*|0))+') or matches(cda:id/@root,'([A-Fa-f0-9]{8})(\-[A-Fa-f0-9]{4}){3}(\-[A-Fa-f0-9]{12})')">
+    Error: The ClinicalDocument/id/@root attribute SHALL be a syntactically
+    correct UUID or OID. UUIDs SHALL be represented in the form
+    XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX, where each X is a character from the set
+    [A-Fa-f0-9].  OIDs SHALL be represented in dotted decimal notation, where each
+    decimal number is either 0, or starts with a nonzero digit.  More formally,
+    an OID SHALL be in the form ([0-2])(.([1-9][0-9]*|0))+.
+    See HL7 History and Physical Note, CONF-HP-17, CONF-HP-18 and CONF-HP-19.
+    </assert>
+
+    <assert test="not (cda:id[string-length(@root)>64])">
+    Error: OIDs SHALL be no more than 64 characters in length.
+    See HL7 History and Physical Note, CONF-HP-20.
+    </assert>
+
+    <assert test="cda:code">
+    Error: The ClinicalDocument/code element SHALL be present and specifies the
+    type of clincal document.
+    See HL7 History and Physical Note, CONF-HP-21.
+    </assert>
+
+    <assert test="cda:title">
+    Error: The title element SHALL be present and specifies the local name used
+    for the document.
+    See HL7 History and Physical Note, CONF-HP-22.
+    </assert>
+
+    <!--
+    CONF-HP-23: The ClinicalDocument/effectiveTime element SHALL be present and
+    specifies the creation time of the document.
+
+    Please note that this requirement is already covered by CDA R2 requirements.
+
+    -->
+
+    <assert test="cda:effectiveTime">
+    Error: The ClinicalDocument/effectiveTime element SHALL be present and
+    specifies the creation time of the document.
+    See HL7 History and Physical Note, CONF-HP-23.
+    </assert>
+
+    <assert test="cda:languageCode">
+    Error: ClinicalDocument / languageCode element SHALL be present.
+    See HL7 History and Physical Note, CONF-HP-24.
+    </assert>
+
+    <assert test="matches(cda:languageCode/@code,'(([a-z]{2})(\-[A-Z]{2})?)')">
+    Error: ClincalDocument / languageCode SHALL be in the form nn, or nn-CC.
+    See HL7 History and Physical Note, CONF-HP-25.
+    </assert>
+
+    <assert test="(not(cda:setId) and not(cda:versionNumber)) or (cda:setId and cda:versionNumber)">
+    Error: Both ClinicalDocument/setId and ClinicalDocument/versionNumber SHALL
+    be present or both SHALL be absent.
+    See HL7 History and Physical Note, CONF-HP-28.
+    </assert>
+
+    <assert test="not((cda:setId/@extension = cda:id/@extension)
+                                      and (cda:setId/@root = cda:id/@root))">
+    Error: The @extension and/or @root of ClinicalDocument/setId and
+    ClinicalDocument/id SHALL be different when both are present.
+    See HL7 History and Physical Note, CONF-HP-29.
+    </assert>
+
+    <assert test="not(cda:copyTime)">
+    Error: A ClinicalDocument/copyTime element SHALL NOT be present.
+    See HL7 History and Physical Note, CONF-HP-30.
+    </assert>
+
+    <assert test="cda:recordTarget/cda:patientRole">
+    Error: At least one recordTarget/patientRole element SHALL be present.
+    See HL7 History and Physical Note, CONF-HP-31.
+    </assert>
+
+    <assert test="string-length(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value) >= 4 or cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@nullFlavor">
+    Error: A patient/birthTime element SHALL be present. The patient/birthTime
+    element SHALL be precise at least to the year.  If unknown, it SHALL be
+    represented using a flavor of null.
+    See HL7 History and Physical Note, CONF-HP-32.
+    </assert>
+
+    <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:administrativeGenderCode[(@code and @codeSystem) or @nullFlavor]">
+    Error: A patient/administrativeGenderCode element SHALL be present.
+    If unknown, it SHALL be represented using a flavor of null.
+    See HL7 History and Physical Note, CONF-HP-33.
+    </assert>
+
+    <assert test="cda:author/cda:time">
+    Error: The author/time element SHALL be present.
+    See HL7 History and Physical Note, CONF-HP-37.
+    </assert>
+
+    <assert test="cda:author/cda:assignedAuthor/cda:id">
+    Error: The assignedAuthor/id element SHALL be present.
+    See HL7 History and Physical Note, CONF-HP-38.
+    </assert>
+
+    <assert test="cda:author/cda:assignedAuthor/cda:assignedPerson or cda:author/cda:assignedAuthor/cda:assignedAuthoringDevice">
+    Error: An assignedAuthor element SHALL contain at least one assignedPerson
+    or assignedAuthoringDevice elements.
+    See HL7 History and Physical Note, CONF-HP-39.
+    </assert>
+    </rule>
+
+    <rule context='/cda:ClinicalDocument/cda:languageCode'>
+    <assert test='
+                (
+                string-length(current()/@code) = 2
+                and
+                substring( current()/@code , 1, 2 ) = document("schematron/hitspc32_v2.5_20101007/languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
+                )
+                or
+                (
+                string-length(current()/@code) = 3
+                and
+                substring( current()/@code , 1, 3 ) = document("schematron/hitspc32_v2.5_20101007/languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
+                )
+                or
+                (
+                string-length(current()/@code) = 5
+                and
+                substring( current()/@code , 1, 2 ) = document("schematron/hitspc32_v2.5_20101007/languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
+                and
+                substring( current()/@code , 3, 1 ) = "-"
+                and
+                substring( current()/@code, 4, 2) = document("schematron/hitspc32_v2.5_20101007/languageCode.xml")/systems/system[@root="2.16.1"]/code/@value
+                )
+                or
+                (
+                string-length(current()/@code) = 6
+                and
+                substring( current()/@code , 1, 3 ) = document("schematron/hitspc32_v2.5_20101007/languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
+                and
+                substring( current()/@code , 4, 1 ) = "-"
+                and
+                substring( current()/@code, 5, 2) = document("schematron/hitspc32_v2.5_20101007/languageCode.xml")/systems/system[@root="2.16.1"]/code/@value
+                )
+                ' >
+    Error: ClinicalDocument / languageCode SHALL be in the
+    form nn, or nn-CC.  The nn portion of ClinicalDocument / languageCode SHALL be a
+    legal ISO-639-1 language code in lowercase.  The CC portion ClinicalDocument /
+    languageCode, if present, SHALL be an ISO-3166 country code in uppercase.
+    See HL7 History and Physical Note, CONF-HP-25, CONF-HP-26 and CONF-HP-27.
+    </assert>
+
+    </rule>
+
+    <rule context="*[self::cda:patient or self::cda:guardianPerson or self::cda:assignedPerson or
+                     self::cda:maintainingPerson or self::cda:relatedPerson or self::cda:associatedPerson]">
+    <assert test="cda:name">
+    Error: All patient guardianPerson, assignedPerson, maintainingPerson, relatedPerson,
+    intendedRecipient/informationRecipient, associatedPerson, and relatedSubject/subject
+    elements SHALL have a name.
+    See HL7 History and Physical Note, CONF-HP-6.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:intendedRecipient/cda:informationRecipient or self::cda:relatedSubject/cda:subject]">
+    <assert test="cda:informationRecipient/cda:name or cda:subject/cda:name">
+    Error: All patient guardianPerson, assignedPerson, maintainingPerson, relatedPerson,
+    intendedRecipient/informationRecipient, associatedPerson, and relatedSubject/subject
+    elements SHALL have a name.
+    See HL7 History and Physical Note, CONF-HP-6.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:patientRole or self::cda:assignedAuthor or self::cda:assignedEntity[not(parent::cda:dataEnterer)] or self::cda:associatedEntity]">
+    <assert test="cda:addr and cda:telecom">
+    Error: All patientRole, assignedAuthor, assignedEntity[not(parent::dataEnterer)]
+    and associatedEntity elements SHALL have an addr and telecom element.
+    See HL7 History and Physical Note, CONF-HP-7.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:guardianOrganization or self::cda:providerOrganization or self::cda:wholeOrganization or self::cda:representedOrganization or self::cda:representedCustodianOrganization or self::cda:receivedOrganization or self::cda:scopingOrganization or self::cda:serviceProviderOrganization]">
+    <assert test="cda:name and cda:addr and cda:telecom">
+    Error: All guardianOrganization, providerOrganization, wholeOrganization,
+    representedOrganization, representedCustodianOrganization, receivedOrganization,
+    scopingOrganization and serviceProviderOrganization elements SHALL have name,
+    addr and telecom elements.
+    See HL7 History and Physical Note, CONF-HP-9.
+    </assert>
+    </rule>
+
+    <rule context="/cda:ClinicalDocument/cda:effectiveTime | //cda:author/cda:time | //cda:dataEnterer/cda:time | //cda:encompassingEncounter/cda:effectiveTime">
+    <assert test="(@nullFlavor or (not(@value)) or string-length(@value) >= 8) or
+                  (cda:low/@nullFlavor or string-length(cda:low/@value) >= 8) or
+                  (cda:high/@nullFlavor or string-length(cda:high/@value) >= 8) or
+                  (cda:center/@nullFlavor or string-length(cda:center/@value) >= 8) or
+                  (cda:width/@nullFlavor or string-length(cda:width/@value) >= 8)">
+    Error: Times or time intervals found in the ClinicalDocument/effectiveTime,
+    author/time, dataEnterer/time, legalAuthenticator/time, authenticator/time and
+    encompassingEncounter/effectiveTime elements SHALL be precise to the day, and SHALL
+    include a time zone if more precise than to the day.
+    See HL7 History and Physical Note, CONF-HP-10.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:asOrganizationPartOf or self::cda:asMaintainedEntity or self::cda:relatedEntity or self::cda:serviceEvent or self::cda:serviceEvent/cda:performer or self::cda:encounterParticipant]">
+    <assert test="(not(cda:time/@value) or string-length(cda:time/@value) >= 4) and
+                  (not(cda:time/cda:low/@value) or string-length(cda:time/cda:low/@value) >= 4) and
+                  (not(cda:time/cda:high/@value) or string-length(cda:time/cda:high/@value) >= 4) and
+                  (not(cda:time/cda:center/@value) or string-length(cda:time/cda:center/@value) >= 4) and
+                  (not(cda:time/cda:width/@value) or string-length(cda:time/cda:width/@value) >= 4) and
+                  (not(cda:effectiveTime/@value) or string-length(cda:effectiveTime/@value) >= 4) and
+                  (not(cda:effectiveTime/cda:low/@value) or string-length(cda:effectiveTime/cda:low/@value) >= 4) and
+                  (not(cda:effectiveTime/cda:high/@value) or string-length(cda:effectiveTime/cda:high/@value) >= 4) and
+                  (not(cda:effectiveTime/cda:center/@value) or string-length(cda:effectiveTime/cda:center/@value) >= 4) and
+                  (not(cda:effectiveTime/cda:width/@value) or string-length(cda:effectiveTime/cda:width/@value) >= 4)">
+    Error: Times or time intervals found in the asOrganizationPartOf/effectiveTime,
+    asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime, serviceEvent/effectiveTime,
+    ClinicalDocument/participant/time, serviceEvent/performer/time and encounterParticipant/time
+    SHALL be precise at least to the year.
+    See HL7 History and Physical Note, CONF-HP-11.
+    </assert>
+    </rule>
+
+    <rule context="/cda:ClinicalDocument/cda:participant/cda:time">
+    <assert test="(not(./@value) or string-length(./@value) >= 4) and
+                  (not(./cda:low/@value) or string-length(./cda:low/@value) >= 4) and
+                  (not(./cda:high/@value) or string-length(./cda:high/@value) >= 4) and
+                  (not(./cda:center/@value) or string-length(./cda:center/@value) >= 4) and
+                  (not(./cda:width/@value) or string-length(./cda:width/@value) >= 4) ">
+    Error: Times or time intervals found in the asOrganizationPartOf/effectiveTime,
+    asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime, serviceEvent/effectiveTime,
+    ClinicalDocument/participant/time, serviceEvent/performer/time and encounterParticipant/time
+    SHALL be precise at least to the year.
+    See HL7 History and Physical Note, CONF-HP-11.
+    </assert>
+    </rule>
+
+    <rule context="//*[self::cda:addr/@nullFlavor or self::cda:name/@nullFlavor or self::cda:telecom/@nullFlavor]">
+    <assert test="document('schematron/hitspc32_v2.5_20101007/voc.xml')/systems/system[@group='Null Flavors']/code[@value = current()/@nullFlavor]">
+    Error: When name, addr, telecom information is unknown and where these elements
+    are required to be present, the fact that the information is unknown SHALL be represented
+    using an appropriate value for the nullFlavor attribute on the element.  Legal values
+    according to this specification come from the HL7 NullFlavor vocabulary.
+    See HL7 History and Physical Note, CONF-HP-9.
+    </assert>
+    </rule>
+
+    <rule context="//*[self::cda:telecom]">
+    <assert test="not(starts-with(@value,'tel:')) or matches(@value,'tel:\+?[-0-9().]+')">
+    Error: Telephone numbers SHALL match the regular expression pattern tel:\+?[-0-9().]+
+    See HL7 History and Physical Note, CONF-HP-12.
+    </assert>
+    <assert test="not(starts-with(@value,'tel:')) or matches(@value,'.\d+.' )">
+    Error: At least one dialing digit SHALL be present in the phone number after visual
+    separators are removed.
+    See HL7 History and Physical Note, CONF-HP-13.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:telecom]">
+    <assert test="@value or @nullFlavor">
+    Error: If the telephone number is unknown it SHALL be represented using the appopriate
+    flavor of null.
+    See HL7 History and Physical Note, CONF-HP-14.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:assignedEntity[parent::cda:dataEnterer]]">
+    <assert test="cda:assignedPerson">
+    Error: When dataEnterer is present, an assignedEntity/assignedPerson element SHALL
+    be present.
+    See HL7 History and Physical Note, CONF-HP-40.
+    </assert>
+    </rule>
+
+    <rule context="cda:informant">
+    <assert test="not(cda:relatedEntity) or cda:relatedEntity[@classCode='CON' or @classCode='PRS' or @classCode='CAREGIVER' or @classCode='AGNT' or @classCode='PROV']">
+    Error: Allowable values for informant/relatedEntity/@classCode SHALL be CON, PRS,
+    CAREGIVER, AGNT or PROV from the RoleClass vocabulary.
+    See HL7 History and Physical Note, CONF-HP-45.
+    </assert>
+
+    <assert test="cda:assignedEntity/cda:assignedPerson or cda:relatedEntity/cda:relatedPerson">
+    Error: When informant is present, an assignedEntity/assignedPerson or
+    relatedEntity/relatedPerson element SHALL be present.
+    See HL7 History and Physical Note, CONF-HP-43.
+    </assert>
+
+    <assert test="not(cda:relatedEntity/@classCode='PRS') or document('voc.xml')/systems/system[@codeSystemName='LOINC'][@group='Personal Relationship Role Type']/code[@value = current()/cda:relatedEntity/cda:code/@code] or current()/cda:relatedEntity/cda:code/@codeSystem='2.16.840.1.113883.6.96'">
+    Error: When relatedEntity/@classCode is PRS, values in relatedEntity/code SHALL come
+    from the HL7 PersonalRelationshipRoleType vocabulary or from SNOMED, any subtype of“
+    Person in the family” (303071001).
+    See HL7 History and Physical Note, CONF-HP-46.
+    </assert>
+    </rule>
+
+    <rule context="cda:informationRecipient/cda:intendedRecipient">
+    <assert test="cda:informationRecipient or cda:receivedOrganization">
+    Error: When informationRecipient is used, at least one
+    informationRecipient/intendedRecipient/informationRecipient or
+    informationRecipient/intendedRecipient/receivedOrganization SHALL be present.
+    See HL7 History and Physical Note, CONF-HP-50.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:legalAuthenticator]">
+    <assert test="(cda:time/@nullFlavor or string-length(cda:time/@value) >= 8) or
+                  (cda:effectiveTime/@nullFlavor or string-length(cda:effectiveTime/@value) >= 8) or
+                  (cda:time/cda:low/@nullFlavor or string-length(cda:time/cda:low/@value) >= 8) or
+                  (cda:effectiveTime/cda:low/@nullFlavor or string-length(cda:effectiveTime/cda:low/@value) >= 8) or
+                  (cda:time/cda:high/@nullFlavor or string-length(cda:time/cda:high/@value) >= 8) or
+                  (cda:effectiveTime/cda:high/@nullFlavor or string-length(cda:effectiveTime/cda:high/@value) >= 8) or
+                  (cda:time/cda:center/@nullFlavor or string-length(cda:time/cda:center/@value) >= 8) or
+                  (cda:effectiveTime/cda:center/@nullFlavor or string-length(cda:effectiveTime/cda:center/@value) >= 8) or
+                  (cda:time/cda:width/@nullFlavor or string-length(cda:time/cda:width/@value) >= 8) or
+                  (cda:effectiveTime/cda:width/@nullFlavor or string-length(cda:effectiveTime/cda:width/@value) >= 8)">
+    Error: Times or time intervals found in the ClinicalDocument/effectiveTime,
+    author/time, dataEnterer/time, legalAuthenticator/time, authenticator/time and
+    encompassingEncounter/effectiveTime elements SHALL be precise to the day, and SHALL
+    include a time zone if more precise than to the day.
+    See HL7 History and Physical Note, CONF-HP-10.
+    </assert>
+
+    <assert test="cda:assignedEntity/cda:assignedPerson">
+    Error: The assignedEntity/assignedPerson element SHALL be present
+    in legalAuthenticator.
+    See HL7 History and Physical Note, CONF-HP-51.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:authenticator]">
+    <assert test="(cda:time/@nullFlavor or string-length(cda:time/@value) >= 8) or
+                  (cda:effectiveTime/@nullFlavor or string-length(cda:effectiveTime/@value) >= 8) or
+                  (cda:time/cda:low/@nullFlavor or string-length(cda:time/cda:low/@value) >= 8) or
+                  (cda:effectiveTime/cda:low/@nullFlavor or string-length(cda:effectiveTime/cda:low/@value) >= 8) or
+                  (cda:time/cda:high/@nullFlavor or string-length(cda:time/cda:high/@value) >= 8) or
+                  (cda:effectiveTime/cda:high/@nullFlavor or string-length(cda:effectiveTime/cda:high/@value) >= 8) or
+                  (cda:time/cda:center/@nullFlavor or string-length(cda:time/cda:center/@value) >= 8) or
+                  (cda:effectiveTime/cda:center/@nullFlavor or string-length(cda:effectiveTime/cda:center/@value) >= 8) or
+                  (cda:time/cda:width/@nullFlavor or string-length(cda:time/cda:width/@value) >= 8) or
+                  (cda:effectiveTime/cda:width/@nullFlavor or string-length(cda:effectiveTime/cda:width/@value) >= 8)">
+    Error: Times or time intervals found in the ClinicalDocument/effectiveTime,
+    author/time, dataEnterer/time, legalAuthenticator/time, authenticator/time and
+    encompassingEncounter/effectiveTime elements SHALL be precise to the day, and SHALL
+    include a time zone if more precise than to the day.
+    See HL7 History and Physical Note, CONF-HP-10.
+    </assert>
+
+    <assert test="cda:assignedEntity/cda:assignedPerson">
+    Error: The assignedEntity/assignedPerson element SHALL be present
+    in an authenticator element.
+    See HL7 History and Physical Note, CONF-HP-52.
+    </assert>
+    </rule>
+
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.3-warning' see='#p-2.16.840.1.113883.10.20.3-warning'>
+	<title>CDA for common document type - warning validation phase</title>
+
+    <rule context="*[self::cda:guardian or self::cda:assignedEntity[parent::cda:dataEnterer] or self::cda:relatedEntity or self::cda:intendedRecipient or self::cda:relatedSubject or self::cda:participantRole]">
+    <assert test="cda:addr and cda:telecom">
+    Warning: All guardian, dataEnterer/assignedEntity, relatedEntity, intendedRecipient,
+    relatedSubject and participantRole elements SHOULD have an addr and telecom element.
+    See HL7 History and Physical Note, CONF-HP-8.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:ClinicalDocument or self::cda:author or self::cda:dataEnterer or self::cda:legalAuthenticator or self::cda:authenticator or self::cda:encompassingEncounter]">
+    <assert test="(cda:time/@nullFlavor or string-length(cda:time/@value) >= 14) or
+                  (cda:effectiveTime/@nullFlavor or string-length(cda:effectiveTime/@value) >= 14) or
+                  (cda:time/cda:low/@nullFlavor or string-length(cda:time/cda:low/@value) >= 14) or
+                  (cda:effectiveTime/cda:low/@nullFlavor or string-length(cda:effectiveTime/cda:low/@value) >= 14) or
+                  (cda:time/cda:high/@nullFlavor or string-length(cda:time/cda:high/@value) >= 14) or
+                  (cda:effectiveTime/cda:high/@nullFlavor or string-length(cda:effectiveTime/cda:high/@value) >= 14) or
+                  (cda:time/cda:center/@nullFlavor or string-length(cda:time/cda:center/@value) >= 14) or
+                  (cda:effectiveTime/cda:center/@nullFlavor or string-length(cda:effectiveTime/cda:center/@value) >= 14) or
+                  (cda:time/cda:width/@nullFlavor or string-length(cda:time/cda:width/@value) >= 14) or
+                  (cda:effectiveTime/cda:width/@nullFlavor or string-length(cda:effectiveTime/cda:width/@value) >= 14)">
+    Warning: Times or time intervals found in the ClinicalDocument/effectiveTime,
+    author/time, dataEnterer/time, legalAuthenticator/time, authenticator/time and
+    encompassingEncounter/effectiveTime elements SHOULD be precise to the second.
+    See HL7 History and Physical Note, CONF-HP-10.
+    </assert>
+    </rule>
+
+
+    <!-- these high and low should be precise to the day -->
+    <rule context="*[self::cda:high[ancestor::cda:effectiveTime[parent::cda:asOrganizationPartOf]] or self::cda:high[ancestor::cda:effectiveTime[parent::cda:asMaintainedEntity]] or self::cda:high[ancestor::cda:effectiveTime[parent::cda:relatedEntity]] or self::cda:high[ancestor::cda:effectiveTime[parent::cda:serviceEvent]] or self::cda:high[ancestor::cda:time[parent::cda:encounterParticipant]]]">
+    <assert test="not(./@value) or string-length(./@value) >= 8">
+    Warning: Times or time intervals found in the asOrganizationPartOf/effectiveTime,
+    asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime,
+    ClinicalDocument/participant/time, serviceEvent/effectiveTime, serviceEvent/performer/time
+    and encounterParticipant/time ... SHOULD be precise to the day.
+    See HL7 History and Physical Note, CONF-HP-11.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:low[ancestor::cda:effectiveTime[parent::cda:asOrganizationPartOf]] or self::cda:low[ancestor::cda:effectiveTime[parent::cda:asMaintainedEntity]] or self::cda:low[ancestor::cda:effectiveTime[parent::cda:relatedEntity]] or self::cda:low[ancestor::cda:effectiveTime[parent::cda:serviceEvent]] or self::cda:low[ancestor::cda:time[parent::cda:encounterParticipant]]]">
+    <assert test="not(./@value) or string-length(./@value) >= 8">
+    Warning: Times or time intervals found in the asOrganizationPartOf/effectiveTime,
+    asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime,
+    ClinicalDocument/participant/time, serviceEvent/effectiveTime, serviceEvent/performer/time
+    and encounterParticipant/time ... SHOULD be precise to the day.
+    See HL7 History and Physical Note, CONF-HP-11.
+    </assert>
+    </rule>
+
+
+    <rule context="/cda:ClinicalDocument/cda:participant/cda:time">
+    <assert test="not(./@value) or string-length(./@value) >= 8">
+    Warning: Times or time intervals found in the asOrganizationPartOf/effectiveTime,
+    asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime,
+    ClinicalDocument/participant/time, serviceEvent/effectiveTime, serviceEvent/performer/time
+    and encounterParticipant/time ... SHOULD be precise to the day.
+    See HL7 History and Physical Note, CONF-HP-11.
+    </assert>
+    </rule>
+
+    <rule context="cda:patient">
+    <assert test="string-length(cda:birthTime/@value) >= 8">
+    Warning: The patient/birthTime element SHOULD be precise at least to the day.
+    See HL7 History and Physical Note, CONF-HP-32.
+    </assert>
+
+    <assert test="document('schematron/hitspc32_v2.5_20101007/voc.xml')/systems/system[@codeSystemName='LOINC'][@group='Administrative Gender']/code[@value = current()/cda:administrativeGenderCode/@code]">
+    Warning: Administrative Gender codes used to describe the gender of the patient
+    SHOULD come from the HL7 AdministrativeGender vocabulary. The OID for this
+    vocabulary domain is 2.16.840.1.113883.5.1.
+    See HL7 History and Physical Note, CONF-HP-33.
+    </assert>
+
+    <assert test="not(current()/cda:maritalStatusCode) or document('voc.xml')/systems/system[@codeSystemName='LOINC'][@group='Marital Status']/code[@value = current()/cda:maritalStatusCode/@code]">
+    Warning: Marital status codes used to describe the marital status of the patient
+    SHOULD come from the HL7 MaritalStatus vocabulary. The OID for this vocabulary
+    domain is 2.16.840.1.113883.5.2.
+    See HL7 History and Physical Note, CONF-HP-34.
+    </assert>
+    </rule>
+
+</pattern>
+
+
+<!-- notes -->
+
+<pattern id='p-2.16.840.1.113883.10.20.3-note' see='#p-2.16.840.1.113883.10.20.3-note'>
+        <title>CDA for common document type - note validation phase</title>
+
+        <rule context="/cda:ClinicalDocument">
+           <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.10"]'>
+              Note: To indicate conformance to Level 1 (which also asserts compliance with
+              all general or non-level-specific constraints), ClinicalDocument/templateId elements
+              MAY be present with the value shown: &lt;templateId root='2.16.840.1.113883.10.20.10'/&gt;
+              See HL7 History and Physical Note, CONF-HP-3.
+           </assert>
+           <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.20"]'>
+              Note: To indicate conformance to Level 2 (which also asserts compliance with
+              all general or non-level-specific constraints), ClinicalDocument/templateId elements
+              MAY be present with the value shown: &lt;templateId root='2.16.840.1.113883.10.20.20'/&gt;
+              See HL7 History and Physical Note, CONF-HP-4.
+           </assert>
+           <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.30"]'>
+              Note: To indicate conformance to Level 3 (which also asserts compliance with
+              all general or non-level-specific constraints), ClinicalDocument/templateId elements
+              MAY be present with the value shown: &lt;templateId root='2.16.840.1.113883.10.20.30'/&gt;
+              See HL7 History and Physical Note, CONF-HP-5.
+           </assert>
+           <assert test='cda:informant'>
+              Note: The informant element MAY be present.
+              See HL7 History and Physical Note, CONF-HP-42.
+           </assert>
+
+        </rule>
+        <rule context="cda:patientRole">
+           <assert test='cda:providerOrganization'>
+              Note: The providerOrganization element MAY be present.
+              See HL7 History and Physical Note, CONF-HP-36.
+           </assert>
+        </rule>
+        <rule context="cda:dataEnterer">
+           <assert test="cda:time">
+             Note: The time element MAY be present. If present, it represents the starting
+             time of entry of the data.
+             See HL7 History and Physical Note, CONF-HP-41.
+           </assert>
+        </rule>
+</pattern>
+

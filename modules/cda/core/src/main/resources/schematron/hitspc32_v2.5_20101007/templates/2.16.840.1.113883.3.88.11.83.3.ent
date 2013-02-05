@@ -1,0 +1,139 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.3 -->
+<!-- HITSP/C83 Support Module -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.3-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.3"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='(parent::cda:patient and self::cda:guardian[@classCode ="GUARD"])
+              or (parent::cda:ClinicalDocument and self::cda:participant[@typeCode="IND"])'>
+      Error: The HITSP/C83 templateId for Support (2.16.840.1.113883.3.88.11.83.3) is in the wrong 
+      location. The C83 Support module shall be represented as a CDA Guardian under CDA Patient, 
+      or as a CDA Participant (indirect participant IND) directly under ClinicalDocument.
+      See HITSP/C83 Table 2-7 and Figure 2-11 and Section 2.2.2.3.1, rule C83-[DE-3-CDA-1].
+   </assert> 
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.4"'>
+      Error: HITSP/C83 Support Module SHALL also declare conformance to the IHE Patient Contacts 
+      module by including a templateId element with the root attribute set to the value 
+      1.3.6.1.4.1.19376.1.5.3.1.2.4.
+      See HITSP/C83 Section 2.2.2.3.1, rule C83-[DE-3-CDA-2].
+   </assert>
+
+   <assert test='not(parent::cda:ClinicalDocument and self::cda:participant[@typeCode="IND"]) or
+                 count(cda:time) = 1'>
+      Error: HITSP/C83 Support Module, participant/associatedEntity support requires a non-repeating
+      time element describing the period over which the support is provided.
+      See HITSP/C83 Table 2-7, Data Element 3.01.
+   </assert>
+
+
+   <assert test='cda:associatedEntity/@classCode or @classCode'>
+      Error: HITSP/C83 Support Module, contact type is a required, non-repeating element.
+      See HITSP/C83 Table 2-7, Data Element 3.02.
+   </assert>
+
+   <assert test='cda:associatedEntity/cda:associatedPerson/cda:name or cda:guardianPerson/cda:name'>
+      Error: HITSP/C83 Support Module, Contact Name is a required, repeatable element.
+      See HITSP/C83 Table 2-7, Data Element 3.06.
+   </assert>
+
+<!-- Section 2.2.2.3.2 -->
+
+
+   <assert test='not(parent::cda:patient and self::cda:guardian[@classCode ="GUARD"]) or
+                 (not(cda:associatedEntity/@classCode) or 
+                  cda:associatedEntity[@classCode="AGNT" or 
+                                       @classCode="CAREGIVER" or
+                                       @classCode="ECON" or
+                                       @classCode="GUARD" or
+                                       @classCode="NOK" or
+                                       @classCode="PRS"]
+                 )'>
+      Error: HITSP/C83 Support, Contact Type classCode attribute SHALL be coded as 
+      specified in HITSP/C80 section 2.2.1.2.6 Contact Type.
+      See HITSP/C83, Rule C83-[DE-3.01-CDA-1].
+   </assert>
+
+   <assert test='not(parent::cda:ClinicalDocument and self::cda:participant[@typeCode="IND"]) or
+                 (not(./@classCode) or
+                  ./@classCode="AGNT" or
+                  ./@classCode="CAREGIVER" or
+                  ./@classCode="ECON" or
+                  ./@classCode="GUARD" or
+                  ./@classCode="NOK" or
+                  ./@classCode="PRS")'>
+      Error: HITSP/C83 Support, Contact Type classCode attribute SHALL be coded as
+      specified in HITSP/C80 section 2.2.1.2.6 Contact Type.
+      See HITSP/C83, Rule C83-[DE-3.01-CDA-1].
+   </assert>
+
+<!-- Section 2.2.2.3.3 -->
+
+   <assert test='not(parent::cda:ClinicalDocument and self::cda:participant[@typeCode="IND"]) or
+                 (not(cda:associatedEntity/cda:code) or
+                  cda:associatedEntity/cda:code/@codeSystem="2.16.840.1.113883.5.111")'>
+      Error: HITSP/C83 Support, Contact Relationship code element SHALL have a code value as
+      specified in HITSP/C80 section 2.2.1.2.4 Personal Relationships.
+      See HITSP/C83, Rule C154-[DE-3.03-1].
+   </assert>
+
+   <assert test='not(parent::cda:patient and self::cda:guardian[@classCode ="GUARD"]) or
+                 ((not(cda:code/@code) and not(cda:code/@codeSystem) or
+                  cda:code/@codeSystem="2.16.840.1.113883.5.111"))'>
+      Error: HITSP/C83 Support, Contact Relationship code element SHALL have a code value as
+      specified in HITSP/C80 section 2.2.1.2.4 Personal Relationships.
+      See HITSP/C83, Rule C154-[DE-3.03-1].
+   </assert>
+
+
+ </rule>
+
+</pattern>
+
+
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.3-warning'>
+
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.3"]'>
+
+   <assert test='count(cda:associatedEntity/cda:code/@code) = 1 or count(cda:code/@code) = 1'>
+      Warning: HITSP/C83 Support, Contact Relationship is a required if known, non-repeating element.
+      See HITSP/C83 Table 2-7, Data Element 3.03.
+   </assert>
+   <assert test='cda:associatedEntity/cda:addr or cda:addr'>
+      Warning: HITSP/C83 Support, Contact Address is a required if known, repeatable element.
+      See HITSP/C83 Table 2-7, Data Element 3.04.
+   </assert>
+   <assert test='cda:associatedEntity/cda:telecom or cda:telecom'>
+      Warning: HITSP/C83 Support, Contact Phone / Email / URL is a required if known, repeatable element.
+      See HITSP/C83 Table 2-7, Data Element 3.05.
+   </assert>
+
+ </rule>
+
+
+</pattern>
+
+
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.3-note'>
+
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.3"]'>
+
+   <assert test='cda:associatedEntity/cda:associatedPerson/cda:name/cda:family[@qualifier="BR"] or 
+                 cda:guardianPerson/cda:name/cda:family[@qualifier="BR"]'>
+      Note: HITSP/C83 Support Module, Mother's Maiden Name is an optional, non-repeatable element.
+      See HITSP/C83 Table 2-7, Data Element 1.12 and Section 2.2.2.3.5.
+   </assert>
+
+
+ </rule>
+
+</pattern>
+

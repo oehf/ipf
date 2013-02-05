@@ -26,7 +26,11 @@ public interface CDAR2Constants {
     
     static final String IHE_LAB_SCHEMA = "schema/ihe_lab/infrastructure/cda/LabCDA.xsd";
 
+    /** @deprecated use HITSP_32_2_4_SCHEMA **/
     static final String HITSP_24_SCHEMA = "schema/hitspc32_v2.4_20090414/infrastructure/cda/C32_CDA.xsd";
+
+    static final String HITSP_32_2_4_SCHEMA = "schema/hitspc32_v2.4_20090414/infrastructure/cda/C32_CDA.xsd";
+    static final String HITSP_32_2_5_SCHEMA = "schema/hitspc32_v2.5_20101007/infrastructure/cda/C32_CDA.xsd";
 
     // Schematron
 
@@ -34,8 +38,12 @@ public interface CDAR2Constants {
     
     static final String CDA_PHMR_SCHEMATRON_RULES = "schematron/cda_phmr/PHMR.sch";
 
+    /** @deprecated use HITSP_32_2_4_SCHEMATRON_RULES **/
     static final String HITSP_24_SCHEMATRON_RULES = "schematron/hitsp32_v2.4_20090414/HITSP_C32.sch";
-    
+
+    static final String HITSP_32_2_4_SCHEMATRON_RULES = "schematron/hitsp32_v2.4_20090414/HITSP_C32.sch";
+    static final String HITSP_32_2_5_SCHEMATRON_RULES = "schematron/hitspc32_v2.5_20101007/HITSP_C32.sch";
+
     static final String HITSP_37_SCHEMATRON_RULES = "schematron/hitspc37_20080211/HITSP_C37.sch";
 
     static final String CDA4CDT_SCHEMATRON_RULES = "schematron/cda4cdt_20090206/HandP.sch";
@@ -45,6 +53,8 @@ public interface CDAR2Constants {
     static final String IHE_LAB_SCHEMATRON_RULES = "schematron/ihe_lab_v21_20080803/IHE_LAB.sch";
 
     static final String IHE_LAB_20_SCHEMATRON_RULES = "schematron/ihe_lab_v20_20070816/IHE_LAB.sch";
+
+    static final String IHE_LAB_21_SCHEMATRON_RULES = "schematron/ihe_lab_v21_20080803/IHE_LAB.sch";
 
     static final String IHE_PCC_ANTEPARTUM_EDUCATION_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/ape.sch";
 

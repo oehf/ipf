@@ -3,7 +3,6 @@ package org.openehealth.ipf.modules.cda.support;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
@@ -14,9 +13,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.openehealth.ipf.modules.cda.CDAR2Constants.HITSP_24_SCHEMATRON_RULES;
+import static org.openehealth.ipf.modules.cda.CDAR2Constants.*;
 
 /**
  * Validates the HITSP C37 schematron rule set.
@@ -44,14 +41,33 @@ public class HITSPC32ValidationTest {
 	public void tearDown() throws Exception {
 	}
 
+    @Test
+    public void validateSchemaGoodSample24() throws Exception {
+        Source testXml = new StreamSource(
+                new ClassPathResource(sample_c32).getInputStream());
+        validator.validate(testXml, HITSP_32_2_4_SCHEMA);
+    }
+
+    @Test
+    public void validateSchemaGoodSample25() throws Exception {
+        Source testXml = new StreamSource(
+                new ClassPathResource(sample_c32).getInputStream());
+        validator.validate(testXml, HITSP_32_2_5_SCHEMA);
+    }
 
 	@Test
-	public void validateComplete() throws Exception {
+	public void validateComplete24() throws Exception {
 		Source testXml = new StreamSource(
 				new ClassPathResource(sample_c32).getInputStream());
 		schematron.validate(testXml, new SchematronProfile(
-				HITSP_24_SCHEMATRON_RULES, params));
+				HITSP_32_2_4_SCHEMATRON_RULES, params));
 	}
 
-
+    @Test
+    public void validateComplete25() throws Exception {
+        Source testXml = new StreamSource(
+                new ClassPathResource(sample_c32).getInputStream());
+        schematron.validate(testXml, new SchematronProfile(
+                HITSP_32_2_5_SCHEMATRON_RULES, params));
+    }
 }

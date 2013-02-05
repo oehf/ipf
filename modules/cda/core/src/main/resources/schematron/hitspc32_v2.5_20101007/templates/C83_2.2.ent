@@ -1,0 +1,64 @@
+<pattern id='p-C83_2.2-errors'>
+
+ <rule context='/cda:ClinicalDocument'>   
+
+   <assert test='self::cda:ClinicalDocument'>
+      Error: HITSP/C83 Clinical Document, the top-level element SHALL be a ClinicalDocument element
+      in accordance with CDA R2 specification.
+   </assert>
+
+   <assert test='cda:realmCode/@code="US"'>
+      Error: HITSP/C83 Clinical Document: A clinical document created using this specification SHALL
+      contain a realmCode element with a value of US in the code attribute indicating that it conforms 
+      to US realm requirements.
+      See HITSP/C83 Section 2.2 Rule C83-[CDA-1].
+   </assert>
+
+   <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.1" and not(@extension)]'>
+      Error: HITSP/C83 Clinical Document: A clinical document created using this specification SHALL 
+      contain the templateId element with a value of 1.3.6.1.4.1.19376.1.5.3.1.1.1 in the root 
+      attribute and no extension attribute indicating that it conforms to the IHE PCC Medical 
+      Documents specification.
+      See HITSP/C83 Section 2.2 Rule C83-[CDA-2].
+   </assert>
+
+   <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.3" and not(@extension)]'>
+      Error: HITSP/C83 Clinical Document: A clinical document created using this specification SHALL 
+      contain the templateId element with a value of 2.16.840.1.113883.10.20.3 in the root attribute 
+      and no extension attribute, indicating that it conforms to the HL7 General Header constraints 
+      defined in the HL7 Implementation Guide for History and Physical Notes.
+      See HITSP/C83 Section 2.2 Rule C83-[CDA-3].
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+
+<!-- Pattern for Warnings -->
+
+
+<pattern id='p-C83_2.2-warning'>
+
+</pattern>
+
+
+
+<!-- Pattern for Notes -->
+
+
+<pattern id='p-C83_2.2-note'>
+ <rule context='/cda:ClinicalDocument'>
+
+   <assert test='cda:templateId[@root="2.16.840.1.113883.3.88.11.83.1" and not(@extension)]'>
+      Note: HITSP/C83 Clinical Document: CDA document instances that adhere to the specifications for 
+      the sections and entries defined within this specification MAY declare their conformance to these 
+      constraints by including &lt;templateId&gt; element with a value of 2.16.840.1.113883.3.88.11.83.1
+      in the root attribute and no extension attribute.
+      See HITSP/C83 Section 2.2 Rule C83-[CDA-10].
+   </assert>
+</rule>
+
+</pattern>
+

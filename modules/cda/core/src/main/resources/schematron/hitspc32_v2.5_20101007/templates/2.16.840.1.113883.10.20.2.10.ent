@@ -1,0 +1,35 @@
+<!--  Physical Examination: 2.16.840.1.113883.10.20.2.10 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.2.10-errors' see='#p-2.16.840.1.113883.10.20.2.10-errors'>
+	<title>Physical Examination - errors validation phase</title>
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.10"]'>
+    <assert test="cda:code/@code='29545-1'">
+       Error: HL7 History and Physical Notes, the section code for the section describing physical
+       examination SHALL be 29545-1 (PHYSICAL FINDINGS).
+       See HL7 History and Physical Note, Section 4.2.9, CONF-HP-85.
+    </assert>
+ </rule>
+</pattern>
+
+<!-- warning -->
+<!--
+<pattern id='p-2.16.840.1.113883.10.20.2.10-warning' see='#p-2.16.840.1.113883.10.20.2.10-warning'>
+	<title>Physical Examination - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.10"]'>
+	<report test='.'>TBD</report>
+	</rule>
+</pattern>
+-->
+<pattern id='p-2.16.840.1.113883.10.20.2.10-warning'>
+</pattern>
+<!-- manual -->
+<!--
+<pattern id='p-2.16.840.1.113883.10.20.2.10-manual' see='#p-2.16.840.1.113883.10.20.2.10-manual'>
+	<title>Physical Examination - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.2.10"]'>
+	<report test='.'>TBD</report>
+	</rule>
+</pattern>
+-->

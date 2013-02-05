@@ -1,0 +1,113 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.14 -->
+<!-- HITSP/C83 Vital Signs Module -->
+
+
+<!-- Errors Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.14-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.14"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='self::cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.31"]'>
+      Error: The HITSP/C83 templateId for a Vital Signs entry (2.16.840.1.113883.3.88.11.83.14) is in the wrong 
+      location. A HITSP/C83 Vital Signs entry data element shall be represented as a CCD Result observation 
+      (2.16.840.1.113883.10.20.1.31). 
+      See HITSP/C83 Section 2.2.2.14 and rule C83-[DE-14-CDA-1].
+   </assert>   
+
+   <assert test='ancestor::cda:organizer[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.13.1"]'>
+      Error: HITSP/C83 Vital Signs information elements SHALL be contained in a conforming IHE Vital Signs 
+      Organizer element that includes a templateId element with the root attribute set to the value
+      1.3.6.1.4.1.19376.1.5.3.1.4.13.1.
+      See HITSP/C83 Section 2.2.2.14, rule C83-[DE-14-CDA-2].
+   </assert>
+
+   <assert test='cda:id'>
+     Error: HITSP/C83 Vital Signs, Result ID is a required, repeatable data element. 
+     See HITSP/C83 Table 2-19 and Table 2-20, Data Element 15.01.
+   </assert>
+
+   <assert test='count(cda:effectiveTime) = 1'>
+     Error: HITSP/C83 Vital Signs, Result Date / Time is a required, non-repeating data element. 
+     See HITSP/C83 Table 2-19 and Table 2-20, Data Element 15.02.
+   </assert>
+
+   <assert test='count(cda:code/@code) = 1'>
+     Error: HITSP/C83 Vital Signs, Result Type is a required, non-repeating data element. 
+     See HITSP/C83 Table 2-19 and Table 2-20, Data Element 15.03.
+   </assert>
+
+   <assert test='count(cda:statusCode) = 1'>
+     Error: HITSP/C83 Vital Signs, a Result Status is a required, non-repeating data element.
+     See HITSP/C83 Table 2-19 and Table 2-20, Data Element 15.04.
+   </assert>
+
+   <assert test='count(cda:value) = 1'>
+     Error: HITSP/C83 Vital Signs, Result Value is a required, non-repeating data element. 
+     See HITSP/C83 Table 2-19 and Table 2-20, Data Element 15.05.
+   </assert>
+
+   <assert test='(self::cda:observation[@moodCode="EVN" or @moodCode="GOL"] and count(cda:value) = 1) or
+                 (self::cda:observation[@moodCode="INT" or @moodCode="PRP"] and not(cda:value))'>
+     Error: HITSP/C83 Vital Signs, Result Value is a non-repeatable data element of conditional optionality.
+     Result Value SHALL be present when the observation/@moodCode is EVN or GOL,
+     and SHALL NOT be present when observation/@moodCode is INT or PRP.
+     See HITSP/C83 Table 2-19, Data Element 15.05 and Section 2.2.2.15.3, rule C83-[DE-15.05-CDA-1].
+   </assert>
+
+
+ </rule>
+
+</pattern>
+
+
+<!-- Warnings Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.14-warning'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.14"]'>
+
+   <assert test='cda:code[@codeSystem="2.16.840.1.113883.6.1" and (
+                          @code="9279-1" or
+                          @code="8867-4" or
+                          @code="2710-2" or
+                          @code="8480-6" or
+                          @code="8462-4" or
+                          @code="8310-5" or
+                          @code="8302-2" or
+                          @code="8306-3" or
+                          @code="8287-5" or
+                          @code="3141-9")]'>
+      Warning: HITSP/C83 Vital Signs, Result Type for Vital Sign entries SHOULD be coded as specified in HITSP/C80 
+      Section 2.2.3.6.5 Vital Sign Result Type.
+      See HITSP/C83 Table 2-19 and Table 2-20, Data Element 15.03 and Section 2.2.2.14.2, rule C154-[DE-14.03-1].
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+
+<!-- Notes Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.14-note'> 
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.14"]'>
+   <assert test='count(cda:interpretationCode/@code) = 1'>
+      Note: HITSP/C83 Vital Signs, Result Interpretation is an optional, non-repeatable data element.
+      See HITSP/C83 Table 2-19 and Table 2-20, Data Element 15.06.
+   </assert>
+
+   <assert test='cda:referenceRange'>
+      Note: HITSP/C83 Vital Signs, Result Reference Range is an optional, repeatable data element.
+      See HITSP/C83 Table 2-19 and Table 2-20, Data Element 15.07.
+   </assert>
+
+ </rule>
+
+</pattern>
+
+

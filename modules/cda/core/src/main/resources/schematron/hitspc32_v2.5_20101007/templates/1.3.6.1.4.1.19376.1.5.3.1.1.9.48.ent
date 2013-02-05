@@ -1,0 +1,42 @@
+<!--  IHE PCC Visible Implanted Medical Devices Section: 1.3.6.1.4.1.19376.1.5.3.1.1.9.48 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.9.48-errors">
+    <title>IHE PCC Visible Implanted Medical Devices Section - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.9.48"]'>
+     <!-- Verify that the template id is used on the appropriate type of
+    object --> 
+   <assert test='../cda:section'> 
+      Error: In IHE PCC Visible Implanted Medical Devices Section (1.3.6.1.4.1.19376.1.5.3.1.1.9.48), the Visible Implanted 
+      Medical Devices can only be used on sections. 
+   </assert> 
+   <!-- Verify the section type code --> 
+
+<!-- TBD
+   <assert test='cda:code[@code = "TBD"]'> 
+     Error: In IHE PCC Visible Implanted Medical Devices Section (1.3.6.1.4.1.19376.1.5.3.1.1.9.48), the section type code 
+     of a Visible Implanted Medical Devices must be TBD 
+   </assert> 
+-->
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'> 
+     Error: In IHE PCC Visible Implanted Medical Devices Section (1.3.6.1.4.1.19376.1.5.3.1.1.9.48), the section type code 
+     of a Visible Implated Medical Decides must come from the LOINC code system (2.16.840.1.113883.6.1). 
+   </assert> 
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.9.48-warnings">
+    <title>IHE PCC Visible Implanted Medical Devices Section - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.9.48"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>

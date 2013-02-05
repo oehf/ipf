@@ -1,0 +1,37 @@
+<!--  IHE PCC Ears Section: 1.3.6.1.4.1.19376.1.5.3.1.1.9.21 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.9.21-errors">
+    <title>IHE PCC Ears Section - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.9.21"]'>
+     <!-- Verify that the template id is used on the appropriate type of
+    object --> 
+   <assert test='../cda:section'> 
+      Error: In IHE PCC Ears Section (1.3.6.1.4.1.19376.1.5.3.1.1.9.21), the Ears can only be used on sections. 
+   </assert> 
+   <!-- Verify the section type code --> 
+   <assert test='cda:code[@code = "10195-6"]'> 
+     Error: In IHE PCC Ears Section (1.3.6.1.4.1.19376.1.5.3.1.1.9.21), the section type code of a Ears must be 10195-6 
+   </assert> 
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'> 
+     Error: In IHE PCC Ears Section (1.3.6.1.4.1.19376.1.5.3.1.1.9.21), the section type code must come from the LOINC code  
+     system (2.16.840.1.113883.6.1). 
+   </assert> 
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.9.21-warnings">
+    <title>IHE PCC Ears Section - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.9.21"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>

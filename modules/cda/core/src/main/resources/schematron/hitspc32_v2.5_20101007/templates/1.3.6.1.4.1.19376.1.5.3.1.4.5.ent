@@ -1,0 +1,242 @@
+<!--  IHE PCC Problem Entry: 1.3.6.1.4.1.19376.1.5.3.1.4.5 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.5-errors">
+    <title>IHE PCC Problem Entry - errors validation phase</title>
+       <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.5"]'>
+
+       <assert test='self::cda:observation[@classCode="OBS" and @moodCode="EVN"]'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), the basic pattern for reporting a problem uses 
+          the CDA &lt;observation&gt; element, setting the classCode='OBS' to represent that this is an observation of a 
+          problem, and the moodCode='EVN', to represent that this is an observation that has in fact taken place.
+       </assert>
+
+ 
+       <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.1.28"]'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), &lt;templateId&gt; elements identify this under 
+          both IHE and CCD specifications (2.16.840.1.113883.10.20.1.28).  This CCD template ID SHALL be included.
+       </assert>
+
+       <assert test='cda:id'>
+	  Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), the specific Problem Entry observation being 
+          recorded must have an identifier (&lt;id&gt;) that shall be provided for tracking purposes. If the source EMR
+          does not or cannot supply an intrinsic identifier, then a GUID shall be provided as the root, with no extension
+          (e.g., &lt;id root='CE1215CD-69EC-4C7B-805F-569233C5E159'/&gt;).
+       </assert>
+
+       <assert test='cda:statusCode[@code="completed"]'>
+	  Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), a clinical document normally records only 
+          those condition observation events that have been completed, not observations that are in any other state. 
+          Therefore, the &lt;statusCode&gt; shall always have code='completed' for Problem Entry.
+       </assert>
+
+       <report test='cda:effectiveTime/cda:width or cda:effectiveTime/cda:center'>
+	  Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), while CDA allows for multiple mechanisms to record 
+          this time interval (e.g. by low and high values, low and width, high and width, or center point and width), we are
+          constraining Medical summaries (Problem Entry) to use only the low/high form.
+       </report>
+       
+       <assert test='cda:effectiveTime/cda:low[@value or @nullFlavor = "UNK"]'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), the effectiveTime &lt;low&gt; value should normally 
+          be present in Problem Entry. There are exceptions, such as for the case where the patient may be able to report that
+          they had chicken pox, but are unsure when. In this case, the &lt;effectiveTime&gt; element shall have a &lt;low&gt;
+          element with a nullFlavor attribute set to 'UNK'.
+       </assert>
+
+       <assert test='cda:value[@xsi:type="CD"]'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), the &lt;value&gt; is the condition that was found. 
+          This element is required.  While the value of Problem Entry code may be a coded or an un-coded string, the type is 
+          always a coded value (xsi:type='CD').
+       </assert>
+       
+       <assert test='(cda:value[@code and @codeSystem]) or
+                     (not(cda:value[@code]) and not(cda:value[@codeSystem]))'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), if Problem Entry value is coded, the code and 
+          codeSystem attributes shall be present.  If uncoded, all attributes other than xsi:type='CD' must be absent.
+       </assert>	
+
+       <assert
+          test='count(cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1"] |
+                      cda:subjectOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1"]) &lt;= 1'>  
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), only one optional severity entry relationship is 
+          allowed.
+       </assert>  
+
+       <assert
+      test='not(cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1"]) or
+            (cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1"] and
+             cda:entryRelationship[@typeCode="SUBJ" and @inversionInd="true"])'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), an optional &lt;entryRelationship&gt; element may 
+          be present in Problem Entry indicating the severity of the problem. When present, this &lt;entryRelationship&gt; 
+          element shall contain a severity observation conforming to the Severity entry template (1.3.6.1.4.1.19376.1.5.3.1.4.1). 
+          The typeCode SHALL be SUBJ and inversionInd SHALL be true. For CDA this SHALL be represented with the 
+          &lt;entryRelationship&gt; element. 
+       </assert>
+
+       <assert
+      test='not(cda:subjectOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1"]) or
+            (cda:subjectOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1"] and
+             cda:subjectOf[@typeCode="SUBJ" and @inversionInd="true"])'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), an optional &lt;entryRelationship&gt; element may be 
+          present in Problem Entry indicating the severity of the problem. When present, this &lt;entryRelationship&gt; element
+          shall contain a severity observation conforming to the Severity entry template (1.3.6.1.4.1.19376.1.5.3.1.4.1).  The
+          typeCode SHALL be SUBJ and inversionInd SHALL be true. For HL7 Version 3 Messages, this SHALL be represented as a 
+          &lt;subjectOf&gt; element.
+       </assert>
+
+       <assert
+          test='count(cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.1"] |
+	              cda:sourceOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.1"]) &lt;= 1'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), only one optional Problem Status Observation 
+          relationship is allowed.
+       </assert>
+
+       <assert
+        test='not(cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.1"]) or
+	      (cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.1"] and
+               cda:entryRelationship[@typeCode="REFR" and @inversionInd="false"])'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), an optional &lt;entryRelationship&gt; element may 
+          be present in Problem Entry indicating the clinical status of the problem, e.g., resolved, in remission, active. 
+          When present, this &lt;entryRelationship&gt; element shall contain a clinical status observation conforming to the 
+          Problem Status Observation template (1.3.6.1.4.1.19376.1.5.3.1.4.1.1).  The typeCode SHALL be REFR and inversionInd
+          SHALL be false. For CDA this SHALL be represented with the &lt;entryRelationship&gt; element.
+       </assert>
+
+       <assert
+        test='not(cda:sourceOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.1"]) or
+              (cda:sourceOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.1"] and
+               cda:sourceOf[@typeCode="REFR" and @inversionInd="false"])'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), an optional &lt;entryRelationship&gt; element may 
+          be present in Problem Entry indicating the clinical status of the problem, e.g., resolved, in remission, active. 
+          When present, this &lt;entryRelationship&gt; element shall contain a clinical status observation conforming to the 
+          Problem Status Observation template (1.3.6.1.4.1.19376.1.5.3.1.4.1.1).  The typeCode SHALL be REFR and inversionInd
+          SHALL be false. For HL7 Version 3 Messages, this SHALL be represented as a &lt;sourceOf&gt; element.
+       </assert>
+
+
+       <assert
+       test='count(cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.2"] |
+		   cda:sourceOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.2"]) &lt;= 1'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), only one optional Health Status Observation 
+          relationship is allowed.
+       </assert>
+
+       <assert
+        test='not(cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.2"]) or
+              (cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.2"] and
+               cda:entryRelationship[@typeCode="REFR" and @inversionInd="false"])'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), an optional &lt;entryRelationship&gt; may be 
+          present in Problem Entry referencing the health status of the patient, e.g., resolved, in remission, active. 
+          When present, this &lt;entryRelationship&gt; element shall contain a clinical status observation conforming 
+          to the Health Status Observation template (1.3.6.1.4.1.19376.1.5.3.1.4.1.2). The typeCode SHALL be REFR and
+          inversionInd SHALL be false. For CDA this SHALL be represented with the &lt;entryRelationship&gt; element.
+       </assert>
+       <assert
+        test='not(cda:sourceOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.2"]) or
+              (cda:sourceOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.1.2"] and
+               cda:sourceOf[@typeCode="REFR" and @inversionInd="false"])'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), an optional &lt;entryRelationship&gt; may be 
+          present in Problem Entry referencing the health status of the patient, e.g., resolved, in remission, active. 
+          When present, this &lt;entryRelationship&gt; element shall contain a clinical status observation conforming to 
+          the Health Status Observation template (1.3.6.1.4.1.19376.1.5.3.1.4.1.2). The typeCode SHALL be REFR and 
+          inversionInd SHALL be false.  For HL7 Version 3 Messages, this SHALL be represented as a &lt;sourceOf&gt; element. 
+       </assert>
+
+
+       <assert
+          test='not(cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.2"]) or
+               (cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.2"] and
+                cda:entryRelationship[@typeCode="SUBJ" and @inversionInd="true"])'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), one or more optional &lt;entryRelationship&gt; 
+          elements may be present providing an additional comments (annotations) for the condition. When present, this 
+          &lt;entryRelationship&gt; element shall contain a comment observation conforming to the Comment entry template 
+          (1.3.6.1.4.1.19376.1.5.3.1.4.2). The typeCode SHALL be SUBJ and inversionInd SHALL be true. For CDA this SHALL
+          be represented with the &lt;entryRelationship&gt; element.
+       </assert>
+
+       <assert
+          test='not(cda:sourceOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.2"])
+          or
+               (cda:sourceOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.2"] and
+                cda:sourceOf[@typeCode="SUBJ" and @inversionInd="true"])'>
+          Error: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), one or more optional &lt;entryRelationship&gt; 
+          elements may be present providing an additional comments (annotations) for the condition. When present, this 
+          &lt;entryRelationship&gt; element shall contain a comment observation conforming to the Comment entry template 
+          (1.3.6.1.4.1.19376.1.5.3.1.4.2). The typeCode SHALL be SUBJ and inversionInd SHALL be true.  For HL7 Version 3
+          Messages, this SHALL be represented as a &lt;sourceOf&gt; element.
+       </assert>
+
+
+       </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.5-warnings">
+    <title>IHE PCC Problem Entry - warning validation phase</title>
+
+       <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.5"]'>
+
+       <report test='./@negationInd="true"'>
+          Warning: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), the value of negationInd should not normally be 
+          set to true. Instead, to record that there is "no prior history of chicken pox", one would use a coded value 
+          indicated exactly that. However, it is not always possible to record problems in this manner, especially if using a 
+          controlled vocabulary that does not supply pre-coordinated negations , or which do not allow the negation to be 
+          recorded with post-coordinated coded terminology.
+       </report>
+
+       <assert test='cda:code'>
+          Warning: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), the code for Problem Entry describes the process 
+          of establishing a problem. The code element should be used, as the process of determining the value is important to 
+          clinicians (e.g., a diagnosis is a more advanced statement than a symptom).
+       </assert>
+
+       <assert test="cda:code[@codeSystem='2.16.840.1.113883.6.96']">
+          Warning: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), the recommended vocabulary for Problem Entry is
+          '2.16.840.1.113883.6.96' (SNOMED CT).
+       </assert>
+
+       <assert test="cda:code[@code = '64572001' or
+	                      @code = '418799008' or
+			      @code = '404684003' or
+			      @code = '409586006' or
+			      @code = '248536006' or
+			      @code = '55607006' or
+			      @code = '282291009']">
+
+          Warning: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), the recommended vocabulary for describing Problem 
+          Entry is shown in a table.  
+          See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5
+       </assert>
+
+       <report test='cda:confidentialityCode'>
+          Warning: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), while CDA allows for a condition to specify a 
+          &lt;confidentialtyCode&gt; for an observation, in practice there is no way to enforce consistent use of this 
+          information across institutions to secure confidential patient information. Therefore, it is recommended that 
+          this element not be sent in Problem Entry. If there are confidentiality issues that need to be addressed other 
+          mechanisms should be negotiated within the affinity domain.
+       </report>
+
+       <report test='cda:uncertaintyCode'>
+          Warning: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), CDA allows a condition to be specified with an 
+          &lt;uncertaintyCode&gt;. Such conditions can also be recorded as a possible condition (e.g. possible ear infection). 
+          There is no present consensus on the best use of this element; therefore, it is recommended that this element not 
+          be sent in Problem Entry.
+       </report>
+
+       <assert test='not(cda:value[@codeSystem]) or cda:value[@codeSystemName]'>
+          Warning: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), it is recommended that the value codeSystemName 
+          associated with the codeSystem be provided for diagnostic and human readability purposes, but this is not required
+          by this profile.
+       </assert>
+       <assert test='not(cda:value[@code]) or cda:value[@displayName]'>
+          Warning: In IHE PCC Problem Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5), it is recommended that the displayName for the 
+          code also be provided for diagnostic and human readability purposes, but this is not required by this profile.
+       </assert>
+
+       </rule>
+
+  </pattern>
+

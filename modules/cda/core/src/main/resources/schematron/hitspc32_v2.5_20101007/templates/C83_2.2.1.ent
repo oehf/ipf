@@ -1,0 +1,637 @@
+<!-- HITSP C83 Section 2.2.1   -->
+
+<!-- errors -->
+
+<pattern id='p-C83_2.2.1-errors'>
+
+    <title>C83 Section 2.2.1</title>
+
+<!-- Payers Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.101"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.5.3.7"'>
+          Error: HITSP/C83 Clinical Document, the Payer section SHALL conform to the IHE Payers Section
+          template, and SHALL contain a templateId element whose root attribute is 
+          1.3.6.1.4.1.19376.1.5.3.1.1.5.3.7.
+          See HITSP/C83 Section 2.2.1.1, rule C83-[CT-101-1]. 
+       </assert>
+    </rule>
+
+
+<!-- Allergies and Other Adverse Reactions Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.102"]'>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.6"'>
+          Error: HITSP/C83 Clinical Document, an Allergies and Other Adverse Reactions Section SHALL include
+          entries from the Allergy/Drug Sensitivity module (2.16.840.1.113883.3.88.11.83.6).
+          See HITSP/C83 Section 2.2.1.2, rule C83-[CT-102-1].
+       </assert>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.13"'>
+          Error: HITSP/C83 Clinical Document, an Allergies and Other Adverse Reactions Section SHALL conform 
+          to the IHE Allergies and Other Adverse Reactions Section template, and SHALL contain a
+          templateId element whose root attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.13.
+          See HITSP/C83 Section 2.2.1.2, rule C83-[CT-102-2].
+       </assert>
+
+    </rule>
+
+<!-- Problem List Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.103"]'>
+
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"'>
+          Error: HITSP/C83 Clinical Document, the Problem List section SHALL include entries from 
+          the Condition module.
+          See HITSP/C83 Section 2.2.1.3, rule C83-[CT-103-1].
+       </assert>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.6"'>
+          Error: HITSP/C83 Clinical Document, the Problem List section SHALL conform to the IHE Active 
+          Problems Section template, and SHALL contain a templateId element whose
+          root attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.6.
+          See HITSP/C83 Section 2.2.1.3, rule C83-[CT-103-2].
+       </assert>
+    </rule>
+
+
+<!-- History of Past Illness Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.104"]'>
+
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"'>
+          Error: HITSP/C83 Clinical Document, the History of Past Illness section SHALL include entries from
+          the Condition module.
+          See HITSP/C83 Section 2.2.1.4, rule C83-[CT-104-1].
+       </assert>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.8"'>
+          Error: HITSP/C83 Clinical Document, the History of Past Illness section SHALL conform to the IHE History
+          of Past Illness Section template, and SHALL contain a templateId element whose
+          root attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.8.
+          See HITSP/C83 Section 2.2.1.4, rule C83-[CT-104-2].
+       </assert>
+
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.2.9"'>
+          Error: HITSP/C83 Clinical Document, the History of Past Illness section SHALL conform to the HL7 
+          History and Physical Note and HL7 Consultation Note implementation guide requirements for this 
+          section, and SHALL contain a templateId element whose root attribute is 2.16.840.1.113883.10.20.2.9.
+          See HITSP/C83 Section 2.2.1.4, rule C83-[CT-104-3].
+       </assert>
+    </rule>
+
+
+<!-- Chief Complaint Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.105"]'>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1"'>
+          Error: HITSP/C83 Clinical Document, the Chief Complaint section SHALL conform to the IHE Chief
+          Complaint Section template, and SHALL contain a templateId element whose
+          root attribute is 1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1.
+          See HITSP/C83 Section 2.2.1.5, rule C83-[CT-105-1].
+       </assert>
+
+
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.2.8"'>
+          Error: HITSP/C83 Clinical Document, the Chief Complaint section SHALL conform to the HL7 History and 
+          Physical Note requirements for this section, and SHALL contain a templateId element whose root attribute 
+          is 2.16.840.1.113883.10.20.2.8.
+          See HITSP/C83 Section 2.2.1.5, rule C83-[CT-105-2].
+       </assert>
+    </rule>
+
+
+<!-- Reason for Referral Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.106"]'>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.1"'>
+          Error: HITSP/C83 Clinical Document, the Reason for Referral section SHALL conform to the IHE Reason
+          for Referral Section template, and SHALL contain a templateId element whose
+          root attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.1.
+          See HITSP/C83 Section 2.2.1.6, rule C83-[CT-106-1].
+       </assert>
+
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.4.8"'>
+          Error: HITSP/C83 Clinical Document, the Reason For Referral section SHALL conform to the HL7 Consultation 
+          Note requirements for this section, and SHALL contain a templateId element whose root attribute is
+          2.16.840.1.113883.10.20.4.8.
+          See HITSP/C83 Section 2.2.1.6, rule C83-[CT-106-2].
+       </assert>
+
+    </rule>
+
+
+<!-- History of Present Illness Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.107"]'>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.4"'>
+          Error: HITSP/C83 Clinical Document, the History of Present Illness section SHALL conform to the IHE History
+          of Present Illness Section template, and SHALL contain a templateId element whose
+          root attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.4.
+          See HITSP/C83 Section 2.2.1.7, rule C83-[CT-107-1].
+       </assert>
+
+    </rule>
+
+
+<!-- List of Surgeries Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.108"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.12"'>
+          Error: HITSP/C83 Clinical Document, the List of Surgeries section SHALL conform to the IHE Coded
+          List of Surgeries template, and SHALL contain a templateId element whose
+          root attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.12
+          See HITSP/C83 Section 2.2.1.8, rule C83-[CT-108-1].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.17"'>
+          Error: HITSP/C83 Clinical Document, the List of Surgeries section SHALL include entries from
+          the Procedure module.
+          See HITSP/C83 Section 2.2.1.8, rule C83-[CT-108-2].   
+       </assert>
+
+    </rule>
+
+<!-- Functional Status Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.109"]'>
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.1.5"'>
+          Error: HITSP/C83 Clinical Document, the Functional Status section SHALL conform to the 
+          Continuity of Care Document Functional Status section described in section 3.4 of the CCD
+          specification and, SHALL contain a templateId element whose root attribute is
+          2.16.840.1.113883.10.20.1.5.
+          See HITSP/C83 Section 2.2.1.9, rule C83-[CT-109-1].
+       </assert>
+    </rule>
+
+
+
+<!-- Hospital Admission Diagnosis Section -->
+
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.110"]'>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.3"'>
+          Error: HITSP/C83 Clinical Document, the Hospital Admisstion Diagnosis section SHALL conform 
+          to the IHE Hospital Admission Diagnosis section and SHALL contain a templateId element whose 
+          root attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.3.
+          See HITSP/C83 Section 2.2.1.10, rule C83-[CT-110-1].
+       </assert>
+
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"'>
+          Error: HITSP/C83 Clinical Document, the Hospital Admission Diagnosis section SHALL include an entry from the 
+          Condition module to provide the admission diagnosis in coded form.
+          See HITSP/C83 Section 2.2.1.10, rule C83-[CT-110-2].
+       </assert>
+    </rule>
+
+
+
+<!-- Discharge Diagnosis Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.111"]'>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.7"'>
+          Error: HITSP/C83 Clinical Document, the Discharge Diagnosis section SHALL conform to the
+          IHE Hospital Discharge Diagnosis section and SHALL contain a templateId element whose
+          root attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.7.
+          See HITSP/C83 Section 2.2.1.11, rule C83-[CT-111-1].
+       </assert>
+
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"'>
+          Error: HITSP/C83 Clinical Document, the Discharge Diagnosis section SHALL include entries from the Condition 
+          module to provide the discharge diagnosis in coded form. 
+          See HITSP/C83 Section 2.2.1.11 Rule C83-[CT-111-2].
+       </assert>
+    </rule>
+
+
+<!-- Medications Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.112"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.19"'>
+          Error: HITSP/C83 Clinical Document, the Medications section SHALL conform to the IHE Medications
+          section, and SHALL contain a templateId element whose root attribute is
+          1.3.6.1.4.1.19376.1.5.3.1.3.19.
+          See HITSP/C83 Section 2.2.1.12, rule C83-[CT-112-1].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"'>
+          Error: HITSP/C83 Clinical Document, the Medications section SHALL include entries from the
+          Medication module to provide the relevant medications in coded form.
+          See HITSP/C83 Section 2.2.1.12, rule C83-[CT-112-2].
+       </assert>
+    </rule>
+
+
+<!-- Admission Medications History Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.113"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.20"'>
+          Error: HITSP/C83 Clinical Document, the Admission Medications History section SHALL conform to the 
+          IHE Medications section, and SHALL contain a templateId element whose root attribute is
+          1.3.6.1.4.1.19376.1.5.3.1.3.20.
+          See HITSP/C83 Section 2.2.1.13, rule C83-[CT-113-1].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"'>
+          Error: HITSP/C83 Clinical Document, the Admission Medications History section SHALL include entries from the 
+          Medication module to provide the relevant medications of a patient prior to admission in coded form.
+          See HITSP/C83 Section 2.2.1.13, rule C83-[CT-113-2].
+       </assert>
+    </rule>
+
+
+<!-- Hospital Discharge Medications Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.114"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.22"'>
+          Error: HITSP/C83 Clinical Document, the Hospital Discharge Medications section SHALL conform to the
+          IHE Hospital Discharge Medications section, and SHALL contain a templateId element whose root attribute is
+          1.3.6.1.4.1.19376.1.5.3.1.3.22.
+          See HITSP/C83 Section 2.2.1.14, rule C83-[CT-114-1].
+       </assert>
+
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"'>
+          Error: HITSP/C83 Clinical Document, the hospital discharge medications history section SHALL include entries from the
+          Medication module to provide the relevant medications of a patient for use after discharge in coded form.
+          See HITSP/C83 Section 2.2.1.14, rule C83-[CT-114-2].
+       </assert>
+    </rule>
+
+
+<!-- Medications Administered Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.115"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.21"'>
+          Error: HITSP/C83 Clinical Document, the Medications Administered section SHALL conform to the
+          IHE Medications Administered section, and SHALL contain a templateId element whose root attribute is
+          1.3.6.1.4.1.19376.1.5.3.1.3.21.
+          See HITSP/C83 Section 2.2.1.15, rule C83-[CT-115-1].
+       </assert>
+
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"'>
+          Error: HITSP/C83 Clinical Document, the medications administered section SHALL include entries from the
+          Medication module to provide the relevant medications administered to a patient in coded form.
+          See HITSP/C83 Section 2.2.1.15, rule C83-[CT-115-2].
+       </assert>
+    </rule>
+
+
+<!-- Advance Directives -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.116"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.35"'>
+          Error: HITSP/C83 Clinical Document, the Advance Directives section SHALL conform to the 
+          IHE Coded Advance Directives section, and SHALL contain a templateId element whose
+          root attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.35.
+          See HITSP/C83 Section 2.2.1.16, rule C83-[CT-116-1].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.12"'>
+          Error: HITSP/C83 Clinical Document, the Advance Directives section SHALL include entries 
+          from the Advance Directive module.
+          See HITSP/C83 Section 2.2.1.16, rule C83-[CT-116-2].
+       </assert>
+    </rule>
+
+
+<!-- Immunizations -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.117"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.23"'>
+          Error: HITSP/C83 Clinical Document, the Immunizations section SHALL conform to the IHE Immunizations
+          section, and SHALL contain a templateId element whose root attribute
+          is 1.3.6.1.4.1.19376.1.5.3.1.3.23.
+          See HITSP/C83 Section 2.2.1.17, rule C83-[CT-117-1].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.13"'>
+          Error: HITSP/C83 Clinical Document, the Immunizations section SHALL include entries from the 
+          Immunization module.
+          See HITSP/C83 Section 2.2.1.17, rule C83-[CT-117-2].
+       </assert>
+    </rule>
+
+
+<!-- Physical Examination Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.118"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.9.15"'>
+          Error: HITSP/C83 Clinical Document, the Physical Examination section SHALL conform to the IHE Physical
+          Examination section, and SHALL contain a templateId element whose root attribute
+          is 1.3.6.1.4.1.19376.1.5.3.1.1.9.15.
+          See HITSP/C83 Section 2.2.1.18, rule C83-[CT-118-1].
+       </assert>
+
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.2.10"'>
+          Error: HITSP/C83 Clinical Document, the Physical Examination section SHALL conform to the HL7 History and Physical 
+          Note and HL7 Consultation Note requirements for this section, and SHALL contain a templateId element whose root 
+          attribute is 2.16.840.1.113883.10.20.2.10.
+          See HITSP/C83 Section 2.2.1.18, rule C83-[CT-118-2].
+       </assert>
+    </rule>
+
+
+<!-- Vital Signs Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.119"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.5.3.2"'>
+          Error: HITSP/C83 Clinical Document, the Vital Signs section SHALL conform to the IHE Coded Vital Signs
+          section, and SHALL contain a templateId element whose root
+          attribute is 1.3.6.1.4.1.19376.1.5.3.1.1.5.3.2.
+          See HITSP/C83 Section 2.2.1.19, rule C83-[CT-119-1].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.14"'>
+          Error: HITSP/C83 Clinical Document, the Vital Signs section SHALL contain entries conforming to
+          the Vital Sign module.
+          See HITSP/C83 Section 2.2.1.19, rule C83-[CT-119-2].
+       </assert>
+    </rule>
+
+
+<!-- Review of Systems Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.120"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.18"'>
+          Error: HITSP/C83 Clinical Document, the Review of Systems section SHALL conform to the IHE Review
+          of Systems section, and SHALL contain a templateId element whose root
+          attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.18.
+          See HITSP/C83 Section 2.2.1.20, rule C83-[CT-120-1].
+       </assert>
+
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.4.10"'>
+          Error: HITSP/C83 Clinical Document, the Review of Systems section SHALL conform to the HL7 Consultation Note 
+          requirements for this section, and SHALL contain a templateId element whose root attribute is 
+          2.16.840.1.113883.10.20.4.10.
+          See HITSP/C83 Section 2.2.1.20, rule C83-[CT-120-2].
+       </assert>
+    </rule>
+
+
+<!-- Hopsital Course Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.121"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.5"'>
+          Error: HITSP/C83 Clinical Document, the Hospital Course section SHALL conform to the IHE Hospital
+          Course section, and SHALL contain a templateId element whose root
+          attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.5.
+          See HITSP/C83 Section 2.2.1.21, rule C83-[CT-121-1].
+       </assert>
+    </rule>
+
+
+<!-- Diagnostic Results Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.122"]'>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.28"'>
+          Error: HITSP/C83 Clinical Document, the Diagnostic Results section SHALL conform to the IHE 
+          Coded Results section, and SHALL contain a templateId element whose root
+          attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.28.
+          See HITSP/C83 Section 2.2.1.22, rule C83-[CT-122-1].
+       </assert>
+
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.17" and
+                     .//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.15.1"'>
+          Error: HITSP/C83 Clinical Document, the Diagnostic Results section SHALL include entries from the Procedure 
+          module to indicate the diagnostic procedure, and the Result module to provide the results of that procedure.
+          See HITSP/C83 Section 2.2.1.22, rule C83-[CT-122-2].
+       </assert>
+    </rule>
+
+
+<!-- Assessment and Plan Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.123"]'>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.2.5"'>
+          Error: HITSP/C83 Clinical Document, the Assessment and Plan section SHALL conform to the IHE Assessment
+          and Plan section, and SHALL contain a templateId element whose root attribute is 
+          1.3.6.1.4.1.19376.1.5.3.1.1.13.2.5.
+          See HITSP/C83 Section 2.2.1.23, rule C83-[CT-123-1].
+       </assert>
+
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.2.7"'>
+          Error: HITSP/C83 Clinical Document, the Assessment and Plan section SHALL conform to the HL7 History and Physical
+          Note and HL7 Consultation Node requirements for this section amd SHALL contain a templateId element whose root
+          attribute is 2.16.840.1.113883.10.20.2.7
+          See HITSP/C83 Section 2.2.1.23, rule C83-[CT-123-2].
+       </assert>
+    </rule>
+
+<!-- Plan of Care Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.124"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.31"'>
+          Error: HITSP/C83 Clinical Document, the Plan of Care section SHALL conform to the IHE Care Plan section,
+          and SHALL contain a templateId element whose root attribute is
+          1.3.6.1.4.1.19376.1.5.3.1.3.31.
+          See HITSP/C83 Section 2.2.1.24, rule C83-[CT-124-1].
+       </assert>
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.2.7"'>
+          Error: HITSP/C83 Clinical Document, the Plan of Care section SHALL conform to the HL7 History and Physical
+          Note and HL7 Consultation Note requirements for this section, and
+          SHALL contain a templateId element whose root attribute is 2.16.840.1.113883.10.20.2.7
+          See HITSP/C83 Section 2.2.1.24, rule C83-[CT-124-2].
+       </assert>
+    </rule>
+
+<!-- Family History Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.125"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.14"'>
+          Error: HITSP/C83 Clinical Document, the Family History section SHALL conform to the IHE Family Medical
+          History section, and SHALL contain a templateId element whose root attribute is 
+          1.3.6.1.4.1.19376.1.5.3.1.3.14.
+          See HITSP/C83 Section 2.2.1.25, rule C83-[CT-125-1].
+       </assert>
+    </rule>
+
+
+<!-- Social History Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.126"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.16"'>
+          Error: HITSP/C83 Clinical Document, the Social History section SHALL conform to the IHE Social History 
+          section, and SHALL contain a templateId element whose root attribute is 1.3.6.1.4.1.19376.1.5.3.1.3.16.
+          See HITSP/C83 Section 2.2.1.26, Rule C83-[CT-126-1].
+       </assert>
+    </rule>
+
+
+<!-- Encounters Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.127"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.5.3.3"'>
+          Error: HITSP/C83 Clinical Document, the Encounters section SHALL conform to the IHE Encounters History
+          section, and SHALL contain a templateId element whose root
+          attribute is 1.3.6.1.4.1.19376.1.5.3.1.1.5.3.3.
+          See HITSP/C83 Section 2.2.1.27, rule C83-[CT-127-1].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.16"'>
+          Error: HITSP/C83 Clinical Document, the Encounters section SHALL contain entries conforming to the
+          Encounter module.
+          See HITSP/C83 Section 2.2.1.27, rule C83-[CT-127-2].
+       </assert>
+    </rule>
+
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.128"]'>
+
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.1.7"'>
+          Error: HITSP/C83 Clinical Document, the Medical Equipment section SHALL conform to the HL7 CCD Section,
+          and SHALL contain a templateId element whose root attribute is 2.16.840.1.113883.10.20.1.7.
+          See HITSP/C83 Section 2.2.1.28, rule C83-[CT-128-1].
+       </assert>
+
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.5.3.5"'>
+          Error: HITSP/C83 Clinical Document, the Medical Equipment Section SHALL conform to the IHE Medical 
+          Devices Section, and SHALL contain a templateId element whose root attribute is 
+          1.3.6.1.4.1.19376.1.5.3.1.1.5.3.5.
+          See HITSP/C83 Section 2.2.1.28, rule C83-[CT-128-2].
+       </assert>
+
+    </rule>
+
+  </pattern>
+
+
+  <!-- warning -->
+
+<pattern id='p-C83_2.2.1-warning'>
+
+<!-- Payers Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.101"]'>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.5"'>
+          Warning: HITSP/C83 Clinical Document, the Payers section SHALL include entries from the 
+          Insurance Provider module when this information is known.
+          See HITSP/C83 Section 2.2.1.1, rule C83-[CT-101-2].
+       </assert>
+
+    </rule>
+
+<!-- Physical Examination Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.118"]'>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"'>
+          Warning: HITSP/C83 Clinical Document, the Physical Examination Section SHOULD contain 
+          Condition entries conforming to the Condition module.
+          See HITSP/C83 Section 2.2.1.18, rule C83-[CT-118-3].
+       </assert>
+
+       <assert test='not(.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7") or
+                     cda:act[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"]/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.28"]/cda:code[@code="404684003" or @code="248536006"]'>
+         Warning: HITSP/C83 Clinical Document, condition entries appearing in the physical examination
+         section SHALL conform the Condition module and SHOULD restrict the Condition Type as FINDING
+         (404684003) or FUNCTIONAL LIMITATION (248536006) from the SNOMED CT Code System.
+         See HITSP/C83 Section 2.2.1.18, rule C83-[CT-118-4]
+       </assert>
+
+
+
+    </rule>
+
+</pattern>
+
+<pattern id='p-C83_2.2.1-note'>
+
+    <title>C83/IHE Mapping - notes validation phase</title>
+
+
+<!-- Chief Complaint Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.105"]'>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7"'>
+          Note: HITSP/C83 Clinical Document, the Chief Complaint Section MAY include an entry from the
+          Condition Module to provide the chief complaint in coded form.
+          See HITSP/C83 Section 2.2.1.5, rule C83-[CT-105-3].
+       </assert>
+    </rule>
+
+<!-- Reason for Referral Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.106"]'>
+       <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.2"'>
+          Note: HITSP/C83 Clinical Document, the Reason for Referral section MAY conform to the IHE Coded Reason 
+          for Referral Section template, in which case it SHALL contain a templateId element whose root attribute
+          is 1.3.6.1.4.1.19376.1.5.3.1.3.2 to indicate conformance.
+          See HITSP/C83 Section 2.2.1.6, rule C83-[CT-106-3].
+       </assert>
+
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.7" or
+                     .//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.15.1"'>
+          Note: HITSP/C83 Clinical Document, the Reason For Referral section MAY include entries from the Condition 
+          module or the Result module to provide the reason for referral in coded form.
+          See HITSP/C83 Section 2.2.1.6, rule C83-[CT-106-4].
+       </assert>
+
+    </rule>
+
+
+<!-- Assessment and Plan Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.123"]'>
+
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"'>
+          Note: HITSP/C83 Clinical Document, the Assessment and Plan section MAY include entries conforming to
+          the Medication module to provide information about the intended care plan.
+          See HITSP/C83 Section 2.2.1.23, rule C83-[CT-123-3].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.13"'>
+          Note: HITSP/C83 Clinical Document, the Assessment and Plan section MAY include entries conforming to
+          the Immunization module to provide information about the intended care plan.
+          See HITSP/C83 Section 2.2.1.23, rule C83-[CT-123-3].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.16"'>
+          Note: HITSP/C83 Clinical Document, the Assessment and Plan section MAY include entries conforming to
+          the Encounters module to provide information about the intended care plan.
+          See HITSP/C83 Section 2.2.1.23, rule C83-[CT-123-3].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.17"'>
+          Note: HITSP/C83 Clinical Document, the Plan of Care section MAY include entries conforming to
+          the Procedure module to provide information about the intended care plan.
+          See HITSP/C83 Section 2.2.1.23 Rule C83-[CT-123-3].
+       </assert>
+
+
+    </rule>
+
+
+<!-- Plan of Care Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.124"]'>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.8"'>
+          Note: HITSP/C83 Clinical Document, the Plan of Care section MAY include entries conforming to 
+          the Medication module to provide information about the intended care plan.
+          See HITSP/C83 Section 2.2.1.24, rule C83-[CT-124-3].  
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.13"'>
+          Note: HITSP/C83 Clinical Document, the Plan of Care section MAY include entries conforming to
+          the Immunization module to provide information about the intended care plan.
+          See HITSP/C83 Section 2.2.1.24, rule C83-[CT-124-3].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.16"'>
+          Note: HITSP/C83 Clinical Document, the Plan of Care section MAY include entries conforming to
+          the Encounter module to provide information about the intended care plan.
+          See HITSP/C83 Section 2.2.1.24, rule C83-[CT-124-3].
+       </assert>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.17"'>
+          Note: HITSP/C83 Clinical Document, the Plan of Care section MAY include entries conforming to
+          the Procedure module to provide information about the intended care plan.
+          See HITSP/C83 Section 2.2.1.24, rule C83-[CT-124-3].
+       </assert>
+    </rule>
+
+
+<!-- Social History Section -->
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.126"]'>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.19"'>
+          Note: HITSP/C83 Clinical Document, the Social History section MAY contain entries conforming to 
+          the Social History module. 
+          See HITSP/C83 Section 2.2.1.26, rule C83-[CT-126-2].
+       </assert>
+    </rule>
+
+  </pattern>
+

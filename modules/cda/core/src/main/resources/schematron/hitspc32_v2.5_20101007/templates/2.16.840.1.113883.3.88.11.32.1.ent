@@ -1,0 +1,149 @@
+
+<pattern id='p-2.16.840.1.113883.3.88.11.32.1-errors'>
+
+
+ <rule context='/cda:ClinicalDocument'>   
+
+   <!-- Verify that the HITSP/C32 templateId is present. -->
+   <assert test='cda:templateId/@root="2.16.840.1.113883.3.88.11.32.1"'>
+     Error: A CDA Document shall declare conformance to HITSP/C32 by including a templateId 
+     element with the root attribute set to the value 2.16.840.1.113883.3.88.11.32.1.
+     See Section 2.2.1.2, rule C32-[CT1-19].
+   </assert>
+
+   <!-- Verify that the parent CCD templateId is also present. -->
+<!-- Not explicitly stated 
+
+   <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.1"]'>
+     Error: A HITSP/C32 document shall carry the template identifier for the ASTM/HL7 CCD 
+     Implementation Guide (2.16.840.1.113883.10.20.1) from which it is derived.
+     See Section 2.2.1.
+   </assert>
+--> 
+   <assert test='.//cda:author'>
+      Error: HITSP/C32 requires a repeatable HITSP/C83 Information Source module.
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--8].
+   </assert>  
+                                                                                                                                        
+ </rule>
+
+</pattern>
+
+
+
+<!-- Pattern for Warnings -->
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.32.1-warning'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.32.1"]'>
+   <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.2"'>
+      Warning: HITSP/C32 requires one or more HITSP/C83 Language Spoken modules (2.16.840.1.113883.3.88.11.83.2)
+      if that information is known.
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--10].
+   </assert>
+
+   <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.3"'>
+      Warning: HITSP/C32 requires one or more HITSP/C83 Support modules (2.16.840.1.113883.3.88.11.83.3)
+      if that information is known.
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--16].
+   </assert>
+
+</rule>
+
+</pattern>
+
+
+
+<!-- Pattern for Notes -->
+
+
+<pattern id='p-2.16.840.1.113883.3.88.11.32.1-note'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.32.1"]'>
+
+   <assert test='.//cda:templateId[@root="2.16.840.1.113883.3.88.11.83.12"]'>
+      Note: HITSP/C32 may contain a HITSP/C83 Advance Directives module 
+      (2.16.840.1.113883.3.88.11.83.12).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--1].
+   </assert>
+
+   <assert test='.//cda:templateId[@root="2.16.840.1.113883.3.88.11.83.102"]'>
+      Note: HITSP/C32 may contain a HITSP/C83 Allergies and Other Adverse Reactions Section
+      (2.16.840.1.113883.3.88.11.83.102).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--2].
+   </assert>
+
+   <assert test='.//cda:templateId[@root="2.16.840.1.113883.3.88.11.83.11"]'>
+      Note: HITSP/C32 may contain HITSP/C83 Comments modules (2.16.840.1.113883.3.88.11.83.11).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--3].
+   </assert>
+
+   <assert test='.//cda:templateId[@root="2.16.840.1.113883.3.88.11.83.103"]'>
+      Note: HITSP/C32 may contain a HITSP/C83 Condition / Problem List Section 
+      (2.16.840.1.113883.3.88.11.83.103).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--4].
+   </assert>
+
+   <assert test='.//cda:templateId[@root="2.16.840.1.113883.3.88.11.83.127"]'>
+      Note: HITSP/C32 may contain HITSP/C83 Encounters Section (2.16.840.1.113883.3.88.11.83.127).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--5].
+   </assert>
+
+   <assert test='.//cda:templateId/@root="2.16.840.1.113883.3.88.11.83.4"'>
+      Note: HITSP/C32 may contain one or more HITSP/C83 Healthcare Provider modules 
+      (2.16.840.1.113883.3.88.11.83.4).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--6].
+   </assert>
+
+   <assert test='.//cda:templateId[@root="2.16.840.1.113883.3.88.11.83.117"]'>
+      Note: HITSP/C32 may contain HITSP/C83 Immunization module (2.16.840.1.113883.3.88.11.83.117).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--7].
+   </assert>
+
+   <assert test='.//cda:templateId[@root="2.16.840.1.113883.3.88.11.83.101"]'>
+      Note: HITSP/C32 may contain a HITSP/C83 Insurance Provider / Payers Section
+      (2.16.840.1.113883.3.88.11.83.101).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--9].
+   </assert>   
+
+   <assert test='.//cda:templateId[@root = "2.16.840.1.113883.3.88.11.83.112"]'>
+      Note: HITSP/C32 may contain a HITSP/C83 Medications (Prescription and Non-Prescription) /
+      Medications Section (2.16.840.1.113883.3.88.11.83.112).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--11].
+   </assert>
+
+   <assert test='.//cda:templateId[@root = "2.16.840.1.113883.3.88.11.83.124"]'>
+      Note: HITSP/C32 may contain a HITSP/C83 Plan of Care Section (2.16.840.1.113883.3.88.11.83.124).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--13].
+   </assert>
+
+   <assert test='.//cda:observation/cda:value[@code="773860066" and @codeSystem="2.16.840.1.113883.6.96"]'>
+      Note: HITSP/C32 may contain a HITSP/C83 Pregnancy module represented as a SNOMED "Patient currently 
+      pregnant" observation (code=773860066), or its negation. The observation may appear in any C83 
+      section where it is legal to have a cda:observation element, including: Conditions, Vital Signs, 
+      or Results.
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--14].
+   </assert>
+
+   <assert test='.//cda:templateId[@root="2.16.840.1.113883.3.88.11.83.108"]'>
+      Note: HITSP/C32 may contain a HITSP/C83 Procedure / List of Surgeries Section 
+      (2.16.840.1.113883.3.88.11.83.108).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--15].
+   </assert>
+
+   <assert test='.//cda:templateId[@root="2.16.840.1.113883.3.88.11.83.119"]'>
+      Note: HITSP/C32 may contain HITSP/C83 Vital Signs Section (2.16.840.1.113883.3.88.11.83.119).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--17].
+   </assert>
+
+   <assert test='.//cda:templateId[@root="2.16.840.1.113883.3.88.11.83.122"]'>
+      Note: HITSP/C32 may contain HITSP/C83 Results / Diagnostic Results Section 
+      (2.16.840.1.113883.3.88.11.83.122).
+      See Section 2.2.1, Table 2-3, rule C32-[CT1--18].
+   </assert>
+
+ </rule>
+
+</pattern>
+
