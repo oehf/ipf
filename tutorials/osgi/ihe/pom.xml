@@ -22,7 +22,7 @@
         <geronimo-management-spec-version>1.0.1</geronimo-management-spec-version>
         <geronimo-servlet_3.0_spec_version>1.0</geronimo-servlet_3.0_spec_version>
         <hapi-osgi-version>1.2</hapi-osgi-version>
-        <jdom-version>1.0.0</jdom-version>
+        <springsource-jdom-version>1.1.0</springsource-jdom-version>
         <jms-version>1.1-p1</jms-version>
         <neethi-version>3.0.2</neethi-version>
         <osgi-compendium-version>4.2.0</osgi-compendium-version>
@@ -49,7 +49,7 @@
         <springsource-commons-dbcp-version>1.2.2.osgi</springsource-commons-dbcp-version>
         <springsource-commons-fileupload-version>1.2.1</springsource-commons-fileupload-version>
         <springsource-commons-httpclient-version>3.1.0</springsource-commons-httpclient-version>
-        <springsource-commons-lang-version>2.5.0</springsource-commons-lang-version>
+        <springsource-commons-lang-version>2.6.0</springsource-commons-lang-version>
         <springsource-commons-logging-version>1.1.1</springsource-commons-logging-version>
         <springsource-commons-pool-version>1.5.3</springsource-commons-pool-version>
         <springsource-dom4j-version>1.6.1</springsource-dom4j-version>
@@ -127,7 +127,7 @@
             <param>mvn:org.dom4j/com.springsource.org.dom4j/${springsource-dom4j-version}@start</param>
             <param>mvn:javax.annotation/com.springsource.javax.annotation/${springsource-annotations-api-version}@start</param>
             <param>mvn:javax.activation/com.springsource.javax.activation/${springsource-activation-version}@start</param>
-            <param>mvn:org.jdom/com.springsource.org.jdom/${jdom-version}@start</param>
+            <param>mvn:org.jdom/com.springsource.org.jdom/${springsource-jdom-version}@start</param>
             <param>mvn:org.antlr/com.springsource.antlr/${springsource-antlr-version}@start</param>
             <param>mvn:org.aopalliance/com.springsource.org.aopalliance/${springsource-aopalliance-version}@start</param>
             <param>mvn:javax.xml.rpc/com.springsource.javax.xml.rpc/${springsource-rpc-api-version}@start</param>

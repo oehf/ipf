@@ -21,9 +21,9 @@ import static org.openehealth.ipf.commons.flow.config.ApplicationConfig.PURGE_FL
 import static org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria.PurgeMode.ALL;
 import static org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria.PurgeMode.CLEAN;
 
-import java.text.ParseException;
 import java.util.Date;
 
+import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.datetime.Duration;
@@ -32,16 +32,10 @@ import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
 import org.openehealth.ipf.commons.flow.jmx.FlowPurgerMBean;
 import org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria;
 import org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria.PurgeMode;
-import org.quartz.CronTrigger;
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SimpleTrigger;
-import org.quartz.Trigger;
+
+import static org.quartz.TriggerBuilder.*;
+import static org.quartz.JobBuilder.*;
+import static org.quartz.CronScheduleBuilder.*;
 
 /**
  * A flow purge job implementation used by both, Quartz scheduler and
@@ -171,7 +165,8 @@ public class FlowPurgeJob implements Job {
      */
     public void execute(ApplicationConfig config) {
         String name = "once";
-        schedule(config, new SimpleTrigger(name, (String) null), name);
+
+        schedule(config, newTrigger().withIdentity(name, (String) null).build(), name);
         LOG.info("Execute purge job once for application {}", application);
     }
     
@@ -183,22 +178,24 @@ public class FlowPurgeJob implements Job {
      * @see ApplicationConfig#setFlowPurgeSchedule(String)
      */
     public void schedule(ApplicationConfig config) {
-        try {
-            schedule(config, new CronTrigger(application, null, flowPurgeSchedule), application);
-            setFlowPurgeScheduled(true);
-            LOG.info("Scheduled purge job for application {}", application);
-        } catch (ParseException e) {
-            throw new FlowPurgeJobException("Cannot parse schedule: " + e.getMessage());
-        }
+        CronTrigger cronTrigger = newTrigger().withIdentity(application, null)
+                                              .withSchedule(cronSchedule(flowPurgeSchedule))
+                                              .build();
+        schedule(config, cronTrigger, application);
+        setFlowPurgeScheduled(true);
+        LOG.info("Scheduled purge job for application {}", application);
     }
     
     private void schedule(ApplicationConfig config, Trigger trigger, String jobName) {
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put(FlowPurgeJob.FLOW_MANAGER_KEY, flowManager);
         jobDataMap.put(FlowPurgeJob.APP_CONFIG_KEY, config);
-        
-        JobDetail jobDetail = new JobDetail(jobName, null, FlowPurgeJob.class);
-        jobDetail.setJobDataMap(jobDataMap);
+
+        JobDetail jobDetail = newJob()
+                                  .withIdentity(jobName, null)
+                                  .ofType(FlowPurgeJob.class)
+                                  .usingJobData(jobDataMap)
+                                  .build();
         
         try {
             scheduler.scheduleJob(jobDetail, trigger);
@@ -212,7 +209,7 @@ public class FlowPurgeJob implements Job {
      */
     public void unschedule() {
         try {
-            scheduler.deleteJob(application, null);
+            scheduler.deleteJob(JobKey.jobKey(application, null));
             setFlowPurgeScheduled(false);
             LOG.info("Unscheduled purge job for application {}", application);
         } catch (SchedulerException e) {
@@ -230,7 +227,7 @@ public class FlowPurgeJob implements Job {
      */
     public boolean isScheduled() {
         try {
-            return scheduler.getJobDetail(application, null) != null;
+            return scheduler.getJobDetail(JobKey.jobKey(application, null)) != null;
         } catch (SchedulerException e) {
             throw new FlowPurgeJobException("Cannot get job details: " + e.getMessage());
         }
