@@ -149,13 +149,13 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
         validateAssociations(container, profile);
         validateDocumentEntries(container, profile);
-        validateFolders(container);
+        validateFolders(container, profile);
         if (!profile.isQuery()) {
             validatePatientIdsAreIdentical(container);
         }
     }
 
-    private void validateFolders(EbXMLObjectContainer container) throws XDSMetaDataException {
+    private void validateFolders(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         for (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
             runValidations(folder, folderSlotValidations);
 
@@ -163,6 +163,9 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             if (status != null) {
                 metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.SUBMITTED,
                         FOLDER_INVALID_AVAILABILITY_STATUS, status);
+            }
+            if (profile.getInteractionId() == IpfInteractionId.ITI_57){
+                validateUpdateObject(folder, container);
             }
         }
     }
@@ -213,6 +216,10 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(attachmentProvided == attachmentExpected,
                     attachmentExpected ? MISSING_DOCUMENT_FOR_DOC_ENTRY : DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY,
                     docEntry.getId());
+
+            if (profile.getInteractionId() == IpfInteractionId.ITI_57){
+                validateUpdateObject(docEntry, container);
+            }
         }
     }
 
@@ -277,7 +284,11 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                 docEntryIds.add(docEntry.getId());
             }
         }
-        
+        Set<String> submissionSetIds = new HashSet<String>();
+        for (EbXMLRegistryPackage submissionSet : container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE)) {
+            submissionSetIds.add(submissionSet.getId());
+        }
+
         for (EbXMLAssociation association : container.getAssociations()) {
             AssociationType type = association.getAssociationType();
             metaDataAssert(type != null, INVALID_ASSOCIATION_TYPE);
@@ -285,6 +296,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             if (type != AssociationType.HAS_MEMBER) {
                 validateDocumentRelationship(association, docEntryIds, profile);
                 validateIsSnapshotRelationship(container, association);
+                validateUpdateAvailabilityStatusRelationship(submissionSetIds, association);
             }
             else {
                 validateAssociation(association, docEntryIds, profile);
@@ -327,6 +339,18 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
     }
 
+    private void validateUpdateAvailabilityStatusRelationship(Set<String> submissionSetIds, EbXMLAssociation association){
+        if (association.getAssociationType() == AssociationType.UPDATE_AVAILABILITY_STATUS){
+            metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
+            metaDataAssert(association.getSingleSlotValue(SLOT_NAME_ORIGINAL_STATUS) != null, MISSING_ORIGINAL_STATUS);
+            metaDataAssert(AvailabilityStatus.valueOfOpcode(association.getSingleSlotValue(SLOT_NAME_ORIGINAL_STATUS)) != null,
+                    INVALID_SUBMISSION_SET_STATUS);
+            metaDataAssert(association.getSingleSlotValue(SLOT_NAME_NEW_STATUS) != null, MISSING_NEW_STATUS);
+            metaDataAssert(AvailabilityStatus.valueOfOpcode(association.getSingleSlotValue(SLOT_NAME_NEW_STATUS)) != null,
+                    INVALID_SUBMISSION_SET_STATUS);
+        }
+    }
+
     private EbXMLExtrinsicObject getExtrinsicObject(EbXMLObjectContainer container, String docEntryId, String... objectTypes){
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(objectTypes)) {
             if (docEntry.getId() != null && docEntry.getId().equals(docEntryId)) {
@@ -334,5 +358,36 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             }
         }
         return null;
+    }
+
+    private EbXMLRegistryPackage getRegistryPackage(EbXMLObjectContainer container, String submissionSetId, String classificationNode){
+        for (EbXMLRegistryPackage registryPackage : container.getRegistryPackages(classificationNode)) {
+            if (registryPackage.getId() != null && registryPackage.getId().equals(submissionSetId)) {
+                return registryPackage;
+            }
+        }
+        return null;
+    }
+
+    private void validateUpdateObject(EbXMLRegistryObject registryObject, EbXMLObjectContainer container){
+        metaDataAssert(registryObject.getLid() != null, LOGICAL_ID_MISSING);
+        metaDataAssert(!registryObject.getLid().equals(registryObject.getId()), LOGICAL_ID_EQUALS_ENTRY_UUID,
+                registryObject.getLid(), registryObject.getId());
+        metaDataAssert(registryObject.getVersionInfo() != null &&
+                !"".equals(registryObject.getVersionInfo().getVersionName()),
+                VERSION_INFO_MISSING);
+
+        boolean foundHasMemberAsociation = false;
+        for (EbXMLAssociation association : container.getAssociations()){
+            if (association.getAssociationType() == AssociationType.HAS_MEMBER
+                && association.getTarget().equals(registryObject.getId())
+                && (getRegistryPackage(container, association.getSource(), SUBMISSION_SET_CLASS_NODE) != null)){
+
+                metaDataAssert(association.getSingleSlotValue(SLOT_NAME_PREVIOUS_VERSION) != null,
+                        MISSING_PREVIOUS_VERSION);
+                foundHasMemberAsociation = true;
+            }
+        }
+        metaDataAssert(foundHasMemberAsociation, MISSING_HAS_MEMBER_ASSOCIATION, registryObject.getId());
     }
 }

@@ -65,7 +65,16 @@ public class AssociationTransformer {
         
         String label = AssociationLabel.toOpcode(association.getLabel());
         result.addSlot(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS, label);
-        
+
+        String previousVersion = association.getPreviousVersion();
+        result.addSlot(Vocabulary.SLOT_NAME_PREVIOUS_VERSION, previousVersion);
+
+        String originalStatus = association.getOriginalStatus();
+        result.addSlot(Vocabulary.SLOT_NAME_ORIGINAL_STATUS, originalStatus);
+
+        String newStatus = association.getNewStatus();
+        result.addSlot(Vocabulary.SLOT_NAME_NEW_STATUS, newStatus);
+
         EbXMLClassification contentType = codeTransformer.toEbXML(association.getDocCode(), objectLibrary);
         result.addClassification(contentType, Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
         
@@ -92,7 +101,16 @@ public class AssociationTransformer {
         
         String label = association.getSingleSlotValue(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS);
         result.setLabel(AssociationLabel.fromOpcode(label));
-        
+
+        String previousVersion = association.getSingleSlotValue(Vocabulary.SLOT_NAME_PREVIOUS_VERSION);
+        result.setPreviousVersion(previousVersion);
+
+        String originalStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_ORIGINAL_STATUS);
+        result.setOriginalStatus(originalStatus);
+
+        String newStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_NEW_STATUS);
+        result.setNewStatus(newStatus);
+
         EbXMLClassification docCode = association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
         result.setDocCode(codeTransformer.fromEbXML(docCode));
         
