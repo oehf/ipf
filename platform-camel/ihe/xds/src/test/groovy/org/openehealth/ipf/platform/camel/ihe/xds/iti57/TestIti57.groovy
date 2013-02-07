@@ -20,12 +20,15 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLInternationalString30
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest
-import org.openehealth.ipf.commons.xml.XmlUtils
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.LocalizedStringType
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint
 
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Unmarshaller
@@ -43,13 +46,13 @@ class TestIti57 extends StandardTestContainer {
     
     def SERVICE1 = "xds-iti57://localhost:${port}/xds-iti57-service1"
     def SERVICE2 = "xds-iti57://localhost:${port}/xds-iti57-service2"
-    def SERVICE3 = "xds-iti57://localhost:${port}/xds-iti57-service3"
 
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti57-service2"
     
     def request
     def docEntry
-    
+    def folder
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
@@ -63,6 +66,11 @@ class TestIti57 extends StandardTestContainer {
     void setUp() {
         request = SampleData.createRegisterDocumentSet()
         docEntry = request.documentEntries[0]
+        docEntry.logicalUuid = 'urn:uuid:20744602-ba65-44e9-87ee-a52303a5183e'
+        docEntry.version = new Version('123')
+        folder = request.folders[0]
+        folder.logicalUuid = 'urn:uuid:20744602-ba65-44e9-87ee-a52303a5183g'
+        folder.version = new Version('124')
     }
     
     @Test
@@ -117,4 +125,5 @@ class TestIti57 extends StandardTestContainer {
         docEntry.comments = new LocalizedString(value)
         return send(endpoint, request, Response.class)
     }
+
 }

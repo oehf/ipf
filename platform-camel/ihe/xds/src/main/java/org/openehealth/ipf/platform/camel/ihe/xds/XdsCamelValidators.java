@@ -397,14 +397,14 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
     }
 
     /**
-     * Returns a validating processor for ITI-42 request messages.
+     * Returns a validating processor for ITI-57 request messages.
      */
     public static Processor iti57RequestValidator() {
         return ITI_57_REQUEST_VALIDATOR;
     }
 
     /**
-     * Returns a validating processor for ITI-42 response messages.
+     * Returns a validating processor for ITI-57 response messages.
      */
     public static Processor iti57ResponseValidator() {
         return ITI_57_RESPONSE_VALIDATOR;

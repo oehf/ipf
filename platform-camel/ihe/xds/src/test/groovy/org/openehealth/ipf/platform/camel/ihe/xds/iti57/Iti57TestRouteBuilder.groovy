@@ -16,13 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti57
 
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti57RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti57ResponseValidator
 
 /**
  * @author Boris Stanojevic
@@ -31,7 +32,9 @@ public class Iti57TestRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti57:xds-iti57-service1')
+            .process(iti57RequestValidator())
             .process { checkValue(it, 'service 1')}
+            .process(iti57ResponseValidator())
 
         from('xds-iti57:xds-iti57-service2')
             .process { checkValue(it, 'service 2')}

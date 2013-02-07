@@ -42,7 +42,9 @@ public enum AssociationType {
     /** An entry that represents a signature of another one. */
     @XmlEnumValue("signs") SIGNS("signs", "urn:ihe:iti:2007:AssociationType:signs"),
     /** An entry that represents a link to the On-Demand DocumentEntry. */
-    @XmlEnumValue("IsSnapshotOf") IS_SNAPSHOT_OF("IsSnapshotOf", "urn:ihe:iti:2010:AssociationType:IsSnapshotOf");
+    @XmlEnumValue("IsSnapshotOf") IS_SNAPSHOT_OF("IsSnapshotOf", "urn:ihe:iti:2010:AssociationType:IsSnapshotOf"),
+    /** An entry that represents a association for update availability status trigger. */
+    @XmlEnumValue("UpdateAvailabilityStatus") UPDATE_AVAILABILITY_STATUS("UpdateAvailabilityStatus", "urn:ihe:iti:2010:AssociationType:UpdateAvailabilityStatus");
 
     private final String opcode21;
     private final String opcode30;
