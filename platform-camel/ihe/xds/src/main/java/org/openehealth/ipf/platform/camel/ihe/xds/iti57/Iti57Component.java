@@ -33,7 +33,7 @@ import javax.xml.namespace.QName;
 import java.util.Map;
 
 /**
- * The Camel component for the ITI-42 transaction.
+ * The Camel component for the ITI-57 transaction.
  */
 public class Iti57Component extends AbstractWsComponent<WsTransactionConfiguration> {
     protected final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(

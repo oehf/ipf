@@ -193,12 +193,30 @@ public class SubmitObjectsRequestValidatorTest {
     @Test
     public void testSourceIsSnapshotAssociation() {
         Association association = new Association();
-        association.setTargetUuid("BLAH");
-        association.setSourceUuid("document01");
+        association.setTargetUuid("urn:uuid:e0985823-dc50-45a5-a6c8-a11a829893bd");
+        association.setSourceUuid("blah");
         association.setAssociationType(AssociationType.IS_SNAPSHOT_OF);
         association.setEntryUuid("isSnapshotEntryId");
         request.getAssociations().add(association);
         expectFailure(MISSING_SNAPSHOT_ASSOCIATION);
+    }
+
+    @Test
+    public void testSubmitAssociation() {
+        Association association = new Association();
+        association.setTargetUuid("urn:uuid:aa0da13b-51b0-4c2e-868c-cef8d7e1bc3d");
+        association.setSourceUuid("document01");
+        association.setAssociationType(AssociationType.APPEND);
+        association.setEntryUuid("apnd_assoc");
+        request.getAssociations().add(association);
+
+        Association submitAssociation = new Association();
+        submitAssociation.setTargetUuid("apnd_assoc1");
+        submitAssociation.setSourceUuid("submissionSet01");
+        submitAssociation.setAssociationType(AssociationType.SUBMIT_ASSOCIATION);
+        submitAssociation.setEntryUuid("submitAssociation");
+        request.getAssociations().add(submitAssociation);
+        expectFailure(MISSING_ASSOCIATION);
     }
 
     @Test    

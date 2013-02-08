@@ -44,6 +44,7 @@ public class Association implements Serializable {
     private String previousVersion;
     private String originalStatus;
     private String newStatus;
+    private String associationPropagation;
     
     /**
      * Constructs an association.
@@ -207,6 +208,21 @@ public class Association implements Serializable {
         this.newStatus = newStatus;
     }
 
+    /**
+     * @return associationPropagation annotation value
+     */
+    public String getAssociationPropagation() {
+        return associationPropagation;
+    }
+
+    /**
+     * @param associationPropagation
+     *           value of associationPropagation annotation
+     */
+    public void setAssociationPropagation(String associationPropagation) {
+        this.associationPropagation = associationPropagation;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -220,6 +236,7 @@ public class Association implements Serializable {
         result = prime * result + ((previousVersion == null) ? 0 : previousVersion.hashCode());
         result = prime * result + ((originalStatus == null) ? 0 : originalStatus.hashCode());
         result = prime * result + ((newStatus == null) ? 0 : newStatus.hashCode());
+        result = prime * result + ((associationPropagation == null) ? 0 : associationPropagation.hashCode());
         return result;
     }
 
@@ -281,6 +298,11 @@ public class Association implements Serializable {
             if (other.newStatus != null)
                 return false;
         } else if (!newStatus.equals(other.newStatus))
+            return false;
+        if (associationPropagation == null) {
+            if (other.associationPropagation != null)
+                return false;
+        } else if (!associationPropagation.equals(other.associationPropagation))
             return false;
         return true;
     }
