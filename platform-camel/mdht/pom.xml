@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.platform-camel</groupId>
+    <artifactId>ipf-platform-camel-mdht</artifactId>
+    <name>ipf-platform-camel-mdht</name>
+    
+    <parent>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel</artifactId>
+        <version>2.5-SNAPSHOT</version>
+    </parent>
+    
+    <properties>
+        <osgi.export.pkg>
+            org.openehealth.ipf.platform.camel.cda.*
+        </osgi.export.pkg>
+        <osgi.import.pkg>
+        <!--
+            org.apache.camel.builder,
+            org.openehealth.ipf.modules.hl7.validation,
+            org.openehealth.ipf.modules.hl7.validation.support,
+            org.openehealth.ipf.platform.camel.core.model,
+            *
+            *
+            *            -->            
+        </osgi.import.pkg>
+        <ipf.extension.classes>org.openehealth.ipf.platform.camel.cda.extend.CDAR2ModelExtension</ipf.extension.classes>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>ipf-platform-camel-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.modules</groupId>
+            <artifactId>ipf-modules-cda-mdht</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openhealthtools.mdht</groupId>
+            <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
+            <version>${mdht-version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/groovy</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>META-INF/**/*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+</project>
