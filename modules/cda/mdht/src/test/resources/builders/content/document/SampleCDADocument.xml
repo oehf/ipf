@@ -1145,8 +1145,7 @@
 					</entry>
 					<entry>
 						<act classCode="ACT" moodCode="INT">
-
-							<id/>
+						    <!-- removed empty ID -->
 							<code code="223468009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Teaching of skills">
 								<qualifier>
 									<name code="363702006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="has focus"/>

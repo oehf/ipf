@@ -19,9 +19,7 @@ import java.util.Map;
 
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openhealthtools.mdht.uml.cda.CDAPackage;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
-import org.openhealthtools.mdht.uml.cda.ccd.CCDPackage;
 import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
 import org.openhealthtools.mdht.uml.cda.util.CDAUtil.ValidationHandler;
 
@@ -33,13 +31,7 @@ import org.openhealthtools.mdht.uml.cda.util.CDAUtil.ValidationHandler;
  * 
  */
 public class CDAR2Validator implements Validator<ClinicalDocument, Map<Object, Object>> {
-    
-    static {
-        @SuppressWarnings("unused")
-        CDAPackage cdaPackageInstance = CDAPackage.eINSTANCE;
-        @SuppressWarnings("unused")
-        CCDPackage ccdPackageInstance = CCDPackage.eINSTANCE;
-    }
+
 
     @Override
     public void validate(ClinicalDocument doc, Map<Object, Object> context) {

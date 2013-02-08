@@ -13,3 +13,4 @@ id_file
 .settings/
 assembly/bin
 work
+/atlassian-ide-plugin.xml

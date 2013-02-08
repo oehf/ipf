@@ -1,7 +1,10 @@
 package org.openehealth.ipf.modules.cda;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.emf.common.util.URI;
@@ -16,7 +19,8 @@ import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
 public class CDAR2ValidatorTest {
     private static final Logger LOG = LoggerFactory.getLogger(CDAR2ValidatorTest.class.getName());
 
-    CDAR2Validator validator;
+    private CDAR2Validator validator;
+    private Map<Object, Object> context;
 
     // Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=364797
     static {
@@ -28,6 +32,11 @@ public class CDAR2ValidatorTest {
     @Before
     public void setUp() throws Exception {
         validator = new CDAR2Validator();
+        context = new HashMap<Object, Object>();
+        context.put(CDAUtil.ValidationHandler.class, new DefaultValidationHandler());
+        CDAR2Utils.initCCD();
+        CDAR2Utils.initHITSPC32();
+
     }
     
     @After
@@ -36,6 +45,7 @@ public class CDAR2ValidatorTest {
     
     @Test
     public final void validateCDA() throws Exception {
+        LOG.info("Validating plain CDA document");
         InputStream is = getClass().getResourceAsStream(
             "/builders/content/document/SampleCDADocument.xml");
         ClinicalDocument cda = CDAUtil.load(is);
@@ -44,14 +54,17 @@ public class CDAR2ValidatorTest {
     
     @Test(expected=ValidationException.class)
     public final void validateCDAError() throws Exception {
+        LOG.info("Validating erroneous plain CDA document");
         InputStream is = getClass().getResourceAsStream(
             "/builders/content/document/InvalidCDADocument.xml");
         ClinicalDocument cda = CDAUtil.load(is);
         validator.validate(cda, null);
+        // TODO check expected validation errors
     }
     
     @Test
     public final void validateCCD() throws Exception {
+        LOG.info("Validating CCD document");
         InputStream is = getClass().getResourceAsStream(
             "/builders/content/document/SampleCCDDocument.xml");
         ClinicalDocument ccd = CDAUtil.load(is);
@@ -60,19 +73,20 @@ public class CDAR2ValidatorTest {
     
     @Test(expected = ValidationException.class)
     public final void validateCCDError() throws Exception {
+        LOG.info("Validating erroneous CCD document");
         InputStream is = getClass().getResourceAsStream(
             "/builders/content/document/InvalidCCDDocument.xml");
         ClinicalDocument ccd = CDAUtil.load(is);
         validator.validate(ccd, null);
+        // TODO check expected validation errors
     }
-    
-    @Test
-    public final void validateCDAwithCCDProfile() throws Exception {
+
+    @Ignore
+    public final void validateCDAwithHITSPProfile() throws Exception {
+        LOG.info("Validating HITSPC32 document");
         InputStream is = getClass().getResourceAsStream(
-            "/builders/content/document/SampleCDADocument.xml");
-        ClinicalDocument ccd = CDAUtil.load(is);
-        validator.validate(ccd, null);
+                "/builders/content/document/SampleHITSPC32v25Document.xml");
+        ClinicalDocument hitsp = CDAUtil.load(is);
+        validator.validate(hitsp, null);
     }
-
-
 }

@@ -30,19 +30,15 @@ import org.openhealthtools.mdht.uml.cda.CDAPackage;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 import org.openhealthtools.mdht.uml.cda.DocumentRoot;
 import org.openhealthtools.mdht.uml.cda.ccd.CCDPackage;
+import org.openhealthtools.mdht.uml.cda.consol.ConsolPackage;
+import org.openhealthtools.mdht.uml.cda.hitsp.HITSPPackage;
+import org.openhealthtools.mdht.uml.cda.ihe.IHEPackage;
 import org.openhealthtools.mdht.uml.cda.internal.resource.CDAResource;
-
 /**
  * @author Stefan Ivanov
  */
 public class CDAR2Parser implements Parser<ClinicalDocument> {
 
-    static {
-        @SuppressWarnings("unused")
-        CDAPackage cdaPackageInstance = CDAPackage.eINSTANCE;
-        @SuppressWarnings("unused")
-        CCDPackage ccdPackageInstance = CCDPackage.eINSTANCE;
-    }
 
     /* (non-Javadoc)
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.lang.String, java.lang.Object[])

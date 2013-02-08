@@ -41,15 +41,27 @@ public class CDAR2ParserTest {
         InputStream is = getClass().getResourceAsStream(
                 "/builders/content/document/SampleCDADocument.xml");
         ClinicalDocument clinicalDocument = parser.parse(is);
-        Assert.assertTrue(clinicalDocument instanceof ClinicalDocument);
+        // TODO test document content
+        String result = renderer.render(clinicalDocument, (Object[]) null);
+        Assert.assertTrue(result.length() > 0);
     }
     
     @Test
     public void testParseCCDDocument() throws Exception {
+        CDAR2Utils.initCCD();
         InputStream is = getClass().getResourceAsStream(
                 "/builders/content/document/SampleCCDDocument.xml");
         ClinicalDocument clinicalDocument = parser.parse(is);
-        Assert.assertTrue(clinicalDocument instanceof ClinicalDocument);
+        String result = renderer.render(clinicalDocument, (Object[]) null);
+        Assert.assertTrue(result.length() > 0);
+    }
+
+    @Test
+    public void testParseHITSPDocument() throws Exception {
+        CDAR2Utils.initHITSPC32();
+        InputStream is = getClass().getResourceAsStream(
+                "/builders/content/document/SampleHITSPC32v25Document.xml");
+        ClinicalDocument clinicalDocument = parser.parse(is);
         String result = renderer.render(clinicalDocument, (Object[]) null);
         Assert.assertTrue(result.length() > 0);
     }
