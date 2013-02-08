@@ -288,15 +288,25 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         for (EbXMLRegistryPackage submissionSet : container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE)) {
             submissionSetIds.add(submissionSet.getId());
         }
+        Set<String> associationIds = new HashSet<String>();
+        boolean hasSubmitAssociationType = false;
+        for (EbXMLAssociation association : container.getAssociations()) {
+            associationIds.add(association.getId());
+            if (!hasSubmitAssociationType){
+                hasSubmitAssociationType = association.getAssociationType() != null &&
+                                           association.getAssociationType().equals(AssociationType.SUBMIT_ASSOCIATION);
+            }
+        }
 
         for (EbXMLAssociation association : container.getAssociations()) {
             AssociationType type = association.getAssociationType();
             metaDataAssert(type != null, INVALID_ASSOCIATION_TYPE);
     
             if (type != AssociationType.HAS_MEMBER) {
-                validateDocumentRelationship(association, docEntryIds, profile);
                 validateIsSnapshotRelationship(container, association);
+                validateDocumentRelationship(association, docEntryIds, profile, hasSubmitAssociationType);
                 validateUpdateAvailabilityStatusRelationship(submissionSetIds, association);
+                validateSubmitAssociationRelationship(submissionSetIds, associationIds, association);
             }
             else {
                 validateAssociation(association, docEntryIds, profile);
@@ -321,8 +331,9 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
     }
 
-    private void validateDocumentRelationship(EbXMLAssociation association, Set<String> docEntryIds, ValidationProfile profile) throws XDSMetaDataException {
-        if (!profile.isQuery()) {
+    private void validateDocumentRelationship(EbXMLAssociation association, Set<String> docEntryIds, ValidationProfile profile,
+                                              boolean hasSubmitAssociationType) throws XDSMetaDataException {
+        if (!profile.isQuery()  && !hasSubmitAssociationType) {
             metaDataAssert(docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
         }
     }
@@ -331,11 +342,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         if (association.getAssociationType() == AssociationType.IS_SNAPSHOT_OF){
             EbXMLExtrinsicObject sourceDocEntry = getExtrinsicObject(
                     container, association.getSource(), DocumentEntryType.STABLE.getUuid());
-            EbXMLExtrinsicObject targetDocEntry = getExtrinsicObject(
-                    container, association.getTarget(), DocumentEntryType.ON_DEMAND.getUuid());
             metaDataAssert(sourceDocEntry != null, MISSING_SNAPSHOT_ASSOCIATION, "sourceObject", association.getSource());
-            metaDataAssert(targetDocEntry != null, MISSING_SNAPSHOT_ASSOCIATION, "targetObject", association.getTarget());
-            metaDataAssert(targetDocEntry.getStatus().equals(AvailabilityStatus.APPROVED), WRONG_SNAPSHOT_ASSOCIATION_STATUS);
         }
     }
 
@@ -348,6 +355,13 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(association.getSingleSlotValue(SLOT_NAME_NEW_STATUS) != null, MISSING_NEW_STATUS);
             metaDataAssert(AvailabilityStatus.valueOfOpcode(association.getSingleSlotValue(SLOT_NAME_NEW_STATUS)) != null,
                     INVALID_SUBMISSION_SET_STATUS);
+        }
+    }
+
+    private void validateSubmitAssociationRelationship(Set<String> submissionSetIds, Set<String> associationIds, EbXMLAssociation association){
+        if (association.getAssociationType() == AssociationType.SUBMIT_ASSOCIATION){
+            metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
+            metaDataAssert(associationIds.contains(association.getTarget()), MISSING_ASSOCIATION, association.getTarget());
         }
     }
 

@@ -121,7 +121,8 @@ public enum ValidationMessage {
     MISSING_ORIGINAL_STATUS("UpdateAvailabilityStatus Association must specify an original document status"),
     MISSING_NEW_STATUS("UpdateAvailabilityStatus Association must specify an new document status"),
     MISSING_HAS_MEMBER_ASSOCIATION("No SubmissionSet to DocumentEntry/Folder HasMember Association found for the entry: %s"),
-    MISSING_SUBMISSION_SET("Association specifies a sourceObject: %s submission set, but it was not provided");
+    MISSING_SUBMISSION_SET("Association specifies a sourceObject: %s submission set, but it was not provided"),
+    MISSING_ASSOCIATION("Association specifies a targetObject: %s association, but it was not provided");
 
 
     private final String text;

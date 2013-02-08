@@ -234,6 +234,6 @@
                 </rim:ValueList>
             </rim:Slot>
         </rim:Association>
-        <rim:Association id="as02" associationType="urn:ihe:iti:2010:AssociationType:IsSnapshotOf" sourceObject="SubmissionSet01" targetObject="Document01" />
+        <rim:Association id="as02" associationType="urn:ihe:iti:2010:AssociationType:IsSnapshotOf" sourceObject="Document01" targetObject="urn:uuid:e0985823-dc50-45a5-a6c8-a11a829893bd" />
     </rim:RegistryObjectList>
 </lcm:SubmitObjectsRequest>

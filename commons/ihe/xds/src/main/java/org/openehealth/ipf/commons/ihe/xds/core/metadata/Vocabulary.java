@@ -235,6 +235,9 @@ public abstract class Vocabulary {
     /** Name of the slot that is used for new association type status on update associations*/
     public static final String SLOT_NAME_NEW_STATUS = "NewStatus";
 
+    /** Annotation for association propagation*/
+    public static final String SLOT_NAME_ASSOCIATION_PROPAGATION = "AssociationPropagation";
+
     /** Universal ID Type to be used for all HD data types used with XDS */
     public static final String UNIVERSAL_ID_TYPE_OID = "ISO";
 
