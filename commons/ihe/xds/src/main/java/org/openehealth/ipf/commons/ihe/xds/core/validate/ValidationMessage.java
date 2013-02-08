@@ -113,7 +113,16 @@ public enum ValidationMessage {
     WRONG_QUERY_RETURN_TYPE("Wrong query return type: %s"),
     AUTHOR_INCOMPLETE("At least an authorPerson, authorTelecommunication, or authorInstitution sub-attribute must be present in %s"),
     MISSING_SNAPSHOT_ASSOCIATION("IsSnapshot Association specifies an %s document entry, but it was not provided: %s"),
-    WRONG_SNAPSHOT_ASSOCIATION_STATUS("The targetObject DocumentEntry has not availabilityStatus of Approved");
+    WRONG_SNAPSHOT_ASSOCIATION_STATUS("The targetObject DocumentEntry has not availabilityStatus of Approved"),
+    LOGICAL_ID_MISSING("Logical ID is missing on Update Document Set request"),
+    LOGICAL_ID_EQUALS_ENTRY_UUID("Logical ID: %s required to have a different value then entryUUID: %s on Update Document Set request"),
+    VERSION_INFO_MISSING("Version Info is missing on Update Document Set request"),
+    MISSING_PREVIOUS_VERSION("A previous version must be defined for each association involving a document update"),
+    MISSING_ORIGINAL_STATUS("UpdateAvailabilityStatus Association must specify an original document status"),
+    MISSING_NEW_STATUS("UpdateAvailabilityStatus Association must specify an new document status"),
+    MISSING_HAS_MEMBER_ASSOCIATION("No SubmissionSet to DocumentEntry/Folder HasMember Association found for the entry: %s"),
+    MISSING_SUBMISSION_SET("Association specifies a sourceObject: %s submission set, but it was not provided"),
+    MISSING_ASSOCIATION("Association specifies a targetObject: %s association, but it was not provided");
 
 
     private final String text;

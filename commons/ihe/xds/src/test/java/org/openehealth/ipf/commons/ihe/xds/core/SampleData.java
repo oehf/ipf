@@ -178,6 +178,7 @@ public abstract class SampleData {
         folderAssociation.setSourceUuid("submissionSet01");
         folderAssociation.setTargetUuid("folder01");
         folderAssociation.setEntryUuid("folderAss");
+        folderAssociation.setPreviousVersion("110");
         return folderAssociation;
     }
 
@@ -188,6 +189,7 @@ public abstract class SampleData {
         docAssociation.setTargetUuid("document01");
         docAssociation.setLabel(AssociationLabel.ORIGINAL);
         docAssociation.setEntryUuid("docAss");
+        docAssociation.setPreviousVersion("111");
         return docAssociation;
     }
 

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright 2013 the original author or authors. Licensed under the Apache
+    License, Version 2.0 (the "License"); you may not use this file except
+    in compliance with the License. You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
+    law or agreed to in writing, software distributed under the License is
+    distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the specific
+    language governing permissions and limitations under the License.
+-->
+        
+<definitions 
+        targetNamespace="urn:ihe:iti:xds-b:2010"
+        name="DocumentRegistry"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:ihe="urn:ihe:iti:xds-b:2010"
+        xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0"
+        xmlns:rs="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0"
+        xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
+
+    <documentation>IHE XDS.b Document Registry = ITI-57 adaptor = Update Document Set</documentation>
+
+    <types>
+        <xsd:schema elementFormDefault="qualified">
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/rs.xsd"/>
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/lcm.xsd"/>
+        </xsd:schema>
+    </types>
+
+    <message name="UpdateDocumentSet_Message">
+        <documentation>Update Document Set Request</documentation>
+        <part name="body" element="lcm:SubmitObjectsRequest"/>
+    </message>
+
+    <message name="UpdateDocumentSetResponse_Message">
+        <documentation>Update Document Set Response</documentation>
+        <part name="body" element="rs:RegistryResponse"/>
+    </message>
+
+    <portType name="DocumentRegistry_PortType">
+        <operation name="DocumentRegistry_UpdateDocumentSet">
+            <input message="ihe:UpdateDocumentSet_Message"
+                   wsam:Action="urn:ihe:iti:2010:UpdateDocumentSet"/>
+            <output message="ihe:UpdateDocumentSetResponse_Message"
+                    wsam:Action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="DocumentRegistry_Binding_Soap12" type="ihe:DocumentRegistry_PortType">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="DocumentRegistry_UpdateDocumentSet">
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <binding name="DocumentRegistry_Binding_Soap11" type="ihe:DocumentRegistry_PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="DocumentRegistry_UpdateDocumentSet">
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="DocumentRegistry_Service">
+        <port name="DocumentRegistry_Port_Soap12" binding="ihe:DocumentRegistry_Binding_Soap12">
+            <soap12:address location="http://servicelocation/DocumentRegistry_Service12"/>
+        </port>
+        <port name="DocumentRegistry_Port_Soap11" binding="ihe:DocumentRegistry_Binding_Soap11">
+            <soap:address location="http://servicelocation/DocumentRegistry_Service11"/>
+        </port>
+    </service>
+</definitions>

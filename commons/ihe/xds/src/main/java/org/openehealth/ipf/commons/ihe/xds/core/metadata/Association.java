@@ -41,6 +41,10 @@ public class Association implements Serializable {
     private AssociationLabel label;
     private String entryUuid;
     private Code docCode;
+    private String previousVersion;
+    private String originalStatus;
+    private String newStatus;
+    private String associationPropagation;
     
     /**
      * Constructs an association.
@@ -157,6 +161,68 @@ public class Association implements Serializable {
         this.docCode = docCode;
     }
 
+    /**
+     *
+     * @return previous version slot value
+     */
+    public String getPreviousVersion() {
+        return previousVersion;
+    }
+
+    /**
+     *
+     * @param previousVersion
+     *          value of previous version in XDS metadata update association
+     */
+    public void setPreviousVersion(String previousVersion) {
+        this.previousVersion = previousVersion;
+    }
+
+    /**
+     * @return original status slot value
+     */
+    public String getOriginalStatus() {
+        return originalStatus;
+    }
+
+    /**
+     * @param originalStatus
+     *           value of originalStatus in update availabilityStatus
+     */
+    public void setOriginalStatus(String originalStatus) {
+        this.originalStatus = originalStatus;
+    }
+
+    /**
+     * @return new status slot value
+     */
+    public String getNewStatus() {
+        return newStatus;
+    }
+
+    /**
+     * @param newStatus
+     *           value of newStatus in update availabilityStatus
+     */
+    public void setNewStatus(String newStatus) {
+        this.newStatus = newStatus;
+    }
+
+    /**
+     * @return associationPropagation annotation value
+     */
+    public String getAssociationPropagation() {
+        return associationPropagation;
+    }
+
+    /**
+     * @param associationPropagation
+     *           value of associationPropagation annotation
+     */
+    public void setAssociationPropagation(String associationPropagation) {
+        this.associationPropagation = associationPropagation;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -167,6 +233,10 @@ public class Association implements Serializable {
         result = prime * result + ((label == null) ? 0 : label.hashCode());
         result = prime * result + ((sourceUuid == null) ? 0 : sourceUuid.hashCode());
         result = prime * result + ((targetUuid == null) ? 0 : targetUuid.hashCode());
+        result = prime * result + ((previousVersion == null) ? 0 : previousVersion.hashCode());
+        result = prime * result + ((originalStatus == null) ? 0 : originalStatus.hashCode());
+        result = prime * result + ((newStatus == null) ? 0 : newStatus.hashCode());
+        result = prime * result + ((associationPropagation == null) ? 0 : associationPropagation.hashCode());
         return result;
     }
 
@@ -208,6 +278,31 @@ public class Association implements Serializable {
             if (other.targetUuid != null)
                 return false;
         } else if (!targetUuid.equals(other.targetUuid))
+            return false;
+        if (targetUuid == null) {
+            if (other.targetUuid != null)
+                return false;
+        } else if (!targetUuid.equals(other.targetUuid))
+            return false;
+        if (previousVersion == null) {
+            if (other.previousVersion != null)
+                return false;
+        } else if (!previousVersion.equals(other.previousVersion))
+            return false;
+        if (originalStatus == null) {
+            if (other.originalStatus != null)
+                return false;
+        } else if (!originalStatus.equals(other.originalStatus))
+            return false;
+        if (newStatus == null) {
+            if (other.newStatus != null)
+                return false;
+        } else if (!newStatus.equals(other.newStatus))
+            return false;
+        if (associationPropagation == null) {
+            if (other.associationPropagation != null)
+                return false;
+        } else if (!associationPropagation.equals(other.associationPropagation))
             return false;
         return true;
     }

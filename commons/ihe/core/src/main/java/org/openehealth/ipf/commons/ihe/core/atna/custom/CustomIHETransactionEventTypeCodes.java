@@ -35,6 +35,12 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
         }   
     }
 
+    public static final class UpdateDocumentSet extends IHETransactionEventTypeCodes {
+        public UpdateDocumentSet() {
+            super("ITI-57", "Update Document Set");
+        }
+    }
+
     public static final class RegisterOnDemandDocumentEntry extends IHETransactionEventTypeCodes {
         public RegisterOnDemandDocumentEntry() {
             super("ITI-61", "Register On-Demand Document Entry");
