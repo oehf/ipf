@@ -42,9 +42,9 @@
         <feature version="${project.version}">ipf-specs</feature>
         <feature version="${project.version}">ipf-spring</feature>
         <bundle start-level='20' dependency="true">mvn:org.apache.commons/com.springsource.org.apache.commons.httpclient/3.1.0</bundle>
-        <bundle start-level='20' dependency="true">mvn:org.apache.commons/com.springsource.org.apache.commons.lang/2.5.0</bundle>
+        <bundle start-level='20' dependency="true">mvn:commons-lang/commons-lang/${commons-lang-version}</bundle>
         <bundle start-level='20' dependency="true">mvn:net.sourceforge.ehcache/com.springsource.net.sf.ehcache/1.6.2</bundle>
-        <bundle start-level='20' dependency="true">mvn:org.apache.commons/commons-lang3/${commons-lang-version}</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.apache.commons/commons-lang3/${commons-lang3-version}</bundle>
         <bundle start-level='20' dependency="true">mvn:commons-io/commons-io/2.4</bundle>
         <bundle start-level='20' dependency="true">mvn:commons-codec/commons-codec/1.6</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saxon/9.1.0.8_2</bundle>
