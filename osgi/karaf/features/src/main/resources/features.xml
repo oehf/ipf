@@ -18,7 +18,7 @@
 -->
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.0.0" name="ipf-${project.version}">
 
-    <feature name="ipf" version="${project.version}" resolver="(obr)">
+    <feature name="ipf" description="IPF support" version="${project.version}" resolver="(obr)">
         <feature>spring-dm</feature>
         <feature version="${project.version}">ipf-specs</feature>
         <feature version="${project.version}">ipf-spring</feature>
@@ -37,14 +37,14 @@
         <feature version="${project.version}">ipf-osgi</feature>
     </feature>
 
-    <feature name="ipf-core" version="${project.version}" resolver="(obr)">
+    <feature name="ipf-core" description="IPF-Core support" version="${project.version}" resolver="(obr)">
         <feature>spring-dm</feature>
         <feature version="${project.version}">ipf-specs</feature>
         <feature version="${project.version}">ipf-spring</feature>
         <bundle start-level='20' dependency="true">mvn:org.apache.commons/com.springsource.org.apache.commons.httpclient/3.1.0</bundle>
-        <bundle start-level='20' dependency="true">mvn:org.apache.commons/com.springsource.org.apache.commons.lang/2.5.0</bundle>
+        <bundle start-level='20' dependency="true">mvn:commons-lang/commons-lang/${commons-lang-version}</bundle>
         <bundle start-level='20' dependency="true">mvn:net.sourceforge.ehcache/com.springsource.net.sf.ehcache/1.6.2</bundle>
-        <bundle start-level='20' dependency="true">mvn:org.apache.commons/commons-lang3/${commons-lang-version}</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.apache.commons/commons-lang3/${commons-lang3-version}</bundle>
         <bundle start-level='20' dependency="true">mvn:commons-io/commons-io/2.4</bundle>
         <bundle start-level='20' dependency="true">mvn:commons-codec/commons-codec/1.6</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saxon/9.1.0.8_2</bundle>
@@ -57,19 +57,19 @@
         <bundle start-level='50'>mvn:org.openehealth.ipf.commons/ipf-commons-xml/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-core-extenders" version="${project.version}">
+    <feature name="ipf-core-extenders" description="IPF OSGi extenders support" version="${project.version}">
         <feature version="${project.version}">ipf-core</feature>
         <bundle start-level='50'>mvn:org.openehealth.ipf.osgi/ipf-osgi-commons/${project.version}</bundle>
         <bundle start-level='50'>mvn:org.openehealth.ipf.osgi/ipf-osgi-extender-spring/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-core-map" version="${project.version}">
+    <feature name="ipf-core-map" description="IPF Mapping Service support" version="${project.version}">
         <feature version="${project.version}">ipf-core</feature>
         <feature version="${project.version}">ipf-core-extenders</feature>
         <bundle start-level='80'>mvn:org.openehealth.ipf.commons/ipf-commons-map/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-core-flow" version="${project.version}">
+    <feature name="ipf-core-flow" description="IPF Flow Manager core support" version="${project.version}">
         <feature version="${project.version}">ipf-core</feature>
         <feature version="${project.version}">ipf-core-extenders</feature>
         <bundle start-level="30">mvn:javax.persistence/com.springsource.javax.persistence/1.99.0</bundle>
@@ -92,7 +92,7 @@
         <bundle start-level='80'>mvn:org.openehealth.ipf.commons/ipf-commons-flow/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-modules-hl7" version="${project.version}">
+    <feature name="ipf-modules-hl7" description="IPF-HL7 support" version="${project.version}">
         <feature version="${project.version}">ipf-core-map</feature>
         <bundle start-level='20' dependency="true">mvn:javax.ejb/com.springsource.javax.ejb/3.0.0</bundle>
         <bundle start-level='20' dependency="true">mvn:javax.xml.rpc/com.springsource.javax.xml.rpc/1.1.0</bundle>
@@ -112,7 +112,7 @@
         <bundle start-level='80'>mvn:org.openehealth.ipf.modules/ipf-modules-hl7dsl/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-core-ihe" version="${project.version}">
+    <feature name="ipf-core-ihe" description="IPF IHE core support" version="${project.version}">
         <feature version="${project.version}">ipf-modules-hl7</feature>
         <feature version="${project.version}">ipf-cxf</feature>
         <bundle start-level='80'>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-core/${project.version}</bundle>
@@ -123,14 +123,14 @@
         <bundle start-level='80'>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-xds/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-platform-camel" version="${project.version}">
+    <feature name="ipf-platform-camel" description="IPF Platform Camel core extensions support" version="${project.version}">
         <feature version="${project.version}">ipf-modules-hl7</feature>
         <feature version="${project.version}">ipf-camel</feature>
         <bundle start-level='80'>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-core/${project.version}</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-hl7/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-platform-camel-flow" version="${project.version}">
+    <feature name="ipf-platform-camel-flow" description="IPF Platform Camel support for Flow Manager" version="${project.version}">
         <feature version="${project.version}">ipf-core-flow</feature>
         <feature version="${project.version}">ipf-platform-camel</feature>
         <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aspectj/1.7.0_1</bundle>
@@ -138,7 +138,7 @@
         <bundle start-level='80'>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-flow/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-platform-camel-ihe" version="${project.version}">
+    <feature name="ipf-platform-camel-ihe" description="IPF Platform Camel IHE components support" version="${project.version}">
         <feature version="${project.version}">ipf-platform-camel</feature>
         <feature version="${project.version}">ipf-core-ihe</feature>
         <bundle start-level='80'>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-hl7v2/${project.version}</bundle>
@@ -150,7 +150,7 @@
         <bundle start-level='80'>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-atna/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-osgi" version="${project.version}">
+    <feature name="ipf-osgi" description="IPF OSGi Camel components support" version="${project.version}">
         <feature version="${project.version}">ipf-amq</feature>
         <feature version="${project.version}">ipf-platform-camel-ihe</feature>
         <bundle start-level='80'>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-jms/${project.version}</bundle>
@@ -160,7 +160,7 @@
         <bundle start-level='80'>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-ihe-atna/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-tutorial-osgi" version="${project.version}">
+    <feature name="ipf-tutorial-osgi" description="IPF OSGi tutorial" version="${project.version}">
         <feature version="${project.version}">ipf-platform-camel-flow</feature>
         <feature version="${project.version}">ipf-osgi</feature>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-service/${project.version}</bundle>
@@ -170,7 +170,7 @@
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-route-file/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-tutorial-osgi-ihe" version="${project.version}">
+    <feature name="ipf-tutorial-osgi-ihe" description="IPF OSGi IHE components tutorial" version="${project.version}">
         <feature version="${project.version}">ipf-osgi</feature>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-auditor/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-pixpdq/${project.version}</bundle>
