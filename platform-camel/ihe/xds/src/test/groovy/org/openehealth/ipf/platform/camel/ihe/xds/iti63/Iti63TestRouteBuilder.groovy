@@ -57,14 +57,12 @@ class Iti63TestRouteBuilder extends SpringRouteBuilder {
 
     static final int TASKS_COUNT = 5
 
+    static boolean errorOccurred = false
+
     Iti63TestRouteBuilder(){
         countDownLatch      = new CountDownLatch(TASKS_COUNT)
         asyncCountDownLatch = new CountDownLatch(TASKS_COUNT)
     }
-
-    static final long ASYNC_DELAY = 10 * 1000L
-
-    static boolean errorOccurred = false
 
     CountDownLatch getCountDownLatch(){
         this.countDownLatch
@@ -96,7 +94,6 @@ class Iti63TestRouteBuilder extends SpringRouteBuilder {
                     LOG.error(e)
                 }
             }
-            .delay(ASYNC_DELAY)
 
 
         // responding route

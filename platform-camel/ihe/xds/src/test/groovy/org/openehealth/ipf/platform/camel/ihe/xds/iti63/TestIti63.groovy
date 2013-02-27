@@ -46,6 +46,8 @@ class TestIti63 extends StandardTestContainer {
     
     static final QueryRegistry REQUEST = SampleData.createFetchQuery()
 
+    static final long AWAIT_DELAY = 20 * 1000L
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
@@ -80,8 +82,8 @@ class TestIti63 extends StandardTestContainer {
         // wait for completion of asynchronous routes
         Iti63TestRouteBuilder routeBuilder = StandardTestContainer.appContext
                 .getBean(Iti63TestRouteBuilder.class)
-        routeBuilder.countDownLatch.await(1000 + Iti63TestRouteBuilder.ASYNC_DELAY, TimeUnit.MILLISECONDS)
-        routeBuilder.asyncCountDownLatch.await(1000 + Iti63TestRouteBuilder.ASYNC_DELAY, TimeUnit.MILLISECONDS)
+        routeBuilder.countDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
+        routeBuilder.asyncCountDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
 
         assert Iti63TestRouteBuilder.responseCount.get() == N * 2
         assert Iti63TestRouteBuilder.asyncResponseCount.get() == N

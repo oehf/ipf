@@ -45,8 +45,6 @@ class Rad75TestRouteBuilder extends SpringRouteBuilder {
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()
     
-    static final long ASYNC_DELAY = 10 * 1000L
-
     static boolean errorOccurred = false
 
     private final CountDownLatch countDownLatch, asyncCountDownLatch;
@@ -94,7 +92,6 @@ class Rad75TestRouteBuilder extends SpringRouteBuilder {
                     LOG.error(e)
                 }
             }
-            .delay(ASYNC_DELAY)
 
 
         // responding route
