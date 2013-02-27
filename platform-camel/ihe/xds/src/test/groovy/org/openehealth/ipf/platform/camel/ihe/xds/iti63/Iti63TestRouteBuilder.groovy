@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti63;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti63
+
+import java.util.concurrent.CountDownLatch;
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti63RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti63ResponseValidator
@@ -51,9 +53,24 @@ class Iti63TestRouteBuilder extends SpringRouteBuilder {
                 new DataHandler('abcd ' * 1500, "text/plain"));
     }
 
-    static final long ASYNC_DELAY = 10 * 1000L
+    private final CountDownLatch countDownLatch, asyncCountDownLatch;
+
+    static final int TASKS_COUNT = 5
 
     static boolean errorOccurred = false
+
+    Iti63TestRouteBuilder(){
+        countDownLatch      = new CountDownLatch(TASKS_COUNT)
+        asyncCountDownLatch = new CountDownLatch(TASKS_COUNT)
+    }
+
+    CountDownLatch getCountDownLatch(){
+        this.countDownLatch
+    }
+
+    CountDownLatch getAsyncCountDownLatch(){
+        this.asyncCountDownLatch
+    }
     
     @Override
     public void configure() throws Exception {
@@ -71,12 +88,12 @@ class Iti63TestRouteBuilder extends SpringRouteBuilder {
                         "corr ${asyncResponseCount.getAndIncrement() * 2}"
 
                     assert it.in.getBody(QueryResponse.class).status == Status.SUCCESS
+                    asyncCountDownLatch.countDown()
                 } catch (Exception e) {
                     errorOccurred = true
                     LOG.error(e)
                 }
             }
-            .delay(ASYNC_DELAY)
 
 
         // responding route
@@ -100,6 +117,7 @@ class Iti63TestRouteBuilder extends SpringRouteBuilder {
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
                 
                 responseCount.incrementAndGet()
+                countDownLatch.countDown()
             }
             .process(iti63ResponseValidator())
 

@@ -28,6 +28,9 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.springframework.test.annotation.DirtiesContext
 
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+
 /**
  * Tests for ITI-63.
  * @author Dmytro Rud
@@ -42,6 +45,8 @@ class TestIti63 extends StandardTestContainer {
     final String SERVICE2_URI = "xca-iti63://localhost:${port}/iti63service2"
     
     static final QueryRegistry REQUEST = SampleData.createFetchQuery()
+
+    static final long AWAIT_DELAY = 20 * 1000L
 
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
@@ -66,16 +71,19 @@ class TestIti63 extends StandardTestContainer {
      */
     @Test
     void testIti63() {
-        final int N = 5
+        final int N = Iti63TestRouteBuilder.TASKS_COUNT
         int i = 0
         
         N.times {
             send(SERVICE1_URI, i++, SERVICE1_RESPONSE_URI)
             send(SERVICE1_URI, i++)
         }
-        
+
         // wait for completion of asynchronous routes
-        Thread.currentThread().sleep(1000 + Iti63TestRouteBuilder.ASYNC_DELAY)
+        Iti63TestRouteBuilder routeBuilder = StandardTestContainer.appContext
+                .getBean(Iti63TestRouteBuilder.class)
+        routeBuilder.countDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
+        routeBuilder.asyncCountDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
 
         assert Iti63TestRouteBuilder.responseCount.get() == N * 2
         assert Iti63TestRouteBuilder.asyncResponseCount.get() == N
