@@ -56,6 +56,10 @@ public class ContextFacade {
      */
     public static <B> B getBean(String beanName) {
         return (B)instance.bean(beanName);
-    }	
+    }
+	
+	public static synchronized void clearRegistry() {
+		instance = null;
+	}
 
 }
