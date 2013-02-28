@@ -47,5 +47,15 @@ public class ContextFacade {
     public static <B> B getBean(Class<B> requiredType) {
         return instance.bean(requiredType);
     }
+	
+    /**
+     * @param bean name
+     * @return bean of the required type
+     * 
+     * @since 2.5
+     */
+    public static <B> B getBean(String beanName) {
+        return (B)instance.bean(beanName);
+    }	
 
 }
