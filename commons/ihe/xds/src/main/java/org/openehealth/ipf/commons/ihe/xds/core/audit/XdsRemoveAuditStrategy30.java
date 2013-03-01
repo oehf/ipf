@@ -33,7 +33,7 @@ import java.util.List;
  * Basis for Strategy pattern implementation for ATNA Auditing
  * in ebXML 3.0-based retrieval-related XDS transactions.
  *
- * @author Dmytro Rud
+ * @author Boris Stanojevic
  */
 abstract public class XdsRemoveAuditStrategy30 extends XdsAuditStrategy<XdsRemoveAuditDataset> {
 

@@ -247,7 +247,6 @@ public class CustomXdsAuditor extends XDSAuditor {
      * @param eventOutcome The event outcome indicator
      * @param repositoryUserId The Active Participant UserID for the document repository (if using WS-Addressing)
      * @param registryEndpointUri  The Web service endpoint URI for the document registry
-     * @param submissionSetUniqueId The UniqueID of the Submission Set registered
      * @param patientId The Patient Id that this submission pertains to
      */
     public void auditClientIti62(
