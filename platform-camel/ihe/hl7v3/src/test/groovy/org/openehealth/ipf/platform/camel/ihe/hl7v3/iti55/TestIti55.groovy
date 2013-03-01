@@ -71,6 +71,8 @@ class TestIti55 extends StandardTestContainer {
 
     final int REPETITIONS_COUNT = 5
 
+    final long RESULT_WAIT_TIME = 30000L
+
 
     @BeforeClass
     static void setUpClass() {
@@ -114,11 +116,10 @@ class TestIti55 extends StandardTestContainer {
         asyncResponsesMockEndpoint.expectedMessageCount    = REPETITIONS_COUNT
         deferredResponsesMockEndpoint.expectedMessageCount = REPETITIONS_COUNT
 
-        /*
-        allResponsesMockEndpoint.resultWaitTime      = Long.MAX_VALUE
-        asyncResponsesMockEndpoint.resultWaitTime    = Long.MAX_VALUE
-        deferredResponsesMockEndpoint.resultWaitTime = Long.MAX_VALUE
-        */
+
+        allResponsesMockEndpoint.resultWaitTime      = RESULT_WAIT_TIME
+        asyncResponsesMockEndpoint.resultWaitTime    = RESULT_WAIT_TIME
+        deferredResponsesMockEndpoint.resultWaitTime = RESULT_WAIT_TIME
 
         int i = 0
         REPETITIONS_COUNT.times {

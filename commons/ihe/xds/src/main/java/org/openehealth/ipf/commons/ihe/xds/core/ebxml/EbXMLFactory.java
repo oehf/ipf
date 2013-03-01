@@ -132,4 +132,10 @@ public interface EbXMLFactory {
      * @return the created object.
      */
     EbXMLRegistryError createRegistryError();
+
+    /**
+     * Creates a new remove object request.
+     * @return the created object.
+     */
+    EbXMLRemoveObjectsRequest createRemoveObjectsRequest();
 }

@@ -239,6 +239,91 @@ public class CustomXdsAuditor extends XDSAuditor {
         audit(event);
     }
 
+    /**
+     * Generically sends audit messages for XDS Document Administrator Delete Document Set events
+     * ("blind" implementation leaned on the ITI-57 since ITI-62 spec still does not define a ATNA requirements)
+     * TODO: the specification of ITI-62 still does not define a ATNA requirements, the work is marked as TBD
+     *
+     * @param eventOutcome The event outcome indicator
+     * @param repositoryUserId The Active Participant UserID for the document repository (if using WS-Addressing)
+     * @param registryEndpointUri  The Web service endpoint URI for the document registry
+     * @param submissionSetUniqueId The UniqueID of the Submission Set registered
+     * @param patientId The Patient Id that this submission pertains to
+     */
+    public void auditClientIti62(
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String repositoryUserId,
+            String userName,
+            String registryEndpointUri,
+            String patientId)
+    {
+        if (! isAuditorEnabled()) {
+            return;
+        }
+
+        GenericIHEAuditEventMessage iti62ExportEvent = new GenericIHEAuditEventMessage(
+                true,
+                eventOutcome,
+                RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
+                new DICOMEventIdCodes.Export(),
+                new CustomIHETransactionEventTypeCodes.DeleteDocumentSet());
+
+        iti62ExportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
+        iti62ExportEvent.addSourceActiveParticipant(
+                repositoryUserId, getSystemAltUserId(), null, getSystemNetworkId(), true);
+
+        if (!EventUtils.isEmptyOrNull(userName)) {
+            iti62ExportEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
+        }
+
+        iti62ExportEvent.addDestinationActiveParticipant(
+                registryEndpointUri, null, null, EventUtils.getAddressForUrl(registryEndpointUri, false), false);
+        if (!EventUtils.isEmptyOrNull(patientId)) {
+            iti62ExportEvent.addPatientParticipantObject(patientId);
+        }
+        audit(iti62ExportEvent);
+    }
+
+
+    /**
+     * Generically sends audit messages for XDS Delete Document Set events
+     *
+     * @param eventOutcome The event outcome indicator
+     * @param sourceUserId The Active Participant UserID for the document consumer (if using WS-Addressing)
+     * @param sourceIpAddress The IP address of the document source that initiated the transaction
+     * @param repositoryEndpointUri The Web service endpoint URI for this document repository
+     * @param patientId The Patient Id that this submission pertains to
+     */
+    public void auditServerIti62 (
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String sourceUserId,
+            String sourceIpAddress,
+            String userName,
+            String repositoryEndpointUri,
+            String patientId)
+    {
+        GenericIHEAuditEventMessage iti62ImportEvent = new GenericIHEAuditEventMessage(
+                false,
+                eventOutcome,
+                RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
+                new DICOMEventIdCodes.Import(),
+                new CustomIHETransactionEventTypeCodes.DeleteDocumentSet());
+
+        iti62ImportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
+        iti62ImportEvent.addSourceActiveParticipant(sourceUserId, null, null, sourceIpAddress, true);
+        if (!EventUtils.isEmptyOrNull(userName)) {
+            iti62ImportEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
+        }
+
+        iti62ImportEvent.addDestinationActiveParticipant(repositoryEndpointUri, getSystemAltUserId(), null,
+                EventUtils.getAddressForUrl(repositoryEndpointUri, false), false);
+        if (!EventUtils.isEmptyOrNull(patientId)) {
+            iti62ImportEvent.addPatientParticipantObject(patientId);
+        }
+
+        audit(iti62ImportEvent);
+    }
+
 
     /**
      * Audits an ITI-63 XCF Cross-Community Fetch event.

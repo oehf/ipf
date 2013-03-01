@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
@@ -231,6 +232,28 @@ public class EbXML30Converters {
     public static RetrieveImagingDocumentSet convert(RetrieveImagingDocumentSetRequestType in) {
         RetrieveImagingDocumentSetRequestTransformer transformer = new RetrieveImagingDocumentSetRequestTransformer(factory);
         return transformer.fromEbXML(new EbXMLRetrieveImagingDocumentSetRequest30(in));
+    }
+
+    /**
+     * Standard Camel converter for the Remove Objects request.
+     * @param in    A version independent request object
+     * @return an ebXML 3.0 object.
+     */
+    @Converter
+    public static RemoveObjectsRequest convert(RemoveDocumentSet in) {
+        RemoveDocumentSetTransformer transformer = new RemoveDocumentSetTransformer();
+        return (RemoveObjectsRequest) transformer.toEbXML(in).getInternal();
+    }
+
+    /**
+     * Standard Camel converter for the Remove Document Set request.
+     * @param in    An ebXML 3.0 object.
+     * @return a version independent request object.
+     */
+    @Converter
+    public static RemoveDocumentSet convert(RemoveObjectsRequest in) {
+        RemoveDocumentSetTransformer transformer = new RemoveDocumentSetTransformer();
+        return transformer.fromEbXML(new EbXMLRemoveObjectsRequest30(in));
     }
 
 }

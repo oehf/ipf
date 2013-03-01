@@ -47,6 +47,12 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
         }
     }
 
+    public static final class DeleteDocumentSet extends IHETransactionEventTypeCodes {
+        public DeleteDocumentSet() {
+            super("ITI-62", "Delete Document Set");
+        }
+    }
+
     public static final class CrossCommunityFetch extends IHETransactionEventTypeCodes {
         public CrossCommunityFetch() {
             super("ITI-63", "XCF Fetch");

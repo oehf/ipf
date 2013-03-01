@@ -19,9 +19,11 @@ import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
@@ -62,14 +64,12 @@ public class Iti62Component extends AbstractWsComponent<WsTransactionConfigurati
 
     @Override
     public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        //return new Iti62ClientAuditStrategy(allowIncompleteAudit);
-        return null;
+        return new Iti62ClientAuditStrategy(allowIncompleteAudit);
     }
 
     @Override
     public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        //return new Iti62ServerAuditStrategy(allowIncompleteAudit);
-        return null;
+        return new Iti62ServerAuditStrategy(allowIncompleteAudit);
     }
 
     @Override
@@ -78,11 +78,11 @@ public class Iti62Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public SimpleWsProducer<SubmitObjectsRequest, RegistryResponseType> getProducer(
+    public SimpleWsProducer<RemoveObjectsRequest, RegistryResponseType> getProducer(
             AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
-        return new SimpleWsProducer<SubmitObjectsRequest, RegistryResponseType>(
-                endpoint, clientFactory, SubmitObjectsRequest.class,RegistryResponseType.class);
+        return new SimpleWsProducer<RemoveObjectsRequest, RegistryResponseType>(
+                endpoint, clientFactory, RemoveObjectsRequest.class,RegistryResponseType.class);
     }
 }

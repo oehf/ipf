@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.*;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
@@ -270,6 +271,31 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         }
     };
 
+    private static final Processor ITI_62_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLRemoveObjectsRequest30 message =
+                    new EbXMLRemoveObjectsRequest30(exchange.getIn().getBody(RemoveObjectsRequest.class));
+            ValidationProfile profile = new ValidationProfile(ITI_62);
+            new RemoveObjectsRequestValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor ITI_62_RESPONSE_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
+            ValidationProfile profile = new ValidationProfile(ITI_62);
+            new RegistryResponseValidator().validate(message, profile);
+        }
+    };
+
     private static final Processor ITI_63_REQUEST_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
@@ -422,6 +448,20 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
      */
     public static Processor iti61ResponseValidator() {
         return ITI_61_RESPONSE_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-62 response messages.
+     */
+    public static Processor iti62RequestValidator() {
+        return ITI_62_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-62 response messages.
+     */
+    public static Processor iti62ResponseValidator() {
+        return ITI_62_RESPONSE_VALIDATOR;
     }
 
     /**
