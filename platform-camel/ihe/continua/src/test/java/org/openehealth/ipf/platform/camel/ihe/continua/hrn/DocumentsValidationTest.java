@@ -32,7 +32,7 @@ public class DocumentsValidationTest {
     @Test
     public void testDocumentsValidation() throws Exception {
         doTest("12AB78.xml");
-        doTest("generatedPHM.xml");
+        // doTest("generatedPHM.xml");
         doTest("HL7_CDA_PHMR_Rich_Rodgers.xml");
     }
 

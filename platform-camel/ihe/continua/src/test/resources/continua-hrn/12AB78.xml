@@ -290,7 +290,6 @@
           <entry typeCode="DRIV">
             <organizer classCode="CLUSTER" moodCode="EVN">
               <templateId root="b606a959-baab-4836-84a8-97c4e9857533"/>
-              <id/>
               <code code="46680005" codeSystem="2.16.840.1.113883.6.96" displayName="Temperature Readings"/>
               <statusCode code="completed"/>
               <component>
@@ -302,7 +301,6 @@
                   <value xsi:type="PQ" unit="[degF]" value="41.34"/>
                   <participant typeCode="DEV">
                     <participantRole>
-                      <templateId/>
                       <id assigningAuthorityName="EUI-64" extension="1A-34-46-78-9A-BC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
                     </participantRole>
                   </participant>
@@ -317,7 +315,6 @@
                   <value xsi:type="PQ" unit="[degF]" value="42.0"/>
                   <participant typeCode="DEV">
                     <participantRole>
-                      <templateId/>
                       <id assigningAuthorityName="EUI-64" extension="1A-34-46-78-9A-BC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
                     </participantRole>
                   </participant>
@@ -332,7 +329,6 @@
                   <value xsi:type="PQ" unit="[degF]" value="45.0"/>
                   <participant typeCode="DEV">
                     <participantRole>
-                      <templateId/>
                       <id assigningAuthorityName="EUI-64" extension="1A-34-46-78-9A-BC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
                     </participantRole>
                   </participant>
@@ -347,7 +343,6 @@
                   <value xsi:type="PQ" unit="[degF]" value="43.0"/>
                   <participant typeCode="DEV">
                     <participantRole>
-                      <templateId/>
                       <id assigningAuthorityName="EUI-64" extension="1A-34-46-78-9A-BC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
                     </participantRole>
                   </participant>
@@ -362,7 +357,6 @@
                   <value xsi:type="PQ" unit="[degF]" value="41.34"/>
                   <participant typeCode="DEV">
                     <participantRole>
-                      <templateId/>
                       <id assigningAuthorityName="EUI-64" extension="1A-34-46-78-9A-BC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
                     </participantRole>
                   </participant>
@@ -373,7 +367,6 @@
           <entry typeCode="DRIV">
             <organizer classCode="CLUSTER" moodCode="EVN">
               <templateId root="b606a959-baab-4836-84a8-97c4e9857533"/>
-              <id/>
               <code code="46680005" codeSystem="2.16.840.1.113883.6.96" displayName="Blood Pressure Readings"/>
               <statusCode code="completed"/>
               <component>
@@ -676,7 +669,6 @@
           <entry typeCode="DRIV">
             <organizer classCode="CLUSTER" moodCode="EVN">
               <templateId root="b606a959-baab-4836-84a8-97c4e9857533"/>
-              <id/>
               <code code="46680005" codeSystem="2.16.840.1.113883.6.96" displayName="Blood Glucose Readings"/>
               <statusCode code="completed"/>
               <component>
@@ -726,7 +718,6 @@
           <entry typeCode="DRIV">
             <organizer classCode="CLUSTER" moodCode="EVN">
               <templateId root="b606a959-baab-4836-84a8-97c4e9857533"/>
-              <id/>
               <code code="46680005" codeSystem="2.16.840.1.113883.6.96" displayName="Weight Readings"/>
               <statusCode code="completed"/>
               <component>
