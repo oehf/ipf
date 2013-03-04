@@ -34,4 +34,9 @@ public class MdhtTypeConverter {
                 (Object[]) null).getBytes());
     }
 
+    @Converter
+    public static String toString(
+            ClinicalDocument document) {
+        return renderer.render(document,(Object[]) null);
+    }
 }

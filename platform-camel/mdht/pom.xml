@@ -25,7 +25,6 @@
             *
             *            -->            
         </osgi.import.pkg>
-        <ipf.extension.classes>org.openehealth.ipf.platform.camel.cda.extend.CDAR2ModelExtension</ipf.extension.classes>
     </properties>
     
     <dependencies>

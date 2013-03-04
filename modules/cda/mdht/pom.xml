@@ -23,11 +23,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>ipf-modules-cda-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.openhealthtools.mdht</groupId>
             <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
         </dependency>

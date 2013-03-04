@@ -37,7 +37,7 @@ public class MdhtExtension {
       * Defines marshalling between a standard CDA document and a ClinicalDocument object 
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
       */
-     public static ProcessorDefinition cda(DataFormatClause self) {
+     public static ProcessorDefinition mdht(DataFormatClause self) {
          MdhtDataFormat dataFormat = new MdhtDataFormat();
          return CoreExtension.dataFormat(self, dataFormat);
      }         
@@ -45,8 +45,8 @@ public class MdhtExtension {
      /**
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
       */
-     public static ValidatorAdapterDefinition cda(ValidatorAdapterDefinition self) {
-         self.validator = new CDAR2Validator()
+     public static ValidatorAdapterDefinition mdht(ValidatorAdapterDefinition self) {
+         self.validator = new CDAR2Validator();
          return (ValidatorAdapterDefinition)self.input(bodyAs(ClinicalDocument.class));
      }
 

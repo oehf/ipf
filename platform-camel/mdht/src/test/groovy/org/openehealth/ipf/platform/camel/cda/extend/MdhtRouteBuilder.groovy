@@ -16,34 +16,39 @@
 package org.openehealth.ipf.platform.camel.cda.extend
 
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.cda.dataformat.MdhtDataFormat
 
 /**
  * @author Christian Ohr
  */
-class CDARouteBuilder extends SpringRouteBuilder {
-      
+class MdhtRouteBuilder extends SpringRouteBuilder {
+
+    private MdhtDataFormat mdht = new MdhtDataFormat();
+
     void configure() {
         
         from("direct:input1")
-            .marshal().cda()
+            .marshal().mdht()
             .to('mock:output')        
 
         from("direct:input2")
-            .unmarshal().cda()
+            .unmarshal().mdht()
             .to('mock:output') 
             
         from("direct:input3")
             .onException(Exception.class)
                 .to('mock:error')
                 .end()
-            .validate().cda()
+            .unmarshal(mdht)
+            .validate().mdht()
             .to('mock:output')
             
         from("direct:input4")
             .onException(Exception.class)
                 .to('mock:error')
                 .end()
-            .validate().cda()
+            .unmarshal(mdht)
+            .validate().mdht()
             .to('mock:output')             
     }
     
