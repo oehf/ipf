@@ -36,9 +36,9 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
     <osgi:service ref="xds-iti61" interface="org.apache.camel.Component"/>
 
-    <osgi:service ref="xca-iti62" interface="org.apache.camel.Component"/>
+    <osgi:service ref="xds-iti62" interface="org.apache.camel.Component"/>
 
-    <osgi:service ref="xca-rad69" interface="org.apache.camel.Component"/>
+    <osgi:service ref="xdsi-rad69" interface="org.apache.camel.Component"/>
 
     <osgi:service ref="xcf-iti63" interface="org.apache.camel.Component"/>
 

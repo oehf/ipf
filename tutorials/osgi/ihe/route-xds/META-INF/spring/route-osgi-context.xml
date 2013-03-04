@@ -14,6 +14,8 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
     <osgi:reference id="xds-iti15" bean-name="xds-iti15" interface="org.apache.camel.Component"/>
 
+    <osgi:reference id="xds-iti62" bean-name="xds-iti62" interface="org.apache.camel.Component"/>
+
     <osgi:service ref="iti17Servlet" interface="javax.servlet.Servlet">
         <osgi:service-properties>
             <entry key="alias" value="/iti17" />

@@ -54,7 +54,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
           class="org.openehealth.ipf.platform.camel.ihe.xds.iti51.Iti51Component"/>
 
     <bean id="xds-iti57"
-          class="org.openehealth.ipf.platform.camel.ihe.xds.iti51.Iti57Component"/>
+          class="org.openehealth.ipf.platform.camel.ihe.xds.iti57.Iti57Component"/>
 
     <bean id="xds-iti61"
           class="org.openehealth.ipf.platform.camel.ihe.xds.iti61.Iti61Component"/>

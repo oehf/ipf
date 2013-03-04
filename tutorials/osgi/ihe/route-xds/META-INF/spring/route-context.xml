@@ -20,6 +20,7 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
         <camel-spring:routeBuilder ref="routeBuilderIti14"/>
         <camel-spring:routeBuilder ref="routeBuilderIti15"/>
         <camel-spring:routeBuilder ref="routeBuilderIti17"/>
+        <camel-spring:routeBuilder ref="routeBuilderIti62"/>
     </camel-osgi:camelContext >
 
     <bean id="routeBuilderIti14"
@@ -28,6 +29,10 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
     <bean id="routeBuilderIti15"
         class="org.openehealth.ipf.tutorials.osgi.ihe.xds.iti15.route.GroovyRouteBuilder">
+    </bean>
+
+    <bean id="routeBuilderIti62"
+          class="org.openehealth.ipf.tutorials.osgi.ihe.xds.iti62.route.GroovyRouteBuilder">
     </bean>
 
     <bean id="routeBuilderIti17"

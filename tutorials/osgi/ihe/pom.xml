@@ -17,16 +17,16 @@
         <cxf-bundle-version>2.6.1</cxf-bundle-version>
         <equinox-cm-version>1.0.100-v20090520-1800</equinox-cm-version>
         <fileinstall-version>1.0.0</fileinstall-version>
-        <geronimo-javamail-api-version>1.2</geronimo-javamail-api-version>
+        <javamail-api-version>1.4.4</javamail-api-version>
         <geronimo-ws-api-version>1.1.2</geronimo-ws-api-version>
         <geronimo-management-spec-version>1.0.1</geronimo-management-spec-version>
         <geronimo-servlet_3.0_spec_version>1.0</geronimo-servlet_3.0_spec_version>
-        <hapi-osgi-version>1.2</hapi-osgi-version>
+        <hapi-osgi-version>2.0</hapi-osgi-version>
         <springsource-jdom-version>1.1.0</springsource-jdom-version>
         <jms-version>1.1-p1</jms-version>
         <neethi-version>3.0.2</neethi-version>
         <osgi-compendium-version>4.2.0</osgi-compendium-version>
-        <pax-web-version>1.1.2</pax-web-version>
+        <pax-web-version>2.1.2</pax-web-version>
         <servicemix-jaxb-api-version>1.9.0</servicemix-jaxb-api-version>
         <servicemix-jaxws-api-version>1.9.0</servicemix-jaxws-api-version>
         <servicemix-saaj-api-version>1.9.0</servicemix-saaj-api-version>
@@ -96,8 +96,8 @@
             <configuration>
                 <provision>
             <param>--platform=equinox</param>
-            <param>--version=3.6.1</param>
-            <param>--ee=J2SE-1.5</param>
+            <param>--version=3.6.2</param>
+            <param>--ee=J2SE-1.6</param>
             <param>--vmo=-Dosgi.classloader.lock=classname -Xmx256M</param>
             <param>--startLevel=5</param>
             <param>--bundleStartLevel=4</param>
@@ -114,7 +114,7 @@
             <param>mvn:org.apache.log4j/com.springsource.org.apache.log4j/${springsource-log4j-version}@start</param>
             <param>mvn:net.sourceforge.cglib/com.springsource.net.sf.cglib/${springsource-cglib-version}@start</param>
             <param>mvn:org.apache.commons/com.springsource.org.apache.commons.lang/${springsource-commons-lang-version}@start</param>
-            <param>mvn:org.apache.commons/commons-lang3/${commons-lang-version}@start</param>
+            <param>mvn:org.apache.commons/commons-lang3/${commons-lang3-version}@start</param>
             <param>mvn:commons-io/commons-io/${commons-io-version}@start</param>
             <param>mvn:commons-dbcp/commons-dbcp/${commons-dbcp-version}@start</param>
             <param>mvn:org.apache.lucene/com.springsource.org.apache.lucene/${springsource-lucene-version}@start</param>
@@ -164,7 +164,7 @@
             <param>mvn:org.apache.cxf/cxf-rt-databinding-jaxb/${cxf-version}@start</param>
             <param>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.mina/${servicemix-mina-version}@start</param>
             <param>mvn:javax.wsdl/com.springsource.javax.wsdl/${springsource-wsdl-version}@start</param>
-            <param>mvn:org.apache.geronimo.specs/geronimo-javamail_1.4_spec/${geronimo-javamail-api-version}@start</param>
+            <param>mvn:javax.mail/mail/${javamail-api-version}@start</param>
             <param>mvn:org.apache.geronimo.specs/geronimo-ws-metadata_2.0_spec/${geronimo-ws-api-version}@start</param>
             <param>mvn:org.apache.geronimo.specs/geronimo-servlet_3.0_spec/${geronimo-servlet_3.0_spec_version}@start</param>
             <param>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlschema/${servicemix-xmlschema-version}@start</param>
