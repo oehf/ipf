@@ -205,4 +205,9 @@ public class EbXMLFactory21 implements EbXMLFactory {
         RegistryError registryError = RS_FACTORY.createRegistryError();
         return new EbXMLRegistryError21(registryError);
     }
+
+    @Override
+    public EbXMLRemoveObjectsRequest createRemoveObjectsRequest() {
+        throw new UnsupportedOperationException("Only supported for ebXML 3.0");
+    }
 }

@@ -71,7 +71,7 @@ class TestIti55 extends StandardTestContainer {
 
     final int REPETITIONS_COUNT = 5
 
-    final long MOCK_WAIT_TIME = 30000L
+    final long RESULT_WAIT_TIME = 30000L
 
 
     @BeforeClass
@@ -115,7 +115,6 @@ class TestIti55 extends StandardTestContainer {
         allResponsesMockEndpoint.expectedMessageCount      = REPETITIONS_COUNT * 3
         asyncResponsesMockEndpoint.expectedMessageCount    = REPETITIONS_COUNT
         deferredResponsesMockEndpoint.expectedMessageCount = REPETITIONS_COUNT
-
 
         allResponsesMockEndpoint.resultWaitTime      = MOCK_WAIT_TIME
         asyncResponsesMockEndpoint.resultWaitTime    = MOCK_WAIT_TIME

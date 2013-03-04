@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.iti57;
+package org.openehealth.ipf.commons.ihe.xds.iti62;
 
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
 import javax.jws.WebMethod;
@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 
 /**
- * Provides the ITI-57 web-service interface.
+ * Provides the ITI-62 web-service interface.
  */
 @WebService(targetNamespace = "urn:ihe:iti:xds-b:2010", name = "DocumentRegistry_PortType")
 @XmlSeeAlso({
@@ -36,10 +36,10 @@ import javax.xml.ws.Action;
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.ObjectFactory.class,
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory.class })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-public interface Iti57PortType {
+public interface Iti62PortType {
 
     /**
-     * Updates a set of documents according to the ITI-57 specification.
+     * Deletes a set of documents according to the ITI-62 specification.
      * @param body
      *          the request.
      * @return the response.
@@ -47,10 +47,10 @@ public interface Iti57PortType {
     @WebResult(name = "RegistryResponse",
             targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0",
             partName = "body")
-    @Action(input = "urn:ihe:iti:2010:UpdateDocumentSet", output = "urn:ihe:iti:2010:UpdateDocumentSetResponse")
-    @WebMethod(operationName = "DocumentRegistry_UpdateDocumentSet")
-    public RegistryResponseType documentRegistryUpdateDocumentSet(
-            @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0")
-            SubmitObjectsRequest body
+    @Action(input = "urn:ihe:iti:2010:DeleteDocumentSet", output = "urn:ihe:iti:2010:DeleteDocumentSetResponse")
+    @WebMethod(operationName = "DocumentRegistry_DeleteDocumentSet")
+    public RegistryResponseType documentRegistryDeleteDocumentSet(
+            @WebParam(partName = "body", name = "RemoveObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0")
+            RemoveObjectsRequest body
     );
 }
