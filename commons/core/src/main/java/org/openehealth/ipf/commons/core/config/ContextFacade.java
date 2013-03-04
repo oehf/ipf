@@ -21,45 +21,51 @@ import org.slf4j.LoggerFactory;
 /**
  * Facade to an active registry, providing static access to their registered
  * beans.
- * <p>
- * You have to create an instance in order to pass in the {@link Registry}
- * object.
- * 
+ * <p/>
+ * The ContextFacade is supposed to be used by Groovy Extension Modules that
+ * require a global piece of configuration or context. As Extension Modules
+ * are stateless, they have to obtain this information at runtime by means of
+ * statically access, i.e. calling the getBean methods of this class. Before
+ * this can be done, the registry must be set by calling {@link #setRegistry(Registry)}.
+ *
+ * @see SpringRegistry
  * @since 2.5
  */
 public class ContextFacade {
 
     private static Registry instance;
     private static Logger LOG = LoggerFactory.getLogger(ContextFacade.class);
-    
+
     public static synchronized void setRegistry(Registry registry) {
         if (instance != null && !registry.equals(instance))
             LOG.warn("Re-initializing the registry");
-        instance = registry;       
+        instance = registry;
     }
 
     /**
-     * @param requiredType
+     * @param requiredType required bean type
      * @return bean of the required type
-     * 
      * @since 2.5
      */
     public static <B> B getBean(Class<B> requiredType) {
         return instance.bean(requiredType);
     }
-	
+
     /**
-     * @param bean name
+     * @param beanName name
      * @return bean of the required type
-     * 
      * @since 2.5
      */
+    @SuppressWarnings("unchecked")
     public static <B> B getBean(String beanName) {
-        return (B)instance.bean(beanName);
+        return (B) instance.bean(beanName);
     }
-	
-	public static synchronized void clearRegistry() {
-		instance = null;
-	}
+
+    /**
+     * Empties the registry
+     */
+    public static synchronized void clearRegistry() {
+        instance = null;
+    }
 
 }
