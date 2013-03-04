@@ -37,7 +37,7 @@
         <feature version="${project.version}">ipf-osgi</feature>
     </feature>
 
-    <feature name="ipf-core" description="IPF-Core support" version="${project.version}" resolver="(obr)">
+    <feature name="ipf-core" description="IPF Core support" version="${project.version}" resolver="(obr)">
         <feature>spring-dm</feature>
         <feature version="${project.version}">ipf-specs</feature>
         <feature version="${project.version}">ipf-spring</feature>
@@ -92,7 +92,7 @@
         <bundle start-level='80'>mvn:org.openehealth.ipf.commons/ipf-commons-flow/${project.version}</bundle>
     </feature>
 
-    <feature name="ipf-modules-hl7" description="IPF-HL7 support" version="${project.version}">
+    <feature name="ipf-modules-hl7" description="IPF HL7 support" version="${project.version}">
         <feature version="${project.version}">ipf-core-map</feature>
         <bundle start-level='20' dependency="true">mvn:javax.ejb/com.springsource.javax.ejb/3.0.0</bundle>
         <bundle start-level='20' dependency="true">mvn:javax.xml.rpc/com.springsource.javax.xml.rpc/1.1.0</bundle>
@@ -161,11 +161,10 @@
     </feature>
 
     <feature name="ipf-tutorial-osgi" description="IPF OSGi tutorial" version="${project.version}">
-        <feature version="${project.version}">ipf-platform-camel-flow</feature>
-        <feature version="${project.version}">ipf-osgi</feature>
-        <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-service/${project.version}</bundle>
-        <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-mapping/${project.version}</bundle>
-        <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-extension/${project.version}</bundle>
+        <feature version="${project.version}">ipf</feature>
+        <bundle start-level='90'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-service/${project.version}</bundle>
+        <bundle start-level='90'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-mapping/${project.version}</bundle>
+        <bundle start-level='90'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-extension/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-route-web/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-route-file/${project.version}</bundle>
     </feature>

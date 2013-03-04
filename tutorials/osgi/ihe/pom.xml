@@ -97,10 +97,11 @@
                 <provision>
             <param>--platform=equinox</param>
             <param>--version=3.6.2</param>
-            <param>--ee=J2SE-1.6</param>
+            <param>--ee=J2SE-1.5</param>
             <param>--vmo=-Dosgi.classloader.lock=classname -Xmx256M</param>
             <param>--startLevel=5</param>
             <param>--bundleStartLevel=4</param>
+            <param>--args=file:runner.args</param>
             <param>--workingDirectory=${project.build.directory}/runtime</param>
             <param>--repositories=+http://repo1.maven.org/maven2,http://repository.springsource.com/maven/bundles/release,http://repository.springsource.com/maven/bundles/external,http://repo.openehealth.org/maven2/snapshots@snapshots,http://repo.openehealth.org/maven2/releases</param>
             <param>mvn:org.eclipse.equinox/cm/${equinox-cm-version}@1</param>
