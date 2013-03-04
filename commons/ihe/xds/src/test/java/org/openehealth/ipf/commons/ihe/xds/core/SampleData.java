@@ -679,5 +679,15 @@ public abstract class SampleData {
         return queryRegistry;
     }
 
+
+    public static RemoveDocumentSet createRemoveDocumentSet(){
+        RemoveDocumentSet removeDocs = new RemoveDocumentSet();
+        removeDocs.getReferences().add(new ObjectReference("urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871", "1.2.3"));
+        removeDocs.getReferences().add(new ObjectReference("urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd", "5.6.7"));
+        removeDocs.setDeletionScope("urn:oasis:names:tc:ebxml-regrep:DeletionScopeType:DeleteAll");
+
+        return removeDocs;
+    }
+
 }
 

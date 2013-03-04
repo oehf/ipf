@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
 
 /**
- * Factory for EbXML 2.1 objects.
+ * Factory for EbXML 3.0 objects.
  * @author Jens Riemschneider
  */
 public class EbXMLFactory30 implements EbXMLFactory {
@@ -167,5 +167,10 @@ public class EbXMLFactory30 implements EbXMLFactory {
     public EbXMLRegistryError createRegistryError() {
         RegistryError registryError = RS_FACTORY.createRegistryError();
         return new EbXMLRegistryError30(registryError);
+    }
+
+    @Override
+    public EbXMLRemoveObjectsRequest createRemoveObjectsRequest() {
+        return new EbXMLRemoveObjectsRequest30(LCM_FACTORY.createRemoveObjectsRequest());
     }
 }

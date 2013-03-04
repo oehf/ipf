@@ -122,7 +122,10 @@ public enum ValidationMessage {
     MISSING_NEW_STATUS("UpdateAvailabilityStatus Association must specify an new document status"),
     MISSING_HAS_MEMBER_ASSOCIATION("No SubmissionSet to DocumentEntry/Folder HasMember Association found for the entry: %s"),
     MISSING_SUBMISSION_SET("Association specifies a sourceObject: %s submission set, but it was not provided"),
-    MISSING_ASSOCIATION("Association specifies a targetObject: %s association, but it was not provided");
+    MISSING_ASSOCIATION("Association specifies a targetObject: %s association, but it was not provided"),
+    WRONG_DELETION_SCOPE("Default deletionScope (%s) must be specified."),
+    OBJECT_SHALL_NOT_BE_SPECIFIED("%s shall not be specified."),
+    EMPTY_REFERENCE_LIST("No object references specified for %s");
 
 
     private final String text;

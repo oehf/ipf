@@ -16,17 +16,36 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
     <osgi:service ref="xds-iti18" interface="org.apache.camel.Component"/>
 
+    <osgi:service ref="xca-iti38" interface="org.apache.camel.Component"/>
+
+    <osgi:service ref="xca-iti38-async-response" interface="org.apache.camel.Component"/>
+
+    <osgi:service ref="xca-iti39" interface="org.apache.camel.Component"/>
+
+    <osgi:service ref="xca-iti39-async-response" interface="org.apache.camel.Component"/>
+
     <osgi:service ref="xds-iti41" interface="org.apache.camel.Component"/>
 
     <osgi:service ref="xds-iti42" interface="org.apache.camel.Component"/>
 
     <osgi:service ref="xds-iti43" interface="org.apache.camel.Component"/>
 
-    <osgi:service ref="xca-iti38" interface="org.apache.camel.Component"/>
+    <osgi:service ref="xds-iti51" interface="org.apache.camel.Component"/>
 
-    <osgi:service ref="xca-iti39" interface="org.apache.camel.Component"/>
+    <osgi:service ref="xds-iti57" interface="org.apache.camel.Component"/>
 
-    <osgi:service ref="xca-iti38-async-response" interface="org.apache.camel.Component"/>
+    <osgi:service ref="xds-iti61" interface="org.apache.camel.Component"/>
 
-    <osgi:service ref="xca-iti39-async-response" interface="org.apache.camel.Component"/>
+    <osgi:service ref="xca-iti62" interface="org.apache.camel.Component"/>
+
+    <osgi:service ref="xca-rad69" interface="org.apache.camel.Component"/>
+
+    <osgi:service ref="xcf-iti63" interface="org.apache.camel.Component"/>
+
+    <osgi:service ref="xcf-iti63-async-response" interface="org.apache.camel.Component"/>
+
+    <osgi:service ref="xcai-rad75" interface="org.apache.camel.Component"/>
+
+    <osgi:service ref="xcai-rad75-async-response" interface="org.apache.camel.Component"/>
+
 </beans>
