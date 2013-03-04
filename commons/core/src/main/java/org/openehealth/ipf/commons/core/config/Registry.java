@@ -25,7 +25,7 @@ import java.util.Map;
 public interface Registry {
 
     /**
-     * @param name
+     * @param name bean name
      * @return bean of given name
      * 
      * @since 2.5
@@ -33,7 +33,7 @@ public interface Registry {
     public Object bean(String name);
 
     /**
-     * @param requiredType
+     * @param requiredType bean type
      * @return first bean of given type
      * 
      * @since 2.5
@@ -41,7 +41,7 @@ public interface Registry {
     public <T> T bean(Class<T> requiredType);
     
     /**
-     * @param requiredType
+     * @param requiredType bean type
      * @return all beans of given type
      * 
      * @since 2.5

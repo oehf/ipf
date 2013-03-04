@@ -26,7 +26,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 /**
- * Spring Listener which holds the instances of all {@link OrderedConfigurer}.
+ * Spring Listener which holds the instances of all {@link OrderedConfigurer}. These
+ * instances are collected from the Spring context on a {@link ContextRefreshedEvent}.
  * 
  * @author Boris Stanojevic
  */

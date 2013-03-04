@@ -25,8 +25,19 @@ import org.springframework.beans.factory.ListableBeanFactory;
 
 /**
  * Class that bridges the {@link Registry} interface to a Spring
- * {@link ListableBeanFactory}.
- * 
+ * {@link ListableBeanFactory}. You simply need to declare a  Spring
+ * bean like this:
+ * <p>
+ * <bean class="org.openehealth.ipf.commons.core.config.SpringRegistry"/>
+ * </p>
+ * or, even easier, using the globalContext tag in the
+ * http://openehealth.org/schema/ipf-commons-core extension namespace:
+ * <pre>
+ *     <ipf-commons-core:globalContext/>
+ * </pre>
+ * Then the "stateful" Groovy Extension Modules will access the Spring
+ * registry.
+ *
  * @since 2.5
  */
 public class SpringRegistry implements Registry, BeanFactoryAware {
