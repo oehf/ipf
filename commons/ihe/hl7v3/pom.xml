@@ -14,6 +14,7 @@
     <properties>
         <osgi.import.pkg>
             groovy.util,
+            groovy.xml,
             org.joda.time,
             org.joda.time.format,
             org.openehealth.ipf.modules.hl7.message,
