@@ -73,7 +73,7 @@
         <feature version="${project.version}">ipf-core</feature>
         <feature version="${project.version}">ipf-core-extenders</feature>
         <bundle start-level="30">mvn:javax.persistence/com.springsource.javax.persistence/1.99.0</bundle>
-        <bundle start-level="30">mvn:org.jboss.javassist/com.springsource.javassist/3.15.0.GA</bundle>
+        <bundle start-level="30">mvn:org.javassist/javassist/${hibernate-javassist-version}</bundle>
         <bundle start-level="30">mvn:org.apache.lucene/com.springsource.org.apache.lucene/2.3.0</bundle>
         <bundle start-level="30">mvn:org.apache.commons/com.springsource.org.apache.commons.collections/3.2.0</bundle>
         <bundle start-level="30">mvn:org.dom4j/com.springsource.org.dom4j/1.6.1</bundle>
@@ -178,31 +178,32 @@
 
     <feature name="ipf-spring" version="${project.version}">
         <bundle start-level='20'>mvn:org.aopalliance/com.springsource.org.aopalliance/1.0.0</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-core/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-context/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-beans/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-expression/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-aop/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-asm/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-jdbc/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-jms/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-tx/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-orm/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-web/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-core/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-context/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-beans/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-expression/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-aop/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-asm/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-jdbc/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-jms/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-tx/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-orm/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-web/3.1.4.RELEASE</bundle>
     </feature>
 
     <feature name="ipf-specs" version="${project.version}" resolver='(obr)'>
         <bundle start-level='20' dependency="true">mvn:org.apache.geronimo.specs/geronimo-servlet_3.0_spec/1.0</bundle>
         <bundle start-level='10' dependency="true">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.1/2.1.0</bundle>
         <bundle start-level='10' dependency="true">mvn:javax.jms/com.springsource.javax.jms/1.1.0</bundle>
+        <bundle start-level='10' dependency="true">mvn:javax.transaction/com.springsource.javax.transaction/1.1.0</bundle>
         <bundle start-level='10'>mvn:org.apache.geronimo.specs/geronimo-annotation_1.0_spec/1.1.1</bundle>
         <bundle start-level='10'>mvn:org.apache.geronimo.specs/geronimo-ws-metadata_2.0_spec/1.1.3</bundle>
-        <bundle start-level='10'>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.stax-api-1.0/1.9.0</bundle>
-        <bundle start-level='10' dependency="true">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxb-api-2.2/1.9.0</bundle>
-        <bundle start-level='10' dependency="true">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxws-api-2.2/1.9.0</bundle>
-        <bundle start-level='10' dependency="true">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.saaj-api-1.3/1.9.0</bundle>
+        <bundle start-level='10'>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.stax-api-1.0/2.2.0</bundle>
+        <bundle start-level='10' dependency="true">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxb-api-2.2/2.2.0</bundle>
+        <bundle start-level='10' dependency="true">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxws-api-2.2/2.2.0</bundle>
+        <bundle start-level='10' dependency="true">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.saaj-api-1.3/2.2.0</bundle>
         <bundle start-level='10'>mvn:javax.mail/mail/1.4.4</bundle>
-        <bundle start-level='10'>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jsr311-api-1.1.1/1.9.0</bundle>
+        <bundle start-level='10'>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jsr311-api-1.1.1/2.2.0</bundle>
         <bundle start-level='20'>mvn:org.codehaus.woodstox/stax2-api/3.1.1</bundle>
         <bundle start-level='20'>mvn:org.codehaus.woodstox/woodstox-core-asl/4.1.4</bundle>
         <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-impl/2.2.1.1_2</bundle>
