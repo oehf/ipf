@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti39;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti39
+
+import java.util.concurrent.CountDownLatch;
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
@@ -42,39 +44,53 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()
     
-    static final long ASYNC_DELAY = 10 * 1000L
-
     static boolean errorOccurred = false
-    
+
+    private final CountDownLatch countDownLatch, asyncCountDownLatch;
+
+    static final int TASKS_COUNT = 5
+
+    Iti39TestRouteBuilder(){
+        countDownLatch      = new CountDownLatch(TASKS_COUNT)
+        asyncCountDownLatch = new CountDownLatch(TASKS_COUNT)
+    }
+
+    CountDownLatch getCountDownLatch(){
+        this.countDownLatch
+    }
+
+    CountDownLatch getAsyncCountDownLatch(){
+        this.asyncCountDownLatch
+    }
+
     @Override
     public void configure() throws Exception {
 
         // receiver of asynchronous responses
-        from('xca-iti39-async-response:iti39service-response' + 
-             '?correlator=#correlator' +
-             '&inInterceptors=#clientAsyncInLogger' +
-             '&inFaultInterceptors=#clientAsyncInLogger' +
-             '&outInterceptors=#clientAsyncOutLogger' +
-             '&outFaultInterceptors=#clientAsyncOutLogger'
+        from('xca-iti39-async-response:iti39service-response' +
+                '?correlator=#correlator' +
+                '&inInterceptors=#clientAsyncInLogger' +
+                '&inFaultInterceptors=#clientAsyncInLogger' +
+                '&outInterceptors=#clientAsyncOutLogger' +
+                '&outFaultInterceptors=#clientAsyncOutLogger'
         )
-            .process(iti39ResponseValidator())
-            .process {
-                try {
-                    def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
-                    assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
+                .process(iti39ResponseValidator())
+                .process {
+            try {
+                def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+                assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
-                    assert it.pattern == ExchangePattern.InOnly
-                    assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] ==
+                assert it.pattern == ExchangePattern.InOnly
+                assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] ==
                         "corr ${asyncResponseCount.getAndIncrement() * 2}"
 
-                    assert it.in.getBody(RetrievedDocumentSet.class).status == Status.SUCCESS
-                } catch (Exception e) {
-                    errorOccurred = true
-                    LOG.error(e)
-                }
+                assert it.in.getBody(RetrievedDocumentSet.class).status == Status.SUCCESS
+                asyncCountDownLatch.countDown()
+            } catch (Exception e) {
+                errorOccurred = true
+                LOG.error(e)
             }
-            .delay(ASYNC_DELAY)
-
+        }
 
         // responding route
         from('xca-iti39:iti39service' +
@@ -102,6 +118,7 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
                 
                 responseCount.incrementAndGet()
+                countDownLatch.countDown()
             }
             .process(iti39ResponseValidator())
     }

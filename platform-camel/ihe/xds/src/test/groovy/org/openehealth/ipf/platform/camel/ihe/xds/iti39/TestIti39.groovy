@@ -29,6 +29,8 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.springframework.test.annotation.DirtiesContext
 
+import java.util.concurrent.TimeUnit
+
 /**
  * Tests for ITI-39.
  * @author Dmytro Rud
@@ -50,7 +52,9 @@ class TestIti39 extends StandardTestContainer {
     final String SERVICE2_URI = "xca-iti39://localhost:${port}/iti39service2"
     
     static final RetrieveDocumentSet REQUEST = SampleData.createRetrieveDocumentSet()
-    
+
+    static final long AWAIT_DELAY = 20 * 1000L
+
     static void main(args) {
         PayloadLoggerBase.setGloballyEnabled(false)
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
@@ -76,7 +80,7 @@ class TestIti39 extends StandardTestContainer {
      */
     @Test
     void testIti39() {
-        final int N = 5
+        final int N = Iti39TestRouteBuilder.TASKS_COUNT
         int i = 0
         
         N.times {
@@ -85,7 +89,10 @@ class TestIti39 extends StandardTestContainer {
         }
 
         // wait for completion of asynchronous routes
-        Thread.currentThread().sleep(1000 + Iti39TestRouteBuilder.ASYNC_DELAY)
+        Iti39TestRouteBuilder routeBuilder = StandardTestContainer.appContext
+                .getBean(Iti39TestRouteBuilder.class)
+        routeBuilder.countDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
+        routeBuilder.asyncCountDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
 
         assert Iti39TestRouteBuilder.responseCount.get() == N * 2
         assert Iti39TestRouteBuilder.asyncResponseCount.get() == N

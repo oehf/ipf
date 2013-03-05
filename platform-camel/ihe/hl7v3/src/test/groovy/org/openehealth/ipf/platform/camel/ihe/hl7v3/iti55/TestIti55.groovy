@@ -71,7 +71,7 @@ class TestIti55 extends StandardTestContainer {
 
     final int REPETITIONS_COUNT = 5
 
-    final long RESULT_WAIT_TIME = 30000L
+    final long MOCK_WAIT_TIME = 30000L
 
 
     @BeforeClass
