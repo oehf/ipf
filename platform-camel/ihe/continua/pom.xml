@@ -39,6 +39,11 @@
             <artifactId>ipf-modules-cda-mdht</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.modules</groupId>
+            <artifactId>ipf-modules-cda-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- Dependencies for test -->
         <dependency>
