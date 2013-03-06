@@ -23,14 +23,14 @@
         <geronimo-servlet_3.0_spec_version>1.0</geronimo-servlet_3.0_spec_version>
         <hapi-osgi-version>2.0</hapi-osgi-version>
         <springsource-jdom-version>1.1.0</springsource-jdom-version>
-        <jms-version>1.1-p1</jms-version>
+        <jms-version>1.1.0</jms-version>
         <neethi-version>3.0.2</neethi-version>
         <osgi-compendium-version>4.2.0</osgi-compendium-version>
         <pax-web-version>2.1.2</pax-web-version>
-        <servicemix-jaxb-api-version>1.9.0</servicemix-jaxb-api-version>
-        <servicemix-jaxws-api-version>1.9.0</servicemix-jaxws-api-version>
-        <servicemix-saaj-api-version>1.9.0</servicemix-saaj-api-version>
-        <servicemix-stax-api-version>1.9.0</servicemix-stax-api-version>
+        <servicemix-jaxb-api-version>2.2.0</servicemix-jaxb-api-version>
+        <servicemix-jaxws-api-version>2.2.0</servicemix-jaxws-api-version>
+        <servicemix-saaj-api-version>2.2.0</servicemix-saaj-api-version>
+        <servicemix-stax-api-version>2.2.0</servicemix-stax-api-version>
         <servicemix-jaxb-impl-version>2.2.1.1_2</servicemix-jaxb-impl-version>
         <servicemix-mina-version>1.1.7_3</servicemix-mina-version>
         <servicemix-saxon-version>9.1.0.8_2</servicemix-saxon-version>
@@ -129,6 +129,7 @@
             <param>mvn:javax.annotation/com.springsource.javax.annotation/${springsource-annotations-api-version}@start</param>
             <param>mvn:javax.activation/com.springsource.javax.activation/${springsource-activation-version}@start</param>
             <param>mvn:org.jdom/com.springsource.org.jdom/${springsource-jdom-version}@start</param>
+            <param>mvn:javax.jms/com.springsource.javax.jms/${jms-version}@start</param>
             <param>mvn:org.antlr/com.springsource.antlr/${springsource-antlr-version}@start</param>
             <param>mvn:org.aopalliance/com.springsource.org.aopalliance/${springsource-aopalliance-version}@start</param>
             <param>mvn:javax.xml.rpc/com.springsource.javax.xml.rpc/${springsource-rpc-api-version}@start</param>
@@ -211,7 +212,6 @@
             <param>mvn:org.eclipse.jetty/jetty-security/${jetty-version}@start</param>
             <param>mvn:org.eclipse.jetty/jetty-continuation/${jetty-version}@start</param>
             <param>mvn:org.eclipse.jetty/jetty-util/${jetty-version}@start</param>
-            <param>mvn:javax.jms/jms/${jms-version}@start</param>
             <param>mvn:xml-apis/xml-apis/${xml-apis-version}@start</param>
             <param>mvn:xalan/xalan/${xalan-version}@start</param>
             <param>mvn:joda-time/joda-time/${joda-time-version}@start</param>

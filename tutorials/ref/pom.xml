@@ -88,7 +88,10 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-client</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+        </dependency>
         <!-- dependencies for test -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>

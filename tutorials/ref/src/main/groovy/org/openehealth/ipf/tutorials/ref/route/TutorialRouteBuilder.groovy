@@ -42,7 +42,7 @@ class TutorialRouteBuilder extends SpringRouteBuilder {
         //  Receive order
         // ------------------------------------------------------------
 
-        from('jetty:http://localhost:' + httpPort + '/tutorial')
+        from('jetty:http://0.0.0.0:' + httpPort + '/tutorial')
             .initFlow('http', sysErrorUri)
             .to('direct:received')
         
