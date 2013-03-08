@@ -190,6 +190,11 @@
         </developer>
     </developers>
 
+    <issueManagement>
+        <system>Github Issue Tracker</system>
+        <url>https://github.com/oehf/ipf/issues</url>
+    </issueManagement>
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -1411,4 +1416,38 @@
             <url>http://svn.apache.org/repos/asf/servicemix/m2-repo/</url>
         </repository>
     </repositories>
+    <profiles>
+        <profile>
+            <!-- This profile generates groovystubs with last gmaven plugin        -->
+            <!-- which still respects the javadocs annotations on stub generation. -->
+            <!-- To deploy javadocs with groovydocs it should be run like follows: -->
+            <!-- 1. mvn process-resources -Pgapidoc' -->
+            <!-- 2. mvn clean javadoc:jar -Dsourcepath=./src/main/java:./gapi-stubs deploy -->
+            <id>gapidoc</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.groovy.maven</groupId>
+                        <artifactId>gmaven-plugin</artifactId>
+                        <version>1.0</version>
+                        <executions>
+                            <execution>
+                                <id>generate-stubs</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>generateStubs</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/gapi-stubs</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
