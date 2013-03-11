@@ -48,21 +48,77 @@ public class CDAExtension {
          return self.staticProfile(CDAR2Constants.CDAR2_SCHEMA);
      }
 
+    /**
+     * Parameterizes the xsd() validator to validate against a W3C CCDA Schema
+     * (CDA schema with SDTC extensions)
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
+     */
+    public static ValidatorAdapterDefinition ccda_schema(ValidatorAdapterDefinition self) {
+        return self.staticProfile(CDAR2Constants.CCDA_SCHEMA);
+    }
+
+    /**
+     * Parameterizes the xsd() validator to validate against a W3C HITSPC32 v2.5 Schema
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
+     */
+    public static ValidatorAdapterDefinition hitspc32_schema(ValidatorAdapterDefinition self) {
+        return self.staticProfile(CDAR2Constants.HITSP_32_2_5_SCHEMA);
+    }
+
      /**
-      * fill me
-      * @param parameters
-      * 		fill me 
-      * @DSLDoc fill me
+      * Parameterizes the schematron() validator to validate against the CCD 1.0
+      * schematron rules.
+      * @param parameters schematron parameters
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
       */
      public static ValidatorAdapterDefinition ccd(ValidatorAdapterDefinition self, Map parameters) {
          return self.staticProfile(new SchematronProfile(CDAR2Constants.CCD_SCHEMATRON_RULES, parameters));
      }
      
      /**
-      * fill me 
-      * @DSLDoc fill me
+      * Parameterizes the schematron() validator to validate against the CCD 1.0
+      * schematron rules.
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
       */
      public static ValidatorAdapterDefinition ccd(ValidatorAdapterDefinition self) { 
          return self.staticProfile(new SchematronProfile(CDAR2Constants.CCD_SCHEMATRON_RULES));
      }
+
+    /**
+     * Parameterizes the schematron() validator to validate against the CCD 1.0
+     * schematron rules.
+     * @param parameters schematron parameters
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
+     */
+    public static ValidatorAdapterDefinition hitspc32(ValidatorAdapterDefinition self, Map parameters) {
+        return self.staticProfile(new SchematronProfile(CDAR2Constants.HITSP_32_2_5_SCHEMATRON_RULES, parameters));
+    }
+
+    /**
+     * Parameterizes the schematron() validator to validate against the CCD 1.0
+     * schematron rules.
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
+     */
+    public static ValidatorAdapterDefinition hitspc32(ValidatorAdapterDefinition self) {
+        return self.staticProfile(new SchematronProfile(CDAR2Constants.HITSP_32_2_5_SCHEMATRON_RULES));
+    }
+
+    /**
+     * Parameterizes the schematron() validator to validate against the CCDA
+     * schematron rules.
+     * @param parameters schematron parameters
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
+     */
+    public static ValidatorAdapterDefinition ccda(ValidatorAdapterDefinition self, Map parameters) {
+        return self.staticProfile(new SchematronProfile(CDAR2Constants.CCDA_SCHEMATRON_RULES, parameters));
+    }
+
+    /**
+     * Parameterizes the schematron() validator to validate against the CCD 1.0
+     * schematron rules.
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
+     */
+    public static ValidatorAdapterDefinition ccda(ValidatorAdapterDefinition self) {
+        return self.staticProfile(new SchematronProfile(CDAR2Constants.CCDA_SCHEMATRON_RULES));
+    }
 }
