@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.osgi</groupId>
+    <artifactId>ipf-osgi-karaf-commands</artifactId>
+    <name>ipf-osgi-karaf-commands</name>
+
+    <parent>
+        <groupId>org.openehealth.ipf.osgi</groupId>
+        <artifactId>ipf-osgi-karaf</artifactId>
+        <version>2.5-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <karaf-version>2.3.1</karaf-version>
+        <!-- osgi:install -s mvn:org.openehealth.ipf.osgi/ipf-osgi-karaf-commands/2.5-SNAPSHOT -->
+        <osgi.import.pkg>
+            !org.apache.cxf.karaf.commands,
+            org.apache.felix.gogo.commands,
+            org.apache.felix.service.command,
+            *
+        </osgi.import.pkg>
+    </properties>
+
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.karaf.shell</groupId>
+            <artifactId>org.apache.karaf.shell.console</artifactId>
+            <version>${karaf-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.karaf</groupId>
+            <artifactId>org.apache.karaf.util</artifactId>
+            <version>${karaf-version}</version>
+        </dependency>
+    </dependencies>
+
+</project>
