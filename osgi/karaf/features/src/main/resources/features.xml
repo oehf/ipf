@@ -61,6 +61,7 @@
         <feature version="${project.version}">ipf-core</feature>
         <bundle start-level='50'>mvn:org.openehealth.ipf.osgi/ipf-osgi-commons/${project.version}</bundle>
         <bundle start-level='50'>mvn:org.openehealth.ipf.osgi/ipf-osgi-extender-spring/${project.version}</bundle>
+        <bundle start-level='50'>mvn:org.openehealth.ipf.osgi/ipf-osgi-extender-basic/${project.version}</bundle>
     </feature>
 
     <feature name="ipf-core-map" description="IPF Mapping Service support" version="${project.version}">

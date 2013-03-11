@@ -20,6 +20,7 @@
             org.openehealth.ipf.osgi.commons.bundle,
             *
         </osgi.import.pkg>
+        <osgi.bundle.activator>org.openehealth.ipf.osgi.extender.basic.GroovyExtenderActivator</osgi.bundle.activator>
     </properties>
 
     <dependencies>
@@ -32,6 +33,10 @@
             <groupId>org.openehealth.ipf.osgi</groupId>
             <artifactId>ipf-osgi-commons</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.osgi</groupId>
+            <artifactId>spring-osgi-core</artifactId>
         </dependency>
     </dependencies>
 </project>
