@@ -35,6 +35,7 @@
         <feature version="${project.version}">ipf-platform-camel-flow</feature>
         <feature version="${project.version}">ipf-platform-camel-ihe</feature>
         <feature version="${project.version}">ipf-osgi</feature>
+        <feature version="${project.version}">ipf-commands</feature>
     </feature>
 
     <feature name="ipf-core" description="IPF Core support" version="${project.version}" resolver="(obr)">
@@ -175,6 +176,11 @@
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-pixpdq/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-pixpdqv3/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-xds/${project.version}</bundle>
+    </feature>
+
+    <feature name="ipf-commands" description="IPF Karaf Commands" version="${project.version}">
+        <feature version="${project.version}">ipf-core</feature>
+        <bundle start-level='100'>mvn:org.openehealth.ipf.osgi/ipf-osgi-karaf-commands/${project.version}</bundle>
     </feature>
 
     <feature name="ipf-spring" version="${project.version}">
