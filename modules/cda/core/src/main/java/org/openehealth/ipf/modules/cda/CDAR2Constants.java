@@ -32,6 +32,8 @@ public interface CDAR2Constants {
     static final String HITSP_32_2_4_SCHEMA = "schema/hitspc32_v2.4_20090414/infrastructure/cda/C32_CDA.xsd";
     static final String HITSP_32_2_5_SCHEMA = "schema/hitspc32_v2.5_20101007/infrastructure/cda/C32_CDA.xsd";
 
+    static final String CCDA_SCHEMA = "schema/ccda/infrastructure/cda/CDA_SDTC.xsd";
+
     // Schematron
 
     static final String CCD_SCHEMATRON_RULES = "schematron/ccd/ccd.sch";
@@ -85,5 +87,7 @@ public interface CDAR2Constants {
     static final String IHE_PCC_XPHR_UPDATE_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/xphrUpdate.sch";
 
     static final String IHE_QRPH_CRD_SCHEMATRON_RULES = "schematron/ihe_qrph_20090206/crd.sch";
+
+    static final String CCDA_SCHEMATRON_RULES = "schematron/ccda/Consolidation.sch";
 
 }
