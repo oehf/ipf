@@ -34,15 +34,15 @@ import static org.apache.commons.io.IOUtils.closeQuietly;
 import static org.osgi.framework.BundleEvent.STARTED;
 
 /**
+ * OSGi Extender which looks for the Groovy Model Extension definitions in every active
+ * and starting bundle and adds those extension methods to the Groovy module registry.
+ *
  * @author Boris Stanojevic
  */
 public class GroovyExtenderActivator implements BundleActivator, SynchronousBundleListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(GroovyExtenderActivator.class);
 
-    static {
-        ExpandoMetaClass.enableGlobally();
-    }
     
     @Override
     public void bundleChanged(BundleEvent event) {
