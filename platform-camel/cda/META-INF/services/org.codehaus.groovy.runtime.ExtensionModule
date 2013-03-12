@@ -1,3 +1,5 @@
 moduleName = CDAExtension
 moduleVersion = 2.5
-extensionClasses = org.openehealth.ipf.platform.camel.cda.extend.CDAExtension
+moduleFactory=org.openehealth.ipf.commons.core.config.ExtensionModuleFactory
+extensionClasses = org.openehealth.ipf.platform.camel.cda.extend.CDAExtensionModule
+staticExtensionClasses =

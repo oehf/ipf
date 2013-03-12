@@ -18,12 +18,7 @@ package org.openehealth.ipf.platform.camel.hl7.extend
 import ca.uhn.hl7v2.parser.Parser
 
 import org.apache.camel.builder.DataFormatClause
-
-import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
-import org.openehealth.ipf.modules.hl7.validation.support.HL7Validator
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
-import org.openehealth.ipf.platform.camel.hl7.dataformat.Hl7DataFormat
-import org.openehealth.ipf.platform.camel.hl7.expression.Hl7InputExpression
 
 /**
  * @author Martin Krasser
@@ -37,19 +32,19 @@ class Hl7ModelExtension {
         // ----------------------------------------------------------------
         
         DataFormatClause.metaClass.ghl7 = { ->
-            Hl7Extension.ghl7(delegate)
+            Hl7ExtensionModule.ghl7(delegate)
         }
         
         DataFormatClause.metaClass.ghl7 = { Parser parser ->
-            Hl7Extension.ghl7(delegate, parser)
+            Hl7ExtensionModule.ghl7(delegate, parser)
         }
         
         DataFormatClause.metaClass.ghl7 = { String charset ->
-            Hl7Extension.ghl7(delegate, charset)
+            Hl7ExtensionModule.ghl7(delegate, charset)
         }
         
         DataFormatClause.metaClass.ghl7 = { Parser parser, String charset ->
-            Hl7Extension.ghl7(delegate, parser, charset)
+            Hl7ExtensionModule.ghl7(delegate, parser, charset)
         }
     
         // ----------------------------------------------------------------
@@ -57,7 +52,7 @@ class Hl7ModelExtension {
         // ----------------------------------------------------------------
         
         ValidatorAdapterDefinition.metaClass.ghl7 = {-> 
-            Hl7Extension.ghl7(delegate)
+            Hl7ExtensionModule.ghl7(delegate)
         }
         
     }

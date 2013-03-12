@@ -1,4 +1,5 @@
 moduleName=Hl7MarshalExtension
 moduleVersion=2.5
-extensionClasses=org.openehealth.ipf.platform.camel.hl7.extend.Hl7Extension
+moduleFactory=org.openehealth.ipf.commons.core.config.ExtensionModuleFactory
+extensionClasses=org.openehealth.ipf.platform.camel.hl7.extend.Hl7ExtensionModule
 staticExtensionClasses=

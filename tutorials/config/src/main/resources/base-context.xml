@@ -16,6 +16,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         class="org.openehealth.ipf.tutorials.config.base.route.SampleRouteBuilder" />
     
   <bean id="baseExtension"
-        class="org.openehealth.ipf.tutorials.config.base.extend.SampleModelExtension" />
+        class="org.openehealth.ipf.tutorials.config.base.extend.SampleModelExtensionModule" />
 
 </beans>

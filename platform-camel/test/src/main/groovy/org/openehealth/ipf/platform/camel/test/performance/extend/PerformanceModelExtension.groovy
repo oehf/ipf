@@ -27,7 +27,7 @@ class PerformanceModelExtension {
     static extensions = {
         
         ProcessorDefinition.metaClass.measure = {
-            PerformanceExtension.measure(delegate)
+            PerformanceExtensionModule.measure(delegate)
         }
     }
 }

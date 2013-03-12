@@ -1,4 +1,5 @@
 moduleName=SampleOsgiExtension
 moduleVersion=2.5
-extensionClasses=org.openehealth.ipf.tutorials.osgi.extension.SampleExtension
+moduleFactory=org.openehealth.ipf.commons.core.config.ExtensionModuleFactory
+extensionClasses=org.openehealth.ipf.tutorials.osgi.extension.SampleExtensionModule
 staticExtensionClasses=

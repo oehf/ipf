@@ -16,7 +16,7 @@
         <surefire-report-plugin-version>2.8.1</surefire-report-plugin-version>
         <jxr-plugin-version>2.1</jxr-plugin-version>
         <project-info-reports-plugin-version>2.1.2</project-info-reports-plugin-version>
-        <maven-dsldoc-plugin-version>1.3</maven-dsldoc-plugin-version>
+        <maven-dsldoc-plugin-version>1.5-SNAPSHOT</maven-dsldoc-plugin-version>
 
         <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
@@ -1049,11 +1049,12 @@
                     <version>${maven-dsldoc-plugin-version}</version>
                     <configuration>
                         <links>
-                            <java>http://java.sun.com/javase/6/docs/api/java</java>
-                            <groovy>http://groovy.codehaus.org/api/groovy</groovy>
+                            <java>http://java.sun.com/javase/7/docs/api/java</java>
+                            <groovy>http://groovy.codehaus.org/api</groovy>
                             <org.openehealth.ipf>apidocs/org/openehealth/ipf</org.openehealth.ipf>
-                            <org.apache.camel>http://camel.apache.org/maven/camel-core/apidocs/org/apache/camel</org.apache.camel>
+                            <org.apache.camel>http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel</org.apache.camel>
                         </links>
+                        <descriptorFileExtensions>ExtensionModule.groovy</descriptorFileExtensions>
                     </configuration>
                 </plugin>
                 <!-- regular plugins -->
@@ -1292,6 +1293,7 @@
                 <inherited>false</inherited>
                 <configuration>
                     <links>
+						<link>http://java.sun.com/javase/7/docs/api/</link>
                         <link>http://java.sun.com/javase/6/docs/api/</link>
                         <link>http://java.sun.com/javaee/5/docs/api/</link>
                         <link>http://hl7api.sourceforge.net/apidocs/</link>

@@ -28,27 +28,27 @@ class FlowModelExtension {
     static extensions = {
 
         ProcessorDefinition.metaClass.initFlow = { ->
-            FlowExtension.initFlow(delegate)
+            FlowExtensionModule.initFlow(delegate)
         }
         
         ProcessorDefinition.metaClass.initFlow = { String identifier ->
-            FlowExtension.initFlow(delegate, identifier)
+            FlowExtensionModule.initFlow(delegate, identifier)
         }
         
         ProcessorDefinition.metaClass.ackFlow = {
-            FlowExtension.ackFlow(delegate)
+            FlowExtensionModule.ackFlow(delegate)
         }
     
         ProcessorDefinition.metaClass.nakFlow = {
-            FlowExtension.nakFlow(delegate)
+            FlowExtensionModule.nakFlow(delegate)
         }
         
         ProcessorDefinition.metaClass.dedupeFlow = {
-            FlowExtension.dedupeFlow(delegate)
+            FlowExtensionModule.dedupeFlow(delegate)
         }
         
         ProcessorDefinition.metaClass.ipf = { ->
-            FlowExtension.ipf(delegate)
+            FlowExtensionModule.ipf(delegate)
 	    }
                 
    }   

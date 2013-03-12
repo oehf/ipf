@@ -1,4 +1,5 @@
 moduleName=CoreExtension
 moduleVersion=2.5
-extensionClasses=org.openehealth.ipf.platform.camel.core.extend.CoreExtension
+moduleFactory=org.openehealth.ipf.commons.core.config.ExtensionModuleFactory
+extensionClasses=org.openehealth.ipf.platform.camel.core.extend.CoreExtensionModule
 staticExtensionClasses=

@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.core.support.transform.min.TestConvert
 class UseRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
-        use (CoreExtension) {
+        use (CoreExtensionModule) {
             def converter = new TestConverter()
 
             from('direct:input1')

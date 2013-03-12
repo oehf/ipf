@@ -99,4 +99,22 @@
             <artifactId>easymock</artifactId>
         </dependency>                       
     </dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.openehealth.ipf.labs.maven</groupId>
+				<artifactId>maven-dsldoc-plugin</artifactId>
+				<configuration>
+                    <links>
+                        <java>http://java.sun.com/javase/7/docs/api/java</java>
+                        <groovy>http://groovy.codehaus.org/api</groovy>
+                        <org.openehealth.ipf>apidocs/org/openehealth/ipf</org.openehealth.ipf>
+                        <org.apache.camel>http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel</org.apache.camel>
+                    </links>
+					<descriptorFileExtensions>ExtensionModule.groovy</descriptorFileExtensions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>	
 </project>

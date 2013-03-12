@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.map.extend
+package org.openehealth.ipf.commons.map.extend;
 
-import org.codehaus.groovy.runtime.InvokerHelperimport org.openehealth.ipf.commons.core.config.ContextFacade;
-import org.openehealth.ipf.commons.map.MappingService
+import org.codehaus.groovy.runtime.InvokerHelper;
+import org.openehealth.ipf.commons.core.config.ContextFacade;
+import org.openehealth.ipf.commons.map.MappingService;
+
+import static org.openehealth.ipf.commons.map.extend.MappingExtensionHelper.*;
 
 
 /**
@@ -25,54 +28,87 @@ import org.openehealth.ipf.commons.map.MappingService
  * @DSL
  * @author Christian Ohr
  */
-class MappingExtensionModule {
+public class MappingExtensionModule {
 
-    static String firstLower(String delegate) {
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static String firstLower(String delegate) {
         delegate?.replaceAll('^.') { String s -> s ? s[0].toLowerCase() : s }
     }
-    
-    static Object map(String delegate, Object key) {       
+
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static Object map(String delegate, Object key) {
         mappingService()?.get(key, delegate)
     }
-    
-    static Object map(String delegate, Object key, Object defaultValue) {
+
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static Object map(String delegate, Object key, Object defaultValue) {
         mappingService()?.get(key, delegate, defaultValue)
     }
 
-    static Object mapReverse(String delegate, Object value) {
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static Object mapReverse(String delegate, Object value) {
         mappingService()?.getKey(value, delegate)
     }
-    
-    static Object mapReverse(String delegate, Object value, Object defaultValue) {
+
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static Object mapReverse(String delegate, Object value, Object defaultValue) {
         mappingService()?.getKey(value, delegate, defaultValue)
     }
-    
-    static String keySystem(String delegate) {
+
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static String keySystem(String delegate) {
         mappingService()?.getKeySystem(delegate)
     }
 
-    static String valueSystem(String delegate) {
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static String valueSystem(String delegate) {
         mappingService()?.getValueSystem(delegate)
     }
 
-    static Collection<?> keys(String delegate) {
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static Collection<?> keys(String delegate) {
         mappingService()?.keys(delegate)
     }
 
-    static Collection<?> values(String delegate) {
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static Collection<?> values(String delegate) {
         mappingService()?.values(delegate)
     }
 
-    static boolean hasKey(String delegate, Object key) {
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static boolean hasKey(String delegate, Object key) {
         keys(delegate).contains(key)
     }
 
-    static boolean hasValue(String delegate, Object value) {
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Mapping+Service
+     */
+    public static boolean hasValue(String delegate, Object value) {
         values(delegate).contains(value)
     }
-    
-    static Object methodMissing(String delegate, String name, args) {
-        MappingExtensionHelper.methodMissingLogic(mappingService(), { delegate }, name, args)
+
+    public static Object methodMissing(String delegate, String name, Object args) {
+        simpleMethodMissingLogic(mappingService(), delegate, name, args)
     }
     
     private static MappingService mappingService() {

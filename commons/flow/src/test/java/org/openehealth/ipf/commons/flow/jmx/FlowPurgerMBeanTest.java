@@ -65,7 +65,7 @@ public class FlowPurgerMBeanTest {
 
     private static final String PURGE_SCHEDULE_EXPRESSION = "0/2 * * * * ?";
     
-    private static final long EIGHT_DAYS = 1000*60*60*24*8;
+    private static final long EIGHT_DAYS = TimeUnit.DAYS.toMillis(8);
     
     private static final long WAIT_TIMEOUT = 5;
 

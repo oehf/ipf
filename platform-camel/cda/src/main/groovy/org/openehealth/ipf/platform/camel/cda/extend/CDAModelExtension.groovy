@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.cda.extend
 
 import org.apache.camel.builder.DataFormatClause
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
-import org.openehealth.ipf.modules.cda.CDAR2Constantsimport org.openehealth.ipf.commons.xml.SchematronProfile
+
 /**
  * @author Christian Ohr
  */
@@ -30,7 +30,7 @@ public class CDAModelExtension {
          // ----------------------------------------------------------------
          
          DataFormatClause.metaClass.cdar2 = { ->
-             CDAExtension.cdar2(delegate)
+             CDAExtensionModule.cdar2(delegate)
          }         
      
          // ----------------------------------------------------------------
@@ -40,17 +40,17 @@ public class CDAModelExtension {
          // W3C Schema validation
          
          ValidatorAdapterDefinition.metaClass.cdar2 = {-> 
-             CDAExtension.cdar2(delegate)
+             CDAExtensionModule.cdar2(delegate)
          }
 
          // Schematron validation
          
          ValidatorAdapterDefinition.metaClass.ccd = { Map parameters ->
-             CDAExtension.ccd(delegate, parameters)
+             CDAExtensionModule.ccd(delegate, parameters)
          }
          
          ValidatorAdapterDefinition.metaClass.ccd = {-> 
-             CDAExtension.ccd(delegate)
+             CDAExtensionModule.ccd(delegate)
          }
      }
     

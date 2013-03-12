@@ -23,14 +23,19 @@ import org.openehealth.ipf.commons.map.MappingService
  */
 class MappingExtensionHelper {
 
+
     static def methodMissingLogic = { MappingService mappingService, def normalizer, String name, args ->
+        simpleMethodMissingLogic(mappingService, name, normalizer(delegate), args)
+    }
+
+    static def simpleMethodMissingLogic = { MappingService mappingService, Object src, String name, args ->
         def result
         if (name.startsWith('mapReverse')) {
             def key = name.substring('mapReverse'.length()).firstLower()
-            result = InvokerHelper.invokeMethod(mappingService, 'getKey', [key, normalizer(delegate), *args])
+            result = InvokerHelper.invokeMethod(mappingService, 'getKey', [key, src, *args])
         } else if (name.startsWith('map')) {
             def key = name.substring('map'.length()).firstLower()
-            result = InvokerHelper.invokeMethod(mappingService, 'get', [key, normalizer(delegate), *args])
+            result = InvokerHelper.invokeMethod(mappingService, 'get', [key, src, *args])
         } else {
             throw new RuntimeException(new MissingMethodException(name, delegate.class, args))
         }

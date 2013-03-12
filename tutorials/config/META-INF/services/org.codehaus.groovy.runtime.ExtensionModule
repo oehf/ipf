@@ -1,4 +1,5 @@
 moduleName=ConfigTutorialExtension
 moduleVersion=2.5
-extensionClasses=org.openehealth.ipf.tutorials.config.base.extend.SampleModelExtension
+moduleFactory=org.openehealth.ipf.commons.core.config.ExtensionModuleFactory
+extensionClasses=org.openehealth.ipf.tutorials.config.base.extend.SampleModelExtensionModule
 staticExtensionClasses=
