@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.ref.extend
 
+import org.apache.camel.model.language.ExpressionDefinition
+
 import static org.apache.camel.Exchange.HTTP_RESPONSE_CODE
 import static org.openehealth.ipf.tutorials.ref.util.Expressions.filenameExpression
 
@@ -23,15 +25,15 @@ import org.apache.camel.model.ProcessorDefinition
 /**
  * @author Martin Krasser
  */
-class TutorialModelExtension {
-
-    static extensions = {
+public class TutorialModelExtension {
 
         // ------------------------------------------------------------
         //  Flow management extensions
         // ------------------------------------------------------------
         
-        ProcessorDefinition.metaClass.initFlow = { identifier, errorUri -> 
+        public static ProcessorDefinition initFlow (ProcessorDefinition delegate,
+                                                    String identifier,
+                                                    String errorUri){
             delegate.initFlow(identifier)
                 .replayErrorHandler(errorUri)
                 .application('tutorial')
@@ -43,8 +45,11 @@ class TutorialModelExtension {
         // ------------------------------------------------------------
         //  File endpoint extensions
         // ------------------------------------------------------------
-        
-        ProcessorDefinition.metaClass.toFile = { String dir, String filePrefix, String fileExtension ->
+
+        public static ProcessorDefinition toFile (ProcessorDefinition delegate,
+                                                  String dir,
+                                                  String filePrefix,
+                                                  String fileExtension){
             def header = 'CamelFileName'
             def expression = filenameExpression(filePrefix, fileExtension) 
             delegate.setHeader(header, expression).to('file:' + dir);
@@ -54,10 +59,8 @@ class TutorialModelExtension {
         //  HTTP endpoint extensions
         // ------------------------------------------------------------
         
-        ProcessorDefinition.metaClass.responseCode = { ->
+        public static ExpressionDefinition responseCode (ProcessorDefinition delegate){
             delegate.setHeader(HTTP_RESPONSE_CODE)
         }
 
-    }
-    
 }

@@ -1,0 +1,4 @@
+moduleName = TutorialsRefExtension
+moduleVersion = 2.5
+extensionClasses = org.openehealth.ipf.tutorials.ref.extend.TutorialModelExtension
+staticExtensionClasses=

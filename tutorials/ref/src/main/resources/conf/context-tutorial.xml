@@ -42,32 +42,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <!--  Tutorial Setup                                                    -->
     <!-- ================================================================== -->
 
-    <bean id="routeBuilder" depends-on="routeModelExtender"
-        class="org.openehealth.ipf.tutorials.ref.route.TutorialRouteBuilder">
+    <bean id="routeBuilder" class="org.openehealth.ipf.tutorials.ref.route.TutorialRouteBuilder">
         <property name="httpPort" value="${tutorial.inbound.http.port}" />
-    </bean>
-
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="flowModelExtension"
-        class="org.openehealth.ipf.platform.camel.flow.extend.FlowModelExtension">
-    </bean>
-
-    <bean id="tutorialModelExtension"
-        class="org.openehealth.ipf.tutorials.ref.extend.TutorialModelExtension">
-    </bean>
-
-    <bean id="routeModelExtender" 
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-                <ref bean="flowModelExtension" />
-                <ref bean="tutorialModelExtension" />
-            </list>
-        </property>
     </bean>
 
     <bean id="animalOrderTransformer" 
