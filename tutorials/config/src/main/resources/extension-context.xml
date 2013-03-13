@@ -27,8 +27,8 @@ http://www.springframework.org/schema/lang/spring-lang-2.5.xsd">
     <lang:property name="intercepted" ref="baseRoute" />
   </lang:groovy>
 
-  <lang:groovy id="customExtension"
-     script-source="classpath:config/CustomModelExtension.groovy" />
+  <lang:groovy id="customExtensionModule"
+     script-source="classpath:config/CustomModelExtensionModule.groovy" />
 
   <lang:groovy id="exceptionHandler"
      script-source="classpath:config/CustomExceptionHandler.groovy" >

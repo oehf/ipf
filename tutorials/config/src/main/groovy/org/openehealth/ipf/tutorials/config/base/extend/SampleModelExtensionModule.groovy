@@ -17,9 +17,8 @@ package org.openehealth.ipf.tutorials.config.base.extend
 
 import org.apache.camel.Exchange
 import org.apache.camel.model.ProcessorDefinition
-import org.openehealth.ipf.commons.core.extend.config.Extension
 
-class SampleModelExtensionModule implements Extension {
+class SampleModelExtensionModule {
 
      static ProcessorDefinition setFileHeaderFrom(ProcessorDefinition delegate, String sourceHeader) {
          delegate.setHeader(Exchange.FILE_NAME) { exchange ->
@@ -27,4 +26,5 @@ class SampleModelExtensionModule implements Extension {
              destination ? "${destination}" : 'default.txt'
          }
      }
+
 }

@@ -20,6 +20,7 @@ import org.codehaus.groovy.reflection.CachedClass;
 import org.codehaus.groovy.runtime.m12n.ExtensionModule;
 import org.codehaus.groovy.runtime.m12n.StandardPropertiesModuleFactory;
 import org.codehaus.groovy.runtime.metaclass.MetaClassRegistryImpl;
+import org.openehealth.ipf.commons.core.extend.config.DynamicExtensionConfigurer;
 import org.osgi.framework.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,26 +89,7 @@ public class GroovyExtenderActivator implements BundleActivator, SynchronousBund
             LOG.info("Reading extension method definitions {}" + props);
             ClassLoader classLoader = BundleDelegatingClassLoader.createBundleClassLoaderFor(bundle);
             ExtensionModule module = factory.newModule(props, classLoader);
-            MetaClassRegistry metaClassRegistry = GroovySystem.getMetaClassRegistry();
-            ((MetaClassRegistryImpl) metaClassRegistry).getModuleRegistry().addModule(module);
-            Map<CachedClass, List<MetaMethod>> classMap = new HashMap<CachedClass, List<MetaMethod>>();
-            for (MetaMethod metaMethod : module.getMetaMethods()){
-                if (classMap.containsKey(metaMethod.getDeclaringClass())){
-                    classMap.get(metaMethod.getDeclaringClass()).add(metaMethod);
-                } else {
-                    List<MetaMethod> methodList = new ArrayList<MetaMethod>();
-                    methodList.add(metaMethod);
-                    classMap.put(metaMethod.getDeclaringClass(), methodList);
-                }
-                if (metaMethod.isStatic()){
-                    ((MetaClassRegistryImpl)metaClassRegistry).getStaticMethods().add(metaMethod);
-                } else {
-                    ((MetaClassRegistryImpl)metaClassRegistry).getInstanceMethods().add(metaMethod);
-                }
-            }
-            for (CachedClass cachedClass : classMap.keySet()) {
-                cachedClass.addNewMopMethods(classMap.get(cachedClass));
-            }
+            DynamicExtensionConfigurer.addExtensionMethods(module);
             LOG.info("Added extension methods for bundle {}", bundle);
         }
     }

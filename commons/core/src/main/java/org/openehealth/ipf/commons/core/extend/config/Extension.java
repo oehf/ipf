@@ -19,7 +19,11 @@ package org.openehealth.ipf.commons.core.extend.config;
  * DSL extensions implementing this marker interface can be
  * auto discovered by IPF's configuration framework. Works for
  * both OSGi and non-OSGi environment. 
- * 
+ *
+ * Extensions for Groovy 2.x should implement {@link DynamicExtension}
+ * instead.
+ *
+ * @deprecated implement {@link DynamicExtension} instead
  * @author Boris Stanojevic
  */
 public interface Extension {

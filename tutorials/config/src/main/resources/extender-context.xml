@@ -18,8 +18,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
     <property name="camelContext" ref="camelContext" />
   </bean>
 
-  <bean id="customExtensionConfigurer" 
-        class="org.openehealth.ipf.commons.core.extend.config.ExtensionConfigurer" />
+  <bean id="customExtensionModuleConfigurer"
+        class="org.openehealth.ipf.commons.core.extend.config.DynamicExtensionConfigurer" />
     
   <bean id="postProcessor" 
         class="org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor">
@@ -27,7 +27,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
       <list>
         <ref bean="customMappingsConfigurer" />
         <ref bean="customRouteBuilderConfigurer" />
-        <ref bean="customExtensionConfigurer" />
+        <ref bean="customExtensionModuleConfigurer" />
       </list>
     </property>
   </bean>    

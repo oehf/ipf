@@ -46,12 +46,24 @@ public class ExtensionModuleFactory extends PropertiesModuleFactory {
         LOG.info("Registering new extension module {} defined in class {}",
                 properties.getProperty(MODULE_NAME_KEY),
                 properties.getProperty(MetaInfExtensionModule.MODULE_INSTANCE_CLASSES_KEY));
-        ExtensionModule module = MetaInfExtensionModule.newModule(properties, classLoader);
+        ExtensionModule module = createExtensionModule(properties, classLoader);
         if (LOG.isDebugEnabled()) {
             for(MetaMethod method : module.getMetaMethods()) {
                 LOG.debug("registered method: {}", method);
             }
         }
         return module;
+    }
+
+    /**
+     * Delegate that actually creates the ExtensionModule. Defaults to calling
+     * {@link MetaInfExtensionModule#newModule(java.util.Properties, ClassLoader)}.
+     *
+     * @param properties extension module properties
+     * @param classLoader classloader
+     * @return new ExtensionModule
+     */
+    protected ExtensionModule createExtensionModule(Properties properties, ClassLoader classLoader) {
+        return MetaInfExtensionModule.newModule(properties, classLoader);
     }
 }

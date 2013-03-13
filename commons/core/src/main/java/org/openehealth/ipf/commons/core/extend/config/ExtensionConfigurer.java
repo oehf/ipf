@@ -32,9 +32,9 @@ import org.openehealth.ipf.commons.core.extend.ExtensionActivator;
  * 
  * As of Groovy 2.0, you should use Groovy's built-in extension mechanism in
  * order to register custom extensions.
- * 
+ *
+ * @deprecated use {@link DynamicExtensionConfigurer} instead
  * @author Boris Stanojevic
- * @see http://docs.codehaus.org/display/GROOVY/Creating+an+extension+module
  */
 public class ExtensionConfigurer<R extends Registry> extends
         OrderedConfigurer<Extension, R> {
