@@ -46,10 +46,10 @@
                 <include>**/*.xml</include>
             </includes>
         </fileSet>
-        <fileSet encoding="UTF-8">
+        <fileSet filtered="true" encoding="UTF-8">
             <directory>META-INF</directory>
             <includes>
-                <include>**/ExtensionModule</include>
+                <include>**/*ExtensionModule*</include>
             </includes>
         </fileSet>        
         <fileSet encoding="UTF-8">

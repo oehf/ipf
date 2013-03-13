@@ -9,7 +9,7 @@
     <resources>
         <resource>src\main\assembly\bin.xml</resource>
         <resource>src\main\resources\context.xml</resource>
-        <resource>src\main\resources\SampleModelExtension.groovy</resource>
+        <resource>src\main\resources\SampleModelExtensionModule.groovy</resource>
         <resource>src\main\resources\SampleRouteConfig.groovy</resource>
         <resource>.settings\org.codehaus.groovy.eclipse.preferences.prefs</resource>
         <resource>.settings\org.eclipse.jdt.core.prefs</resource>

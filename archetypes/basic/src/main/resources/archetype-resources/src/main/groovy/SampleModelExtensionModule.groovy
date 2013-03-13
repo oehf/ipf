@@ -4,7 +4,7 @@
 package ${package}
 
 import org.apache.camel.model.ProcessorDefinition
-class SampleModelExtension {
+class SampleModelExtensionModule {
       
      static ProcessorDefinition reverse(ProcessorDefinition self) {
          self.transmogrify { it.reverse() } 
