@@ -13,51 +13,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.tutorials.ref.extend
+package org.openehealth.ipf.tutorials.ref.extend;
 
-import static org.apache.camel.Exchange.HTTP_RESPONSE_CODE
-import static org.openehealth.ipf.tutorials.ref.util.Expressions.filenameExpression
+import org.apache.camel.model.language.ExpressionDefinition;
 
-import org.apache.camel.model.ProcessorDefinition
+import static org.apache.camel.Exchange.HTTP_RESPONSE_CODE;
+import static org.openehealth.ipf.tutorials.ref.util.Expressions.filenameExpression;
+
+import org.apache.camel.model.ProcessorDefinition;
 
 /**
  * @author Martin Krasser
  */
-class TutorialModelExtensionModule {
+public class TutorialModelExtensionModule {
 
-    static extensions = {
 
-        // ------------------------------------------------------------
-        //  Flow management extensions
-        // ------------------------------------------------------------
-        
-        ProcessorDefinition.metaClass.initFlow = { identifier, errorUri -> 
-            delegate.initFlow(identifier)
+    public static ProcessorDefinition initFlow(ProcessorDefinition delegate,
+                                               String identifier,
+                                               String errorUri) {
+        delegate.initFlow(identifier)
                 .replayErrorHandler(errorUri)
                 .application('tutorial')
                 .inType(String.class)
                 .outType(String.class)
                 .outConversion(false)
-        }
-        
-        // ------------------------------------------------------------
-        //  File endpoint extensions
-        // ------------------------------------------------------------
-        
-        ProcessorDefinition.metaClass.toFile = { String dir, String filePrefix, String fileExtension ->
-            def header = 'CamelFileName'
-            def expression = filenameExpression(filePrefix, fileExtension) 
-            delegate.setHeader(header, expression).to('file:' + dir);
-        }
-        
-        // ------------------------------------------------------------
-        //  HTTP endpoint extensions
-        // ------------------------------------------------------------
-        
-        ProcessorDefinition.metaClass.responseCode = { ->
-            delegate.setHeader(HTTP_RESPONSE_CODE)
-        }
-
     }
-    
+
+    // ------------------------------------------------------------
+    //  File endpoint extensions
+    // ------------------------------------------------------------
+
+    public static ProcessorDefinition toFile(ProcessorDefinition delegate,
+                                             String dir,
+                                             String filePrefix,
+                                             String fileExtension) {
+        def header = 'CamelFileName'
+        def expression = filenameExpression(filePrefix, fileExtension)
+        delegate.setHeader(header, expression).to('file:' + dir);
+    }
+
+    // ------------------------------------------------------------
+    //  HTTP endpoint extensions
+    // ------------------------------------------------------------
+
+    public static ExpressionDefinition responseCode(ProcessorDefinition delegate) {
+        delegate.setHeader(HTTP_RESPONSE_CODE)
+    }
+
+
 }

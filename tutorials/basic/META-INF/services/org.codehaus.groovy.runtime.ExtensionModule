@@ -1,5 +1,3 @@
 moduleName = TutorialsBasicExtension
 moduleVersion = 2.5
-moduleFactory=org.openehealth.ipf.commons.core.config.ExtensionModuleFactory
-extensionClasses = org.openehealth.ipf.tutorials.basic.extend.SampleModelExtensionModule
-staticExtensionClasses =
+extensionClasses = org.openehealth.ipf.tutorials.basic.extend.SampleModelExtension

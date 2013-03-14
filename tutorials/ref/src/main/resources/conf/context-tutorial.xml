@@ -56,7 +56,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     </bean>
 
     <bean id="tutorialModelExtension"
-        class="org.openehealth.ipf.tutorials.ref.extend.TutorialModelExtensionModule">
+        class="org.openehealth.ipf.tutorials.ref.extend.TutorialModelExtension">
     </bean>
 
     <bean id="routeModelExtender" 
