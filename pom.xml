@@ -16,7 +16,7 @@
         <surefire-report-plugin-version>2.8.1</surefire-report-plugin-version>
         <jxr-plugin-version>2.1</jxr-plugin-version>
         <project-info-reports-plugin-version>2.1.2</project-info-reports-plugin-version>
-        <maven-dsldoc-plugin-version>1.5-SNAPSHOT</maven-dsldoc-plugin-version>
+        <maven-dsldoc-plugin-version>1.5</maven-dsldoc-plugin-version>
 
         <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
