@@ -58,7 +58,7 @@ public class Hl7v3AsyncResponseServiceFactory extends JaxWsServiceFactory {
     {
         super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors, null);
         
-        Validate.notNull(correlator);
+        Validate.notNull(correlator, "Correlator for asynchronous processing must be set.");
         this.correlator = correlator;
     }
 

@@ -18,6 +18,7 @@
         <osgi.import.pkg>
             org.apache.camel,
             org.apache.camel.model,
+            org.openehealth.ipf.commons.core.config,
             *
         </osgi.import.pkg>
         <ipf.extension.classes>org.openehealth.ipf.tutorials.osgi.extension.SampleExtensionModule</ipf.extension.classes>

@@ -17,6 +17,7 @@
         </osgi.export.pkg>
         <osgi.import.pkg>
             org.apache.camel.processor,
+            org.openehealth.ipf.commons.core.config,
             *
         </osgi.import.pkg>
         <osgi.require.bundle>
