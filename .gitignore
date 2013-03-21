@@ -14,3 +14,8 @@ id_file
 assembly/bin
 work
 /atlassian-ide-plugin.xml
+
+/platform-camel/core/KahaDB/db-1.log
+/platform-camel/core/KahaDB/db.data
+/platform-camel/core/KahaDB/db.redo
+/platform-camel/core/KahaDB/lock
