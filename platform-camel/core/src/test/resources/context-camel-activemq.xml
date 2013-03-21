@@ -27,11 +27,7 @@ http://activemq.apache.org/schema/core/activemq-core.xsd">
   <!--  ActiveMQ Broker Setup                                             -->
   <!-- ================================================================== -->
 
-  <amq:broker useJmx="false" persistent="true" brokerName="localhost" useShutdownHook="true">
-    <amq:persistenceAdapter>
-        <amq:kahaDB journalMaxFileLength="32mb"
-                    cleanupInterval="20000"/>
-    </amq:persistenceAdapter>
+  <amq:broker useJmx="false" persistent="false" brokerName="localhost" useShutdownHook="true">
     <amq:transportConnectors>
         <amq:transportConnector uri="tcp://localhost:60001"/>
     </amq:transportConnectors>
