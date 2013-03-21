@@ -50,7 +50,7 @@
         <sources-plugin-version>2.2</sources-plugin-version>
         
         <!-- Dependency version properties -->
-        <activemq-version>5.6.0</activemq-version>
+        <activemq-version>5.8.0</activemq-version>
         <aspectj-version>1.7.2</aspectj-version>
         <camel-version>2.10.4</camel-version>
         <cglib-version>2.2.2</cglib-version>
@@ -531,14 +531,13 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-core</artifactId>
+                <artifactId>activemq-camel</artifactId>
                 <version>${activemq-version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.fusesource.fuse-extra</groupId>
-						<artifactId>fusemq-leveldb</artifactId>
-					</exclusion>
-				</exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-kahadb-store</artifactId>
+                <version>${activemq-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
