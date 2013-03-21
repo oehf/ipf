@@ -17,59 +17,71 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:ctx="http://www.springframework.org/schema/context"
+       xmlns:amq="http://activemq.apache.org/schema/core"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
-http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 http://www.springframework.org/schema/context
-http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+http://www.springframework.org/schema/context/spring-context-3.1.xsd
+http://activemq.apache.org/schema/core
+http://activemq.apache.org/schema/core/activemq-core.xsd">
 
-  <ctx:property-placeholder location="classpath:${cluster.node.dir}/context.properties" />
+    <ctx:property-placeholder location="classpath:${cluster.node.dir}/context.properties"/>
 
-  <!-- ================================================================== -->
-  <!--  ActiveMQ Broker Setup (use classic bean configuration because     --> 
-  <!--  custom schema validation fails for placeholders)                  -->
-  <!-- ================================================================== -->
+    <!-- ================================================================== -->
+    <!--  ActiveMQ Broker Setup (use classic bean configuration because     -->
+    <!--  custom schema validation fails for placeholders)                  -->
+    <!-- ================================================================== -->
 
-  <bean class="org.apache.activemq.broker.BrokerService" init-method="start" destroy-method="stop">
-    <property name="useJmx" value="true" />
-    <property name="persistent" value="true" />
-    <property name="brokerName" value="${activemq.broker.name}" />
-    <property name="dataDirectory" value="${activemq.data.dir}" />
-    <property name="useShutdownHook" value="true" />
-    <property name="managementContext">
-      <bean class="org.apache.activemq.broker.jmx.ManagementContext">
-        <property name="useMBeanServer" value="true" />
-        <property name="createConnector" value="false" />
-      </bean>
-    </property>
-    <property name="persistenceAdapter">
-      <bean class="org.apache.activemq.store.amq.AMQPersistenceAdapter">
-        <property name="cleanupInterval" value="${activemq.persistence.cleanup.interval}" />
-        <property name="directory" value="${activemq.data.dir}" />
-      </bean>
-    </property>
-    
-    <!--
-      Uncomment the following block to setup a network of brokers. A network
-      of brokers is primarily used to load-balance message consumption across
-      different brokers. 
+    <amq:broker brokerName="${activemq.broker.name}" dataDirectory="${activemq.data.dir}" useJmx="true">
+        <amq:managementContext>
+            <amq:managementContext createConnector="false"
+                                   createMBeanServer="false" findTigerMbeanServer="true" />
+        </amq:managementContext>
+        <!-- AMQ-4092: work around concurrency problem, accepting less performance -->
+        <!-- concurrentStoreAndDispatchQueues="false" -->
+        <amq:persistenceAdapter>
+            <amq:kahaDB directory="${activemq.data.dir}"
+                        journalMaxFileLength="32mb"
+                        cleanupInterval="20000"/>
+        </amq:persistenceAdapter>
 
-    <property name="networkConnectors">
-      <list>
-        <bean class="org.apache.activemq.network.DiscoveryNetworkConnector">
-          <property name="uri" value="${activemq.network.connector.uri}" />
-        </bean>
-      </list>
-    </property>
-    <property name="transportConnectors">
-      <list>
-        <bean class="org.apache.activemq.broker.TransportConnector">
-          <property name="uri" value="${activemq.transport.connector.uri}" />
-        </bean>
-      </list>
-    </property>
-     -->
+        <amq:systemUsage>
+            <amq:systemUsage>
+                <amq:memoryUsage>
+                    <amq:memoryUsage limit="20 mb"/>
+                </amq:memoryUsage>
+                <amq:storeUsage>
+                    <amq:storeUsage limit="500 mb"/>
+                </amq:storeUsage>
+                <amq:tempUsage>
+                    <amq:tempUsage limit="100 mb"/>
+                </amq:tempUsage>
+            </amq:systemUsage>
+        </amq:systemUsage>
+    </amq:broker>
 
-  </bean>
+
+        <!--
+          Uncomment the following block to setup a network of brokers. A network
+          of brokers is primarily used to load-balance message consumption across
+          different brokers.
+
+        <property name="networkConnectors">
+          <list>
+            <bean class="org.apache.activemq.network.DiscoveryNetworkConnector">
+              <property name="uri" value="${activemq.network.connector.uri}" />
+            </bean>
+          </list>
+        </property>
+        <property name="transportConnectors">
+          <list>
+            <bean class="org.apache.activemq.broker.TransportConnector">
+              <property name="uri" value="${activemq.transport.connector.uri}" />
+            </bean>
+          </list>
+        </property>
+         -->
+
 
 </beans>

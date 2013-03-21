@@ -37,31 +37,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <!--  Test Setup                                                        -->
     <!-- ================================================================== -->
 
-    <bean id="routeBuilder" depends-on="routeModelExtender"
+    <bean id="routeBuilder"
         class="org.openehealth.ipf.tutorials.ref.route.TestRouteBuilderGroovy">
-    </bean>
-
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="flowModelExtension"
-        class="org.openehealth.ipf.platform.camel.flow.extend.FlowModelExtension">
-    </bean>
-
-    <bean id="tutorialModelExtension"
-        class="org.openehealth.ipf.tutorials.ref.extend.TutorialModelExtensionModule">
-    </bean>
-
-    <bean id="routeModelExtender" 
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-                <ref bean="flowModelExtension" />
-                <ref bean="tutorialModelExtension" />
-            </list>
-        </property>
     </bean>
 
     <bean id="animalOrderTransformer" 
