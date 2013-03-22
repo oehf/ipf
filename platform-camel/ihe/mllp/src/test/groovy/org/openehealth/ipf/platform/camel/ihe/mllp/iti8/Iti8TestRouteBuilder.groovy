@@ -75,6 +75,12 @@ class Iti8TestRouteBuilder extends SpringRouteBuilder {
                 .process {
                     resultMessage(it).body = MessageUtils.ack(it.in.body.target)
                 }
+
+        from('xds-iti8://0.0.0.0:18088?audit=false&'+
+                'sslContextParameters=#sslContextParameters')
+                .process {
+            resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+        }
     }
 }
 

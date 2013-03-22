@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.component.mina.MinaConstants;
+import org.apache.camel.component.mina2.Mina2Constants;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
@@ -41,7 +41,7 @@ public class ConsumerAuthenticationFailureInterceptor extends AbstractMllpInterc
     }
 
     private String getRemoteAddress(Exchange exchange) {
-        InetSocketAddress address = (InetSocketAddress) exchange.getIn().getHeader(MinaConstants.MINA_REMOTE_ADDRESS);
+        InetSocketAddress address = (InetSocketAddress) exchange.getIn().getHeader(Mina2Constants.MINA_REMOTE_ADDRESS);
         return address.getAddress().getHostAddress();
     }
 

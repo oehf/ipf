@@ -57,7 +57,7 @@ public class TransportTest {
         String message = inputMessage("message/msg-02.hl7").toString();
         String content = IOUtils.toString(new ClassPathResource("message/msg-02.content").getInputStream());
         mockOutput.expectedBodiesReceived(content);
-        producerTemplate.sendBody("mina:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec", message);
+        producerTemplate.sendBody("mina2:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec", message);
         mockOutput.assertIsSatisfied();
     }
 
@@ -65,7 +65,7 @@ public class TransportTest {
     public void testMessage03() throws Exception {
         String message = inputMessage("message/msg-03.hl7").toString();
         mockOutput.expectedBodiesReceived(message);
-        producerTemplate.sendBody("mina:tcp://127.0.0.1:8889?sync=true&codec=#hl7Codec", message);
+        producerTemplate.sendBody("mina2:tcp://127.0.0.1:8889?sync=true&codec=#hl7Codec", message);
         mockOutput.assertIsSatisfied();
     }
 

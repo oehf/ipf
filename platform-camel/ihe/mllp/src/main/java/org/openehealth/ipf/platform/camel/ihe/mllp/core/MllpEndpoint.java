@@ -18,13 +18,15 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 import org.apache.camel.*;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
-import org.apache.camel.component.mina.MinaConfiguration;
-import org.apache.camel.component.mina.MinaEndpoint;
+import org.apache.camel.component.mina2.Mina2Configuration;
+import org.apache.camel.component.mina2.Mina2Consumer;
+import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.apache.camel.component.mina2.Mina2Producer;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.commons.lang3.Validate;
-import org.apache.mina.common.DefaultIoFilterChainBuilder;
-import org.apache.mina.common.IoFilter;
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
+import org.apache.mina.core.filterchain.IoFilter;
+import org.apache.mina.core.session.IoSession;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.commons.ihe.core.chain.ChainUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
@@ -60,7 +62,7 @@ import java.util.Map;
 public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint implements Hl7v2ConfigurationHolder {
 
     private final MllpComponent<T> mllpComponent;
-    private final MinaEndpoint wrappedEndpoint;
+    private final Mina2Endpoint wrappedEndpoint;
     private final boolean audit;
     private final boolean allowIncompleteAudit;
 
@@ -125,7 +127,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      */
     public MllpEndpoint(
             MllpComponent<T> mllpComponent,
-            MinaEndpoint wrappedEndpoint,
+            Mina2Endpoint wrappedEndpoint,
             boolean audit,
             boolean allowIncompleteAudit,
             SSLContext sslContext,
@@ -238,8 +240,19 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      */
     @Override
     public Consumer createConsumer(Processor originalProcessor) throws Exception {
+        // configure interceptor chain
+        List<Hl7v2Interceptor> chain = getConsumerInterceptorChain();
+        Processor processor = originalProcessor;
+        for (int i = chain.size() - 1; i >= 0; --i) {
+            Hl7v2Interceptor interceptor = chain.get(i);
+            interceptor.setConfigurationHolder(this);
+            interceptor.setWrappedProcessor(processor);
+            processor = interceptor;
+        }
+
+        Mina2Consumer consumer = (Mina2Consumer)wrappedEndpoint.createConsumer(processor);
         if (sslContext != null) {
-            DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getAcceptorConfig().getFilterChain();
+            DefaultIoFilterChainBuilder filterChain = consumer.getAcceptor().getFilterChain();
             if (! filterChain.contains("ssl")) {
                 HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
                 filter.setNeedClientAuth(clientAuthType == ClientAuthType.MUST);
@@ -251,17 +264,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
             }
         }
 
-        // configure interceptor chain
-        List<Hl7v2Interceptor> chain = getConsumerInterceptorChain();
-        Processor processor = originalProcessor;
-        for (int i = chain.size() - 1; i >= 0; --i) {
-            Hl7v2Interceptor interceptor = chain.get(i);
-            interceptor.setConfigurationHolder(this);
-            interceptor.setWrappedProcessor(processor);
-            processor = interceptor;
-        }
-
-        return wrappedEndpoint.createConsumer(processor);
+        return consumer;
     }
 
 
@@ -271,8 +274,10 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      */
     @Override
     public Producer createProducer() throws Exception {
+        Mina2Producer producer = (Mina2Producer)wrappedEndpoint.createProducer();
+
         if (sslContext != null) {
-            DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getConnectorConfig().getFilterChain();
+            DefaultIoFilterChainBuilder filterChain = producer.getFilterChain();
             if (!filterChain.contains("ssl")) {
                 HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
                 filter.setUseClientMode(true);
@@ -282,11 +287,10 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
                 filterChain.addFirst("ssl", filter);
             }
         }
-
         return Hl7v2InterceptorUtils.adaptProducerChain(
                 getProducerInterceptorChain(),
                 this,
-                wrappedEndpoint.createProducer());
+                producer);
     }
 
 
@@ -535,7 +539,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      * @return
      *      the wrapped MINA endpoint.
      */
-    public MinaEndpoint getWrappedEndpoint() {
+    public Mina2Endpoint getWrappedEndpoint() {
         return wrappedEndpoint;
     }
 
@@ -586,7 +590,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
         return wrappedEndpoint.getComponent();
     }
 
-    public MinaConfiguration getConfiguration() {
+    public Mina2Configuration getConfiguration() {
         return wrappedEndpoint.getConfiguration();
     }
 

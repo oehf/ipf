@@ -42,26 +42,26 @@ class MultiplastRouteBuilder extends SpringRouteBuilder {
                 new MultiplastAggregationStrategy(),
                 privilegedThreadPool)
 
-        from('mina:tcp://localhost:8000?textline=true&sync=true')
+        from('mina2:tcp://localhost:8000?textline=true&sync=true')
             .process {
                 assert it.in.body == 'abc'
                 Exchanges.resultMessage(it).body = '123'
             }
-            .delay(3000L)
+            .delay(1000L)
         
-        from('mina:tcp://localhost:8001?textline=true&sync=true')
+        from('mina2:tcp://localhost:8001?textline=true&sync=true')
             .process {
                 assert it.in.body == 'def'
                 Exchanges.resultMessage(it).body = '456'
             }
-            .delay(3000L)
+            .delay(1000L)
         
-        from('mina:tcp://localhost:8002?textline=true&sync=true')
+        from('mina2:tcp://localhost:8002?textline=true&sync=true')
             .process {
                 assert it.in.body == 'ghi'
                 Exchanges.resultMessage(it).body = '789'
             }
-            .delay(3000L)
+            .delay(1000L)
 
         from('direct:abc')
             .process {
@@ -69,7 +69,7 @@ class MultiplastRouteBuilder extends SpringRouteBuilder {
                 assertSubject()
                 Exchanges.resultMessage(it).body = 'ijk'
             }
-            .delay(3000L)
+            .delay(1000L)
 
         from('direct:def')
             .process {
@@ -77,7 +77,7 @@ class MultiplastRouteBuilder extends SpringRouteBuilder {
                 assertSubject()
                 Exchanges.resultMessage(it).body = 'lmn'
             }
-            .delay(3000L)
+            .delay(1000L)
 
         from('direct:ghi')
             .process {
@@ -85,7 +85,7 @@ class MultiplastRouteBuilder extends SpringRouteBuilder {
                 assertSubject()
                 Exchanges.resultMessage(it).body = 'opr'
             }
-            .delay(3000L)
+            .delay(1000L)
     }
 
     private void assertSubject(){

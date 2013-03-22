@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
+
 import static org.junit.Assert.*
 
 import org.apache.camel.CamelExchangeException
@@ -243,7 +244,7 @@ class TestIti8 extends MllpTestContainer {
         assertEquals('UTF-8', endpoint1.charsetName)
         assertEquals('ISO-8859-1', endpoint2.charsetName)
     }
-    
+
     @Test
     void testSecureEndpoint() {
         final String body = getMessageString('ADT^A01', '2.3.1')
@@ -256,7 +257,23 @@ class TestIti8 extends MllpTestContainer {
     void testUnsecureProducer() {
         final String body = getMessageString('ADT^A01', '2.3.1')
         def endpointUri = 'xds-iti8://localhost:18087'
+        send(endpointUri, body)
+        fail()
+    }
+
+    @Test
+    void testSecureEndpointWithCamelJsseConfigOk() {
+        final String body = getMessageString('ADT^A01', '2.3.1')
+        def endpointUri = 'xds-iti8://localhost:18088?sslContextParameters=#sslContextParameters'
         def msg = send(endpointUri, body)
+        assertACK(msg)
+    }
+
+    @Test(expected=CamelExchangeException.class)
+    void testSecureEndpointWithCamelJsseConfigClientFails() {
+        final String body = getMessageString('ADT^A01', '2.3.1')
+        def endpointUri = 'xds-iti8://localhost:18088'
+        send(endpointUri, body)
         fail()
     }
 }

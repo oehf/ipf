@@ -49,7 +49,7 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
     @Test
     void endpointManagedType() throws Exception {
         ObjectName on = queryForNamedObjects(
-                'org.apache.camel:*,type=endpoints,name=\"mina:tcp:*\"')
+                'org.apache.camel:*,type=endpoints,name=\"mina2:tcp:*\"')
         ObjectInstance oi = getMBeanServer().getObjectInstance(on)
         assertEquals(MllpEndpoint.class.getCanonicalName(), oi.getClassName());
     }
@@ -57,12 +57,12 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
     @Test
     void endpointAttributes() throws Exception {
         ObjectName on = queryForNamedObjects(
-                'org.apache.camel:*,type=endpoints,name=\"mina:tcp:*\"')
+                'org.apache.camel:*,type=endpoints,name=\"mina2:tcp:*\"')
         assertEquals(SomeMllpItiComponent.class.getCanonicalName(),
                 (String) getMBeanServer().getAttribute(on, "ComponentType"));
         assertEquals(true,
                 ((Boolean) getMBeanServer().getAttribute(on, "Audit")).booleanValue());
-        assertEquals(30000L,
+        assertEquals(3000L,
                 ((Long) getMBeanServer().getAttribute(on, "Timeout")).longValue());
         assertEquals(true,
                 ((Boolean) getMBeanServer().getAttribute(on, "SslSecure")).booleanValue());

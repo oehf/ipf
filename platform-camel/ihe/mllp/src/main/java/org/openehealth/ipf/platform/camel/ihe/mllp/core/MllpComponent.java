@@ -18,8 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
-import org.apache.camel.component.mina.MinaComponent;
-import org.apache.camel.component.mina.MinaEndpoint;
+import org.apache.camel.component.mina2.Mina2Component;
+import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
@@ -41,7 +41,7 @@ import java.util.Map;
  * 
  * @author Dmytro Rud
  */
-public abstract class MllpComponent<T extends MllpAuditDataset> extends MinaComponent implements Hl7v2ConfigurationHolder {
+public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Component implements Hl7v2ConfigurationHolder {
     private static final transient Logger LOG = LoggerFactory.getLogger(MllpComponent.class);
     
     public static final String ACK_TYPE_CODE_HEADER = ConsumerAdaptingInterceptor.ACK_TYPE_CODE_HEADER;
@@ -76,7 +76,7 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends MinaComp
     {
         // replace URL parts
         int pos = uri.indexOf(":");
-        uri = new StringBuilder(uri).replace(0, pos, "mina:tcp").toString();
+        uri = new StringBuilder(uri).replace(0, pos, "mina2:tcp").toString();
         remaining = "tcp://" + remaining;
 
         // extract & exclude parameters which cannot be handled by camel-mina
@@ -147,13 +147,14 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends MinaComp
         
         // construct the endpoint
         Endpoint endpoint = super.createEndpoint(uri, remaining, parameters);
-        MinaEndpoint minaEndpoint = (MinaEndpoint) endpoint;
+        Mina2Endpoint minaEndpoint = (Mina2Endpoint) endpoint;
 
         SSLContext sslContext = secure ? resolveAndRemoveReferenceParameter(
                 parameters, 
                 "sslContext", 
                 SSLContext.class,
                 SSLContext.getDefault()) : null;
+
 
         List<Hl7v2Interceptor> customInterceptors = resolveAndRemoveReferenceListParameter(
                 parameters, "interceptors", Hl7v2Interceptor.class);

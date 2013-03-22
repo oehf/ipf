@@ -65,7 +65,7 @@ class TestMultiplast {
 
     
     private String endpoint(int port) {
-        return "mina:tcp://localhost:${port}?sync=true&lazySessionCreation=true&minaLogger=true&textline=true"
+        return "mina2:tcp://localhost:${port}?sync=true&lazySessionCreation=true&minaLogger=true&textline=true"
     }
 
     private String ep(String key) {

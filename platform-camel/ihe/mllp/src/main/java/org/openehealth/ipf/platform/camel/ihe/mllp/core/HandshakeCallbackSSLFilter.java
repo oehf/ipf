@@ -15,19 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import org.apache.mina.common.IoFilter;
-import org.apache.mina.common.IoSession;
-import org.apache.mina.filter.SSLFilter;
+
+import org.apache.mina.core.filterchain.IoFilter;
+import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.ssl.SslFilter;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
 
 /**
- * {@link IoFilter} similar to an {@link SSLFilter} that provides a
+ * {@link IoFilter} similar to an {@link SslFilter} that provides a
  * callbacks to handle a handshake exception.
  */
-public class HandshakeCallbackSSLFilter extends SSLFilter {
+public class HandshakeCallbackSSLFilter extends SslFilter {
     /**
      * Callback interface for dealing with handshake failures.
      */

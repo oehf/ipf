@@ -40,23 +40,23 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mina</artifactId>
+            <artifactId>camel-mina2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.mina</groupId>
             <artifactId>mina-core</artifactId>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.apache.mina</groupId>
             <artifactId>mina-filter-ssl</artifactId>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
         </dependency>
 
         <!-- dependencies for test -->
-        <dependency>
+        <!--dependency>
             <groupId>org.apache.mina</groupId>
             <artifactId>mina-integration-spring</artifactId>
             <exclusions>
@@ -66,7 +66,7 @@
                 </exclusion>
             </exclusions>
             <scope>test</scope>
-        </dependency>
+        </dependency-->
     </dependencies>
 
     <build>
