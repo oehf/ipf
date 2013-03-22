@@ -176,6 +176,7 @@
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-pixpdq/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-pixpdqv3/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-xds/${project.version}</bundle>
+        <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-xds/${project.version}</bundle>
     </feature>
 
     <feature name="ipf-commands" description="IPF Karaf Commands" version="${project.version}">
@@ -259,8 +260,7 @@
     <feature name="ipf-amq" version="${project.version}" resolver='(obr)'>
         <feature version="${project.version}">ipf-specs</feature>
         <bundle start-level='20' dependency="true">mvn:org.apache.geronimo.specs/geronimo-j2ee-management_1.1_spec/1.0.1</bundle>
-        <bundle start-level='50'>mvn:org.apache.activemq/activemq-core/${activemq-version}</bundle>
-        <bundle start-level='50'>mvn:org.apache.activemq/kahadb/${activemq-version}</bundle>
+        <bundle start-level='50'>mvn:org.apache.activemq/activemq-osgi/${activemq-version}</bundle>
     </feature>
 
 </features>

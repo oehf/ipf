@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * @author Boris Stanojevic
  */
-@Command(scope = "ipf", name = "list", description="Lists all Groovy Extension Methods available")
+@Command(scope = "ipf", name = "listextensions", description="Lists all Groovy Extension Methods available")
 public class ListExtensionMethodsCommand extends OsgiCommandSupport {
 
 
