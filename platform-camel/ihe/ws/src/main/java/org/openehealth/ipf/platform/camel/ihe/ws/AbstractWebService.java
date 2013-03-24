@@ -22,10 +22,12 @@ import java.util.Map;
 
 import javax.xml.ws.handler.MessageContext;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
 import org.apache.commons.lang3.Validate;
+import org.apache.cxf.binding.soap.SoapFault;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
@@ -34,6 +36,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
  *
  * @author Jens Riemschneider
  */
+@Slf4j
 abstract public class AbstractWebService {
     private DefaultWsConsumer consumer;
 
@@ -51,7 +54,7 @@ abstract public class AbstractWebService {
     protected Exchange process(
             Object body, 
             Map<String, Object> additionalHeaders,
-            ExchangePattern exchangePattern) 
+            ExchangePattern exchangePattern)
     {
         Validate.notNull(consumer);
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
@@ -71,6 +74,12 @@ abstract public class AbstractWebService {
 
         // process
         consumer.process(exchange);
+
+        Exception exception = Exchanges.extractException(exchange, false);
+        if (exception instanceof SoapFault) {
+            log.debug("Rethrowing SOAP fault occurred in the route", exception);
+            throw (SoapFault) exception;
+        }
 
         // handle resulting message and headers
         Message resultMessage = Exchanges.resultMessage(exchange);

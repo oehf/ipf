@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
+import org.apache.cxf.binding.soap.SoapFault
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Unmarshaller
 import org.apache.camel.impl.DefaultExchange
@@ -38,12 +39,15 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
  */
 class TestIti41 extends StandardTestContainer {
 
-    def static CONTEXT_DESCRIPTOR = 'iti-41.xml'
+    static final String CONTEXT_DESCRIPTOR = 'iti-41.xml'
 
-    def SERVICE1 = "xds-iti41://localhost:${port}/xds-iti41-service1"
-    def SERVICE2 = "xds-iti41://localhost:${port}/xds-iti41-service2"
-    def SERVICE3 = "xds-iti41://localhost:${port}/xds-iti41-service3"
-    def SERVICE2_ADDR = "http://localhost:${port}/xds-iti41-service2"
+    final String SERVICE1 = "xds-iti41://localhost:${port}/xds-iti41-service1"
+    final String SERVICE2 = "xds-iti41://localhost:${port}/xds-iti41-service2"
+    final String SERVICE3 = "xds-iti41://localhost:${port}/xds-iti41-service3"
+    final String SERVICE2_ADDR = "http://localhost:${port}/xds-iti41-service2"
+
+    final String SERVICE_SOAP_FAULT_UNHANDLED = "xds-iti41://localhost:${port}/soap-fault-unhandled"
+    final String SERVICE_SOAP_FAULT_HANDLED   = "xds-iti41://localhost:${port}/soap-fault-handled"
 
     def request
     def docEntry
@@ -61,6 +65,8 @@ class TestIti41 extends StandardTestContainer {
     void setUp() {
         request = SampleData.createProvideAndRegisterDocumentSet()
         docEntry = request.documents[0].documentEntry
+
+        appContext.getBean('routeBuilder', Iti41TestRouteBuilder).soapFaultUnhandledEndpoint = SERVICE_SOAP_FAULT_UNHANDLED
     }
 
     @Test
@@ -144,4 +150,16 @@ class TestIti41 extends StandardTestContainer {
         docEntry.comments = new LocalizedString(value)
         send(endpoint, request, Response.class)
     }
+
+
+    @Test(expected = SoapFault)
+    void testHandlingOfUnhandledSoapFault() {
+        sendIt(SERVICE_SOAP_FAULT_UNHANDLED, 'fail')
+    }
+
+    @Test()
+    void testHandlingOfHandledSoapFault() {
+        assert SUCCESS == sendIt(SERVICE_SOAP_FAULT_HANDLED, 'ok').status
+    }
+
 }

@@ -147,7 +147,41 @@ public class Exchanges {
 
     /**
      * Extracts the exception handled while processing the given
+     * exchange (if any), and optionally marks the exchange as non-failed.
+     *
+     * @param exchange
+     *      Camel exchange, should be not <code>null</code>.
+     * @param cleanup
+     *      <code>true</code> iff the information about the occurred exception
+     *      should be removed from the given exchange.
+     * @return
+     *      an {@link Exception} instance, or <code>null</code> when no exception was handled.
+     */
+    public static Exception extractException(Exchange exchange, boolean cleanup) {
+        Exception exception = exchange.getException();
+        if (exception != null) {
+            if (cleanup) {
+                exchange.setException(null);
+            }
+        }
+        else if (exchange.getProperty(Exchange.EXCEPTION_CAUGHT) != null) {
+            exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
+            if (cleanup) {
+                exchange.removeProperty(Exchange.EXCEPTION_CAUGHT);
+                exchange.removeProperty(Exchange.ERRORHANDLER_HANDLED);
+            }
+        }
+        return exception;
+    }
+
+
+    /**
+     * Extracts the exception handled while processing the given
      * exchange (if any), and marks the exchange as non-failed.
+     * <p>
+     * This method corresponds to {@link #extractException(org.apache.camel.Exchange, boolean)}
+     * with the second parameter set to <code>true</code>.
+     * </p>
      *
      * @param exchange
      *      Camel exchange, should be not <code>null</code>.
@@ -155,17 +189,7 @@ public class Exchanges {
      *      an {@link Exception} instance, or <code>null</code> when no exception was handled.
      */
     public static Exception extractException(Exchange exchange) {
-        Exception exception = null;
-        if (exchange.isFailed()) {
-            exception = exchange.getException();
-            exchange.setException(null);
-        }
-        else if (exchange.getProperty(Exchange.EXCEPTION_CAUGHT) != null) {
-            exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
-            exchange.removeProperty(Exchange.EXCEPTION_CAUGHT);
-            exchange.removeProperty(Exchange.ERRORHANDLER_HANDLED);
-        }
-        return exception;
+        return extractException(exchange, true);
     }
 
 }

@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
+import org.apache.cxf.binding.soap.SoapFault
+import javax.xml.namespace.QName
 import javax.activation.DataHandler
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.io.IOUtils
@@ -32,6 +34,9 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti4
  * @author Jens Riemschneider
  */
 public class Iti41TestRouteBuilder extends SpringRouteBuilder {
+
+    String soapFaultUnhandledEndpoint
+
     @Override
     public void configure() throws Exception {
         from('xds-iti41:xds-iti41-service1?rejectionHandlingStrategy=#rejectionHandlingStrategy')
@@ -48,6 +53,19 @@ public class Iti41TestRouteBuilder extends SpringRouteBuilder {
                 def response = new Response(hasExtraMetadata ? SUCCESS : FAILURE)
                 Exchanges.resultMessage(it).body = response
             }
+
+        // route which ends with a SOAP Fault
+        from('xds-iti41:soap-fault-unhandled')
+                .throwException(new SoapFault('SOAP fault in the test route', new QName('http://openehealth.org/ipf', 'soapfault')))
+
+        // route which handles a SOAP fault internally and returns a normal response
+        from('xds-iti41:soap-fault-handled')
+            .onException(SoapFault)
+                .handled(true)
+                .end()
+            .setHeader('soapFaultUnhandledEndpoint', constant(soapFaultUnhandledEndpoint))
+            .recipientList(header('soapFaultUnhandledEndpoint'))
+            .setBody(constant(new Response(SUCCESS)))
     }
 
 
