@@ -61,9 +61,9 @@ public class Iti41TestRouteBuilder extends SpringRouteBuilder {
         // route which handles a SOAP fault internally and returns a normal response
         from('xds-iti41:soap-fault-handled')
             .onException(SoapFault)
-                .handled(true)
+                .process { Exchanges.extractException(it) }     // clean exchange
                 .end()
-            .setHeader('soapFaultUnhandledEndpoint', constant(soapFaultUnhandledEndpoint))
+            .setHeader('soapFaultUnhandledEndpoint') { soapFaultUnhandledEndpoint }
             .recipientList(header('soapFaultUnhandledEndpoint'))
             .setBody(constant(new Response(SUCCESS)))
     }
