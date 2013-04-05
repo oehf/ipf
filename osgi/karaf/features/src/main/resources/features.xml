@@ -260,8 +260,8 @@
     <feature name="ipf-amq" version="${project.version}" resolver='(obr)'>
         <feature version="${project.version}">ipf-specs</feature>
         <bundle start-level='20' dependency="true">mvn:org.apache.geronimo.specs/geronimo-j2ee-management_1.1_spec/1.0.1</bundle>
+        <bundle start-level='20'>mvn:org.apache.xbean/xbean-spring/${xbean-spring-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.activemq/activemq-osgi/${activemq-version}</bundle>
-        <bundle start-level='50'>mvn:org.apache.activemq/activemq-karaf/${activemq-version}</bundle>
     </feature>
 
 </features>
