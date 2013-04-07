@@ -52,7 +52,7 @@
         <!-- Dependency version properties -->
         <activemq-version>5.8.0</activemq-version>
         <aspectj-version>1.7.2</aspectj-version>
-        <camel-version>2.10.4</camel-version>
+        <camel-version>2.11.0</camel-version>
         <cglib-version>2.2.2</cglib-version>
         <commons-codec-version>1.7</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
@@ -88,7 +88,7 @@
         <lombok-version>0.11.4</lombok-version>
         <mdht-version>1.2.0.201212201425</mdht-version>
         <metabuilder-version>1.1.6-p2</metabuilder-version>
-        <mina-version>1.1.7</mina-version>
+        <mina2-version>2.0.7</mina2-version>
         <oht-atna-version>2.0.0</oht-atna-version>
         <oht-cdar-version>1.1.0-p2</oht-cdar-version>
         <osgi-api-version>1.4.0</osgi-api-version>
@@ -515,19 +515,19 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>camel-mina</artifactId>
+                <artifactId>camel-mina2</artifactId>
                 <version>${camel-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-spring</artifactId>
                 <version>${camel-version}</version>
-                <exclusions>
+                <!--exclusions>
                     <exclusion>
                         <groupId>org.springframework</groupId>
                         <artifactId>spring-aop</artifactId>
                     </exclusion>
-                </exclusions>
+                </exclusions-->
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
@@ -589,17 +589,7 @@
             <dependency>
                 <groupId>org.apache.mina</groupId>
                 <artifactId>mina-core</artifactId>
-                <version>${mina-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.mina</groupId>
-                <artifactId>mina-filter-ssl</artifactId>
-                <version>${mina-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.mina</groupId>
-                <artifactId>mina-integration-spring</artifactId>
-                <version>${mina-version}</version>
+                <version>${mina2-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -1415,6 +1405,17 @@
             <id>servicemix</id>
             <name>Apache ServiceMix Repository</name>
             <url>http://svn.apache.org/repos/asf/servicemix/m2-repo/</url>
+        </repository>
+        <repository>
+            <id>apache-camel-211</id>
+            <name>Apache 211 Maven Repository</name>
+            <url>https://repository.apache.org/content/repositories/orgapachecamel-073/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
     <profiles>

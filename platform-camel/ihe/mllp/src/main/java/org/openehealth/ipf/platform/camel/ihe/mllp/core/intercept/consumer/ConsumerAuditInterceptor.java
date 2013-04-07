@@ -19,7 +19,7 @@ import java.net.InetSocketAddress;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.component.mina.MinaConstants;
+import org.apache.camel.component.mina2.Mina2Constants;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
@@ -48,8 +48,8 @@ public class ConsumerAuditInterceptor<T extends MllpAuditDataset>
     @Override
     public void determineParticipantsAddresses(Exchange exchange, MllpAuditDataset auditDataset) throws Exception {
         Message message = exchange.getIn();
-        auditDataset.setLocalAddress(addressFromHeader(message, MinaConstants.MINA_LOCAL_ADDRESS));
-        auditDataset.setRemoteAddress(addressFromHeader(message, MinaConstants.MINA_REMOTE_ADDRESS));
+        auditDataset.setLocalAddress(addressFromHeader(message, Mina2Constants.MINA_LOCAL_ADDRESS));
+        auditDataset.setRemoteAddress(addressFromHeader(message, Mina2Constants.MINA_REMOTE_ADDRESS));
     }
     
     /**

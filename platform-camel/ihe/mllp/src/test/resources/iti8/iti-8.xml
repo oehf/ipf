@@ -11,24 +11,33 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:lang="http://www.springframework.org/schema/lang"
        xmlns:camel="http://camel.apache.org/schema/spring"
-       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd
-http://www.springframework.org/schema/lang
-http://www.springframework.org/schema/lang/spring-lang.xsd
-http://www.springframework.org/schema/util
-http://www.springframework.org/schema/util/spring-util.xsd
-http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 ">
 
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true" />
         <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>   
+    </camel:camelContext>
+
+    <camel:sslContextParameters id="sslContextParameters">
+        <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
+            <camel:keyStore
+                    resource="some-keystore"
+                    password="changeit"/>
+        </camel:keyManagers>
+        <camel:trustManagers>
+            <camel:keyStore
+                    resource="some-keystore"
+                    password="changeit"/>
+        </camel:trustManagers>
+
+        <camel:serverParameters clientAuthentication="REQUIRE"/>
+    </camel:sslContextParameters>
     
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8TestRouteBuilder">
@@ -41,19 +50,26 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <bean id="alternativeCodec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
         <property name="charset" value="utf-8"/>
     </bean>
-    
-    <!-- configure the server -->
-    <bean id="sslContext" class="org.apache.mina.integration.spring.ssl.SSLContextFactoryBean">
+
+    <bean id="sslContext" class="javax.net.ssl.SSLContext"
+          factory-bean="sslContextFactory"
+          factory-method="newInstance" />
+
+    <bean id="sslContextFactory" class="org.apache.mina.filter.ssl.SslContextFactory">
         <property name="keyManagerFactoryAlgorithm" value="SunX509"/>
         <property name="keyManagerFactoryKeyStore" ref="keyStore"/>
         <property name="keyManagerFactoryKeyStorePassword" value="changeit"/>
         <property name="trustManagerFactoryAlgorithmUseDefault" value="true"/>
         <property name="trustManagerFactoryKeyStore" ref="keyStore"/>
     </bean>
-    
-    <bean id="keyStore" class="org.apache.mina.integration.spring.ssl.KeyStoreFactoryBean">
-        <property name="resource" value="some-keystore"/>
+
+    <bean id="keyStore" class="java.security.KeyStore"
+          factory-bean="keyStoreFactory"
+          factory-method="newInstance" />
+
+    <bean id="keyStoreFactory" class="org.apache.mina.filter.ssl.KeyStoreFactory">
+        <property name="dataUrl" value="some-keystore"/>
         <property name="password" value="changeit"/>
     </bean>
-    
+
 </beans>
