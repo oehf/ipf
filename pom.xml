@@ -13,9 +13,10 @@
         
         <!-- Report version properties -->
         <site-plugin-version>3.0</site-plugin-version>
-        <surefire-report-plugin-version>2.8.1</surefire-report-plugin-version>
+        <cobertura-plugin-version>2.5.2</cobertura-plugin-version>
+        <surefire-report-plugin-version>2.14</surefire-report-plugin-version>
         <jxr-plugin-version>2.1</jxr-plugin-version>
-        <project-info-reports-plugin-version>2.1.2</project-info-reports-plugin-version>
+        <project-info-reports-plugin-version>2.6</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.5</maven-dsldoc-plugin-version>
 
         <!-- Default Bundle Properties -->
@@ -41,10 +42,10 @@
         <bundle-plugin-version>2.0.1</bundle-plugin-version>
         <compiler-plugin-version>3.0</compiler-plugin-version>
         <eclipse-plugin-version>2.8</eclipse-plugin-version>
-        <enforcer-plugin-version>1.0-beta-1</enforcer-plugin-version>
-		<groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
+        <enforcer-plugin-version>1.2</enforcer-plugin-version>
+        <groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
         <jar-plugin-version>2.3.1</jar-plugin-version>
-        <javadoc-plugin-version>2.8</javadoc-plugin-version>
+        <javadoc-plugin-version>2.9</javadoc-plugin-version>
         <release-plugin-version>2.1</release-plugin-version>
         <resources-plugin-version>2.4.3</resources-plugin-version>
         <sources-plugin-version>2.2</sources-plugin-version>
@@ -104,6 +105,8 @@
     </properties>
 
     <url>http://www.openehealth.org/display/ipf2</url>
+
+    <description>IPF is an eHealth Integration Framework</description>
 
     <organization>
         <name>Open eHealth Foundation</name>
@@ -768,6 +771,14 @@
                         <groupId>org.hibernate.javax.persistence</groupId>
                         <artifactId>hibernate-jpa-2.0-api</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.solr</groupId>
+                        <artifactId>solr-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.lucene</groupId>
+                        <artifactId>lucene-snowball</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -1023,6 +1034,11 @@
                     <version>${surefire-report-plugin-version}</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>${cobertura-plugin-version}</version>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jxr-plugin</artifactId>
                     <version>${jxr-plugin-version}</version>
@@ -1239,7 +1255,6 @@
                         <projectnature>org.eclipse.jdt.groovy.core.groovyNature</projectnature>
                     </projectnatures>
                     <downloadSources>true</downloadSources>
-                    <preferredSourceCacheDir>${settings.localRepository}</preferredSourceCacheDir>
                     <ajdtVersion>none</ajdtVersion>
                     <classpathContainers>
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
@@ -1308,6 +1323,11 @@
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>${project-info-reports-plugin-version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>${cobertura-plugin-version}</version>
             </plugin>
             <plugin>
                 <groupId>org.openehealth.ipf.labs.maven</groupId>
