@@ -11,16 +11,10 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:lang="http://www.springframework.org/schema/lang"
        xmlns:camel="http://camel.apache.org/schema/spring"
-       xmlns:util="http://www.springframework.org/schema/util"      
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/lang
-http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
-http://www.springframework.org/schema/util
-http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd
 ">
@@ -28,37 +22,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <camel:jmxAgent id="agent" disabled="true"/>
         <camel:routeBuilder ref="routeBuilder"/>
     </camel:camelContext>
-
-    <!--camel:sslContextParameters id="sslContextParameters">
-        <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
-            <camel:keyStore resource="iti21/keystore" password="changeit"/>
-        </camel:keyManagers>
-        <camel:trustManagers>
-            <camel:keyStore resource="iti21/keystore" password="changeit"/>
-        </camel:trustManagers>
-
-        <camel:serverParameters clientAuthentication="MUST"/>
-    </camel:sslContextParameters>
-
-    <camel:sslContextParameters id="sslContextParametersWithoutKeystore">
-        <camel:trustManagers>
-            <camel:keyStore resource="iti21/keystore" password="changeit"/>
-        </camel:trustManagers>
-
-        <camel:serverParameters clientAuthentication="WANT"/>
-    </camel:sslContextParameters>
-
-    <camel:sslContextParameters id="sslContextParametersOther">
-        <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
-            <camel:keyStore
-                    resource="iti21/bogus.cert" password="boguspw"/>
-        </camel:keyManagers>
-        <camel:trustManagers>
-            <camel:keyStore resource="iti21/keystore" password="changeit"/>
-        </camel:trustManagers>
-
-        <camel:serverParameters clientAuthentication="WANT"/>
-    </camel:sslContextParameters-->
 
     <bean id="routeBuilder"
           class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.Iti21TestRouteBuilder">

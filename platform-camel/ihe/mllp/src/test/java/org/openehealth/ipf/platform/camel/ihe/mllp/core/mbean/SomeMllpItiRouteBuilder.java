@@ -25,7 +25,7 @@ public class SomeMllpItiRouteBuilder extends SpringRouteBuilder {
     
     @Override
     public void configure() throws Exception {
-        from("some-mllp-iti://0.0.0.0:18081?audit=true&" +
+        from("some-mllp-iti://0.0.0.0:18181?audit=true&" +
                 "secure=true&" +
                 "sslContext=#sslContext&" +
                 "sslProtocols=SSLv3,TLSv1&" +
