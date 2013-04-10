@@ -49,9 +49,9 @@ public class OsgiSpringConfigurationPostProcessor implements OsgiBeanFactoryPost
             ConfigurableListableBeanFactory beanFactory) throws BeansException,
             InvalidSyntaxException, BundleException {
 
-        SpringRegistry registry = new SpringRegistry();
+        OsgiServiceRegistry registry = new OsgiServiceRegistry(bundleContext);
         registry.setBeanFactory(beanFactory);
-        
+
         for (OsgiSpringConfigurer osc: osgiSpringConfigurers){
             Collection configurations = osc.lookup(bundleContext, registry);
             if (configurations != null && configurations.size() > 0){

@@ -51,8 +51,7 @@
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saxon/9.1.0.8_2</bundle>
         <bundle start-level='20' dependency="true">mvn:org.openhealthtools.ihe/atna-bundle/${oht-atna-version}</bundle>
         <bundle start-level='10' dependency="true">mvn:org.antlr/com.springsource.antlr/2.7.6</bundle>
-        <bundle start-level='10' dependency="true">mvn:org.codehaus.groovy/groovy/${groovy-version}</bundle>
-        <bundle start-level='10' dependency="true">mvn:org.codehaus.groovy/groovy-xml/${groovy-version}</bundle>
+        <bundle start-level='10' dependency="true">mvn:org.codehaus.groovy/groovy-all/${groovy-version}</bundle>
         <bundle start-level='10' dependency="true">mvn:org.ow2.asm/asm-all/4.0</bundle>
         <bundle start-level='50'>mvn:org.openehealth.ipf.commons/ipf-commons-core/${project.version}</bundle>
         <bundle start-level='50'>mvn:org.openehealth.ipf.commons/ipf-commons-xml/${project.version}</bundle>
@@ -176,7 +175,6 @@
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-pixpdq/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-pixpdqv3/${project.version}</bundle>
         <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-osgi-ihe-route-xds/${project.version}</bundle>
-        <bundle start-level='100'>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-xds/${project.version}</bundle>
     </feature>
 
     <feature name="ipf-commands" description="IPF Karaf Commands" version="${project.version}">
@@ -236,6 +234,7 @@
         <bundle start-level='50'>mvn:org.apache.cxf/cxf-rt-databinding-jaxb/${cxf-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.cxf/cxf-rt-transports-http/${cxf-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.cxf/cxf-rt-ws-policy/${cxf-version}</bundle>
+        <bundle start-level='50'>mvn:org.apache.cxf.karaf/cxf-karaf-commands/${cxf-version}</bundle>
     </feature>
 
     <feature name="ipf-jaxb" version="${project.version}" resolver='(obr)'>

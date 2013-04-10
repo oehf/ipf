@@ -14,7 +14,6 @@
 
     <properties>
         <aries-blueprint-version>0.4</aries-blueprint-version>
-        <cxf-bundle-version>2.6.1</cxf-bundle-version>
         <equinox-cm-version>1.0.100-v20090520-1800</equinox-cm-version>
         <fileinstall-version>1.0.0</fileinstall-version>
         <javamail-api-version>1.4.4</javamail-api-version>
@@ -25,7 +24,7 @@
         <springsource-jdom-version>1.1.0</springsource-jdom-version>
         <jms-version>1.1.0</jms-version>
         <neethi-version>3.0.2</neethi-version>
-        <osgi-compendium-version>4.2.0</osgi-compendium-version>
+        <osgi-compendium-version>4.3.1</osgi-compendium-version>
         <pax-web-version>2.1.2</pax-web-version>
         <servicemix-jaxb-api-version>2.2.0</servicemix-jaxb-api-version>
         <servicemix-jaxws-api-version>2.2.0</servicemix-jaxws-api-version>
@@ -67,7 +66,7 @@
         <springsource-wsdl-version>1.6.1</springsource-wsdl-version>
         <serializer-version>2.7.1-v200806030322</serializer-version>
         <stax2-api-version>3.1.1</stax2-api-version>
-        <woodstox-core-asl-version>4.1.4</woodstox-core-asl-version>
+        <woodstox-core-asl-version>4.2.0</woodstox-core-asl-version>
         <ws-xmlschema-version>2.0.1</ws-xmlschema-version>
         <xalan-version>2.7.1-p1</xalan-version>
         <xerces-impl-osgi-version>2.9.0-v200805270400</xerces-impl-osgi-version>
@@ -146,11 +145,11 @@
             <param>mvn:org.objectweb.asm/com.springsource.org.objectweb.asm/${springsource-asm-version}@start</param>
             <param>mvn:net.sourceforge.ehcache/com.springsource.net.sf.ehcache/${springsource-ehcache-version}@start</param>
             <param>mvn:xml-resolver/xml-resolver/${xml-resolver-version}@start</param>
-            <param>mvn:org.apache.activemq/activemq-core/${activemq-version}@start</param>
-            <param>mvn:org.apache.activemq/kahadb/${activemq-version}@start</param>
+            <param>mvn:org.apache.activemq/activemq-osgi/${activemq-version}@start</param>
+            <param>mvn:org.apache.xbean/xbean-spring/${xbean-spring-version}@start</param>
             <param>mvn:org.apache.camel/camel-spring/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-jms/${camel-version}@start</param>
-            <param>mvn:org.apache.camel/camel-mina/${camel-version}@start</param>
+            <param>mvn:org.apache.camel/camel-mina2/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-core/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-http/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-jetty/${camel-version}@start</param>
@@ -164,7 +163,7 @@
             <param>mvn:org.apache.cxf/cxf-rt-ws-addr/${cxf-version}@start</param>
             <param>mvn:org.apache.cxf/cxf-rt-ws-policy/${cxf-version}@start</param>
             <param>mvn:org.apache.cxf/cxf-rt-databinding-jaxb/${cxf-version}@start</param>
-            <param>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.mina/${servicemix-mina-version}@start</param>
+            <param>mvn:org.apache.mina/mina-core/${mina2-version}@start</param>
             <param>mvn:javax.wsdl/com.springsource.javax.wsdl/${springsource-wsdl-version}@start</param>
             <param>mvn:javax.mail/mail/${javamail-api-version}@start</param>
             <param>mvn:org.apache.geronimo.specs/geronimo-ws-metadata_2.0_spec/${geronimo-ws-api-version}@start</param>
