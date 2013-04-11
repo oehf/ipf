@@ -184,17 +184,17 @@
 
     <feature name="ipf-spring" version="${project.version}">
         <bundle start-level='20'>mvn:org.aopalliance/com.springsource.org.aopalliance/1.0.0</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-core/3.1.4.RELEASE</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-context/3.1.4.RELEASE</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-beans/3.1.4.RELEASE</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-expression/3.1.4.RELEASE</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-aop/3.1.4.RELEASE</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-asm/3.1.4.RELEASE</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-jdbc/3.1.4.RELEASE</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-jms/3.1.4.RELEASE</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-tx/3.1.4.RELEASE</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-orm/3.1.4.RELEASE</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-web/3.1.4.RELEASE</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-core/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-context/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-beans/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-expression/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-aop/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-asm/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-jdbc/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-jms/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-tx/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-orm/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/spring-web/${spring-version}</bundle>
     </feature>
 
     <feature name="ipf-specs" version="${project.version}" resolver='(obr)'>
@@ -211,7 +211,7 @@
         <bundle start-level='10'>mvn:javax.mail/mail/1.4.4</bundle>
         <bundle start-level='10'>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jsr311-api-1.1.1/2.2.0</bundle>
         <bundle start-level='20'>mvn:org.codehaus.woodstox/stax2-api/3.1.1</bundle>
-        <bundle start-level='20'>mvn:org.codehaus.woodstox/woodstox-core-asl/4.1.4</bundle>
+        <bundle start-level='20'>mvn:org.codehaus.woodstox/woodstox-core-asl/4.2.0</bundle>
         <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-impl/2.2.1.1_2</bundle>
         <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/2.2.1.1_2</bundle>
     </feature>
@@ -234,7 +234,6 @@
         <bundle start-level='50'>mvn:org.apache.cxf/cxf-rt-databinding-jaxb/${cxf-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.cxf/cxf-rt-transports-http/${cxf-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.cxf/cxf-rt-ws-policy/${cxf-version}</bundle>
-        <bundle start-level='50'>mvn:org.apache.cxf.karaf/cxf-karaf-commands/${cxf-version}</bundle>
     </feature>
 
     <feature name="ipf-jaxb" version="${project.version}" resolver='(obr)'>

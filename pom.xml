@@ -64,7 +64,7 @@
         <commons-lang-version>2.6</commons-lang-version>
         <commons-lang3-version>3.1</commons-lang3-version>
         <commons-math-version>2.2</commons-math-version>
-        <cxf-version>2.7.3</cxf-version>
+        <cxf-version>2.7.4</cxf-version>
         <derby-version>10.9.1.0</derby-version>
         <easymock-version>3.1</easymock-version>
         <ehcache-version>2.6.5</ehcache-version>
@@ -96,7 +96,7 @@
         <quartz-version>2.1.5</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.6.6</slf4j-version>
-        <spring-version>3.1.3.RELEASE</spring-version>
+        <spring-version>3.1.4.RELEASE</spring-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.27</tomcat-version>
         <xbean-spring-version>3.5</xbean-spring-version>
@@ -1429,7 +1429,7 @@
         <repository>
             <id>apache-camel-211</id>
             <name>Apache 211 Maven Repository</name>
-            <url>https://repository.apache.org/content/repositories/orgapachecamel-082/</url>
+            <url>https://repository.apache.org/content/repositories/orgapachecamel-092/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>

@@ -8,8 +8,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/osgi
 http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
-    <import resource="classpath:META-INF/cxf/cxf.xml"/>
-
     <osgi:reference id="xds-iti14" bean-name="xds-iti14" interface="org.apache.camel.Component"/>
 
     <osgi:reference id="xds-iti15" bean-name="xds-iti15" interface="org.apache.camel.Component"/>

@@ -14,13 +14,12 @@
   ~ limitations under the License.
   -->
 <wsp:Policy wsu:Id="DocumentRegistryPolicy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xmlns:wsp="http://www.w3.org/2006/07/ws-policy"
+            xmlns:wsp="http://www.w3.org/ns/ws-policy"
             xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
             xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
             xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702"
             xmlns:t="http://docs.oasis-open.org/ws-sx/ws-trust/200512" xmlns:wsaw="http://www.w3.org/2005/08/addressing"
-            xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
-            xsi:schemaLocation="http://www.w3.org/2006/07/ws-policy http://www.w3.org/2006/07/ws-policy.xsd">
+            xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex">
     <wsp:ExactlyOne>
         <wsp:All>
             <wsam:Addressing wsp:Optional="false">
