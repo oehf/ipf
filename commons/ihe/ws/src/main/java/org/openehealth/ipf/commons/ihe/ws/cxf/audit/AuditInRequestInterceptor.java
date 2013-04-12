@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import org.apache.cxf.binding.soap.SoapMessage;
+import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.DocLiteralInInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
@@ -49,7 +50,7 @@ public class AuditInRequestInterceptor extends AbstractAuditInterceptor {
 
         WsAuditDataset auditDataset = getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
-        extractXuaUserNameFromSaml2Assertion(message, auditDataset);
+        extractXuaUserNameFromSaml2Assertion(message, Header.Direction.DIRECTION_IN, auditDataset);
         
         if (wsTransactionConfiguration.isAuditRequestPayload()) {
             auditDataset.setRequestPayload(message.getContent(StringPayloadHolder.class));

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import org.apache.cxf.binding.soap.SoapMessage;
+import org.apache.cxf.headers.Header;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.AddressingProperties;
@@ -58,6 +59,7 @@ public class AuditOutRequestInterceptor extends AbstractAuditInterceptor {
 
         WsAuditDataset auditDataset = getAuditDataset(message);
         auditDataset.setServiceEndpointUrl((String) message.get(Message.ENDPOINT_ADDRESS));
+        extractXuaUserNameFromSaml2Assertion(message, Header.Direction.DIRECTION_OUT, auditDataset);
 
         Object request = extractPojo(message);
 

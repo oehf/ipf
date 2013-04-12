@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42
 
-import javax.xml.bind.JAXBContext
+import org.apache.cxf.binding.soap.SoapHeader
+import org.apache.cxf.helpers.XMLUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
@@ -24,12 +25,18 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest
+import org.openehealth.ipf.commons.xml.XmlUtils
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint
+import org.w3c.dom.Element
+
+import javax.xml.bind.JAXBContext
+import javax.xml.bind.Unmarshaller
+import javax.xml.namespace.QName
+
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import javax.xml.bind.Unmarshaller
-import org.openehealth.ipf.commons.xml.XmlUtils
-import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint
 
 /**
  * Tests the ITI-42 transaction with a webservice and client adapter defined via URIs.
@@ -47,13 +54,20 @@ class TestIti42 extends StandardTestContainer {
     
     def request
     def docEntry
-    
+
+    def static Map<String, ?> camelHeaders
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
     
     @BeforeClass
     static void classSetUp() {
+        Element assertion = XMLUtils.parse(TestIti42.class.classLoader.getResourceAsStream('saml2-assertion-for-xua.xml')).documentElement
+        SoapHeader header = new SoapHeader(new QName(assertion.namespaceURI, assertion.localName), assertion)
+        //header.mustUnderstand = true
+        camelHeaders = [(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS) : [header]]
+
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
@@ -107,32 +121,36 @@ class TestIti42 extends StandardTestContainer {
 
 
     void checkAudit(outcome) {
+        // check registry audit records
         def message = getAudit('C', SERVICE2_ADDR)[0]
         
         assert message.EventIdentification.size() == 1
         assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
+        assert message.ActiveParticipant.size() == 3
         assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 6
+        assert message.children().size() == 7
         
         checkEvent(message.EventIdentification, '110107', 'ITI-42', 'C', outcome)
         checkSource(message.ActiveParticipant[0], 'true')
-        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
+        checkHumanRequestor(message.ActiveParticipant[1], 'alias2<lipse@demo.com>')
+        checkDestination(message.ActiveParticipant[2], SERVICE2_ADDR, 'false')
         checkAuditSource(message.AuditSourceIdentification, 'registryId')
         checkPatient(message.ParticipantObjectIdentification[0])
         checkSubmissionSet(message.ParticipantObjectIdentification[1])
-        
+
+        // check repository audit records
         message = getAudit('R', SERVICE2_ADDR)[0]
         
         assert message.EventIdentification.size() == 1
         assert message.AuditSourceIdentification.size() == 1
-        assert message.ActiveParticipant.size() == 2
+        assert message.ActiveParticipant.size() == 3
         assert message.ParticipantObjectIdentification.size() == 2
-        assert message.children().size() == 6
+        assert message.children().size() == 7
         
         checkEvent(message.EventIdentification, '110106', 'ITI-42', 'R', outcome)
         checkSource(message.ActiveParticipant[0], 'true')
-        checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
+        checkHumanRequestor(message.ActiveParticipant[1], 'alias2<lipse@demo.com>')
+        checkDestination(message.ActiveParticipant[2], SERVICE2_ADDR, 'false')
         checkAuditSource(message.AuditSourceIdentification, 'repositoryId')
         checkPatient(message.ParticipantObjectIdentification[0])
         checkSubmissionSet(message.ParticipantObjectIdentification[1])
@@ -140,6 +158,6 @@ class TestIti42 extends StandardTestContainer {
     
     def sendIt(endpoint, value) {
         docEntry.comments = new LocalizedString(value)
-        return send(endpoint, request, Response.class)
+        return send(endpoint, request, Response.class, camelHeaders)
     }
 }

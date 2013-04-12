@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2013 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+    <saml:Assertion Version="2.0" IssueInstant="2011-03-29T09:44:41Z" ID="_7d8e48d69047d3c3da278b33b8f13485" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+        <saml:Issuer>demo.com</saml:Issuer>
+        <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <ds:SignedInfo>
+                <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+                <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+                <ds:Reference URI="#_7d8e48d69047d3c3da278b33b8f13485">
+                    <ds:Transforms>
+                        <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                        <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                            <ec:InclusiveNamespaces PrefixList="ds saml" xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+                        </ds:Transform>
+                    </ds:Transforms>
+                    <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+                    <ds:DigestValue>SsVSD3gENtKpZTjJBHNovQVXa4o=</ds:DigestValue>
+                </ds:Reference>
+            </ds:SignedInfo>
+            <ds:SignatureValue>Mn+FNBrlyWz5nDBViB1+jNnwL/QDAtE0uxgNT/fi6O+e2/eeXggsPYPSQYwv+EeC 8h9lcJ5nzVKknrO2Ny4Ob3UsrmH3YQdj0iaCABb0EMC8tFV1M1taD4USLscUhucd hTl2WQEj/rgCtHzratkBXOlmumTUu+ra8P/1Aef0oO0=</ds:SignatureValue>
+            <ds:KeyInfo>
+                <ds:KeyName>demo.com</ds:KeyName>
+                <ds:X509Data>
+                    <ds:X509SubjectName>emailAddress=info@demo.com,CN=demo.com,OU=Development,O=demo,ST=Utrecht,C=NL</ds:X509SubjectName>
+                    <ds:X509Certificate>MI ... mQ=</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </ds:Signature>
+        <saml:Subject>
+            <saml:NameID SPProvidedID="alias2" Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">lipse</saml:NameID>
+            <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer"/>
+        </saml:Subject>
+        <saml:Conditions NotOnOrAfter="2011-03-29T09:54:40Z" NotBefore="2011-03-29T09:44:40Z">
+            <saml:AudienceRestriction>
+                <saml:Audience>http://blabla</saml:Audience>
+            </saml:AudienceRestriction>
+        </saml:Conditions>
+    </saml:Assertion>
+</wsse:Security>

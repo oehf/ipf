@@ -15,25 +15,27 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.cxf.binding.soap.Soap12;
 import org.apache.cxf.binding.soap.SoapMessage;
+import org.apache.cxf.headers.Header;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
-import org.apache.cxf.ws.addressing.impl.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
+import org.apache.cxf.ws.addressing.impl.AddressingPropertiesImpl;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
-import org.springframework.util.xml.SimpleNamespaceContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.xpath.*;
+import javax.xml.namespace.QName;
+import javax.xml.xpath.XPathExpressionException;
 import java.util.List;
 
 /**
@@ -58,34 +60,10 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      */
     public static final String WSSE_NS_URI = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
 
-    private static final SimpleNamespaceContext WSS_NS_CONTEXT;
-    static {
-        WSS_NS_CONTEXT = new SimpleNamespaceContext();
-        WSS_NS_CONTEXT.bindNamespaceUri("wsse", WSSE_NS_URI);
-        WSS_NS_CONTEXT.bindNamespaceUri("soap", Soap12.SOAP_NAMESPACE);
-        WSS_NS_CONTEXT.bindNamespaceUri("saml2", "urn:oasis:names:tc:SAML:2.0:assertion");
-    }
-
-    private static final String XUA_EXPRESSION_PREFIX    = "/soap:Envelope/soap:Header/wsse:Security[1]/saml2:Assertion[1]";
-    private static final String XUA_NAME_NODE_EXPRESSION = XUA_EXPRESSION_PREFIX + "/saml2:Subject[1]/saml2:NameID[1]";
-    private static final String XUA_ISSUES_EXPRESSION    = XUA_EXPRESSION_PREFIX + "/saml2:Issuer[1]/text()";
-
-    private static final ThreadLocal<XPathExpression[]> XUA_XPATH_EXPRESSIONS = new ThreadLocal<XPathExpression[]>() {
-        @Override
-        protected XPathExpression[] initialValue() {
-            try {
-                XPath xPath = XPathFactory.newInstance().newXPath();
-                xPath.setNamespaceContext(WSS_NS_CONTEXT);
-                return new XPathExpression[] {
-                    xPath.compile(XUA_NAME_NODE_EXPRESSION),
-                    xPath.compile(XUA_ISSUES_EXPRESSION)
-                };
-            } catch (XPathExpressionException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    };
-
+    /**
+     * XML Namespace URI of SAML 2.0 assertions.
+     */
+    public static final String SAML2_NS_URI = "urn:oasis:names:tc:SAML:2.0:assertion";
 
     /**
      * Audit strategy associated with this interceptor.  
@@ -194,11 +172,46 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
 
 
     /**
+     * Starting from the given source XML element, goes downwards the tree through
+     * the given path, and returns the last element, if it exists.
+     * @param source
+     *      source element.
+     * @param path
+     *      path to go &mdash; a chain of qualified element names.
+     *      On each level, only the first element with the given name will be considered.
+     * @return
+     *      last element in the chain, or <code>null</code> when not found.
+     */
+    private static Element getFirstChildDeep(Element source, QName... path) {
+        Element element = source;
+        for (int i = 0; (element != null) && (i < path.length); ++i) {
+            NodeList nodeList = element.getChildNodes();
+            element = null;
+
+            QName qname = path[i];
+            for (int j = 0; i < nodeList.getLength(); ++j) {
+                Node node = nodeList.item(j);
+                if ((node instanceof Element) &&
+                    qname.getNamespaceURI().equals(node.getNamespaceURI()) &&
+                    qname.getLocalPart().equals(node.getLocalName()))
+                {
+                    element = (Element) node;
+                    break;
+                }
+            }
+        }
+        return element;
+    }
+
+
+    /**
      * Extracts ITI-40 XUA user name from the SAML2 assertion contained
      * in the given CXF message, and stores it in the ATNA audit dataset.
      *
      * @param message
      *      source CXF message.
+     * @param headerDirection
+     *      direction of the header containing the SAML2 assertion.
      * @param auditDataset
      *      target ATNA audit dataset.
      * @throws XPathExpressionException
@@ -206,6 +219,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      */
     protected static void extractXuaUserNameFromSaml2Assertion(
             SoapMessage message,
+            Header.Direction headerDirection,
             WsAuditDataset auditDataset)
                 throws XPathExpressionException
     {
@@ -217,22 +231,36 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
         }
 
         // extract information from SAML2 assertion
-        XPathExpression[] expressions = XUA_XPATH_EXPRESSIONS.get();
-        Node envelopeNode = message.getContent(Node.class);
-        Node nameNode = (Node) expressions[0].evaluate(envelopeNode, XPathConstants.NODE);
-        if (nameNode == null) {
+        Header header = message.getHeader(new QName(WSSE_NS_URI, "Security"));
+        if (! ((header != null) &&
+               headerDirection.equals(header.getDirection()) &&
+               (header.getObject() instanceof Element)))
+        {
             return;
         }
 
-        String issuer = (String) expressions[1].evaluate(envelopeNode, XPathConstants.STRING);
-        String userName = nameNode.getTextContent();
-        if (issuer.isEmpty() || userName.isEmpty()) {
+        Element headerElem = (Element) header.getObject();
+        Element assertionElem = getFirstChildDeep(headerElem, new QName(SAML2_NS_URI, "Assertion"));
+        Element issuerElem = getFirstChildDeep(assertionElem, new QName(SAML2_NS_URI, "Issuer"));
+        Element nameElem = getFirstChildDeep(
+                assertionElem,
+                new QName(SAML2_NS_URI, "Subject"),
+                new QName(SAML2_NS_URI, "NameID"));
+
+        if ((nameElem == null) || (issuerElem == null)) {
+            return;
+        }
+
+        String userName = nameElem.getTextContent();
+        String issuer = issuerElem.getTextContent();
+
+        if (StringUtils.isEmpty(issuer) || StringUtils.isEmpty(userName)) {
             return;
         }
 
         // set ATNA XUA userName element
         StringBuilder sb = new StringBuilder()
-                .append(((Element) nameNode).getAttribute("SPProvidedID"))
+                .append(nameElem.getAttribute("SPProvidedID"))
                 .append('<')
                 .append(userName)
                 .append('@')

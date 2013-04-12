@@ -180,10 +180,12 @@ class StandardTestContainer {
       *          the input object.
       * @param outType
       *          the type of the output object.
+      * @param headers
+      *          optional Camel request message headers.
       * @return the output object.
       */
-     def send(endpoint, input, outType) {
-         Exchange result = send(endpoint, input)
+    def send(endpoint, input, outType, Map headers = null) {
+         Exchange result = send(endpoint, input, headers)
          Exchanges.resultMessage(result).getBody(outType)
      }
 
@@ -193,11 +195,16 @@ class StandardTestContainer {
       *          the endpoint to send the object to.
       * @param input
       *          the input object.
+      * @param headers
+      *          optional Camel request message headers.
       * @return the resulting exchange.
       */
-     def send(endpoint, input) {
+    def send(endpoint, input, Map headers = null) {
          def exchange = new DefaultExchange(camelContext)
-         exchange.in.body = input       
+         exchange.in.body = input
+         if (headers) {
+             exchange.in.headers.putAll(headers)
+         }
          Exchange result = producerTemplate.send(endpoint, exchange)
          if (result.exception) {
              throw result.exception
@@ -246,7 +253,7 @@ class StandardTestContainer {
          // assert source.@AlternativeUserID != null && source.@AlternativeUserID != ''
          checkCode(source.RoleIDCode, '110153', 'DCM')
      }
-     
+
      def checkDestination(destination, httpAddr, requestor) {
          checkDestination(destination, requestor)
          assert destination.@UserID == httpAddr
@@ -267,9 +274,10 @@ class StandardTestContainer {
          assert auditSource.@AuditSourceID == sourceId 
      }
      
-     def checkHumanRequestor(human) {
+     def checkHumanRequestor(human, String name) {
          assert human.@UserIsRequestor == 'true'
-         assert human.@UserID != null 
+         assert human.@UserID == name
+         assert human.@UserName == name
      }
      
      def checkPatient(patient, String... allowedIds = ['id3^^^&1.3&ISO']) {
