@@ -24,6 +24,7 @@
             org.openehealth.ipf.platform.camel.flow.process,
             org.openehealth.ipf.platform.camel.flow,
             org.openehealth.ipf.commons.flow,
+            org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
     </properties>

@@ -24,6 +24,7 @@
             org.openehealth.ipf.modules.hl7,
             groovy.util,
             ca.uhn.hl7v2,
+            org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
         <osgi.fragment.host>org.apache.cxf.cxf-api</osgi.fragment.host>

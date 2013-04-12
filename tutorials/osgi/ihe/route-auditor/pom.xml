@@ -19,6 +19,7 @@
         <osgi.import.pkg>
             org.openehealth.ipf.platform.camel.ihe.atna.util,
             org.openhealthtools.ihe.atna.auditor.sender,
+            org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
     </properties>

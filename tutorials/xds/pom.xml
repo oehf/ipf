@@ -29,6 +29,7 @@
             javax.mail.util,
             META-INF.cxf,
             !org.openehealth.ipf.commons.ihe.ws.server,
+            org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
         <ipf.extension.beans>regRepModelExtension</ipf.extension.beans>

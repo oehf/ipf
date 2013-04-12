@@ -18,6 +18,7 @@
         </osgi.private.pkg>
         <osgi.import.pkg>
             org.openehealth.ipf.osgi.commons.bundle,
+            org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
         <osgi.bundle.activator>org.openehealth.ipf.osgi.extender.basic.GroovyExtenderActivator</osgi.bundle.activator>

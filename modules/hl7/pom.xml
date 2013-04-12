@@ -16,6 +16,7 @@
         <osgi.import.pkg>
             org.openehealth.ipf.commons.map.extend,
             org.joda.time,
+            org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
         <ipf.extension.beans>hapiModelExtension</ipf.extension.beans>

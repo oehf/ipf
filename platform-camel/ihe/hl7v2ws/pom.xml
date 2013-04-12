@@ -29,6 +29,7 @@
         <osgi.import.pkg>
               org.openehealth.ipf.commons.ihe.hl7v2ws.*,
               org.openehealth.ipf.platform.camel.core.process,
+              org.slf4j.*;version="[1.6,2)",
               *
         </osgi.import.pkg>
     </properties>

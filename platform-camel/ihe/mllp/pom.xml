@@ -12,6 +12,7 @@
             org.openehealth.ipf.modules.hl7.message,
             org.openehealth.ipf.commons.ihe.hl7v2,
             org.openehealth.ipf.platform.camel.core.process,
+            org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
     </properties>

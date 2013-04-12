@@ -23,6 +23,7 @@
             org.apache.camel.component.hl7,
             org.apache.cxf.bus.spring,
             META-INF.cxf,
+            org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
     </properties>

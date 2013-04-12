@@ -8,6 +8,7 @@
     <properties>
         <osgi.import.pkg>
             org.apache.commons.io,
+            org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
         <osgi.export.pkg>org.openehealth.ipf.commons.map.*</osgi.export.pkg>
