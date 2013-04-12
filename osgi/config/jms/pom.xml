@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
         <artifactId>ipf-osgi-config</artifactId>
-        <version>2.5-SNAPSHOT</version>
+        <version>2.5-rc1</version>
     </parent>
     
     <properties>
