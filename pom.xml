@@ -53,7 +53,7 @@
         <!-- Dependency version properties -->
         <activemq-version>5.8.0</activemq-version>
         <aspectj-version>1.7.2</aspectj-version>
-        <camel-version>2.11.0</camel-version>
+        <camel-version>2.11-201304161455</camel-version>
         <cglib-version>2.2.2</cglib-version>
         <commons-codec-version>1.7</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
@@ -1425,17 +1425,6 @@
             <id>servicemix</id>
             <name>Apache ServiceMix Repository</name>
             <url>http://svn.apache.org/repos/asf/servicemix/m2-repo/</url>
-        </repository>
-        <repository>
-            <id>apache-camel-211</id>
-            <name>Apache 211 Maven Repository</name>
-            <url>https://repository.apache.org/content/repositories/orgapachecamel-092/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
     </repositories>
     <profiles>
