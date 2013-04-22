@@ -103,6 +103,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <forkMode>always</forkMode>
                     <argLine>-Xmx256m -javaagent:${project.build.directory}/lib/spring-agent.jar</argLine>
                 </configuration>
             </plugin>

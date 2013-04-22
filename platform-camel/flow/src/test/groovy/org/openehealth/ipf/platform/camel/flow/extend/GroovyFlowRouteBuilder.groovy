@@ -50,7 +50,7 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
             .ackFlow()
             .to('mock:wait') // avoid race conditions
 
-        from('jetty:http://localhost:7799/recipient').to('mock:mock')
+        from('jetty:http://0.0.0.0:7799/recipient').to('mock:mock')
 
         // --------------------------------------------------------------
         //  Linear Flows
