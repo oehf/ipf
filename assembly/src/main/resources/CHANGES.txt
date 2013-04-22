@@ -1,4 +1,4 @@
-Changes in IPF 2.5-m1
+Changes in IPF 2.5.0
 ---------------------
 
-See http://openehealth.org/display/ipf2/IPF+2.5-m1
+See http://openehealth.org/display/ipf2/IPF+2.5.0
