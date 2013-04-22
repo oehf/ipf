@@ -34,6 +34,8 @@ import ca.uhn.hl7v2.parser.PipeParser
 class TestIti8Datatypes extends MllpTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti8/iti-8-datatypes.xml'
+
+    static String TIMEOUT = '30000'
     
     def static main(args) {
         init(CONTEXT_DESCRIPTOR, true)
@@ -49,7 +51,7 @@ class TestIti8Datatypes extends MllpTestContainer {
      */
     @Test
     void testRequestDataTypes() {
-        def endpointUri = 'pix-iti8://localhost:18188?audit=false'
+        def endpointUri = "pix-iti8://localhost:18188?audit=false&timeout=${TIMEOUT}"
         def originalBody = getMessageString('ADT^A01', '2.3.1')
         def body
         
@@ -114,7 +116,7 @@ class TestIti8Datatypes extends MllpTestContainer {
      */
     @Test
     public void testResponseDataTypes() {
-        final String endpointUri = 'pix-iti8://localhost:18187?audit=false'
+        final String endpointUri = "pix-iti8://localhost:18187?audit=false&timeout=${TIMEOUT}"
         final String body = getMessageString('ADT^A01', '2.3.1')
         DatatypesRouteBuilder.cleanCheckedContentTypes()
         
