@@ -93,7 +93,7 @@
         <oht-atna-version>2.0.0</oht-atna-version>
         <oht-cdar-version>1.1.0-p2</oht-cdar-version>
         <osgi-api-version>1.4.0</osgi-api-version>
-        <quartz-version>2.1.5</quartz-version>
+        <quartz-version>2.1.7</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.7.5</slf4j-version>
         <spring-version>3.1.4.RELEASE</spring-version>

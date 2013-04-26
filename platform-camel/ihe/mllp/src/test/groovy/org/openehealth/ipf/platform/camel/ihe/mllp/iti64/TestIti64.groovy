@@ -61,7 +61,7 @@ class TestIti64 extends MllpTestContainer {
      */
     @Test
     void testHappyCase() {
-        doTestHappyCaseAndAudit('xpid-iti64://localhost:18491', 2)
+        doTestHappyCaseAndAudit('xpid-iti64://localhost:18491?timeout=30000', 2)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
