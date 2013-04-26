@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.test.performance.processingtime;
 
 import java.util.List;
 
-import org.apache.commons.math.stat.descriptive.StatisticalSummary;
+import org.apache.commons.math3.stat.descriptive.StatisticalSummary;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

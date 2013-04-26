@@ -36,7 +36,7 @@ http://www.springframework.org/schema/util/spring-util-2.5.xsd
 
 
     <util:list id="schemaLocations">
-        <value>classpath:wsdl\schema\xml.xsd</value>
+        <value>classpath:feature-test-resources\my-schema.xsd</value>
     </util:list>
 
     <util:map id="props">

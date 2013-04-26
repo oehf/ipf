@@ -132,6 +132,13 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkMode>always</forkMode>
+                    <argLine>-Xmx256m</argLine>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

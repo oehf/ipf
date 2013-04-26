@@ -19,18 +19,23 @@ import org.apache.camel.ExchangePattern
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
+import org.junit.FixMethodOrder
 import org.junit.Test
+import org.junit.runners.MethodSorters
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.apache.cxf.binding.soap.SoapFault
 import org.springframework.test.annotation.DirtiesContext
 
+import java.util.concurrent.TimeUnit
+
 /**
  * Tests for ITI-56.
  * @author Dmytro Rud
  */
 @DirtiesContext
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class TestIti56 extends StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti56/iti-56.xml'
@@ -40,7 +45,9 @@ class TestIti56 extends StandardTestContainer {
     final String SERVICE_URI_ERROR = "xcpd-iti56://localhost:${port}/iti56service-error?correlator=#correlator";
     
     static final String REQUEST = readFile('iti56/iti56-sample-request.xml')
-    
+
+    static final long AWAIT_DELAY = 20 * 1000L
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
@@ -65,16 +72,20 @@ class TestIti56 extends StandardTestContainer {
      */
     @Test
     void testIti56() {
-        final int N = 5
+        final int N = Iti56TestRouteBuilder.TASKS_COUNT
         int i = 0
         
         N.times {
             send(SERVICE1_URI, i++, SERVICE1_RESPONSE_URI)
             send(SERVICE1_URI, i++)
         }
-        
+
         // wait for completion of asynchronous routes
-        Thread.currentThread().sleep(1000 + Iti56TestRouteBuilder.ASYNC_DELAY)
+        Iti56TestRouteBuilder routeBuilder = StandardTestContainer.appContext
+                .getBean(Iti56TestRouteBuilder.class)
+
+        routeBuilder.countDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
+        routeBuilder.asyncCountDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
 
         assert Iti56TestRouteBuilder.responseCount.get() == N * 2
         assert Iti56TestRouteBuilder.asyncResponseCount.get() == N
@@ -84,7 +95,7 @@ class TestIti56 extends StandardTestContainer {
     
     
     @Test
-    void testSyncError() {
+    void testWithErrorSync() {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
         def responseExchange = producerTemplate.send(SERVICE_URI_ERROR, requestExchange)
@@ -94,7 +105,7 @@ class TestIti56 extends StandardTestContainer {
     
     
     @Test
-    void testAsyncError() {
+    void testWithErrorAsync() {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
         requestExchange.in.headers[AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME] = SERVICE1_RESPONSE_URI

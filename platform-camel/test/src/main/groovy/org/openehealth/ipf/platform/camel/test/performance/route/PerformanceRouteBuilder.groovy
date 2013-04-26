@@ -21,9 +21,6 @@ import static org.apache.camel.component.http.HttpMethods.DELETE
 import static org.apache.camel.component.http.HttpMethods.GET
 import static org.apache.camel.component.http.HttpMethods.POST
 import static org.apache.commons.httpclient.HttpStatus.SC_METHOD_NOT_ALLOWED
-import static org.apache.commons.io.IOUtils.closeQuietly
-import static org.apache.commons.io.IOUtils.toString
-import static org.openehealth.ipf.commons.test.performance.dispatcher.MeasurementDispatcher.CONTENT_ENCODING
 import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.unmarshall
 
 import org.apache.camel.spring.SpringRouteBuilder

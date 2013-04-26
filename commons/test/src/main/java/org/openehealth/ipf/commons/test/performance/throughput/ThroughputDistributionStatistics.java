@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.math.stat.Frequency;
+import org.apache.commons.math3.stat.Frequency;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.openehealth.ipf.commons.test.performance.Timestamp;
 
@@ -65,7 +65,7 @@ public class ThroughputDistributionStatistics extends ThroughputStatistics {
     /**
      * Returns the number of "bins" in the frequency scale.
      * 
-     * @return the value set with {@link #setNumberOfBins(int)}. if
+     * @return the value set with {@link #setNumberOfIntervalBins(int)}. if
      *         setNumberOfBins is not invoked, returns
      *         {@link #DEFAULT_NUMBER_OF_BINS}
      */

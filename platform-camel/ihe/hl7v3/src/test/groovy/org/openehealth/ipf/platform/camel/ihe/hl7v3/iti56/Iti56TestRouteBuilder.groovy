@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56;
+package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.spring.SpringRouteBuilder;
@@ -35,8 +36,14 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
     
     static final String RESPONSE = StandardTestContainer.readFile('iti56/iti56-sample-response.xml')
 
-    static final long ASYNC_DELAY = 10 * 1000L
-    
+    private final CountDownLatch countDownLatch, asyncCountDownLatch;
+
+    static final int TASKS_COUNT = 5
+
+    Iti56TestRouteBuilder(){
+        countDownLatch      = new CountDownLatch(TASKS_COUNT)
+        asyncCountDownLatch = new CountDownLatch(TASKS_COUNT)
+    }
     
     @Override
     public void configure() throws Exception {
@@ -53,8 +60,8 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
                     assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] ==
                         "corr ${asyncResponseCount.getAndIncrement() * 2}"
                 }
+                asyncCountDownLatch.countDown()
             }
-            .delay(ASYNC_DELAY)
 
 
         // responding route
@@ -65,6 +72,7 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
             .process {
                 Exchanges.resultMessage(it).body = RESPONSE
                 responseCount.incrementAndGet()
+                countDownLatch.countDown()
             }
             .process(iti56ResponseValidator())
 

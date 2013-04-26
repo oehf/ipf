@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.test.performance.extend;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.math.stat.descriptive.StatisticalSummary;
+import org.apache.commons.math3.stat.descriptive.StatisticalSummary;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;

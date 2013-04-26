@@ -22,12 +22,11 @@ import org.apache.cxf.ws.security.SecurityConstants;
 import org.apache.cxf.ws.security.trust.STSClient;
 import org.junit.*;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.server.JettyServer;
-import org.openehealth.ipf.commons.ihe.ws.server.ServletServer;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
-import org.springframework.core.io.ClassPathResource;
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+import org.springframework.test.annotation.DirtiesContext;
 
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
@@ -36,35 +35,24 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
-public class CxfFeatureTest {
+public class CxfFeatureTest extends StandardTestContainer {
 
-    static private int port;
-    static private JettyServer server;
+    static private String CONTEXT_DESCRIPTOR = "feature-test-resources/server-context.xml";
 
     @BeforeClass
     public static void setUp() throws IOException {
-        port = ServletServer.getFreePort();
-        //port = 8091;
-        server = new JettyServer();
-        server.setContextResource(new ClassPathResource("feature-test-resources/server-context.xml").getURI().toString());
-        server.setPort(port);
-        server.setContextPath("");
-        server.setServletPath("/*");
-        server.setServlet(new CXFServlet());
-
-        server.start();
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
     }
 
-    @AfterClass
-    public static void tearDown() {
-        server.stop();
-    }
+//    public static void main(String[] args) {
+//        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+//    }
 
     @Test
     public void testFeatureEndpointWithoutPolicy() {
         JaxWsClientFactory clientFactory = new XdsClientFactory(
                 Iti42Component.WS_CONFIG,
-                "http://localhost:" + port + "/xds-iti42",
+                "http://localhost:" + getPort() + "/xds-iti42",
                 null, null, null);
         Iti42PortType client = (Iti42PortType) clientFactory.getClient();
         try {
@@ -82,10 +70,10 @@ public class CxfFeatureTest {
 	    SpringBusFactory.setThreadDefaultBus(bus);
 
         Iti42PortType client =
-                getClient("feature-test-resources/iti42-with-policy.wsdl", "http://localhost:" + port + "/xds-iti42");
+                getClient("feature-test-resources/iti42-with-policy.wsdl", "http://localhost:" + getPort() + "/xds-iti42");
 
         STSClient stsClient = (STSClient)((BindingProvider)client).getRequestContext().get(SecurityConstants.STS_CLIENT);
-        stsClient.setWsdlLocation("http://localhost:" + port + "/X509?wsdl");
+        stsClient.setWsdlLocation("http://localhost:" + getPort() + "/X509?wsdl");
 
 
         try {
