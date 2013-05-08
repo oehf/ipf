@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
@@ -71,7 +72,11 @@ class TestIti62 extends StandardTestContainer {
     @Test
     void testIti62FailureAudit() {
         request.getReferences().add(new ObjectReference("wrong-id", "not-at-home"))
-        assert FAILURE == sendIt(SERVICE1).status
+        def response = sendIt(SERVICE1)
+        assert response.status == FAILURE
+        assert response.errors.size() == 1
+        assert response.errors[0].errorCode == ErrorCode.UNRESOLVED_REFERENCE_EXCEPTION
+        assert response.errors[0].codeContext == 'wrong-id'
         assert auditSender.messages.size() == 2
     }
 
