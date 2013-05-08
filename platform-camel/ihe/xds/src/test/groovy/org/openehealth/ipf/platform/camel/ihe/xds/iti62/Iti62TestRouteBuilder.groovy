@@ -17,7 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti62
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
@@ -47,6 +50,15 @@ public class Iti62TestRouteBuilder extends SpringRouteBuilder {
             it.id == 'wrong-id'
         }
         def response = new Response(doCheck? FAILURE : SUCCESS)
+        if (response.status == FAILURE){
+            ErrorInfo errorInfo = new ErrorInfo()
+            // the codeContext attribute of the RegistryError element shall
+            // contain the id attribute of the metadata object causing the error.
+            errorInfo.setCodeContext('wrong-id')
+            errorInfo.setErrorCode(ErrorCode.UNRESOLVED_REFERENCE_EXCEPTION)
+            errorInfo.setSeverity(Severity.ERROR)
+            response.errors.add(errorInfo)
+        }
         Exchanges.resultMessage(exchange).body = response
     }
 }
