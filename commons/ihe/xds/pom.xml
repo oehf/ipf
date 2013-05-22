@@ -59,6 +59,34 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.5</version>
+                <configuration>
+                    <includes>
+                        <include>org/openehealth/ipf/commons/ihe/xds/core/requests/*</include>
+                        <include>org/openehealth/ipf/commons/ihe/xds/core/responses/*</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>schemagen</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                        <version>${lombok-version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            -->
         </plugins>
     </build>
 </project>
