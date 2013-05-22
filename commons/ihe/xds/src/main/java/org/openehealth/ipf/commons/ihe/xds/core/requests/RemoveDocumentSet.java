@@ -34,7 +34,6 @@ import java.util.List;
  * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Boris Stanojevic
  */
-
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RemoveDocumentSet", propOrder = {
         "query",
@@ -68,7 +67,7 @@ public class RemoveDocumentSet implements Serializable {
     @Getter @Setter
     private Query query;
 
-    @XmlElementRef
+    @XmlElement(name = "reference")
     @Getter
     private final List<ObjectReference> references = new ArrayList<ObjectReference>();
 

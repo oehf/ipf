@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.*;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Association", propOrder = {
-        "entryUuid", "sourceUuid", "targetUuid", "associationType", "label", "docCode"})
+        "entryUuid", "sourceUuid", "targetUuid", "associationType", "label", "docCode",
+        "previousVersion", "originalStatus", "newStatus", "associationPropagation"})
 @XmlRootElement(name = "association")
 public class Association implements Serializable {
     private static final long serialVersionUID = -4556980177483609469L;
