@@ -24,6 +24,7 @@ import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.flow.FlowManager;
@@ -87,9 +88,9 @@ public class GroovyFlowRenderTest {
         err.expectedMessageCount(1);
         try {
             producerTemplate.sendBody("direct:render-test", "error");
-            fail("failure not reported");
+            // DeadLetterChannel marks Exception as handled
+            // No failure should be reported
         } catch (RuntimeCamelException e) {
-            // ok
         }
         out.assertIsSatisfied();
         err.assertIsSatisfied();

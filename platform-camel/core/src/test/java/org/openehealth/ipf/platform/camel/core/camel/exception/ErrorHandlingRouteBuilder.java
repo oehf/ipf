@@ -41,7 +41,7 @@ public class ErrorHandlingRouteBuilder extends SpringRouteBuilder {
         
         from("direct:input-2")
         // defines local error handler (placed before every node in this route)
-        .errorHandler(deadLetterChannel("mock:error").maximumRedeliveries(2))
+        .errorHandler(defaultErrorHandler().maximumRedeliveries(2)).to("mock:error")
         .onException(Exception.class).handled(false).end()
         .to("mock:inter")   // no redeliveries here
         .to("direct:temp"); // the error handler of this node redelivers
