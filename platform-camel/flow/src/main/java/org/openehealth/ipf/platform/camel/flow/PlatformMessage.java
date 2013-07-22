@@ -125,7 +125,7 @@ public class PlatformMessage implements ManagedMessage {
      */
     @Override
     public Long getFlowId() {
-        return (Long)exchange.getIn().getHeader(FLOW_ID_KEY);
+        return exchange.getIn().getHeader(FLOW_ID_KEY, Long.class);
     }
 
     /**
