@@ -96,7 +96,7 @@
         <quartz-version>2.1.7</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.7.5</slf4j-version>
-        <spring-version>3.1.4.RELEASE</spring-version>
+        <spring-version>3.2.3.RELEASE</spring-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.39</tomcat-version>
         <xbean-spring-version>3.5</xbean-spring-version>
@@ -525,12 +525,12 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-spring</artifactId>
                 <version>${camel-version}</version>
-                <!--exclusions>
+                <exclusions>
                     <exclusion>
                         <groupId>org.springframework</groupId>
                         <artifactId>spring-aop</artifactId>
                     </exclusion>
-                </exclusions-->
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
@@ -608,6 +608,11 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>jcl-over-slf4j</artifactId>
                 <version>${slf4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${spring-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
