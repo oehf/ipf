@@ -39,11 +39,7 @@ class TestIti18 extends StandardTestContainer {
     def SERVICE1 = "xds-iti18://localhost:${port}/xds-iti18-service1"
     def SERVICE2 = "xds-iti18://localhost:${port}/xds-iti18-service2"
     def SAMPLE_SERVICE = "xds-iti18://localhost:${port}/myIti18Service"
-    
-    def SERVICE_SOAPDEFAULT = "xds-iti18://localhost:${port}/xds-iti18-service21"
-    def SERVICE_SOAP12 = "xds-iti18://localhost:${port}/xds-iti18-service22?soap11=false"
-    def SERVICE_SOAP11 = "xds-iti18://localhost:${port}/xds-iti18-service23?soap11=true"
-    
+
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti18-service2"
     
     def request

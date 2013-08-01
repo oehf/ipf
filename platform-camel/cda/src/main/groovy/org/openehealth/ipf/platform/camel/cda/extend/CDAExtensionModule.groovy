@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.cda.extend
+package org.openehealth.ipf.platform.camel.cda.extend;
 
 import org.apache.camel.builder.DataFormatClause;
 import org.apache.camel.model.ProcessorDefinition;

@@ -61,9 +61,9 @@ import org.openehealth.ipf.platform.camel.core.model.RendererAdapterDefinition;
 import org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefinition;
 import org.openehealth.ipf.platform.camel.core.model.ValidationDefinition;
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
-import org.openehealth.ipf.platform.camel.core.util.Expressions
-import java.util.concurrent.ExecutorService
-import static org.apache.camel.builder.Builder.body
+import org.openehealth.ipf.platform.camel.core.util.Expressions;
+import java.util.concurrent.ExecutorService;
+import static org.apache.camel.builder.Builder.body;
 
 /**
  * Core DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.tutorials.basic.extend
+package org.openehealth.ipf.tutorials.basic.extend;
 
-import org.apache.camel.Exchange
-import org.apache.camel.model.ProcessorDefinition
+import org.apache.camel.Exchange;
+import org.apache.camel.model.ProcessorDefinition;
 
 /**
  * @author Martin Krasser
