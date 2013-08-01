@@ -15,12 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import java.io.Serializable;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Represents an XDS association.
@@ -31,11 +38,13 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Association", propOrder = {
         "entryUuid", "sourceUuid", "targetUuid", "associationType", "label", "docCode",
-        "previousVersion", "originalStatus", "newStatus", "associationPropagation"})
+        "previousVersion", "originalStatus", "newStatus", "associationPropagation",
+        "extraMetadata"})
 @XmlRootElement(name = "association")
-public class Association implements Serializable {
+public class Association implements Serializable, ExtraMetadataHolder {
+
     private static final long serialVersionUID = -4556980177483609469L;
-    
+
     private String targetUuid;
     private String sourceUuid;
     private AssociationType associationType;
@@ -46,7 +55,8 @@ public class Association implements Serializable {
     private String originalStatus;
     private String newStatus;
     private String associationPropagation;
-    
+    @Getter @Setter private Map<String, ArrayList<String>> extraMetadata;
+
     /**
      * Constructs an association.
      */
@@ -91,7 +101,7 @@ public class Association implements Serializable {
     public String getSourceUuid() {
         return sourceUuid;
     }
-    
+
     /**
      * @param sourceUuid
      *          the UUID of the source object.
@@ -99,7 +109,7 @@ public class Association implements Serializable {
     public void setSourceUuid(String sourceUuid) {
         this.sourceUuid = sourceUuid;
     }
-    
+
     /**
      * @return the type of this association.
      */
@@ -146,7 +156,7 @@ public class Association implements Serializable {
     }
 
     /**
-     * @return code describing the association (e.g. the type of transformation, 
+     * @return code describing the association (e.g. the type of transformation,
      *          reason for replacement).
      */
     public Code getDocCode() {
@@ -155,7 +165,7 @@ public class Association implements Serializable {
 
     /**
      * @param docCode
-     *          code describing the association (e.g. the type of transformation, 
+     *          code describing the association (e.g. the type of transformation,
      *          reason for replacement).
      */
     public void setDocCode(Code docCode) {
@@ -238,6 +248,7 @@ public class Association implements Serializable {
         result = prime * result + ((originalStatus == null) ? 0 : originalStatus.hashCode());
         result = prime * result + ((newStatus == null) ? 0 : newStatus.hashCode());
         result = prime * result + ((associationPropagation == null) ? 0 : associationPropagation.hashCode());
+        result = prime * result + ((extraMetadata == null) ? 0 : extraMetadata.hashCode());
         return result;
     }
 
@@ -304,6 +315,11 @@ public class Association implements Serializable {
             if (other.associationPropagation != null)
                 return false;
         } else if (!associationPropagation.equals(other.associationPropagation))
+            return false;
+        if (extraMetadata == null) {
+            if (other.extraMetadata != null)
+                return false;
+        } else if (!extraMetadata.equals(other.extraMetadata))
             return false;
         return true;
     }

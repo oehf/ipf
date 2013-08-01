@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
+import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
@@ -82,7 +83,11 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         addClassifications(metaData, ebXML, objectLibrary);
         addSlots(metaData, ebXML, objectLibrary);
         addExternalIdentifiers(metaData, ebXML, objectLibrary);
-        
+
+        if (ebXML instanceof ExtraMetadataHolder) {
+            ((ExtraMetadataHolder) ebXML).setExtraMetadata(metaData.getExtraMetadata());
+        }
+
         return ebXML;
     }
 
@@ -103,7 +108,11 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         addClassificationsFromEbXML(metaData, ebXML);
         addSlotsFromEbXML(metaData, ebXML);
         addExternalIdentifiersFromEbXML(metaData, ebXML);
-        
+
+        if (ebXML instanceof ExtraMetadataHolder) {
+            metaData.setExtraMetadata(((ExtraMetadataHolder) ebXML).getExtraMetadata());
+        }
+
         return metaData;
     }
     

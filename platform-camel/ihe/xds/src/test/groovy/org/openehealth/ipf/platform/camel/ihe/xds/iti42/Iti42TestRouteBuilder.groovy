@@ -33,6 +33,21 @@ public class Iti42TestRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('xds-iti42:xds-iti42-service1')
             .process(iti42RequestValidator())
+            .process {
+                RegisterDocumentSet request = it.in.getBody(RegisterDocumentSet)
+                assert request.documentEntries[0].extraMetadata == [
+                    'urn:oehf:docEntry1' : ['a', 'b', 'c'],
+                    'urn:oehf:docEntry2' : ['g', 'h']]
+                assert request.submissionSet.extraMetadata == [
+                    'urn:oehf:submission1' : ['1', '2', '3'],
+                    'urn:oehf:submission2' : ['7', '8']]
+                assert request.associations[1].extraMetadata == [
+                    'urn:oehf:association1' : ['A', 'B', 'C'],
+                    'urn:oehf:association2' : ['G', 'H']]
+                assert request.folders[0].extraMetadata == [
+                    'urn:oehf:folder1' : ['i', 'ii', 'iii'],
+                    'urn:oehf:folder2' : ['vii', 'viii']]
+            }
             .process { checkValue(it, 'service 1') }
             .process(iti42ResponseValidator())
     

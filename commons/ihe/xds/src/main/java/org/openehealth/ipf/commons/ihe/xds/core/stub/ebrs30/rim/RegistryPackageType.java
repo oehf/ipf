@@ -8,11 +8,13 @@
 
 package org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 
+import javax.xml.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * 
@@ -45,7 +47,11 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class RegistryPackageType
     extends RegistryObjectType
+    implements ExtraMetadataHolder
 {
+
+    @XmlTransient
+    @Getter @Setter private Map<String, ArrayList<String>> extraMetadata;
 
     @XmlElement(name = "RegistryObjectList")
     protected RegistryObjectListType registryObjectList;

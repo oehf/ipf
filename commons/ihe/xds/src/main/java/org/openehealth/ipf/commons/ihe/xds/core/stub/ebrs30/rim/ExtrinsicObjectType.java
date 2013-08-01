@@ -8,8 +8,14 @@
 
 package org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
+
 import javax.activation.DataHandler;
 import javax.xml.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.Map;
 
 
 /**
@@ -45,6 +51,7 @@ import javax.xml.bind.annotation.*;
 })
 public class ExtrinsicObjectType
     extends RegistryObjectType
+    implements ExtraMetadataHolder
 {
 
     @XmlElement(name = "ContentVersionInfo")
@@ -56,6 +63,9 @@ public class ExtrinsicObjectType
     protected String mimeType;
     @XmlAttribute
     protected Boolean isOpaque;
+
+    @XmlTransient
+    @Getter @Setter private Map<String, ArrayList<String>> extraMetadata;
 
     /**
      * Gets the value of the contentVersionInfo property.

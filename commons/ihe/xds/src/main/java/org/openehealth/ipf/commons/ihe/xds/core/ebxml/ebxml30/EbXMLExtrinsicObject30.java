@@ -15,18 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
+import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExtrinsicObjectType;
 
 import javax.activation.DataHandler;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Encapsulation of {@link ExtrinsicObjectType}.
  * @author Jens Riemschneider
  */
-public class EbXMLExtrinsicObject30 extends EbXMLRegistryObject30<ExtrinsicObjectType> implements EbXMLExtrinsicObject {
+public class EbXMLExtrinsicObject30 extends EbXMLRegistryObject30<ExtrinsicObjectType> implements EbXMLExtrinsicObject, ExtraMetadataHolder {
     /**
      * Constructs an extrinsic object by wrapping an ebXML 3.0 object.
      * @param extrinsic
@@ -66,5 +69,15 @@ public class EbXMLExtrinsicObject30 extends EbXMLRegistryObject30<ExtrinsicObjec
     @Override
     public void setDataHandler(DataHandler dataHandler) {
         getInternal().setDataHandler(dataHandler);
+    }
+
+    @Override
+    public Map<String, ArrayList<String>> getExtraMetadata() {
+        return getInternal().getExtraMetadata();
+    }
+
+    @Override
+    public void setExtraMetadata(Map<String, ArrayList<String>> map) {
+        getInternal().setExtraMetadata(map);
     }
 }

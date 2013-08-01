@@ -17,13 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotType1;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
 
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 
 /**
  * Data binding specific for the XDS data model --- gathers some additional
@@ -43,20 +41,20 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
 
 
     /**
-     * Returns an information holder for the given object.
+     * Returns a map of additional Camel headers for the given ebXML object.
      * <p>
-     * NB: not declared <tt>synchronized</tt>, because no object
-     * is supposed to be processed from multiple threads.
-     * @param x
+     * NB: not declared <tt>synchronized</tt>, because no ebXML object
+     * is supposed to be marshaled/unmarshaled from multiple threads.
+     * @param ebXml
      *      key object.
      * @return
-     *      an existing ot a freshly created information holder.
+     *      Camel an existing or a freshly created information holder.
      */
-    public static Map<String, Object> getMap(Object x) {
-        Map<String, Object> map = DATA.get(x);
+    public static Map<String, Object> getCamelHeaders(Object ebXml) {
+        Map<String, Object> map = DATA.get(ebXml);
         if (map == null) {
             map = new HashMap<String, Object>();
-            DATA.put(x, map);
+            DATA.put(ebXml, map);
         }
         return map;
     }
@@ -65,6 +63,12 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
     public XdsJaxbDataBinding() {
         super();
         setUnmarshallerListener(new UnmarshallerListener());
+        setMarshallerListener(new MarshallerListener());
+    }
+
+
+    private static boolean isValidExtraMetadataSlotName(String name) {
+        return ((name != null) && name.startsWith("urn:") && (! name.startsWith("urn:ihe:")));
     }
 
 
@@ -73,15 +77,71 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
 
         @Override
         public void afterUnmarshal(Object target, Object parent) {
-            if (target instanceof SlotType1) {
-                SlotType1 slot = (SlotType1) target;
-                String name = slot.getName();
-                if ((name != null) && name.startsWith("urn:") && (! name.startsWith("urn:ihe:"))) {
-                    RESULTS.set(Boolean.TRUE);
-                }
+            if (target instanceof ExtrinsicObjectType) {
+                ExtrinsicObjectType ebXml = (ExtrinsicObjectType) target;
+                findExtraMetadata(ebXml.getSlot(), ebXml);
+            }
+            else if (target instanceof RegistryPackageType) {
+                RegistryPackageType ebXml = (RegistryPackageType) target;
+                findExtraMetadata(ebXml.getSlot(), ebXml);
+            }
+            else if (target instanceof AssociationType1) {
+                AssociationType1 ebXml = (AssociationType1) target;
+                findExtraMetadata(ebXml.getSlot(), ebXml);
             }
             else if ((target instanceof SubmitObjectsRequest) && Boolean.TRUE.equals(RESULTS.get())) {
-                getMap(target).put(SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.TRUE);
+                getCamelHeaders(target).put(SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.TRUE);
+            }
+        }
+
+        private static void findExtraMetadata(List<SlotType1> slots, ExtraMetadataHolder holder) {
+            if (slots != null) {
+                for (SlotType1 slot : slots) {
+                    String name = slot.getName();
+                    if (isValidExtraMetadataSlotName(name)) {
+                        Map<String, ArrayList<String>> extraMetadata = holder.getExtraMetadata();
+                        if (extraMetadata == null) {
+                            extraMetadata = new HashMap<String, ArrayList<String>>();
+                            holder.setExtraMetadata(extraMetadata);
+                        }
+                        extraMetadata.put(name, new ArrayList<String>(slot.getValueList().getValue()));
+                        RESULTS.set(Boolean.TRUE);
+                    }
+                }
+            }
+        }
+    }
+
+
+    private static class MarshallerListener extends Marshaller.Listener {
+        @Override
+        public void beforeMarshal(Object source) {
+            if (source instanceof ExtrinsicObjectType) {
+                ExtrinsicObjectType ebXml = (ExtrinsicObjectType) source;
+                injectExtraMetadata(ebXml.getSlot(), ebXml);
+            }
+            else if (source instanceof RegistryPackageType) {
+                RegistryPackageType ebXml = (RegistryPackageType) source;
+                injectExtraMetadata(ebXml.getSlot(), ebXml);
+            }
+            else if (source instanceof AssociationType1) {
+                AssociationType1 ebXml = (AssociationType1) source;
+                injectExtraMetadata(ebXml.getSlot(), ebXml);
+            }
+        }
+
+        private static void injectExtraMetadata(List<SlotType1> slots, ExtraMetadataHolder holder) {
+            if (holder.getExtraMetadata() != null) {
+                for (Map.Entry<String, ArrayList<String>> entry : holder.getExtraMetadata().entrySet()) {
+                    if (isValidExtraMetadataSlotName(entry.getKey())) {
+                        SlotType1 slot = new SlotType1();
+                        slot.setName(entry.getKey());
+                        ValueListType valueList = new ValueListType();
+                        valueList.getValue().addAll(entry.getValue());
+                        slot.setValueList(valueList);
+                        slots.add(slot);
+                    }
+                }
             }
         }
     }
