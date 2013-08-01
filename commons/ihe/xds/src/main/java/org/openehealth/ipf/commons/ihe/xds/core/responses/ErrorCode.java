@@ -71,8 +71,8 @@ public enum ErrorCode {
     /** A request produced too many results to finish the request. */
     @XmlEnumValue("XDSTooManyResults") TOO_MANY_RESULTS("XDSTooManyResults"),
     /** Warning returned if extra meta data was present but not saved in the registry. */
-    @XmlEnumValue("XDSExtraMetadataNotSaved") EXTRA_METADATA_NO_SAVED("XDSExtraMetadataNotSaved"),
-    /** The patient ID referenced in the meta data is not known to the registry actor 
+    @XmlEnumValue("XDSExtraMetadataNotSaved") EXTRA_METADATA_NOT_SAVED("XDSExtraMetadataNotSaved"),
+    /** The patient ID referenced in the meta data is not known to the registry actor
      *  via the Patient Identity Feed or is unknown because of patient identifier merge 
      *  or other reasons. The code context includes the value of the problematic patient ID. */
     @XmlEnumValue("XDSUnknownPatientId") UNKNOWN_PATIENT_ID("XDSUnknownPatientId"),

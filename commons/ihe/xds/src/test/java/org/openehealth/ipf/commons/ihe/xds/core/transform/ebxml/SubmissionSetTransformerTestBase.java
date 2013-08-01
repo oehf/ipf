@@ -102,9 +102,9 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         set.setUniqueId("uniqueId");
         set.setContentTypeCode(createCode(6));
         set.setSourceId("sourceId");
-        set.getIntendedRecipients().add(new Recipient(createOrganization(20), createPerson(22)));
-        set.getIntendedRecipients().add(new Recipient(createOrganization(21), null));
-        set.getIntendedRecipients().add(new Recipient(null, createPerson(23)));
+        set.getIntendedRecipients().add(new Recipient(createOrganization(20), createPerson(22), null));
+        set.getIntendedRecipients().add(new Recipient(createOrganization(21), null, null));
+        set.getIntendedRecipients().add(new Recipient(null, createPerson(23), null));
 
         if (homeAware) {
             set.setHomeCommunityId("123.456");

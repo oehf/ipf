@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.utils;
 
-import static junit.framework.Assert.assertEquals;
-import junit.framework.Assert;
-
 import org.junit.Test;
-import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.extractNonEmptyElement;
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.extractSoapBody;
 
 public class TestSoapUtils {
     
@@ -76,8 +76,8 @@ public class TestSoapUtils {
         assertEquals("", extractSoapBody(emptyEnvelopeWithNamespacePrefixesShort));
         assertEquals("", extractSoapBody(emptyEnvelopeWithoutNamespacePrefixesShort));
         
-        Assert.assertNull(extractSoapBody(null));
-        Assert.assertEquals(totallyBad, extractSoapBody(totallyBad));
+        assertNull(extractSoapBody(null));
+        assertEquals(totallyBad, extractSoapBody(totallyBad));
     }
 
 
@@ -93,7 +93,7 @@ public class TestSoapUtils {
         assertEquals(null, extractNonEmptyElement(emptyEnvelopeWithNamespacePrefixesShort, elementName));
         assertEquals(null, extractNonEmptyElement(emptyEnvelopeWithoutNamespacePrefixesShort, elementName));
 
-        Assert.assertNull(extractNonEmptyElement(null, elementName));
-        Assert.assertNull(extractNonEmptyElement(totallyBad, elementName));
+        assertNull(extractNonEmptyElement(null, elementName));
+        assertNull(extractNonEmptyElement(totallyBad, elementName));
     }
 }
