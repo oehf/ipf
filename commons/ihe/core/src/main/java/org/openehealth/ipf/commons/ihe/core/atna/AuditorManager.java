@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
+import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.Hl7v3Auditor;
 import org.openhealthtools.ihe.atna.auditor.*;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
@@ -106,6 +107,12 @@ public abstract class AuditorManager {
     public static XCARespondingGatewayAuditor getXCARespondingGatewayAuditor() {
         synchronized (sync) {
             return XCARespondingGatewayAuditor.getAuditor();
+        }
+    }
+
+    public static CustomXdsAuditor getCustomXdsAuditor() {
+        synchronized (sync) {
+            return CustomXdsAuditor.getAuditor();
         }
     }
 }

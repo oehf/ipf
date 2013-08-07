@@ -71,6 +71,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     private Code typeCode;
     private String uri;
     private String repositoryUniqueId;
+    private DocumentEntryType type = DocumentEntryType.STABLE;
 
     /**
      * @return the list of authors of the document. Cannot be <code>null</code>.
@@ -364,6 +365,15 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
      */
     public List<Code> getEventCodeList() {
         return eventCodeList;
+    }
+
+
+    public DocumentEntryType getType() {
+        return type;
+    }
+
+    public void setType(DocumentEntryType type) {
+        this.type = type;
     }
 
     @Override

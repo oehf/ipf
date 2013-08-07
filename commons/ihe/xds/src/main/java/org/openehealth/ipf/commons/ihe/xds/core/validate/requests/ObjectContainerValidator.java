@@ -66,17 +66,20 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile) {
         List<RegistryObjectValidator> validators = new ArrayList<RegistryObjectValidator>();
         boolean isContinuaHRN = profile.getInteractionId() == IpfInteractionId.Continua_HRN;
+        boolean isIti61       = (profile.getInteractionId() == IpfInteractionId.ITI_61);
         
         Collections.addAll(validators,
-            new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator),
+                new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator, 0, isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_HASH, hashValidator,
-                    isContinuaHRN ? 1 : 0, 1),
+                    isContinuaHRN ? 1 : 0,
+                    isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, 0, 1),
-            new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, 1),
-            new SlotValueValidation(SLOT_NAME_SIZE, positiveNumberValidator,
-                    isContinuaHRN ? 1 : 0, 1),
+            new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, isIti61 ? 0 : 1),
+                new SlotValueValidation(SLOT_NAME_SIZE, positiveNumberValidator,
+                        isContinuaHRN ? 1 : 0,
+                        isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_ID, cxValidator,
                     (profile.isEbXml30Based() && ! profile.isQuery()) ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
@@ -100,7 +103,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
             new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidator));
 
-        if (profile.getInteractionId() == IpfInteractionId.ITI_42) {
+        if (profile.getInteractionId() == IpfInteractionId.ITI_42 || isIti61) {
             validators.add(new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
         }
         return validators;

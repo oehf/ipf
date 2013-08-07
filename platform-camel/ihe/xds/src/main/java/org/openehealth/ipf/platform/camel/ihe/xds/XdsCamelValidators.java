@@ -32,6 +32,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryRespo
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RetrieveDocumentSetResponseValidator;
 
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
+import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_61;
 import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
 
 /**
@@ -195,7 +196,33 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
             ValidationProfile profile = new ValidationProfile(ITI_43);
             new RetrieveDocumentSetResponseValidator().validate(message, profile);
         }
-    };    
+    };
+
+
+    private static final Processor ITI_61_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLSubmitObjectsRequest30 message =
+                    new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
+            ValidationProfile profile = new ValidationProfile(ITI_61);
+            new SubmitObjectsRequestValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor ITI_61_RESPONSE_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
+            ValidationProfile profile = new ValidationProfile(ITI_61);
+            new RegistryResponseValidator().validate(message, profile);
+        }
+    };
 
     /**
      * Returns a validating processor for ITI-18 request messages.

@@ -25,6 +25,7 @@ import org.apache.commons.logging.LogFactory
 import org.junit.After
 import org.junit.AfterClass
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender
+import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor
 import org.openehealth.ipf.commons.ihe.core.atna.custom.Hl7v3Auditor
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
@@ -118,6 +119,13 @@ class StandardTestContainer {
          Hl7v3Auditor.auditor.config = new AuditorModuleConfig()
          Hl7v3Auditor.auditor.config.auditRepositoryHost = 'localhost'
          Hl7v3Auditor.auditor.config.auditRepositoryPort = auditPort
+
+         CustomXdsAuditor.auditor.config = new AuditorModuleConfig()
+         CustomXdsAuditor.auditor.config.auditSourceId = 'customXdsSourceId'
+         CustomXdsAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         CustomXdsAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         CustomXdsAuditor.auditor.config.auditRepositoryPort = auditPort
+         CustomXdsAuditor.auditor.config.systemUserId = 'customXdsUserId'
 
          XCAInitiatingGatewayAuditor.auditor.config = new AuditorModuleConfig()
          XCAInitiatingGatewayAuditor.auditor.config.auditSourceId = 'initiatingGwId'

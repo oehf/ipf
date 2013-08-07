@@ -144,4 +144,28 @@ public class Exchanges {
         
     }
 
+
+    /**
+     * Extracts the exception handled while processing the given
+     * exchange (if any), and marks the exchange as non-failed.
+     *
+     * @param exchange
+     *      Camel exchange, should be not <code>null</code>.
+     * @return
+     *      an {@link Exception} instance, or <code>null</code> when no exception was handled.
+     */
+    public static Exception extractException(Exchange exchange) {
+        Exception exception = null;
+        if (exchange.isFailed()) {
+            exception = exchange.getException();
+            exchange.setException(null);
+        }
+        else if (exchange.getProperty(Exchange.EXCEPTION_CAUGHT) != null) {
+            exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
+            exchange.removeProperty(Exchange.EXCEPTION_CAUGHT);
+            exchange.removeProperty(Exchange.ERRORHANDLER_HANDLED);
+        }
+        return exception;
+    }
+
 }

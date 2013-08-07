@@ -521,7 +521,7 @@ public abstract class SampleData {
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
         query.setAssociationTypes(Arrays.asList(AssociationType.APPEND, AssociationType.TRANSFORM));
-                
+
         return new QueryRegistry(query);
     }
 

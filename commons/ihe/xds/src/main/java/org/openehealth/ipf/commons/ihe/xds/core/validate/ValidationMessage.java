@@ -101,7 +101,8 @@ public enum ValidationMessage {
     RESULT_NOT_SINGLE_PATIENT("Query result contains entries for multiple patients", ErrorCode.RESULT_NOT_SINGLE_PATIENT),
     HOME_COMMUNITY_ID_MUST_BE_SPECIFIED("Home community ID is missing", ErrorCode.MISSING_HOME_COMMUNITY_ID),
     UNKNOWN_HOME_COMMUNITY_ID("Unknown home community ID: %1", ErrorCode.UNKNOWN_COMMUNITY),
-    UNKNOWN_REPOSITORY_ID("Unknown repository ID: %1", ErrorCode.UNKNOWN_REPOSITORY_ID);
+    UNKNOWN_REPOSITORY_ID("Unknown repository ID: %1", ErrorCode.UNKNOWN_REPOSITORY_ID),
+    WRONG_DOCUMENT_ENTRY_TYPE("Wrong document entry type (stable/on-demand): %s"),;
 
 
     private final String text;

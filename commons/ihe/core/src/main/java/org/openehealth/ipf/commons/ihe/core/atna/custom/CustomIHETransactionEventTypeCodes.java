@@ -32,6 +32,11 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
         }   
     }
 
+    public static final class RegisterOnDemandDocumentEntry extends IHETransactionEventTypeCodes {
+        public RegisterOnDemandDocumentEntry() {
+            super("ITI-61", "Register On-Demand Document Entry");
+        }
+    }
 
     public static final class QueryExistingData extends IHETransactionEventTypeCodes {
         public QueryExistingData() {
