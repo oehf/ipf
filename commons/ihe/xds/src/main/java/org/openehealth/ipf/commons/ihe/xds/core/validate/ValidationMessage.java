@@ -125,7 +125,8 @@ public enum ValidationMessage {
     MISSING_ASSOCIATION("Association specifies a targetObject: %s association, but it was not provided"),
     WRONG_DELETION_SCOPE("Default deletionScope (%s) must be specified."),
     OBJECT_SHALL_NOT_BE_SPECIFIED("%s shall not be specified."),
-    EMPTY_REFERENCE_LIST("No object references specified for %s");
+    EMPTY_REFERENCE_LIST("No object references specified for %s"),
+    WRONG_TELECOM("Expected telecom format ^^Internet^<address> : %s");
 
 
     private final String text;

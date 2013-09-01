@@ -253,6 +253,12 @@ public abstract class SampleData {
         name.setFamilyName("Norbi");
         author.setAuthorPerson(new Person(new Identifiable("id2", new AssigningAuthority("1.2")), name));
         author.getAuthorInstitution().add(new Organization("authorOrg", null, null));
+        author.getAuthorRole().add(new Identifiable("role1", new AssigningAuthority("1.2.3.1", "ISO")));
+        author.getAuthorRole().add(new Identifiable("role2", null));
+        author.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("1.2.3.3", "ISO")));
+        author.getAuthorSpecialty().add(new Identifiable("spec2", null));
+        author.getAuthorTelecom().add(new Telecom("author1@acme.org", "Internet"));
+        author.getAuthorTelecom().add(new Telecom("author2@acme.org", "Internet"));
 
         Address address = new Address();
         address.setStreetAddress("hier");

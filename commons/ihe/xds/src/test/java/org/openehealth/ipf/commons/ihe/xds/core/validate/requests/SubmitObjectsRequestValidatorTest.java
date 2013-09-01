@@ -471,7 +471,7 @@ public class SubmitObjectsRequestValidatorTest {
         new ObjectContainerValidator().validate(ebXml, profile);
 
         Author author = new Author();
-        author.getAuthorRole().add("clown");
+        author.getAuthorRole().add(new Identifiable("clown", new AssigningAuthority("1.3.14.15", "ISO")));
         request.getSubmissionSet().setAuthor(author);
         ebXml = transformer.toEbXML(request);
 

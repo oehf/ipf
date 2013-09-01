@@ -42,8 +42,8 @@ public class Author implements Serializable {
     
     private Person authorPerson;
     private final List<Organization> authorInstitution = new ArrayList<Organization>();
-    private final List<String> authorRole = new ArrayList<String>(); 
-    private final List<String> authorSpecialty = new ArrayList<String>();
+    private final List<Identifiable> authorRole = new ArrayList<Identifiable>();
+    private final List<Identifiable> authorSpecialty = new ArrayList<Identifiable>();
     private final List<Telecom> authorTelecom = new ArrayList<Telecom>();
 
     /**
@@ -73,7 +73,7 @@ public class Author implements Serializable {
      * @return the list of author roles. Never <code>null</code>, but
      *          can be empty. 
      */
-    public List<String> getAuthorRole() {
+    public List<Identifiable> getAuthorRole() {
         return authorRole;
     }
     
@@ -81,7 +81,7 @@ public class Author implements Serializable {
      * @return the list of author specialties. Never <code>null</code>, but
      *          can be empty. 
      */
-    public List<String> getAuthorSpecialty() {
+    public List<Identifiable> getAuthorSpecialty() {
         return authorSpecialty;
     }
 

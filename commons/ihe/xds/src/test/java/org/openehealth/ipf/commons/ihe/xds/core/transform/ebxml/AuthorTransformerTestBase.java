@@ -64,11 +64,11 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         author.getAuthorInstitution().add(new Organization("inst1"));
         author.getAuthorInstitution().add(new Organization("inst2"));
         
-        author.getAuthorRole().add("role1");
-        author.getAuthorRole().add("role2");
+        author.getAuthorRole().add(new Identifiable("role1", new AssigningAuthority("2.3.1", "ISO")));
+        author.getAuthorRole().add(new Identifiable("role2", null));
         
-        author.getAuthorSpecialty().add("spec1");
-        author.getAuthorSpecialty().add("spec2");
+        author.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
+        author.getAuthorSpecialty().add(new Identifiable("spec2", null));
 
         author.getAuthorTelecom().add(new Telecom("5.25 in", "Floppynet"));
         author.getAuthorTelecom().add(new Telecom("2:465/46.40", "Fidonet"));
@@ -91,10 +91,10 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         assertEquals(Arrays.asList("inst1", "inst2"), slots.get(1).getValueList());
 
         assertEquals(Vocabulary.SLOT_NAME_AUTHOR_ROLE, slots.get(2).getName());
-        assertEquals(Arrays.asList("role1", "role2"), slots.get(2).getValueList());
+        assertEquals(Arrays.asList("role1^^^&2.3.1&ISO", "role2"), slots.get(2).getValueList());
 
         assertEquals(Vocabulary.SLOT_NAME_AUTHOR_SPECIALTY, slots.get(3).getName());
-        assertEquals(Arrays.asList("spec1", "spec2"), slots.get(3).getValueList());
+        assertEquals(Arrays.asList("spec1^^^&2.3.3&ISO", "spec2"), slots.get(3).getValueList());
 
         assertEquals(Vocabulary.SLOT_NAME_AUTHOR_TELECOM, slots.get(4).getName());
         assertEquals(Arrays.asList("^^Floppynet^5.25 in", "^^Fidonet^2:465/46.40"), slots.get(4).getValueList());

@@ -18,15 +18,13 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.CXValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
  * Tests for {@link CXValidator}.
  * @author Jens Riemschneider
  */
 public class CXValidatorTest {
-    private static final CXValidator validator = new CXValidator();
+    private static final CXValidator validator = new CXValidator(true);
 
     @Test
     public void testValidateGoodCases() throws XDSMetaDataException {

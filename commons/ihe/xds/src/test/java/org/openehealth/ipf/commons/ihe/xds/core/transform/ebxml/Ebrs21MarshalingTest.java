@@ -147,15 +147,15 @@ public class Ebrs21MarshalingTest {
         author1.setAuthorPerson(new Person(null, new XcnName("Smitty", "Gerald", null, null, null, null)));
         author1.getAuthorInstitution().add(new Organization("Cleveland Clinic"));
         author1.getAuthorInstitution().add(new Organization("Parma Community"));
-        author1.getAuthorRole().add("Attending");
-        author1.getAuthorSpecialty().add("Orthopedic");
+        author1.getAuthorRole().add(new Identifiable("Attending", null));
+        author1.getAuthorSpecialty().add(new Identifiable("Orthopedic", null));
 
         Author author2 = new Author();
         author2.setAuthorPerson(new Person(null, new XcnName("Dopplemeyer", "Sherry", null, null, null, null)));
         author2.getAuthorInstitution().add(new Organization("Cleveland Clinic"));
         author2.getAuthorInstitution().add(new Organization("Berea Community"));
-        author2.getAuthorRole().add("Primary Surgon");
-        author2.getAuthorSpecialty().add("Orthopedic");
+        author2.getAuthorRole().add(new Identifiable("Primary Surgon", null));
+        author2.getAuthorSpecialty().add(new Identifiable("Orthopedic", null));
         
         Address address = new Address();
         address.setCity("Metropolis");

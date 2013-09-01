@@ -60,10 +60,10 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         author1.setAuthorPerson(createPerson(1));
         author1.getAuthorInstitution().add(new Organization("inst1"));
         author1.getAuthorInstitution().add(new Organization("inst2"));
-        author1.getAuthorRole().add("role1");
-        author1.getAuthorRole().add("role2");
-        author1.getAuthorSpecialty().add("spec1");
-        author1.getAuthorSpecialty().add("spec2");
+        author1.getAuthorRole().add(new Identifiable("role1", new AssigningAuthority("2.3.1", "ISO")));
+        author1.getAuthorRole().add(new Identifiable("role2", null));
+        author1.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
+        author1.getAuthorSpecialty().add(new Identifiable("spec2", null));
         author1.getAuthorTelecom().add(new Telecom("5.25 in", "Floppynet"));
         author1.getAuthorTelecom().add(new Telecom("2:465/46.40", "Fidonet"));
 
@@ -71,10 +71,10 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         author2.setAuthorPerson(createPerson(30));
         author2.getAuthorInstitution().add(new Organization("inst3"));
         author2.getAuthorInstitution().add(new Organization("inst4"));
-        author2.getAuthorRole().add("role3");
-        author2.getAuthorRole().add("role4");
-        author2.getAuthorSpecialty().add("spec3");
-        author2.getAuthorSpecialty().add("spec4");
+        author2.getAuthorRole().add(new Identifiable("role3", null));
+        author2.getAuthorRole().add(new Identifiable("role4", new AssigningAuthority("2.3.6", "ISO")));
+        author2.getAuthorSpecialty().add(new Identifiable("spec3", null));
+        author2.getAuthorSpecialty().add(new Identifiable("spec4", new AssigningAuthority("2.3.8", "ISO")));
         author2.getAuthorTelecom().add(new Telecom("3.5 in", "Floppynet"));
         author2.getAuthorTelecom().add(new Telecom("2:465/168.8", "Fidonet"));
 
@@ -170,15 +170,15 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         EbXMLClassification classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
         assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^degree 1^^&uni 1&uniType 1");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
-        assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
-        assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1", "spec2");
+        assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1^^^&2.3.1&ISO", "role2");
+        assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1^^^&2.3.3&ISO", "spec2");
         assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), "^^Floppynet^5.25 in", "^^Fidonet^2:465/46.40");
 
         classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 1, "", -1);
         assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^degree 30^^&uni 30&uniType 30");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst3", "inst4");
-        assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role3", "role4");
-        assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec3", "spec4");
+        assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role3", "role4^^^&2.3.6&ISO");
+        assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec3", "spec4^^^&2.3.8&ISO");
         assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), "^^Floppynet^3.5 in", "^^Fidonet^2:465/168.8");
 
         classification = assertClassification(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, ebXML, 0, "code 1", 1);
