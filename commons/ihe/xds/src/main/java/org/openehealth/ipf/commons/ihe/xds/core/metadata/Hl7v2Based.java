@@ -28,13 +28,13 @@ import java.io.Serializable;
 
 /**
  * An XDS model object backed up by an HL7 v2 element.
- * @param <T>
+ * @param <C>
  *     HAPI composite type which corresponds to the HL7 v2 element.
  *
  * @author Dmytro Rud
  */
 @XmlTransient
-abstract public class Hl7v2Based<T extends Composite> implements Serializable {
+abstract public class Hl7v2Based<C extends Composite> implements Serializable {
     private static final long serialVersionUID = 5463666004063275303L;
 
     protected static final Message MESSAGE;
@@ -44,7 +44,7 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
     }
 
 
-    private final T hapiObject;
+    private final C hapiObject;
 
 
     /**
@@ -60,7 +60,7 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
      * @param hapiObject
      *      HAPI composite object.
      */
-    protected Hl7v2Based(T hapiObject) {
+    protected Hl7v2Based(C hapiObject) {
         this.hapiObject = Validate.notNull(hapiObject, "HAPI object");
     }
 
@@ -71,24 +71,24 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
      *      HL7 v2 element as a String.
      * @param xdsModelClass
      *      class of the XDS model object to be generates.
-     * @param <T>
-     *      class of HAPI composite object which should hold the HL7 element.
      * @param <C>
+     *      class of HAPI composite object which should hold the HL7 element.
+     * @param <T>
      *      class of XDS model object.
      * @return
      *      generated XDS model object or <code>null</code> when the given
      *      HL7 v2 element is <code>null</code> or empty.
      */
-    public static <T extends Composite, C extends Hl7v2Based<T>> C parse(
+    public static <C extends Composite, T extends Hl7v2Based<C>> T parse(
             String hl7String,
-            Class<C> xdsModelClass)
+            Class<T> xdsModelClass)
     {
         if (StringUtils.isEmpty(hl7String)) {
             return null;
         }
 
         try {
-            C xdsModelObject = xdsModelClass.newInstance();
+            T xdsModelObject = xdsModelClass.newInstance();
             MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, XdsHl7v2Renderer.ENCODING_CHARACTERS);
             // TODO: can the xdsModelObject be empty when the String is not empty?
             return xdsModelObject.isEmpty() ? null : xdsModelObject;
@@ -160,7 +160,7 @@ abstract public class Hl7v2Based<T extends Composite> implements Serializable {
      *      HAPI composite holding the HL7 v2 element
      *      which corresponds to this XDS model object.
      */
-    public T getHapiObject() {
+    public C getHapiObject() {
         return hapiObject;
     }
 

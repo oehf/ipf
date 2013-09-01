@@ -66,9 +66,10 @@ public class Comparators {
          def texts = []
          authors.each { author ->
              texts.add(Hl7v2Based.render(author.authorPerson))
-             author.authorInstitution.each { texts.add(Hl7v2Based.render(it))  }
-             texts.addAll(author.authorRole)
-             texts.addAll(author.authorSpecialty)
+             author.authorInstitution.each { texts.add(Hl7v2Based.render(it)) }
+             author.authorRole.each        { texts.add(Hl7v2Based.render(it)) }
+             author.authorSpecialty.each   { texts.add(Hl7v2Based.render(it)) }
+             author.authorTelecom.each     { texts.add(Hl7v2Based.render(it)) }
          }
          texts
      }

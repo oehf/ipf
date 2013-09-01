@@ -39,7 +39,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * @author Jens Riemschneider
  */
 public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequest, ValidationProfile> {
-    private static final CXValidator cxValidator = new CXValidator();
+    private static final CXValidator cxValidator = new CXValidator(true);
     private static final TimeValidator timeValidator = new TimeValidator();
     private static final NopValidator nopValidator = new NopValidator();
 

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
 import ca.uhn.hl7v2.model.v25.datatype.CX;
+import ca.uhn.hl7v2.model.v25.datatype.HD;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 
@@ -29,7 +30,14 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * @author Jens Riemschneider
  */
 public class CXValidator implements ValueValidator {
-    private final HDValidator HD_VALIDATOR = new HDValidator();
+    private static final HDValidator HD_VALIDATOR = new HDValidator();
+
+    private final boolean assigningAuthorityRequired;
+
+    public CXValidator(boolean assigningAuthorityRequired) {
+        this.assigningAuthorityRequired = assigningAuthorityRequired;
+    }
+
 
     @Override
     public void validate(String hl7CX) throws XDSMetaDataException {
@@ -44,6 +52,9 @@ public class CXValidator implements ValueValidator {
 
         metaDataAssert(isNotEmpty(cx.getCx1_IDNumber().getValue()), CX_NEEDS_ID);
 
-        HD_VALIDATOR.validate(cx.getCx4_AssigningAuthority(), hl7CX);
+        HD assigningAuthority = cx.getCx4_AssigningAuthority();
+        if (assigningAuthorityRequired || (! HD_VALIDATOR.isEmpty(assigningAuthority))) {
+            HD_VALIDATOR.validate(assigningAuthority, hl7CX);
+        }
     }
 }

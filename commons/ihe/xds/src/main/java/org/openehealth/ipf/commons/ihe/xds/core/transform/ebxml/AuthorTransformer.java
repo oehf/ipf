@@ -16,6 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang3.Validate.notNull;
+
+import ca.uhn.hl7v2.model.Composite;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
@@ -66,33 +68,10 @@ public class AuthorTransformer {
             classification.addSlot(SLOT_NAME_AUTHOR_PERSON, hl7XCN);
         }
 
-        List<String> hl7XONs = new ArrayList<String>();
-        for (Organization organization : author.getAuthorInstitution()) {
-            String hl7 = Hl7v2Based.render(organization);
-            if (hl7 != null) {
-                hl7XONs.add(hl7);
-            }
-        }
-        
-        classification.addSlot(SLOT_NAME_AUTHOR_INSTITUTION,
-                hl7XONs.toArray(new String[hl7XONs.size()]));
-        
-        classification.addSlot(SLOT_NAME_AUTHOR_ROLE,
-                author.getAuthorRole().toArray(new String[author.getAuthorRole().size()]));
-
-        classification.addSlot(SLOT_NAME_AUTHOR_SPECIALTY,
-                author.getAuthorSpecialty().toArray(new String[author.getAuthorSpecialty().size()]));
-        
-        List<String> hl7XTNs = new ArrayList<String>();
-        for (Telecom telecom : author.getAuthorTelecom()) {
-            String hl7 = Hl7v2Based.render(telecom);
-            if (hl7 != null) {
-                hl7XTNs.add(hl7);
-            }
-        }
-
-        classification.addSlot(SLOT_NAME_AUTHOR_TELECOM,
-                hl7XTNs.toArray(new String[hl7XTNs.size()]));
+        transformToHl7Slots(author.getAuthorInstitution(), classification, SLOT_NAME_AUTHOR_INSTITUTION);
+        transformToHl7Slots(author.getAuthorRole(),        classification, SLOT_NAME_AUTHOR_ROLE);
+        transformToHl7Slots(author.getAuthorSpecialty(),   classification, SLOT_NAME_AUTHOR_SPECIALTY);
+        transformToHl7Slots(author.getAuthorTelecom(),     classification, SLOT_NAME_AUTHOR_TELECOM);
 
         return classification;
     }
@@ -108,36 +87,85 @@ public class AuthorTransformer {
             return null;        
         }
         
+        Author author = new Author();
+
         List<String> persons = classification.getSlotValues(SLOT_NAME_AUTHOR_PERSON);
-        List<String> institutions = classification.getSlotValues(SLOT_NAME_AUTHOR_INSTITUTION);
-        List<String> roles = classification.getSlotValues(SLOT_NAME_AUTHOR_ROLE);
-        List<String> specialties = classification.getSlotValues(SLOT_NAME_AUTHOR_SPECIALTY);
-        List<String> telecoms = classification.getSlotValues(SLOT_NAME_AUTHOR_TELECOM);
-
-        Person person = null;
         if (persons.size() > 0) {
-            person = Hl7v2Based.parse(persons.get(0), Person.class);
-        }
-        
-        Author author = new Author();        
-        author.setAuthorPerson(person);
-        author.getAuthorRole().addAll(roles);
-        author.getAuthorSpecialty().addAll(specialties);
-
-        for (String hl7XON : institutions) {
-            Organization org = Hl7v2Based.parse(hl7XON, Organization.class);
-            if (org != null) {
-                author.getAuthorInstitution().add(org);
-            }
+            Person person = Hl7v2Based.parse(persons.get(0), Person.class);
+            author.setAuthorPerson(person);
         }
 
-        for (String hl7XTN : telecoms) {
-            Telecom telecom = Hl7v2Based.parse(hl7XTN, Telecom.class);
-            if (telecom != null) {
-                author.getAuthorTelecom().add(telecom);
-            }
-        }
+        transformFromHl7Slots(classification, SLOT_NAME_AUTHOR_INSTITUTION, author.getAuthorInstitution(), Organization.class);
+        transformFromHl7Slots(classification, SLOT_NAME_AUTHOR_ROLE,        author.getAuthorRole(),        Identifiable.class);
+        transformFromHl7Slots(classification, SLOT_NAME_AUTHOR_SPECIALTY,   author.getAuthorSpecialty(),   Identifiable.class);
+        transformFromHl7Slots(classification, SLOT_NAME_AUTHOR_TELECOM,     author.getAuthorTelecom(),     Telecom.class);
 
         return author;
     }
+
+
+    /**
+     * Extracts slots with the given name from the given classification,
+     * transforms them into HL7-based XDS object model instances
+     * of the given type and inserts into the given collection.
+     *
+     * @param sourceClassification
+     *      source classification.
+     * @param sourceSlotName
+     *      slot name in the source classification.
+     * @param targetCollection
+     *      target collection of HL7-based object model instances.
+     * @param targetClass
+     *      target class of the HL7-based object model.
+     * @param <T>
+     *      target class of the HL7-based object model.
+     * @param <C>
+     *      composite HAPI type wrapped by {@link T}.
+     */
+    private static <C extends Composite, T extends Hl7v2Based<C>> void transformFromHl7Slots(
+            EbXMLClassification sourceClassification,
+            String sourceSlotName,
+            List<T> targetCollection,
+            Class<T> targetClass)
+    {
+        for (String source : sourceClassification.getSlotValues(sourceSlotName)) {
+            T target = Hl7v2Based.<C, T>parse(source, targetClass);
+            if (target != null) {
+                targetCollection.add(target);
+            }
+        }
+    }
+
+
+    /**
+     * Renders HL7-based XDS object model instances contained in the given
+     * collection and stores them into the given classification
+     * as slot values with the given name.
+     *
+     * @param sourceCollection
+     *      source collection of HL7-based object model instances.
+     * @param targetClassification
+     *      target classification.
+     * @param targetSlotName
+     *      slot number in the target classification.
+     * @param <T>
+     *      source class of the HL7-based object model.
+     */
+    private static <T extends Hl7v2Based> void transformToHl7Slots(
+            List<T> sourceCollection,
+            EbXMLClassification targetClassification,
+            String targetSlotName)
+    {
+        List<String> targetCollection = new ArrayList<String>();
+        for (T source : sourceCollection) {
+            String target = Hl7v2Based.render(source);
+            if (source != null) {
+                targetCollection.add(target);
+            }
+        }
+
+        String[] array = new String[targetCollection.size()];
+        targetClassification.addSlot(targetSlotName, targetCollection.toArray(array));
+    }
+
 }
