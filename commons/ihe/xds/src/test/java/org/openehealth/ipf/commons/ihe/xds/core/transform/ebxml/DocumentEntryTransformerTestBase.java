@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
@@ -125,7 +124,14 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.getEventCodeList().add(createCode(8));
         documentEntry.getEventCodeList().add(createCode(9));
         documentEntry.setRepositoryUniqueId("repo1");
-        
+
+        documentEntry.getReferenceIdList().add(new ReferenceId(
+                "ref-id-11", new AssigningAuthority("1.1.2.3"),
+                ReferenceId.ID_TYPE_CODE_ORDER, new AssigningAuthority("1.4.5.6")));
+        documentEntry.getReferenceIdList().add(new ReferenceId(
+                "ref-id-12", new AssigningAuthority("2.1.2.3"),
+                ReferenceId.ID_TYPE_CODE_ACCESSION, new AssigningAuthority("2.4.5.6")));
+
         if (homeAware) {
             documentEntry.setHomeCommunityId("123.456");
         }
@@ -165,8 +171,11 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
                 "PID-7|dateOfBirth",
                 "PID-8|F",
                 "PID-11|streetAddress^otherDesignation^city^stateOrProvince^zipOrPostalCode^country^^^countyParishCode");
-        
-        
+
+        assertSlot(SLOT_NAME_REFERENCE_ID_LIST, slots,
+                "ref-id-11^^^&1.1.2.3&ISO^urn:ihe:iti:xds:2013:order^&1.4.5.6&ISO",
+                "ref-id-12^^^&2.1.2.3&ISO^urn:ihe:iti:xds:2013:accession^&2.4.5.6&ISO");
+
         EbXMLClassification classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
         assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^degree 1^^&uni 1&uniType 1");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
@@ -215,7 +224,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
                 "uniqueId", DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID);
         
         assertEquals(11, ebXML.getClassifications().size());
-        assertEquals(11, ebXML.getSlots().size());
+        assertEquals(12, ebXML.getSlots().size());
         assertEquals(2, ebXML.getExternalIdentifiers().size());
     }
 

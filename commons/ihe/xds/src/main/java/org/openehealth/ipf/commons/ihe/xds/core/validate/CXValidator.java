@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 
 import static org.apache.commons.lang3.StringUtils.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.HL7ValidationUtils.isEmptyField;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.CX_NEEDS_ID;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.CX_TOO_MANY_COMPONENTS;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
@@ -46,14 +47,21 @@ public class CXValidator implements ValueValidator {
 
         CX cx = identifiable.getHapiObject();
 
-        metaDataAssert(countMatches(hl7CX, "^") <= 3, CX_TOO_MANY_COMPONENTS);
+        // prohibited fields
         metaDataAssert(isEmpty(cx.getCx2_CheckDigit().getValue()), CX_TOO_MANY_COMPONENTS);
         metaDataAssert(isEmpty(cx.getCx3_CheckDigitScheme().getValue()), CX_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmpty(cx.getCx5_IdentifierTypeCode().getValue()), CX_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmptyField(cx.getCx6_AssigningFacility()), CX_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmpty(cx.getCx7_EffectiveDate().getValue()), CX_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmpty(cx.getCx8_ExpirationDate().getValue()), CX_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmptyField(cx.getCx9_AssigningJurisdiction()), CX_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmptyField(cx.getCx10_AssigningAgencyOrDepartment()), CX_TOO_MANY_COMPONENTS);
 
-        metaDataAssert(isNotEmpty(cx.getCx1_IDNumber().getValue()), CX_NEEDS_ID);
+        // required and optional fields
+        metaDataAssert(isNotEmpty(cx.getCx1_IDNumber().getValue()), CX_NEEDS_ID, hl7CX);
 
         HD assigningAuthority = cx.getCx4_AssigningAuthority();
-        if (assigningAuthorityRequired || (! HD_VALIDATOR.isEmpty(assigningAuthority))) {
+        if (assigningAuthorityRequired || (! isEmptyField(assigningAuthority))) {
             HD_VALIDATOR.validate(assigningAuthority, hl7CX);
         }
     }

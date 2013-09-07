@@ -40,23 +40,45 @@ abstract public class XdsHl7v2Renderer {
             new EncodingCharacters('|', '^', '~', '\\', '&');
 
     /**
-     * Numbers of fields of HL7 v2 composite types which are allowed to appear in XDS-specific
-     * string representation.  Note that the numbers are ZERO-based!  When some type is not
-     * mentioned here, its all sub-fields will be allowed.
+     * Map from HL7 class name to indices of fields allowed for rendering.
+     * An optional modifier is the class name of the root XDS model object.
+     * So the type of the key is a tuple [HL7 class name, XDS class name].
+     * <p>
+     * Querying algorithm when rendering an HL7 element C which is
+     * contained (directly or indirectly) in an XDS model object T:
+     * <ol>
+     *      <li> Try to retrieve indices for [C class name, null].
+     *      <li> When step 1 fails, try to retrieve indices for [C class name, T class name].
+     *      <li> When step 2 fails, assume that all fields of C are allowed.
+     * </ol>
+     * <p>
+     * Note that the indices are one-based, as in the HL7 and IHE documentation.
      */
-    private static final Map<Class<? extends Type>, Collection<Integer>> INCLUSIONS;
+    private static final Map<String, Collection<Integer>> INCLUSIONS = new HashMap<String, Collection<Integer>>();
 
-    private static void addInclusion(Class<? extends Type> typeClass, Integer... fieldNumbers) {
-        INCLUSIONS.put(typeClass, Arrays.asList(fieldNumbers));
+    private static <C extends Composite, T extends Hl7v2Based<C>> void addInclusion(
+            Class<C> hl7Class,
+            Class<T> xdsClass,
+            int... fieldNumbers)
+    {
+        Collection<Integer> collection = new HashSet<Integer>(fieldNumbers.length);
+        for (int number : fieldNumbers) {
+            collection.add(number - 1);
+        }
+        StringBuilder key = new StringBuilder(hl7Class.getSimpleName());
+        if (xdsClass != null) {
+            key.append('\n').append(xdsClass.getSimpleName());
+        }
+        INCLUSIONS.put(key.toString(), collection);
     }
 
     static {
-        INCLUSIONS = new HashMap<Class<? extends Type>, Collection<Integer>>();
-        addInclusion(CE.class,  0, 2);
-        addInclusion(CX.class,  0, 3);
-        addInclusion(HD.class,  1, 2);
-        addInclusion(XON.class, 0, 5, 9);
-        addInclusion(XTN.class, 2, 3);
+        addInclusion(CE.class,  null,               1, 3);
+        addInclusion(CX.class,  Identifiable.class, 1, 4);
+        addInclusion(CX.class,  ReferenceId.class,  1, 4, 5, 6);
+        addInclusion(HD.class,  null,               2, 3);
+        addInclusion(XON.class, null,               1, 6, 10);
+        addInclusion(XTN.class, null,               3, 4);
     }
 
 
@@ -66,27 +88,35 @@ abstract public class XdsHl7v2Renderer {
 
 
     /**
-     * Encodes the given HL7 v2 composite field using XDS-specific
-     * rules regarding required and prohibited sub-fields.
-     * @param composite
-     *      HL7 v2 composite field to be rendered.
+     * Encodes the given HL7-based XDS model object using specific
+     * rules regarding required and prohibited HL7 fields.
+     * @param hl7v2based
+     *      source HL7-based XDS object model to be rendered.
      * @return
      *      String representation of the given HL7 v2 composite field.
      */
-    public static String encode(Composite composite) {
-        return encodeComposite(composite, ENCODING_CHARACTERS.getComponentSeparator());
+    public static String encode(Hl7v2Based hl7v2based) {
+        return encodeComposite(
+                hl7v2based.getHapiObject(),
+                "\n" + hl7v2based.getClass().getSimpleName(),
+                ENCODING_CHARACTERS.getComponentSeparator());
     }
 
 
-    protected static String encodeComposite(Composite composite, char delimiter) {
+    private static String encodeComposite(Composite composite, String keyModifier, char delimiter) {
         StringBuilder sb = new StringBuilder();
         Type[] fields = composite.getComponents();
-        Collection<Integer> inclusions = INCLUSIONS.get(composite.getClass());
+
+        String key = composite.getClass().getSimpleName();
+        Collection<Integer> inclusions = INCLUSIONS.get(key);
+        if (inclusions == null) {
+            inclusions = INCLUSIONS.get(key + keyModifier);
+        }
 
         for (int i = 0; i < fields.length; ++i) {
             if ((inclusions == null) || inclusions.contains(i)) {
                 if (fields[i] instanceof Composite) {
-                    sb.append(encodeComposite((Composite) fields[i], ENCODING_CHARACTERS.getSubcomponentSeparator()));
+                    sb.append(encodeComposite((Composite) fields[i], keyModifier, ENCODING_CHARACTERS.getSubcomponentSeparator()));
                 } else if (fields[i] instanceof Primitive) {
                     sb.append(encodePrimitive((Primitive) fields[i]));
                 } else {
@@ -101,7 +131,7 @@ abstract public class XdsHl7v2Renderer {
     }
 
 
-    public static String encodePrimitive(Primitive p) {
+    private static String encodePrimitive(Primitive p) {
         String value = p.getValue();
         return (value == null) ? "" : Escape.escape(value, ENCODING_CHARACTERS);
     }

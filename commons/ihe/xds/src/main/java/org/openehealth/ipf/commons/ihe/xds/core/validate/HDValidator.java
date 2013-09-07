@@ -28,12 +28,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
 public class HDValidator {
     private static final OIDValidator OID_VALIDATOR = new OIDValidator();
 
-    public boolean isEmpty(HD hd) {
-        return StringUtils.isEmpty(hd.getHd1_NamespaceID().getValue()) &&
-               StringUtils.isEmpty(hd.getHd2_UniversalID().getValue()) &&
-               StringUtils.isEmpty(hd.getHd3_UniversalIDType().getValue());
-    }
-
 
     /**
      * Validates an HL7 v2 HD element.

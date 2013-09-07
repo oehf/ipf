@@ -104,13 +104,13 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
 
     /**
      * Renders this XDS model object using the XDS-specific
-     * {@link XdsHl7v2Renderer#encode(ca.uhn.hl7v2.model.Composite) HL7 v2 renderer},
+     * {@link XdsHl7v2Renderer HL7 v2 renderer},
      * i.e. with applying IHE TF rules regarding unwanted components.
      * @return
      *      HL7 v2 representation of this XDS model object, may be an empty String.
      */
     protected String render() {
-        return XdsHl7v2Renderer.encode(hapiObject);
+        return XdsHl7v2Renderer.encode(this);
     }
 
 

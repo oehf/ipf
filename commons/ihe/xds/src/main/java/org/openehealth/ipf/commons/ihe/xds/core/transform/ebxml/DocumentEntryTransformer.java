@@ -110,6 +110,10 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         
         List<String> slotValues = extrinsic.getSlotValues(SLOT_NAME_SOURCE_PATIENT_INFO);        
         docEntry.setSourcePatientInfo(patientInfoTransformer.fromHL7(slotValues));
+
+        for (String referenceIdValue : extrinsic.getSlotValues(SLOT_NAME_REFERENCE_ID_LIST)) {
+            docEntry.getReferenceIdList().add(Hl7v2Based.parse(referenceIdValue, ReferenceId.class));
+        }
     }
     
     @Override
@@ -135,6 +139,14 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         
         List<String> slotValues = patientInfoTransformer.toHL7(docEntry.getSourcePatientInfo());
         extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slotValues.toArray(new String[slotValues.size()]));
+
+        if (! docEntry.getReferenceIdList().isEmpty()) {
+            String[] referenceIdValues = new String[docEntry.getReferenceIdList().size()];
+            for (int i = 0; i < docEntry.getReferenceIdList().size(); ++i) {
+                referenceIdValues[i] = Hl7v2Based.render(docEntry.getReferenceIdList().get(i));
+            }
+            extrinsic.addSlot(SLOT_NAME_REFERENCE_ID_LIST, referenceIdValues);
+        }
     }
 
     @Override

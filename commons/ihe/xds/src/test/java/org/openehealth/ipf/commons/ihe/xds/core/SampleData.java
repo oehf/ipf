@@ -297,6 +297,12 @@ public abstract class SampleData {
         docEntry.setTypeCode(new Code("code6", new LocalizedString("code6"), "scheme6"));
         docEntry.setUniqueId("32848902348");
         docEntry.setUri("http://hierunten.com");
+        docEntry.getReferenceIdList().add(new ReferenceId(
+                "ref-id-1", new AssigningAuthority("1.1.2.3"),
+                ReferenceId.ID_TYPE_CODE_ORDER, new AssigningAuthority("1.4.5.6")));
+        docEntry.getReferenceIdList().add(new ReferenceId(
+                "ref-id-2", new AssigningAuthority("2.1.2.3"),
+                "vendor-defined", new AssigningAuthority("2.4.5.6")));
         return docEntry;
     }    
 

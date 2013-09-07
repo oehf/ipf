@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.HL7ValidationUtils.isEmptyField;
 import static org.apache.commons.lang3.StringUtils.*;
 
 import ca.uhn.hl7v2.model.v25.datatype.HD;
@@ -41,7 +42,7 @@ public class XONValidator implements ValueValidator {
         metaDataAssert(isNotEmpty(xon.getXon1_OrganizationName().getValue()), ORGANIZATION_NAME_MISSING, hl7XON);
 
         HD hd = xon.getXon6_AssigningAuthority();
-        if (HD_VALIDATOR.isEmpty(hd)) {
+        if (isEmptyField(hd)) {
             String idNumber = xon.getXon10_OrganizationIdentifier().getValue();
             if (isNotEmpty(idNumber)) {
                 OID_VALIDATOR.validate(idNumber);
@@ -56,7 +57,7 @@ public class XONValidator implements ValueValidator {
         metaDataAssert(isEmpty(xon.getXon4_CheckDigit().getValue()), ORGANIZATION_TOO_MANY_COMPONENTS);
         metaDataAssert(isEmpty(xon.getXon5_CheckDigitScheme().getValue()), ORGANIZATION_TOO_MANY_COMPONENTS);
         metaDataAssert(isEmpty(xon.getXon7_IdentifierTypeCode().getValue()), ORGANIZATION_TOO_MANY_COMPONENTS);
-        metaDataAssert(HD_VALIDATOR.isEmpty(xon.getXon8_AssigningFacility()), ORGANIZATION_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmptyField(xon.getXon8_AssigningFacility()), ORGANIZATION_TOO_MANY_COMPONENTS);
         metaDataAssert(isEmpty(xon.getXon9_NameRepresentationCode().getValue()), ORGANIZATION_TOO_MANY_COMPONENTS);
     }
 }
