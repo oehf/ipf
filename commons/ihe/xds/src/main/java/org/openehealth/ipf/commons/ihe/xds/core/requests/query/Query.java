@@ -73,6 +73,7 @@ public abstract class Query implements Serializable {
         void visit(GetAllQuery query);
         void visit(FindSubmissionSetsQuery query);
         void visit(FetchQuery query);
+        void visit(FindDocumentsByReferenceIdQuery query);
     }
     
     /**

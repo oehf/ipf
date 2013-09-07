@@ -68,6 +68,18 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 DOC_ENTRY_FORMAT_CODE,
                 DOC_ENTRY_STATUS);
 
+        addAllowedMultipleSlots(FIND_DOCUMENTS_BY_REFERENCE_ID,
+                DOC_ENTRY_CLASS_CODE,
+                DOC_ENTRY_TYPE_CODE,
+                DOC_ENTRY_PRACTICE_SETTING_CODE,
+                DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE,
+                DOC_ENTRY_EVENT_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE,
+                DOC_ENTRY_AUTHOR_PERSON,
+                DOC_ENTRY_FORMAT_CODE,
+                DOC_ENTRY_STATUS,
+                DOC_ENTRY_REFERENCE_IDS);
+
         addAllowedMultipleSlots(FIND_DOCUMENTS_MPQ,
                 DOC_ENTRY_PATIENT_ID,
                 DOC_ENTRY_CLASS_CODE,
@@ -155,6 +167,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 Arrays.<InteractionId> asList(ITI_18, ITI_38),
                 Arrays.asList(
                         FIND_DOCUMENTS,
+                        FIND_DOCUMENTS_BY_REFERENCE_ID,
                         FIND_SUBMISSION_SETS,
                         FIND_FOLDERS,
                         GET_ALL,
@@ -231,6 +244,28 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
                     new StatusValidation(DOC_ENTRY_STATUS),
                     new DocumentEntryTypeValidation(),
+                };
+
+            case FIND_DOCUMENTS_BY_REFERENCE_ID:
+                return new QueryParameterValidation[] {
+                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                        new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                        new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                        new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                        new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                        new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                        new NumberValidation(DOC_ENTRY_CREATION_TIME_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_CREATION_TIME_TO, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_TO, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM, timeValidator),
+                        new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO, timeValidator),
+                        new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                        new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
+                        new StatusValidation(DOC_ENTRY_STATUS),
+                        new DocumentEntryTypeValidation(),
+                        new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator),
                 };
 
             case FIND_SUBMISSION_SETS:

@@ -117,7 +117,7 @@ public class QuerySlotHelper {
             fromCode(param, codes);
         }
     }
-    
+
     private QueryList<Code> toCodeQueryList(QueryParameter param) {
         List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
         if (slots.isEmpty()) {
@@ -173,7 +173,24 @@ public class QuerySlotHelper {
         }
         ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[slotValues.size()]));
     }
-    
+
+    /**
+     * Stores a list of strings into a slot.
+     * @param param
+     *          the parameter.
+     * @param queryList
+     *          the list of strings.
+     */
+    public void fromStringList(QueryParameter param, QueryList<String> queryList) {
+        if (queryList == null) {
+            return;
+        }
+
+        for (List<String> list : queryList.getOuterList()) {
+            fromStringList(param, list);
+        }
+    }
+
     /**
      * Retrieves a list of strings from a slot.
      * @param param
