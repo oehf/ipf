@@ -381,7 +381,7 @@ public abstract class SampleData {
         
         return new QueryRegistry(query);
     }
-    
+
     /**
      * @return a sample stored query for find documents.
      */
@@ -391,6 +391,24 @@ public abstract class SampleData {
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for find documents by reference ID.
+     */
+    public static QueryRegistry createFindDocumentsByReferenceIdQuery() {
+        FindDocumentsByReferenceIdQuery query = new FindDocumentsByReferenceIdQuery();
+        populateDocumentsQuery(query);
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+
+        QueryList<String> referenceIds = new QueryList<String>();
+        referenceIds.getOuterList().add(Arrays.asList("ref-id-11", "ref-id-12", "ref-id-13"));
+        referenceIds.getOuterList().add(Arrays.asList("ref-id-21", "ref-id-22"));
+        query.setReferenceIds(referenceIds);
+
         return new QueryRegistry(query);
     }
 

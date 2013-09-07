@@ -206,6 +206,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
             data[0] = t;
         }
 
+        @SuppressWarnings("unchecked")
         public T getInternal() {
             return (T) data[0];
         }

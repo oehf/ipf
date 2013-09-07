@@ -28,10 +28,10 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  * Transforms between a {@link FindDocumentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-public class FindDocumentsQueryTransformer extends DocumentsQueryTransformer<FindDocumentsQuery> {
+public class FindDocumentsQueryTransformer<T extends FindDocumentsQuery> extends DocumentsQueryTransformer<T> {
 
     @Override
-    public void toEbXML(FindDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
+    public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
@@ -45,7 +45,7 @@ public class FindDocumentsQueryTransformer extends DocumentsQueryTransformer<Fin
     }
 
 
-    public void fromEbXML(FindDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
+    public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }

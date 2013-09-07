@@ -46,7 +46,7 @@ final class ToEbXMLVisitor implements Visitor {
 
     @Override
     public void visit(FindDocumentsQuery query) {
-        new FindDocumentsQueryTransformer().toEbXML(query, ebXML);                
+        new FindDocumentsQueryTransformer<FindDocumentsQuery>().toEbXML(query, ebXML);
     }
 
     @Override
@@ -122,5 +122,10 @@ final class ToEbXMLVisitor implements Visitor {
     @Override
     public void visit(FetchQuery query) {
         new FetchQueryTransformer().toEbXML(query, ebXML);
+    }
+
+    @Override
+    public void visit(FindDocumentsByReferenceIdQuery query) {
+        new FindDocumentsByReferenceIdQueryTransformer().toEbXML(query, ebXML);
     }
 }

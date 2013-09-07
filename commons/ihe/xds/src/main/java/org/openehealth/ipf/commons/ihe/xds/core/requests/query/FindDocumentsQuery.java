@@ -30,7 +30,7 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FindDocumentsQuery", propOrder = {"patientId","status", "documentEntryTypes"})
+@XmlType(name = "FindDocumentsQuery", propOrder = {"patientId", "status", "documentEntryTypes"})
 @XmlRootElement(name = "findDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class FindDocumentsQuery extends DocumentsQuery implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery {
@@ -46,6 +46,10 @@ public class FindDocumentsQuery extends DocumentsQuery implements PatientIdBased
      */
     public FindDocumentsQuery() {
         super(QueryType.FIND_DOCUMENTS);
+    }
+
+    protected FindDocumentsQuery(QueryType type) {
+        super(type);
     }
 
     @Override

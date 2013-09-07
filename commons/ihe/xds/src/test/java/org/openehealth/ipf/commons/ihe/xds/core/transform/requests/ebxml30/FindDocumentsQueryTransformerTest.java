@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.DocumentsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
@@ -40,7 +39,7 @@ import static org.junit.Assert.assertEquals;
  * @author Michael Ottati
  */
 public class FindDocumentsQueryTransformerTest {
-    private FindDocumentsQueryTransformer transformer;
+    private FindDocumentsQueryTransformer<FindDocumentsQuery> transformer;
     private FindDocumentsForMultiplePatientsQueryTransformer multiplePatientsQueryTransformer;
     private FindDocumentsForMultiplePatientsQuery multiplePatientsQuery;
     private FindDocumentsQuery query;
@@ -48,7 +47,7 @@ public class FindDocumentsQueryTransformerTest {
     
     @Before
     public void setUp() {
-        transformer = new FindDocumentsQueryTransformer();
+        transformer = new FindDocumentsQueryTransformer<FindDocumentsQuery>();
         query = (FindDocumentsQuery)SampleData.createFindDocumentsQuery().getQuery();
         multiplePatientsQueryTransformer = new FindDocumentsForMultiplePatientsQueryTransformer();
         multiplePatientsQuery = (FindDocumentsForMultiplePatientsQuery)SampleData.createFindDocumentsForMultiplePatientsQuery().getQuery();
@@ -63,7 +62,7 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals("12.21.41", ebXML.getHome());
         assertEquals(Arrays.asList("'id3^^^&1.3&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
-        toEbXML(query,ebXML);
+        checkEbXML(ebXML);
     }
 
     @Test
@@ -72,11 +71,10 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(QueryType.FIND_DOCUMENTS_MPQ.getId(), ebXML.getId());
         assertEquals(Arrays.asList("('id3^^^&1.3&ISO')","('id4^^^&1.4&ISO')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
-        toEbXML(query,ebXML);
+        checkEbXML(ebXML);
     }
 
-    public void toEbXML(DocumentsQuery query,EbXMLAdhocQueryRequest ebXML) {
-
+    private static void checkEbXML(EbXMLAdhocQueryRequest ebXML) {
         assertEquals("12.21.41", ebXML.getHome());
 
         assertEquals(Arrays.asList("('code1^^scheme1')", "('code2^^scheme2')"),
@@ -164,7 +162,6 @@ public class FindDocumentsQueryTransformerTest {
 
     @Test
     public void testFromEbXML_MPQ() {
-
         multiplePatientsQueryTransformer.toEbXML(multiplePatientsQuery,ebXML);
         FindDocumentsForMultiplePatientsQuery mpResult = new FindDocumentsForMultiplePatientsQuery();
         multiplePatientsQueryTransformer.fromEbXML(mpResult,ebXML);
