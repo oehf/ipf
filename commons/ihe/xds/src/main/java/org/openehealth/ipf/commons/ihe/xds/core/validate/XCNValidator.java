@@ -48,7 +48,7 @@ public class XCNValidator implements ValueValidator {
 
 
         HD hd = xcn.getXcn9_AssigningAuthority();
-        if (! HD_VALIDATOR.isEmpty(hd)) {
+        if (! HL7ValidationUtils.isEmptyField(hd)) {
             HD_VALIDATOR.validate(hd, hl7xcn);
         }
     }

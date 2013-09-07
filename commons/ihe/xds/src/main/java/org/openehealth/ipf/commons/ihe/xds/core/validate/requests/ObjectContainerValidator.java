@@ -29,7 +29,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
-
 /**
  * Validation of an ebXML object container.
  * @author Jens Riemschneider
@@ -52,6 +51,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final CXValidator cxValidatorRequiredAA = new CXValidator(true);
     private final CXValidator cxValidatorOptionalAA = new CXValidator(false);
     private final XTNValidator xtnValidator = new XTNValidator();
+    private final CXiValidator cxiValidator = new CXiValidator();
 
     private final SlotValueValidation[] authorValidations = new SlotValueValidation[] {
         new SlotValueValidation(SLOT_NAME_AUTHOR_PERSON, xcnValidator, 0, 1),
@@ -94,6 +94,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                     (profile.isEbXml30Based() && ! profile.isQuery()) ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
                     isContinuaHRN ? 1 : 0, Integer.MAX_VALUE),
+            new SlotValueValidation(SLOT_NAME_REFERENCE_ID_LIST, cxiValidator, 0, Integer.MAX_VALUE),
             new SlotValidation(SLOT_NAME_URI, uriValidator),
             new AuthorClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, authorValidations),
             new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),

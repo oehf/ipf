@@ -229,14 +229,17 @@ public abstract class Vocabulary {
     /** Name of the slot that is used for version number of documents previous version */
     public static final String SLOT_NAME_PREVIOUS_VERSION = "PreviousVersion";
 
-    /** Name of the slot that is used for original association type status on update associations*/
+    /** Name of the slot that is used for original association type status on update associations */
     public static final String SLOT_NAME_ORIGINAL_STATUS = "OriginalStatus";
 
-    /** Name of the slot that is used for new association type status on update associations*/
+    /** Name of the slot that is used for new association type status on update associations */
     public static final String SLOT_NAME_NEW_STATUS = "NewStatus";
 
     /** Annotation for association propagation*/
     public static final String SLOT_NAME_ASSOCIATION_PROPAGATION = "AssociationPropagation";
+
+    /** Name of the slot that is used for reference ID list */
+    public static final String SLOT_NAME_REFERENCE_ID_LIST = "urn:ihe:iti:xds:2013:referenceIdList";
 
     /** Universal ID Type to be used for all HD data types used with XDS */
     public static final String UNIVERSAL_ID_TYPE_OID = "ISO";

@@ -47,6 +47,7 @@ public enum ValidationMessage {
     WRONG_NODE_REPRESENTATION("Classification does not specify its node representation. Scheme = %1s"),
     CX_TOO_MANY_COMPONENTS("Only the ID number and the assigning authority can be definied for a CX value"),
     CX_NEEDS_ID("ID number must be specified for a CX value"),
+    CX_NEEDS_ID_TYPE_CODE("ID type code must be specified for a CXi value"),
     HD_MUST_NOT_HAVE_NAMESPACE_ID("The namespace ID should not be defined for an assigning authority: %1s"),
     UNIVERSAL_ID_TYPE_MUST_BE_ISO("The universal ID type of an assigning authority must be ISO: %1s"),
     HD_NEEDS_UNIVERSAL_ID("The universal ID must be defined for an assigning authority: %1s"),

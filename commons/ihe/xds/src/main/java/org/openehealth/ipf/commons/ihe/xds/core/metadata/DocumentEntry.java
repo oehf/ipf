@@ -39,7 +39,7 @@ import java.util.List;
         "sourcePatientId", "sourcePatientInfo", "creationTime", "authors", "legalAuthenticator", "serviceStartTime",
         "serviceStopTime", "classCode", "confidentialityCodes", "eventCodeList", "formatCode",
         "healthcareFacilityTypeCode", "languageCode", "practiceSettingCode", "typeCode", "repositoryUniqueId",
-        "mimeType", "size", "hash", "uri", "type"})
+        "mimeType", "size", "hash", "uri", "type", "referenceIdList"})
 @XmlRootElement(name = "documentEntry")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class DocumentEntry extends XDSMetaClass implements Serializable {
@@ -75,6 +75,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     @Getter @Setter private String uri;
     @Getter @Setter private String repositoryUniqueId;
     @Getter @Setter private DocumentEntryType type = DocumentEntryType.STABLE;
+    @Getter private List<ReferenceId> referenceIdList = new ArrayList<ReferenceId>();
 
     /**
      * @param author
