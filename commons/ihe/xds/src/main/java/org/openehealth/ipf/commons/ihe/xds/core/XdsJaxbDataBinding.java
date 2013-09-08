@@ -48,7 +48,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
      * @param ebXml
      *      key object.
      * @return
-     *      Camel an existing or a freshly created information holder.
+     *      additional Camel headers as a map.
      */
     public static Map<String, Object> getCamelHeaders(Object ebXml) {
         Map<String, Object> map = DATA.get(ebXml);

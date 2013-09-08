@@ -24,18 +24,21 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base class for stored queries.
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "StoredQuery", propOrder = { "homeCommunityId" })
+@XmlType(name = "StoredQuery", propOrder = {"homeCommunityId", "extraParameters"})
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public abstract class StoredQuery extends Query {
     private static final long serialVersionUID = -8296981156625412818L;
 
     @Getter @Setter private String homeCommunityId;
+    @Getter private Map<String, QueryList<String>> extraParameters = new HashMap<String, QueryList<String>>();
 
     /**
      * For JAXB serialization only.

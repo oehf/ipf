@@ -27,7 +27,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  *          the actual query type that is transformed by an extending subclass.
  * @author Jens Riemschneider
  */
-public abstract class GetFromDocumentQueryTransformer<T extends GetFromDocumentQuery> {
+public abstract class GetFromDocumentQueryTransformer<T extends GetFromDocumentQuery> extends AbstractStoredQueryTransformer<T> {
     /**
      * Transforms the query into its ebXML representation.
      * <p>
@@ -41,12 +41,10 @@ public abstract class GetFromDocumentQueryTransformer<T extends GetFromDocumentQ
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.toEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
-        ebXML.setId(query.getType().getId());
-        ebXML.setHome(query.getHomeCommunityId());
-        
         slots.fromString(DOC_ENTRY_UUID, query.getUuid());
         slots.fromString(DOC_ENTRY_UNIQUE_ID, query.getUniqueId());
     }
@@ -64,12 +62,13 @@ public abstract class GetFromDocumentQueryTransformer<T extends GetFromDocumentQ
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.fromEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         query.setUniqueId(slots.toString(DOC_ENTRY_UNIQUE_ID));
         query.setUuid(slots.toString(DOC_ENTRY_UUID));
-        query.setHomeCommunityId(ebXML.getHome());
     }
 
 }

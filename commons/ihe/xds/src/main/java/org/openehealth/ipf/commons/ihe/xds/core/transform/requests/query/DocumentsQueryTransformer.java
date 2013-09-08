@@ -21,10 +21,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.DocumentsQuery;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
- * Transforms between an {@link org.openehealth.ipf.commons.ihe.xds.core.requests.query.DocumentsQuery} derivative and {@link EbXMLAdhocQueryRequest}.
+ * Transforms between an {@link DocumentsQuery} derivative and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-abstract class DocumentsQueryTransformer<T extends DocumentsQuery> {
+abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends AbstractStoredQueryTransformer<T> {
 
     /**
      * Transforms the query into its ebXML representation.
@@ -39,11 +39,10 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.toEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
-        ebXML.setId(query.getType().getId());
-        ebXML.setHome(query.getHomeCommunityId());
         
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
 
@@ -78,7 +77,9 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.fromEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         query.setClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE));
@@ -100,7 +101,5 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> {
 
         query.getServiceStopTime().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM));
         query.getServiceStopTime().setTo(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO));
-        
-        query.setHomeCommunityId(ebXML.getHome());
     }
 }
