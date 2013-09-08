@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  *          the actual query type that is transformed by an extending subclass.
  * @author Jens Riemschneider
  */
-public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQuery> {
+public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQuery> extends AbstractStoredQueryTransformer<T> {
     private final QueryParameter formatCodeParam;
     private final QueryParameter confCodeParam;
     private final QueryParameter confCodeSchemeParam;
@@ -77,12 +77,11 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.toEbXML(query,  ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
-        ebXML.setId(query.getType().getId());
-        ebXML.setHome(query.getHomeCommunityId());
-        
+
         slots.fromCode(formatCodeParam, query.getFormatCodes());
         slots.fromCode(confCodeParam, query.getConfidentialityCodes());
         slots.fromString(uuidParam, query.getUuid());
@@ -98,18 +97,19 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      */
-   public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
+    public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.fromEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         query.setFormatCodes(slots.toCodeList(formatCodeParam));
         query.setConfidentialityCodes(slots.toCodeQueryList(confCodeParam, confCodeSchemeParam));
         query.setUniqueId(slots.toString(uniqueIdParam));
         query.setUuid(slots.toString(uuidParam));
-        query.setHomeCommunityId(ebXML.getHome());
     }
 
 }

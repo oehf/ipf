@@ -136,4 +136,27 @@ public enum QueryParameter {
     public String getSlotName() {
         return slotName;
     }
+
+
+    /**
+     * @param slotName
+     *      query slot name.
+     * @return
+     *      a {@link QueryParameter} element which corresponds to the given
+     *      slot name, or <code>null</code> when none found.
+     */
+    public static QueryParameter valueOfSlotName(String slotName) {
+        if (slotName == null) {
+            return null;
+        }
+
+        for (QueryParameter queryParameter : QueryParameter.values()) {
+            if (slotName.equals(queryParameter.getSlotName())) {
+                return queryParameter;
+            }
+        }
+
+        return null;
+    }
+
 }

@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindSubmissionSet
  * Transforms between {@link FindSubmissionSetsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-public class FindSubmissionSetsQueryTransformer {
+public class FindSubmissionSetsQueryTransformer extends AbstractStoredQueryTransformer<FindSubmissionSetsQuery> {
 
     /**
      * Transforms the query into its EbXML representation.
@@ -41,11 +41,10 @@ public class FindSubmissionSetsQueryTransformer {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.toEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
-        ebXML.setId(query.getType().getId());
-        ebXML.setHome(query.getHomeCommunityId());
 
         slots.fromString(SUBMISSION_SET_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         
@@ -74,7 +73,9 @@ public class FindSubmissionSetsQueryTransformer {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.fromEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         String patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
@@ -90,6 +91,5 @@ public class FindSubmissionSetsQueryTransformer {
         query.setContentTypeCodes(slots.toCodeList(SUBMISSION_SET_CONTENT_TYPE_CODE));
         
         query.setStatus(slots.toStatus(SUBMISSION_SET_STATUS));
-        query.setHomeCommunityId(ebXML.getHome());
     }
 }

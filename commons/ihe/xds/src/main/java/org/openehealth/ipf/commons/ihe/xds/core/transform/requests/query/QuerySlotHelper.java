@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 /**
  * Wrapper class for ebXML query request to simplify access to slots.
  * <p>
@@ -102,9 +104,9 @@ public class QuerySlotHelper {
     }
 
     /**
-     * Stores a list of codes into a slot.
+     * Stores a code list with AND/OR semantics into a set of slots with the same name.
      * @param param
-     *          the parameter.
+     *          standard query parameter (implies the name of the slots).
      * @param queryList
      *          the list of codes.
      */
@@ -133,13 +135,28 @@ public class QuerySlotHelper {
     }
     
     /**
-     * Retrieves a list of strings from a slot.
+     * Retrieves a string list with AND/OR semantics from a set of slots with the same name.
      * @param param
-     *          the parameter.
+     *          standard query parameter (implies the name of the slots).
      * @return the string list.
      */
     public QueryList<String> toStringQueryList(QueryParameter param) {
-        List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
+        return toStringQueryList(param.getSlotName());
+    }
+
+    /**
+     * Retrieves a string list with AND/OR semantics from a set of slots with the same name.
+     * @param slotName
+     *          name of the source slots, may correspond to either
+     *          a standard query parameter or an extra parameter.
+     * @return the string list.
+     */
+    public QueryList<String> toStringQueryList(String slotName) {
+        if (isEmpty(slotName)) {
+            return null;
+        }
+
+        List<EbXMLSlot> slots = ebXML.getSlots(slotName);
         if (slots.isEmpty()) {
             return null;
         }
@@ -158,12 +175,24 @@ public class QuerySlotHelper {
     /**
      * Stores a list of strings into a slot.
      * @param param
-     *          the parameter.
+     *          standard query parameter (implies the name of the slots).
      * @param values
      *          the string list.
      */
     public void fromStringList(QueryParameter param, List<String> values) {
-        if (values == null) {
+        fromStringList(param.getSlotName(), values);
+    }
+
+    /**
+     * Stores a list of strings into a slot.
+     * @param slotName
+     *          name of the target slot, may correspond to either
+     *          a standard query parameter or an extra parameter.
+     * @param values
+     *          the string list.
+     */
+    public void fromStringList(String slotName, List<String> values) {
+        if (isEmpty(slotName) || (values == null)) {
             return;
         }
         
@@ -171,23 +200,35 @@ public class QuerySlotHelper {
         for (String value : values) {
             slotValues.add(encodeAsStringList(value));
         }
-        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[slotValues.size()]));
+        ebXML.addSlot(slotName, slotValues.toArray(new String[slotValues.size()]));
     }
 
     /**
-     * Stores a list of strings into a slot.
+     * Stores a string list with AND/OR semantics into a set of slots with the same name.
      * @param param
-     *          the parameter.
+     *          standard query parameter (implies the name of the slots).
      * @param queryList
      *          the list of strings.
      */
     public void fromStringList(QueryParameter param, QueryList<String> queryList) {
-        if (queryList == null) {
+        fromStringList(param.getSlotName(), queryList);
+    }
+
+    /**
+     * Stores a string list with AND/OR semantics into a set of slots with the same name.
+     * @param slotName
+     *          name of the target slots, may correspond to either
+     *          a standard query parameter or an extra parameter.
+     * @param queryList
+     *          the list of strings.
+     */
+    public void fromStringList(String slotName, QueryList<String> queryList) {
+        if (isEmpty(slotName) || (queryList == null)) {
             return;
         }
 
         for (List<String> list : queryList.getOuterList()) {
-            fromStringList(param, list);
+            fromStringList(slotName, list);
         }
     }
 
@@ -260,9 +301,9 @@ public class QuerySlotHelper {
     }
 
     /**
-     * Retrieves a list of codes from a slot.
+     * Retrieves a code list with AND/OR semantics from a set of slots with the same name.
      * @param param
-     *          the parameter.
+     *          standard query parameter (implies the name of the slots).
      * @param schemeParam
      *          the code scheme parameter.
      * @return the codes.

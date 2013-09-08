@@ -18,11 +18,15 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetDocumentsQueryTransformer;
@@ -45,6 +49,17 @@ public class GetDocumentsQueryTransformerTest {
         query.setUniqueIds(Arrays.asList("uniqueId1", "uniqueId2"));
         query.setHomeCommunityId("home");
 
+        QueryList<String> extraParams1 = new QueryList<String>();
+        extraParams1.getOuterList().add(Arrays.asList("para-11", "para-12"));
+        extraParams1.getOuterList().add(Arrays.asList("para-21", "para-22", "para-23"));
+
+        QueryList<String> extraParams2 = new QueryList<String>();
+        extraParams2.getOuterList().add(Arrays.asList("dia-31", "dia-32", "dia-33"));
+        extraParams2.getOuterList().add(Arrays.asList("dia-41"));
+
+        query.getExtraParameters().put("$PatientPerimeter", extraParams1);
+        query.getExtraParameters().put("$PatientDiameter", extraParams2);
+
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
     
@@ -59,10 +74,31 @@ public class GetDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('uniqueId1')", "('uniqueId2')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UNIQUE_ID.getSlotName()));
 
+        List<EbXMLSlot> perimeters = ebXML.getSlots("$PatientPerimeter");
+        assertEquals(2, perimeters.size());
+        assertEquals(Arrays.asList("('para-11')", "('para-12')"), perimeters.get(0).getValueList());
+        assertEquals(Arrays.asList("('para-21')", "('para-22')", "('para-23')"), perimeters.get(1).getValueList());
+
+        List<EbXMLSlot> diameters = ebXML.getSlots("$PatientDiameter");
+        assertEquals(2, diameters.size());
+        assertEquals(Arrays.asList("('dia-31')", "('dia-32')", "('dia-33')"), diameters.get(0).getValueList());
+        assertEquals(Arrays.asList("('dia-41')"), diameters.get(1).getValueList());
+
+        assertEquals(Arrays.asList("('uniqueId1')", "('uniqueId2')"),
+                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UNIQUE_ID.getSlotName()));
+
         assertEquals("home", ebXML.getHome());
-        assertEquals(2, ebXML.getSlots().size());
+        assertEquals(6, ebXML.getSlots().size());
     }
-    
+
+    @Test
+    public void testRoundtrip() {
+        transformer.toEbXML(query, ebXML);
+        GetDocumentsQuery otherQuery = new GetDocumentsQuery();
+        transformer.fromEbXML(otherQuery, ebXML);
+        assertEquals(query, otherQuery);
+    }
+
     @Test
     public void testToEbXMLNull() {
         transformer.toEbXML(null, ebXML);

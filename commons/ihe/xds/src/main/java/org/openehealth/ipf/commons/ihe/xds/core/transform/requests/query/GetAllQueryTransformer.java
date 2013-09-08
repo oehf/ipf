@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAllQuery;
  * Transforms between a {@link GetAllQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-public class GetAllQueryTransformer {
+public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAllQuery> {
 
     /**
      * Transforms the query into its ebXML representation.
@@ -41,11 +41,10 @@ public class GetAllQueryTransformer {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.toEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
-        ebXML.setId(query.getType().getId());
-        ebXML.setHome(query.getHomeCommunityId());
 
         slots.fromString(PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         
@@ -72,7 +71,9 @@ public class GetAllQueryTransformer {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.fromEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         String patientId = slots.toString(PATIENT_ID);
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
@@ -83,7 +84,6 @@ public class GetAllQueryTransformer {
         
         query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
         query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
-        query.setHomeCommunityId(ebXML.getHome());
 
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
     }

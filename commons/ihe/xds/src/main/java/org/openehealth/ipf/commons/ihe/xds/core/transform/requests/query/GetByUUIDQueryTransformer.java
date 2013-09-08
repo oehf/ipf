@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  *          type of the query.
  * @author Jens Riemschneider
  */
-public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> {
+public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> extends AbstractStoredQueryTransformer<T> {
     private final QueryParameter uuidParam;
     
     /**
@@ -53,12 +53,10 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.toEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
-        ebXML.setId(query.getType().getId());
-        ebXML.setHome(query.getHomeCommunityId());
-        
         slots.fromStringList(uuidParam, query.getUuids());
 
         toEbXML(query, slots);
@@ -77,11 +75,11 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.fromEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        
         query.setUuids(slots.toStringList(uuidParam));
-        query.setHomeCommunityId(ebXML.getHome());
 
         fromEbXML(query, slots);
     }

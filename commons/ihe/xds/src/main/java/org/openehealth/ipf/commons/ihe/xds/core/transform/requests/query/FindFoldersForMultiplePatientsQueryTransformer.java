@@ -25,7 +25,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
  * @author Jens Riemschneider
  * @author Michael Ottati
  */
-public class FindFoldersForMultiplePatientsQueryTransformer {
+public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStoredQueryTransformer<FindFoldersForMultiplePatientsQuery> {
 
     /**
      * Transforms the query into its ebXML representation.
@@ -40,12 +40,11 @@ public class FindFoldersForMultiplePatientsQueryTransformer {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.toEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
-        ebXML.setId(query.getType().getId());
-        ebXML.setHome(query.getHomeCommunityId());
-
         slots.fromPatientIdList(FOLDER_PATIENT_ID, query.getPatientIds());
         
         slots.fromNumber(FOLDER_LAST_UPDATE_TIME_FROM, query.getLastUpdateTime().getFrom());
@@ -69,7 +68,9 @@ public class FindFoldersForMultiplePatientsQueryTransformer {
         if (query == null || ebXML == null) {
             return;
         }
-        
+
+        super.fromEbXML(query, ebXML);
+
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         query.setPatientIds(slots.toPatientIdList(FOLDER_PATIENT_ID));
         
@@ -79,6 +80,5 @@ public class FindFoldersForMultiplePatientsQueryTransformer {
         query.getLastUpdateTime().setTo(slots.toNumber(FOLDER_LAST_UPDATE_TIME_TO));
         
         query.setStatus(slots.toStatus(FOLDER_STATUS));
-        query.setHomeCommunityId(ebXML.getHome());
     }
 }
