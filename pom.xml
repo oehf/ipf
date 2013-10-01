@@ -52,8 +52,8 @@
         
         <!-- Dependency version properties -->
         <activemq-version>5.8.0</activemq-version>
-        <aspectj-version>1.7.2</aspectj-version>
-        <camel-version>2.11.1</camel-version>
+        <aspectj-version>1.7.3</aspectj-version>
+        <camel-version>2.12.1</camel-version>
         <cglib-version>2.2.2</cglib-version>
         <commons-codec-version>1.8</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
@@ -64,7 +64,7 @@
         <commons-lang-version>2.6</commons-lang-version>
         <commons-lang3-version>3.1</commons-lang3-version>
         <commons-math3-version>3.2</commons-math3-version>
-        <cxf-version>2.7.5</cxf-version>
+        <cxf-version>2.7.6</cxf-version>
         <derby-version>10.9.1.0</derby-version>
         <easymock-version>3.1</easymock-version>
         <ehcache-version>2.6.6</ehcache-version>
@@ -96,7 +96,7 @@
         <quartz-version>2.1.7</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.7.5</slf4j-version>
-        <spring-version>3.2.3.RELEASE</spring-version>
+        <spring-version>3.2.4.RELEASE</spring-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.39</tomcat-version>
         <xbean-spring-version>3.5</xbean-spring-version>

@@ -126,9 +126,9 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
             .ackFlow()
             
         from('direct:flow-test-9')
+            .transacted()
             .initFlow('test-9')
                 .application('test')
-            .transacted()
             .to('mock:mock')
             .ackFlow()
 

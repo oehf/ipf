@@ -62,7 +62,7 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
                 (String) getMBeanServer().getAttribute(on, "ComponentType"));
         assertEquals(true,
                 ((Boolean) getMBeanServer().getAttribute(on, "Audit")).booleanValue());
-        assertEquals(3000L,
+        assertEquals(30000L,
                 ((Long) getMBeanServer().getAttribute(on, "Timeout")).longValue());
         assertEquals(true,
                 ((Boolean) getMBeanServer().getAttribute(on, "SslSecure")).booleanValue());
