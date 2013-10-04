@@ -61,7 +61,8 @@ class MessageAdapterValidator extends AbstractMessageAdapterValidator {
          if(queryResponse instanceof SelectorClosure) {
              // PDQ (ITI-21)
              for(repetition in queryResponse()) {
-                 checkPID(repetition, violations)
+                 if (!repetition.PID.isEmpty()) // CP 537 allows for non-existing PID segments
+                    checkPID(repetition, violations)
              }
          } else {
              // PIX Query (ITI-9)
