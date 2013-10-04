@@ -18,7 +18,9 @@ package org.openehealth.ipf.platform.camel.flow;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.core.io.IOUtils;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -168,6 +170,12 @@ public class PlatformPacket implements Serializable {
                 continue;
             }
             if (entry.getValue() instanceof Serializable) {
+                try {
+                    // only way to proof if the object really is serializable.
+                    IOUtils.serialize(entry.getValue());
+                } catch (IOException ioe){
+                    continue;
+                }
                 result.put(entry.getKey(), entry.getValue());
             }
         }
