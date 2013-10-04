@@ -272,7 +272,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
     }
 
     /**
-     * Validates a single patient ID (datatype CX).
+     * Validates a single patient ID (datatype CX). Already covers CP-538.
      */
     void checkPatientId(cx, Collection<Exception> violations) {
         if( ! (cx[1].value && (cx[4][1].value || (cx[4][2].value && (cx[4][3].value == 'ISO'))))) {
