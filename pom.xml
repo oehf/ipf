@@ -39,6 +39,7 @@
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
+        <build-helper-version>1.8</build-helper-version>
         <bundle-plugin-version>2.0.1</bundle-plugin-version>
         <compiler-plugin-version>3.0</compiler-plugin-version>
         <eclipse-plugin-version>2.8</eclipse-plugin-version>
@@ -46,6 +47,8 @@
         <groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
         <jar-plugin-version>2.3.1</jar-plugin-version>
         <javadoc-plugin-version>2.9</javadoc-plugin-version>
+        <jaxb-plugin-version>1.5</jaxb-plugin-version>
+        <pax-plugin-version>1.5</pax-plugin-version>
         <release-plugin-version>2.1</release-plugin-version>
         <resources-plugin-version>2.4.3</resources-plugin-version>
         <sources-plugin-version>2.2</sources-plugin-version>
@@ -1101,6 +1104,21 @@
                     <artifactId>maven-eclipse-plugin</artifactId>
                     <version>${eclipse-plugin-version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jaxb2-maven-plugin</artifactId>
+                    <version>${jaxb-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.ops4j</groupId>
+                    <artifactId>maven-pax-plugin</artifactId>
+                    <version>${pax-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper-version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -1342,6 +1360,7 @@
             <plugin>
                 <groupId>org.openehealth.ipf.labs.maven</groupId>
                 <artifactId>maven-dsldoc-plugin</artifactId>
+                <version>${maven-dsldoc-plugin-version}</version>
                 <inherited>false</inherited>
             </plugin>
         </plugins>
