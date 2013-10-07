@@ -59,9 +59,10 @@ class MessageAdapterValidator extends AbstractMessageAdapterValidator {
          def queryResponse = msg.QUERY_RESPONSE
          if(queryResponse instanceof SelectorClosure) {
              // PDQ (ITI-21)
+             // TODO CP 537 allows for non-existing PID query responses, but all
+             // existing responses must have a NON-EMPTY PID-3 segment
              for(repetition in queryResponse()) {
-                 if (!repetition.PID.isEmpty()) // CP 537 allows for non-existing PID segments
-                    checkPID(repetition, violations)
+                 checkPID(repetition, violations)
              }
          } else {
              // PIX Query (ITI-9)
