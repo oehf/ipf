@@ -56,7 +56,6 @@ class MessageAdapterValidator extends AbstractMessageAdapterValidator {
       * Valdates group QUERY_RESPONSE from RSP^K22, RSP^K23.
       */
      void checkQUERY_RESPONSE(msg, Collection<Exception> violations) {
-         Collection<Exception> exceptions = []
          def queryResponse = msg.QUERY_RESPONSE
          if(queryResponse instanceof SelectorClosure) {
              // PDQ (ITI-21)
@@ -69,7 +68,6 @@ class MessageAdapterValidator extends AbstractMessageAdapterValidator {
              // PIX Query (ITI-9)
              checkPatientIdList(queryResponse.PID[3], violations)
          }
-         exceptions
      }
 
 
