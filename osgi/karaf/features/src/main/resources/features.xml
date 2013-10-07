@@ -184,17 +184,16 @@
 
     <feature name="ipf-spring" version="${project.version}">
         <bundle start-level='20'>mvn:org.aopalliance/com.springsource.org.aopalliance/1.0.0</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-core/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-context/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-beans/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-expression/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-aop/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-asm/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-jdbc/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-jms/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-tx/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-orm/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/spring-web/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.core/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.context/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.beans/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.expression/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.aop/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.jdbc/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.jms/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.transaction/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.orm/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.web/${spring-version}</bundle>
     </feature>
 
     <feature name="ipf-specs" version="${project.version}" resolver='(obr)'>

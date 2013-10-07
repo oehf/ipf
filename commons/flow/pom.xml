@@ -19,6 +19,7 @@
             net.sf.cglib.proxy,
             javassist.util.proxy,
             org.slf4j.*;version="[1.6,2)",
+            org.springframework.transaction.*;version="[3.2.0,3.3.0)",
             *
         </osgi.import.pkg>
     </properties>

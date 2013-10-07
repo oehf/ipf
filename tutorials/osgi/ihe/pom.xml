@@ -96,7 +96,7 @@
                 <provision>
             <param>--platform=equinox</param>
             <param>--version=3.6.2</param>
-            <param>--ee=J2SE-1.5</param>
+            <param>--ee=J2SE-1.7</param>
             <param>--vmo=-Dosgi.classloader.lock=classname -Xmx256M</param>
             <param>--startLevel=5</param>
             <param>--bundleStartLevel=4</param>
@@ -193,7 +193,6 @@
             <param>mvn:org.springframework/org.springframework.aop/${spring-version}@start</param>
             <param>mvn:org.springframework/org.springframework.core/${spring-version}@start</param>
             <param>mvn:org.springframework/org.springframework.web/${spring-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.asm/${spring-version}@start</param>
             <param>mvn:org.springframework/org.springframework.expression/${spring-version}@start</param>
             <param>mvn:org.springframework.osgi/org.springframework.osgi.extender/${spring-osgi-version}@2</param>
             <param>mvn:org.springframework.osgi/org.springframework.osgi.core/${spring-osgi-version}@start</param>
