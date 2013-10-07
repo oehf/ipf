@@ -905,7 +905,7 @@
             <dependency>
                 <groupId>org.openhealthtools.ihe</groupId>
                 <artifactId>org.openhealthtools.ihe.atna.auditor</artifactId>
-                <version>${oht-atna-version}-p1</version>
+                <version>${oht-atna-version}-p2</version>
             </dependency>
             <dependency>
                 <groupId>org.openhealthtools.ihe</groupId>
