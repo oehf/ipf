@@ -59,7 +59,8 @@ public class Response implements Serializable {
      * @param throwable
      *          the exception that occurred.
      * @param defaultMetaDataError
-     *          the default error code for {@link XDSMetaDataException}.
+     *          the default error code for
+     *          {@link org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException}.
      * @param defaultError
      *          the default error code for any other exception.
      * @param location

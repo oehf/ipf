@@ -19,6 +19,19 @@ import groovy.lang.Closure;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.TypeConverter;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
 import javax.activation.DataHandler;
 import javax.xml.bind.JAXBContext;
@@ -28,6 +41,9 @@ import javax.xml.bind.attachment.AttachmentMarshaller;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.countMatches;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * Utility class for rendering of ebXML stub POJOs and simplified
@@ -45,59 +61,57 @@ abstract public class XdsRenderingUtils {
     private static final JAXBContext JAXB_CONTEXT;
 
     static {
-        Class[] simplifiedClasses = new Class[] {
-                // requests
-                /* ITI-14 */   org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet.class,
-                /* ITI-15 */   org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet.class,
-                /* ITI-16 */   org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry.class,
-                /* ITI-18 */   org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry.class,
-                /* ITI-41 */   org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet.class,
-                /* ITI-42 */   org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet.class,
-                /* ITI-43 */   org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet.class,
-                /* RAD-69 */   org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet.class,
-
-                // responses
-                /* ITI-14 */   org.openehealth.ipf.commons.ihe.xds.core.responses.Response.class,
-                /* ITI-15 */   org.openehealth.ipf.commons.ihe.xds.core.responses.Response.class,
-                /* ITI-16 */   org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse.class,
-                /* ITI-18 */   org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse.class,
-                /* ITI-41 */   org.openehealth.ipf.commons.ihe.xds.core.responses.Response.class,
-                /* ITI-42 */   org.openehealth.ipf.commons.ihe.xds.core.responses.Response.class,
-                /* ITI-43 */   org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet.class,
-        };
-
-        Class[] ebXmlClasses = new Class[] {
-                // requests
-                /* ITI-14 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest.class,
-                /* ITI-15 */   org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.class,
-                /* ITI-16 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest.class,
-                /* ITI-18 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest.class,
-                /* ITI-41 */   org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType.class,
-                /* ITI-42 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest.class,
-                /* ITI-43 */   org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType.class,
-                /* RAD-69 */   org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType.class,
-
-                // responses
-                /* ITI-14 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse.class,
-                /* ITI-15 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse.class,
-                /* ITI-16 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse.class,
-                /* ITI-18 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse.class,
-                /* ITI-41 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType.class,
-                /* ITI-42 */   org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType.class,
-                /* ITI-43 */   org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType.class,
-        };
-
-        if (ebXmlClasses.length != simplifiedClasses.length) {
-            throw new RuntimeException("you changes have broken my code");
-        }
-
         TYPES_CORRESPONDENCE = new HashMap<Class, Class>();
-        for (int i = 0; i < ebXmlClasses.length; ++i) {
-            TYPES_CORRESPONDENCE.put(simplifiedClasses[i],  ebXmlClasses[i]);
-        }
+
+        /* --------- REQUESTS --------- */
+
+        // ITI-18, 38, 51, 63
+        TYPES_CORRESPONDENCE.put(QueryRegistry.class, AdhocQueryRequest.class);
+
+        // ITI-41
+        TYPES_CORRESPONDENCE.put(ProvideAndRegisterDocumentSet.class, ProvideAndRegisterDocumentSetRequestType.class);
+
+        // ITI-42, 57, 61
+        TYPES_CORRESPONDENCE.put(RegisterDocumentSet.class, SubmitObjectsRequest.class);
+
+        // ITI-39, 43
+        TYPES_CORRESPONDENCE.put(RetrieveDocumentSet.class, RetrieveDocumentSetRequestType.class);
+
+        // ITI-62
+        TYPES_CORRESPONDENCE.put(RemoveDocumentSet.class, RemoveObjectsRequest.class);
+
+        // RAD-69, 75
+        TYPES_CORRESPONDENCE.put(RetrieveImagingDocumentSet.class, RetrieveImagingDocumentSetRequestType.class);
+
+        /* --------- RESPONSES --------- */
+
+        // ITI-18, 38, 51, 63
+        TYPES_CORRESPONDENCE.put(QueryResponse.class, AdhocQueryResponse.class);
+
+        // ITI-41, 42, 57, 61, 62
+        TYPES_CORRESPONDENCE.put(Response.class, RegistryResponseType.class);
+
+        // ITI-39, ITI-43, RAD-69, RAD-75
+        TYPES_CORRESPONDENCE.put(RetrievedDocumentSet.class, RetrieveDocumentSetResponseType.class);
+
 
         try {
-            JAXB_CONTEXT = JAXBContext.newInstance(ebXmlClasses);
+            JAXB_CONTEXT = JAXBContext.newInstance(
+                    AdhocQueryRequest.class,
+                    ProvideAndRegisterDocumentSetRequestType.class,
+                    SubmitObjectsRequest.class,
+                    RetrieveDocumentSetRequestType.class,
+                    RemoveObjectsRequest.class,
+                    RetrieveImagingDocumentSetRequestType.class,
+                    AdhocQueryResponse.class,
+                    RegistryResponseType.class,
+                    RetrieveDocumentSetResponseType.class,
+
+                    org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.class,
+                    org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest.class,
+                    org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse.class,
+                    org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest.class
+            );
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
@@ -229,18 +243,15 @@ abstract public class XdsRenderingUtils {
         private static String attachmentDescription(String name, String size, String contentType) {
             return new StringBuilder()
                     .append("Attachment: name='")
-                    .append(whenKnown(name))
+                    .append(defaultString(name, "[unknown]"))
                     .append("', size='")
-                    .append(whenKnown(size))
+                    .append(defaultString(size, "[unknown]"))
                     .append("', content type='")
-                    .append(whenKnown(contentType))
+                    .append(defaultString(contentType, "[unknown]"))
                     .append('\'')
                     .toString();
         }
 
-        private static String whenKnown(String s) {
-            return (s != null) ? s : "[unknown]";
-        }
     }
 
 }
