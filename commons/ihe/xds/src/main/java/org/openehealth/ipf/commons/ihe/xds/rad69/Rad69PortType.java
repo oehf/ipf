@@ -39,8 +39,7 @@ import javax.xml.ws.Action;
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory.class })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @DataBinding(XdsJaxbDataBinding.class)
-public interface Rad69PortType
-{
+public interface Rad69PortType {
 
     /**
      * Retrieves a set of imaging documents according to the RAD-69 specification.

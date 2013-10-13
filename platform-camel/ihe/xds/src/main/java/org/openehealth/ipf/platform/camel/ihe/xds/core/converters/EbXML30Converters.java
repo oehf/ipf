@@ -212,6 +212,7 @@ public class EbXML30Converters {
         RetrieveDocumentSetResponseTransformer transformer = new RetrieveDocumentSetResponseTransformer(factory);
         return transformer.fromEbXML(new EbXMLRetrieveDocumentSetResponse30(in));
     }
+
     /**
      * Standard Camel converter for the Retrieve Imaging Document Set request.
      * @param in    A version independent request object
