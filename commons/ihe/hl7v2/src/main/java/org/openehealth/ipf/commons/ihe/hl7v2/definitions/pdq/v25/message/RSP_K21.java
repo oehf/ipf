@@ -32,18 +32,11 @@ import ca.uhn.hl7v2.model.v25.segment.SFT;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 
 /**
- * <p>
- * Represents a RSP_K21 message structure (see chapter 3.3.56). This structure
- * contains the following elements:
- * </p>
- * 0: MSH (Message Header) <b></b><br>
- * 1: SFT (Software Segment) <b>optional repeating</b><br>
- * 2: MSA (Message Acknowledgment) <b></b><br>
- * 3: ERR (Error) <b>optional </b><br>
- * 4: QAK (Query Acknowledgment) <b></b><br>
- * 5: QPD (Query Parameter Definition) <b></b><br>
- * 6: RSP_K21_QUERY_RESPONSE (a Group object) <b>optional repeating</b><br>
- * 7: DSC (Continuation Pointer) <b>optional </b><br>
+ * Adds a custom QPD segment instead of the standard one
+ * coming from v25 hapi package
+ *
+ * @see ca.uhn.hl7v2.model.v25.message.RSP_K21
+ * @see org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD
  */
 @SuppressWarnings("serial")
 public class RSP_K21 extends AbstractMessage {

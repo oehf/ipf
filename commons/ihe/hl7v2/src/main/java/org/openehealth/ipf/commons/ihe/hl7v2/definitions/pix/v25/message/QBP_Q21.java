@@ -29,13 +29,11 @@ import ca.uhn.hl7v2.model.v25.segment.RCP;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 
 /**
- * <p>Represents a QBP_Q21 message structure (see chapter 3.3.56). This structure contains the
- * following elements: </p>
- * 0: MSH (Message Header) <b></b><br>
- * 1: SFT (Software Segment) <b>optional repeating</b><br>
- * 2: QPD (Query Parameter Definition) <b></b><br>
- * 3: RCP (Response Control Parameter) <b></b><br>
- * 4: DSC (Continuation Pointer) <b>optional </b><br>
+ * Adds a custom QPD segment instead of the standard one
+ * coming from v25 hapi package
+ *
+ * @see ca.uhn.hl7v2.model.v25.message.QBP_Q21
+ * @see org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.segment.QPD
  */
 @SuppressWarnings("serial")
 public class QBP_Q21 extends AbstractMessage {

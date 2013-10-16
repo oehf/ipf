@@ -26,18 +26,11 @@ import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 import java.util.Map;
 
 /**
- * <p>Represents a RSP_K23 message structure (see chapter 3.3.58). This structure contains the
- * following elements: </p>
- * <ul>
- * <li>1: MSH (Message Header) <b> </b></li>
- * <li>2: SFT (Software Segment) <b>optional repeating</b></li>
- * <li>3: MSA (Message Acknowledgment) <b> </b></li>
- * <li>4: ERR (Error) <b>optional </b></li>
- * <li>5: QAK (Query Acknowledgment) <b> </b></li>
- * <li>6: QPD (Query Parameter Definition) <b> </b></li>
- * <li>7: RSP_K23_QUERY_RESPONSE (a Group object) <b>optional </b></li>
- * <li>8: DSC (Continuation Pointer) <b>optional </b></li>
- * </ul>
+ * Adds a custom QPD segment instead of the standard one
+ * coming from v25 hapi package
+ *
+ * @see ca.uhn.hl7v2.model.v25.message.RSP_K23
+ * @see org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.segment.QPD
  */
 @SuppressWarnings("serial")
 public class RSP_K23 extends AbstractMessage {
