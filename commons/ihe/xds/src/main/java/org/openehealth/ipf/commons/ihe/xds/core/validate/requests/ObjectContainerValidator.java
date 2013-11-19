@@ -313,22 +313,28 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                 validateSubmitAssociationRelationship(submissionSetIds, associationIds, association);
             }
             else {
-                validateAssociation(association, docEntryIds, profile);
+                boolean isSubmissionSetToDocEntry =
+                    submissionSetIds.contains(association.getSource()) && docEntryIds.contains(association.getTarget());
+                validateAssociation(association, docEntryIds, profile, isSubmissionSetToDocEntry);
             }
         }
     }
 
-    private void validateAssociation(EbXMLAssociation association, Set<String> docEntryIds, ValidationProfile profile) throws XDSMetaDataException {
+    private void validateAssociation(EbXMLAssociation association, Set<String> docEntryIds,
+                                     ValidationProfile profile, boolean isSubmissionSetToDocEntry) throws XDSMetaDataException {
         metaDataAssert(association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME) == null,
                 DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER);
 
         List<String> slotValues = association.getSlotValues(SLOT_NAME_SUBMISSION_SET_STATUS);
+        if (isSubmissionSetToDocEntry){
+            metaDataAssert(!slotValues.isEmpty(), SUBMISSION_SET_STATUS_MANDATORY);
+        }
         if (!slotValues.isEmpty()) {
             metaDataAssert(slotValues.size() == 1, TOO_MANY_SUBMISSION_SET_STATES);
-            
+
             AssociationLabel status = AssociationLabel.fromOpcode(slotValues.get(0));
             metaDataAssert(status != null, INVALID_SUBMISSION_SET_STATUS);
-    
+
             if (status == AssociationLabel.ORIGINAL && !profile.isQuery()) {
                 metaDataAssert(docEntryIds.contains(association.getTarget()), MISSING_ORIGINAL);
             }
