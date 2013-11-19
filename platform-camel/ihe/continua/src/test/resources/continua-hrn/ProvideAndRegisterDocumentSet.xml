@@ -61,7 +61,7 @@
 					classifiedObject="Document01">
 					<rim:Slot name="authorPerson">
 						<rim:ValueList>
-							<rim:Value>Gerald Smitty</rim:Value>
+							<rim:Value>^Gerald^Smitty</rim:Value>
 						</rim:ValueList>
 					</rim:Slot>
 					<rim:Slot name="authorInstitution">
@@ -185,7 +185,7 @@
 					classifiedObject="SubmissionSet01" nodeRepresentation="unknown">
 					<rim:Slot name="authorPerson">
 						<rim:ValueList>
-							<rim:Value>Sherry Dopplemeyer</rim:Value>
+							<rim:Value>^Dopplemeyer^Sherry</rim:Value>
 						</rim:ValueList>
 					</rim:Slot>
 					<rim:Slot name="authorInstitution">

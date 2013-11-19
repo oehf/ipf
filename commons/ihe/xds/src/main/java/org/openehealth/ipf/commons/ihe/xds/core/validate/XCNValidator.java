@@ -22,7 +22,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PERSON_MISSING_NAME_AND_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PERSON_HD_MISSING;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.HL7ValidationUtils.isEmptyField;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.HL7ValidationUtils.isNotEmptyField;
 
 /**
  * Validates a XCN string.
@@ -44,11 +47,11 @@ public class XCNValidator implements ValueValidator {
 
 //        Spec actually allows the assigning authority to be missing:
 //          "If component 1 (ID Number) is specified, component 9 (Assigning Authority) shall be present if available"
-//        metaDataAssert(idNumber == null || hl7hd != null, PERSON_HD_MISSING, hl7xcn);
-
-
         HD hd = xcn.getXcn9_AssigningAuthority();
-        if (! HL7ValidationUtils.isEmptyField(hd)) {
+        boolean condition = isNotEmpty(xcn.getXcn1_IDNumber().getValue())? isNotEmptyField(hd) : true;
+        metaDataAssert(condition, PERSON_HD_MISSING, hl7xcn);
+
+        if (! isEmptyField(hd)) {
             HD_VALIDATOR.validate(hd, hl7xcn);
         }
     }

@@ -33,7 +33,7 @@ public class RecipientListValidatorTest {
     public void testValidateGoodCases() throws XDSMetaDataException {
         validator.validate(Arrays.asList("Some Hospital|^Welby"));
         validator.validate(Arrays.asList("|^Welby"));
-        validator.validate(Arrays.asList("|ONLYID"));
+        validator.validate(Arrays.asList("|ID^^^^^^^^&1.2.840.113619.6.197&ISO"));
         validator.validate(Arrays.asList("Some Hospital"));
         validator.validate(Arrays.asList("Some Hospital", "|^Welby"));
     }
