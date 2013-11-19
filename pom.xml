@@ -75,7 +75,7 @@
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
         <geronimo-spec-servlet-api-30-version>1.0</geronimo-spec-servlet-api-30-version>
-        <groovy-version>2.1.6</groovy-version>
+        <groovy-version>2.1.9</groovy-version>
         <hapi-version>2.0</hapi-version>
         <hibernate-version>3.5.6-Final</hibernate-version>
         <hibernate-commons-annotations-version>3.2.0.Final</hibernate-commons-annotations-version>

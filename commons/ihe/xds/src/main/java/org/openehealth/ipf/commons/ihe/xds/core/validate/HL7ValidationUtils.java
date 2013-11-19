@@ -31,6 +31,10 @@ public class HL7ValidationUtils {
                isEmpty(hd.getHd3_UniversalIDType().getValue());
     }
 
+    public static boolean isNotEmptyField(HD hd) {
+        return !isEmptyField(hd);
+    }
+
     public static boolean isEmptyField(CWE cwe) {
         return isEmpty(cwe.getCwe1_Identifier().getValue()) &&
                isEmpty(cwe.getCwe2_Text().getValue()) &&
