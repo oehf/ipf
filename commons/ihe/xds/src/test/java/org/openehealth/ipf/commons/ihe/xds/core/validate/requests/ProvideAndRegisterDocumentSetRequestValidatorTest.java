@@ -85,6 +85,12 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
         docEntry.setRepositoryUniqueId(null);
         validator.validate(transformer.toEbXML(request), profile);
     }
+
+    @Test
+    public void testMandatorySubmissionSetStatus() {
+        request.getAssociations().get(0).setLabel(null);
+        expectFailure(SUBMISSION_SET_STATUS_MANDATORY);
+    }
     
     private void expectFailure(ValidationMessage expectedMessage) {
         expectFailure(expectedMessage, transformer.toEbXML(request), profile);

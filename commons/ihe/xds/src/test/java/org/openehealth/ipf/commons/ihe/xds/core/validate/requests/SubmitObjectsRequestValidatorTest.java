@@ -173,6 +173,12 @@ public class SubmitObjectsRequestValidatorTest {
         ebXML.getAssociations().get(0).getSlots(SLOT_NAME_SUBMISSION_SET_STATUS).get(0).getValueList().set(0, "lol");
         expectFailure(INVALID_SUBMISSION_SET_STATUS, ebXML);
     }
+
+    @Test
+    public void testMandatorySubmissionSetStatus() {
+        request.getAssociations().get(0).setLabel(null);
+        expectFailure(SUBMISSION_SET_STATUS_MANDATORY);
+    }
     
     @Test
     public void testMissingOriginal() {
