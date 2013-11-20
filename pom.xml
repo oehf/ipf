@@ -102,7 +102,7 @@
         <spring-version>3.2.4.RELEASE</spring-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.39</tomcat-version>
-        <xbean-spring-version>3.5</xbean-spring-version>
+        <xbean-spring-version>3.11.1</xbean-spring-version>
         <xerces-impl-version>2.11.0</xerces-impl-version>
         <xmlunit-version>1.4</xmlunit-version>
     </properties>
