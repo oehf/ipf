@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import org.apache.camel.Exchange
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils.pidList
 
 /**
  * Audit Strategy Groovy Utils
@@ -30,11 +30,11 @@ final class Iti8AuditStrategyUtils  {
         if(msg.MSH[9][2].value == 'A40') {
             def group = msg.PIDPD1MRGPV1
             pidSegment = group.PID[3]
-            auditDataset.oldPatientId = group.MRG[1].value ?: null
+            auditDataset.oldPatientId = pidList(group.MRG[1])?.join(msg.MSH[2].value[1])
         } else {
             pidSegment = msg.PID[3]
         }
-        auditDataset.patientId = AuditUtils.pidList(pidSegment)?.join(msg.MSH[2].value[1])
+        auditDataset.patientId = pidList(pidSegment)?.join(msg.MSH[2].value[1])
     }
 
 }

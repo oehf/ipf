@@ -88,7 +88,7 @@
         <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.ejb/3.4.0.GA-A</bundle>
         <bundle start-level='30'>mvn:org.apache.commons/com.springsource.org.apache.commons.dbcp/1.2.2.osgi</bundle>
         <bundle start-level='30'>mvn:org.apache.commons/com.springsource.org.apache.commons.pool/1.5.3</bundle>
-        <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.derby/10.8.2.2_1</bundle>
+        <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.derby/10.9.1.0_1</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-flow-repository/${project.version}</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.commons/ipf-commons-flow/${project.version}</bundle>
     </feature>
@@ -133,7 +133,7 @@
     <feature name="ipf-platform-camel-flow" description="IPF Platform Camel support for Flow Manager" version="${project.version}">
         <feature version="${project.version}">ipf-core-flow</feature>
         <feature version="${project.version}">ipf-platform-camel</feature>
-        <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aspectj/1.7.0_1</bundle>
+        <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aspectj/1.7.3_1</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-flow-manager/${project.version}</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-flow/${project.version}</bundle>
     </feature>
