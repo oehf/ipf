@@ -45,7 +45,7 @@
         <eclipse-plugin-version>2.8</eclipse-plugin-version>
         <enforcer-plugin-version>1.2</enforcer-plugin-version>
         <groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
-        <jar-plugin-version>2.3.1</jar-plugin-version>batch-ve
+        <jar-plugin-version>2.3.1</jar-plugin-version>
         <javadoc-plugin-version>2.9</javadoc-plugin-version>
         <jaxb-plugin-version>1.5</jaxb-plugin-version>
         <pax-plugin-version>1.5</pax-plugin-version>
