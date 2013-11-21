@@ -44,7 +44,8 @@
         <compiler-plugin-version>3.0</compiler-plugin-version>
         <eclipse-plugin-version>2.8</eclipse-plugin-version>
         <enforcer-plugin-version>1.2</enforcer-plugin-version>
-        <groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
+        <groovy-eclipse-compiler-version>2.8.0-01</groovy-eclipse-compiler-version>
+        <groovy-eclipse-batch-version>2.1.8-01</groovy-eclipse-batch-version>
         <jar-plugin-version>2.3.1</jar-plugin-version>
         <javadoc-plugin-version>2.9</javadoc-plugin-version>
         <jaxb-plugin-version>1.5</jaxb-plugin-version>
@@ -1156,6 +1157,11 @@
 						<artifactId>groovy-eclipse-compiler</artifactId>
 						<version>${groovy-eclipse-compiler-version}</version>
 					</dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>${groovy-eclipse-batch-version}</version>
+                    </dependency>
 					<dependency>
 						<groupId>org.projectlombok</groupId>
 						<artifactId>lombok</artifactId>
