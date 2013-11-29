@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Map;
-
 import javax.xml.transform.Source;
 
 import org.eclipse.emf.common.util.URI;
@@ -29,10 +28,6 @@ import org.openehealth.ipf.commons.core.modules.api.Parser;
 import org.openhealthtools.mdht.uml.cda.CDAPackage;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 import org.openhealthtools.mdht.uml.cda.DocumentRoot;
-import org.openhealthtools.mdht.uml.cda.ccd.CCDPackage;
-import org.openhealthtools.mdht.uml.cda.consol.ConsolPackage;
-import org.openhealthtools.mdht.uml.cda.hitsp.HITSPPackage;
-import org.openhealthtools.mdht.uml.cda.ihe.IHEPackage;
 import org.openhealthtools.mdht.uml.cda.internal.resource.CDAResource;
 /**
  * @author Stefan Ivanov

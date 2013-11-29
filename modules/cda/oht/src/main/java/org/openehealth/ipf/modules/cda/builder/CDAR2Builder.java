@@ -24,6 +24,10 @@ import groovytools.builder.MetaBuilder;
 import groovytools.builder.MetaObjectGraphBuilder;
 import groovytools.builder.SchemaNode;
 
+/**
+ * @deprecated the underlying CDA model is not maintained anymore. Use OHT's
+ * MDHT library instead.
+ */
 public class CDAR2Builder extends MetaBuilder {
 
     private BuilderDefinitionLoader loader;

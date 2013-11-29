@@ -48,6 +48,7 @@ import org.openhealthtools.ihe.common.cdar2.TS1
 
 /**
  * @author Christian Ohr
+ * @deprecated
  */
 public class CDAR2ModelExtension extends BaseModelExtension {
 

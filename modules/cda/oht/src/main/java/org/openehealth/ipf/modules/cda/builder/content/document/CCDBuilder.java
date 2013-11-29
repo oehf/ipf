@@ -17,6 +17,9 @@ package org.openehealth.ipf.modules.cda.builder.content.document;
 
 import org.openehealth.ipf.modules.cda.builder.CDAR2Builder;
 
+/**
+ * @deprecated the underlying CDA model is not maintained anymore. Use the MDHT lib instead
+ */
 public class CCDBuilder extends CDAR2Builder {
 
     @Override

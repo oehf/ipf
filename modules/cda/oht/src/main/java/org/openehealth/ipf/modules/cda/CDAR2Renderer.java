@@ -35,6 +35,7 @@ import org.openhealthtools.ihe.common.cdar2.util.CDAR2ResourceFactoryImpl;
 
 /**
  * @author Christian Ohr
+ * @deprecated use org.openehealth.ipf.modules.cda.CDAR2Renderer in the MDHT project instead
  */
 public class CDAR2Renderer implements Renderer<POCDMT000040ClinicalDocument> {
 
