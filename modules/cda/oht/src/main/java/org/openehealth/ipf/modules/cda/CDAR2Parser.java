@@ -36,6 +36,7 @@ import org.openhealthtools.ihe.common.cdar2.util.CDAR2ResourceFactoryImpl;
 
 /**
  * @author Christian Ohr
+ * @deprecated use org.openehealth.ipf.modules.cda.CDAR2Parser in the MDHT project instead
  */
 public class CDAR2Parser implements Parser<POCDMT000040ClinicalDocument> {
 
