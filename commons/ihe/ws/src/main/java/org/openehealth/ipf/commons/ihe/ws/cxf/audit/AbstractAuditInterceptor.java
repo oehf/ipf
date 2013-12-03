@@ -189,7 +189,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
             element = null;
 
             QName qname = path[i];
-            for (int j = 0; i < nodeList.getLength(); ++j) {
+            for (int j = 0; j < nodeList.getLength(); ++j) {
                 Node node = nodeList.item(j);
                 if ((node instanceof Element) &&
                     qname.getNamespaceURI().equals(node.getNamespaceURI()) &&
