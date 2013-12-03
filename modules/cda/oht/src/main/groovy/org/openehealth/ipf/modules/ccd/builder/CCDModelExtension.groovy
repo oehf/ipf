@@ -20,11 +20,14 @@ import org.openehealth.ipf.modules.cda.builder.content.entry.*
 import org.openehealth.ipf.modules.cda.builder.content.section.*
 import org.openehealth.ipf.modules.cda.builder.content.header.*
 import org.openehealth.ipf.modules.cda.builder.*
-import org.openehealth.ipf.modules.cda.builder.content.section.CCDEncountersExtensionimport org.openehealth.ipf.modules.cda.builder.content.section.CCDFunctionalStatusExtension
+import org.openehealth.ipf.modules.cda.builder.content.section.CCDEncountersExtension
+import org.openehealth.ipf.modules.cda.builder.content.section.CCDFunctionalStatusExtension
+
 /**
  * Metaclass model extensions for CCD documents
  *
  * @author Christian Ohr
+ * @deprecated
  */
 public class CCDModelExtension extends CompositeModelExtension{
 
