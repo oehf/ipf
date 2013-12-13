@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 
 import javax.xml.bind.annotation.*;
@@ -29,7 +30,8 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetRelatedDocumentsQuery", propOrder = {"associationTypes", "documentEntryTypes"})
+@XmlType(name = "GetRelatedDocumentsQuery", propOrder = {
+        "associationTypes", "documentEntryTypes", "statusAssociations", "metadataLevel"})
 @XmlRootElement(name = "getRelatedDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class GetRelatedDocumentsQuery extends GetFromDocumentQuery
@@ -41,6 +43,8 @@ public class GetRelatedDocumentsQuery extends GetFromDocumentQuery
     @Getter @Setter private List<AssociationType> associationTypes;
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
+    @Getter @Setter private List<AvailabilityStatus> statusAssociations;
+    @Getter @Setter private Integer metadataLevel;
 
     /**
      * Constructs the query.

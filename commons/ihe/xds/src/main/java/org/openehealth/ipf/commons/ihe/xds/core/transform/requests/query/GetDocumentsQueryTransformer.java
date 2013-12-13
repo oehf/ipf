@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_UNIQUE_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_UUID;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between a {@link GetDocumentsQuery} and {@link EbXMLAdhocQueryRequest}.
@@ -31,5 +30,41 @@ public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDoc
      */
     public GetDocumentsQueryTransformer() {
         super(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID);
+    }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void toEbXML(GetDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.toEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        slots.fromStringList(DOC_ENTRY_LOGICAL_ID, query.getLogicalUuid());
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
+    }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void fromEbXML(GetDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.fromEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        query.setLogicalUuid(slots.toStringList(DOC_ENTRY_LOGICAL_ID));
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
 }

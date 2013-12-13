@@ -20,9 +20,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_PATIENT_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_TYPE;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between a {@link FindDocumentsQuery} and {@link EbXMLAdhocQueryRequest}.
@@ -42,6 +40,8 @@ public class FindDocumentsQueryTransformer<T extends FindDocumentsQuery> extends
         slots.fromString(DOC_ENTRY_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
+        slots.fromDocumentAvailability(DOC_ENTRY_DOCUMENT_AVAILABILITY, query.getDocumentAvailability());
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
 
@@ -56,5 +56,7 @@ public class FindDocumentsQueryTransformer<T extends FindDocumentsQuery> extends
         query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
+        query.setDocumentAvailability(slots.toDocumentAvailability(DOC_ENTRY_DOCUMENT_AVAILABILITY));
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
 }

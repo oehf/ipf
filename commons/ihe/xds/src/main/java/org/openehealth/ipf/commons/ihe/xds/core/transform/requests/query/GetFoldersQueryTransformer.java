@@ -31,4 +31,40 @@ public class GetFoldersQueryTransformer extends GetByIDQueryTransformer<GetFolde
     public GetFoldersQueryTransformer() {
         super(FOLDER_UUID, FOLDER_UNIQUE_ID);
     }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void toEbXML(GetFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.toEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        slots.fromStringList(FOLDER_LOGICAL_ID, query.getLogicalUuid());
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
+    }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void fromEbXML(GetFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.fromEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        query.setLogicalUuid(slots.toStringList(FOLDER_LOGICAL_ID));
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
+    }
 }

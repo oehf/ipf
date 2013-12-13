@@ -397,6 +397,8 @@ public abstract class SampleData {
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        query.setDocumentAvailability(Arrays.asList(DocumentAvailability.ONLINE));
+        query.setMetadataLevel(1);
         return new QueryRegistry(query);
     }
 

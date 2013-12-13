@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.ebxml30;
 
+import org.junit.Before;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAssociation30;
@@ -33,6 +34,12 @@ public class AssociationTransformerTest extends AssociationTransformerTestBase {
     @Override
     public EbXMLFactory createFactory() {
         return new EbXMLFactory30();
+    }
+
+    @Before
+    public void baseSetUp() {
+        super.baseSetUp();
+        association.setAvailabilityStatus(AvailabilityStatus.APPROVED);
     }
 
     @Override
