@@ -98,6 +98,8 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         docEntry.setServiceStopTime(extrinsic.getSingleSlotValue(SLOT_NAME_SERVICE_STOP_TIME));
         docEntry.setRepositoryUniqueId(extrinsic.getSingleSlotValue(SLOT_NAME_REPOSITORY_UNIQUE_ID));
         docEntry.setUri(uriTransformer.fromEbXML(extrinsic.getSlotValues(SLOT_NAME_URI)));
+        docEntry.setDocumentAvailability(DocumentAvailability.valueOfOpcode(
+                extrinsic.getSingleSlotValue(SLOT_NAME_DOCUMENT_AVAILABILITY)));
         
         String size = extrinsic.getSingleSlotValue(SLOT_NAME_SIZE);
         docEntry.setSize(size != null ? Long.parseLong(size) : null);
@@ -127,6 +129,8 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         extrinsic.addSlot(SLOT_NAME_SERVICE_STOP_TIME, docEntry.getServiceStopTime());
         extrinsic.addSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, docEntry.getRepositoryUniqueId());
         extrinsic.addSlot(SLOT_NAME_URI, uriTransformer.toEbXML(docEntry.getUri()));
+        extrinsic.addSlot(SLOT_NAME_DOCUMENT_AVAILABILITY,
+                DocumentAvailability.toFullQualifiedOpcode(docEntry.getDocumentAvailability()));
         
         Long size = docEntry.getSize();
         extrinsic.addSlot(SLOT_NAME_SIZE, size != null ? size.toString() : null);

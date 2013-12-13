@@ -38,7 +38,7 @@ import java.util.Map;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Association", propOrder = {
         "entryUuid", "sourceUuid", "targetUuid", "associationType", "label", "docCode",
-        "previousVersion", "originalStatus", "newStatus", "associationPropagation",
+        "previousVersion", "originalStatus", "newStatus", "associationPropagation", "availabilityStatus",
         "extraMetadata"})
 @XmlRootElement(name = "association")
 public class Association implements Serializable, ExtraMetadataHolder {
@@ -52,9 +52,10 @@ public class Association implements Serializable, ExtraMetadataHolder {
     private String entryUuid;
     private Code docCode;
     private String previousVersion;
-    private String originalStatus;
-    private String newStatus;
-    private String associationPropagation;
+    private AvailabilityStatus originalStatus;
+    private AvailabilityStatus newStatus;
+    private Boolean associationPropagation;
+    private AvailabilityStatus availabilityStatus;
     @Getter @Setter private Map<String, ArrayList<String>> extraMetadata;
 
     /**
@@ -192,7 +193,7 @@ public class Association implements Serializable, ExtraMetadataHolder {
     /**
      * @return original status slot value
      */
-    public String getOriginalStatus() {
+    public AvailabilityStatus getOriginalStatus() {
         return originalStatus;
     }
 
@@ -200,14 +201,14 @@ public class Association implements Serializable, ExtraMetadataHolder {
      * @param originalStatus
      *           value of originalStatus in update availabilityStatus
      */
-    public void setOriginalStatus(String originalStatus) {
+    public void setOriginalStatus(AvailabilityStatus originalStatus) {
         this.originalStatus = originalStatus;
     }
 
     /**
      * @return new status slot value
      */
-    public String getNewStatus() {
+    public AvailabilityStatus getNewStatus() {
         return newStatus;
     }
 
@@ -215,14 +216,14 @@ public class Association implements Serializable, ExtraMetadataHolder {
      * @param newStatus
      *           value of newStatus in update availabilityStatus
      */
-    public void setNewStatus(String newStatus) {
+    public void setNewStatus(AvailabilityStatus newStatus) {
         this.newStatus = newStatus;
     }
 
     /**
      * @return associationPropagation annotation value
      */
-    public String getAssociationPropagation() {
+    public Boolean getAssociationPropagation() {
         return associationPropagation;
     }
 
@@ -230,8 +231,25 @@ public class Association implements Serializable, ExtraMetadataHolder {
      * @param associationPropagation
      *           value of associationPropagation annotation
      */
-    public void setAssociationPropagation(String associationPropagation) {
+    public void setAssociationPropagation(Boolean associationPropagation) {
         this.associationPropagation = associationPropagation;
+    }
+
+    /**
+     *
+     * @return availabilityStatus value in XDS metadata update association
+     */
+    public AvailabilityStatus getAvailabilityStatus() {
+        return availabilityStatus;
+    }
+
+    /**
+     *
+     * @param availabilityStatus
+     *           value of availabilityStatus in XDS metadata update association
+     */
+    public void setAvailabilityStatus(AvailabilityStatus availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
     }
 
     @Override
@@ -248,6 +266,7 @@ public class Association implements Serializable, ExtraMetadataHolder {
         result = prime * result + ((originalStatus == null) ? 0 : originalStatus.hashCode());
         result = prime * result + ((newStatus == null) ? 0 : newStatus.hashCode());
         result = prime * result + ((associationPropagation == null) ? 0 : associationPropagation.hashCode());
+        result = prime * result + ((availabilityStatus == null) ? 0 : availabilityStatus.hashCode());
         result = prime * result + ((extraMetadata == null) ? 0 : extraMetadata.hashCode());
         return result;
     }
@@ -315,6 +334,11 @@ public class Association implements Serializable, ExtraMetadataHolder {
             if (other.associationPropagation != null)
                 return false;
         } else if (!associationPropagation.equals(other.associationPropagation))
+            return false;
+        if (availabilityStatus == null) {
+            if (other.availabilityStatus != null)
+                return false;
+        } else if (!availabilityStatus.equals(other.availabilityStatus))
             return false;
         if (extraMetadata == null) {
             if (other.extraMetadata != null)
