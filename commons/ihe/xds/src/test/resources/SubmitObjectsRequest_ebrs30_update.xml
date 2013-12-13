@@ -16,6 +16,11 @@
                <rim:Value>http://129.6.24.109:9080/Repository/1.42.20100709101812.2.txt</rim:Value>
             </rim:ValueList>
          </rim:Slot>
+         <rim:Slot name="documentAvailability">
+            <rim:ValueList>
+                <rim:Value>urn:ihe:iti:2010:DocumentAvailability:Offline</rim:Value>
+            </rim:ValueList>
+         </rim:Slot>
          <rim:Slot
                name="creationTime">
             <rim:ValueList>

@@ -15,10 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.ebxml30;
 
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAssociation30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformerTestBase;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link AssociationTransformer}.
@@ -28,5 +33,10 @@ public class AssociationTransformerTest extends AssociationTransformerTestBase {
     @Override
     public EbXMLFactory createFactory() {
         return new EbXMLFactory30();
-    }    
+    }
+
+    @Override
+    protected void checkExtraValues(EbXMLAssociation ebXML) {
+        assertEquals(AvailabilityStatus.APPROVED, ((EbXMLAssociation30) ebXML).getStatus());
+    }
 }

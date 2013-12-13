@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLInternationalString30
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
@@ -68,6 +69,7 @@ class TestIti57 extends StandardTestContainer {
         docEntry = request.documentEntries[0]
         docEntry.logicalUuid = 'urn:uuid:20744602-ba65-44e9-87ee-a52303a5183e'
         docEntry.version = new Version('123')
+        docEntry.documentAvailability = DocumentAvailability.ONLINE
         folder = request.folders[0]
         folder.logicalUuid = 'urn:uuid:20744602-ba65-44e9-87ee-a52303a5183g'
         folder.version = new Version('124')

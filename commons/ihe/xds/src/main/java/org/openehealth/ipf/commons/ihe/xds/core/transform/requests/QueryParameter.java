@@ -78,6 +78,10 @@ public enum QueryParameter {
     DOC_ENTRY_TYPE("$XDSDocumentEntryType"),
     /** Used to filter {@link DocumentEntry#referenceIdList}. */
     DOC_ENTRY_REFERENCE_IDS("$XDSDocumentEntryReferenceIdList"),
+    /** Used to filter {@link DocumentEntry#documentAvailability}. */
+    DOC_ENTRY_DOCUMENT_AVAILABILITY("$XDSDocumentEntryDocumentAvailability"),
+    /** Used to filter {@link DocumentEntry#logicalUuid}. */
+    DOC_ENTRY_LOGICAL_ID("$XDSDocumentEntryLogicalID"),
      
     /** Used to filter {@link Folder#getCodeList()}. */
     FOLDER_CODES("$XDSFolderCodeList"),
@@ -95,6 +99,8 @@ public enum QueryParameter {
     FOLDER_UUID("$XDSFolderEntryUUID"),
     /** Used to filter {@link Folder#getUniqueId()}. */
     FOLDER_UNIQUE_ID("$XDSFolderUniqueId"),
+    /** Used to filter {@link Folder#logicalUuid}. */
+    FOLDER_LOGICAL_ID("$XDSFolderLogicalID"),
     
     /** Used to filter {@link SubmissionSet#getPatientId()}. */
     SUBMISSION_SET_PATIENT_ID("$XDSSubmissionSetPatientId"),
@@ -116,13 +122,17 @@ public enum QueryParameter {
     SUBMISSION_SET_UUID("$XDSSubmissionSetEntryUUID"),
     /** Used to filter {@link SubmissionSet#getUniqueId()}. */
     SUBMISSION_SET_UNIQUE_ID("$XDSSubmissionSetUniqueId"),
-    
+
     /** Used to filter {@link XDSMetaClass#getEntryUuid()}. */
     UUID("$uuid"),
     /** Used to filter {@link XDSMetaClass#getPatientId()}. */
     PATIENT_ID("$patientId"),
     /** Used to filter {@link Association#getAssociationType()}. */
-    ASSOCIATION_TYPE("$AssociationTypes");
+    ASSOCIATION_TYPE("$AssociationTypes"),
+    /** Used to filter {@link Association#getAvailabilityStatus()}. */
+    ASSOCIATION_STATUS("$XDSAssociationStatus"),
+    /** Used to filter {none}. */
+    METADATA_LEVEL("$MetadataLevel");
     
     private final String slotName;
     

@@ -235,6 +235,9 @@ public abstract class Vocabulary {
     /** Name of the slot that is used for new association type status on update associations */
     public static final String SLOT_NAME_NEW_STATUS = "NewStatus";
 
+    /** Name of the slot that is used for document availability on document entries */
+    public static final String SLOT_NAME_DOCUMENT_AVAILABILITY = "documentAvailability";
+
     /** Annotation for association propagation*/
     public static final String SLOT_NAME_ASSOCIATION_PROPAGATION = "AssociationPropagation";
 
