@@ -471,6 +471,80 @@ public class QuerySlotHelper {
         }
         return codes;
     }
+
+
+    /**
+     * Stores a status parameter into a slot.
+     * @param param
+     *          the parameter.
+     * @param status
+     *          the list of documentAvailability values.
+     */
+    public void fromDocumentAvailability(QueryParameter param, List<DocumentAvailability> status) {
+        if (status == null) {
+            return;
+        }
+
+        List<String> opcodes = new ArrayList<String>(status.size());
+        for (DocumentAvailability availabilityValue : status) {
+            opcodes.add(DocumentAvailability.toFullQualifiedOpcode(availabilityValue));
+        }
+        fromStringList(param, opcodes);
+    }
+
+    /**
+     * Retrieves a status parameter from a slot.
+     * @param param
+     *          the parameter.
+     * @return the list of documentAvailability values.
+     */
+    public List<DocumentAvailability> toDocumentAvailability(QueryParameter param) {
+        List<String> opcodes = toStringList(param);
+        if (opcodes == null) {
+            return null;
+        }
+
+        List<DocumentAvailability> list = new ArrayList<DocumentAvailability>();
+        for (String opcode : opcodes) {
+            DocumentAvailability availability = DocumentAvailability.valueOfOpcode(opcode);
+            if (availability != null) {
+                list.add(availability);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Stores a numbered parameter into a slot.
+     * @param param
+     *          the parameter.
+     * @param value
+     *          the value.
+     */
+    public void fromInteger(QueryParameter param, Integer value) {
+        if (value == null){
+            return;
+        }
+        ebXML.addSlot(param.getSlotName(), String.valueOf(value));
+    }
+
+    /**
+     * Retrieves a numbered parameter from a slot.
+     * @param param
+     *          the parameter.
+     * @return the value.
+     */
+    public Integer toInteger(QueryParameter param) {
+        Integer result = null;
+        try {
+            String slotValue = ebXML.getSingleSlotValue(param.getSlotName());
+            if (StringUtils.isNotBlank(slotValue)) {
+                result = Integer.valueOf(slotValue);
+            }
+        } catch (NumberFormatException nfe){
+        }
+        return result;
+    }
     
     public static String encodeAsString(String value) {
         if (value == null) {

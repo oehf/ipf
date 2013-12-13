@@ -21,6 +21,8 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsAndAssociationsQuery;
 
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
+
 /**
  * Transforms between a {@link GetDocumentsAndAssociationsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
@@ -31,5 +33,41 @@ public class GetDocumentsAndAssociationsQueryTransformer extends GetByIDQueryTra
      */
     public GetDocumentsAndAssociationsQueryTransformer() {
         super(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID);
+    }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void toEbXML(GetDocumentsAndAssociationsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.toEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        slots.fromStatus(ASSOCIATION_STATUS, query.getStatusAssociations());
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
+    }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void fromEbXML(GetDocumentsAndAssociationsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.fromEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        query.setStatusAssociations(slots.toStatus(ASSOCIATION_STATUS));
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
 }

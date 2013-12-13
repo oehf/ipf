@@ -34,10 +34,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 public abstract class AssociationTransformerTestBase implements FactoryCreator {
     private AssociationTransformer transformer;
     private EbXMLObjectLibrary objectLibrary;
-    private Association association;
+    protected Association association;
     
     @Before
-    public final void baseSetUp() {
+    public void baseSetUp() {
         EbXMLFactory factory = createFactory();
         transformer = new AssociationTransformer(factory);
         objectLibrary = factory.createObjectLibrary();
@@ -51,7 +51,6 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
         association.setLabel(AssociationLabel.ORIGINAL);
         association.setEntryUuid("uuid");
         association.setDocCode(new Code("code", new LocalizedString("display", "en-US", "UTF-8"), "scheme"));
-        association.setAvailabilityStatus(AvailabilityStatus.APPROVED);
     }
     
     @Test

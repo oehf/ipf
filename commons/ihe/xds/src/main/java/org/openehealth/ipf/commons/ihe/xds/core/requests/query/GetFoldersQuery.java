@@ -15,17 +15,25 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.xml.bind.annotation.*;
+import java.util.List;
 
 /**
  * Represents a stored query for GetFolders.
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetFoldersQuery")
+@XmlType(name = "GetFoldersQuery", propOrder = {"logicalUuid", "metadataLevel"})
 @XmlRootElement(name = "getFoldersQuery")
 public class GetFoldersQuery extends GetByIdQuery {
     private static final long serialVersionUID = 854601731250203237L;
+
+    @Getter @Setter
+    private List<String> logicalUuid;
+    @Getter @Setter private Integer metadataLevel;
 
     /**
      * Constructs the query.
