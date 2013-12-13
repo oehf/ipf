@@ -124,6 +124,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.getEventCodeList().add(createCode(8));
         documentEntry.getEventCodeList().add(createCode(9));
         documentEntry.setRepositoryUniqueId("repo1");
+        documentEntry.setDocumentAvailability(DocumentAvailability.ONLINE);
 
         documentEntry.getReferenceIdList().add(new ReferenceId(
                 "ref-id-11", new AssigningAuthority("1.1.2.3"),
@@ -175,6 +176,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertSlot(SLOT_NAME_REFERENCE_ID_LIST, slots,
                 "ref-id-11^^^&1.1.2.3&ISO^urn:ihe:iti:xds:2013:order^&1.4.5.6&ISO",
                 "ref-id-12^^^&2.1.2.3&ISO^urn:ihe:iti:xds:2013:accession^&2.4.5.6&ISO");
+        assertSlot(SLOT_NAME_DOCUMENT_AVAILABILITY, slots, "urn:ihe:iti:2010:DocumentAvailability:Online");
 
         EbXMLClassification classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
         assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^degree 1^^&uni 1&uniType 1");
@@ -224,7 +226,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
                 "uniqueId", DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID);
         
         assertEquals(11, ebXML.getClassifications().size());
-        assertEquals(12, ebXML.getSlots().size());
+        assertEquals(13, ebXML.getSlots().size());
         assertEquals(2, ebXML.getExternalIdentifiers().size());
     }
 

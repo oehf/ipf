@@ -66,7 +66,9 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 DOC_ENTRY_CONFIDENTIALITY_CODE,
                 DOC_ENTRY_AUTHOR_PERSON,
                 DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_STATUS);
+                DOC_ENTRY_STATUS,
+                DOC_ENTRY_DOCUMENT_AVAILABILITY,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(FIND_DOCUMENTS_BY_REFERENCE_ID,
                 DOC_ENTRY_CLASS_CODE,
@@ -99,7 +101,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
         addAllowedMultipleSlots(FIND_FOLDERS,
                 FOLDER_CODES,
-                FOLDER_STATUS);
+                FOLDER_STATUS,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(FIND_FOLDERS_MPQ,
                 FOLDER_PATIENT_ID,
@@ -111,39 +114,56 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 SUBMISSION_SET_STATUS,
                 FOLDER_STATUS,
                 DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
+                DOC_ENTRY_CONFIDENTIALITY_CODE,
+                ASSOCIATION_STATUS,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(GET_DOCUMENTS,
                 DOC_ENTRY_UUID,
-                DOC_ENTRY_UNIQUE_ID);
+                DOC_ENTRY_UNIQUE_ID,
+                DOC_ENTRY_LOGICAL_ID,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(GET_FOLDERS,
                 FOLDER_UUID,
-                FOLDER_UNIQUE_ID);
+                FOLDER_UNIQUE_ID,
+                FOLDER_LOGICAL_ID,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(GET_ASSOCIATIONS,
-                UUID);
+                UUID,
+                ASSOCIATION_STATUS,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(GET_DOCUMENTS_AND_ASSOCIATIONS,
                 DOC_ENTRY_UUID,
-                DOC_ENTRY_UNIQUE_ID);
+                DOC_ENTRY_UNIQUE_ID,
+                ASSOCIATION_STATUS,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(GET_SUBMISSION_SETS,
-                UUID);
+                UUID,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(GET_SUBMISSION_SET_AND_CONTENTS,
                 DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
+                DOC_ENTRY_CONFIDENTIALITY_CODE,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(GET_FOLDER_AND_CONTENTS,
                 DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
+                DOC_ENTRY_CONFIDENTIALITY_CODE,
+                ASSOCIATION_STATUS,
+                METADATA_LEVEL);
 
-        addAllowedMultipleSlots(GET_FOLDERS_FOR_DOCUMENT
-                /* empty list */);
+        addAllowedMultipleSlots(GET_FOLDERS_FOR_DOCUMENT,
+                ASSOCIATION_STATUS,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(GET_RELATED_DOCUMENTS,
-                ASSOCIATION_TYPE);
+                ASSOCIATION_TYPE,
+                ASSOCIATION_STATUS,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(FETCH,
                 DOC_ENTRY_CLASS_CODE,

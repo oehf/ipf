@@ -25,12 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationLabel;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 /**
  * Tests for {@link AssociationTransformer}.
@@ -56,6 +51,7 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
         association.setLabel(AssociationLabel.ORIGINAL);
         association.setEntryUuid("uuid");
         association.setDocCode(new Code("code", new LocalizedString("display", "en-US", "UTF-8"), "scheme"));
+        association.setAvailabilityStatus(AvailabilityStatus.APPROVED);
     }
     
     @Test
@@ -76,6 +72,8 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
         assertEquals("code", classification.getNodeRepresentation());
         assertEquals("display", classification.getNameAsInternationalString().getSingleLocalizedString().getValue());
         assertEquals("scheme", classification.getSingleSlotValue("codingScheme"));
+
+        checkExtraValues(ebXML);
     }
     
     @Test
@@ -112,4 +110,6 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
         EbXMLAssociation ebXML = transformer.toEbXML(new Association(), objectLibrary);
         assertEquals(new Association(), transformer.fromEbXML(ebXML));
     }
+
+    protected abstract void checkExtraValues(EbXMLAssociation ebXML);
 }

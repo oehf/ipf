@@ -16,9 +16,11 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
+import org.openehealth.ipf.commons.ihe.xds.core.StatusHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AssociationType1;
 
 import java.util.ArrayList;
@@ -28,7 +30,8 @@ import java.util.Map;
  * Encapsulation of {@link AssociationType1}.
  * @author Jens Riemschneider
  */
-public class EbXMLAssociation30 extends EbXMLRegistryObject30<AssociationType1> implements EbXMLAssociation, ExtraMetadataHolder {
+public class EbXMLAssociation30 extends EbXMLRegistryObject30<AssociationType1>
+                                implements EbXMLAssociation, ExtraMetadataHolder, StatusHolder {
     /**
      * Constructs an association by wrapping the given ebXML 3.0 object.
      * @param association
@@ -68,6 +71,16 @@ public class EbXMLAssociation30 extends EbXMLRegistryObject30<AssociationType1> 
     @Override
     public void setAssociationType(AssociationType associationType) {
         getInternal().setAssociationType(AssociationType.getOpcode30(associationType));
+    }
+
+    @Override
+    public AvailabilityStatus getStatus() {
+        return AvailabilityStatus.valueOfOpcode(getInternal().getStatus());
+    }
+
+    @Override
+    public void setStatus(AvailabilityStatus availabilityStatus) {
+        getInternal().setStatus(AvailabilityStatus.toQueryOpcode(availabilityStatus));
     }
 
     @Override

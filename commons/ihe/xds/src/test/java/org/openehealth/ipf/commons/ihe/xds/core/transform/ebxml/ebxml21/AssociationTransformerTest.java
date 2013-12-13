@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.ebxml21;
 
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
@@ -28,5 +29,9 @@ public class AssociationTransformerTest extends AssociationTransformerTestBase {
     @Override
     public EbXMLFactory createFactory() {
         return new EbXMLFactory21();
+    }
+
+    @Override
+    protected void checkExtraValues(EbXMLAssociation ebXML) {
     }
 }

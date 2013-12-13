@@ -18,12 +18,14 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
+import org.openehealth.ipf.commons.ihe.xds.core.StatusHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationLabel;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 
 /**
@@ -33,6 +35,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 public class AssociationTransformer {
     private final EbXMLFactory factory;
     private final CodeTransformer codeTransformer;
+    private final StringToBoolTransformer stringToBoolTransformer;
     
     /**
      * Constructs the transformer
@@ -43,6 +46,7 @@ public class AssociationTransformer {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
         codeTransformer = new CodeTransformer(factory);
+        stringToBoolTransformer = new StringToBoolTransformer();
     }
     
     /**
@@ -63,27 +67,31 @@ public class AssociationTransformer {
         result.setAssociationType(association.getAssociationType());
         result.setSource(association.getSourceUuid());
         result.setTarget(association.getTargetUuid());
-        
+
         String label = AssociationLabel.toOpcode(association.getLabel());
         result.addSlot(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS, label);
 
         String previousVersion = association.getPreviousVersion();
         result.addSlot(Vocabulary.SLOT_NAME_PREVIOUS_VERSION, previousVersion);
 
-        String originalStatus = association.getOriginalStatus();
-        result.addSlot(Vocabulary.SLOT_NAME_ORIGINAL_STATUS, originalStatus);
+        AvailabilityStatus originalStatus = association.getOriginalStatus();
+        result.addSlot(Vocabulary.SLOT_NAME_ORIGINAL_STATUS, AvailabilityStatus.toQueryOpcode(originalStatus));
 
-        String newStatus = association.getNewStatus();
-        result.addSlot(Vocabulary.SLOT_NAME_NEW_STATUS, newStatus);
+        AvailabilityStatus newStatus = association.getNewStatus();
+        result.addSlot(Vocabulary.SLOT_NAME_NEW_STATUS, AvailabilityStatus.toQueryOpcode(newStatus));
 
-        String associationPropagation = association.getAssociationPropagation();
-        result.addSlot(Vocabulary.SLOT_NAME_ASSOCIATION_PROPAGATION, associationPropagation);
+        result.addSlot(Vocabulary.SLOT_NAME_ASSOCIATION_PROPAGATION,
+                                    stringToBoolTransformer.toEbXML(association.getAssociationPropagation()));
 
         EbXMLClassification contentType = codeTransformer.toEbXML(association.getDocCode(), objectLibrary);
         result.addClassification(contentType, Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
 
         if (result instanceof ExtraMetadataHolder) {
             ((ExtraMetadataHolder) result).setExtraMetadata(association.getExtraMetadata());
+        }
+
+        if (result instanceof StatusHolder){
+            ((StatusHolder) result).setStatus(association.getAvailabilityStatus());
         }
 
         return result;
@@ -100,13 +108,12 @@ public class AssociationTransformer {
         if (association == null) {
             return null;
         }
-        
         Association result = new Association();
         result.setAssociationType(association.getAssociationType());
         result.setTargetUuid(association.getTarget());
         result.setSourceUuid(association.getSource());
         result.setEntryUuid(association.getId());
-        
+
         String label = association.getSingleSlotValue(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS);
         result.setLabel(AssociationLabel.fromOpcode(label));
 
@@ -114,19 +121,23 @@ public class AssociationTransformer {
         result.setPreviousVersion(previousVersion);
 
         String originalStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_ORIGINAL_STATUS);
-        result.setOriginalStatus(originalStatus);
+        result.setOriginalStatus(AvailabilityStatus.valueOfOpcode(originalStatus));
 
         String newStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_NEW_STATUS);
-        result.setNewStatus(newStatus);
+        result.setNewStatus(AvailabilityStatus.valueOfOpcode(newStatus));
 
         String associationPropagation = association.getSingleSlotValue(Vocabulary.SLOT_NAME_ASSOCIATION_PROPAGATION);
-        result.setAssociationPropagation(associationPropagation);
+        result.setAssociationPropagation(stringToBoolTransformer.fromEbXML(associationPropagation));
 
         EbXMLClassification docCode = association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
         result.setDocCode(codeTransformer.fromEbXML(docCode));
 
         if (association instanceof ExtraMetadataHolder) {
             result.setExtraMetadata(((ExtraMetadataHolder) association).getExtraMetadata());
+        }
+
+        if (association instanceof StatusHolder){
+            result.setAvailabilityStatus(((StatusHolder) association).getStatus());
         }
 
         return result;
