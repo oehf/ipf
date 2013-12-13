@@ -32,4 +32,38 @@ public class GetSubmissionSetsQueryTransformer extends GetByUUIDQueryTransformer
     public GetSubmissionSetsQueryTransformer() {
         super(UUID);
     }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void toEbXML(GetSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.toEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
+    }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void fromEbXML(GetSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.fromEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
+    }
 }

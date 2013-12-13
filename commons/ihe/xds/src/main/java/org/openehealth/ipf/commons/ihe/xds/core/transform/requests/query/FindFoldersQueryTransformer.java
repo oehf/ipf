@@ -54,6 +54,7 @@ public class FindFoldersQueryTransformer extends AbstractStoredQueryTransformer<
         slots.fromCode(FOLDER_CODES, query.getCodes());
         
         slots.fromStatus(FOLDER_STATUS, query.getStatus());
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
     
     /**
@@ -82,5 +83,6 @@ public class FindFoldersQueryTransformer extends AbstractStoredQueryTransformer<
         query.getLastUpdateTime().setTo(slots.toNumber(FOLDER_LAST_UPDATE_TIME_TO));
         
         query.setStatus(slots.toStatus(FOLDER_STATUS));
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
 }

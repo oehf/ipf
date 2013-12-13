@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -22,10 +25,13 @@ import javax.xml.bind.annotation.*;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetSubmissionSetsQuery")
+@XmlType(name = "GetSubmissionSetsQuery", propOrder = {"metadataLevel"})
 @XmlRootElement(name = "getSubmissionSetsQuery")
 public class GetSubmissionSetsQuery extends GetByUuidQuery {
     private static final long serialVersionUID = 2089514690641582428L;
+
+    @Getter @Setter
+    private Integer metadataLevel;
 
     /**
      * Constructs the query.

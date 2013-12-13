@@ -15,18 +15,25 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a stored query for GetDocuments.
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetDocumentsQuery")
+@XmlType(name = "GetDocumentsQuery", propOrder = {"logicalUuid", "metadataLevel"})
 @XmlRootElement(name = "getDocumentsQuery")
 public class GetDocumentsQuery extends GetByIdQuery implements Serializable {
     private static final long serialVersionUID = 3610389657970005956L;
+
+    @Getter @Setter private List<String> logicalUuid;
+    @Getter @Setter private Integer metadataLevel;
 
     /**
      * Constructs the query.

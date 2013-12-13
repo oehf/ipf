@@ -31,4 +31,40 @@ public class GetAssociationsQueryTransformer extends GetByUUIDQueryTransformer<G
     public GetAssociationsQueryTransformer() {
         super(UUID);
     }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void toEbXML(GetAssociationsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.toEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        slots.fromStatus(ASSOCIATION_STATUS, query.getStatusAssociations());
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
+    }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void fromEbXML(GetAssociationsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.fromEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        query.setStatusAssociations(slots.toStatus(ASSOCIATION_STATUS));
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
+    }
 }

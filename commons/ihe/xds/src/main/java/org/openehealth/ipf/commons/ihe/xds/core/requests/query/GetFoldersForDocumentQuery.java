@@ -15,7 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+
 import javax.xml.bind.annotation.*;
+import java.util.List;
 
 
 /**
@@ -23,10 +28,14 @@ import javax.xml.bind.annotation.*;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetFoldersForDocumentQuery")
+@XmlType(name = "GetFoldersForDocumentQuery", propOrder = {"statusAssociations", "metadataLevel"})
 @XmlRootElement(name = "getFoldersForDocumentQuery")
 public class GetFoldersForDocumentQuery extends GetFromDocumentQuery {
     private static final long serialVersionUID = 4576256132617368775L;
+
+    @Getter @Setter
+    private List<AvailabilityStatus> statusAssociations;
+    @Getter @Setter private Integer metadataLevel;
 
     /**
      * Constructs the query.

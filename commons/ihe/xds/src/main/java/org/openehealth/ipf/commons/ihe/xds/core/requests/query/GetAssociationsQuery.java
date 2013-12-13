@@ -15,17 +15,26 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+
 import javax.xml.bind.annotation.*;
+import java.util.List;
 
 /**
  * Represents a stored query for GetAssociations.
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetAssociationsQuery")
+@XmlType(name = "GetAssociationsQuery", propOrder = {"statusAssociations", "metadataLevel"})
 @XmlRootElement(name = "getAssociationsQuery")
 public class GetAssociationsQuery extends GetByUuidQuery {
     private static final long serialVersionUID = 5623733746377113397L;
+
+    @Getter @Setter
+    private List<AvailabilityStatus> statusAssociations;
+    @Getter @Setter private Integer metadataLevel;
 
     /**
      * Constructs the query.

@@ -32,7 +32,7 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FindFoldersQuery", propOrder = {"status", "lastUpdateTime", "codes", "patientId"})
+@XmlType(name = "FindFoldersQuery", propOrder = {"status", "lastUpdateTime", "codes", "patientId", "metadataLevel"})
 @XmlRootElement(name = "findFoldersQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class FindFoldersQuery extends StoredQuery implements PatientIdBasedStoredQuery {
@@ -44,6 +44,7 @@ public class FindFoldersQuery extends StoredQuery implements PatientIdBasedStore
     @Getter @Setter private Identifiable patientId;
     
     @Getter private final TimeRange lastUpdateTime = new TimeRange();
+    @Getter @Setter private Integer metadataLevel;
 
     /**
      * Constructs the query.

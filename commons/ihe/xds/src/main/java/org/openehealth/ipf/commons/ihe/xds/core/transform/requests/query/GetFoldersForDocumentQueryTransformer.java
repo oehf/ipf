@@ -19,9 +19,47 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersForDocumentQuery;
 
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
+
 /**
  * Transforms between a {@link GetFoldersForDocumentQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class GetFoldersForDocumentQueryTransformer extends GetFromDocumentQueryTransformer<GetFoldersForDocumentQuery> {
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void toEbXML(GetFoldersForDocumentQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.toEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        slots.fromStatus(ASSOCIATION_STATUS, query.getStatusAssociations());
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
+    }
+
+    /**
+     *
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     */
+    public void fromEbXML(GetFoldersForDocumentQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.fromEbXML(query, ebXML);
+
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        query.setStatusAssociations(slots.toStatus(ASSOCIATION_STATUS));
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
+    }
 }
