@@ -21,7 +21,6 @@ import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCod
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
-import org.openhealthtools.ihe.atna.auditor.events.ihe.ImportEvent;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
@@ -30,7 +29,9 @@ import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtil
  * Implementation of ATNA Auditors for the following XDS-based transactions:
  * <ul>
  *     <li>ITI-51 -- XDS.b Multi-Patient Stored Query</li>
+ *     <li>ITI-57 -- XDS.b Update Document Set</li>
  *     <li>ITI-61 -- XDS.b Register On-Demand Document Entry</li>
+ *     <li>ITI-62 -- XDS.b Delete Document Set</li>
  *     <li>ITI-63 -- XCF Cross-Community Fetch</li>
  *     <li>RAD-69 -- XDS-I.b Retrieve Imaging Document Set</li>
  *     <li>RAD-75 -- XCA-I Cross-Gateway Retrieve Imaging Document Set</li>

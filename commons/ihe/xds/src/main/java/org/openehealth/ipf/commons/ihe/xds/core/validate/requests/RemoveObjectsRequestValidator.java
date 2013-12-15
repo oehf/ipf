@@ -22,12 +22,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet.DEFAULT_DELETION_SCOPE;
+
 /**
- * Validates a {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveObjectsRequest} request.
+ * Validates a {@link EbXMLRemoveObjectsRequest} request.
  * @author Boris Stanojevic
  */
 public class RemoveObjectsRequestValidator implements Validator<EbXMLRemoveObjectsRequest, ValidationProfile> {
+
+    public static final String DEFAULT_DELETION_SCOPE = "urn:oasis:names:tc:ebxml-regrep:DeletionScopeType:DeleteAll";
 
     /**
      * Validates the request.
@@ -44,6 +46,7 @@ public class RemoveObjectsRequestValidator implements Validator<EbXMLRemoveObjec
                            WRONG_DELETION_SCOPE, DEFAULT_DELETION_SCOPE);
             metaDataAssert(request.getId() == null &&
                            request.getHome() == null &&
+                           request.getSql() == null &&
                            request.getSlots().size() == 0, OBJECT_SHALL_NOT_BE_SPECIFIED, "AdhocQuery");
         }
     }

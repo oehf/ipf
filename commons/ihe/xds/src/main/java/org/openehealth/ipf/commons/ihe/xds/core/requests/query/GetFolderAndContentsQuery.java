@@ -19,10 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
 /**
@@ -30,13 +27,13 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetFolderAndContentsQuery", propOrder = {"statusAssociations", "metadataLevel"})
+@XmlType(name = "GetFolderAndContentsQuery", propOrder = {"associationStatuses", "metadataLevel"})
 @XmlRootElement(name = "getFolderAndContentsQuery")
 public class GetFolderAndContentsQuery extends GetByIdAndCodesQuery {
     private static final long serialVersionUID = -5400326849236563094L;
 
-    @Getter @Setter
-    private List<AvailabilityStatus> statusAssociations;
+    @XmlElement(name = "associationStatus")
+    @Getter @Setter private List<AvailabilityStatus> associationStatuses;
     @Getter @Setter private Integer metadataLevel;
 
     /**

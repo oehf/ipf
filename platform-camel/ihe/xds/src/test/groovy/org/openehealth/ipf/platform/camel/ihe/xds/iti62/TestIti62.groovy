@@ -20,9 +20,7 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
@@ -82,7 +80,7 @@ class TestIti62 extends StandardTestContainer {
 
     @Test
     void testIti62NotValidAudit() {
-        request.setDeletionScope("blah")
+        request.references.clear()
         assert FAILURE == sendIt(SERVICE1).status
         assert auditSender.messages.size() == 2
     }

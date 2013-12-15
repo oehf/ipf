@@ -34,7 +34,7 @@ public class StringToBoolTransformer {
         if (booleanValue == null) {
             return null;
         }
-        return booleanValue? YES : NO;
+        return booleanValue ? YES : NO;
     }
 
     /**
@@ -47,9 +47,9 @@ public class StringToBoolTransformer {
             return null;
         }
         if (YES.equals(slotValue.trim().toLowerCase())){
-            return new Boolean(true);
+            return Boolean.TRUE;
         } else if (NO.equals(slotValue.trim().toLowerCase())) {
-            return new Boolean(false);
+            return Boolean.FALSE;
         }
         return null;
     }

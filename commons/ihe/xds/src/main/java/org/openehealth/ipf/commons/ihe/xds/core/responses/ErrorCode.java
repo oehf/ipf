@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -136,7 +138,7 @@ public enum ErrorCode {
     /** General metadata update error. Use only when more specific error code is not available or appropriate */
     @XmlEnumValue("XDSMetadataUpdateError") META_DATA_UPDATE_ERROR("XDSMetadataUpdateError"),
     /**  Update encountered error where Patient IDs did not match*/
-    @XmlEnumValue("XDSPatientIDReconciliationError") PATIENTID_RECONCILIATION_ERROR("XDSPatientIDReconciliationError"),
+    @XmlEnumValue("XDSPatientIDReconciliationError") PATIENT_ID_RECONCILIATION_ERROR("XDSPatientIDReconciliationError"),
     /**  Document Registry/Recipient cannot decode the requested metadata update.*/
     @XmlEnumValue("XDSMetadataUpdateOperationError") META_DATA_UPDATE_OPERATION_ERROR("XDSMetadataUpdateOperationError"),
     /**  The version number included in the update request did not match the existing object.
@@ -188,7 +190,7 @@ public enum ErrorCode {
      *      {@link #_USER_DEFINED} when the code is not a standard one.
      */
     public static ErrorCode valueOfOpcode(String opcode) {
-        if ((opcode == null) || (opcode.trim().length() == 0)) {
+        if (StringUtils.isBlank(opcode)) {
             return null;
         }
         

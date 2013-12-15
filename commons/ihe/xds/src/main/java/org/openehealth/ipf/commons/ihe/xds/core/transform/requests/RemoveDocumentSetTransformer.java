@@ -49,12 +49,6 @@ public class RemoveDocumentSetTransformer {
 
         EbXMLRemoveObjectsRequest ebXML = factory.createRemoveObjectsRequest();
         ebXML.setReferences(request.getReferences());
-        ebXML.setDeletionScope(request.getDeletionScope());
-
-        if (request.getQuery() != null){
-            Query query = request.getQuery();
-            query.accept(new ToEbXMLVisitor(ebXML));
-        }
 
         return ebXML;
     }
@@ -72,19 +66,7 @@ public class RemoveDocumentSetTransformer {
 
         RemoveDocumentSet request = new RemoveDocumentSet();
         request.getReferences().addAll(ebXML.getReferences());
-        request.setDeletionScope(ebXML.getDeletionScope());
 
-        if (ebXML.getId() != null){
-            String id = ebXML.getId();
-            QueryType queryType = id == null ? QueryType.SQL : QueryType.valueOfId(id);
-            if (queryType == null) {
-                return null;
-            }
-
-            Query query = createQuery(queryType);
-            query.accept(new FromEbXMLVisitor(ebXML));
-            request.setQuery(query);
-        }
         return request;
     }
 

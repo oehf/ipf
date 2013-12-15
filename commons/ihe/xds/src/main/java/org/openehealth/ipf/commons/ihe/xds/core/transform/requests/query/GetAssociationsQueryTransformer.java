@@ -46,7 +46,7 @@ public class GetAssociationsQueryTransformer extends GetByUUIDQueryTransformer<G
         super.toEbXML(query, ebXML);
 
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        slots.fromStatus(ASSOCIATION_STATUS, query.getStatusAssociations());
+        slots.fromStatus(ASSOCIATION_STATUS, query.getAssociationStatuses());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
@@ -64,7 +64,7 @@ public class GetAssociationsQueryTransformer extends GetByUUIDQueryTransformer<G
         super.fromEbXML(query, ebXML);
 
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
-        query.setStatusAssociations(slots.toStatus(ASSOCIATION_STATUS));
+        query.setAssociationStatuses(slots.toStatus(ASSOCIATION_STATUS));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
 }

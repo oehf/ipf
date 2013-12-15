@@ -17,11 +17,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
@@ -35,52 +33,14 @@ import java.util.List;
  * @author Boris Stanojevic
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RemoveDocumentSet", propOrder = {
-        "query",
-        "references"
-})
+@XmlType(name = "RemoveDocumentSet", propOrder = {"references"})
 @XmlRootElement(name = "removeDocumentSet")
 @EqualsAndHashCode(callSuper = false, doNotUseGetters = false)
 public class RemoveDocumentSet implements Serializable {
     private static final long serialVersionUID = -737326382128159189L;
 
-    public static final String DEFAULT_DELETION_SCOPE = "urn:oasis:names:tc:ebxml-regrep:DeletionScopeType:DeleteAll";
-
-    @XmlElementRefs({
-            @XmlElementRef(type = FindDocumentsQuery.class),
-            @XmlElementRef(type = FindDocumentsForMultiplePatientsQuery.class),
-            @XmlElementRef(type = FetchQuery.class),
-            @XmlElementRef(type = FindFoldersQuery.class),
-            @XmlElementRef(type = FindFoldersForMultiplePatientsQuery.class),
-            @XmlElementRef(type = FindSubmissionSetsQuery.class),
-            @XmlElementRef(type = GetAllQuery.class),
-            @XmlElementRef(type = GetAssociationsQuery.class),
-            @XmlElementRef(type = GetDocumentsAndAssociationsQuery.class),
-            @XmlElementRef(type = GetDocumentsQuery.class),
-            @XmlElementRef(type = GetFolderAndContentsQuery.class),
-            @XmlElementRef(type = GetFoldersForDocumentQuery.class),
-            @XmlElementRef(type = GetFoldersQuery.class),
-            @XmlElementRef(type = GetFromDocumentQuery.class),
-            @XmlElementRef(type = GetRelatedDocumentsQuery.class),
-            @XmlElementRef(type = GetSubmissionSetAndContentsQuery.class),
-            @XmlElementRef(type = GetSubmissionSetsQuery.class)})
-    @Getter @Setter
-    private Query query;
-
     @XmlElement(name = "reference")
-    @Getter
-    private final List<ObjectReference> references = new ArrayList<ObjectReference>();
-
-    @XmlAttribute
-    @Setter
-    private String deletionScope;
-
-    public String getDeletionScope(){
-        if (deletionScope == null){
-            deletionScope = DEFAULT_DELETION_SCOPE;
-        }
-        return deletionScope;
-    }
+    @Getter private final List<ObjectReference> references = new ArrayList<ObjectReference>();
 
     @Override
     public String toString() {

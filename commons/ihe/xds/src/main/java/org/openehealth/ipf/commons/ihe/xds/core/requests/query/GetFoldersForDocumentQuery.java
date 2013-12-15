@@ -28,13 +28,13 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetFoldersForDocumentQuery", propOrder = {"statusAssociations", "metadataLevel"})
+@XmlType(name = "GetFoldersForDocumentQuery", propOrder = {"associationStatuses", "metadataLevel"})
 @XmlRootElement(name = "getFoldersForDocumentQuery")
 public class GetFoldersForDocumentQuery extends GetFromDocumentQuery {
     private static final long serialVersionUID = 4576256132617368775L;
 
-    @Getter @Setter
-    private List<AvailabilityStatus> statusAssociations;
+    @XmlElement(name = "associationStatus")
+    @Getter @Setter private List<AvailabilityStatus> associationStatuses;
     @Getter @Setter private Integer metadataLevel;
 
     /**

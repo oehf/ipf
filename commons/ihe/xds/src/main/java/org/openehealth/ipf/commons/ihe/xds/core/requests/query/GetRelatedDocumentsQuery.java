@@ -31,7 +31,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetRelatedDocumentsQuery", propOrder = {
-        "associationTypes", "documentEntryTypes", "statusAssociations", "metadataLevel"})
+        "associationTypes", "documentEntryTypes", "associationStatuses", "metadataLevel"})
 @XmlRootElement(name = "getRelatedDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class GetRelatedDocumentsQuery extends GetFromDocumentQuery
@@ -43,7 +43,8 @@ public class GetRelatedDocumentsQuery extends GetFromDocumentQuery
     @Getter @Setter private List<AssociationType> associationTypes;
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
-    @Getter @Setter private List<AvailabilityStatus> statusAssociations;
+    @XmlElement(name = "associationStatus")
+    @Getter @Setter private List<AvailabilityStatus> associationStatuses;
     @Getter @Setter private Integer metadataLevel;
 
     /**
