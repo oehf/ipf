@@ -18,7 +18,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.AssociationType1;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Encapsulation of {@link AssociationType1}.
@@ -64,5 +68,25 @@ public class EbXMLAssociation21 extends EbXMLRegistryObject21<AssociationType1> 
     @Override
     public void setAssociationType(AssociationType associationType) {
         getInternal().setAssociationType(AssociationType.getOpcode21(associationType));
+    }
+
+    @Override
+    public AvailabilityStatus getStatus() {
+        return null;  // not supported in ebXML 2.1
+    }
+
+    @Override
+    public void setStatus(AvailabilityStatus status) {
+        // not supported in ebXML 2.1
+    }
+
+    @Override
+    public Map<String, ArrayList<String>> getExtraMetadata() {
+        return null;  // not supported in ebXML 2.1
+    }
+
+    @Override
+    public void setExtraMetadata(Map<String, ArrayList<String>> map) {
+        // not supported in ebXML 2.1
     }
 }

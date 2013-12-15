@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
 
+import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 
 /**
  * Encapsulation of the ebXML classes for {@code AssociationType1}. 
@@ -24,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLAssociation extends EbXMLRegistryObject {
+public interface EbXMLAssociation extends EbXMLRegistryObject, ExtraMetadataHolder {
     /**
      * @return the id of the target object of this association.
      */
@@ -57,4 +59,8 @@ public interface EbXMLAssociation extends EbXMLRegistryObject {
      *          the type of this association.
      */
     void setAssociationType(AssociationType associationType);
+
+    AvailabilityStatus getStatus();
+
+    void setStatus(AvailabilityStatus status);
 }
