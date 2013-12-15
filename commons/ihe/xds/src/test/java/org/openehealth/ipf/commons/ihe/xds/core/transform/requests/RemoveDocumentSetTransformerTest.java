@@ -42,16 +42,13 @@ public class RemoveDocumentSetTransformerTest {
 
     @Test
     public void testToEbXML() {
-        QueryRegistry queryRegistry = SampleData.createFindDocumentsQuery();
-        request.setQuery(queryRegistry.getQuery());
         EbXMLRemoveObjectsRequest ebXML = transformer.toEbXML(request);
         assertNotNull(ebXML);
         assertEquals(2, ebXML.getReferences().size());
         assertEquals("1.2.3", ebXML.getReferences().get(0).getHome());
         assertEquals("5.6.7", ebXML.getReferences().get(1).getHome());
-        assertEquals(RemoveDocumentSet.DEFAULT_DELETION_SCOPE, ebXML.getDeletionScope());
-        assertNotNull("12.21.41", ebXML.getHome());
-        assertEquals("urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d", ebXML.getId());
+        assertNull(ebXML.getHome());
+        assertNull(ebXML.getId());
     }
 
     @Test
@@ -65,7 +62,6 @@ public class RemoveDocumentSetTransformerTest {
         assertNotNull(result);
         assertNotNull(result.getReferences());
         assertEquals(0, result.getReferences().size());
-        assertEquals(RemoveDocumentSet.DEFAULT_DELETION_SCOPE, result.getDeletionScope());
     }
     
     @Test

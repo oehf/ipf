@@ -56,7 +56,7 @@ public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAl
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
 
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
-        slots.fromStatus(ASSOCIATION_STATUS, query.getStatusAssociations());
+        slots.fromStatus(ASSOCIATION_STATUS, query.getAssociationStatuses());
         slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
     
@@ -88,7 +88,7 @@ public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAl
         query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
 
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
-        query.setStatusAssociations(slots.toStatus(ASSOCIATION_STATUS));
+        query.setAssociationStatuses(slots.toStatus(ASSOCIATION_STATUS));
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
 }

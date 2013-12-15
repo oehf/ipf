@@ -27,13 +27,13 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetAssociationsQuery", propOrder = {"statusAssociations", "metadataLevel"})
+@XmlType(name = "GetAssociationsQuery", propOrder = {"associationStatuses", "metadataLevel"})
 @XmlRootElement(name = "getAssociationsQuery")
 public class GetAssociationsQuery extends GetByUuidQuery {
     private static final long serialVersionUID = 5623733746377113397L;
 
-    @Getter @Setter
-    private List<AvailabilityStatus> statusAssociations;
+    @XmlElement(name = "associationStatus")
+    @Getter @Setter private List<AvailabilityStatus> associationStatuses;
     @Getter @Setter private Integer metadataLevel;
 
     /**
