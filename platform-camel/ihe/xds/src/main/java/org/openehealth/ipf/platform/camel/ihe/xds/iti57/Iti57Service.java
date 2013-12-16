@@ -41,7 +41,7 @@ public class Iti57Service extends AbstractWebService implements Iti57PortType {
 
     @Override
     public RegistryResponseType documentRegistryUpdateDocumentSet(SubmitObjectsRequest body) {
-        Exchange result = process(body, XdsJaxbDataBinding.getMap(body), ExchangePattern.InOut);
+        Exchange result = process(body, XdsJaxbDataBinding.getCamelHeaders(body), ExchangePattern.InOut);
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug("ITI-57 service failed", exception);

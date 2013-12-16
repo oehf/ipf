@@ -8,10 +8,13 @@
 
 package org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
+
+import javax.xml.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.Map;
 
 
 /**
@@ -46,6 +49,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "AssociationType1")
 public class AssociationType1
     extends RegistryObjectType
+    implements ExtraMetadataHolder
 {
 
     @XmlAttribute(required = true)
@@ -54,6 +58,9 @@ public class AssociationType1
     protected String sourceObject;
     @XmlAttribute(required = true)
     protected String targetObject;
+
+    @XmlTransient
+    @Getter @Setter private Map<String, ArrayList<String>> extraMetadata;
 
     /**
      * Gets the value of the associationType property.

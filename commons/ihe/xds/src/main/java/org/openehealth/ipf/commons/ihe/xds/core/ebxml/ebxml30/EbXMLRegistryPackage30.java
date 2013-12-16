@@ -15,16 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
+import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryPackageType;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 /**
  * Encapsulation for {@link RegistryPackageType}.
  * @author Jens Riemschneider
  */
-public class EbXMLRegistryPackage30 extends EbXMLRegistryObject30<RegistryPackageType> implements EbXMLRegistryPackage {
+public class EbXMLRegistryPackage30 extends EbXMLRegistryObject30<RegistryPackageType> implements EbXMLRegistryPackage, ExtraMetadataHolder {
     /**
      * Constructs a registry package by wrapping the given ebXML 3.0 object.
      * @param registryPackage
@@ -44,5 +48,15 @@ public class EbXMLRegistryPackage30 extends EbXMLRegistryObject30<RegistryPackag
     @Override
     public void setStatus(AvailabilityStatus status) {
         getInternal().setStatus(AvailabilityStatus.toQueryOpcode(status));
+    }
+
+    @Override
+    public Map<String, ArrayList<String>> getExtraMetadata() {
+        return getInternal().getExtraMetadata();
+    }
+
+    @Override
+    public void setExtraMetadata(Map<String, ArrayList<String>> map) {
+        getInternal().setExtraMetadata(map);
     }
 }

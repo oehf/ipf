@@ -15,13 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Common base class of all XDS meta data classes.
@@ -31,8 +36,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "IdentifiedObject", propOrder = {
-        "homeCommunityId", "entryUuid", "logicalUuid", "version", "uniqueId", "patientId", "availabilityStatus", "title", "comments"})
-public abstract class XDSMetaClass implements Serializable {
+        "homeCommunityId", "entryUuid", "logicalUuid", "version", "uniqueId",
+        "patientId", "availabilityStatus", "title", "comments", "extraMetadata"})
+abstract public class XDSMetaClass implements Serializable, ExtraMetadataHolder {
     private static final long serialVersionUID = -1193012076778493996L;
     
     private AvailabilityStatus availabilityStatus;
@@ -44,6 +50,7 @@ public abstract class XDSMetaClass implements Serializable {
     private String homeCommunityId;
     private String logicalUuid;
     private Version version;
+    @Getter @Setter private Map<String, ArrayList<String>> extraMetadata;
 
     /**
      * @return the availability status.
@@ -194,6 +201,7 @@ public abstract class XDSMetaClass implements Serializable {
         result = prime * result + ((uniqueId == null) ? 0 : uniqueId.hashCode());
         result = prime * result + ((logicalUuid == null) ? 0 : logicalUuid.hashCode());
         result = prime * result + ((version == null) ? 0 : version.hashCode());
+        result = prime * result + ((extraMetadata == null) ? 0 : extraMetadata.hashCode());
         return result;
     }
 
@@ -250,6 +258,11 @@ public abstract class XDSMetaClass implements Serializable {
             if (other.version != null)
                 return false;
         } else if (!version.equals(other.version))
+            return false;
+        if (extraMetadata == null) {
+            if (other.extraMetadata != null)
+                return false;
+        } else if (!extraMetadata.equals(other.extraMetadata))
             return false;
         return true;
     }

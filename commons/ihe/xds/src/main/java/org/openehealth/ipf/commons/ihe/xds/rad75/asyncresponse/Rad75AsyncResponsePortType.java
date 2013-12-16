@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.rad75.asyncresponse;
 
+import org.apache.cxf.annotations.DataBinding;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 
 import javax.jws.Oneway;
@@ -35,6 +37,7 @@ import javax.xml.ws.Action;
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.ObjectFactory.class,
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory.class })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
+@DataBinding(XdsJaxbDataBinding.class)
 public interface Rad75AsyncResponsePortType
 {
 

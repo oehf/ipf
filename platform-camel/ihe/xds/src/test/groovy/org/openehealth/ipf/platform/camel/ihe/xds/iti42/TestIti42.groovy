@@ -21,7 +21,9 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -44,10 +46,12 @@ class TestIti42 extends StandardTestContainer {
     def SERVICE3 = "xds-iti42://localhost:${port}/xds-iti42-service3"
 
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti42-service2"
-    
-    def request
-    def docEntry
-    
+
+    RegisterDocumentSet request
+    DocumentEntry docEntry
+
+    def static Map<String, ?> camelHeaders
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
@@ -65,6 +69,26 @@ class TestIti42 extends StandardTestContainer {
     
     @Test
     void testIti42() {
+        request.documentEntries[0].extraMetadata = [
+                'urn:oehf:docEntry1' : ['a', 'b', 'c'],
+                'invalid' : ['d', 'e', 'f'],
+                'urn:oehf:docEntry2' : ['g', 'h']]
+
+        request.submissionSet.extraMetadata = [
+                'urn:oehf:submission1' : ['1', '2', '3'],
+                'wrong' : ['4', '5', '6'],
+                'urn:oehf:submission2' : ['7', '8']]
+
+        request.associations[1].extraMetadata = [
+                'urn:oehf:association1' : ['A', 'B', 'C'],
+                'improper' : ['D', 'E', 'F'],
+                'urn:oehf:association2' : ['G', 'H']]
+
+        request.folders[0].extraMetadata = [
+                'urn:oehf:folder1' : ['i', 'ii', 'iii'],
+                'bad' : ['iv', 'v', 'vi'],
+                'urn:oehf:folder2' : ['vii', 'viii']]
+
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4

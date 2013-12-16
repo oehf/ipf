@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti61;
 
+import org.apache.cxf.annotations.DataBinding;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
@@ -36,6 +38,7 @@ import javax.xml.ws.Action;
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.ObjectFactory.class,
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory.class })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
+@DataBinding(XdsJaxbDataBinding.class)
 public interface Iti61PortType {
 
     /**

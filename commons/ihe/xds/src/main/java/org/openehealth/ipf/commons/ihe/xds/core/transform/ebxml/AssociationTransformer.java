@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
+import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
@@ -80,7 +81,11 @@ public class AssociationTransformer {
 
         EbXMLClassification contentType = codeTransformer.toEbXML(association.getDocCode(), objectLibrary);
         result.addClassification(contentType, Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
-        
+
+        if (result instanceof ExtraMetadataHolder) {
+            ((ExtraMetadataHolder) result).setExtraMetadata(association.getExtraMetadata());
+        }
+
         return result;
     }
     
@@ -119,7 +124,11 @@ public class AssociationTransformer {
 
         EbXMLClassification docCode = association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
         result.setDocCode(codeTransformer.fromEbXML(docCode));
-        
+
+        if (association instanceof ExtraMetadataHolder) {
+            result.setExtraMetadata(((ExtraMetadataHolder) association).getExtraMetadata());
+        }
+
         return result;
     }
 }

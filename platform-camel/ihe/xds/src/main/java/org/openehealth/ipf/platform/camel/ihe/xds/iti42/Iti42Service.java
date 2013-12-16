@@ -40,7 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
 public class Iti42Service extends AbstractWebService implements Iti42PortType {
     @Override
     public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest body) {
-        Exchange result = process(body, XdsJaxbDataBinding.getMap(body), ExchangePattern.InOut);
+        Exchange result = process(body, XdsJaxbDataBinding.getCamelHeaders(body), ExchangePattern.InOut);
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug("ITI-42 service failed", exception);
