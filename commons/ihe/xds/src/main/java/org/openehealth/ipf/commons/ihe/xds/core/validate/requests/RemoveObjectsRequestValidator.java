@@ -42,8 +42,6 @@ public class RemoveObjectsRequestValidator implements Validator<EbXMLRemoveObjec
     public void validate(EbXMLRemoveObjectsRequest request, ValidationProfile profile)  {
         if (profile.getInteractionId() == IpfInteractionId.ITI_62) {
             metaDataAssert(request.getReferences().size() > 0, EMPTY_REFERENCE_LIST, "RemoveObjectsRequest");
-            metaDataAssert(request.getDeletionScope().equals(DEFAULT_DELETION_SCOPE),
-                           WRONG_DELETION_SCOPE, DEFAULT_DELETION_SCOPE);
             metaDataAssert(request.getId() == null &&
                            request.getHome() == null &&
                            request.getSql() == null &&
