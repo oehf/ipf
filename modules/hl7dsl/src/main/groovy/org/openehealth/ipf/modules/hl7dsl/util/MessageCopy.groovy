@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.modules.hl7dsl.util
 
-import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.model.AbstractGroup
 import ca.uhn.hl7v2.model.Group;
-import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.util.DeepCopy;
-import ca.uhn.hl7v2.util.Terser;
+import ca.uhn.hl7v2.util.Terser
 
 /**
  * @author Martin Krasser
@@ -45,9 +46,12 @@ class MessageCopy {
     }
     
     private void doExecute(String path, Group grp) {
+        if (grp instanceof AbstractGroup){
+            addNonStandardIfExists(path, grp)
+        }
         grp.names.each { name ->
             grp.getAll(name).eachWithIndex { structure, index ->
-                String spec = spec(path, structure, index)
+                String spec = spec(path, name, index)
                 if (structure instanceof Group) {
                     doExecute(spec, structure) // recursion
                 } else {
@@ -56,8 +60,36 @@ class MessageCopy {
             }
         }
     }
+
+    private void addNonStandardIfExists(String path, AbstractGroup grp){
+        if (grp.nonStandardNames.size() > 0){
+            grp.nonStandardNames.each { nonStandardName ->
+                doAddNonStandard(nonStandardName, '/', path, dst)
+            }
+        }
+    }
+
+    private void doAddNonStandard(String segmentName, String rootPath, String groupPath, Group grp) {
+        if (rootPath == groupPath){
+            grp.addNonstandardSegment(segmentName)
+        }
+        grp.names.each { name ->
+            grp.get(name)
+            grp.getAll(name).eachWithIndex { structure, index ->
+                String spec = spec(rootPath, name, index)
+                if (structure instanceof Group){
+                    if (spec == groupPath) {
+                        structure.addNonstandardSegment(segmentName)
+                    } else {
+                        doAddNonStandard(segmentName, spec, groupPath, structure)
+                    }
+                }
+            }
+        }
+        dstTerser = new Terser(dst)
+    }
     
-    private copySegment(spec) {
+    private copySegment(String spec) {
         try {
             DeepCopy.copy(
                     srcTerser.getSegment(spec), 
@@ -67,8 +99,8 @@ class MessageCopy {
         }
     }
     
-    private static String spec(def path, def str, def idx) {
-        path + (path == '/' ? '' : '/') + str.name + '(' + idx + ')'
+    private static String spec(def path, def structureName, def idx) {
+        path + (path == '/' ? '' : '/') + structureName + '(' + idx + ')'
     }
-    
+
 }
