@@ -28,14 +28,17 @@ import org.springframework.context.event.ContextRefreshedEvent;
 /**
  * Spring Listener which holds the instances of all {@link OrderedConfigurer}. These
  * instances are collected from the Spring context on a {@link ContextRefreshedEvent}.
- * 
+ *
  * @author Boris Stanojevic
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SpringConfigurationPostProcessor implements
         ApplicationListener<ContextRefreshedEvent> {
-    
+
     private static Logger LOG = LoggerFactory.getLogger(SpringConfigurationPostProcessor.class);
+
+    private boolean refreshed;
+    private boolean restartOnce = true;
 
     private List<OrderedConfigurer> springConfigurers;
 
@@ -51,6 +54,13 @@ public class SpringConfigurationPostProcessor implements
         }
     }
 
+    /**
+     * @param restartOnce
+     */
+    public void setRestartOnce(boolean restartOnce) {
+        this.restartOnce = restartOnce;
+    }
+
     public List<OrderedConfigurer> getSpringConfigurers() {
         return springConfigurers;
     }
@@ -62,17 +72,21 @@ public class SpringConfigurationPostProcessor implements
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        SpringRegistry registry = new SpringRegistry();
-        registry.setBeanFactory(event.getApplicationContext());
-        // If there are no configurers set, we look them up
-        if (getSpringConfigurers() == null) {
-            LOG.info("No extension beans configured, will look up registry for extension beans");
-            springConfigurers = new ArrayList(registry.beans(
-                    OrderedConfigurer.class).values());
-            Collections.sort(springConfigurers);
+        if (!refreshed || !restartOnce) {
+            SpringRegistry registry = new SpringRegistry();
+            registry.setBeanFactory(event.getApplicationContext());
+            // If there are no configurers set, we look them up
+            if (getSpringConfigurers() == null) {
+                LOG.info("No extension beans configured, will look up registry for extension beans");
+                springConfigurers = new ArrayList(registry.beans(
+                        OrderedConfigurer.class).values());
+                Collections.sort(springConfigurers);
+            }
+            LOG.info("Number of extension beans: " + springConfigurers.size());
+            configure(registry);
+            refreshed = true;
+        } else {
+            LOG.info("Spring context has already been initialized before");
         }
-        LOG.info("Number of extension beans: " + springConfigurers.size());
-
-        configure(registry);
     }
 }
