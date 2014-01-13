@@ -28,24 +28,38 @@ import ca.uhn.hl7v2.model.v24.message.ORU_R01
  */
 public class MessagesTest extends GroovyTestCase {
 
-     MessageAdapter<ADT_A01> msg1
-     MessageAdapter<ORU_R01> msg2
+    MessageAdapter<ADT_A01> msg1
+    MessageAdapter<ORU_R01> msg2, msg3, msg4
+
+    void setUp() {
+        msg1 = load('msg-01.hl7')
+        msg2 = load('msg-04.hl7')
+        msg3 = load('msg-03.hl7')
+        msg4 = load('msg-08.hl7')
+    }
      
-     void setUp() {
-         msg1 = load('msg-01.hl7')
-         msg2 = load('msg-04.hl7')
-     }
-     
-     void testCopyMessage1() {
-         def msg1Copy = msg1.empty()
-         copyMessage(msg1.target, msg1Copy.target)
-         assert msg1.toString() == msg1Copy.toString()
-     }
+    void testCopyMessage1() {
+        def msg1Copy = msg1.empty()
+        copyMessage(msg1.target, msg1Copy.target)
+        assert msg1.toString() == msg1Copy.toString()
+    }
     
-     void testCopyMessage2() {
-         def msg2Copy = msg2.empty()
-         copyMessage(msg2.target, msg2Copy.target)
-         assert msg2.toString() == msg2Copy.toString()
-     }
+    void testCopyMessage2() {
+        def msg2Copy = msg2.empty()
+        copyMessage(msg2.target, msg2Copy.target)
+        assert msg2.toString() == msg2Copy.toString()
+    }
+
+    void testCopyMessageWithNonStandardSegments1() {
+        def msg3Copy = msg3.empty()
+        copyMessage(msg3.target, msg3Copy.target)
+        assert msg3.toString() == msg3Copy.toString()
+    }
+
+    void testCopyMessageWithNonStandardSegments2() {
+        def msg4Copy = msg4.empty()
+        copyMessage(msg4.target, msg4Copy.target)
+        assert msg4.toString() == msg4Copy.toString()
+    }
     
 }
