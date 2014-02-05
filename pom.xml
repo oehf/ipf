@@ -54,9 +54,9 @@
         <sources-plugin-version>2.2</sources-plugin-version>
         
         <!-- Dependency version properties -->
-        <activemq-version>5.8.0</activemq-version>
+        <activemq-version>5.9.0</activemq-version>
         <aspectj-version>1.7.3</aspectj-version>
-        <camel-version>2.12.1</camel-version>
+        <camel-version>2.12.2</camel-version>
         <cglib-version>2.2.2</cglib-version>
         <commons-codec-version>1.8</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
@@ -67,7 +67,7 @@
         <commons-lang-version>2.6</commons-lang-version>
         <commons-lang3-version>3.1</commons-lang3-version>
         <commons-math3-version>3.2</commons-math3-version>
-        <cxf-version>2.7.6</cxf-version>
+        <cxf-version>2.7.7</cxf-version>
         <derby-version>10.9.1.0</derby-version>
         <easymock-version>3.1</easymock-version>
         <ehcache-version>2.6.6</ehcache-version>
@@ -1302,6 +1302,36 @@
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
                     </classpathContainers>
                  </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/groovy</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/test/groovy</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <resources>
