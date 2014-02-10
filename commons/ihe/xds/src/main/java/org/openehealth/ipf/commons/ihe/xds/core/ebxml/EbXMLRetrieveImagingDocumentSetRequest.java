@@ -41,6 +41,17 @@ public interface EbXMLRetrieveImagingDocumentSetRequest
     List<RetrieveStudy> getRetrieveStudies();
 
     /**
+     * Sets the transferSyntaxUIDList of the request.
+     * @param transferSyntaxUIDList  the transferSyntaxUIDList.
+     */
+    void setTransferSyntaxUIDList(List<String> transferSyntaxUIDList);
+
+    /**
+     * @return the transferSyntaxUIDList of the request.
+     */
+    List<String> getTransferSyntaxUIDList();
+
+    /**
      * @return the ebXML object being wrapped by this class. 
      */
     Object getInternal();
