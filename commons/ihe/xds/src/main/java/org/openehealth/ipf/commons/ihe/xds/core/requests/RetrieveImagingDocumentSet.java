@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
@@ -32,12 +33,15 @@ import java.util.List;
 
 @XmlRootElement(name = "retrieveImagingDocumentSet")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RetrieveImagingDocumentSet", propOrder = {"retrieveStudies"})
+@XmlType(name = "RetrieveImagingDocumentSet", propOrder = {"retrieveStudies", "transferSyntaxIds"})
 public class RetrieveImagingDocumentSet implements Serializable {
     private static final long serialVersionUID = -8999352499981099419L;
 
     @XmlElementRef
     private final List<RetrieveStudy> retrieveStudies = new ArrayList<RetrieveStudy>();
+
+    @XmlElement
+    private final List<String> transferSyntaxIds = new ArrayList<String>();
 
     /**
      * @return the list of StudyRequests to retrieve.
@@ -46,11 +50,20 @@ public class RetrieveImagingDocumentSet implements Serializable {
         return retrieveStudies;
     }
 
+    /**
+     *
+     * @return the list of TransferSyntaxUID
+     */
+    public List<String> getTransferSyntaxIds() {
+        return transferSyntaxIds;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((retrieveStudies == null) ? 0 : retrieveStudies.hashCode());
+        result = prime * result + ((transferSyntaxIds == null) ? 0 : transferSyntaxIds.hashCode());
         return result;
     }
 
@@ -68,6 +81,11 @@ public class RetrieveImagingDocumentSet implements Serializable {
             if (other.retrieveStudies != null)
                 return false;
         } else if (!retrieveStudies.equals(other.retrieveStudies))
+            return false;
+        if (transferSyntaxIds == null) {
+            if (other.transferSyntaxIds != null)
+                return false;
+        } else if (!transferSyntaxIds.equals(other.transferSyntaxIds))
             return false;
         return true;
     }

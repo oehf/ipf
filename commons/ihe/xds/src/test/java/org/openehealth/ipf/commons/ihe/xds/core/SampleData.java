@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
@@ -364,6 +365,10 @@ public abstract class SampleData {
         retrieveStudies.add(retrieveStudy1);
         RetrieveStudy retrieveStudy2 = new RetrieveStudy("urn:oid:1.1.2", retrieveSerieses);
         retrieveStudies.add(retrieveStudy2);
+
+        request.getTransferSyntaxIds().add("1.2.840.10008.1.2.4.64");
+        request.getTransferSyntaxIds().add("1.2.840.10008.1.2.4.70");
+
 
         return request;
     }
