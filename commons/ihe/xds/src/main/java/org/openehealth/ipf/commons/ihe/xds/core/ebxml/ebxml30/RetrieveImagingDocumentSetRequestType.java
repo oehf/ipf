@@ -55,6 +55,19 @@ import javax.xml.bind.annotation.*;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
+ *
+ *        &lt;xs:element name="TransferSyntaxUIDList">
+ *          &lt;xs:complexType>
+ *            &lt;xs:sequence>
+ *              &lt;xs:element name="TransferSyntaxUID" type="rim:LongName" maxOccurs="unbounded">
+ *                &lt;xs:annotation>
+ *                   &lt;xs:documentation>This is the list of DICOM transfer styntax UIDs to be used when requesting retrieval of DICOM images</xs:documentation>
+ *                &lt;/xs:annotation>
+ *              &lt;/xs:element>
+ *            &lt;/xs:sequence>
+ *          &lt;/xs:complexType>
+ *        &lt;/xs:element>
+ *
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -65,12 +78,15 @@ import javax.xml.bind.annotation.*;
 @XmlRootElement(name = "RetrieveImagingDocumentSetRequest")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RetrieveImagingDocumentSetRequestType", propOrder = {
-    "studyRequest"
+    "studyRequest", "transferSyntaxUIDList"
 })
 public class RetrieveImagingDocumentSetRequestType {
 
-    @XmlElement(name = "StudyRequest", required = true)
+    @XmlElement(name = "StudyRequest", required = true, namespace = "urn:ihe:rad:xdsi-b:2009")
     protected List<StudyRequest> studyRequest;
+
+    @XmlElement(name = "TransferSyntaxUIDList", required = true, namespace = "urn:ihe:rad:xdsi-b:2009")
+    protected List<TransferSyntaxUIDList> transferSyntaxUIDList;
 
     /**
      * Gets the value of the studyRequest property.
@@ -103,6 +119,36 @@ public class RetrieveImagingDocumentSetRequestType {
     }
 
     /**
+     * Gets the value of the transferSyntaxUIDList property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the studyRequest property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getTransferSyntaxUIDList().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link TransferSyntaxUIDList }
+     *
+     *
+     * @return the study request.
+     */
+    public List<RetrieveImagingDocumentSetRequestType.TransferSyntaxUIDList> getTransferSyntaxUIDList() {
+        if (transferSyntaxUIDList == null) {
+            transferSyntaxUIDList = new ArrayList<TransferSyntaxUIDList>();
+        }
+        return this.transferSyntaxUIDList;
+    }
+
+    /**
      * <p>The following schema fragment specifies the expected content contained within this class.
      *
      * <pre>
@@ -123,10 +169,10 @@ public class RetrieveImagingDocumentSetRequestType {
     @XmlType(name = "", propOrder = {"studyInstanceUID", "seriesRequest"})
     public static class StudyRequest {
 
-        @XmlAttribute(name = "StudyInstanceUID", required = true)
+        @XmlAttribute(name = "studyInstanceUID", required = true)
         protected String studyInstanceUID;
 
-        @XmlElement(name = "SeriesRequest", required = true)
+        @XmlElement(name = "SeriesRequest", required = true, namespace = "urn:ihe:rad:xdsi-b:2009")
         protected List<SeriesRequest> seriesRequest;
 
         /**
@@ -177,6 +223,57 @@ public class RetrieveImagingDocumentSetRequestType {
      * <p>The following schema fragment specifies the expected content contained within this class.
      *
      * <pre>
+     * &lt;xs:element name="TransferSyntaxUIDList">
+     *   &lt;xs:complexType>
+     *     &lt;xs:sequence>
+     *       &lt;xs:element name="TransferSyntaxUID" type="rim:LongName" maxOccurs="unbounded">
+     *         &lt;xs:annotation>
+     *           &lt;xs:documentation>This is the list of DICOM transfer styntax UIDs to be used when requesting retrieval of DICOM images</xs:documentation>
+     *         &lt;/xs:annotation>
+     *       &lt;/xs:element>
+     *     &lt;/xs:sequence>
+     *   &lt;/xs:complexType>
+     * &lt;/xs:element>
+     * </pre>
+     *
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {"transferSyntaxUID"})
+    public static class TransferSyntaxUIDList {
+
+        @XmlElement(name = "TransferSyntaxUID", required = true, namespace="urn:ihe:rad:xdsi-b:2009")
+        protected List<String> transferSyntaxUID;
+
+        /**
+         * Gets the value of the seriesRequest property.
+         *
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the seriesRequest property.
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getTransferSyntaxUID().add(newItem);
+         * </pre>
+         * <p>
+         * Objects of the following type(s) are allowed in the list {@link TransferSyntaxUIDList }
+         *
+         */
+        public List<String> getTransferSyntaxUID() {
+            if (transferSyntaxUID == null) {
+                transferSyntaxUID = new ArrayList<String>();
+            }
+            return this.transferSyntaxUID;
+        }
+
+    }
+
+    /**
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     *
+     * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -194,7 +291,7 @@ public class RetrieveImagingDocumentSetRequestType {
     @XmlType(name = "", propOrder = {"seriesInstanceUID", "documentRequest"})
     public static class SeriesRequest {
 
-        @XmlAttribute(name = "SeriesInstanceUID", required = true)
+        @XmlAttribute(name = "seriesInstanceUID", required = true)
         protected String seriesInstanceUID;
 
         @XmlElement(name = "DocumentRequest", required = true)
@@ -248,4 +345,5 @@ public class RetrieveImagingDocumentSetRequestType {
             return documentRequest;
         }
     }
+
 }
