@@ -61,7 +61,7 @@ import javax.xml.bind.annotation.*;
  *            &lt;xs:sequence>
  *              &lt;xs:element name="TransferSyntaxUID" type="rim:LongName" maxOccurs="unbounded">
  *                &lt;xs:annotation>
- *                   &lt;xs:documentation>This is the list of DICOM transfer styntax UIDs to be used when requesting retrieval of DICOM images</xs:documentation>
+ *                   &lt;xs:documentation>This is the list of DICOM transfer syntax UIDs to be used when requesting retrieval of DICOM images</xs:documentation>
  *                &lt;/xs:annotation>
  *              &lt;/xs:element>
  *            &lt;/xs:sequence>
@@ -86,7 +86,7 @@ public class RetrieveImagingDocumentSetRequestType {
     protected List<StudyRequest> studyRequest;
 
     @XmlElement(name = "TransferSyntaxUIDList", required = true, namespace = "urn:ihe:rad:xdsi-b:2009")
-    protected List<TransferSyntaxUIDList> transferSyntaxUIDList;
+    protected TransferSyntaxUIDList transferSyntaxUIDList;
 
     /**
      * Gets the value of the studyRequest property.
@@ -139,11 +139,11 @@ public class RetrieveImagingDocumentSetRequestType {
      * {@link TransferSyntaxUIDList }
      *
      *
-     * @return the study request.
+     * @return the value of the transferSyntaxUIDList property.
      */
-    public List<RetrieveImagingDocumentSetRequestType.TransferSyntaxUIDList> getTransferSyntaxUIDList() {
+    public RetrieveImagingDocumentSetRequestType.TransferSyntaxUIDList getTransferSyntaxUIDList() {
         if (transferSyntaxUIDList == null) {
-            transferSyntaxUIDList = new ArrayList<TransferSyntaxUIDList>();
+            transferSyntaxUIDList = new TransferSyntaxUIDList();
         }
         return this.transferSyntaxUIDList;
     }
@@ -228,7 +228,7 @@ public class RetrieveImagingDocumentSetRequestType {
      *     &lt;xs:sequence>
      *       &lt;xs:element name="TransferSyntaxUID" type="rim:LongName" maxOccurs="unbounded">
      *         &lt;xs:annotation>
-     *           &lt;xs:documentation>This is the list of DICOM transfer styntax UIDs to be used when requesting retrieval of DICOM images</xs:documentation>
+     *           &lt;xs:documentation>This is the list of DICOM transfer syntax UIDs to be used when requesting retrieval of DICOM images</xs:documentation>
      *         &lt;/xs:annotation>
      *       &lt;/xs:element>
      *     &lt;/xs:sequence>

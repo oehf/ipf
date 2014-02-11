@@ -30,7 +30,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * Tests for {@link org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveImagingDocumentSetRequestTransformer}.
+ * Tests for {@link RetrieveImagingDocumentSetRequestTransformer}.
  * @author Clay Sebourn
  */
 public class RetrieveImagingDocumentSetRequestTransformerTest

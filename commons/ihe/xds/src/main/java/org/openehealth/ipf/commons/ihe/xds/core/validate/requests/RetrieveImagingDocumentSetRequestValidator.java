@@ -23,6 +23,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveStudy;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
+import java.util.List;
+
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
@@ -41,19 +44,22 @@ public class RetrieveImagingDocumentSetRequestValidator implements Validator<EbX
         
         for (RetrieveStudy retrieveStudy : request.getRetrieveStudies()) {
             String studyInstanceUID = retrieveStudy.getStudyInstanceUID();
-            metaDataAssert(studyInstanceUID != null && !studyInstanceUID.isEmpty(), STUDY_INSTANCE_UID_MUST_BE_SPECIFIED);
+            metaDataAssert(isNotEmpty(studyInstanceUID), STUDY_INSTANCE_UID_MUST_BE_SPECIFIED);
+
+            List<String> transferSyntaxUIDList = request.getTransferSyntaxUIDList();
+            metaDataAssert(transferSyntaxUIDList != null && !transferSyntaxUIDList.isEmpty(), TRANSFER_SYNTAX_UID_LIST_MUST_BE_SPECIFIED);
 
             for (RetrieveSeries retrieveSeries : retrieveStudy.getRetrieveSerieses()) {
                 String seriesInstanceUID = retrieveSeries.getSeriesInstanceUID();
-                metaDataAssert(seriesInstanceUID != null && !seriesInstanceUID.isEmpty(), SERIES_INSTANCE_UID_MUST_BE_SPECIFIED);
+                metaDataAssert(isNotEmpty(seriesInstanceUID), SERIES_INSTANCE_UID_MUST_BE_SPECIFIED);
 
                 for (RetrieveDocument document : retrieveSeries.getDocuments()) {
                     //todo: Eliminate this duplicate code from DocumentRequest?
                     String repoId = document.getRepositoryUniqueId();
-                    metaDataAssert(repoId != null && !repoId.isEmpty(), REPO_ID_MUST_BE_SPECIFIED);
+                    metaDataAssert(isNotEmpty(repoId), REPO_ID_MUST_BE_SPECIFIED);
 
                     String docId = document.getDocumentUniqueId();
-                    metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
+                    metaDataAssert(isNotEmpty(docId), DOC_ID_MUST_BE_SPECIFIED);
 
                     if (profile.getProfile() == ValidationProfile.InteractionProfile.XCA) {
                         hcValidator.validate(document.getHomeCommunityId());
