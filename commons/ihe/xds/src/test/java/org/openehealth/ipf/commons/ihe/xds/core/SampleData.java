@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;

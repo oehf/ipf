@@ -19,7 +19,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocume
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType.DocumentRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType.StudyRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType.SeriesRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType.TransferSyntaxUIDList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveSeries;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveStudy;
@@ -80,11 +79,7 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
     @Override
     public List<String> getTransferSyntaxUIDList() {
         List<String> transferSyntaxUIDs = new ArrayList<String>();
-        TransferSyntaxUIDList transferSyntaxUIDList = request.getTransferSyntaxUIDList().get(0);
-        for (String transferSyntaxUID : transferSyntaxUIDList.getTransferSyntaxUID())
-        {
-            transferSyntaxUIDs.add(transferSyntaxUID);
-        }
+        transferSyntaxUIDs.addAll(request.getTransferSyntaxUIDList().getTransferSyntaxUID());
         return transferSyntaxUIDs;
     }
 
@@ -117,17 +112,9 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
 
     @Override
     public void setTransferSyntaxUIDList(List<String> transferSyntaxUIDList) {
-        if (!request.getTransferSyntaxUIDList().isEmpty()) {
-          request.getTransferSyntaxUIDList().clear();
-        }
-        request.getTransferSyntaxUIDList().add(new TransferSyntaxUIDList());
-        request.getTransferSyntaxUIDList().get(0).getTransferSyntaxUID().clear();
+        request.getTransferSyntaxUIDList().getTransferSyntaxUID().clear();
         if (transferSyntaxUIDList != null) {
-            for (String transferSyntaxUID : transferSyntaxUIDList)
-            {
-                request.getTransferSyntaxUIDList().get(0).getTransferSyntaxUID().add(transferSyntaxUID);
-            }
+            request.getTransferSyntaxUIDList().getTransferSyntaxUID().addAll(transferSyntaxUIDList);
         }
-
     }
 }

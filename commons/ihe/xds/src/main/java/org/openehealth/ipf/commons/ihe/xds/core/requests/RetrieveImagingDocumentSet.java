@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;

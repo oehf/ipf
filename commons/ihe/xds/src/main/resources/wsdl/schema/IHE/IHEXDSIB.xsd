@@ -31,7 +31,7 @@
                     <xs:sequence>
                         <xs:element name="TransferSyntaxUID" type="rim:LongName" maxOccurs="unbounded">
                             <xs:annotation>
-                                <xs:documentation>This is the list of DICOM transfer styntax UIDs to be used when requesting retrieval of DICOM images</xs:documentation>
+                                <xs:documentation>This is the list of DICOM transfer syntax UIDs to be used when requesting retrieval of DICOM images</xs:documentation>
                             </xs:annotation>
                         </xs:element>
                     </xs:sequence>
