@@ -20,19 +20,11 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLInternationalString30
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.LocalizedStringType
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.Unmarshaller
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
