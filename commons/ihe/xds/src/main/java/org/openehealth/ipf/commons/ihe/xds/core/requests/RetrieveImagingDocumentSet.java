@@ -39,7 +39,7 @@ public class RetrieveImagingDocumentSet implements Serializable {
     @XmlElementRef
     private final List<RetrieveStudy> retrieveStudies = new ArrayList<RetrieveStudy>();
 
-    @XmlElement
+    @XmlElement(name = "transferSyntaxId")
     private final List<String> transferSyntaxIds = new ArrayList<String>();
 
     /**
