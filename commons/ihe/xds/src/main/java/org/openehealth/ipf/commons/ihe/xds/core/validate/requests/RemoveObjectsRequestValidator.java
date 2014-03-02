@@ -29,8 +29,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  */
 public class RemoveObjectsRequestValidator implements Validator<EbXMLRemoveObjectsRequest, ValidationProfile> {
 
-    public static final String DEFAULT_DELETION_SCOPE = "urn:oasis:names:tc:ebxml-regrep:DeletionScopeType:DeleteAll";
-
     /**
      * Validates the request.
      * @param request
