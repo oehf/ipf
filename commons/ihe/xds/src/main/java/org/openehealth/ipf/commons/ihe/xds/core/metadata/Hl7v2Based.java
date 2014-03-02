@@ -66,7 +66,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
 
 
     /**
-     * Parses the given HL7 v2 element info an XDS simplified model object.
+     * Parses the given HL7 v2 element into an XDS simplified model object.
      * @param hl7String
      *      HL7 v2 element as a String.
      * @param xdsModelClass
@@ -90,7 +90,6 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
         try {
             T xdsModelObject = xdsModelClass.newInstance();
             MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, XdsHl7v2Renderer.ENCODING_CHARACTERS);
-            // TODO: can the xdsModelObject be empty when the String is not empty?
             return xdsModelObject.isEmpty() ? null : xdsModelObject;
         } catch (InstantiationException e) {
             throw new RuntimeException(e);

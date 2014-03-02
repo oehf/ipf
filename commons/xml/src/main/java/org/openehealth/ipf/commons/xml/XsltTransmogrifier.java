@@ -174,7 +174,7 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
     /**
      * Creates the Xslt template
      * 
-     * @param resourceLocation
+     * @param params
      * @return the Xslt template
      */
     protected Templates doCreateTemplate(Object... params) {

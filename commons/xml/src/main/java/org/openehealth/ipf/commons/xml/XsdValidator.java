@@ -75,7 +75,7 @@ public class XsdValidator implements Validator<Source, String> {
     /**
      * @param message
      *            the message to be validated
-     * @param schemaSource
+     * @param schemaResource
      *            the XML schema to validate against
      * @return an array of validation exceptions
      */
