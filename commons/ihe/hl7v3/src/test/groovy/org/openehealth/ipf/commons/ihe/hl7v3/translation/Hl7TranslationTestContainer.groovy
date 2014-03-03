@@ -22,7 +22,6 @@ import org.custommonkey.xmlunit.XMLUnit
 import static org.easymock.EasyMock.*
 
 import org.junit.BeforeClass;
-import org.junit.runner.RunWith
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.ihe.core.InteractionId
@@ -139,17 +138,17 @@ class Hl7TranslationTestContainer {
         assert differences[0].toString().contains('creationTime')
     }
     
-    void doTestV2toV3RequestTranslation(String fn, int v2index, InteractionId v3Id, ca.uhn.hl7v2.parser.Parser parser) {
+    void doTestV2toV3RequestTranslation(String fn, int v2index, InteractionId v3Id, Parser parser) {
         String v2request = getFileContent(fn, V2, REQUEST)
-        org.openehealth.ipf.modules.hl7dsl.MessageAdapter msg = org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make(parser, v2request)
+        MessageAdapter msg = MessageAdapters.make(parser, v2request)
         V2_VALIDATOR.validate(msg, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
         String translatedV3response = v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')
         V3_VALIDATOR.validate(translatedV3response, Hl7v3ValidationProfiles.getRequestValidationProfile(v3Id))
 
-        org.custommonkey.xmlunit.Diff diff = new org.custommonkey.xmlunit.Diff(expectedV3response, translatedV3response)
-        org.custommonkey.xmlunit.DetailedDiff detDiff = new org.custommonkey.xmlunit.DetailedDiff(diff)
+        Diff diff = new Diff(expectedV3response, translatedV3response)
+        DetailedDiff detDiff = new DetailedDiff(diff)
         List differences = detDiff.getAllDifferences()
         assert differences.size() == 1
         assert differences[0].toString().contains('creationTime')
