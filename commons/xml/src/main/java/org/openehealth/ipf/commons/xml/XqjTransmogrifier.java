@@ -65,7 +65,6 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
     /**
      * @param outputFormat
      *            currently supported: String, Writer, OutputStream
-     * @throws XQException
      */
     public XqjTransmogrifier(Class<T> outputFormat) {
         super();
@@ -79,14 +78,11 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
     /**
      * @param outputFormat
      *            currently supported: String
-     * @param staticParams
-     *            static XQuery parameters
      * @param globalParams
      *            static XQuery parameters
      * @throws XQException
      */
-    public XqjTransmogrifier(Class<T> outputFormat, Map<String, Object> globalParams)
-            throws XQException {
+    public XqjTransmogrifier(Class<T> outputFormat, Map<String, Object> globalParams) throws XQException {
         this(outputFormat);
         initGlobalConfiguration(globalParams);
     }

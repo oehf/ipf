@@ -56,7 +56,7 @@
         <!-- Dependency version properties -->
         <activemq-version>5.9.0</activemq-version>
         <aspectj-version>1.7.3</aspectj-version>
-        <camel-version>2.12.2</camel-version>
+        <camel-version>2.12.3</camel-version>
         <cglib-version>2.2.2</cglib-version>
         <commons-codec-version>1.8</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
@@ -67,9 +67,9 @@
         <commons-lang-version>2.6</commons-lang-version>
         <commons-lang3-version>3.1</commons-lang3-version>
         <commons-math3-version>3.2</commons-math3-version>
-        <cxf-version>2.7.7</cxf-version>
+        <cxf-version>2.7.10</cxf-version>
         <derby-version>10.9.1.0</derby-version>
-        <easymock-version>3.1</easymock-version>
+        <easymock-version>3.2</easymock-version>
         <ehcache-version>2.6.6</ehcache-version>
         <geronimo-jpa_2.0_spec.version>1.1</geronimo-jpa_2.0_spec.version>
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
@@ -89,17 +89,17 @@
         <junit-version>4.11</junit-version>
         <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.17</log4j-version>
-        <lombok-version>1.12.2</lombok-version>
+        <lombok-version>1.12.6</lombok-version>
         <mdht-version>1.2.0.201212201425</mdht-version>
         <metabuilder-version>1.1.6-p2</metabuilder-version>
         <mina2-version>2.0.7</mina2-version>
         <oht-atna-version>2.0.0</oht-atna-version>
         <oht-cdar-version>1.1.0-p2</oht-cdar-version>
         <osgi-api-version>1.4.0</osgi-api-version>
-        <quartz-version>2.1.7</quartz-version>
+        <quartz-version>2.2.1</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.7.5</slf4j-version>
-        <spring-version>3.2.4.RELEASE</spring-version>
+        <spring-version>3.2.5.RELEASE</spring-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.39</tomcat-version>
         <xbean-spring-version>3.11.1</xbean-spring-version>
