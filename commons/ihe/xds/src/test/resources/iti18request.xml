@@ -1,0 +1,21 @@
+<query:AdhocQueryRequest
+        xmlns:query="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0"
+        xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0">
+
+    <query:ResponseOption returnComposedObjects="true" returnType="LeafClass"/>
+
+    <!-- FindDocuments query -->
+    <rim:AdhocQuery id="urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d">
+        <rim:Slot name="$XDSDocumentEntryPatientId">
+            <rim:ValueList>
+                <rim:Value>'593603^^^&amp;2.16.756.5.33.2.5.1.5.1&amp;ISO''%20and%20611%3d611--%20</rim:Value>
+            </rim:ValueList>
+        </rim:Slot>
+        <rim:Slot name="$XDSDocumentEntryStatus">
+            <rim:ValueList>
+                <rim:Value>('urn:oasis:names:tc:ebxmlregrep:ResponseStatusType:Approved')</rim:Value>
+            </rim:ValueList>
+        </rim:Slot>
+    </rim:AdhocQuery>
+
+</query:AdhocQueryRequest>
