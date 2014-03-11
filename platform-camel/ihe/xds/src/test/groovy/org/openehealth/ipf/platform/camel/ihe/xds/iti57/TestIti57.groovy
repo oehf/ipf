@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti57
 
+import org.apache.cxf.headers.Header
+import org.apache.cxf.jaxb.JAXBDataBinding
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
@@ -24,7 +26,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+
+import javax.xml.namespace.QName
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
@@ -39,6 +44,7 @@ class TestIti57 extends StandardTestContainer {
     
     def SERVICE1 = "xds-iti57://localhost:${port}/xds-iti57-service1"
     def SERVICE2 = "xds-iti57://localhost:${port}/xds-iti57-service2"
+    def SERVICE3 = "xds-iti57://localhost:${port}/xds-iti57-service3"
 
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti57-service2"
     
@@ -75,12 +81,30 @@ class TestIti57 extends StandardTestContainer {
 
         checkAudit("0")
     }
-    
+
+    @Test
+    void testSoapHeaders() {
+        Header header1 = new Header(new QName("http://acme.org", "MyHeader1"), "header 1 contents", new JAXBDataBinding(String.class))
+        Header header2 = new Header(new QName("http://openehealth.org", "MyHeader2"), "header 2 contents", new JAXBDataBinding(String.class))
+
+        Collection<Header> headerCollection = [header1, header2]
+        Map<QName, Header> headerMap = [
+                (header1.name) : header1,
+                (header2.name) : header2,
+        ]
+
+        assert SUCCESS == sendIt(SERVICE3, 'service 3', headerCollection).status
+        assert SUCCESS == sendIt(SERVICE3, 'service 3', headerMap).status
+
+        assert FAILURE == sendIt(SERVICE3, 'service 3', header1).status
+        assert FAILURE == sendIt(SERVICE3, 'service 3', 'garbage').status
+        assert FAILURE == sendIt(SERVICE3, 'service 3', null).status
+    }
+
     @Test
     void testIti57FailureAudit() {
         assert FAILURE == sendIt(SERVICE1, 'falsch').status
         assert auditSender.messages.size() == 2
-        
     }
 
     void checkAudit(outcome) {
@@ -115,9 +139,10 @@ class TestIti57 extends StandardTestContainer {
         checkSubmissionSet(message.ParticipantObjectIdentification[1])
     }
 
-    def sendIt(endpoint, value) {
+    def sendIt(endpoint, value, soapHeaders = null) {
         docEntry.comments = new LocalizedString(value)
-        return send(endpoint, request, Response.class)
+        Map camelHeaders = soapHeaders ? [(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS) : soapHeaders] : null
+        return send(endpoint, request, Response.class, camelHeaders)
     }
 
 }

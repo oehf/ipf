@@ -132,8 +132,8 @@ class TestIti42 extends StandardTestContainer {
         String submissionSetString = readFile('submission-set.xml')
         JAXBContext jaxbContext = JAXBContext.newInstance(SubmitObjectsRequest.class)
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller()
-        def requestWitmMetadata = unmarshaller.unmarshal(XmlUtils.source(submissionSetString))
-        def response = send(SERVICE3, requestWitmMetadata, Response.class)
+        def requestWithMetadata = unmarshaller.unmarshal(XmlUtils.source(submissionSetString))
+        def response = send(SERVICE3, requestWithMetadata, Response.class)
         assert response.status == SUCCESS
 
         // request without extra metadata

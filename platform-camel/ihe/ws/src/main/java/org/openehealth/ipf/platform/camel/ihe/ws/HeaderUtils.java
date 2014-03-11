@@ -17,11 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import static org.apache.cxf.message.Message.PROTOCOL_HEADERS;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.xml.namespace.QName;
 
@@ -173,9 +169,14 @@ abstract public class HeaderUtils {
             Message message,
             boolean isRequest) 
     {
-        List<Header> userHeaders = CastUtils.cast(
-                message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, List.class));
-        
+        Collection<Header> userHeaders = null;
+        Object o = message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
+        if (o instanceof Collection) {
+            userHeaders = (Collection<Header>) o;
+        } else if (o instanceof Map) {
+            userHeaders = ((Map<QName, Header>) o).values();
+        }
+
         if ((userHeaders != null) && ! userHeaders.isEmpty()) {
             List<Header> soapHeaders = getHeaders(
                     messageContext, Header.HEADER_LIST, isRequest, true, SOAP_HEADERS_CONTAINER_FACTORY);

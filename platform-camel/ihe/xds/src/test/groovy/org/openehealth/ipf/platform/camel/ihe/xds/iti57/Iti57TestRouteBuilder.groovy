@@ -16,9 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti57
 
 import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.cxf.headers.Header
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+
+import javax.xml.namespace.QName
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
@@ -38,6 +42,24 @@ public class Iti57TestRouteBuilder extends SpringRouteBuilder {
 
         from('xds-iti57:xds-iti57-service2')
             .process { checkValue(it, 'service 2')}
+
+        // for testing SOAP headers
+        from('xds-iti57:xds-iti57-service3')
+            .process {
+                Map<QName, Header> soapHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_SOAP_HEADERS]
+                boolean correct = true
+                correct = correct && (soapHeaders != null)
+
+                Header header1 = soapHeaders[new QName("http://acme.org", "MyHeader1")]
+                correct = correct && (header1 != null)
+                correct = correct && (header1.object.firstChild.data == "header 1 contents")
+
+                Header header2 = soapHeaders[new QName("http://openehealth.org", "MyHeader2")]
+                correct = correct && (header1 != null)
+                correct = correct && (header2.object.firstChild.data== "header 2 contents")
+
+                it.out.body = new Response(correct ? SUCCESS : FAILURE)
+            }
     }
 
     void checkValue(exchange, expected) {
