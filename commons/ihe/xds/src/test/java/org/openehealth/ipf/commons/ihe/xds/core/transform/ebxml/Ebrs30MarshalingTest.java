@@ -25,16 +25,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLExtrinsicObje
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
 import javax.xml.bind.*;
 import javax.xml.namespace.QName;
@@ -153,7 +152,6 @@ public class Ebrs30MarshalingTest {
     }
 
     @Test
-    @Ignore     // disabled to prevent clouds from crashing onto the Earth
     public void testPatientIdSlotRegexp() throws Exception {
         File file = new File(getClass().getClassLoader().getResource("iti18request.xml").toURI());
 
@@ -163,14 +161,9 @@ public class Ebrs30MarshalingTest {
         Object unmarshalled = unmarshaller.unmarshal(file);
         AdhocQueryRequest original = (AdhocQueryRequest) unmarshalled;
 
-        QueryRegistryTransformer transformer = new QueryRegistryTransformer();
-        QueryRegistry result = transformer.fromEbXML(new EbXMLAdhocQueryRequest30(original));
-
-        FindDocumentsQuery query = (FindDocumentsQuery) result.getQuery();
-        Identifiable patientId = query.getPatientId();
-        assertEquals("'593603", patientId.getId());
-        assertEquals("2.16.756.5.33.2.5.1.5.1", patientId.getAssigningAuthority().getUniversalId());
-        assertEquals("ISO'%20and%20611%3d611--%20", patientId.getAssigningAuthority().getUniversalIdType());
+        QuerySlotHelper slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(original));
+        List<String> patientIdList = slotHelper.toStringList(QueryParameter.DOC_ENTRY_PATIENT_ID);
+        assertEquals(0, patientIdList.size());
     }
 
     private SubmitObjectsRequest send() throws JAXBException {

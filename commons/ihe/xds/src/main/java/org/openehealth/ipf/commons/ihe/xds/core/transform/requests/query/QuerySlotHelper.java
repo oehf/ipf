@@ -45,7 +45,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 public class QuerySlotHelper {
     private static final Pattern PATTERN =
-            Pattern.compile("\\s*,?\\s*'((?:[^']*(?:'')*[^']*)*)'(.*)", Pattern.DOTALL);
+            Pattern.compile("\\s*,?\\s*'((?:[^']*(?:'')*[^']*)*+)'(.*)", Pattern.DOTALL);
 
     private final EbXMLAdhocQueryRequest ebXML;
 
