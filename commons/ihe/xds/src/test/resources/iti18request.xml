@@ -13,7 +13,7 @@
         </rim:Slot>
         <rim:Slot name="$XDSDocumentEntryStatus">
             <rim:ValueList>
-                <rim:Value>('urn:oasis:names:tc:ebxmlregrep:ResponseStatusType:Approved')</rim:Value>
+                <rim:Value>('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')</rim:Value>
             </rim:ValueList>
         </rim:Slot>
     </rim:AdhocQuery>
