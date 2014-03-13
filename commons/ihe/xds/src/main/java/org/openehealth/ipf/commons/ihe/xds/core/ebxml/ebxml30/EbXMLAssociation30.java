@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AssociationType1;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,12 +81,12 @@ public class EbXMLAssociation30 extends EbXMLRegistryObject30<AssociationType1> 
     }
 
     @Override
-    public Map<String, ArrayList<String>> getExtraMetadata() {
+    public Map<String, List<String>> getExtraMetadata() {
         return getInternal().getExtraMetadata();
     }
 
     @Override
-    public void setExtraMetadata(Map<String, ArrayList<String>> map) {
+    public void setExtraMetadata(Map<String, List<String>> map) {
         getInternal().setExtraMetadata(map);
     }
 }

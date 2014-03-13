@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryPackageType;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,12 +51,12 @@ public class EbXMLRegistryPackage30 extends EbXMLRegistryObject30<RegistryPackag
     }
 
     @Override
-    public Map<String, ArrayList<String>> getExtraMetadata() {
+    public Map<String, List<String>> getExtraMetadata() {
         return getInternal().getExtraMetadata();
     }
 
     @Override
-    public void setExtraMetadata(Map<String, ArrayList<String>> map) {
+    public void setExtraMetadata(Map<String, List<String>> map) {
         getInternal().setExtraMetadata(map);
     }
 }

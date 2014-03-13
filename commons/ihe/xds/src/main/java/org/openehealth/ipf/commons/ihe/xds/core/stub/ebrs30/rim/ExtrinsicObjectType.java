@@ -14,7 +14,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 
 import javax.activation.DataHandler;
 import javax.xml.bind.annotation.*;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -65,7 +65,7 @@ public class ExtrinsicObjectType
     protected Boolean isOpaque;
 
     @XmlTransient
-    @Getter @Setter private Map<String, ArrayList<String>> extraMetadata;
+    @Getter @Setter private Map<String, List<String>> extraMetadata;
 
     /**
      * Gets the value of the contentVersionInfo property.
