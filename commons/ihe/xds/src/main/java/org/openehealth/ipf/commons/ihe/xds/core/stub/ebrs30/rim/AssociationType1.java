@@ -13,7 +13,7 @@ import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 
 import javax.xml.bind.annotation.*;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -60,7 +60,7 @@ public class AssociationType1
     protected String targetObject;
 
     @XmlTransient
-    @Getter @Setter private Map<String, ArrayList<String>> extraMetadata;
+    @Getter @Setter private Map<String, List<String>> extraMetadata;
 
     /**
      * Gets the value of the associationType property.

@@ -15,14 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Interface for XDS objects which can have extra metadata slots.
- * <p>
- * NOTE: in declarations, {@link java.util.ArrayList ArrayList} is used instead of
- * {@link java.util.List List}, because JAXB cannot work with interfaces.
  * @author Dmytro Rud
  */
 public interface ExtraMetadataHolder {
@@ -32,7 +29,7 @@ public interface ExtraMetadataHolder {
      *      mapping of extra metadata slot names to their values.
      *      A new instance will be created when necessary.
      */
-    Map<String, ArrayList<String>> getExtraMetadata();
+    Map<String, List<String>> getExtraMetadata();
 
 
     /**
@@ -40,6 +37,6 @@ public interface ExtraMetadataHolder {
      * @param map
      *      mapping.
      */
-    void setExtraMetadata(Map<String, ArrayList<String>> map);
+    void setExtraMetadata(Map<String, List<String>> map);
 
 }

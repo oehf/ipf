@@ -99,9 +99,9 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
                 for (SlotType1 slot : slots) {
                     String name = slot.getName();
                     if (isValidExtraMetadataSlotName(name)) {
-                        Map<String, ArrayList<String>> extraMetadata = holder.getExtraMetadata();
+                        Map<String, List<String>> extraMetadata = holder.getExtraMetadata();
                         if (extraMetadata == null) {
-                            extraMetadata = new HashMap<String, ArrayList<String>>();
+                            extraMetadata = new HashMap<String, List<String>>();
                             holder.setExtraMetadata(extraMetadata);
                         }
                         extraMetadata.put(name, new ArrayList<String>(slot.getValueList().getValue()));
@@ -132,7 +132,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
 
         private static void injectExtraMetadata(List<SlotType1> slots, ExtraMetadataHolder holder) {
             if (holder.getExtraMetadata() != null) {
-                for (Map.Entry<String, ArrayList<String>> entry : holder.getExtraMetadata().entrySet()) {
+                for (Map.Entry<String, List<String>> entry : holder.getExtraMetadata().entrySet()) {
                     if (isValidExtraMetadataSlotName(entry.getKey())) {
                         SlotType1 slot = new SlotType1();
                         slot.setName(entry.getKey());

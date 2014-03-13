@@ -13,7 +13,7 @@ import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 
 import javax.xml.bind.annotation.*;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,7 +51,7 @@ public class RegistryPackageType
 {
 
     @XmlTransient
-    @Getter @Setter private Map<String, ArrayList<String>> extraMetadata;
+    @Getter @Setter private Map<String, List<String>> extraMetadata;
 
     @XmlElement(name = "RegistryObjectList")
     protected RegistryObjectListType registryObjectList;
