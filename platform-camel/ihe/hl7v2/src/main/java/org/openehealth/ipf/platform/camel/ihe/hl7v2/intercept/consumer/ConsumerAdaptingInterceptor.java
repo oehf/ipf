@@ -85,7 +85,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
                 throw exception;
             }
         } catch (Exception e) {
-            LOG.error("Message processing failed", e);
+            LOG.warn("Message processing failed", e);
             resultMessage(exchange).setBody(getNakFactory().createNak(originalMessage, e));
         }
 
