@@ -26,12 +26,16 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * NAK factory for PDQ, PDVQ and PIX Query.
  * @author Dmytro Rud
  */
 public class QpdAwareNakFactory extends NakFactory {
+
+    private static final Logger LOG = LoggerFactory.getLogger(QpdAwareNakFactory.class);
     private final String messageType, triggerEvent;
 
 
@@ -67,9 +71,17 @@ public class QpdAwareNakFactory extends NakFactory {
                 messageType,
                 triggerEvent);
 
+        LOG.info("Creating NAK response event of type {}", ack.getClass().getName());
+
         getHl7Exception(t).populateMessage(ack, ackTypeCode);
 
         Segment ackQak = (Segment) ack.get("QAK");
+        Segment origQpd = (Segment) originalMessage.get("QPD");
+        if (origQpd != null) {
+            String queryTag = Terser.get(origQpd, 2, 0, 1, 1);
+            Terser.set(ackQak, 1, 0, 1, 1, queryTag);
+            LOG.debug("Set QAK-1 to {}", queryTag);
+        }
         Terser.set(ackQak, 2, 0, 1, 1, "AE");
 
         // create a dummy QPD segment, it will be replaced with proper contents by
