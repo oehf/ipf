@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
@@ -78,6 +79,9 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             if (storage.delete(keyString(queryTag, msh31, msh32, msh33))) {
                 LOG.debug("Dropped response chain for query tag {}", queryTag);
                 Message ack = MessageUtils.ack(parser.getFactory(), requestMessage);
+
+                // Workaround: HAPI misses to populate the message structure for ACKs, but client may want to see it
+                Terser.set((Segment)ack.get("MSH"), 9, 0, 3, 1, "ACK");
                 Exchanges.resultMessage(exchange).setBody(parser.encode(ack));
             } else {
                 getWrappedProcessor().process(exchange);
