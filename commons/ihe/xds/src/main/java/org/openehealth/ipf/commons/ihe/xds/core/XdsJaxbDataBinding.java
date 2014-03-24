@@ -67,7 +67,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
     }
 
 
-    private static boolean isValidExtraMetadataSlotName(String name) {
+    public static boolean isExtraMetadataSlotName(String name) {
         return ((name != null) && name.startsWith("urn:") && (! name.startsWith("urn:ihe:")));
     }
 
@@ -98,7 +98,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
             if (slots != null) {
                 for (SlotType1 slot : slots) {
                     String name = slot.getName();
-                    if (isValidExtraMetadataSlotName(name)) {
+                    if (isExtraMetadataSlotName(name)) {
                         Map<String, List<String>> extraMetadata = holder.getExtraMetadata();
                         if (extraMetadata == null) {
                             extraMetadata = new HashMap<String, List<String>>();
@@ -133,7 +133,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
         private static void injectExtraMetadata(List<SlotType1> slots, ExtraMetadataHolder holder) {
             if (holder.getExtraMetadata() != null) {
                 for (Map.Entry<String, List<String>> entry : holder.getExtraMetadata().entrySet()) {
-                    if (isValidExtraMetadataSlotName(entry.getKey())) {
+                    if (isExtraMetadataSlotName(entry.getKey())) {
                         SlotType1 slot = new SlotType1();
                         slot.setName(entry.getKey());
                         ValueListType valueList = new ValueListType();
