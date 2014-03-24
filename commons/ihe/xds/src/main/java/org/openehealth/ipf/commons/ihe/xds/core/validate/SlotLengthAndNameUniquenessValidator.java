@@ -29,6 +29,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList;
 
+import static org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding.isExtraMetadataSlotName;
+
 /**
  * Validates lengths of ebXML slot values and uniqueness of slot names.
  * @author Jens Riemschneider
@@ -82,7 +84,7 @@ public class SlotLengthAndNameUniquenessValidator {
         for (EbXMLSlot slot : slots) {
             // validate uniqueness of slot names
             String name = slot.getName();
-            if (! allowedSlotNamesMultiple.contains(name)) {
+            if (! (allowedSlotNamesMultiple.contains(name) || isExtraMetadataSlotName(name))) {
                 metaDataAssert(StringUtils.isNotEmpty(name), MISSING_SLOT_NAME);
                 metaDataAssert(! names.contains(name), DUPLICATE_SLOT_NAME, name);
                 names.add(name);
