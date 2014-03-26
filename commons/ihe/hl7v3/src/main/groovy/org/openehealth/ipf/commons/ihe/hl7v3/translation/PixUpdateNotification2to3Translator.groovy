@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
@@ -31,8 +32,8 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * into HL7 v3 <tt>PRPA_IN201302UV02</tt> message.
      */
     String translateV2toV3(MessageAdapter adt, String dummy, String charset) {
-        def output = new ByteArrayOutputStream()
-        def builder = getBuilder(output, charset)
+        OutputStream output = new ByteArrayOutputStream()
+        MarkupBuilder builder = getBuilder(output, charset)
 
         builder.PRPA_IN201302UV02(
             'ITSVersion' : 'XML_1.0',
@@ -62,7 +63,7 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
                                     buildInstanceIdentifier(builder, 'id', false, pid3)
                                 }
                                 statusCode(code: 'active')
-                                fakePatientPerson(builder)
+                                addPerson(builder)
                             }
                         }
                         createCustodian(builder, this.mpiSystemIdRoot, this.mpiSystemIdExtension)  
@@ -73,5 +74,15 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
 
         return output.toString(charset)
     }
-	
+
+    /**
+     * Adds a person element to the patient. By default a person with empty name is added, like this:
+     * <pre>
+     *     builder.patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') { name(nullFlavor: 'NA') }
+     * </pre>
+     * @param builder
+     */
+    void addPerson(MarkupBuilder builder) {
+        fakePatientPerson(builder)
+    }
 }
