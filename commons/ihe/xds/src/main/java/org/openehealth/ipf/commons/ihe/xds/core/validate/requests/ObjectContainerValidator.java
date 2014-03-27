@@ -165,7 +165,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
             AvailabilityStatus status = folder.getStatus();
             if (status != null &&
-                    (profile.getInteractionId() != IpfInteractionId.ITI_57 ||
+                    (profile.getInteractionId() != IpfInteractionId.ITI_57 &&
                      profile.getInteractionId() != IpfInteractionId.ITI_18)) {
                 metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.SUBMITTED,
                         FOLDER_INVALID_AVAILABILITY_STATUS, status);
