@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -68,7 +71,7 @@ public enum DocumentAvailability {
             }
         }
 
-        return null;
+        throw new XDSMetaDataException(ValidationMessage.INVALID_DOCUMENT_AVAILABILITY);
     }
 
     /**
