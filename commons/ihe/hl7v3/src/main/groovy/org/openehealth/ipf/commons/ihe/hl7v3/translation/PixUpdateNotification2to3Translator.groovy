@@ -63,7 +63,7 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
                                     buildInstanceIdentifier(builder, 'id', false, pid3)
                                 }
                                 statusCode(code: 'active')
-                                addPerson(builder)
+                                addPerson(builder, adt)
                             }
                         }
                         createCustodian(builder, this.mpiSystemIdRoot, this.mpiSystemIdExtension)  
@@ -82,7 +82,7 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * </pre>
      * @param builder
      */
-    void addPerson(MarkupBuilder builder) {
+    void addPerson(MarkupBuilder builder, MessageAdapter adt) {
         fakePatientPerson(builder)
     }
 }

@@ -108,7 +108,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                             buildInstanceIdentifier(builder, 'id', false, pid3)
                                         }
 										statusCode(code: 'active')
-                                        addPerson(builder)
+                                        addPerson(builder, rsp)
 									}
 								}
 								createCustodian(builder, this.mpiSystemIdRoot, this.mpiSystemIdExtension)
@@ -139,7 +139,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
      * </pre>
      * @param builder
      */
-    void addPerson(MarkupBuilder builder) {
+    void addPerson(MarkupBuilder builder, MessageAdapter rsp) {
         fakePatientPerson(builder)
     }
      
