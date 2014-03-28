@@ -17,6 +17,7 @@ package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptStructure
 import static org.openehealth.ipf.modules.hl7dsl.util.Messages.copyMessage
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.newInstance
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.model.AbstractMessage;
@@ -39,12 +40,13 @@ class MessageAdapter<T extends AbstractMessage> extends GroupAdapter<T> implemen
     }
 
     MessageAdapter empty() {
-        adaptStructure(group.class.newInstance())
+        adaptStructure(newInstance(group, target.modelClassFactory))
     }
     
     MessageAdapter copy() {
         MessageAdapter copy = empty()
         adaptStructure(copyMessage(this.target, copy.target))
+        copy.parser = this.parser
         return copy
     }
 

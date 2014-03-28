@@ -16,6 +16,9 @@
 package org.openehealth.ipf.modules.hl7dsl
 
 import ca.uhn.hl7v2.model.*
+import ca.uhn.hl7v2.parser.ModelClassFactory
+
+import java.lang.reflect.Constructor
 
 /**
  * @author Martin Krasser
@@ -133,4 +136,16 @@ class AdapterHelper {
     static boolean isEmpty(Varies varies){
         isEmpty(varies.data)
     }
+
+    static def newInstance(def group, ModelClassFactory factory){
+        Constructor constructor = group?.class?.constructors?.find {
+            it.parameterTypes?.size() == 1 && it.parameterTypes[0] == ModelClassFactory.class
+        }
+        (constructor && factory) ? constructor.newInstance(factory): newInstance(group)
+    }
+
+    static def newInstance(def group){
+        group.class.newInstance()
+    }
+
 }

@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList
+
 import static org.junit.Assert.fail
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
@@ -42,8 +46,8 @@ class TestIti18 extends StandardTestContainer {
 
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti18-service2"
     
-    def request
-    def query
+    QueryRegistry request
+    FindDocumentsQuery query
     
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
@@ -58,6 +62,18 @@ class TestIti18 extends StandardTestContainer {
     void setUp() {
         request = SampleData.createFindDocumentsQuery()
         query = request.query
+
+        QueryList<String> params1 = new QueryList<>()
+        params1.outerList << ['a', 'b', 'c']
+        params1.outerList << ['d', 'e', 'f']
+        params1.outerList << ['h', 'i', 'j']
+
+        QueryList<String> params2 = new QueryList<>()
+        params2.outerList << ['12', '34']
+        params2.outerList << ['56', '78', '90']
+
+        query.extraParameters['urn:oehf:test1'] = params1
+        query.extraParameters['urn:oehf:test2'] = params2
     }
     
     @Test
