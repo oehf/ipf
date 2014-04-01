@@ -300,7 +300,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             associationIds.add(association.getId());
             if (!hasSubmitAssociationType){
                 hasSubmitAssociationType = association.getAssociationType() != null &&
-                                           association.getAssociationType().equals(AssociationType.SUBMIT_ASSOCIATION);
+                        (association.getAssociationType().equals(AssociationType.SUBMIT_ASSOCIATION) ||
+                         association.getAssociationType().equals(AssociationType.UPDATE_AVAILABILITY_STATUS));
             }
         }
 

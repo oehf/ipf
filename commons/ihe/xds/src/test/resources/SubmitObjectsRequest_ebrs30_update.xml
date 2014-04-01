@@ -528,5 +528,22 @@
                 </rim:ValueList>
             </rim:Slot>
         </rim:Association>
+
+        <rim:Association
+                id="Assoc2"
+                associationType="urn:ihe:iti:2010:AssociationType:UpdateAvailabilityStatus"
+                sourceObject="SubmissionSet"
+                targetObject="urn:uuid:e0985823-dc50-45a5-a6c8-a11a829893bd">
+            <rim:Slot name="NewStatus">
+                <rim:ValueList>
+                    <rim:Value>urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated</rim:Value>
+                </rim:ValueList>
+            </rim:Slot>
+            <rim:Slot name="OriginalStatus">
+                <rim:ValueList>
+                    <rim:Value>urn:oasis:names:tc:ebxml-regrep:StatusType:Approved</rim:Value>
+                </rim:ValueList>
+            </rim:Slot>
+        </rim:Association>
     </rim:RegistryObjectList>
 </lcm:SubmitObjectsRequest>
