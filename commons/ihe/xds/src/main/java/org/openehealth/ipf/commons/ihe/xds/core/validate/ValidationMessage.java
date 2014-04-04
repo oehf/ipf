@@ -130,7 +130,7 @@ public enum ValidationMessage {
     EMPTY_REFERENCE_LIST("No object references specified for %s"),
     WRONG_TELECOM("Expected telecom format ^^Internet^<address> : %s"),
     SUBMISSION_SET_STATUS_MANDATORY("Submission set status is mandatory for each association involving a submission set as a target and document entry as its source"),
-    INVALID_DOCUMENT_AVAILABILITY("Unsupported document availability");
+    INVALID_DOCUMENT_AVAILABILITY("Unsupported document availability: %s");
 
 
     private final String text;
