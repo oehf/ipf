@@ -147,7 +147,8 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                 }
                 
                 queryAck {
-                    int patientCount = (rsp.MSH[9][1].value == 'RSP') ? rsp.QUERY_RESPONSE().size() : 0
+                    int patientCount = (rsp.MSH[9][1].value == 'RSP') ?
+                            (rsp.QAK[2].value == 'OK' ? rsp.QUERY_RESPONSE().size() : 0) : 0
                     
                     def queryId = xml.controlActProcess.queryByParameter.queryId
                     buildInstanceIdentifier(builder, 'queryId', false, 
