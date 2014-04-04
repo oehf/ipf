@@ -118,6 +118,7 @@ public enum ValidationMessage {
     WRONG_SNAPSHOT_ASSOCIATION_STATUS("The targetObject DocumentEntry has not availabilityStatus of Approved"),
     LOGICAL_ID_MISSING("Logical ID is missing on Update Document Set request"),
     LOGICAL_ID_EQUALS_ENTRY_UUID("Logical ID: %s required to have a different value then entryUUID: %s on Update Document Set request"),
+    LOGICAL_ID_SAME("Same logical ID %s appears more than once in a single request"),
     VERSION_INFO_MISSING("Version Info is missing on Update Document Set request"),
     MISSING_PREVIOUS_VERSION("A previous version must be defined for each association involving a document update"),
     MISSING_ORIGINAL_STATUS("UpdateAvailabilityStatus Association must specify an original document status"),

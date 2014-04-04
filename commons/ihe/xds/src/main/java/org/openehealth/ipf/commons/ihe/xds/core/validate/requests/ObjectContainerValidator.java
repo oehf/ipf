@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
+import org.apache.commons.lang.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
@@ -160,6 +161,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateFolders(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
+        List<String> logicalIds = new ArrayList<String>();
         for (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
             runValidations(folder, folderSlotValidations);
 
@@ -169,6 +171,10 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                      profile.getInteractionId() != IpfInteractionId.ITI_18)) {
                 metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.SUBMITTED,
                         FOLDER_INVALID_AVAILABILITY_STATUS, status);
+            }
+            if (StringUtils.isNotBlank(folder.getLid())){
+                metaDataAssert(!logicalIds.contains(folder.getLid()), LOGICAL_ID_SAME, folder.getLid());
+                logicalIds.add(folder.getLid());
             }
             if (profile.getInteractionId() == IpfInteractionId.ITI_57){
                 validateUpdateObject(folder, container);
@@ -194,6 +200,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
+        List<String> logicalIds = new ArrayList<String>();
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             boolean onDemandExpected = (profile.getInteractionId() == IpfInteractionId.ITI_61);
             boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
@@ -223,6 +230,10 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                     attachmentExpected ? MISSING_DOCUMENT_FOR_DOC_ENTRY : DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY,
                     docEntry.getId());
 
+            if (StringUtils.isNotBlank(docEntry.getLid())){
+                metaDataAssert(!logicalIds.contains(docEntry.getLid()), LOGICAL_ID_SAME, docEntry.getLid());
+                logicalIds.add(docEntry.getLid());
+            }
             if (profile.getInteractionId() == IpfInteractionId.ITI_57){
                 validateUpdateObject(docEntry, container);
             }
