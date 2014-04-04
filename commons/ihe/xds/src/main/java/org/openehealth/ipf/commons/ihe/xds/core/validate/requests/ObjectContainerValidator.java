@@ -161,7 +161,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateFolders(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        List<String> logicalIds = new ArrayList<String>();
+        Set<String> logicalIds = new HashSet<String>();
         for (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
             runValidations(folder, folderSlotValidations);
 
@@ -172,10 +172,9 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                 metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.SUBMITTED,
                         FOLDER_INVALID_AVAILABILITY_STATUS, status);
             }
-            if (StringUtils.isNotBlank(folder.getLid())){
-                metaDataAssert(!logicalIds.contains(folder.getLid()), LOGICAL_ID_SAME, folder.getLid());
-                logicalIds.add(folder.getLid());
-            }
+            metaDataAssert(StringUtils.isBlank(folder.getLid()) || logicalIds.add(folder.getLid()),
+                    LOGICAL_ID_SAME, folder.getLid());
+
             if (profile.getInteractionId() == IpfInteractionId.ITI_57){
                 validateUpdateObject(folder, container);
             }
