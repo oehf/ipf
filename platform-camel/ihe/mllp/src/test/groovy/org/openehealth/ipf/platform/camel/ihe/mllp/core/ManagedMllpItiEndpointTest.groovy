@@ -41,7 +41,7 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
     @Test
     void initContext() throws Exception {
         ObjectName on = queryForNamedObjects(
-                'org.apache.camel:context=*/camelContext,type=context,name=\"camelContext\"')
+                'org.apache.camel:context=camelContext,type=context,name=\"camelContext\"')
         ObjectInstance oi = getMBeanServer().getObjectInstance(on)
         assertNotNull(oi)
     }
