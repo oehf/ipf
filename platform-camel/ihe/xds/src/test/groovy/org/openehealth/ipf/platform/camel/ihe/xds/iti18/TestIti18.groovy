@@ -72,8 +72,8 @@ class TestIti18 extends StandardTestContainer {
         params2.outerList << ['12', '34']
         params2.outerList << ['56', '78', '90']
 
-        query.extraParameters['urn:oehf:test1'] = params1
-        query.extraParameters['urn:oehf:test2'] = params2
+        query.extraParameters['$urn:oehf:test1'] = params1
+        query.extraParameters['$urn:oehf:test2'] = params2
     }
     
     @Test

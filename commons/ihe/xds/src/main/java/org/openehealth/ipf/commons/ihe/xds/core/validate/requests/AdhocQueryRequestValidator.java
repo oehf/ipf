@@ -420,7 +420,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         if (queryType == QueryType.SQL) {
             metaDataAssert(request.getSql() != null, MISSING_SQL_QUERY_TEXT);
         } else {
-            new SlotLengthAndNameUniquenessValidator().validateSlots(
+            new SlotLengthAndNameUniquenessValidator().validateQuerySlots(
                     request.getSlots(),
                     ALLOWED_MULTIPLE_SLOTS.get(queryType));
             for (QueryParameterValidation validation : getValidators(queryType, profile)) {
