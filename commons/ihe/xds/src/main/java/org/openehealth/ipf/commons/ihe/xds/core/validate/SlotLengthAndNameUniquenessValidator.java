@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.*;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -63,31 +62,47 @@ public class SlotLengthAndNameUniquenessValidator {
 
     private void validateSlotLists(List<? extends EbXMLSlotList> slotListContainers) throws XDSMetaDataException {
         for (EbXMLSlotList slotList : slotListContainers) {
-            validateSlots(slotList.getSlots(), Collections.<String>emptySet());
+            doValidateSlots(slotList.getSlots(), false, null);
         }
+    }
+
+    public void validateQuerySlots(
+            List<? extends EbXMLSlot> slots,
+            Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException
+    {
+        doValidateSlots(slots, true, allowedSlotNamesMultiple);
     }
 
     /**
      * Validates uniqueness of slot names and maximal lengths of slot values in the given collection.
      * @param slots
      *      ebXML slot collection.
+     * @param queryMode
+     *      <code>true</code> iff the given slots represent parameters of a stored query.
      * @param allowedSlotNamesMultiple
-     *      names of slots which are allowed to be present more than once.
+     *      names of slots which are allowed to be present more than once (only for queries).
      * @throws XDSMetaDataException
      *      when the validation fails.
      */
-    public void validateSlots(
+    private void doValidateSlots(
             List<? extends EbXMLSlot> slots,
+            boolean queryMode,
             Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException
     {
         HashSet<String> names = new HashSet<String>();
         for (EbXMLSlot slot : slots) {
-            // validate uniqueness of slot names
+            // validate format and uniqueness of slot names
             String name = slot.getName();
-            if (! (allowedSlotNamesMultiple.contains(name) || isExtraMetadataSlotName(name))) {
-                metaDataAssert(StringUtils.isNotEmpty(name), MISSING_SLOT_NAME);
-                metaDataAssert(! names.contains(name), DUPLICATE_SLOT_NAME, name);
-                names.add(name);
+            metaDataAssert(StringUtils.isNotEmpty(name), MISSING_SLOT_NAME);
+
+            if (queryMode) {
+                metaDataAssert((name.length() > 1) && (name.charAt(0) == '$'), WRONG_QUERY_SLOT_NAME, name);
+                metaDataAssert(names.add(name)
+                        || allowedSlotNamesMultiple.contains(name)
+                        || isExtraMetadataSlotName(name.substring(1)),
+                        DUPLICATE_SLOT_NAME, name);
+            } else {
+                metaDataAssert(names.add(name), DUPLICATE_SLOT_NAME, name);
             }
 
             // validate lengths of slot values
