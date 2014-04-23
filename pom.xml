@@ -67,7 +67,7 @@
         <commons-lang-version>2.6</commons-lang-version>
         <commons-lang3-version>3.1</commons-lang3-version>
         <commons-math3-version>3.2</commons-math3-version>
-        <cxf-version>2.7.10</cxf-version>
+        <cxf-version>2.7.11</cxf-version>
         <derby-version>10.9.1.0</derby-version>
         <easymock-version>3.2</easymock-version>
         <ehcache-version>2.6.6</ehcache-version>
