@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment;
 
+import ca.uhn.hl7v2.model.v25.datatype.*;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 
 import ca.uhn.hl7v2.HL7Exception;
@@ -23,10 +24,6 @@ import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.Varies;
-import ca.uhn.hl7v2.model.v25.datatype.CE;
-import ca.uhn.hl7v2.model.v25.datatype.CX;
-import ca.uhn.hl7v2.model.v25.datatype.QIP;
-import ca.uhn.hl7v2.model.v25.datatype.ST;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 
 
@@ -38,7 +35,7 @@ import ca.uhn.hl7v2.parser.ModelClassFactory;
  * QPD-3: Query Input Parameter List (QIP)<br>
  * QPD-4: Parameters for Fuzzy Search (QIP)<br>
  * QPD-5,6,7: User Parameters (in successive fields) (varies)<br>
- * QPD-8: Extended Composite ID with Check Digit (CX)<br>
+ * QPD-8: What Domains Returned (CX)<br>
  */
 @SuppressWarnings("serial")
 public class QPD extends AbstractSegment {
@@ -93,14 +90,14 @@ public class QPD extends AbstractSegment {
     }
 
     /**
-     * Returns Demographics Fields (QPD-3).
+     * Returns a specific repetition of Demographics Fields (QPD-3).
      */
     public QIP getDemographicsFields(int rep) {
         return getTypedField(3, rep);
     }
 
     /**
-     * Returns Demographics Fields (QPD-3).
+     * Returns a specific repetition of Demographics Fields (QPD-3).
      */
     public QIP getQpd3_DemographicsFields(int rep) {
         return getTypedField(3, rep);
@@ -111,6 +108,55 @@ public class QPD extends AbstractSegment {
      */
     public QIP[] getDemographicsFields() {
         return getTypedField(3, new QIP[0]);
+    }
+
+    /**
+     * Returns Demographics Fields (QPD-3).
+     */
+    public QIP[] getQpd3_DemographicsFields() {
+        return getTypedField(3, new QIP[0]);
+    }
+
+    /**
+     * Returns count of Demographics Fields (QPD-3).
+     */
+    public int getDemographicsFieldsReps() {
+        return getReps(3);
+    }
+
+    /**
+     * Returns count of Demographics Fields (QPD-3).
+     */
+    public int getQpd3_DemographicsFieldsReps() {
+        return getReps(3);
+    }
+
+    /**
+     * Inserts a repetition of Demographics Fields (QPD-3).
+     */
+    public QIP insertDemographicsFieldsReps(int rep) throws HL7Exception {
+        return (QIP) super.insertRepetition(3, rep);
+    }
+
+    /**
+     * Inserts a repetition of Demographics Fields (QPD-3).
+     */
+    public QIP insertQpd3_DemographicsFieldsReps(int rep) throws HL7Exception {
+        return (QIP) super.insertRepetition(3, rep);
+    }
+
+    /**
+     * Removes a repetition of Demographics Fields (QPD-3).
+     */
+    public QIP removeDemographicsFieldsReps(int rep) throws HL7Exception {
+        return (QIP) super.removeRepetition(3, rep);
+    }
+
+    /**
+     * Removes a repetition of Demographics Fields (QPD-3).
+     */
+    public QIP removeQpd3_DemographicsFieldsReps(int rep) throws HL7Exception {
+        return (QIP) super.removeRepetition(3, rep);
     }
 
     /**
@@ -128,14 +174,14 @@ public class QPD extends AbstractSegment {
     }
 
     /**
-     * Returns What Domains to be returned (QPD-8).
+     * Returns a specific repetition of What Domains to be returned (QPD-8).
      */
     public CX getWhatDomainsReturned(int rep) {
         return getTypedField(8, rep);
     }
 
     /**
-     * Returns What Domains to be returned (QPD-8).
+     * Returns a specific repetition of What Domains to be returned (QPD-8).
      */
     public CX getQpd8_WhatDomainsReturned(int rep) {
         return getTypedField(8, rep);
@@ -143,13 +189,61 @@ public class QPD extends AbstractSegment {
 
     /**
      * Returns What Domains to be returned (QPD-8).
-     *
-     * @return movement IDs
      */
     public CX[] getWhatDomainsReturned() {
         return getTypedField(8, new CX[0]);
     }
 
+    /**
+     * Returns What Domains to be returned (QPD-8).
+     */
+    public CX[] getQpd8_WhatDomainsReturned() {
+        return getTypedField(8, new CX[0]);
+    }
+
+    /**
+     * Returns count of What Domains to be returned (QPD-8).
+     */
+    public int getWhatDomainsReturnedReps() {
+        return getReps(8);
+    }
+
+    /**
+     * Returns count of What Domains to be returned (QPD-8).
+     */
+    public int getQpd8_WhatDomainsReturnedReps() {
+        return getReps(8);
+    }
+
+    /**
+     * Inserts a repetition of What Domains to be returned (QPD-8).
+     */
+    public CX insertWhatDomainsReturnedReps(int rep) throws HL7Exception {
+        return (CX) super.insertRepetition(8, rep);
+    }
+
+    /**
+     * Inserts a repetition of What Domains to be returned (QPD-8).
+     */
+    public CX insertQpd8_WhatDomainsReturnedReps(int rep) throws HL7Exception {
+        return (CX) super.insertRepetition(8, rep);
+    }
+
+    /**
+     * Removes a repetition of What Domains to be returned (QPD-8).
+     */
+    public CX removeWhatDomainsReturnedReps(int rep) throws HL7Exception {
+        return (CX) super.removeRepetition(8, rep);
+    }
+
+    /**
+     * Removes a repetition of What Domains to be returned (QPD-8).
+     */
+    public CX removeQpd8_WhatDomainsReturnedReps(int rep) throws HL7Exception {
+        return (CX) super.removeRepetition(8, rep);
+    }
+
+    
     /** {@inheritDoc} */
     protected Type createNewTypeWithoutReflection(int field) {
         switch (field) {

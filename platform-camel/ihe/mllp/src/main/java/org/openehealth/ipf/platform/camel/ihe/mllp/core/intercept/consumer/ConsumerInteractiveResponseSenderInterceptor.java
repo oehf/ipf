@@ -203,7 +203,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         for (int currentFragmentIndex = 0; currentFragmentIndex < fragmentsCount; ++currentFragmentIndex) {
             // create the current fragment as String 
             int startRecordIndex = currentFragmentIndex * threshold;
-            int endRecordIndex = Math.min(startRecordIndex + threshold, recordBoundaries.size());
+            int endRecordIndex = Math.min(startRecordIndex + threshold, recordBoundaries.size() - 1);
             int startSegmentIndex = recordBoundaries.get(startRecordIndex);
             int endSegmentIndex = recordBoundaries.get(endRecordIndex);
 

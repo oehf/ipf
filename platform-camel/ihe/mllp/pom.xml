@@ -57,6 +57,11 @@
         </dependency>
 
         <!-- dependencies for test -->
+        <dependency>
+            <groupId>geronimo-spec</groupId>
+            <artifactId>geronimo-spec-jta</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!--dependency>
             <groupId>org.apache.mina</groupId>
             <artifactId>mina-integration-spring</artifactId>

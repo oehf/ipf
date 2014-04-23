@@ -65,6 +65,7 @@ public enum ValidationMessage {
     SLOT_VALUE_TOO_LONG("Slot value length exceeds ebXML limit in slot: %1s"),
     MISSING_SLOT_NAME("Missing slot name"),
     DUPLICATE_SLOT_NAME("Duplicate slot name: %1s"),
+    WRONG_QUERY_SLOT_NAME("Slot name must be preceded by '$': %s"),
     WRONG_NUMBER_OF_SLOT_VALUES("Slot contains incorrect amount of values. Slot = %1s, allowed = [%2s-%3s], Was = %4s"),
     EMPTY_SLOT_VALUE("Slot value is undefined. Slot = %1s"),
     INVALID_TIME("Invalid time format: %1s"),
@@ -118,6 +119,7 @@ public enum ValidationMessage {
     WRONG_SNAPSHOT_ASSOCIATION_STATUS("The targetObject DocumentEntry has not availabilityStatus of Approved"),
     LOGICAL_ID_MISSING("Logical ID is missing on Update Document Set request"),
     LOGICAL_ID_EQUALS_ENTRY_UUID("Logical ID: %s required to have a different value then entryUUID: %s on Update Document Set request"),
+    LOGICAL_ID_SAME("Same logical ID %s appears more than once in a single request"),
     VERSION_INFO_MISSING("Version Info is missing on Update Document Set request"),
     MISSING_PREVIOUS_VERSION("A previous version must be defined for each association involving a document update"),
     MISSING_ORIGINAL_STATUS("UpdateAvailabilityStatus Association must specify an original document status"),
@@ -129,7 +131,7 @@ public enum ValidationMessage {
     EMPTY_REFERENCE_LIST("No object references specified for %s"),
     WRONG_TELECOM("Expected telecom format ^^Internet^<address> : %s"),
     SUBMISSION_SET_STATUS_MANDATORY("Submission set status is mandatory for each association involving a submission set as a target and document entry as its source"),
-    INVALID_DOCUMENT_AVAILABILITY("Unsupported document availability");
+    INVALID_DOCUMENT_AVAILABILITY("Unsupported document availability: %s");
 
 
     private final String text;

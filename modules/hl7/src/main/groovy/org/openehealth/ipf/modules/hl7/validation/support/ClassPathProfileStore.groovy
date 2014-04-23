@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.conf.store.ProfileStore
 
 
 /**
- * Store implementation for Confirmance Profile files that looks in
+ * Store implementation for Conformance Profile files that looks in
  * the classpath.
  * 
  * @author Christian Ohr

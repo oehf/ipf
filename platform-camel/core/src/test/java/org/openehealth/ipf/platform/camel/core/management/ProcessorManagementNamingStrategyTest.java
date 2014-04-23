@@ -50,7 +50,7 @@ public class ProcessorManagementNamingStrategyTest {
     @Test
     public void testProcessorManagementNamingStrategy() throws Exception {
 
-        ObjectName on = queryForNamedObjects("org.apache.camel:context=*/camelContext,type=processors,name=\"namingStrategyProcessor\"");
+        ObjectName on = queryForNamedObjects("org.apache.camel:context=camelContext,type=processors,name=\"namingStrategyProcessor\"");
 
         ObjectInstance oi = getMBeanServer().getObjectInstance(on);
         assertNotNull(oi);

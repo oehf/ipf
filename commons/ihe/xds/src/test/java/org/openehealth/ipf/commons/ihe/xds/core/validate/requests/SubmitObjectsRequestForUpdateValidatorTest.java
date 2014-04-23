@@ -48,7 +48,9 @@ public class SubmitObjectsRequestForUpdateValidatorTest {
 
     @Test
     public void testLid() throws Exception {
-        EbXMLSubmitObjectsRequest30 request = getRequest("SubmitObjectsRequest_ebrs30_update.xml");
+        EbXMLSubmitObjectsRequest30 request = getRequest("SubmitObjectsRequest_ebrs30_update_sameLid.xml");
+
+        expectFailure(LOGICAL_ID_SAME, request, profile);
 
         request.getExtrinsicObjects().get(0).setLid(null);
         expectFailure(LOGICAL_ID_MISSING, request, profile);

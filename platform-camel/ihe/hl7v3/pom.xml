@@ -74,6 +74,11 @@
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
         </dependency>
+        <dependency>
+            <groupId>geronimo-spec</groupId>
+            <artifactId>geronimo-spec-jta</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

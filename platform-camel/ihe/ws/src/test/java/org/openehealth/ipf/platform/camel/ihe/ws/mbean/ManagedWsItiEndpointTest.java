@@ -52,7 +52,7 @@ public class ManagedWsItiEndpointTest extends ManagementTestSupport {
     public void testInit() throws Exception {
         MBeanServer mbeanServer = getMBeanServer();
         ObjectName on = ObjectName
-            .getInstance("org.apache.camel:context=localhost/camel-1,type=context,name=\"camel-1\"");
+            .getInstance("org.apache.camel:context=camel-1,type=context,name=\"camel-1\"");
         ObjectInstance oi = mbeanServer.getObjectInstance(on);
         assertNotNull(oi);
     }

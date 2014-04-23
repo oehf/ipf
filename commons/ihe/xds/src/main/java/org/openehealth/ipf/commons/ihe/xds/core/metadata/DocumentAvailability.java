@@ -71,7 +71,7 @@ public enum DocumentAvailability {
             }
         }
 
-        throw new XDSMetaDataException(ValidationMessage.INVALID_DOCUMENT_AVAILABILITY);
+        throw new XDSMetaDataException(ValidationMessage.INVALID_DOCUMENT_AVAILABILITY, opcode);
     }
 
     /**
