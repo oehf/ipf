@@ -20,13 +20,12 @@ import ca.uhn.hl7v2.conf.ProfileException
 import ca.uhn.hl7v2.conf.check.DefaultValidator
 import ca.uhn.hl7v2.conf.check.ProfileNotHL7CompliantException
 import ca.uhn.hl7v2.conf.spec.message.ProfileStructure
-import ca.uhn.hl7v2.conf.spec.message.Seg
 import ca.uhn.hl7v2.conf.spec.message.SegGroup
 import ca.uhn.hl7v2.conf.spec.message.StaticDef
 import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.model.Structure
+import ca.uhn.hl7v2.util.Terser
 
 /**
  * Subclass of HAPI's conformance validator, that stops checking at the segment level, i.e. the
@@ -39,11 +38,15 @@ public class AbstractSyntaxValidator extends DefaultValidator {
     /**
      * Omit the checks for correct version, trigger event and structure
      */
+    @Override
     public HL7Exception[] validate(Message message, StaticDef profile) throws ProfileException, HL7Exception {
-        testGroup(message, profile, profile.getIdentifier());
+        List<HL7Exception> exList = new ArrayList<HL7Exception>();
+        exList.addAll(doTestGroup(message, profile, profile.getIdentifier(), true));
+        return exList.toArray(new HL7Exception[exList.size()]);
     }
 
-    public HL7Exception[] testStructure(Structure s, ProfileStructure profile, String profileID) throws ProfileException {
+    @Override
+    public List<HL7Exception> testStructure(Structure s, ProfileStructure profile, String profileID) throws ProfileException {
         List<HL7Exception> exList = []
         if (profile instanceof SegGroup) {
             if (s instanceof Group) {
@@ -54,6 +57,6 @@ public class AbstractSyntaxValidator extends DefaultValidator {
             }
         }
         // Skip testing of segments
-        return exList.toArray(new HL7Exception[exList.size()])
+        return exList
     }
 }

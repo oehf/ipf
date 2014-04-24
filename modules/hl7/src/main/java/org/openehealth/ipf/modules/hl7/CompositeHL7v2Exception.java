@@ -35,6 +35,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
  * 
  * @author Christian Ohr
  * @author Marek Vaclavik
+ * @deprecated Validation in HAPI 2.2 does not require composite exceptions
  * 
  */
 @SuppressWarnings("serial")

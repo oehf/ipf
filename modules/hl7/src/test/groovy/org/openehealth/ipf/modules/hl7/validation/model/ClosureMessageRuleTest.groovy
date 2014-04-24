@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.model
 
-import org.junit.Assert
-import org.junit.Test
-import ca.uhn.hl7v2.parser.*
+import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.validation.ValidationException
+import org.junit.Test
 
 /**
  * @author Christian Ohr
@@ -29,11 +28,11 @@ public class ClosureMessageRuleTest {
 		
 	@Test
 	void testTest(){
-		def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
-		def msg = new GenericParser().parse(msgText)        
+		String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+		Message msg = new DefaultHapiContext().getGenericParser().parse(msgText)
 		
 		// Event time must start with '20'
-		def rule = new ClosureMessageRule( {
+        ClosureMessageRule rule = new ClosureMessageRule( {
 		    if (!it.EVN.dateTimeOfEvent.timeOfAnEvent.value.startsWith('20')) {
 		        def e = new ValidationException("baah")
 		        return [e] as ValidationException[]

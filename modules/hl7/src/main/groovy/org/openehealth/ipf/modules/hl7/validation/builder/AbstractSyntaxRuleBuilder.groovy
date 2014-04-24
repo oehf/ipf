@@ -69,6 +69,7 @@ import org.openehealth.ipf.modules.hl7.validation.support.AbstractSyntaxValidato
  *
  * 
  * @author Christian Ohr
+ * @deprecated use validation builders of HAPI (cf. {@link ca.uhn.hl7v2.validation.builder.ValidationRuleBuilder})
  */
 public class AbstractSyntaxRuleBuilder extends MessageRuleBuilder{
 

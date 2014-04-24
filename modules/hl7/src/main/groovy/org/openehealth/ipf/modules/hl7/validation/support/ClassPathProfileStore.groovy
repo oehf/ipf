@@ -21,25 +21,26 @@ import ca.uhn.hl7v2.conf.store.ProfileStore
 /**
  * Store implementation for Conformance Profile files that looks in
  * the classpath.
- * 
+ *
  * @author Christian Ohr
+ * @deprecated use {@link ca.uhn.hl7v2.conf.store.ClasspathProfileStore}
  */
-public class ClassPathProfileStore implements ProfileStore{
-    
+public class ClassPathProfileStore implements ProfileStore {
+
     String offset = ""
-    
+
     /**
      * @see ca.uhn.hl7v2.conf.store.ProfileStore#getProfile(java.lang.String)
      */
-    public String getProfile(String ID){
+    public String getProfile(String ID) {
         this.class.getResourceAsStream("/${offset}${ID}.xml")?.getText()
     }
-    
+
     /**
      * @see ca.uhn.hl7v2.conf.store.ProfileStore#persistProfile(java.lang.String, java.lang.String)
      */
-    public void persistProfile(String arg0, String arg1){
+    public void persistProfile(String arg0, String arg1) {
         throw new UnsupportedOperationException("Not implemented yet")
     }
-    
+
 }

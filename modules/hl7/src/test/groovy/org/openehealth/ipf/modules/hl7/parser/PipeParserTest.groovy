@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.modules.hl7.parser
 
+import ca.uhn.hl7v2.DefaultHapiContext
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.parser.ModelClassFactory
+import ca.uhn.hl7v2.parser.Parser
 import org.junit.Test;
 
 import ca.uhn.hl7v2.model.Segment;
@@ -33,20 +37,20 @@ public class PipeParserTest {
      
   @Test
   void testParseWithCustomClasses() {
-      def customModelClasses = [(customPackageVersion ): [customPackageName]]
-      def customFactory = new CustomModelClassFactory(customModelClasses)
-      def parser = new PipeParser(customFactory)      
-      def hapiMessage = parser.parse(msgText)      
-      assert hapiMessage.get('ZBE').getClass().getName().contains(customPackageName)
+      Map<String, String[]> customModelClasses = [(customPackageVersion): [customPackageName] as String[]]
+      ModelClassFactory customFactory = new CustomModelClassFactory(customModelClasses)
+      Parser parser = new DefaultHapiContext(customFactory).getPipeParser()
+      Message hapiMessage = parser.parse(msgText)
+      assert hapiMessage.ZBE.class.name.contains(customPackageName)
   }
   
   @Test
   void testParseWithoutCustomClasses() {
-      def customFactory = new CustomModelClassFactory([:])
-      def parser = new PipeParser(customFactory)
+      ModelClassFactory customFactory = new CustomModelClassFactory([:])
+      Parser parser = new DefaultHapiContext(customFactory).getPipeParser()
       try {
-    	  def hapiMessage = parser.parse(msgText)
-    	  println hapiMessage.get('ZBE').getClass().getName()
+          Message hapiMessage = parser.parse(msgText)
+    	  println hapiMessage.ZBE.class.name
       } catch (Exception e) { 
     	  assert e.getMessage().contains('ZBE does not exist')
       }     
@@ -54,11 +58,11 @@ public class PipeParserTest {
   
   @Test
   void testParseWithNullCustomClasses() {
-      def customFactory = new CustomModelClassFactory()
-      def parser = new PipeParser(customFactory)
+      ModelClassFactory customFactory = new CustomModelClassFactory()
+      Parser parser = new DefaultHapiContext(customFactory).getPipeParser()
       try {
-    	  def hapiMessage = parser.parse(msgText)
-    	  println hapiMessage.get('ZBE').getClass().getName()
+          Message hapiMessage = parser.parse(msgText)
+          println hapiMessage.ZBE.class.name
       } catch (Exception e) { 
     	  assert e.getMessage().contains('ZBE does not exist')
       }     
@@ -67,21 +71,21 @@ public class PipeParserTest {
   @Test
   void testParseWithCustomGroovyClasses() {
 	  def customModelClasses = [(customPackageVersion ): [customGroovyPackageName]]
-	  def customFactory = new GroovyCustomModelClassFactory(customModelClasses)
-	  def parser = new PipeParser(customFactory)
-	  def hapiMessage = parser.parse(msgText)
-	  Segment s = hapiMessage.get('ZBE')
+	  ModelClassFactory customFactory = new GroovyCustomModelClassFactory(customModelClasses)
+      Parser parser = new DefaultHapiContext(customFactory).getPipeParser()
+	  Message hapiMessage = parser.parse(msgText)
+	  Segment s = hapiMessage.ZBE
 	  assert s.class.name.contains(customGroovyPackageName)
 	  assert '1234' == Terser.get(s, 1, 0, 1, 1)
   }
 	
   @Test
   void testParseWithoutCustomGroovyClasses() {
-	  def customFactory = new GroovyCustomModelClassFactory([:])
-	  def parser = new PipeParser(customFactory)
+      ModelClassFactory customFactory = new GroovyCustomModelClassFactory([:])
+      Parser parser = new DefaultHapiContext(customFactory).getPipeParser()
 	  try {
-		  def hapiMessage = parser.parse(msgText)
-		  println hapiMessage.get('ZBE').getClass().getName()
+          Message hapiMessage = parser.parse(msgText)
+          println hapiMessage.ZBE.class.name
 	  } catch (Exception e) {
 		  assert e.getMessage().contains('ZBE does not exist')
 	  }

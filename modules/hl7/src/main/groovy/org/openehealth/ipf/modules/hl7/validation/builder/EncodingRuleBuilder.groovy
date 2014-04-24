@@ -22,6 +22,7 @@ import ca.uhn.hl7v2.validation.impl.XMLSchemaRule
 
 /**
  * @author Christian Ohr
+ * @deprecated use validation builders of HAPI (cf. {@link ca.uhn.hl7v2.validation.builder.ValidationRuleBuilder})
  */
 public class EncodingRuleBuilder extends VersionBuilder{
 	

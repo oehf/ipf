@@ -15,154 +15,99 @@
  */
 package org.openehealth.ipf.modules.hl7;
 
+import ca.uhn.hl7v2.*;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.util.Terser;
+import lombok.Delegate;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
 /**
- * Alternative HL7 Exception. Compared to the HAPI HL7Exception, it adds
- * several location parameters and correctly populates the ERR segment of a
- * response message depending on the message version. Furthermore it extends
- * {@link RuntimeException} so it need not to be caught.
+ * HL7v2Exception extends {@link RuntimeException} so it need not to be caught.
+ * All calls are delegated to the contained {@link ca.uhn.hl7v2.HL7Exception}
  * 
  * @author Christian Ohr
  * @author Marek Vaclavik
  */
 @SuppressWarnings("serial")
-public class HL7v2Exception extends AbstractHL7v2Exception {
+public class HL7v2Exception extends RuntimeException {
 
-	private static final ErrorLocation EMPTY_LOCATION = new ErrorLocation();
+	private HL7Exception nested;
 
-	private ErrorLocation location;
-
-	public HL7v2Exception() {
-		location = EMPTY_LOCATION;
+	public HL7v2Exception(HL7Exception nested) {
+        this.nested = nested;
 	}
 
-	public HL7v2Exception(String message, int errCode, Throwable cause, ErrorLocation location) {
-		super(message, errCode, cause);
-		this.location = location;
-	}
+    Object getDetail() {
+        return nested.getDetail();
+    }
 
-	public HL7v2Exception(String message, int errCode, Throwable cause) {
-		this(message, errCode, cause, EMPTY_LOCATION);
-	}
-	
-	public HL7v2Exception(String message, int errCode) {
-		this(message, errCode, null, EMPTY_LOCATION);
-	}
+    public void setSegmentRepetition(int segmentRepetition) {
+        nested.setSegmentRepetition(segmentRepetition);
+    }
 
-	public HL7v2Exception(String message) {
-		this(message, 207, null, EMPTY_LOCATION);
-	}
+    public ErrorCode getError() {
+        return nested.getError();
+    }
 
+    public void setFieldPosition(int pos) {
+        nested.setFieldPosition(pos);
+    }
 
-	public HL7v2Exception(String message, ErrorLocation location) {
-		this(message, 207, null, location);
-	}
+    public void setError(ErrorCode errorCode) {
+        nested.setError(errorCode);
+    }
 
-	public HL7v2Exception(ErrorLocation location) {
-		this(null, 207, null, location);
-	}
+    public Message populateResponse(Message emptyResponse, AcknowledgmentCode acknowledgmentCode, int repetition) throws HL7Exception {
+        return nested.populateResponse(emptyResponse, acknowledgmentCode, repetition);
+    }
 
-	public HL7v2Exception(ca.uhn.hl7v2.HL7Exception exception) {
-		this(exception.getMessage(), 207, exception);
-		ErrorLocation location = new ErrorLocation();
-		location.setFieldPosition(exception.getFieldPosition());
-		location.setSegmentName(exception.getSegmentName());
-		location.setSegmentRepetition(exception.getSegmentRepetition());
-		setLocation(location);
-	}
+    public String getMessageWithoutLocation() {
+        return nested.getMessageWithoutLocation();
+    }
 
-	public ErrorLocation getLocation() {
-		return location;
-	}
+    public Severity getSeverity() {
+        return nested.getSeverity();
+    }
 
-	public void setLocation(ErrorLocation location) {
-		this.location = location;
-	}
+    public void setResponseMessage(Message responseMessage) {
+        nested.setResponseMessage(responseMessage);
+    }
 
-	/**
-	 * @see org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception#populateMessage(ca.uhn.hl7v2.model.Message,
-	 *      org.openehealth.ipf.modules.hl7.AckTypeCode)
-	 */
-	@Override
-	public Message populateMessage(Message m, AckTypeCode code) {
+    public void setDetail(Object detail) {
+        nested.setDetail(detail);
+    }
 
-		try {
-			Segment errorSegment = (Segment) m.get("ERR");
-            if (MessageUtils.atLeastVersion(m, "2.5")) {
-                populateErr2347(errorSegment);
-			} else {
-                populateErr1(errorSegment);
-			}
-			Segment msaSegment = (Segment) m.get("MSA");
-			Terser.set(msaSegment, 1, 0, 1, 1, code.name());
-			return m;
-		} catch (ca.uhn.hl7v2.HL7Exception e) {
-			// TODO Auto-generated catch block
-			throw new RuntimeException(e);
-		}
+    public void setErrorCode(int errorCode) {
+        nested.setErrorCode(errorCode);
+    }
 
-	}
+    public void setSeverity(Severity severity) {
+        nested.setSeverity(severity);
+    }
 
-	/**
-	 * Fills ERR-1 for messages version 2.4 and earlier
-	 * 
-	 * @param errorSegment
-	 * @throws ca.uhn.hl7v2.HL7Exception
-	 */
-	protected void populateErr1(Segment errorSegment)
-			throws ca.uhn.hl7v2.HL7Exception {
-		int rep = errorSegment.getField(1).length;
+    public int getErrorCode() {
+        return nested.getErrorCode();
+    }
 
-		if (getLocation().getSegmentName() != null)
-			Terser.set(errorSegment, 1, rep, 1, 1, getLocation()
-					.getSegmentName());
-		if (getLocation().getSegmentRepetition() >= 0)
-			Terser.set(errorSegment, 1, rep, 2, 1, String.valueOf(getLocation()
-					.getSegmentRepetition()));
-		if (getLocation().getFieldPosition() >= 0)
-			Terser.set(errorSegment, 1, rep, 3, 1, String.valueOf(getLocation()
-					.getFieldPosition()));
+    public void setSegmentName(String segmentName) {
+        nested.setSegmentName(segmentName);
+    }
 
-		Terser.set(errorSegment, 1, rep, 4, 1, String.valueOf(getErrCode()));
-		Terser.set(errorSegment, 1, rep, 4, 2, getErrorMessage());
-		Terser.set(errorSegment, 1, rep, 4, 3, "HL70357");
-		Terser.set(errorSegment, 1, rep, 4, 5, getMessage());
-	}
+    public Message getResponseMessage() {
+        return nested.getResponseMessage();
+    }
 
-	/**
-	 * Fills ERR-2, 3, 4 for messages version 2.5 and later
-	 * 
-	 * @param errorSegment
-	 */
-	protected void populateErr2347(Segment errorSegment)
-			throws ca.uhn.hl7v2.HL7Exception {
-		int rep = errorSegment.getField(2).length;
+    public void setLocation(Location location) {
+        nested.setLocation(location);
+    }
 
-		// Fill error location (ERR-2) with member variables
-		if (getLocation().getSegmentName() != null)
-			Terser.set(errorSegment, 2, rep, 1, 1, getLocation()
-					.getSegmentName());
-		if (getLocation().getSegmentRepetition() >= 0)
-			Terser.set(errorSegment, 2, rep, 2, 1, String.valueOf(getLocation()
-					.getSegmentRepetition()));
-		if (getLocation().getFieldPosition() >= 0)
-			Terser.set(errorSegment, 2, rep, 3, 1, String.valueOf(getLocation()
-					.getFieldPosition()));
-		if (getLocation().getFieldPosition() >= 0)
-			Terser.set(errorSegment, 2, rep, 4, 1, String.valueOf(getLocation()
-					.getFieldRepetition()));
-		if (getLocation().getComponentNumber() >= 0)
-			Terser.set(errorSegment, 2, rep, 5, 1, String.valueOf(getLocation()
-					.getComponentNumber()));
-		if (getLocation().getSubcomponentNumber() >= 0)
-			Terser.set(errorSegment, 2, rep, 6, 1, String.valueOf(getLocation()
-					.getSubcomponentNumber()));
+    public Location getLocation() {
+        return nested.getLocation();
+    }
 
-        fillErr347(errorSegment);
-	}
-
+    @Override
+    public String getMessage() {
+        return nested.getMessage();
+    }
 }

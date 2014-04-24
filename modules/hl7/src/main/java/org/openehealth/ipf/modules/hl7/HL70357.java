@@ -19,6 +19,7 @@ package org.openehealth.ipf.modules.hl7;
  * HL7 Error codes and messages
  * 
  * @author Christian Ohr
+ * @deprecated use {@link ca.uhn.hl7v2.ErrorCode}
  *
  */
 public enum HL70357 {

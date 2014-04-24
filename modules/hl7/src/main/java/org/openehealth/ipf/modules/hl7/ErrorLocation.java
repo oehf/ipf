@@ -19,6 +19,7 @@ package org.openehealth.ipf.modules.hl7;
  * Java Bean for HL7 locations
  * 
  * @author Christian Ohr
+ * @deprecated use {@link ca.uhn.hl7v2.Location}
  * 
  */
 public class ErrorLocation {

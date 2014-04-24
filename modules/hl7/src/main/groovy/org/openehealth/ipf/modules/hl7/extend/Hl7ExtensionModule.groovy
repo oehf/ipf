@@ -13,22 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7.extend;
+package org.openehealth.ipf.modules.hl7.extend
 
-import org.openehealth.ipf.commons.core.config.ContextFacade;
-import org.openehealth.ipf.commons.map.MappingService;
-import org.openehealth.ipf.commons.map.extend.MappingExtensionHelper;
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.modules.hl7.validation.support.HL7Validator;
+import ca.uhn.hl7v2.AcknowledgmentCode
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.model.AbstractMessage
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.model.Type
+import ca.uhn.hl7v2.validation.ValidationContext
+import ca.uhn.hl7v2.validation.builder.EncodingRuleBuilder
+import ca.uhn.hl7v2.validation.builder.MessageRuleBuilder
+import ca.uhn.hl7v2.validation.builder.PrimitiveRuleBuilder
+import org.openehealth.ipf.commons.core.config.ContextFacade
+import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.extend.MappingExtensionHelper
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
+import org.openehealth.ipf.modules.hl7.validation.model.AbstractSyntaxRule
+import org.openehealth.ipf.modules.hl7.validation.model.ClosureEncodingRule
+import org.openehealth.ipf.modules.hl7.validation.model.ClosureMessageRule
+import org.openehealth.ipf.modules.hl7.validation.model.ClosurePrimitiveTypeRule
+import org.openehealth.ipf.modules.hl7.validation.support.HL7Validator
 
-import static org.openehealth.ipf.modules.hl7.extend.ExtensionUtils.normalizeCollection;
-
-import ca.uhn.hl7v2.model.AbstractMessage;
-import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.model.Type;
-import ca.uhn.hl7v2.validation.ValidationContext;
+import static org.openehealth.ipf.modules.hl7.extend.ExtensionUtils.normalizeCollection
 
 /**
  * Adds HL7 extensions for Groovy
@@ -148,42 +154,35 @@ public class Hl7ExtensionModule {
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
     public static Message respond(AbstractMessage delegate, String eventType, String triggerEvent) {
-        MessageUtils.response(delegate.modelClassFactory, delegate, eventType, triggerEvent);
+        MessageUtils.response(delegate, eventType, triggerEvent);
     }
 
-	/**
-	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-	 */
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     */
     public static Message ack(AbstractMessage delegate) {
-        MessageUtils.ack(delegate.modelClassFactory, delegate);
+        delegate.generateACK()
     }
 
-	/**
-	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-	 */
-    public static Message nak(AbstractMessage delegate, String cause, AckTypeCode ackTypeCode) {
-        MessageUtils.nak(delegate.modelClassFactory, delegate, cause, ackTypeCode);
-    }
-    
-	/**
-	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-	 */
-    public static Message nak(AbstractMessage delegate, AbstractHL7v2Exception e, AckTypeCode ackTypeCode) {
-        MessageUtils.nak(delegate.modelClassFactory, delegate, e, ackTypeCode);
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     */
+    public static Message nak(AbstractMessage delegate, String cause, AcknowledgmentCode ackTypeCode) {
+        nak(delegate, new HL7Exception(cause), ackTypeCode)
     }
 
-	/**
-	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-	 */
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     */
+    public static Message nak(AbstractMessage delegate, HL7Exception e, AcknowledgmentCode ackTypeCode) {
+        delegate.generateACK(ackTypeCode, e)
+    }
+
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     */
     public static Message dump(Message delegate) {
-        MessageUtils.dump(delegate);
-    }
-
-	/**
-	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-	 */
-    public static void validate(Message delegate, ValidationContext context) {
-        new HL7Validator().validate(delegate, context);
+        delegate.printStructure()
     }
     
 	/**
@@ -213,6 +212,39 @@ public class Hl7ExtensionModule {
     public static String addGroup(AbstractMessage delegate, String name, boolean required, boolean repeating, int index) {
         delegate.add(delegate.modelClassFactory.getGroupClass(name, delegate.getVersion()), required, repeating, index);
     }
+
+    // ----------------------------------------------------------------
+    //  Extensions to HAPI validators
+    // ----------------------------------------------------------------
+
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     */
+    public static MessageRuleBuilder abstractSyntax(MessageRuleBuilder delegate, Object... args) {
+        delegate.test(new AbstractSyntaxRule(args))
+    }
+
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     */
+    public static MessageRuleBuilder checkIf(MessageRuleBuilder delegate, Closure closure) {
+        delegate.test(new ClosureMessageRule(closure))
+    }
+
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     */
+    public static PrimitiveRuleBuilder checkIf(PrimitiveRuleBuilder delegate, Closure closure) {
+        delegate.test(new ClosurePrimitiveTypeRule(closure))
+    }
+
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     */
+    public static EncodingRuleBuilder checkIf(EncodingRuleBuilder delegate, Closure closure) {
+        delegate.test(new ClosureEncodingRule(closure))
+    }
+
 
     private static MappingService mappingService() {
         ContextFacade.getBean(MappingService);

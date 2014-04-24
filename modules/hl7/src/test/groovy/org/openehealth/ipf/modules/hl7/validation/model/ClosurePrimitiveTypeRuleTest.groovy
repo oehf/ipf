@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.model
 
+import ca.uhn.hl7v2.validation.ValidationException
+
 import static org.junit.Assert.*
 import org.junit.Test
 
@@ -26,7 +28,7 @@ public class ClosurePrimitiveTypeRuleTest {
     
     @Test
     void testCorrect(){
-        def rule = new ClosurePrimitiveTypeRule(ClosurePrimitiveTypeRule.PASS)
+        ClosurePrimitiveTypeRule rule = new ClosurePrimitiveTypeRule(ClosurePrimitiveTypeRule.PASS)
         rule.omitLeadingWhitespace = true
         assert 'trimmed  ' == rule.correct('   \ntrimmed  ')
         rule.omitTrailingWhitespace = true
@@ -36,8 +38,10 @@ public class ClosurePrimitiveTypeRuleTest {
     
     @Test
     void testTest(){
-        def rule = new ClosurePrimitiveTypeRule( {
-            it.size() < 10
+        ClosurePrimitiveTypeRule rule = new ClosurePrimitiveTypeRule( {
+            it.size() >= 10 ?
+                    [ new ValidationException("Primitive is longer than 10")] as ValidationException[] :
+                    [] as ValidationException[]
         })
         rule.omitLeadingWhitespace = true
         rule.omitTrailingWhitespace = true

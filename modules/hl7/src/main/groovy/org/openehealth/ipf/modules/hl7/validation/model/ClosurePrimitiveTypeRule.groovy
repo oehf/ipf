@@ -15,22 +15,24 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.model
 
-import ca.uhn.hl7v2.validation.PrimitiveTypeRule
+import ca.uhn.hl7v2.validation.PrimitiveTypeRule
+import ca.uhn.hl7v2.validation.ValidationException
+
 
 /**
  * Rule class for validating Primitive value. The actual validation is executed
  * by means of a Groovy closure, which is expected to return a value that can
- * evaluate to a boolean (e.g. booleans, strings, numbers).
- * 
+ * evaluate to a ValidationException[].
+ *
  * @author Christian Ohr
  */
-public class ClosurePrimitiveTypeRule extends ClosureRuleSupport implements PrimitiveTypeRule{
+public class ClosurePrimitiveTypeRule extends ClosureRuleSupport implements PrimitiveTypeRule {
 
     boolean omitLeadingWhitespace
     boolean omitTrailingWhitespace
-        
+
     static Closure PASS = { true }
-    
+
     ClosurePrimitiveTypeRule(Closure testClosure) {
         this("", "", testClosure)
     }
@@ -39,23 +41,27 @@ public class ClosurePrimitiveTypeRule extends ClosureRuleSupport implements Prim
         super(description, sectionReference, testClosure)
     }
 
-    
     /**
      * @see ca.uhn.hl7v2.validation.PrimitiveTypeRule#correct(java.lang.String)
      */
-    public String correct(String s){
+    public String correct(String s) {
         if (omitLeadingWhitespace)
             s = (s =~ /^\s+/).replaceFirst('')
         if (omitTrailingWhitespace)
             s = (s =~ /\s+$/).replaceFirst('')
         s
     }
-    
+
     /**
      * @see ca.uhn.hl7v2.validation.PrimitiveTypeRule#test(java.lang.String)
      */
-    public boolean test(String s){
-        testClosure.call(correct(s))
+    public boolean test(String s) {
+        ValidationException[] exceptions = apply(s);
+        return exceptions == null || exceptions.length == 0;
     }
-    
+
+    @Override
+    ValidationException[] apply(String value) {
+        testClosure.call(correct(value))
+    }
 }

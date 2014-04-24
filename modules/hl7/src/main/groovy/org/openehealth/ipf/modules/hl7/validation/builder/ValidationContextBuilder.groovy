@@ -22,6 +22,7 @@ import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
  * ValidationRule definition.
  * 
  * @author Christian Ohr
+ * @deprecated use validation builders of HAPI (cf. {@link ca.uhn.hl7v2.validation.builder.ValidationRuleBuilder})
  */
 public abstract class ValidationContextBuilder{
     

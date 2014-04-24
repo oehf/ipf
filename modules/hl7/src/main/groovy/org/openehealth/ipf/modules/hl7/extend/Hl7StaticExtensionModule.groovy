@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7.extend;
+package org.openehealth.ipf.modules.hl7.extend
 
+import ca.uhn.hl7v2.AcknowledgmentCode
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.HapiContext;
 import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
@@ -33,37 +36,41 @@ import ca.uhn.hl7v2.parser.ModelClassFactory;
 class Hl7StaticExtensionModule {
 
     public static Object $static_methodMissing(Message delegate, String name, Object args) {
-        MessageUtils.newMessage(factory(), name, args[0])
+        MessageUtils.newMessage(context(), name, args[0])
     }
 
     public static Object $static_methodMissing(Segment delegate, String name, Object args) {
-        MessageUtils.newSegment(factory(), name, args[0])
+        MessageUtils.newSegment(context(), name, args[0])
     }
 
     public static Object $static_methodMissing(Composite delegate, String name, Object args) {
         if (args.size() > 1 && args[1] instanceof Map) {
-            MessageUtils.newComposite(factory(), name, args[0], args[1])
+            MessageUtils.newComposite(context(), name, args[0], args[1])
         } else {
-            MessageUtils.newComposite(factory(), name, args[0], null)
+            MessageUtils.newComposite(context(), name, args[0], null)
         }
     }
 
     public static Object $static_methodMissing(Primitive delegate, String name, Object args) {
         if (args.size() > 1 && args[1] instanceof String) {
-            MessageUtils.newPrimitive(factory(), name, args[0], args[1])
+            MessageUtils.newPrimitive(context(), name, args[0], args[1])
         } else {
-            MessageUtils.newPrimitive(factory(), name, args[0], null)
+            MessageUtils.newPrimitive(context(), name, args[0], null)
         }
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-	public static Message defaultNak(Message delegate, AbstractHL7v2Exception e, AckTypeCode ackTypeCode, String version) {
+	public static Message defaultNak(Message delegate, HL7Exception e, AcknowledgmentCode ackTypeCode, String version) {
         MessageUtils.defaultNak(e, ackTypeCode, version)
     }
 
     private static ModelClassFactory factory() {
         ContextFacade.getBean(ModelClassFactory)
+    }
+
+    private static HapiContext context() {
+        ContextFacade.getBean(HapiContext)
     }
 }

@@ -15,26 +15,21 @@
  */
 package org.openehealth.ipf.modules.hl7.message
 
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormatter
-import org.joda.time.format.ISODateTimeFormat
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
-import org.openehealth.ipf.modules.hl7.AckTypeCode
-import org.openehealth.ipf.modules.hl7.HL7v2Exception
-
-import ca.uhn.hl7v2.HL7Exception
-import ca.uhn.hl7v2.Version;
-import ca.uhn.hl7v2.app.DefaultApplication;
+import ca.uhn.hl7v2.*
 import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.util.DeepCopy
-import ca.uhn.hl7v2.util.MessageIDGenerator
+import ca.uhn.hl7v2.util.ReflectionUtil
 import ca.uhn.hl7v2.util.Terser
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormatter
+import org.joda.time.format.ISODateTimeFormat
+import org.openehealth.ipf.modules.hl7.HL7v2Exception
 
 /**
  * This is a utility class that offers convenience methods for
  * accessing and creating HL7 messages. It's primarily used by
- * the HapiModelExtension to dynamically add the convenience
+ * the {@link org.openehealth.ipf.modules.hl7.extend.Hl7ExtensionModule} to dynamically add the convenience
  * methods directly to the affected classes.
  * 
  * @author Christian Ohr
@@ -44,8 +39,7 @@ import ca.uhn.hl7v2.util.Terser
 class MessageUtils {
     
     private static DateTimeFormatter FMT = ISODateTimeFormat.basicDateTimeNoMillis()
-    private static int INDENT_SIZE = 3
-    private static defaultFactory = new DefaultModelClassFactory();
+    private static final Escaping ESCAPE = new DefaultEscaping()
 
 
     /**
@@ -74,7 +68,7 @@ class MessageUtils {
     /**
      * @return Returns current time in HL7 format
      */
-    static def String hl7Now() {
+    static String hl7Now() {
         FMT.print(new DateTime())[0..7, 9..14]
     }
     
@@ -82,8 +76,9 @@ class MessageUtils {
      * @return Encodes a string using HL7 encoding definition taken
      * 	from the passed message
      */
-    static def encodeHL7String(String s, Message msg) {
-        Escape.escape(s, encodingCharacters(msg))
+    static String encodeHL7String(String s, Message msg) {
+        Escaping escaping = msg?.parser?.parserConfiguration?.escaping ?: ESCAPE
+        escaping.escape(s, encodingCharacters(msg))
     }
     
     /**
@@ -91,7 +86,7 @@ class MessageUtils {
      * 
      * @deprecated use {@link Type#encode()}
      */
-    static def pipeEncode(Type t) {
+    static String pipeEncode(Type t) {
 		t.encode()
     }
     
@@ -100,7 +95,7 @@ class MessageUtils {
      * 
      * @deprecated use {@link Segment#encode()}
      */
-    static def pipeEncode(Segment s) {
+    static String pipeEncode(Segment s) {
         s.encode()
     }
     
@@ -124,77 +119,18 @@ class MessageUtils {
     static String messageStructure(Message msg) {
         def structName = eventType(msg) + '_' + triggerEvent(msg)
         if (atLeastVersion(msg, '2.4')) {
-            structName = Parser.getMessageStructureForEvent(structName, msg.version)
+            structName = msg.parser.hapiContext.modelClassFactory
+                    .getMessageStructureForEvent(structName, Version.versionOf(msg.version))
         }
         structName
-    }
-    
-    /*
-     * @deprecated. Use {@link #ack(ModelClassFactory, Message)}.
-     */
-    @Deprecated
-    static Message ack(Message msg) {
-        ack(defaultFactory, msg)
-    }
-    
-    /** 
-     *  @return a positive ACK response message
-     */
-    static Message ack(ModelClassFactory factory, Message msg) {
-        ack(factory, msg, AckTypeCode.AA)
-    }
-    
-    /**
-     *  @return a positive ACK response message
-     */
-    static Message ack(ModelClassFactory factory, Message msg, AckTypeCode ackType ) {
-        Message ack = response(factory, msg, 'ACK', triggerEvent(msg))
-        Terser terser = new Terser(ack)
-        if (!('MSA' in ack.names)) ack.addNonstandardSegment('MSA', 1)
-        terser.set("MSA-1", ackType.name());
-        ack
-    }
-    
-    /*
-     * @deprecated. Use {@link #nak(ModelClassFactory, Message, String, AckTypeCode)}.
-     */
-    @Deprecated
-    static Message nak(Message msg, String cause, AckTypeCode ackType) {
-        nak(defaultFactory, msg, cause, ackType)
-    }
-    
-    /** 
-     *  @return a negative ACK response message using a String cause
-     */
-    static Message nak(ModelClassFactory factory, Message msg, String cause, AckTypeCode ackType) {
-        HL7v2Exception e = new HL7v2Exception(cause)
-        nak(factory, msg, e, ackType)
-    }
-    
-    /*
-     * @deprecated. Use {@link #nak(ModelClassFactory, Message, Exception, AckTypeCode)}.
-     */
-    @Deprecated
-    static Message nak(Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
-        nak(defaultFactory, msg, e, ackType)
-    }
-    
-    /** 
-     *  @return a negative ACK response message using an Exception cause
-     */
-    static Message nak(ModelClassFactory factory, Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
-        Message ack = ack(factory, msg)
-        if (!('ERR' in ack.names)) ack.addNonstandardSegment('ERR', 2)
-        e.populateMessage(ack, ackType)
-        ack
     }
     
     /** 
      *  @return a negative ACK response message constructed from scratch
      */
     static Message defaultNak(
-            AbstractHL7v2Exception e,
-            AckTypeCode ackType,
+            HL7Exception e,
+            AcknowledgmentCode ackCode,
             String version,
             String sendingApplication,
             String sendingFacility,
@@ -206,102 +142,112 @@ class MessageUtils {
         def cannedNak = "MSH|^~\\&|${sendingApplication}|${sendingFacility}|unknown|unknown|$now||${msh9}|unknown|T|$version|\r" +
                 "MSA|AE|MsgIdUnknown|$cause|\r"
         def nak = new GenericParser().parse(cannedNak)
-        e.populateMessage(nak, ackType)
+        e.populateResponse(nak, ackCode, 0)
         nak
     }
     
     /** 
      *  @return a negative ACK response message constructed from scratch
      */
-    static Message defaultNak(AbstractHL7v2Exception e, AckTypeCode ackType, String version) {
-        defaultNak(e, ackType, version, 'unknown', 'unknown', 'ACK')
+    static Message defaultNak(HL7Exception e, AcknowledgmentCode ackCode, String version) {
+        defaultNak(e, ackCode, version, 'unknown', 'unknown', 'ACK')
     }
     
     /** 
      *  @return a new message of the given event and version args[0]
      */
-    static Message newMessage(ModelClassFactory factory, String event, String version) {
+    static Message newMessage(HapiContext context, String event, String version) {
         if (version) {
             def list = event.tokenize('_')
             def eventType = list[0]
             def triggerEvent = list[1]
-            return makeMessage(factory, eventType, triggerEvent, version)
+            return makeMessage(context, eventType, triggerEvent, version)
         } else {
             throw new HL7v2Exception("Must have valid version to create message")
         }
     }
-    
-    /*
-     * @deprecated
-     */
-    @Deprecated
-    static Message response(Message msg, String eventType, String triggerEvent) {
-        response(defaultFactory, msg, eventType, triggerEvent)
-    }
+
     
     /** 
      *  @return a response message with the basic MSH fields already populated
      */
-    static Message response(ModelClassFactory factory, Message msg, String eventType, String triggerEvent) {
+    static Message response(Message msg, String eventType, String triggerEvent) {
         
         // make message of correct version
-        def version = msg.version
-        if (! triggerEvent) {
+        if (!triggerEvent) {
             triggerEvent = Terser.get(msg.MSH, 9, 0, 2, 1)
         }
-        Message out = makeMessage(factory, eventType, triggerEvent, version)
+        String v = msg.version
+        Message out = makeMessage(msg.parser.hapiContext, eventType, triggerEvent, v)
+
         //populate outbound MSH using data from inbound message ...
-        DefaultApplication.fillResponseHeader(msg.MSH, out.MSH)
+        Segment mshIn = msg.MSH
+        Segment mshOut = out.MSH
+
+        // get MSH data from incoming message ...
+        String fieldSep = Terser.get(mshIn, 1, 0, 1, 1);
+        String encChars = Terser.get(mshIn, 2, 0, 1, 1);
+        String procID = Terser.get(mshIn, 11, 0, 1, 1);
+
+        // populate outbound MSH using data from inbound message ...
+        Terser.set(mshOut, 1, 0, 1, 1, fieldSep);
+        Terser.set(mshOut, 2, 0, 1, 1, encChars);
+        Terser.set(mshOut, 11, 0, 1, 1, procID);
+
+        // revert sender and receiver
+        Terser.set(mshOut, 3, 0, 1, 1, Terser.get(mshIn, 5, 0, 1, 1));
+        Terser.set(mshOut, 4, 0, 1, 1, Terser.get(mshIn, 6, 0, 1, 1));
+        Terser.set(mshOut, 5, 0, 1, 1, Terser.get(mshIn, 3, 0, 1, 1));
+        Terser.set(mshOut, 6, 0, 1, 1, Terser.get(mshIn, 4, 0, 1, 1));
+
         if ('MSA' in out.names) {
             Terser.set(out.MSA, 2, 0, 1, 1, Terser.get(msg.MSH, 10, 0, 1, 1))
         }
         out
     }
     
-    public static Message makeMessage(ModelClassFactory factory, String eventType, String triggerEvent, String version) {
+    public static Message makeMessage(HapiContext context, String eventType, String triggerEvent, String version) {
         def structName
-        Message result;
+        ModelClassFactory factory = context.modelClassFactory
 
         if (eventType == 'ACK') {
             structName = 'ACK'
         } else {
             structName = "${eventType}_${triggerEvent}"
             if (atLeastVersion(version, '2.4')) {
-                structName = Parser.getMessageStructureForEvent(structName, version)
+                structName = factory.getMessageStructureForEvent(structName, Version.versionOf(version))
             }
         }
         
-        Class c = factory.getMessageClass(structName, version, true);
+        Class<? extends Message> c = factory.getMessageClass(structName, version, true);
         if (!c) {
-            throw new HL7v2Exception("Can't instantiate message ${structName}",
-                HL7Exception.UNSUPPORTED_MESSAGE_TYPE)
+            HL7Exception e = new HL7Exception("Can't instantiate message ${structName}", ErrorCode.UNSUPPORTED_MESSAGE_TYPE)
+            throw new HL7v2Exception(e)
         }
-        AbstractMessage msg = c.newInstance([factory]as Object[])
+        AbstractMessage msg = ReflectionUtil.instantiateMessage(c, factory)
         msg.initQuickstart(eventType, triggerEvent, 'P')
         Terser.set(msg.MSH, 11, 0, 2, 1, 'T');
         msg
     }
     
-    static Segment newSegment(ModelClassFactory factory, String name, Message message) {
-        Class c = factory.getSegmentClass(name, message?.version);
+    static Segment newSegment(HapiContext context, String name, Message message) {
+        Class<? extends Segment> c = context.modelClassFactory.getSegmentClass(name, message?.version);
         if (!c) {
             throw new HL7v2Exception("Can't instantiate Segment $name")
         }
-        Segment segment = c.newInstance([message, factory]as Object[])
-        segment
+        ReflectionUtil.instantiateStructure(c, message, context.modelClassFactory)
     }
     
-    static Group newGroup(ModelClassFactory factory, String name, Message message) {
-        Class c = factory.getGroupClass(name, message?.version);
+    static Group newGroup(HapiContext context, String name, Message message) {
+        Class<? extends Group> c = context.modelClassFactory.getGroupClass(name, message?.version);
         if (!c) {
             throw new HL7v2Exception("Can't instantiate Group $name")
         }
-        Group group = c.newInstance([message, factory]as Object[])
-        group
+        ReflectionUtil.instantiateStructure(c, message, context.modelClassFactory)
     }
     
-    static Primitive newPrimitive(ModelClassFactory factory, String name, Message message, String value) {
-        Class c = factory.getTypeClass(name, message?.version);
+    static Primitive newPrimitive(HapiContext context, String name, Message message, String value) {
+        Class<? extends Type> c = context.modelClassFactory.getTypeClass(name, message?.version);
         if (!c) {
             throw new HL7v2Exception("Can't instantiate Type $name")
         }
@@ -312,8 +258,8 @@ class MessageUtils {
         primitive
     }
     
-    static Composite newComposite(ModelClassFactory factory, String name, Message message, Map map) {
-        Class c = factory.getTypeClass(name, message?.version);
+    static Composite newComposite(HapiContext context, String name, Message message, Map map) {
+        Class c = context.modelClassFactory.getTypeClass(name, message?.version);
         if (!c) {
             throw new HL7v2Exception("Can't instantiate Type $name")
         }
@@ -331,6 +277,7 @@ class MessageUtils {
     
     /** 
      *  @return a hierarchical dump of the message
+     *  @deprecated use {@link Message#printStructure()}
      */
     static String dump(Message msg) {
         msg.printStructure()

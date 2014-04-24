@@ -17,33 +17,30 @@ package org.openehealth.ipf.modules.hl7.config;
 
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
-
-import ca.uhn.hl7v2.parser.ModelClassFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * 
- * Configurer used to configure all {@link CustomModelClasses} 
+ * Configurer used to configure all {@link CustomModelClasses}
  * bean occurrences in the spring application context. Provides
  * the logic to add the new package definitions after the
  * existing ones.
- * 
+ *
  * @author Boris Stanojevic
  * @author Christian Ohr
- * 
  */
 public class CustomModelClassFactoryConfigurer<R extends Registry> extends OrderedConfigurer<CustomModelClasses, R> {
 
     private CustomModelClassFactory customModelClassFactory;
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(CustomModelClassFactoryConfigurer.class);
 
     boolean configureRecursively = true;
-    
+
     @Override
     public Collection<CustomModelClasses> lookup(R registry) {
         return registry.beans(CustomModelClasses.class).values();
@@ -56,7 +53,7 @@ public class CustomModelClassFactoryConfigurer<R extends Registry> extends Order
         // delegate if required
         CustomModelClassFactory currentFactory;
         while (isConfigureRecursively() && (delegateFactory instanceof CustomModelClassFactory)) {
-            currentFactory = (CustomModelClassFactory)delegateFactory;
+            currentFactory = (CustomModelClassFactory) delegateFactory;
             delegateFactory = configureAndDelegate(currentFactory, configuration);
         }
         LOG.debug("Custom model classes configured: {}", configuration);
@@ -64,8 +61,8 @@ public class CustomModelClassFactoryConfigurer<R extends Registry> extends Order
 
     private ModelClassFactory configureAndDelegate(CustomModelClassFactory factory,
                                                    CustomModelClasses configuration) {
-       factory.addModels(configuration.getModelClasses());
-       return factory.getDefaultFactory();
+        factory.addModels(configuration.getModelClasses());
+        return factory.getDelegate();
     }
 
     public CustomModelClassFactory getCustomModelClassFactory() {

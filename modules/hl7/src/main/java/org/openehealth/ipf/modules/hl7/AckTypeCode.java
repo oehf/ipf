@@ -17,6 +17,7 @@ package org.openehealth.ipf.modules.hl7;
 
 /**
  * @author Christian Ohr
+ * @deprecated use {@link ca.uhn.hl7v2.AcknowledgmentCode}
  */
 public enum AckTypeCode {
 	AA, AR, AE, CA, CR, CE

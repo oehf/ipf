@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.model
 
+import ca.uhn.hl7v2.validation.impl.AbstractMessageRule
 
 
 /**
@@ -22,7 +23,7 @@ package org.openehealth.ipf.modules.hl7.validation.model
  * 
  * @author Christian Ohr
  */
-public class ClosureRuleSupport{
+public class ClosureRuleSupport {
 
      ClosureRuleSupport(Closure testClosure) {
          this("", "", testClosure)

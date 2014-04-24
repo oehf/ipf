@@ -19,13 +19,16 @@ import org.openehealth.ipf.commons.core.modules.api.Validator
 import ca.uhn.hl7v2.validation.ValidationContext
 import ca.uhn.hl7v2.validation.MessageValidator
 import ca.uhn.hl7v2.model.Message
-import org.openehealth.ipf.commons.core.modules.api.ValidationExceptionimport ca.uhn.hl7v2.HL7Exception
+import org.openehealth.ipf.commons.core.modules.api.ValidationException
+import ca.uhn.hl7v2.HL7Exception
+
 /**
  * Adapter class between {@link Validator} interface and HAPI's
  * {@link MessageValidator}. This class can only be used for
  * validating against message rules.
  * 
  * @author Christian Ohr
+ * @deprecated
  */
 public class HL7Validator implements Validator {
 

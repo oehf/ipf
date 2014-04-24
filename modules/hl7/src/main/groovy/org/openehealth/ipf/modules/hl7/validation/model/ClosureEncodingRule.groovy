@@ -23,24 +23,28 @@ import ca.uhn.hl7v2.validation.ValidationException
  * Rule class for validating encoded messages. The actual validation is executed
  * by means of a Groovy closure. The closure is expected to return a
  * (possibly empty) array of {@link ValidationException}s.
- * 
+ *
  * @author Christian Ohr
  */
-public class ClosureEncodingRule extends ClosureRuleSupport implements EncodingRule{
+public class ClosureEncodingRule extends ClosureRuleSupport implements EncodingRule {
 
-     ClosureEncodingRule(Closure testClosure) {
-         super(testClosure)
-     }
-     
-     ClosureEncodingRule(String description, String sectionReference, Closure testClosure) {
-         super(description, sectionReference, testClosure)
-     }
-     
+    ClosureEncodingRule(Closure testClosure) {
+        super(testClosure)
+    }
+
+    ClosureEncodingRule(String description, String sectionReference, Closure testClosure) {
+        super(description, sectionReference, testClosure)
+    }
+
     /**
      * @see ca.uhn.hl7v2.validation.EncodingRule#test(java.lang.String)
      */
-    public ValidationException[] test(String msg){
-         testClosure.call(msg)
+    public ValidationException[] test(String msg) {
+        apply(msg)
     }
-    
+
+    @Override
+    ValidationException[] apply(String msg) {
+        testClosure.call(msg)
+    }
 }

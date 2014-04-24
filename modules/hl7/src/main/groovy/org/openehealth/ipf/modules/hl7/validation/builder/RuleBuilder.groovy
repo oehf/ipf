@@ -22,6 +22,7 @@ import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
  * rules using a domain specific language (DSL).
  * 
  * @author Christian Ohr
+ * @deprecated use validation builders of HAPI (cf. {@link ca.uhn.hl7v2.validation.builder.ValidationRuleBuilder})
  */
 public class RuleBuilder {
 	

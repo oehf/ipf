@@ -56,6 +56,7 @@ import ca.uhn.hl7v2.validation.ValidationContext
  * </pre>
  * 
  * @author Christian Ohr
+ * @deprecated use {@link ca.uhn.hl7v2.validation.impl.ValidationContextImpl} or subclasses thereof
  */
 public class DefaultValidationContext implements ValidationContext, Serializable {
 	    
@@ -70,7 +71,7 @@ public class DefaultValidationContext implements ValidationContext, Serializable
 	/**
 	 * @see ca.uhn.hl7v2.validation.ValidationContext#getPrimitiveRules(java.lang.String, java.lang.String, ca.uhn.hl7v2.model.Primitive)
 	 */
-	public PrimitiveTypeRule[] getPrimitiveRules(String version, String typeName, Primitive type){
+	public Collection<PrimitiveTypeRule> getPrimitiveRules(String version, String typeName, Primitive type){
 	    def rules = []
 		def matchingRules = ruleMap[version]["_P_$typeName"]
 	    if (matchingRules) {
@@ -82,13 +83,13 @@ public class DefaultValidationContext implements ValidationContext, Serializable
 		        rules.addAll(matchingRules)
 		    }
 		}
-		rules as PrimitiveTypeRule[]
+		rules
 	}
 	
 	/**
 	 * @see ca.uhn.hl7v2.validation.ValidationContext#getMessageRules(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public MessageRule[] getMessageRules(String version, String messageType, String triggerEvent){
+	public Collection<MessageRule> getMessageRules(String version, String messageType, String triggerEvent){
 	    def rules = []
 		def matchingRules = ruleMap[version]["_M_$messageType^$triggerEvent"]
 	    if (matchingRules) {
@@ -137,14 +138,14 @@ public class DefaultValidationContext implements ValidationContext, Serializable
                result.add(rule)
            }
        }
-       result as CompositeTypeRule<T>[]
+       result
    }
    
    
 	/**
 	 * @see ca.uhn.hl7v2.validation.ValidationContext#getEncodingRules(java.lang.String, java.lang.String)
 	 */
-	public EncodingRule[] getEncodingRules(String version, String encoding){
+	public Collection<EncodingRule> getEncodingRules(String version, String encoding){
 	    def rules = []
 		def matchingRules = ruleMap[version]["_E_$encoding"]
 	    if (matchingRules) {
@@ -156,7 +157,7 @@ public class DefaultValidationContext implements ValidationContext, Serializable
 		        rules.addAll(matchingRules)
 		    }
 		}
-		rules as EncodingRule[]
+		rules
 	}
 	
 	/**

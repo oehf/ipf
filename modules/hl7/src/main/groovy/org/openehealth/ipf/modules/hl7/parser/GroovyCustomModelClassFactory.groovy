@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.modules.hl7.parser
 
-
+import ca.uhn.hl7v2.ErrorCode
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.Version
+import ca.uhn.hl7v2.parser.ModelClassFactory
 import org.apache.commons.io.IOUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import ca.uhn.hl7v2.HL7Exception
-import ca.uhn.hl7v2.parser.*
 
 /**
  * This ModelClassFactory is used in same way as its superclass, however,
@@ -35,56 +35,56 @@ import ca.uhn.hl7v2.parser.*
  * this class. You can also wrap a normal CustomModelClassFactory to have a 
  * hierarchy of custom Groovy model classes, custom Java model classes, and 
  * default model classes to search in.
- * 
+ *
  * @author Christian Ohr
- * 
+ *
  */
-public class GroovyCustomModelClassFactory extends CustomModelClassFactory{
-	
-	private static Logger LOG = LoggerFactory.getLogger(CustomModelClassFactory.class)
-	
-	private GroovyClassLoader loader = new GroovyClassLoader(getClass().getClassLoader())
+public class GroovyCustomModelClassFactory extends CustomModelClassFactory {
+
+    private static Logger LOG = LoggerFactory.getLogger(CustomModelClassFactory.class)
+
+    private GroovyClassLoader loader = new GroovyClassLoader(getClass().getClassLoader())
 
     boolean cacheSources = true
 
-	GroovyCustomModelClassFactory() {
-		super()
-	}
-	
-	GroovyCustomModelClassFactory(Map<String, String[]> map) {
-		super(map)
-	}
-	
-	GroovyCustomModelClassFactory(ModelClassFactory defaultFactory) {
-		super(defaultFactory)
-	}
-	
-	GroovyCustomModelClassFactory(ModelClassFactory defaultFactory, Map<String, String[]> map) {
-		super(defaultFactory, map)
-	}
-	
-	// Finds appropriate classes to be compiled and loaded for the given structure/type
-	protected Class findClass(String subpackage, String name, String version) {
-		if (!Parser.validVersion(version)) {
-			throw new HL7Exception("HL7 version $version is not supported",
-			HL7Exception.UNSUPPORTED_VERSION_ID);
-		}
-		def classLoaded = null
-		def fullyQualifiedName = null
-		customModelClasses?.getAt(version)?.find {
-			try {
-				def path = it.replaceAll('\\.', '/')
-				def sep = path.endsWith('/') ? '' : '/'
-				fullyQualifiedName = "/${path}${sep}${subpackage}/${name}.groovy"
+    GroovyCustomModelClassFactory() {
+        super()
+    }
+
+    GroovyCustomModelClassFactory(Map<String, String[]> map) {
+        super(map)
+    }
+
+    GroovyCustomModelClassFactory(ModelClassFactory defaultFactory) {
+        super(defaultFactory, null)
+    }
+
+    GroovyCustomModelClassFactory(ModelClassFactory defaultFactory, Map<String, String[]> map) {
+        super(defaultFactory, map)
+    }
+
+    // Finds appropriate classes to be compiled and loaded for the given structure/type
+    protected Class findClass(String subpackage, String name, String version) {
+        if (!Version.supportsVersion(version)) {
+            throw new HL7Exception("HL7 version $version is not supported",
+                    ErrorCode.UNSUPPORTED_VERSION_ID);
+        }
+        def classLoaded = null
+        def fullyQualifiedName = null
+        customModelClasses?.getAt(version)?.find {
+            try {
+                def path = it.replaceAll('\\.', '/')
+                def sep = path.endsWith('/') ? '' : '/'
+                fullyQualifiedName = "/${path}${sep}${subpackage}/${name}.groovy"
                 def stream = getClass().getResourceAsStream(fullyQualifiedName)
                 GroovyCodeSource gcs = new GroovyCodeSource(
                         IOUtils.toString(stream), fullyQualifiedName, ".")
                 classLoaded = loader.parseClass(gcs, cacheSources)
-				LOG.debug("Found {} in custom HL7 model definitions", fullyQualifiedName)
-			} catch (Exception e) {
-				LOG.debug("Did not find {} in custom HL7 model definitions", fullyQualifiedName)
-			}
-		}
-		return classLoaded
-	}
+                LOG.debug("Found {} in custom HL7 model definitions", fullyQualifiedName)
+            } catch (Exception e) {
+                LOG.debug("Did not find {} in custom HL7 model definitions", fullyQualifiedName)
+            }
+        }
+        return classLoaded
+    }
 }

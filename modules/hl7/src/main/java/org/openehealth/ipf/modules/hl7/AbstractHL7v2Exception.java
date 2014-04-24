@@ -26,7 +26,7 @@ import ca.uhn.hl7v2.util.Terser;
  * not not be caught.
  * 
  * @author Christian Ohr
- * 
+ * @deprecated not used anymore because subclasses are deprecated, too
  */
 @SuppressWarnings("serial")
 public abstract class AbstractHL7v2Exception extends RuntimeException {

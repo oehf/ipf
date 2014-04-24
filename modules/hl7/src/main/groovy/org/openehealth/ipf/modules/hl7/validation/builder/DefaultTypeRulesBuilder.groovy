@@ -22,6 +22,7 @@ import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
  * the HL7v2 specifications.
  * 
  * @author Christian Ohr
+ * @deprecated use {@link ca.uhn.hl7v2.validation.builder.support.DefaultValidationWithoutTNBuilder}
  */
 public class DefaultTypeRulesBuilder extends ValidationContextBuilder{
 

@@ -15,6 +15,12 @@
  */
 package org.openehealth.ipf.modules.hl7.extend
 
+import ca.uhn.hl7v2.AcknowledgmentCode
+import ca.uhn.hl7v2.DefaultHapiContext
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.HapiContext
+import ca.uhn.hl7v2.model.v24.message.ACK
+
 import static org.easymock.EasyMock.*
 import static org.junit.Assert.*
 
@@ -48,10 +54,12 @@ public class HapiModelExtensionTest {
         BidiMappingService mappingService = new BidiMappingService()
         mappingService.addMappingScript(new ClassPathResource("example2.map"))
         ModelClassFactory mcf = new CustomModelClassFactory()
+        HapiContext context = new DefaultHapiContext(mcf)
         Registry registry = createMock(Registry)
         ContextFacade.setRegistry(registry)
         expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
         expect(registry.bean(ModelClassFactory)).andReturn(mcf).anyTimes()
+        expect(registry.bean(HapiContext)).andReturn(context).anyTimes()
         replay(registry)
     }
 	
@@ -86,7 +94,7 @@ public class HapiModelExtensionTest {
     void testNak() {
         String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
         Message msg = new GenericParser().parse(msgText)        
-    	Message nak = msg.nak(new HL7v2Exception("blarg", 204), AckTypeCode.AR)
+    	Message nak = msg.nak(new HL7Exception("blarg", 204), AcknowledgmentCode.AR)
     	assertEquals 'ACK', nak.MSH.messageType.messageType.value
     	assertEquals 'AR', nak.MSA.acknowledgementCode.value 
     	assertEquals 'AR', nak.MSA.acknowledgementCode.value
@@ -96,7 +104,7 @@ public class HapiModelExtensionTest {
     void testNakCause() {
         String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
         Message msg = new GenericParser().parse(msgText)        
-    	Message nak = msg.nak("blarg", AckTypeCode.AR)
+    	Message nak = msg.nak("blarg", AcknowledgmentCode.AR)
     	assertEquals 'ACK', nak.MSH.messageType.messageType.value
     	assertEquals 'AR', nak.MSA.acknowledgementCode.value
     }
@@ -105,7 +113,7 @@ public class HapiModelExtensionTest {
     void testNak25() {
         String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         Message msg = new GenericParser().parse(msgText)        
-    	Message nak = msg.nak(new HL7v2Exception("blarg", 204), AckTypeCode.AR)
+    	Message nak = msg.nak(new HL7Exception("blarg", 204), AcknowledgmentCode.AR)
     	assertEquals 'ACK', nak.MSH.messageType.messageCode.value
     	assertEquals 'AR', nak.MSA.acknowledgmentCode.value
     }
@@ -114,22 +122,23 @@ public class HapiModelExtensionTest {
     void testNak25Cause() {
         String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         Message msg = new GenericParser().parse(msgText)        
-    	Message nak = msg.nak("blarg", AckTypeCode.AR)
+    	Message nak = msg.nak("blarg", AcknowledgmentCode.AR)
     	assertEquals 'ACK', nak.MSH.messageType.messageCode.value
     	assertEquals 'AR', nak.MSA.acknowledgmentCode.value
     }
     
     @Test
     void testDefaultNak() {
-    	Message nak = Message.defaultNak(new HL7v2Exception("blarg", 204), AckTypeCode.AE, "2.4")
+    	ACK nak = Message.defaultNak(new HL7Exception("blarg", 204), AcknowledgmentCode.AE, "2.4")
     	assertEquals 'ACK', nak.MSH.messageType.messageType.value
     	assertEquals 'AE', nak.MSA.acknowledgementCode.value
-    	assertEquals 'blarg', nak.MSA.textMessage.value
+        String msg = nak.ERR.getErrorCodeAndLocation(0).codeIdentifyingError.alternateText.value
+    	assertEquals 'blarg', msg
     }
 
     @Test
     void testDefaultNak25() {
-    	Message nak = Message.defaultNak(new HL7v2Exception("blarg", 204), AckTypeCode.AE, "2.5")
+    	Message nak = Message.defaultNak(new HL7Exception("blarg", 204), AcknowledgmentCode.AE, "2.5")
     	assertEquals 'ACK', nak.MSH.messageType.messageCode.value
     	assertEquals 'AE', nak.MSA.acknowledgmentCode.value
     	assertEquals 'blarg', nak.MSA.textMessage.value

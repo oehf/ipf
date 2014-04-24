@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import ca.uhn.hl7v2.HL7Exception;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer;
@@ -37,7 +38,7 @@ public class GroovyCustomModelClassFactoryTest {
     private CustomModelClassFactoryConfigurer configurer;
     
     @Test
-    public void testMappings() {
+    public void testMappings() throws HL7Exception {
         Map<String, String[]> map = configurer.getCustomModelClassFactory().getCustomModelClasses();
         assertTrue(map.containsKey("2.5"));
         assertTrue(map.containsKey("2.4"));

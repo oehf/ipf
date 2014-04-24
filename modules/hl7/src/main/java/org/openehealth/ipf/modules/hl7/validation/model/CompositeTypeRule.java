@@ -28,7 +28,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * 
  * @see PrimitiveTypeRule
  */
-public abstract class CompositeTypeRule<T extends Composite> implements Rule {
+public abstract class CompositeTypeRule<T extends Composite> implements Rule<Composite> {
 
     private static final long serialVersionUID = -8277252874737667192L;
 

@@ -24,24 +24,28 @@ import ca.uhn.hl7v2.validation.ValidationException
  * Rule class for validating Messages. The actual validation is executed
  * by means of a Groovy closure. The closure is expected to return a
  * (possibly empty) array of {@link ValidationException}s.
- * 
+ *
  * @author Christian Ohr
  */
-public class ClosureMessageRule extends ClosureRuleSupport implements MessageRule{
+public class ClosureMessageRule extends ClosureRuleSupport implements MessageRule {
 
-     ClosureMessageRule(Closure testClosure) {
-         super(testClosure)
-     }
-     
-     ClosureMessageRule(String description, String sectionReference, Closure testClosure) {
-         super(description, sectionReference, testClosure)
-     }
-     
+    ClosureMessageRule(Closure testClosure) {
+        super(testClosure)
+    }
+
+    ClosureMessageRule(String description, String sectionReference, Closure testClosure) {
+        super(description, sectionReference, testClosure)
+    }
+
     /**
      * @see ca.uhn.hl7v2.validation.MessageRule#test(ca.uhn.hl7v2.model.Message)
      */
-    public ValidationException[] test(Message msg){
-         testClosure.call(msg)
+    public ValidationException[] test(Message msg) {
+        apply(msg)
     }
-    
+
+    @Override
+    ValidationException[] apply(Message msg) {
+        return testClosure.call(msg);
+    }
 }

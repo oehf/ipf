@@ -31,6 +31,9 @@ import org.openehealth.ipf.modules.hl7.validation.builder.ValidationContextBuild
  * collection property to override autodetection.
  * 
  * @author Christian Ohr
+ * @deprecated set up {@link ca.uhn.hl7v2.validation.builder.ValidationRuleBuilder} beans explicitly
+ * and inject them into a {@link ca.uhn.hl7v2.DefaultHapiContext} bean
+ *
  */
 public class ValidationContextFactoryBean extends AbstractFactoryBean implements ApplicationContextAware {
 
