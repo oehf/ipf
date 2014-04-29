@@ -37,18 +37,16 @@ public class CustomMessageCopyTest {
 
     @Test
     public void testCopyDefaultQBP(){
-        MessageAdapter QBP_Q21_copy = MessageAdapters.load("qbp.hl7").copy();
-        assertTrue(QBP_Q21_copy.getGroup() instanceof ca.uhn.hl7v2.model.v25.message.QBP_Q21);
-        assertTrue(
-            ((ca.uhn.hl7v2.model.v25.message.QBP_Q21)QBP_Q21_copy.getGroup()).getQPD()
-                    instanceof ca.uhn.hl7v2.model.v25.segment.QPD);
+        MessageAdapter<ca.uhn.hl7v2.model.v25.message.QBP_Q21> QBP_Q21_copy = MessageAdapters.load("qbp.hl7").copy();
+        assertTrue(QBP_Q21_copy.getTarget() instanceof ca.uhn.hl7v2.model.v25.message.QBP_Q21);
+        assertTrue(QBP_Q21_copy.getTarget().getQPD() instanceof ca.uhn.hl7v2.model.v25.segment.QPD);
     }
 
     @Test
     public void testCopyCustomQBP(){
-        MessageAdapter QBP_Q21_copy = MessageAdapters.load(PARSER, "qbp.hl7").copy();
-        assertTrue(QBP_Q21_copy.getGroup() instanceof QBP_Q21);
-        assertTrue(((QBP_Q21) QBP_Q21_copy.getGroup()).getQPD() instanceof QPD);
+        MessageAdapter<QBP_Q21> QBP_Q21_copy = MessageAdapters.load(PARSER, "qbp.hl7").copy();
+        assertTrue(QBP_Q21_copy.getTarget() instanceof QBP_Q21);
+        assertTrue(QBP_Q21_copy.getTarget().getQPD() instanceof QPD);
 
         assertEquals(PARSER, QBP_Q21_copy.getParser());
         assertEquals(PARSER.getFactory(), QBP_Q21_copy.getParser().getFactory());

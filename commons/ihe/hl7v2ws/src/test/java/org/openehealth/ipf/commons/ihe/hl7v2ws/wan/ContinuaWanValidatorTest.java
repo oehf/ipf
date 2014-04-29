@@ -31,7 +31,7 @@ import ca.uhn.hl7v2.HL7Exception;
 public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
     ContinuaWanValidator validator = new ContinuaWanValidator();
 
-    public ContinuaWanValidator getValiadtor() {
+    public ContinuaWanValidator getValidator() {
         return validator;
     }
 

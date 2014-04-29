@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
+import ca.uhn.hl7v2.ErrorCode;
+import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.parser.Parser;
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,8 +37,8 @@ public class Hl7v2TransactionConfiguration {
     private final String sendingApplication;
     private final String sendingFacility;
     
-    private final int requestErrorDefaultErrorCode;
-    private final int responseErrorDefaultErrorCode;
+    private final ErrorCode requestErrorDefaultErrorCode;
+    private final ErrorCode responseErrorDefaultErrorCode;
 
     private final String[] allowedRequestMessageTypes;
     private final String[] allowedRequestTriggerEvents;
@@ -47,7 +49,7 @@ public class Hl7v2TransactionConfiguration {
     private final boolean[] auditabilityFlags;
     private final boolean[] responseContinuabilityFlags;
 
-    private final Parser parser;
+    private final HapiContext hapiContext;
 
 
     /**
@@ -83,22 +85,22 @@ public class Hl7v2TransactionConfiguration {
      *      flags of whether the messages of corresponding
      *      type should support HL7 response continuations.
      *      If <code>null</code>, no continuations will be supported.
-     * @param parser
-     *      transaction-specific HL7v2 NAK parser.
+     * @param hapiContext
+     *      transaction-specific HAPI Context
      */
     public Hl7v2TransactionConfiguration(
             String hl7Version,
             String sendingApplication,
             String sendingFacility,
-            int requestErrorDefaultErrorCode,
-            int responseErrorDefaultErrorCode,
+            ErrorCode requestErrorDefaultErrorCode,
+            ErrorCode responseErrorDefaultErrorCode,
             String[] allowedRequestMessageTypes,
             String[] allowedRequestTriggerEvents,
             String[] allowedResponseMessageTypes,
             String[] allowedResponseTriggerEvents,
             boolean[] auditabilityFlags,
             boolean[] responseContinuabilityFlags,
-            Parser parser)
+            HapiContext hapiContext)
     {
         notNull(hl7Version);
         notNull(sendingApplication);
@@ -108,7 +110,7 @@ public class Hl7v2TransactionConfiguration {
         noNullElements(allowedRequestTriggerEvents);
         noNullElements(allowedResponseMessageTypes);
         noNullElements(allowedResponseTriggerEvents);
-        notNull(parser);
+        notNull(hapiContext);
 
         notEmpty(allowedRequestMessageTypes);
         isTrue(allowedRequestMessageTypes.length == allowedRequestTriggerEvents.length);
@@ -138,7 +140,7 @@ public class Hl7v2TransactionConfiguration {
         this.auditabilityFlags = auditabilityFlags;
         this.responseContinuabilityFlags = responseContinuabilityFlags;
 
-        this.parser = parser;
+        this.hapiContext = hapiContext;
     }
 
     
@@ -253,11 +255,11 @@ public class Hl7v2TransactionConfiguration {
         return hl7Version;
     }
     
-    public int getRequestErrorDefaultErrorCode() {
+    public ErrorCode getRequestErrorDefaultErrorCode() {
         return requestErrorDefaultErrorCode;
     }
 
-    public int getResponseErrorDefaultErrorCode() {
+    public ErrorCode getResponseErrorDefaultErrorCode() {
         return responseErrorDefaultErrorCode;
     }
 
@@ -278,7 +280,12 @@ public class Hl7v2TransactionConfiguration {
     }
 
     public Parser getParser() {
-        return parser;
+        return getHapiContext().getPipeParser();
     }
+
+    public HapiContext getHapiContext() {
+        return hapiContext;
+    }
+
 }
 

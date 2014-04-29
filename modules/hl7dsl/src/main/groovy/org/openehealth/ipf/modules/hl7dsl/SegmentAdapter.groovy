@@ -25,43 +25,37 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.*
  * @author Martin Krasser
  * @author Christian Ohr
  */
-class SegmentAdapter<T extends Segment> extends StructureAdapter {
-
-    T segment
+class SegmentAdapter<T extends Segment> extends StructureAdapter<T> {
     
     SegmentAdapter(T segment) {
-        this.segment = segment
+        super(segment)
 		this.path = ''
-    }
-
-    T getTarget() {
-        segment
     }
     
     int count(int idx) {
-        segment.getField(idx).length
+        target.getField(idx).length
     }
     
     TypeAdapter nrp(int idx) {
-        adaptType(segment.getField(idx, count(idx)))
+        adaptType(target.getField(idx, count(idx)))
     }
     
     Object invokeMethod(String name, Object args) {
-        adapt(InvokerHelper.invokeMethod(segment, name, args))
+        adapt(InvokerHelper.invokeMethod(target, name, args))
     }
     
     Object get(String s) {
-        adapt(InvokerHelper.getProperty(segment, s))
+        adapt(InvokerHelper.getProperty(target, s))
     }
 
     def getAt(int idx) {
         def result;
-        def adapters = adaptTypes(segment.getField(idx))
-        if (segment.getMaxCardinality(idx) == 1) { 
+        def adapters = adaptTypes(target.getField(idx))
+        if (target.getMaxCardinality(idx) == 1) {
             // non-repeating field
             if (adapters.empty) {
                 //HAPI expects 0 as index for the first element
-                result = adaptType(segment.getField(idx, 0))
+                result = adaptType(target.getField(idx, 0))
             } else {
                 result = adapters[0]
             }
@@ -87,31 +81,19 @@ class SegmentAdapter<T extends Segment> extends StructureAdapter {
 
     void from(def value) {
         if (value instanceof SegmentAdapter) {
-            DeepCopy.copy((Segment)value.target, (Segment)this.target)
+            DeepCopy.copy((Segment)value.target, target)
         } else {
             throw new AdapterException("cannot assign from ${value.class.name} to ${SegmentAdapter.class.name}")
         }
     }
     
     def call(object) {
-        throw new AdapterException("The segment ${segment.class.simpleName} is not repeatable in this group or message")
+        throw new AdapterException("The segment ${target.class.simpleName} is not repeatable in this group or message")
     }
     
     def getValue() {
         componentValue(this)
     }
-    
-    /**
-	 * @return true if the segment is empty
-	 */
-	boolean isEmpty() {
-		int i = 1
-		boolean found = false
-		while (i <= segment.numFields() && !found) {
-			found = (count(i++) > 0)
-		}
-		!found
-	}
     
     /**
      * Only when this segment adapter represents an OBX segment: sets the
@@ -126,7 +108,7 @@ class SegmentAdapter<T extends Segment> extends StructureAdapter {
      *      minimal count of available OBX-5 repetitions.
      */
     void setObx5Type(String type, int desiredRepetitionsCount = 1) {
-        if (! segment.getClass().name.endsWith('.OBX')) {
+        if (! target.getClass().name.endsWith('.OBX')) {
             throw new AdapterException('only OBX segments can be served by this method')
         }
 

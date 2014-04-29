@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.Location
 import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.model.MessageVisitor
 import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.AbstractType
 import ca.uhn.hl7v2.model.DataTypeException
@@ -61,4 +64,9 @@ class NullPrimitive extends AbstractType implements Primitive {
 	void setValue(String value) throws DataTypeException {
 		throw new DataTypeException("Cannot assign a value to NullPrimitive")
 	}
+
+    @Override
+    boolean accept(MessageVisitor visitor, Location currentLocation) throws HL7Exception {
+        return false
+    }
 }

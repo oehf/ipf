@@ -22,7 +22,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.*
 /**
  * @author Christian Ohr
  */
-class ExtraComponentsAdapter implements AbstractAdapter {
+class ExtraComponentsAdapter implements AbstractAdapter<ExtraComponents> {
 
 	ExtraComponents extraComponents
     
@@ -52,11 +52,6 @@ class ExtraComponentsAdapter implements AbstractAdapter {
     }
   
     boolean isEmpty(){
-        boolean result = false;
-        int numComponents = extraComponents.numComponents();
-        for (int t = 0; t < numComponents; t ++){
-            result |= isEmpty(extraComponents.getComponent(t))
-        }
-        return result;
+        extraComponents.isEmpty()
     }
 }

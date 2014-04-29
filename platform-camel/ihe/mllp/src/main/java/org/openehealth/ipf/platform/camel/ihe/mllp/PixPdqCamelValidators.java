@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp;
 
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.hl7v2.MessageAdapterValidator;
@@ -33,20 +34,21 @@ import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.v
 
 /**
  * Validating processors for MLLP-based IPF IHE components.
+ *
  * @author Dmytro Rud
  */
 abstract public class PixPdqCamelValidators {
-    private static final MessageAdapterValidator VALIDATOR = new MessageAdapterValidator(); 
+    public static final MessageAdapterValidator VALIDATOR = new MessageAdapterValidator();
 
-    private static final Parser ITI_8_PARSER  = Iti8Component.CONFIGURATION.getParser();
-    private static final Parser ITI_9_PARSER  = Iti9Component.CONFIGURATION.getParser();
+    private static final Parser ITI_8_PARSER = Iti8Component.CONFIGURATION.getParser();
+    private static final Parser ITI_9_PARSER = Iti9Component.CONFIGURATION.getParser();
     private static final Parser ITI_10_PARSER = Iti10Component.CONFIGURATION.getParser();
     private static final Parser ITI_21_PARSER = Iti21Component.CONFIGURATION.getParser();
     private static final Parser ITI_22_PARSER = Iti22Component.CONFIGURATION.getParser();
     private static final Parser ITI_64_PARSER = Iti64Component.CONFIGURATION.getParser();
-    
-    private static final Processor ITI_8_VALIDATOR  = validatingProcessor(ITI_8_PARSER);
-    private static final Processor ITI_9_VALIDATOR  = validatingProcessor(ITI_9_PARSER);
+
+    private static final Processor ITI_8_VALIDATOR = validatingProcessor(ITI_8_PARSER);
+    private static final Processor ITI_9_VALIDATOR = validatingProcessor(ITI_9_PARSER);
     private static final Processor ITI_10_VALIDATOR = validatingProcessor(ITI_10_PARSER);
     private static final Processor ITI_21_VALIDATOR = validatingProcessor(ITI_21_PARSER);
     private static final Processor ITI_22_VALIDATOR = validatingProcessor(ITI_22_PARSER);
@@ -77,7 +79,7 @@ abstract public class PixPdqCamelValidators {
     }
 
     /**
-     * Returns a validating processor for ITI-9 response messages 
+     * Returns a validating processor for ITI-9 response messages
      * (Patient Identity Query).
      */
     public static Processor iti9ResponseValidator() {
@@ -85,7 +87,7 @@ abstract public class PixPdqCamelValidators {
     }
 
     /**
-     * Returns a validating processor for ITI-10 request messages 
+     * Returns a validating processor for ITI-10 request messages
      * (PIX Update Notification).
      */
     public static Processor iti10RequestValidator() {
@@ -93,7 +95,7 @@ abstract public class PixPdqCamelValidators {
     }
 
     /**
-     * Returns a validating processor for ITI-10 response messages 
+     * Returns a validating processor for ITI-10 response messages
      * (PIX Update Notification).
      */
     public static Processor iti10ResponseValidator() {
@@ -101,7 +103,7 @@ abstract public class PixPdqCamelValidators {
     }
 
     /**
-     * Returns a validating processor for ITI-21 request messages 
+     * Returns a validating processor for ITI-21 request messages
      * (Patient Demographics Query).
      */
     public static Processor iti21RequestValidator() {
@@ -109,7 +111,7 @@ abstract public class PixPdqCamelValidators {
     }
 
     /**
-     * Returns a validating processor for ITI-21 response messages 
+     * Returns a validating processor for ITI-21 response messages
      * (Patient Demographics Query).
      */
     public static Processor iti21ResponseValidator() {
@@ -117,7 +119,7 @@ abstract public class PixPdqCamelValidators {
     }
 
     /**
-     * Returns a validating processor for ITI-22 request messages 
+     * Returns a validating processor for ITI-22 request messages
      * (Patient Demographics and Visit Query).
      */
     public static Processor iti22RequestValidator() {
@@ -125,7 +127,7 @@ abstract public class PixPdqCamelValidators {
     }
 
     /**
-     * Returns a validating processor for ITI-22 response messages 
+     * Returns a validating processor for ITI-22 response messages
      * (Patient Demographics and Visit Query).
      */
     public static Processor iti22ResponseValidator() {
@@ -147,26 +149,41 @@ abstract public class PixPdqCamelValidators {
     public static Processor iti64ResponseValidator() {
         return ITI_64_VALIDATOR;
     }
-    
-    
+
+
+    /**
+     * Returns a validating processor for ITI messages that validates as specified
+     * in the Validation Rules in the message's HapiContext
+     */
+    public static Processor validatingProcessor() {
+        return new Processor() {
+            @Override
+            public void process(Exchange exchange) throws Exception {
+                if (validationEnabled(exchange)) {
+                    Message msg = Hl7v2MarshalUtils.extractMessage(
+                            exchange.getIn(),
+                            exchange.getProperty(Exchange.CHARSET_NAME, String.class),
+                            null);
+                    msg.getParser().getHapiContext().getMessageValidator().validate(msg);
+                }
+            }
+        };
+    }
+
     private static Processor validatingProcessor(final Parser parser) {
         return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
-                doValidate(exchange, parser);
+                if (validationEnabled(exchange)) {
+                    MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
+                            exchange.getIn(),
+                            exchange.getProperty(Exchange.CHARSET_NAME, String.class),
+                            parser);
+                    VALIDATOR.validate(msg, null);
+                }
             }
         };
     }
-    
-    private static void doValidate(Exchange exchange, Parser parser) throws Exception {
-        if (! validationEnabled(exchange)) {
-            return;
-        }
-        MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
-                exchange.getIn(),
-                exchange.getProperty(Exchange.CHARSET_NAME, String.class),
-                parser);  
-        VALIDATOR.validate(msg, null);
-    }
-    
+
+
 }

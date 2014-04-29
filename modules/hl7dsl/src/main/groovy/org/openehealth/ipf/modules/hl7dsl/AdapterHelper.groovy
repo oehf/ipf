@@ -129,12 +129,18 @@ class AdapterHelper {
                 firstElement.originalValue
     }
 
+    /**
+     * @deprecated use {@link Type#isEmpty()}
+     */
     static boolean isEmpty(Type t){
-        return !t.encode()
+        t.isEmpty()
     }
- 
+
+    /**
+     * @deprecated use {@link Varies#isEmpty()}
+     */
     static boolean isEmpty(Varies varies){
-        isEmpty(varies.data)
+        varies.isEmpty()
     }
 
     static def newInstance(def group, ModelClassFactory factory){

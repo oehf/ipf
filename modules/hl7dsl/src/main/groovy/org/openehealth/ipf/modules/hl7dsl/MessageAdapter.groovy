@@ -31,16 +31,16 @@ class MessageAdapter<T extends AbstractMessage> extends GroupAdapter<T> implemen
     Parser parser
 
     MessageAdapter(Message message) {
-        this(MessageAdapters.defaultParser(), message)
+        this(message.parser, message)
     }
 
     MessageAdapter(Parser parser, Message message) {
         super(message)
-        this.parser = parser
+        this.parser = (parser != null ? parser : message.parser);
     }
 
     MessageAdapter empty() {
-        adaptStructure(newInstance(group, target.modelClassFactory))
+        adaptStructure(newInstance(target, target.modelClassFactory))
     }
     
     MessageAdapter copy() {
@@ -51,7 +51,7 @@ class MessageAdapter<T extends AbstractMessage> extends GroupAdapter<T> implemen
     }
 
     Writer writeTo(Writer writer) {
-        String s = parser.encode(group)
+        String s = parser.encode(target)
         writer.write(s)
         writer.flush()
         writer
@@ -70,6 +70,6 @@ class MessageAdapter<T extends AbstractMessage> extends GroupAdapter<T> implemen
     }
 
     Message getHapiMessage() {
-        return (Message) target
+        return target
     }
 }

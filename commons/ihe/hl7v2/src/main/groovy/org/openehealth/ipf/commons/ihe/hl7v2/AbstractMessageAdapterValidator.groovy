@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2
 
+import ca.uhn.hl7v2.validation.ValidationContext
+import ca.uhn.hl7v2.validation.builder.ValidationRuleBuilder
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.core.modules.api.Validator
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
@@ -29,10 +31,11 @@ import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.model.Structure
 
 /**
- * Basic validator for HL7 v.2. 
+ * Basic validator for HL7 v2
  * 
  * @author Dmytro Rud
  * @author Mitko Kolev
+ * @author Christian Ohr
  */
 public abstract class AbstractMessageAdapterValidator implements Validator<Object, Object> {
 
@@ -52,7 +55,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
    /**
     *  @return the rules for type validation
     */
-    public abstract DefaultValidationContext getValidationContext();
+    public abstract ValidationContext getValidationContext();
   
     
     /**
@@ -111,7 +114,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
         checkMessage(msg, segmentNames, violations)
         validateGroup(msg, 1, violations);
     }
-    
+
     void validateGroup(final GroupAdapter group, int groupRepetition, final Collection<Exception> violations){
         Group groupTarget = group.target;
         def names = group.names;
@@ -148,14 +151,14 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
          }
      }
      
-      void validateCompositeType(Composite t, int fieldIndnex, int typeRepetition, String path, Collection<Exception> violations){
+      void validateCompositeType(Composite t, int fieldIndex, int typeRepetition, String path, Collection<Exception> violations){
           def msg = new MessageAdapter(t.getMessage());
           String version = msg.target.getVersion();
           String messageType = msg.MSH[9][1];
           String triggerEvent = msg.MSH[9][2];
           def rules = getValidationContext().getCompositeTypeRules(version, messageType, triggerEvent, t.getClass());
           for (rule in rules){
-              violations.addAll(rule.test(t, fieldIndnex, typeRepetition, path) as List)
+              violations.addAll(rule.test(t, fieldIndex, typeRepetition, path) as List)
           }
       }
 

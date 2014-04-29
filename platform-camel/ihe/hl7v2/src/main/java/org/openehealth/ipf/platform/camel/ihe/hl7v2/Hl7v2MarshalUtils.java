@@ -183,4 +183,27 @@ public class Hl7v2MarshalUtils {
         return msg;
     }
 
+    public static ca.uhn.hl7v2.model.Message extractMessage(
+            Message message,
+            String charset,
+            Parser parser) throws Exception
+    {
+        Object body = message.getBody();
+        ca.uhn.hl7v2.model.Message msg = null;
+        if(body instanceof MessageAdapter) {
+            msg = ((MessageAdapter) body).getHapiMessage();
+        } else if(body instanceof ca.uhn.hl7v2.model.Message) {
+            msg = (ca.uhn.hl7v2.model.Message) body;
+        } else {
+            // process all other types (String, File, InputStream, ByteBuffer, byte[])
+            // by means of the standard routine.  An exception here will be o.k.
+            String s = marshalStandardTypes(message, charset, parser);
+            if(s != null) {
+                s = s.replace('\n', '\r');
+                msg = parser.parse(s);
+            }
+        }
+        return msg;
+    }
+
 }

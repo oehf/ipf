@@ -18,12 +18,14 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti21;
 import java.util.Collections;
 import java.util.List;
 
+import ca.uhn.hl7v2.ErrorCode;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
@@ -40,15 +42,15 @@ public class Iti21Component extends MllpComponent<QueryAuditDataset> {
                 "2.5", 
                 "PDQ adapter", 
                 "IPF",
-                207, 
-                207,
+                ErrorCode.APPLICATION_INTERNAL_ERROR,
+                ErrorCode.APPLICATION_INTERNAL_ERROR,
                 new String[] {"QBP", "QCN"},
                 new String[] {"Q22", "J01"},
                 new String[] {"RSP", "ACK"},
                 new String[] {"K22", "*"},
                 new boolean[] {true, false},
                 new boolean[] {true, false},
-                CustomModelClassUtils.createParser("pdq", "2.5"));
+                CustomModelClassUtils.createHapiContext("pdq", "2.5", PixPdqCamelValidators.VALIDATOR.getValidationContext()));
         
     private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY = 
         new Iti21ClientAuditStrategy();

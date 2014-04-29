@@ -118,7 +118,6 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
             
         storage.put(keyString(dsc1, msh31, msh32, msh33), accumulator);
         Message ack = MessageUtils.response(
-                parser.getFactory(),
                 requestMessage, "ACK", 
                 requestTerser.get("MSH-9-2"));
         Terser ackTerser = new Terser(ack);

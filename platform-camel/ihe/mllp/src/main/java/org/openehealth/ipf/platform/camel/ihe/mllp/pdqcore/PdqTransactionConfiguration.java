@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore;
 
 import java.util.List;
 
+import ca.uhn.hl7v2.ErrorCode;
+import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.parser.Parser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 
@@ -30,22 +32,22 @@ public class PdqTransactionConfiguration extends Hl7v2TransactionConfiguration {
             String hl7Version,
             String sendingApplication, 
             String sendingFacility,
-            int requestErrorDefaultErrorCode,
-            int responseErrorDefaultErrorCode,
+            ErrorCode requestErrorDefaultErrorCode,
+            ErrorCode responseErrorDefaultErrorCode,
             String[] allowedRequestMessageTypes,
             String[] allowedRequestTriggerEvents,
             String[] allowedResponseMessageTypes,
             String[] allowedResponseTriggerEvents, 
             boolean[] auditabilityFlags,
             boolean[] responseContinuabilityFlags,
-            Parser parser)
+            HapiContext hapiContext)
     {
         super(hl7Version, sendingApplication, sendingFacility,
                 requestErrorDefaultErrorCode,
                 responseErrorDefaultErrorCode, allowedRequestMessageTypes,
                 allowedRequestTriggerEvents, allowedResponseMessageTypes,
                 allowedResponseTriggerEvents, auditabilityFlags,
-                responseContinuabilityFlags, parser);
+                responseContinuabilityFlags, hapiContext);
     }
     
     @Override

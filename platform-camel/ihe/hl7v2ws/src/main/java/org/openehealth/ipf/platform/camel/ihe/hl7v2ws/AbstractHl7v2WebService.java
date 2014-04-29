@@ -15,12 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
+import java.io.IOException;
+
 import static org.openehealth.ipf.commons.ihe.hl7v2ws.Utils.render;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.checkRequestAcceptance;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.checkResponseAcceptance;
 
+import ca.uhn.hl7v2.AcknowledgmentCode;
+import ca.uhn.hl7v2.HL7Exception;
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
@@ -96,7 +101,13 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
 
         } catch (Exception e) {
             LOG.error(formatErrMsg("Message processing failed, response missing or not acceptable"), e);
-            return render(nakFactory.createNak(originalRequest.getHapiMessage(), e));
+            try {
+                return render(nakFactory.createNak(originalRequest.getHapiMessage(), e));
+            } catch (HL7Exception e1) {
+                return render(MessageUtils.defaultNak(e1, AcknowledgmentCode.AE, msg.getHapiMessage().getVersion()));
+            } catch (IOException e2) {
+                return render(MessageUtils.defaultNak(new HL7Exception(e2), AcknowledgmentCode.AE, msg.getHapiMessage().getVersion()));
+            }
         }
     }
 

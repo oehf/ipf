@@ -15,18 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 
+import java.io.IOException;
+
+import ca.uhn.hl7v2.AcknowledgmentCode;
+import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.ClassUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
@@ -128,25 +130,24 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
      * an automatic acknowledgment, and generates the latter when the author really does.   
      */
     @SuppressWarnings("rawtypes")
-    private MessageAdapter analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) {
+    private MessageAdapter analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) throws HL7Exception, IOException {
         Object header = m.getHeader(ACK_TYPE_CODE_HEADER);
-        if ((header == null) || ! (header instanceof AckTypeCode)) {
+        if ((header == null) || ! (header instanceof AcknowledgmentCode)) {
             return null;
         }
 
         Message ack;
-        if ((header == AckTypeCode.AA) || (header == AckTypeCode.CA)) {
+        if ((header == AcknowledgmentCode.AA) || (header == AcknowledgmentCode.CA)) {
             ack = getNakFactory().createAck(
-                    originalMessage,
-                    (AckTypeCode) header);
+                    originalMessage);
         } else {
-            HL7v2Exception exception = new HL7v2Exception(
+            HL7Exception exception = new HL7Exception(
                     "HL7v2 processing failed",
                     getHl7v2TransactionConfiguration().getResponseErrorDefaultErrorCode());
             ack = getNakFactory().createNak(
                     originalMessage,
                     exception, 
-                    (AckTypeCode) header); 
+                    (AcknowledgmentCode) header);
         }
         return new MessageAdapter(ack);
     }

@@ -20,19 +20,15 @@ import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.model.AbstractMessage
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.Type
-import ca.uhn.hl7v2.validation.ValidationContext
 import ca.uhn.hl7v2.validation.builder.EncodingRuleBuilder
 import ca.uhn.hl7v2.validation.builder.MessageRuleBuilder
+import ca.uhn.hl7v2.validation.builder.Predicate
 import ca.uhn.hl7v2.validation.builder.PrimitiveRuleBuilder
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.commons.map.extend.MappingExtensionHelper
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.openehealth.ipf.modules.hl7.validation.model.AbstractSyntaxRule
-import org.openehealth.ipf.modules.hl7.validation.model.ClosureEncodingRule
-import org.openehealth.ipf.modules.hl7.validation.model.ClosureMessageRule
-import org.openehealth.ipf.modules.hl7.validation.model.ClosurePrimitiveTypeRule
-import org.openehealth.ipf.modules.hl7.validation.support.HL7Validator
+import org.openehealth.ipf.modules.hl7.validation.model.*
 
 import static org.openehealth.ipf.modules.hl7.extend.ExtensionUtils.normalizeCollection
 

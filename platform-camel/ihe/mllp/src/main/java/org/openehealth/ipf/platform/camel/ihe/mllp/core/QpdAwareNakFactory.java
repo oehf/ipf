@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
+import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.AbstractMessage;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.commons.lang3.Validate;
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
@@ -51,7 +51,7 @@ public class QpdAwareNakFactory extends NakFactory {
 
 
     @Override
-    public Message createNak(Message originalMessage, Throwable t, AckTypeCode ackTypeCode) {
+    public Message createNak(Message originalMessage, HL7Exception t, AcknowledgmentCode ackTypeCode) {
         try {
             return (t instanceof Hl7v2AcceptanceException)
                 ? super.createNak(originalMessage, t, ackTypeCode)
@@ -62,18 +62,19 @@ public class QpdAwareNakFactory extends NakFactory {
     }
 
 
-    public Message createNak0(Message originalMessage, Throwable t, AckTypeCode ackTypeCode)
+    public Message createNak0(Message originalMessage, HL7Exception t, AcknowledgmentCode ackTypeCode)
         throws HL7Exception, IllegalAccessException, NoSuchFieldException
     {
         AbstractMessage ack = (AbstractMessage) MessageUtils.response(
-                getConfig().getParser().getFactory(),
                 originalMessage,
                 messageType,
                 triggerEvent);
 
         LOG.info("Creating NAK response event of type {}", ack.getClass().getName());
 
-        getHl7Exception(t).populateMessage(ack, ackTypeCode);
+
+        Segment msa = (Segment) ack.get("MSA");
+        Terser.set(msa, 1, 0, 1, 1, ackTypeCode.name());
 
         Segment ackQak = (Segment) ack.get("QAK");
         Segment origQpd = (Segment) originalMessage.get("QPD");
@@ -94,7 +95,7 @@ public class QpdAwareNakFactory extends NakFactory {
 
 
     @Override
-    public Message createAck(Message originalMessage, AckTypeCode ackTypeCode) {
+    public Message createAck(Message originalMessage) {
         throw new IllegalStateException("This transaction cannot return a simple ACK");
     }
 }

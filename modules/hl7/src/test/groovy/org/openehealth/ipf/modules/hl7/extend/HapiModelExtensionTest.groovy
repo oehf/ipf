@@ -280,7 +280,7 @@ public class HapiModelExtensionTest {
     @Test
 	void testParseWithCustomGroovyClasses() {
 		String msgText = this.class.classLoader.getResource('msg-09.hl7')?.text
-		def customModelClasses = ['2.5' : [customGroovyPackageName]]
+		def customModelClasses = ['2.5' : [customGroovyPackageName] as String[]]
 		ModelClassFactory customFactory = new GroovyCustomModelClassFactory(customModelClasses)
 		Parser parser = new PipeParser(customFactory)
 		Message hapiMessage = parser.parse(msgText)

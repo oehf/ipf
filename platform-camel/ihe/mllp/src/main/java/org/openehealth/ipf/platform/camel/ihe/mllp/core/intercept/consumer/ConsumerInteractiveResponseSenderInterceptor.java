@@ -78,7 +78,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
                     requestTerser.get("QPD-2");
             if (storage.delete(keyString(queryTag, msh31, msh32, msh33))) {
                 LOG.debug("Dropped response chain for query tag {}", queryTag);
-                Message ack = MessageUtils.ack(parser.getFactory(), requestMessage);
+                Message ack = requestMessage.generateACK();
 
                 // Workaround: HAPI misses to populate the message structure for ACKs, but client may want to see it
                 Terser.set((Segment)ack.get("MSH"), 9, 0, 3, 1, "ACK");

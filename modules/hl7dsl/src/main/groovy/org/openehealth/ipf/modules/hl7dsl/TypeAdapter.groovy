@@ -23,17 +23,17 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.isEmpty
 /**
  * @author Martin Krasser
  */
-class TypeAdapter implements AbstractAdapter {
+class TypeAdapter<T extends Type> implements AbstractAdapter<T> {
 
-    Type type
+    T type
     String path
     
-    TypeAdapter(Type type) {
+    TypeAdapter(T type) {
         this.type = type
         this.path = ''
     }
  
-    Type getTarget() {
+    T getTarget() {
         type
     }
 
@@ -54,11 +54,11 @@ class TypeAdapter implements AbstractAdapter {
     }
     
     boolean isEmpty(){
-      return isEmpty(type)
+      type.isEmpty()
     }
     
     String getPath(){
-        return path
+        path
     }
   
 }

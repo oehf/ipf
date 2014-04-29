@@ -35,7 +35,7 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
  * @author Mitko Kolev
  *
  */
-class Pcd01Validator extends  AbstractMessageAdapterValidator {
+class Pcd01Validator extends AbstractMessageAdapterValidator {
  
    static DefaultValidationContext PCD01_CONTEXT = new DefaultValidationContext()
    static {

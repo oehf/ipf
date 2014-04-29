@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.uhn.hl7v2.Location;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.XTN;
@@ -24,6 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
+ * @author Christian Ohr
  * 
  */
 public class XTNRule extends AbstractCompositeTypeRule<XTN> {
@@ -39,12 +42,18 @@ public class XTNRule extends AbstractCompositeTypeRule<XTN> {
     }
 
     @Override
-    public void validate(XTN xtn, String path, Collection<ValidationException> violations) {
-        mustBeNonEmpty(xtn, 2, path, violations);
-        mustBeOneOf(new String[] { "PRN", "NET" }, xtn, 2, path, violations);
-        mustBeNonEmpty(xtn, 3, path, violations);
+    public ValidationException[] validate(XTN xtn, Location location) {
+        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        potentialViolation(enforce(allOf(not(empty()), in("PRN", "NET")), xtn, 2), location, violations);
+        potentialViolation(enforce(not(empty()), xtn, 3), location, violations);
         if (isEqual("NET", xtn, 2)) {
-            mustBeOneOf(new String[] { "X.400", "Internet" }, xtn, 3, path, violations);
+            potentialViolation(enforce(in("X.400", "Internet"), xtn, 3), location, violations);
         }
+        return violations.toArray(new ValidationException[violations.size()]);
+    }
+
+    @Override
+    public String getDescription() {
+        return "XTM composite type rule";
     }
 }

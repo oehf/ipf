@@ -17,10 +17,11 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
 import javax.xml.namespace.QName;
 
+import ca.uhn.hl7v2.DefaultHapiContext;
+import ca.uhn.hl7v2.ErrorCode;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsComponent;
@@ -48,15 +49,15 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
             "2.6",
             "PCD01",
             "IPF",
-            207,
-            207,
+            ErrorCode.APPLICATION_INTERNAL_ERROR,
+            ErrorCode.APPLICATION_INTERNAL_ERROR,
             new String[] {"ORU"},
             new String[] {"R01"},
             new String[] {"ACK"},
             new String[] {"*"},
             null,
             null,
-            new PipeParser());
+            new DefaultHapiContext());
 
     private static final NakFactory NAK_FACTORY = new NakFactory(HL7V2_CONFIG, false, "ACK^R01^ACK");
 

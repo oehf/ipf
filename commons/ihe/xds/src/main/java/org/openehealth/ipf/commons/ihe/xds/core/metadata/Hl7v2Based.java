@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.Location;
 import ca.uhn.hl7v2.model.*;
 import ca.uhn.hl7v2.model.v25.datatype.HD;
 import ca.uhn.hl7v2.model.v25.message.ACK;
@@ -222,6 +223,11 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
             } catch (ArrayIndexOutOfBoundsException e) {
                 throw new DataTypeException("please do not use this class");
             }
+        }
+
+        @Override
+        public boolean accept(MessageVisitor visitor, Location currentLocation) throws HL7Exception {
+            return false;
         }
     }
 

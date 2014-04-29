@@ -15,11 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8;
 
+import ca.uhn.hl7v2.DefaultHapiContext;
+import ca.uhn.hl7v2.ErrorCode;
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.*;
+import org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 
 /**
  * Camel component for ITI-8 (PIX Feed).
@@ -30,16 +33,16 @@ public class Iti8Component extends MllpComponent<Iti8AuditDataset> {
         new Hl7v2TransactionConfiguration(
                 "2.3.1", 
                 "PIX adapter", 
-                "IPF", 
-                207, 
-                207, 
+                "IPF",
+                ErrorCode.APPLICATION_INTERNAL_ERROR,
+                ErrorCode.APPLICATION_INTERNAL_ERROR,
                 new String[] {"ADT"},
                 new String[] {"A01 A04 A05 A08 A40"},
                 new String[] {"ACK"},
                 new String[] {"*"},
                 new boolean[] {true},
                 new boolean[] {false},
-                new PipeParser());
+                new DefaultHapiContext(PixPdqCamelValidators.VALIDATOR.getValidationContext()));
   
     private static final MllpAuditStrategy<Iti8AuditDataset> CLIENT_AUDIT_STRATEGY = 
         new Iti8ClientAuditStrategy();

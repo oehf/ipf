@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.dataformat;
 
+import ca.uhn.hl7v2.DefaultHapiContext;
+import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
 import org.apache.camel.spi.DataFormat;
@@ -31,12 +33,14 @@ import java.io.OutputStreamWriter;
 public class Hl7DataFormat implements DataFormat {
 
     private String charset;
-    
+
+    private HapiContext context = new DefaultHapiContext();
     private Parser parser;
     
     public Hl7DataFormat() {
         charset = System.getProperty("file.encoding");
-        parser = MessageAdapters.defaultParser();
+        context = new DefaultHapiContext();
+        parser = context.getGenericParser();
     }
     
     public String getCharset() {
@@ -55,6 +59,11 @@ public class Hl7DataFormat implements DataFormat {
         this.parser = parser;
     }
 
+    public void setContext(HapiContext context) {
+        this.context = context;
+        this.parser = context.getGenericParser();
+    }
+
     @Override
     public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
         MessageAdapter<?> adapter = (MessageAdapter<?>)graph;
@@ -63,7 +72,7 @@ public class Hl7DataFormat implements DataFormat {
 
     @Override
     public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
-        return MessageAdapters.make(parser, stream, charset);
+        return MessageAdapters.make(context.getGenericParser(), stream, charset);
         
     }
 

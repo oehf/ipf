@@ -34,7 +34,7 @@ public abstract class AbstractPCD01ValidatorTest {
     
     private Pcd01Validator validator = new Pcd01Validator();
 
-    public Pcd01Validator getValiadtor(){
+    public Pcd01Validator getValidator(){
         return validator;
     }
     
@@ -47,7 +47,7 @@ public abstract class AbstractPCD01ValidatorTest {
         return make(maximumMessage.toString().replace(whatToReplace, replacement));
      }
     protected <T extends AbstractMessage> void validate (MessageAdapter<T> message){
-        getValiadtor().validate(message);
+        getValidator().validate(message);
      }   
     
 }

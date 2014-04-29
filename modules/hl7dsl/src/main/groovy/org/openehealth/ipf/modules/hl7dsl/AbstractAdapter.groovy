@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7dsl;
+package org.openehealth.ipf.modules.hl7dsl
+
+import ca.uhn.hl7v2.model.Visitable;
 
 /**
  * @author Mitko Kolev
  */
-public interface AbstractAdapter {
+public interface AbstractAdapter<T> {
     
     /**
      * @return <code>true</code> if the {@link #getTarget()} element is empty
@@ -28,7 +30,7 @@ public interface AbstractAdapter {
    /**
     * @return the adapter target. This should be a HAPI object
     */
-    Object getTarget();
+    T getTarget();
     
     /**
     * @return the position of the element target in the message

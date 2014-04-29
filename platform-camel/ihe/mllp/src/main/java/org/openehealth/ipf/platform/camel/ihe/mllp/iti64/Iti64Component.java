@@ -15,10 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti64;
 
+import ca.uhn.hl7v2.DefaultHapiContext;
+import ca.uhn.hl7v2.ErrorCode;
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 
@@ -32,15 +34,15 @@ public class Iti64Component extends MllpComponent<Iti64AuditDataset> {
                 "2.5",
                 "XPID adapter",
                 "IPF",
-                207,
-                207,
+                ErrorCode.APPLICATION_INTERNAL_ERROR,
+                ErrorCode.APPLICATION_INTERNAL_ERROR,
                 new String[] {"ADT"},
                 new String[] {"A43"},
                 new String[] {"ACK"},
                 new String[] {"*"},
                 new boolean[] {true},
                 new boolean[] {false},
-                new PipeParser());
+                new DefaultHapiContext(PixPdqCamelValidators.VALIDATOR.getValidationContext()));
 
     private static final MllpAuditStrategy<Iti64AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti64AuditStrategy(false);
     private static final MllpAuditStrategy<Iti64AuditDataset> SERVER_AUDIT_STRATEGY = new Iti64AuditStrategy(true);

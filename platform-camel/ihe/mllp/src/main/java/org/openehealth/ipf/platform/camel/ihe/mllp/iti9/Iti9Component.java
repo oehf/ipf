@@ -15,12 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti9;
 
+import ca.uhn.hl7v2.AcknowledgmentCode;
+import ca.uhn.hl7v2.ErrorCode;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
@@ -39,15 +42,15 @@ public class Iti9Component extends MllpComponent<QueryAuditDataset> {
                 "2.5", 
                 "PIX adapter", 
                 "IPF",
-                207, 
-                207,
+                ErrorCode.APPLICATION_INTERNAL_ERROR,
+                ErrorCode.APPLICATION_INTERNAL_ERROR,
                 new String[] {"QBP"},
                 new String[] {"Q23"},
                 new String[] {"RSP"},
                 new String[] {"K23"}, 
                 new boolean[] {true},
                 new boolean[] {false},
-                CustomModelClassUtils.createParser("pix", "2.5"));
+                CustomModelClassUtils.createHapiContext("pix", "2.5", PixPdqCamelValidators.VALIDATOR.getValidationContext()));
   
     private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY = 
         new Iti9ClientAuditStrategy();

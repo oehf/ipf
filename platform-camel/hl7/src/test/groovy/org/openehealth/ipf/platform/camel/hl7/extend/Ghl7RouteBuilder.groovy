@@ -15,15 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.extend
 
+import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.parser.GenericParser
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.spring.SpringRouteBuilder
+
 /**
  * @author Martin Krasser
  */
 class Ghl7RouteBuilder extends SpringRouteBuilder {
     
     def parser = new GenericParser()
+    def hapiContext = new DefaultHapiContext()
      
     void configure() {
         
@@ -47,7 +50,11 @@ class Ghl7RouteBuilder extends SpringRouteBuilder {
         from("direct:input5")
             .unmarshal().ghl7('UTF-8')
             .marshal().ghl7('ISO-8859-1')
-            .to('mock:output')            
+            .to('mock:output')
+
+        from("direct:input6")
+            .unmarshal().ghl7(hapiContext, 'UTF-8')
+            .to('mock:output')
     }
     
 }

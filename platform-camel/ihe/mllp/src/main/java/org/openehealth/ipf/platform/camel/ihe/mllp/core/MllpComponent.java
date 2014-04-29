@@ -58,7 +58,7 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
     /**
      * Camel context-based constructor.
      * 
-     * @param camelContext
+     * @param camelContext camel context
      */
     protected MllpComponent(CamelContext camelContext) {
         super(camelContext);
@@ -131,7 +131,7 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
         }
 
         // adopt character set configured for the HL7 codec
-        ProtocolCodecFactory codecFactory = getCamelContext().getRegistry().lookup(
+        ProtocolCodecFactory codecFactory = getCamelContext().getRegistry().lookupByNameAndType(
                     extractBeanName((String) parameters.get("codec")), 
                     ProtocolCodecFactory.class);
         Charset charset = null;

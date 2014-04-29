@@ -15,31 +15,24 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.model;
 
+import ca.uhn.hl7v2.Location;
 import ca.uhn.hl7v2.model.Composite;
 import ca.uhn.hl7v2.validation.PrimitiveTypeRule;
 import ca.uhn.hl7v2.validation.Rule;
 import ca.uhn.hl7v2.validation.ValidationException;
+import ca.uhn.hl7v2.validation.builder.BuilderSupport;
+import ca.uhn.hl7v2.validation.impl.RuleSupport;
 
 /**
  * Rule for validating {@link Composite} types.
- * FIXME declared as abstract class to work around compile problems in Eclipse
  * 
  * @author Mitko Kolev
  * 
  * @see PrimitiveTypeRule
  */
-public abstract class CompositeTypeRule<T extends Composite> implements Rule<Composite> {
+public abstract class CompositeTypeRule<T extends Composite> extends BuilderSupport implements Rule<Composite>  {
 
     private static final long serialVersionUID = -8277252874737667192L;
-
-    /**
-     * Tests the given (fully populated) message against the criteria defined by
-     * this rule class.
-     * 
-     * @return a list of exceptions indicating points at which the given message
-     *         failed to validate (empty if validation succeeds;
-     */
-    public abstract ValidationException[] test(T composite, int fieldIndex, int repetition, String path);
 
     /**
      * Returns if the rule should check the given class.
@@ -47,5 +40,7 @@ public abstract class CompositeTypeRule<T extends Composite> implements Rule<Com
      * @return a class instance.
      */
     public abstract boolean appliesFor(Class<? extends Composite> clazz);
-    
+
+    public abstract ValidationException[] apply(T composite, Location location);
+
 }

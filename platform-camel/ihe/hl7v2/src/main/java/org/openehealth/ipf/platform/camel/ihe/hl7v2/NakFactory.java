@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
+import java.io.IOException;
+
+import ca.uhn.hl7v2.AcknowledgmentCode;
+import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.util.ObjectHelper;
 import org.apache.commons.lang3.Validate;
@@ -72,30 +76,23 @@ public class NakFactory {
      * @param originalMessage
      *      original HAPI request message.
      */
-    public Message createAck(Message originalMessage, AckTypeCode ackTypeCode) {
-        return MessageUtils.ack(
-                config.getParser().getFactory(),
-                originalMessage,
-                useCAckTypeCodes ? AckTypeCode.CA : AckTypeCode.AA);
+    public Message createAck(Message originalMessage) throws HL7Exception, IOException {
+        return originalMessage.generateACK(useCAckTypeCodes ? AcknowledgmentCode.CA : AcknowledgmentCode.AA, null);
     }
 
 
     /**
      * Generates an HL7v2 NAK response message on the basis
      * of the thrown exception and the original HAPI request message.
-     * @param t
+     * @param exception
      *      thrown exception.
      * @param originalMessage
      *      original HAPI request message.
      * @param ackTypeCode
      *      HL7v2 acknowledgement type code.
      */
-    public Message createNak(Message originalMessage, Throwable t, AckTypeCode ackTypeCode) {
-        return MessageUtils.nak(
-                config.getParser().getFactory(),
-                originalMessage,
-                getHl7Exception(t),
-                ackTypeCode);
+    public Message createNak(Message originalMessage, HL7Exception exception, AcknowledgmentCode ackTypeCode) throws HL7Exception, IOException {
+        return originalMessage.generateACK(ackTypeCode, exception);
     }
 
 
@@ -107,8 +104,8 @@ public class NakFactory {
      * @param originalMessage
      *      original HAPI request message.
      */
-    public Message createNak(Message originalMessage, Throwable t) {
-        AbstractHL7v2Exception hl7Exception = getHl7Exception(t);
+    public Message createNak(Message originalMessage, Throwable t) throws HL7Exception, IOException {
+        HL7Exception hl7Exception = getHl7Exception(t);
         return createNak(originalMessage, hl7Exception, getAckTypeCode(hl7Exception));
     }
 
@@ -120,14 +117,14 @@ public class NakFactory {
      *      thrown exception.
      */
     public Message createDefaultNak(Throwable t) {
-        HL7v2Exception hl7v2Exception = new HL7v2Exception(
+        HL7Exception hl7Exception = new HL7Exception(
                 formatErrorMessage(t),
                 config.getRequestErrorDefaultErrorCode(),
                 t);
 
         return MessageUtils.defaultNak(
-                hl7v2Exception,
-                useCAckTypeCodes ? AckTypeCode.CR : AckTypeCode.AR,
+                hl7Exception,
+                useCAckTypeCodes ? AcknowledgmentCode.CR : AcknowledgmentCode.AR,
                 config.getHl7Version(),
                 config.getSendingApplication(),
                 config.getSendingFacility(),
@@ -139,10 +136,10 @@ public class NakFactory {
      * Returns a HL7v2 exception that corresponds
      * to the given instance of {@link Throwable}.
      */
-    protected AbstractHL7v2Exception getHl7Exception(Throwable t) {
-        AbstractHL7v2Exception hl7Exception = ObjectHelper.getException(AbstractHL7v2Exception.class, t);
+    protected HL7Exception getHl7Exception(Throwable t) {
+        HL7Exception hl7Exception = ObjectHelper.getException(HL7Exception.class, t);
         if (hl7Exception == null) {
-            hl7Exception = new HL7v2Exception(
+            hl7Exception = new HL7Exception(
                     formatErrorMessage(t),
                     config.getRequestErrorDefaultErrorCode(),
                     t);
@@ -155,10 +152,10 @@ public class NakFactory {
      * Returns a HL7v2 acknowledgement type code that corresponds
      * to the given instance of {@link Throwable}.
      */
-    protected AckTypeCode getAckTypeCode(Throwable t) {
-        AckTypeCode ackTypeCode = (t instanceof Hl7v2AcceptanceException) ? AckTypeCode.AR : AckTypeCode.AE;
+    protected AcknowledgmentCode getAckTypeCode(Throwable t) {
+        AcknowledgmentCode ackTypeCode = (t instanceof Hl7v2AcceptanceException) ? AcknowledgmentCode.AR : AcknowledgmentCode.AE;
         if (useCAckTypeCodes) {
-            ackTypeCode = (ackTypeCode == AckTypeCode.AR) ? AckTypeCode.CR : AckTypeCode.CE;
+            ackTypeCode = (ackTypeCode == AcknowledgmentCode.AR) ? AcknowledgmentCode.CR : AcknowledgmentCode.CE;
         }
         return ackTypeCode;
     }

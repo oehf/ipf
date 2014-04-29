@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.hl7.extend;
+package org.openehealth.ipf.platform.camel.hl7.extend
 
-
-import ca.uhn.hl7v2.parser.Parser;
-import org.apache.camel.builder.DataFormatClause;
-import org.apache.camel.model.ProcessorDefinition;
-import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext;
+import ca.uhn.hl7v2.HapiContext
+import ca.uhn.hl7v2.parser.Parser
+import ca.uhn.hl7v2.validation.impl.DefaultValidation
+import org.apache.camel.builder.DataFormatClause
+import org.apache.camel.model.ProcessorDefinition
 import org.openehealth.ipf.modules.hl7.validation.support.HL7Validator
-import org.openehealth.ipf.platform.camel.core.extend.CoreExtensionModule;
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
-import org.openehealth.ipf.platform.camel.hl7.dataformat.Hl7DataFormat;
-import org.openehealth.ipf.platform.camel.hl7.expression.Hl7InputExpression;
+import org.openehealth.ipf.platform.camel.core.extend.CoreExtensionModule
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
+import org.openehealth.ipf.platform.camel.hl7.dataformat.Hl7DataFormat
+import org.openehealth.ipf.platform.camel.hl7.expression.Hl7InputExpression
 
 /**
  * HL7 DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
@@ -54,6 +54,16 @@ public class Hl7ExtensionModule {
     public static ProcessorDefinition ghl7(DataFormatClause self, Parser parser) {
         return ghl7(self, parser, null);
     }
+
+    /**
+     * Defines marshaling between a standard HL7 message and a
+     * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
+     * via an parser provided by the specified {@link HapiContext}.
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
+     */
+    public static ProcessorDefinition ghl7(DataFormatClause self, HapiContext context) {
+        return ghl7(self, context, null);
+    }
     
     /**
      * Defines marshaling between a standard HL7 message and a
@@ -62,13 +72,30 @@ public class Hl7ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
      */
     public static ProcessorDefinition ghl7(DataFormatClause self, String charset) {
-        return ghl7(self, null, charset);
+        return ghl7(self, (HapiContext)null, charset);
     }
     
     /**
      * Defines marshaling between a standard HL7 message and a
      * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
      * using the given charset and parser 
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
+     */
+    public static ProcessorDefinition ghl7(DataFormatClause self, HapiContext context, String charset) {
+        Hl7DataFormat hl7DataFormat = new Hl7DataFormat();
+        if (context) {
+            hl7DataFormat.context = context;
+        }
+        if (charset) {
+            hl7DataFormat.charset = charset;
+        }
+        CoreExtensionModule.dataFormat(self, hl7DataFormat);
+    }
+
+    /**
+     * Defines marshaling between a standard HL7 message and a
+     * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
+     * using the given charset and parser
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
      */
     public static ProcessorDefinition ghl7(DataFormatClause self, Parser parser, String charset) {
@@ -88,7 +115,7 @@ public class Hl7ExtensionModule {
      */
     public static ValidatorAdapterDefinition ghl7(ValidatorAdapterDefinition self) { 
         self.setValidator(new HL7Validator());
-        self.staticProfile(new DefaultValidationContext()); 
+        self.staticProfile(new DefaultValidation());
         return (ValidatorAdapterDefinition)self.input(new Hl7InputExpression());
     }
 }

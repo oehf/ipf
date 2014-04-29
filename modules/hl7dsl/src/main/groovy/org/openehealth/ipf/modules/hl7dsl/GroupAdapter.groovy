@@ -24,33 +24,27 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.*
  * @author Christian Ohr
  * @author Mitko Kolev
  */
-class GroupAdapter<T extends Group> extends StructureAdapter {
-    
-    T group
+class GroupAdapter<T extends Group> extends StructureAdapter<T> {
     
     private Set cachedNames
 
     GroupAdapter(Group group) {
-        this.group = group
+        super(group)
         this.path = ''
         this.cachedNames = group.names as HashSet
     }
-   
-    T getTarget() {
-        group
-    }
     
     void wrapTarget(T group) {
-        this.group = group
+        this.target = group
     }
     
     int count(String s) {
-        group.getAll(s).length
+        target.getAll(s).length
     }
     
     StructureAdapter nrp(String s) {
         // create new structure within repeating group
-        adaptStructure(group.get(s, count(s)), structurePath(s))
+        adaptStructure(target.get(s, count(s)), structurePath(s))
     }
     
     public Object invokeMethod(String name, Object args) {
@@ -65,7 +59,7 @@ class GroupAdapter<T extends Group> extends StructureAdapter {
         } else if (name.startsWith('find')) {
             return find { it.name == name.substring(4) }
         } else {
-            return adapt(InvokerHelper.invokeMethod(group, name, args))
+            return adapt(InvokerHelper.invokeMethod(target, name, args))
         }
     }
     
@@ -73,7 +67,7 @@ class GroupAdapter<T extends Group> extends StructureAdapter {
         if (cachedNames.contains(s)) {
             return getAt(s)
         } else {
-            return adapt(InvokerHelper.getProperty(group, s))
+            return adapt(InvokerHelper.getProperty(target, s))
         }
     }
     
@@ -88,15 +82,15 @@ class GroupAdapter<T extends Group> extends StructureAdapter {
     def getAt(String s) {
         def result;
         def resultElementPath = structurePath(s)
-        if (group.isRepeating(s)) {
-            result = selector(adaptStructures(group.getAll(s), resultElementPath), this, s);
+        if (target.isRepeating(s)) {
+            result = selector(adaptStructures(target.getAll(s), resultElementPath), this, s);
         } else {
-            result = adaptStructure(group.get(s), resultElementPath)
+            result = adaptStructure(target.get(s), resultElementPath)
         }
         result
     }
     
-    void from(def value) {
+    void from(value) {
         throw new UnsupportedOperationException('group copying not implemented yet')
     }
     
@@ -105,14 +99,14 @@ class GroupAdapter<T extends Group> extends StructureAdapter {
     }
     
     def call(object) {
-        throw new AdapterException("The group ${group.class.simpleName} is not repeatable in this group or message")
+        throw new AdapterException("The group ${target.class.simpleName} is not repeatable in this group or message")
     }
     
     /**
      * @return true if the group has only empty substructures
      */
     boolean isEmpty() {
-        group.getNames().every { 
+        target.getNames().every {
             get(it).isEmpty()
         }
     }

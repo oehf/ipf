@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import ca.uhn.hl7v2.model.Visitable
 import org.codehaus.groovy.runtime.InvokerHelper
 
 import ca.uhn.hl7v2.model.DataTypeException
@@ -26,7 +27,7 @@ import ca.uhn.hl7v2.model.DataTypeException
  * 
  * @author Christian Ohr
  */
-class SelectorClosure extends Closure implements AbstractAdapter {
+class SelectorClosure extends Closure implements AbstractAdapter<Object> {
 	
 	def elements	
 	AbstractAdapter adapter
@@ -87,7 +88,7 @@ class SelectorClosure extends Closure implements AbstractAdapter {
         }
         return result;
     }
-    
+
     Object getTarget(){
         return adapter.target
     }

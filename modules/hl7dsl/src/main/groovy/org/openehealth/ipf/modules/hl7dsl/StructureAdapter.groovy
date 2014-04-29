@@ -15,19 +15,35 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import ca.uhn.hl7v2.model.Structure
+
 /**
  * @author Martin Krasser
  * @author Christian Ohr
  */
-abstract class StructureAdapter implements AbstractAdapter {
-	
+abstract class StructureAdapter<T extends Structure> implements AbstractAdapter<T> {
+
+    T target
 	String path
-	
-	StructureAdapter withPath(def parent, int idx) {
+
+    StructureAdapter(T target) {
+        this.target = target
+    }
+
+    StructureAdapter withPath(def parent, int idx) {
 		String pp = parent.path
 		path = pp + (pp == '' ? name : ".$name") +
 		       (parent.isRepeating(name) ? "($idx)" : '')
 		this
 	}
-		
+
+    @Override
+    T getTarget() {
+        target
+    }
+
+    @Override
+    boolean isEmpty() {
+        return target.isEmpty()
+    }
 }
