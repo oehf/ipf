@@ -1504,13 +1504,17 @@
         <profile>
             <!-- This profile generates groovystubs with last gmaven plugin        -->
             <!-- which still respects the javadocs annotations on stub generation. -->
-            <!-- To deploy javadocs with groovydocs it should be run like follows: -->
-            <!-- 1. mvn process-resources -Pgapidoc' -->
-            <!-- 2. mvn clean javadoc:jar -Dsourcepath=./src/main/java:./gapi-stubs deploy -->
-            <id>gapidoc</id>
+            <!-- It also generates delomboked java sources required for decent javadoc generation. -->
+            <!-- To deploy javadocs with groovydocs+deloboked java sources it should be run like follows: -->
+            <!-- 1. mvn generate-sources -Pgenerate-stubs' -->
+            <!-- 2. mvn clean javadoc:jar -Dsourcepath=./generate-stubs deploy -->
+            <id>generate-stubs</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
+            <properties>
+                <output-folder>${basedir}</output-folder>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -1520,15 +1524,42 @@
                         <executions>
                             <execution>
                                 <id>generate-stubs</id>
-                                <phase>process-resources</phase>
+                                <phase>generate-sources</phase>
                                 <goals>
                                     <goal>generateStubs</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${basedir}/gapi-stubs</outputDirectory>
+                                    <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok-maven-plugin</artifactId>
+                        <version>1.12.6.0</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>delombok</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                            <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>sun.jdk</groupId>
+                                <artifactId>tools</artifactId>
+                                <version>1.6</version>
+                                <scope>system</scope>
+                                <systemPath>${java.home}/../lib/tools.jar</systemPath>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
