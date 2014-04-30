@@ -72,24 +72,22 @@ public class Document extends ContentMap implements Serializable {
     }
 
     /**
-     * This method is deprecated.
-     * Use <code>getContent(DataHandler.class)</code> instead.
+     * Same as <code>getContent(DataHandler.class)</code>.
      *
      * @return the data handler allowing access to the contents of the document.
      */
-    @Deprecated
+    @XmlElement(name = "data")
+    @XmlMimeType("application/octet-stream")
     public DataHandler getDataHandler() {
         return getContent(DataHandler.class);
     }
     
     /**
-     * This method is deprecated.
-     * Use <code>setContent(DataHandler.class, dataHandler)</code> instead.
+     * Same as <code>setContent(DataHandler.class, DataHandler dataHandler)</code>.
      *
      * @param dataHandler
      *          the data handler allowing access to the contents of the document.
      */
-    @Deprecated
     public void setDataHandler(DataHandler dataHandler) {
         setContent(DataHandler.class, dataHandler);
     }

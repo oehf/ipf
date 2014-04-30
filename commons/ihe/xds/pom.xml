@@ -71,10 +71,11 @@
                         <include>org/openehealth/ipf/commons/ihe/xds/core/requests/*</include>
                         <include>org/openehealth/ipf/commons/ihe/xds/core/responses/*</include>
                     </includes>
+                    <outputDirectory>target/classes</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>generate-test-resources</phase>
+                        <phase>process-classes</phase>
                         <goals>
                             <goal>schemagen</goal>
                         </goals>

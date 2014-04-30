@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import java.util.Map;
  * Content map based on Spring type conversion framework.
  * @author Dmytro Rud
  */
+@XmlTransient
 public class ContentMap {
     private static transient Logger LOG = LoggerFactory.getLogger(ContentMap.class);
 
