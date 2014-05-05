@@ -199,7 +199,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        List<String> logicalIds = new ArrayList<String>();
+        Set<String> logicalIds = new HashSet<String>();
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             boolean onDemandExpected = (profile.getInteractionId() == IpfInteractionId.ITI_61);
             boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
@@ -229,10 +229,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                     attachmentExpected ? MISSING_DOCUMENT_FOR_DOC_ENTRY : DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY,
                     docEntry.getId());
 
-            if (StringUtils.isNotBlank(docEntry.getLid())){
-                metaDataAssert(!logicalIds.contains(docEntry.getLid()), LOGICAL_ID_SAME, docEntry.getLid());
-                logicalIds.add(docEntry.getLid());
-            }
+            metaDataAssert(StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
+                    LOGICAL_ID_SAME, docEntry.getLid());
             if (profile.getInteractionId() == IpfInteractionId.ITI_57){
                 validateUpdateObject(docEntry, container);
             }
@@ -294,6 +292,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateAssociations(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
+        Set<String> logicalIds = new HashSet<String>();
         Set<String> docEntryIds = new HashSet<String>();
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             if (docEntry.getId() != null) {
@@ -313,6 +312,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                         (association.getAssociationType().equals(AssociationType.SUBMIT_ASSOCIATION) ||
                          association.getAssociationType().equals(AssociationType.UPDATE_AVAILABILITY_STATUS));
             }
+            metaDataAssert(StringUtils.isBlank(association.getLid()) || logicalIds.add(association.getLid()),
+                    LOGICAL_ID_SAME, association.getLid());
         }
 
         for (EbXMLAssociation association : container.getAssociations()) {

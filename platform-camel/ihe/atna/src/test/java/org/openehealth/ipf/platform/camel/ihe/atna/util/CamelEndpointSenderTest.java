@@ -41,6 +41,8 @@ public class CamelEndpointSenderTest {
     @After
     public void tearDown() {
         mock.reset();
+        getAuditor().getContext().setSender(null);
+        getAuditor().setContext(null);
     }
     
     @Test

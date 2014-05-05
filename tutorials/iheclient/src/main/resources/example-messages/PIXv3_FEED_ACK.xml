@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MCCI_IN000002UV01 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:hl7-org:v3 ../../schema/HL7V3/NE2008/multicacheschemas/MCCI_IN000002UV01.xsd" xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0">
+    <id root="f531489e-67f2-11dc-984e-3603d6866807"/>
+    <creationTime value="20070803130625"/>
+    <interactionId root="2.16.840.1.113883.1.6" extension="MCCI_IN000002UV01"/>
+    <processingCode code="P"/>
+    <processingModeCode code="R"/>
+    <acceptAckCode code="NE"/>
+    <receiver typeCode="RCV">
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id root="1.2.840.114350.1.13.99998.8734"/>
+        </device>
+    </receiver>
+    <sender typeCode="SND">
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id root="1.2.840.114350.1.13.99999.4567"/>
+            <telecom value="https://example.org/PatientFeed"/>
+        </device>
+    </sender>
+    <acknowledgement>
+        <typeCode code="CA"/>
+        <targetMessage>
+            <id root="22a0f9e0-4454-11dc-a6be-3603d6866807"/>
+        </targetMessage>
+    </acknowledgement>
+</MCCI_IN000002UV01>
