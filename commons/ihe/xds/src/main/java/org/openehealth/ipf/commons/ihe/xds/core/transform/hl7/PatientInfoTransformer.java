@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
 import ca.uhn.hl7v2.parser.PipeParser;
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.*;
 
@@ -30,7 +31,7 @@ import java.util.*;
  */
 public class PatientInfoTransformer {
     private static final String PID_PREFIX = "PID-";
-    
+
     private static final Map<Integer, PIDTransformer> pidTransformers;
     
     static {
@@ -84,11 +85,14 @@ public class PatientInfoTransformer {
         
         List<String> hl7Strings = new ArrayList<String>();
         for (Map.Entry<Integer, PIDTransformer> entry : pidTransformers.entrySet()) {
-            String pidNoStr = PID_PREFIX + entry.getKey();
+            String prefix = PID_PREFIX + entry.getKey() + '|';
             List<String> repetitions = entry.getValue().toHL7(patientInfo);
             if (repetitions != null) {
-                for (String repetition : repetitions) {
-                    hl7Strings.add(pidNoStr + '|' + repetition);
+                if (entry.getKey() == 3) {
+                    hl7Strings.add(prefix + StringUtils.join(repetitions, '~'));
+                } else {
+                    // multiple list elements are possible for PID-3 only
+                    hl7Strings.add(prefix + repetitions.get(0));
                 }
             }
         }
