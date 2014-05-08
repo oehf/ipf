@@ -100,6 +100,7 @@
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.7.5</slf4j-version>
         <spring-version>4.0.2.RELEASE</spring-version>
+        <spring-karaf-version>3.2.4.RELEASE</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.39</tomcat-version>
         <xbean-spring-version>3.16</xbean-spring-version>
