@@ -47,7 +47,7 @@
         <groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
         <jar-plugin-version>2.4</jar-plugin-version>
         <javadoc-plugin-version>2.9.1</javadoc-plugin-version>
-        <jaxb-plugin-version>1.5</jaxb-plugin-version>
+        <jaxb-plugin-version>1.6</jaxb-plugin-version>
         <pax-plugin-version>1.5</pax-plugin-version>
         <release-plugin-version>2.1</release-plugin-version>
         <resources-plugin-version>2.6</resources-plugin-version>
@@ -1108,20 +1108,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>jaxb2-maven-plugin</artifactId>
                     <version>${jaxb-plugin-version}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok-version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>com.sun</groupId>
-                            <artifactId>tools</artifactId>
-                            <version>1.7.0</version>
-                            <scope>system</scope>
-                            <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                        </dependency>
-                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.ops4j</groupId>

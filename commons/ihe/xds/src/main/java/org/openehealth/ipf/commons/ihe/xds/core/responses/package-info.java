@@ -15,7 +15,7 @@
  */
 @XmlSchema(
         namespace = "http://www.openehealth.org/ipf/xds",
-        elementFormDefault = XmlNsForm.UNQUALIFIED,
+        elementFormDefault = XmlNsForm.QUALIFIED,
         attributeFormDefault = XmlNsForm.UNQUALIFIED,
         xmlns = {
                 @XmlNs(prefix = "xds", namespaceURI = "http://www.openehealth.org/ipf/xds")})
