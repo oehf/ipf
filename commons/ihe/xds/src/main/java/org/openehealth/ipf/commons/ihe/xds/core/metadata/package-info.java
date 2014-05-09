@@ -15,9 +15,10 @@
  */
 @XmlSchema(
         namespace = "http://www.openehealth.org/ipf/xds",
-        elementFormDefault = XmlNsForm.UNQUALIFIED,
+        elementFormDefault = XmlNsForm.QUALIFIED,
         attributeFormDefault = XmlNsForm.UNQUALIFIED,
-        xmlns = {@XmlNs(prefix = "xds", namespaceURI = "http://www.openehealth.org/ipf/xds")})
+        xmlns = {
+                @XmlNs(prefix = "xds", namespaceURI = "http://www.openehealth.org/ipf/xds")})
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import javax.xml.bind.annotation.XmlNs;

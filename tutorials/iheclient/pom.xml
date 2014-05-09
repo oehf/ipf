@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ipf-iheclient</artifactId>
-    <name>ipf-iheclient</name>
-    <description>This project demonstrates how a client-side application can make use of IHE Producer Endpoints </description>
+    <artifactId>ipf-tutorials-iheclient</artifactId>
+    <name>ipf-tutorials-iheclient</name>
+    <description>This project demonstrates how a client-side application can make use of IHE Producer Endpoints</description>
 
     <dependencies>
         <dependency>
@@ -37,24 +37,19 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
-            <version>${camel-version}</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <version>${cxf-version}</version>
             <scope>runtime</scope>
         </dependency>
 
         <!-- Dependencies for test -->
-
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-core</artifactId>
@@ -65,7 +60,6 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
