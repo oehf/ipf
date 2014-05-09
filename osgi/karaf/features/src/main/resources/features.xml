@@ -89,6 +89,7 @@
         <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.annotations/3.4.0.GA-A</bundle>
         <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.annotations.common/3.3.0.ga</bundle>
         <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.ejb/3.4.0.GA-A</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/2.2_2</bundle>
         <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.derby/10.9.1.0_1</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-flow-repository/${project.version}</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.commons/ipf-commons-flow/${project.version}</bundle>
