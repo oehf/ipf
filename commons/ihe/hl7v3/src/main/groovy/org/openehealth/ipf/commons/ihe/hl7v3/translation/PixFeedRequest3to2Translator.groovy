@@ -230,14 +230,17 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         for (telecom in person.telecom) {            
             String value = telecom.@value.text()
             if (value) {
-                int pos = value.indexOf(':')
-                if (pos < 0) {
-                    throw new Hl7TranslationException('Missing telecom scheme, see HL7v3 NE 2008, section 2.19')
-                }
+                
+                // Prepare for clients that just send a phone number without preceding tel:
+                String type = 'tel'
+                String number = value
+                String use = telecom.@use?.text()
 
-                String type   = value.substring(0, pos)
-                String number = value.substring(pos + 1)
-                String use    = telecom.@use.text()
+                int pos = value.indexOf(':')
+                if (pos >= 0) {
+                    type = value.substring(0, pos)
+                    number = value.substring(pos + 1)
+                }
                 
                 // Currently (as of Aug 13, 2010 -- yes, it's a Friday), 
                 // only telephone numbers are differentiated between  
