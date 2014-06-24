@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.uhn.hl7v2.Location;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.CNE;
@@ -27,16 +29,17 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * 
  */
 public class CNERule extends AbstractCompositeTypeRule<CNE> {
-    private static final long serialVersionUID = -4355783034721382060L;
 
     public CNERule() {
         super(CNE.class);
     }
 
-    public void validate(CNE cne, String path,
-            Collection<ValidationException> violations) {
-        mustBeNonEmpty(cne, 1, path, violations);
-        mustBeNonEmpty(cne, 2, path, violations);
+    @Override
+    public ValidationException[] validate(CNE cne, Location location) {
+        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        validate(enforce(not(empty()), cne, 1), location, violations);
+        validate(enforce(not(empty()), cne, 2), location, violations);
+        return violations.toArray(new ValidationException[violations.size()]);
     }
 
     @Override

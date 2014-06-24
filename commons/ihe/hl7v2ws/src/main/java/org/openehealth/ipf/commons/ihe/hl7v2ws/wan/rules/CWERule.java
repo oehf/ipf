@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.uhn.hl7v2.Location;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.CWE;
@@ -24,18 +26,19 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * 
+ * @author Christian Ohr
  */
 public class CWERule extends AbstractCompositeTypeRule<CWE> {
-
-    private static final long serialVersionUID = 7147652947902463045L;
 
     public CWERule() {
         super(CWE.class);
     }
 
-    public void validate(CWE cwe, String path, Collection<ValidationException> violations) {
-        mustBeNonEmpty(cwe, 1, path, violations);
+    @Override
+    public ValidationException[] validate(CWE cwe, Location location) {
+        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        validate(enforce(not(empty()), cwe, 1), location, violations);
+        return violations.toArray(new ValidationException[violations.size()]);
     }
 
     @Override

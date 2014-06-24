@@ -21,7 +21,6 @@
             <groupId>ca.uhn.hapi</groupId>
             <artifactId>hapi-structures-v25</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>ipf-modules-hl7</artifactId>
@@ -31,6 +30,11 @@
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>ipf-modules-hl7dsl</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>gazelle-validation-commons-core</artifactId>
+            <version>${ipf-gazelle-version}</version>
         </dependency>
         
         <!-- Dependencies for test -->

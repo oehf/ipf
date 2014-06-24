@@ -15,8 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.uhn.hl7v2.Location;
+import ca.uhn.hl7v2.model.v26.datatype.CWE;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.XAD;
@@ -24,26 +27,25 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * 
+ * @author Christian Ohr
  */
 public class XADRule extends AbstractCompositeTypeRule<XAD> {
-
-    private static final long serialVersionUID = 7818625807638987635L;
 
     public XADRule() {
         super(XAD.class);
     }
 
     @Override
-    public void validate(XAD xad, String path, Collection<ValidationException> violations) {
-        mustBeNonEmpty(xad, 1, path, violations);
-        mustBeNonEmpty(xad, 3, path, violations);
-        mustBeNonEmpty(xad, 4, path, violations);
-        mustBeNonEmpty(xad, 5, path, violations);
-        mustBeNonEmpty(xad, 7, path, violations);
-
+    public ValidationException[] validate(XAD xad, Location location) {
+        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        validate(enforce(not(empty()), xad, 1), location, violations);
+        validate(enforce(not(empty()), xad, 3), location, violations);
+        validate(enforce(not(empty()), xad, 4), location, violations);
+        validate(enforce(not(empty()), xad, 5), location, violations);
+        validate(enforce(not(empty()), xad, 6), location, violations);
+        return violations.toArray(new ValidationException[violations.size()]);
     }
-   
+
     @Override
     public String getSectionReference() {
         return "Continua Design Guidelines 2010, Section K.2.6";

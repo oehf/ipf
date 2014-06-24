@@ -27,6 +27,11 @@
         <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>ipf-platform-camel-hl7</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -34,6 +39,16 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>gazelle-validation-profiles-iti-pixpdq</artifactId>
+            <version>${ipf-gazelle-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>gazelle-validation-commons-core</artifactId>
+            <version>${ipf-gazelle-version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>

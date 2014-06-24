@@ -23,6 +23,7 @@
             org.openehealth.ipf.platform.camel.core.extend,
             org.openehealth.ipf.platform.camel.core.model,
             org.openehealth.ipf.commons.core.config,
+            org.openehealth.ipf.gazelle.validation.*,
             org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
@@ -46,8 +47,21 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>gazelle-validation-commons-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>gazelle-validation-profiles-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>gazelle-validation-profiles-iti-pixpdq</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>

@@ -15,23 +15,18 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.regex.Pattern;
-
-import ca.uhn.hl7v2.Location;
-import ca.uhn.hl7v2.validation.builder.BuilderSupport;
-import ca.uhn.hl7v2.validation.builder.Predicate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.Location;
 import ca.uhn.hl7v2.model.Composite;
 import ca.uhn.hl7v2.model.DataTypeException;
 import ca.uhn.hl7v2.model.Primitive;
 import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.validation.ValidationException;
+import ca.uhn.hl7v2.validation.builder.Predicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mitko Kolev
@@ -39,22 +34,28 @@ import ca.uhn.hl7v2.validation.ValidationException;
  */
 public abstract class AbstractCompositeTypeRule<T extends Composite> extends CompositeTypeRule<T> {
 
-    private static final long serialVersionUID = 1861386949211093806L;
-
-    private final String appliesFor;
-
-    public static final String ISO_OID_PATTERN = "[1-9][0-9]*(\\.(0|([1-9][0-9]*)))+";
-
     public static final String EUI_64_PATTERN = "[0-9a-zA-Z]+";
-
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCompositeTypeRule.class);
 
+    private final String appliesFor;
+    private final String description;
+
     public AbstractCompositeTypeRule(Class<T> compositeTypeClass) {
+        this(compositeTypeClass, compositeTypeClass.getSimpleName() + " composite type rule");
+    }
+
+    public AbstractCompositeTypeRule(Class<T> compositeTypeClass, String description) {
         this.appliesFor = compositeTypeClass.getSimpleName();
+        this.description = description;
     }
 
     @Override
-    public boolean appliesFor(Class<? extends Composite> clazz) {
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public boolean matches(Class<? extends Composite> clazz) {
         return clazz.getSimpleName().equals(appliesFor);
     }
 
@@ -70,14 +71,14 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
 
     @Override
     public ValidationException[] apply(T composite, Location location) {
-        if (appliesFor(composite.getClass())) {
+        if (matches(composite.getClass())) {
             return validate(composite, location);
         } else {
             throw new IllegalArgumentException("The rule " + this.getClass().getSimpleName() + " does not apply for class " + composite.getClass().getName());
         }
     }
 
-    public abstract  ValidationException[]  validate(T struct, Location location);
+    public abstract  ValidationException[] validate(T struct, Location location);
 
     protected ValidationException[] violations(Object value, Location location) {
         String msg = String.format(getDescription(), String.valueOf(value));
@@ -127,7 +128,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
         }
     }
 
-    protected AbstractCompositeTypeRule potentialViolation(ValidationException e, Location l, Collection<ValidationException> violations) {
+    protected AbstractCompositeTypeRule validate(ValidationException e, Location l, Collection<ValidationException> violations) {
         if (e != null ) {
             e.setLocation(l);
             violations.add(e);

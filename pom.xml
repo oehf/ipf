@@ -1,5 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
     <artifactId>ipf</artifactId>
@@ -10,7 +11,7 @@
     <properties>
         <!-- Project configurations -->
         <!-- project.build.sourceEncoding>UTF-8</project.build.sourceEncoding -->
-        
+
         <!-- Report version properties -->
         <site-plugin-version>3.0</site-plugin-version>
         <cobertura-plugin-version>2.5.2</cobertura-plugin-version>
@@ -22,17 +23,17 @@
         <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
         <osgi.import.pkg>org.slf4j.*;version="[1.6,2)",*</osgi.import.pkg>
-        <osgi.dynamic.import.pkg />
-        <osgi.private.pkg />
-        <osgi.bundle.activator />
-        <osgi.bundle.classpath />
-        <osgi.embed.dependency />
-        <osgi.fragment.host />
-        <osgi.require.bundle />
-        <osgi.spring.context />
-        <ipf.extension.classes />
-        <ipf.extension.beans />
-        <eclipse.supplement.bundle />
+        <osgi.dynamic.import.pkg/>
+        <osgi.private.pkg/>
+        <osgi.bundle.activator/>
+        <osgi.bundle.classpath/>
+        <osgi.embed.dependency/>
+        <osgi.fragment.host/>
+        <osgi.require.bundle/>
+        <osgi.spring.context/>
+        <ipf.extension.classes/>
+        <ipf.extension.beans/>
+        <eclipse.supplement.bundle/>
         <osgi.bundle.vendor>Open eHealth Foundation</osgi.bundle.vendor>
         <osgi.bundle.license>Apache License, Version 2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache foundation</osgi.bundle.license>
         <osgi.bundle.category>healthcare</osgi.bundle.category>
@@ -52,7 +53,7 @@
         <release-plugin-version>2.1</release-plugin-version>
         <resources-plugin-version>2.6</resources-plugin-version>
         <sources-plugin-version>2.2.1</sources-plugin-version>
-        
+
         <!-- Dependency version properties -->
         <activemq-version>5.9.0</activemq-version>
         <aspectj-version>1.7.3</aspectj-version>
@@ -81,6 +82,7 @@
         <hibernate-commons-annotations-version>3.2.0.Final</hibernate-commons-annotations-version>
         <hibernate-javassist-version>3.17.1-GA</hibernate-javassist-version>
         <hibernate-search-version>3.2.1.Final</hibernate-search-version>
+        <ipf-gazelle-version>1.0-SNAPSHOT</ipf-gazelle-version>
         <jaxb-impl-version>2.2.6</jaxb-impl-version>
         <jasypt-version>1.9.0</jasypt-version>
         <jdom-version>1.1.3</jdom-version>
@@ -138,7 +140,7 @@
                 <role>Developer</role>
             </roles>
             <timezone>+1</timezone>
-        </developer>    
+        </developer>
         <developer>
             <id>riemschneider</id>
             <name>Jens Riemschneider</name>
@@ -149,7 +151,7 @@
                 <role>Developer</role>
             </roles>
             <timezone>+1</timezone>
-        </developer>    
+        </developer>
         <developer>
             <id>mkolev</id>
             <name>Mitko Kolev</name>
@@ -160,7 +162,7 @@
                 <role>Developer</role>
             </roles>
             <timezone>+1</timezone>
-        </developer>    
+        </developer>
         <developer>
             <id>boris</id>
             <name>Boris Stanojevic</name>
@@ -272,12 +274,12 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec-version}</version>
-            </dependency> 
+            </dependency>
             <dependency>
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
                 <version>${commons-collections-version}</version>
-            </dependency> 
+            </dependency>
             <dependency>
                 <groupId>commons-dbcp</groupId>
                 <artifactId>commons-dbcp</artifactId>
@@ -292,12 +294,12 @@
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>${commons-httpclient-version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>				
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
@@ -324,7 +326,7 @@
                 <artifactId>easymock</artifactId>
                 <version>${easymock-version}</version>
                 <scope>test</scope>
-            </dependency> 
+            </dependency>
             <dependency>
                 <groupId>org.easymock</groupId>
                 <artifactId>easymockclassextension</artifactId>
@@ -382,12 +384,6 @@
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-base</artifactId>
                 <version>${hapi-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>xalan</groupId>
-                        <artifactId>xalan</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi</groupId>
@@ -413,7 +409,7 @@
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v25</artifactId>
                 <version>${hapi-version}</version>
-            </dependency>                                                
+            </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v251</artifactId>
@@ -423,7 +419,27 @@
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v26</artifactId>
                 <version>${hapi-version}</version>
-            </dependency>            
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.gazelle</groupId>
+                <artifactId>gazelle-validation-commons-core</artifactId>
+                <version>${ipf-gazelle-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.gazelle</groupId>
+                <artifactId>gazelle-validation-profiles-core</artifactId>
+                <version>${ipf-gazelle-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.gazelle</groupId>
+                <artifactId>gazelle-validation-profiles-iti-pixpdq</artifactId>
+                <version>${ipf-gazelle-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.gazelle</groupId>
+                <artifactId>gazelle-validation-profiles-iti-pcd</artifactId>
+                <version>${ipf-gazelle-version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-core</artifactId>
@@ -441,10 +457,10 @@
                 <artifactId>camel-cxf</artifactId>
                 <version>${camel-version}</version>
                 <exclusions>
-                     <exclusion>
-                          <groupId>javax.activation</groupId>
-                          <artifactId>activation</artifactId>
-                     </exclusion>
+                    <exclusion>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -475,8 +491,8 @@
                 <version>${camel-version}</version>
                 <exclusions>
                     <exclusion>
-                         <groupId>org.apache.geronimo.specs</groupId>
-                         <artifactId>geronimo-servlet_2.5_spec</artifactId>
+                        <groupId>org.apache.geronimo.specs</groupId>
+                        <artifactId>geronimo-servlet_2.5_spec</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.eclipse.jetty</groupId>
@@ -589,11 +605,11 @@
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-transports-http-jetty</artifactId>
-                <version>${cxf-version}</version>             
+                <version>${cxf-version}</version>
                 <exclusions>
                     <exclusion>
-                         <groupId>org.apache.geronimo.specs</groupId>
-                         <artifactId>geronimo-servlet_2.5_spec</artifactId>
+                        <groupId>org.apache.geronimo.specs</groupId>
+                        <artifactId>geronimo-servlet_2.5_spec</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -631,17 +647,17 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
                 <version>${spring-version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>				
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
-                <version>${spring-version}</version>				
+                <version>${spring-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -652,12 +668,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
                 <version>${spring-version}</version>
-            </dependency>        
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-orm</artifactId>
                 <version>${spring-version}</version>
-            </dependency>        
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jdbc</artifactId>
@@ -672,12 +688,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
                 <version>${spring-version}</version>
-            </dependency>        
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-instrument</artifactId>
                 <version>${spring-version}</version>
-            </dependency>        
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
@@ -705,18 +721,18 @@
                         <artifactId>org.springframework.aop</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>        
+            </dependency>
             <dependency>
                 <groupId>org.springframework.osgi</groupId>
                 <artifactId>spring-osgi-extender</artifactId>
                 <version>${spring-osgi-version}</version>
-            </dependency>        
+            </dependency>
             <dependency>
                 <groupId>org.springframework.osgi</groupId>
                 <artifactId>spring-osgi-mock</artifactId>
                 <version>${spring-osgi-version}</version>
                 <scope>test</scope>
-            </dependency>        
+            </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
@@ -757,7 +773,7 @@
                         <artifactId>hibernate-jpa-2.0-api</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>    
+            </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-commons-annotations</artifactId>
@@ -795,7 +811,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>        
+                <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-jpa_2.0_spec</artifactId>
                 <version>${geronimo-jpa_2.0_spec.version}</version>
             </dependency>
@@ -839,7 +855,7 @@
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>${joda-time-version}</version>
-            </dependency>        
+            </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
@@ -880,12 +896,12 @@
                 <groupId>org.apache.xbean</groupId>
                 <artifactId>xbean-spring</artifactId>
                 <version>${xbean-spring-version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>				
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>
@@ -923,10 +939,10 @@
                 <version>${mdht-version}</version>
             </dependency>
             <dependency>
-                 <groupId>org.openhealthtools.mdht</groupId>
-                 <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
-                 <version>${mdht-version}</version>
-                 <optional>true</optional>
+                <groupId>org.openhealthtools.mdht</groupId>
+                <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
+                <version>${mdht-version}</version>
+                <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>org.openhealthtools.mdht</groupId>
@@ -987,7 +1003,7 @@
                 <artifactId>xmlunit</artifactId>
                 <version>${xmlunit-version}</version>
                 <scope>test</scope>
-            </dependency>			
+            </dependency>
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib-nodep</artifactId>
@@ -1026,7 +1042,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <pluginManagement>
             <plugins>
@@ -1084,7 +1100,8 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>${bundle-plugin-version}</version>  <configuration>
+                    <version>${bundle-plugin-version}</version>
+                    <configuration>
                         <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
                     </configuration>
                     <extensions>true</extensions>
@@ -1141,27 +1158,27 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin-version}</version>
                 <configuration>
-					<compilerId>groovy-eclipse-compiler</compilerId>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
                     <source>1.6</source>
                     <target>1.6</target>
-					<fork>true</fork>
-					<verbose>false</verbose>
-					<compilerArguments>
-						<javaAgentClass>lombok.core.Agent</javaAgentClass>
-					</compilerArguments>
+                    <fork>true</fork>
+                    <verbose>false</verbose>
+                    <compilerArguments>
+                        <javaAgentClass>lombok.core.Agent</javaAgentClass>
+                    </compilerArguments>
                 </configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.groovy</groupId>
-						<artifactId>groovy-eclipse-compiler</artifactId>
-						<version>${groovy-eclipse-compiler-version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.projectlombok</groupId>
-						<artifactId>lombok</artifactId>
-						<version>${lombok-version}</version>
-					</dependency>					
-				</dependencies>				
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>${groovy-eclipse-compiler-version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                        <version>${lombok-version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1183,17 +1200,17 @@
                 <version>${resources-plugin-version}</version>
             </plugin>
             <plugin>
-              <artifactId>maven-jar-plugin</artifactId>
-              <configuration>
-                <archive>  
-                  <manifestFile>META-INF/MANIFEST.MF</manifestFile>
-                </archive> 
-                <excludes>
-                    <!-- Do not include the .groovy files, that are declared as resources, in the binaries -->    
-                    <exclude>**/*.groovy</exclude>
-                </excludes>
-              </configuration>
-            </plugin>  
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                    <excludes>
+                        <!-- Do not include the .groovy files, that are declared as resources, in the binaries -->
+                        <exclude>**/*.groovy</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>${sources-plugin-version}</version>
@@ -1253,23 +1270,23 @@
                     <execution>
                         <id>bundle-manifest</id>
                         <phase>process-classes</phase>
-                        <goals>    
+                        <goals>
                             <goal>manifest</goal>
-                        </goals>   
+                        </goals>
                     </execution>
                     <execution>
                         <id>bundle-install</id>
                         <phase>install</phase>
-                        <goals>    
+                        <goals>
                             <goal>install</goal>
-                        </goals>   
+                        </goals>
                     </execution>
                     <execution>
                         <id>bundle-deploy</id>
                         <phase>deploy</phase>
-                        <goals>    
+                        <goals>
                             <goal>deploy</goal>
-                        </goals>   
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -1301,7 +1318,7 @@
                     <classpathContainers>
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
                     </classpathContainers>
-                 </configuration>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -1339,9 +1356,9 @@
                 <directory>src/main/resources</directory>
             </resource>
             <resource>
-                 <!-- This seems to be the only way to add the .groovy source files --> 
-                 <!-- in src/main/groovy to the Eclipse build path. -->
-                 <!-- The source files have to be excluded binaries explicitly (see maven-jar-plugin config). -->
+                <!-- This seems to be the only way to add the .groovy source files -->
+                <!-- in src/main/groovy to the Eclipse build path. -->
+                <!-- The source files have to be excluded binaries explicitly (see maven-jar-plugin config). -->
                 <directory>src/main/groovy</directory>
             </resource>
             <resource>
@@ -1360,7 +1377,7 @@
             </testResource>
         </testResources>
     </build>
-   
+
     <reporting>
         <plugins>
             <plugin>
@@ -1369,7 +1386,7 @@
                 <inherited>false</inherited>
                 <configuration>
                     <links>
-						<link>http://java.sun.com/javase/7/docs/api/</link>
+                        <link>http://java.sun.com/javase/7/docs/api/</link>
                         <link>http://java.sun.com/javase/6/docs/api/</link>
                         <link>http://java.sun.com/javaee/5/docs/api/</link>
                         <link>http://hl7api.sourceforge.net/apidocs/</link>
@@ -1434,7 +1451,7 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-    
+
     <repositories>
         <repository>
             <id>openehealth.releases</id>

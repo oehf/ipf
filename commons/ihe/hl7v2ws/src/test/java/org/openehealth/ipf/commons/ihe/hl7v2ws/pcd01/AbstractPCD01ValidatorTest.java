@@ -18,7 +18,17 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make;
 
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.HapiContext;
+import ca.uhn.hl7v2.parser.Parser;
+import ca.uhn.hl7v2.validation.DefaultValidationExceptionHandler;
+import ca.uhn.hl7v2.validation.ReportingValidationExceptionHandler;
+import ca.uhn.hl7v2.validation.ValidationExceptionHandler;
+import ca.uhn.hl7v2.validation.Validator;
+import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
 import org.junit.Before;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
+import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 
 import ca.uhn.hl7v2.model.AbstractMessage;
@@ -26,28 +36,36 @@ import ca.uhn.hl7v2.model.v26.message.ORU_R01;
 
 /**
  * @author Mitko Kolev
- *
  */
 public abstract class AbstractPCD01ValidatorTest {
 
-    protected MessageAdapter<ORU_R01> maximumMessage;
-    
-    private Pcd01Validator validator = new Pcd01Validator();
+    private HapiContext hapiContext = HapiContextFactory.createHapiContext(PcdTransactions.PCD1);
+    private Parser p = hapiContext.getPipeParser();
 
-    public Pcd01Validator getValidator(){
-        return validator;
+    protected MessageAdapter<ORU_R01> maximumMessage;
+
+
+    public Validator getValidator() {
+        return hapiContext.getMessageValidator();
     }
-    
+
+    public Parser getParser() {
+        return hapiContext.getPipeParser();
+    }
+
     @Before
-    public void setUp(){
-        maximumMessage = load("pcd01/valid-pcd01-MaximumRequest2.hl7");
+    public void setUp() {
+        maximumMessage = load(getParser(), "pcd01/valid-pcd01-MaximumRequest2.hl7");
     }
-    
-    protected MessageAdapter<ORU_R01> maxMsgReplace(String whatToReplace, String replacement){
-        return make(maximumMessage.toString().replace(whatToReplace, replacement));
-     }
-    protected <T extends AbstractMessage> void validate (MessageAdapter<T> message){
-        getValidator().validate(message);
-     }   
-    
+
+    protected MessageAdapter<ORU_R01> maxMsgReplace(String whatToReplace, String replacement) {
+        return make(getParser(), maximumMessage.toString().replace(whatToReplace, replacement));
+    }
+
+    protected <T extends AbstractMessage> void validate(MessageAdapter<T> message) throws HL7Exception {
+        SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(hapiContext);
+        getValidator().validate(message.getHapiMessage(), handler);
+        if (handler.hasFailed()) throw new HL7Exception("Validation has failed", handler.getExceptions().get(0));
+    }
+
 }

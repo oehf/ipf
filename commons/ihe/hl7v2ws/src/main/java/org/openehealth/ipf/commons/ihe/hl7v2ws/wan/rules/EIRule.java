@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.uhn.hl7v2.Location;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.EI;
@@ -24,28 +26,26 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * 
+ * @author Christian Ohr
  */
 public class EIRule extends AbstractCompositeTypeRule<EI> {
-
-    private static final long serialVersionUID = -9200002672506824129L;
 
     public EIRule() {
         super(EI.class);
     }
 
     @Override
-    public void validate(EI ei, String path, Collection<ValidationException> violations) {
-        mustBeNonEmpty(ei, 1, path, violations);
-        
-        // Either EI-2 or both EI-3 and EI-4 shall be non-empty.
+    public ValidationException[] validate(EI ei, Location location) {
+        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        validate(enforce(not(empty()), ei, 1), location, violations);
         if (isEmpty(ei, 2)) {
-            mustBeNonEmpty(ei, 3, path, violations);
-            mustBeNonEmpty(ei, 4, path, violations);
+            validate(enforce(not(empty()), ei, 3), location, violations);
+            validate(enforce(not(empty()), ei, 4), location, violations);
         }
-        if (isEmpty(ei, 3) && isEmpty(ei, 4)) {
-            mustBeNonEmpty(ei, 2, path, violations);
+        if (isEmpty(ei, 3) || isEmpty(ei, 4)) {
+            validate(enforce(not(empty()), ei, 2), location, violations);
         }
+        return violations.toArray(new ValidationException[violations.size()]);
     }
    
     @Override

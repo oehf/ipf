@@ -32,14 +32,13 @@ import ca.uhn.hl7v2.validation.impl.RuleSupport;
  */
 public abstract class CompositeTypeRule<T extends Composite> extends BuilderSupport implements Rule<Composite>  {
 
-    private static final long serialVersionUID = -8277252874737667192L;
 
     /**
      * Returns if the rule should check the given class.
      * 
      * @return a class instance.
      */
-    public abstract boolean appliesFor(Class<? extends Composite> clazz);
+    public abstract boolean matches(Class<? extends Composite> clazz);
 
     public abstract ValidationException[] apply(T composite, Location location);
 

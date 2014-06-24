@@ -30,7 +30,6 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * 
  */
 public class XTNRule extends AbstractCompositeTypeRule<XTN> {
-    private static final long serialVersionUID = -4439680501220366330L;
 
     public XTNRule() {
         super(XTN.class);
@@ -44,16 +43,11 @@ public class XTNRule extends AbstractCompositeTypeRule<XTN> {
     @Override
     public ValidationException[] validate(XTN xtn, Location location) {
         Collection<ValidationException> violations = new ArrayList<ValidationException>();
-        potentialViolation(enforce(allOf(not(empty()), in("PRN", "NET")), xtn, 2), location, violations);
-        potentialViolation(enforce(not(empty()), xtn, 3), location, violations);
+        validate(enforce(allOf(not(empty()), in("PRN", "NET")), xtn, 2), location, violations);
+        validate(enforce(not(empty()), xtn, 3), location, violations);
         if (isEqual("NET", xtn, 2)) {
-            potentialViolation(enforce(in("X.400", "Internet"), xtn, 3), location, violations);
+            validate(enforce(in("X.400", "Internet"), xtn, 3), location, violations);
         }
         return violations.toArray(new ValidationException[violations.size()]);
-    }
-
-    @Override
-    public String getDescription() {
-        return "XTM composite type rule";
     }
 }

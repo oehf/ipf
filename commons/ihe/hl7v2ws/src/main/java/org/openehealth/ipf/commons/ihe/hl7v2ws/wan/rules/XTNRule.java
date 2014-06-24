@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.uhn.hl7v2.Location;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.XTN;
@@ -24,38 +26,29 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * 
+ * @author Christian Ohr
  */
 public class XTNRule extends AbstractCompositeTypeRule<XTN> {
-
-    private static final long serialVersionUID = -2689901635637437625L;
 
     public XTNRule() {
         super(XTN.class);
     }
 
     @Override
-    public void validate(XTN xtn, String path, Collection<ValidationException> violations) {
-        mustBeNonEmpty(xtn, 2, path, violations);
-        mustBeNonEmpty(xtn, 3, path, violations);
-
-        String[] allowed2 = new String[] { "PRN", "NET" };
-        mustBeOneOf(allowed2, xtn, 2, path, violations);
-
-        if (isEqual(allowed2[0], xtn, 2)) {
-            mustBeEqualTo("PH", xtn, 3, path, violations);
+    public ValidationException[] validate(XTN xtn, Location location) {
+        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        validate(enforce(allOf(not(empty()), in("PRN", "NET")), xtn, 2), location, violations);
+        validate(enforce(not(empty()), xtn, 3), location, violations);
+        if (isEqual("NET", xtn, 2)) {
+            validate(enforce(in("X.400", "Internet"), xtn, 3), location, violations);
         }
-        if (isEqual(allowed2[1], xtn, 2)) {
-            mustBeOneOf(new String[] { "X.400", "Internet" }, xtn, 3, path, violations);
+        if (isEqual("PRN", xtn, 2)) {
+            validate(enforce(isEqual("PH"), xtn, 3), location, violations);
         }
-
         if (!isEmpty(xtn, 4)) {
-            String val = val(xtn, 4).toString();
-            if (!val.contains("@")) {
-                violations.add(new ValidationException(msg("expected valid email address, found "
-                                + String.valueOf(val), xtn, 4, path)));
-            }
+            validate(enforce(matches(".*@.*"), xtn, 4), location, violations);
         }
+        return violations.toArray(new ValidationException[violations.size()]);
     }
 
     @Override

@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.uhn.hl7v2.Location;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.NA;
@@ -24,19 +26,19 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * 
+ * @author Christian Ohr
  */
 public class NARule extends AbstractCompositeTypeRule<NA> {
-
-    private static final long serialVersionUID = 6024938536050294035L;
 
     public NARule() {
         super(NA.class);
     }
 
     @Override
-    public void validate(NA na, String path, Collection<ValidationException> violations) {
-        mustBeNonEmpty(na, 1, path, violations);
+    public ValidationException[] validate(NA na, Location location) {
+        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        validate(enforce(not(empty()), na, 1), location, violations);
+        return violations.toArray(new ValidationException[violations.size()]);
     }
 
     @Override

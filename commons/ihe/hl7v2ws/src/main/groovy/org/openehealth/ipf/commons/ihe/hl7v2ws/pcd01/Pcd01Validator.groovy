@@ -15,6 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01
 
+import ca.uhn.hl7v2.Version
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.validation.ValidationContext
+import ca.uhn.hl7v2.validation.ValidationException
+import ca.uhn.hl7v2.validation.builder.support.DefaultValidationWithoutTNBuilder
+import ca.uhn.hl7v2.validation.impl.AbstractMessageRule
+import ca.uhn.hl7v2.validation.impl.ValidationContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.AbstractMessageAdapterValidator
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CNERule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CWERule
@@ -102,9 +109,66 @@ class Pcd01Validator extends AbstractMessageAdapterValidator {
     Map<String, Map<String, String>> getRules(){
         return RULES
     }
-   
-    DefaultValidationContext getValidationContext(){
-       PCD01_CONTEXT
+
+    /**
+     * This bridges HAPI message validation to the custom-built validation rules. In a later version,
+     * the validation rules should be expressed using HAPI ValidationBuilders
+     * @return
+     */
+    public ValidationContext getValidationContext() {
+        //adds default primitive checks
+        return ValidationContextFactory.fromBuilder(new DefaultValidationWithoutTNBuilder() {
+            @Override
+            protected void configure() {
+                super.configure()
+                forAllVersions().message().all().test(new AbstractMessageRule() {
+                    @Override
+                    ValidationException[] apply(Message msg) {
+                        validate(new MessageAdapter(msg))
+                        return new ValidationException[0]
+                    }
+                })
+                forVersion(Version.V26)
+                    .message('ORU', 'R01')
+                    .abstractSyntax('MSH',
+                        [  {  'SFT'  }  ],
+                        {PATIENT_RESULT(
+                                [PATIENT(
+                                        'PID',
+                                        [  'PD1'  ],
+                                        [  {  'NTE'  }  ],
+                                        [  {  'NK1'  }  ],
+                                        [VISIT(
+                                                'PV1',
+                                                [  'PV2'  ]
+                                        )]
+                                )],
+                                {ORDER_OBSERVATION(
+                                        [  'ORC'  ],
+                                        'OBR',
+                                        [{  'NTE'  }],
+                                        [{TIMING_QTY(
+                                                'TQ1',
+                                                [{  'TQ2'  }]
+                                        )}],
+
+                                        [  'CTD'  ],
+                                        [{OBSERVATION(
+                                                'OBX',
+                                                [  {  'NTE'  }  ]
+                                        )}],
+
+                                        [{  'FT1'  }],
+                                        [{  'CTI'  }],
+                                        [{SPECIMEN(
+                                                'SPM',
+                                                [{  'OBX'  }]
+                                        )}]
+                                )}
+                        )},
+                        [ 'DSC' ])
+            }
+        })
     }
 
    

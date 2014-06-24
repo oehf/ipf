@@ -26,11 +26,9 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * @author Chrustian Ohr
+ * @author Christian Ohr
  */
 public class XPNRule extends AbstractCompositeTypeRule<XPN> {
-
-    private static final long serialVersionUID = 8151972073853015127L;
 
     public XPNRule() {
         super(XPN.class);
@@ -39,13 +37,8 @@ public class XPNRule extends AbstractCompositeTypeRule<XPN> {
     @Override
     public ValidationException[] validate(XPN xpn, Location location) {
         Collection<ValidationException> violations = new ArrayList<ValidationException>();
-        potentialViolation(enforce(not(empty()), xpn, 7), location, violations);
+        validate(enforce(not(empty()), xpn, 7), location, violations);
         return violations.toArray(new ValidationException[violations.size()]);
-    }
-
-    @Override
-    public String getDescription() {
-        return "XPN composite type rule";
     }
 
     @Override

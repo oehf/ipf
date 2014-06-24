@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.model
 
+import ca.uhn.hl7v2.validation.ValidationException
 import ca.uhn.hl7v2.validation.impl.AbstractMessageRule
 
 
@@ -25,17 +26,17 @@ import ca.uhn.hl7v2.validation.impl.AbstractMessageRule
  */
 public class ClosureRuleSupport {
 
-     ClosureRuleSupport(Closure testClosure) {
+     ClosureRuleSupport(Closure<ValidationException[]> testClosure) {
          this("", "", testClosure)
      }
      
-     ClosureRuleSupport(String description, String sectionReference, Closure testClosure) {
+     ClosureRuleSupport(String description, String sectionReference, Closure<ValidationException[]> testClosure) {
          this.testClosure = testClosure
          this.description = description
          this.sectionReference = sectionReference
      }
 
-     Closure testClosure
+     Closure<ValidationException[]> testClosure
      String sectionReference
      String description   
     

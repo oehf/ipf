@@ -18,15 +18,14 @@ package org.openehealth.ipf.commons.ihe.hl7v2.definitions;
 import java.util.Collections;
 import java.util.Map;
 
-import ca.uhn.hl7v2.DefaultHapiContext;
-import ca.uhn.hl7v2.HapiContext;
-import ca.uhn.hl7v2.validation.ValidationContext;
-import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
-
+import ca.uhn.hl7v2.Version;
 import ca.uhn.hl7v2.parser.Parser;
+import ca.uhn.hl7v2.parser.PipeParser;
+import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
 
 /**
  * Utilities to work with custom HAPI class definitions.
+ *
  * @author Dmytro Rud
  */
 public class CustomModelClassUtils {
@@ -39,35 +38,19 @@ public class CustomModelClassUtils {
      * Creates a class factory for the given transaction and HL7 version.
      */
     public static CustomModelClassFactory createFactory(String transaction, String version) {
-        String packageName = new StringBuilder()
-            .append(CustomModelClassUtils.class.getPackage().getName())
-            .append('.')
-            .append(transaction)
-            .append(".v")
-            .append(version.replace(".", ""))
-            .toString();
-        Map<String, String[]> map = Collections.singletonMap(version, new String[] {packageName});
+        String packageName = String.format("%s.%s.%s",
+                CustomModelClassUtils.class.getPackage().getName(),
+                transaction,
+                Version.versionOf(version).getPackageVersion());
+        Map<String, String[]> map = Collections.singletonMap(version, new String[]{packageName});
         return new CustomModelClassFactory(map);
     }
-    
+
     /**
      * Creates a parser for the given transaction and HL7 version.
      */
     public static Parser createParser(String transaction, String version) {
-        return createHapiContext(transaction, version).getPipeParser();
+        return new PipeParser(createFactory(transaction, version));
     }
 
-    /**
-     * Creates a parser for the given transaction and HL7 version.
-     */
-    public static HapiContext createHapiContext(String transaction, String version) {
-        CustomModelClassFactory factory = createFactory(transaction, version);
-        return new DefaultHapiContext(factory);
-    }
-
-    public static HapiContext createHapiContext(String transaction, String version, ValidationContext validationContext) {
-        HapiContext context = createHapiContext(transaction, version);
-        context.setValidationContext(validationContext);
-        return context;
-    }
 }

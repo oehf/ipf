@@ -17,11 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
 import javax.xml.namespace.QName;
 
-import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.ErrorCode;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsComponent;
@@ -57,7 +58,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
             new String[] {"*"},
             null,
             null,
-            new DefaultHapiContext());
+            HapiContextFactory.createHapiContext(PcdTransactions.PCD1));
 
     private static final NakFactory NAK_FACTORY = new NakFactory(HL7V2_CONFIG, false, "ACK^R01^ACK");
 

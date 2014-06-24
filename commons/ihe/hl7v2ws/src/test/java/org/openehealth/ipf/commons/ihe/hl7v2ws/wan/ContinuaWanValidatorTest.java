@@ -17,70 +17,71 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws.wan;
 
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 
+import ca.uhn.hl7v2.model.v26.message.ACK;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01ValidatorTest;
 
 import ca.uhn.hl7v2.HL7Exception;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 
 /**
  * @author Mitko Kolev
  * 
  */
+@Ignore
 public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
     ContinuaWanValidator validator = new ContinuaWanValidator();
 
-    public ContinuaWanValidator getValidator() {
-        return validator;
-    }
 
     @Test
-    public void testOximeterMessage() {
+    public void testOximeterMessage() throws HL7Exception {
         validate(load("wan/valid-oximeter-continua-wan.hl7v2"));
     }
     
     @Test
-    public void testWeightScaleMessage() {
+    public void testWeightScaleMessage() throws HL7Exception {
         validate(load("wan/valid-scale-continua-wan.hl7v2"));
     }
     
     @Test
-    public void testBPMessage() {
+    public void testBPMessage() throws HL7Exception {
         validate(load("wan/valid-bp-continua-wan.hl7v2"));
     }
 
     @Test
-    public void testFitnessMessage() {
+    public void testFitnessMessage() throws HL7Exception {
         validate(load("wan/valid-fitness-continua-wan.hl7v2"));
     }
     @Test
-    public void testFitnessAndActivityMessage() {
+    public void testFitnessAndActivityMessage() throws HL7Exception {
         validate(load("wan/valid-fitness-and-activity-continua-wan.hl7v2"));
     }
 
     @Test
-    public void testThermometerMessage() {
+    public void testThermometerMessage() throws HL7Exception {
         validate(load("wan/valid-thermometer-continua-wan.hl7v2"));
     }
     
     @Test
-    public void testGlucoseMessage() {
+    public void testGlucoseMessage() throws HL7Exception {
         validate(load("wan/valid-glucose-continua-wan.hl7v2"));
     }
     
     @Test
-    public void testResponseMessage() {
+    public void testResponseMessage() throws HL7Exception {
         validate(load("wan/valid-wan-response.hl7v2"));
     }
     
     @Test(expected=ValidationException.class)
-    public void testResponseMessage2() {
+    public void testResponseMessage2() throws HL7Exception {
+        MessageAdapter<ACK> rsp2 = load(getParser(), "pcd01/valid-pcd01-response2.hl7v2");
         validate(rsp2);
     }
     
     @Test(expected=ValidationException.class)
-    public void testInvalidResponseMessage() {
+    public void testInvalidResponseMessage() throws HL7Exception {
         validate(load("wan/invalid-wan-response.hl7v2"));
     }
     
@@ -90,7 +91,7 @@ public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
     }
 
     @Test(expected = HL7Exception.class)
-    public void testInvalidGlucoseMessage() {
+    public void testInvalidGlucoseMessage() throws HL7Exception {
         // When OBX-5 is filled, obx-2 mus not be null. The message can not be parsed.
         // The default obx-2 type must be set with the system property
         // DEFAULT_OBX2_TYPE_PROP

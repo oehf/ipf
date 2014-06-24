@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.uhn.hl7v2.Location;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.CX;
@@ -24,20 +26,20 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * 
+ * @author Christian Ohr
  */
 public class CXRule extends AbstractCompositeTypeRule<CX> {
-
-    private static final long serialVersionUID = -2458721983593718344L;
 
     public CXRule() {
         super(CX.class);
     }
 
     @Override
-    public void validate(CX cx, String path, Collection<ValidationException> violations) {
-        mustBeNonEmpty(cx, 1, path, violations);
-        mustBeNonEmpty(cx, 4, path, violations);
+    public ValidationException[] validate(CX cx, Location location) {
+        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        validate(enforce(not(empty()), cx, 1), location, violations);
+        validate(enforce(not(empty()), cx, 4), location, violations);
+        return violations.toArray(new ValidationException[violations.size()]);
     }
 
     @Override

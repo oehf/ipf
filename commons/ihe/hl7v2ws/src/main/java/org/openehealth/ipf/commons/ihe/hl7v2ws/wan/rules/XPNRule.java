@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import ca.uhn.hl7v2.Location;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.XPN;
@@ -24,19 +26,19 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * 
+ * @author Christian Ohr
  */
 public class XPNRule extends AbstractCompositeTypeRule<XPN> {
-    
-    private static final long serialVersionUID = 7651829451910080004L;
 
     public XPNRule() {
         super(XPN.class);
     }
 
     @Override
-    public void validate(XPN xpn, String path, Collection<ValidationException> violations) {
-        mustBeNonEmpty(xpn, 7, path, violations);
+    public ValidationException[] validate(XPN xpn, Location location) {
+        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        validate(enforce(not(empty()), xpn, 7), location, violations);
+        return violations.toArray(new ValidationException[violations.size()]);
     }
    
     @Override

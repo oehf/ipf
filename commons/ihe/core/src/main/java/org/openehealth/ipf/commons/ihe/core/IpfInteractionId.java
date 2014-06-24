@@ -20,6 +20,7 @@ package org.openehealth.ipf.commons.ihe.core;
  * @author Dmytro Rud
  */
 public enum IpfInteractionId implements InteractionId {
+
     ITI_8,
     ITI_9,
     ITI_10,

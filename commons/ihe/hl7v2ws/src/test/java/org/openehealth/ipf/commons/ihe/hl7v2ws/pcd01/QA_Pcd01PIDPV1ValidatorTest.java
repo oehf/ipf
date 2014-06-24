@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 
+import ca.uhn.hl7v2.HL7Exception;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 
@@ -26,53 +27,53 @@ public class QA_Pcd01PIDPV1ValidatorTest extends AbstractPCD01ValidatorTest {
 
     // ################ PID Segment tests ###############################
 
-    @Test(expected = ValidationException.class)
-    public void testMissingPID3() {
+    @Test(expected = HL7Exception.class)
+    public void testMissingPID3() throws HL7Exception {
         validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
                                ""));
     }
 
-    @Test(expected = ValidationException.class)
-    public void testSpaceAsPID3() {
+    @Test(expected = HL7Exception.class)
+    public void testSpaceAsPID3() throws HL7Exception {
         validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
                                " "));
     }
 
-    @Test(expected = ValidationException.class)
-    public void testMissingPID3_1() {
+    @Test(expected = HL7Exception.class)
+    public void testMissingPID3_1() throws HL7Exception {
         validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
                                "^^^Imaginary Hospital&1.3.4.565&ISO^PI"));
     }
 
-    @Test(expected = ValidationException.class)
-    public void testMissingPID34_1_2_3() {
+    @Test(expected = HL7Exception.class)
+    public void testMissingPID34_1_2_3() throws HL7Exception {
         validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
                                "111222333444"));
     }
 
-    @Test(expected = ValidationException.class)
-    public void testMissingPID34_1_2() {
+    @Test(expected = HL7Exception.class)
+    public void testMissingPID34_1_2() throws HL7Exception {
         validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
                                "111222333444^^^ISO"));
     }
 
-    @Test(expected = ValidationException.class)
-    public void testMissingPID5() {
+    @Test(expected = HL7Exception.class)
+    public void testMissingPID5() throws HL7Exception {
         validate(maxMsgReplace("Doe^John^Joseph", ""));
     }
 
     @Test
-    public void testMissingPID5_1() {
+    public void testMissingPID5_1() throws HL7Exception {
         validate(maxMsgReplace("Doe^John^Joseph", "^John^Joseph"));
     }
 
     @Test
-    public void testMissingPID5_2_3() {
+    public void testMissingPID5_2_3() throws HL7Exception {
         validate(maxMsgReplace("Doe^John^Joseph", "Doe^^"));
     }
 
-    @Test(expected = ValidationException.class)
-    public void testMissingPV12() {
+    @Test(expected = HL7Exception.class)
+    public void testMissingPV12() throws HL7Exception {
         validate(maxMsgReplace("|I|", "||"));
     }
 

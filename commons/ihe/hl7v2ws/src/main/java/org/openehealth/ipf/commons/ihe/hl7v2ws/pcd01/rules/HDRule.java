@@ -26,11 +26,10 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * @author Chrustian Ohr
+ * @author Christian Ohr
  * 
  */
 public class HDRule extends AbstractCompositeTypeRule<HD> {
-    private static final long serialVersionUID = -9037983867502164173L;
 
     public HDRule() {
         super(HD.class);
@@ -41,17 +40,17 @@ public class HDRule extends AbstractCompositeTypeRule<HD> {
         // Either HD-1 or both HD-2 and HD-3 shall be non-empty
         Collection<ValidationException> violations = new ArrayList<ValidationException>();
         if (isEmpty(hd, 1)) {
-            potentialViolation(enforce(not(empty()), hd, 2), location, violations);
-            potentialViolation(enforce(not(empty()), hd, 3), location, violations);
+            validate(enforce(not(empty()), hd, 2), location, violations);
+            validate(enforce(not(empty()), hd, 3), location, violations);
             if (isEqual("ISO", hd, 3)) {
-                potentialViolation(enforce(oid(), hd, 2), location, violations);
+                validate(enforce(oid(), hd, 2), location, violations);
             }
             if (isEqual("EUI-64", hd, 3)) {
-                potentialViolation(enforce((matches(EUI_64_PATTERN)), hd, 2), location, violations);
+                validate(enforce((matches(EUI_64_PATTERN)), hd, 2), location, violations);
             }
         }
         if (isEmpty(hd, 2) || isEmpty(hd, 3)) {
-            potentialViolation(enforce(not(empty()), hd, 1), location, violations);
+            validate(enforce(not(empty()), hd, 1), location, violations);
         }
         return violations.toArray(new ValidationException[violations.size()]);
     }
@@ -61,8 +60,4 @@ public class HDRule extends AbstractCompositeTypeRule<HD> {
         return "PCD Rev. 2, Vol. 2 App C.6";
     }
 
-    @Override
-    public String getDescription() {
-        return "HD composite type rule";
-    }
 }

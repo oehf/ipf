@@ -51,6 +51,11 @@
             <artifactId>ipf-platform-camel-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>gazelle-validation-profiles-pcd</artifactId>
+            <version>${ipf-gazelle-version}</version>
+        </dependency>
      
         <!-- Dependencies for test -->
         <dependency>

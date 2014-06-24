@@ -15,22 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti9;
 
-import ca.uhn.hl7v2.AcknowledgmentCode;
+import java.util.Collections;
+import java.util.List;
+
 import ca.uhn.hl7v2.ErrorCode;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
-
-import java.util.Collections;
-import java.util.List;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.*;
 
 /**
  * Camel component for ITI-9 (PIX Query).
@@ -50,8 +47,10 @@ public class Iti9Component extends MllpComponent<QueryAuditDataset> {
                 new String[] {"K23"}, 
                 new boolean[] {true},
                 new boolean[] {false},
-                CustomModelClassUtils.createHapiContext("pix", "2.5", PixPdqCamelValidators.VALIDATOR.getValidationContext()));
-  
+                HapiContextFactory.createHapiContext(
+                        CustomModelClassUtils.createFactory("pix", "2.5"),
+                        PixPdqTransactions.ITI9));
+
     private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY = 
         new Iti9ClientAuditStrategy();
     private static final MllpAuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY = 

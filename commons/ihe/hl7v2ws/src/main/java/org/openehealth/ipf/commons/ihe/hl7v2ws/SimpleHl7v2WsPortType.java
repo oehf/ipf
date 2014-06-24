@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws;
 
 /**
  * Hl7v2 WS endpoint with a single operation.
+ *
  * @author Dmytro Rud
  */
 public interface SimpleHl7v2WsPortType {

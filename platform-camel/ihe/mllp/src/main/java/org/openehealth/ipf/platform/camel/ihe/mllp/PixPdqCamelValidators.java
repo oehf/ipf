@@ -15,11 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp;
 
-import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.hl7v2.MessageAdapterValidator;
+import org.openehealth.ipf.gazelle.validation.profile.ItiPixPdqProfile;
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.platform.camel.hl7.validation.ConformanceProfileValidators;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.iti10.Iti10Component;
 import org.openehealth.ipf.platform.camel.ihe.mllp.iti21.Iti21Component;
@@ -40,26 +42,13 @@ import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.v
 abstract public class PixPdqCamelValidators {
     public static final MessageAdapterValidator VALIDATOR = new MessageAdapterValidator();
 
-    private static final Parser ITI_8_PARSER = Iti8Component.CONFIGURATION.getParser();
-    private static final Parser ITI_9_PARSER = Iti9Component.CONFIGURATION.getParser();
-    private static final Parser ITI_10_PARSER = Iti10Component.CONFIGURATION.getParser();
-    private static final Parser ITI_21_PARSER = Iti21Component.CONFIGURATION.getParser();
-    private static final Parser ITI_22_PARSER = Iti22Component.CONFIGURATION.getParser();
-    private static final Parser ITI_64_PARSER = Iti64Component.CONFIGURATION.getParser();
-
-    private static final Processor ITI_8_VALIDATOR = validatingProcessor(ITI_8_PARSER);
-    private static final Processor ITI_9_VALIDATOR = validatingProcessor(ITI_9_PARSER);
-    private static final Processor ITI_10_VALIDATOR = validatingProcessor(ITI_10_PARSER);
-    private static final Processor ITI_21_VALIDATOR = validatingProcessor(ITI_21_PARSER);
-    private static final Processor ITI_22_VALIDATOR = validatingProcessor(ITI_22_PARSER);
-    private static final Processor ITI_64_VALIDATOR = validatingProcessor(ITI_64_PARSER);
 
     /**
      * Returns a validating processor for ITI-8 request messages
      * (Patient Identity Feed).
      */
     public static Processor iti8RequestValidator() {
-        return ITI_8_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(PixPdqTransactions.ITI8);
     }
 
     /**
@@ -67,7 +56,7 @@ abstract public class PixPdqCamelValidators {
      * (Patient Identity Feed).
      */
     public static Processor iti8ResponseValidator() {
-        return ITI_8_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_8_ACK);
     }
 
     /**
@@ -75,7 +64,7 @@ abstract public class PixPdqCamelValidators {
      * (Patient Identity Query).
      */
     public static Processor iti9RequestValidator() {
-        return ITI_9_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_9_QBP_Q23);
     }
 
     /**
@@ -83,7 +72,7 @@ abstract public class PixPdqCamelValidators {
      * (Patient Identity Query).
      */
     public static Processor iti9ResponseValidator() {
-        return ITI_9_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_9_RSP_K23);
     }
 
     /**
@@ -91,7 +80,7 @@ abstract public class PixPdqCamelValidators {
      * (PIX Update Notification).
      */
     public static Processor iti10RequestValidator() {
-        return ITI_10_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_10_ADT_A31);
     }
 
     /**
@@ -99,7 +88,7 @@ abstract public class PixPdqCamelValidators {
      * (PIX Update Notification).
      */
     public static Processor iti10ResponseValidator() {
-        return ITI_10_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_10_ACK);
     }
 
     /**
@@ -107,7 +96,7 @@ abstract public class PixPdqCamelValidators {
      * (Patient Demographics Query).
      */
     public static Processor iti21RequestValidator() {
-        return ITI_21_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_21_QBP_Q22);
     }
 
     /**
@@ -115,7 +104,7 @@ abstract public class PixPdqCamelValidators {
      * (Patient Demographics Query).
      */
     public static Processor iti21ResponseValidator() {
-        return ITI_21_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_21_RSP_K22);
     }
 
     /**
@@ -123,7 +112,7 @@ abstract public class PixPdqCamelValidators {
      * (Patient Demographics and Visit Query).
      */
     public static Processor iti22RequestValidator() {
-        return ITI_22_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_22_QBP_ZV1);
     }
 
     /**
@@ -131,7 +120,7 @@ abstract public class PixPdqCamelValidators {
      * (Patient Demographics and Visit Query).
      */
     public static Processor iti22ResponseValidator() {
-        return ITI_22_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_22_RSP_ZV2);
     }
 
     /**
@@ -139,7 +128,7 @@ abstract public class PixPdqCamelValidators {
      * (XAD-PID Change Management).
      */
     public static Processor iti64RequestValidator() {
-        return ITI_64_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_64_ADT_A43);
     }
 
     /**
@@ -147,7 +136,7 @@ abstract public class PixPdqCamelValidators {
      * (XAD-PID Change Management).
      */
     public static Processor iti64ResponseValidator() {
-        return ITI_64_VALIDATOR;
+        return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_64_ACK_A43);
     }
 
 
@@ -156,34 +145,10 @@ abstract public class PixPdqCamelValidators {
      * in the Validation Rules in the message's HapiContext
      */
     public static Processor validatingProcessor() {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                if (validationEnabled(exchange)) {
-                    Message msg = Hl7v2MarshalUtils.extractMessage(
-                            exchange.getIn(),
-                            exchange.getProperty(Exchange.CHARSET_NAME, String.class),
-                            null);
-                    msg.getParser().getHapiContext().getMessageValidator().validate(msg);
-                }
-            }
-        };
+        return ConformanceProfileValidators.validatingProcessor();
     }
 
-    private static Processor validatingProcessor(final Parser parser) {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                if (validationEnabled(exchange)) {
-                    MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
-                            exchange.getIn(),
-                            exchange.getProperty(Exchange.CHARSET_NAME, String.class),
-                            parser);
-                    VALIDATOR.validate(msg, null);
-                }
-            }
-        };
-    }
+
 
 
 }

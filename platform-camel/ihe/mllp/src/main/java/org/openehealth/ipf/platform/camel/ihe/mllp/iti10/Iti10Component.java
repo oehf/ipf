@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti10;
 
-import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.ErrorCode;
 import org.apache.camel.CamelContext;
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
@@ -43,7 +43,7 @@ public class Iti10Component extends MllpComponent<QueryAuditDataset> {
                 new String[] {"*"}, 
                 new boolean[] {true},
                 new boolean[] {false},
-                new DefaultHapiContext(PixPdqCamelValidators.VALIDATOR.getValidationContext()));
+                HapiContextFactory.createHapiContext(PixPdqTransactions.ITI10));
   
     private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY = 
         new Iti10ClientAuditStrategy();
