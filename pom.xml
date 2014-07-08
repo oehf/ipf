@@ -45,6 +45,7 @@
         <eclipse-plugin-version>2.8</eclipse-plugin-version>
         <enforcer-plugin-version>1.2</enforcer-plugin-version>
         <groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
+        <groovy-eclipse-batch-version>2.1.8-01</groovy-eclipse-batch-version>
         <jar-plugin-version>2.3.1</jar-plugin-version>
         <javadoc-plugin-version>2.9</javadoc-plugin-version>
         <jaxb-plugin-version>1.5</jaxb-plugin-version>
@@ -292,12 +293,12 @@
                 <groupId>commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>${commons-httpclient-version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>				
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>                
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
@@ -631,17 +632,17 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
                 <version>${spring-version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>				
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>                
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
-                <version>${spring-version}</version>				
+                <version>${spring-version}</version>                
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -880,12 +881,12 @@
                 <groupId>org.apache.xbean</groupId>
                 <artifactId>xbean-spring</artifactId>
                 <version>${xbean-spring-version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>				
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>
@@ -987,7 +988,7 @@
                 <artifactId>xmlunit</artifactId>
                 <version>${xmlunit-version}</version>
                 <scope>test</scope>
-            </dependency>			
+            </dependency>            
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib-nodep</artifactId>
@@ -1141,27 +1142,32 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin-version}</version>
                 <configuration>
-					<compilerId>groovy-eclipse-compiler</compilerId>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
                     <source>1.6</source>
                     <target>1.6</target>
-					<fork>true</fork>
-					<verbose>false</verbose>
-					<compilerArguments>
-						<javaAgentClass>lombok.core.Agent</javaAgentClass>
-					</compilerArguments>
+                    <fork>true</fork>
+                    <verbose>false</verbose>
+                    <compilerArguments>
+                        <javaAgentClass>lombok.core.Agent</javaAgentClass>
+                    </compilerArguments>
                 </configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.groovy</groupId>
-						<artifactId>groovy-eclipse-compiler</artifactId>
-						<version>${groovy-eclipse-compiler-version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.projectlombok</groupId>
-						<artifactId>lombok</artifactId>
-						<version>${lombok-version}</version>
-					</dependency>					
-				</dependencies>				
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>${groovy-eclipse-compiler-version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>${groovy-eclipse-batch-version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                        <version>${lombok-version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1369,7 +1375,7 @@
                 <inherited>false</inherited>
                 <configuration>
                     <links>
-						<link>http://java.sun.com/javase/7/docs/api/</link>
+                        <link>http://java.sun.com/javase/7/docs/api/</link>
                         <link>http://java.sun.com/javase/6/docs/api/</link>
                         <link>http://java.sun.com/javaee/5/docs/api/</link>
                         <link>http://hl7api.sourceforge.net/apidocs/</link>
