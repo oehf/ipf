@@ -2,7 +2,7 @@
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>${groupId}</groupId>
@@ -14,14 +14,14 @@
     <properties>
         <!-- libraries -->
         <ipf-version>${archetypeVersion}</ipf-version>
-        <groovy-version>2.1.6</groovy-version>
+        <lombok-version>1.12.6</lombok-version>
 
         <!-- plugins -->
-        <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
+        <assembly-plugin-version>2.4</assembly-plugin-version>
         <compiler-plugin-version>3.0</compiler-plugin-version>
         <eclipse-plugin-version>2.8</eclipse-plugin-version>
+        <groovy-eclipse-batch-version>2.1.8-01</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
-        <lombok-version>1.12.2</lombok-version>
     </properties>
 
     <dependencyManagement>
@@ -89,6 +89,11 @@
 						</compilerArguments>
 	                </configuration>
 					<dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-eclipse-batch</artifactId>
+                            <version>${symbol_dollar}{groovy-eclipse-batch-version}</version>
+                        </dependency>
 						<dependency>
 							<groupId>org.codehaus.groovy</groupId>
 							<artifactId>groovy-eclipse-compiler</artifactId>
