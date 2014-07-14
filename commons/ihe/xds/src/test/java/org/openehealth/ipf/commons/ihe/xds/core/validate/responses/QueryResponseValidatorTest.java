@@ -107,7 +107,13 @@ public class QueryResponseValidatorTest {
         response.getReferences().add(new ObjectReference());        
         expectFailure(MISSING_OBJ_REF);
     }
-    
+
+    @Test
+    public void testValidateDocumentEntryHasInvalidAvailabilityStatus() {
+        docEntry.setAvailabilityStatus(AvailabilityStatus.SUBMITTED);
+        expectFailure(DOC_ENTRY_INVALID_AVAILABILITY_STATUS);
+    }
+
     private void expectFailure(ValidationMessage expectedMessage) {
         expectFailure(expectedMessage, transformer.toEbXML(response));
     }
