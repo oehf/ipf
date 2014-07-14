@@ -27,8 +27,7 @@ public class Iti41ClientAuditStrategy extends Iti41AuditStrategy {
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "EventOutcomeCode",
         "ServiceEndpointUrl",
-        "SubmissionSetUuid",
-        "PatientId"};
+        "SubmissionSetUuid"};
 
     
     /**
