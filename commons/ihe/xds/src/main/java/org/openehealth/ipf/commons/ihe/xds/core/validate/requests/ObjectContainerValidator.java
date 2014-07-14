@@ -208,10 +208,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
             runValidations(docEntry, documentEntrySlotValidators(profile));
 
-            AvailabilityStatus status = docEntry.getStatus();
-            if (status != null) {
-                metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.DEPRECATED,
-                        DOC_ENTRY_INVALID_AVAILABILITY_STATUS, status);
+            if (profile.isQuery()) {
+                AvailabilityStatus status = docEntry.getStatus();
+                if (status != null) {
+                    metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.DEPRECATED,
+                            DOC_ENTRY_INVALID_AVAILABILITY_STATUS, status);
+                }
             }
 
             LocalizedString name = docEntry.getName();

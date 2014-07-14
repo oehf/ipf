@@ -87,12 +87,6 @@ public class SubmitObjectsRequestValidatorTest {
     }
 
     @Test
-    public void testValidateDocumentEntryHasInvalidAvailabilityStatus() {
-        docEntry.setAvailabilityStatus(AvailabilityStatus.SUBMITTED);
-        expectFailure(DOC_ENTRY_INVALID_AVAILABILITY_STATUS);
-    }
-    
-    @Test
     public void testValidateExactlyOneSubmissionSetMustExist() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         EbXMLRegistryPackage regPackage = factory.createRegistryPackage("lol", ebXML.getObjectLibrary());
@@ -494,10 +488,6 @@ public class SubmitObjectsRequestValidatorTest {
 
     private void expectFailure(ValidationMessage expectedMessage) {
         expectFailure(expectedMessage, transformer.toEbXML(request));
-    }
-
-    private void expectFailure(ValidationMessage expectedMessage, ValidationProfile profile) {
-        expectFailure(expectedMessage, transformer.toEbXML(request), profile);
     }
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest ebXML) {
