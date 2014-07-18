@@ -67,7 +67,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     private final boolean allowIncompleteAudit;
 
     private final SSLContext sslContext;
-    private final List<Hl7v2Interceptor> customInterceptors;
+    private final String[] customInterceptorBeans;
     private final ClientAuthType clientAuthType;
     private final String[] sslProtocols;
     private final String[] sslCiphers;
@@ -82,8 +82,6 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     private final UnsolicitedFragmentationStorage unsolicitedFragmentationStorage;
     private final boolean autoCancel;
 
-    private List<Hl7v2Interceptor> consumerInterceptorChain;
-    private List<Hl7v2Interceptor> producerInterceptorChain;
 
     /**
      * Constructor.
@@ -99,8 +97,8 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      *      the SSL context to use; {@code null} if secure communication is not used.
      * @param clientAuthType
      *      type of desired client authentication (NONE/WANT/MUST).
-     * @param customInterceptors
-     *      the interceptors defined in the endpoint URI.
+     * @param customInterceptorBeans
+     *      names of interceptor beans defined in the endpoint URI.
      * @param sslProtocols
      *      the protocols defined in the endpoint URI or {@code null} if none were specified.
      * @param sslCiphers
@@ -132,7 +130,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
             boolean allowIncompleteAudit,
             SSLContext sslContext,
             ClientAuthType clientAuthType,
-            List<Hl7v2Interceptor> customInterceptors,
+            String[] customInterceptorBeans,
             String[] sslProtocols,
             String[] sslCiphers,
             boolean supportInteractiveContinuation,
@@ -147,7 +145,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     {
         Validate.notNull(mllpComponent);
         Validate.notNull(wrappedEndpoint);
-        Validate.noNullElements(customInterceptors);
+        Validate.noNullElements(customInterceptorBeans);
         Validate.notNull(clientAuthType);
 
         this.mllpComponent = mllpComponent;
@@ -156,7 +154,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
         this.allowIncompleteAudit = allowIncompleteAudit;
         this.sslContext = sslContext;
         this.clientAuthType = clientAuthType;
-        this.customInterceptors = customInterceptors;
+        this.customInterceptorBeans = customInterceptorBeans;
         this.sslProtocols = sslProtocols;
         this.sslCiphers = sslCiphers;
 
@@ -172,63 +170,68 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     }
 
 
-    private synchronized List<Hl7v2Interceptor> getConsumerInterceptorChain() {
-        if (consumerInterceptorChain == null) {
-            // set up initial interceptor chain
-            List<Hl7v2Interceptor> initialChain = new ArrayList<Hl7v2Interceptor>();
-            initialChain.add(new ConsumerStringProcessingInterceptor());
-            if (isSupportUnsolicitedFragmentation()) {
-                initialChain.add(new ConsumerRequestDefragmenterInterceptor());
-            }
-            initialChain.add(new ConsumerMarshalInterceptor());
-            initialChain.add(new ConsumerRequestAcceptanceInterceptor());
-            if (isSupportInteractiveContinuation()) {
-                initialChain.add(new ConsumerInteractiveResponseSenderInterceptor());
-            }
-            if (isAudit()) {
-                initialChain.add(new ConsumerAuditInterceptor<T>());
-            }
-            initialChain.add(new ConsumerResponseAcceptanceInterceptor());
-            initialChain.add(new ConsumerAdaptingInterceptor(getCharsetName()));
-            if (isAudit()) {
-                initialChain.add(new ConsumerAuthenticationFailureInterceptor());
-            }
-
-            // add interceptors provided by the user
-            List<Hl7v2Interceptor> additionalInterceptors =
-                    new ArrayList<Hl7v2Interceptor>(mllpComponent.getAdditionalConsumerInterceptors());
-            additionalInterceptors.addAll(customInterceptors);
-            consumerInterceptorChain = ChainUtils.createChain(initialChain, additionalInterceptors);
+    private synchronized List<Hl7v2Interceptor> getCustomInterceptors() {
+        List<Hl7v2Interceptor> result = new ArrayList<Hl7v2Interceptor>();
+        for (String beanName : customInterceptorBeans) {
+            result.add(getCamelContext().getRegistry().lookupByNameAndType(beanName, Hl7v2Interceptor.class));
         }
-        return consumerInterceptorChain;
+        return result;
     }
 
 
-    private synchronized List<Hl7v2Interceptor> getProducerInterceptorChain() {
-        if (producerInterceptorChain == null) {
-            // set up initial interceptor chain
-            List<Hl7v2Interceptor> initialChain = new ArrayList<Hl7v2Interceptor>();
-            initialChain.add(new ProducerStringProcessingInterceptor());
-            if (isSupportUnsolicitedFragmentation()) {
-                initialChain.add(new ProducerRequestFragmenterInterceptor());
-            }
-            initialChain.add(isSupportInteractiveContinuation()
-                    ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor()
-                    : new ProducerMarshalInterceptor());
-            initialChain.add(new ProducerResponseAcceptanceInterceptor());
-            if (isAudit()) {
-                initialChain.add(new ProducerAuditInterceptor<T>());
-            }
-            initialChain.add(new ProducerRequestAcceptanceInterceptor());
-            initialChain.add(new ProducerAdaptingInterceptor());
-
-            // add interceptors provided by the user
-            List<Hl7v2Interceptor> additionalInterceptors =
-                    new ArrayList<Hl7v2Interceptor>(mllpComponent.getAdditionalProducerInterceptors());
-            additionalInterceptors.addAll(customInterceptors);
-            producerInterceptorChain = ChainUtils.createChain(initialChain, additionalInterceptors);
+    private List<Hl7v2Interceptor> getConsumerInterceptorChain() {
+        // set up initial interceptor chain
+        List<Hl7v2Interceptor> initialChain = new ArrayList<Hl7v2Interceptor>();
+        initialChain.add(new ConsumerStringProcessingInterceptor());
+        if (isSupportUnsolicitedFragmentation()) {
+            initialChain.add(new ConsumerRequestDefragmenterInterceptor());
         }
-        return producerInterceptorChain;
+        initialChain.add(new ConsumerMarshalInterceptor());
+        initialChain.add(new ConsumerRequestAcceptanceInterceptor());
+        if (isSupportInteractiveContinuation()) {
+            initialChain.add(new ConsumerInteractiveResponseSenderInterceptor());
+        }
+        if (isAudit()) {
+            initialChain.add(new ConsumerAuditInterceptor<T>());
+        }
+        initialChain.add(new ConsumerResponseAcceptanceInterceptor());
+        initialChain.add(new ConsumerAdaptingInterceptor(getCharsetName()));
+        if (isAudit()) {
+            initialChain.add(new ConsumerAuthenticationFailureInterceptor());
+        }
+
+        // add interceptors provided by the user
+        List<Hl7v2Interceptor> additionalInterceptors = new ArrayList<Hl7v2Interceptor>();
+        additionalInterceptors.addAll(mllpComponent.getAdditionalConsumerInterceptors());
+        additionalInterceptors.addAll(getCustomInterceptors());
+
+        return ChainUtils.createChain(initialChain, additionalInterceptors);
+    }
+
+
+    private List<Hl7v2Interceptor> getProducerInterceptorChain() {
+        // set up initial interceptor chain
+        List<Hl7v2Interceptor> initialChain = new ArrayList<Hl7v2Interceptor>();
+        initialChain.add(new ProducerStringProcessingInterceptor());
+        if (isSupportUnsolicitedFragmentation()) {
+            initialChain.add(new ProducerRequestFragmenterInterceptor());
+        }
+        initialChain.add(isSupportInteractiveContinuation()
+                ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor()
+                : new ProducerMarshalInterceptor());
+        initialChain.add(new ProducerResponseAcceptanceInterceptor());
+        if (isAudit()) {
+            initialChain.add(new ProducerAuditInterceptor<T>());
+        }
+        initialChain.add(new ProducerRequestAcceptanceInterceptor());
+        initialChain.add(new ProducerAdaptingInterceptor());
+
+        // add interceptors provided by the user
+        List<Hl7v2Interceptor> additionalInterceptors = new ArrayList<Hl7v2Interceptor>();
+        additionalInterceptors.addAll(mllpComponent.getAdditionalProducerInterceptors());
+        additionalInterceptors.addAll(getCustomInterceptors());
+
+        return ChainUtils.createChain(initialChain, additionalInterceptors);
     }
 
 
@@ -513,18 +516,11 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     }
 
     /**
-     * @return the customInterceptors
+     * @return the customInterceptors as array of bean names.
      */
-    public List<Hl7v2Interceptor> getCustomInterceptors() {
-        return customInterceptors;
-    }
-
-    /**
-     * @return the customInterceptors as array of string names
-     */
-    @ManagedAttribute(description = "Custom Interceptors")
-    public String[] getCustomInterceptorsList() {
-        return toStringArray(getCustomInterceptors());
+    @ManagedAttribute(description = "Custom Interceptor Beans")
+    public String[] getCustomInterceptorBeans() {
+        return this.customInterceptorBeans;
     }
 
     private String[] toStringArray(List<?> list) {
