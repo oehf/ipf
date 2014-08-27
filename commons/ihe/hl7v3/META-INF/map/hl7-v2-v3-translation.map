@@ -49,12 +49,17 @@ mappings = {
         'M': 'M',               // married
         'S': 'S',               // never married AKA single
         'W': 'W',               // widowed
-        (ELSE) : ''             // A=annuled, I=interlocutory, P=polygamic, T=domestic partner
+        'I': 'I',               // interlocuraty
+        'A': 'N',               // annulled
+        'T': 'P',               // domestic partner
+        'P': 'O',               // polygamic
+        (ELSE) : ''             // unknown stuff
     )
 
     // patient religious affiliation v3 -> v2
     'hl7v2v3-patient-religiousAffiliation'(
-        (ELSE): { it }
+        (ELSE): { it },
+        { it }: (ELSE)
     )
 
     // v3: 2.16.840.1.113883.5.1100

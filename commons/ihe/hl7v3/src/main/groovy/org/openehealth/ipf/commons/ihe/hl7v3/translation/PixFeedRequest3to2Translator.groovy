@@ -213,7 +213,14 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         // PID-7..8
         grp.PID[7][1].value = dropTimeZone(person.birthTime.@value.text())
         grp.PID[8].value    = person.administrativeGenderCode.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
-        
+
+        if (person.raceCode) {
+            for (race in person.raceCode) {
+                def pid10 = nextRepetition(grp.PID[10])
+                pid10[1].value = race.@code.text()
+            }
+        }
+
         // PID-11 = addresses
         for (address in person.addr) {
             def pid11 = nextRepetition(grp.PID[11])
@@ -283,6 +290,19 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         // PID-16..                
         grp.PID[16] = person.maritalStatusCode.@code.text().map('hl7v2v3-patient-maritalStatus')
         grp.PID[17] = person.religiousAffiliationCode.@code.text().map('hl7v2v3-patient-religiousAffiliation')
+
+        if (person.ethnicGroupCode) {
+            for (ethnicGroup in person.ethnicGroupCode) {
+                def pid22 = nextRepetition(grp.PID[22])
+                pid22[1].value = ethnicGroup.@code.text()
+            }
+        }
+
+        grp.PID[24].value   = person.multipleBirthInd?.@value == 'true' ? 'Y' : ''
+        grp.PID[25].value= person.multipleBirthOrderNumber?.@value
+
+        grp.PID[30].value   = person.deceasedInd?.@value == 'true' ? 'Y' : ''
+        grp.PID[29][1].value= person.deceasedTime?.@value
 
         // Segment PV1
         grp.PV1[2] = 'O'
