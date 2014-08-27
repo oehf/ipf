@@ -50,6 +50,7 @@
                 <city>WALTON</city>
                 <streetAddressLine>2 TITUS PLACE</streetAddressLine>
               </addr>
+              <maritalStatusCode code="S"/>
             </patientPerson>
             <providerOrganization classCode="ORG" determinerCode="INSTANCE">
               <id root="1.2.3" />
