@@ -86,11 +86,6 @@
                   <id root="1.3.6.1.4.1.21367.2005.1.2" />
                 </scopingOrganization>
               </asOtherIDs>
-              <birthPlace classCode="BIRTHPL">
-                  <birthplace classCode="CITY" determinerCode="INSTANCE">
-                    <name>Racine</name>
-                  </birthplace>
-              </birthPlace>
             </patientPerson>
             <subjectOf1>
               <queryMatchObservation classCode="COND" moodCode="EVN">
