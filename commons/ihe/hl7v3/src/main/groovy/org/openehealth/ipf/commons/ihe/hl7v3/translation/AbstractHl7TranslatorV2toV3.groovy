@@ -93,7 +93,6 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
         String religiousAffiliation = (pid[17].value ?: '').mapReverse('hl7v2v3-patient-religiousAffiliation')
         boolean multipleBirthIndicator = 'Y'.equals(pid[24].value)
         boolean deceasedIndicator = 'Y'.equals(pid[30].value)
-        String citizenship = pid[26].value
 
         if (gender)
             builder.administrativeGenderCode(code: gender)
@@ -138,6 +137,17 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
             }
         }
 
+        def pid26collection = pid[26]()
+        if (pid26collection) {
+            for (pid26 in pid26collection) {
+                builder.asCitizen(classCode: 'CIT') {
+                    politicalNation(classCode: 'NAT', determinerCode: 'INSTANCE') {
+                        code(code: pid26[1].value)
+                    }
+                }
+            }
+        }
+
         def pid4collection = pid[4]()
         if (pid4collection) {
             builder.asOtherIDs(classCode: 'PAT') {
@@ -159,14 +169,16 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
             }
         }
 
-        if (citizenship) {
-            builder.asCitizen(classCode: 'CIT') {
-                politicalNation(classCode: 'NAT', determinerCode: 'INSTANCE') {
-                    code(code:citizenship)
+    }
+
+    void createBirthPlaceElement(MarkupBuilder builder, SegmentAdapter pid) {
+        if (pid[23].value) {
+            builder.birthPlace(classCode: 'BIRTHPL') {
+                birthplace(classCode: 'CITY', determinerCode: 'INSTANCE') {
+                    name(pid[23].value)
                 }
             }
         }
-
     }
 
     /**

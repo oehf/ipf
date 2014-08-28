@@ -133,6 +133,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                                                         }
                                                     }
                                                 }
+                                                createBirthPlaceElement(builder, qr.PID)
                                             }
                                             subjectOf1 {
                                                 createQueryMatchObservation(builder, qr)

@@ -40,7 +40,6 @@
 
         <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient/hl7:patientPerson">
             <sch:assert test="not(hl7:asPatientOfOtherProvider)">asPatientOfOtherProvider must be omitted</sch:assert>
-            <sch:assert test="not(hl7:birthPlace)">birthPlace must be omitted</sch:assert>
             <sch:assert test="not(hl7:guarantorRole)">guarantorRole must be omitted</sch:assert>
             <sch:assert test="not(hl7:guardian)">guardian must be omitted</sch:assert>
             <sch:assert test="not(hl7:contactParty)">contactParty must be omitted</sch:assert>
