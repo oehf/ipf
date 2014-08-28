@@ -81,6 +81,11 @@
         	<raceCode code="1004-2"/>
         	<ethnicGroupCode code="2178-2"/>
         	<ethnicGroupCode code="2178-3"/>
+              <asCitizen classCode="CIT">
+                  <politicalNation classCode="NAT" determinerCode="INSTANCE">
+                      <code code="US"/>
+                  </politicalNation>
+              </asCitizen>
               <asOtherIDs classCode="PAT">
                 <id root="2.16.840.1.113883.4.1" extension="100-09-1234"/>
                 <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
@@ -101,6 +106,11 @@
                   </name>
                 </relationshipHolder1>
               </personalRelationship>
+                <birthPlace classCode="BIRTHPL">
+                    <birthplace classCode="CITY" determinerCode="INSTANCE">
+                        <name>Chicago</name>
+                    </birthplace>
+                </birthPlace>
             </patientPerson>
             <providerOrganization classCode="ORG" determinerCode="INSTANCE">
               <id root="1.2.840.114350.1.13.99998.8734"/>

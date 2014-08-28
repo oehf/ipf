@@ -298,8 +298,19 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             }
         }
 
-        grp.PID[24].value   = person.multipleBirthInd?.@value == 'true' ? 'Y' : ''
-        grp.PID[25].value= person.multipleBirthOrderNumber?.@value
+        if (person.birthPlace) {
+            grp.PID[23].value = person.birthPlace.birthplace.name.text()
+        }
+
+        grp.PID[24].value = person.multipleBirthInd?.@value == 'true' ? 'Y' : ''
+        grp.PID[25].value = person.multipleBirthOrderNumber?.@value.text()
+
+        if (person.asCitizen) {
+            for (citizen in person.asCitizen) {
+                def pid26 = nextRepetition(grp.PID[26])
+                pid26[1].value = citizen.politicalNation.code.@code.text()
+            }
+        }
 
         grp.PID[30].value   = person.deceasedInd?.@value == 'true' ? 'Y' : ''
         grp.PID[29][1].value= person.deceasedTime?.@value
