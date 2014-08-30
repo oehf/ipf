@@ -102,6 +102,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         set.setUniqueId("uniqueId");
         set.setContentTypeCode(createCode(6));
         set.setSourceId("sourceId");
+        set.setLimitedMetadata(true);
         set.getIntendedRecipients().add(new Recipient(createOrganization(20), createPerson(22), null));
         set.getIntendedRecipients().add(new Recipient(createOrganization(21), null, null));
         set.getIntendedRecipients().add(new Recipient(null, createPerson(23), null));
@@ -151,7 +152,6 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         classification = assertClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, ebXML, 0, "code 6", 6);
         assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 6");
         
-        
         assertExternalIdentifier(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, ebXML,
                 "id 3^^^&uni 3&uniType 3", SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID);
 
@@ -160,8 +160,10 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
 
         assertExternalIdentifier(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, ebXML,
                 "sourceId", SUBMISSION_SET_LOCALIZED_STRING_SOURCE_ID);
-        
-        assertEquals(3, ebXML.getClassifications().size());
+
+        assertClassification(SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME, ebXML, 0, null, 0);
+
+        assertEquals(4, ebXML.getClassifications().size());
         assertEquals(2, ebXML.getSlots().size());
         assertEquals(3, ebXML.getExternalIdentifiers().size());
     }

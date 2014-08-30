@@ -125,6 +125,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.getEventCodeList().add(createCode(9));
         documentEntry.setRepositoryUniqueId("repo1");
         documentEntry.setDocumentAvailability(DocumentAvailability.ONLINE);
+        documentEntry.setLimitedMetadata(true);
 
         documentEntry.getReferenceIdList().add(new ReferenceId(
                 "ref-id-11", new AssigningAuthority("1.1.2.3"),
@@ -223,8 +224,10 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
 
         assertExternalIdentifier(DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, ebXML, 
                 "uniqueId", DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID);
-        
-        assertEquals(11, ebXML.getClassifications().size());
+
+        assertClassification(DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME, ebXML, 0, null, 0);
+
+        assertEquals(12, ebXML.getClassifications().size());
         assertEquals(13, ebXML.getSlots().size());
         assertEquals(2, ebXML.getExternalIdentifiers().size());
     }
@@ -250,14 +253,12 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertEquals(0, ebXML.getClassifications().size());
         assertEquals(0, ebXML.getExternalIdentifiers().size());
     }
-    
-    
-    
+
     @Test
     public void testFromEbXML() {
         EbXMLExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);
         DocumentEntry result = transformer.fromEbXML(ebXML);
-        
+
         assertNotNull(result);
         assertEquals(documentEntry, result);
     }
