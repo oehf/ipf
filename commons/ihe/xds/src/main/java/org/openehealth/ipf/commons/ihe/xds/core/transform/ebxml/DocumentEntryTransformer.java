@@ -185,6 +185,9 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         for (EbXMLClassification code : extrinsic.getClassifications(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME)) {
             eventCodeList.add(codeTransformer.fromEbXML(code));
         }
+
+        List<EbXMLClassification> limitedMetadata = extrinsic.getClassifications(DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME);
+        docEntry.setLimitedMetadata(! limitedMetadata.isEmpty());
     }
 
     @Override
@@ -219,6 +222,11 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         for (Code eventCode : docEntry.getEventCodeList()) {
             EbXMLClassification event = codeTransformer.toEbXML(eventCode, objectLibrary);
             extrinsic.addClassification(event, DOC_ENTRY_EVENT_CODE_CLASS_SCHEME);
+        }
+
+        if (docEntry.isLimitedMetadata()) {
+            EbXMLClassification classification = factory.createClassification(objectLibrary);
+            extrinsic.addClassification(classification, DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME);
         }
     }
 }

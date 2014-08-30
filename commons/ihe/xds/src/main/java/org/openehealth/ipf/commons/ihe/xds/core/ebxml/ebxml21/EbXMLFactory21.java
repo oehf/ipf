@@ -61,20 +61,23 @@ public class EbXMLFactory21 implements EbXMLFactory {
         addObjToLib(Vocabulary.DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, lib);
         addObjToLib(Vocabulary.DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME, lib);
         addObjToLib(Vocabulary.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, lib);
+        addObjToLib(Vocabulary.DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME, lib);
         addObjToLib(Vocabulary.DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME, lib);
         addObjToLib(Vocabulary.DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, lib);
         addObjToLib(Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, lib);
-        addObjToLib(Vocabulary.DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, lib); 
-        
+        addObjToLib(Vocabulary.DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, lib);
+
         addObjToLib(Vocabulary.FOLDER_CLASS_NODE, lib);         
-        addObjToLib(Vocabulary.FOLDER_CODE_LIST_CLASS_SCHEME, lib);         
-        addObjToLib(Vocabulary.FOLDER_PATIENT_ID_EXTERNAL_ID, lib);         
+        addObjToLib(Vocabulary.FOLDER_CODE_LIST_CLASS_SCHEME, lib);
+        addObjToLib(Vocabulary.FOLDER_LIMITED_METADATA_CLASS_SCHEME, lib);
+        addObjToLib(Vocabulary.FOLDER_PATIENT_ID_EXTERNAL_ID, lib);
         addObjToLib(Vocabulary.FOLDER_UNIQUE_ID_EXTERNAL_ID, lib);
         
         addObjToLib(Vocabulary.SUBMISSION_SET_CLASS_NODE, lib);         
         addObjToLib(Vocabulary.SUBMISSION_SET_AUTHOR_CLASS_SCHEME, lib);         
-        addObjToLib(Vocabulary.SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, lib);         
-        addObjToLib(Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, lib);                 
+        addObjToLib(Vocabulary.SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, lib);
+        addObjToLib(Vocabulary.SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME, lib);
+        addObjToLib(Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, lib);
         addObjToLib(Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, lib);                 
         addObjToLib(Vocabulary.SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, lib);
         

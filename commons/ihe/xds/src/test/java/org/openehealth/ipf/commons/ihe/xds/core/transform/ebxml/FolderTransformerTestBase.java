@@ -62,6 +62,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         folder.setUniqueId("uniqueId");
         folder.getCodeList().add(createCode(6));
         folder.getCodeList().add(createCode(7));
+        folder.setLimitedMetadata(true);
 
         if (homeAware) {
             folder.setHomeCommunityId("123.456");
@@ -97,8 +98,10 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
 
         assertExternalIdentifier(Vocabulary.FOLDER_UNIQUE_ID_EXTERNAL_ID, ebXML, 
                 "uniqueId", Vocabulary.FOLDER_LOCALIZED_STRING_UNIQUE_ID);
-        
-        assertEquals(2, ebXML.getClassifications().size());
+
+        assertClassification(Vocabulary.FOLDER_LIMITED_METADATA_CLASS_SCHEME, ebXML, 0, null, 0);
+
+        assertEquals(3, ebXML.getClassifications().size());
         assertEquals(1, ebXML.getSlots().size());
         assertEquals(2, ebXML.getExternalIdentifiers().size());
     }
@@ -123,9 +126,6 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         assertEquals(0, ebXML.getClassifications().size());
         assertEquals(0, ebXML.getExternalIdentifiers().size());
     }
-    
-    
-    
     
     @Test
     public void testFromEbXML() {
