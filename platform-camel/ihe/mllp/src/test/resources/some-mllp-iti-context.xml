@@ -32,7 +32,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
     <bean id="routeBuilder" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.SomeMllpItiRouteBuilder"/>
     
-    <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
+    <bean id="hl7codec" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.HL7MLLPCodec">
         <property name="charset" value="iso-8859-1"/>
     </bean>
 

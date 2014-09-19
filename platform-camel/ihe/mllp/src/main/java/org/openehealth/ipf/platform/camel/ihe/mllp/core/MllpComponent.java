@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
-import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina2.Mina2Component;
 import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.apache.camel.spring.GenericBeansException;
@@ -139,11 +138,13 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
                     extractBeanName((String) parameters.get("codec")),
                     ProtocolCodecFactory.class);
         Charset charset = null;
-        try {
-            charset = ((HL7MLLPCodec) codecFactory).getCharset();
-        } catch(ClassCastException cce) {
-            LOG.error("Unsupported HL7 codec factory type " + codecFactory.getClass().getName());
-        }
+        if (codecFactory instanceof org.apache.camel.component.hl7.HL7MLLPCodec) {
+            LOG.warn("org.apache.camel.component.hl7.HL7MLLPCodec leaks memory. Better use " + HL7MLLPCodec.class.getName());
+            charset = ((org.apache.camel.component.hl7.HL7MLLPCodec) codecFactory).getCharset();
+        } else if (codecFactory instanceof HL7MLLPCodec) {
+            charset = ((HL7MLLPCodec)codecFactory).getCharset();
+        } else
+            throw new ClassCastException("Unsupported HL7 codec factory type " + codecFactory.getClass().getName());
         if(charset == null) {
             charset = Charset.defaultCharset();
         }

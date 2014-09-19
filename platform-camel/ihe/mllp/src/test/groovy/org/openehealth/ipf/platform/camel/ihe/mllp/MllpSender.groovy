@@ -16,9 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp
 
 import org.apache.camel.component.mina2.Mina2Configuration
-import org.apache.camel.component.hl7.HL7MLLPCodec
 import org.apache.camel.impl.DefaultCamelContext
 import org.apache.camel.component.mina2.Mina2Component
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.HL7MLLPCodec
 
 final String message =
     'MSH|^~\\&|@1.2.840.114350.1.13.99998.8734||@1.2.840.114350.1.13.99999.4567||20091112115139||ADT^A40|123@52918b99-dc72-4d17-8714-f39b9b6f16e8|P^T|2.3.1\r' +
