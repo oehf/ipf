@@ -306,7 +306,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
 
         if (person.multipleBirthInd?.@value == 'true' || person.multipleBirthOrderNumber?.@value.text()) {
             grp.PID[24].value = 'Y'
-            grp.PID[25][1].value = person.multipleBirthOrderNumber?.@value.text() ?: ''
+            grp.PID[25].value = person.multipleBirthOrderNumber?.@value.text() ?: ''
         } else if (person.multipleBirthInd?.@value == 'false') {
             grp.PID[24].value = 'N'
         }
