@@ -90,23 +90,26 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
 
         String gender = (pid[8].value ?: '').mapReverse('hl7v2v3-bidi-administrativeGender-administrativeGender')
         String maritalStatus = (pid[16].value ?: '').mapReverse('hl7v2v3-patient-maritalStatus')
-        String religiousAffiliation = (pid[17].value ?: '').mapReverse('hl7v2v3-patient-religiousAffiliation')
-        boolean multipleBirthIndicator = 'Y'.equals(pid[24].value)
-        boolean deceasedIndicator = 'Y'.equals(pid[30].value)
+        String religiousAffiliation = pid[17].value ?: ''
 
         if (gender)
             builder.administrativeGenderCode(code: gender)
         if (pid[7][1].value)
             builder.birthTime(value: pid[7][1].value)
-        if (deceasedIndicator) {
+
+        if ('Y'.equals(pid[30].value) || pid[29].value) {
             builder.deceasedInd(value:true)
-            if (pid[29][1].value)
+            if (pid[29].value)
                 builder.deceasedTime(value: pid[29][1].value)
+        } else if ('N'.equals(pid[30].value)) {
+            builder.deceasedInd(value: false)
         }
-        if (multipleBirthIndicator) {
-            builder.multipleBirthInd(value:true)
+        if ('Y'.equals(pid[24].value) || pid[25].value) {
+            builder.multipleBirthInd(value: true)
             if (pid[25].value)
                 builder.multipleBirthOrderNumber(value: pid[25].value)
+        } else if ('N'.equals(pid[24].value)) {
+            builder.multipleBirthInd(value: false)
         }
 
         builder.addr {
@@ -116,6 +119,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
             conditional(builder, 'postalCode', pid11[5].value)
             conditional(builder, 'city', pid11[3].value)
             conditional(builder, 'streetAddressLine', pid11[1].value)
+            conditional(builder, 'streetAddressLine', pid11[2].value)
         }
 
         if (maritalStatus)

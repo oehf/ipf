@@ -56,12 +56,6 @@ mappings = {
         (ELSE) : ''             // unknown stuff
     )
 
-    // patient religious affiliation v3 -> v2
-    'hl7v2v3-patient-religiousAffiliation'(
-        (ELSE): { it },
-        { it }: (ELSE)
-    )
-
     // v3: 2.16.840.1.113883.5.1100
     'hl7v2v3-error-codes'(
         '101' : 'SYN105',

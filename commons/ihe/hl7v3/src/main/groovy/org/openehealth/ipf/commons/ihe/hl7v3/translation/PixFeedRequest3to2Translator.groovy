@@ -224,9 +224,11 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         // PID-11 = addresses
         for (address in person.addr) {
             def pid11 = nextRepetition(grp.PID[11])
-            String streetName  = address.streetAddressLine.text()
+            String streetName  = address.streetAddressLine[0].text()
+            String extraStreetName  = address.streetAddressLine[1]?.text()
             String houseNumber = address.houseNumber.text() 
-            pid11[1].value = houseNumber ? "${streetName} ${houseNumber}" : streetName 
+            pid11[1].value = houseNumber ? "${streetName} ${houseNumber}" : streetName
+            pid11[2].value = extraStreetName
             pid11[3].value = address.city.text()
             pid11[4].value = address.state.text()
             pid11[5].value = address.postalCode.text()
@@ -289,7 +291,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         
         // PID-16..                
         grp.PID[16] = person.maritalStatusCode.@code.text().map('hl7v2v3-patient-maritalStatus')
-        grp.PID[17] = person.religiousAffiliationCode.@code.text().map('hl7v2v3-patient-religiousAffiliation')
+        grp.PID[17] = person.religiousAffiliationCode.@code.text()
 
         if (person.ethnicGroupCode) {
             for (ethnicGroup in person.ethnicGroupCode) {
@@ -302,8 +304,13 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             grp.PID[23].value = person.birthPlace.birthplace.name.text()
         }
 
-        grp.PID[24].value = person.multipleBirthInd?.@value == 'true' ? 'Y' : ''
-        grp.PID[25].value = person.multipleBirthOrderNumber?.@value.text()
+        if (person.multipleBirthInd?.@value == 'true' || person.multipleBirthOrderNumber?.@value.text()) {
+            grp.PID[24].value = 'Y'
+            grp.PID[25][1].value = person.multipleBirthOrderNumber?.@value.text() ?: ''
+        } else if (person.multipleBirthInd?.@value == 'false') {
+            grp.PID[24].value = 'N'
+        }
+
 
         if (person.asCitizen) {
             for (citizen in person.asCitizen) {
@@ -312,8 +319,12 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             }
         }
 
-        grp.PID[30].value   = person.deceasedInd?.@value == 'true' ? 'Y' : ''
-        grp.PID[29][1].value= person.deceasedTime?.@value
+        if (person.deceasedInd?.@value == 'true' || person.deceasedTime?.@value.text()) {
+            grp.PID[30].value = 'Y'
+            grp.PID[29][1].value = person.deceasedTime?.@value.text() ?: ''
+        } else if (person.deceasedInd?.@value == 'false') {
+            grp.PID[24].value = 'N'
+        }
 
         // Segment PV1
         grp.PV1[2] = 'O'
