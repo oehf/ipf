@@ -26,6 +26,7 @@ import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -154,6 +155,9 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
         Endpoint endpoint = super.createEndpoint(uri, remaining, parameters);
         Mina2Endpoint minaEndpoint = (Mina2Endpoint) endpoint;
 
+        List<Hl7v2InterceptorFactory> customInterceptorsFactories = resolveAndRemoveReferenceListParameter(
+                parameters, "interceptorFactories", Hl7v2InterceptorFactory.class);
+
         SSLContext sslContext = secure ? resolveAndRemoveReferenceParameter(
                 parameters, 
                 "sslContext", 
@@ -172,6 +176,7 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
                 sslContext,
                 clientAuthType,
                 extractInterceptorBeanNames(parameters),
+                customInterceptorsFactories,
                 sslProtocols,
                 sslCiphers,
                 supportInteractiveContinuation,
