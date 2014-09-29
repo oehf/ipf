@@ -101,6 +101,8 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      *      type of desired client authentication (NONE/WANT/MUST).
      * @param customInterceptorBeans
      *      names of interceptor beans defined in the endpoint URI.
+     * @param customInterceptorFactories
+     *      names of interceptor factories defined in the endpoint URI.
      * @param sslProtocols
      *      the protocols defined in the endpoint URI or {@code null} if none were specified.
      * @param sslCiphers
