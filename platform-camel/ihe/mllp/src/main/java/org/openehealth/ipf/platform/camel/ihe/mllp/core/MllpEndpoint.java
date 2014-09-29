@@ -33,6 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestAcceptanceInterceptor;
@@ -68,6 +69,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
 
     private final SSLContext sslContext;
     private final String[] customInterceptorBeans;
+    private final List<Hl7v2InterceptorFactory> customInterceptorFactories;
     private final ClientAuthType clientAuthType;
     private final String[] sslProtocols;
     private final String[] sslCiphers;
@@ -131,6 +133,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
             SSLContext sslContext,
             ClientAuthType clientAuthType,
             String[] customInterceptorBeans,
+            List<Hl7v2InterceptorFactory> customInterceptorFactories,
             String[] sslProtocols,
             String[] sslCiphers,
             boolean supportInteractiveContinuation,
@@ -146,6 +149,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
         Validate.notNull(mllpComponent);
         Validate.notNull(wrappedEndpoint);
         Validate.noNullElements(customInterceptorBeans);
+        Validate.noNullElements(customInterceptorFactories);
         Validate.notNull(clientAuthType);
 
         this.mllpComponent = mllpComponent;
@@ -155,6 +159,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
         this.sslContext = sslContext;
         this.clientAuthType = clientAuthType;
         this.customInterceptorBeans = customInterceptorBeans;
+        this.customInterceptorFactories = customInterceptorFactories;
         this.sslProtocols = sslProtocols;
         this.sslCiphers = sslCiphers;
 
@@ -174,6 +179,9 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
         List<Hl7v2Interceptor> result = new ArrayList<Hl7v2Interceptor>();
         for (String beanName : customInterceptorBeans) {
             result.add(getCamelContext().getRegistry().lookupByNameAndType(beanName, Hl7v2Interceptor.class));
+        }
+        for (Hl7v2InterceptorFactory customInterceptorFactory: customInterceptorFactories) {
+            result.add(customInterceptorFactory.getNewInstance());
         }
         return result;
     }
@@ -521,6 +529,21 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     @ManagedAttribute(description = "Custom Interceptor Beans")
     public String[] getCustomInterceptorBeans() {
         return this.customInterceptorBeans;
+    }
+
+    /**
+     * @return the customInterceptorFactories
+     */
+    public List<Hl7v2InterceptorFactory> getCustomInterceptorFactories() {
+        return customInterceptorFactories;
+    }
+
+    /**
+     * @return the customInterceptors as array of string names
+     */
+    @ManagedAttribute(description = "Custom Interceptor Factories")
+    public String[] getCustomInterceptorFactoryList() {
+        return toStringArray(getCustomInterceptorFactories());
     }
 
     private String[] toStringArray(List<?> list) {
