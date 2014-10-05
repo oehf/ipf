@@ -118,6 +118,9 @@ public enum ErrorCode {
     @XmlEnumValue("PartialTransformReplaceNotProcessed") PARTIAL_TRANSFORM_REPLACE_NOT_PROCESSED("PartialTransformReplaceNotProcessed"),
     /** An XDR Recipient queued the document for future manual matching to a patient. */
     @XmlEnumValue("DocumentQueued") DOCUMENT_QUEUED("DocumentQueued"),
+    /** The recipient has rejected this submission because it detected that one of the documents does
+     * not match the metadata or has failed other requirements for the document content. */
+    @XmlEnumValue("InvalidDocumentContent") INVALID_DOCUMENT_CONTENT("InvalidDocumentContent"),
 
     /* --- codes for XCA --- */
     /** A value for the homeCommunityId is not recognized */
