@@ -16,17 +16,18 @@
 
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
+import org.apache.camel.spring.GenericBeansException;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Trivial Hl7v2InterceptorFactory that calls Class.newInstance()
  */
 public class Hl7v2InterceptorFactorySupport<T extends Hl7v2Interceptor> implements Hl7v2InterceptorFactory<T> {
 
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     public Hl7v2InterceptorFactorySupport(Class<T> clazz) {
-        this.clazz = clazz;
+        this.clazz = Validate.notNull(clazz);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class Hl7v2InterceptorFactorySupport<T extends Hl7v2Interceptor> implemen
         try {
             return clazz.newInstance();
         } catch (Exception e) {
-            throw new Hl7v2AdaptingException("Could not create interceptor instance of class" + clazz.getName(), e);
+            throw new GenericBeansException("Could not create interceptor instance of class " + clazz.getName(), e);
         }
     }
 }
