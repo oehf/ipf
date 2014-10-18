@@ -96,6 +96,7 @@
         <mina2-version>2.0.7</mina2-version>
         <oht-atna-version>2.0.0</oht-atna-version>
         <oht-cdar-version>1.1.0-p2</oht-cdar-version>
+        <opensaml-version>2.6.1</opensaml-version>
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.1.7</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
@@ -906,7 +907,7 @@
             <dependency>
                 <groupId>org.openhealthtools.ihe</groupId>
                 <artifactId>org.openhealthtools.ihe.atna.auditor</artifactId>
-                <version>${oht-atna-version}-p2</version>
+                <version>${oht-atna-version}-p3</version>
             </dependency>
             <dependency>
                 <groupId>org.openhealthtools.ihe</groupId>
@@ -946,6 +947,11 @@
                 <artifactId>org.openhealthtools.mdht.uml.cda.ihe</artifactId>
                 <version>${mdht-version}</version>
                 <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml</artifactId>
+                <version>${opensaml-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tomcat</groupId>

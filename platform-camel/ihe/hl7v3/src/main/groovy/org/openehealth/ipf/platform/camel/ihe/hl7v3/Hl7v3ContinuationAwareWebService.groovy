@@ -66,7 +66,7 @@ abstract public class Hl7v3ContinuationAwareWebService
         this.defaultThreshold = endpoint.defaultContinuationThreshold
         this.validation       = endpoint.validationOnContinuation
         this.auditStrategy    = endpoint.manualAudit ?
-            endpoint.component.getServerAuditStrategy(endpoint.allowIncompleteAudit) : null
+            endpoint.component.getServerAuditStrategy() : null
     }
 
 

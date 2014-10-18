@@ -14,7 +14,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <saml:Assertion Version="2.0" IssueInstant="2011-03-29T09:44:41Z" ID="_7d8e48d69047d3c3da278b33b8f13485" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
         <saml:Issuer>demo.com</saml:Issuer>
         <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
@@ -50,5 +50,61 @@
                 <saml:Audience>http://blabla</saml:Audience>
             </saml:AudienceRestriction>
         </saml:Conditions>
+        <saml:AttributeStatement>
+            <saml:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse">
+                <saml:AttributeValue>
+                    <PurposeOfUse xmlns="urn:hl7-org:v3"
+                                  xsi:type="CE"
+                                  code="12"
+                                  codeSystem="1.0.14265.12"
+                                  codeSystemName="ISO 14265 Classification of Purposes for processing personal health information"
+                                  displayName="Law Enforcement"/>
+                </saml:AttributeValue>
+                <saml:AttributeValue>
+                    <Garbage xmlns="urn:hl7-org:xxxx"
+                             xsi:type="ABC"
+                             code="13"
+                             codeSystem="1.0.14265.12"
+                             codeSystemName="ISO 14266"
+                             displayName="Law Enforcement"/>
+                </saml:AttributeValue>
+                <saml:AttributeValue>
+                    <PurposeOfUse xmlns="urn:hl7-org:v3"
+                                  xsi:type="CE"
+                                  code="13"
+                                  codeSystem="1.0.14265.13"
+                                  codeSystemName="ISO 14265 Classification of Purposes for processing personal health information"
+                                  displayName="Law Enforcement"/>
+                </saml:AttributeValue>
+            </saml:Attribute>
+        </saml:AttributeStatement>
+        <saml:AttributeStatement>
+            <saml:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse">
+                <saml:AttributeValue>
+                    <PurposeOfUse xmlns="urn:hl7-org:v3"
+                                  xsi:type="CE"
+                                  code="14"
+                                  codeSystem="1.0.14265.14"
+                                  codeSystemName="ISO 14265 Classification of Purposes for processing personal health information"
+                                  displayName="Law Enforcement"/>
+                </saml:AttributeValue>
+                <saml:AttributeValue>
+                    <PurposeOfUse xmlns="urn:hl7-org:v3"
+                                  xsi:type="CE"
+                                  code="15"
+                                  codeSystem="1.0.14265.15"
+                                  codeSystemName="ISO 14265 Classification of Purposes for processing personal health information"
+                                  displayName="Law Enforcement"/>
+                </saml:AttributeValue>
+                <saml:AttributeValue>
+                    <PurposeOfUse xmlns="urn:hl7-org:v0000"
+                                  xsi:type="CWE"
+                                  code="16"
+                                  codeSystem="1.0.14265.15"
+                                  codeSystemName="ISO 14265 Classification of Purposes for processing personal health information"
+                                  displayName="Law Enforcement"/>
+                </saml:AttributeValue>
+            </saml:Attribute>
+        </saml:AttributeStatement>
     </saml:Assertion>
 </wsse:Security>

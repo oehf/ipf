@@ -24,20 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
  */
 public class Iti41ClientAuditStrategy extends Iti41AuditStrategy {
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "EventOutcomeCode",
-        "ServiceEndpointUrl",
-        "SubmissionSetUuid"};
-
-    
-    /**
-     * Constructs the audit strategy.
-     * @param allowIncompleteAudit
-     *      whether this strategy should allow incomplete audit records
-     *      (parameter initially configurable via endpoint URL).
-     */
-    public Iti41ClientAuditStrategy(boolean allowIncompleteAudit) {
-        super(false, allowIncompleteAudit);
+    public Iti41ClientAuditStrategy() {
+        super(false);
     }
 
     @Override
@@ -47,11 +35,8 @@ public class Iti41ClientAuditStrategy extends Iti41AuditStrategy {
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getUserName(),
                 auditDataset.getSubmissionSetUuid(),
-                auditDataset.getPatientId());
+                auditDataset.getPatientId(),
+                auditDataset.getPurposesOfUse());
     }
 
-    @Override
-    public String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_AUDIT_FIELDS;
-    }
 }

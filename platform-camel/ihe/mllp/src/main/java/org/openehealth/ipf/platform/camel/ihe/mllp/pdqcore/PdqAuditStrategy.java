@@ -32,16 +32,6 @@ public abstract class PdqAuditStrategy extends MllpAuditStrategy<QueryAuditDatas
     }
 
     
-    // patient ID list is obligatory for auditing, but might
-    // be not available in reality -- particularly when search
-    // criteria were not based on patient ID and no patients
-    // have been found
-    @Override
-    public String[] getNecessaryFields(String messageType) {
-        return new String[] { "Payload" };
-    }
-
-
     @Override
     public void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, MessageAdapter<?> msg, Exchange exchange) {
         PdqAuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);

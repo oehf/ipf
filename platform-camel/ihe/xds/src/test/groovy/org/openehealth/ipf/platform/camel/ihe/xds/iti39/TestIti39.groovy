@@ -49,8 +49,9 @@ class TestIti39 extends StandardTestContainer {
             '&outFaultInterceptors=#clientSyncOutLogger'
 
     final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti39service-response"
-    final String SERVICE2_URI = "xca-iti39://localhost:${port}/iti39service2"
-    
+
+    final String SERVICE2_SPLIT_AUDIT_URI = "xca-iti39://localhost:${port}/iti39service2-splitAudit"
+
     static final RetrieveDocumentSet REQUEST = SampleData.createRetrieveDocumentSet()
 
     static final long AWAIT_DELAY = 20 * 1000L
@@ -89,8 +90,7 @@ class TestIti39 extends StandardTestContainer {
         }
 
         // wait for completion of asynchronous routes
-        Iti39TestRouteBuilder routeBuilder = StandardTestContainer.appContext
-                .getBean(Iti39TestRouteBuilder.class)
+        Iti39TestRouteBuilder routeBuilder = appContext.getBean(Iti39TestRouteBuilder.class)
         routeBuilder.countDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
         routeBuilder.asyncCountDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
 
@@ -100,6 +100,20 @@ class TestIti39 extends StandardTestContainer {
         assert auditSender.messages.size() == N * 4
         
         assert ! Iti39TestRouteBuilder.errorOccurred
+    }
+
+    /**
+     * Requested are two documents, received are two as well, but one with a wrong ID.
+     * Per actor, two audit records shall be generated -- one with status SUCCESS and IDs
+     * of delivered documents (one as requested, one unsolicited); another one with
+     * status FAILURE and the ID of the requested, but not delivered document.
+     */
+    @Test
+    void testSplittingAuditRecords() {
+        def requestExchange = new DefaultExchange(camelContext)
+        requestExchange.in.body = REQUEST
+        producerTemplate.send(SERVICE2_SPLIT_AUDIT_URI, requestExchange)
+        assert auditSender.messages.size() == 4
     }
     
     

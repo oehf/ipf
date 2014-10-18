@@ -15,10 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.cxf.wsdl.EndpointReferenceUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
@@ -35,18 +41,41 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
 public class WsAuditDataset extends AuditDataset {
     private static final long serialVersionUID = 7940196804508126576L;
 
-    // event outcome code as defined in RFC 3881
-    private RFC3881EventOutcomeCodes eventOutcomeCode;
-    // request SOAP Body (XML) payload
-    private String requestPayload;
-    // client user ID (WS-Addressing <Reply-To> header)
-    private String userId;
-    // client user name (WS-Security <Username> header)
-    private String userName;
-    // client IP address
-    private String clientIpAddress;
-    // service (i.e. registry or repository) endpoint URL
-    private String serviceEndpointUrl;
+    /**
+     * Event outcome code as defined in RFC 3881.
+     */
+    @Getter @Setter private RFC3881EventOutcomeCodes eventOutcomeCode;
+
+    /**
+     * Request SOAP Body (XML) payload.
+     */
+    @Getter private String requestPayload;
+
+    /**
+     * Client user ID (WS-Addressing &lt;Reply-To&gt; header).
+     */
+    @Setter private String userId;
+
+    /**
+     * Client user name (WS-Security &lt;Username&gt; header).
+     */
+    @Getter @Setter private String userName;
+
+    /**
+     * Client IP address.
+     */
+    @Getter @Setter private String clientIpAddress;
+
+    /**
+     * Service (i.e. registry or repository) endpoint URL.
+     */
+    @Getter @Setter private String serviceEndpointUrl;
+
+    /**
+     * Purposes of use, see ITI TF-2a section 3.20.7.8 and ITI TF-2b section 3.40.4.1.2.3.
+     */
+    @Getter private final List<CodedValueType> purposesOfUse = new ArrayList<CodedValueType>();
+
 
     /**
      * Constructor.
@@ -79,22 +108,6 @@ public class WsAuditDataset extends AuditDataset {
     }
 
     /**
-     * @return request SOAP Body (XML) payload.
-     */
-    public String getRequestPayload() {
-        return requestPayload;
-    }
-
-    /**
-     * Sets the client user ID (WS-Addressing &gt;Reply-To&lt; header).
-     * @param userId
-     *          client user ID (WS-Addressing &gt;Reply-To&lt; header).
-     */
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    /**
      * Returns User ID.
      * <p>
      * When the user ID could not be extracted from WS-Addressing header
@@ -105,70 +118,6 @@ public class WsAuditDataset extends AuditDataset {
      */
     public String getUserId() {
         return (userId != null) ? userId : EndpointReferenceUtils.ANONYMOUS_ADDRESS;
-    }
-
-    /**
-     * Sets the client user name (WS-Security &lt;Username&gt; header).
-     * @param userName
-     *          client user name (WS-Security &lt;Username&gt; header).
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    /**
-     * @return client user name (WS-Security &lt;Username&gt; header).
-     */
-    public String getUserName() {
-        return userName;
-    }
-
-    /**
-     * Sets the client IP address
-     * @param clientIpAddress
-     *          client IP address.
-     */
-    public void setClientIpAddress(String clientIpAddress) {
-        this.clientIpAddress = clientIpAddress;
-    }
-
-    /**
-     * @return client IP address.
-     */
-    public String getClientIpAddress() {
-        return clientIpAddress;
-    }
-
-    /**
-     * Sets the service (i.e. registry or repository) endpoint URL.
-     * @param serviceEntpointUrl
-     *          service (i.e. registry or repository) endpoint URL.
-     */
-    public void setServiceEndpointUrl(String serviceEntpointUrl) {
-        serviceEndpointUrl = serviceEntpointUrl;
-    }
-
-    /**
-     * @return service (i.e. registry or repository) endpoint URL.
-     */
-    public String getServiceEndpointUrl() {
-        return serviceEndpointUrl;
-    }
-
-    /**
-     * @return RFC 3881 event outcome code.
-     */
-    public RFC3881EventOutcomeCodes getEventOutcomeCode() {
-        return eventOutcomeCode;
-    }
-
-    /**
-     * Sets the RFC 3881 event outcome code.
-     * @param eventOutcomeCode
-     *      RFC 3881 event outcome code.
-     */
-    public void setEventOutcomeCode(RFC3881EventOutcomeCodes eventOutcomeCode) {
-        this.eventOutcomeCode = eventOutcomeCode;
     }
 
 }

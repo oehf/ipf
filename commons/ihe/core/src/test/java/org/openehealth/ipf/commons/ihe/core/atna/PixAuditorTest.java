@@ -37,10 +37,12 @@ public class PixAuditorTest extends TestCase {
     private static final String OLD_PATIENT_ID          = "old^^^&1.8.7&ISO";
 
 
+    private MockedSender sender;
 
     @Override
     protected void setUp() throws Exception {
-        super.setUp();
+        sender = new MockedSender();
+        AuditorModuleContext.getContext().setSender(sender);
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
     }
@@ -77,6 +79,7 @@ public class PixAuditorTest extends TestCase {
                 NEW_PATIENT_ID,
                 OLD_PATIENT_ID);
 
+        assertEquals(2, sender.getMessages().size());   // 16
     }
 
 }

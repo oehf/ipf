@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
-import java.util.Set;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
@@ -39,13 +39,8 @@ public abstract class WsAuditStrategy<T extends WsAuditDataset> {
      * Server side is where the response is generated, i.e. asynchronous
      * response receivers must use <code>false</code> here.
      */
-    private boolean serverSide;
+    @Getter @Setter private boolean serverSide;
 
-    /**
-     * Whether this strategy should allow incomplete audit records.
-     */
-    private boolean allowIncompleteAudit;
-    
 
     /**
      * Constructs an audit strategy.
@@ -54,13 +49,9 @@ public abstract class WsAuditStrategy<T extends WsAuditDataset> {
      *      whether this is a server-side or a client-side strategy.
      *      Server side is where the response is generated, i.e. asynchronous
      *      response receivers must use <code>false</code> here.
-     * @param allowIncompleteAudit
-     *      whether this strategy should allow incomplete audit records
-     *      (parameter initially configurable via endpoint URL).
      */
-    public WsAuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+    public WsAuditStrategy(boolean serverSide) {
         setServerSide(serverSide);
-        setAllowIncompleteAudit(allowIncompleteAudit);
     }
     
 
@@ -115,33 +106,12 @@ public abstract class WsAuditStrategy<T extends WsAuditDataset> {
 
     
     /**
-     * Checks whether the audit can be performed and calls {@link #doAudit}  
-     * if the answer is positive. 
-     * <p>
-     * Audit can be performed when all necessary data is present or
-     * when the user allows us to audit with incomplete data,
-     * @see #allowIncompleteAudit
-     * 
+     * Simply calls {@link #doAudit}.
      * @param auditDataset
      *      audit dataset  
-     * @throws Exception
-     *      any exception that occurred during auditing
      */
     public void audit(T auditDataset) throws Exception {
-        Set<String> missing = auditDataset.checkFields(getNecessaryAuditFieldNames(), true);
-        if(! missing.isEmpty()) {
-            StringBuilder sb = new StringBuilder("Missing audit fields: ");
-            for(String fieldName : missing) {
-                sb.append(fieldName).append(", ");
-            }
-            sb.append(isAllowIncompleteAudit() ? 
-                "but incomplete audit is allowed, so we'll perform it." :
-                "auditing not possible.");
-            LOG.error(sb.toString());
-        }
-        if(missing.isEmpty() || isAllowIncompleteAudit()) {
-            doAudit(auditDataset);
-        }
+        doAudit(auditDataset);
     }
 
 
@@ -160,17 +130,7 @@ public abstract class WsAuditStrategy<T extends WsAuditDataset> {
         return true;
     }
 
-    
-    /**
-     * Returns a transaction-specific list of names of fields 
-     * a "complete" audit dataset must contain. 
-     *  
-     * @return
-     *      list of field names as a string array
-     */
-    public abstract String[] getNecessaryAuditFieldNames();
-    
-    
+
     /**
      * Determines which RFC 3881 event outcome code corresponds to the
      * given response POJO.  
@@ -181,38 +141,4 @@ public abstract class WsAuditStrategy<T extends WsAuditDataset> {
      */
     public abstract RFC3881EventOutcomeCodes getEventOutcomeCode(Object response);
     
-
-    /* ----- automatically generated getters and setters ----- */
-
-    /**
-     * Defines whether this is a server-side or a client-side strategy.
-     * @param serverSide
-     *          whether this is a server-side or a client-side strategy.
-     */
-    public void setServerSide(boolean serverSide) {
-        this.serverSide = serverSide;
-    }
-
-    /**
-     * @return whether this is a server-side or a client-side strategy.
-     */
-    public boolean isServerSide() {
-        return serverSide;
-    }
-
-    /**
-     * Defines whether this strategy should allow incomplete audit records.
-     * @param allowIncompleteAudit
-     *          whether this strategy should allow incomplete audit records.
-     */
-    public void setAllowIncompleteAudit(boolean allowIncompleteAudit) {
-        this.allowIncompleteAudit = allowIncompleteAudit;
-    }
-
-    /**
-     * @return whether this strategy should allow incomplete audit records.
-     */
-    public boolean isAllowIncompleteAudit() {
-        return allowIncompleteAudit;
-    }
 }

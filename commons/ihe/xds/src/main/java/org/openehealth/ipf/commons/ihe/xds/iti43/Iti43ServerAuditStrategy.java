@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.iti43;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditStrategy30;
 
 /**
@@ -25,33 +26,26 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditStrategy30
  */
 public class Iti43ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "EventOutcomeCode",
-        "ClientIpAddress",
-        "ServiceEndpointUrl",
-        "DocumentUniqueIds",
-        "RepositoryUniqueIds"};
-
-    
-    public Iti43ServerAuditStrategy(boolean allowIncompleteAudit) {
-        super(true, allowIncompleteAudit);
+    public Iti43ServerAuditStrategy() {
+        super(true);
     }
 
     @Override
     public void doAudit(XdsRetrieveAuditDataset auditDataset) {
-        AuditorManager.getRepositoryAuditor().auditRetrieveDocumentSetEvent(
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getUserId(),
-                auditDataset.getUserName(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getDocumentUniqueIds(),
-                auditDataset.getRepositoryUniqueIds(),
-                auditDataset.getHomeCommunityIds());
+        for (Status status : Status.values()) {
+            if (auditDataset.hasDocuments(status)) {
+                AuditorManager.getRepositoryAuditor().auditRetrieveDocumentSetEvent(
+                        auditDataset.getEventOutcomeCode(status),
+                        auditDataset.getUserId(),
+                        auditDataset.getUserName(),
+                        auditDataset.getClientIpAddress(),
+                        auditDataset.getServiceEndpointUrl(),
+                        auditDataset.getDocumentIds(status),
+                        auditDataset.getRepositoryIds(status),
+                        auditDataset.getHomeCommunityIds(status),
+                        auditDataset.getPurposesOfUse());
+            }
+        }
     }
 
-    @Override
-    public String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_AUDIT_FIELDS;
-    }
 }

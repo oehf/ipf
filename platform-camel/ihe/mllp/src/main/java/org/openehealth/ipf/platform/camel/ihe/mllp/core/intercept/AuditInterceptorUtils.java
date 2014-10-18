@@ -74,11 +74,7 @@ public class AuditInterceptorUtils  {
             failed = true;
             throw e;
         } finally {
-            AuditUtils.finalizeAudit(
-                    auditDataset,
-                    interceptor.getMllpEndpoint().isAllowIncompleteAudit(),
-                    strategy,
-                    failed);
+            AuditUtils.finalizeAudit(auditDataset, strategy, failed);
         }
     }
 

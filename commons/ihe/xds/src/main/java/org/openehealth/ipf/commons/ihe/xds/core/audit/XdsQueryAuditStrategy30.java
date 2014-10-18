@@ -36,16 +36,13 @@ import java.util.List;
 abstract public class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryAuditDataset> {
 
     /**
-     * Constructs an XDS audit strategy.
+     * Constructs an XDS query audit strategy.
      *
      * @param serverSide
      *      whether this is a server-side or a client-side strategy.
-     * @param allowIncompleteAudit
-     *      whether this strategy should allow incomplete audit records
-     *      (parameter initially configurable via endpoint URL).
      */
-    public XdsQueryAuditStrategy30(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit);
+    public XdsQueryAuditStrategy30(boolean serverSide) {
+        super(serverSide);
     }
 
 

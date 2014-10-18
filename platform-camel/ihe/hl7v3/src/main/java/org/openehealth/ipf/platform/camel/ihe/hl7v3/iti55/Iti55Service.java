@@ -162,7 +162,6 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
                     AbstractWsEndpoint responseEndpoint = (AbstractWsEndpoint) camelContext.getEndpoint(deferredResponseUri);
                     responseEndpoint.setAudit(endpoint.isAudit());
-                    responseEndpoint.setAllowIncompleteAudit(endpoint.isAllowIncompleteAudit());
 
                     exchange = producerTemplate.send(responseEndpoint, exchange);
                     Exception exception = Exchanges.extractException(exchange);

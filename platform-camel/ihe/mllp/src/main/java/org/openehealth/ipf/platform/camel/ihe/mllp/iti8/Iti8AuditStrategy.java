@@ -26,18 +26,14 @@ public abstract class Iti8AuditStrategy extends MllpAuditStrategy<Iti8AuditDatas
         super(serverSide);
     }
 
-    public String[] getNecessaryFields(String messageType) {
-        return ("A40".equals(messageType) ?
-            new String[] { "PatientId", "OldPatientId" } :
-            new String[] { "PatientId" });
-    }
 
-
+    @Override
     public void enrichAuditDatasetFromRequest(Iti8AuditDataset auditDataset, MessageAdapter<?> msg, Exchange exchange) {
         Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);
     }
 
-    
+
+    @Override
     public void doAudit(RFC3881EventOutcomeCodes eventOutcome, Iti8AuditDataset auditDataset) {
         if("A08".equals(auditDataset.getMessageType())) {
             callUpdateAuditRoutine(eventOutcome, auditDataset, true);
@@ -50,7 +46,7 @@ public abstract class Iti8AuditStrategy extends MllpAuditStrategy<Iti8AuditDatas
         }
     }
 
-    
+
     protected abstract void callCreateAuditRoutine(
             RFC3881EventOutcomeCodes eventOutcome,
             Iti8AuditDataset auditDataset,

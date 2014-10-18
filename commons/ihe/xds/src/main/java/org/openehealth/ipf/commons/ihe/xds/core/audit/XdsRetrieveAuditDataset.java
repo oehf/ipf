@@ -15,21 +15,89 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * XDS audit dataset specific for retrieval-related transactions.
+ * XDS audit dataset specific for transactions related to document retrieval.
  * @author Dmytro Rud
  */
 public class XdsRetrieveAuditDataset extends XdsAuditDataset {
     private static final long serialVersionUID = -8776033207572005899L;
 
-    @Getter @Setter private String[] documentUniqueIds;
-    @Getter @Setter private String[] repositoryUniqueIds;
-    @Getter @Setter private String[] homeCommunityIds;
+    private final List<String[]> deliveredDocuments    = new ArrayList<String[]>();
+    private final List<String[]> notDeliveredDocuments = new ArrayList<String[]>();
+
+
+    public enum Status {DELIVERED, NOT_DELIVERED}
+
 
     public XdsRetrieveAuditDataset(boolean serverSide) {
         super(serverSide);
     }
+
+
+    public boolean hasDocuments(Status status) {
+        return ! getDocumentList(status).isEmpty();
+    }
+
+
+    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Status status) {
+        return (status == Status.DELIVERED)
+                ? RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS
+                : RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+    }
+
+
+    @Override
+    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode() {
+        throw new RuntimeException("Please call #getEventOutcomeCode(Status status) instead");
+    }
+
+
+    public void registerRequestedDocument(String documentUniqueId, String repositoryUniqueId, String homeCommunityId, String studyInstanceUID, String seriesInstanceUID) {
+        String[] metadata = new String[] {documentUniqueId, repositoryUniqueId, homeCommunityId, studyInstanceUID, seriesInstanceUID};
+        notDeliveredDocuments.add(metadata);
+    }
+
+    
+    public void registerDeliveredDocument(String documentUniqueId, String repositoryUniqueId, String homeCommunityId) {
+        Iterator<String[]> iterator = notDeliveredDocuments.iterator();
+        while (iterator.hasNext()) {
+            String[] metadata = iterator.next();
+            if (StringUtils.equals(metadata[0], documentUniqueId) &&
+                StringUtils.equals(metadata[1], repositoryUniqueId) &&
+                StringUtils.equals(metadata[2], homeCommunityId))
+            {
+                deliveredDocuments.add(metadata);
+                iterator.remove();
+            }
+        }
+    }
+
+
+    private List<String[]> getDocumentList(Status status) {
+        return (status == Status.DELIVERED) ? deliveredDocuments : notDeliveredDocuments;
+    }
+
+
+    private String[] array(Status status, int index) {
+        List<String[]> list = getDocumentList(status);
+        String[] result = new String[list.size()];
+        for (int i = 0; i < list.size(); ++i) {
+            result[i] = list.get(i)[index];
+        }
+        return result;
+    }
+
+
+    public String[] getDocumentIds      (Status status) { return array(status, 0); }
+    public String[] getRepositoryIds    (Status status) { return array(status, 1); }
+    public String[] getHomeCommunityIds (Status status) { return array(status, 2); }
+    public String[] getStudyInstanceIds (Status status) { return array(status, 3); }
+    public String[] getSeriesInstanceIds(Status status) { return array(status, 4); }
 }

@@ -21,7 +21,10 @@ import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCod
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
+
+import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
@@ -71,6 +74,8 @@ public class CustomXdsAuditor extends XDSAuditor {
      *      home community ID (optional).
      * @param patientId
      *      patient ID as an HL7 v2 CX string.
+     * @param purposesOfUse
+     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      */
     public void auditIti51(
             boolean serverSide,
@@ -82,7 +87,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String queryUuid,
             String requestPayload,
             String homeCommunityId,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         if (!isAuditorEnabled()) {
             return;
@@ -99,7 +105,8 @@ public class CustomXdsAuditor extends XDSAuditor {
                 queryUuid,
                 requestPayload,
                 homeCommunityId,
-                patientId);
+                patientId,
+                purposesOfUse);
     }
 
     /**
@@ -110,6 +117,8 @@ public class CustomXdsAuditor extends XDSAuditor {
      * @param registryEndpointUri  The Web service endpoint URI for the document registry
      * @param submissionSetUniqueId The UniqueID of the Submission Set registered
      * @param patientId The Patient Id that this submission pertains to
+     * @param purposesOfUse
+     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      */
     public void auditClientIti57(
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
@@ -117,7 +126,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String userName,
             String registryEndpointUri,
             String submissionSetUniqueId,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -128,7 +138,8 @@ public class CustomXdsAuditor extends XDSAuditor {
                 eventOutcome,
                 RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
                 new DICOMEventIdCodes.Export(),
-                new CustomIHETransactionEventTypeCodes.UpdateDocumentSet());
+                new CustomIHETransactionEventTypeCodes.UpdateDocumentSet(),
+                purposesOfUse);
 
         iti57ExportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
         iti57ExportEvent.addSourceActiveParticipant(
@@ -156,6 +167,8 @@ public class CustomXdsAuditor extends XDSAuditor {
      * @param repositoryEndpointUri The Web service endpoint URI for this document repository
      * @param submissionSetUniqueId The UniqueID of the Submission Set registered
      * @param patientId The Patient Id that this submission pertains to
+     * @param purposesOfUse
+     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      */
     public void auditServerIti57 (
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
@@ -164,14 +177,16 @@ public class CustomXdsAuditor extends XDSAuditor {
             String userName,
             String repositoryEndpointUri,
             String submissionSetUniqueId,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         GenericIHEAuditEventMessage iti57ImportEvent = new GenericIHEAuditEventMessage(
                 false,
                 eventOutcome,
                 RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
                 new DICOMEventIdCodes.Import(),
-                new CustomIHETransactionEventTypeCodes.UpdateDocumentSet());
+                new CustomIHETransactionEventTypeCodes.UpdateDocumentSet(),
+                purposesOfUse);
 
         iti57ImportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
         iti57ImportEvent.addSourceActiveParticipant(sourceUserId, null, null, sourceIpAddress, true);
@@ -210,6 +225,8 @@ public class CustomXdsAuditor extends XDSAuditor {
      *      unique ID of the XDS submission set.
      * @param patientId
      *      patient ID as an HL7 v2 CX string.
+     * @param purposesOfUse
+     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      */
     public void auditIti61(
             boolean serverSide,
@@ -219,7 +236,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String serviceEndpointUri,
             String clientIpAddress,
             String submissionSetUniqueId,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -230,7 +248,8 @@ public class CustomXdsAuditor extends XDSAuditor {
                 eventOutcome,
                 serverSide ? RFC3881EventCodes.RFC3881EventActionCodes.CREATE : RFC3881EventCodes.RFC3881EventActionCodes.READ,
                 serverSide ? new DICOMEventIdCodes.Import() : new DICOMEventIdCodes.Export(),
-                new CustomIHETransactionEventTypeCodes.RegisterOnDemandDocumentEntry());
+                new CustomIHETransactionEventTypeCodes.RegisterOnDemandDocumentEntry(),
+                purposesOfUse);
 
         configureEvent(this, serverSide, event, userId, userName, serviceEndpointUri, serviceEndpointUri, clientIpAddress);
         if (!EventUtils.isEmptyOrNull(patientId)) {
@@ -249,13 +268,16 @@ public class CustomXdsAuditor extends XDSAuditor {
      * @param repositoryUserId The Active Participant UserID for the document repository (if using WS-Addressing)
      * @param registryEndpointUri  The Web service endpoint URI for the document registry
      * @param patientId The Patient Id that this submission pertains to
+     * @param purposesOfUse
+     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      */
     public void auditClientIti62(
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String repositoryUserId,
             String userName,
             String registryEndpointUri,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -266,7 +288,8 @@ public class CustomXdsAuditor extends XDSAuditor {
                 eventOutcome,
                 RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
                 new DICOMEventIdCodes.Export(),
-                new CustomIHETransactionEventTypeCodes.DeleteDocumentSet());
+                new CustomIHETransactionEventTypeCodes.DeleteDocumentSet(),
+                purposesOfUse);
 
         iti62ExportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
         iti62ExportEvent.addSourceActiveParticipant(
@@ -293,6 +316,8 @@ public class CustomXdsAuditor extends XDSAuditor {
      * @param sourceIpAddress The IP address of the document source that initiated the transaction
      * @param repositoryEndpointUri The Web service endpoint URI for this document repository
      * @param patientId The Patient Id that this submission pertains to
+     * @param purposesOfUse
+     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      */
     public void auditServerIti62 (
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
@@ -300,14 +325,16 @@ public class CustomXdsAuditor extends XDSAuditor {
             String sourceIpAddress,
             String userName,
             String repositoryEndpointUri,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         GenericIHEAuditEventMessage iti62ImportEvent = new GenericIHEAuditEventMessage(
                 false,
                 eventOutcome,
                 RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
                 new DICOMEventIdCodes.Import(),
-                new CustomIHETransactionEventTypeCodes.DeleteDocumentSet());
+                new CustomIHETransactionEventTypeCodes.DeleteDocumentSet(),
+                purposesOfUse);
 
         iti62ImportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
         iti62ImportEvent.addSourceActiveParticipant(sourceUserId, null, null, sourceIpAddress, true);
@@ -349,6 +376,8 @@ public class CustomXdsAuditor extends XDSAuditor {
      *      home community ID.
      * @param patientId
      *      patient ID as an HL7 v2 CX string.
+     * @param purposesOfUse
+     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      */
     public void auditIti63(
             boolean serverSide,
@@ -360,7 +389,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String queryUuid,
             String requestPayload,
             String homeCommunityId,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -377,7 +407,8 @@ public class CustomXdsAuditor extends XDSAuditor {
                 queryUuid,
                 requestPayload,
                 homeCommunityId,
-                patientId);
+                patientId,
+                purposesOfUse);
     }
 
 
@@ -409,6 +440,8 @@ public class CustomXdsAuditor extends XDSAuditor {
      *      list of home community IDs.
      * @param patientId
      *      patient ID as an HL7 v2 CX string (if known).
+     * @param purposesOfUse
+     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      */
     public void auditRad69(
             boolean serverSide,
@@ -422,7 +455,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String[] documentUniqueIds,
             String[] repositoryUniqueIds,
             String[] homeCommunityIds,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -441,7 +475,8 @@ public class CustomXdsAuditor extends XDSAuditor {
                 documentUniqueIds,
                 repositoryUniqueIds,
                 homeCommunityIds,
-                patientId);
+                patientId,
+                purposesOfUse);
     }
 
 
@@ -473,6 +508,8 @@ public class CustomXdsAuditor extends XDSAuditor {
      *      list of home community IDs.
      * @param patientId
      *      patient ID as an HL7 v2 CX string (if known).
+     * @param purposesOfUse
+     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      */
     public void auditRad75(
             boolean serverSide,
@@ -486,7 +523,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String[] documentUniqueIds,
             String[] repositoryUniqueIds,
             String[] homeCommunityIds,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -505,7 +543,8 @@ public class CustomXdsAuditor extends XDSAuditor {
                 documentUniqueIds,
                 repositoryUniqueIds,
                 homeCommunityIds,
-                patientId);
+                patientId,
+                purposesOfUse);
     }
 
 
@@ -522,12 +561,14 @@ public class CustomXdsAuditor extends XDSAuditor {
             String[] documentUniqueIds,
             String[] repositoryUniqueIds,
             String[] homeCommunityIds,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         ImagingRetrieveEvent event = new ImagingRetrieveEvent(
                 ! serverSide,
                 eventOutcome,
-                transactionEventTypeCodes);
+                transactionEventTypeCodes,
+                purposesOfUse);
 
         event.addSourceActiveParticipant(
                 serviceEndpointUri,
@@ -579,7 +620,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String queryUuid,
             String requestPayload,
             String homeCommunityId,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         auditQueryEvent(
                 ! serverSide,
@@ -599,6 +641,7 @@ public class CustomXdsAuditor extends XDSAuditor {
                 queryUuid,
                 requestPayload,
                 homeCommunityId,
-                patientId);
+                patientId,
+                purposesOfUse);
     }
 }

@@ -28,15 +28,6 @@ class Iti10TestRouteBuilder extends SpringRouteBuilder {
 
      void configure() throws Exception {
 
-         from('pix-iti10://0.0.0.0:18106?allowIncompleteAudit=true')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
-                 .end()
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
-         
-         
          from('pix-iti10://0.0.0.0:18107?audit=false')
              .onException(Exception.class)
                  .maximumRedeliveries(0)

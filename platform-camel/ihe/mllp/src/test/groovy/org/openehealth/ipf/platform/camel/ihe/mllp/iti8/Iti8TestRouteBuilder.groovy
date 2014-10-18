@@ -41,12 +41,6 @@ class Iti8TestRouteBuilder extends SpringRouteBuilder {
                     resultMessage(it).body = MessageUtils.ack(it.in.body.target)
                 }
         
-        // normal processing with support for incomplete auditing
-        from('xds-iti8://0.0.0.0:18083?allowIncompleteAudit=true')
-                .process {
-                    resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-                }
-        
         // fictive route to test producer-side acceptance checking
         from('pix-iti8://0.0.0.0:18084')
                 .process {

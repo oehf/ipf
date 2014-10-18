@@ -43,19 +43,23 @@ public class Iti43TestRouteBuilder extends SpringRouteBuilder {
     }
 
     void checkValue(exchange, expected) {
-        def request = exchange.in.getBody(RetrieveDocumentSet.class)
-        def retrieveDocument = request.documents[0]
-        def value = retrieveDocument.documentUniqueId
-        def response = new RetrievedDocumentSet(SUCCESS)
-        if (expected != value) {
+        RetrieveDocumentSet request = exchange.in.getBody(RetrieveDocumentSet.class)
+        RetrievedDocumentSet response = new RetrievedDocumentSet(SUCCESS)
+        if (expected != request.documents[0].documentUniqueId) {
             response.setStatus(FAILURE)
         }
         else {
-            def doc = new RetrievedDocument()
-            doc.dataHandler = new DataHandler(new LargeDataSource())
-            doc.requestData = retrieveDocument
-            doc.mimeType = 'application/octet-cream'
-            response.documents.add(doc)
+            def doc1 = new RetrievedDocument()
+            doc1.dataHandler = new DataHandler(new LargeDataSource())
+            doc1.requestData = request.documents[0]
+            doc1.mimeType = 'application/octet-cream'
+            response.documents.add(doc1)
+
+            def doc2 = new RetrievedDocument()
+            doc2.dataHandler = new DataHandler(new LargeDataSource())
+            doc2.requestData = request.documents[1]
+            doc2.mimeType = 'application/octet-cream'
+            response.documents.add(doc2)
         }
         
         Exchanges.resultMessage(exchange).body = response

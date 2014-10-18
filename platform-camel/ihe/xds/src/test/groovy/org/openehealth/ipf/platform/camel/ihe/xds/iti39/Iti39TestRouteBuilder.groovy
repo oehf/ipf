@@ -74,8 +74,8 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
                 '&outInterceptors=#clientAsyncOutLogger' +
                 '&outFaultInterceptors=#clientAsyncOutLogger'
         )
-                .process(iti39ResponseValidator())
-                .process {
+        .process(iti39ResponseValidator())
+        .process {
             try {
                 def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
                 assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
@@ -121,6 +121,14 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
                 countDownLatch.countDown()
             }
             .process(iti39ResponseValidator())
+
+        // route for testing splitting of audit records
+        from('xca-iti39:iti39service2-splitAudit')
+            .process {
+                RetrievedDocumentSet response = createRetrievedDocumentSet()
+                response.documents[1].requestData.documentUniqueId = 'WRONG'
+                Exchanges.resultMessage(it).body = response
+            }
     }
 
 

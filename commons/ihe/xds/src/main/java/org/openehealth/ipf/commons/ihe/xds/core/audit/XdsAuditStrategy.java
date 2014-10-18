@@ -34,12 +34,9 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends WsAudi
      *   
      * @param serverSide
      *      whether this is a server-side or a client-side strategy.
-     * @param allowIncompleteAudit
-     *      whether this strategy should allow incomplete audit records
-     *      (parameter initially configurable via endpoint URL).
      */
-    public XdsAuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit);
+    public XdsAuditStrategy(boolean serverSide) {
+        super(serverSide);
     }
 
 

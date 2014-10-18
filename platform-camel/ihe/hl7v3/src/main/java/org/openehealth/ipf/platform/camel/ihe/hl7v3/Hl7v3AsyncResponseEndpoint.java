@@ -56,7 +56,7 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
         return new Hl7v3DeferredResponderFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
-                isAudit() ? getComponent().getServerAuditStrategy(isAllowIncompleteAudit()) : null,
+                isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getCustomInterceptors());
     }
 
@@ -66,7 +66,7 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
         return new Hl7v3AsyncResponseServiceFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
-                isAudit() ? getComponent().getServerAuditStrategy(isAllowIncompleteAudit()) : null,
+                isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getCorrelator(),
                 getCustomInterceptors());
     }

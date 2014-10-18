@@ -28,8 +28,8 @@ import org.slf4j.LoggerFactory
 abstract class Hl7v3AuditStrategy extends WsAuditStrategy<Hl7v3AuditDataset> {
     protected static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3AuditStrategy.class)
 
-    Hl7v3AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit)
+    Hl7v3AuditStrategy(boolean serverSide) {
+        super(serverSide)
     }
 
 

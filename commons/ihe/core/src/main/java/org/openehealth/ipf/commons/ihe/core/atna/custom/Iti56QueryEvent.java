@@ -20,7 +20,10 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.QueryEvent;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
+
+import java.util.List;
 
 /**
  * Special query event element type for ITI-56 (XCPD patient location query).
@@ -31,9 +34,10 @@ public class Iti56QueryEvent extends QueryEvent {
     public Iti56QueryEvent(
             boolean systemIsSource,
             RFC3881EventOutcomeCodes outcome,
-            IHETransactionEventTypeCodes eventType) 
+            IHETransactionEventTypeCodes eventType,
+            List<CodedValueType> purposesOfUse)
     {
-        super(systemIsSource, outcome, eventType);
+        super(systemIsSource, outcome, eventType, purposesOfUse);
     }
 
     

@@ -85,8 +85,6 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
 
         // extract & exclude parameters which cannot be handled by camel-mina
         boolean audit = getAndRemoveParameter(parameters, "audit", boolean.class, true);
-        boolean allowIncompleteAudit =
-                getAndRemoveParameter(parameters, "allowIncompleteAudit", boolean.class, false);
 
         boolean secure = getAndRemoveParameter(parameters, "secure", boolean.class, false);
         ClientAuthType clientAuthType = getAndRemoveParameter(parameters, "clientAuth",
@@ -172,7 +170,6 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
                 this,
                 minaEndpoint,
                 audit,
-                allowIncompleteAudit,
                 sslContext,
                 clientAuthType,
                 extractInterceptorBeanNames(parameters),

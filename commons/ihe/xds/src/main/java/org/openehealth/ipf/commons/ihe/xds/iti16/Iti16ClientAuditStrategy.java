@@ -24,14 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
  */
 public class Iti16ClientAuditStrategy extends Iti16AuditStrategy {
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "EventOutcomeCode",
-        "ServiceEndpointUrl",
-        "RequestPayload"
-        /*"PatientId"*/};
-    
-    public Iti16ClientAuditStrategy(boolean allowIncompleteAudit) {
-        super(false, allowIncompleteAudit);
+    public Iti16ClientAuditStrategy() {
+        super(false);
     }
 
     @Override
@@ -44,8 +38,4 @@ public class Iti16ClientAuditStrategy extends Iti16AuditStrategy {
                 /*auditDataset.getPatientId()*/ null);
     }
 
-    @Override
-    public String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_AUDIT_FIELDS;
-    }
 }

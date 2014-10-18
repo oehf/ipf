@@ -24,15 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
  */
 public class Iti14ServerAuditStrategy extends Iti14AuditStrategy {
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "EventOutcomeCode",
-        "ClientIpAddress",
-        "ServiceEndpointUrl", 
-        "SubmissionSetUuid",
-        "PatientId"};
-    
-    public Iti14ServerAuditStrategy(boolean allowIncompleteAudit) {
-        super(true, allowIncompleteAudit);
+    public Iti14ServerAuditStrategy() {
+        super(true);
     }
 
     @Override
@@ -47,8 +40,4 @@ public class Iti14ServerAuditStrategy extends Iti14AuditStrategy {
                 auditDataset.getPatientId());
     }
 
-    @Override
-    public String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_AUDIT_FIELDS;
-    }
 }
