@@ -16,9 +16,6 @@
 package org.openehealth.ipf.commons.ihe.core.atna;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -51,88 +48,15 @@ public class AuditDataset implements Serializable {
     public AuditDataset(boolean serverSide) {
         this.serverSide = serverSide;
     }
-    
+
     public boolean isServerSide() {
         return serverSide;
     }
 
-    /**
-     * <i>"What you see is what I get"</i>&nbsp;&mdash; returns a string that
-     * consists from all fields available through getter methods.
-     */
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 
-    /**
-     * Checks whether this audit dataset contains non-null values in the fields
-     * from the given list.
-     * 
-     * @param fieldNames
-     *            a list of field names with first letter capitalized, e.g.
-     *            "Address"
-     * @param positiveCheck
-     *            {@code true} when the given fields must be present;
-     *            {@code false} when they must be absent.
-     * @return a set of names of the fields which do not match the given
-     *         condition (i.e. are absent when they must be present, and vice
-     *         versa).
-     * @throws Exception
-     *             on reflection errors
-     */
-    public Set<String> checkFields(String[] fieldNames, boolean positiveCheck) throws Exception {
-        Set<String> result = new HashSet<String>();
-
-        for (String fieldName : fieldNames) {
-            Method m = getClass().getMethod("get" + fieldName);
-            Object o = m.invoke(this);
-            if ((o == null) == positiveCheck) {
-                result.add(fieldName);
-            }
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Checks whether this audit dataset misses some fields, when 
-     * yes&nbsp;&mdash; writes a corresponding message into the log.
-     * 
-     * @param fieldNames
-     *            a list of field names with first letter capitalized, e.g.
-     *            "Address"
-     * @param positiveCheck
-     *            {@code true} when the given fields must be present;
-     *            {@code false} when they must be absent.
-     * @param allowIncompleteAudit
-     *            {@code true} when the incomplete audit records are allowed;
-     *            {@code false} otherwise.
-     * @return
-     *            {@code true} when the auditing can be performed;
-     *            {@code false} otherwise.
-     * @throws Exception
-     *            on reflection errors.
-     */
-    public boolean isAuditingPossible(
-            String[] fieldNames, 
-            boolean positiveCheck,
-            boolean allowIncompleteAudit) throws Exception
-    {
-        Set<String> missing = checkFields(fieldNames, positiveCheck);
-        if(! missing.isEmpty()) {
-            StringBuilder sb = new StringBuilder("Missing audit fields: ");
-            for(String fieldName : missing) {
-                sb.append(fieldName).append(", ");
-            }
-            sb.append(allowIncompleteAudit ? 
-                "but incomplete audit is allowed, so we'll perform it." :
-                "auditing not possible.");
-            LOG.error(sb.toString());
-        }
-        
-        return missing.isEmpty() || allowIncompleteAudit;
-    }
-    
 }

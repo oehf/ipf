@@ -48,12 +48,12 @@ public class SomeItiComponent extends AbstractWsComponent<WsTransactionConfigura
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+    public WsAuditStrategy getClientAuditStrategy() {
         return null;   // dummy
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
+    public WsAuditStrategy getServerAuditStrategy() {
         return null;   // dummy
     }
 

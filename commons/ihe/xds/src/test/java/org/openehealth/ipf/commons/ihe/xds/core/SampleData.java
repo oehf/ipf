@@ -368,7 +368,6 @@ public abstract class SampleData {
         request.getTransferSyntaxIds().add("1.2.840.10008.1.2.4.64");
         request.getTransferSyntaxIds().add("1.2.840.10008.1.2.4.70");
 
-
         return request;
     }
 

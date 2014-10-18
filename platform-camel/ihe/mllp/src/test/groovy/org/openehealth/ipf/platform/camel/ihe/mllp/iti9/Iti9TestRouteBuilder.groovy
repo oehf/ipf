@@ -60,15 +60,7 @@ class Iti9TestRouteBuilder extends SpringRouteBuilder {
                  resultMessage(it).body = rspWithoutPid
              }
          
-         from('pix-iti9://0.0.0.0:18092?allowIncompleteAudit=true')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
-                 .end()
-             .process {
-                 resultMessage(it).body = rspWithoutPid
-             }
-
-         // for automatic NAK 
+         // for automatic NAK
          from('pix-iti9://0.0.0.0:18093')
              .process {
                  throw new RuntimeException('12345')

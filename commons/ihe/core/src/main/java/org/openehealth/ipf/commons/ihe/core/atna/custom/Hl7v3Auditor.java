@@ -22,11 +22,13 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.PatientRecordEvent;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.QueryEvent;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ParticipantObjectIdentificationType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
@@ -60,9 +62,9 @@ public class Hl7v3Auditor extends IHEAuditor {
             String userName,
             String pixManagerUri,
             String clientIpAddress,
-
             String[] patientIds,
-            String messageId)
+            String messageId,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -72,7 +74,8 @@ public class Hl7v3Auditor extends IHEAuditor {
                 true,
                 eventOutcome,
                 eventActionCode,
-                new IHETransactionEventTypeCodes.PatientIdentityFeedV3());
+                new IHETransactionEventTypeCodes.PatientIdentityFeedV3(),
+                purposesOfUse);
 
         configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri, pixManagerUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, messageId);
@@ -87,13 +90,13 @@ public class Hl7v3Auditor extends IHEAuditor {
             String userName,
             String pixManagerUri,
             String clientIpAddress,
-
             String[] patientIds,
-            String messageId)
+            String messageId,
+            List<CodedValueType> purposesOfUse)
     {
         auditIti44(serverSide, RFC3881EventCodes.RFC3881EventActionCodes.CREATE,
                 eventOutcome, replyToUri, userName, pixManagerUri, clientIpAddress,
-                patientIds, messageId);
+                patientIds, messageId, purposesOfUse);
     }
 
 
@@ -104,13 +107,13 @@ public class Hl7v3Auditor extends IHEAuditor {
             String userName,
             String pixManagerUri,
             String clientIpAddress,
-
             String[] patientIds,
-            String messageId)
+            String messageId,
+            List<CodedValueType> purposesOfUse)
     {
         auditIti44(serverSide, RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
                 eventOutcome, replyToUri, userName, pixManagerUri, clientIpAddress,
-                patientIds, messageId);
+                patientIds, messageId, purposesOfUse);
     }
 
 
@@ -121,14 +124,14 @@ public class Hl7v3Auditor extends IHEAuditor {
             String userName,
             String pixManagerUri,
             String clientIpAddress,
-
             String oldPatientId,
-            String messageId)
+            String messageId,
+            List<CodedValueType> purposesOfUse)
     {
         String[] patientIds = new String[] { oldPatientId };
         auditIti44(serverSide, RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
                 eventOutcome, replyToUri, userName, pixManagerUri, clientIpAddress,
-                patientIds, messageId);
+                patientIds, messageId, purposesOfUse);
     }
 
 
@@ -139,9 +142,9 @@ public class Hl7v3Auditor extends IHEAuditor {
             String userName,
             String pixManagerUri,
             String clientIpAddress,
-
             String queryPayload,
-            String[] patientIds)
+            String[] patientIds,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -150,7 +153,8 @@ public class Hl7v3Auditor extends IHEAuditor {
         QueryEvent event = new QueryEvent(
                 true,
                 eventOutcome,
-                new IHETransactionEventTypeCodes.PIXQueryV3());
+                new IHETransactionEventTypeCodes.PIXQueryV3(),
+                purposesOfUse);
 
         configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri, pixManagerUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);
@@ -167,9 +171,9 @@ public class Hl7v3Auditor extends IHEAuditor {
             String userName,
             String pixManagerUri,
             String clientIpAddress,
-
             String[] patientIds,
-            String messageId)
+            String messageId,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -179,7 +183,8 @@ public class Hl7v3Auditor extends IHEAuditor {
                 true,
                 eventOutcome,
                 RFC3881EventCodes.RFC3881EventActionCodes.READ,
-                new IHETransactionEventTypeCodes.PIXUpdateNotificationV3());
+                new IHETransactionEventTypeCodes.PIXUpdateNotificationV3(),
+                purposesOfUse);
 
         configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri, pixManagerUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, messageId);
@@ -194,9 +199,9 @@ public class Hl7v3Auditor extends IHEAuditor {
             String userName,
             String pdSupplierUri,
             String clientIpAddress,
-
             String queryPayload,
-            String[] patientIds)
+            String[] patientIds,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -206,7 +211,8 @@ public class Hl7v3Auditor extends IHEAuditor {
         QueryEvent event = new QueryEvent(
                 true,
                 eventOutcome,
-                new IHETransactionEventTypeCodes.PatientDemographicsQueryV3());
+                new IHETransactionEventTypeCodes.PatientDemographicsQueryV3(),
+                purposesOfUse);
 
         configureEvent(this, serverSide, event, replyToUri, userName, pdSupplierUri, pdSupplierUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);
@@ -223,11 +229,11 @@ public class Hl7v3Auditor extends IHEAuditor {
             String userName,
             String respondingGatewayUri,
             String clientIpAddress,
-
             String queryPayload,
             String queryId,
             String homeCommunityId,
-            String[] patientIds)
+            String[] patientIds,
+            List<CodedValueType> purposesOfUses)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -236,11 +242,17 @@ public class Hl7v3Auditor extends IHEAuditor {
         QueryEvent event = new QueryEvent(
                 true,
                 eventOutcome,
-                new IHETransactionEventTypeCodes.CrossGatewayPatientDiscovery());
+                new IHETransactionEventTypeCodes.CrossGatewayPatientDiscovery(),
+                purposesOfUses);
 
         configureEvent(this, serverSide, event, replyToUri, userName, respondingGatewayUri, respondingGatewayUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);
-        event.addXCPDParticipantObject(queryId, homeCommunityId, payloadBytes(queryPayload));
+        event.addQueryParticipantObject(
+                queryId,
+                homeCommunityId,
+                payloadBytes(queryPayload),
+                null,
+                new IHETransactionEventTypeCodes.CrossGatewayPatientDiscovery());
         audit(event);
     }
 
@@ -252,9 +264,9 @@ public class Hl7v3Auditor extends IHEAuditor {
             String userName,
             String respondingGatewayUri,
             String clientIpAddress,
-
             String queryPayload,
-            String patientId)
+            String patientId,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -263,7 +275,8 @@ public class Hl7v3Auditor extends IHEAuditor {
         Iti56QueryEvent event = new Iti56QueryEvent(
                 true,
                 eventOutcome,
-                new CustomIHETransactionEventTypeCodes.PatientLocationQuery());
+                new CustomIHETransactionEventTypeCodes.PatientLocationQuery(),
+                purposesOfUse);
 
         configureEvent(this, serverSide, event, replyToUri, userName, respondingGatewayUri, respondingGatewayUri, clientIpAddress);
         event.addPatientParticipantObject(patientId);
@@ -279,10 +292,10 @@ public class Hl7v3Auditor extends IHEAuditor {
             String userName,
             String clinicalDataSourceUri,
             String clientIpAddress,
-
             String queryPayload,
             String queryId,
-            String[] patientIds)
+            String[] patientIds,
+            List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -291,7 +304,8 @@ public class Hl7v3Auditor extends IHEAuditor {
         QueryEvent event = new QueryEvent(
                 true,
                 eventOutcome,
-                new CustomIHETransactionEventTypeCodes.QueryExistingData());
+                new CustomIHETransactionEventTypeCodes.QueryExistingData(),
+                purposesOfUse);
 
         configureEvent(this, serverSide, event, replyToUri, userName, clinicalDataSourceUri, clinicalDataSourceUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);

@@ -28,8 +28,8 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  */
 abstract class Iti16AuditStrategy extends XdsAuditStrategy<XdsQueryAuditDataset> {
 
-    Iti16AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit);
+    Iti16AuditStrategy(boolean serverSide) {
+        super(serverSide);
     }
 
     @Override

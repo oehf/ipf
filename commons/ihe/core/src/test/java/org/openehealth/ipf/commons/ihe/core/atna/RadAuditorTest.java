@@ -19,6 +19,10 @@ import junit.framework.TestCase;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Clay Sebourn
@@ -36,8 +40,27 @@ public class RadAuditorTest extends TestCase {
     private static final String[] HOME_COMMUNITY_UUIDS  = {"home-community_uuid1", "home-community_uuid1", "home-community_uuid1"};
     private static final String PATIENT_ID              = "patientId^^^&1.2.3&ISO";
 
+    private static final List<CodedValueType> PURPOSES_OF_USE;
+    static {
+        PURPOSES_OF_USE = new ArrayList<CodedValueType>();
+        CodedValueType cvt = new CodedValueType();
+
+        cvt.setCode("12");
+        cvt.setCodeSystemName("1.0.14265.1");
+        cvt.setOriginalText("Law Enforcement");
+        PURPOSES_OF_USE.add(cvt);
+
+        cvt.setCode("13");
+        cvt.setCodeSystemName("1.0.14265.1");
+        cvt.setOriginalText("Something Else");
+        PURPOSES_OF_USE.add(cvt);
+    }
+
+    private MockedSender sender;
 
     protected void setUp() throws Exception {
+        sender = new MockedSender();
+        AuditorModuleContext.getContext().setSender(sender);
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
     }
@@ -59,7 +82,8 @@ public class RadAuditorTest extends TestCase {
             DOCUMENT_UUIDS,
             REPOSITORY_UUIDS,
             HOME_COMMUNITY_UUIDS,
-            PATIENT_ID);
+            PATIENT_ID,
+            PURPOSES_OF_USE);
 
         // Server RAD-69 event
         auditor.auditRad69(
@@ -74,7 +98,8 @@ public class RadAuditorTest extends TestCase {
             DOCUMENT_UUIDS,
             REPOSITORY_UUIDS,
             HOME_COMMUNITY_UUIDS,
-            PATIENT_ID);
+            PATIENT_ID,
+            PURPOSES_OF_USE);
 
         // Client RAD-75 event
         auditor.auditRad75(
@@ -89,7 +114,8 @@ public class RadAuditorTest extends TestCase {
             DOCUMENT_UUIDS,
             REPOSITORY_UUIDS,
             HOME_COMMUNITY_UUIDS,
-            PATIENT_ID);
+            PATIENT_ID,
+            PURPOSES_OF_USE);
 
         // Server RAD-75
         auditor.auditRad75(
@@ -104,6 +130,9 @@ public class RadAuditorTest extends TestCase {
             DOCUMENT_UUIDS,
             REPOSITORY_UUIDS,
             HOME_COMMUNITY_UUIDS,
-            PATIENT_ID);
-   }
+            PATIENT_ID,
+            PURPOSES_OF_USE);
+
+        assertEquals(4, sender.getMessages().size());   // 16
+    }
 }

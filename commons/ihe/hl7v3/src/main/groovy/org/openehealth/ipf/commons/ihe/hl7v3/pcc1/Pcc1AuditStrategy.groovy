@@ -27,18 +27,8 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
  */
 class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
 
-    private static final String[] NECESSARY_FIELD_NAMES = [
-            'EventOutcomeCode',
-            'UserId',
-            'ServiceEndpointUrl',
-            'PatientIds',
-            'RequestPayload',
-            'QueryId',
-    ]
-
-
-    Pcc1AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit)
+    Pcc1AuditStrategy(boolean serverSide) {
+        super(serverSide)
     }
     
 
@@ -71,14 +61,8 @@ class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
                 auditDataset.clientIpAddress,
                 auditDataset.requestPayload,
                 auditDataset.queryId,
-                auditDataset.patientIds
-        )
-    }
-
-
-    @Override
-    String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_FIELD_NAMES
+                auditDataset.patientIds,
+                auditDataset.purposesOfUse)
     }
 
 }

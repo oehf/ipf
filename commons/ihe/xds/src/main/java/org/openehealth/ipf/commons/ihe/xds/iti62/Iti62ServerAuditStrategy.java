@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.iti62;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditStrategy30;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
 /**
  * Server audit strategy for ITI-62.
@@ -27,20 +25,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
  */
 public class Iti62ServerAuditStrategy extends XdsRemoveAuditStrategy30 {
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "EventOutcomeCode",
-        "ClientIpAddress",
-        "ServiceEndpointUrl"};
-
-
     /**
      * Constructs the audit strategy.
-     * @param allowIncompleteAudit
-     *      whether this strategy should allow incomplete audit records
-     *      (parameter initially configurable via endpoint URL).
      */
-    public Iti62ServerAuditStrategy(boolean allowIncompleteAudit) {
-        super(true, allowIncompleteAudit);
+    public Iti62ServerAuditStrategy() {
+        super(true);
     }
 
     @Override
@@ -51,11 +40,8 @@ public class Iti62ServerAuditStrategy extends XdsRemoveAuditStrategy30 {
                 auditDataset.getClientIpAddress(),
                 auditDataset.getUserName(),
                 auditDataset.getServiceEndpointUrl(),
-                auditDataset.getPatientId());
+                auditDataset.getPatientId(),
+                auditDataset.getPurposesOfUse());
     }
 
-    @Override
-    public String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_AUDIT_FIELDS;
-    }
 }

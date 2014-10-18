@@ -28,7 +28,6 @@ import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
@@ -65,13 +64,13 @@ public class Iti39Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti39ClientAuditStrategy(allowIncompleteAudit);
+    public WsAuditStrategy getClientAuditStrategy() {
+        return new Iti39ClientAuditStrategy();
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti39ServerAuditStrategy(allowIncompleteAudit);
+    public WsAuditStrategy getServerAuditStrategy() {
+        return new Iti39ServerAuditStrategy();
     }
 
     @Override

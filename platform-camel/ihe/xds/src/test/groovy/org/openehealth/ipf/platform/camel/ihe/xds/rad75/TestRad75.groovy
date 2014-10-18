@@ -48,8 +48,7 @@ class TestRad75 extends StandardTestContainer {
             '&outFaultInterceptors=#clientSyncOutLogger'
 
     final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/rad75service-response"
-    final String SERVICE2_URI = "xcai-rad75://localhost:${port}/rad75service2"
-    
+
     static final RetrieveImagingDocumentSet REQUEST = SampleData.createRetrieveImagingDocumentSet()
 
     static final long AWAIT_DELAY = 20 * 1000L

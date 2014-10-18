@@ -32,11 +32,6 @@ public abstract class Iti10AuditStrategy extends MllpAuditStrategy<QueryAuditDat
     }
 
     @Override
-    public String[] getNecessaryFields(String eventTrigger) {
-        return new String[] { "PatientIds" };
-    }
-
-    @Override
     public void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset,
             MessageAdapter<?> msg, Exchange exchange) {
         Iti10AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);        

@@ -65,20 +65,16 @@ abstract public class AbstractWsComponent<ConfigType extends WsTransactionConfig
     public abstract ConfigType getWsTransactionConfiguration();
 
     /**
-     * @param allowIncompleteAudit
-     *      whether incomplete ATNA audit records are allowed.
      * @return
      *      transaction-specific client-side ATNA audit strategy instance.
      */
-    public abstract WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit);
+    public abstract WsAuditStrategy getClientAuditStrategy();
 
     /**
-     * @param allowIncompleteAudit
-     *      whether incomplete ATNA audit records are allowed.
      * @return
      *      transaction-specific server-side ATNA audit strategy instance.
      */
-    public abstract WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit);
+    public abstract WsAuditStrategy getServerAuditStrategy();
 
     /**
      * Constructs and returns a transaction-specific service class instance

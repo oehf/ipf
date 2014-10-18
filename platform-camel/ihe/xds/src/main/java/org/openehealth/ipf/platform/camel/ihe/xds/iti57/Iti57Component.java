@@ -63,13 +63,13 @@ public class Iti57Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti57ClientAuditStrategy(allowIncompleteAudit);
+    public WsAuditStrategy getClientAuditStrategy() {
+        return new Iti57ClientAuditStrategy();
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti57ServerAuditStrategy(allowIncompleteAudit);
+    public WsAuditStrategy getServerAuditStrategy() {
+        return new Iti57ServerAuditStrategy();
     }
 
     @Override

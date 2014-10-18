@@ -165,7 +165,7 @@ public class Hl7v3ContinuationAwareEndpoint
         return new Hl7v3ClientFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
-                isManualAudit() ? null : getComponent().getClientAuditStrategy(isAllowIncompleteAudit()),
+                isManualAudit() ? null : getComponent().getClientAuditStrategy(),
                 null,
                 getCustomInterceptors());
     }
@@ -176,7 +176,7 @@ public class Hl7v3ContinuationAwareEndpoint
         return new Hl7v3ServiceFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
-                isManualAudit() ? null : getComponent().getServerAuditStrategy(isAllowIncompleteAudit()),
+                isManualAudit() ? null : getComponent().getServerAuditStrategy(),
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
     }

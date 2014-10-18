@@ -227,7 +227,7 @@ class StandardTestContainer {
      }
      
      def checkCode(actual, code, scheme) {
-         assert actual.@code == code && actual.@codeSystemName == scheme
+         assert actual.'@csd-code' == code && actual.@codeSystemName == scheme
      }
 
      def checkEvent(event, code, iti, actionCode, outcome) {
@@ -314,7 +314,7 @@ class StandardTestContainer {
         checkParticipantObjectDetail(uri.ParticipantObjectDetail[0], 'Repository Unique Id', repoId)
         checkParticipantObjectDetail(uri.ParticipantObjectDetail[1], 'ihe:homeCommunityID', homeId)
     }
-     
+
     def checkImageDocument(uri, docUniqueId, homeId, repoId, studyId, seriesId) {
         assert uri.@ParticipantObjectTypeCode == '2'
         assert uri.@ParticipantObjectTypeCodeRole == '3'

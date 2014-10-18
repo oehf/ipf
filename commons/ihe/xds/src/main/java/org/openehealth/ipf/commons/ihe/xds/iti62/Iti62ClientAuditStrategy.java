@@ -25,19 +25,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditStrategy30;
  */
 public class Iti62ClientAuditStrategy extends XdsRemoveAuditStrategy30 {
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "EventOutcomeCode",
-        "ServiceEndpointUrl"};
-
-
     /**
      * Constructs the audit strategy.
-     * @param allowIncompleteAudit
-     *      whether this strategy should allow incomplete audit records
-     *      (parameter initially configurable via endpoint URL).
      */
-    public Iti62ClientAuditStrategy(boolean allowIncompleteAudit) {
-        super(false, allowIncompleteAudit);
+    public Iti62ClientAuditStrategy() {
+        super(false);
     }
 
     @Override
@@ -47,11 +39,8 @@ public class Iti62ClientAuditStrategy extends XdsRemoveAuditStrategy30 {
                 auditDataset.getUserId(),
                 auditDataset.getUserName(),
                 auditDataset.getServiceEndpointUrl(),
-                auditDataset.getPatientId());
+                auditDataset.getPatientId(),
+                auditDataset.getPurposesOfUse());
     }
 
-    @Override
-    public String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_AUDIT_FIELDS;
-    }
 }

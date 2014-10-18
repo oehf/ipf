@@ -37,9 +37,8 @@ class TestIti14 extends StandardTestContainer {
     def SERVICE1 = "xds-iti14://localhost:${port}/xds-iti14-service1";
     def SERVICE2 = "xds-iti14://localhost:${port}/xds-iti14-service2";
     
-    def SERVICE_FT = "xds-iti14://localhost:${port}/xds-iti14-service12?audit=false&allowIncompleteAudit=true";
-    def SERVICE_DT = "xds-iti14://localhost:${port}/xds-iti14-service13?allowIncompleteAudit=true";
-    
+    def SERVICE_FT = "xds-iti14://localhost:${port}/xds-iti14-service12?audit=false";
+
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti14-service2"
     
     def request
@@ -109,23 +108,6 @@ class TestIti14 extends StandardTestContainer {
     void testIti14_AuditDisabled() {
         sendIt(SERVICE_FT, 'service 12')
         assert auditSender.messages.size() == 0
-    }
-    
-    @Test
-    void testIti14_Incomplete_IncompleteAuditingNotAllowed()  {
-        request.submissionSet = null
-        sendIt(SERVICE2, 'service 2')
-        assert auditSender.messages.size() == 0
-    }
-    
-    @Test
-    void testIti14_Incomplete_IncompleteAuditingAllowed() {
-        request.submissionSet = null
-        sendIt(SERVICE_DT, 'service 13')
-        assert auditSender.messages.size() == 2
-        
-        // No assumption on what is actually logged, as it is faulty anyway and highly
-        // depends on what OHT does.
     }
     
     def sendIt(endpoint, value) {

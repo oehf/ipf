@@ -21,7 +21,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqAuditStrategy;
 
 /**
- * Server (aka Camel consumer) audit strategy for ITI-21 and ITI-22 (PDQ).
+ * Server (aka Camel consumer) audit strategy for ITI-22 (PDVQ).
  * 
  * @author Dmytro Rud
  */
@@ -31,6 +31,7 @@ public class Iti22ServerAuditStrategy extends PdqAuditStrategy {
         super(true);
     }
 
+    @Override
     public void doAudit(RFC3881EventOutcomeCodes eventOutcome,
             QueryAuditDataset auditDataset) {
         AuditorManager.getPIXManagerAuditor().auditPDVQQueryEvent(eventOutcome,

@@ -62,7 +62,8 @@ public class CustomPixAuditor extends PIXAuditor {
                 true,
                 eventOutcome,
                 RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
-                transactionCode);
+                transactionCode,
+                null);
 
         configureEvent(
                 this,

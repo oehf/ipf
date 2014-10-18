@@ -18,9 +18,9 @@ package org.openehealth.ipf.commons.ihe.core.atna.custom;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventActionCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
@@ -36,13 +36,15 @@ public class ImagingRetrieveEvent extends GenericIHEAuditEventMessage {
     public ImagingRetrieveEvent(
             boolean systemIsSource,
             RFC3881EventCodes.RFC3881EventOutcomeCodes outcome,
-            IHETransactionEventTypeCodes eventType)
+            IHETransactionEventTypeCodes eventType,
+            List<CodedValueType> purposesOfUse)
     {
         super(systemIsSource,
               outcome,
               systemIsSource ? RFC3881EventCodes.RFC3881EventActionCodes.CREATE : RFC3881EventCodes.RFC3881EventActionCodes.READ,
               systemIsSource ? new DICOMEventIdCodes.Import() : new DICOMEventIdCodes.Export(),
-              eventType);
+              eventType,
+              purposesOfUse);
     }
 
 

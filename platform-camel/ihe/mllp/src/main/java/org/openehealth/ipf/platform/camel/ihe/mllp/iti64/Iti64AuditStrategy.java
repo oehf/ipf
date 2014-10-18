@@ -36,20 +36,9 @@ class Iti64AuditStrategy extends MllpAuditStrategy<Iti64AuditDataset> {
     private static final EncodingCharacters ENCODING_CHARACTERS =
             new EncodingCharacters('|', '^', '~', '\\', '&');
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-            "SourcePatientId",
-            "NewPatientId",
-            "OldPatientId"};
-
 
     public Iti64AuditStrategy(boolean serverSide) {
         super(serverSide);
-    }
-
-
-    @Override
-    public String[] getNecessaryFields(String eventTrigger) {
-        return NECESSARY_AUDIT_FIELDS;
     }
 
 

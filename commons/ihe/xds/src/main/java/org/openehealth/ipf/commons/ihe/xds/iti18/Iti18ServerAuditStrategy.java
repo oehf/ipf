@@ -25,23 +25,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditStrategy30;
  */
 public class Iti18ServerAuditStrategy extends XdsQueryAuditStrategy30 {
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "EventOutcomeCode",
-        "ClientIpAddress",
-        "ServiceEndpointUrl",
-        "QueryUuid",
-        "RequestPayload"
-        /*"PatientId"*/};
-
-    
-    /**
-     * Constructs the audit strategy.
-     * @param allowIncompleteAudit
-     *      whether this strategy should allow incomplete audit records
-     *      (parameter initially configurable via endpoint URL).
-     */
-    public Iti18ServerAuditStrategy(boolean allowIncompleteAudit) {
-        super(true, allowIncompleteAudit);
+    public Iti18ServerAuditStrategy() {
+        super(true);
     }
 
     @Override
@@ -55,11 +40,8 @@ public class Iti18ServerAuditStrategy extends XdsQueryAuditStrategy30 {
                 auditDataset.getQueryUuid(), 
                 auditDataset.getRequestPayload(),
                 auditDataset.getHomeCommunityId(),
-                auditDataset.getPatientId());
+                auditDataset.getPatientId(),
+                auditDataset.getPurposesOfUse());
     }
 
-    @Override
-    public String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_AUDIT_FIELDS;
-    }
 }

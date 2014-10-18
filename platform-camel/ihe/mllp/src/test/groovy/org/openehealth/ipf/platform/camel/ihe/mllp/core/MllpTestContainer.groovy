@@ -27,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.core.atna.MockedSender
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
-import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
 /**
@@ -53,10 +52,6 @@ class MllpTestContainer {
         camelContext = appContext.getBean('camelContext', CamelContext.class)
         
         auditSender = new MockedSender()
-        AuditEventMessage[] a = new AuditEventMessage[2];
-        auditSender.sendAuditEvent(a)
-        assertEquals(2, auditSender.messages.size())
-        auditSender.messages.clear()
         AuditorModuleContext.context.sender = auditSender
         AuditorModuleContext.context.config.auditRepositoryHost = 'localhost'
         AuditorModuleContext.context.config.auditRepositoryPort = 514

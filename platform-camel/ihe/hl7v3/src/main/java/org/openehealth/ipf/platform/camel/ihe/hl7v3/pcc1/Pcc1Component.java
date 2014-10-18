@@ -69,13 +69,13 @@ public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsT
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return new Pcc1AuditStrategy(false, allowIncompleteAudit);
+    public WsAuditStrategy getClientAuditStrategy() {
+        return new Pcc1AuditStrategy(false);
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Pcc1AuditStrategy(true, allowIncompleteAudit);
+    public WsAuditStrategy getServerAuditStrategy() {
+        return new Pcc1AuditStrategy(true);
     }
 
     @Override

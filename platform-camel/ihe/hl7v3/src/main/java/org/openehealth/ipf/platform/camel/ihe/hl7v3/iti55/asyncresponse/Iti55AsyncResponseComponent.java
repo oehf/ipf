@@ -65,13 +65,13 @@ public class Iti55AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTran
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+    public WsAuditStrategy getClientAuditStrategy() {
         return null;   // no producer support
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti55AuditStrategy(false, allowIncompleteAudit);
+    public WsAuditStrategy getServerAuditStrategy() {
+        return new Iti55AuditStrategy(false);
     }
 
     @Override

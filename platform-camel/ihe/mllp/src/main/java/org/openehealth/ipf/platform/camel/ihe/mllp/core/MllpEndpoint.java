@@ -65,7 +65,6 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     private final MllpComponent<T> mllpComponent;
     private final Mina2Endpoint wrappedEndpoint;
     private final boolean audit;
-    private final boolean allowIncompleteAudit;
 
     private final SSLContext sslContext;
     private final String[] customInterceptorBeans;
@@ -93,8 +92,6 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      *      The original camel-mina endpoint instance.
      * @param audit
      *      Whether ATNA auditing should be performed.
-     * @param allowIncompleteAudit
-     *      Whether incomplete ATNA auditing are allowed as well.
      * @param sslContext
      *      the SSL context to use; {@code null} if secure communication is not used.
      * @param clientAuthType
@@ -131,7 +128,6 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
             MllpComponent<T> mllpComponent,
             Mina2Endpoint wrappedEndpoint,
             boolean audit,
-            boolean allowIncompleteAudit,
             SSLContext sslContext,
             ClientAuthType clientAuthType,
             String[] customInterceptorBeans,
@@ -157,7 +153,6 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
         this.mllpComponent = mllpComponent;
         this.wrappedEndpoint = wrappedEndpoint;
         this.audit = audit;
-        this.allowIncompleteAudit = allowIncompleteAudit;
         this.sslContext = sslContext;
         this.clientAuthType = clientAuthType;
         this.customInterceptorBeans = customInterceptorBeans;
@@ -324,14 +319,6 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     @ManagedAttribute(description = "Audit Enabled")
     public boolean isAudit() { 
         return audit;
-    }
-    
-    /**
-     * Returns <tt>true</tt> when incomplete ATNA auditing records are allowed as well.
-     */
-    @ManagedAttribute(description = "Incomplete Audit Allowed")
-    public boolean isAllowIncompleteAudit() { 
-        return allowIncompleteAudit;
     }
     
     /**

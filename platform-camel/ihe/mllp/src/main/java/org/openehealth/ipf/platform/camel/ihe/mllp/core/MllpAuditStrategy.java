@@ -51,21 +51,6 @@ abstract public class MllpAuditStrategy<T extends MllpAuditDataset> {
 
 
     /**
-     * Returns an array containing names of transaction-specific fields
-     * that must be present in a complete audit dataset.
-     * <p>
-     * These field names must have first letters capitalized,
-     * e.g. "PatientId". 
-     *
-     * @param eventTrigger
-     *          Event trigger of the current HL7 message, e.g. "A01". 
-     * @return
-     *          A String array.
-     */
-    abstract public String[] getNecessaryFields(String eventTrigger);
-    
-    
-    /**
      * Enriches the given audit dataset with transaction-specific 
      * contents of the request message and Camel exchange.
      * @param auditDataset

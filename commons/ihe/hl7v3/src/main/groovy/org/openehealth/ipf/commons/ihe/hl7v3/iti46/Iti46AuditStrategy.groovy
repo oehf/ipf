@@ -25,17 +25,8 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
  */
 class Iti46AuditStrategy extends Hl7v3AuditStrategy {
 
-    private static final String[] NECESSARY_FIELD_NAMES = [
-            'EventOutcomeCode',
-            'UserId',
-            'ServiceEndpointUrl',
-            'PatientIds',
-            'MessageId',
-    ]
-
-
-    Iti46AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit)
+    Iti46AuditStrategy(boolean serverSide) {
+        super(serverSide)
     }
 
 
@@ -63,13 +54,8 @@ class Iti46AuditStrategy extends Hl7v3AuditStrategy {
                 auditDataset.serviceEndpointUrl,
                 auditDataset.clientIpAddress,
                 auditDataset.patientIds,
-                auditDataset.messageId)
-    }
-
-
-    @Override
-    String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_FIELD_NAMES
+                auditDataset.messageId,
+                auditDataset.purposesOfUse)
     }
 
 }

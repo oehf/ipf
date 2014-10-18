@@ -57,7 +57,7 @@ public class XdsAsyncResponseEndpoint extends AbstractWsEndpoint<AbstractWsCompo
         return new XdsAsyncResponseServiceFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
-                isAudit() ? getComponent().getServerAuditStrategy(isAllowIncompleteAudit()) : null,
+                isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getCorrelator(),
                 getCustomInterceptors());
     }

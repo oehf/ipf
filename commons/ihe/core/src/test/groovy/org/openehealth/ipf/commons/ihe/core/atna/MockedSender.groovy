@@ -15,21 +15,47 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna
 
+import org.openehealth.ipf.commons.xml.XsdValidator
 import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage
 import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import static org.openehealth.ipf.commons.xml.XmlUtils.source
 
 /**
- * Mocked sender implementation for ATNA messages. 
- * Records the messages to allow verification in tests.
+ * Mocked sender implementation for ATNA audit records.
+ * Records the messages to allow verification in tests and, optionally,
+ * validates them against the schema from DICOM Part 15 Appendix A.5.1.
+ *
  * @author Jens Riemschneider
  */
 class MockedSender implements AuditMessageSender {
+    private static final transient Logger LOG = LoggerFactory.getLogger(MockedSender.class)
+
+    private static final String VALIDATION_SCHEMA = 'dicomModified.xsd'
+
     List<AuditEventMessage> messages = Collections.synchronizedList(new ArrayList<AuditEventMessage>())
+    XsdValidator validator = new XsdValidator()
+    boolean needValidation
+
+
+    MockedSender(boolean needValidation = true) {
+        this.needValidation = needValidation
+    }
+
 
     void sendAuditEvent(AuditEventMessage[] msg) {
-        messages.addAll(Arrays.asList(msg))
+        for (message in msg) {
+            String s = message.toString()
+            LOG.debug(s)
+            if (needValidation) {
+                validator.validate(source(s), VALIDATION_SCHEMA)
+            }
+            messages.add(message)
+        }
     }
-    
+
     void sendAuditEvent(AuditEventMessage[] msg, InetAddress destination, int port) {
         sendAuditEvent(msg)
     }

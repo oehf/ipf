@@ -32,16 +32,13 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 abstract public class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmitAuditDataset> {
 
     /**
-     * Constructs an XDS audit strategy.
+     * Constructs an audit strategy for an XDS submission.
      *
      * @param serverSide
      *      whether this is a server-side or a client-side strategy.
-     * @param allowIncompleteAudit
-     *      whether this strategy should allow incomplete audit records
-     *      (parameter initially configurable via endpoint URL).
      */
-    public XdsSubmitAuditStrategy30(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit);
+    public XdsSubmitAuditStrategy30(boolean serverSide) {
+        super(serverSide);
     }
 
 

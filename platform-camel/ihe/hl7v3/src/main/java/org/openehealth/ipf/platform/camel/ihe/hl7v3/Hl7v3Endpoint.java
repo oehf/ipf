@@ -54,7 +54,7 @@ public class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
         return new Hl7v3ClientFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
-                isAudit() ? getComponent().getClientAuditStrategy(isAllowIncompleteAudit()) : null,
+                isAudit() ? getComponent().getClientAuditStrategy() : null,
                 getCorrelator(),
                 getCustomInterceptors());
     }
@@ -65,7 +65,7 @@ public class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
         return new Hl7v3ServiceFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
-                isAudit() ? getComponent().getServerAuditStrategy(isAllowIncompleteAudit()) : null,
+                isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
     }
