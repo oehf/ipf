@@ -112,7 +112,7 @@ public class XdsAuditorTest extends TestCase {
                 PATIENT_ID,
                 PURPOSES_OF_USE);
 
-        assertEquals(6, sender.getMessages().size());   // 16
+        assertEquals(6, sender.getMessages().size());
     }
 
 }

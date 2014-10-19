@@ -133,6 +133,6 @@ public class RadAuditorTest extends TestCase {
             PATIENT_ID,
             PURPOSES_OF_USE);
 
-        assertEquals(4, sender.getMessages().size());   // 16
+        assertEquals(4, sender.getMessages().size());
     }
 }
