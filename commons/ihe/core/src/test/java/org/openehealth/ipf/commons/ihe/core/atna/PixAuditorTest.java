@@ -79,7 +79,7 @@ public class PixAuditorTest extends TestCase {
                 NEW_PATIENT_ID,
                 OLD_PATIENT_ID);
 
-        assertEquals(2, sender.getMessages().size());   // 16
+        assertEquals(2, sender.getMessages().size());
     }
 
 }
