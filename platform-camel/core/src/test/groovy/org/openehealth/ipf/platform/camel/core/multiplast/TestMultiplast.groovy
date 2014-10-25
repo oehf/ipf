@@ -32,7 +32,7 @@ import javax.security.auth.Subject
 import java.security.AccessController
 import javax.security.auth.SubjectDomainCombiner
 
-import static junit.framework.Assert.assertTrue
+import static org.junit.Assert.assertTrue
 import java.security.PrivilegedAction
 
 /**

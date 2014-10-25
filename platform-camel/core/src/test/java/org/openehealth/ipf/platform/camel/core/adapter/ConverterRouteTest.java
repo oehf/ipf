@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
