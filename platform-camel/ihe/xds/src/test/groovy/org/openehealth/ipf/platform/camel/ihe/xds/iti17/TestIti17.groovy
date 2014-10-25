@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti17
 
-import static junit.framework.Assert.assertEquals
+import static org.junit.Assert.assertEquals
 
 import org.apache.commons.io.IOUtils
 import org.junit.BeforeClass

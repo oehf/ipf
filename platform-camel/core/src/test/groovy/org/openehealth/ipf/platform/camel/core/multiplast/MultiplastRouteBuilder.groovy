@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.LinkedBlockingQueue
 import java.security.AccessController
 import javax.security.auth.SubjectDomainCombiner
-import static junit.framework.Assert.assertNotNull
+import static org.junit.Assert.assertNotNull
 
 class MultiplastRouteBuilder extends SpringRouteBuilder {
 
