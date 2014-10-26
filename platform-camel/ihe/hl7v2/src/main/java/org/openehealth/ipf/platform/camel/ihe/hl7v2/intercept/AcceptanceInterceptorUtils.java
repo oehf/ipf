@@ -18,12 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 
 
 /**
- * Generic functionality for HL7v2 acceptance checking
- * interceptors, a kind of Visitor.
+ * Generic functionality for HL7v2 acceptance checking interceptors.
  * @author Dmytro Rud
  */
 public class AcceptanceInterceptorUtils {
@@ -41,9 +40,8 @@ public class AcceptanceInterceptorUtils {
             Exchange exchange) throws Exception
     {
         // check input message
-        AcceptanceCheckUtils.checkRequestAcceptance(
-                exchange.getIn().getBody(MessageAdapter.class),
-                interceptor.getHl7v2TransactionConfiguration());
+        Hl7v2TransactionConfiguration config = interceptor.getHl7v2TransactionConfiguration();
+        config.checkRequestAcceptance(exchange.getIn().getBody(MessageAdapter.class));
         
         // run the route
         interceptor.getWrappedProcessor().process(exchange);
@@ -61,8 +59,7 @@ public class AcceptanceInterceptorUtils {
         interceptor.getWrappedProcessor().process(exchange);
 
         // check output message
-        AcceptanceCheckUtils.checkResponseAcceptance(
-                Exchanges.resultMessage(exchange).getBody(MessageAdapter.class),
-                interceptor.getHl7v2TransactionConfiguration());
+        Hl7v2TransactionConfiguration config = interceptor.getHl7v2TransactionConfiguration();
+        config.checkResponseAcceptance(Exchanges.resultMessage(exchange).getBody(MessageAdapter.class));
     }
 }

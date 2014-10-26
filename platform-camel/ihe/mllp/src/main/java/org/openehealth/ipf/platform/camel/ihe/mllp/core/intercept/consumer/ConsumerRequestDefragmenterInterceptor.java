@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage;
 
 import ca.uhn.hl7v2.model.Message;
@@ -41,7 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
  * 
  * @author Dmytro Rud
  */
-public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpInterceptor<MllpAuditDataset> {
+public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpInterceptor {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerRequestDefragmenterInterceptor.class);
     
     // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  

@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqTransactionConfiguration;
@@ -34,7 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqTransactionConfigu
  * Camel component for ITI-21 (PDQ).
  * @author Dmytro Rud
  */
-public class Iti21Component extends MllpComponent<QueryAuditDataset> {
+public class Iti21Component extends MllpTransactionComponent<QueryAuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new PdqTransactionConfiguration(
                 "2.5", 

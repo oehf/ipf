@@ -20,13 +20,13 @@ import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
 /**
  * Camel component for ITI-64 (XAD-PID Change Management - XPID).
  * @author Boris Stanojevic
  */
-public class Iti64Component extends MllpComponent<Iti64AuditDataset> {
+public class Iti64Component extends MllpTransactionComponent<Iti64AuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
                 "2.5",

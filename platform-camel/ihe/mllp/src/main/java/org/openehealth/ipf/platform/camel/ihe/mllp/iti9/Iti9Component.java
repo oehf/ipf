@@ -22,7 +22,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
@@ -33,7 +33,7 @@ import java.util.List;
  * Camel component for ITI-9 (PIX Query).
  * @author Dmytro Rud
  */
-public class Iti9Component extends MllpComponent<QueryAuditDataset> {
+public class Iti9Component extends MllpTransactionComponent<QueryAuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
                 "2.5", 

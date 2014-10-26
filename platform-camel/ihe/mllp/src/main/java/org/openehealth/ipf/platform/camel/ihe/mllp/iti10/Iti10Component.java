@@ -20,14 +20,14 @@ import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
 /**
  * Camel component for ITI-10 (PIX Update Notification).
  * @author Dmytro Rud
  */
-public class Iti10Component extends MllpComponent<QueryAuditDataset> {
+public class Iti10Component extends MllpTransactionComponent<QueryAuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
                 "2.5", 

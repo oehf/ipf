@@ -20,20 +20,12 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina2.Mina2Component;
 import org.apache.camel.component.mina2.Mina2Endpoint;
-import org.apache.camel.spring.GenericBeansException;
-import org.apache.camel.spring.SpringCamelContext;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.mina.filter.codec.ProtocolCodecFactory;
-import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 
-import javax.net.ssl.SSLContext;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,32 +34,47 @@ import java.util.Map;
 
 
 /**
- * Generic Camel component for IHE PIX/PDQ transactions.
- * 
+ * Generic Camel component for MLLP.
  * @author Dmytro Rud
  */
-public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Component implements Hl7v2ConfigurationHolder {
+public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration>
+        extends Mina2Component implements Hl7v2ConfigurationHolder
+{
     private static final transient Logger LOG = LoggerFactory.getLogger(MllpComponent.class);
     
     public static final String ACK_TYPE_CODE_HEADER = ConsumerAdaptingInterceptor.ACK_TYPE_CODE_HEADER;
     
     private static final String DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME = "#hl7codec";
 
-    /**
-     * Default constructor.
-     */
     protected MllpComponent() {
         super();
     }
 
-    /**
-     * Camel context-based constructor.
-     *
-     * @param camelContext
-     */
     protected MllpComponent(CamelContext camelContext) {
         super(camelContext);
     }
+
+
+    /**
+     * Creates a configuration object.
+     * @param parameters
+     *      URL parameters.
+     * @return
+     *      configuration object filled with values from the provided parameter map.
+     */
+    protected abstract ConfigType createConfig(Map<String, Object> parameters) throws Exception;
+
+
+    /**
+     * Creates an endpoint object.
+     * @param wrappedEndpoint
+     *      standard Camel MINA2 endpoint instance.
+     * @param config
+     *      endpoint configuration.
+     * @return
+     *      configured MLLP endpoint instance which wraps the MINA2 one.
+     */
+    protected abstract MllpEndpoint createEndpoint(Mina2Endpoint wrappedEndpoint, ConfigType config);
 
 
     /**
@@ -79,49 +86,6 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
             String remaining, 
             Map<String, Object> parameters) throws Exception
     {
-        // replace URL parts
-        int pos = uri.indexOf(":");
-        uri = new StringBuilder(uri).replace(0, pos, "mina2:tcp").toString();
-        remaining = "tcp://" + remaining;
-
-        // extract & exclude parameters which cannot be handled by camel-mina
-        boolean audit = getAndRemoveParameter(parameters, "audit", boolean.class, true);
-
-        boolean secure = getAndRemoveParameter(parameters, "secure", boolean.class, false);
-        ClientAuthType clientAuthType = getAndRemoveParameter(parameters, "clientAuth",
-                ClientAuthType.class, ClientAuthType.NONE);
-        String sslProtocolsString = getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
-        String sslCiphersString = getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
-        
-        boolean supportInteractiveContinuation = getAndRemoveParameter(
-                parameters, "supportInteractiveContinuation", boolean.class, false);
-        int interactiveContinuationDefaultThreshold = getAndRemoveParameter(
-                parameters, "interactiveContinuationDefaultThreshold", int.class, -1);      // >= 1 data record
-        
-        boolean supportUnsolicitedFragmentation = getAndRemoveParameter(
-                parameters, "supportUnsolicitedFragmentation", boolean.class, false);
-        int unsolicitedFragmentationThreshold = getAndRemoveParameter(
-                parameters, "unsolicitedFragmentationThreshold", int.class, -1);            // >= 3 segments
-        
-        boolean supportSegmentFragmentation = getAndRemoveParameter(
-                parameters, "supportSegmentFragmentation", boolean.class, false);
-        int segmentFragmentationThreshold = getAndRemoveParameter(
-                parameters, "segmentFragmentationThreshold", int.class, -1);                // >= 5 characters
-        
-        InteractiveContinuationStorage interactiveContinuationStorage =
-                resolveAndRemoveReferenceParameter(
-                        parameters,
-                        "interactiveContinuationStorage",
-                        InteractiveContinuationStorage.class);
-
-        UnsolicitedFragmentationStorage unsolicitedFragmentationStorage = 
-                resolveAndRemoveReferenceParameter(
-                        parameters,
-                        "unsolicitedFragmentationStorage",
-                        UnsolicitedFragmentationStorage.class);
-
-        boolean autoCancel = getAndRemoveParameter(parameters, "autoCancel", boolean.class, false);
-
         // explicitly overwrite some standard camel-mina parameters
         if (parameters == Collections.EMPTY_MAP) {
             parameters = new HashMap<String, Object>();
@@ -129,88 +93,30 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
         parameters.put("sync", true);
         parameters.put("lazySessionCreation", true);
         parameters.put("transferExchange", false);
-        if( ! parameters.containsKey("codec")) {
+        if (! parameters.containsKey("codec")) {
             parameters.put("codec", DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME);
         }
 
+        ConfigType config = createConfig(parameters);
+
         // adopt character set configured for the HL7 codec
-        ProtocolCodecFactory codecFactory = getCamelContext().getRegistry().lookupByNameAndType(
-                    extractBeanName((String) parameters.get("codec")),
-                    ProtocolCodecFactory.class);
         Charset charset = null;
         try {
-            charset = ((HL7MLLPCodec) codecFactory).getCharset();
+            charset = ((HL7MLLPCodec) config.getCodecFactory()).getCharset();
         } catch(ClassCastException cce) {
-            LOG.error("Unsupported HL7 codec factory type " + codecFactory.getClass().getName());
+            LOG.error("Unsupported HL7 codec factory type " + config.getCodecFactory().getClass().getName());
         }
-        if(charset == null) {
+        if (charset == null) {
             charset = Charset.defaultCharset();
         }
         parameters.put("encoding", charset.name());
         
         // construct the endpoint
-        Endpoint endpoint = super.createEndpoint(uri, remaining, parameters);
+        Endpoint endpoint = super.createEndpoint(uri, "tcp://" + remaining, parameters);
         Mina2Endpoint minaEndpoint = (Mina2Endpoint) endpoint;
 
-        List<Hl7v2InterceptorFactory> customInterceptorsFactories = resolveAndRemoveReferenceListParameter(
-                parameters, "interceptorFactories", Hl7v2InterceptorFactory.class);
-
-        SSLContext sslContext = secure ? resolveAndRemoveReferenceParameter(
-                parameters, 
-                "sslContext", 
-                SSLContext.class,
-                SSLContext.getDefault()) : null;
-
-        String[] sslProtocols = sslProtocolsString != null ? sslProtocolsString.split(",") : null;
-        String[] sslCiphers = sslCiphersString != null ? sslCiphersString.split(",") : null;
-
         // wrap and return
-        return new MllpEndpoint<T>(
-                this,
-                minaEndpoint,
-                audit,
-                sslContext,
-                clientAuthType,
-                extractInterceptorBeanNames(parameters),
-                customInterceptorsFactories,
-                sslProtocols,
-                sslCiphers,
-                supportInteractiveContinuation,
-                supportUnsolicitedFragmentation,
-                supportSegmentFragmentation,
-                interactiveContinuationDefaultThreshold,
-                unsolicitedFragmentationThreshold,
-                segmentFragmentationThreshold,
-                interactiveContinuationStorage,
-                unsolicitedFragmentationStorage,
-                autoCancel);
-    }
-
-
-    private static String extractBeanName(String originalBeanName) {
-        return originalBeanName.startsWith("#") ? originalBeanName.substring(1) : originalBeanName;
-    }
-
-
-    private String[] extractInterceptorBeanNames(Map<String, Object> parameters) {
-        SpringCamelContext camelContext = (SpringCamelContext) getCamelContext();
-        ApplicationContext applicationContext = camelContext.getApplicationContext();
-
-        String paramValue = getAndRemoveParameter(parameters, "interceptors", String.class);
-        if (StringUtils.isEmpty(paramValue)) {
-            return new String[0];
-        }
-
-        String[] beanNames = paramValue.split(",");
-        for (int i = 0; i < beanNames.length; ++i) {
-            beanNames[i] = extractBeanName(beanNames[i]);
-            if (! applicationContext.isPrototype(beanNames[i])) {
-                throw new GenericBeansException("Custom HL7v2 interceptor bean '" +
-                        beanNames[i] + "' shall have scope=\"prototype\"");
-            }
-        }
-
-        return beanNames;
+        return createEndpoint(minaEndpoint, config);
     }
 
 
@@ -256,18 +162,5 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
     public List<Hl7v2Interceptor> getAdditionalProducerInterceptors() {
         return Collections.emptyList();
     }
-
-
-    // ----- abstract methods -----
-
-    /**
-     * Returns server-side ATNA audit strategy. 
-     */
-    public abstract MllpAuditStrategy<T> getServerAuditStrategy();
-
-    /**
-     * Returns client-side ATNA audit strategy. 
-     */
-    public abstract MllpAuditStrategy<T> getClientAuditStrategy();
 
 }

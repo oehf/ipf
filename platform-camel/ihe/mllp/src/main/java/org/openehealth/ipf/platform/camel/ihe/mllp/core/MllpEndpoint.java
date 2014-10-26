@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.apache.camel.*;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
@@ -35,19 +37,6 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerMarshalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerResponseAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerResponseAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerRequestFragmenterInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerStringProcessingInterceptor;
 
 import javax.net.ssl.SSLContext;
 import java.util.ArrayList;
@@ -60,28 +49,17 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 @ManagedResource(description = "Managed IPF MLLP ITI Endpoint")
-public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint implements Hl7v2ConfigurationHolder {
+public abstract class MllpEndpoint
+        <
+            ConfigType extends MllpEndpointConfiguration,
+            ComponentType extends MllpComponent<ConfigType>
+        >
+        extends DefaultEndpoint implements Hl7v2ConfigurationHolder
+{
 
-    private final MllpComponent<T> mllpComponent;
-    private final Mina2Endpoint wrappedEndpoint;
-    private final boolean audit;
-
-    private final SSLContext sslContext;
-    private final String[] customInterceptorBeans;
-    private final List<Hl7v2InterceptorFactory> customInterceptorFactories;
-    private final ClientAuthType clientAuthType;
-    private final String[] sslProtocols;
-    private final String[] sslCiphers;
-    
-    private final boolean supportInteractiveContinuation;
-    private final boolean supportUnsolicitedFragmentation;
-    private final boolean supportSegmentFragmentation;
-    private final int interactiveContinuationDefaultThreshold;
-    private final int unsolicitedFragmentationThreshold;
-    private final int segmentFragmentationThreshold;
-    private final InteractiveContinuationStorage interactiveContinuationStorage;
-    private final UnsolicitedFragmentationStorage unsolicitedFragmentationStorage;
-    private final boolean autoCancel;
+    @Getter(AccessLevel.PROTECTED) private final ConfigType config;
+    @Getter(AccessLevel.PROTECTED) private final ComponentType mllpComponent;
+    @Getter(AccessLevel.PROTECTED) private final Mina2Endpoint wrappedEndpoint;
 
 
     /**
@@ -90,120 +68,39 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      *      MLLP Component instance which is creating this endpoint.
      * @param wrappedEndpoint
      *      The original camel-mina endpoint instance.
-     * @param audit
-     *      Whether ATNA auditing should be performed.
-     * @param sslContext
-     *      the SSL context to use; {@code null} if secure communication is not used.
-     * @param clientAuthType
-     *      type of desired client authentication (NONE/WANT/MUST).
-     * @param customInterceptorBeans
-     *      names of interceptor beans defined in the endpoint URI.
-     * @param customInterceptorFactories
-     *      names of interceptor factories defined in the endpoint URI.
-     * @param sslProtocols
-     *      the protocols defined in the endpoint URI or {@code null} if none were specified.
-     * @param sslCiphers
-     *      the ciphers defined in the endpoint URI or {@code null} if none were specified.
-     * @param supportInteractiveContinuation
-     *      {@code true} when this endpoint should support interactive message continuation.
-     * @param supportUnsolicitedFragmentation
-     *      {@code true} when this endpoint should support segment fragmentation.
-     * @param supportSegmentFragmentation
-     *      {@code true} when this endpoint should support segment fragmentation.
-     * @param interactiveContinuationDefaultThreshold
-     *      default consumer-side threshold for interactive response continuation.
-     * @param unsolicitedFragmentationThreshold
-     *      producer-side threshold for unsolicited message fragmentation.
-     * @param segmentFragmentationThreshold
-     *      threshold for segment fragmentation.
-     * @param interactiveContinuationStorage
-     *      consumer-side storage for interactive message continuation.
-     * @param unsolicitedFragmentationStorage
-     *      consumer-side storage for unsolicited message fragmentation.
-     * @param autoCancel
-     *      whether the producer should automatically send a cancel message
-     *      after it has collected all interactive continuation pieces.
+     * @param config
+     *      Configuration parameters.
      */
     public MllpEndpoint(
-            MllpComponent<T> mllpComponent,
+            ComponentType mllpComponent,
             Mina2Endpoint wrappedEndpoint,
-            boolean audit,
-            SSLContext sslContext,
-            ClientAuthType clientAuthType,
-            String[] customInterceptorBeans,
-            List<Hl7v2InterceptorFactory> customInterceptorFactories,
-            String[] sslProtocols,
-            String[] sslCiphers,
-            boolean supportInteractiveContinuation,
-            boolean supportUnsolicitedFragmentation,
-            boolean supportSegmentFragmentation,
-            int interactiveContinuationDefaultThreshold,
-            int unsolicitedFragmentationThreshold,
-            int segmentFragmentationThreshold,
-            InteractiveContinuationStorage interactiveContinuationStorage,
-            UnsolicitedFragmentationStorage unsolicitedFragmentationStorage,
-            boolean autoCancel)
+            ConfigType config)
     {
-        Validate.notNull(mllpComponent);
-        Validate.notNull(wrappedEndpoint);
-        Validate.noNullElements(customInterceptorBeans);
-        Validate.noNullElements(customInterceptorFactories);
-        Validate.notNull(clientAuthType);
-
-        this.mllpComponent = mllpComponent;
-        this.wrappedEndpoint = wrappedEndpoint;
-        this.audit = audit;
-        this.sslContext = sslContext;
-        this.clientAuthType = clientAuthType;
-        this.customInterceptorBeans = customInterceptorBeans;
-        this.customInterceptorFactories = customInterceptorFactories;
-        this.sslProtocols = sslProtocols;
-        this.sslCiphers = sslCiphers;
-
-        this.supportInteractiveContinuation = supportInteractiveContinuation;
-        this.supportUnsolicitedFragmentation = supportUnsolicitedFragmentation;
-        this.supportSegmentFragmentation = supportSegmentFragmentation;
-        this.interactiveContinuationDefaultThreshold = interactiveContinuationDefaultThreshold;
-        this.unsolicitedFragmentationThreshold = unsolicitedFragmentationThreshold;
-        this.segmentFragmentationThreshold = segmentFragmentationThreshold;
-        this.interactiveContinuationStorage = interactiveContinuationStorage;
-        this.unsolicitedFragmentationStorage = unsolicitedFragmentationStorage;
-        this.autoCancel = autoCancel;
+        this.mllpComponent = Validate.notNull(mllpComponent);
+        this.wrappedEndpoint = Validate.notNull(wrappedEndpoint);
+        this.config = Validate.notNull(config);
     }
 
 
-    private synchronized List<Hl7v2Interceptor> getCustomInterceptors() {
+    protected synchronized List<Hl7v2Interceptor> getCustomInterceptors() {
         List<Hl7v2Interceptor> result = new ArrayList<Hl7v2Interceptor>();
-        for (String beanName : customInterceptorBeans) {
+        for (String beanName : config.getCustomInterceptorBeans()) {
             result.add(getCamelContext().getRegistry().lookupByNameAndType(beanName, Hl7v2Interceptor.class));
         }
-        for (Hl7v2InterceptorFactory customInterceptorFactory: customInterceptorFactories) {
+        for (Hl7v2InterceptorFactory customInterceptorFactory : config.getCustomInterceptorFactories()) {
             result.add(customInterceptorFactory.getNewInstance());
         }
         return result;
     }
 
 
+    protected abstract List<Hl7v2Interceptor> createInitialConsumerInterceptorChain();
+    protected abstract List<Hl7v2Interceptor> createInitialProducerInterceptorChain();
+
+
     private List<Hl7v2Interceptor> getConsumerInterceptorChain() {
         // set up initial interceptor chain
-        List<Hl7v2Interceptor> initialChain = new ArrayList<Hl7v2Interceptor>();
-        initialChain.add(new ConsumerStringProcessingInterceptor());
-        if (isSupportUnsolicitedFragmentation()) {
-            initialChain.add(new ConsumerRequestDefragmenterInterceptor());
-        }
-        initialChain.add(new ConsumerMarshalInterceptor());
-        initialChain.add(new ConsumerRequestAcceptanceInterceptor());
-        if (isSupportInteractiveContinuation()) {
-            initialChain.add(new ConsumerInteractiveResponseSenderInterceptor());
-        }
-        if (isAudit()) {
-            initialChain.add(new ConsumerAuditInterceptor<T>());
-        }
-        initialChain.add(new ConsumerResponseAcceptanceInterceptor());
-        initialChain.add(new ConsumerAdaptingInterceptor(getCharsetName()));
-        if (isAudit()) {
-            initialChain.add(new ConsumerAuthenticationFailureInterceptor());
-        }
+        List<Hl7v2Interceptor> initialChain = createInitialConsumerInterceptorChain();
 
         // add interceptors provided by the user
         List<Hl7v2Interceptor> additionalInterceptors = new ArrayList<Hl7v2Interceptor>();
@@ -216,20 +113,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
 
     private List<Hl7v2Interceptor> getProducerInterceptorChain() {
         // set up initial interceptor chain
-        List<Hl7v2Interceptor> initialChain = new ArrayList<Hl7v2Interceptor>();
-        initialChain.add(new ProducerStringProcessingInterceptor());
-        if (isSupportUnsolicitedFragmentation()) {
-            initialChain.add(new ProducerRequestFragmenterInterceptor());
-        }
-        initialChain.add(isSupportInteractiveContinuation()
-                ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor()
-                : new ProducerMarshalInterceptor());
-        initialChain.add(new ProducerResponseAcceptanceInterceptor());
-        if (isAudit()) {
-            initialChain.add(new ProducerAuditInterceptor<T>());
-        }
-        initialChain.add(new ProducerRequestAcceptanceInterceptor());
-        initialChain.add(new ProducerAdaptingInterceptor());
+        List<Hl7v2Interceptor> initialChain = createInitialProducerInterceptorChain();
 
         // add interceptors provided by the user
         List<Hl7v2Interceptor> additionalInterceptors = new ArrayList<Hl7v2Interceptor>();
@@ -258,16 +142,16 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
             processor = interceptor;
         }
 
-        Mina2Consumer consumer = (Mina2Consumer)wrappedEndpoint.createConsumer(processor);
-        if (sslContext != null) {
+        Mina2Consumer consumer = (Mina2Consumer) wrappedEndpoint.createConsumer(processor);
+        if (config.getSslContext() != null) {
             DefaultIoFilterChainBuilder filterChain = consumer.getAcceptor().getFilterChain();
             if (! filterChain.contains("ssl")) {
-                HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
-                filter.setNeedClientAuth(clientAuthType == ClientAuthType.MUST);
-                filter.setWantClientAuth(clientAuthType == ClientAuthType.WANT);
+                HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(config.getSslContext());
+                filter.setNeedClientAuth(config.getClientAuthType() == ClientAuthType.MUST);
+                filter.setWantClientAuth(config.getClientAuthType() == ClientAuthType.WANT);
                 filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
-                filter.setEnabledProtocols(sslProtocols);
-                filter.setEnabledCipherSuites(sslCiphers);
+                filter.setEnabledProtocols(config.getSslProtocols());
+                filter.setEnabledCipherSuites(config.getSslCiphers());
                 filterChain.addFirst("ssl", filter);
             }
         }
@@ -284,14 +168,14 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     public Producer createProducer() throws Exception {
         Mina2Producer producer = (Mina2Producer)wrappedEndpoint.createProducer();
 
-        if (sslContext != null) {
+        if (config.getSslContext() != null) {
             DefaultIoFilterChainBuilder filterChain = producer.getFilterChain();
             if (!filterChain.contains("ssl")) {
-                HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
+                HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(config.getSslContext());
                 filter.setUseClientMode(true);
                 filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
-                filter.setEnabledProtocols(sslProtocols);
-                filter.setEnabledCipherSuites(sslCiphers);
+                filter.setEnabledProtocols(config.getSslProtocols());
+                filter.setEnabledCipherSuites(config.getSslCiphers());
                 filterChain.addFirst("ssl", filter);
             }
         }
@@ -305,35 +189,14 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     private class HandshakeFailureCallback implements HandshakeCallbackSSLFilter.Callback {
         @Override
         public void run(IoSession session) {
-            if (isAudit()) {
+            if (config.isAudit()) {
                 String hostAddress = session.getRemoteAddress().toString();
-                getServerAuditStrategy().auditAuthenticationNodeFailure(hostAddress);
+                MllpAuditStrategy.auditAuthenticationNodeFailure(hostAddress);
             }
         }
     }
 
     // ----- getters -----
-    /**
-     * Returns <tt>true</tt> when ATNA auditing should be performed.
-     */
-    @ManagedAttribute(description = "Audit Enabled")
-    public boolean isAudit() { 
-        return audit;
-    }
-    
-    /**
-     * Returns client-side audit strategy instance.
-     */
-    public MllpAuditStrategy<T> getClientAuditStrategy() {
-        return mllpComponent.getClientAuditStrategy();
-    }
-
-    /**
-     * Returns server-side audit strategy instance.
-     */
-    public MllpAuditStrategy<T> getServerAuditStrategy() {
-        return mllpComponent.getServerAuditStrategy();
-    }
 
     /**
      * Returns transaction configuration.
@@ -352,19 +215,11 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     }
 
     /**
-     * Returns <code>true</code> if this endpoint supports interactive continuation.
-     */
-    @ManagedAttribute(description = "Support Interactive Continuation Enabled")
-    public boolean isSupportInteractiveContinuation() {
-        return supportInteractiveContinuation;
-    }
-
-    /**
      * Returns <code>true</code> if this endpoint supports unsolicited message fragmentation.
      */
     @ManagedAttribute(description = "Support Unsolicited Fragmentation Enabled")
     public boolean isSupportUnsolicitedFragmentation() {
-        return supportUnsolicitedFragmentation;
+        return config.isSupportUnsolicitedFragmentation();
     }
 
     /**
@@ -372,21 +227,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      */
     @ManagedAttribute(description = "Support Segment Fragmentation Enabled")
     public boolean isSupportSegmentFragmentation() {
-        return supportSegmentFragmentation;
-    }
-
-    /**
-     * Returns default threshold for interactive continuation 
-     * (relevant on consumer side only).
-     * <p>
-     * This value will be used when interactive continuation is generally supported 
-     * by this endpoint and is particularly applicable for the current response message,   
-     * and the corresponding request message does not set the records count threshold 
-     * explicitly (RCP-2-1==integer, RCP-2-2=='RD').
-     */
-    @ManagedAttribute(description = "Interactive Continuation Default Threshold")
-    public int getInteractiveContinuationDefaultThreshold() {
-        return interactiveContinuationDefaultThreshold;
+        return config.isSupportSegmentFragmentation();
     }
 
     /**
@@ -395,7 +236,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      */
     @ManagedAttribute(description = "Unsolicited Fragmentation Threshold")
     public int getUnsolicitedFragmentationThreshold() {
-        return unsolicitedFragmentationThreshold;
+        return config.getUnsolicitedFragmentationThreshold();
     }
 
     /**
@@ -403,37 +244,21 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      */
     @ManagedAttribute(description = "Segment Fragmentation Threshold")
     public int getSegmentFragmentationThreshold() {
-        return segmentFragmentationThreshold;
-    }
-
-    /**
-     * Returns the interactive continuation storage bean. 
-     */
-    public InteractiveContinuationStorage getInteractiveContinuationStorage() {
-        return interactiveContinuationStorage;
+        return config.getSegmentFragmentationThreshold();
     }
 
     /**
      * Returns the unsolicited fragmentation storage bean. 
      */
     public UnsolicitedFragmentationStorage getUnsolicitedFragmentationStorage() {
-        return unsolicitedFragmentationStorage;
-    }
-
-    /**
-     * Returns true, when the producer should automatically send a cancel
-     * message after it has collected all interactive continuation pieces.
-     */
-    @ManagedAttribute(description = "Auto Cancel Enabled")
-    public boolean isAutoCancel() {
-        return autoCancel;
+        return config.getUnsolicitedFragmentationStorage();
     }
 
     /**
      * @return the sslContext
      */
     public SSLContext getSslContext() {
-        return sslContext;
+        return config.getSslContext();
     }
 
     /**
@@ -441,7 +266,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      */
     @ManagedAttribute(description = "Defined SSL Protocols")
     public String[] getSslProtocols() {
-        return sslProtocols;
+        return config.getSslProtocols();
     }
 
     /**
@@ -449,7 +274,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      */
     @ManagedAttribute(description = "Defined SSL Ciphers")
     public String[] getSslCiphers() {
-        return sslCiphers;
+        return config.getSslCiphers();
     }
 
     @ManagedAttribute(description = "Component Type Name")
@@ -483,12 +308,6 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
         return toStringArray(filters);
     }
 
-    @ManagedAttribute(description = "Interactive Continuation Storage Cache Type")
-    public String getInteractiveContinuationStorageType() {
-        return isSupportInteractiveContinuation() ?
-            getInteractiveContinuationStorage().getClass().getName() : "";
-    }
-
     @ManagedAttribute(description = "Unsolicited Fragmentation Storage Cache Type")
     public String getUnsolicitedFragmentationStorageType() {
         return isSupportUnsolicitedFragmentation() ?
@@ -504,7 +323,7 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      * @return the client authentication type.
      */
     public ClientAuthType getClientAuthType() {
-        return clientAuthType;
+        return config.getClientAuthType();
     }
 
     @ManagedAttribute(description = "Client Authentication Type")
@@ -517,14 +336,14 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
      */
     @ManagedAttribute(description = "Custom Interceptor Beans")
     public String[] getCustomInterceptorBeans() {
-        return this.customInterceptorBeans;
+        return config.getCustomInterceptorBeans();
     }
 
     /**
      * @return the customInterceptorFactories
      */
     public List<Hl7v2InterceptorFactory> getCustomInterceptorFactories() {
-        return customInterceptorFactories;
+        return config.getCustomInterceptorFactories();
     }
 
     /**
@@ -543,13 +362,6 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
         return result;
     }
 
-    /**
-     * @return
-     *      the wrapped MINA endpoint.
-     */
-    public Mina2Endpoint getWrappedEndpoint() {
-        return wrappedEndpoint;
-    }
 
     /* ----- dumb delegation, nothing interesting below ----- */
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -581,11 +393,10 @@ public class MllpEndpoint<T extends MllpAuditDataset> extends DefaultEndpoint im
     @Override
     public boolean equals(Object object) {
         if (object instanceof MllpEndpoint) {
-            MllpEndpoint<?> that = (MllpEndpoint<?>) object;
-            return this.getWrappedEndpoint().equals(that.getWrappedEndpoint());
+            MllpEndpoint<?, ?> that = (MllpEndpoint<?, ?>) object;
+            return wrappedEndpoint.equals(that.getWrappedEndpoint());
         }
-        else
-            return false;
+        return false;
     }
 
     @Override

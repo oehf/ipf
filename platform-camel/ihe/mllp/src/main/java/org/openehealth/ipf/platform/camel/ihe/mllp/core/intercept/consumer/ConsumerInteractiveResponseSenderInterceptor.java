@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
@@ -29,7 +30,6 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * as described in paragraph 5.6.3 of the HL7 v2.5 specification.
  * @author Dmytro Rud
  */
-public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpInterceptor<MllpAuditDataset> {
+public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpInterceptor {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerInteractiveResponseSenderInterceptor.class);
     private InteractiveContinuationStorage storage;
 
@@ -53,13 +53,15 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
     @Override
     public void setConfigurationHolder(Hl7v2ConfigurationHolder configurationHolder) {
         super.setConfigurationHolder(configurationHolder);
-        this.storage = getMllpEndpoint().getInteractiveContinuationStorage();
-        Validate.notNull(storage);
+        MllpTransactionEndpoint endpoint = (MllpTransactionEndpoint) getMllpEndpoint();
+        this.storage = Validate.notNull(endpoint.getInteractiveContinuationStorage());
     }
 
 
     @Override
     public void process(Exchange exchange) throws Exception {
+        MllpTransactionEndpoint endpoint = (MllpTransactionEndpoint) getMllpEndpoint();
+
         Parser parser = getHl7v2TransactionConfiguration().getParser();
         MessageAdapter<?> request = (MessageAdapter<?>) exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME);
         Message requestMessage = request.getHapiMessage();
@@ -111,7 +113,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             LOG.warn("Cannot parse RCP-2-1, try to use default threshold", nfe);
         }
         if (threshold < 1) {
-            threshold = getMllpEndpoint().getInteractiveContinuationDefaultThreshold();
+            threshold = endpoint.getInteractiveContinuationDefaultThreshold();
         }
         if (threshold < 1) {
             LOG.debug("Cannot perform interactive continuation: invalid or missing threshold");

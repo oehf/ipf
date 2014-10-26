@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptorUtils;
@@ -29,18 +30,18 @@ import java.net.InetAddress;
  * Producer-side ATNA auditing Camel interceptor.
  * @author Dmytro Rud
  */
-public class ProducerAuditInterceptor<T extends MllpAuditDataset> extends AbstractMllpInterceptor<T> implements AuditInterceptor<T> {
+public class ProducerAuditInterceptor<T extends MllpAuditDataset> extends AbstractMllpInterceptor implements AuditInterceptor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
         AuditInterceptorUtils.doProcess(this, exchange);
     }
 
-    
+
     @Override
     public void determineParticipantsAddresses(
             Exchange exchange,
-            MllpAuditDataset auditDataset) throws Exception 
+            MllpAuditDataset auditDataset) throws Exception
     {
         auditDataset.setLocalAddress(InetAddress.getLocalHost().getCanonicalHostName());
         auditDataset.setRemoteAddress(getMllpEndpoint().getEndpointUri());
@@ -49,6 +50,7 @@ public class ProducerAuditInterceptor<T extends MllpAuditDataset> extends Abstra
 
     @Override
     public MllpAuditStrategy<T> getAuditStrategy() {
-        return getMllpEndpoint().getClientAuditStrategy();
+        MllpTransactionEndpoint<T> endpoint = (MllpTransactionEndpoint<T>) getMllpEndpoint();
+        return endpoint.getClientAuditStrategy();
     }
 }

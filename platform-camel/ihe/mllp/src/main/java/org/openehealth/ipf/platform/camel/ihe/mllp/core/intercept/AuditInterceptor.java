@@ -23,7 +23,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
  * Interface for PIX/PDQ auditing interceptors.
  * @author Dmytro Rud
  */
-public interface AuditInterceptor<T extends MllpAuditDataset> extends MllpInterceptor<T> {
+public interface AuditInterceptor<T extends MllpAuditDataset> extends MllpInterceptor {
 
     /**
      * Determines local and remote network addresses on the basis of the

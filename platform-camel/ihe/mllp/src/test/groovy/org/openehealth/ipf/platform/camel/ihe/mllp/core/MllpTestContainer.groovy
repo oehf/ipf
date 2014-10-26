@@ -35,18 +35,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext
  * @author Dmytro Rud
  */
 class MllpTestContainer {
-    def static CONTEXT_DESCRIPTOR = 'some-mllp-iti-context.xml'
-    
-    def static producerTemplate
-    def static camelContext
-    def static auditSender
-    def static appContext
+
+    static ProducerTemplate producerTemplate
+    static CamelContext camelContext
+    static MockedSender auditSender
+    static ClassPathXmlApplicationContext appContext
     
     
     /**
      * Initializes a test on the basis of a Spring descriptor.
      */
-    def static init(String descriptorFile, boolean standalone) {
+    static void init(String descriptorFile, boolean standalone) {
         appContext = new ClassPathXmlApplicationContext(descriptorFile)
         producerTemplate = appContext.getBean('template', ProducerTemplate.class)
         camelContext = appContext.getBean('camelContext', CamelContext.class)

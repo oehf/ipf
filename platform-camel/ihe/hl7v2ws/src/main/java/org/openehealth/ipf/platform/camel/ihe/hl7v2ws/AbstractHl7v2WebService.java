@@ -17,8 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
 import static org.openehealth.ipf.commons.ihe.hl7v2ws.Utils.render;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.checkRequestAcceptance;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.checkResponseAcceptance;
 import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 import org.apache.camel.Exchange;
@@ -71,7 +69,7 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
         MessageAdapter<?> msg;
         try {
             msg = MessageAdapters.make(config.getParser(), trimToEmpty(request).replaceAll("\n", "\r\n"));
-            checkRequestAcceptance(msg, config);
+            config.checkRequestAcceptance(msg);
         } catch (Exception e) {
             LOG.error(formatErrMsg("Request not acceptable"), e);
             return render(nakFactory.createDefaultNak(e));
@@ -92,7 +90,7 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
                     resultMessage(exchange),
                     exchange.getProperty(Exchange.CHARSET_NAME, String.class),
                     config.getParser());
-            checkResponseAcceptance(msg, config);
+            config.checkResponseAcceptance(msg);
             return render(msg.getHapiMessage());
 
         } catch (Exception e) {

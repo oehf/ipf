@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 
 
@@ -24,13 +23,11 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
  * Abstract Camel interceptor for MLLP-based HL7v2 transactions.
  * @author Dmytro Rud
  */
-public abstract class AbstractMllpInterceptor<T extends MllpAuditDataset>
-        extends AbstractHl7v2Interceptor
-        implements MllpInterceptor<T>
+public abstract class AbstractMllpInterceptor<T extends MllpEndpoint> extends AbstractHl7v2Interceptor implements MllpInterceptor
 {
     @SuppressWarnings("unchecked")
     @Override
-    public MllpEndpoint<T> getMllpEndpoint() {
-        return (MllpEndpoint<T>) getConfigurationHolder();
+    public T getMllpEndpoint() {
+        return (T) getConfigurationHolder();
     }
 }

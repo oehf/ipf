@@ -99,9 +99,9 @@ abstract public class MllpAuditStrategy<T extends MllpAuditDataset> {
      * @param hostAddress
      *          the address of the node that is responsible for the failure.
      */
-    public void auditAuthenticationNodeFailure(String hostAddress) {
+    public static void auditAuthenticationNodeFailure(String hostAddress) {
         AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure(
-            true, null, getClass().getName(), null, hostAddress, null);
+            true, null, "IPF MLLP Component", null, hostAddress, null);
     }
     
     
