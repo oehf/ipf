@@ -82,7 +82,7 @@ public abstract class MllpEndpoint
     }
 
 
-    protected synchronized List<Hl7v2Interceptor> getCustomInterceptors() {
+    private synchronized List<Hl7v2Interceptor> getCustomInterceptors() {
         List<Hl7v2Interceptor> result = new ArrayList<Hl7v2Interceptor>();
         for (String beanName : config.getCustomInterceptorBeans()) {
             result.add(getCamelContext().getRegistry().lookupByNameAndType(beanName, Hl7v2Interceptor.class));

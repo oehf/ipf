@@ -23,7 +23,7 @@ import org.apache.camel.component.mina2.Mina2Consumer;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +32,7 @@ import java.util.IdentityHashMap;
 
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.apache.commons.lang3.StringUtils.splitPreserveAllTokens;
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 /**
  * Interceptor which dispatches an incoming request message to another MLLP route.
@@ -68,11 +69,11 @@ public class ConsumerDispatchingInterceptor extends AbstractMllpInterceptor impl
         for (String routeId : routeIds) {
             Mina2Consumer consumer = (Mina2Consumer) camelContext.getRoute(routeId).getConsumer();
             Hl7v2Interceptor interceptor = (Hl7v2Interceptor) consumer.getProcessor();
-            while (! (interceptor instanceof ConsumerRequestAcceptanceInterceptor)) {
+            while (! ConsumerMarshalInterceptor.class.getName().equals(interceptor.getId())) {
                 interceptor = (Hl7v2Interceptor) interceptor.getWrappedProcessor();
             }
 
-            map.put((Hl7v2Interceptor) interceptor.getWrappedProcessor(), routeId);
+            map.put(interceptor, routeId);
         }
     }
 
@@ -125,7 +126,8 @@ public class ConsumerDispatchingInterceptor extends AbstractMllpInterceptor impl
         if (! found) {
             LOG.debug("Nobody can process message with MSH-9-1='{}', MSH-9-2='{}', MSH-9-3='{}', MSH-12='{}'",
                     messageType, triggerEvent, messageStructure, version);
-            throw new Hl7v2AcceptanceException("Unsupported message type and/or version", 207);
+            Hl7v2AcceptanceException exception = new Hl7v2AcceptanceException("Unsupported message type and/or version", 207);
+            resultMessage(exchange).setBody(getNakFactory().createDefaultNak(exception).encode());
         }
     }
 
