@@ -49,7 +49,7 @@ public class EhcacheAsynchronyCorrelator implements AsynchronyCorrelator {
 
     private <T extends Serializable> T get(String key, String suffix) {
         Element element = ehcache.get(key + suffix);
-        return (element != null) ? (T) element.getValue() : null;
+        return (element != null) ? (T) element.getObjectValue() : null;
     }
 
     @Override
