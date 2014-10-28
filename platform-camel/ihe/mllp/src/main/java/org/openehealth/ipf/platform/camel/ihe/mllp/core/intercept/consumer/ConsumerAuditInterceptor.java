@@ -33,7 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditIntercept
  * @author Dmytro Rud
  */
 public class ConsumerAuditInterceptor<T extends MllpAuditDataset>
-        extends AbstractMllpInterceptor
+        extends AbstractMllpInterceptor<MllpTransactionEndpoint<T>>
         implements AuditInterceptor<T>
 {
     @Override
@@ -43,8 +43,7 @@ public class ConsumerAuditInterceptor<T extends MllpAuditDataset>
 
     @Override
     public MllpAuditStrategy<T> getAuditStrategy() {
-        MllpTransactionEndpoint mllpEndpoint = (MllpTransactionEndpoint) getMllpEndpoint();
-        return mllpEndpoint.getServerAuditStrategy();
+        return getMllpEndpoint().getServerAuditStrategy();
     }
 
     @Override

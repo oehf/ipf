@@ -30,7 +30,9 @@ import java.net.InetAddress;
  * Producer-side ATNA auditing Camel interceptor.
  * @author Dmytro Rud
  */
-public class ProducerAuditInterceptor<T extends MllpAuditDataset> extends AbstractMllpInterceptor implements AuditInterceptor {
+public class ProducerAuditInterceptor<T extends MllpAuditDataset>
+        extends AbstractMllpInterceptor<MllpTransactionEndpoint<T>>
+        implements AuditInterceptor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -50,7 +52,6 @@ public class ProducerAuditInterceptor<T extends MllpAuditDataset> extends Abstra
 
     @Override
     public MllpAuditStrategy<T> getAuditStrategy() {
-        MllpTransactionEndpoint<T> endpoint = (MllpTransactionEndpoint<T>) getMllpEndpoint();
-        return endpoint.getClientAuditStrategy();
+        return getMllpEndpoint().getClientAuditStrategy();
     }
 }

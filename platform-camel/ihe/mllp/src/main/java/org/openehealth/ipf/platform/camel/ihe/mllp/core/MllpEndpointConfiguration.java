@@ -47,11 +47,8 @@ public class MllpEndpointConfiguration implements Serializable {
     @Getter private final String[] sslProtocols;
     @Getter private final String[] sslCiphers;
 
-    @Getter private final boolean supportUnsolicitedFragmentation;
     @Getter private final boolean supportSegmentFragmentation;
-    @Getter private final int unsolicitedFragmentationThreshold;
     @Getter private final int segmentFragmentationThreshold;
-    @Getter private final UnsolicitedFragmentationStorage unsolicitedFragmentationStorage;
 
 
     protected MllpEndpointConfiguration(MllpComponent component, Map<String, Object> parameters) throws Exception {
@@ -76,20 +73,10 @@ public class MllpEndpointConfiguration implements Serializable {
                 SSLContext.class,
                 SSLContext.getDefault()) : null;
 
-        supportUnsolicitedFragmentation = component.getAndRemoveParameter(
-                parameters, "supportUnsolicitedFragmentation", boolean.class, false);
-        unsolicitedFragmentationThreshold = component.getAndRemoveParameter(
-                parameters, "unsolicitedFragmentationThreshold", int.class, -1);            // >= 3 segments
-
         supportSegmentFragmentation = component.getAndRemoveParameter(
                 parameters, "supportSegmentFragmentation", boolean.class, false);
         segmentFragmentationThreshold = component.getAndRemoveParameter(
                 parameters, "segmentFragmentationThreshold", int.class, -1);                // >= 5 characters
-
-        unsolicitedFragmentationStorage = component.resolveAndRemoveReferenceParameter(
-                        parameters,
-                        "unsolicitedFragmentationStorage",
-                        UnsolicitedFragmentationStorage.class);
 
         customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
                 parameters, "interceptorFactories", Hl7v2InterceptorFactory.class);

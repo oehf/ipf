@@ -113,14 +113,12 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
         return getConfig().isAudit();
     }
 
-
     /**
      * Returns client-side audit strategy instance.
      */
     public MllpAuditStrategy<AuditDatasetType> getClientAuditStrategy() {
         return getMllpComponent().getClientAuditStrategy();
     }
-
 
     /**
      * Returns server-side audit strategy instance.
@@ -129,6 +127,35 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
         return getMllpComponent().getServerAuditStrategy();
     }
 
+    /**
+     * Returns <code>true</code> if this endpoint supports unsolicited message fragmentation.
+     */
+    @ManagedAttribute(description = "Support Unsolicited Fragmentation Enabled")
+    public boolean isSupportUnsolicitedFragmentation() {
+        return getConfig().isSupportUnsolicitedFragmentation();
+    }
+
+    /**
+     * Returns threshold for unsolicited message fragmentation
+     * (relevant on producer side only).
+     */
+    @ManagedAttribute(description = "Unsolicited Fragmentation Threshold")
+    public int getUnsolicitedFragmentationThreshold() {
+        return getConfig().getUnsolicitedFragmentationThreshold();
+    }
+
+    /**
+     * Returns the unsolicited fragmentation storage bean.
+     */
+    public UnsolicitedFragmentationStorage getUnsolicitedFragmentationStorage() {
+        return getConfig().getUnsolicitedFragmentationStorage();
+    }
+
+    @ManagedAttribute(description = "Unsolicited Fragmentation Storage Cache Type")
+    public String getUnsolicitedFragmentationStorageType() {
+        return isSupportUnsolicitedFragmentation() ?
+                getUnsolicitedFragmentationStorage().getClass().getName() : "";
+    }
 
     /**
      * Returns <code>true</code> if this endpoint supports interactive continuation.
@@ -137,7 +164,6 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
     public boolean isSupportInteractiveContinuation() {
         return getConfig().isSupportInteractiveContinuation();
     }
-
 
     /**
      * Returns default threshold for interactive continuation
@@ -153,14 +179,12 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
         return getConfig().getInteractiveContinuationDefaultThreshold();
     }
 
-
     /**
      * Returns the interactive continuation storage bean.
      */
     public InteractiveContinuationStorage getInteractiveContinuationStorage() {
         return getConfig().getInteractiveContinuationStorage();
     }
-
 
     /**
      * Returns true, when the producer should automatically send a cancel
@@ -170,7 +194,6 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
     public boolean isAutoCancel() {
         return getConfig().isAutoCancel();
     }
-
 
     @ManagedAttribute(description = "Interactive Continuation Storage Cache Type")
     public String getInteractiveContinuationStorageType() {

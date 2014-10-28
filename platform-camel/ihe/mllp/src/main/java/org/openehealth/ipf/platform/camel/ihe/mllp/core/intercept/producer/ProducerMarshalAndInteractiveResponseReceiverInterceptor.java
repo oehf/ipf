@@ -46,7 +46,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  *
  * @author Dmytro Rud
  */
-public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends AbstractMllpInterceptor {
+public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends AbstractMllpInterceptor<MllpTransactionEndpoint> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
 
     public ProducerMarshalAndInteractiveResponseReceiverInterceptor() {
@@ -59,8 +59,6 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        MllpTransactionEndpoint endpoint = (MllpTransactionEndpoint) getMllpEndpoint();
-
         Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
         MessageAdapter<?> request = exchange.getIn().getBody(MessageAdapter.class);
         
@@ -74,7 +72,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         //     2. It must be allowed for the given request message type.
         //     3. The user must not have already filled the DSC segment.
         boolean supportContinuations = false;
-        if (endpoint.isSupportInteractiveContinuation()) {
+        if (getMllpEndpoint().isSupportInteractiveContinuation()) {
             requestTerser = new Terser(request.getHapiMessage());
             if (config.isContinuable(requestTerser.get("MSH-9-1")) && isEmpty(requestTerser.get("DSC-1"))) {
                 supportContinuations = true;
@@ -173,7 +171,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
 
             // prepare and send automatic cancel request, if necessary.
             // All errors will be ignored
-            if (endpoint.isAutoCancel()) {
+            if (getMllpEndpoint().isAutoCancel()) {
                 try {
                     String cancel = createCancelMessage(request.getHapiMessage(), config.getParser());
                     exchange.getIn().setBody(cancel);

@@ -215,14 +215,6 @@ public abstract class MllpEndpoint
     }
 
     /**
-     * Returns <code>true</code> if this endpoint supports unsolicited message fragmentation.
-     */
-    @ManagedAttribute(description = "Support Unsolicited Fragmentation Enabled")
-    public boolean isSupportUnsolicitedFragmentation() {
-        return config.isSupportUnsolicitedFragmentation();
-    }
-
-    /**
      * Returns <code>true</code> if this endpoint supports segment fragmentation.
      */
     @ManagedAttribute(description = "Support Segment Fragmentation Enabled")
@@ -231,27 +223,11 @@ public abstract class MllpEndpoint
     }
 
     /**
-     * Returns threshold for unsolicited message fragmentation 
-     * (relevant on producer side only).
-     */
-    @ManagedAttribute(description = "Unsolicited Fragmentation Threshold")
-    public int getUnsolicitedFragmentationThreshold() {
-        return config.getUnsolicitedFragmentationThreshold();
-    }
-
-    /**
      * Returns threshold for segment fragmentation. 
      */
     @ManagedAttribute(description = "Segment Fragmentation Threshold")
     public int getSegmentFragmentationThreshold() {
         return config.getSegmentFragmentationThreshold();
-    }
-
-    /**
-     * Returns the unsolicited fragmentation storage bean. 
-     */
-    public UnsolicitedFragmentationStorage getUnsolicitedFragmentationStorage() {
-        return config.getUnsolicitedFragmentationStorage();
     }
 
     /**
@@ -306,12 +282,6 @@ public abstract class MllpEndpoint
     public String[] getIoFilters() {
         List<IoFilter> filters = getConfiguration().getFilters();
         return toStringArray(filters);
-    }
-
-    @ManagedAttribute(description = "Unsolicited Fragmentation Storage Cache Type")
-    public String getUnsolicitedFragmentationStorageType() {
-        return isSupportUnsolicitedFragmentation() ?
-            getUnsolicitedFragmentationStorage().getClass().getName() : "";
     }
 
     @ManagedAttribute(description = "SSL Secure Enabled")

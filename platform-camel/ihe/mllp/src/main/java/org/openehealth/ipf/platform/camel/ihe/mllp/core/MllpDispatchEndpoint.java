@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerRequestDefragmenterInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerStringProcessingInterceptor;
 
 import java.util.ArrayList;
@@ -43,11 +42,7 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
     protected List<Hl7v2Interceptor> createInitialConsumerInterceptorChain() {
         List<Hl7v2Interceptor> initialChain = new ArrayList<Hl7v2Interceptor>();
         initialChain.add(new ConsumerStringProcessingInterceptor());
-        if (isSupportUnsolicitedFragmentation()) {
-            initialChain.add(new ConsumerRequestDefragmenterInterceptor());
-        }
         initialChain.add(new ConsumerDispatchingInterceptor(getCamelContext(), getConfig().getRoutes()));
-
         return initialChain;
     }
 

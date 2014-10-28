@@ -27,6 +27,10 @@ import java.util.Map;
 public class MllpTransactionEndpointConfiguration extends MllpEndpointConfiguration {
     private static final long serialVersionUID = -6154765290339153487L;
 
+    @Getter private final boolean supportUnsolicitedFragmentation;
+    @Getter private final int unsolicitedFragmentationThreshold;
+    @Getter private final UnsolicitedFragmentationStorage unsolicitedFragmentationStorage;
+
     @Getter private final boolean supportInteractiveContinuation;
     @Getter private final int interactiveContinuationDefaultThreshold;
     @Getter private final InteractiveContinuationStorage interactiveContinuationStorage;
@@ -35,6 +39,16 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
 
     protected MllpTransactionEndpointConfiguration(MllpComponent component, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
+
+        supportUnsolicitedFragmentation = component.getAndRemoveParameter(
+                parameters, "supportUnsolicitedFragmentation", boolean.class, false);
+        unsolicitedFragmentationThreshold = component.getAndRemoveParameter(
+                parameters, "unsolicitedFragmentationThreshold", int.class, -1);            // >= 3 segments
+
+        unsolicitedFragmentationStorage = component.resolveAndRemoveReferenceParameter(
+                parameters,
+                "unsolicitedFragmentationStorage",
+                UnsolicitedFragmentationStorage.class);
 
         supportInteractiveContinuation = component.getAndRemoveParameter(
                 parameters, "supportInteractiveContinuation", boolean.class, false);

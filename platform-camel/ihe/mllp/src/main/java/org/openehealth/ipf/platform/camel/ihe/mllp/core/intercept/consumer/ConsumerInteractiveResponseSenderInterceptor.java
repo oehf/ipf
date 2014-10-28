@@ -45,7 +45,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * as described in paragraph 5.6.3 of the HL7 v2.5 specification.
  * @author Dmytro Rud
  */
-public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpInterceptor {
+public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpInterceptor<MllpTransactionEndpoint> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerInteractiveResponseSenderInterceptor.class);
     private InteractiveContinuationStorage storage;
 
@@ -53,15 +53,12 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
     @Override
     public void setConfigurationHolder(Hl7v2ConfigurationHolder configurationHolder) {
         super.setConfigurationHolder(configurationHolder);
-        MllpTransactionEndpoint endpoint = (MllpTransactionEndpoint) getMllpEndpoint();
-        this.storage = Validate.notNull(endpoint.getInteractiveContinuationStorage());
+        this.storage = Validate.notNull(getMllpEndpoint().getInteractiveContinuationStorage());
     }
 
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        MllpTransactionEndpoint endpoint = (MllpTransactionEndpoint) getMllpEndpoint();
-
         Parser parser = getHl7v2TransactionConfiguration().getParser();
         MessageAdapter<?> request = (MessageAdapter<?>) exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME);
         Message requestMessage = request.getHapiMessage();
@@ -113,7 +110,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             LOG.warn("Cannot parse RCP-2-1, try to use default threshold", nfe);
         }
         if (threshold < 1) {
-            threshold = endpoint.getInteractiveContinuationDefaultThreshold();
+            threshold = getMllpEndpoint().getInteractiveContinuationDefaultThreshold();
         }
         if (threshold < 1) {
             LOG.debug("Cannot perform interactive continuation: invalid or missing threshold");
