@@ -29,7 +29,8 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.IdentityHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.apache.commons.lang3.StringUtils.splitPreserveAllTokens;
@@ -43,7 +44,7 @@ public class ConsumerDispatchingInterceptor extends AbstractMllpInterceptor<Mllp
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerDispatchingInterceptor.class);
 
     private final String[] routeIds;
-    private IdentityHashMap<String, Hl7v2Interceptor> map;
+    private Map<String, Hl7v2Interceptor> map;
 
 
     /**
@@ -66,15 +67,21 @@ public class ConsumerDispatchingInterceptor extends AbstractMllpInterceptor<Mllp
 
     @Override
     public void onCamelContextStarted(CamelContext camelContext, boolean alreadyStarted) throws Exception {
-        map = new IdentityHashMap<String, Hl7v2Interceptor>(routeIds.length);
+        map = new HashMap<String, Hl7v2Interceptor>(routeIds.length);
         for (String routeId : routeIds) {
-            Mina2Consumer consumer = (Mina2Consumer) camelContext.getRoute(routeId).getConsumer();
-            Hl7v2Interceptor interceptor = (Hl7v2Interceptor) consumer.getProcessor();
-            while (! (interceptor instanceof ConsumerStringProcessingInterceptor)) {
-                interceptor = (Hl7v2Interceptor) interceptor.getWrappedProcessor();
-            }
+            try {
+                Mina2Consumer consumer = (Mina2Consumer) camelContext.getRoute(routeId).getConsumer();
+                Hl7v2Interceptor interceptor = (Hl7v2Interceptor) consumer.getProcessor();
+                while (! (interceptor instanceof ConsumerStringProcessingInterceptor)) {
+                    interceptor = (Hl7v2Interceptor) interceptor.getWrappedProcessor();
+                }
 
-            map.put(routeId, (Hl7v2Interceptor) interceptor.getWrappedProcessor());
+                map.put(routeId, (Hl7v2Interceptor) interceptor.getWrappedProcessor());
+            } catch (NullPointerException e) {
+                throw new Exception("Route with ID='" + routeId + "' not found or is not an IPF MLLP route", e);
+            } catch (ClassCastException e) {
+                throw new Exception("Route with ID='" + routeId + "' is not an IPF MLLP route", e);
+            }
         }
     }
 
