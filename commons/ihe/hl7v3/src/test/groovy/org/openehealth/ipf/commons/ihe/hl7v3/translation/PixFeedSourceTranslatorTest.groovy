@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
-import static junit.framework.Assert.assertTrue
+import static org.junit.Assert.assertTrue
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_44_PIX
 
 /**

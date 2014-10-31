@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.utils;
 
+import org.junit.Assert;
+
 import javax.activation.DataSource;
 import java.io.InputStream;
 import java.io.IOException;
@@ -45,7 +47,7 @@ public class LargeDataSource implements DataSource {
 
             @Override
             public void close() throws IOException {
-                junit.framework.Assert.assertEquals(STREAM_SIZE, idx);
+                Assert.assertEquals(STREAM_SIZE, idx);
                 super.close();
             }
         };

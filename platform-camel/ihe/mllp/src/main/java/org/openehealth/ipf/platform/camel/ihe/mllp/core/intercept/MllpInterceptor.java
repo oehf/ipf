@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 
 
@@ -24,11 +23,11 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
  * Camel interceptor interface for PIX/PDQ transactions.
  * @author Dmytro Rud
  */
-public interface MllpInterceptor<T extends MllpAuditDataset> extends Hl7v2Interceptor {
+public interface MllpInterceptor<T extends MllpEndpoint> extends Hl7v2Interceptor {
 
     /**
      * Returns the endpoint instance to which this interceptor belongs.
      */
-    public MllpEndpoint<T> getMllpEndpoint();
+    public T getMllpEndpoint();
 
 }

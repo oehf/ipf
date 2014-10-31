@@ -100,7 +100,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
      */
     void validateMessage(Object msg, Collection<Exception> violations) {
         def msh91 = msg.MSH[9][1].value
-        def msh92 = msg.MSH[9][2].value
+        def msh92 = msg.MSH[9][2].value ?: ''
 
         // find rules that correspond the type of the given message
         def segmentNames = null

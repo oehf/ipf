@@ -27,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.core.atna.MockedSender
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
-import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
 /**
@@ -36,27 +35,22 @@ import org.springframework.context.support.ClassPathXmlApplicationContext
  * @author Dmytro Rud
  */
 class MllpTestContainer {
-    def static CONTEXT_DESCRIPTOR = 'some-mllp-iti-context.xml'
-    
-    def static producerTemplate
-    def static camelContext
-    def static auditSender
-    def static appContext
+
+    static ProducerTemplate producerTemplate
+    static CamelContext camelContext
+    static MockedSender auditSender
+    static ClassPathXmlApplicationContext appContext
     
     
     /**
      * Initializes a test on the basis of a Spring descriptor.
      */
-    def static init(String descriptorFile, boolean standalone) {
+    static void init(String descriptorFile, boolean standalone) {
         appContext = new ClassPathXmlApplicationContext(descriptorFile)
         producerTemplate = appContext.getBean('template', ProducerTemplate.class)
         camelContext = appContext.getBean('camelContext', CamelContext.class)
         
         auditSender = new MockedSender()
-        AuditEventMessage[] a = new AuditEventMessage[2];
-        auditSender.sendAuditEvent(a)
-        assertEquals(2, auditSender.messages.size())
-        auditSender.messages.clear()
         AuditorModuleContext.context.sender = auditSender
         AuditorModuleContext.context.config.auditRepositoryHost = 'localhost'
         AuditorModuleContext.context.config.auditRepositoryPort = 514

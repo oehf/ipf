@@ -113,7 +113,7 @@ class TestIti43 extends StandardTestContainer {
     
     void checkForMTOM(response) {
         def attachments = response.documents[0].dataHandler.dataSource.attachments
-        assert attachments.size() == 1
+        assert attachments.size() == 2
         assert attachments.iterator().next().xop
     }
     

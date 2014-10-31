@@ -67,13 +67,13 @@ public class Iti55DeferredResponseComponent extends AbstractWsComponent<Hl7v3WsT
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+    public WsAuditStrategy getClientAuditStrategy() {
         return null;   // producers send responses, so the server-side strategy must be used
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti55AuditStrategy(false, allowIncompleteAudit);
+    public WsAuditStrategy getServerAuditStrategy() {
+        return new Iti55AuditStrategy(false);
     }
 
     @Override

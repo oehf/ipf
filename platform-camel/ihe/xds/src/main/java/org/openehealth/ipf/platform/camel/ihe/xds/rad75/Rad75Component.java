@@ -62,13 +62,13 @@ public class Rad75Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return new Rad75AuditStrategy(false, allowIncompleteAudit);
+    public WsAuditStrategy getClientAuditStrategy() {
+        return new Rad75AuditStrategy(false);
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Rad75AuditStrategy(true, allowIncompleteAudit);
+    public WsAuditStrategy getServerAuditStrategy() {
+        return new Rad75AuditStrategy(true);
     }
 
     @Override

@@ -27,36 +27,40 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguratio
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.*;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
 /**
  * Camel component for ITI-9 (PIX Query).
+ *
  * @author Dmytro Rud
  */
-public class Iti9Component extends MllpComponent<QueryAuditDataset> {
+public class Iti9Component extends MllpTransactionComponent<QueryAuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
-        new Hl7v2TransactionConfiguration(
-                "2.5", 
-                "PIX adapter", 
-                "IPF",
-                ErrorCode.APPLICATION_INTERNAL_ERROR,
-                ErrorCode.APPLICATION_INTERNAL_ERROR,
-                new String[] {"QBP"},
-                new String[] {"Q23"},
-                new String[] {"RSP"},
-                new String[] {"K23"}, 
-                new boolean[] {true},
-                new boolean[] {false},
-                HapiContextFactory.createHapiContext(
-                        CustomModelClassUtils.createFactory("pix", "2.5"),
-                        PixPdqTransactions.ITI9));
+            new Hl7v2TransactionConfiguration(
+                    "2.5",
+                    "PIX adapter",
+                    "IPF",
+                    ErrorCode.APPLICATION_INTERNAL_ERROR,
+                    ErrorCode.APPLICATION_INTERNAL_ERROR,
+                    new String[]{"QBP"},
+                    new String[]{"Q23"},
+                    new String[]{"RSP"},
+                    new String[]{"K23"},
+                    new boolean[]{true},
+                    new boolean[]{false},
+                    HapiContextFactory.createHapiContext(
+                            CustomModelClassUtils.createFactory("pix", "2.5"),
+                            PixPdqTransactions.ITI9));
 
-    private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY = 
-        new Iti9ClientAuditStrategy();
-    private static final MllpAuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY = 
-        new Iti9ServerAuditStrategy();
+    private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY =
+            new Iti9ClientAuditStrategy();
+    private static final MllpAuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY =
+            new Iti9ServerAuditStrategy();
     private static final NakFactory NAK_FACTORY =
-        new QpdAwareNakFactory(CONFIGURATION, "RSP", "K23");
+            new QpdAwareNakFactory(CONFIGURATION, "RSP", "K23");
 
 
     public Iti9Component() {
@@ -66,7 +70,7 @@ public class Iti9Component extends MllpComponent<QueryAuditDataset> {
     public Iti9Component(CamelContext camelContext) {
         super(camelContext);
     }
-    
+
     @Override
     public MllpAuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
@@ -76,7 +80,7 @@ public class Iti9Component extends MllpComponent<QueryAuditDataset> {
     public MllpAuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
-    
+
     @Override
     public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return CONFIGURATION;
@@ -89,6 +93,6 @@ public class Iti9Component extends MllpComponent<QueryAuditDataset> {
 
     @Override
     public List<Hl7v2Interceptor> getAdditionalConsumerInterceptors() {
-        return Collections.<Hl7v2Interceptor> singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
+        return Collections.<Hl7v2Interceptor>singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
     }
 }

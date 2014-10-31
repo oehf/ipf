@@ -75,7 +75,7 @@ class TestRad69 extends StandardTestContainer {
         checkForMTOM(response2)
         assert auditSender.messages.size() == 4
         
-        checkAudit('0', 'service 2')
+        checkAudit('0', 'service 2', true)
     }
     
     @Test
@@ -84,10 +84,10 @@ class TestRad69 extends StandardTestContainer {
         assert FAILURE == response2.status
         assert auditSender.messages.size() == 2
         
-        checkAudit('8', 'falsch')
+        checkAudit('8', 'falsch', false)
     }
     
-    def checkAudit(outcome, docIdValue) {
+    def checkAudit(outcome, docIdValue, boolean reordered) {
         def message = getAudit('R', SERVICE2_ADDR)[0]
         
         assert message.AuditSourceIdentification.size() == 1
@@ -100,9 +100,15 @@ class TestRad69 extends StandardTestContainer {
         checkSource(message.ActiveParticipant[0], SERVICE2_ADDR, 'false')
         checkDestination(message.ActiveParticipant[1], 'true')
         checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkImageDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
-        checkImageDocument(message.ParticipantObjectIdentification[1], 'doc2', 'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
-        
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 0 : 0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 4 : 1], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 1 : 2], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 5 : 3], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 2 : 4], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 6 : 5], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 3 : 6], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 7 : 7], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
+
         message = getAudit('C', SERVICE2_ADDR)[0]
         
         assert message.AuditSourceIdentification.size() == 1
@@ -114,13 +120,19 @@ class TestRad69 extends StandardTestContainer {
         checkEvent(message.EventIdentification, '110107', 'RAD-69', 'C', outcome)
         checkSource(message.ActiveParticipant[0], 'false')
         checkDestination(message.ActiveParticipant[1], 'true')
-        checkImageDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
-        checkImageDocument(message.ParticipantObjectIdentification[1], 'doc2', 'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 0 : 0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 4 : 1], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 1 : 2], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 5 : 3], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 2 : 4], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 6 : 5], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 3 : 6], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
+        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 7 : 7], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
     }
     
     void checkForMTOM(response) {
         def attachments = response.documents[0].dataHandler.dataSource.attachments
-        assert attachments.size() == 1
+        assert attachments.size() == 2
         assert attachments.iterator().next().xop
     }
     

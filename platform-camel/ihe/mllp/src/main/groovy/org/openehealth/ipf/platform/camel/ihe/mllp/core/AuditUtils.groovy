@@ -65,8 +65,6 @@ class AuditUtils {
      * 
      * @param auditDataset
      *      The pre-filled audit dataset instance. 
-     * @param allowIncompleteAudit
-     *      Whether incomplete ATNA audit records are allowed as well.
      * @param auditStrategy
      *      The actual auditing functionality holder.  
      * @param fault
@@ -75,8 +73,7 @@ class AuditUtils {
      */
     static void finalizeAudit(
             MllpAuditDataset auditDataset,
-            boolean allowIncompleteAudit,
-            MllpAuditStrategy auditStrategy, 
+            MllpAuditStrategy auditStrategy,
             boolean fault)
     {
         if(auditDataset == null) {
@@ -85,34 +82,17 @@ class AuditUtils {
         }
         
         try {
-            String[] fields = concatenate(
-                MllpAuditDataset.GENERIC_NECESSARY_AUDIT_FIELDS,
-                auditStrategy.getNecessaryFields(auditDataset.getMessageType()));
+            RFC3881EventOutcomeCodes eventOutcome = fault ?
+                    RFC3881EventOutcomeCodes.MAJOR_FAILURE :
+                    RFC3881EventOutcomeCodes.SUCCESS;
 
-            if(auditDataset.isAuditingPossible(fields, true, allowIncompleteAudit)) {            
-                RFC3881EventOutcomeCodes eventOutcome = fault ? 
-                        RFC3881EventOutcomeCodes.MAJOR_FAILURE : 
-                        RFC3881EventOutcomeCodes.SUCCESS;
-                
-                auditStrategy.doAudit(eventOutcome, auditDataset);
-            }
+            auditStrategy.doAudit(eventOutcome, auditDataset);
 
         } catch (Exception e) {
             LOG.error('ATNA auditing failed', e);
         }
     }
     
-    
-    /**
-     * Concatenates two {@link String} arrays.
-     */
-    static String[] concatenate(String[] src1, String[] src2) {
-        String[] result = new String[src1.length + src2.length];
-        System.arraycopy(src1, 0, result, 0, src1.length);
-        System.arraycopy(src2, 0, result, src1.length, src2.length);
-        result
-    }
-
 
     /**
      * Returns <code>true</code> when the given {@link MessageAdapter}

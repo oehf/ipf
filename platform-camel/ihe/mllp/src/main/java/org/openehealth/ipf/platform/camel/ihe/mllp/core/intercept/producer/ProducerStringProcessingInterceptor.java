@@ -20,7 +20,6 @@ import org.apache.camel.Message;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 
@@ -29,7 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
  * for the given endpoint, and handles segment fragmentation (\rADD|...).
  * @author Dmytro Rud
  */
-public class ProducerStringProcessingInterceptor extends AbstractMllpInterceptor<MllpAuditDataset> {
+public class ProducerStringProcessingInterceptor extends AbstractMllpInterceptor {
 
     @Override
     public void process(Exchange exchange) throws Exception {

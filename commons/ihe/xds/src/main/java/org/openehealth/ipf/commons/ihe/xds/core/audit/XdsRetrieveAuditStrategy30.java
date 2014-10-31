@@ -15,14 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType.DocumentRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType.DocumentResponse;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-
-import java.util.List;
 
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
@@ -32,33 +29,37 @@ import java.util.List;
  */
 abstract public class XdsRetrieveAuditStrategy30 extends XdsAuditStrategy<XdsRetrieveAuditDataset> {
 
-    public XdsRetrieveAuditStrategy30(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit);
+    public XdsRetrieveAuditStrategy30(boolean serverSide) {
+        super(serverSide);
     }
 
 
     @Override
     public void enrichDatasetFromRequest(Object pojo, XdsRetrieveAuditDataset auditDataset) {
         RetrieveDocumentSetRequestType request = (RetrieveDocumentSetRequestType) pojo;
-
-        List<DocumentRequest> requestedDocuments = request.getDocumentRequest();
-        if (requestedDocuments != null) {
-            final int SIZE = requestedDocuments.size();
-
-            String[] documentUniqueIds = new String[SIZE];
-            String[] repositoryUniqueIds = new String[SIZE];
-            String[] homeCommunityIds = new String[SIZE];
-
-            for (int i = 0; i < SIZE; ++i) {
-                DocumentRequest document = requestedDocuments.get(i);
-                documentUniqueIds[i] = document.getDocumentUniqueId();
-                repositoryUniqueIds[i] = document.getRepositoryUniqueId();
-                homeCommunityIds[i] = document.getHomeCommunityId();
+        if (request.getDocumentRequest() != null) {
+            for (DocumentRequest document : request.getDocumentRequest()) {
+                auditDataset.registerRequestedDocument(
+                        document.getDocumentUniqueId(),
+                        document.getRepositoryUniqueId(),
+                        document.getHomeCommunityId(),
+                        null,
+                        null);
             }
+        }
+    }
 
-            auditDataset.setDocumentUniqueIds(documentUniqueIds);
-            auditDataset.setRepositoryUniqueIds(repositoryUniqueIds);
-            auditDataset.setHomeCommunityIds(homeCommunityIds);
+
+    @Override
+    public void enrichDatasetFromResponse(Object pojo, XdsRetrieveAuditDataset auditDataset) throws Exception {
+        RetrieveDocumentSetResponseType response = (RetrieveDocumentSetResponseType) pojo;
+        if (response.getDocumentResponse() != null) {
+            for (DocumentResponse documentResponse : response.getDocumentResponse()) {
+                auditDataset.registerDeliveredDocument(
+                        documentResponse.getDocumentUniqueId(),
+                        documentResponse.getRepositoryUniqueId(),
+                        documentResponse.getHomeCommunityId());
+            }
         }
     }
 
@@ -71,8 +72,9 @@ abstract public class XdsRetrieveAuditStrategy30 extends XdsAuditStrategy<XdsRet
 
     @Override
     public RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
-        RetrieveDocumentSetResponseType response = (RetrieveDocumentSetResponseType) pojo;
-        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response.getRegistryResponse()); 
-        return getEventOutcomeCodeFromRegistryResponse(ebXML);
+        // This method is not necessary for retrieve transactions, because the
+        // logic is very easy: all successfully retrieved files will be audited
+        // with status SUCCESS, and all failed ones -- with status FAILURE.
+        return null;
     }
 }

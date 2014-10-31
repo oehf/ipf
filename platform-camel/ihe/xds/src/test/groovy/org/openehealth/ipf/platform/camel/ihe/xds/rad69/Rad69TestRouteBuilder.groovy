@@ -51,11 +51,17 @@ public class Rad69TestRouteBuilder extends SpringRouteBuilder {
             response.setStatus(FAILURE)
         }
         else {
-            def doc = new RetrievedDocument()
-            doc.dataHandler = new DataHandler(new LargeDataSource())
-            doc.requestData = retrieveDocument
-            doc.mimeType = 'application/octet-cream'
-            response.documents.add(doc)
+            def doc1 = new RetrievedDocument()
+            doc1.dataHandler = new DataHandler(new LargeDataSource())
+            doc1.requestData = request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().get(0)
+            doc1.mimeType = 'application/octet-cream'
+            response.documents.add(doc1)
+
+            def doc2 = new RetrievedDocument()
+            doc2.dataHandler = new DataHandler(new LargeDataSource())
+            doc2.requestData = request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().get(1)
+            doc2.mimeType = 'application/octet-cream'
+            response.documents.add(doc2)
         }
         
         Exchanges.resultMessage(exchange).body = response

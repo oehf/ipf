@@ -29,7 +29,7 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
 
     void configure() throws Exception {
 
-        from('pix-iti10://0.0.0.0:8891?allowIncompleteAudit=true')
+        from('pix-iti10://0.0.0.0:8891')
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()

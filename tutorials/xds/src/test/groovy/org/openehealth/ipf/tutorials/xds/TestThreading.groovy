@@ -35,8 +35,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.tutorials.xds.Task
-import static junit.framework.Assert.assertEquals
+import static org.junit.Assert.assertEquals
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.APPROVED
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 

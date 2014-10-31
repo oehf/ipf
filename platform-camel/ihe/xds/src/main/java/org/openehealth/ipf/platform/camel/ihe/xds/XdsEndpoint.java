@@ -52,7 +52,7 @@ public class XdsEndpoint extends AbstractWsEndpoint<AbstractWsComponent<?>> {
         return new XdsClientFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
-                isAudit() ? getComponent().getClientAuditStrategy(isAllowIncompleteAudit()) : null,
+                isAudit() ? getComponent().getClientAuditStrategy() : null,
                 getCorrelator(),
                 getCustomInterceptors());
     }
@@ -63,7 +63,7 @@ public class XdsEndpoint extends AbstractWsEndpoint<AbstractWsComponent<?>> {
         return new XdsServiceFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
-                isAudit() ? getComponent().getServerAuditStrategy(isAllowIncompleteAudit()) : null,
+                isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
     }

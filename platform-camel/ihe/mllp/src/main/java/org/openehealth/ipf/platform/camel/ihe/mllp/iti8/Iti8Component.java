@@ -23,12 +23,13 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
 /**
  * Camel component for ITI-8 (PIX Feed).
  * @author Dmytro Rud
  */
-public class Iti8Component extends MllpComponent<Iti8AuditDataset> {
+public class Iti8Component extends MllpTransactionComponent<Iti8AuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
                 "2.3.1", 

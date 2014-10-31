@@ -175,38 +175,6 @@ class TestIti9 extends MllpTestContainer {
     
     
     /**
-     * Incomplete messages (absent PID segment), incomplete audit enabled.
-     * Expected results: corresponding count of audit items (0-1-2).
-     */
-    @Test
-    void testIncompleteAudit1() throws Exception {
-        // both consumer-side and producer-side
-        doTestIncompleteAudit('pix-iti9://localhost:18092?allowIncompleteAudit=true', 2)
-    }
-    @Test
-    void testIncompleteAudit2() throws Exception {
-        // consumer-side only
-        doTestIncompleteAudit('pix-iti9://localhost:18092', 1)
-    }
-    @Test
-    void testIncompleteAudit3() throws Exception {
-        // producer-side only
-        doTestIncompleteAudit('pix-iti9://localhost:18090?allowIncompleteAudit=true', 1)
-    }
-    @Test
-    void testIncompleteAudit4() throws Exception {
-        // producer-side only, but fictive
-        doTestIncompleteAudit('pix-iti9://localhost:18090?allowIncompleteAudit=true&audit=false', 0)
-    }
-    
-    def doTestIncompleteAudit(String endpointUri, int expectedAuditItemsCount) {
-        def body = getMessageString('QBP^Q23', '2.5', false)
-        def msg = send(endpointUri, body)
-        assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
-    }
-    
-    /**
      * Auditing in case of automatically generated NAK.
      */
     @Test

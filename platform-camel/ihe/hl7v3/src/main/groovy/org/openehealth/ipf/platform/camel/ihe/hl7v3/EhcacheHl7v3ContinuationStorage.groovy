@@ -40,7 +40,7 @@ class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage {
     }
 
     String getMessage(String key) {
-        return ehcache.get(key + MESSAGE_SUFFIX)?.value
+        return ehcache.get(key + MESSAGE_SUFFIX)?.objectValue
     }
 
     void storeLastResultNumber(String key, int lastResultNumber) {
@@ -48,7 +48,7 @@ class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage {
     }
 
     int getLastResultNumber(String key) {
-        Integer i = (Integer) ehcache.get(key + LAST_RESULT_NUMBER_SUFFIX)?.value
+        Integer i = (Integer) ehcache.get(key + LAST_RESULT_NUMBER_SUFFIX)?.objectValue
         return (i != null) ? i.intValue() : -1
     }
 
@@ -57,7 +57,7 @@ class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage {
     }
 
     int getContinuationQuantity(String key) {
-        Integer i = (Integer) ehcache.get(key + CONTINUATION_QUANTITY_SUFFIX)?.value
+        Integer i = (Integer) ehcache.get(key + CONTINUATION_QUANTITY_SUFFIX)?.objectValue
         return (i != null) ? i.intValue() : -1
     }
 

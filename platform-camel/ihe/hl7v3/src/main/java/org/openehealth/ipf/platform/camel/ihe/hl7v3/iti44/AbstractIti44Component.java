@@ -43,13 +43,13 @@ abstract public class AbstractIti44Component extends AbstractWsComponent<Hl7v3Ws
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti44AuditStrategy(false, allowIncompleteAudit);
+    public WsAuditStrategy getClientAuditStrategy() {
+        return new Iti44AuditStrategy(false);
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti44AuditStrategy(true, allowIncompleteAudit);
+    public WsAuditStrategy getServerAuditStrategy() {
+        return new Iti44AuditStrategy(true);
     }
 
     @Override

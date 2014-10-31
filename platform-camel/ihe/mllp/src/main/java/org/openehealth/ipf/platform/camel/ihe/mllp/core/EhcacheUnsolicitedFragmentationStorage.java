@@ -41,7 +41,7 @@ public class EhcacheUnsolicitedFragmentationStorage implements UnsolicitedFragme
         Element element = ehcache.get(key);
         if (element != null) {
             ehcache.remove(key);
-            return (StringBuilder) element.getValue();
+            return (StringBuilder) element.getObjectValue();
         }
         return null;
     }

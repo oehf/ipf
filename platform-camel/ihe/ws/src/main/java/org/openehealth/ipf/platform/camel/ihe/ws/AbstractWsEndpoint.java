@@ -95,7 +95,6 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
     private String serviceUrl;    
     private boolean secure;
     private boolean audit = true;
-    private boolean allowIncompleteAudit = false;
     private AsynchronyCorrelator correlator = null;
     private InterceptorProvider customInterceptors = null;
     private String homeCommunityId = null;
@@ -183,24 +182,6 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
      */
     public void setAudit(boolean audit) {
         this.audit = audit;
-    }
-
-    /**
-     * @param allowIncompleteAudit
-     *          <code>true</code> if audit entries are logged even if not all 
-     *          necessary data is available.
-     */
-    public void setAllowIncompleteAudit(boolean allowIncompleteAudit) {
-        this.allowIncompleteAudit = allowIncompleteAudit;
-    }
-
-    /**
-     * @return <code>true</code> if audit entries are logged even if not all 
-     *          necessary data is available. Defaults to <code>false</code>.
-     */
-    @ManagedAttribute(description = "Incomplete Audit Allowed")
-    public boolean isAllowIncompleteAudit() {
-        return allowIncompleteAudit;
     }
 
     /**

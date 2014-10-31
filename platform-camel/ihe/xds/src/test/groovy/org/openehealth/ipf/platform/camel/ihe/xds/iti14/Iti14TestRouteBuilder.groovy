@@ -38,11 +38,8 @@ public class Iti14TestRouteBuilder extends SpringRouteBuilder {
         from('xds-iti14:xds-iti14-service2')
             .process { checkValue(it, 'service 2') }
 
-        from('xds-iti14:xds-iti14-service12?audit=false&allowIncompleteAudit=true')
+        from('xds-iti14:xds-iti14-service12?audit=false')
             .process { checkValue(it, 'service 12') }
-    
-        from('xds-iti14:xds-iti14-service13?allowIncompleteAudit=true')
-            .process { checkValue(it, 'service 13') }
     }
 
     def checkValue(exchange, expected) { 

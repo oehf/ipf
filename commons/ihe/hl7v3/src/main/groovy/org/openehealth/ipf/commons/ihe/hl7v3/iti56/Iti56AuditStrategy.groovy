@@ -28,17 +28,8 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
  */
 class Iti56AuditStrategy extends Hl7v3AuditStrategy {
 
-    private static final String[] NECESSARY_FIELD_NAMES = [
-            'EventOutcomeCode',
-            'UserId',
-            'ServiceEndpointUrl',
-            'RequestPayload',
-            'PatientId',
-    ]
-
-
-    Iti56AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit)
+    Iti56AuditStrategy(boolean serverSide) {
+        super(serverSide)
     }
     
     
@@ -80,14 +71,8 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
                 auditDataset.serviceEndpointUrl,
                 auditDataset.clientIpAddress,
                 auditDataset.requestPayload,
-                auditDataset.patientId
-        )
-    }
-
-
-    @Override
-    String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_FIELD_NAMES
+                auditDataset.patientId,
+                auditDataset.purposesOfUse)
     }
 
 }

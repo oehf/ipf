@@ -16,21 +16,18 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import ca.uhn.hl7v2.AcknowledgmentCode
-
-import static junit.framework.Assert.*
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.typeSupported
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.openehealth.ipf.modules.hl7.AckTypeCode
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
 
 import java.nio.ByteBuffer
-import ca.uhn.hl7v2.parser.PipeParser
 
+import static org.junit.Assert.assertFalse
+import static org.junit.Assert.assertTrue
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.typeSupported
 
 /**
  * Camel route to test datatypes handling.

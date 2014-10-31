@@ -27,39 +27,43 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguratio
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.*;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqTransactionConfiguration;
 
 /**
  * Camel component for ITI-21 (PDQ).
+ *
  * @author Dmytro Rud
  */
-public class Iti21Component extends MllpComponent<QueryAuditDataset> {
+public class Iti21Component extends MllpTransactionComponent<QueryAuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
-        new PdqTransactionConfiguration(
-                "2.5", 
-                "PDQ adapter", 
-                "IPF",
-                ErrorCode.APPLICATION_INTERNAL_ERROR,
-                ErrorCode.APPLICATION_INTERNAL_ERROR,
-                new String[] {"QBP", "QCN"},
-                new String[] {"Q22", "J01"},
-                new String[] {"RSP", "ACK"},
-                new String[] {"K22", "*"},
-                new boolean[] {true, false},
-                new boolean[] {true, false},
-                HapiContextFactory.createHapiContext(
-                        CustomModelClassUtils.createFactory("pdq", "2.5"),
-                        PixPdqTransactions.ITI21));
+            new PdqTransactionConfiguration(
+                    "2.5",
+                    "PDQ adapter",
+                    "IPF",
+                    ErrorCode.APPLICATION_INTERNAL_ERROR,
+                    ErrorCode.APPLICATION_INTERNAL_ERROR,
+                    new String[]{"QBP", "QCN"},
+                    new String[]{"Q22", "J01"},
+                    new String[]{"RSP", "ACK"},
+                    new String[]{"K22", "*"},
+                    new boolean[]{true, false},
+                    new boolean[]{true, false},
+                    HapiContextFactory.createHapiContext(
+                            CustomModelClassUtils.createFactory("pdq", "2.5"),
+                            PixPdqTransactions.ITI21));
 
-    private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY = 
-        new Iti21ClientAuditStrategy();
-    private static final MllpAuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY = 
-        new Iti21ServerAuditStrategy();
+    private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY =
+            new Iti21ClientAuditStrategy();
+    private static final MllpAuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY =
+            new Iti21ServerAuditStrategy();
     private static final NakFactory NAK_FACTORY =
-        new QpdAwareNakFactory(CONFIGURATION, "RSP", "K22");
+            new QpdAwareNakFactory(CONFIGURATION, "RSP", "K22");
 
-    
+
     public Iti21Component() {
         super();
     }
@@ -67,7 +71,7 @@ public class Iti21Component extends MllpComponent<QueryAuditDataset> {
     public Iti21Component(CamelContext camelContext) {
         super(camelContext);
     }
-    
+
     @Override
     public MllpAuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
@@ -77,7 +81,7 @@ public class Iti21Component extends MllpComponent<QueryAuditDataset> {
     public MllpAuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
-    
+
     @Override
     public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return CONFIGURATION;
@@ -90,6 +94,6 @@ public class Iti21Component extends MllpComponent<QueryAuditDataset> {
 
     @Override
     public List<Hl7v2Interceptor> getAdditionalConsumerInterceptors() {
-        return Collections.<Hl7v2Interceptor> singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
+        return Collections.<Hl7v2Interceptor>singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
     }
 }

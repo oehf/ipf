@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
 
 /**
- * Generic audit dataset for IHE PIX/PDQ transactions.
+ * Generic audit dataset for MLLP-based IHE transactions.
  * 
  * @author Dmytro Rud
  */
@@ -53,17 +53,6 @@ abstract public class MllpAuditDataset extends AuditDataset {
     @Getter @Setter private String remoteAddress;
 
 
-    public static final String[] GENERIC_NECESSARY_AUDIT_FIELDS = new String[] {
-        "SendingApplication",
-        "SendingFacility",
-        "ReceivingApplication",
-        "ReceivingFacility",
-        "MessageControlId",
-        "LocalAddress",
-        "RemoteAddress"
-    };
-    
-    
     /**
      * Constructor.
      * @param serverSide

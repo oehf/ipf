@@ -34,7 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqTransactionConfigu
  * Camel component for ITI-22 (PDQ).
  * @author Dmytro Rud
  */
-public class Iti22Component extends MllpComponent<QueryAuditDataset> {
+public class Iti22Component extends MllpTransactionComponent<QueryAuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new PdqTransactionConfiguration(
                 "2.5", 

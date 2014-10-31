@@ -16,51 +16,41 @@
 package org.openehealth.ipf.commons.ihe.xds.rad75;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsIRetrieveAuditStrategy30;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset.Status;
 
 /**
  * Audit strategy for RAD-75.
  * @author Clay Sebourn
  */
-public class Rad75AuditStrategy extends XdsIRetrieveAuditStrategy {
+public class Rad75AuditStrategy extends XdsIRetrieveAuditStrategy30 {
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "EventOutcomeCode",
-        "ServiceEndpointUrl",
-        "StudyInstanceUniqueIds",
-        "SeriesInstanceUniqueIds",
-        "DocumentUniqueIds",
-        "RepositoryUniqueIds",
-        "HomeCommunityIds"};
-
-
-    public Rad75AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit);
+    public Rad75AuditStrategy(boolean serverSide) {
+        super(serverSide);
     }
 
 
     @Override
-    public String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_AUDIT_FIELDS;
+    public void doAudit(XdsRetrieveAuditDataset auditDataset) throws Exception {
+        for (Status status : Status.values()) {
+            if (auditDataset.hasDocuments(status)) {
+                AuditorManager.getCustomXdsAuditor().auditRad75(
+                        isServerSide(),
+                        auditDataset.getEventOutcomeCode(status),
+                        auditDataset.getUserId(),
+                        auditDataset.getUserName(),
+                        auditDataset.getServiceEndpointUrl(),
+                        auditDataset.getClientIpAddress(),
+                        auditDataset.getStudyInstanceIds(status),
+                        auditDataset.getSeriesInstanceIds(status),
+                        auditDataset.getDocumentIds(status),
+                        auditDataset.getRepositoryIds(status),
+                        auditDataset.getHomeCommunityIds(status),
+                        auditDataset.getPatientId(),
+                        auditDataset.getPurposesOfUse());
+            }
+        }
     }
-
-
-    @Override
-    public void doAudit(XdsIRetrieveAuditDataset auditDataset) throws Exception {
-        AuditorManager.getCustomXdsAuditor().auditRad75(
-                isServerSide(),
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getUserId(),
-                auditDataset.getUserName(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getStudyInstanceUniqueIds(),
-                auditDataset.getSeriesInstanceUniqueIds(),
-                auditDataset.getDocumentUniqueIds(),
-                auditDataset.getRepositoryUniqueIds(),
-                auditDataset.getHomeCommunityIds(),
-                auditDataset.getPatientId()
-        );
-    }
+    
 }

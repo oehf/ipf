@@ -17,14 +17,19 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HapiContext;
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.Version;
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.parser.Parser;
+import ca.uhn.hl7v2.util.Terser;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 
 import java.util.List;
 
-import static org.apache.commons.lang3.ArrayUtils.INDEX_NOT_FOUND;
-import static org.apache.commons.lang3.ArrayUtils.contains;
-import static org.apache.commons.lang3.ArrayUtils.indexOf;
+import static org.apache.commons.lang3.ArrayUtils.*;
 import static org.apache.commons.lang3.Validate.*;
 
 /**
@@ -32,7 +37,7 @@ import static org.apache.commons.lang3.Validate.*;
  * @author Dmytro Rud
  */
 public class Hl7v2TransactionConfiguration {
-    
+
     private final String hl7Version;
     private final String sendingApplication;
     private final String sendingFacility;
@@ -145,19 +150,19 @@ public class Hl7v2TransactionConfiguration {
 
     
     /**
-     * Returns <code>true</code> when request messages  
-     * of the given type belong to this transaction. 
+     * Returns <code>true</code> when request messages
+     * of the given type belong to this transaction.
      */
-    public boolean isSupportedRequestMessageType(String messageType) {
+    private boolean isSupportedRequestMessageType(String messageType) {
         return contains(allowedRequestMessageTypes, messageType);
     }
 
-    
+
     /**
      * Returns <code>true</code> when the given trigger event  
      * is valid for request messages of the given type. 
      */
-    public boolean isSupportedRequestTriggerEvent(String messageType, String triggerEvent) {
+    private boolean isSupportedRequestTriggerEvent(String messageType, String triggerEvent) {
         int index = indexOf(allowedRequestMessageTypes, messageType);
         if (index == INDEX_NOT_FOUND) {
             throw new IllegalArgumentException("Unknown message type " + messageType);
@@ -172,7 +177,7 @@ public class Hl7v2TransactionConfiguration {
      * of the given type belong to this transaction. 
      * "ACK" is always supported.
      */
-    public boolean isSupportedResponseMessageType(String messageType) {
+    private boolean isSupportedResponseMessageType(String messageType) {
         return "ACK".equals(messageType) || contains(allowedResponseMessageTypes, messageType);
     }
 
@@ -182,7 +187,7 @@ public class Hl7v2TransactionConfiguration {
      * is valid for response messages of the given type. 
      * For "ACK" message type, every trigger event is considered valid.
      */
-    public boolean isSupportedResponseTriggerEvent(String messageType, String triggerEvent) {
+    private boolean isSupportedResponseTriggerEvent(String messageType, String triggerEvent) {
         if("ACK".equals(messageType)) {
             return true;
         }
@@ -247,8 +252,139 @@ public class Hl7v2TransactionConfiguration {
     public boolean isFooterStartSegment(List<String> segments, int index) {
         return false;
     }
-    
-    
+
+
+    /**
+     * Performs transaction-specific acceptance test of the given request message.
+     * @param messageAdapter
+     *      IPF {@link MessageAdapter} object.
+     */
+    public void checkRequestAcceptance(MessageAdapter messageAdapter) throws Hl7v2AcceptanceException {
+        Message message = messageAdapter.getHapiMessage();
+        checkMessageAcceptance(message, true);
+    }
+
+
+    /**
+     * Performs transaction-specific acceptance test of the given response message.
+     * @param messageAdapter
+     *      IPF {@link MessageAdapter} object.
+     */
+    public void checkResponseAcceptance(MessageAdapter messageAdapter) throws Hl7v2AcceptanceException {
+        Message message = messageAdapter.getHapiMessage();
+        checkMessageAcceptance(message, false);
+
+        try {
+            if (! ArrayUtils.contains(
+                    new String[] {"AA", "AR", "AE", "CA", "CR", "CE"},
+                    new Terser(message).get("MSA-1")))
+            {
+                throw new Hl7v2AcceptanceException("Bad response: missing or invalid MSA segment", 101);
+            }
+        } catch (HL7Exception e) {
+            throw new Hl7v2AcceptanceException("Bad response: missing or invalid MSA segment", 207);
+        }
+    }
+
+
+    /**
+     * Performs acceptance test of the given message.
+     * @param message
+     *      HAPI {@link Message} object.
+     * @param isRequest
+     *      <code>true</code> iff the message is a request.
+     * @throws Hl7v2AcceptanceException
+     *      when the message is not acceptable.
+     */
+    public void checkMessageAcceptance(
+            Message message,
+            boolean isRequest) throws Hl7v2AcceptanceException
+    {
+        try {
+            Segment msh = (Segment) message.get("MSH");
+            checkMessageAcceptance(
+                    Terser.get(msh, 9, 0, 1, 1),
+                    Terser.get(msh, 9, 0, 2, 1),
+                    Terser.get(msh, 9, 0, 3, 1),
+                    Terser.get(msh, 12, 0, 1, 1),
+                    isRequest);
+        } catch (HL7Exception e) {
+            throw new Hl7v2AcceptanceException("Missing or invalid MSH segment", 207);
+        }
+    }
+
+
+    /**
+     * Performs acceptance test of the message with the given attributes.
+     * @param messageType
+     *      value from MSH-9-1, can be empty or <code>null</code>.
+     * @param triggerEvent
+     *      value from MSH-9-PAI2, can be empty or <code>null</code>.
+     * @param messageStructure
+     *      value from MSH-9-3, can be empty or <code>null</code>.
+     * @param version
+     *      value from MSH-12, can be empty or <code>null</code>.
+     * @param isRequest
+     *      <code>true</code> iff the message under consideration is a request.
+     * @throws Hl7v2AcceptanceException
+     *      when the message is not acceptable.
+     */
+    public void checkMessageAcceptance(
+            String messageType,
+            String triggerEvent,
+            String messageStructure,
+            String version,
+            boolean isRequest) throws Hl7v2AcceptanceException
+    {
+        if (! hl7Version.equals(version)) {
+            throw new Hl7v2AcceptanceException("Invalid HL7 version " + version, 203);
+        }
+
+        boolean messageTypeSupported = isRequest
+                ? isSupportedRequestMessageType(messageType)
+                : isSupportedResponseMessageType(messageType);
+
+        if (! messageTypeSupported) {
+            throw new Hl7v2AcceptanceException("Invalid message type " + messageType, 200);
+        }
+
+        boolean triggerEventSupported = isRequest
+                ? isSupportedRequestTriggerEvent(messageType, triggerEvent)
+                : isSupportedResponseTriggerEvent(messageType, triggerEvent);
+
+        if(! triggerEventSupported) {
+            throw new Hl7v2AcceptanceException("Invalid trigger event " + triggerEvent, 201);
+        }
+
+        if (! StringUtils.isEmpty(messageStructure)) {
+            // This may not work as the custom event map cannot be distinguished from the
+            // default one! This needs to be fixed for HAPI 2.1
+            String event = messageType + "_" + triggerEvent;
+            String expectedMessageStructure;
+            try {
+                expectedMessageStructure = hapiContext.getModelClassFactory().getMessageStructureForEvent(event, Version.versionOf(version));
+            } catch (HL7Exception e) {
+                throw new Hl7v2AcceptanceException("Acceptance check failed", 204);
+            }
+
+            // TODO when upgrading to HAPI 2.1 remove the constant IF statements
+            if ("QBP_ZV1".equals(event)) {
+                expectedMessageStructure = "QBP_Q21";
+            } else if ("RSP_ZV2".equals(event)) {
+                expectedMessageStructure = "RSP_ZV2";
+            }
+
+            // the expected structure must be equal to the actual one,
+            // but second components may be omitted in acknowledgements
+            boolean bothAreEqual = messageStructure.equals(expectedMessageStructure);
+            boolean bothAreAcks = (messageStructure.startsWith("ACK") && expectedMessageStructure.startsWith("ACK"));
+            if (! (bothAreEqual || bothAreAcks)) {
+                throw new Hl7v2AcceptanceException("Invalid message structure " + messageStructure, 207);
+            }
+        }
+    }
+
+
     // ----- automatically generated getters -----
 
     public String getHl7Version() {

@@ -181,40 +181,7 @@ class TestIti8 extends MllpTestContainer {
         assertEquals(0, auditSender.messages.size())
     }
     
-    
-    /**
-     * Incomplete messages (absent PID segment), incomplete audit enabled.
-     * Expected results: corresponding count of audit items (0-1-2).
-     */
-    @Test
-    void testIncompleteAudit1() throws Exception {
-        // both consumer-side and producer-side
-        doTestIncompleteAudit('xds-iti8://localhost:18083?allowIncompleteAudit=true', 2)
-    }
-    @Test
-    void testIncompleteAudit2() throws Exception {
-        // consumer-side only
-        doTestIncompleteAudit('pix-iti8://localhost:18083', 1)
-    }
-    @Test
-    void testIncompleteAudit3() throws Exception {
-        // producer-side only
-        doTestIncompleteAudit('xds-iti8://localhost:18082?allowIncompleteAudit=true', 1)
-    }
-    @Test
-    void testIncompleteAudit4() throws Exception {
-        // producer-side only, but fictive
-        doTestIncompleteAudit('pix-iti8://localhost:18082?allowIncompleteAudit=true&audit=false', 0)
-    }
-    
-    def doTestIncompleteAudit(String endpointUri, int expectedAuditItemsCount) {
-        def body = getMessageString('ADT^A01', '2.3.1', false)
-        def msg = send(endpointUri, body)
-        assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
-    }
-    
-    
+
     /**
      * Tests how the exceptions in tte route are handled.
      */

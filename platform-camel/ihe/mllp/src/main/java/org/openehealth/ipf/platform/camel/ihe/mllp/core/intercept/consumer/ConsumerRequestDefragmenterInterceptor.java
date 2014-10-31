@@ -15,24 +15,23 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.keyString;
-
 import ca.uhn.hl7v2.HL7Exception;
-import org.apache.camel.Exchange;
-import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage;
-
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
+import org.apache.camel.Exchange;
+import org.apache.commons.lang3.Validate;
+import org.openehealth.ipf.modules.hl7.message.MessageUtils;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.keyString;
 
 
 /**
@@ -41,7 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
  * 
  * @author Dmytro Rud
  */
-public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpInterceptor<MllpAuditDataset> {
+public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpInterceptor<MllpTransactionEndpoint> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerRequestDefragmenterInterceptor.class);
     
     // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  

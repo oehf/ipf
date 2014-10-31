@@ -79,7 +79,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> 
         this.validationOnContinuation   = endpoint.validationOnContinuation
 
         this.auditStrategy = endpoint.manualAudit ?
-            endpoint.component.getClientAuditStrategy(endpoint.allowIncompleteAudit) : null
+            endpoint.component.getClientAuditStrategy() : null
     }
 
 

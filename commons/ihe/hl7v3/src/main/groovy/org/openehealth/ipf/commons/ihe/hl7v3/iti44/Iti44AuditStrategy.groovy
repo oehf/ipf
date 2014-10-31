@@ -27,16 +27,8 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
  */
 class Iti44AuditStrategy extends Hl7v3AuditStrategy {
 
-    private static final String[] NECESSARY_FIELD_NAMES = [
-            'EventOutcomeCode',
-            'UserId',
-            'ServiceEndpointUrl',
-            'PatientIds',
-    ]
-
-
-    Iti44AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
-        super(serverSide, allowIncompleteAudit)
+    Iti44AuditStrategy(boolean serverSide) {
+        super(serverSide)
     }
 
 
@@ -62,13 +54,6 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
     }
 
 
-    // TODO consider oldPatientId for Merge operations --> requires API change
-    @Override
-    String[] getNecessaryAuditFieldNames() {
-        return NECESSARY_FIELD_NAMES
-    }
-
-
     @Override
     void doAudit(Hl7v3AuditDataset auditDataset) {
         switch (auditDataset.requestType) {
@@ -81,7 +66,8 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
                         auditDataset.serviceEndpointUrl,
                         auditDataset.clientIpAddress,
                         auditDataset.patientIds,
-                        auditDataset.messageId)
+                        auditDataset.messageId,
+                        auditDataset.purposesOfUse)
                 break
 
             case 'PRPA_IN201302UV02':
@@ -93,7 +79,8 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
                         auditDataset.serviceEndpointUrl,
                         auditDataset.clientIpAddress,
                         auditDataset.patientIds,
-                        auditDataset.messageId)
+                        auditDataset.messageId,
+                        auditDataset.purposesOfUse)
                 break
 
             case 'PRPA_IN201304UV02':
@@ -105,7 +92,8 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
                         auditDataset.serviceEndpointUrl,
                         auditDataset.clientIpAddress,
                         auditDataset.oldPatientId,
-                        auditDataset.messageId)
+                        auditDataset.messageId,
+                        auditDataset.purposesOfUse)
 
                 AuditorManager.hl7v3Auditor.auditIti44Revise(
                         serverSide,
@@ -115,7 +103,8 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
                         auditDataset.serviceEndpointUrl,
                         auditDataset.clientIpAddress,
                         auditDataset.patientIds,
-                        auditDataset.messageId)
+                        auditDataset.messageId,
+                        auditDataset.purposesOfUse)
                 break
 
             default:

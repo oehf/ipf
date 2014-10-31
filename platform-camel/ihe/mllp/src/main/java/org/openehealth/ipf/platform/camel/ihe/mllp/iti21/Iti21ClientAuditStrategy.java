@@ -21,7 +21,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqAuditStrategy;
 
 /**
- * Client (aka Camel producer) audit strategy for ITI-21 and ITI-22 (PDQ).
+ * Client (aka Camel producer) audit strategy for ITI-21 (PDQ).
  * 
  * @author Dmytro Rud
  */

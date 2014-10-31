@@ -60,13 +60,13 @@ public class Iti63AsyncResponseComponent extends AbstractWsComponent<WsTransacti
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+    public WsAuditStrategy getClientAuditStrategy() {
         return null;   // no producer support
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti63AuditStrategy(false, allowIncompleteAudit);
+    public WsAuditStrategy getServerAuditStrategy() {
+        return new Iti63AuditStrategy(false);
     }
 
     @Override

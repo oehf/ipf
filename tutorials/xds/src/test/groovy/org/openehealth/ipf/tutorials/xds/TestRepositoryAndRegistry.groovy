@@ -30,7 +30,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import static junit.framework.Assert.assertEquals
+import static org.junit.Assert.assertEquals
 import javax.activation.DataHandler
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
 

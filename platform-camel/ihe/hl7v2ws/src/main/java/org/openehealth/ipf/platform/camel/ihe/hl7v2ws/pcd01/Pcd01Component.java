@@ -79,12 +79,12 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+    public WsAuditStrategy getClientAuditStrategy() {
         return null;  // not defined for this transaction
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
+    public WsAuditStrategy getServerAuditStrategy() {
         return null;   // not defined for this transaction
     }
 

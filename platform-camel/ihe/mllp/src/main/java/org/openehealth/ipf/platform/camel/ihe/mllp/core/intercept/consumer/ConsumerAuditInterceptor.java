@@ -22,6 +22,7 @@ import org.apache.camel.Message;
 import org.apache.camel.component.mina2.Mina2Constants;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptorUtils;
@@ -31,9 +32,9 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditIntercept
  * Consumer-side ATNA auditing Camel interceptor.
  * @author Dmytro Rud
  */
-public class ConsumerAuditInterceptor<T extends MllpAuditDataset> 
-        extends AbstractMllpInterceptor<T> 
-        implements AuditInterceptor<T> 
+public class ConsumerAuditInterceptor<T extends MllpAuditDataset>
+        extends AbstractMllpInterceptor<MllpTransactionEndpoint<T>>
+        implements AuditInterceptor<T>
 {
     @Override
     public void process(Exchange exchange) throws Exception {
