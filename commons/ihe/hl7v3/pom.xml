@@ -68,7 +68,11 @@
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
-        </dependency>             
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>gazelle-validation-profiles-iti-pixpdq</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

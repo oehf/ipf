@@ -74,25 +74,23 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         boolean isContinuaHRN = (profile.getInteractionId() == IpfInteractionId.Continua_HRN);
         boolean isIti61       = (profile.getInteractionId() == IpfInteractionId.ITI_61);
 
-        boolean needHash =
-                isContinuaHRN
-                || (profile.getProfile() == ValidationProfile.InteractionProfile.XCA)
-                || (profile.getProfile() == ValidationProfile.InteractionProfile.XCF);
+        boolean needHashAndSize = isContinuaHRN || profile.isQuery() ||
+                (profile.getInteractionId() == IpfInteractionId.ITI_42);
 
         Collections.addAll(validators,
             new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator, 0, isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_HASH, hashValidator,
-                    needHash ? 1 : 0,
+                    needHashAndSize ? 1 : 0,
                     isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SIZE, positiveNumberValidator,
-                    isContinuaHRN ? 1 : 0,
+                    needHashAndSize ? 1 : 0,
                     isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_ID, cxValidatorRequiredAA,
-                    (profile.isEbXml30Based() && ! profile.isQuery()) ? 1 : 0, 1),
+                    profile.isEbXml30Based() ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
                     isContinuaHRN ? 1 : 0, Integer.MAX_VALUE),
             new SlotValueValidation(SLOT_NAME_REFERENCE_ID_LIST, cxiValidator, 0, Integer.MAX_VALUE),
@@ -115,7 +113,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
             new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
 
-        if ((profile.getInteractionId() == IpfInteractionId.ITI_42) || isIti61) {
+        if ((profile.getInteractionId() == IpfInteractionId.ITI_42) || isIti61 || profile.isQuery()) {
             validators.add(new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
         }
         return validators;
@@ -166,12 +164,14 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             runValidations(folder, folderSlotValidations);
 
             AvailabilityStatus status = folder.getStatus();
-            if (status != null &&
-                    (profile.getInteractionId() != IpfInteractionId.ITI_57 &&
-                     profile.getInteractionId() != IpfInteractionId.ITI_18)) {
-                metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.SUBMITTED,
+            if ((profile.getInteractionId() == IpfInteractionId.ITI_18) || (profile.getInteractionId() == IpfInteractionId.ITI_57)) {
+                metaDataAssert(status != null,
+                        FOLDER_INVALID_AVAILABILITY_STATUS, status);
+            } else if (profile.isQuery() || (status != null)) {
+                metaDataAssert(status == AvailabilityStatus.APPROVED,
                         FOLDER_INVALID_AVAILABILITY_STATUS, status);
             }
+
             metaDataAssert(StringUtils.isBlank(folder.getLid()) || logicalIds.add(folder.getLid()),
                     LOGICAL_ID_SAME, folder.getLid());
 
@@ -191,8 +191,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             runValidations(submissionSet, submissionSetSlotValidations);
 
             AvailabilityStatus status = submissionSet.getStatus();
-            if (status != null) {
-                metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.SUBMITTED,
+            if (profile.isQuery() || (status != null)) {
+                metaDataAssert(status == AvailabilityStatus.APPROVED,
                         SUBMISSION_SET_INVALID_AVAILABILITY_STATUS, status);
             }
         }
@@ -209,7 +209,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             runValidations(docEntry, documentEntrySlotValidators(profile));
 
             AvailabilityStatus status = docEntry.getStatus();
-            if (status != null) {
+            if (profile.isQuery()) {
                 metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.DEPRECATED,
                         DOC_ENTRY_INVALID_AVAILABILITY_STATUS, status);
             }
@@ -231,6 +231,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
             metaDataAssert(StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
                     LOGICAL_ID_SAME, docEntry.getLid());
+
             if (profile.getInteractionId() == IpfInteractionId.ITI_57){
                 validateUpdateObject(docEntry, container);
             }
@@ -415,7 +416,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                 !"".equals(registryObject.getVersionInfo().getVersionName()),
                 VERSION_INFO_MISSING);
 
-        boolean foundHasMemberAsociation = false;
+        boolean foundHasMemberAssociation = false;
         for (EbXMLAssociation association : container.getAssociations()){
             if (association.getAssociationType() == AssociationType.HAS_MEMBER
                 && association.getTarget().equals(registryObject.getId())
@@ -423,9 +424,9 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
                 metaDataAssert(association.getSingleSlotValue(SLOT_NAME_PREVIOUS_VERSION) != null,
                         MISSING_PREVIOUS_VERSION);
-                foundHasMemberAsociation = true;
+                foundHasMemberAssociation = true;
             }
         }
-        metaDataAssert(foundHasMemberAsociation, MISSING_HAS_MEMBER_ASSOCIATION, registryObject.getId());
+        metaDataAssert(foundHasMemberAssociation, MISSING_HAS_MEMBER_ASSOCIATION, registryObject.getId());
     }
 }

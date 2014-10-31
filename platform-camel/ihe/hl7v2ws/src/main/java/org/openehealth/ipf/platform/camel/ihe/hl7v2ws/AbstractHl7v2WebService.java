@@ -21,6 +21,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v2ws.Utils.render;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.checkRequestAcceptance;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.checkResponseAcceptance;
+import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.HL7Exception;
@@ -74,7 +75,7 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
         // parse request
         MessageAdapter<?> msg;
         try {
-            msg = MessageAdapters.make(config.getParser(), normalize(request));
+            msg = MessageAdapters.make(config.getParser(), trimToEmpty(request).replaceAll("\n", "\r\n"));
             checkRequestAcceptance(msg, config);
         } catch (Exception e) {
             LOG.error(formatErrMsg("Request not acceptable"), e);
@@ -124,20 +125,4 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
         return config.getSendingApplication() + ": " + text;
     }
     
-    /**
-     * Replaces the LF with CRLF. This give flexibility for the clients, because they must not escape 
-     * the CR characters. Clients can simply send LFs.<br>
-     * Without the normalization if the client sends no CR characters, all segments after MSH are parsed as MSH fields, so MSH is 
-     * the only non-empty segment. 
-     *    
-     * @param request
-     * @return the normalized request.
-     */
-    private String normalize(String request){
-        if (request == null){
-            return "";
-        } else {
-            return request.trim().replaceAll("\n", "\r\n");
-        }
-    }
 }

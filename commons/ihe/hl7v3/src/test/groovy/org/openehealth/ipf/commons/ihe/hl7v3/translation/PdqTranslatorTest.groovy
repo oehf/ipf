@@ -17,6 +17,9 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import org.junit.*
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
+
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_47
 
 /**
@@ -31,9 +34,10 @@ class PdqTranslatorTest extends Hl7TranslationTestContainer {
     static void setUpClass() {
         doSetUp('pdq',
                 new PdqRequest3to2Translator(),
-                new PdqResponse2to3Translator())
+                new PdqResponse2to3Translator(),
+                HapiContextFactory.createHapiContext(PixPdqTransactions.ITI21))
 
-        parser = CustomModelClassUtils.createParser('pdq', '2.5')
+        parser = context.getPipeParser()
     }
 
    

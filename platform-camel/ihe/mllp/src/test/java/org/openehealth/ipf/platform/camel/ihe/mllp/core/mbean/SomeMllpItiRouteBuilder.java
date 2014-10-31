@@ -30,9 +30,8 @@ public class SomeMllpItiRouteBuilder extends SpringRouteBuilder {
                 "sslContext=#sslContext&" +
                 "sslProtocols=SSLv3,TLSv1&" +
                 "sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA" +
-                "&interceptors=#dummyInterceptor1,#dummyInterceptor2")
+                "&interceptorFactories=#dummyInterceptor1,#dummyInterceptor2")
             .to("mock:result");
-        
     }
 
 }

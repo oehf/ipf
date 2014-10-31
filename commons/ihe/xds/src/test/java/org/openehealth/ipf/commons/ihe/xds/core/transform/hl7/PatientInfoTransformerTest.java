@@ -89,14 +89,13 @@ public class PatientInfoTransformerTest {
         patientInfo.setGender("A");
 
         List<String> hl7Data = transformer.toHL7(patientInfo);
-        assertEquals(6, hl7Data.size());
+        assertEquals(5, hl7Data.size());
 
-        assertEquals("PID-3|abcdef", hl7Data.get(0));
-        assertEquals("PID-3|ghijkl", hl7Data.get(1));
-        assertEquals("PID-5|Joman", hl7Data.get(2));
-        assertEquals("PID-7|1234", hl7Data.get(3));
-        assertEquals("PID-8|A", hl7Data.get(4));
-        assertEquals("PID-11|Jo Str. 3", hl7Data.get(5));
+        assertEquals("PID-3|abcdef~ghijkl", hl7Data.get(0));
+        assertEquals("PID-5|Joman", hl7Data.get(1));
+        assertEquals("PID-7|1234", hl7Data.get(2));
+        assertEquals("PID-8|A", hl7Data.get(3));
+        assertEquals("PID-11|Jo Str. 3", hl7Data.get(4));
     }
 
     @Test
@@ -116,8 +115,7 @@ public class PatientInfoTransformerTest {
     @Test
     public void testFromHL7() {
         List<String> hl7PID = Arrays.asList(
-            "PID-3|abcdef",
-            "PID-3|fedcba",
+            "PID-3|abcdef~fedcba",
             "PID-5|Joman",
             "PID-7|1234",
             "PID-8|A",

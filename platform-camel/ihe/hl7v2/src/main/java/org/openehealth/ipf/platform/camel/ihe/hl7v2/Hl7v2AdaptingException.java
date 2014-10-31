@@ -26,4 +26,8 @@ public class Hl7v2AdaptingException extends RuntimeException {
     public Hl7v2AdaptingException(String message) {
         super(message);
     }
+
+    public Hl7v2AdaptingException(String message, Throwable e) {
+        super(message, e);
+    }
 }

@@ -22,7 +22,8 @@ import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
 
 /**
  * Simple {@link ca.uhn.hl7v2.validation.builder.ValidationRuleBuilder validation rule builder}
- * that just uses a conformance profile to validate against.
+ * that just uses a conformance profile to validate against a message that is allowed for a
+ * defined set of {@link HL7v2Transactions HL7v2 based IHE transactions}.
  */
 public class ConformanceProfileBasedValidationBuilder extends DefaultValidationWithoutTNBuilder {
 
@@ -32,6 +33,9 @@ public class ConformanceProfileBasedValidationBuilder extends DefaultValidationW
         this.transaction = transaction;
     }
 
+    /**
+     * Configures the matching {@link CachingGazelleProfileRule} to be validated against
+     */
     @Override
     protected void configure() {
 

@@ -71,6 +71,9 @@ public class Hl7ExtensionModule {
         mappingService()?.getKey(value, normalizeCollection(delegate), defaultValue);
     }
 
+    /**
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     */
     static Object methodMissing(Collection delegate, String name, Object args) {
         MappingExtensionHelper.methodMissingLogic(mappingService(), normalizeCollection, name, args);
     }
@@ -155,6 +158,7 @@ public class Hl7ExtensionModule {
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     * @deprecated use {@link AbstractMessage#generateACK()}
      */
     public static Message ack(AbstractMessage delegate) {
         delegate.generateACK()
@@ -164,11 +168,12 @@ public class Hl7ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     public static Message nak(AbstractMessage delegate, String cause, AcknowledgmentCode ackTypeCode) {
-        nak(delegate, new HL7Exception(cause), ackTypeCode)
+        delegate.generateACK(ackTypeCode, new HL7Exception(cause))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     * @deprecated use {@link AbstractMessage#generateACK(java.lang.String, ca.uhn.hl7v2.HL7Exception)}
      */
     public static Message nak(AbstractMessage delegate, HL7Exception e, AcknowledgmentCode ackTypeCode) {
         delegate.generateACK(ackTypeCode, e)
@@ -176,6 +181,7 @@ public class Hl7ExtensionModule {
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     * @deprecated use {@link Message#printStructure()}
      */
     public static Message dump(Message delegate) {
         delegate.printStructure()

@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v3.translation;
+package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.parser.ModelClassFactory
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
@@ -70,8 +73,9 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
      */
 	boolean translateInitialQuantity = false
 
-	private static final ModelClassFactory MODEL_CLASS_FACTORY =
-	    CustomModelClassUtils.createFactory('pdq', '2.5')
+	private static final HapiContext PDQ_CONTEXT = HapiContextFactory.createHapiContext(
+            CustomModelClassUtils.createFactory("pdq", "2.5"),
+            PixPdqTransactions.ITI21)
 
 
 	/**
@@ -84,7 +88,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	 */
     MessageAdapter translateV3toV2(String v3requestString, MessageAdapter dummy = null) {
 	    def v3request = slurp(v3requestString)
-        def hapiMessage = MessageUtils.makeMessage(MODEL_CLASS_FACTORY, 'QBP', 'Q22', '2.5')
+        def hapiMessage = MessageUtils.makeMessage(PDQ_CONTEXT, 'QBP', 'Q22', '2.5')
         def v2request = new MessageAdapter(hapiMessage)
         
         // Segment MSH

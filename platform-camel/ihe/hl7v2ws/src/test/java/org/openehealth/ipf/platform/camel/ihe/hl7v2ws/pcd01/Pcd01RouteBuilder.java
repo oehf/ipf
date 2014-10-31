@@ -15,24 +15,31 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators.pcd01RequestValidator;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators.pcd01ResponseValidator;
-
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
+import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+
+import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators.pcd01RequestValidator;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators.pcd01ResponseValidator;
 /**
  * @author Mitko Kolev
  *
  */
 public class Pcd01RouteBuilder extends SpringRouteBuilder {
    
-    public static final String PCD_01_SPEC_RESPONSE = load("pcd01/pcd01-response.hl7").toString();
-    public static final String PCD_01_SPEC_RESPONSE_INVALID = load(
-            "pcd01/pcd01-response-invalid.hl7").toString();
+    public static final MessageAdapter PCD_01_SPEC_RESPONSE = load(
+            HapiContextFactory.createHapiContext(PcdTransactions.PCD1),
+            "pcd01/pcd01-response.hl7");
+    public static final MessageAdapter PCD_01_SPEC_RESPONSE_INVALID = load(
+            HapiContextFactory.createHapiContext(PcdTransactions.PCD1),
+            "pcd01/pcd01-response-invalid.hl7");
 
     /* (non-Javadoc)
      * @see org.apache.camel.builder.RouteBuilder#configure()

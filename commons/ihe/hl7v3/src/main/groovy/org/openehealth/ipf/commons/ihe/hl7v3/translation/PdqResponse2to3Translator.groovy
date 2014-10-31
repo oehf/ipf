@@ -133,6 +133,8 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                                                         }
                                                     }
                                                 }
+                                                // disallowed in ITI-47
+                                                // createBirthPlaceElement(builder, qr.PID)
                                             }
                                             subjectOf1 {
                                                 createQueryMatchObservation(builder, qr)

@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
-import static org.junit.Assert.*
-
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.CamelExchangeException
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
@@ -30,8 +30,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
 
-import ca.uhn.hl7v2.HL7Exception
-import ca.uhn.hl7v2.parser.PipeParser
+import static org.junit.Assert.*
 
 /**
  * Unit tests for the PDQ transaction aka ITI-21.

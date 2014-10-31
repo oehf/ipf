@@ -42,12 +42,12 @@
         <feature>spring-dm</feature>
         <feature version="${project.version}">ipf-specs</feature>
         <feature version="${project.version}">ipf-spring</feature>
-        <bundle start-level='20' dependency="true">mvn:org.apache.commons/com.springsource.org.apache.commons.httpclient/3.1.0</bundle>
         <bundle start-level='20' dependency="true">mvn:commons-lang/commons-lang/${commons-lang-version}</bundle>
-        <bundle start-level='20' dependency="true">mvn:net.sourceforge.ehcache/com.springsource.net.sf.ehcache/1.6.2</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.commons/commons-lang3/${commons-lang3-version}</bundle>
         <bundle start-level='20' dependency="true">mvn:commons-io/commons-io/2.4</bundle>
         <bundle start-level='20' dependency="true">mvn:commons-codec/commons-codec/1.6</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-httpclient/3.1_7</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.ehcache/2.6.8_1</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saxon/9.1.0.8_2</bundle>
         <bundle start-level='20' dependency="true">mvn:org.openhealthtools.ihe/atna-bundle/${oht-atna-version}</bundle>
         <bundle start-level='10' dependency="true">mvn:org.antlr/com.springsource.antlr/2.7.6</bundle>
@@ -74,20 +74,22 @@
         <feature version="${project.version}">ipf-core</feature>
         <feature version="${project.version}">ipf-core-extenders</feature>
         <bundle start-level="30">mvn:javax.persistence/com.springsource.javax.persistence/1.99.0</bundle>
-        <bundle start-level="30">mvn:org.javassist/javassist/${hibernate-javassist-version}</bundle>
         <bundle start-level="30">mvn:org.apache.lucene/com.springsource.org.apache.lucene/2.3.0</bundle>
-        <bundle start-level="30">mvn:org.apache.commons/com.springsource.org.apache.commons.collections/3.2.0</bundle>
-        <bundle start-level="30">mvn:org.dom4j/com.springsource.org.dom4j/1.6.1</bundle>
         <bundle start-level="30">mvn:org.objectweb.asm/com.springsource.org.objectweb.asm/1.5.3</bundle>
-        <bundle start-level="30">mvn:org.jasypt/com.springsource.org.jasypt.encryption/1.5.0</bundle>
-        <bundle start-level="30">mvn:com.opensymphony.quartz/com.springsource.org.quartz/1.6.0</bundle>
+        <bundle start-level="30">mvn:org.javassist/javassist/${hibernate-javassist-version}</bundle>
+        <bundle start-level="30">mvn:commons-collections/commons-collections/${commons-collections-version}</bundle>
+        <bundle start-level='30'>mvn:commons-dbcp/commons-dbcp/${commons-dbcp-version}</bundle>
+        <bundle start-level='30'>mvn:commons-pool/commons-pool/1.6</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jasypt/1.9.2_1</bundle>
+        <bundle start-level="30">mvn:org.quartz-scheduler/quartz/${quartz-version}</bundle>
+        <bundle start-level="30">mvn:com.mchange.c3p0/com.springsource.com.mchange.v2.c3p0/0.9.1.2</bundle>
         <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate/3.3.2.GA</bundle>
         <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.search/3.0.1.GA</bundle>
         <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.annotations/3.4.0.GA-A</bundle>
         <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.annotations.common/3.3.0.ga</bundle>
         <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.ejb/3.4.0.GA-A</bundle>
-        <bundle start-level='30'>mvn:org.apache.commons/com.springsource.org.apache.commons.dbcp/1.2.2.osgi</bundle>
-        <bundle start-level='30'>mvn:org.apache.commons/com.springsource.org.apache.commons.pool/1.5.3</bundle>
+        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/2.2_2</bundle>
         <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.derby/10.9.1.0_1</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-flow-repository/${project.version}</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.commons/ipf-commons-flow/${project.version}</bundle>
@@ -95,17 +97,16 @@
 
     <feature name="ipf-modules-hl7" description="IPF HL7 support" version="${project.version}">
         <feature version="${project.version}">ipf-core-map</feature>
-        <bundle start-level='20' dependency="true">mvn:javax.ejb/com.springsource.javax.ejb/3.0.0</bundle>
-        <bundle start-level='20' dependency="true">mvn:javax.xml.rpc/com.springsource.javax.xml.rpc/1.1.0</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.apache.geronimo.specs/geronimo-ejb_3.1_spec/1.0.2</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.apache.geronimo.specs/geronimo-jaxrpc_1.1_spec/2.1</bundle>
         <bundle start-level='20' dependency="true">mvn:javax.xml.soap/com.springsource.javax.xml.soap/1.3.0</bundle>
-        <bundle start-level='20' dependency="true">mvn:javax.activation/com.springsource.javax.activation/1.1.1</bundle>
         <bundle start-level='20' dependency="true">mvn:commons-cli/commons-cli/1.2</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/2.9.1_5</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/2.7.1_5</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlresolver/1.2_5</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/2.7.1_4</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jdom/1.1_4</bundle>
         <bundle start-level='20' dependency="true">mvn:xml-apis/xml-apis/1.3.4-v200806030440</bundle>
-        <bundle start-level='20' dependency="true">mvn:org.jdom/com.springsource.org.jdom/1.0.0</bundle>
         <bundle start-level='20' dependency="true">mvn:joda-time/joda-time/${joda-time-version}</bundle>
         <bundle start-level='50' dependency="true">mvn:ca.uhn.hapi/hapi-osgi/${hapi-version}</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.modules/ipf-modules-hl7/${project.version}</bundle>
@@ -183,24 +184,38 @@
     </feature>
 
     <feature name="ipf-spring" version="${project.version}">
-        <bundle start-level='20'>mvn:org.aopalliance/com.springsource.org.aopalliance/1.0.0</bundle>
-        <bundle start-level='20'>mvn:org.springframework/org.springframework.core/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/org.springframework.context/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/org.springframework.beans/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/org.springframework.expression/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/org.springframework.aop/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/org.springframework.jdbc/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/org.springframework.jms/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/org.springframework.transaction/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/org.springframework.orm/${spring-version}</bundle>
-        <bundle start-level='20'>mvn:org.springframework/org.springframework.web/${spring-version}</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/1.0_6</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.core/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.context/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.beans/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.expression/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.aop/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.jdbc/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.jms/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.transaction/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.orm/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.springframework/org.springframework.web/${spring-karaf-version}</bundle>
     </feature>
+
+    <!--feature name="ipf-spring" version="${project.version}">
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/1.0_6</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-core/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-context/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-beans/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-expression/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-aop/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-jdbc/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-jms/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-tx/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-orm/${spring-karaf-version}</bundle>
+        <bundle start-level='20'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-web/${spring-karaf-version}</bundle>
+    </feature-->
 
     <feature name="ipf-specs" version="${project.version}" resolver='(obr)'>
         <bundle start-level='20' dependency="true">mvn:org.apache.geronimo.specs/geronimo-servlet_3.0_spec/1.0</bundle>
         <bundle start-level='10' dependency="true">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.1/2.1.0</bundle>
-        <bundle start-level='10' dependency="true">mvn:javax.jms/com.springsource.javax.jms/1.1.0</bundle>
-        <bundle start-level='10' dependency="true">mvn:javax.transaction/com.springsource.javax.transaction/1.1.0</bundle>
+        <bundle start-level='10' dependency="true">mvn:org.apache.geronimo.specs/geronimo-jms_1.1_spec/1.1.1</bundle>
+        <bundle start-level='10' dependency="true">mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec/1.1.1</bundle>
         <bundle start-level='10'>mvn:org.apache.geronimo.specs/geronimo-annotation_1.0_spec/1.1.1</bundle>
         <bundle start-level='10'>mvn:org.apache.geronimo.specs/geronimo-ws-metadata_2.0_spec/1.1.3</bundle>
         <bundle start-level='10'>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.stax-api-1.0/2.2.0</bundle>
@@ -219,7 +234,7 @@
         <feature version="${project.version}">ipf-jaxb</feature>
         <feature version="${project.version}">ipf-specs</feature>
         <feature>http-whiteboard</feature>
-        <bundle start-level='30' dependency="true">mvn:org.apache.ws.xmlschema/xmlschema-core/2.0.3</bundle>
+        <bundle start-level='30' dependency="true">mvn:org.apache.ws.xmlschema/xmlschema-core/2.1.0</bundle>
         <bundle start-level='30' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.wsdl4j/1.6.2_6</bundle>
         <bundle start-level='30' dependency="true">mvn:org.apache.neethi/neethi/3.0.2</bundle>
         <bundle start-level='50'>mvn:org.apache.cxf/cxf-api/${cxf-version}</bundle>

@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Mitko Kolev
  * @author Christian Ohr
+ *
+ * @deprecated
  */
 public abstract class AbstractCompositeTypeRule<T extends Composite> extends CompositeTypeRule<T> {
 

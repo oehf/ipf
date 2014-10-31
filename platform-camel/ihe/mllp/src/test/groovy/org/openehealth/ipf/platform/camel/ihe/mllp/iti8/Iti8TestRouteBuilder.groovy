@@ -32,19 +32,19 @@ class Iti8TestRouteBuilder extends SpringRouteBuilder {
         // normal processing without auditing
         from('xds-iti8://0.0.0.0:18081?audit=false')
                 .process {
-                    resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                    resultMessage(it).body = it.in.body.target.generateACK()
                 }
         
         // normal processing with auditing
         from('pix-iti8://0.0.0.0:18082')
                 .process {
-                    resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                    resultMessage(it).body = it.in.body.target.generateACK()
                 }
         
         // normal processing with support for incomplete auditing
         from('xds-iti8://0.0.0.0:18083?allowIncompleteAudit=true')
                 .process {
-                    resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                    resultMessage(it).body = it.in.body.target.generateACK()
                 }
         
         // fictive route to test producer-side acceptance checking
@@ -73,13 +73,13 @@ class Iti8TestRouteBuilder extends SpringRouteBuilder {
                 'sslProtocols=SSLv3,TLSv1&' +
                 'sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
                 .process {
-                    resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                    resultMessage(it).body = it.in.body.target.generateACK()
                 }
 
         from('xds-iti8://0.0.0.0:18088?audit=false&'+
                 'sslContextParameters=#sslContextParameters')
                 .process {
-            resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+            resultMessage(it).body = it.in.body.target.generateACK()
         }
     }
 }

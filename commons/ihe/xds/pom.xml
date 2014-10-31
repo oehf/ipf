@@ -68,14 +68,14 @@
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <configuration>
                     <includes>
-                        <include>org/openehealth/ipf/commons/ihe/xds/core/requests/*</include>
-                        <include>org/openehealth/ipf/commons/ihe/xds/core/responses/*</include>
+                        <include>org/openehealth/ipf/commons/ihe/xds/core/requests/*.java</include>
+                        <include>org/openehealth/ipf/commons/ihe/xds/core/responses/*.java</include>
                     </includes>
-                    <outputDirectory>target/classes</outputDirectory>
+                    <outputDirectory>target/jaxb2</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>process-classes</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>schemagen</goal>
                         </goals>

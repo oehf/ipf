@@ -17,6 +17,8 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import org.junit.*
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import static junit.framework.Assert.assertTrue
@@ -33,9 +35,10 @@ class PixFeedSourceTranslatorTest extends Hl7TranslationTestContainer {
     static void setUpClass() {
         doSetUp('pixsource',
                 null,
-                new PixFeedRequest2to3Translator())
+                new PixFeedRequest2to3Translator(),
+                HapiContextFactory.createHapiContext(PixPdqTransactions.ITI8))
 
-        parser = CustomModelClassUtils.createParser('pixsource', '2.5')
+        parser = context.getPipeParser()
     }
 
 	@Test

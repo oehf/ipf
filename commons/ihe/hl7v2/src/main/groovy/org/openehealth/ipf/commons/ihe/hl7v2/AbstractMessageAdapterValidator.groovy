@@ -36,6 +36,9 @@ import ca.uhn.hl7v2.model.Structure
  * @author Dmytro Rud
  * @author Mitko Kolev
  * @author Christian Ohr
+ *
+ * @deprecated Validation of messages defined by specifications like IHE shall now be done
+ * using conformance profiles
  */
 public abstract class AbstractMessageAdapterValidator implements Validator<Object, Object> {
 
@@ -168,7 +171,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
      * Validates a message.
      */
     void checkMessage(MessageAdapter msg, String segmentNames, Collection<Exception> violations) {
-        checkUnrecognizedSegments(msg.group, violations)
+        checkUnrecognizedSegments(msg.target, violations)
         for (segmentName in segmentNames.tokenize()) {
             "check${segmentName}"(msg, violations)
         }

@@ -33,7 +33,7 @@ class Iti10TestRouteBuilder extends SpringRouteBuilder {
                  .maximumRedeliveries(0)
                  .end()
              .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                 resultMessage(it).body = it.in.body.target.generateACK()
              }
          
          
@@ -43,9 +43,10 @@ class Iti10TestRouteBuilder extends SpringRouteBuilder {
                  .end()
              .process(iti10RequestValidator())
              .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                 resultMessage(it).body = it.in.body.target.generateACK()
              }
-             .process(iti10ResponseValidator())
+
+             //.process(iti10ResponseValidator())
 
              
          from('pix-iti10://0.0.0.0:18108')
@@ -53,7 +54,7 @@ class Iti10TestRouteBuilder extends SpringRouteBuilder {
                  .maximumRedeliveries(0)
                  .end()
              .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                 resultMessage(it).body = it.in.body.target.generateACK()
              }
      }
 }

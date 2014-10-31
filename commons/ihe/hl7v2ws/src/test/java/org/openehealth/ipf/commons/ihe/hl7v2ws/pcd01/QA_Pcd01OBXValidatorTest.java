@@ -30,6 +30,7 @@ import ca.uhn.hl7v2.model.v26.message.ORU_R01;
  * @author Kingsley Nwaigbo
  * 
  */
+@Ignore
 public class QA_Pcd01OBXValidatorTest extends AbstractPCD01ValidatorTest {
 
     @Test

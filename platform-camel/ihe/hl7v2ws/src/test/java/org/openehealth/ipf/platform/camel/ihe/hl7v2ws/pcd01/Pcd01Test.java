@@ -24,6 +24,8 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
+import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
@@ -48,7 +50,10 @@ public class Pcd01Test extends StandardTestContainer {
     public static final String CONTEXT_DESCRIPTOR = "pcd-01.xml";
     
     public static final String PCD_01_SPEC_REQUEST = load("pcd01/pcd01-request.hl7").toString();
-    public static final String PCD_01_SPEC_RESPONSE = load("pcd01/pcd01-response.hl7").toString();
+
+    public static final String PCD_01_SPEC_RESPONSE = load(
+            HapiContextFactory.createHapiContext(PcdTransactions.PCD1),
+            "pcd01/pcd01-response.hl7").toString();
     
     public static void main(String args[]) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
@@ -137,7 +142,7 @@ public class Pcd01Test extends StandardTestContainer {
         String response = requestBody(uri, invalidMSG);
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertTrue(response.contains("MSA|AE"));
-        assertTrue(response.contains("OBX-4"));
+        assertTrue(response.contains("Observation Sub-ID"));
         assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 
@@ -157,9 +162,9 @@ public class Pcd01Test extends StandardTestContainer {
                 + "/route_unacceptable_response";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
-        assertTrue(response.contains("|ACK^R01|"));
+        assertTrue(response.contains("|ACK^R01^ACK|"));
         assertTrue(response.contains("MSA|AR|MSGID1234"));
-        assertTrue(response.contains("ERR|||203^Unsupported version id^HL70357^^Invalid HL7 version 2.5|E|||Invalid HL7 version 2.5"));
+        assertTrue(response.contains("ERR|||203^Unsupported version id^HL70357"));
         assertEquals(1, MyRejectionHandlingStrategy.getCount());
     }
     

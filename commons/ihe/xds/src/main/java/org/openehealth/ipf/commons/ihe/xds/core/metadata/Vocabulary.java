@@ -65,11 +65,11 @@ public abstract class Vocabulary {
     /** formatCode External Classification Scheme of the Document Entry */
     public static final String DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME = 
         "urn:uuid:a09d5840-386c-46f2-b5ad-9c3699a4309d";
-    
+
     /** healthcareFacitilityTypeCode External Classification Scheme of the Document Entry */
-    public static final String DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME = 
+    public static final String DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME =
         "urn:uuid:f33fb8ac-18af-42cc-ae0e-ed0b0bdb91e1";
-    
+
     /** practiceSettingCode ExternalIdentifier of the Document Entry */
     public static final String DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME =
         "urn:uuid:cccf5598-8b07-4b77-a05e-ae952c785ead";
@@ -77,7 +77,11 @@ public abstract class Vocabulary {
     /** typeCode ExternalIdentifier of the Document Entry */
     public static final String DOC_ENTRY_TYPE_CODE_CLASS_SCHEME =
         "urn:uuid:f0306f51-975f-434e-a61c-c59651d33983";
-    
+
+    /** limitedMetadata External Classification Scheme of the Document Entry */
+    public static final String DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME =
+        "urn:uuid:ab9b591b-83ab-4d03-8f5d-f93b1fb92e85";
+
     /** patientId ExternalIdentifier of the Document Entry */
     public static final String DOC_ENTRY_PATIENT_ID_EXTERNAL_ID =
         "urn:uuid:58a6f841-87b3-4a3e-92fd-a8ffeff98427";
@@ -101,8 +105,12 @@ public abstract class Vocabulary {
     
     /** codeList External Classification Scheme of the folder */
     public static final String FOLDER_CODE_LIST_CLASS_SCHEME =
-        "urn:uuid:1ba97051-7806-41a8-a48b-8fce7af683c5";    
-    
+        "urn:uuid:1ba97051-7806-41a8-a48b-8fce7af683c5";
+
+    /** limitedMetadata External Classification Scheme of the Folder */
+    public static final String FOLDER_LIMITED_METADATA_CLASS_SCHEME =
+        "urn:uuid:2c144a76-29a9-4b7c-af54-b25409fe7d03";
+
     /** patientId ExternalIdentifier of the Folder */
     public static final String FOLDER_PATIENT_ID_EXTERNAL_ID =
         "urn:uuid:f64ffdf0-4b97-4e06-b79f-a52b38ec2f8a";
@@ -131,7 +139,11 @@ public abstract class Vocabulary {
 
     /** contentTypeCode External Classification Scheme of the Submission Set */
     public static final String SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME = 
-        "urn:uuid:aa543740-bdda-424e-8c96-df4873be8500";    
+        "urn:uuid:aa543740-bdda-424e-8c96-df4873be8500";
+
+    /** limitedMetadata External Classification Scheme of the Submission Set */
+    public static final String SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME =
+        "urn:uuid:5003a9db-8d8d-49e6-bf0c-990e34ac7707";
 
     /** patientId ExternalIdentifier of the Submission Set */
     public static final String SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID =

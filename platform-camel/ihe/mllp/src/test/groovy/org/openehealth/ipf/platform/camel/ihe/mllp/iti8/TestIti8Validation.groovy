@@ -53,7 +53,7 @@ class TestIti8Validation extends MllpTestContainer {
         body = body + 'AAA|1|2|3\n'
         def msg = send(endpointUri, body)
         assertNAK(msg)
-        assertTrue(msg.toString().contains('Unknown segment AAA'))
+        assertTrue(msg.toString().contains('The structure \'AAA\' appears in the message but not in the profile'))
     }
     
     @Test
@@ -62,7 +62,7 @@ class TestIti8Validation extends MllpTestContainer {
         def body = getMessageString('ADT^A01', '2.3.1', false)
         def msg = send(endpointUri, body)
         assertNAK(msg)
-        assertTrue(msg.toString().contains('Missing patient ID'))
+        assertTrue(msg.toString().contains('PID must have at least  1 repetitions'))
     }
     
     @Test

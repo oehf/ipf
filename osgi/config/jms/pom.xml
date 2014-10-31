@@ -16,7 +16,6 @@
             org.apache.activemq,
             org.apache.activemq.broker,
             org.apache.activemq.broker.jmx,
-            org.apache.activemq.store.amq,
             org.apache.activemq.store.kahadb,
             org.apache.activemq.usage,
             org.apache.activemq.xbean,

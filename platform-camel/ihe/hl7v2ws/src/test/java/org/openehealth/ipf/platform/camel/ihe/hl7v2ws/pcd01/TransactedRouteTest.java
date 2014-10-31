@@ -37,6 +37,7 @@ import org.springframework.transaction.support.SimpleTransactionStatus;
 
 /**
  * Test for handling of HL7v2 exceptions from within transactional contexts.
+ *
  * @author Stefan Albrecht
  */
 public class TransactedRouteTest extends StandardTestContainer {
@@ -50,8 +51,7 @@ public class TransactedRouteTest extends StandardTestContainer {
 + "OBX|4|NM|150022^MDC_PRESS_BLD_NONINV_DIA^MDC|1.0.1.2|80|266016^MDC_DIM_MMHG^MDC|||||R\n"
 + "OBX|5|NM|150023^MDC_PRESS_BLD_NONINV_MEAN^MDC|1.0.1.3|100|266016^MDC_DIM_MMHG^MDC|||||R\n";
     
-    private static final SpringTransactionPolicy transactionPolicy
-        = new SpringTransactionPolicy();
+    private static final SpringTransactionPolicy transactionPolicy = new SpringTransactionPolicy();
     private static PlatformTransactionManager txManager;
 
     
@@ -68,8 +68,7 @@ public class TransactedRouteTest extends StandardTestContainer {
     @Test
     public void testNonTransactedRoute () throws Exception {
         final String response = sendRequest(
-                "pcd-pcd01://localhost:" + getPort()
-                    + "/communicateLabData/notransaction", WAN_REQUEST);
+                "pcd-pcd01://localhost:" + getPort() + "/communicateLabData/notransaction", WAN_REQUEST);
         assertTrue(response.contains("testexception"));        
         assertTrue(response.contains("MSA|AR"));        
     }
@@ -86,8 +85,7 @@ public class TransactedRouteTest extends StandardTestContainer {
         EasyMock.replay(txManager);
 
         final String response = sendRequest(
-                "pcd-pcd01://localhost:" + getPort()
-                    + "/communicateLabData/transacted", WAN_REQUEST);
+                "pcd-pcd01://localhost:" + getPort() + "/communicateLabData/transacted", WAN_REQUEST);
         EasyMock.verify(txManager);
         assertTrue(response.contains("testexception"));        
         assertTrue(response.contains("MSA|AR"));

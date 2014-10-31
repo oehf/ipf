@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.junit.*;
+import org.junit.*
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
+
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_44_PIX
 
 /**
@@ -28,7 +31,8 @@ class PixFeedTranslatorTest extends Hl7TranslationTestContainer {
     static void setUpClass() {
         doSetUp('pixfeed',
                 new PixFeedRequest3to2Translator(),
-                new PixFeedAck2to3Translator())
+                new PixFeedAck2to3Translator(),
+                HapiContextFactory.createHapiContext(PixPdqTransactions.ITI8))
     }        
   
     @Test

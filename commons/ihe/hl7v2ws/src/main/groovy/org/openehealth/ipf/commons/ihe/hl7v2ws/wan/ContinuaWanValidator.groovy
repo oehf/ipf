@@ -38,6 +38,7 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
  * There must be at least one PATIENT_RESULT
  * 
  * @author Mitko Kolev
+ * @deprecated
  *
  */
 class ContinuaWanValidator extends  Pcd01Validator {

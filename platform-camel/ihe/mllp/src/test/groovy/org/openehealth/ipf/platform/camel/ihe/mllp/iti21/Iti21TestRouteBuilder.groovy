@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
+import ca.uhn.hl7v2.AcknowledgmentCode
 import org.apache.camel.spring.SpringRouteBuilder;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
@@ -68,7 +69,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
          // for cancel messages
          from('pdq-iti21://0.0.0.0:18212')
              .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                 resultMessage(it).body = it.in.body.target.generateACK()
              }
              
          // for automatic NAK 
@@ -107,7 +108,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
          from('pdq-iti21://0.0.0.0:18219')
              .process {
                  it.out.body = null
-                 it.out.headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AckTypeCode.AE
+                 it.out.headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AE
              }
      }
 }

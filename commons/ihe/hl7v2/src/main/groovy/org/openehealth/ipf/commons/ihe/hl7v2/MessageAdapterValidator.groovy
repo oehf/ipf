@@ -32,6 +32,8 @@ import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
  * HL7 message validator for PIX/PDQ transactions.
  *
  * @author Dmytro Rud
+ * @deprecated Validation of messages defined by specifications like IHE shall now be done
+ * using conformance profiles
  */
 class MessageAdapterValidator extends AbstractMessageAdapterValidator {
 

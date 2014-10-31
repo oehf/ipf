@@ -88,16 +88,68 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
         translateTelecom(builder, pid[13], 'H')
         translateTelecom(builder, pid[14], 'WP')
 
-        def gender = (pid[8].value ?: '').mapReverse('hl7v2v3-bidi-administrativeGender-administrativeGender')
-        builder.administrativeGenderCode(code: gender)
-        builder.birthTime(value: pid[7][1].value ?: '')
+        String gender = (pid[8].value ?: '').mapReverse('hl7v2v3-bidi-administrativeGender-administrativeGender')
+        String maritalStatus = (pid[16].value ?: '').mapReverse('hl7v2v3-patient-maritalStatus')
+        String religiousAffiliation = pid[17].value ?: ''
+
+        if (gender)
+            builder.administrativeGenderCode(code: gender)
+        if (pid[7][1].value)
+            builder.birthTime(value: pid[7][1].value)
+
+        if ('Y'.equals(pid[30].value) || pid[29].value) {
+            builder.deceasedInd(value:true)
+            if (pid[29].value)
+                builder.deceasedTime(value: pid[29][1].value)
+        } else if ('N'.equals(pid[30].value)) {
+            builder.deceasedInd(value: false)
+        }
+        if ('Y'.equals(pid[24].value) || pid[25].value) {
+            builder.multipleBirthInd(value: true)
+            if (pid[25].value)
+                builder.multipleBirthOrderNumber(value: pid[25].value)
+        } else if ('N'.equals(pid[24].value)) {
+            builder.multipleBirthInd(value: false)
+        }
+
         builder.addr {
             def pid11 = pid[11]
-            conditional(builder, 'country',           pid11[6].value)
-            conditional(builder, 'state',             pid11[4].value)
-            conditional(builder, 'postalCode',        pid11[5].value)
-            conditional(builder, 'city',              pid11[3].value)
+            conditional(builder, 'country', pid11[6].value)
+            conditional(builder, 'state', pid11[4].value)
+            conditional(builder, 'postalCode', pid11[5].value)
+            conditional(builder, 'city', pid11[3].value)
             conditional(builder, 'streetAddressLine', pid11[1].value)
+            conditional(builder, 'streetAddressLine', pid11[2].value)
+        }
+
+        if (maritalStatus)
+            builder.maritalStatusCode(code: maritalStatus)
+        if (religiousAffiliation)
+            builder.religiousAffiliationCode(code: religiousAffiliation)
+
+        def pid10collection = pid[10]()
+        if (pid10collection) {
+            for (pid10 in pid10collection) {
+                builder.raceCode(code: pid10[1].value)
+            }
+        }
+
+        def pid22collection = pid[22]()
+        if (pid22collection) {
+            for (pid22 in pid22collection) {
+                builder.ethnicGroupCode(code: pid22[1].value)
+            }
+        }
+
+        def pid26collection = pid[26]()
+        if (pid26collection) {
+            for (pid26 in pid26collection) {
+                builder.asCitizen(classCode: 'CIT') {
+                    politicalNation(classCode: 'NAT', determinerCode: 'INSTANCE') {
+                        code(code: pid26[1].value)
+                    }
+                }
+            }
         }
 
         def pid4collection = pid[4]()
@@ -121,6 +173,16 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
             }
         }
 
+    }
+
+    void createBirthPlaceElement(MarkupBuilder builder, SegmentAdapter pid) {
+        if (pid[23].value) {
+            builder.birthPlace(classCode: 'BIRTHPL') {
+                birthplace(classCode: 'CITY', determinerCode: 'INSTANCE') {
+                    name(pid[23].value)
+                }
+            }
+        }
     }
 
     /**

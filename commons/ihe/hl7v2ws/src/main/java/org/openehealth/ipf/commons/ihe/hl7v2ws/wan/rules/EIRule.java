@@ -27,6 +27,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
 /**
  * @author Mitko Kolev
  * @author Christian Ohr
+ * @deprecated
  */
 public class EIRule extends AbstractCompositeTypeRule<EI> {
 

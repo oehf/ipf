@@ -37,9 +37,7 @@ class Iti8TestValidationRouteBuilder extends SpringRouteBuilder {
                  .maximumRedeliveries(0)
                  .end()
              .process(iti8RequestValidator())
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
+             .process { resultMessage(it).body = it.in.body.target.generateACK() }
              .process(iti8ResponseValidator())
              
              
@@ -48,7 +46,7 @@ class Iti8TestValidationRouteBuilder extends SpringRouteBuilder {
              .onException(ValidationException.class)
                  .handled(true)
                  .process {
-                     resultMessage(it).body = MessageUtils.ack(it.in.body.target) 
+                     resultMessage(it).body = it.in.body.target.generateACK()
                  }
                  .end()
              .process(iti8RequestValidator())

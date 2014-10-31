@@ -124,7 +124,16 @@ class MessageUtils {
         }
         structName
     }
-    
+
+    /**
+     * @param msg
+     * @return acknowledgement for the msg
+     * @deprecated use {@link Message#generateACK()}
+     */
+    static Message ack(Message msg) {
+        return msg.generateACK()
+    }
+
     /** 
      *  @return a negative ACK response message constructed from scratch
      */
@@ -225,6 +234,7 @@ class MessageUtils {
             throw new HL7v2Exception(e)
         }
         AbstractMessage msg = ReflectionUtil.instantiateMessage(c, factory)
+        msg.setParser(context.getGenericParser())
         msg.initQuickstart(eventType, triggerEvent, 'P')
         Terser.set(msg.MSH, 11, 0, 2, 1, 'T');
         msg

@@ -109,7 +109,6 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
      * Test whether MDHT POJO can be used as input for Continua HRN.
      */
     @Test
-    @Ignore    // probably we will abandon MDHT
     public void testMdhtInputDatatype() throws Exception {
         String uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
 

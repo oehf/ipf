@@ -35,7 +35,7 @@ class Iti64TestRouteBuilder extends SpringRouteBuilder {
         .end()
         .process(iti64RequestValidator())
         .process {
-            resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+            resultMessage(it).body = it.in.body.target.generateACK()
         }
         .process(iti64ResponseValidator())
 

@@ -28,8 +28,7 @@ public class Iti41ServerAuditStrategy extends Iti41AuditStrategy {
         "EventOutcomeCode",
         "ClientIpAddress",
         "ServiceEndpointUrl",
-        "SubmissionSetUuid",
-        "PatientId"};
+        "SubmissionSetUuid"};
 
     
     /**

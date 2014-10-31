@@ -40,7 +40,7 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
  * "IHE Patient Care Device (PCD) Technical Framework 5  Volume 2  (PCD TF-2)  Revision 1.2"
  * 
  * @author Mitko Kolev
- *
+ * @deprecated use PCD-01 conformance profile validator
  */
 class Pcd01Validator extends AbstractMessageAdapterValidator {
  

@@ -26,7 +26,9 @@ import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 
 /**
- * 
+ * Convenience subclass of {@link ca.uhn.hl7v2.model.AbstractMessage} used for custom message structures
+ * as e.g. defined by IHE.
+ *
  * @author Christian Ohr
  */
 @SuppressWarnings("serial")

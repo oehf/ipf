@@ -49,6 +49,9 @@
                 <city>LONDON</city>
                 <streetAddressLine>999 PENNY LANE</streetAddressLine>
               </addr>
+              <maritalStatusCode code="M" />
+              <raceCode code="W" />
+              <ethnicGroupCode code="W" />
             </patientPerson>
             <providerOrganization classCode="ORG" determinerCode="INSTANCE">
               <id root="1.2.3" />

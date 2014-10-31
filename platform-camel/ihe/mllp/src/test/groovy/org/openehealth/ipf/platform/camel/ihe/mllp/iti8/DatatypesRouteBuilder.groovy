@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
+import ca.uhn.hl7v2.AcknowledgmentCode
+
 import static junit.framework.Assert.*
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.typeSupported
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
@@ -72,7 +74,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
      static void prepareContents(int contentType, Exchange exchange) throws Exception {
          checkedContentTypes[contentType] = true
          
-         def x = MessageUtils.ack(exchange.in.body.target)
+         def x = exchange.in.body.target.generateACK()
 
          switch(contentType) {
 
@@ -134,7 +136,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              assertTrue(x instanceof String)
              assertTrue(typeSupported(x))
              resultMessage(exchange).body = x
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AckTypeCode.AE
+             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AE
              break
              
          // Unsupported data type, header set to "OK"
@@ -142,13 +144,13 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              x = Math.PI
              assertFalse(typeSupported(x))
              resultMessage(exchange).body = x
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AckTypeCode.AA
+             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AA
              break
              
          // Null body, header set to "OK"
          case 8:
              resultMessage(exchange).body = null
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AckTypeCode.AA
+             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AA
              break
 
              
@@ -190,13 +192,13 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              x = Math.PI
              assertFalse(typeSupported(x))
              resultMessage(exchange).body = x
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AckTypeCode.AE
+             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AE
              break
 
          // Null body, header set to "FAILURE"
          case 14:
              resultMessage(exchange).body = null
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AckTypeCode.AE
+             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AE
              break
          
          // Exception as data, header not set
@@ -220,7 +222,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              assertTrue(x instanceof Exception)
              assertFalse(typeSupported(x))
              resultMessage(exchange).body = x
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AckTypeCode.AA
+             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AA
              break
              
          // Exception thrown, header set to "OK" (and should be ignored)
@@ -228,7 +230,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              x = new Exception('So schnell, wie der Wind')
              assertTrue(x instanceof Exception)
              assertFalse(typeSupported(x))
-             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AckTypeCode.AA
+             resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AA
              throw x
 
          }
@@ -249,7 +251,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
          // port 8088 -- producer-side datatype handling
          from('xds-iti8://0.0.0.0:18188?audit=false')
              .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                 resultMessage(it).body = it.in.body.target.generateACK()
              }
          
     }

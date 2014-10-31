@@ -92,6 +92,7 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
                                 statusCode(code: 'active')
                                 patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
                                     createPatientPersonElements(builder, PIDSegment)
+                                    createBirthPlaceElement(builder, PIDSegment)
                                 }
                                 providerOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
                                     buildInstanceIdentifier(builder, 'id', false,

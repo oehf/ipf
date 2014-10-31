@@ -57,7 +57,13 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <property name="password" value="changeit"/>
     </bean>
     
-    <bean id="dummyInterceptor1" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.DummyInterceptor" />
-    <bean id="dummyInterceptor2" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.DummyInterceptor" />
+    <bean id="dummyInterceptor1" class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactorySupport">
+        <constructor-arg index="0" value="org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.DummyInterceptor"/>
+    </bean>
+
+    <bean id="dummyInterceptor2" class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactorySupport">
+        <constructor-arg index="0" value="org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.DummyInterceptor"/>
+    </bean>
+
     
 </beans>

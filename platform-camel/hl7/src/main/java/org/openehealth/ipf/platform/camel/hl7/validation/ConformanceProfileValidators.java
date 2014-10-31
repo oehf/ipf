@@ -20,11 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBException;
 
+import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.Severity;
 import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.parser.GenericParser;
+import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.validation.MessageRule;
-import ca.uhn.hl7v2.validation.ValidationExceptionHandler;
 import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -47,6 +49,8 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
  * @author Christian Ohr
  */
 public final class ConformanceProfileValidators {
+
+    private static final Parser FALLBACK = new GenericParser();
 
     private ConformanceProfileValidators() {
     }
@@ -129,9 +133,19 @@ public final class ConformanceProfileValidators {
         }
     }
 
-    private static Message bodyMessage(Exchange exchange) {
+    private static Message bodyMessage(Exchange exchange) throws HL7Exception {
         Object body = exchange.getIn().getBody();
-        Message message = body instanceof MessageAdapter ? ((MessageAdapter)body).getHapiMessage() : exchange.getIn().getBody(Message.class);
+        Message message;
+
+        if (body instanceof MessageAdapter) {
+            message = ((MessageAdapter)body).getHapiMessage();
+        } else if (body instanceof Message) {
+            message = (Message)body;
+        } else if (body instanceof String) {
+            message = FALLBACK.parse((String)body);
+        } else {
+            message = exchange.getIn().getBody(Message.class);
+        }
         Validate.notNull(message, "Exchange does not contain or wrap required 'ca.uhn.hl7v2.model.Message' type");
         return message;
     }

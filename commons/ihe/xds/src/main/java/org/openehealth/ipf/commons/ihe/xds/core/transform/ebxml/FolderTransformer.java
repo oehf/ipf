@@ -99,6 +99,9 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
         for (EbXMLClassification code : regPackage.getClassifications(FOLDER_CODE_LIST_CLASS_SCHEME)) {
             codes.add(codeTransformer.fromEbXML(code));
         }
+
+        List<EbXMLClassification> limitedMetadata = regPackage.getClassifications(FOLDER_LIMITED_METADATA_CLASS_SCHEME);
+        folder.setLimitedMetadata(! limitedMetadata.isEmpty());
     }
 
     @Override
@@ -108,6 +111,11 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
         for (Code codeListElem : folder.getCodeList()) {
             EbXMLClassification code = codeTransformer.toEbXML(codeListElem, objectLibrary);
             regPackage.addClassification(code, FOLDER_CODE_LIST_CLASS_SCHEME);
+        }
+
+        if (folder.isLimitedMetadata()) {
+            EbXMLClassification classification = factory.createClassification(objectLibrary);
+            regPackage.addClassification(classification, FOLDER_LIMITED_METADATA_CLASS_SCHEME);
         }
     }
 }

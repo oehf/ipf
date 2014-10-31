@@ -15,24 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.ihe.hl7v2.MessageAdapterValidator;
 import org.openehealth.ipf.gazelle.validation.profile.ItiPixPdqProfile;
 import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.hl7.validation.ConformanceProfileValidators;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti10.Iti10Component;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti21.Iti21Component;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti22.Iti22Component;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti64.Iti64Component;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8Component;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti9.Iti9Component;
-
-import ca.uhn.hl7v2.parser.Parser;
-
-import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
 
 /**
  * Validating processors for MLLP-based IPF IHE components.
@@ -40,7 +26,6 @@ import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.v
  * @author Dmytro Rud
  */
 abstract public class PixPdqCamelValidators {
-    public static final MessageAdapterValidator VALIDATOR = new MessageAdapterValidator();
 
 
     /**
@@ -86,6 +71,7 @@ abstract public class PixPdqCamelValidators {
     /**
      * Returns a validating processor for ITI-10 response messages
      * (PIX Update Notification).
+     * FIXME I think this is the wrong profile
      */
     public static Processor iti10ResponseValidator() {
         return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_10_ACK);

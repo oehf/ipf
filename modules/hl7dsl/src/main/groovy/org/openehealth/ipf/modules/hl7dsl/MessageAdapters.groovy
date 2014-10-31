@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import ca.uhn.hl7v2.DefaultHapiContext
+import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.AbstractMessage
-import ca.uhn.hl7v2.parser.GenericParser
 import ca.uhn.hl7v2.parser.Parser
 
 /**
@@ -24,8 +25,8 @@ import ca.uhn.hl7v2.parser.Parser
  */
 public class MessageAdapters {
 	
-	static Parser defaultParser() {
-		return new GenericParser()
+	static HapiContext defaultContext() {
+		return new DefaultHapiContext()
 	}
 	
 	// -----------------------------------------------------------------
@@ -49,34 +50,55 @@ public class MessageAdapters {
 	}
 	
 	static <T extends AbstractMessage>  MessageAdapter<T>  make(String message) {
-		make(defaultParser(), message)
+		make(defaultContext(), message)
 	}
 	
 	// -----------------------------------------------------------------
 	//  Factory methods using custom parser
 	// -----------------------------------------------------------------
-	
+
+    static <T extends AbstractMessage>  MessageAdapter<T>  load(HapiContext context, String resource) {
+        make(context, MessageAdapter.class.classLoader.getResource(resource)?.text)
+    }
+
 	static <T extends AbstractMessage>  MessageAdapter<T>  load(Parser parser, String resource) {
 		make(parser, MessageAdapter.class.classLoader.getResource(resource)?.text)
 	}
-	
+
+    static <T extends AbstractMessage>  MessageAdapter<T>  load(HapiContext context, String resource, String charset) {
+        make(context, MessageAdapter.class.classLoader.getResource(resource)?.getText(charset))
+    }
+
 	static <T extends AbstractMessage>  MessageAdapter<T>  load(Parser parser, String resource, String charset) {
 		make(parser, MessageAdapter.class.classLoader.getResource(resource)?.getText(charset))
 	}
-	
+
+    static <T extends AbstractMessage>  MessageAdapter<T>  make(HapiContext context, InputStream stream) {
+        return make(context, stream.text)
+    }
+
 	static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, InputStream stream) {
 		return make(parser, stream.text)
 	}
-	
+
+    static <T extends AbstractMessage>  MessageAdapter<T>  make(HapiContext context, InputStream stream, String charset) {
+        return make(context, stream.getText(charset))
+    }
+
 	static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, InputStream stream, String charset) {
 		return make(parser, stream.getText(charset))
 	}
-	
+
+    static <T extends AbstractMessage>  MessageAdapter<T>  make(HapiContext context, String message) {
+        make(context.genericParser, message);
+    }
+
 	static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, String message) {
 		if (!message) {
 			return null
 		}
 		new MessageAdapter(parser, parser.parse(message))
 	}
-	
+
+
 }

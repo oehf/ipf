@@ -31,7 +31,7 @@ class TestIti21Continuations extends MllpTestContainer {
     
     final String REQUEST_MESSAGE =
         'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
-        '20081031112704||QBP^Q22|324406609|P|2.5|||ER\r' +
+        '20081031112704||QBP^Q22^QBP_Q21|324406609|P|2.5|||ER\r' +
         'SFT|XON|ST|ST|ST|TX|TS\r' +
         'QPD|IHE PDQ Query|1402274727|@PID.3.1^12345678~@PID.3.2.1^BLABLA~' +
         '@PID.3.4.2^1.2.3.4~@PID.3.4.3^KRYSO|||||\r' +

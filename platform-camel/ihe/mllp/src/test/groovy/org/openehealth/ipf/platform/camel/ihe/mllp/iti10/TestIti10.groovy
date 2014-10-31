@@ -53,15 +53,15 @@ class TestIti10 extends MllpTestContainer {
      */
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit('pix-iti10://localhost:18108', true, 2)
+        doTestHappyCaseAndAudit('pix-iti10://localhost:18108', 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit('pix-iti10://localhost:18107?audit=false', false, 0)
+        doTestHappyCaseAndAudit('pix-iti10://localhost:18107?audit=false', 0)
     }
     
-    def doTestHappyCaseAndAudit(String endpointUri, boolean needStructure, int expectedAuditItemsCount) {
-        final String body = getMessageString(needStructure ? 'ADT^A31^ADT_A05' : 'ADT^A31', '2.5')
+    def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
+        final String body = getMessageString10('ADT^A31^ADT_A05', '2.5')
         def msg = send(endpointUri, body)
         assertACK(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size())

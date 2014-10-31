@@ -79,6 +79,11 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
           factory-bean="keyStoreOtherFactory"
           factory-method="newInstance" />
 
-    <bean id="dummyInterceptor" class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.DummyInterceptor" />
-    <bean id="authenticationInterceptor" class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.AuthenticationInterceptor" />
+    <bean id="dummyInterceptor"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.DummyInterceptor"
+          scope="prototype"/>
+
+    <bean id="authenticationInterceptor"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.AuthenticationInterceptor"
+          scope="prototype"/>
 </beans>

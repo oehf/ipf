@@ -125,6 +125,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.getEventCodeList().add(createCode(9));
         documentEntry.setRepositoryUniqueId("repo1");
         documentEntry.setDocumentAvailability(DocumentAvailability.ONLINE);
+        documentEntry.setLimitedMetadata(true);
 
         documentEntry.getReferenceIdList().add(new ReferenceId(
                 "ref-id-11", new AssigningAuthority("1.1.2.3"),
@@ -166,8 +167,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertSlot(SLOT_NAME_LEGAL_AUTHENTICATOR, slots, "id 2^familyName 2^givenName 2^prefix 2^second 2^suffix 2^degree 2^^&uni 2&uniType 2");
         assertSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, slots, "repo1");
         assertSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slots, 
-                "PID-3|id 5^^^&uni 5&uniType 5",
-                "PID-3|id 6^^^&uni 6&uniType 6",
+                "PID-3|id 5^^^&uni 5&uniType 5~id 6^^^&uni 6&uniType 6",
                 "PID-5|familyName 3^givenName 3^prefix 3^second 3^suffix 3^degree 3",
                 "PID-7|dateOfBirth",
                 "PID-8|F",
@@ -224,8 +224,10 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
 
         assertExternalIdentifier(DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, ebXML, 
                 "uniqueId", DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID);
-        
-        assertEquals(11, ebXML.getClassifications().size());
+
+        assertClassification(DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME, ebXML, 0, null, 0);
+
+        assertEquals(12, ebXML.getClassifications().size());
         assertEquals(13, ebXML.getSlots().size());
         assertEquals(2, ebXML.getExternalIdentifiers().size());
     }
@@ -251,14 +253,12 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertEquals(0, ebXML.getClassifications().size());
         assertEquals(0, ebXML.getExternalIdentifiers().size());
     }
-    
-    
-    
+
     @Test
     public void testFromEbXML() {
         EbXMLExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);
         DocumentEntry result = transformer.fromEbXML(ebXML);
-        
+
         assertNotNull(result);
         assertEquals(documentEntry, result);
     }

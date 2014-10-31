@@ -32,7 +32,7 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
         // normal processing without auditing
         from('xds-iti8://0.0.0.0:8881?audit=false')
             .process {
-                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                resultMessage(it).body = it.in.body.target.generateACK()
             }
 
         // normal processing with auditing
@@ -40,7 +40,7 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
             .process(iti8RequestValidator())
             .process {
                 println('PIX-ITI8 Content: ' + it.in.body)
-                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                resultMessage(it).body = it.in.body.target.generateACK()
             }
             .process(iti8ResponseValidator())
     }

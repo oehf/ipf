@@ -15,9 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.junit.*;
+import org.junit.*
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
 
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_46
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
@@ -32,7 +34,8 @@ class PixUpdateNotificationTranslatorTest extends Hl7TranslationTestContainer {
     static void setUpClass() {
         doSetUp('pixupdatenotification',
                 new PixAck3to2Translator(),
-                new PixUpdateNotification2to3Translator())
+                new PixUpdateNotification2to3Translator(),
+                HapiContextFactory.createHapiContext(PixPdqTransactions.ITI10))
     } 
 
     @Test

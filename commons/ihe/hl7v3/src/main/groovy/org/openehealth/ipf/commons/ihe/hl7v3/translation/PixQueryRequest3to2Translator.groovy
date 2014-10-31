@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import ca.uhn.hl7v2.HapiContext
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
@@ -53,10 +56,11 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
      * If true, MSH-9-3 of the output message will be filled. 
      * Otherwise, MSH-9-3 will remain empty.
      */
-    boolean outputMessageStructure = true 
+    boolean outputMessageStructure = true
 
-	private static final CustomModelClassFactory MODEL_CLASS_FACTORY =
-	    CustomModelClassUtils.createFactory('pix', '2.5')
+    private static final HapiContext PIX_QUERY_CONTEXT = HapiContextFactory.createHapiContext(
+            CustomModelClassUtils.createFactory("pix", "2.5"),
+            PixPdqTransactions.ITI9)
 
 
     /**
@@ -65,7 +69,7 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
      */
     MessageAdapter translateV3toV2(String xmlText, MessageAdapter dummy = null) {
         def xml = slurp(xmlText)
-        def hapiMessage = MessageUtils.makeMessage(MODEL_CLASS_FACTORY, 'QBP', 'Q23', '2.5')
+        def hapiMessage = MessageUtils.makeMessage(PIX_QUERY_CONTEXT, 'QBP', 'Q23', '2.5')
         def qry = new MessageAdapter(hapiMessage)
 
         // Segment MSH

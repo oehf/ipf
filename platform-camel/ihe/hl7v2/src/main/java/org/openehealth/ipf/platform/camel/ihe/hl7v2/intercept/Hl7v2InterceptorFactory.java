@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.modules.hl7.validation.model;
-
-import java.util.List;
-
-import ca.uhn.hl7v2.model.MessageVisitorFactory;
+package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 
 /**
  *
  */
-public class CompositeValidationVisitorFactory implements MessageVisitorFactory<CompositeValidationVisitor> {
+public interface Hl7v2InterceptorFactory<T extends Hl7v2Interceptor> {
 
-    private List<CompositeTypeRule> compositeRules;
-
-    public CompositeValidationVisitorFactory(List<CompositeTypeRule> compositeRules) {
-        this.compositeRules = compositeRules;
-    }
-
-    @Override
-    public CompositeValidationVisitor create() {
-        return new CompositeValidationVisitor(compositeRules);
-    }
+    /**
+     * Returns a new instance of an HL7v2Interceptor
+     *
+     * @return new instance of an HL7v2Interceptor
+     */
+    T getNewInstance();
 }

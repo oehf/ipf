@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
  * @author Kingsley Nwaigbo
  * 
  */
+@Ignore
 public class QA_Pcd01OBRValidatorTest extends AbstractPCD01ValidatorTest {
 
     @Test

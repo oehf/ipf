@@ -35,7 +35,7 @@ public class CustomModelClassUtils {
     }
 
     /**
-     * Creates a class factory for the given transaction and HL7 version.
+     * Creates a model class factory for the given transaction and HL7 version.
      */
     public static CustomModelClassFactory createFactory(String transaction, String version) {
         String packageName = String.format("%s.%s.%s",
@@ -48,6 +48,9 @@ public class CustomModelClassUtils {
 
     /**
      * Creates a parser for the given transaction and HL7 version.
+     *
+     * @deprecated the correct parser should be obtained from the {@link ca.uhn.hl7v2.HapiContext}
+     * that has been configured with the correct {@link ca.uhn.hl7v2.parser.ModelClassFactory}.
      */
     public static Parser createParser(String transaction, String version) {
         return new PipeParser(createFactory(transaction, version));

@@ -20,13 +20,18 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina2.Mina2Component;
 import org.apache.camel.component.mina2.Mina2Endpoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.camel.spring.GenericBeansException;
+import org.apache.camel.spring.SpringCamelContext;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 import javax.net.ssl.SSLContext;
 import java.nio.charset.Charset;
@@ -57,7 +62,7 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
 
     /**
      * Camel context-based constructor.
-     * 
+     *
      * @param camelContext camel context
      */
     protected MllpComponent(CamelContext camelContext) {
@@ -132,8 +137,7 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
 
         // adopt character set configured for the HL7 codec
         ProtocolCodecFactory codecFactory = getCamelContext().getRegistry().lookupByNameAndType(
-                    extractBeanName((String) parameters.get("codec")), 
-                    ProtocolCodecFactory.class);
+                extractBeanName((String) parameters.get("codec")),ProtocolCodecFactory.class);
         Charset charset = null;
         try {
             charset = ((HL7MLLPCodec) codecFactory).getCharset();
@@ -149,15 +153,14 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
         Endpoint endpoint = super.createEndpoint(uri, remaining, parameters);
         Mina2Endpoint minaEndpoint = (Mina2Endpoint) endpoint;
 
+        List<Hl7v2InterceptorFactory> customInterceptorsFactories = resolveAndRemoveReferenceListParameter(
+                parameters, "interceptorFactories", Hl7v2InterceptorFactory.class);
+
         SSLContext sslContext = secure ? resolveAndRemoveReferenceParameter(
                 parameters, 
                 "sslContext", 
                 SSLContext.class,
                 SSLContext.getDefault()) : null;
-
-
-        List<Hl7v2Interceptor> customInterceptors = resolveAndRemoveReferenceListParameter(
-                parameters, "interceptors", Hl7v2Interceptor.class);
 
         String[] sslProtocols = sslProtocolsString != null ? sslProtocolsString.split(",") : null;
         String[] sslCiphers = sslCiphersString != null ? sslCiphersString.split(",") : null;
@@ -170,7 +173,8 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
                 allowIncompleteAudit,
                 sslContext,
                 clientAuthType,
-                customInterceptors,
+                extractInterceptorBeanNames(parameters),
+                customInterceptorsFactories,
                 sslProtocols,
                 sslCiphers,
                 supportInteractiveContinuation,
@@ -184,8 +188,31 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
                 autoCancel);
     }
 
+
     private static String extractBeanName(String originalBeanName) {
         return originalBeanName.startsWith("#") ? originalBeanName.substring(1) : originalBeanName;
+    }
+
+
+    private String[] extractInterceptorBeanNames(Map<String, Object> parameters) {
+        SpringCamelContext camelContext = (SpringCamelContext) getCamelContext();
+        ApplicationContext applicationContext = camelContext.getApplicationContext();
+
+        String paramValue = getAndRemoveParameter(parameters, "interceptors", String.class);
+        if (StringUtils.isEmpty(paramValue)) {
+            return new String[0];
+        }
+
+        String[] beanNames = paramValue.split(",");
+        for (int i = 0; i < beanNames.length; ++i) {
+            beanNames[i] = extractBeanName(beanNames[i]);
+            if (! applicationContext.isPrototype(beanNames[i])) {
+                throw new GenericBeansException("Custom HL7v2 interceptor bean '" +
+                        beanNames[i] + "' shall have scope=\"prototype\"");
+            }
+        }
+
+        return beanNames;
     }
 
 
@@ -218,7 +245,15 @@ public abstract class MllpComponent<T extends MllpAuditDataset> extends Mina2Com
      *      chain of each consumer instance created by this component.
      *      <p>
      *      Per default returns an empty list.
-     *      <code>null</code> return values are not allowed.
+     *      <br>
+     *      When overwriting this method, please note:
+     *      <ul>
+     *          <li>Neither the returned list nor any element of it
+     *              are allowed to be <code>null</code>.
+     *          <li>Each invocation should return freshly created instances
+     *              of interceptors (like prototype-scope beans in Spring),
+     *              because interceptors cannot be reused by multiple endpoints.
+     *      </ul>
      */
     public List<Hl7v2Interceptor> getAdditionalProducerInterceptors() {
         return Collections.emptyList();

@@ -28,6 +28,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
 /**
  * @author Mitko Kolev
  * @author Christian Ohr
+ * @deprecated
  */
 public class XADRule extends AbstractCompositeTypeRule<XAD> {
 

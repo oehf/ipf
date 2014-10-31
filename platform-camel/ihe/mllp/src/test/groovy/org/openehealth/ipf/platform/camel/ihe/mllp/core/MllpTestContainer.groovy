@@ -144,11 +144,28 @@ class MllpTestContainer {
                 '|||ER\n' +
                 'EVN|A01|20081204114742\n'
         if(needPid) {
-            s = s + 'PID|1||001^^^XREF2005~002^^^HIMSS2005||Multiple^Christof^Maria^Prof.|Eisner|' +
+            s = s + 'PID|1||001^^^XREF2005~002^^^HIMSS2005||Multiple^Christof^Maria^Prof.^^^L|Eisner^^^^^^B|' +
                     '19530429|M|||Bahnhofstr. 1^^Testort^^01234^DE^H|||||||AccNr01^^^ANICPA|' +
                     '111-222-333|\n'
         }
         s = s + 'PV1|1|O|\n'
+        return s
+    }
+
+    /**
+     * Returns a sample HL7 message as String. This message is substantially different
+     */
+    static String getMessageString10(String msh9, String msh12, boolean needPid = true) {
+        def s = 'MSH|^~\\&|MESA_PD_SUPPLIER|XYZ_HOSPITAL|dummy|dummy|20081204114742||' +
+                msh9 +
+                '|123456|T|' +
+                msh12 +
+                '|||ER\n' +
+                'EVN|A31|20081204114742\n'
+        if(needPid) {
+            s = s + 'PID|||001^^^XREF2005&1.2.3&ISO~002^^^HIMSS2005&1.2.3&ISO||Multiple^Christof^Maria^Prof.^^^L||\n'
+        }
+        s = s + 'PV1||N|\n'
         return s
     }
 }

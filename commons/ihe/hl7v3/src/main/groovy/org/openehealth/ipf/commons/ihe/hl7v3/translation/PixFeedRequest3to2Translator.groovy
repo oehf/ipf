@@ -213,13 +213,22 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         // PID-7..8
         grp.PID[7][1].value = dropTimeZone(person.birthTime.@value.text())
         grp.PID[8].value    = person.administrativeGenderCode.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
-        
+
+        if (person.raceCode) {
+            for (race in person.raceCode) {
+                def pid10 = nextRepetition(grp.PID[10])
+                pid10[1].value = race.@code.text()
+            }
+        }
+
         // PID-11 = addresses
         for (address in person.addr) {
             def pid11 = nextRepetition(grp.PID[11])
-            String streetName  = address.streetAddressLine.text()
+            String streetName  = address.streetAddressLine[0].text()
+            String extraStreetName  = address.streetAddressLine[1]?.text()
             String houseNumber = address.houseNumber.text() 
-            pid11[1].value = houseNumber ? "${streetName} ${houseNumber}" : streetName 
+            pid11[1].value = houseNumber ? "${streetName} ${houseNumber}" : streetName
+            pid11[2].value = extraStreetName
             pid11[3].value = address.city.text()
             pid11[4].value = address.state.text()
             pid11[5].value = address.postalCode.text()
@@ -230,14 +239,17 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         for (telecom in person.telecom) {            
             String value = telecom.@value.text()
             if (value) {
-                int pos = value.indexOf(':')
-                if (pos < 0) {
-                    throw new Hl7TranslationException('Missing telecom scheme, see HL7v3 NE 2008, section 2.19')
-                }
+                
+                // Prepare for clients that just send a phone number without preceding tel:
+                String type = 'tel'
+                String number = value
+                String use = telecom.@use?.text()
 
-                String type   = value.substring(0, pos)
-                String number = value.substring(pos + 1)
-                String use    = telecom.@use.text()
+                int pos = value.indexOf(':')
+                if (pos >= 0) {
+                    type = value.substring(0, pos)
+                    number = value.substring(pos + 1)
+                }
                 
                 // Currently (as of Aug 13, 2010 -- yes, it's a Friday), 
                 // only telephone numbers are differentiated between  
@@ -279,7 +291,40 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         
         // PID-16..                
         grp.PID[16] = person.maritalStatusCode.@code.text().map('hl7v2v3-patient-maritalStatus')
-        grp.PID[17] = person.religiousAffiliationCode.@code.text().map('hl7v2v3-patient-religiousAffiliation')
+        grp.PID[17] = person.religiousAffiliationCode.@code.text()
+
+        if (person.ethnicGroupCode) {
+            for (ethnicGroup in person.ethnicGroupCode) {
+                def pid22 = nextRepetition(grp.PID[22])
+                pid22[1].value = ethnicGroup.@code.text()
+            }
+        }
+
+        if (person.birthPlace) {
+            grp.PID[23].value = person.birthPlace.birthplace.name.text()
+        }
+
+        if (person.multipleBirthInd?.@value == 'true' || person.multipleBirthOrderNumber?.@value.text()) {
+            grp.PID[24].value = 'Y'
+            grp.PID[25].value = person.multipleBirthOrderNumber?.@value.text() ?: ''
+        } else if (person.multipleBirthInd?.@value == 'false') {
+            grp.PID[24].value = 'N'
+        }
+
+
+        if (person.asCitizen) {
+            for (citizen in person.asCitizen) {
+                def pid26 = nextRepetition(grp.PID[26])
+                pid26[1].value = citizen.politicalNation.code.@code.text()
+            }
+        }
+
+        if (person.deceasedInd?.@value == 'true' || person.deceasedTime?.@value.text()) {
+            grp.PID[30].value = 'Y'
+            grp.PID[29][1].value = person.deceasedTime?.@value.text() ?: ''
+        } else if (person.deceasedInd?.@value == 'false') {
+            grp.PID[24].value = 'N'
+        }
 
         // Segment PV1
         grp.PV1[2] = 'O'

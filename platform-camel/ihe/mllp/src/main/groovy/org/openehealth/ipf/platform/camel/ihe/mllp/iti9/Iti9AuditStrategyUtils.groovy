@@ -31,7 +31,7 @@ class Iti9AuditStrategyUtils  {
 
     static void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
         if(msg.QPD?.value) {
-            def patientId = MessageUtils.pipeEncode(msg.QPD[3].target)
+            def patientId = msg.QPD[3].target.encode()
             if(patientId) { 
                 auditDataset.patientIds = [patientId]
             }

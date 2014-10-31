@@ -26,6 +26,7 @@ import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 import org.openehealth.ipf.platform.camel.hl7.dataformat.Hl7DataFormat
 import org.openehealth.ipf.platform.camel.hl7.expression.Hl7InputExpression
 
+
 /**
  * HL7 DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
  *

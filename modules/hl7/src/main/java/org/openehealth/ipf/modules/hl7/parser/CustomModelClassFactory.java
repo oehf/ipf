@@ -1,6 +1,5 @@
 package org.openehealth.ipf.modules.hl7.parser;
 
-import java.util.List;
 import java.util.Map;
 
 import ca.uhn.hl7v2.HL7Exception;
@@ -9,14 +8,15 @@ import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 
 /**
- * CustomModelClassFactory implementation that fixes a HAPI 2.2 bug
+ * CustomModelClassFactory implementation that fixes a HAPI 2.2 bug. It is strongly recommended
+ * to use this class instead of {@link ca.uhn.hl7v2.parser.CustomModelClassFactory}
  */
 public class CustomModelClassFactory extends ca.uhn.hl7v2.parser.CustomModelClassFactory {
 
     private ModelClassFactory defaultFactory;
 
     public CustomModelClassFactory() {
-        this((Map<String, String[]>)null);
+        this(null);
     }
 
     public CustomModelClassFactory(Map<String, String[]> map) {

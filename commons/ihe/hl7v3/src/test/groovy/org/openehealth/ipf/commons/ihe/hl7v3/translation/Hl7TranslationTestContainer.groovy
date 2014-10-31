@@ -15,10 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import ca.uhn.hl7v2.DefaultHapiContext
+import ca.uhn.hl7v2.HapiContext
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.validation.ValidationContext
 import org.apache.commons.io.IOUtils
 import org.custommonkey.xmlunit.DetailedDiff
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLUnit
+import org.openehealth.ipf.commons.core.modules.api.Validator
+import org.openehealth.ipf.modules.hl7.validation.ValidatorAdapter
+
 import static org.easymock.EasyMock.*
 
 import org.junit.BeforeClass;
@@ -48,31 +55,20 @@ class Hl7TranslationTestContainer {
     private static final boolean V2       = false
     private static final boolean REQUEST  = true
     private static final boolean RESPONSE = false
-    
-    protected static final MessageAdapterValidator V2_VALIDATOR = new MessageAdapterValidator()
+
+    protected static final Validator<Message, ValidationContext> V2_VALIDATOR = new ValidatorAdapter()
     protected static final CombinedXmlValidator V3_VALIDATOR = new CombinedXmlValidator()
     
     static String transactionName
     static Hl7TranslatorV3toV2 v3tov2Translator
     static Hl7TranslatorV2toV3 v2tov3Translator
-    
-    @BeforeClass
-    static void before() {
-        BidiMappingService mappingService = new BidiMappingService()
-        mappingService.addMappingScript(new ClassPathResource('META-INF/map/hl7-v2-v3-translation.map'))
-        ModelClassFactory mcf = new CustomModelClassFactory()
-        Registry registry = createMock(Registry)
-        ContextFacade.setRegistry(registry)
-        expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
-        expect(registry.bean(ModelClassFactory)).andReturn(mcf).anyTimes()
-        replay(registry)
-    }
+    static HapiContext context
     
     static void doSetUp(
             String transactionName, 
             Hl7TranslatorV3toV2 v3tov2Translator,
-            Hl7TranslatorV2toV3 v2tov3Translator)
-    {
+            Hl7TranslatorV2toV3 v2tov3Translator,
+            HapiContext context) {
         Hl7TranslationTestContainer.transactionName = transactionName
         
         XMLUnit.setCompareUnmatched(true)
@@ -82,6 +78,15 @@ class Hl7TranslationTestContainer {
         
         Hl7TranslationTestContainer.v3tov2Translator = v3tov2Translator
         Hl7TranslationTestContainer.v2tov3Translator = v2tov3Translator
+        Hl7TranslationTestContainer.context = context
+
+        BidiMappingService mappingService = new BidiMappingService()
+        mappingService.addMappingScript(new ClassPathResource('META-INF/map/hl7-v2-v3-translation.map'))
+        Registry registry = createMock(Registry)
+        ContextFacade.setRegistry(registry)
+        expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        expect(registry.bean(HapiContext)).andReturn(context).anyTimes()
+        replay(registry)
     }      
 
     
@@ -116,7 +121,7 @@ class Hl7TranslationTestContainer {
         
         String expectedV2request = getFileContent(fn, V2, REQUEST)
         MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request, null)
-        V2_VALIDATOR.validate(translatedV2request, null)
+        V2_VALIDATOR.validate(translatedV2request.hapiMessage, null)
         assert translatedV2request.toString().trim() == expectedV2request.trim()
     }
 
@@ -125,7 +130,7 @@ class Hl7TranslationTestContainer {
         String v3request = getFileContent(fn, V3, REQUEST)
         String v2response = getFileContent(fn, V2, RESPONSE)
         MessageAdapter msg = MessageAdapters.make(parser, v2response)
-        V2_VALIDATOR.validate(msg, null)
+        V2_VALIDATOR.validate(msg.hapiMessage, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
         String translatedV3response = v2tov3Translator.translateV2toV3(msg, v3request, 'UTF-8')
@@ -141,7 +146,7 @@ class Hl7TranslationTestContainer {
     void doTestV2toV3RequestTranslation(String fn, int v2index, InteractionId v3Id, Parser parser) {
         String v2request = getFileContent(fn, V2, REQUEST)
         MessageAdapter msg = MessageAdapters.make(parser, v2request)
-        V2_VALIDATOR.validate(msg, null)
+        V2_VALIDATOR.validate(msg.hapiMessage, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
         String translatedV3response = v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')

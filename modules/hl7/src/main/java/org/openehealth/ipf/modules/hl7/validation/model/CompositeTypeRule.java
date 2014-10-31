@@ -29,6 +29,7 @@ import ca.uhn.hl7v2.validation.impl.RuleSupport;
  * @author Mitko Kolev
  * 
  * @see PrimitiveTypeRule
+ * @deprecated
  */
 public abstract class CompositeTypeRule<T extends Composite> extends BuilderSupport implements Rule<Composite>  {
 

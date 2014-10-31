@@ -60,6 +60,10 @@
               <telecom value="tel:022-23579" use="MC" />
               <administrativeGenderCode code="M" />
               <birthTime value="19400101" />
+              <deceasedInd value="true"/>
+              <deceasedTime value="20140101" />
+              <multipleBirthInd value="true"/>
+              <multipleBirthOrderNumber value="1" />
               <addr>
                 <country>US</country>
                 <state>WI</state>
@@ -67,6 +71,15 @@
                 <city>Racine</city>
                 <streetAddressLine>1200 Center St</streetAddressLine>
               </addr>
+              <maritalStatusCode code="S" />
+              <religiousAffiliationCode code="RK" />
+              <raceCode code="2028-9"/>
+              <ethnicGroupCode code="H"/>
+              <asCitizen classCode="CIT">
+                <politicalNation classCode="NAT" determinerCode="INSTANCE">
+                    <code code="US"/>
+                </politicalNation>
+              </asCitizen>
               <asOtherIDs classCode="PAT">
                 <id nullFlavor="NA" />
                 <scopingOrganization classCode="ORG" determinerCode="INSTANCE">

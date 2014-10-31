@@ -26,7 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * 
+ * @deprecated
  */
 public class CNERule extends AbstractCompositeTypeRule<CNE> {
 

@@ -77,8 +77,7 @@ public class SampleRouteBuilderTest {
             producerTemplate.requestBody(JETTY_URI + "/map", "BLAH");
         } catch (Exception e) {
             assertTrue(e.getCause() instanceof HttpOperationFailedException);
-            assertEquals("Can't parse message beginning BLAH",
-                        ((HttpOperationFailedException)e.getCause()).getResponseBody());
+            assertTrue(((HttpOperationFailedException)e.getCause()).getResponseBody().startsWith("Determine encoding"));
             assertEquals(400, ((HttpOperationFailedException)e.getCause()).getStatusCode());            
         }
     }

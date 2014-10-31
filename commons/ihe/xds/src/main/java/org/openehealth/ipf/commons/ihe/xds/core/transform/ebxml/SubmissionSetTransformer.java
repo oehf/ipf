@@ -118,6 +118,9 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
 
         EbXMLClassification contentType = regPackage.getSingleClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);
         set.setContentTypeCode(codeTransformer.fromEbXML(contentType));
+
+        List<EbXMLClassification> limitedMetadata = regPackage.getClassifications(SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME);
+        set.setLimitedMetadata(! limitedMetadata.isEmpty());
     }
     
     @Override
@@ -131,6 +134,12 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
 
         EbXMLClassification contentType = codeTransformer.toEbXML(set.getContentTypeCode(), objectLibrary);
         regPackage.addClassification(contentType, SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);
+
+        if (set.isLimitedMetadata()) {
+            EbXMLClassification classification = factory.createClassification(objectLibrary);
+            classification.setClassificationScheme(SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME);
+            regPackage.addClassification(classification, SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME);
+        }
     }
     
     @Override
