@@ -308,8 +308,10 @@ public class Hl7v2TransactionConfiguration {
                     Terser.get(msh, 9, 0, 3, 1),
                     Terser.get(msh, 12, 0, 1, 1),
                     isRequest);
+        } catch (Hl7v2AcceptanceException e) {
+            throw e;
         } catch (HL7Exception e) {
-            throw new Hl7v2AcceptanceException("Missing or invalid MSH segment", 207);
+            throw new Hl7v2AcceptanceException("Missing or invalid MSH segment: " + e.getMessage(), 207);
         }
     }
 
