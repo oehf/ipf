@@ -34,17 +34,17 @@ class DispatchRouteBuilder extends SpringRouteBuilder {
             .routeId('pixfeed')
             .process(PixPdqCamelValidators.iti8RequestValidator())
             .process {
-                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                resultMessage(it).body = it.in.body.target.generateACK()
             }
             .process(PixPdqCamelValidators.iti8ResponseValidator())
 
         from('xpid-iti64://0.0.0.0:18502')
             .routeId('xadpid')
-            .process(PixPdqCamelValidators.iti8RequestValidator())
+            .process(PixPdqCamelValidators.iti64RequestValidator())
             .process {
-                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                resultMessage(it).body = it.in.body.target.generateACK()
             }
-            .process(PixPdqCamelValidators.iti8ResponseValidator())
+            .process(PixPdqCamelValidators.iti64ResponseValidator())
 
     }
 

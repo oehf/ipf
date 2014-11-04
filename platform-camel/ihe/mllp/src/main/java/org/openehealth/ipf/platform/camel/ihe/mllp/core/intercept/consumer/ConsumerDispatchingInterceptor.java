@@ -96,6 +96,7 @@ public class ConsumerDispatchingInterceptor extends AbstractMllpInterceptor<Mllp
         String version = null;
 
         // determine attributes of the message
+        // FIXME these are available as header in the message
         String message = exchange.getIn().getBody(String.class);
         String[] segments = split(message, '\r');
         if (segments.length > 0) {
