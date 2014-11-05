@@ -27,11 +27,20 @@ import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
 
 /**
  * This factory creates HapiContext instances that are required to derive {@link ca.uhn.hl7v2.parser.ModelClassFactory}
- * and {@link ca.uhn.hl7v2.validation.ValidationContext}
+ * and {@link ca.uhn.hl7v2.validation.ValidationContext} valid for the given
+ * {@link org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions HL7v2 transaction}.
+ * <p>
+ * By default, the HapiContext defines the transaction-specific conformance profile and profile store, and
+ * disables validation during parsing.
+ * </p>
  */
 public class HapiContextFactory {
 
     /**
+     * Returns a HapiContext for the provided
+     * {@link org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions HL7v2 transaction}, using
+     * a {@link ca.uhn.hl7v2.parser.DefaultModelClassFactory default HL7 model}
+     *
      * @param transactions profile enumeration
      * @return HapiContext
      */
@@ -40,10 +49,13 @@ public class HapiContextFactory {
     }
 
     /**
+     * Returns a HapiContext for the provided
+     * {@link org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions HL7v2 transaction}, using
+     * a custom HL7 model.
+     *
      * @param modelClassFactory transaction-specific model-class factory
-     * @param transactions profile enumeration
+     * @param transactions      profile enumeration
      * @return HapiContext
-
      */
     public static HapiContext createHapiContext(ModelClassFactory modelClassFactory, HL7v2Transactions transactions) {
         HapiContext context = new DefaultHapiContext(modelClassFactory);

@@ -31,15 +31,11 @@ class Iti8TestRouteBuilder extends SpringRouteBuilder {
         
         // normal processing without auditing
         from('xds-iti8://0.0.0.0:18081?audit=false')
-                .process {
-                    resultMessage(it).body = it.in.body.target.generateACK()
-                }
+                .ack()
         
         // normal processing with auditing
         from('pix-iti8://0.0.0.0:18082')
-                .process {
-                    resultMessage(it).body = it.in.body.target.generateACK()
-                }
+                .ack()
 
         // fictive route to test producer-side acceptance checking
         from('pix-iti8://0.0.0.0:18084')
@@ -51,30 +47,27 @@ class Iti8TestRouteBuilder extends SpringRouteBuilder {
         // route with normal exception
         from('xds-iti8://0.0.0.0:18085')
                 .onException(Exception.class)
-                .maximumRedeliveries(0)
-                .end()
+                    .maximumRedeliveries(0)
+                    .end()
                 .process { throw new Exception('Why do you cry, Willy?') }
         
         // route with runtime exception
         from('pix-iti8://0.0.0.0:18086')
                 .onException(Exception.class)
-                .maximumRedeliveries(0)
-                .end()
+                    .maximumRedeliveries(0)
+                    .end()
                 .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
         
         from('xds-iti8://0.0.0.0:18087?audit=false&'+
                 'secure=true&sslContext=#sslContext&' +
                 'sslProtocols=SSLv3,TLSv1&' +
                 'sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
-                .process {
-                    resultMessage(it).body = it.in.body.target.generateACK()
-                }
+                .ack()
 
         from('xds-iti8://0.0.0.0:18088?audit=false&'+
                 'sslContextParameters=#sslContextParameters')
-                .process {
-            resultMessage(it).body = it.in.body.target.generateACK()
-        }
+                .ack()
+
     }
 }
 

@@ -50,7 +50,7 @@ public class MessageUtilsTest {
         context = new DefaultHapiContext(factory)
         parser = context.getGenericParser()
     }
-    
+
     @Test
     void testAck() {
         String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
@@ -59,7 +59,7 @@ public class MessageUtilsTest {
         assert response.MSH.messageType.messageType.value == 'ACK'
         assert response.MSH.messageType.triggerEvent.value == 'A01'
     }
-    
+
     @Test
     void testNak() {
         String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
@@ -126,7 +126,7 @@ public class MessageUtilsTest {
     void testMakeNK1SegmentVersion25() {
         String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         Message msg = parser.parse(msgText)
-        Segment segment = MessageUtils.newSegment(context, 'NK1', msg)
+        Segment segment = MessageUtils.newSegment('NK1', msg)
         assert segment instanceof NK1
     }
     
@@ -144,7 +144,7 @@ public class MessageUtilsTest {
     void testMakeCECompositeVersion25() {
         String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         Message msg = parser.parse(msgText)
-        Composite type = MessageUtils.newComposite(context, 'CE', msg, [identifier:'BRO'])
+        Composite type = MessageUtils.newComposite('CE', msg, [identifier:'BRO'])
         assert type instanceof CE
         assert type.identifier.value == 'BRO'
     }
@@ -153,7 +153,7 @@ public class MessageUtilsTest {
     void testMakeSIPrimitiveVersion25() {
         String msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         Message msg = parser.parse(msgText)
-        Primitive si = MessageUtils.newPrimitive(context, 'SI', msg, '1')
+        Primitive si = MessageUtils.newPrimitive('SI', msg, '1')
         assert si instanceof SI
         assert si.value == '1'
     }

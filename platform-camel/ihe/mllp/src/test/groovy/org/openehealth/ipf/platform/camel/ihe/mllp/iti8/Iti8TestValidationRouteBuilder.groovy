@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
+import ca.uhn.hl7v2.AcknowledgmentCode
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.apache.camel.spring.SpringRouteBuilder
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
@@ -31,29 +32,28 @@ class Iti8TestValidationRouteBuilder extends SpringRouteBuilder {
 
      void configure() throws Exception {
 
+         onException(ValidationException.class)
+                 .handled(true)
+                 .ack().staticParams(AcknowledgmentCode.AE)
+
          // no error handling
          from('xds-iti8://0.0.0.0:18080?audit=false')
              .onException(ValidationException.class)
                  .maximumRedeliveries(0)
                  .end()
-             .process(iti8RequestValidator())
-             .process { resultMessage(it).body = it.in.body.target.generateACK() }
-             .process(iti8ResponseValidator())
-             
+             .process(itiValidator())
+             .ack()
+             .process(itiValidator())
+
              
          // manual ACK generation on error
          from('xds-iti8://0.0.0.0:18089?audit=false')
-             .onException(ValidationException.class)
-                 .handled(true)
-                 .process {
-                     resultMessage(it).body = it.in.body.target.generateACK()
-                 }
-                 .end()
-             .process(iti8RequestValidator())
+
+             .process(itiValidator())
              .process {
                  throw new RuntimeException('SHOULD NOT BE THROWN')
              }
-             .process(iti8ResponseValidator())
+             .process(itiValidator())
              
      }
 }

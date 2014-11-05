@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti10
 import org.apache.camel.spring.SpringRouteBuilder
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.iti10RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator
 
 /**
  * Camel route for generic unit tests.
@@ -32,10 +32,8 @@ class Iti10TestRouteBuilder extends SpringRouteBuilder {
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
-             .process(iti10RequestValidator())
-             .process {
-                 resultMessage(it).body = it.in.body.target.generateACK()
-             }
+             .process(itiValidator())
+             .ack()
 
              //.process(iti10ResponseValidator())
 
@@ -44,9 +42,7 @@ class Iti10TestRouteBuilder extends SpringRouteBuilder {
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
-             .process {
-                 resultMessage(it).body = it.in.body.target.generateACK()
-             }
+             .ack()
      }
 }
  

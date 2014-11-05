@@ -67,7 +67,7 @@ class TestDispatch extends MllpTestContainer {
         DefaultExchange exchange = new DefaultExchange(camelContext);
 
         exchange.in.body = send('pix-iti8://localhost:18500', ITI_8_REQUEST)
-        iti8ResponseValidator().process(exchange)
+        itiValidator().process(exchange)
         assertACK(exchange.in.body)
 
         exchange.in.body = send('pix-iti9://localhost:18500', ITI_9_REQUEST)
@@ -76,7 +76,7 @@ class TestDispatch extends MllpTestContainer {
         assertNAK(exchange.in.body)
 
         exchange.in.body = send('xpid-iti64://localhost:18500', ITI_64_REQUEST)
-        iti64ResponseValidator().process(exchange)
+        itiValidator().process(exchange)
         assertACK(exchange.in.body)
 
         // ITI-8 from server

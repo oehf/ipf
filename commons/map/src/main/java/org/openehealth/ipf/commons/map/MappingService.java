@@ -32,8 +32,8 @@ import java.util.Set;
 public interface MappingService {
 
 	/**
-	 * @param mappingKey
-	 * @param key
+	 * @param mappingKey mapping name
+	 * @param key left side of the mapping
 	 * @return the value mapped by a registered mapping. The implementation of the
 	 *         mapping implements the behavior if the key does not exist.
 	 * @throws IllegalArgumentException
@@ -42,9 +42,9 @@ public interface MappingService {
 	Object get(Object mappingKey, Object key);
 
 	/**
-	 * @param mappingKey
-	 * @param key
-	 * @param defaultValue
+	 * @param mappingKey mapping name
+	 * @param key left side of the mapping
+	 * @param defaultValue default right side if there is no mapping for the code
 	 * @return the value mapped by a registered mapping. If no mapping exists, the
 	 *         default value if returned. The implementation of the mapping
 	 *         implements the behavior if the key does not exist.
@@ -56,8 +56,8 @@ public interface MappingService {
 	/**
 	 * Reverse mapping (Optional implementation)
 	 * 
-	 * @param mappingKey
-	 * @param value
+	 * @param mappingKey mapping name
+	 * @param value right side of the mapping
 	 * @return the key mapped by a registered mapping. The implementation of the
 	 *         mapping implements the behavior if the value does not exist.
 	 * @throws IllegalArgumentException
@@ -68,9 +68,9 @@ public interface MappingService {
 	/**
 	 * Reverse mapping (Optional implementation)
 	 * 
-	 * @param mappingKey
-	 * @param value
-	 * @param defaultKey
+	 * @param mappingKey mapping name
+	 * @param value right side of the mapping
+	 * @param defaultKey default left side
 	 * @return the key mapped by a registered mapping. If no mapping exists, the
 	 *         default value if returned. The implementation of the mapping
 	 *         implements the behavior if the key does not exist.
@@ -80,7 +80,7 @@ public interface MappingService {
 	Object getKey(Object mappingKey, Object value, Object defaultKey);
 	
 	/**
-	 * @param mappingKey
+	 * @param mappingKey mapping name
 	 * @return a formal identification of the key system (e.g. an OID)
 	 * @throws IllegalArgumentException
 	 *             if the mappingKey is not registered.
@@ -88,7 +88,7 @@ public interface MappingService {
 	Object getKeySystem(Object mappingKey);
 
 	/**
-	 * @param mappingKey
+	 * @param mappingKey mapping name
 	 * @return a formal identification of the value system (e.g. an OID)
 	 * @throws IllegalArgumentException
 	 *             if the mappingKey is not registered.

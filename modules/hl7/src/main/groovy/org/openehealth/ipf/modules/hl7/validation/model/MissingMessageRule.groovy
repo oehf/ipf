@@ -13,7 +13,7 @@ import ca.uhn.hl7v2.validation.impl.AbstractMessageRule
 /**
  * A private rule that may be used if no other message rule could be found
  * 
- * @author i000161
+ * @author Christian Ohr
  *
  */
 class MissingMessageRule extends AbstractMessageRule {

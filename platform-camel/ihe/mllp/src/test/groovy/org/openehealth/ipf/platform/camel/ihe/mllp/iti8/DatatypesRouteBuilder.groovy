@@ -247,9 +247,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
          
          // port 8088 -- producer-side datatype handling
          from('xds-iti8://0.0.0.0:18188?audit=false')
-             .process {
-                 resultMessage(it).body = it.in.body.target.generateACK()
-             }
+             .ack()
          
     }
 }

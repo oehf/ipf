@@ -19,8 +19,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslat
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.translatorHL7v3toHL7v2;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti47RequestValidator;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti47ResponseValidator;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.iti21RequestValidator;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.iti21ResponseValidator;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -52,9 +51,9 @@ class CamelOnlyRouteBuilder extends SpringRouteBuilder {
             .convertBodyTo(byte[].class)
             .process(translatorHL7v3toHL7v2(REQUEST_TRANSLATOR))
             .process(typeAndHeaderChecker(MessageAdapter.class, "content-1"))
-            .process(iti21RequestValidator())
+            .process(itiValidator())
             .setBody(constant(MessageAdapters.make(PARSER, Testiti47CamelOnly.getResponseMessage())))
-            .process(iti21ResponseValidator())
+            .process(itiValidator())
             .setHeader("myHeader", constant("content-2"))
             .process(translatorHL7v2toHL7v3(RESPONSE_TRANSLATOR))
             .process(typeAndHeaderChecker(String.class, "content-2"))

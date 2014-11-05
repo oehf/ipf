@@ -40,19 +40,15 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||Müller^Joachim
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .process {
-                resultMessage(it).body = rsp
-            }
+            .transform(constant(rsp))
 
         from('pdq-iti21://0.0.0.0:8872')
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .process(iti21RequestValidator())
-            .process {
-                resultMessage(it).body = rsp
-            }
-            .process(iti21ResponseValidator())
+            .process(itiValidator())
+            .transform(constant(rsp))
+            .process(itiValidator())
 
     }
 }

@@ -34,13 +34,13 @@ public class Hl7v2WsCamelValidators {
 
     // private static final Validator<Object, Object> CONTINUA_WAN_VALIDATOR = new ContinuaWanValidator();
 
+    public static Processor pcdValidator() {
+        return ConformanceProfileValidators.validatingProcessor();
+    }
+
     /**
      * Returns a validating processor for PCD-01 request messages
      * (Communicate Patient Care Device (PCD) data).
-     *
-     * @deprecated use {@link org.openehealth.ipf.commons.ihe.hl7v2.definitions.ConformanceProfileBasedValidationBuilder}
-     * with {@link org.openehealth.ipf.gazelle.validation.profile.PcdTransactions#PCD1} as parameter for the validation
-     * rule of the HAPIContext, or directly ConformanceProfileValidators.validatingProcessor(PcdTransactions.PCD1)
      */
     public static Processor pcd01RequestValidator() {
         return ConformanceProfileValidators.validatingProcessor(PcdTransactions.PCD1);
@@ -49,10 +49,6 @@ public class Hl7v2WsCamelValidators {
     /**
      * Returns a validating processor for PCD-01 response messages
      * (Communicate Patient Care Device (PCD) data).
-     *
-     * @deprecated use {@link org.openehealth.ipf.commons.ihe.hl7v2.definitions.ConformanceProfileBasedValidationBuilder}
-     * with {@link org.openehealth.ipf.gazelle.validation.profile.PcdTransactions#PCD1} as parameter for the validation
-     * rule of the HAPIContext, or directly ConformanceProfileValidators.validatingProcessor(PcdTransactions.PCD1)
      */
     public static Processor pcd01ResponseValidator() {
         return ConformanceProfileValidators.validatingProcessor(PcdTransactions.PCD1);

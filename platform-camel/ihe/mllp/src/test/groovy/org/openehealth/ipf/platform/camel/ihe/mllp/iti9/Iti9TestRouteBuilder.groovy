@@ -46,17 +46,13 @@ class Iti9TestRouteBuilder extends SpringRouteBuilder {
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
-             .process {
-                 resultMessage(it).body = rsp
-             }
+             .transform(constant(rsp))
 
          from('pix-iti9://0.0.0.0:18090')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
-             .process {
-                 resultMessage(it).body = rspWithoutPid
-             }
+             .transform(constant(rspWithoutPid))
          
          // for automatic NAK
          from('pix-iti9://0.0.0.0:18093')

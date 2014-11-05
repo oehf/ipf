@@ -214,7 +214,17 @@ class MessageUtils {
         }
         out
     }
-    
+
+    /**
+     * Creates a message using the provided HapiContext and message type parameters. The MSH segment of
+     * the message is already initialized
+     *
+     * @param context HapiContext
+     * @param eventType event type, e.g. ADT
+     * @param triggerEvent trigger event, e.g. A01
+     * @param version version, e.g. 2.3.1
+     * @return new message
+     */
     public static Message makeMessage(HapiContext context, String eventType, String triggerEvent, String version) {
         def structName
         ModelClassFactory factory = context.modelClassFactory
@@ -239,24 +249,49 @@ class MessageUtils {
         Terser.set(msg.MSH, 11, 0, 2, 1, 'T');
         msg
     }
-    
-    static Segment newSegment(HapiContext context, String name, Message message) {
+
+    /**
+     * Creates a new segment for the provided message
+     *
+     * @param name segment name
+     * @param message message for which the segment shall be created
+     * @return new segment
+     */
+    static Segment newSegment(String name, Message message) {
+        HapiContext context = message.getParser().getHapiContext()
         Class<? extends Segment> c = context.modelClassFactory.getSegmentClass(name, message?.version);
         if (!c) {
             throw new HL7v2Exception("Can't instantiate Segment $name")
         }
         ReflectionUtil.instantiateStructure(c, message, context.modelClassFactory)
     }
-    
-    static Group newGroup(HapiContext context, String name, Message message) {
+
+    /**
+     * Creates a new group for the provided message
+     *
+     * @param name group name
+     * @param message message for which the group shall be created
+     * @return new group
+     */
+    static Group newGroup(String name, Message message) {
+        HapiContext context = message.getParser().getHapiContext()
         Class<? extends Group> c = context.modelClassFactory.getGroupClass(name, message?.version);
         if (!c) {
             throw new HL7v2Exception("Can't instantiate Group $name")
         }
         ReflectionUtil.instantiateStructure(c, message, context.modelClassFactory)
     }
-    
-    static Primitive newPrimitive(HapiContext context, String name, Message message, String value) {
+
+    /**
+     * Creates a new primitive for the provided message. Example: newPrimitive('SI', msg, '1')
+     *
+     * @param name primitive name
+     * @param message message for which the primitive shall be created
+     * @param value primitive value
+     * @return new primitive
+     */
+    static Primitive newPrimitive(String name, Message message, String value) {
+        HapiContext context = message.getParser().getHapiContext()
         Class<? extends Type> c = context.modelClassFactory.getTypeClass(name, message?.version);
         if (!c) {
             throw new HL7v2Exception("Can't instantiate Type $name")
@@ -267,8 +302,19 @@ class MessageUtils {
         }
         primitive
     }
-    
-    static Composite newComposite(HapiContext context, String name, Message message, Map map) {
+
+    /**
+     * Creates a new composite for the provided message. The provided map contains
+     * entries, which represent the component values, where the component name is the
+     * key of an entry. Example: newComposite('CE', msg, [identifier:'BRO'])
+     *
+     * @param name composite name
+     * @param message message for which the composite shall be created
+     * @param map the map with the values for the composite
+     * @return new composite
+     */
+    static Composite newComposite(String name, Message message, Map map) {
+        HapiContext context = message.getParser().getHapiContext()
         Class c = context.modelClassFactory.getTypeClass(name, message?.version);
         if (!c) {
             throw new HL7v2Exception("Can't instantiate Type $name")

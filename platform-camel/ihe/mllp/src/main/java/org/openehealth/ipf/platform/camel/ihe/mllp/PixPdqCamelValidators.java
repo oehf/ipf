@@ -29,6 +29,18 @@ abstract public class PixPdqCamelValidators {
 
 
     /**
+     * Returns a validating processor that obtains the validation rules from the currently
+     * used {@link ca.uhn.hl7v2.HapiContext HapiContext} and the type of the message contained
+     * in the exchange body. As such there is no real need to use the explicitly transaction-dependent
+     * validators.
+     *
+     * @return all-purpose validating processor
+     */
+    public static Processor itiValidator() {
+        return ConformanceProfileValidators.validatingProcessor();
+    }
+
+    /**
      * Returns a validating processor for ITI-8 request messages
      * (Patient Identity Feed).
      */
@@ -124,17 +136,5 @@ abstract public class PixPdqCamelValidators {
     public static Processor iti64ResponseValidator() {
         return ConformanceProfileValidators.validatingProcessor(ItiPixPdqProfile.ITI_64_ACK_A43);
     }
-
-
-    /**
-     * Returns a validating processor for ITI messages that validates as specified
-     * in the Validation Rules in the message's HapiContext
-     */
-    public static Processor validatingProcessor() {
-        return ConformanceProfileValidators.validatingProcessor();
-    }
-
-
-
 
 }

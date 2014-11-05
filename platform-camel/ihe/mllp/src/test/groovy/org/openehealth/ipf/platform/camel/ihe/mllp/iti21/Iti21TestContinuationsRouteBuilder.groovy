@@ -19,12 +19,10 @@ import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.Parser
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
-import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions
-import org.openehealth.ipf.gazelle.validation.profile.ItiPixPdqProfile
-import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator
 
 /**
  * Camel route for continuations unit tests.
@@ -120,11 +118,9 @@ class Iti21TestContinuationsRouteBuilder extends SpringRouteBuilder {
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .process(iti21RequestValidator())
-            .process {
-                resultMessage(it).body = BIG_RESPONSE
-            }
-            .process(iti21ResponseValidator())
+            .process(itiValidator())
+            .transform(constant(BIG_RESPONSE))
+            .process(itiValidator())
 
             
         /**
@@ -135,7 +131,7 @@ class Iti21TestContinuationsRouteBuilder extends SpringRouteBuilder {
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .process(iti21RequestValidator())
+            .process(itiValidator())
             .process {
                 def dsc = it.in.body.DSC[1].value ?: ''
                 resultMessage(it).body = CHAIN_1[dsc]

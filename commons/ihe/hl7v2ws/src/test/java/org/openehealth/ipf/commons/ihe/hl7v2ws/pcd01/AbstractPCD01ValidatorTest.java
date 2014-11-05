@@ -40,7 +40,6 @@ import ca.uhn.hl7v2.model.v26.message.ORU_R01;
 public abstract class AbstractPCD01ValidatorTest {
 
     private HapiContext hapiContext = HapiContextFactory.createHapiContext(PcdTransactions.PCD1);
-    private Parser p = hapiContext.getPipeParser();
 
     protected MessageAdapter<ORU_R01> maximumMessage;
 

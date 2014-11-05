@@ -72,9 +72,10 @@ public final class ConformanceProfileValidators {
                 // We could also write an exception handler on top of SimpleValidationExceptionHandler that
                 // encapsulates the behavior below, but that may restrict custom validation...
                 SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(context);
-                context.<Boolean>getMessageValidator().validate(msg, handler);
-                List<ca.uhn.hl7v2.validation.ValidationException> exceptions = handler.getExceptions();
-                throwIPFValidationException(exceptions.toArray(new ca.uhn.hl7v2.validation.ValidationException[exceptions.size()]));
+                handler.setMinimumSeverityToCollect(Severity.ERROR);
+                if (context.<Boolean>getMessageValidator().validate(msg, handler)) {
+                    throw new ValidationException("Message validation failed", handler.getExceptions());
+                }
             }
         };
     }
@@ -88,11 +89,11 @@ public final class ConformanceProfileValidators {
     public static Processor validatingProcessor(final ConformanceProfile conformanceProfile) {
         return new Processor() {
 
-            private CachingGazelleProfileRule validator = new CachingGazelleProfileRule(conformanceProfile);
+            private CachingGazelleProfileRule rule = new CachingGazelleProfileRule(conformanceProfile);
 
             @Override
             public void process(Exchange exchange) throws Exception {
-                doValidate(bodyMessage(exchange), validator);
+                doValidate(bodyMessage(exchange), rule);
             }
         };
     }
@@ -107,11 +108,11 @@ public final class ConformanceProfileValidators {
     public static Processor validatingProcessor(final HL7v2Transactions iheTransaction) {
         return new Processor() {
 
-            private CachingGazelleProfileRule validator = new CachingGazelleProfileRule(iheTransaction);
+            private CachingGazelleProfileRule rule = new CachingGazelleProfileRule(iheTransaction);
 
             @Override
             public void process(Exchange exchange) throws Exception {
-                doValidate(bodyMessage(exchange), validator);
+                doValidate(bodyMessage(exchange), rule);
             }
         };
     }
@@ -133,6 +134,13 @@ public final class ConformanceProfileValidators {
         }
     }
 
+    /**
+     * Returns the HAPI Message from the message body. If the body is a string, it is parsed on the fly
+     * using
+     * @param exchange
+     * @return
+     * @throws HL7Exception
+     */
     private static Message bodyMessage(Exchange exchange) throws HL7Exception {
         Object body = exchange.getIn().getBody();
         Message message;
@@ -142,11 +150,14 @@ public final class ConformanceProfileValidators {
         } else if (body instanceof Message) {
             message = (Message)body;
         } else if (body instanceof String) {
-            message = FALLBACK.parse((String)body);
+            HapiContext context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
+            Parser parser = context != null ? context.getGenericParser() : FALLBACK;
+            message = parser.parse((String)body);
         } else {
+            // try type conversion
             message = exchange.getIn().getBody(Message.class);
         }
-        Validate.notNull(message, "Exchange does not contain or wrap required 'ca.uhn.hl7v2.model.Message' type");
+        Validate.notNull(message, "Exchange does not contain or can be converted to the required 'ca.uhn.hl7v2.model.Message' type");
         return message;
     }
 

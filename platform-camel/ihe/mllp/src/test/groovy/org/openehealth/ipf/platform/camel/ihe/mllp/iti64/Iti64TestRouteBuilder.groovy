@@ -16,10 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti64
 
 import org.apache.camel.spring.SpringRouteBuilder
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.iti64ResponseValidator
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.iti64RequestValidator
+
+import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator
 
 /**
  * Camel route for generic unit tests.
@@ -32,12 +30,10 @@ class Iti64TestRouteBuilder extends SpringRouteBuilder {
     from('xpid-iti64://0.0.0.0:18491')
         .onException(Exception.class)
             .maximumRedeliveries(0)
-        .end()
-        .process(iti64RequestValidator())
-        .process {
-            resultMessage(it).body = it.in.body.target.generateACK()
-        }
-        .process(iti64ResponseValidator())
+            .end()
+        .process(itiValidator())
+        .ack()
+        .process(itiValidator())
 
     }
 }

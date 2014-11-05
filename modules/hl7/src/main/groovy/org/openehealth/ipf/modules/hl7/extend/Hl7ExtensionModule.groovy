@@ -24,6 +24,8 @@ import ca.uhn.hl7v2.validation.builder.EncodingRuleBuilder
 import ca.uhn.hl7v2.validation.builder.MessageRuleBuilder
 import ca.uhn.hl7v2.validation.builder.Predicate
 import ca.uhn.hl7v2.validation.builder.PrimitiveRuleBuilder
+import ca.uhn.hl7v2.validation.builder.RuleTypeBuilder
+import ca.uhn.hl7v2.validation.impl.RuleSupport
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.commons.map.extend.MappingExtensionHelper
@@ -166,6 +168,7 @@ public class Hl7ExtensionModule {
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     * @deprecated use {@link AbstractMessage#generateACK(java.lang.String, ca.uhn.hl7v2.HL7Exception)}
      */
     public static Message nak(AbstractMessage delegate, String cause, AcknowledgmentCode ackTypeCode) {
         delegate.generateACK(ackTypeCode, new HL7Exception(cause))
@@ -216,35 +219,43 @@ public class Hl7ExtensionModule {
     }
 
     // ----------------------------------------------------------------
-    //  Extensions to HAPI validators
+    //  Extensions to HAPI 2.2 validators for Abstract Syntax and
+    //  closure validation
     // ----------------------------------------------------------------
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     public static MessageRuleBuilder abstractSyntax(MessageRuleBuilder delegate, Object... args) {
-        delegate.test(new AbstractSyntaxRule(args))
+        prepareAndTest(delegate, new AbstractSyntaxRule(args))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     public static MessageRuleBuilder checkIf(MessageRuleBuilder delegate, Closure closure) {
-        delegate.test(new ClosureMessageRule(closure))
+        prepareAndTest(delegate, new ClosureMessageRule(closure))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     public static PrimitiveRuleBuilder checkIf(PrimitiveRuleBuilder delegate, Closure closure) {
-        delegate.test(new ClosurePrimitiveTypeRule(closure))
+        prepareAndTest(delegate, new ClosurePrimitiveTypeRule(closure))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     public static EncodingRuleBuilder checkIf(EncodingRuleBuilder delegate, Closure closure) {
-        delegate.test(new ClosureEncodingRule(closure))
+        prepareAndTest(delegate, new ClosureEncodingRule(closure))
+    }
+
+    private static <E, T extends RuleSupport<E>, S extends RuleTypeBuilder<S, T>> T prepareAndTest(RuleTypeBuilder<S, T> delegate, T rule) {
+        rule.description = delegate.description;
+        rule.sectionReference = delegate.sectionReference;
+        rule.severity = delegate.severity
+        delegate.test(rule)
     }
 
 
