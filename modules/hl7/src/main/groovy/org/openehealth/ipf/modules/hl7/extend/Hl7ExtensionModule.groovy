@@ -227,35 +227,28 @@ public class Hl7ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     public static MessageRuleBuilder abstractSyntax(MessageRuleBuilder delegate, Object... args) {
-        prepareAndTest(delegate, new AbstractSyntaxRule(args))
+        delegate.test(new AbstractSyntaxRule(args))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     public static MessageRuleBuilder checkIf(MessageRuleBuilder delegate, Closure closure) {
-        prepareAndTest(delegate, new ClosureMessageRule(closure))
+        delegate.test(new ClosureMessageRule(closure))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     public static PrimitiveRuleBuilder checkIf(PrimitiveRuleBuilder delegate, Closure closure) {
-        prepareAndTest(delegate, new ClosurePrimitiveTypeRule(closure))
+        delegate.test(new ClosurePrimitiveTypeRule(closure))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     public static EncodingRuleBuilder checkIf(EncodingRuleBuilder delegate, Closure closure) {
-        prepareAndTest(delegate, new ClosureEncodingRule(closure))
-    }
-
-    private static <E, T extends RuleSupport<E>, S extends RuleTypeBuilder<S, T>> T prepareAndTest(RuleTypeBuilder<S, T> delegate, T rule) {
-        rule.description = delegate.description;
-        rule.sectionReference = delegate.sectionReference;
-        rule.severity = delegate.severity
-        delegate.test(rule)
+        delegate.test(delegate, new ClosureEncodingRule(closure))
     }
 
 
