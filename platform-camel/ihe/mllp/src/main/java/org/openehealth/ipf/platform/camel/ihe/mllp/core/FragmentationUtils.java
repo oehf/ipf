@@ -31,7 +31,7 @@ public class FragmentationUtils {
      * Splits the given String at occurrences of the given character.
      */
     public static List<String> splitString(String s, char c) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         int startPos = 0;
         while (true) {
             int pos = s.indexOf(c, startPos);

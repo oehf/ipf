@@ -15,11 +15,14 @@
  */
 package org.openehealth.ipf.commons.map
 
+import org.junit.Test
+
 /**
  * @author Christian Ohr
  */
-public class MappingsBuilderTest extends GroovyTestCase {
-	
+public class MappingsBuilderTest {
+
+    @Test
 	void testBuilder() {
 		def builder = new MappingsBuilder()
 		def map = builder.mappings {

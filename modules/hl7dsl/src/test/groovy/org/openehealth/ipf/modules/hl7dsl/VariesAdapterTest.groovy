@@ -15,16 +15,20 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import org.junit.Before
+import org.junit.Test
+
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 
 /**
  * @author Marek Václavik
  */
-class VariesAdapterTest extends GroovyTestCase {
+class VariesAdapterTest extends groovy.test.GroovyAssert {
 
     def msg1
     def msg2
 
+    @Before
     void setUp() {
         msg1 = load('msg-05.hl7')
         msg2 = load('msg-02.hl7')
@@ -33,6 +37,7 @@ class VariesAdapterTest extends GroovyTestCase {
     //TODO Organize tests by classes, not by usage;
     //TODO Move tests to SegmentAdadpterTest, CompositeAdapterTest etc. where apropriate
 
+    @Test
     void testVariesUsage() {
         assert msg1.QPD.target.getClass().getName().contains('ca.uhn.hl7v2.model.v25.segment.QPD')
 

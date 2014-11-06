@@ -76,7 +76,7 @@ public class RegistryObjectListType
      */
     public List<RegistryObjectType> getRegistryEntryOrRegistryObject() {
         if (registryEntryOrRegistryObject == null) {
-            registryEntryOrRegistryObject = new ArrayList<RegistryObjectType>();
+            registryEntryOrRegistryObject = new ArrayList<>();
         }
         return this.registryEntryOrRegistryObject;
     }

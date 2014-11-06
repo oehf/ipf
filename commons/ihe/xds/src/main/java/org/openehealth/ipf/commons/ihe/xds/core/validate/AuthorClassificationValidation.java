@@ -33,7 +33,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
 public class AuthorClassificationValidation extends ClassificationValidation {
     private static final Set<String> SLOT_NAMES;
     static {
-        SLOT_NAMES = new HashSet<String>();
+        SLOT_NAMES = new HashSet<>();
         SLOT_NAMES.add(Vocabulary.SLOT_NAME_AUTHOR_PERSON);
         SLOT_NAMES.add(Vocabulary.SLOT_NAME_AUTHOR_TELECOM);
         SLOT_NAMES.add(Vocabulary.SLOT_NAME_AUTHOR_INSTITUTION);

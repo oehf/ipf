@@ -87,7 +87,7 @@ public class OrganizationType
      */
     public List<PostalAddressType> getAddress() {
         if (address == null) {
-            address = new ArrayList<PostalAddressType>();
+            address = new ArrayList<>();
         }
         return this.address;
     }
@@ -116,7 +116,7 @@ public class OrganizationType
      */
     public List<TelephoneNumberType> getTelephoneNumber() {
         if (telephoneNumber == null) {
-            telephoneNumber = new ArrayList<TelephoneNumberType>();
+            telephoneNumber = new ArrayList<>();
         }
         return this.telephoneNumber;
     }
@@ -145,7 +145,7 @@ public class OrganizationType
      */
     public List<EmailAddressType> getEmailAddress() {
         if (emailAddress == null) {
-            emailAddress = new ArrayList<EmailAddressType>();
+            emailAddress = new ArrayList<>();
         }
         return this.emailAddress;
     }

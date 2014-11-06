@@ -133,7 +133,7 @@ public class RegistryObjectQueryType {
      */
     public List<FilterType> getExternalIdentifierFilter() {
         if (externalIdentifierFilter == null) {
-            externalIdentifierFilter = new ArrayList<FilterType>();
+            externalIdentifierFilter = new ArrayList<>();
         }
         return this.externalIdentifierFilter;
     }
@@ -162,7 +162,7 @@ public class RegistryObjectQueryType {
      */
     public List<AuditableEventQueryType> getAuditableEventQuery() {
         if (auditableEventQuery == null) {
-            auditableEventQuery = new ArrayList<AuditableEventQueryType>();
+            auditableEventQuery = new ArrayList<>();
         }
         return this.auditableEventQuery;
     }
@@ -239,7 +239,7 @@ public class RegistryObjectQueryType {
      */
     public List<ClassifiedByBranch> getClassifiedByBranch() {
         if (classifiedByBranch == null) {
-            classifiedByBranch = new ArrayList<ClassifiedByBranch>();
+            classifiedByBranch = new ArrayList<>();
         }
         return this.classifiedByBranch;
     }
@@ -268,7 +268,7 @@ public class RegistryObjectQueryType {
      */
     public List<SlotBranch> getSlotBranch() {
         if (slotBranch == null) {
-            slotBranch = new ArrayList<SlotBranch>();
+            slotBranch = new ArrayList<>();
         }
         return this.slotBranch;
     }
@@ -297,7 +297,7 @@ public class RegistryObjectQueryType {
      */
     public List<AssociationBranchType> getSourceAssociationBranch() {
         if (sourceAssociationBranch == null) {
-            sourceAssociationBranch = new ArrayList<AssociationBranchType>();
+            sourceAssociationBranch = new ArrayList<>();
         }
         return this.sourceAssociationBranch;
     }
@@ -326,7 +326,7 @@ public class RegistryObjectQueryType {
      */
     public List<AssociationBranchType> getTargetAssociationBranch() {
         if (targetAssociationBranch == null) {
-            targetAssociationBranch = new ArrayList<AssociationBranchType>();
+            targetAssociationBranch = new ArrayList<>();
         }
         return this.targetAssociationBranch;
     }

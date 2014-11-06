@@ -102,7 +102,7 @@ public class ServiceBindingQueryType
      */
     public List<SpecificationLinkQueryType> getSpecificationLinkQuery() {
         if (specificationLinkQuery == null) {
-            specificationLinkQuery = new ArrayList<SpecificationLinkQueryType>();
+            specificationLinkQuery = new ArrayList<>();
         }
         return this.specificationLinkQuery;
     }

@@ -79,7 +79,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", name = "RegistryRequest")
     public JAXBElement<RegistryRequestType> createRegistryRequest(RegistryRequestType value) {
-        return new JAXBElement<RegistryRequestType>(_RegistryRequest_QNAME, RegistryRequestType.class, null, value);
+        return new JAXBElement<>(_RegistryRequest_QNAME, RegistryRequestType.class, null, value);
     }
 
     /**
@@ -88,7 +88,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", name = "RegistryResponse")
     public JAXBElement<RegistryResponseType> createRegistryResponse(RegistryResponseType value) {
-        return new JAXBElement<RegistryResponseType>(_RegistryResponse_QNAME, RegistryResponseType.class, null, value);
+        return new JAXBElement<>(_RegistryResponse_QNAME, RegistryResponseType.class, null, value);
     }
 
 }

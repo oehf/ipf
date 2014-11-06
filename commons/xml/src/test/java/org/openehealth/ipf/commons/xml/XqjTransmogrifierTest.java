@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -28,6 +27,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.xquery.XQException;
 
 import net.sf.saxon.FeatureKeys;
+// import net.sf.saxon.lib.FeatureKeys;
 
 import org.apache.commons.io.IOUtils;
 import org.custommonkey.xmlunit.XMLUnit;
@@ -51,7 +51,7 @@ public class XqjTransmogrifierTest {
 
     @Before
     public void setUp() throws Exception {
-        transformer = new XqjTransmogrifier<String>(String.class);
+        transformer = new XqjTransmogrifier<>(String.class);
     }
 
     @Test
@@ -62,14 +62,14 @@ public class XqjTransmogrifierTest {
 
     @Test
     public void zapStringParameter() throws IOException, SAXException {
-        Map<String, Object> dynamicParams = new HashMap<String, Object>();
+        Map<String, Object> dynamicParams = new HashMap<>();
         dynamicParams.put("language", "English");
         Object[] params = new Object[] { "xquery/string-q2.xq", dynamicParams };
         String zapResult1 = transformer.zap(source("xquery/string.xml"), params);
         assertTrue(XMLUnit.compareXML(result("xquery/string-q2.xml"), zapResult1).similar());
         dynamicParams.put("language", "German");
         String zapResult2 = transformer.zap(source("xquery/string.xml"), params);
-        assertFalse(XMLUnit.compareXML(zapResult1, zapResult2).similar());
+        assertTrue(XMLUnit.compareXML(result("xquery/string-q2g.xml"), zapResult2).similar());
     }
 
     @Test(expected = RuntimeException.class)
@@ -79,7 +79,7 @@ public class XqjTransmogrifierTest {
 
     @Test
     public void zapLocalFunction() throws IOException, SAXException {
-        Map<String, Object> dynamicEvalParams = new HashMap<String, Object>();
+        Map<String, Object> dynamicEvalParams = new HashMap<>();
         dynamicEvalParams.put("language", "Bulgarian");
         dynamicEvalParams.put("author_name", "John");
         Object[] params = new Object[] { "xquery/string-q3.xq", dynamicEvalParams };
@@ -101,16 +101,16 @@ public class XqjTransmogrifierTest {
 
     @Test
     public void zapParametrisedConstructor() throws IOException, SAXException, XQException {
-        Map<String, Object> configParams = new HashMap<String, Object>();
+        Map<String, Object> configParams = new HashMap<>();
         configParams.put(FeatureKeys.PRE_EVALUATE_DOC_FUNCTION, Boolean.TRUE);
-        XqjTransmogrifier<String> localTransformer = new XqjTransmogrifier<String>(String.class, configParams);
+        XqjTransmogrifier<String> localTransformer = new XqjTransmogrifier<>(String.class, configParams);
         String zapResult = localTransformer.zap(source("xquery/string.xml"), new Object[] { "xquery/string-q5.xq" });
         assertTrue(XMLUnit.compareXML(result("xquery/string.xml"), zapResult).similar());
     }
 
     @Test
     public void zapParametrisedConstructorNoParams() throws IOException, SAXException, XQException {
-        XqjTransmogrifier<String> localTransformer = new XqjTransmogrifier<String>(String.class, null);
+        XqjTransmogrifier<String> localTransformer = new XqjTransmogrifier<>(String.class, null);
         String zapResult = localTransformer.zap(source("xquery/string.xml"), new Object[] { "xquery/string-q5.xq" });
         assertTrue(XMLUnit.compareXML(result("xquery/string.xml"), zapResult).similar());
     }

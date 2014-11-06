@@ -6,7 +6,7 @@
 <xsl:stylesheet version="2.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:param="java:org.openehealth.ipf.commons.xml.XsltTestService">
+	xmlns:ext="java:org.openehealth.ipf.commons.xml.XsltTestService">
 
 	<xsl:param name="service" />
 
@@ -17,7 +17,7 @@
 	<xsl:template match="top">
 		<xsl:variable name="arg" select="." />
 		<xsl:element name="first">
-			<xsl:value-of select="param:getValue($service, $arg)" />
+			<xsl:value-of select="ext:getValue($service, $arg)" />
 		</xsl:element>
 	</xsl:template>
 </xsl:stylesheet>

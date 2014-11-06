@@ -39,7 +39,7 @@ public class ProcessingTimeStatistics implements Statistics {
     private final static TimeUnit PROCESSING_TIME_UNIT = TimeUnit.MILLISECONDS;
 
     public ProcessingTimeStatistics() {
-        statisticsByMeasurementName = new TreeMap<String, SummaryStatistics>();
+        statisticsByMeasurementName = new TreeMap<>();
     }
 
     /*
@@ -57,7 +57,7 @@ public class ProcessingTimeStatistics implements Statistics {
     }
 
     public List<String> getMeasurementNames() {
-        return new ArrayList<String>(statisticsByMeasurementName.keySet());
+        return new ArrayList<>(statisticsByMeasurementName.keySet());
     }
 
     public StatisticalSummary getStatisticalSummaryByName(String name) {

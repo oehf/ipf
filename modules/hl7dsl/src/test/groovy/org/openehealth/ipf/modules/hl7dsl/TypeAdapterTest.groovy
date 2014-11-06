@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7dsl;
+package org.openehealth.ipf.modules.hl7dsl
+
+import org.junit.Before
+import org.junit.Test;
 
 import static org.junit.Assert.*
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
@@ -23,20 +26,22 @@ import ca.uhn.hl7v2.model.v24.message.ORU_R01
  * @author Mitko Kolev
  *
  */
-class TypeAdapterTest extends GroovyTestCase{
+class TypeAdapterTest extends groovy.test.GroovyAssert {
     SegmentAdapter obx1
     SegmentAdapter obx2
     SegmentAdapter obx3
     SegmentAdapter obr
     MessageAdapter<ORU_R01> msg2 = load('msg-02.hl7')
-    
+
+    @Before
     void setUp() {
         obr = msg2.PATIENT_RESULT.ORDER_OBSERVATION.OBR
         obx1 = msg2.PATIENT_RESULT.ORDER_OBSERVATION.OBSERVATION.OBX
         obx2 = msg2.PATIENT_RESULT.ORDER_OBSERVATION(1).OBSERVATION.OBX
         obx3 = msg2.PATIENT_RESULT.ORDER_OBSERVATION(1).OBSERVATION(1).OBX
     }
-    
+
+    @Test
     void testIsEmptyOBX1() {
         assertFieldEquals('1', obx1, 1)
         assertFieldEquals('NM', obx1, 2)
@@ -61,8 +66,8 @@ class TypeAdapterTest extends GroovyTestCase{
         assertFieldEquals('HL^^L', obx1, 15)
         assertFieldsEmpty(obx1, 16, 17)
     }
-    
-    
+
+    @Test
     void testIsEmptyOBX2() {
         assertFieldEquals('1', obx2, 1)
         assertFieldEquals('NM', obx2, 2)
@@ -83,7 +88,8 @@ class TypeAdapterTest extends GroovyTestCase{
         assertFieldEquals('HL^^L', obx2, 15)
         assertFieldsEmpty(obx2, 16, 17)
     }
-    
+
+    @Test
     void testIsEmptyOBX3() {
         assertFieldEquals('2', obx3, 1)
         assertFieldEquals('NM', obx3, 2)
@@ -108,6 +114,7 @@ class TypeAdapterTest extends GroovyTestCase{
         assertFieldsEmpty(obx3, 16, 17)
     }
 
+    @Test
     void testDelimetersAreRemoved() {
         String msgCopy = msg2.copy().toString()
         msgCopy = msgCopy.replace('25026500^CREATININE, RANDOM URINE^^25026500^CREATININE, RANDOM URINE', '^^^^')
@@ -116,7 +123,8 @@ class TypeAdapterTest extends GroovyTestCase{
         String val = emptyObx3[3].encode()
         assertFieldsEmpty(emptyObx3, 3)
     }
-    
+
+    @Test
     void testIsEmptyMsg2OBR() {
         assertFieldEquals('1', obr, 1)
         assertFieldEquals('0007111', obr, 2)
@@ -131,19 +139,22 @@ class TypeAdapterTest extends GroovyTestCase{
         assertFieldsEmpty(obr, 17,18,19)
     }
 
+    @Test
     void assertFieldEquals(String expected, AbstractAdapter adapter, int field){
         String simpleName = adapter.target.getClass().getSimpleName();
         assertEquals(expected, adapter[field].encode())
         assertFalse("${simpleName}[${field}] must be not empty, but isEmpty() returns true", adapter[field].isEmpty())
     }
-    
+
+    @Test
     void assertFieldsEmpty(SegmentAdapter adapter, int ... fields){
         String simpleName = adapter.target.getClass().getSimpleName();
         for (field in fields){
             assertTrue("${simpleName}[${field}] must be empty, but isEmpty() returns false", adapter[field].isEmpty())
         }
     }
-    
+
+    @Test
     void testTypeAdapterPath(){
         String encoded =  msg2.MSH.encode()
         assertNotNull(encoded);

@@ -89,7 +89,7 @@ public class SlotLengthAndNameUniquenessValidator {
             boolean queryMode,
             Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException
     {
-        HashSet<String> names = new HashSet<String>();
+        HashSet<String> names = new HashSet<>();
         for (EbXMLSlot slot : slots) {
             // validate format and uniqueness of slot names
             String name = slot.getName();

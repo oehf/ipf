@@ -37,10 +37,10 @@ public class RetrieveImagingDocumentSet implements Serializable {
     private static final long serialVersionUID = -8999352499981099419L;
 
     @XmlElementRef
-    private final List<RetrieveStudy> retrieveStudies = new ArrayList<RetrieveStudy>();
+    private final List<RetrieveStudy> retrieveStudies = new ArrayList<>();
 
     @XmlElement(name = "transferSyntaxId")
-    private final List<String> transferSyntaxIds = new ArrayList<String>();
+    private final List<String> transferSyntaxIds = new ArrayList<>();
 
     /**
      * @return the list of StudyRequests to retrieve.

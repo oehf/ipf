@@ -53,7 +53,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
     public static Map<String, Object> getCamelHeaders(Object ebXml) {
         Map<String, Object> map = DATA.get(ebXml);
         if (map == null) {
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             DATA.put(ebXml, map);
         }
         return map;
@@ -73,7 +73,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
 
 
     private static class UnmarshallerListener extends Unmarshaller.Listener {
-        static final ThreadLocal<Boolean> RESULTS = new ThreadLocal<Boolean>();
+        static final ThreadLocal<Boolean> RESULTS = new ThreadLocal<>();
 
         @Override
         public void afterUnmarshal(Object target, Object parent) {
@@ -101,10 +101,10 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
                     if (isExtraMetadataSlotName(name)) {
                         Map<String, List<String>> extraMetadata = holder.getExtraMetadata();
                         if (extraMetadata == null) {
-                            extraMetadata = new HashMap<String, List<String>>();
+                            extraMetadata = new HashMap<>();
                             holder.setExtraMetadata(extraMetadata);
                         }
-                        extraMetadata.put(name, new ArrayList<String>(slot.getValueList().getValue()));
+                        extraMetadata.put(name, new ArrayList<>(slot.getValueList().getValue()));
                         RESULTS.set(Boolean.TRUE);
                     }
                 }

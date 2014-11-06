@@ -38,7 +38,7 @@ public abstract class StoredQuery extends Query {
     private static final long serialVersionUID = -8296981156625412818L;
 
     @Getter @Setter private String homeCommunityId;
-    @Getter private Map<String, QueryList<String>> extraParameters = new HashMap<String, QueryList<String>>();
+    @Getter private Map<String, QueryList<String>> extraParameters = new HashMap<>();
 
     /**
      * For JAXB serialization only.

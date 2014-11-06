@@ -102,7 +102,7 @@ public class RegistryPackageQueryType
      */
     public List<RegistryObjectQueryType> getRegistryObjectQuery() {
         if (registryObjectQuery == null) {
-            registryObjectQuery = new ArrayList<RegistryObjectQueryType>();
+            registryObjectQuery = new ArrayList<>();
         }
         return this.registryObjectQuery;
     }
@@ -131,7 +131,7 @@ public class RegistryPackageQueryType
      */
     public List<RegistryEntryQueryType> getRegistryEntryQuery() {
         if (registryEntryQuery == null) {
-            registryEntryQuery = new ArrayList<RegistryEntryQueryType>();
+            registryEntryQuery = new ArrayList<>();
         }
         return this.registryEntryQuery;
     }

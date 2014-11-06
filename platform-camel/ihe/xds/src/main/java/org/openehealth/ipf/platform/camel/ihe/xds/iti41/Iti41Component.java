@@ -83,7 +83,7 @@ public class Iti41Component extends AbstractWsComponent<WsTransactionConfigurati
             AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
-        return new SimpleWsProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponseType>(
+        return new SimpleWsProducer<>(
                 endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class, RegistryResponseType.class);
     }
 }

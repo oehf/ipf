@@ -70,7 +70,7 @@ public class ServiceQueryType
      */
     public List<ServiceBindingQueryType> getServiceBindingQuery() {
         if (serviceBindingQuery == null) {
-            serviceBindingQuery = new ArrayList<ServiceBindingQueryType>();
+            serviceBindingQuery = new ArrayList<>();
         }
         return this.serviceBindingQuery;
     }

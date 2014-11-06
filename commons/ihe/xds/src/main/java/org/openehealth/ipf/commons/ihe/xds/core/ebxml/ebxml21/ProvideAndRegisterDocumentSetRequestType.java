@@ -115,7 +115,7 @@ public class ProvideAndRegisterDocumentSetRequestType {
      */
     public List<ProvideAndRegisterDocumentSetRequestType.Document> getDocument() {
         if (document == null) {
-            document = new ArrayList<ProvideAndRegisterDocumentSetRequestType.Document>();
+            document = new ArrayList<>();
         }
         return document;
     }

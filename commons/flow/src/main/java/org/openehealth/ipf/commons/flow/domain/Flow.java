@@ -229,7 +229,7 @@ public class Flow {
 
     public Set<FlowPart> getParts() {
         if (parts == null) {
-            parts = new HashSet<FlowPart>();
+            parts = new HashSet<>();
         }
         return parts;
     }
@@ -554,7 +554,7 @@ public class Flow {
     }
     
     public static List<FlowInfo> getInfos(List<Flow> flows) {
-        List<FlowInfo> result = new ArrayList<FlowInfo>(flows.size());
+        List<FlowInfo> result = new ArrayList<>(flows.size());
         for (Flow flow : flows) {
             result.add(flow.getInfo());
         }

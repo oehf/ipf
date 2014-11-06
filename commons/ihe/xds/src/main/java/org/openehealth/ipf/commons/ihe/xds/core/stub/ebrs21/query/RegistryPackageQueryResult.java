@@ -87,7 +87,7 @@ public class RegistryPackageQueryResult {
      */
     public List<Object> getObjectRefOrRegistryEntryOrRegistryObject() {
         if (objectRefOrRegistryEntryOrRegistryObject == null) {
-            objectRefOrRegistryEntryOrRegistryObject = new ArrayList<Object>();
+            objectRefOrRegistryEntryOrRegistryObject = new ArrayList<>();
         }
         return this.objectRefOrRegistryEntryOrRegistryObject;
     }

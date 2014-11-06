@@ -36,7 +36,7 @@ public class CNERule extends AbstractCompositeTypeRule<CNE> {
 
     @Override
     public ValidationException[] validate(CNE cne, Location location) {
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         validate(enforce(not(empty()), cne, 1), location, violations);
         validate(enforce(not(empty()), cne, 2), location, violations);
         return violations.toArray(new ValidationException[violations.size()]);

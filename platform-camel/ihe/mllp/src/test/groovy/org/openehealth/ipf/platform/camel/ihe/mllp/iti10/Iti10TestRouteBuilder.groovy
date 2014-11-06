@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti10
 
 import org.apache.camel.spring.SpringRouteBuilder
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator
 
 /**

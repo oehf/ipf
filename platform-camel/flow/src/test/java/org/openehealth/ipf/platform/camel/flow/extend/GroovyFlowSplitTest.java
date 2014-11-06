@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.flow.extend;
 
-import org.junit.Ignore;
 import org.openehealth.ipf.platform.camel.flow.process.AbstractFlowSplitTest;
 import org.springframework.test.context.ContextConfiguration;
 

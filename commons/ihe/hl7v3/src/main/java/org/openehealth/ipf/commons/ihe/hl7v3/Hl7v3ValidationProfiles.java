@@ -30,10 +30,10 @@ import java.util.Map;
 public class Hl7v3ValidationProfiles {
 
     private static final Map<InteractionId, CombinedXmlValidationProfile> REQUEST_VALIDATION_PROFILES =
-            new HashMap<InteractionId, CombinedXmlValidationProfile>();
+            new HashMap<>();
 
     private static final Map<InteractionId, CombinedXmlValidationProfile> RESPONSE_VALIDATION_PROFILES =
-            new HashMap<InteractionId, CombinedXmlValidationProfile>();
+            new HashMap<>();
 
     public static CombinedXmlValidationProfile getRequestValidationProfile(InteractionId id) {
         return REQUEST_VALIDATION_PROFILES.get(id);

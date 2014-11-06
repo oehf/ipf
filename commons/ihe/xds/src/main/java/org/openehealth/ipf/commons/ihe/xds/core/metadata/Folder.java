@@ -40,7 +40,7 @@ public class Folder extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = -1923451867453561796L;
     
     @XmlElement(name = "code")
-    private final List<Code> codeList = new ArrayList<Code>();
+    private final List<Code> codeList = new ArrayList<>();
     @XmlSchemaType(name = "dateTime")
     @XmlJavaTypeAdapter(value = DateAdapter.class)
     private String lastUpdateTime;

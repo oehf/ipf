@@ -57,7 +57,7 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
     private final Map<String, FlowPurgeJob> flowPurgeJobs;
 
     public FlowPurgerMBean() {
-        flowPurgeJobs = new HashMap<String, FlowPurgeJob>();
+        flowPurgeJobs = new HashMap<>();
     }
 
     @ManagedAttribute(description="Application name")
@@ -209,7 +209,7 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
 
     @ManagedAttribute(description="Schedulers metadata")
     public Map<String, String> getSchedulerMetaData() {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         try {
             map.put("Scheduler Name", scheduler.getMetaData().getSchedulerName());
             map.put("Scheduler Class", scheduler.getMetaData().getSchedulerClass().getCanonicalName());

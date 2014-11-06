@@ -86,7 +86,7 @@ public class RetrieveDocumentSetRequestType {
      */
     public List<RetrieveDocumentSetRequestType.DocumentRequest> getDocumentRequest() {
         if (documentRequest == null) {
-            documentRequest = new ArrayList<RetrieveDocumentSetRequestType.DocumentRequest>();
+            documentRequest = new ArrayList<>();
         }
         return documentRequest;
     }

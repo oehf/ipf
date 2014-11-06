@@ -21,8 +21,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
 /**
  * Transforms between a {@link org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet} and its ebXML representation.
  * @author Boris Stanojevic

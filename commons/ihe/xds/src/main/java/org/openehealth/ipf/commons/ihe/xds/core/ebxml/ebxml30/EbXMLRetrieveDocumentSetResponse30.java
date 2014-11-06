@@ -55,7 +55,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
 
     @Override
     public List<RetrievedDocument> getDocuments() {
-        List<RetrievedDocument> docs = new ArrayList<RetrievedDocument>();
+        List<RetrievedDocument> docs = new ArrayList<>();
         for (DocumentResponse documentResponse : response.getDocumentResponse()) {
             RetrieveDocument requestData = new RetrieveDocument();
             requestData.setDocumentUniqueId(documentResponse.getDocumentUniqueId());
@@ -126,7 +126,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
             return Collections.emptyList();
         }
 
-        List<EbXMLRegistryError> errors = new ArrayList<EbXMLRegistryError>();
+        List<EbXMLRegistryError> errors = new ArrayList<>();
         for (RegistryError regError : list.getRegistryError()) {
             errors.add(new EbXMLRegistryError30(regError));
         }

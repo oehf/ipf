@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.*;
 

@@ -40,7 +40,7 @@ public class RetrieveSeries implements Serializable
 
     protected String seriesInstanceUID;
     @XmlElementRef
-    private List<RetrieveDocument> documents = new ArrayList<RetrieveDocument>();
+    private List<RetrieveDocument> documents = new ArrayList<>();
 
     /**
      * Constructs the RetrieveSeries.

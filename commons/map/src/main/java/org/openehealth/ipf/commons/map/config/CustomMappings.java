@@ -62,7 +62,7 @@ public class CustomMappings {
     }
 
     public void setMappingScripts(Collection<Resource> mappingScripts) {
-        this.mappingScripts = new ArrayList<Resource>(mappingScripts.size());
+        this.mappingScripts = new ArrayList<>(mappingScripts.size());
         for (Resource mappingScript : mappingScripts) {
             if (mappingScript.exists() && mappingScript.isReadable()) {
                 this.mappingScripts.add(mappingScript);

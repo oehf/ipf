@@ -17,13 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.List;
 
 /**
  * Represents a stored query for GetSubmissionSetAndContents.

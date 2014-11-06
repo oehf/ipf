@@ -113,7 +113,7 @@ public class RetrieveImagingDocumentSetRequestType {
      */
     public List<RetrieveImagingDocumentSetRequestType.StudyRequest> getStudyRequest() {
         if (studyRequest == null) {
-            studyRequest = new ArrayList<StudyRequest>();
+            studyRequest = new ArrayList<>();
         }
         return this.studyRequest;
     }
@@ -212,7 +212,7 @@ public class RetrieveImagingDocumentSetRequestType {
          */
         public List<SeriesRequest> getSeriesRequest() {
             if (seriesRequest == null) {
-                seriesRequest = new ArrayList<SeriesRequest>();
+                seriesRequest = new ArrayList<>();
             }
             return this.seriesRequest;
         }
@@ -263,7 +263,7 @@ public class RetrieveImagingDocumentSetRequestType {
          */
         public List<String> getTransferSyntaxUID() {
             if (transferSyntaxUID == null) {
-                transferSyntaxUID = new ArrayList<String>();
+                transferSyntaxUID = new ArrayList<>();
             }
             return this.transferSyntaxUID;
         }
@@ -340,7 +340,7 @@ public class RetrieveImagingDocumentSetRequestType {
          */
         public List<RetrieveDocumentSetRequestType.DocumentRequest> getDocumentRequests() {
             if (documentRequest == null) {
-                documentRequest = new ArrayList<RetrieveDocumentSetRequestType.DocumentRequest>();
+                documentRequest = new ArrayList<>();
             }
             return documentRequest;
         }

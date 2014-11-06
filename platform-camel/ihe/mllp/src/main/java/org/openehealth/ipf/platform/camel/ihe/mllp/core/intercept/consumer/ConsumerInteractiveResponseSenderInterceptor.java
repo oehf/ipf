@@ -242,7 +242,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
      */
     private List<Integer> getRecordBoundaries(List<String> segments) {
         Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
-        List<Integer> recordBoundaries = new ArrayList<Integer>(); 
+        List<Integer> recordBoundaries = new ArrayList<>();
         boolean foundFooter = false;
         for (int i = 1; i < segments.size(); ++i) {
             if (config.isDataStartSegment(segments, i)) {

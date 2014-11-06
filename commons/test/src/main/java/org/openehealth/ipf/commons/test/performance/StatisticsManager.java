@@ -37,7 +37,7 @@ public class StatisticsManager {
     private Map<Statistics, StatisticsRenderer> bindings;
 
     public StatisticsManager() {
-        bindings = new HashMap<Statistics, StatisticsRenderer>();
+        bindings = new HashMap<>();
     }
 
     /**
@@ -65,7 +65,7 @@ public class StatisticsManager {
         LOG.info("Statistics reset");
     }
     public  List<Statistics> getStatistics() {
-        return new ArrayList<Statistics>(bindings.keySet());
+        return new ArrayList<>(bindings.keySet());
     }
     
     public  StatisticsRenderer getRenderer(Statistics statistics) {

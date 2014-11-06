@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
 import static org.junit.Assert.*;
 
-import java.sql.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class GetSubmissionSetAndContentsQueryTransformerTest {
         query.setUuid("uuid1");
         query.setUniqueId("uniqueId1");
         query.setHomeCommunityId("home");
-        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(

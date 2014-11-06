@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
         <artifactId>ipf-platform-camel-ihe</artifactId>
-        <version>2.7-SNAPSHOT</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -68,7 +68,7 @@
         </dependency-->
         <dependency>
             <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
+            <artifactId>ehcache</artifactId>
         </dependency>
 
         <!-- dependencies for test -->

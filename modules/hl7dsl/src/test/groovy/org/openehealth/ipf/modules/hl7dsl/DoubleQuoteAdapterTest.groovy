@@ -15,25 +15,30 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import org.junit.Before
+import org.junit.Test
+
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 
 /**
  * @author Martin Krasser
  */
-class DoubleQuoteAdapterTest extends GroovyTestCase {
+class DoubleQuoteAdapterTest extends groovy.test.GroovyAssert {
     
     def streetAddress
     def address
     def maidenName
     def msg
-    
+
+    @Before
     void setUp() {
         msg = load('msg-07.hl7')
         maidenName = msg.PID[6]
         streetAddress = msg.PID[11](0)[1]
         address = msg.PID[11]
     }
-    
+
+    @Test
     void testGet() {
         // property access on target
         assertEquals '', address.value
@@ -49,7 +54,8 @@ class DoubleQuoteAdapterTest extends GroovyTestCase {
         assertTrue streetAddress.isNullValue()
         assertTrue streetAddress[1].isNullValue()
     }
-    
+
+    @Test
     void testCopy() {
         def newStreetAddress = streetAddress
         assertEquals '""', streetAddress.originalValue

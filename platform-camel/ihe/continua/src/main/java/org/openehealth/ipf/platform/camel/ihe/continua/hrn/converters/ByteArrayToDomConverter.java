@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
-import org.apache.cxf.helpers.XMLUtils;
+import java.io.ByteArrayInputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.springframework.core.convert.converter.Converter;
 import org.w3c.dom.Document;
 
@@ -24,10 +27,17 @@ import org.w3c.dom.Document;
  */
 public class ByteArrayToDomConverter implements Converter<byte[], Document> {
 
+    private static final DocumentBuilderFactory FACTORY;
+
+    static {
+        FACTORY = DocumentBuilderFactory.newInstance();
+        FACTORY.setNamespaceAware(true);
+    }
     @Override
     public Document convert(byte[] source) {
         try {
-            return XMLUtils.parse(source);
+            DocumentBuilder builder = FACTORY.newDocumentBuilder();
+            return builder.parse(new ByteArrayInputStream(source));
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

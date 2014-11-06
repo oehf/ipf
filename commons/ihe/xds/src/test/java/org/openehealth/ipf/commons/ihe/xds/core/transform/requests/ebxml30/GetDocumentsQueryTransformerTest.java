@@ -49,11 +49,11 @@ public class GetDocumentsQueryTransformerTest {
         query.setUniqueIds(Arrays.asList("uniqueId1", "uniqueId2"));
         query.setHomeCommunityId("home");
 
-        QueryList<String> extraParams1 = new QueryList<String>();
+        QueryList<String> extraParams1 = new QueryList<>();
         extraParams1.getOuterList().add(Arrays.asList("para-11", "para-12"));
         extraParams1.getOuterList().add(Arrays.asList("para-21", "para-22", "para-23"));
 
-        QueryList<String> extraParams2 = new QueryList<String>();
+        QueryList<String> extraParams2 = new QueryList<>();
         extraParams2.getOuterList().add(Arrays.asList("dia-31", "dia-32", "dia-33"));
         extraParams2.getOuterList().add(Arrays.asList("dia-41"));
 

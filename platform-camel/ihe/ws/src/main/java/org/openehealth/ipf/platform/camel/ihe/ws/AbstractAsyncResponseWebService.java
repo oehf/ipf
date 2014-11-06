@@ -17,17 +17,16 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.xml.ws.handler.MessageContext;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
-import org.apache.cxf.ws.addressing.impl.AddressingPropertiesImpl;
+import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for receivers of asynchronous responses for Web Service-based IHE transactions.
@@ -65,7 +64,7 @@ abstract public class AbstractAsyncResponseWebService extends AbstractWebService
         final AsynchronyCorrelator correlator = ((AbstractWsEndpoint) getConsumer().getEndpoint()).getCorrelator();
 
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
-        AddressingPropertiesImpl apropos = (AddressingPropertiesImpl) messageContext.get(JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_INBOUND);
+        AddressingProperties apropos = (AddressingProperties) messageContext.get(JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND);
         String messageId = ((apropos != null) && (apropos.getRelatesTo() != null))
                 ? apropos.getRelatesTo().getValue()
                 : null;
@@ -89,7 +88,7 @@ abstract public class AbstractAsyncResponseWebService extends AbstractWebService
             if (correlationKey != null) {
                 if (headers == null) {
                     // NB: it shouldn't be a non-modifiable singleton map...
-                    headers = new HashMap<String, Object>();
+                    headers = new HashMap<>();
                 }
                 headers.put(AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME, correlationKey);
             }

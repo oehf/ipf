@@ -47,7 +47,7 @@ public class FindDocumentsQueryTransformerTest {
     
     @Before
     public void setUp() {
-        transformer = new FindDocumentsQueryTransformer<FindDocumentsQuery>();
+        transformer = new FindDocumentsQueryTransformer<>();
         query = (FindDocumentsQuery)SampleData.createFindDocumentsQuery().getQuery();
         multiplePatientsQueryTransformer = new FindDocumentsForMultiplePatientsQueryTransformer();
         multiplePatientsQuery = (FindDocumentsForMultiplePatientsQuery)SampleData.createFindDocumentsForMultiplePatientsQuery().getQuery();

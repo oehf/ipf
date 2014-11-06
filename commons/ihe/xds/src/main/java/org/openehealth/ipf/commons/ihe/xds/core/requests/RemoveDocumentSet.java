@@ -40,7 +40,7 @@ public class RemoveDocumentSet implements Serializable {
     private static final long serialVersionUID = -737326382128159189L;
 
     @XmlElement(name = "reference")
-    @Getter private final List<ObjectReference> references = new ArrayList<ObjectReference>();
+    @Getter private final List<ObjectReference> references = new ArrayList<>();
 
     @Override
     public String toString() {

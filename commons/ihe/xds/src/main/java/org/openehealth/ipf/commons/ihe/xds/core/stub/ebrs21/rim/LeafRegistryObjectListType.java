@@ -117,7 +117,7 @@ public class LeafRegistryObjectListType {
      */
     public List<Object> getObjectRefOrAssociationOrAuditableEvent() {
         if (objectRefOrAssociationOrAuditableEvent == null) {
-            objectRefOrAssociationOrAuditableEvent = new ArrayList<Object>();
+            objectRefOrAssociationOrAuditableEvent = new ArrayList<>();
         }
         return this.objectRefOrAssociationOrAuditableEvent;
     }

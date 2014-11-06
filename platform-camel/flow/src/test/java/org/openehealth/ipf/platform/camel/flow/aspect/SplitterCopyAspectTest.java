@@ -25,7 +25,6 @@ import org.apache.camel.processor.Splitter;
 import org.apache.camel.processor.aggregate.UseLatestAggregationStrategy;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.flow.ManagedMessage;
@@ -57,7 +56,7 @@ public class SplitterCopyAspectTest {
     @Before
     public void setUp() throws Exception {
         CamelContext context = new DefaultCamelContext();
-        messages = new ArrayList<ManagedMessage>();
+        messages = new ArrayList<>();
         splitter = new Splitter(
                 context,
                 new TestExpression(),

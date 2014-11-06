@@ -32,7 +32,7 @@ import java.util.List;
 public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfListWrapper<T>, List<List<T>>> {
     @Override
     public List<List<T>> unmarshal(ListOfListWrapper<T> v) throws Exception {
-        List<List<T>> outerList = new ArrayList<List<T>>();
+        List<List<T>> outerList = new ArrayList<>();
         for (ListWrapper<T> innerList : v.getInnerList())
             outerList.add(innerList.getValue());
 
@@ -41,11 +41,11 @@ public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfLis
 
     @Override
     public ListOfListWrapper<T> marshal(List<List<T>> v) throws Exception {
-        List<ListWrapper<T>> outerList = new ArrayList<ListWrapper<T>>();
+        List<ListWrapper<T>> outerList = new ArrayList<>();
         for (List<T> innerList : v)
-            outerList.add(new ListWrapper<T>(innerList));
+            outerList.add(new ListWrapper<>(innerList));
 
-        return new ListOfListWrapper<T>(outerList);
+        return new ListOfListWrapper<>(outerList);
     }
 
     @XmlType

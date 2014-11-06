@@ -82,7 +82,7 @@ public class FlowInfo implements Serializable {
     private final Set<FlowPartInfo> partInfos;
     
     public FlowInfo() {
-        partInfos = new HashSet<FlowPartInfo>();
+        partInfos = new HashSet<>();
         ackCountExpected = ACK_COUNT_EXPECTED_UNDEFINED;
     }
     

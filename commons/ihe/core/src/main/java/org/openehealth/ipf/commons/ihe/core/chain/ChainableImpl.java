@@ -27,8 +27,8 @@ import java.util.Set;
  */
 abstract public class ChainableImpl implements Chainable {
     private String id = getClass().getName();
-    private Set<String> before = new HashSet<String>();
-    private Set<String> after = new HashSet<String>();
+    private Set<String> before = new HashSet<>();
+    private Set<String> after = new HashSet<>();
 
 
     /**

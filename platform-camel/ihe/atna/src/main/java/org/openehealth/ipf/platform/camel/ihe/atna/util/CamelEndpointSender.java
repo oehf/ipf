@@ -98,7 +98,7 @@ public class CamelEndpointSender implements AuditMessageSender, InitializingBean
         for (AuditEventMessage m : msg) {
             m.setDestinationAddress(getDestinationAddress());
             m.setDestinationPort(getDestinationPort());
-            HashMap<String, Object> headers = new HashMap<String, Object>();
+            HashMap<String, Object> headers = new HashMap<>();
             headers.put(HEADER_NAMESPACE + ".destination.address", m.getDestinationAddress().getHostAddress());
             headers.put(HEADER_NAMESPACE + ".destination.port", m.getDestinationPort());
             headers.put(HEADER_NAMESPACE + ".datetime", m.getDateTime());

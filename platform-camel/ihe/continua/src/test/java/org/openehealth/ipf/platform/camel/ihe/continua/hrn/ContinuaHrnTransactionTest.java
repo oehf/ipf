@@ -15,21 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.InputStream;
-
 import javax.activation.DataHandler;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.cxf.helpers.XMLUtils;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
@@ -40,6 +37,8 @@ import org.openehealth.ipf.modules.cda.CDAR2Parser;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the Continua HRN transaction.
@@ -91,7 +90,10 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
 
         // read in CCD file as DOM tree and make it the new document contents
         InputStream stream = getClass().getClassLoader().getResourceAsStream("continua-hrn/SampleCCDDocument.xml");
-        org.w3c.dom.Document domDocument = XMLUtils.parse(stream);
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        org.w3c.dom.Document domDocument = builder.parse(stream);
         xdsDocument.setContent(org.w3c.dom.Document.class, domDocument);
 
         // create data handler from DOM tree

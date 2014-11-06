@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import ca.uhn.hl7v2.Location;
-import ca.uhn.hl7v2.model.v26.datatype.HD;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.EI;
@@ -38,7 +37,7 @@ public class EIRule extends AbstractCompositeTypeRule<EI> {
 
     @Override
     public ValidationException[] validate(EI ei, Location location) {
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         validate(enforce(not(empty()), ei, 1), location, violations);
         if (isEmpty(ei, 2)) {
             validate(enforce(not(empty()), ei, 3), location, violations);

@@ -37,7 +37,7 @@ public class XTNRule extends AbstractCompositeTypeRule<XTN> {
 
     @Override
     public ValidationException[] validate(XTN xtn, Location location) {
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         validate(enforce(allOf(not(empty()), in("PRN", "NET")), xtn, 2), location, violations);
         validate(enforce(not(empty()), xtn, 3), location, violations);
         if (isEqual("NET", xtn, 2)) {

@@ -86,7 +86,7 @@ public class EbXMLInternationalString30 implements EbXMLInternationalString {
         }
         
         List<LocalizedStringType> list = international.getLocalizedString();
-        List<LocalizedString> result = new ArrayList<LocalizedString>(list.size());
+        List<LocalizedString> result = new ArrayList<>(list.size());
         for (LocalizedStringType localizedEbRS30 : list) {
             result.add(createLocalizedString(localizedEbRS30));
         }

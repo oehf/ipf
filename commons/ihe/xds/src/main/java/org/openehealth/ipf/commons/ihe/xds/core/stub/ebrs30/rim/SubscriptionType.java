@@ -92,7 +92,7 @@ public class SubscriptionType
      */
     public List<JAXBElement<? extends ActionType>> getAction() {
         if (action == null) {
-            action = new ArrayList<JAXBElement<? extends ActionType>>();
+            action = new ArrayList<>();
         }
         return this.action;
     }

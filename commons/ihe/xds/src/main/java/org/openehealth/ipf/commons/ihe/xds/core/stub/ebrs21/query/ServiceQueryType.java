@@ -98,7 +98,7 @@ public class ServiceQueryType
      */
     public List<ServiceBindingBranchType> getServiceBindingBranch() {
         if (serviceBindingBranch == null) {
-            serviceBindingBranch = new ArrayList<ServiceBindingBranchType>();
+            serviceBindingBranch = new ArrayList<>();
         }
         return this.serviceBindingBranch;
     }

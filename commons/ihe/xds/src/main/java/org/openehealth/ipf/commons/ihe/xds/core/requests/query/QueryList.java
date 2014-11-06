@@ -50,7 +50,7 @@ public class QueryList<T> implements Serializable {
     private static final long serialVersionUID = -2729640243221349924L;
     
     @XmlJavaTypeAdapter(ListOfListAdapter.class)
-    @Getter private List<List<T>> outerList = new ArrayList<List<T>>();
+    @Getter private List<List<T>> outerList = new ArrayList<>();
 
     /**
      * Constructs a query list.
@@ -69,7 +69,7 @@ public class QueryList<T> implements Serializable {
         noNullElements(other.getOuterList(), "other.getOuterList() cannot contain null elements");
         for (List<T> innerList : other.getOuterList()) {
             noNullElements(innerList, "innerList cannot contain null elements");
-            outerList.add(new ArrayList<T>(innerList));
+            outerList.add(new ArrayList<>(innerList));
         }
     }
 

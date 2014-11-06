@@ -15,16 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.namespace.QName;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
+import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
-import org.apache.cxf.ws.addressing.impl.AddressingPropertiesImpl;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
@@ -43,10 +47,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.namespace.QName;
-import java.util.List;
 
 /**
  * Base class for all ATNA audit-related CXF interceptors.
@@ -168,7 +168,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
             boolean inverseWsaDirection,
             WsAuditDataset auditDataset) 
     {
-        AddressingPropertiesImpl wsaProperties = (AddressingPropertiesImpl) message.get(isInbound ?
+        AddressingProperties wsaProperties = (AddressingProperties) message.get(isInbound ?
                 JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND :
                 JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND);
         

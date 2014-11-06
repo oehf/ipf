@@ -88,7 +88,7 @@ public class BidiMappingServiceOsgiConfigurer implements BundleListener {
         if (entries == null){
             return;
         }
-        List<Resource> urlResources = new ArrayList<Resource>();
+        List<Resource> urlResources = new ArrayList<>();
         while (entries.hasMoreElements()){
             URL url = entries.nextElement();
             urlResources.add(new UrlResource(url));

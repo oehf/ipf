@@ -60,7 +60,7 @@ abstract public class XdsRenderingUtils {
     private static final JAXBContext JAXB_CONTEXT;
 
     static {
-        TYPES_CORRESPONDENCE = new HashMap<Class, Class>();
+        TYPES_CORRESPONDENCE = new HashMap<>();
 
         /* --------- REQUESTS --------- */
 

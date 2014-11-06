@@ -60,7 +60,7 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      * Specifies that the transformation is done via XSLT
      */
     public TransmogrifierAdapterDefinition xslt() {
-        transmogrifier = new XsltTransmogrifier<String>(String.class);
+        transmogrifier = new XsltTransmogrifier<>(String.class);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
@@ -72,7 +72,7 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      *            transformation
      */
     public <T> TransmogrifierAdapterDefinition xslt(Class<T> clazz) {
-        transmogrifier = new XsltTransmogrifier<T>(clazz);
+        transmogrifier = new XsltTransmogrifier<>(clazz);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
@@ -81,7 +81,7 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      * 
      */
     public TransmogrifierAdapterDefinition xquery() {
-        transmogrifier = new XqjTransmogrifier<String>(String.class);
+        transmogrifier = new XqjTransmogrifier<>(String.class);
         return (TransmogrifierAdapterDefinition) input(bodyAs(StreamSource.class));
     }
 
@@ -93,7 +93,7 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      *            transformation
      */
     public <T> TransmogrifierAdapterDefinition xquery(Class<T> clazz) {
-        transmogrifier = new XqjTransmogrifier<T>(clazz);
+        transmogrifier = new XqjTransmogrifier<>(clazz);
         return (TransmogrifierAdapterDefinition) input(bodyAs(StreamSource.class));
     }
 
@@ -101,7 +101,7 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      * Specifies that a schematron validation report is generated
      */
     public TransmogrifierAdapterDefinition schematron() {
-        transmogrifier = new SchematronTransmogrifier<String>(String.class);
+        transmogrifier = new SchematronTransmogrifier<>(String.class);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
 
@@ -111,7 +111,7 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      *          the resulting type of the message bodyf after the transformation
      */
     public <T> TransmogrifierAdapterDefinition schematron(Class<T> clazz) {
-        transmogrifier = new SchematronTransmogrifier<T>(clazz);
+        transmogrifier = new SchematronTransmogrifier<>(clazz);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
 

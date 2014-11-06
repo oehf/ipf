@@ -25,16 +25,20 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
 /**
  * Tests passing in global parameters (e.g. services) into a stylesheet. See
  * parameter.xslt.
+ *
+ * Note that with Saxon-HE, this feature is not available anymore
  * 
  * @author Christian Ohr
  * 
  */
+@Ignore
 public class XslTransmogrifierWithGlobalParameterTest {
 
     private XsltTransmogrifier<String> transformer;
@@ -42,9 +46,9 @@ public class XslTransmogrifierWithGlobalParameterTest {
 
     @Before
     public void setUp() throws Exception {
-        parameters = new HashMap<String, Object>();
+        parameters = new HashMap<>();
         parameters.put("service", new XsltTestService());
-        transformer = new XsltTransmogrifier<String>(String.class);
+        transformer = new XsltTransmogrifier<>(String.class);
     }
 
     /**

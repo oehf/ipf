@@ -69,7 +69,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
     }
     
     private SplitHistory(int initialCapacity, boolean addRoot) {
-        entries = new ArrayList<SplitHistoryEntry>(initialCapacity);
+        entries = new ArrayList<>(initialCapacity);
         if (addRoot) {
             entries.add(SplitHistoryEntry.ROOT);
         }

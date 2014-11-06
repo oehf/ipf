@@ -87,7 +87,7 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     protected void addSlots(SubmissionSet metaData, EbXMLRegistryPackage ebXML, EbXMLObjectLibrary objectLibrary) {
         super.addSlots(metaData, ebXML, objectLibrary);
         
-        List<String> slotValues = new ArrayList<String>();
+        List<String> slotValues = new ArrayList<>();
         for (Recipient recipient : metaData.getIntendedRecipients()) {
             slotValues.add(recipientTransformer.toEbXML(recipient));
         }

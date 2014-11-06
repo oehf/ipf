@@ -37,7 +37,7 @@ public class XPNRule extends AbstractCompositeTypeRule<XPN> {
 
     @Override
     public ValidationException[] validate(XPN xpn, Location location) {
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         validate(enforce(not(empty()), xpn, 7), location, violations);
         return violations.toArray(new ValidationException[violations.size()]);
     }

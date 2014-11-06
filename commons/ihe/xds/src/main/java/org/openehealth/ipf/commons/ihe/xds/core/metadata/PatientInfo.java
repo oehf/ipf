@@ -45,7 +45,7 @@ public class PatientInfo implements Serializable {
     private static final long serialVersionUID = 7202574584233259959L;
 
     @XmlElement(name = "id")
-    private final List<Identifiable> ids = new ArrayList<Identifiable>();   // PID-3
+    private final List<Identifiable> ids = new ArrayList<>();   // PID-3
     private Name name;                                                      // PID-5
     @XmlElement(name = "birthTime")
     @XmlSchemaType(name = "dateTime")

@@ -123,7 +123,7 @@ public final class ConformanceProfileValidators {
     }
 
     private static void throwIPFValidationException(ca.uhn.hl7v2.validation.ValidationException[] exceptions) {
-        List<ca.uhn.hl7v2.validation.ValidationException> fatalExceptions = new ArrayList<ca.uhn.hl7v2.validation.ValidationException>();
+        List<ca.uhn.hl7v2.validation.ValidationException> fatalExceptions = new ArrayList<>();
         for (ca.uhn.hl7v2.validation.ValidationException exception : exceptions) {
             if (exception.getSeverity().equals(Severity.ERROR)) {
                 fatalExceptions.add(exception);

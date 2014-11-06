@@ -15,18 +15,12 @@
  */
 package org.openehealth.ipf.osgi.karaf.commands;
 
-import groovy.lang.GroovySystem;
-import groovy.lang.MetaMethod;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
-import org.codehaus.groovy.runtime.m12n.ExtensionModule;
-import org.codehaus.groovy.runtime.metaclass.MetaClassRegistryImpl;
 import org.openehealth.ipf.commons.map.BidiMappingService;
 import org.openehealth.ipf.commons.map.MappingService;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**

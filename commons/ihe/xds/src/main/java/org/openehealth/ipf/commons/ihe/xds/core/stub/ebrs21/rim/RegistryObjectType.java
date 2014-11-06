@@ -181,7 +181,7 @@ public class RegistryObjectType {
      */
     public List<SlotType1> getSlot() {
         if (slot == null) {
-            slot = new ArrayList<SlotType1>();
+            slot = new ArrayList<>();
         }
         return this.slot;
     }
@@ -210,7 +210,7 @@ public class RegistryObjectType {
      */
     public List<ClassificationType> getClassification() {
         if (classification == null) {
-            classification = new ArrayList<ClassificationType>();
+            classification = new ArrayList<>();
         }
         return this.classification;
     }
@@ -239,7 +239,7 @@ public class RegistryObjectType {
      */
     public List<ExternalIdentifierType> getExternalIdentifier() {
         if (externalIdentifier == null) {
-            externalIdentifier = new ArrayList<ExternalIdentifierType>();
+            externalIdentifier = new ArrayList<>();
         }
         return this.externalIdentifier;
     }

@@ -100,7 +100,7 @@ public class ServiceBindingBranchType {
      */
     public List<SpecificationLinkBranch> getSpecificationLinkBranch() {
         if (specificationLinkBranch == null) {
-            specificationLinkBranch = new ArrayList<SpecificationLinkBranch>();
+            specificationLinkBranch = new ArrayList<>();
         }
         return this.specificationLinkBranch;
     }

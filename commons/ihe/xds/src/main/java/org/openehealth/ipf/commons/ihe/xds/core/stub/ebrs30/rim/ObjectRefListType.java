@@ -68,7 +68,7 @@ public class ObjectRefListType {
      */
     public List<ObjectRefType> getObjectRef() {
         if (objectRef == null) {
-            objectRef = new ArrayList<ObjectRefType>();
+            objectRef = new ArrayList<>();
         }
         return this.objectRef;
     }

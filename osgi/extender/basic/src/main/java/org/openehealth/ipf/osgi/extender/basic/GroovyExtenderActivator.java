@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.osgi.extender.basic;
 
-import groovy.lang.*;
-import org.codehaus.groovy.reflection.CachedClass;
 import org.codehaus.groovy.runtime.m12n.ExtensionModule;
 import org.codehaus.groovy.runtime.m12n.StandardPropertiesModuleFactory;
 import org.codehaus.groovy.runtime.metaclass.MetaClassRegistryImpl;

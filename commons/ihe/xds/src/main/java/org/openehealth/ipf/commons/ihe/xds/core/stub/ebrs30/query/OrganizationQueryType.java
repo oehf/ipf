@@ -90,7 +90,7 @@ public class OrganizationQueryType
      */
     public List<FilterType> getAddressFilter() {
         if (addressFilter == null) {
-            addressFilter = new ArrayList<FilterType>();
+            addressFilter = new ArrayList<>();
         }
         return this.addressFilter;
     }
@@ -119,7 +119,7 @@ public class OrganizationQueryType
      */
     public List<FilterType> getTelephoneNumberFilter() {
         if (telephoneNumberFilter == null) {
-            telephoneNumberFilter = new ArrayList<FilterType>();
+            telephoneNumberFilter = new ArrayList<>();
         }
         return this.telephoneNumberFilter;
     }
@@ -148,7 +148,7 @@ public class OrganizationQueryType
      */
     public List<FilterType> getEmailAddressFilter() {
         if (emailAddressFilter == null) {
-            emailAddressFilter = new ArrayList<FilterType>();
+            emailAddressFilter = new ArrayList<>();
         }
         return this.emailAddressFilter;
     }
@@ -201,7 +201,7 @@ public class OrganizationQueryType
      */
     public List<OrganizationQueryType> getChildOrganizationQuery() {
         if (childOrganizationQuery == null) {
-            childOrganizationQuery = new ArrayList<OrganizationQueryType>();
+            childOrganizationQuery = new ArrayList<>();
         }
         return this.childOrganizationQuery;
     }

@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
-import org.openehealth.ipf.commons.core.config.SpringRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.InvalidSyntaxException;

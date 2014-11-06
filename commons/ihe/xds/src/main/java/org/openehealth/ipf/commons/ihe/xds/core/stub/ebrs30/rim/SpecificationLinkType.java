@@ -105,7 +105,7 @@ public class SpecificationLinkType
      */
     public List<String> getUsageParameter() {
         if (usageParameter == null) {
-            usageParameter = new ArrayList<String>();
+            usageParameter = new ArrayList<>();
         }
         return this.usageParameter;
     }

@@ -29,7 +29,7 @@ public class ExceptionProcessor  implements Processor {
     private Map<String, Exception> exceptions;
 
     public ExceptionProcessor() {
-        this.exceptions = new HashMap<String, Exception>(); 
+        this.exceptions = new HashMap<>();
     }
 
     public Map<String, Exception> getExceptions() {

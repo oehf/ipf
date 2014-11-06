@@ -31,7 +31,7 @@ import java.util.List;
 public class ExchangeCopyHelper {
 
     public static void afterCopy(Exchange exchange, Iterable pairs) {
-        ArrayList<ManagedMessage> copies = new ArrayList<ManagedMessage>(countElements(pairs));
+        ArrayList<ManagedMessage> copies = new ArrayList<>(countElements(pairs));
         for (Object p : pairs) {
             ProcessorExchangePair pair = (ProcessorExchangePair) p;
             copies.add(new PlatformMessage(pair.getExchange()));

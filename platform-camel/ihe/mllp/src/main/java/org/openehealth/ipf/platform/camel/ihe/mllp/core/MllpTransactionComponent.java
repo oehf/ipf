@@ -43,7 +43,7 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
 
     @Override
     protected MllpEndpoint createEndpoint(Mina2Endpoint wrappedEndpoint, MllpTransactionEndpointConfiguration config) {
-        return new MllpTransactionEndpoint<AuditDatasetType>(this, wrappedEndpoint, config);
+        return new MllpTransactionEndpoint<>(this, wrappedEndpoint, config);
     }
 
     /**

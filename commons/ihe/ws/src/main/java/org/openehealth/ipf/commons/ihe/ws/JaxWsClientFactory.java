@@ -49,7 +49,7 @@ import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 public class JaxWsClientFactory {
     private static final Logger LOG = LoggerFactory.getLogger(JaxWsClientFactory.class);
 
-    protected final ThreadLocal<Object> threadLocalPort = new ThreadLocal<Object>();
+    protected final ThreadLocal<Object> threadLocalPort = new ThreadLocal<>();
     protected final WsTransactionConfiguration wsTransactionConfiguration;
     protected final String serviceUrl;
     protected final InterceptorProvider customInterceptors;

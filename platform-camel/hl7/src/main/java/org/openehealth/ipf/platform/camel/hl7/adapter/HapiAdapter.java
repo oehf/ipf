@@ -22,7 +22,6 @@ import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.GenericParser;
 import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
-import org.apache.camel.util.ExchangeHelper;
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;

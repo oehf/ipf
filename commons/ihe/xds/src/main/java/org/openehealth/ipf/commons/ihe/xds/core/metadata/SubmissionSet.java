@@ -41,10 +41,10 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = 5961980266312684583L;
     
     @XmlElement(name = "author")
-    private final List<Author> authors = new ArrayList<Author>();
+    private final List<Author> authors = new ArrayList<>();
     private Code contentTypeCode;
     @XmlElement(name = "intendedRecipient")
-    private final List<Recipient> intendedRecipients = new ArrayList<Recipient>(); 
+    private final List<Recipient> intendedRecipients = new ArrayList<>();
     private String sourceId;
     @XmlSchemaType(name = "dateTime")
     @XmlJavaTypeAdapter(value = DateAdapter.class)

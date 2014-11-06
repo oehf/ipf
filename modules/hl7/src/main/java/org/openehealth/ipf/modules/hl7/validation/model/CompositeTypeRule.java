@@ -21,7 +21,6 @@ import ca.uhn.hl7v2.validation.PrimitiveTypeRule;
 import ca.uhn.hl7v2.validation.Rule;
 import ca.uhn.hl7v2.validation.ValidationException;
 import ca.uhn.hl7v2.validation.builder.BuilderSupport;
-import ca.uhn.hl7v2.validation.impl.RuleSupport;
 
 /**
  * Rule for validating {@link Composite} types.

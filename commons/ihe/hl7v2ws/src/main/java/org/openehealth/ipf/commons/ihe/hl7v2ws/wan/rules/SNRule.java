@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import ca.uhn.hl7v2.Location;
-import ca.uhn.hl7v2.model.v26.datatype.EI;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.SN;
@@ -44,7 +43,7 @@ public class SNRule extends AbstractCompositeTypeRule<SN> {
 
     @Override
     public ValidationException[] validate(SN sn, Location location) {
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         if (!isEmpty(sn, 2) && !isEmpty(sn, 4)) {
             validate(enforce(not(empty()), sn, 3), location, violations);
         }

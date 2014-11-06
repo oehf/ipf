@@ -146,7 +146,7 @@ public class UserType
      */
     public List<TelephoneNumberType> getTelephoneNumber() {
         if (telephoneNumber == null) {
-            telephoneNumber = new ArrayList<TelephoneNumberType>();
+            telephoneNumber = new ArrayList<>();
         }
         return this.telephoneNumber;
     }
@@ -175,7 +175,7 @@ public class UserType
      */
     public List<EmailAddressType> getEmailAddress() {
         if (emailAddress == null) {
-            emailAddress = new ArrayList<EmailAddressType>();
+            emailAddress = new ArrayList<>();
         }
         return this.emailAddress;
     }

@@ -94,7 +94,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     @Override
     public List<EbXMLClassification> getClassifications() {
         List<ClassificationType> classifications = registryEntry.getClassification();
-        List<EbXMLClassification> results = new ArrayList<EbXMLClassification>(classifications.size());
+        List<EbXMLClassification> results = new ArrayList<>(classifications.size());
         for (ClassificationType classification : classifications) {
             results.add(new EbXMLClassification30(classification));
         }
@@ -105,7 +105,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     public List<EbXMLClassification> getClassifications(String scheme) {
         notNull(scheme, "scheme cannot be null");
         
-        List<EbXMLClassification> results = new ArrayList<EbXMLClassification>();
+        List<EbXMLClassification> results = new ArrayList<>();
         for (ClassificationType classification : registryEntry.getClassification()) {            
             if (scheme.equals(classification.getClassificationScheme())) {
                 results.add(new EbXMLClassification30(classification));
@@ -135,7 +135,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     @Override
     public List<EbXMLExternalIdentifier> getExternalIdentifiers() {
         List<ExternalIdentifierType> externalIdentifiers = registryEntry.getExternalIdentifier();
-        List<EbXMLExternalIdentifier> results = new ArrayList<EbXMLExternalIdentifier>(externalIdentifiers.size());
+        List<EbXMLExternalIdentifier> results = new ArrayList<>(externalIdentifiers.size());
         for (ExternalIdentifierType identifier : externalIdentifiers) {
             results.add(new EbXMLExternalIdentifier30(identifier));
         }

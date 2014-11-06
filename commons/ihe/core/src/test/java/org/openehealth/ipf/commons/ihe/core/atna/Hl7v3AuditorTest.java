@@ -46,7 +46,7 @@ public class Hl7v3AuditorTest extends TestCase {
 
     private static final List<CodedValueType> PURPOSES_OF_USE;
     static {
-        PURPOSES_OF_USE = new ArrayList<CodedValueType>();
+        PURPOSES_OF_USE = new ArrayList<>();
         CodedValueType cvt = new CodedValueType();
 
         cvt.setCode("12");

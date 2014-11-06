@@ -33,7 +33,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetDocumentsQueryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetFolderAndContentsQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.QueryParameterValidation;
 
 /**
  * Tests for {@link GetDocumentsQueryTransformer}.
@@ -52,7 +51,7 @@ public class GetFolderAndContentsQueryTransformerTest {
         query.setUuid("uuid1");
         query.setUniqueId("uniqueId1");
         query.setHomeCommunityId("home");
-        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(

@@ -41,10 +41,10 @@ public class Author implements Serializable {
     private static final long serialVersionUID = 6731221295927724760L;
     
     private Person authorPerson;
-    private final List<Organization> authorInstitution = new ArrayList<Organization>();
-    private final List<Identifiable> authorRole = new ArrayList<Identifiable>();
-    private final List<Identifiable> authorSpecialty = new ArrayList<Identifiable>();
-    private final List<Telecom> authorTelecom = new ArrayList<Telecom>();
+    private final List<Organization> authorInstitution = new ArrayList<>();
+    private final List<Identifiable> authorRole = new ArrayList<>();
+    private final List<Identifiable> authorSpecialty = new ArrayList<>();
+    private final List<Telecom> authorTelecom = new ArrayList<>();
 
     /**
      * @return basic information about the author.

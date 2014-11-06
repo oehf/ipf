@@ -99,7 +99,7 @@ public class RegistryEntryQueryResult {
      */
     public List<Object> getObjectRefOrClassificationSchemeOrExtrinsicObject() {
         if (objectRefOrClassificationSchemeOrExtrinsicObject == null) {
-            objectRefOrClassificationSchemeOrExtrinsicObject = new ArrayList<Object>();
+            objectRefOrClassificationSchemeOrExtrinsicObject = new ArrayList<>();
         }
         return this.objectRefOrClassificationSchemeOrExtrinsicObject;
     }

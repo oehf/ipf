@@ -52,7 +52,7 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
 
     @Override
     public List<RetrieveStudy> getRetrieveStudies() {
-        List<RetrieveStudy> retrieveStudies = new ArrayList<RetrieveStudy>();
+        List<RetrieveStudy> retrieveStudies = new ArrayList<>();
         for (StudyRequest studyRequest : request.getStudyRequest())
         {
             RetrieveStudy retrieveStudy = new RetrieveStudy();
@@ -78,7 +78,7 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
 
     @Override
     public List<String> getTransferSyntaxUIDList() {
-        List<String> transferSyntaxUIDs = new ArrayList<String>();
+        List<String> transferSyntaxUIDs = new ArrayList<>();
         transferSyntaxUIDs.addAll(request.getTransferSyntaxUIDList().getTransferSyntaxUID());
         return transferSyntaxUIDs;
     }

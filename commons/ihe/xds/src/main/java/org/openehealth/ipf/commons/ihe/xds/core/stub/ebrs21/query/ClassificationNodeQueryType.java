@@ -154,7 +154,7 @@ public class ClassificationNodeQueryType
      */
     public List<ClassificationNodeQueryType> getClassificationNodeChildrenBranch() {
         if (classificationNodeChildrenBranch == null) {
-            classificationNodeChildrenBranch = new ArrayList<ClassificationNodeQueryType>();
+            classificationNodeChildrenBranch = new ArrayList<>();
         }
         return this.classificationNodeChildrenBranch;
     }

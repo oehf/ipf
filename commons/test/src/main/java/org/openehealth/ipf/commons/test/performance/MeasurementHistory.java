@@ -45,13 +45,13 @@ public class MeasurementHistory implements Serializable {
     private Date referenceDate;
 
     public MeasurementHistory() {
-        measurements = new ArrayList<Measurement>();
+        measurements = new ArrayList<>();
         referenceDate = new Date();
     }
 
     public MeasurementHistory(Date referenceDate) {
         notNull(referenceDate, "The referenceDate must not be null!");
-        measurements = new ArrayList<Measurement>();
+        measurements = new ArrayList<>();
         this.referenceDate = referenceDate;
     }
 
@@ -59,7 +59,7 @@ public class MeasurementHistory implements Serializable {
         notNull(copy, "The copy must not be null!");
 
         referenceDate = new Date(copy.referenceDate.getTime());
-        measurements = new ArrayList<Measurement>(copy.measurements);
+        measurements = new ArrayList<>(copy.measurements);
 
     }
 

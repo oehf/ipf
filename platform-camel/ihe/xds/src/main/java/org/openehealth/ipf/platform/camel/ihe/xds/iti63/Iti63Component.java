@@ -81,7 +81,7 @@ public class Iti63Component extends AbstractWsComponent<WsTransactionConfigurati
             AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
-        return new SimpleWsProducer<AdhocQueryRequest, AdhocQueryResponse>(
+        return new SimpleWsProducer<>(
                 endpoint, clientFactory, AdhocQueryRequest.class, AdhocQueryResponse.class);
     }
 }

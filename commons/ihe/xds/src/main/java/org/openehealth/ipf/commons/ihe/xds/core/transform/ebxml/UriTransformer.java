@@ -70,7 +70,7 @@ public class UriTransformer {
             return new String[0];
         }
         
-        List<String> uriParts = new ArrayList<String>();
+        List<String> uriParts = new ArrayList<>();
         
         int slotIdx = 1;
         int start = 0;

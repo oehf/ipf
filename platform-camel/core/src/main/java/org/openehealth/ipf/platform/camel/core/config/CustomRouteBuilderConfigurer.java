@@ -44,7 +44,7 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
 
     @Override
     public Collection<CustomRouteBuilder> lookup(R registry) {        
-        List<CustomRouteBuilder> list = new ArrayList<CustomRouteBuilder>(
+        List<CustomRouteBuilder> list = new ArrayList<>(
                 registry.beans(CustomRouteBuilder.class).values());
         Collections.sort(list);
         return list;

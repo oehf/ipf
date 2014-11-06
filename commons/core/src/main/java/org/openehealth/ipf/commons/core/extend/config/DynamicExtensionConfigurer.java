@@ -64,12 +64,12 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
     public static void addExtensionMethods(ExtensionModule module) {
         MetaClassRegistry metaClassRegistry = GroovySystem.getMetaClassRegistry();
         ((MetaClassRegistryImpl) metaClassRegistry).getModuleRegistry().addModule(module);
-        Map<CachedClass, List<MetaMethod>> classMap = new HashMap<CachedClass, List<MetaMethod>>();
+        Map<CachedClass, List<MetaMethod>> classMap = new HashMap<>();
         for (MetaMethod metaMethod : module.getMetaMethods()){
             if (classMap.containsKey(metaMethod.getDeclaringClass())){
                 classMap.get(metaMethod.getDeclaringClass()).add(metaMethod);
             } else {
-                List<MetaMethod> methodList = new ArrayList<MetaMethod>();
+                List<MetaMethod> methodList = new ArrayList<>();
                 methodList.add(metaMethod);
                 classMap.put(metaMethod.getDeclaringClass(), methodList);
             }

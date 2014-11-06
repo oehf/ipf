@@ -44,7 +44,7 @@ public class ExtraMetadataMarshalingTest {
 
     @Test
     public void testDocumentEntryUnMarshalling() throws Exception {
-        Map<String, List<String>> extraMetaData = new HashMap<String, List<String>>();
+        Map<String, List<String>> extraMetaData = new HashMap<>();
         extraMetaData.put(KEY_1, VALUES_1);
         extraMetaData.put(KEY_2, VALUES_2);
 

@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.cxf.wsdl.EndpointReferenceUtils;
+import org.apache.cxf.ws.addressing.EndpointReferenceUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
@@ -74,7 +74,7 @@ public class WsAuditDataset extends AuditDataset {
     /**
      * Purposes of use, see ITI TF-2a section 3.20.7.8 and ITI TF-2b section 3.40.4.1.2.3.
      */
-    @Getter private final List<CodedValueType> purposesOfUse = new ArrayList<CodedValueType>();
+    @Getter private final List<CodedValueType> purposesOfUse = new ArrayList<>();
 
 
     /**

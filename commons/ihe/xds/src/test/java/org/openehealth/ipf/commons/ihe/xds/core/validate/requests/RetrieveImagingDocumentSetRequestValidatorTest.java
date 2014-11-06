@@ -65,12 +65,12 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
     
     @Test
     public void testStudyInstanceIdMustBeSpecified() {
-        List<RetrieveDocument> retrieveDocuments = new ArrayList<RetrieveDocument>();
+        List<RetrieveDocument> retrieveDocuments = new ArrayList<>();
         RetrieveDocument retrieveDocument = new RetrieveDocument("repo1", "doc1", "urn:oid:1.2.5");
         retrieveDocuments.add(retrieveDocument);
 
         RetrieveSeries retrieveSeries = new RetrieveSeries("urn:oid:1.2.3", retrieveDocuments);
-        List<RetrieveSeries> retrieveSerieses = new ArrayList<RetrieveSeries>();
+        List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
         retrieveSerieses.add(retrieveSeries);
 
         request.getRetrieveStudies().add(new RetrieveStudy(null, retrieveSerieses));
@@ -80,12 +80,12 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
 
     @Test
     public void testSteriesInstanceIdMustBeSpecified() {
-        List<RetrieveDocument> retrieveDocuments = new ArrayList<RetrieveDocument>();
+        List<RetrieveDocument> retrieveDocuments = new ArrayList<>();
         RetrieveDocument retrieveDocument = new RetrieveDocument("repo1", "doc1", "urn:oid:1.2.6");
         retrieveDocuments.add(retrieveDocument);
 
         RetrieveSeries retrieveSeries = new RetrieveSeries(null, retrieveDocuments);
-        List<RetrieveSeries> retrieveSerieses = new ArrayList<RetrieveSeries>();
+        List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
         retrieveSerieses.add(retrieveSeries);
 
         request.getRetrieveStudies().add(new RetrieveStudy("urn:oid:1.1.3", retrieveSerieses));

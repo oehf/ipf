@@ -74,7 +74,7 @@ public class RegistryErrorList {
      */
     public List<RegistryError> getRegistryError() {
         if (registryError == null) {
-            registryError = new ArrayList<RegistryError>();
+            registryError = new ArrayList<>();
         }
         return this.registryError;
     }

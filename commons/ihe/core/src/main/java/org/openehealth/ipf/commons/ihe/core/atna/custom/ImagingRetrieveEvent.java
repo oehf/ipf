@@ -62,7 +62,7 @@ public class ImagingRetrieveEvent extends GenericIHEAuditEventMessage {
             String repositoryUniqueId,
             String homeCommunityId)
     {
-        List<TypeValuePairType> pairs = new LinkedList<TypeValuePairType>();
+        List<TypeValuePairType> pairs = new LinkedList<>();
         addTypeValuePair(pairs, "Study Instance Unique Id",  studyInstanceUniqueId);
         addTypeValuePair(pairs, "Series Instance Unique Id", seriesInstanceUniqueId);
         addTypeValuePair(pairs, "Repository Unique Id",      repositoryUniqueId);

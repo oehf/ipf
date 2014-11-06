@@ -68,7 +68,7 @@ public class InternationalStringType {
      */
     public List<LocalizedStringType> getLocalizedString() {
         if (localizedString == null) {
-            localizedString = new ArrayList<LocalizedStringType>();
+            localizedString = new ArrayList<>();
         }
         return this.localizedString;
     }

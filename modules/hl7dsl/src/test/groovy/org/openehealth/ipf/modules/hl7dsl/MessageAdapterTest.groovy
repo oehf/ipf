@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import org.junit.Before
+import org.junit.Test
+
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
@@ -22,22 +25,25 @@ import ca.uhn.hl7v2.model.v22.message.ADT_A01
 /**
  * @author Martin Krasser
  */
-class MessageAdapterTest extends GroovyTestCase {
+class MessageAdapterTest extends groovy.test.GroovyAssert {
     
     MessageAdapter<ADT_A01> msg;
-    
+
+    @Before
     void setUp() {
         msg = load('msg-01.hl7')
 
     }
 
+    @Test
     void testMakeStream() {
         def stream = getClass().classLoader.getResource('msg-01.hl7').openStream()
         MessageAdapter<ADT_A01> result = make(stream)
 		
         assert result.MSH[4].value == 'HZL'
     }
-    
+
+    @Test
     void testRender() {
         def writer
         def result
@@ -61,7 +67,8 @@ class MessageAdapterTest extends GroovyTestCase {
         assert result.contains('4444')
         assert result.contains('6666')
     }
-    
+
+    @Test
     void testCopy() {
 		msg.MSH[5] = 'X';
 		MessageAdapter<ADT_A01> copy = msg.copy()
@@ -70,7 +77,8 @@ class MessageAdapterTest extends GroovyTestCase {
         assert copy.MSH[5].value == 'Y'
         assert msg.MSH[5].value == 'X'
     }
-    
+
+    @Test
     void testMatches() {
         assert msg.matches('ADT', 'A01', '2.2')
         assert msg.matches('ADT', 'A01', '*')

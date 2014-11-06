@@ -67,7 +67,7 @@ public class EbXMLRegistryResponse30 implements EbXMLRegistryResponse {
             return Collections.emptyList();
         }
 
-        List<EbXMLRegistryError> errors = new ArrayList<EbXMLRegistryError>();
+        List<EbXMLRegistryError> errors = new ArrayList<>();
         for (RegistryError regError : list.getRegistryError()) {
             errors.add(new EbXMLRegistryError30(regError));
         }

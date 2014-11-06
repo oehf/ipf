@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42
 
 import org.apache.cxf.binding.soap.SoapHeader
-import org.apache.cxf.helpers.XMLUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
@@ -31,11 +30,14 @@ import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint
+import org.w3c.dom.Document
 import org.w3c.dom.Element
 
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Unmarshaller
 import javax.xml.namespace.QName
+import javax.xml.parsers.DocumentBuilder
+import javax.xml.parsers.DocumentBuilderFactory
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
@@ -65,7 +67,11 @@ class TestIti42 extends StandardTestContainer {
     
     @BeforeClass
     static void classSetUp() {
-        Element assertion = XMLUtils.parse(TestIti42.class.classLoader.getResourceAsStream('saml2-assertion-for-xua.xml')).documentElement
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(TestIti42.class.classLoader.getResourceAsStream('saml2-assertion-for-xua.xml'));
+        Element assertion = doc.documentElement
         SoapHeader header = new SoapHeader(new QName(assertion.namespaceURI, assertion.localName), assertion)
         //header.mustUnderstand = true
         camelHeaders = [(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS) : [header]]

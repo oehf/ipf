@@ -86,7 +86,7 @@ public class EbXMLSlotList30 implements EbXMLSlotList {
 
     @Override
     public List<EbXMLSlot> getSlots() {
-        List<EbXMLSlot> slots = new ArrayList<EbXMLSlot>(slotListObj.size());
+        List<EbXMLSlot> slots = new ArrayList<>(slotListObj.size());
         for (SlotType1 slot30 : slotListObj) {
             slots.add(new EbXMLSlot30(slot30));
         }
@@ -97,7 +97,7 @@ public class EbXMLSlotList30 implements EbXMLSlotList {
     public List<EbXMLSlot> getSlots(String slotName) {
         notNull(slotName, "slotName cannot be null");
         
-        List<EbXMLSlot> slots = new ArrayList<EbXMLSlot>(slotListObj.size());
+        List<EbXMLSlot> slots = new ArrayList<>(slotListObj.size());
         for (SlotType1 slot30 : slotListObj) {
             if (slotName.equals(slot30.getName())) {
                 slots.add(new EbXMLSlot30(slot30));

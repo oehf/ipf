@@ -274,8 +274,8 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
         DefaultExchange exchange = new DefaultExchange(camelContext);
         
         exchange.setUnitOfWork(new DefaultUnitOfWork(exchange));
-        exchange.setProperties(new HashMap<String, Object>(packet.getExchangeProperties()));
-        exchange.getIn().setHeaders(new HashMap<String, Object>(packet.getMessageProperties()));
+        exchange.setProperties(new HashMap<>(packet.getExchangeProperties()));
+        exchange.getIn().setHeaders(new HashMap<>(packet.getMessageProperties()));
 
         setInBody(packet.getMessageBody(), exchange);
     

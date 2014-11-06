@@ -38,7 +38,7 @@ http://cxf.apache.org/schemas/configuration/security.xsd
 
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
-            <list>
+            <set>
                 <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ByteArrayToStringConverter" />
 
                 <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ClinicalDocumentToByteArrayConverter" />
@@ -49,7 +49,7 @@ http://cxf.apache.org/schemas/configuration/security.xsd
 
                 <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ByteArrayToDataHandlerConverter" />
                 <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.DataHandlerToByteArrayConverter" />
-            </list>
+            </set>
         </property>
     </bean>
 

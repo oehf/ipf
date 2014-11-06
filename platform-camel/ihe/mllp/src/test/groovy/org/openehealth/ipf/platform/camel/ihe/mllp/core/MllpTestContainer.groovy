@@ -64,12 +64,12 @@ class MllpTestContainer {
     
     @After
     void tearDown() {
-        auditSender.messages.clear()
+        auditSender?.messages.clear()
     }
     
     @AfterClass
     static void tearDownAfterClass() {
-        appContext.destroy()
+        appContext?.destroy()
     }
     
     

@@ -33,7 +33,7 @@ public class ContentMap {
     private static transient Logger LOG = LoggerFactory.getLogger(ContentMap.class);
 
     // synchronized manually
-    private transient final Map<Class<?>, Object> map = new HashMap<Class<?>, Object>();
+    private transient final Map<Class<?>, Object> map = new HashMap<>();
 
     private static transient ConversionService conversionService;
 

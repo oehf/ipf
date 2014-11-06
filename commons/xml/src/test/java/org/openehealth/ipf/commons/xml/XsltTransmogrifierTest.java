@@ -37,7 +37,7 @@ public class XsltTransmogrifierTest {
 
     @Before
     public void setUp() throws Exception {
-        transformer = new XsltTransmogrifier<String>(String.class);
+        transformer = new XsltTransmogrifier<>(String.class);
     }
 
     @After

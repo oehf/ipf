@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
     <artifactId>ipf</artifactId>
-    <version>2.7-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
@@ -42,7 +42,7 @@
         <assembly-plugin-version>2.4</assembly-plugin-version>
         <build-helper-version>1.8</build-helper-version>
         <bundle-plugin-version>2.0.1</bundle-plugin-version>
-        <compiler-plugin-version>3.0</compiler-plugin-version>
+        <compiler-plugin-version>3.2</compiler-plugin-version>
         <eclipse-plugin-version>2.9</eclipse-plugin-version>
         <enforcer-plugin-version>1.2</enforcer-plugin-version>
         <groovy-eclipse-batch-version>2.3.4-01</groovy-eclipse-batch-version>
@@ -56,7 +56,7 @@
         <sources-plugin-version>2.2.1</sources-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.9.1</activemq-version>
+        <activemq-version>5.10.0</activemq-version>
         <aspectj-version>1.7.3</aspectj-version>
         <camel-version>2.14.0</camel-version>
         <cglib-version>2.2.2</cglib-version>
@@ -69,14 +69,15 @@
         <commons-lang-version>2.6</commons-lang-version>
         <commons-lang3-version>3.1</commons-lang3-version>
         <commons-math3-version>3.2</commons-math3-version>
-        <cxf-version>2.7.11</cxf-version>
+        <cxf-version>3.0.2</cxf-version>
         <derby-version>10.9.1.0</derby-version>
         <easymock-version>3.2</easymock-version>
-        <ehcache-version>2.6.9</ehcache-version>
+        <ehcache-version>2.8.3</ehcache-version>
         <geronimo-jpa_2.0_spec.version>1.1</geronimo-jpa_2.0_spec.version>
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
         <geronimo-spec-servlet-api-30-version>1.0</geronimo-spec-servlet-api-30-version>
+        <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <groovy-version>2.3.4</groovy-version>
         <hapi-version>2.2</hapi-version>
         <hibernate-version>3.5.6-Final</hibernate-version>
@@ -102,14 +103,15 @@
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.1</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
+        <saxon-he-version>9.6.0-1</saxon-he-version>
         <slf4j-version>1.7.7</slf4j-version>
-        <spring-version>4.0.2.RELEASE</spring-version>
+        <spring-version>4.1.1.RELEASE</spring-version>
         <spring-karaf-version>3.2.4.RELEASE</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.39</tomcat-version>
         <xbean-spring-version>3.16</xbean-spring-version>
-        <xerces-impl-version>2.11.0</xerces-impl-version>
         <xmlunit-version>1.5</xmlunit-version>
+        <xmlsec-version>2.0.2</xmlsec-version>
     </properties>
 
     <url>http://www.openehealth.org/display/ipf2</url>
@@ -267,6 +269,7 @@
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>${log4j-version}</version>
+                <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>org.apache.felix</groupId>
@@ -338,7 +341,7 @@
             </dependency>
             <dependency>
                 <groupId>net.sf.ehcache</groupId>
-                <artifactId>ehcache-core</artifactId>
+                <artifactId>ehcache</artifactId>
                 <version>${ehcache-version}</version>
             </dependency>
             <dependency>
@@ -566,7 +569,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-api</artifactId>
+                <artifactId>cxf-core</artifactId>
                 <version>${cxf-version}</version>
             </dependency>
             <dependency>
@@ -630,11 +633,13 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j-version}</version>
+                <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>jcl-over-slf4j</artifactId>
                 <version>${slf4j-version}</version>
+                <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -749,6 +754,10 @@
                         <groupId>antlr</groupId>
                         <artifactId>antlr</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>xml-apis</groupId>
+                        <artifactId>xml-apis</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -766,6 +775,11 @@
                 <artifactId>geronimo-servlet_3.0_spec</artifactId>
                 <version>${geronimo-spec-servlet-api-30-version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-javamail_1.4_spec</artifactId>
+                <version>${geronimo-spec-javamail-14-version}</version>
+            </dependency>			
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-annotations</artifactId>
@@ -891,11 +905,6 @@
                 <version>${jetty-version}</version>
             </dependency>
             <dependency>
-                <groupId>xerces</groupId>
-                <artifactId>xercesImpl</artifactId>
-                <version>${xerces-impl-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.xbean</groupId>
                 <artifactId>xbean-spring</artifactId>
                 <version>${xbean-spring-version}</version>
@@ -908,12 +917,18 @@
             </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>
-                <artifactId>saxon</artifactId>
-                <version>${saxon-version}</version>
+                <artifactId>Saxon-HE</artifactId>
+                <version>${saxon-he-version}</version>
             </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>
-                <artifactId>saxon-dom</artifactId>
+                <artifactId>Saxon-HE</artifactId>
+                <classifier>xqj</classifier>
+                <version>${saxon-he-version}</version>
+            </dependency> 
+            <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>saxon</artifactId>
                 <version>${saxon-version}</version>
             </dependency>
             <dependency>
@@ -921,6 +936,11 @@
                 <artifactId>saxon-xqj</artifactId>
                 <version>${saxon-version}</version>
             </dependency>
+            <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>saxon-dom</artifactId>
+                <version>${saxon-version}</version>
+            </dependency>            
             <dependency>
                 <groupId>org.openhealthtools.ihe</groupId>
                 <artifactId>org.openhealthtools.ihe.atna.auditor</artifactId>
@@ -969,6 +989,29 @@
                 <groupId>org.opensaml</groupId>
                 <artifactId>opensaml</artifactId>
                 <version>${opensaml-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.santuario</groupId>
+                        <artifactId>xmlsec</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>xerces</groupId>
+                        <artifactId>xercesImpl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>xalan</groupId>
+                        <artifactId>serializer</artifactId>
+                    </exclusion>  
+                    <exclusion>
+                        <groupId>xalan</groupId>
+                        <artifactId>xalan</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.santuario</groupId>
+                <artifactId>xmlsec</artifactId>
+                <version>${xmlsec-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
@@ -1153,8 +1196,8 @@
                 <version>${compiler-plugin-version}</version>
                 <configuration>
                     <compilerId>groovy-eclipse-compiler</compilerId>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <fork>true</fork>
                     <verbose>false</verbose>
                     <compilerArguments>
@@ -1183,14 +1226,6 @@
 						<version>${lombok-version}</version>
 					</dependency>					
 				</dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire-report-plugin-version}</version>
-                <configuration>
-                    <argLine>-Xms64m -Xmx512m -XX:MaxPermSize=256m</argLine>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
@@ -1522,6 +1557,46 @@
         </repository>
     </repositories>
     <profiles>
+        <profile>
+            <id>jdk8</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${surefire-report-plugin-version}</version>
+                            <configuration>
+                                <argLine>-Xms64m -Xmx512m</argLine>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>jdk7</id>
+            <activation>
+                <jdk>1.7</jdk>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${surefire-report-plugin-version}</version>
+                            <configuration>
+                                <argLine>-Xms64m -Xmx512m -XX:MaxPermSize=256m</argLine>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
         <profile>
             <!-- This profile generates groovystubs with last gmaven plugin        -->
             <!-- which still respects the javadocs annotations on stub generation. -->

@@ -56,7 +56,7 @@ public class HITSPC37ValidationTest {
 	public void setUp() throws Exception {
 		validator = new XsdValidator();
 		schematron = new SchematronValidator();
-		params = new HashMap<String, Object>();
+		params = new HashMap<>();
 		params.put("phase", "errors");
 	}
 

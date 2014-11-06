@@ -24,7 +24,7 @@ import org.junit.Assert
 /**
  * @author Christian Ohr
  */
-public class CDAR2FactoryTest extends GroovyTestCase {
+public class CDAR2FactoryTest {
 	
 	/* (non-Javadoc)
 	 * @see org.openehealth.ipf.modules.cda.factory.oht.CDAR2#factoryFor(java.lang.String)

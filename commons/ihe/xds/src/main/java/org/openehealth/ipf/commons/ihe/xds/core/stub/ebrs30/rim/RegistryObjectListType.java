@@ -90,7 +90,7 @@ public class RegistryObjectListType {
      */
     public List<JAXBElement<? extends IdentifiableType>> getIdentifiable() {
         if (identifiable == null) {
-            identifiable = new ArrayList<JAXBElement<? extends IdentifiableType>>();
+            identifiable = new ArrayList<>();
         }
         return this.identifiable;
     }

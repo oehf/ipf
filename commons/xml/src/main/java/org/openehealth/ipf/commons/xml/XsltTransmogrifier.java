@@ -48,7 +48,7 @@ import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
     private final static Logger LOG = LoggerFactory.getLogger(XsltTransmogrifier.class);
 
-    private final Map<Object, Templates> templateCache = new HashMap<Object, Templates>();
+    private final Map<Object, Templates> templateCache = new HashMap<>();
 
     private Map<String, Object> staticParams;
 

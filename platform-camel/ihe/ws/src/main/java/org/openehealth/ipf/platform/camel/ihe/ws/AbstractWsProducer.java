@@ -15,28 +15,29 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import java.util.UUID;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.soap.SOAPFaultException;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.cxf.endpoint.ClientImpl;
-import org.apache.cxf.endpoint.EndpointImpl;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
-import org.apache.cxf.ws.addressing.*;
-import org.apache.cxf.ws.addressing.impl.AddressingPropertiesImpl;
+import org.apache.cxf.ws.addressing.AddressingProperties;
+import org.apache.cxf.ws.addressing.AttributedURIType;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
+import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.soap.SOAPFaultException;
-import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
@@ -253,7 +254,7 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
         // obtain headers' container
         AddressingProperties apropos = (AddressingProperties) context.get(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES);
         if (apropos == null) {
-            apropos = new AddressingPropertiesImpl();
+            apropos = new AddressingProperties();
             context.put(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES, apropos);
         }
 

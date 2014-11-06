@@ -136,7 +136,7 @@ abstract class EbXMLObjectContainer21 implements EbXMLObjectContainer {
     
     @Override
     public List<EbXMLAssociation> getAssociations() {
-        List<EbXMLAssociation> results = new ArrayList<EbXMLAssociation>();
+        List<EbXMLAssociation> results = new ArrayList<>();
         for (Object identifiable : getContents()) {
             AssociationType1 association = cast(identifiable, AssociationType1.class);            
             if (association != null) {
@@ -151,7 +151,7 @@ abstract class EbXMLObjectContainer21 implements EbXMLObjectContainer {
     public List<EbXMLExtrinsicObject> getExtrinsicObjects(String... objectTypes) {
         noNullElements(objectTypes, "objectTypes cannot be null or contain null elements");
         
-        List<EbXMLExtrinsicObject> results = new ArrayList<EbXMLExtrinsicObject>();
+        List<EbXMLExtrinsicObject> results = new ArrayList<>();
         for (Object identifiable : getContents()) {
             ExtrinsicObjectType extrinsic = cast(identifiable, ExtrinsicObjectType.class);            
             if (extrinsic != null) {
@@ -169,7 +169,7 @@ abstract class EbXMLObjectContainer21 implements EbXMLObjectContainer {
 
     @Override
     public List<EbXMLExtrinsicObject> getExtrinsicObjects() {
-        List<EbXMLExtrinsicObject> results = new ArrayList<EbXMLExtrinsicObject>();
+        List<EbXMLExtrinsicObject> results = new ArrayList<>();
         for (Object identifiable : getContents()) {
             ExtrinsicObjectType extrinsic = cast(identifiable, ExtrinsicObjectType.class);            
             if (extrinsic != null) {
@@ -186,7 +186,7 @@ abstract class EbXMLObjectContainer21 implements EbXMLObjectContainer {
     
         Set<String> acceptedIds = getAcceptedIds(classificationNode);
         
-        List<EbXMLRegistryPackage> results = new ArrayList<EbXMLRegistryPackage>();
+        List<EbXMLRegistryPackage> results = new ArrayList<>();
         for (Object identifiable : getContents()) {
             RegistryPackageType regPackage = cast(identifiable, RegistryPackageType.class);            
             if (matchesFilter(regPackage, acceptedIds, classificationNode)) {
@@ -199,7 +199,7 @@ abstract class EbXMLObjectContainer21 implements EbXMLObjectContainer {
 
     @Override
     public List<EbXMLRegistryPackage> getRegistryPackages() {
-        List<EbXMLRegistryPackage> results = new ArrayList<EbXMLRegistryPackage>();
+        List<EbXMLRegistryPackage> results = new ArrayList<>();
         for (Object identifiable : getContents()) {
             RegistryPackageType regPackage = cast(identifiable, RegistryPackageType.class);            
             if (regPackage != null) {
@@ -212,7 +212,7 @@ abstract class EbXMLObjectContainer21 implements EbXMLObjectContainer {
 
     @Override
     public List<EbXMLClassification> getClassifications() {
-        List<EbXMLClassification> results = new ArrayList<EbXMLClassification>();
+        List<EbXMLClassification> results = new ArrayList<>();
         for (Object identifiable : getContents()) {
             ClassificationType classification = cast(identifiable, ClassificationType.class);            
             if (classification != null) {
@@ -254,7 +254,7 @@ abstract class EbXMLObjectContainer21 implements EbXMLObjectContainer {
     }
 
     private Set<String> getAcceptedIds(String acceptedNode) {
-        Set<String> acceptedIds = new HashSet<String>(); 
+        Set<String> acceptedIds = new HashSet<>();
         for (Object identifiable : getContents()) {
             ClassificationType classification = cast(identifiable, ClassificationType.class);
             if (classification != null) {

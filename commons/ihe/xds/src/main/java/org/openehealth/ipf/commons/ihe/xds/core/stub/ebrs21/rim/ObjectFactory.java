@@ -313,7 +313,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "Value")
     public JAXBElement<String> createValue(String value) {
-        return new JAXBElement<String>(_Value_QNAME, String.class, null, value);
+        return new JAXBElement<>(_Value_QNAME, String.class, null, value);
     }
 
     /**
@@ -322,7 +322,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "ServiceBinding")
     public JAXBElement<ServiceBindingType> createServiceBinding(ServiceBindingType value) {
-        return new JAXBElement<ServiceBindingType>(_ServiceBinding_QNAME, ServiceBindingType.class, null, value);
+        return new JAXBElement<>(_ServiceBinding_QNAME, ServiceBindingType.class, null, value);
     }
 
     /**
@@ -331,7 +331,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "ExternalLink")
     public JAXBElement<ExternalLinkType> createExternalLink(ExternalLinkType value) {
-        return new JAXBElement<ExternalLinkType>(_ExternalLink_QNAME, ExternalLinkType.class, null, value);
+        return new JAXBElement<>(_ExternalLink_QNAME, ExternalLinkType.class, null, value);
     }
 
     /**
@@ -340,7 +340,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "ValueList")
     public JAXBElement<ValueListType> createValueList(ValueListType value) {
-        return new JAXBElement<ValueListType>(_ValueList_QNAME, ValueListType.class, null, value);
+        return new JAXBElement<>(_ValueList_QNAME, ValueListType.class, null, value);
     }
 
     /**
@@ -349,7 +349,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "ObjectRef")
     public JAXBElement<ObjectRefType> createObjectRef(ObjectRefType value) {
-        return new JAXBElement<ObjectRefType>(_ObjectRef_QNAME, ObjectRefType.class, null, value);
+        return new JAXBElement<>(_ObjectRef_QNAME, ObjectRefType.class, null, value);
     }
 
     /**
@@ -358,7 +358,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "MobileTelephoneNumber")
     public JAXBElement<TelephoneNumberType> createMobileTelephoneNumber(TelephoneNumberType value) {
-        return new JAXBElement<TelephoneNumberType>(_MobileTelephoneNumber_QNAME, TelephoneNumberType.class, null, value);
+        return new JAXBElement<>(_MobileTelephoneNumber_QNAME, TelephoneNumberType.class, null, value);
     }
 
     /**
@@ -367,7 +367,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "Service")
     public JAXBElement<ServiceType> createService(ServiceType value) {
-        return new JAXBElement<ServiceType>(_Service_QNAME, ServiceType.class, null, value);
+        return new JAXBElement<>(_Service_QNAME, ServiceType.class, null, value);
     }
 
     /**
@@ -376,7 +376,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "ClassificationNode")
     public JAXBElement<ClassificationNodeType> createClassificationNode(ClassificationNodeType value) {
-        return new JAXBElement<ClassificationNodeType>(_ClassificationNode_QNAME, ClassificationNodeType.class, null, value);
+        return new JAXBElement<>(_ClassificationNode_QNAME, ClassificationNodeType.class, null, value);
     }
 
     /**
@@ -385,7 +385,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "User")
     public JAXBElement<UserType> createUser(UserType value) {
-        return new JAXBElement<UserType>(_User_QNAME, UserType.class, null, value);
+        return new JAXBElement<>(_User_QNAME, UserType.class, null, value);
     }
 
     /**
@@ -394,7 +394,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "ClassificationScheme")
     public JAXBElement<ClassificationSchemeType> createClassificationScheme(ClassificationSchemeType value) {
-        return new JAXBElement<ClassificationSchemeType>(_ClassificationScheme_QNAME, ClassificationSchemeType.class, null, value);
+        return new JAXBElement<>(_ClassificationScheme_QNAME, ClassificationSchemeType.class, null, value);
     }
 
     /**
@@ -403,7 +403,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "ExtrinsicObject")
     public JAXBElement<ExtrinsicObjectType> createExtrinsicObject(ExtrinsicObjectType value) {
-        return new JAXBElement<ExtrinsicObjectType>(_ExtrinsicObject_QNAME, ExtrinsicObjectType.class, null, value);
+        return new JAXBElement<>(_ExtrinsicObject_QNAME, ExtrinsicObjectType.class, null, value);
     }
 
     /**
@@ -412,7 +412,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "PersonName")
     public JAXBElement<PersonNameType> createPersonName(PersonNameType value) {
-        return new JAXBElement<PersonNameType>(_PersonName_QNAME, PersonNameType.class, null, value);
+        return new JAXBElement<>(_PersonName_QNAME, PersonNameType.class, null, value);
     }
 
     /**
@@ -421,7 +421,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "UsageDescription")
     public JAXBElement<InternationalStringType> createUsageDescription(InternationalStringType value) {
-        return new JAXBElement<InternationalStringType>(_UsageDescription_QNAME, InternationalStringType.class, null, value);
+        return new JAXBElement<>(_UsageDescription_QNAME, InternationalStringType.class, null, value);
     }
 
     /**
@@ -430,7 +430,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "Organization")
     public JAXBElement<OrganizationType> createOrganization(OrganizationType value) {
-        return new JAXBElement<OrganizationType>(_Organization_QNAME, OrganizationType.class, null, value);
+        return new JAXBElement<>(_Organization_QNAME, OrganizationType.class, null, value);
     }
 
     /**
@@ -439,7 +439,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "Slot")
     public JAXBElement<SlotType1> createSlot(SlotType1 value) {
-        return new JAXBElement<SlotType1>(_Slot_QNAME, SlotType1 .class, null, value);
+        return new JAXBElement<>(_Slot_QNAME, SlotType1 .class, null, value);
     }
 
     /**
@@ -448,7 +448,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "Classification")
     public JAXBElement<ClassificationType> createClassification(ClassificationType value) {
-        return new JAXBElement<ClassificationType>(_Classification_QNAME, ClassificationType.class, null, value);
+        return new JAXBElement<>(_Classification_QNAME, ClassificationType.class, null, value);
     }
 
     /**
@@ -457,7 +457,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "RegistryObjectList")
     public JAXBElement<RegistryObjectListType> createRegistryObjectList(RegistryObjectListType value) {
-        return new JAXBElement<RegistryObjectListType>(_RegistryObjectList_QNAME, RegistryObjectListType.class, null, value);
+        return new JAXBElement<>(_RegistryObjectList_QNAME, RegistryObjectListType.class, null, value);
     }
 
     /**
@@ -466,7 +466,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "EmailAddress")
     public JAXBElement<EmailAddressType> createEmailAddress(EmailAddressType value) {
-        return new JAXBElement<EmailAddressType>(_EmailAddress_QNAME, EmailAddressType.class, null, value);
+        return new JAXBElement<>(_EmailAddress_QNAME, EmailAddressType.class, null, value);
     }
 
     /**
@@ -475,7 +475,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "TelephoneNumber")
     public JAXBElement<TelephoneNumberType> createTelephoneNumber(TelephoneNumberType value) {
-        return new JAXBElement<TelephoneNumberType>(_TelephoneNumber_QNAME, TelephoneNumberType.class, null, value);
+        return new JAXBElement<>(_TelephoneNumber_QNAME, TelephoneNumberType.class, null, value);
     }
 
     /**
@@ -484,7 +484,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "Description")
     public JAXBElement<InternationalStringType> createDescription(InternationalStringType value) {
-        return new JAXBElement<InternationalStringType>(_Description_QNAME, InternationalStringType.class, null, value);
+        return new JAXBElement<>(_Description_QNAME, InternationalStringType.class, null, value);
     }
 
     /**
@@ -493,7 +493,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "PostalAddress")
     public JAXBElement<PostalAddressType> createPostalAddress(PostalAddressType value) {
-        return new JAXBElement<PostalAddressType>(_PostalAddress_QNAME, PostalAddressType.class, null, value);
+        return new JAXBElement<>(_PostalAddress_QNAME, PostalAddressType.class, null, value);
     }
 
     /**
@@ -502,7 +502,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "RegistryPackage")
     public JAXBElement<RegistryPackageType> createRegistryPackage(RegistryPackageType value) {
-        return new JAXBElement<RegistryPackageType>(_RegistryPackage_QNAME, RegistryPackageType.class, null, value);
+        return new JAXBElement<>(_RegistryPackage_QNAME, RegistryPackageType.class, null, value);
     }
 
     /**
@@ -511,7 +511,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "LocalizedString")
     public JAXBElement<LocalizedStringType> createLocalizedString(LocalizedStringType value) {
-        return new JAXBElement<LocalizedStringType>(_LocalizedString_QNAME, LocalizedStringType.class, null, value);
+        return new JAXBElement<>(_LocalizedString_QNAME, LocalizedStringType.class, null, value);
     }
 
     /**
@@ -520,7 +520,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "InternationalString")
     public JAXBElement<InternationalStringType> createInternationalString(InternationalStringType value) {
-        return new JAXBElement<InternationalStringType>(_InternationalString_QNAME, InternationalStringType.class, null, value);
+        return new JAXBElement<>(_InternationalString_QNAME, InternationalStringType.class, null, value);
     }
 
     /**
@@ -529,7 +529,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "AuditableEvent")
     public JAXBElement<AuditableEventType> createAuditableEvent(AuditableEventType value) {
-        return new JAXBElement<AuditableEventType>(_AuditableEvent_QNAME, AuditableEventType.class, null, value);
+        return new JAXBElement<>(_AuditableEvent_QNAME, AuditableEventType.class, null, value);
     }
 
     /**
@@ -538,7 +538,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "Name")
     public JAXBElement<InternationalStringType> createName(InternationalStringType value) {
-        return new JAXBElement<InternationalStringType>(_Name_QNAME, InternationalStringType.class, null, value);
+        return new JAXBElement<>(_Name_QNAME, InternationalStringType.class, null, value);
     }
 
     /**
@@ -547,7 +547,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "SpecificationLink")
     public JAXBElement<SpecificationLinkType> createSpecificationLink(SpecificationLinkType value) {
-        return new JAXBElement<SpecificationLinkType>(_SpecificationLink_QNAME, SpecificationLinkType.class, null, value);
+        return new JAXBElement<>(_SpecificationLink_QNAME, SpecificationLinkType.class, null, value);
     }
 
     /**
@@ -556,7 +556,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "RegistryObject")
     public JAXBElement<RegistryObjectType> createRegistryObject(RegistryObjectType value) {
-        return new JAXBElement<RegistryObjectType>(_RegistryObject_QNAME, RegistryObjectType.class, null, value);
+        return new JAXBElement<>(_RegistryObject_QNAME, RegistryObjectType.class, null, value);
     }
 
     /**
@@ -565,7 +565,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "ExternalIdentifier")
     public JAXBElement<ExternalIdentifierType> createExternalIdentifier(ExternalIdentifierType value) {
-        return new JAXBElement<ExternalIdentifierType>(_ExternalIdentifier_QNAME, ExternalIdentifierType.class, null, value);
+        return new JAXBElement<>(_ExternalIdentifier_QNAME, ExternalIdentifierType.class, null, value);
     }
 
     /**
@@ -574,7 +574,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "Address")
     public JAXBElement<PostalAddressType> createAddress(PostalAddressType value) {
-        return new JAXBElement<PostalAddressType>(_Address_QNAME, PostalAddressType.class, null, value);
+        return new JAXBElement<>(_Address_QNAME, PostalAddressType.class, null, value);
     }
 
     /**
@@ -583,7 +583,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "UsageParameter")
     public JAXBElement<String> createUsageParameter(String value) {
-        return new JAXBElement<String>(_UsageParameter_QNAME, String.class, null, value);
+        return new JAXBElement<>(_UsageParameter_QNAME, String.class, null, value);
     }
 
     /**
@@ -592,7 +592,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "PagerNumber")
     public JAXBElement<TelephoneNumberType> createPagerNumber(TelephoneNumberType value) {
-        return new JAXBElement<TelephoneNumberType>(_PagerNumber_QNAME, TelephoneNumberType.class, null, value);
+        return new JAXBElement<>(_PagerNumber_QNAME, TelephoneNumberType.class, null, value);
     }
 
     /**
@@ -601,7 +601,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "Association")
     public JAXBElement<AssociationType1> createAssociation(AssociationType1 value) {
-        return new JAXBElement<AssociationType1>(_Association_QNAME, AssociationType1 .class, null, value);
+        return new JAXBElement<>(_Association_QNAME, AssociationType1 .class, null, value);
     }
 
     /**
@@ -610,7 +610,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "LeafRegistryObjectList")
     public JAXBElement<LeafRegistryObjectListType> createLeafRegistryObjectList(LeafRegistryObjectListType value) {
-        return new JAXBElement<LeafRegistryObjectListType>(_LeafRegistryObjectList_QNAME, LeafRegistryObjectListType.class, null, value);
+        return new JAXBElement<>(_LeafRegistryObjectList_QNAME, LeafRegistryObjectListType.class, null, value);
     }
 
     /**
@@ -619,7 +619,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "FaxNumber")
     public JAXBElement<TelephoneNumberType> createFaxNumber(TelephoneNumberType value) {
-        return new JAXBElement<TelephoneNumberType>(_FaxNumber_QNAME, TelephoneNumberType.class, null, value);
+        return new JAXBElement<>(_FaxNumber_QNAME, TelephoneNumberType.class, null, value);
     }
 
     /**
@@ -628,7 +628,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1", name = "RegistryEntry")
     public JAXBElement<RegistryEntryType> createRegistryEntry(RegistryEntryType value) {
-        return new JAXBElement<RegistryEntryType>(_RegistryEntry_QNAME, RegistryEntryType.class, null, value);
+        return new JAXBElement<>(_RegistryEntry_QNAME, RegistryEntryType.class, null, value);
     }
 
 }

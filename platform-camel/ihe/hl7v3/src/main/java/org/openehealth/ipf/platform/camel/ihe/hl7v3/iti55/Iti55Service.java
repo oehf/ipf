@@ -15,26 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
-import static org.apache.cxf.ws.addressing.JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_INBOUND;
-import static org.apache.cxf.ws.addressing.JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_OUTBOUND;
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory.response;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse.Iti55DeferredResponseComponent.THREAD_POOL_NAME;
-import groovy.util.slurpersupport.GPathResult;
-
 import java.util.concurrent.ExecutorService;
 
+import groovy.util.slurpersupport.GPathResult;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.spi.ExecutorServiceManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.ws.addressing.AddressingProperties;
-import org.apache.cxf.ws.addressing.impl.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Exception;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils;
@@ -47,6 +39,13 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.apache.cxf.ws.addressing.JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND;
+import static org.apache.cxf.ws.addressing.JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND;
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory.response;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse.Iti55DeferredResponseComponent.THREAD_POOL_NAME;
 
 /**
  * Service implementation for the Responding Gateway actor
@@ -129,7 +128,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
             // determine original request message ID
             final WrappedMessageContext messageContext = (WrappedMessageContext) new WebServiceContextImpl().getMessageContext();
-            AddressingProperties apropos = (AddressingProperties) messageContext.get(SERVER_ADDRESSING_PROPERTIES_INBOUND);
+            AddressingProperties apropos = (AddressingProperties) messageContext.get(ADDRESSING_PROPERTIES_INBOUND);
             final String requestMessageId = ((apropos != null) && (apropos.getMessageID() != null)) ?
                     apropos.getMessageID().getValue() : null;
             if (requestMessageId == null) {
@@ -237,10 +236,10 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
             return;
         }
 
-        AddressingProperties apropos = (AddressingProperties) outMessage.get(SERVER_ADDRESSING_PROPERTIES_OUTBOUND);
+        AddressingProperties apropos = (AddressingProperties) outMessage.get(ADDRESSING_PROPERTIES_OUTBOUND);
         if (apropos == null) {
-            apropos = new AddressingPropertiesImpl();
-            outMessage.put(SERVER_ADDRESSING_PROPERTIES_OUTBOUND, apropos);
+            apropos = new AddressingProperties();
+            outMessage.put(ADDRESSING_PROPERTIES_OUTBOUND, apropos);
         }
 
         AttributedURIType actionHolder = new AttributedURIType();

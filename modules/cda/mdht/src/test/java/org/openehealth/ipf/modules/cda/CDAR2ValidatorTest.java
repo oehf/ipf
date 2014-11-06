@@ -47,7 +47,7 @@ public class CDAR2ValidatorTest {
     @Before
     public void setUp() throws Exception {
         validator = new CDAR2Validator();
-        context = new HashMap<Object, Object>();
+        context = new HashMap<>();
         context.put(CDAUtil.ValidationHandler.class, new DefaultValidationHandler());
         CDAR2Utils.initCCD();
         CDAR2Utils.initHITSPC32();

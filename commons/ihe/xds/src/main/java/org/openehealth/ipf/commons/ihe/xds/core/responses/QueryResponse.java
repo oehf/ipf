@@ -39,17 +39,17 @@ public class QueryResponse extends Response implements Serializable {
     private static final long serialVersionUID = -435462523350768903L;
     
     @XmlElement(name = "reference")
-    @Getter @Setter private List<ObjectReference> references = new ArrayList<ObjectReference>();
+    @Getter @Setter private List<ObjectReference> references = new ArrayList<>();
     @XmlElementRef
-    @Getter @Setter private List<DocumentEntry> documentEntries = new ArrayList<DocumentEntry>();
+    @Getter @Setter private List<DocumentEntry> documentEntries = new ArrayList<>();
     @XmlElementRef
-    @Getter @Setter private List<Folder> folders = new ArrayList<Folder>();
+    @Getter @Setter private List<Folder> folders = new ArrayList<>();
     @XmlElementRef
-    @Getter @Setter private List<SubmissionSet> submissionSets = new ArrayList<SubmissionSet>();
+    @Getter @Setter private List<SubmissionSet> submissionSets = new ArrayList<>();
     @XmlElementRef
-    @Getter @Setter private List<Association> associations = new ArrayList<Association>();
+    @Getter @Setter private List<Association> associations = new ArrayList<>();
     @XmlElementRef
-    @Getter @Setter private List<Document> documents = new ArrayList<Document>();
+    @Getter @Setter private List<Document> documents = new ArrayList<>();
     
     /**
      * Constructs the response.

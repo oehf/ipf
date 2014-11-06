@@ -35,7 +35,7 @@ public class QueryListTest {
         List<String> innerList1 = Arrays.asList("Lisa", "Jodi", "Terry", "Cassandra");
         List<String> innerList2 = Arrays.asList("Brock", "Thor", "Venus");
 
-        QueryList<String> queryList = new QueryList<String>();
+        QueryList<String> queryList = new QueryList<>();
         queryList.getOuterList().add(innerList1);
         queryList.getOuterList().add(innerList2);
 
@@ -55,7 +55,7 @@ public class QueryListTest {
                 new Code("Thor", null, "Children scheme"),
                 new Code("Venus", null, "Children scheme"));
 
-        QueryList<Code> queryList = new QueryList<Code>();
+        QueryList<Code> queryList = new QueryList<>();
         queryList.getOuterList().add(innerList1);
         queryList.getOuterList().add(innerList2);
 
@@ -66,7 +66,7 @@ public class QueryListTest {
     @SuppressWarnings({"unchecked"})
     private <T> void checkSerialization(JAXBContext jaxbContext, String name, T object) throws Exception {
         QName qname = new QName("http://www.openehealth.org/ipf/xds", name);
-        JAXBElement<T> jaxbElement = new JAXBElement<T>(qname, (Class<T>) object.getClass(), object);
+        JAXBElement<T> jaxbElement = new JAXBElement<>(qname, (Class<T>) object.getClass(), object);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshaller.marshal(jaxbElement, System.out);

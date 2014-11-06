@@ -81,7 +81,7 @@ public class InNamespaceMergeInterceptorTest {
     private static Map<String, String> merge(String payload) throws Exception {
         String target = InNamespaceMergeInterceptor.enrichNamespaces(SOURCE, payload);
         Element element = parse(target).getDocumentElement();
-        Map<String, String> result = new HashMap<String, String>();
+        Map<String, String> result = new HashMap<>();
         NamedNodeMap attributes = element.getAttributes();
         for (int i = 0; i < attributes.getLength(); ++i) {
             Node attribute = attributes.item(i);

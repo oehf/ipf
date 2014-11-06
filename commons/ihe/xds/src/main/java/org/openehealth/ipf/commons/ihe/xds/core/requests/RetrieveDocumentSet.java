@@ -37,7 +37,7 @@ public class RetrieveDocumentSet implements Serializable {
     private static final long serialVersionUID = -3410625944194160618L;
     
     @XmlElementRef
-    private final List<RetrieveDocument> documents = new ArrayList<RetrieveDocument>();
+    private final List<RetrieveDocument> documents = new ArrayList<>();
 
     /**
      * @return the list of documents to retrieve.

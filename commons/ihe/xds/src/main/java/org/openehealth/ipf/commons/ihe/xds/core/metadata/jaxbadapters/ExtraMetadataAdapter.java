@@ -33,7 +33,7 @@ public class ExtraMetadataAdapter extends XmlAdapter<ExtraMetadata, Map<String, 
         }
 
         ExtraMetadata result = new ExtraMetadata();
-        result.entries = new ArrayList<ExtraMetadataEntry>();
+        result.entries = new ArrayList<>();
         for (Map.Entry<String, List<String>> entry : v.entrySet()) {
             ExtraMetadataEntry extra = new ExtraMetadataEntry();
             extra.setKey(entry.getKey());
@@ -52,7 +52,7 @@ public class ExtraMetadataAdapter extends XmlAdapter<ExtraMetadata, Map<String, 
             return null;
         }
 
-        HashMap<String, List<String>> result = new HashMap<String, List<String>>();
+        HashMap<String, List<String>> result = new HashMap<>();
         for (ExtraMetadataEntry extra : v.entries) {
             result.put(extra.getKey(), extra.getValues());
         }

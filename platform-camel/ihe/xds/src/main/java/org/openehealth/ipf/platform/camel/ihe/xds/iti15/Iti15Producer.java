@@ -47,7 +47,7 @@ public class Iti15Producer extends AbstractWsProducer<ProvideAndRegisterDocument
 
     @Override
     protected RegistryResponse callService(Object client, ProvideAndRegisterDocumentSetRequestType request) {
-        Map<String, DataHandler> attachments = new HashMap<String, DataHandler>();
+        Map<String, DataHandler> attachments = new HashMap<>();
         for (Document document : request.getDocument()) {
             attachments.put(document.getId(), document.getValue());
         }

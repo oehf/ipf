@@ -37,7 +37,7 @@ public class StringPayloadHolder {
 
     // not synchronized, because parallel access is not expected
     private final EnumMap<PayloadType, String> map =
-            new EnumMap<PayloadType, String>(PayloadType.class);
+            new EnumMap<>(PayloadType.class);
 
 
     public String get(PayloadType payloadType) {

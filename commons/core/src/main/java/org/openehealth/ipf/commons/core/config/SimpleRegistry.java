@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class SimpleRegistry implements Registry {
 
-    private Map<String, Object> beans = new HashMap<String, Object>();
+    private Map<String, Object> beans = new HashMap<>();
 
     @Override
     public Object bean(String name) {
@@ -48,7 +48,7 @@ public class SimpleRegistry implements Registry {
     @SuppressWarnings("unchecked")
     @Override
     public <T> Map<String, T> beans(Class<T> requiredType) {
-        Map<String, T> result = new HashMap<String, T>();
+        Map<String, T> result = new HashMap<>();
         for (Map.Entry<String, Object> entry : beans.entrySet()) {
             if (requiredType.isAssignableFrom(entry.getValue().getClass()))
                 result.put(entry.getKey(), (T) entry.getValue());

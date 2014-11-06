@@ -23,7 +23,6 @@ import javax.persistence.Table;
 import org.openehealth.ipf.commons.core.datetime.Duration;
 import org.quartz.spi.OperableTrigger;
 
-import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 /**

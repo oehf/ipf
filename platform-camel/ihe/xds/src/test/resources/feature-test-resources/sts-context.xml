@@ -62,11 +62,11 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
     </util:list>
 
     <bean id="x509STSProperties" class="org.apache.cxf.sts.StaticSTSProperties">
-        <property name="signaturePropertiesFile" value="feature-test-resources/stsKeystore.properties"/>
+        <property name="signatureCryptoProperties" value="feature-test-resources/stsKeystore.properties"/>
         <property name="signatureUsername" value="mystskey"/>
         <property name="callbackHandlerClass"
                   value="org.openehealth.ipf.platform.camel.ihe.xds.CommonCallbackHandler"/>
-        <property name="encryptionPropertiesFile" value="feature-test-resources/stsKeystore.properties"/>
+        <property name="encryptionCryptoProperties" value="feature-test-resources/stsKeystore.properties"/>
         <property name="issuer" value="DoubleItSTSIssuer"/>
         <property name="encryptionUsername" value="myservicekey"/>
     </bean>

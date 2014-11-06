@@ -54,14 +54,14 @@ abstract public class XdsHl7v2Renderer {
      * <p>
      * Note that the indices are one-based, as in the HL7 and IHE documentation.
      */
-    private static final Map<String, Collection<Integer>> INCLUSIONS = new HashMap<String, Collection<Integer>>();
+    private static final Map<String, Collection<Integer>> INCLUSIONS = new HashMap<>();
 
     private static <C extends Composite, T extends Hl7v2Based<C>> void addInclusion(
             Class<C> hl7Class,
             Class<T> xdsClass,
             int... fieldNumbers)
     {
-        Collection<Integer> collection = new HashSet<Integer>(fieldNumbers.length);
+        Collection<Integer> collection = new HashSet<>(fieldNumbers.length);
         for (int number : fieldNumbers) {
             collection.add(number - 1);
         }

@@ -22,7 +22,6 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.core.camel.TestSupport;
 import org.springframework.test.context.ContextConfiguration;

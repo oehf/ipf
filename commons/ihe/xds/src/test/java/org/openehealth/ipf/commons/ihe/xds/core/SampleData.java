@@ -347,13 +347,13 @@ public abstract class SampleData {
     public static RetrieveImagingDocumentSet createRetrieveImagingDocumentSet() {
         RetrieveImagingDocumentSet request = new RetrieveImagingDocumentSet();
 
-        List<RetrieveDocument> retrieveDocuments = new ArrayList<RetrieveDocument>();
+        List<RetrieveDocument> retrieveDocuments = new ArrayList<>();
         RetrieveDocument retrieveDocument1 = new RetrieveDocument("repo1", "doc1", "urn:oid:1.2.3");
         retrieveDocuments.add(retrieveDocument1);
         RetrieveDocument retrieveDocument2 = new RetrieveDocument("repo2", "doc2", "urn:oid:1.2.4");
         retrieveDocuments.add(retrieveDocument2);
 
-        List<RetrieveSeries> retrieveSerieses = new ArrayList<RetrieveSeries>();
+        List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
         RetrieveSeries retrieveSeries1 = new RetrieveSeries("urn:oid:1.2.1", retrieveDocuments);
         retrieveSerieses.add(retrieveSeries1);
         RetrieveSeries retrieveSeries2 = new RetrieveSeries("urn:oid:1.2.2", retrieveDocuments);
@@ -415,7 +415,7 @@ public abstract class SampleData {
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
 
-        QueryList<String> referenceIds = new QueryList<String>();
+        QueryList<String> referenceIds = new QueryList<>();
         referenceIds.getOuterList().add(Arrays.asList("ref-id-11", "ref-id-12", "ref-id-13"));
         referenceIds.getOuterList().add(Arrays.asList("ref-id-21", "ref-id-22"));
         query.setReferenceIds(referenceIds);
@@ -437,13 +437,13 @@ public abstract class SampleData {
         query.getServiceStopTime().setFrom("1984");
         query.getServiceStopTime().setTo("1985");
         query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
-        QueryList<Code> eventCodes = new QueryList<Code>();
+        QueryList<Code> eventCodes = new QueryList<>();
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code9", null, "scheme9")));
         query.setEventCodes(eventCodes);
-        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -478,7 +478,7 @@ public abstract class SampleData {
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         query.getLastUpdateTime().setFrom("1980");
         query.getLastUpdateTime().setTo("1981");
-        QueryList<Code> codes = new QueryList<Code>();
+        QueryList<Code> codes = new QueryList<>();
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
@@ -500,7 +500,7 @@ public abstract class SampleData {
         query.setPatientIds(Arrays.asList(new Identifiable("id1", new AssigningAuthority("1.2")), new Identifiable("id2", new AssigningAuthority("1.2"))));
         query.getLastUpdateTime().setFrom("1980");
         query.getLastUpdateTime().setTo("1981");
-        QueryList<Code> codes = new QueryList<Code>();
+        QueryList<Code> codes = new QueryList<>();
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
@@ -537,7 +537,7 @@ public abstract class SampleData {
         
         query.setHomeCommunityId("12.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
-        QueryList<Code> codes = new QueryList<Code>();
+        QueryList<Code> codes = new QueryList<>();
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
@@ -586,7 +586,7 @@ public abstract class SampleData {
         query.setHomeCommunityId("12.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
-        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -607,7 +607,7 @@ public abstract class SampleData {
         query.setHomeCommunityId("12.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
-        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -653,7 +653,7 @@ public abstract class SampleData {
         query.setHomeCommunityId("12.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
-        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
@@ -693,13 +693,13 @@ public abstract class SampleData {
         query.getServiceStopTime().setFrom("1984");
         query.getServiceStopTime().setTo("1985");
         query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
-        QueryList<Code> eventCodes = new QueryList<Code>();
+        QueryList<Code> eventCodes = new QueryList<>();
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code9", null, "scheme9")));
         query.setEventCodes(eventCodes);
-        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(

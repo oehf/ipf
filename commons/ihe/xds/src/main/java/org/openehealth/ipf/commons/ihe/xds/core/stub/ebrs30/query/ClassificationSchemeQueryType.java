@@ -74,7 +74,7 @@ public class ClassificationSchemeQueryType
      */
     public List<ClassificationNodeQueryType> getChildrenQuery() {
         if (childrenQuery == null) {
-            childrenQuery = new ArrayList<ClassificationNodeQueryType>();
+            childrenQuery = new ArrayList<>();
         }
         return this.childrenQuery;
     }

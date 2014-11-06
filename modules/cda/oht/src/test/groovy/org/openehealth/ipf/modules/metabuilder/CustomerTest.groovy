@@ -17,19 +17,21 @@
 package org.openehealth.ipf.modules.metabuilder
 
 import groovytools.builder.*
+import org.junit.Test
 
 /**
  * Tests the Meta Builder Framework
  * 
  * @author Stefan Ivanov
  */
-class CustomerTest extends GroovyTestCase {
+class CustomerTest {
 	
 	MetaBuilder mb = new MetaBuilder(getClass().getClassLoader())
 	
 	/**
 	 * Tests default collections values and 
 	 */
+    @Test
 	public void testCollectionsDef() {
 		
 		/* define */

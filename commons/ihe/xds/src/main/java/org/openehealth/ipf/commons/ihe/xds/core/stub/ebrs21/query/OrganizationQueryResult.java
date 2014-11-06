@@ -83,7 +83,7 @@ public class OrganizationQueryResult {
      */
     public List<Object> getObjectRefOrRegistryObjectOrOrganization() {
         if (objectRefOrRegistryObjectOrOrganization == null) {
-            objectRefOrRegistryObjectOrOrganization = new ArrayList<Object>();
+            objectRefOrRegistryObjectOrOrganization = new ArrayList<>();
         }
         return this.objectRefOrRegistryObjectOrOrganization;
     }

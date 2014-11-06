@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import ca.uhn.hl7v2.Location;
-import ca.uhn.hl7v2.model.v26.datatype.CWE;
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
 import ca.uhn.hl7v2.model.v26.datatype.XAD;
@@ -38,7 +37,7 @@ public class XADRule extends AbstractCompositeTypeRule<XAD> {
 
     @Override
     public ValidationException[] validate(XAD xad, Location location) {
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         validate(enforce(not(empty()), xad, 1), location, violations);
         validate(enforce(not(empty()), xad, 3), location, violations);
         validate(enforce(not(empty()), xad, 4), location, violations);

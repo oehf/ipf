@@ -65,7 +65,7 @@ public class FlowManagerImplLoadTest {
     
     @Before
     public void setUp() throws Exception {
-        this.threads = new ArrayList<Thread>(NUM_THREADS);
+        this.threads = new ArrayList<>(NUM_THREADS);
     }
 
     @After

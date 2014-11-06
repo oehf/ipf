@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import javax.xml.bind.annotation.*;
-import java.io.Serializable;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;

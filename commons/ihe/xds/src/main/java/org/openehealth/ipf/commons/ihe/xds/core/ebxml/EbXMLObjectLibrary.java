@@ -25,8 +25,8 @@ import java.util.Map;
  * @author Jens Riemschneider
  */
 public class EbXMLObjectLibrary {
-    private final Map<String, Object> objLib = new HashMap<String, Object>();
-    private final Map<Object, String> reverseLib = new HashMap<Object, String>();
+    private final Map<String, Object> objLib = new HashMap<>();
+    private final Map<Object, String> reverseLib = new HashMap<>();
     
     /**
      * Puts an object into the library.

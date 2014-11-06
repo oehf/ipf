@@ -45,7 +45,7 @@ abstract public class HeaderUtils {
         new DefaultValueFactory<Map<String, List<String>>>() {
             @Override
             public Map<String, List<String>> createDefaultValue() {
-                return new HashMap<String, List<String>>();
+                return new HashMap<>();
             }
         };
 
@@ -53,7 +53,7 @@ abstract public class HeaderUtils {
         new DefaultValueFactory<List<Header>>() {
             @Override
             public List<Header> createDefaultValue() {
-                return new ArrayList<Header>();
+                return new ArrayList<>();
             }
         };
 
@@ -136,7 +136,7 @@ abstract public class HeaderUtils {
             Map<String, Object> messageContext, 
             Message message) 
     {
-        HashMap<QName, Header> userHeaders = new HashMap<QName, Header>();
+        HashMap<QName, Header> userHeaders = new HashMap<>();
         List<Header> soapHeaders = getHeaders(
                 messageContext, Header.HEADER_LIST, true, false, null);
         if (soapHeaders != null) {
@@ -201,7 +201,7 @@ abstract public class HeaderUtils {
             Map<String, Object> messageContext, 
             Message message) 
     {
-        Map<String, String> userHeaders = new HashMap<String, String>();
+        Map<String, String> userHeaders = new HashMap<>();
         Map<String, List<String>> httpHeaders = getHeaders(
                 messageContext, PROTOCOL_HEADERS, true, false, null);
         for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {

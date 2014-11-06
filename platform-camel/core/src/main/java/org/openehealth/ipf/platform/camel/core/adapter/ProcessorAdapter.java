@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.core.adapter;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
-import org.apache.camel.Message;
 import org.apache.camel.Processor;
 
 /**

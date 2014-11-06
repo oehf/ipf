@@ -94,7 +94,7 @@ public class RetrieveStudy implements Serializable
      */
     public List<RetrieveSeries> getRetrieveSerieses() {
         if (retrieveSerieses == null) {
-            retrieveSerieses = new ArrayList<RetrieveSeries>();
+            retrieveSerieses = new ArrayList<>();
         }
         return this.retrieveSerieses;
     }

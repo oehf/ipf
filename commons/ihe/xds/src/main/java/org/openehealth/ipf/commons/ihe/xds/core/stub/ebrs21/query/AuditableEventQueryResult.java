@@ -83,7 +83,7 @@ public class AuditableEventQueryResult {
      */
     public List<Object> getObjectRefOrRegistryObjectOrAuditableEvent() {
         if (objectRefOrRegistryObjectOrAuditableEvent == null) {
-            objectRefOrRegistryObjectOrAuditableEvent = new ArrayList<Object>();
+            objectRefOrRegistryObjectOrAuditableEvent = new ArrayList<>();
         }
         return this.objectRefOrRegistryObjectOrAuditableEvent;
     }

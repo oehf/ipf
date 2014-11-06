@@ -134,7 +134,7 @@ public class UserBranch {
      */
     public List<FilterType> getTelephoneNumberFilter() {
         if (telephoneNumberFilter == null) {
-            telephoneNumberFilter = new ArrayList<FilterType>();
+            telephoneNumberFilter = new ArrayList<>();
         }
         return this.telephoneNumberFilter;
     }
@@ -163,7 +163,7 @@ public class UserBranch {
      */
     public List<FilterType> getEmailAddressFilter() {
         if (emailAddressFilter == null) {
-            emailAddressFilter = new ArrayList<FilterType>();
+            emailAddressFilter = new ArrayList<>();
         }
         return this.emailAddressFilter;
     }

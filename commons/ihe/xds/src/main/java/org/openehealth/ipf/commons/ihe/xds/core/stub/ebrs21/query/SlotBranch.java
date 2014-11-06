@@ -98,7 +98,7 @@ public class SlotBranch {
      */
     public List<FilterType> getSlotValueFilter() {
         if (slotValueFilter == null) {
-            slotValueFilter = new ArrayList<FilterType>();
+            slotValueFilter = new ArrayList<>();
         }
         return this.slotValueFilter;
     }

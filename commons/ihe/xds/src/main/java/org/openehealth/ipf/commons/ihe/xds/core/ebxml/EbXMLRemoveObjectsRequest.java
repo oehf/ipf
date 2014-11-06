@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
 
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
 
 import java.util.List;
 

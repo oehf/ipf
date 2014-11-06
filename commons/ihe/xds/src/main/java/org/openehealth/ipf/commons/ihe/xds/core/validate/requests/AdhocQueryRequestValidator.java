@@ -45,7 +45,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
 
     private static void addAllowedMultipleSlots(QueryType queryType, QueryParameter... parameters) {
-        Set<String> slotNames = new HashSet<String>();
+        Set<String> slotNames = new HashSet<>();
         for (QueryParameter parameter : parameters) {
             slotNames.add(parameter.getSlotName());
         }
@@ -55,7 +55,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
     private static final Map<QueryType, Set<String>> ALLOWED_MULTIPLE_SLOTS;
     static {
-        ALLOWED_MULTIPLE_SLOTS = new HashMap<QueryType, Set<String>>();
+        ALLOWED_MULTIPLE_SLOTS = new HashMap<>();
 
         addAllowedMultipleSlots(FIND_DOCUMENTS, 
                 DOC_ENTRY_CLASS_CODE,
@@ -179,7 +179,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
     private static final Map<List<InteractionId>, List<QueryType>> ALLOWED_QUERY_TYPES;
     static {
-        ALLOWED_QUERY_TYPES = new HashMap<List<InteractionId>, List<QueryType>>(3);
+        ALLOWED_QUERY_TYPES = new HashMap<>(3);
         ALLOWED_QUERY_TYPES.put(
                 Collections.<InteractionId> singletonList(ITI_16),
                 Collections.singletonList(SQL));

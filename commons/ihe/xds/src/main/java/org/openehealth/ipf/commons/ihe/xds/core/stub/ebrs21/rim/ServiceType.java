@@ -70,7 +70,7 @@ public class ServiceType
      */
     public List<ServiceBindingType> getServiceBinding() {
         if (serviceBinding == null) {
-            serviceBinding = new ArrayList<ServiceBindingType>();
+            serviceBinding = new ArrayList<>();
         }
         return this.serviceBinding;
     }

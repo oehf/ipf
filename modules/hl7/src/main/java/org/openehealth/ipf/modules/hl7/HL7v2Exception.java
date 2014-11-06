@@ -17,10 +17,6 @@ package org.openehealth.ipf.modules.hl7;
 
 import ca.uhn.hl7v2.*;
 import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.model.Segment;
-import ca.uhn.hl7v2.util.Terser;
-import lombok.Delegate;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
 /**
  * HL7v2Exception extends {@link RuntimeException} so it need not to be caught.

@@ -15,20 +15,25 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import org.junit.Before
+import org.junit.Test
+
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 import ca.uhn.hl7v2.model.v24.message.ORU_R01
 
 /**
  * @author Christian Ohr
  */
-class GroupAdapterIteratorTest extends GroovyTestCase {
+class GroupAdapterIteratorTest extends groovy.test.GroovyAssert {
     
     MessageAdapter<ORU_R01> message
-    
+
+    @Before
     void setUp() {
         message = load('msg-02.hl7')
     }
-    
+
+    @Test
     void testIterate() {
 		def iterator = GroupAdapterIterator.iterator(message)
 		def structures = []

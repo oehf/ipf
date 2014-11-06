@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 
 import javax.xml.bind.annotation.*;
-import java.io.Serializable;
 import java.util.List;
 
 /**

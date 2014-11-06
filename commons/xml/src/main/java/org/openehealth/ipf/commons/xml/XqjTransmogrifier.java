@@ -35,8 +35,9 @@ import javax.xml.xquery.XQPreparedExpression;
 import javax.xml.xquery.XQResultSequence;
 
 import net.sf.saxon.Configuration;
-import net.sf.saxon.xqj.SaxonXQDataSource;
 
+// import com.saxonica.xqj.SaxonXQDataSource;
+import net.sf.saxon.xqj.SaxonXQDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
@@ -51,7 +52,7 @@ import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
     private final static Logger LOG = LoggerFactory.getLogger(XqjTransmogrifier.class);
 
-    private final Map<Object, XQPreparedExpression> cache = new HashMap<Object, XQPreparedExpression>();
+    private final Map<Object, XQPreparedExpression> cache = new HashMap<>();
     private final XQDataSource ds;
     private XQConnection connection;
     private Map<String, String> staticParams;
@@ -69,7 +70,7 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
     public XqjTransmogrifier(Class<T> outputFormat) {
         super();
         Configuration globalConfig = new Configuration();
-        globalConfig.setHostLanguage(Configuration.XQUERY);
+        // globalConfig.setHostLanguage(Configuration.XQUERY);
         globalConfig.setURIResolver(new ClasspathUriResolver(globalConfig.getURIResolver()));
         ds = new SaxonXQDataSource(globalConfig);
         this.outputFormat = outputFormat;
@@ -80,7 +81,7 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
      *            currently supported: String
      * @param globalParams
      *            static XQuery parameters
-     * @throws XQException
+     * @throws XQException exception
      */
     public XqjTransmogrifier(Class<T> outputFormat, Map<String, Object> globalParams) throws XQException {
         this(outputFormat);

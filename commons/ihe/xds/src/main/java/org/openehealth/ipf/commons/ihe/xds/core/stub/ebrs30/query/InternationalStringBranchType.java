@@ -70,7 +70,7 @@ public class InternationalStringBranchType
      */
     public List<FilterType> getLocalizedStringFilter() {
         if (localizedStringFilter == null) {
-            localizedStringFilter = new ArrayList<FilterType>();
+            localizedStringFilter = new ArrayList<>();
         }
         return this.localizedStringFilter;
     }

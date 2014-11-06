@@ -167,7 +167,7 @@ public class XsdValidator implements Validator<Source, String> {
         @Override
         public void error(SAXParseException exception) throws SAXException {
             if (exceptions == null) {
-                exceptions = new ArrayList<SAXParseException>();
+                exceptions = new ArrayList<>();
             }
             exceptions.add(exception);
         }
@@ -175,7 +175,7 @@ public class XsdValidator implements Validator<Source, String> {
         @Override
         public void fatalError(SAXParseException exception) throws SAXException {
             if (exceptions == null) {
-                exceptions = new ArrayList<SAXParseException>();
+                exceptions = new ArrayList<>();
             }
             exceptions.add(exception);
         }
@@ -186,7 +186,7 @@ public class XsdValidator implements Validator<Source, String> {
         }
 
         public List<ValidationException> getExceptions() {
-            List<ValidationException> validationExceptions = new ArrayList<ValidationException>();
+            List<ValidationException> validationExceptions = new ArrayList<>();
             if (exceptions != null) {
                 for (SAXParseException exception : exceptions) {
                     validationExceptions

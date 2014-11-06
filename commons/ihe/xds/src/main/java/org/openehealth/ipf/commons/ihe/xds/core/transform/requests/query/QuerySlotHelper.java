@@ -95,7 +95,7 @@ public class QuerySlotHelper {
             return;
         }
         
-        List<String> slotValues = new ArrayList<String>();
+        List<String> slotValues = new ArrayList<>();
         for (Code code : codes) {
             String hl7CE = Hl7v2Based.render(code);
             slotValues.add(encodeAsStringList(hl7CE));
@@ -126,7 +126,7 @@ public class QuerySlotHelper {
             return null;
         }
         
-        QueryList<Code> queryList = new QueryList<Code>(); 
+        QueryList<Code> queryList = new QueryList<>();
         for (EbXMLSlot slot : slots) {
             List<Code> innerList = toCode(slot.getValueList());
             queryList.getOuterList().add(innerList);
@@ -161,9 +161,9 @@ public class QuerySlotHelper {
             return null;
         }
         
-        QueryList<String> queryList = new QueryList<String>();
+        QueryList<String> queryList = new QueryList<>();
         for (EbXMLSlot slot : slots) {
-            List<String> innerList = new ArrayList<String>();
+            List<String> innerList = new ArrayList<>();
             for (String slotValue : slot.getValueList()) {            
                 innerList.addAll(decodeStringList(slotValue));
             }
@@ -196,7 +196,7 @@ public class QuerySlotHelper {
             return;
         }
         
-        List<String> slotValues = new ArrayList<String>();
+        List<String> slotValues = new ArrayList<>();
         for (String value : values) {
             slotValues.add(encodeAsStringList(value));
         }
@@ -244,7 +244,7 @@ public class QuerySlotHelper {
             return null;
         }
         
-        List<String> values = new ArrayList<String>();
+        List<String> values = new ArrayList<>();
         for (String slotValue : slotValues) {            
             values.addAll(decodeStringList(slotValue));
         }
@@ -264,7 +264,7 @@ public class QuerySlotHelper {
             return;
         }
 
-        List<String> slotValues = new ArrayList<String>();
+        List<String> slotValues = new ArrayList<>();
         for (Identifiable value : values) {
             slotValues.add(encodeAsStringList(Hl7v2Based.render(value)));
         }
@@ -283,7 +283,7 @@ public class QuerySlotHelper {
             return null;
         }
 
-        List<Identifiable> patientIds = new ArrayList<Identifiable>();
+        List<Identifiable> patientIds = new ArrayList<>();
         for (String value : values) {
             patientIds.add(Hl7v2Based.parse(value, Identifiable.class));
         }
@@ -362,7 +362,7 @@ public class QuerySlotHelper {
             return;
         }
         
-        List<String> opcodes = new ArrayList<String>(status.size());
+        List<String> opcodes = new ArrayList<>(status.size());
         for (AvailabilityStatus statusValue : status) {
             opcodes.add(AvailabilityStatus.toQueryOpcode(statusValue));
         }
@@ -381,7 +381,7 @@ public class QuerySlotHelper {
             return null;
         }
 
-        List<AvailabilityStatus> list = new ArrayList<AvailabilityStatus>();
+        List<AvailabilityStatus> list = new ArrayList<>();
         for (String opcode : opcodes) {
             AvailabilityStatus status = AvailabilityStatus.valueOfOpcode(opcode);
             if (status != null) {
@@ -403,7 +403,7 @@ public class QuerySlotHelper {
             return;
         }
         
-        List<String> opcodes = new ArrayList<String>(associationTypes.size());
+        List<String> opcodes = new ArrayList<>(associationTypes.size());
         for (AssociationType type : associationTypes) {
             opcodes.add(AssociationType.getOpcode30(type));
         }
@@ -422,7 +422,7 @@ public class QuerySlotHelper {
             return null;
         }
 
-        List<AssociationType> associationTypes = new ArrayList<AssociationType>();
+        List<AssociationType> associationTypes = new ArrayList<>();
         for (String opcode : opcodes) {
             associationTypes.add(AssociationType.valueOfOpcode30(opcode));
         }
@@ -434,7 +434,7 @@ public class QuerySlotHelper {
             return;
         }
 
-        List<String> uuids = new ArrayList<String>(documentEntryTypes.size());
+        List<String> uuids = new ArrayList<>(documentEntryTypes.size());
         for (DocumentEntryType type : documentEntryTypes) {
             uuids.add(DocumentEntryType.toUuid(type));
         }
@@ -447,7 +447,7 @@ public class QuerySlotHelper {
             return null;
         }
 
-        ArrayList<DocumentEntryType> documentEntryTypes = new ArrayList<DocumentEntryType>();
+        ArrayList<DocumentEntryType> documentEntryTypes = new ArrayList<>();
         for (String uuid : uuids) {
             documentEntryTypes.add(DocumentEntryType.valueOfUuid(uuid));
         }
@@ -459,7 +459,7 @@ public class QuerySlotHelper {
             return null;
         }
         
-        List<Code> codes = new ArrayList<Code>();
+        List<Code> codes = new ArrayList<>();
         for (String slotValue : slotValues) {
             for (String hl7CE : decodeStringList(slotValue)) {
                 Code code = Hl7v2Based.parse(hl7CE, Code.class);
@@ -485,7 +485,7 @@ public class QuerySlotHelper {
             return;
         }
 
-        List<String> opcodes = new ArrayList<String>(status.size());
+        List<String> opcodes = new ArrayList<>(status.size());
         for (DocumentAvailability availabilityValue : status) {
             opcodes.add(DocumentAvailability.toFullQualifiedOpcode(availabilityValue));
         }
@@ -504,7 +504,7 @@ public class QuerySlotHelper {
             return null;
         }
 
-        List<DocumentAvailability> list = new ArrayList<DocumentAvailability>();
+        List<DocumentAvailability> list = new ArrayList<>();
         for (String opcode : opcodes) {
             DocumentAvailability availability = DocumentAvailability.valueOfOpcode(opcode);
             if (availability != null) {
@@ -581,7 +581,7 @@ public class QuerySlotHelper {
             list = list.substring(1, list.length() - 1);
         }
         
-        List<String> values = new ArrayList<String>();
+        List<String> values = new ArrayList<>();
 
         Matcher matcher = PATTERN.matcher(list);
         while (matcher.matches() && matcher.groupCount() == 2) {

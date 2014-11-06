@@ -87,7 +87,7 @@ public class ServiceBindingType
      */
     public List<SpecificationLinkType> getSpecificationLink() {
         if (specificationLink == null) {
-            specificationLink = new ArrayList<SpecificationLinkType>();
+            specificationLink = new ArrayList<>();
         }
         return this.specificationLink;
     }

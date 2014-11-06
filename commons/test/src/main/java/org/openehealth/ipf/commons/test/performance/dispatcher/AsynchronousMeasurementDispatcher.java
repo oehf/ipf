@@ -46,7 +46,7 @@ public class AsynchronousMeasurementDispatcher extends MeasurementDispatcher
      * Creates a <code>AsynchronousMeasurementDispatcher</code> instance
      */
     public AsynchronousMeasurementDispatcher() {
-        queue = new LinkedBlockingQueue<MeasurementHistory>();
+        queue = new LinkedBlockingQueue<>();
         consumerThread = new Thread(this);
         consumerThread.setDaemon(true);
         consumerThread.setName("Measurement history dispatcher");

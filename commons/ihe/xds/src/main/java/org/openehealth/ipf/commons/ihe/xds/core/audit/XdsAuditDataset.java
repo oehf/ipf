@@ -30,7 +30,7 @@ abstract public class XdsAuditDataset extends WsAuditDataset {
     private static final long serialVersionUID = 652866992858926778L;
 
     // patient ID as HL7 CX datatype, e.g. "1234^^^&1.2.3.4&ISO"
-    @Getter private final List<String> patientIds = new ArrayList<String>();
+    @Getter private final List<String> patientIds = new ArrayList<>();
 
     /**
      * Constructor.

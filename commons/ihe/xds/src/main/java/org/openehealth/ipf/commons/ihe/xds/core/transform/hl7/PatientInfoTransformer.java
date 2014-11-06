@@ -35,7 +35,7 @@ public class PatientInfoTransformer {
     private static final Map<Integer, PIDTransformer> pidTransformers;
     
     static {
-        pidTransformers = new HashMap<Integer, PIDTransformer>();
+        pidTransformers = new HashMap<>();
         pidTransformers.put(3, new SourcePatientIdentifierPIDTransformer());
         pidTransformers.put(5, new SourcePatientNamePIDTransformer());
         pidTransformers.put(7, new DateOfBirthPIDTransformer());
@@ -83,7 +83,7 @@ public class PatientInfoTransformer {
             return Collections.emptyList();
         }
         
-        List<String> hl7Strings = new ArrayList<String>();
+        List<String> hl7Strings = new ArrayList<>();
         for (Map.Entry<Integer, PIDTransformer> entry : pidTransformers.entrySet()) {
             String prefix = PID_PREFIX + entry.getKey() + '|';
             List<String> repetitions = entry.getValue().toHL7(patientInfo);

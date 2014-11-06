@@ -95,7 +95,7 @@ public class EbXMLQueryResponse21 extends EbXMLObjectContainer21 implements EbXM
             return Collections.emptyList();
         }
         
-        List<EbXMLRegistryError> errors = new ArrayList<EbXMLRegistryError>();
+        List<EbXMLRegistryError> errors = new ArrayList<>();
         for (RegistryError regError : list.getRegistryError()) {
             errors.add(new EbXMLRegistryError21(regError));
         }
@@ -125,7 +125,7 @@ public class EbXMLQueryResponse21 extends EbXMLObjectContainer21 implements EbXM
     
     @Override
     public List<ObjectReference> getReferences() {
-        List<ObjectReference> results = new ArrayList<ObjectReference>();
+        List<ObjectReference> results = new ArrayList<>();
         for (Object identifiable : getContents()) {
             ObjectRefType objRefEbXML = cast(identifiable, ObjectRefType.class);            
             if (objRefEbXML != null) {

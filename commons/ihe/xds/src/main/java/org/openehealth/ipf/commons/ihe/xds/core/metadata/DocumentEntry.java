@@ -46,15 +46,15 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = -4779500440504776909L;
     
     @XmlElement(name = "author")
-    @Getter private final List<Author> authors = new ArrayList<Author>();
+    @Getter private final List<Author> authors = new ArrayList<>();
     @Getter @Setter private Code classCode;
     @XmlElement(name = "confidentialityCode")
-    @Getter private final List<Code> confidentialityCodes = new ArrayList<Code>();
+    @Getter private final List<Code> confidentialityCodes = new ArrayList<>();
     @XmlSchemaType(name = "dateTime")
     @XmlJavaTypeAdapter(value = DateAdapter.class)
     @Getter @Setter private String creationTime;
     @XmlElement(name = "eventCode")
-    @Getter private final List<Code> eventCodeList = new ArrayList<Code>();
+    @Getter private final List<Code> eventCodeList = new ArrayList<>();
     @Getter @Setter private Code formatCode;
     @Getter @Setter private String hash;
     @Getter @Setter private Code healthcareFacilityTypeCode;
@@ -75,7 +75,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     @Getter @Setter private String uri;
     @Getter @Setter private String repositoryUniqueId;
     @Getter @Setter private DocumentEntryType type = DocumentEntryType.STABLE;
-    @Getter private List<ReferenceId> referenceIdList = new ArrayList<ReferenceId>();
+    @Getter private List<ReferenceId> referenceIdList = new ArrayList<>();
     @Getter @Setter private DocumentAvailability documentAvailability;
 
     /**

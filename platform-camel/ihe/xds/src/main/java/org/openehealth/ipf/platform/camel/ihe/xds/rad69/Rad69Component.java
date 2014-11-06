@@ -81,7 +81,7 @@ public class Rad69Component extends AbstractWsComponent<WsTransactionConfigurati
             AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
-        return new SimpleWsProducer<RetrieveImagingDocumentSetRequestType, RetrieveDocumentSetResponseType>(
+        return new SimpleWsProducer<>(
                 endpoint, clientFactory, RetrieveImagingDocumentSetRequestType.class, RetrieveDocumentSetResponseType.class);
     }
 }

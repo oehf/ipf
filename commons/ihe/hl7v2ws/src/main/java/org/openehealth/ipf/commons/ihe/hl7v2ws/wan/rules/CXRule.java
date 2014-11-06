@@ -37,7 +37,7 @@ public class CXRule extends AbstractCompositeTypeRule<CX> {
 
     @Override
     public ValidationException[] validate(CX cx, Location location) {
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         validate(enforce(not(empty()), cx, 1), location, violations);
         validate(enforce(not(empty()), cx, 4), location, violations);
         return violations.toArray(new ValidationException[violations.size()]);

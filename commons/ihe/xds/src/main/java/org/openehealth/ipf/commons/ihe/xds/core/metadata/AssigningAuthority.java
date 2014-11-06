@@ -44,7 +44,7 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     private static final long serialVersionUID = 5350057820250191032L;
 
     public AssigningAuthority() {
-        super(new Holder<HD>(new HD(MESSAGE)));
+        super(new Holder<>(new HD(MESSAGE)));
     }
 
 
@@ -54,7 +54,7 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
 
 
     public AssigningAuthority(HD hd) {
-        super(new Holder<HD>(hd));
+        super(new Holder<>(hd));
     }
 
     /**

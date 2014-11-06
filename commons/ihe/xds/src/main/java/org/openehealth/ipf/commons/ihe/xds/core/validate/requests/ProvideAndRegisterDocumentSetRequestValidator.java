@@ -52,7 +52,7 @@ public class ProvideAndRegisterDocumentSetRequestValidator implements Validator<
     private void validateDocuments(EbXMLProvideAndRegisterDocumentSetRequest request) {
         Map<String, DataHandler> documents = request.getDocuments();
 
-        Set<String> docEntryIds = new HashSet<String>();
+        Set<String> docEntryIds = new HashSet<>();
         for (EbXMLExtrinsicObject docEntry : request.getExtrinsicObjects(DocumentEntryType.STABLE.getUuid())) {
             String docId = docEntry.getId();
             if (docId != null) {

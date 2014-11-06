@@ -70,7 +70,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
 
     private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile) {
-        List<RegistryObjectValidator> validators = new ArrayList<RegistryObjectValidator>();
+        List<RegistryObjectValidator> validators = new ArrayList<>();
         boolean isContinuaHRN = (profile.getInteractionId() == IpfInteractionId.Continua_HRN);
         boolean isIti61       = (profile.getInteractionId() == IpfInteractionId.ITI_61);
 
@@ -159,7 +159,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateFolders(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        Set<String> logicalIds = new HashSet<String>();
+        Set<String> logicalIds = new HashSet<>();
         for (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
             runValidations(folder, folderSlotValidations);
 
@@ -199,7 +199,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        Set<String> logicalIds = new HashSet<String>();
+        Set<String> logicalIds = new HashSet<>();
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             boolean onDemandExpected = (profile.getInteractionId() == IpfInteractionId.ITI_61);
             boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
@@ -259,7 +259,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateUniquenessOfUUIDs(EbXMLObjectContainer container) throws XDSMetaDataException {
-        Set<String> uuids = new HashSet<String>();
+        Set<String> uuids = new HashSet<>();
         addUUIDs(container.getAssociations(), uuids);
         addUUIDs(container.getExtrinsicObjects(), uuids);
         addUUIDs(container.getRegistryPackages(), uuids);
@@ -293,18 +293,18 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateAssociations(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        Set<String> logicalIds = new HashSet<String>();
-        Set<String> docEntryIds = new HashSet<String>();
+        Set<String> logicalIds = new HashSet<>();
+        Set<String> docEntryIds = new HashSet<>();
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             if (docEntry.getId() != null) {
                 docEntryIds.add(docEntry.getId());
             }
         }
-        Set<String> submissionSetIds = new HashSet<String>();
+        Set<String> submissionSetIds = new HashSet<>();
         for (EbXMLRegistryPackage submissionSet : container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE)) {
             submissionSetIds.add(submissionSet.getId());
         }
-        Set<String> associationIds = new HashSet<String>();
+        Set<String> associationIds = new HashSet<>();
         boolean hasSubmitAssociationType = false;
         for (EbXMLAssociation association : container.getAssociations()) {
             associationIds.add(association.getId());

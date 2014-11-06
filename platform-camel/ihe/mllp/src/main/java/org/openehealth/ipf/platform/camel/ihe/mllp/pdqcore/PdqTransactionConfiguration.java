@@ -19,7 +19,6 @@ import java.util.List;
 
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HapiContext;
-import ca.uhn.hl7v2.parser.Parser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 
 /**

@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.iheclient;
 
-import javax.xml.ws.BindingProvider;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelContextAware;
 import org.apache.camel.Exchange;

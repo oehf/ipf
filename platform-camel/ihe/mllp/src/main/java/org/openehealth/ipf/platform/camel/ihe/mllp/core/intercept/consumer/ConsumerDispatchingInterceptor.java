@@ -69,7 +69,7 @@ public class ConsumerDispatchingInterceptor extends AbstractMllpInterceptor<Mllp
 
     @Override
     public void onCamelContextStarted(CamelContext camelContext, boolean alreadyStarted) throws Exception {
-        map = new HashMap<String, Hl7v2Interceptor>(routeIds.length);
+        map = new HashMap<>(routeIds.length);
         for (String routeId : routeIds) {
             try {
                 Mina2Consumer consumer = (Mina2Consumer) camelContext.getRoute(routeId).getConsumer();

@@ -93,7 +93,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
     {
         // explicitly overwrite some standard camel-mina parameters
         if (parameters == Collections.EMPTY_MAP) {
-            parameters = new HashMap<String, Object>();
+            parameters = new HashMap<>();
         }
         parameters.put("sync", true);
         parameters.put("lazySessionCreation", true);

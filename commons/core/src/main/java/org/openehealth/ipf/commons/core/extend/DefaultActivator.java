@@ -28,7 +28,7 @@ public class DefaultActivator implements ExtensionActivator {
     private final List<ConditionalActivator> activators;
     
     public DefaultActivator() {
-        activators = new ArrayList<ConditionalActivator>();
+        activators = new ArrayList<>();
         activators.add(new ExtensionBlockActivator());
         activators.add(new ExtensionMethodActivator());
     }

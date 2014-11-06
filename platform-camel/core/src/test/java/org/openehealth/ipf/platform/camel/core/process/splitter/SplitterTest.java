@@ -236,7 +236,7 @@ public class SplitterTest {
             evaluateCalled = true;
             
             String[] parts = getContent(exchange).split(",");
-            return type.cast(new OneTimeUsageIterable<String>(Arrays.asList(parts))); 
+            return type.cast(new OneTimeUsageIterable<>(Arrays.asList(parts)));
         }
 
         private boolean evaluateCalled;
@@ -277,6 +277,6 @@ public class SplitterTest {
             return Collections.unmodifiableList(received);
         }
         
-        private List<Exchange> received = new ArrayList<Exchange>();
+        private List<Exchange> received = new ArrayList<>();
     }
 }

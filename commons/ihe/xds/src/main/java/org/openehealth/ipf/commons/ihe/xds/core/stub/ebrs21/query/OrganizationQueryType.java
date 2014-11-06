@@ -138,7 +138,7 @@ public class OrganizationQueryType
      */
     public List<FilterType> getTelephoneNumberFilter() {
         if (telephoneNumberFilter == null) {
-            telephoneNumberFilter = new ArrayList<FilterType>();
+            telephoneNumberFilter = new ArrayList<>();
         }
         return this.telephoneNumberFilter;
     }
@@ -215,7 +215,7 @@ public class OrganizationQueryType
      */
     public List<OrganizationQueryType> getOrganizationChildrenBranch() {
         if (organizationChildrenBranch == null) {
-            organizationChildrenBranch = new ArrayList<OrganizationQueryType>();
+            organizationChildrenBranch = new ArrayList<>();
         }
         return this.organizationChildrenBranch;
     }

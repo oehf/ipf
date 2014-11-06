@@ -15,12 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti45
 
-import org.apache.cxf.helpers.XMLUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+
+import javax.xml.parsers.DocumentBuilder
+import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.stream.StreamSource
+import java.nio.charset.Charset
 
 /**
  * Tests for ITI-45.
@@ -81,7 +84,10 @@ class TestIti45 extends StandardTestContainer {
         send(SERVICE2, new InputStreamReader(new ByteArrayInputStream(request.bytes)), String.class)
 
         // DOM Document
-        send(SERVICE2, XMLUtils.parse(request))
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance()
+        factory.setNamespaceAware(true)
+        DocumentBuilder builder = factory.newDocumentBuilder()
+        send(SERVICE2, builder.parse(new ByteArrayInputStream(request.getBytes("UTF-8"))))
 
         // Source
         send(SERVICE2, new StreamSource(new ByteArrayInputStream(request.bytes)), String.class)

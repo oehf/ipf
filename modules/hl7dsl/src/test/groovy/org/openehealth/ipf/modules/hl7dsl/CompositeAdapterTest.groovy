@@ -15,37 +15,45 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import org.junit.Before
+import org.junit.Test
+
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
 
 /**
  * @author Martin Krasser
  */
-class CompositeAdapterTest extends GroovyTestCase {
+class CompositeAdapterTest {
     
     def composite
     MessageAdapter<ADT_A01> msg
-    
+
+    @Before
     void setUp() {
         msg = load('msg-01.hl7')
         composite = msg.NK1(0)[4]
     }
-    
+
+    @Test
     void testGet() {
         // property access on target
         assert composite.components.size() == 8
     }
 
+    @Test
     void testGetAt() {
         assert composite[4].value == 'NW'
     }
 
+    @Test
     void testGetEmptyAt() {
     	assert msg.PID[9](0)[1].value == null
     	assert msg.NK1(10)[4].value == null
     	assert msg.PV2[2][1].value == null
     }
-    
+
+    @Test
     void testFrom() {
         def compositeCopy = composite.message.copy().NK1(0)[4]
         composite[4].value = 'XY'
@@ -54,6 +62,7 @@ class CompositeAdapterTest extends GroovyTestCase {
         assert compositeCopy[4].value == 'XY'
     }
 
+    @Test
     void testFromFailure() {
         def compositeCopy = composite.message.copy().NK1(0)[4]
         try {
@@ -63,6 +72,7 @@ class CompositeAdapterTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testSetAt() {
         // set via string
         composite[4] = 'NX'

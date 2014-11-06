@@ -57,12 +57,12 @@ public abstract class SoapUtils {
     public static final Set<String> SOAP_NS_URIS;
 
     static {
-        WS_ADDRESSING_NS_URIS = new HashSet<String>();
+        WS_ADDRESSING_NS_URIS = new HashSet<>();
         WS_ADDRESSING_NS_URIS.add(Names.WSA_NAMESPACE_NAME);
         WS_ADDRESSING_NS_URIS.add(Names200403.WSA_NAMESPACE_NAME);
         WS_ADDRESSING_NS_URIS.add(Names200408.WSA_NAMESPACE_NAME);
 
-        SOAP_NS_URIS = new HashSet<String>();
+        SOAP_NS_URIS = new HashSet<>();
         SOAP_NS_URIS.add(Soap11.SOAP_NAMESPACE);
         SOAP_NS_URIS.add(Soap12.SOAP_NAMESPACE);
     }

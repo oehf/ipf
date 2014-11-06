@@ -19,11 +19,8 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.prepareResu
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Reader;
-import java.io.Writer;
 
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 
 import org.apache.camel.Exchange;

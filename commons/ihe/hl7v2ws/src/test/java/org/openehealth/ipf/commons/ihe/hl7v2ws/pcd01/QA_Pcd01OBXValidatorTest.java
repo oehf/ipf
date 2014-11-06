@@ -20,7 +20,6 @@ import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 
 import ca.uhn.hl7v2.HL7Exception;

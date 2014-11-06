@@ -29,8 +29,8 @@ import java.util.List;
 public class XdsRetrieveAuditDataset extends XdsAuditDataset {
     private static final long serialVersionUID = -8776033207572005899L;
 
-    private final List<String[]> deliveredDocuments    = new ArrayList<String[]>();
-    private final List<String[]> notDeliveredDocuments = new ArrayList<String[]>();
+    private final List<String[]> deliveredDocuments    = new ArrayList<>();
+    private final List<String[]> notDeliveredDocuments = new ArrayList<>();
 
 
     public enum Status {DELIVERED, NOT_DELIVERED}

@@ -91,7 +91,7 @@ public class IdentifiableType {
      */
     public List<SlotType1> getSlot() {
         if (slot == null) {
-            slot = new ArrayList<SlotType1>();
+            slot = new ArrayList<>();
         }
         return this.slot;
     }

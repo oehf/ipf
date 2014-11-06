@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
-import org.apache.cxf.interceptor.DocLiteralInInterceptor;
+import org.apache.cxf.wsdl.interceptors.DocLiteralInInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;

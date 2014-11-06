@@ -84,7 +84,7 @@ public class CompoundClause {
      */
     public List<Clause> getClause() {
         if (clause == null) {
-            clause = new ArrayList<Clause>();
+            clause = new ArrayList<>();
         }
         return this.clause;
     }

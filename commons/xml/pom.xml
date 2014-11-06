@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons</artifactId>
-        <version>2.7-SNAPSHOT</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
     
     <dependencies>
@@ -35,17 +35,31 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+        <!-- NOTE: Saxon-HE does not work together with xmlunit - xmlunit uses a XSL 1.0 stylesheet to
+             remove whitespaces from a document, but Saxon-HE just returns null as a result from the
+             transformation. Maybe look at it sometime later. -->
+        <!--
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <classifier>xqj</classifier>
+        </dependency>
+        -->
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>saxon</artifactId>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
-            <artifactId>saxon-dom</artifactId>
+            <artifactId>saxon-xqj</artifactId>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
-            <artifactId>saxon-xqj</artifactId>
+            <artifactId>saxon-dom</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

@@ -40,7 +40,7 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
 
     @Override
     protected List<Hl7v2Interceptor> createInitialConsumerInterceptorChain() {
-        List<Hl7v2Interceptor> initialChain = new ArrayList<Hl7v2Interceptor>();
+        List<Hl7v2Interceptor> initialChain = new ArrayList<>();
         initialChain.add(new ConsumerStringProcessingInterceptor());
         initialChain.add(new ConsumerDispatchingInterceptor(getCamelContext(), getConfig().getRoutes()));
         return initialChain;

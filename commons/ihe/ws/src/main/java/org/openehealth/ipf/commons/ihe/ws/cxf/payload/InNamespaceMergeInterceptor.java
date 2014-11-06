@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.XMLConstants;
 
-import org.apache.cxf.interceptor.DocLiteralInInterceptor;
+import org.apache.cxf.wsdl.interceptors.DocLiteralInInterceptor;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
@@ -99,7 +99,7 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
      *      source XML document.
      */
     protected static String enrichNamespaces(Document source, String target) {
-        Map<String, String> namespaces = new HashMap<String, String>();
+        Map<String, String> namespaces = new HashMap<>();
 
         // collect namespace definitions from <soap:Envelope>
         Element envelope = source.getDocumentElement();

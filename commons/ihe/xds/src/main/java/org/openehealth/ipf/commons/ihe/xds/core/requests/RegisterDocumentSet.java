@@ -44,11 +44,11 @@ public class RegisterDocumentSet implements Serializable {
     @XmlElementRef
     private SubmissionSet submissionSet;
     @XmlElementRef
-    private final List<Folder> folders = new ArrayList<Folder>();
+    private final List<Folder> folders = new ArrayList<>();
     @XmlElementRef
-    private final List<DocumentEntry> documentEntries = new ArrayList<DocumentEntry>();
+    private final List<DocumentEntry> documentEntries = new ArrayList<>();
     @XmlElementRef
-    private final List<Association> associations = new ArrayList<Association>();
+    private final List<Association> associations = new ArrayList<>();
 
     /**
      * @return the submission set.

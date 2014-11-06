@@ -48,7 +48,7 @@ public class SourcePatientIdentifierPIDTransformer implements PIDTransformer {
     public List<String> toHL7(PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
 
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         for (Identifiable id : patientInfo.getIds()) {
             String part = Hl7v2Based.render(id);
             if (part != null) {

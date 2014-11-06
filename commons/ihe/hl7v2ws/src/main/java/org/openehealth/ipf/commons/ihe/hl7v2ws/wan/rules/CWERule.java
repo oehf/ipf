@@ -37,7 +37,7 @@ public class CWERule extends AbstractCompositeTypeRule<CWE> {
 
     @Override
     public ValidationException[] validate(CWE cwe, Location location) {
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         validate(enforce(not(empty()), cwe, 1), location, violations);
         return violations.toArray(new ValidationException[violations.size()]);
     }

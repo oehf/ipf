@@ -33,7 +33,7 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor {
-    private final List<QName> mustUnderstandHeaders = new ArrayList<QName>();
+    private final List<QName> mustUnderstandHeaders = new ArrayList<>();
 
     /**
      * Constructs the interceptor.

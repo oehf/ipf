@@ -37,7 +37,7 @@ public class EIRule extends AbstractCompositeTypeRule<EI> {
 
     @Override
     public ValidationException[] validate(EI ei, Location location) {
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         validate(enforce(not(empty()), ei, 1), location, violations);
         if (isEmpty(ei, 2)) {
             validate(enforce(not(empty()), ei, 3), location, violations);

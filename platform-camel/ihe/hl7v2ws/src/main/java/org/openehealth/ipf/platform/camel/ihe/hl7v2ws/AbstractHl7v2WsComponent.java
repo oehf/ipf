@@ -51,6 +51,6 @@ abstract public class AbstractHl7v2WsComponent
             AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
-        return new SimpleWsProducer<String, String>(endpoint, clientFactory, String.class, String.class);
+        return new SimpleWsProducer<>(endpoint, clientFactory, String.class, String.class);
     }
 }

@@ -91,7 +91,7 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
             return Collections.emptyList();
         }
         
-        List<EbXMLRegistryError> errors = new ArrayList<EbXMLRegistryError>();
+        List<EbXMLRegistryError> errors = new ArrayList<>();
         for (RegistryError regError : list.getRegistryError()) {
             errors.add(new EbXMLRegistryError30(regError));
         }
@@ -122,7 +122,7 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
 
     @Override
     public List<ObjectReference> getReferences() {
-        List<ObjectReference> results = new ArrayList<ObjectReference>();
+        List<ObjectReference> results = new ArrayList<>();
         for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
             ObjectRefType objRefEbXML = cast(identifiable, ObjectRefType.class);            
             if (objRefEbXML != null) {

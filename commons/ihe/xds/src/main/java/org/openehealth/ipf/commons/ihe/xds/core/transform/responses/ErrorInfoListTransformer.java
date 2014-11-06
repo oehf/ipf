@@ -47,7 +47,7 @@ public class ErrorInfoListTransformer {
     public List<EbXMLRegistryError> toEbXML(List<ErrorInfo> errorInfoList) {
         notNull(errorInfoList, "error info list cannot be null");
 
-        List<EbXMLRegistryError> result = new ArrayList<EbXMLRegistryError>();
+        List<EbXMLRegistryError> result = new ArrayList<>();
         for (ErrorInfo errorInfo : errorInfoList) {
             result.add(toEbXML(errorInfo));
         }
@@ -58,7 +58,7 @@ public class ErrorInfoListTransformer {
     public List<ErrorInfo> fromEbXML(List<EbXMLRegistryError> registryErrorList) {
         notNull(registryErrorList, "registry error list cannot be null");
 
-        List<ErrorInfo> result = new ArrayList<ErrorInfo>();
+        List<ErrorInfo> result = new ArrayList<>();
         for (EbXMLRegistryError registryError : registryErrorList) {
             result.add(fromEbXML(registryError));
         }

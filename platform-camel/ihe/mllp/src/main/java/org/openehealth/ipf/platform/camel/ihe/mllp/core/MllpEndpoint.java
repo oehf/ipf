@@ -83,7 +83,7 @@ public abstract class MllpEndpoint
 
 
     private synchronized List<Hl7v2Interceptor> getCustomInterceptors() {
-        List<Hl7v2Interceptor> result = new ArrayList<Hl7v2Interceptor>();
+        List<Hl7v2Interceptor> result = new ArrayList<>();
         for (String beanName : config.getCustomInterceptorBeans()) {
             result.add(getCamelContext().getRegistry().lookupByNameAndType(beanName, Hl7v2Interceptor.class));
         }
@@ -103,7 +103,7 @@ public abstract class MllpEndpoint
         List<Hl7v2Interceptor> initialChain = createInitialConsumerInterceptorChain();
 
         // add interceptors provided by the user
-        List<Hl7v2Interceptor> additionalInterceptors = new ArrayList<Hl7v2Interceptor>();
+        List<Hl7v2Interceptor> additionalInterceptors = new ArrayList<>();
         additionalInterceptors.addAll(mllpComponent.getAdditionalConsumerInterceptors());
         additionalInterceptors.addAll(getCustomInterceptors());
 
@@ -116,7 +116,7 @@ public abstract class MllpEndpoint
         List<Hl7v2Interceptor> initialChain = createInitialProducerInterceptorChain();
 
         // add interceptors provided by the user
-        List<Hl7v2Interceptor> additionalInterceptors = new ArrayList<Hl7v2Interceptor>();
+        List<Hl7v2Interceptor> additionalInterceptors = new ArrayList<>();
         additionalInterceptors.addAll(mllpComponent.getAdditionalProducerInterceptors());
         additionalInterceptors.addAll(getCustomInterceptors());
 

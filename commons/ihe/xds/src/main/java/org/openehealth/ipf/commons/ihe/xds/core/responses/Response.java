@@ -38,7 +38,7 @@ public class Response implements Serializable {
     
     private Status status;
     @XmlElement(name = "error")
-    private List<ErrorInfo> errors = new ArrayList<ErrorInfo>();
+    private List<ErrorInfo> errors = new ArrayList<>();
     
     /**
      * Constructs the response.

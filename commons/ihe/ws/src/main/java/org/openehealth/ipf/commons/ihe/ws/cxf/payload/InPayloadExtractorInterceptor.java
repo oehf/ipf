@@ -22,7 +22,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.interceptor.AttachmentInInterceptor;
-import org.apache.cxf.interceptor.DocLiteralInInterceptor;
+import org.apache.cxf.wsdl.interceptors.DocLiteralInInterceptor;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.interceptor.StaxInInterceptor;
 import org.apache.cxf.message.Message;
@@ -120,7 +120,7 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
      * Interceptor which deletes saved "whole-HTTP" payload and the byte
      * array-based input stream, which are not necessary any more after
      * the SOAP Body has been successfully processed by the
-     * {@link org.apache.cxf.interceptor.DocLiteralInInterceptor}.
+     * {@link org.apache.cxf.wsdl.interceptors.DocLiteralInInterceptor}.
      */
     private static class DropHttpPayloadInterceptor extends AbstractPhaseInterceptor<Message> {
 

@@ -50,7 +50,7 @@ public abstract class TestSupport {
     }
 
     protected List<String> sendBodies(String endpointUri, ExchangePattern pattern, String body, int repeats) {
-        ArrayList<String> result = new ArrayList<String>(repeats);
+        ArrayList<String> result = new ArrayList<>(repeats);
         for (int i = 0; i < repeats; i++) {
             result.add((String)producerTemplate.sendBody(endpointUri, pattern, body));
         }
@@ -58,7 +58,7 @@ public abstract class TestSupport {
     }
     
     protected static List<String> bodies(List<Exchange> exchanges) {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         for (Exchange exchange : exchanges) {
             result.add((String)exchange.getIn().getBody());
         }

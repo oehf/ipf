@@ -36,7 +36,7 @@ public class RetrievedDocumentSet extends Response implements Serializable {
     private static final long serialVersionUID = 4389321453383292730L;
     
     @XmlElementRef
-    private final List<RetrievedDocument> documents = new ArrayList<RetrievedDocument>();
+    private final List<RetrievedDocument> documents = new ArrayList<>();
 
     /**
      * Constructs the response.

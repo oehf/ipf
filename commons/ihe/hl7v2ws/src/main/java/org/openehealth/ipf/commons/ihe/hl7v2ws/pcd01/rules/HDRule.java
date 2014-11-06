@@ -38,7 +38,7 @@ public class HDRule extends AbstractCompositeTypeRule<HD> {
     @Override
     public ValidationException[] validate(HD hd, Location location) {
         // Either HD-1 or both HD-2 and HD-3 shall be non-empty
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         if (isEmpty(hd, 1)) {
             validate(enforce(not(empty()), hd, 2), location, violations);
             validate(enforce(not(empty()), hd, 3), location, violations);

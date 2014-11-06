@@ -115,7 +115,7 @@ public class OrganizationType
      */
     public List<TelephoneNumberType> getTelephoneNumber() {
         if (telephoneNumber == null) {
-            telephoneNumber = new ArrayList<TelephoneNumberType>();
+            telephoneNumber = new ArrayList<>();
         }
         return this.telephoneNumber;
     }

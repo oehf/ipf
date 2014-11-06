@@ -123,7 +123,7 @@ public class RetrieveDocumentSetResponseType {
      */
     public List<RetrieveDocumentSetResponseType.DocumentResponse> getDocumentResponse() {
         if (documentResponse == null) {
-            documentResponse = new ArrayList<RetrieveDocumentSetResponseType.DocumentResponse>();
+            documentResponse = new ArrayList<>();
         }
         return documentResponse;
     }

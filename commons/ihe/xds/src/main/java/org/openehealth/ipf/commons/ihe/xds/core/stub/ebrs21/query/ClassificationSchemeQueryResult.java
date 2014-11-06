@@ -87,7 +87,7 @@ public class ClassificationSchemeQueryResult {
      */
     public List<Object> getObjectRefOrRegistryObjectOrRegistryEntry() {
         if (objectRefOrRegistryObjectOrRegistryEntry == null) {
-            objectRefOrRegistryObjectOrRegistryEntry = new ArrayList<Object>();
+            objectRefOrRegistryObjectOrRegistryEntry = new ArrayList<>();
         }
         return this.objectRefOrRegistryObjectOrRegistryEntry;
     }

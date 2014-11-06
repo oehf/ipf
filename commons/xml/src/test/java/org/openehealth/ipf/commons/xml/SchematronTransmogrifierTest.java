@@ -34,7 +34,7 @@ public class SchematronTransmogrifierTest {
 
     @Before
     public void setUp() throws Exception {
-        svi = new SchematronTransmogrifier<String>(String.class);
+        svi = new SchematronTransmogrifier<>(String.class);
     }
 
     @After

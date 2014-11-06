@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.core.chain;
  * @author Dmytro Rud
  */
 public class ChainException extends RuntimeException {
+
     public ChainException(String message) {
         super(message);
     }

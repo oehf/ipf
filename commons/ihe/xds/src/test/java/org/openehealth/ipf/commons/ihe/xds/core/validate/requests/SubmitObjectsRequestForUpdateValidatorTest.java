@@ -30,7 +30,6 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Test for {@link org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator}.

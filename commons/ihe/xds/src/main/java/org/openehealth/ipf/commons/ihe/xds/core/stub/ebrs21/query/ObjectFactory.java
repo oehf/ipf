@@ -435,7 +435,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ServiceFilter")
     public JAXBElement<FilterType> createServiceFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_ServiceFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_ServiceFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -444,7 +444,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "RegistryObjectQueryResult")
     public JAXBElement<RegistryObjectListType> createRegistryObjectQueryResult(RegistryObjectListType value) {
-        return new JAXBElement<RegistryObjectListType>(_RegistryObjectQueryResult_QNAME, RegistryObjectListType.class, null, value);
+        return new JAXBElement<>(_RegistryObjectQueryResult_QNAME, RegistryObjectListType.class, null, value);
     }
 
     /**
@@ -453,7 +453,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "OrganizationQuery")
     public JAXBElement<OrganizationQueryType> createOrganizationQuery(OrganizationQueryType value) {
-        return new JAXBElement<OrganizationQueryType>(_OrganizationQuery_QNAME, OrganizationQueryType.class, null, value);
+        return new JAXBElement<>(_OrganizationQuery_QNAME, OrganizationQueryType.class, null, value);
     }
 
     /**
@@ -462,7 +462,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ClassificationNodeQuery")
     public JAXBElement<ClassificationNodeQueryType> createClassificationNodeQuery(ClassificationNodeQueryType value) {
-        return new JAXBElement<ClassificationNodeQueryType>(_ClassificationNodeQuery_QNAME, ClassificationNodeQueryType.class, null, value);
+        return new JAXBElement<>(_ClassificationNodeQuery_QNAME, ClassificationNodeQueryType.class, null, value);
     }
 
     /**
@@ -471,7 +471,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ExternalIdentifierFilter")
     public JAXBElement<FilterType> createExternalIdentifierFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_ExternalIdentifierFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_ExternalIdentifierFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -480,7 +480,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "TelephoneNumberFilter")
     public JAXBElement<FilterType> createTelephoneNumberFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_TelephoneNumberFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_TelephoneNumberFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -489,7 +489,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "IntClause")
     public JAXBElement<BigInteger> createIntClause(BigInteger value) {
-        return new JAXBElement<BigInteger>(_IntClause_QNAME, BigInteger.class, null, value);
+        return new JAXBElement<>(_IntClause_QNAME, BigInteger.class, null, value);
     }
 
     /**
@@ -498,7 +498,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "EmailAddressFilter")
     public JAXBElement<FilterType> createEmailAddressFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_EmailAddressFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_EmailAddressFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -507,7 +507,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "LocalizedStringFilter")
     public JAXBElement<FilterType> createLocalizedStringFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_LocalizedStringFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_LocalizedStringFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -516,7 +516,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ClassificationQuery")
     public JAXBElement<ClassificationQueryType> createClassificationQuery(ClassificationQueryType value) {
-        return new JAXBElement<ClassificationQueryType>(_ClassificationQuery_QNAME, ClassificationQueryType.class, null, value);
+        return new JAXBElement<>(_ClassificationQuery_QNAME, ClassificationQueryType.class, null, value);
     }
 
     /**
@@ -525,7 +525,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ClassificationSchemeQuery")
     public JAXBElement<ClassificationSchemeQueryType> createClassificationSchemeQuery(ClassificationSchemeQueryType value) {
-        return new JAXBElement<ClassificationSchemeQueryType>(_ClassificationSchemeQuery_QNAME, ClassificationSchemeQueryType.class, null, value);
+        return new JAXBElement<>(_ClassificationSchemeQuery_QNAME, ClassificationSchemeQueryType.class, null, value);
     }
 
     /**
@@ -534,7 +534,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ExtrinsicObjectFilter")
     public JAXBElement<FilterType> createExtrinsicObjectFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_ExtrinsicObjectFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_ExtrinsicObjectFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -543,7 +543,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "RegistryEntryFilter")
     public JAXBElement<FilterType> createRegistryEntryFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_RegistryEntryFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_RegistryEntryFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -552,7 +552,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ServiceQuery")
     public JAXBElement<ServiceQueryType> createServiceQuery(ServiceQueryType value) {
-        return new JAXBElement<ServiceQueryType>(_ServiceQuery_QNAME, ServiceQueryType.class, null, value);
+        return new JAXBElement<>(_ServiceQuery_QNAME, ServiceQueryType.class, null, value);
     }
 
     /**
@@ -561,7 +561,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "UserFilter")
     public JAXBElement<FilterType> createUserFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_UserFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_UserFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -570,7 +570,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "AuditableEventFilter")
     public JAXBElement<FilterType> createAuditableEventFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_AuditableEventFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_AuditableEventFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -579,7 +579,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ClassificationFilter")
     public JAXBElement<FilterType> createClassificationFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_ClassificationFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_ClassificationFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -588,7 +588,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ServiceBindingTargetBranch")
     public JAXBElement<ServiceBindingBranchType> createServiceBindingTargetBranch(ServiceBindingBranchType value) {
-        return new JAXBElement<ServiceBindingBranchType>(_ServiceBindingTargetBranch_QNAME, ServiceBindingBranchType.class, null, value);
+        return new JAXBElement<>(_ServiceBindingTargetBranch_QNAME, ServiceBindingBranchType.class, null, value);
     }
 
     /**
@@ -597,7 +597,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "SQLQueryResult")
     public JAXBElement<RegistryObjectListType> createSQLQueryResult(RegistryObjectListType value) {
-        return new JAXBElement<RegistryObjectListType>(_SQLQueryResult_QNAME, RegistryObjectListType.class, null, value);
+        return new JAXBElement<>(_SQLQueryResult_QNAME, RegistryObjectListType.class, null, value);
     }
 
     /**
@@ -606,7 +606,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ResponseOption")
     public JAXBElement<ResponseOptionType> createResponseOption(ResponseOptionType value) {
-        return new JAXBElement<ResponseOptionType>(_ResponseOption_QNAME, ResponseOptionType.class, null, value);
+        return new JAXBElement<>(_ResponseOption_QNAME, ResponseOptionType.class, null, value);
     }
 
     /**
@@ -615,7 +615,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "AuditableEventQuery")
     public JAXBElement<AuditableEventQueryType> createAuditableEventQuery(AuditableEventQueryType value) {
-        return new JAXBElement<AuditableEventQueryType>(_AuditableEventQuery_QNAME, AuditableEventQueryType.class, null, value);
+        return new JAXBElement<>(_AuditableEventQuery_QNAME, AuditableEventQueryType.class, null, value);
     }
 
     /**
@@ -624,7 +624,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ClassificationNodeFilter")
     public JAXBElement<FilterType> createClassificationNodeFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_ClassificationNodeFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_ClassificationNodeFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -633,7 +633,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ServiceBindingFilter")
     public JAXBElement<FilterType> createServiceBindingFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_ServiceBindingFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_ServiceBindingFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -642,7 +642,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "OrganizationChildrenBranch")
     public JAXBElement<OrganizationQueryType> createOrganizationChildrenBranch(OrganizationQueryType value) {
-        return new JAXBElement<OrganizationQueryType>(_OrganizationChildrenBranch_QNAME, OrganizationQueryType.class, null, value);
+        return new JAXBElement<>(_OrganizationChildrenBranch_QNAME, OrganizationQueryType.class, null, value);
     }
 
     /**
@@ -651,7 +651,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "DateTimeClause")
     public JAXBElement<XMLGregorianCalendar> createDateTimeClause(XMLGregorianCalendar value) {
-        return new JAXBElement<XMLGregorianCalendar>(_DateTimeClause_QNAME, XMLGregorianCalendar.class, null, value);
+        return new JAXBElement<>(_DateTimeClause_QNAME, XMLGregorianCalendar.class, null, value);
     }
 
     /**
@@ -660,7 +660,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ServiceBindingBranch")
     public JAXBElement<ServiceBindingBranchType> createServiceBindingBranch(ServiceBindingBranchType value) {
-        return new JAXBElement<ServiceBindingBranchType>(_ServiceBindingBranch_QNAME, ServiceBindingBranchType.class, null, value);
+        return new JAXBElement<>(_ServiceBindingBranch_QNAME, ServiceBindingBranchType.class, null, value);
     }
 
     /**
@@ -669,7 +669,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "FloatClause")
     public JAXBElement<Float> createFloatClause(Float value) {
-        return new JAXBElement<Float>(_FloatClause_QNAME, Float.class, null, value);
+        return new JAXBElement<>(_FloatClause_QNAME, Float.class, null, value);
     }
 
     /**
@@ -678,7 +678,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "PostalAddressFilter")
     public JAXBElement<FilterType> createPostalAddressFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_PostalAddressFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_PostalAddressFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -687,7 +687,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "AssociationFilter")
     public JAXBElement<FilterType> createAssociationFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_AssociationFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_AssociationFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -696,7 +696,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "SourceAssociationBranch")
     public JAXBElement<AssociationBranchType> createSourceAssociationBranch(AssociationBranchType value) {
-        return new JAXBElement<AssociationBranchType>(_SourceAssociationBranch_QNAME, AssociationBranchType.class, null, value);
+        return new JAXBElement<>(_SourceAssociationBranch_QNAME, AssociationBranchType.class, null, value);
     }
 
     /**
@@ -705,7 +705,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "SlotValueFilter")
     public JAXBElement<FilterType> createSlotValueFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_SlotValueFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_SlotValueFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -714,7 +714,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "TargetAssociationBranch")
     public JAXBElement<AssociationBranchType> createTargetAssociationBranch(AssociationBranchType value) {
-        return new JAXBElement<AssociationBranchType>(_TargetAssociationBranch_QNAME, AssociationBranchType.class, null, value);
+        return new JAXBElement<>(_TargetAssociationBranch_QNAME, AssociationBranchType.class, null, value);
     }
 
     /**
@@ -723,7 +723,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ClassificationSchemeFilter")
     public JAXBElement<FilterType> createClassificationSchemeFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_ClassificationSchemeFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_ClassificationSchemeFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -732,7 +732,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "AssociationQuery")
     public JAXBElement<AssociationQueryType> createAssociationQuery(AssociationQueryType value) {
-        return new JAXBElement<AssociationQueryType>(_AssociationQuery_QNAME, AssociationQueryType.class, null, value);
+        return new JAXBElement<>(_AssociationQuery_QNAME, AssociationQueryType.class, null, value);
     }
 
     /**
@@ -741,7 +741,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ExternalLinkFilter")
     public JAXBElement<FilterType> createExternalLinkFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_ExternalLinkFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_ExternalLinkFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -750,7 +750,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "SlotFilter")
     public JAXBElement<FilterType> createSlotFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_SlotFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_SlotFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -759,7 +759,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "RegistryObjectQuery")
     public JAXBElement<RegistryObjectQueryType> createRegistryObjectQuery(RegistryObjectQueryType value) {
-        return new JAXBElement<RegistryObjectQueryType>(_RegistryObjectQuery_QNAME, RegistryObjectQueryType.class, null, value);
+        return new JAXBElement<>(_RegistryObjectQuery_QNAME, RegistryObjectQueryType.class, null, value);
     }
 
     /**
@@ -768,7 +768,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "OrganizationFilter")
     public JAXBElement<FilterType> createOrganizationFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_OrganizationFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_OrganizationFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -777,7 +777,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "RegistryObjectFilter")
     public JAXBElement<FilterType> createRegistryObjectFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_RegistryObjectFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_RegistryObjectFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -786,7 +786,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ClassificationNodeChildrenBranch")
     public JAXBElement<ClassificationNodeQueryType> createClassificationNodeChildrenBranch(ClassificationNodeQueryType value) {
-        return new JAXBElement<ClassificationNodeQueryType>(_ClassificationNodeChildrenBranch_QNAME, ClassificationNodeQueryType.class, null, value);
+        return new JAXBElement<>(_ClassificationNodeChildrenBranch_QNAME, ClassificationNodeQueryType.class, null, value);
     }
 
     /**
@@ -795,7 +795,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "OrganizationParentBranch")
     public JAXBElement<OrganizationQueryType> createOrganizationParentBranch(OrganizationQueryType value) {
-        return new JAXBElement<OrganizationQueryType>(_OrganizationParentBranch_QNAME, OrganizationQueryType.class, null, value);
+        return new JAXBElement<>(_OrganizationParentBranch_QNAME, OrganizationQueryType.class, null, value);
     }
 
     /**
@@ -804,7 +804,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "SQLQuery")
     public JAXBElement<String> createSQLQuery(String value) {
-        return new JAXBElement<String>(_SQLQuery_QNAME, String.class, null, value);
+        return new JAXBElement<>(_SQLQuery_QNAME, String.class, null, value);
     }
 
     /**
@@ -813,7 +813,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "NameBranch")
     public JAXBElement<InternationalStringBranchType> createNameBranch(InternationalStringBranchType value) {
-        return new JAXBElement<InternationalStringBranchType>(_NameBranch_QNAME, InternationalStringBranchType.class, null, value);
+        return new JAXBElement<>(_NameBranch_QNAME, InternationalStringBranchType.class, null, value);
     }
 
     /**
@@ -822,7 +822,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "SpecificationLinkFilter")
     public JAXBElement<FilterType> createSpecificationLinkFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_SpecificationLinkFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_SpecificationLinkFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -831,7 +831,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ClassificationNodeParentBranch")
     public JAXBElement<ClassificationNodeQueryType> createClassificationNodeParentBranch(ClassificationNodeQueryType value) {
-        return new JAXBElement<ClassificationNodeQueryType>(_ClassificationNodeParentBranch_QNAME, ClassificationNodeQueryType.class, null, value);
+        return new JAXBElement<>(_ClassificationNodeParentBranch_QNAME, ClassificationNodeQueryType.class, null, value);
     }
 
     /**
@@ -840,7 +840,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "RegistryPackageFilter")
     public JAXBElement<FilterType> createRegistryPackageFilter(FilterType value) {
-        return new JAXBElement<FilterType>(_RegistryPackageFilter_QNAME, FilterType.class, null, value);
+        return new JAXBElement<>(_RegistryPackageFilter_QNAME, FilterType.class, null, value);
     }
 
     /**
@@ -849,7 +849,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "RegistryEntryQuery")
     public JAXBElement<RegistryEntryQueryType> createRegistryEntryQuery(RegistryEntryQueryType value) {
-        return new JAXBElement<RegistryEntryQueryType>(_RegistryEntryQuery_QNAME, RegistryEntryQueryType.class, null, value);
+        return new JAXBElement<>(_RegistryEntryQuery_QNAME, RegistryEntryQueryType.class, null, value);
     }
 
     /**
@@ -858,7 +858,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "ExtrinsicObjectQuery")
     public JAXBElement<ExtrinsicObjectQueryType> createExtrinsicObjectQuery(ExtrinsicObjectQueryType value) {
-        return new JAXBElement<ExtrinsicObjectQueryType>(_ExtrinsicObjectQuery_QNAME, ExtrinsicObjectQueryType.class, null, value);
+        return new JAXBElement<>(_ExtrinsicObjectQuery_QNAME, ExtrinsicObjectQueryType.class, null, value);
     }
 
     /**
@@ -867,7 +867,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "DescriptionBranch")
     public JAXBElement<InternationalStringBranchType> createDescriptionBranch(InternationalStringBranchType value) {
-        return new JAXBElement<InternationalStringBranchType>(_DescriptionBranch_QNAME, InternationalStringBranchType.class, null, value);
+        return new JAXBElement<>(_DescriptionBranch_QNAME, InternationalStringBranchType.class, null, value);
     }
 
     /**
@@ -876,7 +876,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", name = "RegistryPackageQuery")
     public JAXBElement<RegistryPackageQueryType> createRegistryPackageQuery(RegistryPackageQueryType value) {
-        return new JAXBElement<RegistryPackageQueryType>(_RegistryPackageQuery_QNAME, RegistryPackageQueryType.class, null, value);
+        return new JAXBElement<>(_RegistryPackageQuery_QNAME, RegistryPackageQueryType.class, null, value);
     }
 
 }

@@ -83,7 +83,7 @@ public class ClassificationQueryResult {
      */
     public List<Object> getObjectRefOrRegistryObjectOrClassification() {
         if (objectRefOrRegistryObjectOrClassification == null) {
-            objectRefOrRegistryObjectOrClassification = new ArrayList<Object>();
+            objectRefOrRegistryObjectOrClassification = new ArrayList<>();
         }
         return this.objectRefOrRegistryObjectOrClassification;
     }

@@ -24,7 +24,6 @@ import org.apache.camel.processor.MulticastProcessor;
 import org.apache.camel.processor.aggregate.UseLatestAggregationStrategy;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.flow.ManagedMessage;
@@ -58,7 +57,7 @@ public class MulticastCopyAspectTest {
     public void setUp() throws Exception {
         CamelContext context = new DefaultCamelContext();
         Processor processor = new TestProcessor();
-        messages = new ArrayList<ManagedMessage>();
+        messages = new ArrayList<>();
         multicast = new MulticastProcessor(context, Collections.nCopies(5, processor),
                 new UseLatestAggregationStrategy());
     }

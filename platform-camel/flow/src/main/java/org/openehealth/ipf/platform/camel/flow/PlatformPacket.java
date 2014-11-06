@@ -20,7 +20,6 @@ import org.openehealth.ipf.commons.core.io.IOUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -160,7 +159,7 @@ public class PlatformPacket implements Serializable {
      * @return serializable copy.
      */
     public static Map<String, Object> serializableCopy(Map<String, Object> map) {
-        HashMap<String, Object> result = new HashMap<String, Object>();
+        HashMap<String, Object> result = new HashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             if (Exchange.AGGREGATION_STRATEGY.equals(entry.getKey())){
                 // The aggregation strategies are hold in a Map, which is serializable 

@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
  * @author Dmytro Rud
  */
 public class ChainUtilsTest {
-    private static final List<Chainable> INITIAL = new ArrayList<Chainable>();
+    private static final List<Chainable> INITIAL = new ArrayList<>();
 
 
     @BeforeClass

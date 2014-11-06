@@ -61,7 +61,7 @@ public class ProvidedAttachmentOutInterceptor extends AbstractSoapInterceptor {
 
         Collection<Attachment> attachments = message.getAttachments();
         if (attachments == null) {
-            attachments = new ArrayList<Attachment>();
+            attachments = new ArrayList<>();
             message.setAttachments(attachments);
         }
         

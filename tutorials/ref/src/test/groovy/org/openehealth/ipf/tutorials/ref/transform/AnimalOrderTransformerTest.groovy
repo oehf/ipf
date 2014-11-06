@@ -15,13 +15,15 @@
  */
 package org.openehealth.ipf.tutorials.ref.transform
 
+import org.junit.Test
 import org.springframework.core.io.ClassPathResource
 
 /**
  * @author Martin Krasser
  */
-class AnimalOrderTransformerTest extends GroovyTestCase {
-    
+class AnimalOrderTransformerTest extends groovy.test.GroovyAssert {
+
+    @Test
     void testSomething() {
         
         def input = new ClassPathResource('order/order-animals.xml').inputStream.text

@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.map
 
+import org.junit.Before
+import org.junit.Test
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ClassPathResource
 
@@ -22,14 +24,16 @@ import org.springframework.core.io.ClassPathResource
  * @author Christian Ohr
  * @author Martin Krasser
  */
-public class BidiMappingServiceTest extends GroovyTestCase {
+public class BidiMappingServiceTest {
 	
     BidiMappingService mappingService
-    
+
+    @Before
     void setUp() {
         mappingService = new BidiMappingService()
     }
-    
+
+    @Test
 	void testMappingService() {
 		mappingService.addMappingScript(new ClassPathResource("example2.map"))
 		assert mappingService.mappingKeys().contains("encounterType")
@@ -51,6 +55,7 @@ public class BidiMappingServiceTest extends GroovyTestCase {
 	/**
 	 * Tests that the second mapping file overrides the first one 
 	 */
+    @Test
 	void testMappingService2() {
 		def resources = [new ClassPathResource("example2.map"),
 		                 new ClassPathResource("example3.map")] as Resource[]
@@ -70,6 +75,7 @@ public class BidiMappingServiceTest extends GroovyTestCase {
     /**
      * Tests whether the "ignoreResourceNotFound" option works.
      */
+    @Test
     void testIgnoreResourceNotFound() {
         def resources = [new ClassPathResource("example2.map.NONEXISTENT"),
                          new ClassPathResource("example3.map")] as Resource[]

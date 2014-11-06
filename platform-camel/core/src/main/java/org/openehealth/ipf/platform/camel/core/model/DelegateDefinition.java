@@ -43,7 +43,7 @@ public abstract class DelegateDefinition extends OutputDefinition<RouteDefinitio
         Processor delegate = doCreateDelegate(routeContext);
         Processor next = createChildProcessor(routeContext, false);
         
-        List<Processor> processors = new ArrayList<Processor>();
+        List<Processor> processors = new ArrayList<>();
         processors.add(delegate);
         if (next != null) {
             processors.add(next);

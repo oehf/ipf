@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import org.junit.Before
+import org.junit.Test
+
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 import ca.uhn.hl7v2.model.v24.group.ORU_R01_PATIENT
 import ca.uhn.hl7v2.model.v24.message.ORU_R01
@@ -24,14 +27,16 @@ import ca.uhn.hl7v2.model.v24.message.ORU_R01
  * @author Christian Ohr
  * @author Mitko Kolev
  */
-class GroupAdapterTest extends GroovyTestCase {
+class GroupAdapterTest extends groovy.test.GroovyAssert {
     
     MessageAdapter<ORU_R01> message
-    
+
+    @Before
     void setUp() {
         message = load('msg-02.hl7')
     }
-    
+
+    @Test
     void testInvokeMethod() {
         // invoke method on adapter
         assert message.count('MSH') == 1
@@ -39,12 +44,14 @@ class GroupAdapterTest extends GroovyTestCase {
         // invoke method on target
         assert message.isRequired('MSH')
     }
-    
+
+    @Test
     void testGet() {
         // property access on target
         assert message.version == '2.4'
     }
-    
+
+    @Test
     void testGetAt() {
         assert message.MSH instanceof SegmentAdapter
         assert message.PATIENT_RESULT instanceof Closure
@@ -59,7 +66,8 @@ class GroupAdapterTest extends GroovyTestCase {
         assert message['PATIENT_RESULT'](0) instanceof GroupAdapter
         assert message['PATIENT_RESULT'](0)['PATIENT']['PID'] instanceof SegmentAdapter
     }
-    
+
+    @Test
     void testPath(){
          assert message.path == ''
          assert message.PATIENT_RESULT(0).path == 'PATIENT_RESULT(0)'
@@ -85,22 +93,26 @@ class GroupAdapterTest extends GroovyTestCase {
          assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(2).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(2).OBX'
     }
 
+    @Test
     void testCount() {
         assert message.PATIENT_RESULT(0).count('ORDER_OBSERVATION') == 2
         
         // alternative notation
         assert message['PATIENT_RESULT'](0).count('ORDER_OBSERVATION') == 2
     }
-    
+
+    @Test
     void testGetTarget() {
         assert message.target instanceof ca.uhn.hl7v2.model.Message
     }
-	
+
+    @Test
 	void testGrep() {
 		// We have three OBX segments somewhere in the message
 		assertEquals(3, message.grep { it.name == 'OBX' }.size())
 	}
-	
+
+    @Test
 	void testFind() {
 		def obx = message.find { it.name == 'OBX' }
 		assert obx[3][1].value == '25026500'
@@ -112,28 +124,32 @@ class GroupAdapterTest extends GroovyTestCase {
 		def visit = message.findVISIT()
 		assert visit == null
 	}
-	
+
+    @Test
 	void testFindAll() {
 		def obxs = message.findAll { it.name == 'OBX' }
 		assertEquals(3, obxs?.size())
 		def obxs2 = message.findAllOBX()
 		assertEquals(obxs*.name, obxs2*.name)
 	}
-	
+
+    @Test
 	void testFindIndexOf() {
 		def index = message.findIndexOf { it.name == 'OBX' }
 		assertEquals('PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0).OBX', index)		
 		def index2 = message.findIndexOfOBX()
 		assertEquals(index, index2)
 	}
-	
+
+    @Test
 	void testFindLastIndexOf() {
 		def index = message.findLastIndexOf { it.name == 'OBX' }
 		assertEquals('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX', index)
 		def index2 = message.findLastIndexOfOBX()
 		assertEquals(index, index2)
 	}
-	
+
+    @Test
 	void testFindIndexValues() {
 		def indexes = message.findIndexValues { it.name == 'OBX' }
 		assertEquals(3, indexes?.size())
@@ -141,19 +157,22 @@ class GroupAdapterTest extends GroovyTestCase {
 		assert indexes.contains('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(0).OBX')
 		assert indexes.contains('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX')
 	}
-	
+
+    @Test
 	void testSplit() {
 		def (segments, groups) = message.split { it instanceof SegmentAdapter }
 		assertEquals(27, segments.size())
 		assertEquals(7, groups.size())
 	}
-	
+
+    @Test
 	void testEach() {
 		int numberOfStructures = 0
 		message.each { numberOfStructures++ }
 		assertEquals(34,  numberOfStructures)
 	}
-	
+
+    @Test
 	void testEachWithIndex() {
 		def found = []
 		message.eachWithIndex { structure, index ->
@@ -163,31 +182,37 @@ class GroupAdapterTest extends GroovyTestCase {
 		assert found.contains('PATIENT_RESULT(0).PATIENT.PID')
 		assert found.contains('MSH')
 	}
-	
+
+    @Test
 	void testEvery() {
 		assertFalse message.every { it instanceof SegmentAdapter }
 	}
-	
+
+    @Test
 	void testAny() {
 		assert message.any { it instanceof GroupAdapter }		
 	}
-	
+
+    @Test
 	void testSpread() {
 		// Length of all structure names concatenated
 		assertEquals(169,  message*.name.join('').length())
 	}
-    
+
+    @Test
     void testNrp() {
         def nteCount = observation(message).count('NTE')
         assert observation(message).nrp('NTE') instanceof SegmentAdapter
         assert observation(message).count('NTE') == nteCount + 1
     }
-	
+
+    @Test
 	void testIsEmpty() {
 		assert message.PATIENT_RESULT.isEmpty() == false
 		assert message.PATIENT_RESULT.PATIENT.VISIT.isEmpty() == true
 	}
-	
+
+    @Test
 	void testFor() {
 		int length = 0
 		for (def s in message) {

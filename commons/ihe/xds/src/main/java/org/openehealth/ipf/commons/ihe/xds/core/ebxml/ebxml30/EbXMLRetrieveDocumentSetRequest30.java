@@ -48,7 +48,7 @@ public class EbXMLRetrieveDocumentSetRequest30 implements EbXMLRetrieveDocumentS
 
     @Override
     public List<RetrieveDocument> getDocuments() {
-        List<RetrieveDocument> docs = new ArrayList<RetrieveDocument>();
+        List<RetrieveDocument> docs = new ArrayList<>();
         for (DocumentRequest documentRequest : request.getDocumentRequest()) {
             RetrieveDocument doc = new RetrieveDocument();
             doc.setDocumentUniqueId(documentRequest.getDocumentUniqueId());

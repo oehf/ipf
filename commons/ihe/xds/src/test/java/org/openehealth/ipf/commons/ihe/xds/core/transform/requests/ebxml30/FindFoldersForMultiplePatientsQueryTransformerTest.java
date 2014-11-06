@@ -52,7 +52,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         query.setPatientIds(Arrays.asList(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")), new Identifiable("id2", new AssigningAuthority("uni2", "uniType2"))));
         query.getLastUpdateTime().setFrom("1");
         query.getLastUpdateTime().setTo("2");
-        QueryList<Code> codes = new QueryList<Code>();
+        QueryList<Code> codes = new QueryList<>();
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(

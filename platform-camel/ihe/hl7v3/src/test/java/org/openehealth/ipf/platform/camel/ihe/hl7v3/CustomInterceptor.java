@@ -29,7 +29,7 @@ import org.apache.cxf.phase.Phase;
  * @author Dmytro Rud
  */
 public class CustomInterceptor extends AbstractPhaseInterceptor<Message> {
-    private static Map<String, AtomicInteger> map = new HashMap<String, AtomicInteger>();
+    private static Map<String, AtomicInteger> map = new HashMap<>();
     
     public CustomInterceptor(String id) {
         super(id, Phase.PRE_PROTOCOL);

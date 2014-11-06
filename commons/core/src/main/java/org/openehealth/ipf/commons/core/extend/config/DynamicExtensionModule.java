@@ -47,7 +47,7 @@ class DynamicExtensionModule extends SimpleExtensionModule {
     }
 
     private static List<Class> classList(Object o) {
-        List<Class> l = new ArrayList<Class>(1);
+        List<Class> l = new ArrayList<>(1);
         l.add(o.getClass());
         return Collections.unmodifiableList(l);
     }

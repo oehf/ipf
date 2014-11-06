@@ -94,7 +94,7 @@ public class ClassificationNodeType
      */
     public List<ClassificationNodeType> getClassificationNode() {
         if (classificationNode == null) {
-            classificationNode = new ArrayList<ClassificationNodeType>();
+            classificationNode = new ArrayList<>();
         }
         return this.classificationNode;
     }

@@ -73,7 +73,7 @@ public class EbXMLRemoveObjectsRequest30 implements EbXMLRemoveObjectsRequest {
         if (list == null) {
             return Collections.emptyList();
         }
-        List<ObjectReference> objectReferenceList = new ArrayList<ObjectReference>();
+        List<ObjectReference> objectReferenceList = new ArrayList<>();
         for (ObjectRefType objRefType: list.getObjectRef()){
             ObjectReference ref = new ObjectReference(objRefType.getId(), objRefType.getHome());
             objectReferenceList.add(ref);

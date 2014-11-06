@@ -90,7 +90,7 @@ public class EbXMLProvideAndRegisterDocumentSetRequest21 extends EbXMLObjectCont
     
     @Override
     public Map<String, DataHandler> getDocuments() {
-        Map<String, DataHandler> map = new HashMap<String, DataHandler>();
+        Map<String, DataHandler> map = new HashMap<>();
         for (Document document : request.getDocument()) {
             map.put(document.getId(), document.getValue());
         }

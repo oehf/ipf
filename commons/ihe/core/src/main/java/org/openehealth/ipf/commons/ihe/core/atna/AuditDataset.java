@@ -19,8 +19,6 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A generic data structure used to store information pieces 
@@ -30,8 +28,6 @@ import org.slf4j.LoggerFactory;
  */
 public class AuditDataset implements Serializable {
     private static final long serialVersionUID = -2919172035448943710L;
-
-    private static final transient Logger LOG = LoggerFactory.getLogger(AuditDataset.class);
 
     // whether we audit on server (true) or on client (false)
     private final boolean serverSide;

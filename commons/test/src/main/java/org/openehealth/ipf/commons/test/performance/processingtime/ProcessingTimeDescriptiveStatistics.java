@@ -44,13 +44,13 @@ public class ProcessingTimeDescriptiveStatistics extends
     private final static TimeUnit PROCESSING_TIME_UNIT = TimeUnit.MILLISECONDS;
 
     public ProcessingTimeDescriptiveStatistics() {
-        statisticsByMeasurementName = new TreeMap<String, DescriptiveStatistics>();
+        statisticsByMeasurementName = new TreeMap<>();
     }
 
     @Override
     public List<String> getMeasurementNames() {
         Set<String> keys = statisticsByMeasurementName.keySet();
-        return new ArrayList<String>(keys);
+        return new ArrayList<>(keys);
     }
 
     /**

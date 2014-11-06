@@ -83,7 +83,7 @@ public class AssociationQueryResult {
      */
     public List<Object> getObjectRefOrRegistryObjectOrAssociation() {
         if (objectRefOrRegistryObjectOrAssociation == null) {
-            objectRefOrRegistryObjectOrAssociation = new ArrayList<Object>();
+            objectRefOrRegistryObjectOrAssociation = new ArrayList<>();
         }
         return this.objectRefOrRegistryObjectOrAssociation;
     }

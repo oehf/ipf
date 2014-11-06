@@ -108,7 +108,7 @@ public class DemoExtensionTest extends AbstractExtensionTest {
     }
 
     private static Map<String, Object> headers() {
-        HashMap<String, Object> result = new HashMap<String, Object>();
+        HashMap<String, Object> result = new HashMap<>();
         result.put("foo", "te");
         result.put("bar", "st");
         return result;

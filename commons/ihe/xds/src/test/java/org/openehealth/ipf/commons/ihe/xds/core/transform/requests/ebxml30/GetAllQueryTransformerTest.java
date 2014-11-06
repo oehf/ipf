@@ -47,7 +47,7 @@ public class GetAllQueryTransformerTest {
         query = new GetAllQuery();
         
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")));
-        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(

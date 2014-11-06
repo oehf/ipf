@@ -49,7 +49,7 @@ public class CCDASchematronValidationTest {
 
     @Before
     public void setUp() throws Exception {
-        params = new HashMap<String, Object>();
+        params = new HashMap<>();
         params.put("phase", "errors");
         schematron = new SchematronValidator();
     }

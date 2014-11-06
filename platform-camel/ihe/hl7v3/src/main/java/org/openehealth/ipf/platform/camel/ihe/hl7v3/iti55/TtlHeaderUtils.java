@@ -80,7 +80,7 @@ public class TtlHeaderUtils {
         List<Header> soapHeaders = CastUtils.cast(message.getHeader(
                 AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, List.class));
         if (soapHeaders == null) {
-            soapHeaders = new ArrayList<Header>();
+            soapHeaders = new ArrayList<>();
             message.setHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, soapHeaders);
         }
         

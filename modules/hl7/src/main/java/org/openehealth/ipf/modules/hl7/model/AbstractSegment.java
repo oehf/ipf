@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.modules.hl7.model;
 
-import java.util.List;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.AbstractMessage;
 import ca.uhn.hl7v2.model.Group;

@@ -37,7 +37,7 @@ public class NARule extends AbstractCompositeTypeRule<NA> {
 
     @Override
     public ValidationException[] validate(NA na, Location location) {
-        Collection<ValidationException> violations = new ArrayList<ValidationException>();
+        Collection<ValidationException> violations = new ArrayList<>();
         validate(enforce(not(empty()), na, 1), location, violations);
         return violations.toArray(new ValidationException[violations.size()]);
     }
