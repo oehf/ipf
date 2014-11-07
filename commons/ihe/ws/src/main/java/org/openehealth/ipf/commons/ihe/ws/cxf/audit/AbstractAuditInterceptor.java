@@ -169,8 +169,8 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
             WsAuditDataset auditDataset) 
     {
         AddressingPropertiesImpl wsaProperties = (AddressingPropertiesImpl) message.get(isInbound ?
-                JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND :
-                JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND);
+                JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_INBOUND :
+                JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_OUTBOUND);
         
         if (wsaProperties != null) {
             AttributedURIType address = null;
