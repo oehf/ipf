@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.preparser.PreParser;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.RuntimeCamelException;
@@ -90,32 +91,14 @@ public class ConsumerDispatchingInterceptor extends AbstractMllpInterceptor<Mllp
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String messageType = null;
-        String triggerEvent = null;
-        String messageStructure = null;
-        String version = null;
 
         // determine attributes of the message
-        // FIXME these are available as header in the message
         String message = exchange.getIn().getBody(String.class);
-        String[] segments = split(message, '\r');
-        if (segments.length > 0) {
-            String msh = segments[0];
-            if (msh.length() > 10) {
-                String[] mshFields = splitPreserveAllTokens(msh, msh.charAt(3));
-                if (mshFields.length > 11) {
-                    String[] msh9Components = split(mshFields[8], msh.charAt(4));
-                    if (msh9Components.length > 1) {
-                        messageType = msh9Components[0];
-                        triggerEvent = msh9Components[1];
-                    }
-                    if (msh9Components.length > 2) {
-                        messageStructure = msh9Components[2];
-                    }
-                    version = mshFields[11];
-                }
-            }
-        }
+        String[] fields = PreParser.getFields(message, "MSH-9-1", "MSH-9-2", "MSH-9-3", "MSH-12");
+        String messageType = fields[0];
+        String triggerEvent = fields[1];
+        String messageStructure = fields[2];
+        String version = fields[3];
 
         // check who can accept the message
         boolean found = false;

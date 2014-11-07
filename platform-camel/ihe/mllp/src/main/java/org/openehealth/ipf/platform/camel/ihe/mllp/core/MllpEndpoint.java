@@ -196,7 +196,7 @@ public abstract class MllpEndpoint
         }
     }
 
-    // ----- getters -----
+// ----- getters -----
 
     /**
      * Returns transaction configuration.
@@ -315,6 +315,8 @@ public abstract class MllpEndpoint
     public List<Hl7v2InterceptorFactory> getCustomInterceptorFactories() {
         return config.getCustomInterceptorFactories();
     }
+
+
 
     /**
      * @return the customInterceptors as array of string names

@@ -1,5 +1,5 @@
 moduleName=Hl7Extension
 moduleVersion=2.5
 moduleFactory=org.openehealth.ipf.commons.core.config.ExtensionModuleFactory
-extensionClasses=org.openehealth.ipf.modules.hl7.extend.Hl7ExtensionModule
+extensionClasses=org.openehealth.ipf.modules.hl7.extend.Hl7ExtensionModule,org.openehealth.ipf.modules.hl7.extend.Hl7Dsl2ExtensionModule
 staticExtensionClasses=org.openehealth.ipf.modules.hl7.extend.Hl7StaticExtensionModule

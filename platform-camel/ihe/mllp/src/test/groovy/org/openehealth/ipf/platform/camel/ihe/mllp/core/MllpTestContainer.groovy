@@ -118,6 +118,20 @@ class MllpTestContainer {
     static MessageAdapter send(String endpoint, Object body) {
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
+
+        // Because during test shutdown there is a race condition between shutting down
+        // the consumer and closing the sessions, we close the session right after use
+        // to avoid ugly exceptions in the log.
+        /*
+        if (!endpoint.contains('disconnect')) {
+            if (endpoint.contains('?')) {
+                endpoint += '&disconnect=true'
+            } else {
+                endpoint += '?disconnect=true'
+            }
+        }
+        */
+
         Exchange result = producerTemplate.send(endpoint, exchange)
         if (result.exception) {
             throw result.exception

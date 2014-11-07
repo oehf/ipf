@@ -139,14 +139,12 @@ class TypeAdapterTest extends groovy.test.GroovyAssert {
         assertFieldsEmpty(obr, 17,18,19)
     }
 
-    @Test
     void assertFieldEquals(String expected, AbstractAdapter adapter, int field){
         String simpleName = adapter.target.getClass().getSimpleName();
         assertEquals(expected, adapter[field].encode())
         assertFalse("${simpleName}[${field}] must be not empty, but isEmpty() returns true", adapter[field].isEmpty())
     }
 
-    @Test
     void assertFieldsEmpty(SegmentAdapter adapter, int ... fields){
         String simpleName = adapter.target.getClass().getSimpleName();
         for (field in fields){

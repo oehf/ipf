@@ -19,27 +19,26 @@ import ca.uhn.hl7v2.AcknowledgmentCode
 import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.HapiContext
+import ca.uhn.hl7v2.model.Composite
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.model.Primitive
+import ca.uhn.hl7v2.model.Segment
+import ca.uhn.hl7v2.model.v22.message.ADT_A01
 import ca.uhn.hl7v2.model.v24.message.ACK
-
-import static org.easymock.EasyMock.*
-import static org.junit.Assert.*
-
+import ca.uhn.hl7v2.model.v25.segment.NK1
+import ca.uhn.hl7v2.parser.*
+import ca.uhn.hl7v2.util.Terser
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
-import org.openehealth.ipf.modules.hl7.AckTypeCode
-import org.openehealth.ipf.modules.hl7.HL7v2Exception
 import org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory
 import org.springframework.core.io.ClassPathResource
 
-import ca.uhn.hl7v2.model.*
-import ca.uhn.hl7v2.model.v22.message.ADT_A01
-import ca.uhn.hl7v2.model.v25.segment.NK1
-import ca.uhn.hl7v2.parser.*
-import ca.uhn.hl7v2.util.Terser
+import static org.easymock.EasyMock.*
+import static org.junit.Assert.*
 
 /**
  * @author Christian Ohr
