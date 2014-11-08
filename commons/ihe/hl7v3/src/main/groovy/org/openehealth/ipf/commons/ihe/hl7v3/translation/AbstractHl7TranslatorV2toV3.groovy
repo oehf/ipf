@@ -238,21 +238,18 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
         String name = (sender ? 'sender' : 'receiver')
 
         String idRoot = this."${name}IdRoot"
-        String idExtension = this."${name}IdExtension"
         String idAssigningAuthority = this."${name}IdAssigningAuthority"
 
         String agentIdRoot = this."${name}AgentIdRoot"
-        String agentIdExtension = this."${name}AgentIdExtension"
         String agentIdAssigningAuthority = this."${name}AgentIdAssigningAuthority"
 
         builder."${name}"(typeCode: (sender ? 'SND' : 'RCV')) {
             device(determinerCode: 'INSTANCE', classCode: 'DEV') {
-                buildInstanceIdentifier(builder, 'id', true, idRoot, idExtension, idAssigningAuthority)
-                if (agentIdRoot || agentIdExtension || agentIdAssigningAuthority) {
+                buildInstanceIdentifier(builder, 'id', true, idRoot, null, idAssigningAuthority)
+                if (agentIdRoot || agentIdAssigningAuthority) {
                     asAgent(classCode: 'AGNT') {
                         representedOrganization(determinerCode: 'INSTANCE', classCode: 'ORG') {
-                            buildInstanceIdentifier(builder, 'id', false,
-                                agentIdRoot, agentIdExtension, agentIdAssigningAuthority)
+                            buildInstanceIdentifier(builder, 'id', false, agentIdRoot, null, agentIdAssigningAuthority)
                         }
                     }
                 }

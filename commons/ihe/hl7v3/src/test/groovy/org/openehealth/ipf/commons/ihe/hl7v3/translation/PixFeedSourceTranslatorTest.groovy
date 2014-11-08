@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import org.junit.*
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter

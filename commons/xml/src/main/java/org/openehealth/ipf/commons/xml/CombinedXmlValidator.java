@@ -53,7 +53,7 @@ public class CombinedXmlValidator implements Validator<String, CombinedXmlValida
         if (schematronPath != null) {
             SchematronProfile schematronProfile = new SchematronProfile(
                     schematronPath,
-                    profile.getCustomSchematronParameters());
+                    profile.getCustomSchematronParameters(rootElementName));
             SCHEMATRON_VALIDATOR.validate(source(message), schematronProfile);
         }
     }

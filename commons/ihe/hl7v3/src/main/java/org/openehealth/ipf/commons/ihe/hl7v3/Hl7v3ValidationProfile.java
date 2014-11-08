@@ -15,69 +15,74 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author Dmytro Rud
  */
 public class Hl7v3ValidationProfile implements CombinedXmlValidationProfile {
-    private static final String HL7V3_SCHEMAS_PATH = "HL7V3/NE2008/multicacheschemas/";
 
-    private final String[][] rows;
+    static class Row {
+        private static final String HL7V3_SCHEMAS_PATH = "/schema/HL7V3/NE2008/multicacheschemas/";
+
+        public static final String DEFAULT_XSD = "";
+        public static final String GAZELLE_PIXPDQV3_SCHEMATRON = "/schematron/gazelle-pixpdqv3.sch";
+
+        @Getter final String rootElementName;
+        @Getter final String xsdPath;
+        @Getter final String schematronPath;
+        @Getter final String schematronPhase;
+
+        Row(String rootElementName, String xsdPath, String schematronPath) {
+            this.rootElementName = rootElementName;
+            if (DEFAULT_XSD.equals(xsdPath)) {
+                int pos1 = rootElementName.indexOf('_');
+                int pos2 = rootElementName.indexOf('_', pos1 + 1);
+                String documentName = (pos2 > 0) ? rootElementName.substring(0, pos2) : rootElementName;
+                this.xsdPath = HL7V3_SCHEMAS_PATH + documentName + ".xsd";
+            } else {
+                this.xsdPath = xsdPath.startsWith("/") ? xsdPath : HL7V3_SCHEMAS_PATH + xsdPath;
+            }
+            this.schematronPath = schematronPath;
+            this.schematronPhase = GAZELLE_PIXPDQV3_SCHEMATRON.equals(schematronPath) ? rootElementName : null;
+        }
+    }
 
 
-    public Hl7v3ValidationProfile(String[][] rows) {
-        this.rows = rows;
+    private final Map<String, Row> map;
+
+    public Hl7v3ValidationProfile(Row... rows) {
+        map = new HashMap<String, Row>(rows.length);
+        for (Row row : rows) {
+            map.put(row.rootElementName, row);
+        }
     }
 
 
     @Override
     public boolean isValidRootElement(String rootElementName) {
-        return (getRow(rootElementName) != null);
+        return map.containsKey(rootElementName);
     }
-
 
     @Override
     public String getXsdPath(String rootElementName) {
-        String[] row = getRow(rootElementName);
-
-        int pos1 = rootElementName.indexOf('_');
-        int pos2 = rootElementName.indexOf('_', pos1 + 1);
-        rootElementName = (pos2 > 0) ? rootElementName.substring(0, pos2) : rootElementName;
-
-        StringBuilder sb = new StringBuilder("schema/");
-        if (row.length > 2) {
-            sb.append(row[2]);
-        } else {
-            sb.append(HL7V3_SCHEMAS_PATH).append(rootElementName);
-        }
-        return sb.append(".xsd").toString();
+        return map.get(rootElementName).getXsdPath();
     }
-
 
     @Override
     public String getSchematronPath(String rootElementName) {
-        String[] row = getRow(rootElementName);
-        return (row[1] != null)
-                ? new StringBuilder("schematron/").append(row[1]).append(".sch.xml").toString()
-                : null;
+        return map.get(rootElementName).getSchematronPath();
     }
-
 
     @Override
-    public Map<String, Object> getCustomSchematronParameters() {
-        return null;
+    public Map<String, Object> getCustomSchematronParameters(String rootElementName) {
+        String phase = map.get(rootElementName).getSchematronPhase();
+        return (phase != null) ? Collections.<String, Object>singletonMap("phase", phase) : null;
     }
 
-
-    private String[] getRow(String rootElementName) {
-        for (String[] row : rows) {
-            if (row[0].equals(rootElementName)) {
-                return row;
-            }
-        }
-        return null;
-    }
 }
