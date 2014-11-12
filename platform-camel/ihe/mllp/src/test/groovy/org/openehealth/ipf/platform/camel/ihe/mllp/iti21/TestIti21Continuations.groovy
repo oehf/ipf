@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
+import ca.uhn.hl7v2.model.Message
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage
@@ -71,8 +72,8 @@ class TestIti21Continuations extends MllpTestContainer {
     
     @Test
     void testHappyCaseAndAudit() {
-        def msg = send(endpointUri(28210, true, true, true, true, false), REQUEST_MESSAGE)
-        assert 4 == msg.QUERY_RESPONSE().size()
+        Message msg = send(endpointUri(28210, true, true, true, true, false), REQUEST_MESSAGE)
+        assert 4 == msg.QUERY_RESPONSEReps
         assert 2 == auditSender.messages.size()
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
@@ -86,10 +87,11 @@ class TestIti21Continuations extends MllpTestContainer {
     @Test
     void testInteractiveAssembly() {
         def msg = send(endpointUri(28211, true, false, false, false, false), REQUEST_MESSAGE)
-        assert 4 == msg.QUERY_RESPONSE().size()
+        assert 4 == msg.QUERY_RESPONSEReps
         assert 2 == auditSender.messages.size()
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value
     }
+
 }

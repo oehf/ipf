@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
+import ca.uhn.hl7v2.model.Message
 import org.apache.camel.Exchange
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils.pidList
 
 /**
@@ -25,7 +26,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils.pidLis
  */
 final class Iti8AuditStrategyUtils  {
 
-    static void enrichAuditDatasetFromRequest(Iti8AuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
+    static void enrichAuditDatasetFromRequest(Iti8AuditDataset auditDataset, Message msg, Exchange exchange) {
         def pidSegment
         if(msg.MSH[9][2].value == 'A40') {
             def group = msg.PIDPD1MRGPV1

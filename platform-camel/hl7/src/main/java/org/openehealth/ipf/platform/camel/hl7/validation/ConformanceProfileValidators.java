@@ -138,7 +138,7 @@ public final class ConformanceProfileValidators {
      * Returns the HAPI Message from the message body. If the body is a string, it is parsed on the fly
      * using
      * @param exchange
-     * @return
+     * @return HAPI message
      * @throws HL7Exception
      */
     private static Message bodyMessage(Exchange exchange) throws HL7Exception {

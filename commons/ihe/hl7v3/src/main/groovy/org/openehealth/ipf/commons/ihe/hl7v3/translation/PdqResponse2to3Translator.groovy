@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v3.translation;
+package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import groovy.xml.MarkupBuilder
+import ca.uhn.hl7v2.model.Composite
+import ca.uhn.hl7v2.model.Group
+import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
-
+import groovy.xml.MarkupBuilder
+import org.openehealth.ipf.commons.xml.XmlYielder
+import org.openehealth.ipf.modules.hl7.ErrorLocation
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
-import org.openehealth.ipf.modules.hl7dsl.GroupAdapter;
-import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-
-import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
-import org.openehealth.ipf.commons.xml.XmlYielder
-import org.openehealth.ipf.modules.hl7.ErrorLocation;
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.collectErrorInfo
+import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.createQueryAcknowledgementElement
 
 /**
  * PDQ Response translator HL7 v2 to v3.
@@ -77,7 +77,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * <p>
      * Parameters related to interactive continuation are ignored.
      */
-    String translateV2toV3(MessageAdapter rsp, String origMessage, String charset) {
+    String translateV2toV3(Message rsp, String origMessage, String charset) {
         def output = new ByteArrayOutputStream()
         def builder = getBuilder(output, charset)
 
@@ -99,7 +99,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
             buildReceiverAndSender(builder, xml, HL7V3_NSURI)
-            createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem, this.ackCodeFirstCharacter) 
+            createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem, this.ackCodeFirstCharacter)
             controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
                 code(code: 'PRPA_TE201306UV02', codeSystem: '2.16.840.1.113883.1.6')
                 effectiveTime(value: messageTimestamp)
@@ -117,7 +117,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                                     subject1(typeCode: 'SBJ') {
                                         patient(classCode: 'PAT') {
                                             for(pid3 in pid3collection) {   
-                                                buildInstanceIdentifier(builder, 'id', false, pid3)
+                                                Utils.buildInstanceIdentifier(builder, 'id', false, pid3)
                                                 remainingDomains.remove(pid3[4][2].value)
                                             }
                                             statusCode(code: 'active')
@@ -153,7 +153,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                             rsp.QUERY_RESPONSE().size() : 0
                     
                     def queryId = xml.controlActProcess.queryByParameter.queryId
-                    buildInstanceIdentifier(builder, 'queryId', false, 
+                    buildInstanceIdentifier(builder, 'queryId', false,
                             queryId.@root.text(), queryId.@extension.text())
 
                     queryResponseCode(code: status.responseStatus)
@@ -174,7 +174,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
     }
 
      
-    private Map getStatusInformation(MessageAdapter rsp, GPathResult xml) {
+    private Map getStatusInformation(Message rsp, GPathResult xml) {
         def responseStatus = 'OK'
         def errorText      = ''
         def errorCode      = ''
@@ -203,7 +203,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
     /**
      * Constructs an v3 error location string from the given v2 ERR-2 field. 
      */
-    String getV3ErrorLocation(CompositeAdapter err2, GPathResult xml) {
+    String getV3ErrorLocation(Composite err2, GPathResult xml) {
         if (err2[1].value == 'QPD') {
             String errorLocation = "/${xml.interactionId.@extension.text()}/controlActProcess/queryByParameter"
             if (err2[3].value == '8') {
@@ -223,7 +223,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * Default (dummy) creation of the queryMatchObservation element,
      * to be customized in derived classes.
      */
-    void createQueryMatchObservation(MarkupBuilder builder, GroupAdapter grp) {
+    void createQueryMatchObservation(MarkupBuilder builder, Group grp) {
         builder.queryMatchObservation(classCode: 'COND', moodCode: 'EVN') {
             code(code: 'IHE_PDQ')
             value('xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', 

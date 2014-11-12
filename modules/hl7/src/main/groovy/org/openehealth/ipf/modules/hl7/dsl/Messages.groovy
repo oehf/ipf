@@ -25,5 +25,9 @@ public class Messages {
      static void copyMessage(Message src, Message dst) {
          new MessageCopy(src, dst).execute()
      }
+
+    static void copyMessage2(Message src, Message dst) {
+        new MessageCopy(src, dst).execute()
+    }
     
 }

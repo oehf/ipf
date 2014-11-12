@@ -15,25 +15,24 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -60,8 +59,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
     @Override
     public void process(Exchange exchange) throws Exception {
         Parser parser = getHl7v2TransactionConfiguration().getParser();
-        MessageAdapter<?> request = (MessageAdapter<?>) exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME);
-        Message requestMessage = request.getHapiMessage();
+        Message requestMessage = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
         Terser requestTerser = new Terser(requestMessage);
         String requestMessageType = requestTerser.get("MSH-9-1");
 
@@ -152,7 +150,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         } else {
             // no fragment found --> run the route and create fragments if necessary
             getWrappedProcessor().process(exchange);
-            MessageAdapter<?> response = Exchanges.resultMessage(exchange).getBody(MessageAdapter.class);
+            Message response = Exchanges.resultMessage(exchange).getBody(Message.class);
             responseMessage = considerFragmentingResponse(response, threshold, queryTag, chainId);
         }
         Exchanges.resultMessage(exchange).setBody(parser.encode(responseMessage));
@@ -168,12 +166,11 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
      * If no -- simply returns the response message back.
      */
     private Message considerFragmentingResponse(
-            MessageAdapter<?> response, 
+            Message responseMessage,
             int threshold,
             String queryTag,
             String chainId) throws Exception
     {
-        Message responseMessage = response.getHapiMessage();
         Terser responseTerser = new Terser(responseMessage);  
         if (isNotEmpty(responseTerser.get("DSC-1"))) {
             LOG.warn("Cannot perform interactive continuation: DSC-1 already " +
@@ -182,7 +179,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         }
         
         // determine data record boundaries in the response
-        List<String> segments = splitString(response.toString(), '\r');
+        List<String> segments = splitString(responseMessage.toString(), '\r');
         List<Integer> recordBoundaries = getRecordBoundaries(segments);
         if (recordBoundaries.size() - 1 <= threshold) {
             return responseMessage;

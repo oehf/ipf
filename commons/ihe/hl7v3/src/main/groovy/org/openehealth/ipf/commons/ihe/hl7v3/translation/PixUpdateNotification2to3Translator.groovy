@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import ca.uhn.hl7v2.model.Message
 import groovy.xml.MarkupBuilder
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
+
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.buildInstanceIdentifier
 
 /**
  * Translator for PIX Update notification v2 to v3.
@@ -31,7 +32,7 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * Translates an HL7 v2 <tt>ADT^A31</tt> message 
      * into HL7 v3 <tt>PRPA_IN201302UV02</tt> message.
      */
-    String translateV2toV3(MessageAdapter adt, String dummy, String charset) {
+    String translateV2toV3(Message adt, String dummy, String charset) {
         OutputStream output = new ByteArrayOutputStream()
         MarkupBuilder builder = getBuilder(output, charset)
 
@@ -48,8 +49,8 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
             processingModeCode(code: 'T')
             acceptAckCode(code: 'AL')
 
-            createAgent(builder, false)
-            createAgent(builder, true)
+            createAgent(builder, "receiver")
+            createAgent(builder, "sender")
 
             controlActProcess(classCode: 'CACT', moodCode: 'EVN') { 
                 code(code: 'PRPA_TE201302UV02', codeSystem: '2.16.840.1.113883.1.6')
@@ -82,7 +83,7 @@ class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * </pre>
      * @param builder
      */
-    void addPerson(MarkupBuilder builder, MessageAdapter adt) {
+    void addPerson(MarkupBuilder builder, Message adt) {
         fakePatientPerson(builder)
     }
 }

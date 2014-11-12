@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
+
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
 
 
 /**
@@ -31,11 +31,11 @@ class Iti8TestRouteBuilder extends SpringRouteBuilder {
         
         // normal processing without auditing
         from('xds-iti8://0.0.0.0:18081?audit=false')
-                .ack()
+                .transform(ack())
         
         // normal processing with auditing
         from('pix-iti8://0.0.0.0:18082')
-                .ack()
+                .transform(ack())
 
         // fictive route to test producer-side acceptance checking
         from('pix-iti8://0.0.0.0:18084')
@@ -62,11 +62,11 @@ class Iti8TestRouteBuilder extends SpringRouteBuilder {
                 'secure=true&sslContext=#sslContext&' +
                 'sslProtocols=SSLv3,TLSv1&' +
                 'sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
-                .ack()
+                .transform(ack())
 
         from('xds-iti8://0.0.0.0:18088?audit=false&'+
                 'sslContextParameters=#sslContextParameters')
-                .ack()
+                .transform(ack())
 
     }
 }

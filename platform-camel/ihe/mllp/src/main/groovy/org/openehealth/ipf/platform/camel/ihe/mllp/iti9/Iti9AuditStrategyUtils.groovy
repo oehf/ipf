@@ -15,13 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti9
 
-import org.apache.camel.Exchange;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import ca.uhn.hl7v2.model.Message
+import org.apache.camel.Exchange
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset
 
 /**
  * Groovy  audit strategy utils for ITI-9 (PIX Query).
@@ -29,9 +26,9 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  */
 class Iti9AuditStrategyUtils  {    
 
-    static void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
-        if(msg.QPD?.value) {
-            def patientId = msg.QPD[3].target.encode()
+    static void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, Message msg, Exchange exchange) {
+        if(msg.QPD) {
+            def patientId = msg.QPD[3].encode()
             if(patientId) { 
                 auditDataset.patientIds = [patientId]
             }
@@ -42,7 +39,7 @@ class Iti9AuditStrategyUtils  {
     }
 
     
-    static void enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, MessageAdapter msg) {
+    static void enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Message msg) {
         if((msg.MSH[9][1].value == 'RSP') && 
            (msg.MSH[9][2].value == 'K23') && 
            (msg.QUERY_RESPONSE?.PID?.value)) 

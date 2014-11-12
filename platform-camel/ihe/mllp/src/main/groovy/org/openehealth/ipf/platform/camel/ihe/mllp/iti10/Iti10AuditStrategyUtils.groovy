@@ -15,12 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti10
 
-import org.apache.camel.Exchange;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import ca.uhn.hl7v2.model.Message
+import org.apache.camel.Exchange
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset
 
 /**
  * Groovy audit strategy util for ITI-10 (PIX Update Notification).
@@ -29,7 +27,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 class Iti10AuditStrategyUtils  {
 
 
-    static void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
+    static void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, Message msg, Exchange exchange) {
         auditDataset.patientIds = AuditUtils.pidList(msg.PID[3])
     }
 

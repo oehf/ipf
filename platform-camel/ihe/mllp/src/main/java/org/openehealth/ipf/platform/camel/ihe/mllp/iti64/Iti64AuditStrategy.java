@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti64;
 
+import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.v25.group.ADT_A43_PATIENT;
 import ca.uhn.hl7v2.model.v25.message.ADT_A43;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.PipeParser;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
@@ -45,10 +45,10 @@ class Iti64AuditStrategy extends MllpAuditStrategy<Iti64AuditDataset> {
     @Override
     public void enrichAuditDatasetFromRequest(
             Iti64AuditDataset auditDataset,
-            MessageAdapter<?> msg,
+            Message msg,
             Exchange exchange)
     {
-        ADT_A43 message = (ADT_A43) msg.getHapiMessage();
+        ADT_A43 message = (ADT_A43) msg;
         ADT_A43_PATIENT patient = message.getPATIENT(0);
 
         auditDataset.setNewPatientId(PipeParser.encode(

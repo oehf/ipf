@@ -24,11 +24,6 @@
         <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>ipf-modules-hl7dsl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>ipf-modules-hl7</artifactId>
             <version>${project.version}</version>
         </dependency>

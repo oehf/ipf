@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
+import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.hl7.validation.ConformanceProfileValidators;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 
@@ -81,7 +81,7 @@ public class Hl7v2WsCamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
+        Message msg = Hl7v2MarshalUtils.extractHapiMessage(
                 exchange.getIn(),
                 exchange.getProperty(Exchange.CHARSET_NAME, String.class),
                 parser);

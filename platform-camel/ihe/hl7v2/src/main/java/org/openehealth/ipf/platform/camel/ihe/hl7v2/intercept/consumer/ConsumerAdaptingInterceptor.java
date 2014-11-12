@@ -22,7 +22,6 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.ClassUtils;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
@@ -34,7 +33,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
 
 
 /**
- * Consumer-side Camel interceptor which creates a {@link MessageAdapter} 
+ * Consumer-side Camel interceptor which creates a {@link Message}
  * from various possible response types.
  *
  * @author Dmytro Rud
@@ -71,13 +70,12 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
 
     
     /**
-     * Converts response to a {@link MessageAdapter}, throws 
+     * Converts response to a {@link Message}, throws
      * a {@link org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException} on failure.
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        MessageAdapter<?> originalAdapter = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, MessageAdapter.class); 
-        Message originalMessage = originalAdapter.getHapiMessage();
+        Message originalMessage = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
 
         // run the route
         try {
@@ -98,15 +96,14 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
         if (charsetName != null) {
             exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
         }
-        MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
+        Message msg = Hl7v2MarshalUtils.extractHapiMessage(
                 m,
                 characterSet(exchange),
                 getHl7v2TransactionConfiguration().getParser());
         
         // additionally: an Exception in the body?
         if((msg == null) && (body instanceof Throwable)) {
-            Message message = getNakFactory().createNak(originalMessage, (Throwable) body);
-            msg = new MessageAdapter(message);
+           msg = getNakFactory().createNak(originalMessage, (Throwable) body);
         }
         
         // no known data type --> determine user's intention on the basis of a header 
@@ -130,7 +127,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
      * an automatic acknowledgment, and generates the latter when the author really does.   
      */
     @SuppressWarnings("rawtypes")
-    private MessageAdapter analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) throws HL7Exception, IOException {
+    private Message analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) throws HL7Exception, IOException {
         Object header = m.getHeader(ACK_TYPE_CODE_HEADER);
         if ((header == null) || ! (header instanceof AcknowledgmentCode)) {
             return null;
@@ -149,7 +146,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
                     exception, 
                     (AcknowledgmentCode) header);
         }
-        return new MessageAdapter(ack);
+        return ack;
     }
 
 }

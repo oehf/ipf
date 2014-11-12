@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>ipf-modules-hl7dsl</artifactId>
+            <artifactId>ipf-modules-hl7</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

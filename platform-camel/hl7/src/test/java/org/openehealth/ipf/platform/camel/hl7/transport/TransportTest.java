@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.transport;
 
+import java.util.Scanner;
+
+import ca.uhn.hl7v2.parser.PipeParser;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -22,16 +25,12 @@ import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-
-import ca.uhn.hl7v2.model.AbstractMessage;
 
 /**
  * @author Martin Krasser
@@ -54,23 +53,15 @@ public class TransportTest {
 
     @Test
     public void testMessage02() throws Exception {
-        String message = inputMessage("message/msg-02.hl7").toString();
+        String message = inputMessage("message/msg-02.hl7");
         String content = IOUtils.toString(new ClassPathResource("message/msg-02.content").getInputStream());
         mockOutput.expectedBodiesReceived(content);
         producerTemplate.sendBody("mina2:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec", message);
         mockOutput.assertIsSatisfied();
     }
 
-    @Test
-    public void testMessage03() throws Exception {
-        String message = inputMessage("message/msg-03.hl7").toString();
-        mockOutput.expectedBodiesReceived(message);
-        producerTemplate.sendBody("mina2:tcp://127.0.0.1:8889?sync=true&codec=#hl7Codec", message);
-        mockOutput.assertIsSatisfied();
-    }
-
-    private static <T extends AbstractMessage>  MessageAdapter<T> inputMessage(String resource) {
-        return MessageAdapters.load(resource);
+    private static String inputMessage(String resource) {
+        return new Scanner(TransportTest.class.getResourceAsStream("/" + resource)).useDelimiter("\\A").next();
     }
     
 }

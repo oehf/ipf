@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
+import java.util.List;
+
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
@@ -22,20 +24,17 @@ import ca.uhn.hl7v2.model.v25.message.QCN_J01;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
 
 /**
@@ -60,7 +59,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
     @Override
     public void process(Exchange exchange) throws Exception {
         Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
-        MessageAdapter<?> request = exchange.getIn().getBody(MessageAdapter.class);
+        Message request = exchange.getIn().getBody(Message.class);
         
         Terser requestTerser = null;
         String responseString = null;
@@ -73,7 +72,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         //     3. The user must not have already filled the DSC segment.
         boolean supportContinuations = false;
         if (getMllpEndpoint().isSupportInteractiveContinuation()) {
-            requestTerser = new Terser(request.getHapiMessage());
+            requestTerser = new Terser(request);
             if (config.isContinuable(requestTerser.get("MSH-9-1")) && isEmpty(requestTerser.get("DSC-1"))) {
                 supportContinuations = true;
                 fragmentAccumulator = new StringBuilder();
@@ -173,7 +172,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
             // All errors will be ignored
             if (getMllpEndpoint().isAutoCancel()) {
                 try {
-                    String cancel = createCancelMessage(request.getHapiMessage(), config.getParser());
+                    String cancel = createCancelMessage(request, config.getParser());
                     exchange.getIn().setBody(cancel);
                     getWrappedProcessor().process(exchange);
                 } catch (Exception e) {
@@ -183,9 +182,9 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         }
 
         // unmarshal and return
-        MessageAdapter<?> rsp = MessageAdapters.make(config.getParser(), responseString);
+        Message rsp = config.getParser().parse(responseString);
         if (recordsCount != 0) {
-            Terser responseTerser = new Terser(rsp.getHapiMessage());
+            Terser responseTerser = new Terser(rsp);
             String recordsCountString = Integer.toString(recordsCount);
             responseTerser.set("QAK-4", recordsCountString);
             responseTerser.set("QAK-5", recordsCountString);

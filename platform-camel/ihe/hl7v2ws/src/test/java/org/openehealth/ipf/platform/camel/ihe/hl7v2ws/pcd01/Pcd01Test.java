@@ -15,6 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
+import java.util.Scanner;
+import java.util.Set;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.HapiContext;
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -26,19 +34,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.Interceptor2ProducerAdapter;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-import java.util.Set;
-
 import static org.junit.Assert.*;
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 
 
 /**
@@ -49,7 +51,9 @@ import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 public class Pcd01Test extends StandardTestContainer {
     public static final String CONTEXT_DESCRIPTOR = "pcd-01.xml";
     
-    public static final String PCD_01_SPEC_REQUEST = load("pcd01/pcd01-request.hl7").toString();
+    public static final String PCD_01_SPEC_REQUEST = load(
+            HapiContextFactory.createHapiContext(PcdTransactions.PCD1),
+            "pcd01/pcd01-request.hl7").toString();
 
     public static final String PCD_01_SPEC_RESPONSE = load(
             HapiContextFactory.createHapiContext(PcdTransactions.PCD1),
@@ -187,6 +191,17 @@ public class Pcd01Test extends StandardTestContainer {
     
     private void assertResponseEquals(String expected, String response){
         //use the same algorithm to parse the String message
-        assertEquals(expected, MessageAdapters.make(response).toString());
+        //assertEquals(expected, MessageAdapters.make(response).toString());
+        assertEquals(expected, response);
     }
+
+    private static <T extends Message> T load(HapiContext context, String fileName) {
+        try {
+            return (T) context.getPipeParser().parse(
+                    new Scanner(Pcd01RouteBuilder.class.getResourceAsStream("/" + fileName)).useDelimiter("\\A").next());
+        } catch (HL7Exception e) {
+            return null;
+        }
+    }
+
 }

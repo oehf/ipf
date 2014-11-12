@@ -15,17 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
-import ca.uhn.hl7v2.parser.Parser;
-import org.apache.camel.Message;
-import org.apache.camel.WrappedFile;
-import org.apache.camel.converter.IOConverter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import ca.uhn.hl7v2.parser.Parser;
+import org.apache.camel.Message;
+import org.apache.camel.WrappedFile;
+import org.apache.camel.converter.IOConverter;
 
 
 /**
@@ -62,8 +60,6 @@ public class Hl7v2MarshalUtils {
         String s = null;
         if(body instanceof String) {
             s = (String) body;
-        } else if(body instanceof MessageAdapter) {
-            s = body.toString();
         } else if(body instanceof ca.uhn.hl7v2.model.Message) {
             s = parser.encode((ca.uhn.hl7v2.model.Message) body);
         } else if(body instanceof File) {
@@ -104,7 +100,6 @@ public class Hl7v2MarshalUtils {
     public static boolean typeSupported(Object body) {
         final Class<?>[] knownTypes = new Class<?>[] {
             String.class,
-            MessageAdapter.class,
             ca.uhn.hl7v2.model.Message.class,
             File.class,
             InputStream.class,
@@ -148,51 +143,26 @@ public class Hl7v2MarshalUtils {
     
     
     /**
-     * Converts the contents of the given Camel message to a {@link MessageAdapter}.  
+     * Converts the contents of the given Camel message to a {@link Message}.
      * @param message
      *      Camel message to be converted.
      * @param charset
      *      character set.
      * @return
-     *      a {@link MessageAdapter} or <code>null</code> when it was impossible
+     *      a {@link Message} or <code>null</code> when it was impossible
      *      to get or create one.
      * @param parser 
      *      HL7 parser. 
      * @throws Exception
      */
-    public static MessageAdapter extractMessageAdapter(
-            Message message, 
-            String charset, 
+    public static ca.uhn.hl7v2.model.Message extractHapiMessage(
+            Message message,
+            String charset,
             Parser parser) throws Exception 
     {
         Object body = message.getBody();
-        MessageAdapter msg = null;
-        if(body instanceof MessageAdapter) {
-            msg = (MessageAdapter) body;
-        } else if(body instanceof ca.uhn.hl7v2.model.Message) {
-            msg = new MessageAdapter(parser, (ca.uhn.hl7v2.model.Message) body);
-        } else {
-            // process all other types (String, File, InputStream, ByteBuffer, byte[])
-            // by means of the standard routine.  An exception here will be o.k.
-            String s = marshalStandardTypes(message, charset, parser);
-            if(s != null) {
-                s = s.replace('\n', '\r');
-                msg = MessageAdapters.make(parser, s);
-            }
-        } 
-        return msg;
-    }
-
-    public static ca.uhn.hl7v2.model.Message extractMessage(
-            Message message,
-            String charset,
-            Parser parser) throws Exception
-    {
-        Object body = message.getBody();
         ca.uhn.hl7v2.model.Message msg = null;
-        if(body instanceof MessageAdapter) {
-            msg = ((MessageAdapter) body).getHapiMessage();
-        } else if(body instanceof ca.uhn.hl7v2.model.Message) {
+        if (body instanceof ca.uhn.hl7v2.model.Message) {
             msg = (ca.uhn.hl7v2.model.Message) body;
         } else {
             // process all other types (String, File, InputStream, ByteBuffer, byte[])
@@ -202,7 +172,7 @@ public class Hl7v2MarshalUtils {
                 s = s.replace('\n', '\r');
                 msg = parser.parse(s);
             }
-        }
+        } 
         return msg;
     }
 

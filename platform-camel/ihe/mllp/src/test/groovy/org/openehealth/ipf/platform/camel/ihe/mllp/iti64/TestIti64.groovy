@@ -23,7 +23,6 @@ import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.impl.DefaultExchange
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import ca.uhn.hl7v2.parser.PipeParser
 import ca.uhn.hl7v2.HL7Exception
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
@@ -107,7 +106,7 @@ class TestIti64 extends MllpTestContainer {
 
         processor.process(exchange)
         def response = Exchanges.resultMessage(exchange).body
-        def msg = MessageAdapters.make(new PipeParser(), response)
+        def msg = new PipeParser().parse(response)
         assertNAK(msg)
         assertEquals(0, auditSender.messages.size())
     }

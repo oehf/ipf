@@ -16,8 +16,8 @@
 package org.openehealth.ipf.tutorials.osgi.ihe.pdq.iti21.route
 
 import org.apache.camel.spring.SpringRouteBuilder
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.*
 
 /**
  * @author Boris Stanojevic
@@ -46,9 +46,9 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||Müller^Joachim
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .process(itiValidator())
-            .transform(constant(rsp))
-            .process(itiValidator())
+            .process(validatingProcessor())
+            .transform(staticResponse(Irsp))
+            .process(validatingProcessor())
 
     }
 }

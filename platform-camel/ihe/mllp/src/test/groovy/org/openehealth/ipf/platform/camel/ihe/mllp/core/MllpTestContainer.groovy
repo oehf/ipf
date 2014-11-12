@@ -15,8 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
-import static org.junit.Assert.*
-
+import ca.uhn.hl7v2.model.Message
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
@@ -24,10 +23,11 @@ import org.apache.camel.impl.DefaultExchange
 import org.junit.After
 import org.junit.AfterClass
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.context.support.ClassPathXmlApplicationContext
+
+import static org.junit.Assert.*
 
 /**
  * Generic Unit Test container for MLLP components.
@@ -76,7 +76,7 @@ class MllpTestContainer {
     /**
      * Checks whether the message represents a (positive) ACK.
      */
-    static void assertACK(MessageAdapter msg) {
+    static void assertACK(Message msg) {
         assertTrue(msg.MSH[9][1].value == 'ACK')
         assertFalse(msg.MSA[1].value[1] in ['R', 'E'])
     }
@@ -85,7 +85,7 @@ class MllpTestContainer {
     /**
      * Checks whether the message represents a positive ReSPonse.
      */
-    static void assertRSP(MessageAdapter msg) {
+    static void assertRSP(Message msg) {
         assertTrue(msg.MSH[9][1].value == 'RSP')
         assertFalse(msg.MSA[1].value[1] in ['R', 'E'])
     }
@@ -94,7 +94,7 @@ class MllpTestContainer {
     /**
      * Checks whether the message represents a NAK.
      */
-    static void assertNAK(MessageAdapter msg) {
+    static void assertNAK(Message msg) {
         assertTrue(msg.MSH[9][1].value == 'ACK')
         assertTrue(msg.MSA[1].value[1] in ['R', 'E'])
         assertNotNull(msg.ERR)
@@ -103,7 +103,7 @@ class MllpTestContainer {
     /**
      * Checks whether the message represents a NAK with segments QPD and QAK.
      */
-    static void assertNAKwithQPD(MessageAdapter msg, String messageType, String triggerEvent) {
+    static void assertNAKwithQPD(Message msg, String messageType, String triggerEvent) {
         assertTrue(msg.MSH[9][1].value == messageType)
         assertTrue(msg.MSH[9][2].value == triggerEvent)
         assertTrue(msg.MSA[1].value[1] in ['R', 'E'])
@@ -115,7 +115,7 @@ class MllpTestContainer {
     /**
      * Sends a request into the route.
      */
-    static MessageAdapter send(String endpoint, Object body) {
+    static Message send(String endpoint, Object body) {
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
 
@@ -137,7 +137,7 @@ class MllpTestContainer {
             throw result.exception
         }
         def response = Exchanges.resultMessage(result)
-        response.getBody(MessageAdapter.class)
+        response.getBody(Message.class)
     }
     
     

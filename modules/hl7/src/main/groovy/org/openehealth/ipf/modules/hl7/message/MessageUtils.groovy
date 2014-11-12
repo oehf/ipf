@@ -26,6 +26,10 @@ import org.joda.time.format.DateTimeFormatter
 import org.joda.time.format.ISODateTimeFormat
 import org.openehealth.ipf.modules.hl7.HL7v2Exception
 
+import java.lang.reflect.Constructor
+
+import static org.openehealth.ipf.modules.hl7.dsl.Messages.copyMessage
+
 /**
  * This is a utility class that offers convenience methods for
  * accessing and creating HL7 messages. It's primarily used by
@@ -56,14 +60,19 @@ class MessageUtils {
      * is not smaller than the target one.
      */
     static boolean atLeastVersion(String actualVersion, String targetVersion) {
-		Version actual = Version.versionOf(actualVersion)
-		Version target = Version.versionOf(targetVersion)
-		if (actual == null || target == null) {
-			throw new IllegalArgumentException('unknown HL7 version')
-		}
-		return !target.isGreaterThan(actual);
+        return atLeastVersion(Version.versionOf(actualVersion), Version.versionOf(targetVersion))
     }
 
+    /**
+     * Returns <code>true</code> when the given actual HL7 version
+     * is not smaller than the target one.
+     */
+    static boolean atLeastVersion(Version actualVersion, Version targetVersion) {
+        if (actualVersion == null || targetVersion == null) {
+            throw new IllegalArgumentException('unknown HL7 version')
+        }
+        return !(targetVersion == actualVersion || targetVersion.isGreaterThan(actualVersion));
+    }
     
     /**
      * @return Returns current time in HL7 format
@@ -213,6 +222,30 @@ class MessageUtils {
             Terser.set(out.MSA, 2, 0, 1, 1, Terser.get(msg.MSH, 10, 0, 1, 1))
         }
         out
+    }
+
+    static Message empty(Message message) {
+        newInstance(message, message.parser.hapiContext.modelClassFactory)
+    }
+
+    static Message copy(Message message) {
+        Message copy = empty(message)
+        copyMessage(message, copy)
+        copy.parser = message.parser
+        copy
+    }
+
+    // Helpers
+
+    private static Group newInstance(Group group, ModelClassFactory factory) {
+        Constructor constructor = group?.class?.constructors?.find {
+            it.parameterTypes?.size() == 1 && it.parameterTypes[0] == ModelClassFactory.class
+        }
+        (constructor && factory) ? constructor.newInstance(factory) : newInstance(group)
+    }
+
+    private static Group newInstance(Group group) {
+        group.class.newInstance()
     }
 
     /**

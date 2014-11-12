@@ -15,15 +15,13 @@
  */
 package org.openehealth.ipf.tutorials.osgi.service.impl
 
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load
-
-import static org.junit.Assert.*
-
 import ca.uhn.hl7v2.model.Type
-
+import ca.uhn.hl7v2.parser.PipeParser
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+
+import static org.junit.Assert.assertEquals
 
 /**
  * @author Martin Krasser
@@ -42,7 +40,7 @@ public class AdmissionTransmogrifierTest {
     @Before
     void setUp() throws Exception {
         transmogrifier = new AdmissionTransmogrifier()
-        message = load('messages/msg-01.hl7')
+        message = new PipeParser().parse(getClass().getResource('/messages/msg-01.hl7').text)
     }
 
     @Test

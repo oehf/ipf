@@ -22,7 +22,8 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.staticResponse
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 
 /**
  * Camel route for continuations unit tests.
@@ -30,9 +31,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.
  */
 class Iti21TestContinuationsRouteBuilder extends SpringRouteBuilder {
 
-     static final Parser p = HapiContextFactory.createHapiContext(PixPdqTransactions.ITI21).getPipeParser()
-
-     static final Message BIG_RESPONSE = p.parse(
+     static final String BIG_RESPONSE =
          'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' + 
              '20090901140929||RSP^K22^RSP_K21|356757|P|2.5|||\r' +
          'MSA|AA|12345\r' +
@@ -48,7 +47,7 @@ class Iti21TestContinuationsRouteBuilder extends SpringRouteBuilder {
          'PID|3||79653^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI|' +
              '|MÃ¼ller^Hannes^^^^^L||19400101|M|||Am Domplatz 14^^KÃ¶ln^^57000||022/843274\r' +
          'PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI|' +
-             '|MÃ¼ller^Joachim^^^^^L||19400101|M|||Am Domplatz 112^^KÃ¶ln^^57000||022/844275\r');
+             '|MÃ¼ller^Joachim^^^^^L||19400101|M|||Am Domplatz 112^^KÃ¶ln^^57000||022/844275\r';
 
      
      static final Map CHAIN_1 = [
@@ -118,9 +117,9 @@ class Iti21TestContinuationsRouteBuilder extends SpringRouteBuilder {
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .process(itiValidator())
-            .transform(constant(BIG_RESPONSE))
-            .process(itiValidator())
+            .process(validatingProcessor())
+            .transform(staticResponse(BIG_RESPONSE))
+            .process(validatingProcessor())
 
             
         /**
@@ -131,7 +130,7 @@ class Iti21TestContinuationsRouteBuilder extends SpringRouteBuilder {
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .process(itiValidator())
+            .process(validatingProcessor())
             .process {
                 def dsc = it.in.body.DSC[1].value ?: ''
                 resultMessage(it).body = CHAIN_1[dsc]

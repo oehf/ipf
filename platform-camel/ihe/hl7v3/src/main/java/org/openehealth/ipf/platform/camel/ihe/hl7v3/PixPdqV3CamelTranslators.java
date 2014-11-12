@@ -20,7 +20,6 @@ import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.Hl7TranslatorV2toV3;
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.Hl7TranslatorV3toV2;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 /**
@@ -44,7 +43,7 @@ abstract public class PixPdqV3CamelTranslators {
         return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
-                MessageAdapter<?> initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, MessageAdapter.class);
+                ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
                 String xmlText = exchange.getIn().getMandatoryBody(String.class);
                 exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
                 Message resultMessage = Exchanges.resultMessage(exchange);
@@ -64,7 +63,7 @@ abstract public class PixPdqV3CamelTranslators {
             @Override
             public void process(Exchange exchange) throws Exception {
                 String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
-                MessageAdapter<?> msg = exchange.getIn().getMandatoryBody(MessageAdapter.class);
+                ca.uhn.hl7v2.model.Message msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.class);
                 exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
                 Message resultMessage = Exchanges.resultMessage(exchange);
                 String charset = exchange.getProperty(Exchange.CHARSET_NAME, "UTF-8", String.class);

@@ -15,14 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
-import org.openehealth.ipf.commons.xml.XmlYielder;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+import org.openehealth.ipf.commons.xml.XmlYielder
 import org.openehealth.ipf.modules.hl7.ErrorLocation
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
 
 /**
  * PIX Query Response translator HL7 v2 to v3.
@@ -68,7 +69,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
      * Translates HL7 v2 response messages <tt>RSP^K23</tt> and <tt>ACK</tt> 
      * into HL7 v3 message <tt>PRPA_IN201310UV02</tt>.
      */
-    String translateV2toV3(MessageAdapter rsp, String origMessage, String charset) {
+    String translateV2toV3(Message rsp, String origMessage, String charset) {
         OutputStream output = new ByteArrayOutputStream()
         MarkupBuilder builder = getBuilder(output, charset)
 
@@ -139,11 +140,11 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
      * </pre>
      * @param builder
      */
-    void addPerson(MarkupBuilder builder, MessageAdapter rsp) {
+    void addPerson(MarkupBuilder builder, Message rsp) {
         fakePatientPerson(builder)
     }
      
-    private Map getStatusInformation(MessageAdapter rsp, GPathResult xml) {
+    private Map getStatusInformation(Message rsp, GPathResult xml) {
         def ackCode   = rsp.MSA[1].value.endsWith('A') ? 'AA' : 'AE'
         def errorCode = rsp.ERR[3][1].value ?: ''
         def errorText = "PIXv2 Interface Reported [${collectErrorInfo(rsp)}]"

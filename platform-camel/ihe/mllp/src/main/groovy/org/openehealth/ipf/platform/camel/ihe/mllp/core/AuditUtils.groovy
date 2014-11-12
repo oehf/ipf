@@ -15,10 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
+import ca.uhn.hl7v2.model.Message
 import org.apache.camel.Exchange
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
+import org.openehealth.ipf.modules.hl7.dsl.Repeatable
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import org.slf4j.Logger
@@ -46,7 +45,7 @@ class AuditUtils {
      */
     static void enrichGenericAuditDatasetFromRequest(
             MllpAuditDataset auditDataset, 
-            MessageAdapter msg)
+            Message msg)
     {
         auditDataset.sendingApplication   = msg.MSH[3].value ?: ''
         auditDataset.sendingFacility      = msg.MSH[4].value ?: ''
@@ -95,13 +94,13 @@ class AuditUtils {
     
 
     /**
-     * Returns <code>true</code> when the given {@link MessageAdapter}
+     * Returns <code>true</code> when the given {@link Message}
      * does contain code 'AA' or 'CA' in MSA-1.
      * <p>
      * <code>null</code> values, damaged messages, etc. will lead
      * to <code>false</code> return values as well.
      */
-    static boolean isPositiveAck(MessageAdapter msg) {
+    static boolean isPositiveAck(Message msg) {
         try {
             return (msg.MSA[1].value in ['AA', 'CA'])
         } catch (Exception e) {
@@ -114,8 +113,8 @@ class AuditUtils {
      * Returns a list of patient IDs from the given repeatable field 
      * or <code>null</code>, when there are no patient IDs.
      */
-    static List pidList(SelectorClosure repeatable) {
-        repeatable().collect { cx -> cx.target.encode() } ?: null
+    static List pidList(Repeatable repeatable) {
+        repeatable.collect { cx -> cx.encode() } ?: null
     }
      
     
@@ -124,7 +123,7 @@ class AuditUtils {
       * from the corresponding header of the given Camel exchange (preferred) 
       * or by serializing the given message adapter. 
       */
-    static String getRequestString(Exchange exchange, MessageAdapter msg) {
+    static String getRequestString(Exchange exchange, Message msg) {
         exchange.in.headers[Hl7v2Interceptor.ORIGINAL_MESSAGE_STRING_HEADER_NAME] ?: msg.toString()
     }
 }

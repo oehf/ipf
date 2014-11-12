@@ -15,36 +15,26 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.parser.Parser
 import ca.uhn.hl7v2.validation.ValidationContext
 import org.apache.commons.io.IOUtils
 import org.custommonkey.xmlunit.DetailedDiff
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLUnit
-import org.openehealth.ipf.commons.core.modules.api.Validator
-import org.openehealth.ipf.modules.hl7.validation.ValidatorAdapter
-
-import static org.easymock.EasyMock.*
-
-import org.junit.BeforeClass;
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
+import org.openehealth.ipf.commons.core.modules.api.Validator
 import org.openehealth.ipf.commons.ihe.core.InteractionId
-import org.openehealth.ipf.commons.ihe.hl7v2.MessageAdapterValidator
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
-import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
-
+import org.openehealth.ipf.modules.hl7.validation.ValidatorAdapter
 import org.springframework.core.io.ClassPathResource
 
-import ca.uhn.hl7v2.parser.ModelClassFactory
-import ca.uhn.hl7v2.parser.Parser
+import static org.easymock.EasyMock.*
 
 /**
  * Test container for HL7 v3-v2 transformation routines.
@@ -120,8 +110,8 @@ class Hl7TranslationTestContainer {
         V3_VALIDATOR.validate(v3request, Hl7v3ValidationProfiles.getRequestValidationProfile(v3Id))
         
         String expectedV2request = getFileContent(fn, V2, REQUEST)
-        MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request, null)
-        V2_VALIDATOR.validate(translatedV2request.hapiMessage, null)
+        Message translatedV2request = v3tov2Translator.translateV3toV2(v3request, null)
+        V2_VALIDATOR.validate(translatedV2request, null)
         assert translatedV2request.toString().trim() == expectedV2request.trim()
     }
 
@@ -129,8 +119,8 @@ class Hl7TranslationTestContainer {
     void doTestV2toV3ResponseTranslation(String fn, int v2index, InteractionId v3Id, Parser parser) {
         String v3request = getFileContent(fn, V3, REQUEST)
         String v2response = getFileContent(fn, V2, RESPONSE)
-        MessageAdapter msg = MessageAdapters.make(parser, v2response)
-        V2_VALIDATOR.validate(msg.hapiMessage, null)
+        Message msg = parser.parse(v2response)
+        V2_VALIDATOR.validate(msg, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
         String translatedV3response = v2tov3Translator.translateV2toV3(msg, v3request, 'UTF-8')
@@ -145,8 +135,8 @@ class Hl7TranslationTestContainer {
     
     void doTestV2toV3RequestTranslation(String fn, int v2index, InteractionId v3Id, Parser parser) {
         String v2request = getFileContent(fn, V2, REQUEST)
-        MessageAdapter msg = MessageAdapters.make(parser, v2request)
-        V2_VALIDATOR.validate(msg.hapiMessage, null)
+        Message msg = parser.parse(v2request)
+        V2_VALIDATOR.validate(msg, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
         String translatedV3response = v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')

@@ -23,6 +23,7 @@ import org.codehaus.groovy.runtime.InvokerHelper
 import org.openehealth.ipf.modules.hl7.dsl.HL7DslException
 import org.openehealth.ipf.modules.hl7.dsl.Null
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7.message.Visitors
 
 import java.lang.reflect.Constructor
@@ -328,6 +329,10 @@ public class Hl7Dsl2ExtensionModule {
         from(delegate, value(0))
     }
 
+    public static String getValue(Segment delegate) {
+        throw new HL7DslException("Cannot obtain the value of a segment")
+    }
+
     /**
      * Non-repeatable segments are not suitable for obtaining repetitions except if
      * @param delegate
@@ -514,14 +519,11 @@ public class Hl7Dsl2ExtensionModule {
     // =========================================================================
 
     public static Message empty(Message delegate) {
-        newInstance(delegate, delegate.parser.hapiContext.modelClassFactory)
+        MessageUtils.empty(delegate)
     }
 
     public static Message copy(Message delegate) {
-        Message copy = empty(delegate)
-        copyMessage(delegate, copy)
-        copy.parser = delegate.parser
-        copy
+        MessageUtils.copy(delegate)
     }
 
     public static Writer writeTo(Message delegate, Writer writer) {
@@ -532,17 +534,6 @@ public class Hl7Dsl2ExtensionModule {
     }
 
     // Helpers
-
-    private static Group newInstance(Group group, ModelClassFactory factory) {
-        Constructor constructor = group?.class?.constructors?.find {
-            it.parameterTypes?.size() == 1 && it.parameterTypes[0] == ModelClassFactory.class
-        }
-        (constructor && factory) ? constructor.newInstance(factory) : newInstance(group)
-    }
-
-    private static Group newInstance(Group group) {
-        group.class.newInstance()
-    }
 
     private static selector(elements, adapter, index) {
         new Repeatable(getClass(), elements, adapter, index)

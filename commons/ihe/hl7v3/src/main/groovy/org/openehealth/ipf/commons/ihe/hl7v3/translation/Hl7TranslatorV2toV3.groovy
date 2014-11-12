@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v3.translation;
+package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import ca.uhn.hl7v2.model.Message;
+
 
 /**
  * Interface for HL7v2 to HL7v3 translators.
@@ -24,8 +25,8 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 interface Hl7TranslatorV2toV3 {
     
     /**
-     * Translates the {@link MessageAdapter} containing an HL7v2 message
+     * Translates the {@link Message} containing an HL7v2 message
      * into an HL7v3 XML String, optionally using the initial HL7v3 message.  
      */
-    String translateV2toV3(MessageAdapter messageV2, String initialV3, String charset)
+    String translateV2toV3(Message messageV2, String initialV3, String charset)
 }

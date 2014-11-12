@@ -15,9 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.HapiContext
+import ca.uhn.hl7v2.model.Message
 import org.junit.Test
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 
 import static org.junit.Assert.assertEquals
 
@@ -28,12 +31,17 @@ class Iti8AuditStrategyUtilsTest {
 
     @Test
     void testExtractPatientId(){
-        MessageAdapter message = MessageAdapters.load('iti8/iti8-a40.hl7')
+        Message message = load(HapiContextFactory.createHapiContext(PixPdqTransactions.ITI8), 'iti8/iti8-a40.hl7')
         Iti8AuditDataset dataset = new Iti8AuditDataset(true);
         Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(dataset, message, null);
         assertEquals('305014^^^MPI-NS-P&2.16.840.1.113883.3.37.4.1.1.2.1.1&ISO'
                 + '~7200117317^^^BBB&2.16.840.1.113883.3.37.4.1.1.2.611.1&ISO'
                 + '~7200117355^^^CCC&2.16.840.1.113883.3.37.4.1.1.2.711.1&ISO', dataset.patientId)
         assertEquals('305010~7200117359^^^BBB&2.16.840.1.113883.3.37.4.1.1.2.611.1&ISO', dataset.oldPatientId)
+    }
+
+    private static <T extends Message> T load(HapiContext context, String fileName) throws HL7Exception {
+        return (T)context.getPipeParser().parse(
+                new Scanner(Iti8AuditStrategyUtilsTest.class.getResourceAsStream("/" + fileName)).useDelimiter("\\A").next());
     }
 }

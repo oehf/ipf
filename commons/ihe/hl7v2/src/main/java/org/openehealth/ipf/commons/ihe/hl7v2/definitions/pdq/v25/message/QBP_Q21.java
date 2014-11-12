@@ -83,6 +83,13 @@ public class QBP_Q21 extends AbstractMessage {
     }
 
     /**
+     * Returns all repetitions of SFT
+     */
+    public java.util.List<SFT> getSFTAll() throws HL7Exception {
+        return getAllAsList("SFT", SFT.class);
+    }
+
+    /**
      * Returns a specific repetition of SFT (Software Segment) - creates it if
      * necessary throws HL7Exception if the repetition requested is more than
      * one greater than the number of existing repetitions.

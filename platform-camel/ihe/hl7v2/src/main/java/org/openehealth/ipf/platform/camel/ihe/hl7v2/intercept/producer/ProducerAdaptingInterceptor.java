@@ -15,17 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.commons.lang3.ClassUtils;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 
 
 /**
- * Producer-side Camel interceptor which creates a {@link MessageAdapter} 
+ * Producer-side Camel interceptor which creates a {@link Message}
  * from various possible request types.
  *  
  * @author Dmytro Rud
@@ -60,7 +60,7 @@ public class ProducerAdaptingInterceptor extends AbstractHl7v2Interceptor {
 
 
     /**
-     * Converts outgoing request to a {@link MessageAdapter}  
+     * Converts outgoing request to a {@link Message}
      * and performs some exchange configuration.
      */
     @Override
@@ -68,7 +68,7 @@ public class ProducerAdaptingInterceptor extends AbstractHl7v2Interceptor {
         if (charsetName != null) {
             exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
         }
-        MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
+        Message msg = Hl7v2MarshalUtils.extractHapiMessage(
                 exchange.getIn(),
                 characterSet(exchange),
                 getHl7v2TransactionConfiguration().getParser());

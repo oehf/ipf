@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.AcknowledgmentCode
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import org.openehealth.ipf.platform.camel.hl7.HL7v2
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
 
 import java.nio.ByteBuffer
@@ -36,7 +36,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.typ
 class DatatypesRouteBuilder extends SpringRouteBuilder {
 
      // for datatype-related tests
-     final static int CONTENT_TYPE_COUNT = 19
+     final static int CONTENT_TYPE_COUNT = 18
      static boolean[] checkedContentTypes = new boolean[CONTENT_TYPE_COUNT]
      static int currentContentType = 0
      
@@ -71,7 +71,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
      static void prepareContents(int contentType, Exchange exchange) throws Exception {
          checkedContentTypes[contentType] = true
          
-         def x = exchange.in.body.target.generateACK()
+         def x = exchange.in.body.generateACK()
 
          switch(contentType) {
 
@@ -85,24 +85,16 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              assertTrue(typeSupported(x))
              resultMessage(exchange).body = x
              break
-
-         // Message Abrakadapter
-         case 1:
-             x = new MessageAdapter(x)
-             assertTrue(x instanceof MessageAdapter)
-             assertTrue(typeSupported(x))
-             resultMessage(exchange).body = x
-             break
              
          // HAPI Message
-         case 2:
+         case 1:
              assertTrue(x instanceof ca.uhn.hl7v2.model.Message)
              assertTrue(typeSupported(x))
              resultMessage(exchange).body = x
              break
 
          // InputStream
-         case 3:
+         case 2:
              x = new PipeParser().encode(x)
              x = new ByteArrayInputStream(x.getBytes())
              assertTrue(x instanceof InputStream)
@@ -111,7 +103,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              break
 
          // NIO ByteBuffer
-         case 4:
+         case 3:
              x = new PipeParser().encode(x).getBytes()
              x = ByteBuffer.wrap(x)
              assertTrue(x instanceof ByteBuffer)
@@ -120,7 +112,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              break
              
          // byte[]
-         case 5:
+         case 4:
              x = new PipeParser().encode(x).getBytes()
              assertTrue(x instanceof byte[])
              assertTrue(typeSupported(x))
@@ -128,7 +120,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              break
              
          // Known data type (a String), header set to "ERROR" (and should be ignored)
-         case 6:
+         case 5:
              x = new PipeParser().encode(x)
              assertTrue(x instanceof String)
              assertTrue(typeSupported(x))
@@ -137,7 +129,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              break
              
          // Unsupported data type, header set to "OK"
-         case 7:
+         case 6:
              x = Math.PI
              assertFalse(typeSupported(x))
              resultMessage(exchange).body = x
@@ -145,7 +137,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              break
              
          // Null body, header set to "OK"
-         case 8:
+         case 7:
              resultMessage(exchange).body = null
              resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AA
              break
@@ -154,7 +146,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
          /* --------------- Should cause exceptions in the route (9-12) --------------- */
              
          // Unsupported data type, header not set
-         case 9:
+         case 8:
              x = Math.PI
              assertFalse(typeSupported(x))
              resultMessage(exchange).body = x
@@ -162,7 +154,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              break
 
          // Unsupported data type, header set to garbage
-         case 10:
+         case 9:
              x = Math.PI
              assertFalse(typeSupported(x))
              resultMessage(exchange).body = x
@@ -170,13 +162,13 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              break
              
          // Null body, header not set 
-         case 11:
+         case 10:
              resultMessage(exchange).body = null
              resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = null
              break
 
          // Null body, header set to garbage 
-         case 12:
+         case 11:
              resultMessage(exchange).body = null
              resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = "But it is such a perfect place to start"
              break
@@ -185,7 +177,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
          /* --------------- Should generate NAKs (13-18) --------------- */
              
          // Unsupported data type, header set to "ALLES SCHLIMM"
-         case 13:
+         case 12:
              x = Math.PI
              assertFalse(typeSupported(x))
              resultMessage(exchange).body = x
@@ -193,13 +185,13 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              break
 
          // Null body, header set to "FAILURE"
-         case 14:
+         case 13:
              resultMessage(exchange).body = null
              resultMessage(exchange).headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AcknowledgmentCode.AE
              break
          
          // Exception as data, header not set
-         case 15:
+         case 14:
              x = new Exception('Vorbei sind die Ferien')
              assertTrue(x instanceof Exception)
              assertFalse(typeSupported(x))
@@ -207,14 +199,14 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              break
              
          // Exception thrown, header not set
-         case 16:
+         case 15:
              x = new Exception('Die Schule beginnt')
              assertTrue(x instanceof Exception)
              assertFalse(typeSupported(x))
              throw x
 
          // Exception as data, header set to "OK" (and should be ignored)
-         case 17:
+         case 16:
              x = new Exception('Die Zeit ist vergangen')
              assertTrue(x instanceof Exception)
              assertFalse(typeSupported(x))
@@ -223,7 +215,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              break
              
          // Exception thrown, header set to "OK" (and should be ignored)
-         case 18:
+         case 17:
              x = new Exception('So schnell, wie der Wind')
              assertTrue(x instanceof Exception)
              assertFalse(typeSupported(x))
@@ -247,7 +239,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
          
          // port 8088 -- producer-side datatype handling
          from('xds-iti8://0.0.0.0:18188?audit=false')
-             .ack()
+             .transform(HL7v2.ack())
          
     }
 }

@@ -25,7 +25,6 @@ import org.apache.camel.impl.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
@@ -225,7 +224,7 @@ class TestIti21 extends MllpTestContainer {
         
         processor.process(exchange)
         def response = Exchanges.resultMessage(exchange).body
-        def msg = MessageAdapters.make(new PipeParser(), response)
+        def msg = new PipeParser().parse(response)
         assertNAK(msg)
         assertEquals(0, auditSender.messages.size())
     }

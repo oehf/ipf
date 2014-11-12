@@ -100,6 +100,13 @@ public class RSP_K21 extends AbstractMessage {
     }
 
     /**
+     * Returns all repetitions of SFT
+     */
+    public java.util.List<SFT> getSFTAll() throws HL7Exception {
+        return getAllAsList("SFT", SFT.class);
+    }
+
+    /**
      * Returns MSA (Message Acknowledgment) - creates it if necessary
      */
     public MSA getMSA() {
@@ -150,6 +157,13 @@ public class RSP_K21 extends AbstractMessage {
      */
     public int getQUERY_RESPONSEReps() {
         return getReps("QUERY_RESPONSE");
+    }
+
+    /**
+     * Returns all repetitions of RSP_K21_QUERY_RESPONSE
+     */
+    public java.util.List<RSP_K21_QUERY_RESPONSE> getQUERY_RESPONSEAll() throws HL7Exception {
+        return getAllAsList("QUERY_RESPONSE", RSP_K21_QUERY_RESPONSE.class);
     }
 
     /**

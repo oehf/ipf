@@ -16,12 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.dispatch
 
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators
+import org.openehealth.ipf.platform.camel.hl7.HL7v2
 
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator
-
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.*
 
 /**
  * @author Dmytro Rud
@@ -34,15 +31,15 @@ class DispatchRouteBuilder extends SpringRouteBuilder {
 
         from('pix-iti8://0.0.0.0:18501')
                 .routeId('pixfeed')
-                .process(itiValidator())
-                .ack()
-                .process(itiValidator())
+                .process(validatingProcessor())
+                .transform(ack())
+                .process(validatingProcessor())
 
         from('xpid-iti64://0.0.0.0:18502')
                 .routeId('xadpid')
-                .process(itiValidator())
-                .ack()
-                .process(itiValidator())
+                .process(validatingProcessor())
+                .transform(HL7v2.ack())
+                .process(validatingProcessor())
 
     }
 

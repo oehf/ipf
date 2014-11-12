@@ -15,13 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
+import java.util.Scanner;
+
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.HapiContext;
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators.pcdValidator;
 
 /**
@@ -29,10 +32,10 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidat
  */
 public class Pcd01RouteBuilder extends SpringRouteBuilder {
 
-    public static final MessageAdapter PCD_01_SPEC_RESPONSE = load(
+    public static final Message PCD_01_SPEC_RESPONSE = load(
             HapiContextFactory.createHapiContext(PcdTransactions.PCD1),
             "pcd01/pcd01-response.hl7");
-    public static final MessageAdapter PCD_01_SPEC_RESPONSE_INVALID = load(
+    public static final Message PCD_01_SPEC_RESPONSE_INVALID = load(
             HapiContextFactory.createHapiContext(PcdTransactions.PCD1),
             "pcd01/pcd01-response-invalid.hl7");
 
@@ -69,6 +72,15 @@ public class Pcd01RouteBuilder extends SpringRouteBuilder {
                 .process(pcdValidator())
                 .transform(constant(PCD_01_SPEC_RESPONSE))
                 .process(pcdValidator());
+    }
+
+    private static <T extends Message> T load(HapiContext context, String fileName) {
+        try {
+            return (T) context.getPipeParser().parse(
+                    new Scanner(Pcd01RouteBuilder.class.getResourceAsStream("/" + fileName)).useDelimiter("\\A").next());
+        } catch (HL7Exception e) {
+            return null;
+        }
     }
 
 }

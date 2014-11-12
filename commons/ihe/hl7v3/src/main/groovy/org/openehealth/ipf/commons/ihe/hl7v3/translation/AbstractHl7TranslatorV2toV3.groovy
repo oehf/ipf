@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import ca.uhn.hl7v2.model.Segment
 import groovy.xml.MarkupBuilder
-import org.openehealth.ipf.modules.hl7dsl.SegmentAdapter
+import org.openehealth.ipf.modules.hl7.dsl.Repeatable
 
-import static Utils.*
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
-
-import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.buildInstanceIdentifier
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.conditional
+import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.createName
 
 /**
  * @author Dmytro Rud
@@ -80,7 +80,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      * @param pid
      *      HL7v2 PID segment.
      */
-    void createPatientPersonElements(MarkupBuilder builder, SegmentAdapter pid) {
+    void createPatientPersonElements(MarkupBuilder builder, Segment pid) {
         for (pid5 in pid[5]()) {
             createName(builder, pid5)
         }
@@ -175,7 +175,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
 
     }
 
-    void createBirthPlaceElement(MarkupBuilder builder, SegmentAdapter pid) {
+    void createBirthPlaceElement(MarkupBuilder builder, Segment pid) {
         if (pid[23].value) {
             builder.birthPlace(classCode: 'BIRTHPL') {
                 birthplace(classCode: 'CITY', determinerCode: 'INSTANCE') {
@@ -194,8 +194,8 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      * @param defaultUse
      *      default value of HL7v3 attribute "use".
      */
-    void translateTelecom(MarkupBuilder builder, SelectorClosure repeatableXTN, String defaultUse) {
-        repeatableXTN().each { telecom ->
+    void translateTelecom(MarkupBuilder builder, Repeatable repeatableXTN, String defaultUse) {
+        repeatableXTN.each { telecom ->
             String number = telecom[1].value ?: telecom[4].value
             if (number) {
                 String use = defaultUse
@@ -234,9 +234,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
     /**
      * Creates sender or receiver element.
      */
-    void createAgent(MarkupBuilder builder, boolean sender) {
-        String name = (sender ? 'sender' : 'receiver')
-
+    void createAgent(MarkupBuilder builder, String name) {
         String idRoot = this."${name}IdRoot"
         String idExtension = this."${name}IdExtension"
         String idAssigningAuthority = this."${name}IdAssigningAuthority"
@@ -245,7 +243,9 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
         String agentIdExtension = this."${name}AgentIdExtension"
         String agentIdAssigningAuthority = this."${name}AgentIdAssigningAuthority"
 
-        builder."${name}"(typeCode: (sender ? 'SND' : 'RCV')) {
+        String code = name == "sender" ? 'SND' : 'RCV'
+
+        builder."${name}"(typeCode: code) {
             device(determinerCode: 'INSTANCE', classCode: 'DEV') {
                 buildInstanceIdentifier(builder, 'id', true, idRoot, idExtension, idAssigningAuthority)
                 if (agentIdRoot || agentIdExtension || agentIdAssigningAuthority) {

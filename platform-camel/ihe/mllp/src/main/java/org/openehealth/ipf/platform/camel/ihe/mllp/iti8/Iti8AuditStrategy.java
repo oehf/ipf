@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8;
 
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
@@ -28,7 +28,7 @@ public abstract class Iti8AuditStrategy extends MllpAuditStrategy<Iti8AuditDatas
 
 
     @Override
-    public void enrichAuditDatasetFromRequest(Iti8AuditDataset auditDataset, MessageAdapter<?> msg, Exchange exchange) {
+    public void enrichAuditDatasetFromRequest(Iti8AuditDataset auditDataset, Message msg, Exchange exchange) {
         Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);
     }
 

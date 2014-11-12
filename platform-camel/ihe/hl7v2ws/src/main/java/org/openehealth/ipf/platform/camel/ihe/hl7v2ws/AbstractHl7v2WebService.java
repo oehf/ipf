@@ -17,24 +17,23 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
 import java.io.IOException;
 
-import static org.openehealth.ipf.commons.ihe.hl7v2ws.Utils.render;
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
-import static org.apache.commons.lang3.StringUtils.trimToEmpty;
-
 import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.apache.commons.lang3.StringUtils.trimToEmpty;
+import static org.openehealth.ipf.commons.ihe.hl7v2ws.Utils.render;
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 /**
  * Generic implementation of an HL7v2-based Web Service.
@@ -71,16 +70,16 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
 
     protected String doProcess(String request) {
         // parse request
-        MessageAdapter<?> msg;
+        Message msg;
         try {
-            msg = MessageAdapters.make(config.getParser(), trimToEmpty(request).replaceAll("\n", "\r\n"));
+            msg = config.getParser().parse(trimToEmpty(request).replaceAll("\n", "\r\n"));
             config.checkRequestAcceptance(msg);
         } catch (Exception e) {
             LOG.error(formatErrMsg("Request not acceptable"), e);
             return render(nakFactory.createDefaultNak(e));
         }
 
-        MessageAdapter<?> originalRequest = msg.copy();
+        Message originalRequest = MessageUtils.copy(msg);
 
         // play the route, handle its outcomes and check response acceptance
         try {
@@ -91,21 +90,21 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
             }
 
             // check response existence and acceptance
-            msg = Hl7v2MarshalUtils.extractMessageAdapter(
+            msg = Hl7v2MarshalUtils.extractHapiMessage(
                     resultMessage(exchange),
                     exchange.getProperty(Exchange.CHARSET_NAME, String.class),
                     config.getParser());
             config.checkResponseAcceptance(msg);
-            return render(msg.getHapiMessage());
+            return render(msg);
 
         } catch (Exception e) {
             LOG.error(formatErrMsg("Message processing failed, response missing or not acceptable"), e);
             try {
-                return render(nakFactory.createNak(originalRequest.getHapiMessage(), e));
+                return render(nakFactory.createNak(originalRequest, e));
             } catch (HL7Exception e1) {
-                return render(MessageUtils.defaultNak(e1, AcknowledgmentCode.AE, msg.getHapiMessage().getVersion()));
+                return render(MessageUtils.defaultNak(e1, AcknowledgmentCode.AE, msg.getVersion()));
             } catch (IOException e2) {
-                return render(MessageUtils.defaultNak(new HL7Exception(e2), AcknowledgmentCode.AE, msg.getHapiMessage().getVersion()));
+                return render(MessageUtils.defaultNak(new HL7Exception(e2), AcknowledgmentCode.AE, msg.getVersion()));
             }
         }
     }

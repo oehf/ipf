@@ -15,12 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.junit.*
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.parser.PipeParser
+import org.junit.BeforeClass
+import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
+
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_45
 
 /**
@@ -40,20 +43,20 @@ class PixQueryTranslatorTest extends Hl7TranslationTestContainer {
     @Test
     void test1() {
         String v3request = getFileContent('NistPixpdq_Mesa10501-04_Example_01', true, true)
-        MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request, null)
+        Message translatedV2request = v3tov2Translator.translateV3toV2(v3request, null)
     }
 
 	@Test
 	void test2() {
 		String v3request = getFileContent('NistPixpdq_Mesa10501-05_Example_01', true, true)
-		MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request, null)
+        Message translatedV2request = v3tov2Translator.translateV3toV2(v3request, null)
 	}
 	
 	@Test
-	void test3() {
+	void test3() throws HL7Exception {
 		String v3request = getFileContent('NistPixpdq_Mesa10501-05_Example_01', true, true)
 	    String v2response = getFileContent('ok-4', false, false)
-		MessageAdapter abrakadapter = MessageAdapters.make(v2response)
+        Message abrakadapter = new PipeParser().parse(v2response)
 		String v3response = v2tov3Translator.translateV2toV3(abrakadapter, v3request, 'UTF-8')
         V3_VALIDATOR.validate(v3response, Hl7v3ValidationProfiles.getResponseValidationProfile(ITI_45))
 	}

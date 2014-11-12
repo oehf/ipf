@@ -15,18 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertTrue
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.parser.PipeParser
+import org.junit.BeforeClass
+import org.junit.Test
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
 import java.nio.ByteBuffer
 
-import org.junit.BeforeClass
-import org.junit.Test
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
 
-import ca.uhn.hl7v2.parser.PipeParser
 /**
  * Unit test for datatypes handling.
  * @author Dmytro Rud
@@ -64,12 +63,8 @@ class TestIti8Datatypes extends MllpTestContainer {
         body = originalBody
         send(endpointUri, body)
         
-        // MessageAdapter
-        body = MessageAdapters.make(new PipeParser(), originalBody)
-        send(endpointUri, body)
-        
         // HAPI message
-        body = body.target
+        body = new PipeParser().parse(originalBody)
         send(endpointUri, body)
         
         // File
@@ -121,14 +116,14 @@ class TestIti8Datatypes extends MllpTestContainer {
         DatatypesRouteBuilder.cleanCheckedContentTypes()
         
         // 0-8 should return ACks
-        for(int i = 0; i <= 8; ++i) {
+        for(int i = 0; i <= 7; ++i) {
             def msg = send(endpointUri, body)
             assertACK(msg)
         }
         
         // 9-12 should throw exceptions
         def exceptionsCount = 0;
-        for(int i = 9; i <= 12; ++i) {
+        for(int i = 8; i <= 11; ++i) {
             try {
                 send(endpointUri, body)
             } catch (Exception e) {
@@ -138,8 +133,8 @@ class TestIti8Datatypes extends MllpTestContainer {
         assertEquals(4, exceptionsCount)
         
         // 13-18 should return NAKs
-        for(int i = 13; i <= 18; ++i) {
-            MessageAdapter msg = send(endpointUri, body)
+        for(int i = 12; i <= 17; ++i) {
+            Message msg = send(endpointUri, body)
             assertNAK(msg)
         }
         

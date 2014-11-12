@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.junit.*
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
+import ca.uhn.hl7v2.model.Message
+import org.junit.BeforeClass
+import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
+
 import static org.junit.Assert.assertTrue
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_44_PIX
 
@@ -61,7 +61,7 @@ class PixFeedSourceTranslatorTest extends Hl7TranslationTestContainer {
     @Test
 	void testNotSupportedMessage() throws Exception {
 		String v2request = getFileContent('A10', false, true)
-        MessageAdapter msg = MessageAdapters.make(parser, v2request)
+        Message msg = parser.parse(v2request)
         try{
             v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')
         } catch (Exception e){

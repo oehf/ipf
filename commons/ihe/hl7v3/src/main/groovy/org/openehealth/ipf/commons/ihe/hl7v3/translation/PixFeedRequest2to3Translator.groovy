@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.model.Segment
 import groovy.xml.MarkupBuilder
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
-import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
-import org.openehealth.ipf.modules.hl7dsl.SegmentAdapter
+import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.buildInstanceIdentifier
 
 /**
  * Translator for PIX Feed requests v2 to v3.
@@ -35,14 +35,14 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
 
 
     private def translators = [
-        A01: { MessageAdapter adt, String charset -> translate(adt, CREATE_MSG, charset) },
-        A04: { MessageAdapter adt, String charset -> translate(adt, CREATE_MSG, charset) },
-        A08: { MessageAdapter adt, String charset -> translate(adt, UPDATE_MSG, charset) },
-        A40: { MessageAdapter adt, String charset -> translate(adt, MERGE_MSG, charset) }
+        A01: { Message adt, String charset -> translate(adt, CREATE_MSG, charset) },
+        A04: { Message adt, String charset -> translate(adt, CREATE_MSG, charset) },
+        A08: { Message adt, String charset -> translate(adt, UPDATE_MSG, charset) },
+        A40: { Message adt, String charset -> translate(adt, MERGE_MSG, charset) }
     ]
 
 
-    String translateV2toV3(MessageAdapter adt, String dummy, String charset) {
+    String translateV2toV3(Message adt, String dummy, String charset) {
         def triggerEvent = adt.MSH[9][2].value
         if (translators.containsKey(triggerEvent)){
             return translators[triggerEvent](adt, charset)
@@ -57,7 +57,7 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
      * into HL7 v3 <tt>PRPA_IN201301UV02</tt> or <tt>PRPA_IN201302UV02</tt>
      * or <tt>PRPA_IN201304UV02</tt> message.
      */
-    String translate(MessageAdapter adt, String interactId, String charset) {
+    String translate(Message adt, String interactId, String charset) {
         def output = new ByteArrayOutputStream()
         def builder = getBuilder(output, charset)
 
@@ -65,8 +65,7 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
             'ITSVersion' : 'XML_1.0',
             'xmlns'      : HL7V3_NSURI,
             'xmlns:xsi'  : 'http://www.w3.org/2001/XMLSchema-instance',
-            'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema')
-        {
+            'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema') {
             buildInstanceIdentifier(builder, 'id', false, this.messageIdRoot, adt.MSH[10].value)
             creationTime(value: MessageUtils.hl7Now())
             interactionId(root: '2.16.840.1.113883.1.6', extension: interactId)
@@ -74,8 +73,8 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
             processingModeCode(code: 'T')
             acceptAckCode(code: 'AL')
 
-            createAgent(builder, false)
-            createAgent(builder, true)
+            createAgent(builder, "receiver")
+            createAgent(builder, "sender")
 
             controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
                 code(code: interactId.replace('IN', 'TE'))
@@ -117,7 +116,7 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
     }
 
 
-    void createReplacementOf(MarkupBuilder builder, MessageAdapter adt){
+    void createReplacementOf(MarkupBuilder builder, Message adt){
         builder.replacementOf(typeCode: 'RPLC'){
             priorRegistration(classCode: 'REG', moodCode: 'EVN'){
                 statusCode(code: 'obsolete')
@@ -134,8 +133,10 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
     /**
      * Returns a PID that is either directly in the PID segment
      * or within a PATIENT group.
+     *
+     * FIXME replace with msg.findPID
      */
-    static SegmentAdapter getPID(MessageAdapter msg) {
+    static Segment getPID(Message msg) {
         def names = msg.names
         if ('PID' in names) {
             return msg.PID

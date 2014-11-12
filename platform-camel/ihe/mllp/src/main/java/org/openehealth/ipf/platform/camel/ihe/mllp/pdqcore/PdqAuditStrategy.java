@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore;
 
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
@@ -33,12 +33,12 @@ public abstract class PdqAuditStrategy extends MllpAuditStrategy<QueryAuditDatas
 
     
     @Override
-    public void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, MessageAdapter<?> msg, Exchange exchange) {
+    public void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset, Message msg, Exchange exchange) {
         PdqAuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);
     }
     
     @Override
-    public void enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, MessageAdapter<?> msg) {
+    public void enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Message msg) {
         PdqAuditStrategyUtils.enrichAuditDatasetFromResponse(auditDataset, msg);
 
     }

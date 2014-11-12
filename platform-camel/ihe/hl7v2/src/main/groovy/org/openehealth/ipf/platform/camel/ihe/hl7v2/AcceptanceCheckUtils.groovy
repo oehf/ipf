@@ -16,8 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2
 
 import ca.uhn.hl7v2.Version
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-
+import org.apache.camel.Message
 
 /**
  * Groovy subroutines for HL7 message acceptance checks.
@@ -34,7 +33,7 @@ class AcceptanceCheckUtils {
      * Performs transaction-specific acceptance test of the given request message.
      */
      static void checkRequestAcceptance(
-             MessageAdapter msg, 
+             Message msg,
              Hl7v2TransactionConfiguration config) throws Hl7v2AcceptanceException
      {
          checkMessageAcceptance(msg, config, 'Request')
@@ -45,7 +44,7 @@ class AcceptanceCheckUtils {
       * Performs transaction-specific acceptance test of the given response message.
       */
      static void checkResponseAcceptance(
-             MessageAdapter msg, 
+             Message msg,
              Hl7v2TransactionConfiguration config) throws Hl7v2AcceptanceException
      {
          checkMessageAcceptance(msg, config, 'Response')
@@ -59,7 +58,7 @@ class AcceptanceCheckUtils {
      /**
       * Performs acceptance test of the given message.
       * @param msg
-      *          {@link MessageAdapter} representing the message.
+      *          {@link Message} representing the message.
       * @param config
       *          transaction configuration.
       * @param direction
@@ -68,7 +67,7 @@ class AcceptanceCheckUtils {
       *          when the message cannot be accepted.
       */
      private static void checkMessageAcceptance(
-             MessageAdapter msg, 
+             Message msg,
              Hl7v2TransactionConfiguration config,
              String direction) throws Hl7v2AcceptanceException
      {

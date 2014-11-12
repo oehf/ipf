@@ -16,11 +16,11 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import ca.uhn.hl7v2.AcknowledgmentCode
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.apache.camel.spring.SpringRouteBuilder
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
+
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 
 
 /**
@@ -34,26 +34,26 @@ class Iti8TestValidationRouteBuilder extends SpringRouteBuilder {
 
          onException(ValidationException.class)
                  .handled(true)
-                 .ack().staticParams(AcknowledgmentCode.AE)
+                 .transform(ack(AcknowledgmentCode.AE))
 
          // no error handling
          from('xds-iti8://0.0.0.0:18080?audit=false')
              .onException(ValidationException.class)
                  .maximumRedeliveries(0)
                  .end()
-             .process(itiValidator())
-             .ack()
-             .process(itiValidator())
+             .process(validatingProcessor())
+             .transform(ack())
+             .process(validatingProcessor())
 
              
          // manual ACK generation on error
          from('xds-iti8://0.0.0.0:18089?audit=false')
 
-             .process(itiValidator())
+             .process(validatingProcessor())
              .process {
                  throw new RuntimeException('SHOULD NOT BE THROWN')
              }
-             .process(itiValidator())
+             .process(validatingProcessor())
              
      }
 }

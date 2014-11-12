@@ -17,14 +17,13 @@ package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message;
 
 import java.util.Map;
 
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.group.RSP_ZV2_QUERY_RESPONSE;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD;
-import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Structure;
 import ca.uhn.hl7v2.model.v25.segment.*;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.group.RSP_ZV2_QUERY_RESPONSE;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD;
+import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 /**
  * Represents a RSP_ZV2 message structure as described
@@ -127,6 +126,13 @@ public class RSP_ZV2 extends AbstractMessage {
       */
     public int getQUERY_RESPONSEReps() {
         return getReps("QUERY_RESPONSE");
+    }
+
+    /**
+     * Returns all repetitions of RSP_ZV2_QUERY_RESPONSE
+     */
+    public java.util.List<RSP_ZV2_QUERY_RESPONSE> getQUERY_RESPONSEAll() throws HL7Exception {
+        return getAllAsList("QUERY_RESPONSE", RSP_ZV2_QUERY_RESPONSE.class);
     }
 
     /**

@@ -96,6 +96,13 @@ public class RSP_K23 extends AbstractMessage {
     }
 
     /**
+     * Returns all repetitions of SFT
+     */
+    public java.util.List<SFT> getSFTAll() throws HL7Exception {
+        return getAllAsList("SFT", SFT.class);
+    }
+
+    /**
       * Returns MSA (Message Acknowledgment) - creates it if necessary
       */
     public MSA getMSA() {

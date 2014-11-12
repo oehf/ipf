@@ -15,10 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.parser.Parser
 import ca.uhn.hl7v2.parser.PipeParser
 import org.junit.Test
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
+
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor.createCancelMessage
 
 /**
@@ -40,9 +41,10 @@ class TestCancelMessages {
      */
     @Test
     void testJ01() {
-        MessageAdapter request = MessageAdapters.make(request('2.5'))
-        String cancelString = createCancelMessage(request.target, new PipeParser())
-        MessageAdapter cancel = MessageAdapters.make(cancelString)
+        Parser p = new PipeParser();
+        Message request = p.parse(request('2.5'))
+        String cancelString = createCancelMessage(request, p)
+        Message cancel = p.parse(cancelString)
 
         [1, 2, 3, 4, 5, 6].each { i ->
             assert cancel.MSH[i].value == request.MSH[i].value
@@ -62,9 +64,10 @@ class TestCancelMessages {
      */
     @Test
     void testCNQ() {
-        MessageAdapter request = MessageAdapters.make(request('2.3.1'))
-        String cancelString = createCancelMessage(request.target, new PipeParser())
-        MessageAdapter cancel = MessageAdapters.make(cancelString)
+        Parser p = new PipeParser();
+        Message request = p.parse(request('2.3.1'))
+        String cancelString = createCancelMessage(request, p)
+        Message cancel = p.parse(cancelString)
 
         assert cancel.MSH[9][1].value == 'QBP'
         assert cancel.MSH[9][2].value == 'CNQ'

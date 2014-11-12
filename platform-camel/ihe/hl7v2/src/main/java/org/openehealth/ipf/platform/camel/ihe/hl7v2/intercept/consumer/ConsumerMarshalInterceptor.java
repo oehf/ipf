@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 
+import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
+import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
@@ -47,7 +47,7 @@ public class ConsumerMarshalInterceptor extends AbstractHl7v2Interceptor {
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        MessageAdapter<?> originalAdapter = null;
+        Message originalMessage = null;
         Parser parser = getHl7v2TransactionConfiguration().getParser();
         
         org.apache.camel.Message inMessage = exchange.getIn();
@@ -56,8 +56,8 @@ public class ConsumerMarshalInterceptor extends AbstractHl7v2Interceptor {
         // unmarshal
         boolean unmarshallingFailed = false;
         try {
-            originalAdapter = MessageAdapters.make(parser, originalString);
-        } catch (Exception e) {
+            originalMessage = parser.parse(originalString);
+        } catch (HL7Exception e) {
             unmarshallingFailed = true;
             LOG.error("Unmarshalling failed, message processing not possible", e);
             Message nak = getNakFactory().createDefaultNak(e);
@@ -66,16 +66,17 @@ public class ConsumerMarshalInterceptor extends AbstractHl7v2Interceptor {
 
         if( ! unmarshallingFailed) {
             // prepare exchange
-            MessageAdapter<?> copyAdapter;
+            Message copy;
             try {
-                copyAdapter = originalAdapter.copy();
+
+                copy = MessageUtils.copy(originalMessage);
             } catch (Exception e) {
                 // this exception will occur when the message structure (MSH-9-3) of
                 // the original adapter is wrong or when unknown segments are present
-                copyAdapter = originalAdapter;
+                copy = originalMessage;
             }
-            inMessage.setBody(originalAdapter);
-            inMessage.setHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, copyAdapter);
+            inMessage.setBody(originalMessage);
+            inMessage.setHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, copy);
             inMessage.setHeader(ORIGINAL_MESSAGE_STRING_HEADER_NAME, originalString);
 
             // run the route
@@ -86,7 +87,7 @@ public class ConsumerMarshalInterceptor extends AbstractHl7v2Interceptor {
             } catch (Exception e) {
                 LOG.error("Message processing failed", e);
                 resultMessage(exchange).setBody(
-                        getNakFactory().createNak(originalAdapter.getHapiMessage(), e));
+                        getNakFactory().createNak(originalMessage, e));
             }
         }
         

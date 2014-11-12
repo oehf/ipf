@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import groovy.xml.MarkupBuilder
+import ca.uhn.hl7v2.model.Composite
+import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
+import groovy.xml.MarkupBuilder
+import org.openehealth.ipf.modules.hl7.dsl.Repeatable
 
-import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
-import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /*
@@ -32,7 +32,7 @@ class Utils {
     /**
      * Returns the next repetition of the given HL7 v2 field/segment/etc.
      */
-    static def nextRepetition(SelectorClosure closure) {
+    static def nextRepetition(Repeatable closure) {
         return closure(closure().size())
     }
 
@@ -54,7 +54,7 @@ class Utils {
      */
     static void fillMshFromSlurper(
             GPathResult xml, 
-            MessageAdapter msg,
+            Message msg,
             boolean useSenderDeviceName,
             boolean useReceiverDeviceName) 
     {
@@ -91,7 +91,7 @@ class Utils {
     /**
      * Fills an HL7 v2 CX data structure.
      */
-    static void fillCx(CompositeAdapter cx, String root, String extension, String assigningAuthority) {
+    static void fillCx(Composite cx, String root, String extension, String assigningAuthority) {
         cx[1]    = extension
         cx[4][1] = assigningAuthority
         cx[4][2] = root
@@ -102,7 +102,7 @@ class Utils {
     /**
      * Fills an HL7 v2 CX data structure from a corresponding XML element.
      */
-    static void fillCx(CompositeAdapter cx, GPathResult element) {
+    static void fillCx(Composite cx, GPathResult element) {
         fillCx(cx, element.@root.text(), 
                    element.@extension.text(), 
                    element.@assigningAuthorityName.text())
@@ -112,7 +112,7 @@ class Utils {
     /**
      * Creates a HL7 v3 name element from a v2 XPN.
      */
-    static void createName(MarkupBuilder builder, CompositeAdapter xpn) {
+    static void createName(MarkupBuilder builder, Composite xpn) {
         String use = null, qualifier = null
 
         switch (xpn[7].value) {
@@ -155,7 +155,7 @@ class Utils {
             def suffix = xpn[4].value
             def prefix = xpn[5].value
             def degree = xpn[6].value
-            def profSuffix = (xpn.target.message.version == '2.5') ? xpn[14].value : null
+            def profSuffix = (xpn.message.version == '2.5') ? xpn[14].value : null
 
             Map qualifierAttrs = [qualifier: qualifier]
 
@@ -212,7 +212,7 @@ class Utils {
      * target is <code>msg.QPD[3]</code>.  A call to this function will lead to
      * <code>QPD|...|...|abc^123~cde^456|...</code>.  
      */
-    static void fillFacets(Map<String, String> source, SelectorClosure target) {
+    static void fillFacets(Map<String, String> source, Repeatable target) {
         for (facet in source.findAll { it.value }) { 
             def field = nextRepetition(target)
             field[1].value = facet.key
@@ -227,7 +227,7 @@ class Utils {
      * <p>
      * Multiple repetitions of the ERR segment are currently not supported. 
      */
-    static String collectErrorInfo(MessageAdapter nak) {
+    static String collectErrorInfo(Message nak) {
         def fields = [nak.MSA[3], nak.MSA[6], nak.ERR[7], nak.ERR[8]]
         for (err1 in nak.ERR[1]()) {
             [1, 2, 4, 5].each { i -> fields << err1[4][i] }
@@ -251,7 +251,7 @@ class Utils {
             MarkupBuilder builder,
             String elementName,
             boolean useNullFlavor,
-            CompositeAdapter cx)
+            Composite cx)
     {
         buildInstanceIdentifier(builder, elementName, useNullFlavor,
                 cx[4][2].value, cx[1].value, cx[4][1].value)

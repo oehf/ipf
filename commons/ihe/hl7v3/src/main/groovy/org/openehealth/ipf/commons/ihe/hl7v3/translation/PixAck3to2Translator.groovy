@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+import ca.uhn.hl7v2.model.Message
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 
 /**
  * Generic PIX acknowledgement translator v3 to v2.
@@ -42,10 +43,10 @@ class PixAck3to2Translator implements Hl7TranslatorV3toV2 {
      * Translates HL7 v3 acknowledgement message <tt>MCCI_IN000002UV01</tt> 
      * into HL7 v2 message </tt>ACK</tt>.
      */
-    MessageAdapter translateV3toV2(String xmlText, MessageAdapter originalNotification) {
+    Message translateV3toV2(String xmlText, Message originalNotification) {
         def xml = slurp(xmlText)
 
-        MessageAdapter rsp = originalNotification.ack()
+        Message rsp = originalNotification.generateACK()
         rsp.MSH[7][1] = xml.creationTime.@value.text()
         rsp.MSH[9][3] = outputMessageStructure ? 'ACK' : ''
         rsp.MSH[10]   = xml.id.@extension.text()

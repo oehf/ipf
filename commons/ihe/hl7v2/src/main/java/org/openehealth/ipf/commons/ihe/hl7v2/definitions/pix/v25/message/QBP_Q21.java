@@ -95,6 +95,13 @@ public class QBP_Q21 extends AbstractMessage {
     }
 
     /**
+     * Returns all repetitions of SFT
+     */
+    public java.util.List<SFT> getSFTAll() throws HL7Exception {
+        return getAllAsList("SFT", SFT.class);
+    }
+
+    /**
       * Returns QPD (Query Parameter Definition) - creates it if necessary
       */
     public QPD getQPD() {

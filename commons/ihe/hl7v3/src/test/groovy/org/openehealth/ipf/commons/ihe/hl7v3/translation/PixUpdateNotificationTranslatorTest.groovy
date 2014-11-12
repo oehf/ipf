@@ -15,14 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.junit.*
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.parser.PipeParser
+import org.junit.BeforeClass
+import org.junit.Test
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
-import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
+import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_46
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 
 /**
  * Test for PIX Update Notification translator.
@@ -39,9 +41,9 @@ class PixUpdateNotificationTranslatorTest extends Hl7TranslationTestContainer {
     } 
 
     @Test
-    void test1() {
+    void test1() throws HL7Exception {
         String v2notification = getFileContent('adt-a31-1', false, true)
-        MessageAdapter msg = MessageAdapters.make(v2notification)
+        Message msg = new PipeParser().parse(v2notification)
         String v3notification = v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')
         V3_VALIDATOR.validate(v3notification, Hl7v3ValidationProfiles.getRequestValidationProfile(ITI_46))
     }

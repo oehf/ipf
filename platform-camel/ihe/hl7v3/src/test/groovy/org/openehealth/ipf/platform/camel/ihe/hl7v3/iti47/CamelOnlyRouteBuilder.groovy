@@ -15,27 +15,23 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47
 
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.translatorHL7v2toHL7v3;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.translatorHL7v3toHL7v2;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti47RequestValidator;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti47ResponseValidator;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
+import org.apache.camel.Exchange
+import org.apache.camel.Processor
 import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.commons.lang3.Validate;
-import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqRequest3to2Translator;
-import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqResponse2to3Translator;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti21.Iti21Component;
+import org.apache.commons.lang3.Validate
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21
+import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqRequest3to2Translator
+import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqResponse2to3Translator
 
-import ca.uhn.hl7v2.parser.Parser;
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.staticResponse
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.translatorHL7v2toHL7v3
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.translatorHL7v3toHL7v2
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti47RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti47ResponseValidator
 
 class CamelOnlyRouteBuilder extends SpringRouteBuilder {
 
-    private static final Parser PARSER = Iti21Component.CONFIGURATION.getParser();
     private static final PdqRequest3to2Translator REQUEST_TRANSLATOR = new PdqRequest3to2Translator();
     private static final PdqResponse2to3Translator RESPONSE_TRANSLATOR = new PdqResponse2to3Translator();
 
@@ -50,10 +46,10 @@ class CamelOnlyRouteBuilder extends SpringRouteBuilder {
             .setHeader("myHeader", constant("content-1"))
             .convertBodyTo(byte[].class)
             .process(translatorHL7v3toHL7v2(REQUEST_TRANSLATOR))
-            .process(typeAndHeaderChecker(MessageAdapter.class, "content-1"))
-            .process(itiValidator())
-            .setBody(constant(MessageAdapters.make(PARSER, Testiti47CamelOnly.getResponseMessage())))
-            .process(itiValidator())
+            .process(typeAndHeaderChecker(QBP_Q21, "content-1"))
+            .process(validatingProcessor())
+            .transform(staticResponse(Testiti47CamelOnly.getResponseMessage()))
+            .process(validatingProcessor())
             .setHeader("myHeader", constant("content-2"))
             .process(translatorHL7v2toHL7v3(RESPONSE_TRANSLATOR))
             .process(typeAndHeaderChecker(String.class, "content-2"))

@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.v25.datatype.*;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.Escape;
+import ca.uhn.hl7v2.parser.Escaping;
 import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 

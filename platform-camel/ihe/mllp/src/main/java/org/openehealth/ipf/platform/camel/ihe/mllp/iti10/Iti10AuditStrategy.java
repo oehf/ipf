@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti10;
 
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
@@ -33,7 +33,7 @@ public abstract class Iti10AuditStrategy extends MllpAuditStrategy<QueryAuditDat
 
     @Override
     public void enrichAuditDatasetFromRequest(QueryAuditDataset auditDataset,
-            MessageAdapter<?> msg, Exchange exchange) {
+            Message msg, Exchange exchange) {
         Iti10AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);        
     }
  

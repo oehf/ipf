@@ -16,14 +16,15 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.HapiContext
+import ca.uhn.hl7v2.model.Message
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * PIX Query Requests translator v3 to v2.
@@ -67,10 +68,9 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
      * Translates HL7 v3 request message <tt>PRPA_IN201309UV02</tt> 
      * into HL7 v2 message </tt>QBP_Q23</tt>.
      */
-    MessageAdapter translateV3toV2(String xmlText, MessageAdapter dummy = null) {
+    Message translateV3toV2(String xmlText, Message dummy = null) {
         def xml = slurp(xmlText)
-        def hapiMessage = MessageUtils.makeMessage(PIX_QUERY_CONTEXT, 'QBP', 'Q23', '2.5')
-        def qry = new MessageAdapter(hapiMessage)
+        def qry = MessageUtils.makeMessage(PIX_QUERY_CONTEXT, 'QBP', 'Q23', '2.5')
 
         // Segment MSH
         fillMshFromSlurper(xml, qry, this.useSenderDeviceName, this.useReceiverDeviceName)                       

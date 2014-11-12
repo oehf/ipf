@@ -15,16 +15,21 @@
  */
 package org.openehealth.ipf.tutorials.osgi.service.impl
 
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load
-
-import static org.junit.Assert.*
-
-import org.junit.Beforeimport org.junit.BeforeClass
-import org.junit.Testimport org.junit.runner.RunWith
-import ca.uhn.hl7v2.model.Type
-import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
+import ca.uhn.hl7v2.model.Type
+import ca.uhn.hl7v2.parser.PipeParser
+import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.ContextConfigurationimport org.springframework.test.context.TestExecutionListenersimport org.springframework.test.context.junit4.SpringJUnit4ClassRunnerimport org.springframework.test.context.support.DependencyInjectionTestExecutionListener
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestExecutionListeners
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
+
+import static org.junit.Assert.assertEquals
+
 /**
  * @author Martin Krasser
  */
@@ -48,7 +53,7 @@ public class AdmissionTransmogrifierSpringTest {
 
      @Before
      void setUp() throws Exception {
-         message = load('messages/msg-01.hl7')
+         message = new PipeParser().parse(getClass().getResource('/messages/msg-01.hl7').text)
      }
 
      @Test

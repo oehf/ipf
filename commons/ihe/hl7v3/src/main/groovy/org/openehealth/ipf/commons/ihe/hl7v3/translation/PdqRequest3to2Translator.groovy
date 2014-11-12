@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import ca.uhn.hl7v2.HapiContext;
-import ca.uhn.hl7v2.parser.ModelClassFactory
+import ca.uhn.hl7v2.HapiContext
+import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
@@ -86,10 +86,9 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
      * Continuation support in the IPF ITI-21 or ITI-47 Camel components
      * should be used instead.
 	 */
-    MessageAdapter translateV3toV2(String v3requestString, MessageAdapter dummy = null) {
+    Message translateV3toV2(String v3requestString, Message dummy = null) {
 	    def v3request = slurp(v3requestString)
-        def hapiMessage = MessageUtils.makeMessage(PDQ_CONTEXT, 'QBP', 'Q22', '2.5')
-        def v2request = new MessageAdapter(hapiMessage)
+        def v2request = MessageUtils.makeMessage(PDQ_CONTEXT, 'QBP', 'Q22', '2.5')
         
         // Segment MSH
         fillMshFromSlurper(v3request, v2request, useSenderDeviceName, useReceiverDeviceName)
@@ -172,7 +171,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
     /**
      * To be customized in derived classes. 
      */
-    void postprocess(MessageAdapter v2request, GPathResult v3request) {
+    void postprocess(Message v2request, GPathResult v3request) {
         // empty per default
     }
 }

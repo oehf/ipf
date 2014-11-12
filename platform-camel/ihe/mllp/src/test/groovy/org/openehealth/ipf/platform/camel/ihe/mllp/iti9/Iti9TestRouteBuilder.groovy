@@ -19,8 +19,6 @@ import ca.uhn.hl7v2.AcknowledgmentCode
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-
 /**
  * Camel route for generic unit tests.
  * @author Dmytro Rud

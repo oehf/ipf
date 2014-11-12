@@ -15,9 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
+import java.util.List;
+
 import ca.uhn.hl7v2.ErrorCode;
-import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.Version;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
@@ -25,9 +27,6 @@ import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-
-import java.util.List;
 
 import static org.apache.commons.lang3.ArrayUtils.*;
 import static org.apache.commons.lang3.Validate.*;
@@ -256,22 +255,18 @@ public class Hl7v2TransactionConfiguration {
 
     /**
      * Performs transaction-specific acceptance test of the given request message.
-     * @param messageAdapter
-     *      IPF {@link MessageAdapter} object.
+     * @param message {@link Message} object.
      */
-    public void checkRequestAcceptance(MessageAdapter messageAdapter) throws Hl7v2AcceptanceException {
-        Message message = messageAdapter.getHapiMessage();
+    public void checkRequestAcceptance(Message message) throws Hl7v2AcceptanceException {
         checkMessageAcceptance(message, true);
     }
 
 
     /**
      * Performs transaction-specific acceptance test of the given response message.
-     * @param messageAdapter
-     *      IPF {@link MessageAdapter} object.
+     * @param message {@link Message} object.
      */
-    public void checkResponseAcceptance(MessageAdapter messageAdapter) throws Hl7v2AcceptanceException {
-        Message message = messageAdapter.getHapiMessage();
+    public void checkResponseAcceptance(Message message) throws Hl7v2AcceptanceException {
         checkMessageAcceptance(message, false);
 
         try {
@@ -279,10 +274,10 @@ public class Hl7v2TransactionConfiguration {
                     new String[] {"AA", "AR", "AE", "CA", "CR", "CE"},
                     new Terser(message).get("MSA-1")))
             {
-                throw new Hl7v2AcceptanceException("Bad response: missing or invalid MSA segment", 101);
+                throw new Hl7v2AcceptanceException("Bad response: missing or invalid MSA segment", ErrorCode.REQUIRED_FIELD_MISSING);
             }
         } catch (HL7Exception e) {
-            throw new Hl7v2AcceptanceException("Bad response: missing or invalid MSA segment", 207);
+            throw new Hl7v2AcceptanceException("Bad response: missing or invalid MSA segment", ErrorCode.APPLICATION_INTERNAL_ERROR);
         }
     }
 
@@ -311,7 +306,7 @@ public class Hl7v2TransactionConfiguration {
         } catch (Hl7v2AcceptanceException e) {
             throw e;
         } catch (HL7Exception e) {
-            throw new Hl7v2AcceptanceException("Missing or invalid MSH segment: " + e.getMessage(), 207);
+            throw new Hl7v2AcceptanceException("Missing or invalid MSH segment: " + e.getMessage(), ErrorCode.APPLICATION_INTERNAL_ERROR);
         }
     }
 
@@ -339,7 +334,7 @@ public class Hl7v2TransactionConfiguration {
             boolean isRequest) throws Hl7v2AcceptanceException
     {
         if (! hl7Version.equals(version)) {
-            throw new Hl7v2AcceptanceException("Invalid HL7 version " + version, 203);
+            throw new Hl7v2AcceptanceException("Invalid HL7 version " + version, ErrorCode.UNSUPPORTED_VERSION_ID);
         }
 
         boolean messageTypeSupported = isRequest
@@ -347,7 +342,7 @@ public class Hl7v2TransactionConfiguration {
                 : isSupportedResponseMessageType(messageType);
 
         if (! messageTypeSupported) {
-            throw new Hl7v2AcceptanceException("Invalid message type " + messageType, 200);
+            throw new Hl7v2AcceptanceException("Invalid message type " + messageType, ErrorCode.UNSUPPORTED_MESSAGE_TYPE);
         }
 
         boolean triggerEventSupported = isRequest
@@ -355,7 +350,7 @@ public class Hl7v2TransactionConfiguration {
                 : isSupportedResponseTriggerEvent(messageType, triggerEvent);
 
         if(! triggerEventSupported) {
-            throw new Hl7v2AcceptanceException("Invalid trigger event " + triggerEvent, 201);
+            throw new Hl7v2AcceptanceException("Invalid trigger event " + triggerEvent, ErrorCode.UNSUPPORTED_EVENT_CODE);
         }
 
         if (! StringUtils.isEmpty(messageStructure)) {
@@ -366,7 +361,7 @@ public class Hl7v2TransactionConfiguration {
             try {
                 expectedMessageStructure = hapiContext.getModelClassFactory().getMessageStructureForEvent(event, Version.versionOf(version));
             } catch (HL7Exception e) {
-                throw new Hl7v2AcceptanceException("Acceptance check failed", 204);
+                throw new Hl7v2AcceptanceException("Acceptance check failed", ErrorCode.UNKNOWN_KEY_IDENTIFIER);
             }
 
             // TODO when upgrading to HAPI 2.1 remove the constant IF statements
@@ -381,7 +376,7 @@ public class Hl7v2TransactionConfiguration {
             boolean bothAreEqual = messageStructure.equals(expectedMessageStructure);
             boolean bothAreAcks = (messageStructure.startsWith("ACK") && expectedMessageStructure.startsWith("ACK"));
             if (! (bothAreEqual || bothAreAcks)) {
-                throw new Hl7v2AcceptanceException("Invalid message structure " + messageStructure, 207);
+                throw new Hl7v2AcceptanceException("Invalid message structure " + messageStructure, ErrorCode.APPLICATION_INTERNAL_ERROR);
             }
         }
     }

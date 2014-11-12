@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
-import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.dropTimeZone
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * PIX Feed Requests translator v3 to v2.
@@ -105,7 +106,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	/**
 	 * Adds patient identifiers from the given GPath source.
 	 */
-	private void addPatientIdentifiers(GPathResult source, GroupAdapter grp) {
+	private void addPatientIdentifiers(GPathResult source, Group grp) {
 	    for (id in source.id) {
 	        def root               = id.@root.text()
 	        def extension          = id.@extension.text()
@@ -141,14 +142,13 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
      * </tt>PRPA_IN201302UV02</tt> or </tt>PRPA_IN201304UV02</tt>
      * into HL7 v2 messages </tt>ADT_A01</tt> or </tt>ADT_A39</tt>.
      */
-    MessageAdapter translateV3toV2(String xmlText, MessageAdapter dummy = null) {
+    Message translateV3toV2(String xmlText, Message dummy = null) {
 	    def xml           = slurp(xmlText)
 	    def interactionId = xml.interactionId.@extension.text()
         def triggerEvent  = interactionId.map('hl7v2v3-interactionId-eventStructure')[0]
 	    
-        def hapiMessage   = Message."ADT_${triggerEvent}"('2.3.1')        
-        def adt           = new MessageAdapter(hapiMessage)
-        def grp           = (triggerEvent == 'A40') ? adt.PIDPD1MRGPV1(0) : adt
+        def adt   = Message."ADT_${triggerEvent}"('2.3.1')
+        def grp   = (triggerEvent == 'A40') ? adt.PIDPD1MRGPV1(0) : adt
 
         // Segment MSH
         fillMshFromSlurper(xml, adt, this.useSenderDeviceName, this.useReceiverDeviceName)                       

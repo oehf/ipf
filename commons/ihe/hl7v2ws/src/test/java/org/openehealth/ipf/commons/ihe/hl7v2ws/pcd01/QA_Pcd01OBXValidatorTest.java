@@ -15,15 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 
-import static org.junit.Assert.assertEquals;
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make;
-
-import org.junit.Ignore;
-import org.junit.Test;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.v26.message.ORU_R01;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Kingsley Nwaigbo
@@ -34,7 +31,7 @@ public class QA_Pcd01OBXValidatorTest extends AbstractPCD01ValidatorTest {
 
     @Test
     public void testSyntheticMessageTrimmed() throws HL7Exception{
-        MessageAdapter<ORU_R01> adapter = make(maximumMessage.toString().trim());
+        ORU_R01 adapter = (ORU_R01)getParser().parse(maximumMessage.toString().trim());
         validate(adapter);
         assertObservationCount(5, adapter);
     }
@@ -144,9 +141,8 @@ public class QA_Pcd01OBXValidatorTest extends AbstractPCD01ValidatorTest {
     @Ignore
     @Test(expected = HL7Exception.class)
     public void testMissingOBR7_OBR8_OBX14() throws HL7Exception {
-        MessageAdapter<ORU_R01> msg;
-        msg = make(maximumMessage.toString().replace("|20090813095715+0500|20090813105715+0500", "||"));
-        msg = make(msg.toString().replace("|R|||20090813095725+0500|", "|R||||"));
+        ORU_R01 msg = (ORU_R01)getParser().parse(maximumMessage.toString().replace("|20090813095715+0500|20090813105715+0500", "||"));
+        msg = (ORU_R01)getParser().parse(msg.toString().replace("|R|||20090813095725+0500|", "|R||||"));
         validate(msg);
     }
     
@@ -159,8 +155,7 @@ public class QA_Pcd01OBXValidatorTest extends AbstractPCD01ValidatorTest {
     
     //check for messages without OBR-7, OBR-8 and OBX-14
     //check: OBX-14 and OBX-19 should be equivalent
-    private void assertObservationCount(int expected, MessageAdapter<ORU_R01> adapter){
-        ORU_R01 msg = (ORU_R01)adapter.getTarget();
+    private void assertObservationCount(int expected, ORU_R01 msg){
         int observationsInMsg = msg.getPATIENT_RESULT().getORDER_OBSERVATION().getOBSERVATIONReps();
         assertEquals(expected, observationsInMsg);
     }

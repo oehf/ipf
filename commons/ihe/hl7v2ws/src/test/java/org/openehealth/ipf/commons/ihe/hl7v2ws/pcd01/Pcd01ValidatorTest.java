@@ -16,18 +16,12 @@
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 
 import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.model.v26.message.ACK;
 import ca.uhn.hl7v2.model.v26.message.ORU_R01;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 
 import static org.junit.Assert.assertEquals;
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make;
 
 /**
  *
@@ -51,108 +45,103 @@ public class Pcd01ValidatorTest extends AbstractPCD01ValidatorTest {
    
     @Test
     public void testMessageSectionJ2() throws HL7Exception {
-        MessageAdapter<ORU_R01> msg1 = load(getParser(), "pcd01/valid-pcd01-request.hl7v2");
+        ORU_R01 msg1 = load(getParser(), "pcd01/valid-pcd01-request.hl7v2");
         validate(msg1);
     }
 
     @Test
     public void testMessageSectionE11() throws HL7Exception {
-        MessageAdapter<ORU_R01>  msg2 = load(getParser(), "pcd01/valid-pcd01-request2.hl7v2");
+        ORU_R01 msg2 = load(getParser(), "pcd01/valid-pcd01-request2.hl7v2");
         validate(msg2);
     }
 
     @Test
     public void testSyntheticMessage() throws HL7Exception{
-        MessageAdapter<ORU_R01> adapter = make(getParser(), VALID);
-        validate(adapter);
-        assertObservationCount(4, adapter);
+        ORU_R01 msg3 = (ORU_R01)getParser().parse(VALID);
+        validate(msg3);
+        assertObservationCount(4, msg3);
     }
     
     @Test
     public void testSyntheticMessageTrimmed() throws HL7Exception{
-        MessageAdapter<ORU_R01>  adapter = make(getParser(), VALID.trim());
-        validate(adapter);
-        assertObservationCount(4, adapter);
+        ORU_R01 msg4 = (ORU_R01)getParser().parse(VALID.trim());
+        validate(msg4);
+        assertObservationCount(4, msg4);
     }
     
     @Test
     public void testResponseMessage()  throws HL7Exception {
-        MessageAdapter<ACK>  rsp = load(getParser(), "pcd01/valid-pcd01-response.hl7v2");
+        ACK rsp = load(getParser(), "pcd01/valid-pcd01-response.hl7v2");
         validate(rsp);
     }
     
     @Test
     public void testResponseMessage2() throws HL7Exception  {
-        MessageAdapter<ACK> rsp2 = load(getParser(), "pcd01/valid-pcd01-response2.hl7v2");
+        ACK rsp2 = load(getParser(), "pcd01/valid-pcd01-response2.hl7v2");
         validate(rsp2);
     }
     
     @Test
     public void testSyntheticResponseMessage() throws HL7Exception {
-        validate(make(getParser(), VALID_RESPONSE));
+        validate(getParser().parse(VALID_RESPONSE));
     }
 
     
     @Test
     public void testNoPID() throws HL7Exception {
         //no PID is allowed (see the definition of ORU^R01) 
-        validate(make(getParser(), VALID.replace(PID, "")));
+        validate(getParser().parse(VALID.replace(PID, "")));
     }
     
     @Test
     public void testOnlyFamilyName() throws HL7Exception {
-        validate(make(getParser(), VALID.replace("Doe^John^Joseph", "Doe^^")));
+        validate(getParser().parse(VALID.replace("Doe^John^Joseph", "Doe^^")));
     }
     
     @Test
     public void testNotPresentPatientName() throws HL7Exception {
-        validate(make(getParser(), VALID.replace("Doe^John^Joseph", "^^")));
+        validate(getParser().parse(VALID.replace("Doe^John^Joseph", "^^")));
     }
     
 
     // ///////// Negative tests
     @Test(expected = HL7Exception.class)
     public void testNoOBR() throws HL7Exception {
-        validate(make(getParser(), VALID.replace(OBR, "")));
+        validate(getParser().parse(VALID.replace(OBR, "")));
     }
 
     @Ignore
     @Test(expected = HL7Exception.class)
     public void testSyntheticResponseUnsupportedCODE() throws HL7Exception {
     	//code SN is not supported
-        validate(make(getParser(), VALID_RESPONSE.replace("MSA|CE|", "MSA|SN|")));
+        validate(getParser().parse(VALID_RESPONSE.replace("MSA|CE|", "MSA|SN|")));
     }
     
 
     /////////////////// Field cheks
     @Test(expected = HL7Exception.class)
     public void testIncompletePatientId() throws HL7Exception {
-        validate(make(getParser(), VALID.replace("789567", "")));
+        validate(getParser().parse(VALID.replace("789567", "")));
     }
 
     @Test(expected = HL7Exception.class)
     public void testObservationIdentifierNotPresent() throws HL7Exception {
-        validate(make(getParser(), VALID.replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", "")));
+        validate(getParser().parse(VALID.replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", "")));
     }
     
     @Test(expected = HL7Exception.class)
     public void testObservationWithNoSubId() throws HL7Exception {
-        validate(make(getParser(), VALID.replace("PROFILE_BP^MDC|1|", "PROFILE_BP^MDC||")));
+        validate(getParser().parse(VALID.replace("PROFILE_BP^MDC|1|", "PROFILE_BP^MDC||")));
     }
     
     @Test(expected = HL7Exception.class)
     public void testObservationWithNoSubId2() throws HL7Exception {
-        validate(make(getParser(), VALID.replace("|1.0.1|", "||")));
+        validate(getParser().parse(VALID.replace("|1.0.1|", "||")));
     }
     
-    private void assertObservationCount(int expected, MessageAdapter<ORU_R01> adapter){
-        ORU_R01 msg = (ORU_R01)adapter.getTarget();
+    private void assertObservationCount(int expected, ORU_R01 msg){
         int observationsInMsg = msg.getPATIENT_RESULT().getORDER_OBSERVATION().getOBSERVATIONReps();
         assertEquals(expected, observationsInMsg);
     }
 
-
-    private HapiContext createHapiContext() {
-        return HapiContextFactory.createHapiContext(PcdTransactions.PCD1);
-    }
 }

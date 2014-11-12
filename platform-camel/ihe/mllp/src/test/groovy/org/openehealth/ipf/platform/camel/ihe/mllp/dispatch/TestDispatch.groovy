@@ -21,7 +21,7 @@ import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
 import static org.junit.Assert.assertEquals
-import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 
 /**
  * @author Dmytro Rud
@@ -67,7 +67,7 @@ class TestDispatch extends MllpTestContainer {
         DefaultExchange exchange = new DefaultExchange(camelContext);
 
         exchange.in.body = send('pix-iti8://localhost:18500', ITI_8_REQUEST)
-        itiValidator().process(exchange)
+        validatingProcessor().process(exchange)
         assertACK(exchange.in.body)
 
         exchange.in.body = send('pix-iti9://localhost:18500', ITI_9_REQUEST)
@@ -76,7 +76,7 @@ class TestDispatch extends MllpTestContainer {
         assertNAK(exchange.in.body)
 
         exchange.in.body = send('xpid-iti64://localhost:18500', ITI_64_REQUEST)
-        itiValidator().process(exchange)
+        validatingProcessor().process(exchange)
         assertACK(exchange.in.body)
 
         // ITI-8 from server

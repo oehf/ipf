@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.tutorials.hl7.route;
 
-import static org.junit.Assert.assertEquals;
+import java.io.InputStream;
+import java.util.Scanner;
 
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.parser.PipeParser;
 import org.apache.camel.ProducerTemplate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
@@ -31,6 +34,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Martin Krasser
@@ -57,8 +62,12 @@ public class SampleRouteTest {
         producerTemplate.sendBody("direct:input", input.getInputStream());
         Resource result = new FileSystemResource("target/output/HZL.hl7");
         assertEquals(
-                MessageAdapters.load("msg-01.hl7.expected").toString(),
-                MessageAdapters.make(result.getInputStream()).toString());
+                load(getClass().getResourceAsStream("/msg-01.hl7.expected")).toString(),
+                load(result.getInputStream()).toString());
     }
-    
+
+    protected static <T extends Message> T load(InputStream is) throws HL7Exception {
+        return (T)new PipeParser().parse(
+                new Scanner(is).useDelimiter("\\A").next());
+    }
 }
