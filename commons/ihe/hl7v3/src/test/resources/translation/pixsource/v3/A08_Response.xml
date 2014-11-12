@@ -7,20 +7,20 @@
   <acceptAckCode code="AL" />
   <receiver typeCode="RCV">
     <device determinerCode="INSTANCE" classCode="DEV">
-      <id root="1.2.3.6" extension="RE" assigningAuthorityName="RA" />
+      <id root="1.2.3.6" assigningAuthorityName="RA" />
       <asAgent classCode="AGNT">
         <representedOrganization determinerCode="INSTANCE" classCode="ORG">
-          <id root="1.2.3.7" extension="RAE" assigningAuthorityName="RAA" />
+          <id root="1.2.3.7" assigningAuthorityName="RAA" />
         </representedOrganization>
       </asAgent>
     </device>
   </receiver>
   <sender typeCode="SND">
     <device determinerCode="INSTANCE" classCode="DEV">
-      <id root="1.2.3.4" extension="SE" assigningAuthorityName="SA" />
+      <id root="1.2.3.4" assigningAuthorityName="SA" />
       <asAgent classCode="AGNT">
         <representedOrganization determinerCode="INSTANCE" classCode="ORG">
-          <id root="1.2.3.5" extension="SAE" assigningAuthorityName="SAA" />
+          <id root="1.2.3.5" assigningAuthorityName="SAA" />
         </representedOrganization>
       </asAgent>
     </device>

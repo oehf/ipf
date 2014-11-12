@@ -35,7 +35,7 @@
           <patient classCode="PAT">
             <id extension="1003" root="2.16.840.1.113883.3.37.4.1.1.2.511.1"/>
             <statusCode code="active"/>
-            <patientPerson>
+            <patientPerson classCode="PSN" determinerCode="INSTANCE">
               <name>
                 <given>JOHN</given>
                 <family>LABBE</family>

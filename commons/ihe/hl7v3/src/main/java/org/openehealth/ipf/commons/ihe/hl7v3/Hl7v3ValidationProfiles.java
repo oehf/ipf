@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.Row;
 
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
 
@@ -44,92 +45,80 @@ public class Hl7v3ValidationProfiles {
     }
 
 
-    private static void registerRequestValidationProfile(InteractionId id, String[][] rows) {
-        REQUEST_VALIDATION_PROFILES.put(id, new Hl7v3ValidationProfile(rows));
-    }
-
-    private static void registerResponseValidationProfile(InteractionId id, String[][] rows) {
-        RESPONSE_VALIDATION_PROFILES.put(id, new Hl7v3ValidationProfile(rows));
-    }
-
-
     static {
         /********** REQUESTS **********/
 
-        String[][] iti44RequestValidationRows = new String[][]{
-                new String[]{"PRPA_IN201301UV02", null},
-                new String[]{"PRPA_IN201302UV02", null},
-                new String[]{"PRPA_IN201304UV02", null}
-        };
+        Hl7v3ValidationProfile iti44RequestValidationProfile = new Hl7v3ValidationProfile(
+                new Row("PRPA_IN201301UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON),
+                new Row("PRPA_IN201302UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON),
+                new Row("PRPA_IN201304UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+        );
+        REQUEST_VALIDATION_PROFILES.put(ITI_44_PIX, iti44RequestValidationProfile);
+        REQUEST_VALIDATION_PROFILES.put(ITI_44_XDS, iti44RequestValidationProfile);
 
-        registerRequestValidationProfile(ITI_44_PIX, iti44RequestValidationRows);
-        registerRequestValidationProfile(ITI_44_XDS, iti44RequestValidationRows);
+        REQUEST_VALIDATION_PROFILES.put(ITI_45, new Hl7v3ValidationProfile(
+                new Row("PRPA_IN201309UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+        ));
 
-        registerRequestValidationProfile(ITI_45, new String[][]{
-                new String[]{"PRPA_IN201309UV02", null}
-        });
+        REQUEST_VALIDATION_PROFILES.put(ITI_46, new Hl7v3ValidationProfile(
+                new Row("PRPA_IN201302UV02", Row.DEFAULT_XSD, null)
+        ));
 
-        registerRequestValidationProfile(ITI_46, new String[][]{
-                new String[]{"PRPA_IN201302UV02", null}
-        });
+        REQUEST_VALIDATION_PROFILES.put(ITI_47, new Hl7v3ValidationProfile(
+                new Row("PRPA_IN201305UV02",        Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON),
+                new Row("QUQI_IN000003UV01",        Row.DEFAULT_XSD, null),
+                new Row("QUQI_IN000003UV01_Cancel", Row.DEFAULT_XSD, null)
+        ));
 
-        registerRequestValidationProfile(ITI_47, new String[][]{
-                new String[]{"PRPA_IN201305UV02", "iti47/PRPA_IN201305UV02"},
-                new String[]{"QUQI_IN000003UV01", null},
-                new String[]{"QUQI_IN000003UV01_Cancel", null}
-        });
+        REQUEST_VALIDATION_PROFILES.put(ITI_55, new Hl7v3ValidationProfile(
+                new Row("PRPA_IN201305UV02", Row.DEFAULT_XSD, "/schematron/iti55/PRPA_IN201305UV02.sch.xml")
+        ));
 
-        registerRequestValidationProfile(ITI_55, new String[][]{
-                new String[]{"PRPA_IN201305UV02", "iti55/PRPA_IN201305UV02"}
-        });
+        REQUEST_VALIDATION_PROFILES.put(ITI_56, new Hl7v3ValidationProfile(
+                new Row("PatientLocationQueryRequest", "/schema/IHE/XCPD_PLQ.xsd", null)
+        ));
 
-        registerRequestValidationProfile(ITI_56, new String[][]{
-                new String[]{"PatientLocationQueryRequest", null, "IHE/XCPD_PLQ"}
-        });
-
-        registerRequestValidationProfile(PCC_1, new String[][]{
-                new String[]{"QUPC_IN043100UV01", null},
-                new String[]{"QUQI_IN000003UV01", null},
-                new String[]{"QUQI_IN000003UV01_Cancel", null}
-        });
+        REQUEST_VALIDATION_PROFILES.put(PCC_1, new Hl7v3ValidationProfile(
+                new Row("QUPC_IN043100UV01",        Row.DEFAULT_XSD, null),
+                new Row("QUQI_IN000003UV01",        Row.DEFAULT_XSD, null),
+                new Row("QUQI_IN000003UV01_Cancel", Row.DEFAULT_XSD, null)
+        ));
 
 
         /********** RESPONSES**********/
 
-        String[][] iti44ResponseValidationRows = new String[][]{
-                new String[]{"MCCI_IN000002UV01", null}
-        };
+        Hl7v3ValidationProfile iti44ResponseValidationProfile = new Hl7v3ValidationProfile(
+                new Row("MCCI_IN000002UV01", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+        );
+        RESPONSE_VALIDATION_PROFILES.put(ITI_44_PIX, iti44ResponseValidationProfile);
+        RESPONSE_VALIDATION_PROFILES.put(ITI_44_XDS, iti44ResponseValidationProfile);
 
-        registerResponseValidationProfile(ITI_44_PIX, iti44ResponseValidationRows);
-        registerResponseValidationProfile(ITI_44_XDS, iti44ResponseValidationRows);
+        RESPONSE_VALIDATION_PROFILES.put(ITI_45, new Hl7v3ValidationProfile(
+                new Row("PRPA_IN201310UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+        ));
 
-        registerResponseValidationProfile(ITI_45, new String[][]{
-                new String[]{"PRPA_IN201310UV02", null}
-        });
+        RESPONSE_VALIDATION_PROFILES.put(ITI_46, new Hl7v3ValidationProfile(
+                new Row("MCCI_IN000002UV01", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+        ));
 
+        RESPONSE_VALIDATION_PROFILES.put(ITI_47, new Hl7v3ValidationProfile(
+                new Row("PRPA_IN201306UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON),
+                new Row("MCCI_IN000002UV01", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+        ));
 
-        registerResponseValidationProfile(ITI_46, new String[][]{
-                new String[]{"MCCI_IN000002UV01", null}
-        });
+        RESPONSE_VALIDATION_PROFILES.put(ITI_55, new Hl7v3ValidationProfile(
+                new Row("PRPA_IN201306UV02", Row.DEFAULT_XSD, "/schematron/iti55/PRPA_IN201306UV02.sch.xml"),
+                new Row("MCCI_IN000002UV01", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+        ));
 
-        registerResponseValidationProfile(ITI_47, new String[][]{
-                new String[]{"PRPA_IN201306UV02", "iti47/PRPA_IN201306UV02"},
-                new String[]{"MCCI_IN000002UV01", null}
-        });
+        RESPONSE_VALIDATION_PROFILES.put(ITI_56, new Hl7v3ValidationProfile(
+                new Row("PatientLocationQueryResponse", "/schema/IHE/XCPD_PLQ.xsd", null)
+        ));
 
-        registerResponseValidationProfile(ITI_55, new String[][]{
-                new String[]{"PRPA_IN201306UV02", "iti55/PRPA_IN201306UV02"},
-                new String[]{"MCCI_IN000002UV01", null}
-        });
-
-        registerResponseValidationProfile(ITI_56, new String[][]{
-                new String[]{"PatientLocationQueryResponse", null, "IHE/XCPD_PLQ"}
-        });
-
-        registerResponseValidationProfile(PCC_1, new String[][]{
-                new String[]{"QUPC_IN043200UV01", null},
-                new String[]{"MCCI_IN000002UV01", null}
-        });
+        RESPONSE_VALIDATION_PROFILES.put(PCC_1, new Hl7v3ValidationProfile(
+                new Row("QUPC_IN043200UV01", Row.DEFAULT_XSD, null),
+                new Row("MCCI_IN000002UV01", Row.DEFAULT_XSD, null)
+        ));
 
     }
 }

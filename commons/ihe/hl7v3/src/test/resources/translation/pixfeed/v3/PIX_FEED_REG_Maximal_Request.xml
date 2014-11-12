@@ -38,7 +38,7 @@
 	    <id assigningAuthorityName="domain2" extension="PIX10515W5"/>
             <statusCode code="active"/>
 	    <veryImportantPersonCode code="true"/>
-            <patientPerson>
+            <patientPerson classCode="PSN" determinerCode="INSTANCE">
               <name use="L">
 		<prefix qualifier="AC">Dr.</prefix>
                 <given>MARY</given>

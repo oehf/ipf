@@ -53,9 +53,12 @@ public interface CombinedXmlValidationProfile {
     String getSchematronPath(String rootElementName);
 
     /**
+     * @param rootElementName
+     *      local name of root XML element of the document that is being validated.
+     *      (already checked for acceptance).
      * @return
      *      a map containing custom Schematron validation parameters,
      *      or <code>null</code>, when such parameters are not necessary.
      */
-    Map<String, Object> getCustomSchematronParameters();
+    Map<String, Object> getCustomSchematronParameters(String rootElementName);
 }
