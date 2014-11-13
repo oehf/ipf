@@ -24,6 +24,7 @@ import ca.uhn.hl7v2.util.Terser
 
 /**
  * @author Martin Krasser
+ * @deprecated use {@link org.openehealth.ipf.modules.hl7.message.MessageUtils#copy}
  */
 class MessageCopy {
 

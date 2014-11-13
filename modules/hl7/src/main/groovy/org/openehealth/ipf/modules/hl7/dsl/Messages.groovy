@@ -19,15 +19,12 @@ import ca.uhn.hl7v2.model.Message;
 
 /**
  * @author Martin Krasser
+ * @deprecated use {@link org.openehealth.ipf.modules.hl7.message.MessageUtils#copy)
  */
 public class Messages {
 
      static void copyMessage(Message src, Message dst) {
          new MessageCopy(src, dst).execute()
      }
-
-    static void copyMessage2(Message src, Message dst) {
-        new MessageCopy(src, dst).execute()
-    }
     
 }
