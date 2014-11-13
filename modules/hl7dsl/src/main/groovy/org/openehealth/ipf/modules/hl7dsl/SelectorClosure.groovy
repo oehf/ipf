@@ -26,6 +26,7 @@ import ca.uhn.hl7v2.model.DataTypeException
  * respective fields that have different structures in different HL7 versions. 
  * 
  * @author Christian Ohr
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class SelectorClosure extends Closure implements AbstractAdapter<Object> {
 	

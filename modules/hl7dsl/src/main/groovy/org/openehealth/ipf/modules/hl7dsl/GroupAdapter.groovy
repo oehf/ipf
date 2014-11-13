@@ -23,6 +23,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.*
  * @author Martin Krasser
  * @author Christian Ohr
  * @author Mitko Kolev
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class GroupAdapter<T extends Group> extends StructureAdapter<T> {
     

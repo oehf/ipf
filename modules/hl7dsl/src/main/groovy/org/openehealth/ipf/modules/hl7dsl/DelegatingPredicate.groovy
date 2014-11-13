@@ -23,6 +23,7 @@ import ca.uhn.hl7v2.util.FilterIterator
  * Bridge between HAPI Predicate and Closure
  * 
  * @author Christian Ohr
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  *
  */
 class DelegatingPredicate implements FilterIterator.Predicate {

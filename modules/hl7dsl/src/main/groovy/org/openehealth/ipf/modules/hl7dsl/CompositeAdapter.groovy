@@ -22,6 +22,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.*
 
 /**
  * @author Martin Krasser
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class CompositeAdapter extends TypeAdapter {
 

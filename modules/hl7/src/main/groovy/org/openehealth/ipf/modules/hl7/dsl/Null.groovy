@@ -24,7 +24,7 @@ import ca.uhn.hl7v2.model.MessageVisitor
 
 /**
  * 
- * NullAdapter helps to handle non-existing repeatable elements transparently
+ * Null helps to handle non-existing repeatable elements transparently
  * without throwing an Exception. 
  * 
  * @author Christian Ohr

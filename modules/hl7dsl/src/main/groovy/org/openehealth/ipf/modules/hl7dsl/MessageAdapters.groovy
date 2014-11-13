@@ -22,6 +22,7 @@ import ca.uhn.hl7v2.parser.Parser
 
 /**
  * @author Martin Krasser
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 public class MessageAdapters {
 	

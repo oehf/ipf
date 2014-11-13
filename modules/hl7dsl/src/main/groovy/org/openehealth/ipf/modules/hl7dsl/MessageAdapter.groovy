@@ -25,6 +25,7 @@ import ca.uhn.hl7v2.model.AbstractMessage;
 /**
  * @author Martin Krasser
  * @author Mitko Kolev
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class MessageAdapter<T extends AbstractMessage> extends GroupAdapter<T> implements Writable {
 

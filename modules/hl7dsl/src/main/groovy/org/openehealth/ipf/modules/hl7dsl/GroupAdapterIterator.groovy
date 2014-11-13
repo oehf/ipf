@@ -25,6 +25,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
  * Inspired by HAPI's {@link ca.uhn.hl7v2.util.ReadOnlyMessageIterator}
  * 
  * @author Christian Ohr
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class GroupAdapterIterator implements Iterator {
 	

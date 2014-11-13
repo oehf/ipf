@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor
  * @author Martin Krasser
  * @author Christian Ohr
  * @author Mitko Kolev
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class AdapterHelper {
 

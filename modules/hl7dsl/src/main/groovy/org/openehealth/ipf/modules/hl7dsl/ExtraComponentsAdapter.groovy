@@ -21,6 +21,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.*
 
 /**
  * @author Christian Ohr
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class ExtraComponentsAdapter implements AbstractAdapter<ExtraComponents> {
 

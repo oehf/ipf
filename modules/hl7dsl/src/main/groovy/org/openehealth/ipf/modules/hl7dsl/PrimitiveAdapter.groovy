@@ -23,6 +23,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.originalStringVal
 /**
  * @author Martin Krasser
  * @author Christian Ohr
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class PrimitiveAdapter extends TypeAdapter {
 

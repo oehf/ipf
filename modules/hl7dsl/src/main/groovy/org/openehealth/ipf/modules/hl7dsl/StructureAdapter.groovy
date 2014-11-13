@@ -20,6 +20,7 @@ import ca.uhn.hl7v2.model.Structure
 /**
  * @author Martin Krasser
  * @author Christian Ohr
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 abstract class StructureAdapter<T extends Structure> implements AbstractAdapter<T> {
 

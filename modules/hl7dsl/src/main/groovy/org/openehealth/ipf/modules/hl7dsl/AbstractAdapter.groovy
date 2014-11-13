@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 package org.openehealth.ipf.modules.hl7dsl
-
-import ca.uhn.hl7v2.model.Visitable;
-
 /**
  * @author Mitko Kolev
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 public interface AbstractAdapter<T> {
     

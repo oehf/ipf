@@ -17,6 +17,7 @@ package org.openehealth.ipf.modules.hl7dsl
 
 /**
  * @author Martin Krasser
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class AdapterException extends RuntimeException {
 

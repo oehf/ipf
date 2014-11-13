@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.hl7;
 
+import java.util.Scanner;
+
 import ca.uhn.hl7v2.model.AbstractMessage;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Message;
@@ -53,7 +55,7 @@ public class SampleRouteBuilder2Test extends AbstractExtensionTest {
 
     @Test
     public void testRoute1() throws Exception {
-        String message = inputMessage(resource).toString();
+        String message = inputMessage(resource);
         mockOutput1.expectedMessageCount(1);
         producerTemplate.sendBodyAndHeader("direct:input1", message, "foo", "blah");
         mockOutput1.assertIsSatisfied();
@@ -62,7 +64,7 @@ public class SampleRouteBuilder2Test extends AbstractExtensionTest {
 
     @Test
     public void testRoute2() throws Exception {
-        String message = inputMessage(resource).toString();
+        String message = inputMessage(resource);
         mockOutput2.expectedMessageCount(1);
         producerTemplate.sendBodyAndHeader("direct:input1", message, "foo", "blub");
         mockOutput2.assertIsSatisfied();
@@ -76,9 +78,9 @@ public class SampleRouteBuilder2Test extends AbstractExtensionTest {
     private static Message resultMessage(MockEndpoint mock) {
         return mock.getExchanges().get(0).getIn();
     }
-    
-    private static <T extends AbstractMessage>  MessageAdapter<T> inputMessage(String resource) {
-        return MessageAdapters.load(resource);
+
+    private static String inputMessage(String resource) {
+        return new Scanner(SampleRouteBuilder2Test.class.getResourceAsStream("/" + resource)).useDelimiter("\\A").next();
     }
     
 }

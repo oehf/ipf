@@ -22,6 +22,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.isEmpty
 
 /**
  * @author Martin Krasser
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class TypeAdapter<T extends Type> implements AbstractAdapter<T> {
 

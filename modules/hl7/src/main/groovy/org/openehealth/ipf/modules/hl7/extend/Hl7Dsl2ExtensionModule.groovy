@@ -121,6 +121,14 @@ public class Hl7Dsl2ExtensionModule {
         delegate.getComponent(idx)
     }
 
+    String getValue(ExtraComponents delegate) {
+        delegate.getComponent(1).getValue()
+    }
+
+    String getValue2(ExtraComponents delegate) {
+        delegate.getComponent(1).getValue2()
+    }
+
     // ==========================================================================
     // Composite metaclass extensions
     // ==========================================================================

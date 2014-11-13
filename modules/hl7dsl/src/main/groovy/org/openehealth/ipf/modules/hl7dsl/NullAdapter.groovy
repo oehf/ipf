@@ -29,6 +29,7 @@ import ca.uhn.hl7v2.model.DataTypeException
  * without throwing an Exception. 
  * 
  * @author Christian Ohr
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  *
  */
 class NullAdapter extends TypeAdapter{
@@ -43,6 +44,9 @@ class NullAdapter extends TypeAdapter{
 
 
 // Also use a NullAdapter object as underlying target to avoid Null Pointer Exceptions
+/**
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
+ */
 class NullPrimitive extends AbstractType implements Primitive {
 	
 	NullPrimitive() {

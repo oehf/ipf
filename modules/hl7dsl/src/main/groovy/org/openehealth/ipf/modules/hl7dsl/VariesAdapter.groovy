@@ -24,6 +24,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentIndex
 
 /**
  * @author Christian Ohr
+ * @deprecated the ipd-modules-hl7dsl module is deprecated
  */
 class VariesAdapter extends TypeAdapter {
 

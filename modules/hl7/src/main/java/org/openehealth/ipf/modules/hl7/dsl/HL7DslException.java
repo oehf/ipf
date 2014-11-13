@@ -17,7 +17,7 @@
 package org.openehealth.ipf.modules.hl7.dsl;
 
 /**
- *
+ * Exception thrown on problems while processing HL7 DSL expressions
  */
 public class HL7DslException extends RuntimeException {
 
