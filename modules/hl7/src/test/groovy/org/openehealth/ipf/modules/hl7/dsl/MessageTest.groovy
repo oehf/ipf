@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.modules.hl7.dsl
 
+import ca.uhn.hl7v2.model.v22.message.ADT_A01
 import ca.uhn.hl7v2.model.v24.message.ORU_R01
 import ca.uhn.hl7v2.model.v25.message.MDM_T01
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
-import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.make
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.load
-import ca.uhn.hl7v2.model.v22.message.ADT_A01
+import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.make
 
 /**
  * @author Martin Krasser
@@ -88,29 +88,27 @@ class MessageTest extends groovy.test.GroovyAssert {
 
     @Test
     void testCopyMessage1() {
-        def msg1Copy = msg1.empty()
-        Messages.copyMessage(msg1, msg1Copy)
+        //def msg1Copy = msg1.empty()
+        //Messages.copyMessage(msg1, msg1Copy)
+        def msg1Copy = MessageUtils.copy(msg1)
         assert msg1.toString() == msg1Copy.toString()
     }
 
     @Test
     void testCopyMessage2() {
-        def msg2Copy = msg2.empty()
-        Messages.copyMessage(msg2, msg2Copy)
+        def msg2Copy = MessageUtils.copy(msg2)
         assert msg2.toString() == msg2Copy.toString()
     }
 
     @Test
     void testCopyMessageWithNonStandardSegments1() {
-        def msg3Copy = msg3.empty()
-        Messages.copyMessage(msg3, msg3Copy)
+        def msg3Copy = MessageUtils.copy(msg3)
         assert msg3.toString() == msg3Copy.toString()
     }
 
     @Test
     void testCopyMessageWithNonStandardSegments2() {
-        def msg4Copy = msg4.empty()
-        Messages.copyMessage(msg4, msg4Copy)
+        def msg4Copy = MessageUtils.copy(msg4)
         assert msg4.toString() == msg4Copy.toString()
     }
 }

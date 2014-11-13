@@ -228,11 +228,8 @@ class MessageUtils {
         newInstance(message, message.parser.hapiContext.modelClassFactory)
     }
 
-    static Message copy(Message message) {
-        Message copy = empty(message)
-        copyMessage(message, copy)
-        copy.parser = message.parser
-        copy
+    static Message copy(Message source) {
+        source.parser.parse(source.encode())
     }
 
     // Helpers
@@ -379,6 +376,8 @@ class MessageUtils {
             return new EncodingCharacters('|' as char, '^~\\&')
         }
     }
+
+
 }
 
 

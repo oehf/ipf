@@ -16,19 +16,13 @@
 package org.openehealth.ipf.modules.hl7.extend
 
 import ca.uhn.hl7v2.model.*
-import ca.uhn.hl7v2.parser.ModelClassFactory
 import ca.uhn.hl7v2.util.DeepCopy
 import ca.uhn.hl7v2.util.ReadOnlyMessageIterator
-import org.codehaus.groovy.runtime.InvokerHelper
 import org.openehealth.ipf.modules.hl7.dsl.HL7DslException
 import org.openehealth.ipf.modules.hl7.dsl.Null
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7.message.Visitors
-
-import java.lang.reflect.Constructor
-
-import static org.openehealth.ipf.modules.hl7.dsl.Messages.copyMessage
 
 /**
  * Adds HL7 DSL extensions for Groovy. This is a replacement for the previous solution
