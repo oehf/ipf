@@ -42,8 +42,9 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
  * IHETransaction. In general this should not be necessary when the HapiContext of the parsed
  * message contains a ValidationContext that includes the corresponding
  * {@link org.openehealth.ipf.gazelle.validation.core.GazelleProfileRule GazelleProfileRule}
- * instance as one of its message rules. In that case it would be sufficient to use the
- * <pre>conformsWithDefault</pre> predicate supplied by camel-hl7.
+ * instance as one of its message rules. In that case it would be sufficient to use
+ * {@link org.openehealth.ipf.platform.camel.hl7.HL7v2#validatingProcessor()} or
+ * {@link org.apache.camel.component.hl7.HL7#messageConforms()}.
  *
  * @author Boris Stanojevic
  * @author Christian Ohr
@@ -55,30 +56,6 @@ public final class ConformanceProfileValidators {
     private ConformanceProfileValidators() {
     }
 
-    /**
-     * Returns a validating Camel processor for a message in a IHE transaction. The actual profile
-     * to be used is defined in the validation rules for the message's HapiContext.
-     *
-     * @return a validating Camel processor for a message in a IHE transaction
-     */
-    public static Processor validatingProcessor() {
-        return new Processor() {
-
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Message msg = bodyMessage(exchange);
-                HapiContext context = msg.getParser().getHapiContext();
-
-                // We could also write an exception handler on top of SimpleValidationExceptionHandler that
-                // encapsulates the behavior below, but that may restrict custom validation...
-                SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(context);
-                handler.setMinimumSeverityToCollect(Severity.ERROR);
-                if (context.<Boolean>getMessageValidator().validate(msg, handler)) {
-                    throw new ValidationException("Message validation failed", handler.getExceptions());
-                }
-            }
-        };
-    }
 
     /**
      * Returns a validating Camel processor for a dedicated profile

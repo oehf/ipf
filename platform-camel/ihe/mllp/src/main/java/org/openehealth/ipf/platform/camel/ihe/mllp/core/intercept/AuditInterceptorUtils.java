@@ -20,6 +20,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
@@ -36,7 +37,7 @@ import ca.uhn.hl7v2.util.Terser;
  *
  * @author Dmytro Rud
  */
-public class AuditInterceptorUtils {
+public final class AuditInterceptorUtils {
     private static final transient Logger LOG = LoggerFactory.getLogger(AuditInterceptorUtils.class);
 
     private AuditInterceptorUtils() {
@@ -92,8 +93,7 @@ public class AuditInterceptorUtils {
                 return false;
             }
 
-            String messageType = terser.get("MSH-9-1");
-            return interceptor.getMllpEndpoint().getHl7v2TransactionConfiguration().isAuditable(messageType);
+            return interceptor.getMllpEndpoint().getHl7v2TransactionConfiguration().isAuditable(MessageUtils.eventType(message));
         } catch (Exception e) {
             LOG.error("Exception when determining message auditability, no audit will be performed", e);
             return false;

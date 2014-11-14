@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.gazelle.validation.profile.ItiPixPdqProfile;
 import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
+import org.openehealth.ipf.platform.camel.hl7.HL7v2;
 import org.openehealth.ipf.platform.camel.hl7.validation.ConformanceProfileValidators;
 
 /**
@@ -37,7 +38,7 @@ abstract public class PixPdqCamelValidators {
      * @return all-purpose validating processor
      */
     public static Processor itiValidator() {
-        return ConformanceProfileValidators.validatingProcessor();
+        return HL7v2.validatingProcessor();
     }
 
     /**

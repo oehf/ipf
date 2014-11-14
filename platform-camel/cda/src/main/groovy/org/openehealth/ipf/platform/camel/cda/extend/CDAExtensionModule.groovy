@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.cda.extend;
+package org.openehealth.ipf.platform.camel.cda.extend
 
-import org.apache.camel.builder.DataFormatClause;
-import org.apache.camel.model.ProcessorDefinition;
-import org.openehealth.ipf.commons.xml.SchematronProfile;
-import org.openehealth.ipf.modules.cda.CDAR2Constants;
-import org.openehealth.ipf.platform.camel.cda.dataformat.CDADataFormat;
-import org.openehealth.ipf.platform.camel.core.extend.CoreExtensionModule;
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
+import org.openehealth.ipf.commons.xml.SchematronProfile
+import org.openehealth.ipf.modules.cda.CDAR2Constants
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 
 /**
  * CDA DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
@@ -30,14 +26,7 @@ import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
  * @author Jens Riemschneider
  */
 public class CDAExtensionModule {
-     /**
-      * Defines marshalling between a standard CDA document and a POCDMT000040ClinicalDocument object 
-      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
-      */
-     public static ProcessorDefinition cdar2(DataFormatClause self) {
-         CDADataFormat dataFormat = new CDADataFormat();
-         return CoreExtensionModule.dataFormat(self, dataFormat);
-     }         
+
  
      /**
       * Parameterizes the xsd() validator to validate against a W3C CDA Schema 

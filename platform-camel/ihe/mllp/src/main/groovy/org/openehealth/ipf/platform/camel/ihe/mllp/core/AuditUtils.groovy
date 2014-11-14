@@ -114,7 +114,7 @@ class AuditUtils {
      * or <code>null</code>, when there are no patient IDs.
      */
     static List pidList(Repeatable repeatable) {
-        repeatable.collect { cx -> cx.encode() } ?: null
+        repeatable.collect { it.encode() } ?: null
     }
      
     

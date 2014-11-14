@@ -18,8 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 import ca.uhn.hl7v2.model.Message
 import org.apache.camel.Exchange
 
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils.pidList
-
 /**
  * Audit Strategy Groovy Utils
  * @author Dmytro Rud
@@ -27,15 +25,10 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils.pidLis
 final class Iti8AuditStrategyUtils  {
 
     static void enrichAuditDatasetFromRequest(Iti8AuditDataset auditDataset, Message msg, Exchange exchange) {
-        def pidSegment
+        auditDataset.patientId = msg.findPID()[3].encodeRepetitions()
         if(msg.MSH[9][2].value == 'A40') {
-            def group = msg.PIDPD1MRGPV1
-            pidSegment = group.PID[3]
-            auditDataset.oldPatientId = pidList(group.MRG[1])?.join(msg.MSH[2].value[1])
-        } else {
-            pidSegment = msg.PID[3]
+            auditDataset.oldPatientId = msg.PIDPD1MRGPV1.MRG[1].encodeRepetitions()
         }
-        auditDataset.patientId = pidList(pidSegment)?.join(msg.MSH[2].value[1])
     }
 
 }

@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>ipf-modules-cda-oht</artifactId>
+            <artifactId>ipf-modules-cda-core</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

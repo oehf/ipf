@@ -15,18 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Message;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Test;
-import org.openehealth.ipf.modules.cda.CDAR2Parser;
-import org.openehealth.ipf.modules.cda.CDAR2Renderer;
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocument;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -42,19 +36,6 @@ public class CDAModelExtensionTest extends AbstractExtensionTest {
     @EndpointInject(uri="mock:error")
     protected MockEndpoint mockError;
     
-    
-    @Test
-    public void testMarshalDefault() throws Exception {
-        testMarshalCDA("direct:input1", cdaExample);
-        testMarshalCDA("direct:input1", ccdExample);
-    }
-    
-    @Test
-    public void testUnmarshalDefault() throws Exception {
-        testUnmarshalCDA("direct:input2", cdaExample);
-        testUnmarshalCDA("direct:input2", ccdExample);
-    }    
-    
     @Test
     public void testXsdValidateSuccess() throws Exception {
         testValidateCDA("direct:input3", cdaExample);
@@ -65,27 +46,7 @@ public class CDAModelExtensionTest extends AbstractExtensionTest {
     public void testSchematronValidateSuccess() throws Exception {
         testValidateCDA("direct:input4", ccdExample);
     }    
-    
 
-    private void testMarshalCDA(String endpoint, String file) throws Exception {
-        mockOutput.reset();
-        mockError.reset();
-        POCDMT000040ClinicalDocument message = inputMessage(file);
-        mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody(endpoint, message);
-        mockOutput.assertIsSatisfied();
-        assertEquals(messageAsString(message), resultString());
-    }
-    
-    private void testUnmarshalCDA(String endpoint, String file) throws Exception {
-        mockOutput.reset();
-        mockError.reset();
-        InputStream stream = inputStream(file);
-        mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody(endpoint, stream);
-        mockOutput.assertIsSatisfied();
-        assertEquals(messageAsString(inputMessage(file)), messageAsString(resultAdapter()));
-    }
     
     private void testValidateCDA(String endpoint, String file) throws Exception {
         mockOutput.reset();
@@ -97,29 +58,9 @@ public class CDAModelExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
         mockError.assertIsSatisfied();
     }
-
-    private String resultString() {
-        return resultMessage().getBody(String.class);
-    }
-
-    private POCDMT000040ClinicalDocument resultAdapter() {
-        return (POCDMT000040ClinicalDocument)resultMessage().getBody();
-    }
-
-    private Message resultMessage() {
-        return mockOutput.getExchanges().get(0).getIn();
-    }   
     
     private static InputStream inputStream(String resource) throws IOException {
         return new ClassPathResource(resource).getInputStream();
-    }
-
-    private POCDMT000040ClinicalDocument inputMessage(String resource) throws IOException {
-        return new CDAR2Parser().parse(inputStream(resource), (Object[])null);
-    }
-    
-    private String messageAsString(POCDMT000040ClinicalDocument message) {
-        return new CDAR2Renderer().render(message, (Object[])null);
     }
     
 }

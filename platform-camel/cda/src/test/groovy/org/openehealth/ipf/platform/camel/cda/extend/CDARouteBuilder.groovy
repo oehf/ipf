@@ -23,14 +23,6 @@ import org.apache.camel.spring.SpringRouteBuilder
 class CDARouteBuilder extends SpringRouteBuilder {
       
     void configure() {
-        
-        from("direct:input1")
-            .marshal().cdar2()
-            .to('mock:output')        
-
-        from("direct:input2")
-            .unmarshal().cdar2()
-            .to('mock:output') 
             
         from("direct:input3")
             .onException(Exception.class)

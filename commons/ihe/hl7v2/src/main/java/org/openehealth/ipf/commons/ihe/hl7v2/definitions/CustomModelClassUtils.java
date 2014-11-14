@@ -28,7 +28,7 @@ import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
  *
  * @author Dmytro Rud
  */
-public class CustomModelClassUtils {
+public final class CustomModelClassUtils {
 
     private CustomModelClassUtils() {
         throw new IllegalStateException("Utility class, cannot instantiate");

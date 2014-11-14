@@ -21,6 +21,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
+import org.openehealth.ipf.platform.camel.hl7.HL7v2;
 import org.openehealth.ipf.platform.camel.hl7.validation.ConformanceProfileValidators;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 
@@ -35,7 +36,7 @@ public class Hl7v2WsCamelValidators {
     // private static final Validator<Object, Object> CONTINUA_WAN_VALIDATOR = new ContinuaWanValidator();
 
     public static Processor pcdValidator() {
-        return ConformanceProfileValidators.validatingProcessor();
+        return HL7v2.validatingProcessor();
     }
 
     /**

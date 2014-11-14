@@ -27,6 +27,7 @@ import org.apache.camel.model.RouteDefinition
 import org.openehealth.ipf.modules.hl7.validation.support.HL7Validator
 import org.openehealth.ipf.platform.camel.core.extend.CoreExtensionModule
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
+import org.openehealth.ipf.platform.camel.hl7.HL7v2
 import org.openehealth.ipf.platform.camel.hl7.adapter.AcknowledgementAdapter
 import org.openehealth.ipf.platform.camel.hl7.dataformat.Hl7DataFormat
 import org.openehealth.ipf.platform.camel.hl7.expression.Hl7InputExpression
@@ -62,7 +63,7 @@ public class Hl7ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing
      */
     public static ProcessorDefinition validateMessage(ProcessorDefinition self) {
-        return self.process(ConformanceProfileValidators.validatingProcessor());
+        return self.process(HL7v2.validatingProcessor());
     }
 
     /**

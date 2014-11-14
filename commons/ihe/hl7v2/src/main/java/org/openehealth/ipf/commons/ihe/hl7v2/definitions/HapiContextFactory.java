@@ -20,6 +20,8 @@ import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
+import ca.uhn.hl7v2.util.idgenerator.FileBasedHiLoGenerator;
+import ca.uhn.hl7v2.util.idgenerator.IDGenerator;
 import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.ConformanceProfileBasedValidationBuilder;
 import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
@@ -35,6 +37,19 @@ import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
  * </p>
  */
 public class HapiContextFactory {
+
+    private static IDGenerator idGenerator = new FileBasedHiLoGenerator();
+
+    /**
+     * Allows to globally set the {@link ca.uhn.hl7v2.util.idgenerator.IDGenerator} that generates
+     * IDs for new HL7 messages from new HapiContext instances. This does not affect the ID generation
+     * of already created HapiContexts nor does it do any cleanup of the previous generator.
+     *
+     * @param generator global ID generator
+     */
+    public static synchronized void setIdGenerator(IDGenerator generator) {
+        idGenerator = generator;
+    }
 
     /**
      * Returns a HapiContext for the provided
@@ -62,6 +77,7 @@ public class HapiContextFactory {
         context.setProfileStore(new GazelleProfileStore());
         context.setValidationRuleBuilder(new ConformanceProfileBasedValidationBuilder(transactions));
         context.getParserConfiguration().setValidating(false);
+        context.getParserConfiguration().setIdGenerator(idGenerator);
         context.setValidationExceptionHandlerFactory(new SimpleValidationExceptionHandler(context));
         return context;
     }

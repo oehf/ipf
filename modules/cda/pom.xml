@@ -15,7 +15,8 @@
     <modules>
         <module>core</module>
         <module>mdht</module>
-        <module>oht</module>
+        <!-- IPF 3.0: removed -->
+        <!-- <module>oht</module> -->
     </modules>
     
 </project>

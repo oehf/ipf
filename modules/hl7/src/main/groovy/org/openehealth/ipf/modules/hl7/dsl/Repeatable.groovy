@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.modules.hl7.dsl
 
-import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.model.Structure
 import ca.uhn.hl7v2.model.Visitable
+import ca.uhn.hl7v2.parser.EncodingCharacters
 import org.codehaus.groovy.runtime.InvokerHelper
-
-import ca.uhn.hl7v2.model.DataTypeException
 
 /**
  * Special closure that helps in the cases of HL7 DSL to allow for a default
@@ -48,34 +46,64 @@ class Repeatable extends Closure implements Iterable<Visitable> {
         return elements.iterator()
     }
 
-    // Defining the value property with getValue() doesn't work
+    /**
+     * Returns the named property of the first repetition
+     *
+     * @param property
+     * @return the named property of the first repetition
+     */
     public Object getProperty(String property) {
         InvokerHelper.getProperty(elementAt(0), property)
     }
 
-    // Forward other method calls to the first object
+    /**
+     * Apply the method call to the first repetition and return the result
+     *
+     * @param name method name
+     * @param args method args
+     * @return result of the method call
+     */
     def methodMissing(String name, args) {
         InvokerHelper.invokeMethod(elementAt(0), name, args)
     }
 
-    // Forward index access to the first object
+    /**
+     * Returns the index'th element of the first repetition
+     * @param index index
+     * @return ndex'th element of the first repetition
+     */
     def getAt(int index) {
         elementAt(0)[index]
     }
 
-    // Forward property access to the first object
+    /**
+     * Forwards property access to the first repetition
+     * @param name property name
+     * @return result value
+     */
     def propertyMissing(String name) {
         InvokerHelper.getProperty(elementAt(0), name)
     }
 
-    // Forward property access to the first object
+    /**
+     * Puts the value into the first repetition
+     * @param value
+     */
     void from(Object value) {
         elementAt(0).from(value)
     }
 
+    /**
+     * Encode the repetition in a way how it would look like in a pipe-encoded message
+     * @return encoded repetition
+     */
+    String encodeRepetitions() {
+        elements.collect { it.encode() }.join(getSeparator(structure))
+    }
+
     protected Object doCall(Object argument) {
         if (argument != null) {
-            return elementAt((int)argument)
+            return elementAt((int) argument)
         } else {
             return elements
         }
@@ -111,4 +139,7 @@ class Repeatable extends Closure implements Iterable<Visitable> {
         elementAt(index).path
     }
 
+    private String getSeparator(Structure s) {
+        return s instanceof Segment ? s.message.encodingCharactersValue[1] : "\r"
+    }
 }

@@ -17,9 +17,10 @@
         <module>flow</module>
         <module>ihe</module>
         <module>hl7</module>
-        <module>test</module>
+        <!-- IPF 3.0 : removed -->
+        <!-- <module>test</module> -->
         <module>cda</module>
-		<module>mdht</module>
+        <module>mdht</module>
     </modules>
 
     <dependencies>
