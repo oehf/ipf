@@ -32,9 +32,7 @@ http://openehealth.org/schema/ipf-commons-core-2.5.xsd
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
 
-    <bean id="routeBuilder"
-        class="org.openehealth.ipf.tutorials.hl7.route.SampleRouteBuilder">
-    </bean>
+    <bean id="routeBuilder" class="org.openehealth.ipf.tutorials.hl7.route.SampleRouteBuilder"/>
 
     <ipf:globalContext id="globalContext"/>
 
@@ -43,8 +41,6 @@ http://openehealth.org/schema/ipf-commons-core-2.5.xsd
         <property name="mappingScript" value="classpath:tutorial.map"/>
     </bean>
 
-    <bean id="myCustomRules" 
-       class="org.openehealth.ipf.tutorials.hl7.validation.SampleRulesBuilder">
-    </bean>
+    <bean id="myCustomRules" class="org.openehealth.ipf.tutorials.hl7.validation.SampleRulesBuilder"/>
 
 </beans>

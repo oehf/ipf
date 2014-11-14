@@ -15,33 +15,43 @@
  */
 package org.openehealth.ipf.tutorials.hl7.route
 
+import ca.uhn.hl7v2.DefaultHapiContext
+import ca.uhn.hl7v2.HapiContext
 import org.apache.camel.Exchange
+import org.apache.camel.component.hl7.HL7DataFormat
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.tutorials.hl7.validation.SampleRulesBuilder
 
+import static org.apache.camel.component.hl7.HL7.messageConforms
+
 /**
- * @author Martin Krasser
+ * @author Christian Ohr
  */
 public class SampleRouteBuilder extends SpringRouteBuilder {
 
-     void configure() {
+    void configure() {
+
+        // Set up HL7 context with the custom validation rules
+        HapiContext context = new DefaultHapiContext(lookup(SampleRulesBuilder))
+        HL7DataFormat hl7 = new HL7DataFormat()
+        hl7.setHapiContext(context)
 
         from('direct:input')
-            .unmarshal().ghl7()
-            .validate().ghl7().staticProfile(lookup(SampleRulesBuilder))
-            .transmogrify { msg ->
-                msg.PV1[3][2] = '' // clear room nr.
-                msg.PV1[3][3] = '' // clear bed nr.
-                msg.PID[7][1] = msg.PID[7][1].value.substring(0, 8) // format birth date
-                msg.PID[8]    = msg.PID[8].mapGender()              // map gender
-                msg
-            }
-            .setHeader(Exchange.FILE_NAME) {exchange -> 
-                exchange.in.body.MSH[4].value + '.hl7'
-            }
-            .marshal().ghl7()
-            .to('file:target/output')
-            
+                .unmarshal(hl7)
+                .validate(messageConforms())  // validate that the message conforms to the rules defined in the context
+                .transmogrify { msg ->
+                    msg.PV1[3][2] = '' // clear room nr.
+                    msg.PV1[3][3] = '' // clear bed nr.
+                    msg.PID[7][1] = msg.PID[7][1].value.substring(0, 8) // format birth date
+                    msg.PID[8] = msg.PID[8].mapGender()                 // map gender
+                    msg
+                }
+                .setHeader(Exchange.FILE_NAME) { exchange ->
+                    exchange.in.body.MSH[4].value + '.hl7'
+                }
+                .convertBodyTo(String)
+                .to('file:target/output')
+
     }
-    
+
 }
