@@ -229,7 +229,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                     attachmentExpected ? MISSING_DOCUMENT_FOR_DOC_ENTRY : DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY,
                     docEntry.getId());
 
-            metaDataAssert(StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
+            metaDataAssert(profile.isQuery() || StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
                     LOGICAL_ID_SAME, docEntry.getLid());
 
             if (profile.getInteractionId() == IpfInteractionId.ITI_57){
