@@ -67,14 +67,38 @@ abstract public class AbstractWsComponent<ConfigType extends WsTransactionConfig
     /**
      * @return
      *      transaction-specific client-side ATNA audit strategy instance.
+     * @deprecated use without parameter
      */
-    public abstract WsAuditStrategy getClientAuditStrategy();
+    @Deprecated
+    public WsAuditStrategy getClientAuditStrategy(boolean dummy) {
+        throw new RuntimeException("not implemented");
+    }
+
+    /**
+     * @return
+     *      transaction-specific client-side ATNA audit strategy instance.
+     */
+    public WsAuditStrategy getClientAuditStrategy() {
+        return getClientAuditStrategy(true);
+    }
+
+    /**
+     * @return
+     *      transaction-specific server-side ATNA audit strategy instance.
+     * @deprecated use without parameter
+     */
+    @Deprecated
+    public WsAuditStrategy getServerAuditStrategy(boolean dummy) {
+        throw new RuntimeException("not implemented");
+    }
 
     /**
      * @return
      *      transaction-specific server-side ATNA audit strategy instance.
      */
-    public abstract WsAuditStrategy getServerAuditStrategy();
+    public WsAuditStrategy getServerAuditStrategy() {
+        return getServerAuditStrategy(true);
+    }
 
     /**
      * Constructs and returns a transaction-specific service class instance

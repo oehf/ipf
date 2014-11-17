@@ -103,6 +103,10 @@ abstract public class MllpAuditStrategy<T extends MllpAuditDataset> {
         AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure(
             true, null, getClass().getName(), null, hostAddress, null);
     }
-    
-    
+
+
+    @Deprecated
+    public String[] getNecessaryFields(String eventTrigger) {
+        return null;
+    }
 }
