@@ -85,11 +85,6 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>ipf-modules-cda-oht</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>ipf-modules-hl7</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -211,11 +206,6 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-xds</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-test</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
