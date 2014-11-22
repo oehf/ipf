@@ -57,7 +57,7 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-xml</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
