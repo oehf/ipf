@@ -57,6 +57,7 @@ class ChainUtils {
                 if (cid in chainIds) {
                     LOG.debug("Element '{}' is already in the chain, ignore it", cid)
                     iter.remove()
+                    successful = true;
                     continue
                 }
 

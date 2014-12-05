@@ -60,6 +60,17 @@ public class ChainUtilsTest {
         doTest(custom, "i1 i2 i3 c4 c2 i4 i5 i6 i7 c1");
     }
 
+    @Test
+    public void testAlreadyExistent() {
+        List<Chainable> custom = Arrays.<Chainable> asList(
+                new MyChainable("i1", "", ""),
+                new MyChainable("i2", "", ""),
+                new MyChainable("i3", "i5 i6 i7", "i3"),
+                new MyChainable("i4", "", "")
+        );
+        doTest(custom, "i1 i2 i3 i4 i5 i6 i7");
+    }
+
 
     @Test(expected = ChainException.class)
     public void testBeforeEqualsToAfter() {
