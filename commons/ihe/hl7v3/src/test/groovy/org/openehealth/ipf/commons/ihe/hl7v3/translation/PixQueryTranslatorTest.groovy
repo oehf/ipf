@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.parser.PipeParser
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
@@ -56,7 +55,7 @@ class PixQueryTranslatorTest extends Hl7TranslationTestContainer {
 	void test3() throws HL7Exception {
 		String v3request = getFileContent('NistPixpdq_Mesa10501-05_Example_01', true, true)
 	    String v2response = getFileContent('ok-4', false, false)
-        Message abrakadapter = new PipeParser().parse(v2response)
+        Message abrakadapter = context.pipeParser.parse(v2response)
 		String v3response = v2tov3Translator.translateV2toV3(abrakadapter, v3request, 'UTF-8')
         V3_VALIDATOR.validate(v3response, Hl7v3ValidationProfiles.getResponseValidationProfile(ITI_45))
 	}

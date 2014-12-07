@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import org.junit.*
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 
@@ -28,34 +27,30 @@ import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_47
  */
 class PdqTranslatorTest extends Hl7TranslationTestContainer {
 
-    static def parser
-   
     @BeforeClass
     static void setUpClass() {
         doSetUp('pdq',
                 new PdqRequest3to2Translator(),
                 new PdqResponse2to3Translator(),
                 HapiContextFactory.createHapiContext(PixPdqTransactions.ITI21))
-
-        parser = context.getPipeParser()
     }
 
    
     @Test
     void testPdqQuery() {
         doTestV3toV2RequestTranslation('PDQ_Maximal_Query', 21, ITI_47)
-        doTestV2toV3ResponseTranslation('PDQ_Maximal_Query', 21, ITI_47, parser)
-        doTestV2toV3ResponseTranslation('PDQ', 21, ITI_47, parser)
+        doTestV2toV3ResponseTranslation('PDQ_Maximal_Query', 21, ITI_47)
+        doTestV2toV3ResponseTranslation('PDQ', 21, ITI_47)
     }
      
     @Test @Ignore // WHYY?????
     void testResponseWithPid4() {
-        doTestV2toV3ResponseTranslation('PDQ_with_PID4', 21, ITI_47, parser)
+        doTestV2toV3ResponseTranslation('PDQ_with_PID4', 21, ITI_47)
     }
     
     @Test
     void testConnectathon2011Issue() {
-        doTestV2toV3ResponseTranslation('PDQ_connectathon2011_namespaces_issue', 21, ITI_47, parser)
+        doTestV2toV3ResponseTranslation('PDQ_connectathon2011_namespaces_issue', 21, ITI_47)
     }
 
 }

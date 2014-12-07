@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.parser.Parser
 import ca.uhn.hl7v2.validation.ValidationContext
 import org.apache.commons.io.IOUtils
 import org.custommonkey.xmlunit.DetailedDiff
@@ -116,10 +115,10 @@ class Hl7TranslationTestContainer {
     }
 
 
-    void doTestV2toV3ResponseTranslation(String fn, int v2index, InteractionId v3Id, Parser parser) {
+    void doTestV2toV3ResponseTranslation(String fn, int v2index, InteractionId v3Id) {
         String v3request = getFileContent(fn, V3, REQUEST)
         String v2response = getFileContent(fn, V2, RESPONSE)
-        Message msg = parser.parse(v2response)
+        Message msg = context.pipeParser.parse(v2response)
         V2_VALIDATOR.validate(msg, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
@@ -133,9 +132,9 @@ class Hl7TranslationTestContainer {
         assert differences[0].toString().contains('creationTime')
     }
     
-    void doTestV2toV3RequestTranslation(String fn, int v2index, InteractionId v3Id, Parser parser) {
+    void doTestV2toV3RequestTranslation(String fn, int v2index, InteractionId v3Id) {
         String v2request = getFileContent(fn, V2, REQUEST)
-        Message msg = parser.parse(v2request)
+        Message msg = context.pipeParser.parse(v2request)
         V2_VALIDATOR.validate(msg, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)

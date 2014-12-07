@@ -29,39 +29,35 @@ import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_44_PIX
  */
 class PixFeedSourceTranslatorTest extends Hl7TranslationTestContainer {
 
-    static def parser
-    
     @BeforeClass
     static void setUpClass() {
         doSetUp('pixsource',
                 null,
                 new PixFeedRequest2to3Translator(),
                 HapiContextFactory.createHapiContext(PixPdqTransactions.ITI8))
-
-        parser = context.getPipeParser()
     }
 
 	@Test
 	void testCreateMessage() {
-		doTestV2toV3RequestTranslation('A01', 8, ITI_44_PIX, parser)
-        doTestV2toV3RequestTranslation('A04', 8, ITI_44_PIX, parser)
-        doTestV2toV3RequestTranslation('A01_with_BR', 8, ITI_44_PIX, parser)
+		doTestV2toV3RequestTranslation('A01', 8, ITI_44_PIX)
+        doTestV2toV3RequestTranslation('A04', 8, ITI_44_PIX)
+        doTestV2toV3RequestTranslation('A01_with_BR', 8, ITI_44_PIX)
 	}
 
 	@Test
 	void testUpdateMessage() {
-		doTestV2toV3RequestTranslation('A08', 8, ITI_44_PIX, parser)
+		doTestV2toV3RequestTranslation('A08', 8, ITI_44_PIX)
 	}
 
 	@Test
 	void testMergeMessage() {
-		doTestV2toV3RequestTranslation('A40', 8, ITI_44_PIX, parser)
+		doTestV2toV3RequestTranslation('A40', 8, ITI_44_PIX)
 	}
 
     @Test
 	void testNotSupportedMessage() throws Exception {
 		String v2request = getFileContent('A10', false, true)
-        Message msg = parser.parse(v2request)
+        Message msg = context.pipeParser.parse(v2request)
         try{
             v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')
         } catch (Exception e){
