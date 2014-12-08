@@ -45,7 +45,7 @@ public class Iti46Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
             false,
             "wsdl/iti46/iti46-raw.wsdl",
             "MCCI_IN000002UV01",
-            false,
+            null,
             false,
             false);
 

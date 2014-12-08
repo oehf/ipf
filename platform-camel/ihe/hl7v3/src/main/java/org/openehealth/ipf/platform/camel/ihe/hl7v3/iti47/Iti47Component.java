@@ -46,7 +46,7 @@ public class Iti47Component extends AbstractWsComponent<Hl7v3ContinuationAwareWs
             false,
             "wsdl/iti47/iti47-raw.wsdl",
             "PRPA_IN201306UV02",
-            true,
+            "PRPA_TE201306UV02",
             false,
             false,
             "PRPA_IN201305UV02",

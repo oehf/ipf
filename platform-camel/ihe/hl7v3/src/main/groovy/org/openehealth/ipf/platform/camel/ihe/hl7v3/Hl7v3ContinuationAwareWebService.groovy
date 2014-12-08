@@ -138,7 +138,7 @@ abstract public class Hl7v3ContinuationAwareWebService
                 VALIDATOR.validate(requestString,
                         Hl7v3ValidationProfiles.getRequestValidationProfile(wsTransactionConfiguration.interactionId))
             } catch (ValidationException e) {
-                LOG.error('operation(): invalid request')
+                LOG.info('operation(): invalid request', e)
                 String nak = createNak(requestString, e)
                 finalizeAtnaAuditing(nak, auditStrategy, auditDataset)
                 return nak
@@ -154,7 +154,7 @@ abstract public class Hl7v3ContinuationAwareWebService
                 VALIDATOR.validate(responseString,
                         Hl7v3ValidationProfiles.getResponseValidationProfile(wsTransactionConfiguration.interactionId))
             } catch (ValidationException e) {
-                LOG.error('operation(): invalid response')
+                LOG.info('operation(): invalid response', e)
                 String nak = createNak(requestString, e)
                 finalizeAtnaAuditing(nak, auditStrategy, auditDataset)
                 return nak
@@ -210,7 +210,7 @@ abstract public class Hl7v3ContinuationAwareWebService
                 VALIDATOR.validate(requestString,
                         Hl7v3ValidationProfiles.getRequestValidationProfile(wsTransactionConfiguration.interactionId))
             } catch (ValidationException e) {
-                LOG.error('continuation(): invalid request')
+                LOG.info('continuation(): invalid request', e)
                 def nak = createNak(requestString, e)
                 return nak
             }
@@ -269,7 +269,7 @@ abstract public class Hl7v3ContinuationAwareWebService
                 VALIDATOR.validate(requestString,
                         Hl7v3ValidationProfiles.getRequestValidationProfile(wsTransactionConfiguration.interactionId))
             } catch (ValidationException e) {
-                LOG.error('cancel(): invalid request')
+                LOG.info('cancel(): invalid request', e)
                 return createNak(requestString, e)
             }
         }
@@ -281,7 +281,7 @@ abstract public class Hl7v3ContinuationAwareWebService
         if (responseString) {
             storage.remove(key)
             GPathResult response = slurp(responseString)
-            String result = Hl7v3NakFactory.response(request, null, 'MCCI_IN000002UV01', false, true)
+            String result = Hl7v3NakFactory.response(request, null, 'MCCI_IN000002UV01', null, true)
             if (LOG.debugEnabled) {
                 LOG.debug('cancel(): generated ACK\n' + result)
             }

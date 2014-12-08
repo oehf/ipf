@@ -40,7 +40,7 @@ class Hl7v3NakFactory {
             String originalMessageString,
             Throwable throwable,
             String rootElementName,
-            boolean needControlActProcess,
+            String controlActProcessCode,
             boolean useCAckTypeCodes)
     {
         GPathResult xml
@@ -50,7 +50,7 @@ class Hl7v3NakFactory {
             xml = slurp('<dummy/>')
         }
 
-        return response(xml, throwable, rootElementName, needControlActProcess, useCAckTypeCodes)
+        return response(xml, throwable, rootElementName, controlActProcessCode, useCAckTypeCodes)
     }
 
 
@@ -64,8 +64,9 @@ class Hl7v3NakFactory {
      * @param rootElementName
      *      root element name of the target NAK message, for example,
      *      'MCCI_IN000002UV01' or 'PRPA_IN201306UV02'.
-     * @param needControlActProcess
-     *      whether a <tt>controlAckProcess</tt> element should be created in the NAK.
+     * @param controlActProcessCode
+     *      whether a <tt>controlAckProcess</tt> element with the given code ID
+     *      shall be created in the NAK.
      *      Note that setting this parameter to <code>true</code> is only allowed when
      *      <code>throwable!=null</code>.
      * @param useCAckTypeCodes
@@ -80,10 +81,10 @@ class Hl7v3NakFactory {
         GPathResult originalMessage,
         Throwable throwable,
         String rootElementName,
-        boolean needControlActProcess,
+        String controlActProcessCode,
         boolean useCAckTypeCodes)
     {
-        if (needControlActProcess && ! throwable) {
+        if (controlActProcessCode && ! throwable) {
             throw new IllegalArgumentException("canot generate positive ACKs with <controlActProcess>")
         }
 
@@ -157,8 +158,9 @@ class Hl7v3NakFactory {
                 }
             }
 
-            if (needControlActProcess) {
+            if (controlActProcessCode) {
                 controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
+                    code(code: controlActProcessCode, codeSystem: '2.16.840.1.113883.1.6')
 
                     // (optionally) create reasonOf element
                     if (detectedIssueEventCode0) {
@@ -185,7 +187,11 @@ class Hl7v3NakFactory {
                             statusCode(code: statusCode0)
                         }
                         queryResponseCode(code: queryResponseCode0)
+                        resultTotalQuantity(value: '0')
+                        resultCurrentQuantity(value: '0')
+                        resultRemainingQuantity(value: '0')
                     }
+
                     yieldElement(qbp, builder, HL7V3_NSURI)
                 }
             }

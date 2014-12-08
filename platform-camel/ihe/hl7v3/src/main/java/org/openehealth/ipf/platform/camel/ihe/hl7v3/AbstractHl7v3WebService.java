@@ -59,7 +59,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
         Exchange result = process(requestString);
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug("HL7 v3 service failed", exception);
+            log.info("HL7 v3 service failed", exception);
             return createNak(requestString, exception);
         }
         return Exchanges.resultMessage(result).getBody(String.class);
@@ -73,7 +73,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
                 requestString,
                 throwable,
                 wsTransactionConfiguration.getNakRootElementName(),
-                wsTransactionConfiguration.isNakNeedControlActProcess(),
+                wsTransactionConfiguration.getControlActProcessCode(),
                 false);
     }
 
@@ -84,7 +84,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
         return Hl7v3NakFactory.response(
                 request, throwable,
                 wsTransactionConfiguration.getNakRootElementName(),
-                wsTransactionConfiguration.isNakNeedControlActProcess(),
+                wsTransactionConfiguration.getControlActProcessCode(),
                 false);
     }
 

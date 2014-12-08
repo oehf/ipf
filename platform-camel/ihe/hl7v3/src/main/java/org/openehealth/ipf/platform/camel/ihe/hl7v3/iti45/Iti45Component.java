@@ -45,7 +45,7 @@ public class Iti45Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
             false,
             "wsdl/iti45/iti45-raw.wsdl",
             "PRPA_IN201310UV02",
-            true,
+            "PRPA_TE201310UV02",
             false,
             false);
 
