@@ -36,7 +36,7 @@
             <id extension="120-01" root="1.2.3.4.5.1000"/>
             <statusCode code="active"/>
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
-              <name/>
+              <name>Unknown</name>
             </patientPerson>
           </patient>
         </subject1>
@@ -50,7 +50,7 @@
             <statusCode code="obsolete"/>
             <subject1 typeCode="SBJ">
               <priorRegisteredRole classCode="PAT">
-                <id extension="120-02" assigningAuthorityName="domain1"/>
+                <id root="1.2.3.4.666" extension="120-02" assigningAuthorityName="domain1"/>
               </priorRegisteredRole>
             </subject1>
           </priorRegistration>
