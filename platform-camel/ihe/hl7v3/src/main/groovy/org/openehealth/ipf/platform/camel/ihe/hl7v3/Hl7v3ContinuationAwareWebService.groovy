@@ -319,6 +319,7 @@ abstract public class Hl7v3ContinuationAwareWebService
         def params = [
             'startResultNumber'        : startResultNumber,
             'continuationCount'        : continuationCount,
+            'messageIdExtension'       : UUID.randomUUID().toString(),
             'targetMessageIdRoot'      : request.id.@root.text(),
             'targetMessageIdExtension' : request.id.@extension.text(),
         ]

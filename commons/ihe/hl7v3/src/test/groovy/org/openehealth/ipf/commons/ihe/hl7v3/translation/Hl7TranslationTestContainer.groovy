@@ -64,7 +64,8 @@ class Hl7TranslationTestContainer {
         XMLUnit.setIgnoreAttributeOrder(true)
         XMLUnit.setIgnoreComments(true)
         XMLUnit.setIgnoreWhitespace(true)
-        
+        //XMLUnit.setTransformerFactory("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl")
+
         Hl7TranslationTestContainer.v3tov2Translator = v3tov2Translator
         Hl7TranslationTestContainer.v2tov3Translator = v2tov3Translator
         Hl7TranslationTestContainer.context = context

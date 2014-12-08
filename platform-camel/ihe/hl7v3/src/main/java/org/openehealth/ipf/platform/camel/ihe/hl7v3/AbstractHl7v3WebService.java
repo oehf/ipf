@@ -107,7 +107,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
                 auditDataset.setServiceEndpointUrl((String) messageContext.get(Message.REQUEST_URL));
 
                 AddressingProperties apropos = (AddressingProperties) messageContext.get(
-                                JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_INBOUND);
+                                JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND);
                 if ((apropos != null) && (apropos.getReplyTo() != null) && (apropos.getReplyTo().getAddress() != null)) {
                     auditDataset.setUserId(apropos.getReplyTo().getAddress().getValue());
                 }

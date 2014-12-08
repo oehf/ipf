@@ -26,8 +26,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xquery.XQException;
 
-import net.sf.saxon.FeatureKeys;
-// import net.sf.saxon.lib.FeatureKeys;
+import net.sf.saxon.lib.FeatureKeys;
 
 import org.apache.commons.io.IOUtils;
 import org.custommonkey.xmlunit.XMLUnit;
