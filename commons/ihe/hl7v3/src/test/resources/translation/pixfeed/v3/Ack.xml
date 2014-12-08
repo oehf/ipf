@@ -4,7 +4,7 @@
     <creationTime value="20070803130625"/>
     <interactionId root="2.16.840.1.113883.1.6" extension="MCCI_IN000002UV01"/>
     <processingCode code="P"/>
-    <processingModeCode code="R"/>
+    <processingModeCode code="T"/>
     <acceptAckCode code="NE"/>
     <receiver typeCode="RCV">
         <device classCode="DEV" determinerCode="INSTANCE">

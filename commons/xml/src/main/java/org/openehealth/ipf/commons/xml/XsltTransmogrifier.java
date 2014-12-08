@@ -80,8 +80,7 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
      * @param staticParams
      *            static Xslt parameters
      */
-    public XsltTransmogrifier(Class<T> outputFormat,
-            Map<String, Object> staticParams) {
+    public XsltTransmogrifier(Class<T> outputFormat, Map<String, Object> staticParams) {
         this(outputFormat);
         this.staticParams = staticParams;
     }
@@ -121,8 +120,7 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
 
     private void doZap(Source source, Result result, Object... params) {
         if (params.length == 0) {
-            throw new IllegalArgumentException(
-                    "Expected XSL location in first parameter");
+            throw new IllegalArgumentException("Expected XSL location in first parameter");
         }
         try {
             Templates template = template(params);
@@ -143,32 +141,41 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
      * @param transformer
      * @param param
      */
-    protected void setXsltParameters(Transformer transformer,
-            Map<String, Object> param) {
+    protected void setXsltParameters(Transformer transformer, Map<String, Object> param) {
         if (param == null) {
             return;
         }
         for (Entry<?, ?> entry : ((Map<?, ?>) param).entrySet()) {
             LOG.debug("Add new parameter for transformer: {}", entry.getKey().toString());
-            transformer.setParameter(entry.getKey().toString(), entry
-                    .getValue());
+            transformer.setParameter(entry.getKey().toString(), entry.getValue());
         }
     }
 
     /**
-     * Instantiates a {@link Templates} object according to the parameters. The template is stored in a cache for faster
-     * access in subsequent calls.
+     * Instantiates a {@link Templates} object according to the parameters.
+     * The template is stored in a cache for faster access in subsequent calls.
      * 
      * @param params
-     *            params[0] must be of type String and reference the stylesheet resource
+     *      parameters containing a reference to the stylesheet resource
      * @return a {@link Templates} object according to the parameters
      * @TODO use an external cache implementation?
      */
     synchronized protected Templates template(Object... params) {
-        if (!(templateCache.containsKey(resource(params)))) {
-            templateCache.put(resource(params), doCreateTemplate(params));
+        String phase = "";
+        if (params[0] instanceof SchematronProfile) {
+            SchematronProfile schematronProfile = (SchematronProfile) params[0];
+            Map<String, Object> parameters = schematronProfile.getParameters();
+            if ((parameters != null) && parameters.containsKey("phase")) {
+                phase = "\n" + parameters.get("phase");
+            }
         }
-        return templateCache.get(resource(params));
+
+        String key = resource(params) + phase;
+
+        if (! templateCache.containsKey(key)) {
+            templateCache.put(key, doCreateTemplate(params));
+        }
+        return templateCache.get(key);
     }
 
     /**
@@ -183,8 +190,7 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
         try {
             return factory.newTemplates(source(resourceLocation));
         } catch (Exception e) {
-            throw new IllegalArgumentException("The resource "
-                    + resourceLocation + " is not valid", e);
+            throw new IllegalArgumentException("The resource " + resourceLocation + " is not valid", e);
         }
     }
 
