@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 
@@ -25,9 +26,9 @@ import javax.xml.namespace.QName;
  */
 public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration {
 
-    private final InteractionId interactionId;
-    private final String nakRootElementName;
-    private final boolean nakNeedControlActProcess;
+    @Getter private final InteractionId interactionId;
+    @Getter private final String nakRootElementName;
+    @Getter private final String controlActProcessCode;
 
     /**
      * Constructs the service info.
@@ -46,9 +47,9 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration 
      *      the location of the WSDL of this webservice.
      * @param nakRootElementName
      *      root element name of automatically generated NAKs.
-     * @param nakNeedControlActProcess
-     *      when {@code true}, the <code>&lt;controlActProcess&gt;</code>
-     *      of the request message will be included into the NAK.
+     * @param controlActProcessCode
+     *      when not {@code null}, the {@code &lt;controlActProcess&gt;}
+     *      element with the given code ID will be created in the NAK.
      * @param auditRequestPayload
      *      whether request payload is needed for ATNA audit.
      * @param supportAsynchrony
@@ -62,7 +63,7 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration 
             boolean mtom,
             String wsdlLocation,
             String nakRootElementName,
-            boolean nakNeedControlActProcess,
+            String controlActProcessCode,
             boolean auditRequestPayload,
             boolean supportAsynchrony)
     {
@@ -71,19 +72,7 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration 
 
         this.interactionId = interactionId;
         this.nakRootElementName = nakRootElementName;
-        this.nakNeedControlActProcess = nakNeedControlActProcess;
-    }
-
-    public InteractionId getInteractionId() {
-        return interactionId;
-    }
-
-    public boolean isNakNeedControlActProcess() {
-        return nakNeedControlActProcess;
-    }
-
-    public String getNakRootElementName() {
-        return nakRootElementName;
+        this.controlActProcessCode = controlActProcessCode;
     }
 
 }

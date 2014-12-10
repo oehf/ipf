@@ -45,7 +45,7 @@ public class Iti56AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTran
             false,
             "wsdl/iti56/iti56-asyncresponse-raw.wsdl",
             null,
-            false,
+            null,
             false,
             false);
 

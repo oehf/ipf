@@ -22,15 +22,16 @@ Creates interactive continuation pieces of PDQv3 and QED responses.
 <xsl:stylesheet version="2.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:hl7="urn:hl7-org:v3"
-    xmlns:ipf="urn:org.openehealth.ipf">
+    xmlns:hl7="urn:hl7-org:v3">
 
     <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
     <!-- all parameters are supposed to be validated beforehand -->
     <xsl:param name="startResultNumber" required="yes" as="xs:integer" />
     <xsl:param name="continuationCount" required="yes" as="xs:integer" />
-    
+
+    <xsl:param name="messageIdExtension" required="yes" as="xs:string" />
+
     <xsl:param name="targetMessageIdRoot" required="yes" as="xs:string" />
     <xsl:param name="targetMessageIdExtension" required="yes" as="xs:string" />
 
@@ -55,16 +56,14 @@ Creates interactive continuation pieces of PDQv3 and QED responses.
     <xsl:template match="/hl7:*/hl7:controlActProcess/hl7:subject[position() lt $startResultNumber]" />
     <xsl:template match="/hl7:*/hl7:controlActProcess/hl7:subject[position() gt $endIndex]" />
 
-    <!-- actualize messaege id -->
+    <!-- actualize message id -->
     <xsl:template match="/hl7:*/hl7:id">
         <xsl:copy>
             <xsl:apply-templates select="@*[local-name() ne 'nullFlavor']" />
             <xsl:if test="not(@root)">
                 <xsl:attribute name="root" select="'1.2.3'" />
             </xsl:if>
-            <xsl:attribute name="extension" 
-                   select="uuid:toString(uuid:randomUUID())"
-                   xmlns:uuid="java:java.util.UUID" />
+            <xsl:attribute name="extension" select="$messageIdExtension"/>
         </xsl:copy>
     </xsl:template>
     

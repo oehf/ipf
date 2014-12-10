@@ -36,8 +36,7 @@ import javax.xml.xquery.XQResultSequence;
 
 import net.sf.saxon.Configuration;
 
-// import com.saxonica.xqj.SaxonXQDataSource;
-import net.sf.saxon.xqj.SaxonXQDataSource;
+import com.saxonica.xqj.SaxonXQDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;

@@ -47,7 +47,7 @@ public class Iti55DeferredResponseComponent extends AbstractWsComponent<Hl7v3WsT
             false,
             "wsdl/iti55/iti55-deferred-response-raw.wsdl",
             null,
-            false,
+            null,
             false,
             false);
 

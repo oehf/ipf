@@ -37,7 +37,7 @@ public class Iti55DeferredResponseService extends AbstractAsyncResponseWebServic
     @Override
     public String receiveDeferredResponse(String responseString) {
         process(responseString, null, ExchangePattern.InOnly);
-        return Hl7v3NakFactory.response(responseString, null, "MCCI_IN000002UV01", false, false);
+        return Hl7v3NakFactory.response(responseString, null, "MCCI_IN000002UV01", null, false);
     }
 
     @Override

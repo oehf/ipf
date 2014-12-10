@@ -5,7 +5,7 @@
  ITSVersion="XML_1.0">
     <id root="d474eb7c-898c-11dc-bf74-3603d6866807"/>
     <creationTime value="20070810140901"/>
-    <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201310UV02 "/>
+    <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201310UV02"/>
     <processingCode code="P"/>
     <processingModeCode code="T"/>
     <acceptAckCode code="NE"/>

@@ -34,7 +34,7 @@ public class Iti44PixComponent extends AbstractIti44Component {
             false,
             "wsdl/iti44/iti44-pix-raw.wsdl",
             "MCCI_IN000002UV01",
-            false,
+            null,
             false,
             false);
 

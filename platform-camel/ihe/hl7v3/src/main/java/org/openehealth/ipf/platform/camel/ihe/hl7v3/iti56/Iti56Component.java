@@ -44,7 +44,7 @@ public class Iti56Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
             false,
             "wsdl/iti56/iti56-raw.wsdl",
             null,
-            false,
+            null,
             true,
             true);
 

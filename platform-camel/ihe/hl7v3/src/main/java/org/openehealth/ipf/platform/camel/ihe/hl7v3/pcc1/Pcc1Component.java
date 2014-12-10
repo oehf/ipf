@@ -47,7 +47,7 @@ public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsT
             false,
             "wsdl/pcc1/pcc1-raw.wsdl",
             "QUPC_IN043200UV01",
-            true,
+            "QUPC_IN043200UV01",
             false,
             false,
             "QUPC_IN043100UV01",

@@ -37,14 +37,14 @@ public class Hl7v3ContinuationAwareWsTransactionConfiguration extends Hl7v3WsTra
             boolean mtom,
             String wsdlLocation,
             String nakRootElementName,
-            boolean nakNeedControlActProcess,
+            String controlActProcessCode,
             boolean auditRequestPayload,
             boolean supportAsynchrony,
             String mainRequestRootElementName,
             String mainResponseRootElementName)
     {
         super(interactionId, serviceName, sei, bindingName, mtom, wsdlLocation,
-                nakRootElementName, nakNeedControlActProcess,
+                nakRootElementName, controlActProcessCode,
                 auditRequestPayload, supportAsynchrony);
 
         Validate.notEmpty(mainRequestRootElementName);

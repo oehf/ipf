@@ -174,7 +174,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
             // return an immediate MCCI ACK
             configureWsaAction(Iti55PortType.DEFERRED_REQUEST_OUTPUT_ACTION);
-            return response(requestXml, null, "MCCI_IN000002UV01", false, false);
+            return response(requestXml, null, "MCCI_IN000002UV01", null, false);
         }
 
         else {

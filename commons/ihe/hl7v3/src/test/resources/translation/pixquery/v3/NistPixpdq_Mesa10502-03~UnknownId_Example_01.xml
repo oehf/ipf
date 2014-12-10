@@ -3,7 +3,7 @@
   <creationTime value="20090821104312"/>
   <interactionId extension="PRPA_IN201309UV02" root="2.16.840.1.113883.1.6"/>
   <processingCode code="P"/>
-  <processingModeCode code="R"/>
+  <processingModeCode code="T"/>
   <acceptAckCode code="AL"/>
   <receiver typeCode="RCV">
     <device classCode="DEV" determinerCode="INSTANCE">
@@ -26,7 +26,12 @@
     </device>
   </sender>
   <controlActProcess classCode="CACT" moodCode="EVN">
-    <code code="PRPA_IN201309UV02" codeSystem="2.16.840.1.113883.1.6"/>
+    <code code="PRPA_TE201309UV02" codeSystem="2.16.840.1.113883.1.6"/>
+    <authorOrPerformer typeCode="AUT">
+      <assignedDevice classCode="ASSIGNED">
+        <id root="1.2.3.4"/>
+      </assignedDevice>
+    </authorOrPerformer>
     <queryByParameter>
       <queryId root="1.2.3.4.5"/>
       <statusCode code="new"/>

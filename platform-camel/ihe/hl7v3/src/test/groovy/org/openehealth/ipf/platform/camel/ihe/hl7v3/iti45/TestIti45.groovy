@@ -23,7 +23,6 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.stream.StreamSource
-import java.nio.charset.Charset
 
 /**
  * Tests for ITI-45.

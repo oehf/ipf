@@ -77,7 +77,7 @@ public class AuditOutRequestInterceptor extends AbstractAuditInterceptor {
         getAuditStrategy().enrichDatasetFromRequest(request, auditDataset);
 
         // when the invocation is asynchronous: store audit dataset into the correlator
-        AddressingProperties props = (AddressingProperties) message.get(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_OUTBOUND);
+        AddressingProperties props = (AddressingProperties) message.get(JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND);
         if (props != null && (Boolean.TRUE.equals(message.getContextualProperty(AsynchronyCorrelator.FORCE_CORRELATION)) ||
             ! Names.WSA_ANONYMOUS_ADDRESS.equals(props.getReplyTo().getAddress().getValue())))
         {
