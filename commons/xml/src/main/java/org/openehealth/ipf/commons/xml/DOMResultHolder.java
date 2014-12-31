@@ -21,7 +21,7 @@ import javax.xml.transform.dom.DOMResult;
 /**
  * @author Christian Ohr
  */
-public class DOMResultHolder extends ResultHolder<DOMResult> {
+public class DOMResultHolder implements ResultHolder<DOMResult> {
 
     private DOMResult result;
 
@@ -31,9 +31,9 @@ public class DOMResultHolder extends ResultHolder<DOMResult> {
     }
 
     @Override
-    Result createResult() {
+    public Result createResult() {
         result = new DOMResult();
-        return getResult();
+        return result;
     }
 
 }

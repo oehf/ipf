@@ -15,11 +15,6 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import static org.openehealth.ipf.commons.xml.ParametersHelper.parameters;
-import static org.openehealth.ipf.commons.xml.ParametersHelper.resource;
-import static org.openehealth.ipf.commons.xml.ParametersHelper.source;
-
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -27,9 +22,11 @@ import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
@@ -45,70 +42,60 @@ import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
  * 
  * @author Christian Ohr
  */
-public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
-    private final static Logger LOG = LoggerFactory.getLogger(XsltTransmogrifier.class);
+public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates> implements Transmogrifier<Source, T> {
+    private static final Logger LOG = LoggerFactory.getLogger(XsltTransmogrifier.class);
 
-    private final Map<Object, Templates> templateCache = new HashMap<>();
-
-    private Map<String, Object> staticParams;
-
-    private final TransformerFactory factory;
+    @Getter @Setter private Map<String, Object> staticParams;
+    @Getter private final TransformerFactory factory;
     private final URIResolver resolver;
     private final Class<T> outputFormat;
 
     @SuppressWarnings("unchecked")
     public XsltTransmogrifier() {
-        this((Class<T>) String.class);
+        this((Class<T>) String.class, null, null);
+    }
+
+    public XsltTransmogrifier(Class<T> outputFormat) {
+        this(outputFormat, null, null);
+    }
+
+    public XsltTransmogrifier(Class<T> outputFormat, ClassLoader classLoader) {
+        this(outputFormat, classLoader, null);
+    }
+
+    public XsltTransmogrifier(Class<T> outputFormat, Map<String, Object> staticParams) {
+        this(outputFormat, null, staticParams);
     }
 
     /**
      * @param outputFormat
      *            currently supported: String, Writer, OutputStream
+     * @param classLoader
+     *            class loader for resource retrieval, may be <code>null</code>
+     * @param staticParams
+     *            static Xslt parameters
      */
-    public XsltTransmogrifier(Class<T> outputFormat) {
-        super();
+    public XsltTransmogrifier(
+            Class<T> outputFormat,
+            ClassLoader classLoader,
+            Map<String, Object> staticParams)
+    {
+        super(Templates.class, classLoader);
         factory = TransformerFactory.newInstance();
         // Wrap the default resolver
         resolver = new ClasspathUriResolver(factory.getURIResolver());
         factory.setURIResolver(resolver);
         this.outputFormat = outputFormat;
-    }
-
-    /**
-     * @param outputFormat
-     *            currently supported: String, Writer, OutputStream
-     * @param staticParams
-     *            static Xslt parameters
-     */
-    public XsltTransmogrifier(Class<T> outputFormat, Map<String, Object> staticParams) {
-        this(outputFormat);
-        this.staticParams = staticParams;
-    }
-
-    protected Map<Object, Templates> getTemplateCache() {
-        return templateCache;
-    }
-
-    protected TransformerFactory getFactory() {
-        return factory;
-    }
-
-    public Map<String, Object> getStaticParams() {
-        return staticParams;
-    }
-
-    public void setStaticParams(Map<String, Object> staticParams) {
         this.staticParams = staticParams;
     }
 
     /**
-     * 
      * Converts a Source into a Result using a XSL processor.
      * <p>
-     * The XSL stylesheet resource location is mandatory in the first extra parameter. XSL Parameters may be passed as a
-     * Map in the second parameter.
+     * The XSL stylesheet resource location is mandatory in the first extra parameter.
+     * XSL Parameters may be passed as a Map in the second parameter.
      * 
-     * @see org.openehealth.ipf.commons.core.modules.api.Transmogrifier#zap(java.lang.Object, java.lang.Object[])
+     * @see Transmogrifier#zap(java.lang.Object, java.lang.Object[])
      */
     @Override
     public T zap(Source source, Object... params) {
@@ -123,13 +110,13 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
             throw new IllegalArgumentException("Expected XSL location in first parameter");
         }
         try {
-            Templates template = template(params);
+            Templates template = resource(params);
             Transformer transformer = template.newTransformer();
             transformer.setURIResolver(resolver);
             setXsltParameters(transformer, staticParams);
-            setXsltParameters(transformer, parameters(params));
+            setXsltParameters(transformer, resourceParameters(params));
             transformer.transform(source, result);
-        } catch (TransformerException e) {
+        } catch (Exception e) {
             throw new RuntimeException("XSLT processing failed", e);
         }
 
@@ -137,61 +124,20 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
 
     /**
      * Sets the parameter to the {@link Transformer} object
-     * 
-     * @param transformer
-     * @param param
      */
     protected void setXsltParameters(Transformer transformer, Map<String, Object> param) {
         if (param == null) {
             return;
         }
-        for (Entry<?, ?> entry : ((Map<?, ?>) param).entrySet()) {
-            LOG.debug("Add new parameter for transformer: {}", entry.getKey().toString());
-            transformer.setParameter(entry.getKey().toString(), entry.getValue());
+        for (Entry<String, Object> entry : param.entrySet()) {
+            LOG.debug("Add new parameter for transformer: {}", entry.getKey());
+            transformer.setParameter(entry.getKey(), entry.getValue());
         }
     }
 
-    /**
-     * Instantiates a {@link Templates} object according to the parameters.
-     * The template is stored in a cache for faster access in subsequent calls.
-     * 
-     * @param params
-     *      parameters containing a reference to the stylesheet resource
-     * @return a {@link Templates} object according to the parameters
-     * @TODO use an external cache implementation?
-     */
-    synchronized protected Templates template(Object... params) {
-        String phase = "";
-        if (params[0] instanceof SchematronProfile) {
-            SchematronProfile schematronProfile = (SchematronProfile) params[0];
-            Map<String, Object> parameters = schematronProfile.getParameters();
-            if ((parameters != null) && parameters.containsKey("phase")) {
-                phase = "\n" + parameters.get("phase");
-            }
-        }
-
-        String key = resource(params) + phase;
-
-        if (! templateCache.containsKey(key)) {
-            templateCache.put(key, doCreateTemplate(params));
-        }
-        return templateCache.get(key);
-    }
-
-    /**
-     * Creates the Xslt template
-     * 
-     * @param params
-     * @return the Xslt template
-     */
-    protected Templates doCreateTemplate(Object... params) {
-        String resourceLocation = resource(params);
-        LOG.debug("Create new template for {}", resourceLocation);
-        try {
-            return factory.newTemplates(source(resourceLocation));
-        } catch (Exception e) {
-            throw new IllegalArgumentException("The resource " + resourceLocation + " is not valid", e);
-        }
+    @Override
+    protected Templates createResource(Object... params) throws Exception {
+        return factory.newTemplates(resourceContent(params));
     }
 
 }

@@ -21,7 +21,7 @@ import java.io.Writer;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
-class StringResultHolder extends ResultHolder<String> {
+class StringResultHolder implements ResultHolder<String> {
 
     private Writer writer;
 
@@ -31,7 +31,7 @@ class StringResultHolder extends ResultHolder<String> {
     }
 
     @Override
-    Result createResult() {
+    public Result createResult() {
         writer = new StringWriter();
         return new StreamResult(writer);
     }

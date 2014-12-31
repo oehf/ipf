@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.commons.xml;
 
 import javax.xml.transform.Source;
@@ -9,40 +24,43 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.springframework.core.io.ClassPathResource;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
 public class XsdValidatorTest {
 
 	private XsdValidator validator;
+	private Map<String, ?> cache;
 	private static final String SCHEMA_RESOURCE = "/xsd/test.xsd";
 
 	@Before
 	public void setUp() throws Exception {
 		validator = new XsdValidator();
+
+		Field field = AbstractCachingXmlProcessor.class.getDeclaredField("XSD_CACHE");
+		field.setAccessible(true);
+		cache = (Map<String, ?>) field.get(null);
 	}
 
 	@Test
 	public void testValidate() throws Exception {
-		XsdValidator.getCachedSchemas().clear();
-		Source testXml = new StreamSource(new ClassPathResource("xsd/test.xml")
-				.getInputStream());
+		cache.clear();
+		Source testXml = new StreamSource(new ClassPathResource("xsd/test.xml").getInputStream());
 		validator.validate(testXml, SCHEMA_RESOURCE);
-		Assert.assertTrue(XsdValidator.getCachedSchemas().containsKey(
-				SCHEMA_RESOURCE));
+		Assert.assertTrue(cache.containsKey(SCHEMA_RESOURCE));
 	}
 
 	@Test(expected = ValidationException.class)
 	public void testValidateFails() throws Exception {
-		boolean schemaExisted = XsdValidator.getCachedSchemas().containsKey(
-				SCHEMA_RESOURCE);
-		int cacheSize = XsdValidator.getCachedSchemas().size();
+		boolean schemaExisted = cache.containsKey(SCHEMA_RESOURCE);
+		int cacheSize = cache.size();
 		Source testXml = new StreamSource(new ClassPathResource(
 				"xsd/invalidtest.xml").getInputStream());
 		validator.validate(testXml, SCHEMA_RESOURCE);
 		if (schemaExisted) {
-			Assert.assertEquals(cacheSize, XsdValidator.getCachedSchemas()
-					.size());
+			Assert.assertEquals(cacheSize, cache.size());
 		} else {
-			Assert.assertEquals(cacheSize + 1, XsdValidator.getCachedSchemas()
-					.size());
+			Assert.assertEquals(cacheSize + 1, cache.size());
 		}
 	}
 

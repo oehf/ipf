@@ -109,7 +109,7 @@ public class XqjTransmogrifierTest {
 
     @Test
     public void zapParametrisedConstructorNoParams() throws IOException, SAXException, XQException {
-        XqjTransmogrifier<String> localTransformer = new XqjTransmogrifier<>(String.class, null);
+        XqjTransmogrifier<String> localTransformer = new XqjTransmogrifier<>(String.class);
         String zapResult = localTransformer.zap(source("xquery/string.xml"), new Object[] { "xquery/string-q5.xq" });
         assertTrue(XMLUnit.compareXML(result("xquery/string.xml"), zapResult).similar());
     }

@@ -15,10 +15,6 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import static org.openehealth.ipf.commons.xml.ParametersHelper.parameters;
-import static org.openehealth.ipf.commons.xml.ParametersHelper.resource;
-import static org.openehealth.ipf.commons.xml.ParametersHelper.source;
-
 import java.io.StringReader;
 import java.util.Map;
 
@@ -73,8 +69,7 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
         this(new XsltTransmogrifier<>(String.class), outputFormat);
     }
     
-    public SchematronTransmogrifier(Class<T> outputFormat,
-            Map<String, Object> staticParams) {
+    public SchematronTransmogrifier(Class<T> outputFormat, Map<String, Object> staticParams) {
         this(new XsltTransmogrifier<>(String.class), outputFormat, staticParams);
     }
 
@@ -89,11 +84,26 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
     }
 
     @Override
-    protected Templates doCreateTemplate(Object... params) {
+    protected String resourceCacheKey(Object... params) {
+        String phase = null;
+        if (params[0] instanceof SchematronProfile) {
+            SchematronProfile schematronProfile = (SchematronProfile) params[0];
+            Map<String, Object> parameters = schematronProfile.getParameters();
+            if (parameters != null) {
+                phase = (String) parameters.get("phase");
+            }
+        }
+        return (phase != null)
+                ? resourceLocation(params) + '\n' + phase
+                : resourceLocation(params);
+    }
+
+    @Override
+    protected Templates createResource(Object... params) throws Exception {
         try {
             LOG.debug("Creating new Schematron stylesheet");
-            Source rules = source(resource(params));
-            Map<String, Object> parameters = parameters(params);
+            Source rules = resourceContent(params);
+            Map<String, Object> parameters = resourceParameters(params);
             LOG.debug("step 1 of 3");
             Source source = step(xsltTransmogrifier, rules,
                     "schematron/iso_dsdl_include.xsl", parameters);
@@ -108,7 +118,7 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
             return template;
         } catch (Exception e) {
             throw new IllegalArgumentException("The schematron rules resource "
-                    + resource(params) + " is not valid");
+                    + resourceLocation(params) + " is not valid");
         }
     }
 

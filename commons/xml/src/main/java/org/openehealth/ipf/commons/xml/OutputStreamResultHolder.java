@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
-class OutputStreamResultHolder extends ResultHolder<OutputStream> {
+class OutputStreamResultHolder implements ResultHolder<OutputStream> {
 
     private OutputStream os;
 
@@ -31,7 +31,7 @@ class OutputStreamResultHolder extends ResultHolder<OutputStream> {
     }
 
     @Override
-    Result createResult() {
+    public Result createResult() {
         os = new ByteArrayOutputStream();
         return new StreamResult(os);
     }

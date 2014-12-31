@@ -25,7 +25,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.xml.XsltTransmogrifier;
 import org.springframework.core.io.ClassPathResource;
 
 /**

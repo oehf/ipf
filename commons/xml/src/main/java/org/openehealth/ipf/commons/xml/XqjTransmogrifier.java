@@ -15,31 +15,22 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import static org.openehealth.ipf.commons.xml.ParametersHelper.parameters;
-import static org.openehealth.ipf.commons.xml.ParametersHelper.resource;
-import static org.openehealth.ipf.commons.xml.ParametersHelper.stream;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import com.saxonica.xqj.SaxonXQConnection;
+import com.saxonica.xqj.SaxonXQDataSource;
+import lombok.Getter;
+import lombok.Setter;
+import net.sf.saxon.Configuration;
+import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
-import javax.xml.xquery.XQConnection;
-import javax.xml.xquery.XQConstants;
-import javax.xml.xquery.XQDataSource;
-import javax.xml.xquery.XQDynamicContext;
-import javax.xml.xquery.XQException;
-import javax.xml.xquery.XQPreparedExpression;
-import javax.xml.xquery.XQResultSequence;
-
-import net.sf.saxon.Configuration;
-
-import com.saxonica.xqj.SaxonXQDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
+import javax.xml.xquery.*;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * XQuery transformer similar to the XsltTransmogrifier
@@ -47,15 +38,24 @@ import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
  * @author Stefan Ivanov
  * 
  * @param <T>
+ *     output type
  */
-public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
+public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPreparedExpression> implements Transmogrifier<Source, T> {
     private final static Logger LOG = LoggerFactory.getLogger(XqjTransmogrifier.class);
 
-    private final Map<Object, XQPreparedExpression> cache = new HashMap<>();
-    private final XQDataSource ds;
-    private XQConnection connection;
-    private Map<String, String> staticParams;
+    private static final Configuration XQUERY_GLOBAL_CONFIG;
+    private static final SaxonXQDataSource DATA_SOURCE;
+    static {
+        XQUERY_GLOBAL_CONFIG = new Configuration();
+        XQUERY_GLOBAL_CONFIG.setURIResolver(new ClasspathUriResolver(XQUERY_GLOBAL_CONFIG.getURIResolver()));
+        DATA_SOURCE = new SaxonXQDataSource(XQUERY_GLOBAL_CONFIG);
+    }
+
     private final Class<T> outputFormat;
+    private SaxonXQConnection connection;
+
+    @Getter @Setter private Map<String, Object> staticParams;
+
 
     @SuppressWarnings("unchecked")
     public XqjTransmogrifier() {
@@ -67,44 +67,59 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
      *            currently supported: String, Writer, OutputStream
      */
     public XqjTransmogrifier(Class<T> outputFormat) {
-        super();
-        Configuration globalConfig = new Configuration();
-        // globalConfig.setHostLanguage(Configuration.XQUERY);
-        globalConfig.setURIResolver(new ClasspathUriResolver(globalConfig.getURIResolver()));
-        ds = new SaxonXQDataSource(globalConfig);
-        this.outputFormat = outputFormat;
+        this(outputFormat, null, null);
     }
 
     /**
      * @param outputFormat
-     *            currently supported: String
-     * @param globalParams
-     *            static XQuery parameters
-     * @throws XQException exception
+     *            currently supported: String, Writer, OutputStream
+     * @param classLoader
+     *            class loader for resource retrieval, may be <code>null</code>
      */
-    public XqjTransmogrifier(Class<T> outputFormat, Map<String, Object> globalParams) throws XQException {
-        this(outputFormat);
-        initGlobalConfiguration(globalParams);
+    public XqjTransmogrifier(Class<T> outputFormat, ClassLoader classLoader) {
+        this(outputFormat, classLoader, null);
     }
 
-    private void initGlobalConfiguration(Map<String, Object> globalParams) {
-        if (globalParams == null)
-            return;
-        Configuration globalConfig = ((SaxonXQDataSource) ds).getConfiguration();
-        for (Entry<String, Object> entry : globalParams.entrySet()) {
-            globalConfig.setConfigurationProperty(entry.getKey(), entry.getValue());
+    /**
+     * @param outputFormat
+     *            currently supported: String, Writer, OutputStream
+     * @param globalParams
+     *            static XQuery parameters
+     */
+    public XqjTransmogrifier(Class<T> outputFormat, Map<String, Object> globalParams) {
+        this(outputFormat, null, globalParams);
+    }
+
+    /**
+     * @param outputFormat
+     *            currently supported: String, Writer, OutputStream
+     * @param classLoader
+     *            class loader for resource retrieval, may be <code>null</code>
+     * @param globalParams
+     *            static XQuery parameters
+     */
+    public XqjTransmogrifier(
+            Class<T> outputFormat,
+            ClassLoader classLoader,
+            Map<String, Object> globalParams)
+    {
+        super(XQPreparedExpression.class, classLoader);
+        this.outputFormat = outputFormat;
+
+        if (globalParams != null) {
+            for (Entry<String, Object> entry : globalParams.entrySet()) {
+                XQUERY_GLOBAL_CONFIG.setConfigurationProperty(entry.getKey(), entry.getValue());
+            }
         }
     }
 
     /**
-     * 
      * Converts a Source into a typed result using a XQuery processor.
      * <p>
      * The XQ resource location is mandatory in the first extra parameter. Other
      * parameters may be passed as a Map in the second parameter.
      * 
-     * @see org.openehealth.ipf.commons.core.modules.api.Transmogrifier#zap(java.lang.Object,
-     *      java.lang.Object[])
+     * @see Transmogrifier#zap(java.lang.Object, java.lang.Object[])
      */
     @Override
     public T zap(Source source, Object... params) {
@@ -117,29 +132,33 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
     private void doZap(Source source, Result result, Object... params) {
         XQResultSequence seq = null;
         try {
-            XQPreparedExpression expression = expression(params);
+            XQPreparedExpression expression = resource(params);
             expression.bindDocument(XQConstants.CONTEXT_ITEM, source, null);
-            if (params.length != 0) {
-                bindExpressionContext(expression, parameters(params));
-            }
+            bindExpressionContext(expression, staticParams);
+            bindExpressionContext(expression, resourceParameters(params));
             seq = expression.executeQuery();
             seq.writeSequenceToResult(result);
-        } catch (XQException e) {
+        } catch (Exception e) {
             throw new RuntimeException("XQuery processing failed", e);
         } finally {
-            if (seq != null && !seq.isClosed())
-                closeQuietly(seq);
+            if (seq != null && !seq.isClosed()) {
+                try {
+                    seq.close();
+                } catch (XQException e) {
+                    LOG.trace("XQLTransmogrifier didn't return a value.", e);
+                }
+            }
         }
     }
 
-    private void bindExpressionContext(XQDynamicContext exp, Map<String, Object> params)
-            throws XQException {
+    private void bindExpressionContext(XQDynamicContext exp, Map<String, Object> params) throws XQException {
         if (params == null) {
             return;
         }
         for (Entry<String, Object> entry : params.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase(ParametersHelper.RESOURCE_LOCATION))
+            if (entry.getKey().equalsIgnoreCase(RESOURCE_LOCATION)) {
                 continue;
+            }
             Object value = entry.getValue();
             if (value instanceof java.lang.String) {
                 exp.bindString(new QName(entry.getKey()), (String) value, null);
@@ -154,59 +173,33 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
     }
 
     /**
-     * Instantiates a {@link XQPreparedExpression} object according to the
-     * parameters. The expression is stored in a cache for faster access in
-     * subsequent calls.
-     * 
-     * @param params
-     *            params[0] must be of type String and reference the stylesheet
-     *            resource
-     * @return a {@link XQPreparedExpression} object according to the parameters
-     * @TODO use an external cache implementation?
+     * This method had to be overridden because {@link XQPreparedExpression} objects
+     * are not thread-safe, thus an additional replication step is necessary.
      */
-    synchronized protected XQPreparedExpression expression(Object... params) {
-        if (!(cache.containsKey(resource(params)))) {
-            cache.put(resource(params), doPreparedExpression(params));
-        }
-        return cache.get(resource(params));
+    @Override
+    protected XQPreparedExpression resource(Object... params) throws Exception {
+        XQPreparedExpression expression = super.resource(params);
+        return getConnection().copyPreparedExpression(expression);
     }
 
-    private XQPreparedExpression doPreparedExpression(Object... params) {
-        String resourceLocation = resource(params);
+    @Override
+    public XQPreparedExpression createResource(Object... params) {
+        String resourceLocation = resourceLocation(params);
         LOG.debug("Create new template for {}", resourceLocation);
         try {
-            initConnection();
-            XQPreparedExpression expression = connection
-                    .prepareExpression(stream(resource(params)));
-            if (staticParams != null) {
-                bindExpressionContext(expression, ParametersHelper.parameters(staticParams));
-            }
-            return expression;
+            InputStream stream = resourceContent(params).getInputStream();
+            return getConnection().prepareExpression(stream);
         } catch (Exception e) {
             throw new IllegalArgumentException("The resource "
                     + resourceLocation + " is not valid", e);
         }
     }
 
-    private void initConnection() throws XQException {
-        if (connection == null)
-            connection = ds.getConnection();
-    }
-
-    private void closeQuietly(XQResultSequence seq) {
-        try {
-            seq.close();
-        } catch (XQException ignored) {
-            LOG.trace("XQLTransmogrifier didn't return a value.");
+    synchronized private SaxonXQConnection getConnection() throws XQException {
+        if (connection == null) {
+            connection = (SaxonXQConnection) DATA_SOURCE.getConnection();
         }
-    }
-
-    public Map<String, String> getStaticParams() {
-        return staticParams;
-    }
-
-    public void setStaticParams(Map<String, String> staticParams) {
-        this.staticParams = staticParams;
+        return connection;
     }
 
 }

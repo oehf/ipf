@@ -15,10 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import org.apache.camel.spring.SpringRouteBuilder
 import static org.apache.camel.builder.Builder.*
-import static org.openehealth.ipf.commons.xml.ParametersHelper.RESOURCE_LOCATION
-import static org.openehealth.ipf.platform.camel.core.util.Expressions.headersAndBuilderExpression
+import static org.openehealth.ipf.commons.xml.AbstractCachingXmlProcessor.RESOURCE_LOCATION
 
 import javax.xml.transform.dom.DOMResult
 import javax.xml.transform.stream.StreamSource

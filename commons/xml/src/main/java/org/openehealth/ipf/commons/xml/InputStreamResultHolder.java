@@ -26,19 +26,18 @@ import javax.xml.transform.stream.StreamResult;
 /**
  * @author Christian Ohr
  */
-class InputStreamResultHolder extends ResultHolder<InputStream> {
+class InputStreamResultHolder implements ResultHolder<InputStream> {
 
     private Writer writer;
 
     @Override
-    Result createResult() {
+    public Result createResult() {
         writer = new StringWriter();
         return new StreamResult(writer);
     }
 
     @Override
     public InputStream getResult() {
-        // TODO Auto-generated method stub
         return new ByteArrayInputStream(writer.toString().getBytes());
     }
 

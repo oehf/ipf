@@ -20,13 +20,8 @@ import javax.xml.transform.Result;
 /**
  * @author Christian Ohr
  */
-abstract class ResultHolder<T> {
-
-    protected Result result;
-
-    abstract public T getResult();
+public interface ResultHolder<T> {
+    abstract T getResult();
 
     abstract Result createResult();
-    
-
 }

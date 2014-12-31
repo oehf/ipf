@@ -22,14 +22,14 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 /**
  * Validation wrapper around the {@link SchematronTransmogrifier}. The
  * result is scanned for <code>svrl:failed-assert</code> elements, and
- * error text and details (if available) are put into the ValidationExecpion's message.
+ * error text and details (if available) are put into the {@link ValidationException}'s message.
  * <p>
  * The Validator accepts a {@link Source} as input, and a {@link SchematronProfile}
  * as validation profile parameter.
  * 
  * @author Christian Ohr
  */
-public class SchematronValidator implements Validator {
+public class SchematronValidator implements Validator<Source, SchematronProfile> {
 
     private SchematronTransmogrifier<String> schematronTransmogrifier
 
@@ -37,18 +37,17 @@ public class SchematronValidator implements Validator {
         this.schematronTransmogrifier = new ValidatingSchematronTransmogrifier<String>(String.class)
     }
 
-    public void validate(Object message, Object profile) {
-        String s = schematronTransmogrifier.zap((Source)message, profile);
-        validateResult(s)
+    public void validate(Source message, SchematronProfile profile) {
+        String s = schematronTransmogrifier.zap(message, profile)
+        evaluateResult(s)
     }
 
-    protected void validateResult(String s) {
-        def exceptions = []
-        def result = new XmlSlurper()
+    protected void evaluateResult(String s) {
+        def xml = new XmlSlurper()
                 .parseText(s)
                 .declareNamespace(svrl:'http://purl.oclc.org/dsdl/svrl')
 
-        exceptions = result.'svrl:failed-assert'.collect {
+        def exceptions = xml.'svrl:failed-assert'.collect {
             def location = it.@location?.text()
             def text = it.'svrl:text'?.text()
             def detail = it.'svrl:diagnostic-reference'?.text()
@@ -56,8 +55,8 @@ public class SchematronValidator implements Validator {
             new ValidationException("Validation error at $location : $message")
         }
 
-        if (exceptions.size() > 0) {
-            throw new ValidationException("Schematron validation error", exceptions)
+        if (! exceptions.isEmpty()) {
+            throw new ValidationException('Schematron validation error', exceptions)
         }
     }
 }
