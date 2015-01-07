@@ -29,6 +29,7 @@ import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.xquery.*;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -43,6 +44,7 @@ import java.util.Map.Entry;
 public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPreparedExpression> implements Transmogrifier<Source, T> {
     private final static Logger LOG = LoggerFactory.getLogger(XqjTransmogrifier.class);
 
+    private static final Map<String, XQPreparedExpression> XQUERY_CACHE = new HashMap<>();
     private static final Configuration XQUERY_GLOBAL_CONFIG;
     private static final SaxonXQDataSource DATA_SOURCE;
     static {
@@ -103,7 +105,7 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
             ClassLoader classLoader,
             Map<String, Object> globalParams)
     {
-        super(XQPreparedExpression.class, classLoader);
+        super(classLoader);
         this.outputFormat = outputFormat;
 
         if (globalParams != null) {
@@ -111,6 +113,11 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
                 XQUERY_GLOBAL_CONFIG.setConfigurationProperty(entry.getKey(), entry.getValue());
             }
         }
+    }
+
+    @Override
+    protected Map<String, XQPreparedExpression> getCache() {
+        return XQUERY_CACHE;
     }
 
     /**

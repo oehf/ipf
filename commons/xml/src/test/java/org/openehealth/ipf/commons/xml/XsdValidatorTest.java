@@ -37,7 +37,7 @@ public class XsdValidatorTest {
 	public void setUp() throws Exception {
 		validator = new XsdValidator();
 
-		Field field = AbstractCachingXmlProcessor.class.getDeclaredField("XSD_CACHE");
+		Field field = XsdValidator.class.getDeclaredField("XSD_CACHE");
 		field.setAccessible(true);
 		cache = (Map<String, ?>) field.get(null);
 	}

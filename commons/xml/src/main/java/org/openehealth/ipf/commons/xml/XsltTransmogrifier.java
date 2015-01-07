@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.xml;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -45,6 +46,8 @@ import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates> implements Transmogrifier<Source, T> {
     private static final Logger LOG = LoggerFactory.getLogger(XsltTransmogrifier.class);
 
+    private static final Map<String, Templates> XSLT_CACHE = new HashMap<>();
+
     @Getter @Setter private Map<String, Object> staticParams;
     @Getter private final TransformerFactory factory;
     private final URIResolver resolver;
@@ -67,6 +70,11 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
         this(outputFormat, null, staticParams);
     }
 
+    @Override
+    protected Map<String, Templates> getCache() {
+        return XSLT_CACHE;
+    }
+
     /**
      * @param outputFormat
      *            currently supported: String, Writer, OutputStream
@@ -80,7 +88,7 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
             ClassLoader classLoader,
             Map<String, Object> staticParams)
     {
-        super(Templates.class, classLoader);
+        super(classLoader);
         factory = TransformerFactory.newInstance();
         // Wrap the default resolver
         resolver = new ClasspathUriResolver(factory.getURIResolver());

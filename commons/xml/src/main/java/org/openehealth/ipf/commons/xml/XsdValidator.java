@@ -16,9 +16,7 @@
 package org.openehealth.ipf.commons.xml;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
@@ -44,16 +42,22 @@ import org.xml.sax.SAXParseException;
 public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements Validator<Source, String> {
     private static final Logger LOG = LoggerFactory.getLogger(XsdValidator.class);
 
+    private static final Map<String, Schema> XSD_CACHE = new HashMap<>();
     private static final LSResourceResolverImpl RESOURCE_RESOLVER = new LSResourceResolverImpl();
 
     @Getter @Setter private String schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
     public XsdValidator() {
-        super(Schema.class, null);
+        super(null);
     }
 
     public XsdValidator(ClassLoader classloader) {
-        super(Schema.class, classloader);
+        super(classloader);
+    }
+
+    @Override
+    protected Map<String, Schema> getCache() {
+        return XSD_CACHE;
     }
 
     @Override

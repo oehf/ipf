@@ -15,17 +15,12 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import org.apache.commons.lang3.Validate;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
-import javax.xml.transform.Templates;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.xquery.XQPreparedExpression;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -54,23 +49,15 @@ abstract public class AbstractCachingXmlProcessor<T> {
 
     public static final String RESOURCE_LOCATION = "org.openehealth.ipf.commons.xml.ResourceLocation";
 
-    private static final Map<String, Templates> XSLT_CACHE = new HashMap<>();
-    private static final Map<String, Schema> XSD_CACHE = new HashMap<>();
-    private static final Map<String, XQPreparedExpression> XQUERY_CACHE = new HashMap<>();
-
-    private final Class<T> resourceType;
     private final ResourceLoader resourceLoader;
 
 
     /**
      * Constructor.
-     * @param resourceType
-     *      type of cached resource, e.g. XML Schema, Schematron templates, XQuery script, ...
      * @param classLoader
      *      class loader, may be <code>null</code>.
      */
-    protected AbstractCachingXmlProcessor(Class<T> resourceType, ClassLoader classLoader) {
-        this.resourceType = Validate.notNull(resourceType);
+    protected AbstractCachingXmlProcessor(ClassLoader classLoader) {
         this.resourceLoader = (classLoader == null)
             ? new DefaultResourceLoader()
             : new DefaultResourceLoader(classLoader);
@@ -78,18 +65,9 @@ abstract public class AbstractCachingXmlProcessor<T> {
 
     /**
      * @return static cache for the configured resource type.
-     * Note that the returned Map is not synchronized.
+     * Note that the returned Map is not necessarily synchronized.
      */
-    private Map<String, T> getCache() {
-        if (resourceType == Templates.class) {
-            return (Map<String, T>) XSLT_CACHE;
-        } else if (resourceType == Schema.class) {
-            return (Map<String, T>) XSD_CACHE;
-        } else if (resourceType == XQPreparedExpression.class) {
-            return (Map<String, T>) XQUERY_CACHE;
-        }
-        throw new IllegalStateException("Unknown resource type " + resourceType.getName());
-    }
+    abstract protected Map<String, T> getCache();
 
     /**
      * Extracts (constructs) resource location from validator/transmogrifier parameters.
