@@ -42,12 +42,12 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
-            <artifactId>gazelle-validation-profiles-iti-pixpdq</artifactId>
+            <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
             <version>${ipf-gazelle-version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
-            <artifactId>gazelle-validation-commons-core</artifactId>
+            <artifactId>ipf-gazelle-validation-commons-core</artifactId>
             <version>${ipf-gazelle-version}</version>
         </dependency>
         <dependency>

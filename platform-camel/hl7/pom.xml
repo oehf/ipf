@@ -48,11 +48,11 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
-            <artifactId>gazelle-validation-commons-core</artifactId>
+            <artifactId>ipf-gazelle-validation-commons-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
-            <artifactId>gazelle-validation-profiles-core</artifactId>
+            <artifactId>ipf-gazelle-validation-profiles-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -64,7 +64,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
-            <artifactId>gazelle-validation-profiles-iti-pixpdq</artifactId>
+            <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

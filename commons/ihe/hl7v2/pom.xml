@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
-            <artifactId>gazelle-validation-commons-core</artifactId>
+            <artifactId>ipf-gazelle-validation-commons-core</artifactId>
             <version>${ipf-gazelle-version}</version>
         </dependency>
         
