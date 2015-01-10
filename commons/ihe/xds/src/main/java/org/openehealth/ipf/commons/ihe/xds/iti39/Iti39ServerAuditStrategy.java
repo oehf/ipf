@@ -34,16 +34,16 @@ public class Iti39ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
     public void doAudit(XdsRetrieveAuditDataset auditDataset) {
         for (Status status : Status.values()) {
             if (auditDataset.hasDocuments(status)) {
-            AuditorManager.getXCARespondingGatewayAuditor().auditCrossGatewayRetrieveEvent(
-                    auditDataset.getEventOutcomeCode(status),
-                    auditDataset.getUserId(),
-                    auditDataset.getClientIpAddress(),
-                    auditDataset.getServiceEndpointUrl(),
-                    auditDataset.getUserName(),
-                    auditDataset.getDocumentIds(status),
-                    auditDataset.getRepositoryIds(status),
-                    auditDataset.getHomeCommunityIds(status),
-                    auditDataset.getPurposesOfUse());
+                AuditorManager.getXCARespondingGatewayAuditor().auditCrossGatewayRetrieveEvent(
+                        auditDataset.getEventOutcomeCode(status),
+                        auditDataset.getUserId(),
+                        auditDataset.getClientIpAddress(),
+                        auditDataset.getServiceEndpointUrl(),
+                        auditDataset.getUserName(),
+                        auditDataset.getDocumentIds(status),
+                        auditDataset.getRepositoryIds(status),
+                        auditDataset.getHomeCommunityIds(status),
+                        auditDataset.getPurposesOfUse());
             }
         }
     }
