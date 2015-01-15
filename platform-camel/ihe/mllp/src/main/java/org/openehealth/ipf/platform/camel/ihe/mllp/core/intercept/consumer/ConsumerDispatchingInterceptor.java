@@ -35,8 +35,6 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.apache.commons.lang3.StringUtils.split;
-import static org.apache.commons.lang3.StringUtils.splitPreserveAllTokens;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 /**

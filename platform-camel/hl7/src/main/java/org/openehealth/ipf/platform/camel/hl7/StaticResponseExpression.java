@@ -21,7 +21,6 @@ import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
 /**
  * Expression that returns a predefined response parsed with the current message's {@link ca.uhn.hl7v2.HapiContext}

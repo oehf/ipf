@@ -27,7 +27,6 @@ import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.GenericParser;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.validation.MessageRule;
-import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang3.Validate;

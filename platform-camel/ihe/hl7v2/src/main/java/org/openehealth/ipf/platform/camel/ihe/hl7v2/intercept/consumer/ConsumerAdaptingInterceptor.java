@@ -111,7 +111,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
             msg = analyseMagicHeader(m, originalMessage);
         }
 
-        // unable to create a MessageAdaper :-(
+        // unable to create a Message :-(
         if(msg == null) {
             throw new Hl7v2AdaptingException("Cannot create HL7v2 message from " +
                     ClassUtils.getSimpleName(body, "<null>") +

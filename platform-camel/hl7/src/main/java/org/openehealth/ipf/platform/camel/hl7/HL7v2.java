@@ -25,7 +25,6 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Predicate;
 import org.apache.camel.Processor;
-import org.apache.camel.builder.ExpressionClause;
 import org.apache.camel.builder.ValueBuilder;
 import org.apache.camel.component.hl7.HL7;
 import org.apache.commons.lang3.Validate;
