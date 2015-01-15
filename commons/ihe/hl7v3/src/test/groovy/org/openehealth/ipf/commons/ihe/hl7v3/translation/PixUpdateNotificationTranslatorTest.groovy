@@ -21,7 +21,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
-import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
+import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_46
 

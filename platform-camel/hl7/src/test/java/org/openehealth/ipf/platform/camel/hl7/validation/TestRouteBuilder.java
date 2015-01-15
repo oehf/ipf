@@ -16,8 +16,8 @@
 package org.openehealth.ipf.platform.camel.hl7.validation;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.openehealth.ipf.gazelle.validation.profile.ItiPixPdqProfile;
-import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
+import org.openehealth.ipf.gazelle.validation.profile.pixpdq.ItiPixPdqProfile;
+import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 
 import static org.openehealth.ipf.platform.camel.hl7.validation.ConformanceProfileValidators.*;
 

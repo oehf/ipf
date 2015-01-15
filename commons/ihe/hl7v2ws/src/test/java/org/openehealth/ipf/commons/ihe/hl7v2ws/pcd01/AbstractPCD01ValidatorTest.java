@@ -27,7 +27,7 @@ import ca.uhn.hl7v2.validation.Validator;
 import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
 import org.junit.Before;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
+import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
 
 public abstract class AbstractPCD01ValidatorTest {
 

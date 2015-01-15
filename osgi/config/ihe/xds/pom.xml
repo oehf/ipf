@@ -14,7 +14,6 @@
     <properties>
         <osgi.import.pkg>
             META-INF.cxf,
-            META-INF.cxf.osgi,
             javax.xml.bind,
             javax.jws,
             javax.jws.soap,

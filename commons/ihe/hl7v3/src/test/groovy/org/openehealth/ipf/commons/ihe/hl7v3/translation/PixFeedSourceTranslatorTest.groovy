@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.model.Message
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
-import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
+import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
 import static org.junit.Assert.assertTrue
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_44_PIX

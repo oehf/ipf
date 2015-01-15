@@ -20,7 +20,7 @@ import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.gazelle.validation.profile.PcdTransactions;
+import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
 import org.openehealth.ipf.platform.camel.hl7.HL7v2;
 import org.openehealth.ipf.platform.camel.hl7.validation.ConformanceProfileValidators;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;

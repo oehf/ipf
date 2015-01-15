@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
-import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
+import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
