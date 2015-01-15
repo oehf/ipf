@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8;
 
 import ca.uhn.hl7v2.ErrorCode;
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions;
+import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;

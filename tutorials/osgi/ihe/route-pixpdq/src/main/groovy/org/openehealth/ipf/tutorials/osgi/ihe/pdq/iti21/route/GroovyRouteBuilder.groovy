@@ -47,7 +47,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||Müller^Joachim
                 .maximumRedeliveries(0)
                 .end()
             .process(validatingProcessor())
-            .transform(staticResponse(Irsp))
+            .transform(staticResponse(rsp))
             .process(validatingProcessor())
 
     }

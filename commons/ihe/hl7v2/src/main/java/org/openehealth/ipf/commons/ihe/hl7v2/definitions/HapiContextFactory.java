@@ -23,7 +23,6 @@ import ca.uhn.hl7v2.parser.ModelClassFactory;
 import ca.uhn.hl7v2.util.idgenerator.FileBasedHiLoGenerator;
 import ca.uhn.hl7v2.util.idgenerator.IDGenerator;
 import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.ConformanceProfileBasedValidationBuilder;
 import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
 import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
 

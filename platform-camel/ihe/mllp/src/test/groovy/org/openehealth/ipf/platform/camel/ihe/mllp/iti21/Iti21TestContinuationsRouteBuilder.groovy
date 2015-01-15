@@ -15,11 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
-import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.parser.Parser
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
-import org.openehealth.ipf.gazelle.validation.profile.PixPdqTransactions
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.staticResponse
