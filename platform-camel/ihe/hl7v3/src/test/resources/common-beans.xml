@@ -19,12 +19,11 @@
     xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"    
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/beans/spring-beans.xsd
 http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd
 http://openehealth.org/schema/ipf-commons-core
-http://openehealth.org/schema/ipf-commons-core-2.5.xsd
-">
+http://openehealth.org/schema/ipf-commons-core.xsd">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
