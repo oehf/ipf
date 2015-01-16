@@ -39,9 +39,9 @@ import org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback;
 import org.openehealth.ipf.commons.flow.repository.search.FlowSearchCallback;
 import org.openehealth.ipf.commons.flow.repository.search.FlowSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.HibernateObjectRetrievalFailureException;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.HibernateObjectRetrievalFailureException;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 /**
  * @author Martin Krasser
@@ -95,7 +95,7 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
 
     @Override
     public Flow find(Long id) {
-        Flow flow = (Flow) getHibernateTemplate().get(Flow.class, id);
+        Flow flow = getHibernateTemplate().get(Flow.class, id);
         if (flow == null) {
             throw new FlowException("no flow with id " + id);
         }
@@ -105,7 +105,7 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
     @Override
     public Flow lock(Long id) {
         try {
-            return (Flow) getHibernateTemplate().load(Flow.class, id, LockMode.UPGRADE);
+            return getHibernateTemplate().load(Flow.class, id, LockMode.UPGRADE);
         } catch (HibernateObjectRetrievalFailureException e) {
             throw new FlowException("no flow with id " + id);
         }
@@ -113,16 +113,24 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
 
     @Override
     public int purgeFlows(FlowPurgeCriteria purgeCriteria) {
-        List<Flow> purgeCandidates = findPurgeCandidates(purgeCriteria);
-        getHibernateTemplate().deleteAll(findPurgeCandidates(purgeCriteria));
-        getHibernateTemplate().flush();
+        final List<Flow> purgeCandidates = findPurgeCandidates(purgeCriteria);
+        getHibernateTemplate().executeWithNativeSession(new HibernateCallback() {
+            @Override
+            public Object doInHibernate(Session session) throws HibernateException {
+                for (Flow object : purgeCandidates){
+                    session.delete(object);
+                }
+                session.flush();
+                return null;
+            }
+        });
         return purgeCandidates.size();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Flow> findFlows(final FlowFinderCriteria finderCriteria) {
-        return getHibernateTemplate().<List<Flow>> execute(new HibernateCallback() {
+        return getHibernateTemplate().<List<Flow>>executeWithNativeSession(new HibernateCallback() {
             @Override
             public Object doInHibernate(Session session) throws HibernateException {
                 return execute(finderCriteria, createFlowsCriteria(finderCriteria), session, false);
@@ -133,7 +141,7 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
     @Override
     @SuppressWarnings("unchecked")
     public List<Flow> findErrorFlows(final FlowFinderCriteria finderCriteria) {
-        return getHibernateTemplate().<List<Flow>> execute(new HibernateCallback() {
+        return getHibernateTemplate().<List<Flow>>executeWithNativeSession(new HibernateCallback() {
             @Override
             public Object doInHibernate(Session session) throws HibernateException {
                 return execute(finderCriteria, createErrorFlowsCriteria(finderCriteria), session, false);
@@ -144,7 +152,7 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
     @Override
     @SuppressWarnings("unchecked")
     public List<Flow> findUnackFlows(final FlowFinderCriteria finderCriteria) {
-        return getHibernateTemplate().<List<Flow>> execute(new HibernateCallback() {
+        return getHibernateTemplate().<List<Flow>>executeWithNativeSession(new HibernateCallback() {
             @Override
             public Object doInHibernate(Session session) throws HibernateException {
                 return execute(finderCriteria, createUnackFlowsCriteria(finderCriteria), session, false);
@@ -155,7 +163,7 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
     @Override
     @SuppressWarnings("unchecked")
     public List<Long> findFlowIds(final FlowFinderCriteria finderCriteria) {
-        return getHibernateTemplate().<List<Long>> execute(new HibernateCallback() {
+        return getHibernateTemplate().<List<Long>>executeWithNativeSession(new HibernateCallback() {
             @Override
             public Object doInHibernate(Session session) throws HibernateException {
                 return execute(finderCriteria, createFlowsCriteria(finderCriteria), session, true);
@@ -166,7 +174,7 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
     @Override
     @SuppressWarnings("unchecked")
     public List<Long> findErrorFlowIds(final FlowFinderCriteria finderCriteria) {
-        return getHibernateTemplate().<List<Long>> execute(new HibernateCallback() {
+        return getHibernateTemplate().<List<Long>>executeWithNativeSession(new HibernateCallback() {
             @Override
             public Object doInHibernate(Session session) throws HibernateException {
                 return execute(finderCriteria, createErrorFlowsCriteria(finderCriteria), session, true);
@@ -177,17 +185,17 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
     @Override
     @SuppressWarnings("unchecked")
     public List<Long> findUnackFlowIds(final FlowFinderCriteria finderCriteria) {
-        return getHibernateTemplate().<List<Long>> execute(new HibernateCallback() {
+        return getHibernateTemplate().<List<Long>>executeWithNativeSession(new HibernateCallback() {
             @Override
             public Object doInHibernate(Session session) throws HibernateException {
-                return execute(finderCriteria, createUnackFlowsCriteria(finderCriteria), session, true);
+                return execute(finderCriteria, createUnackFlowsCriteria(finderCriteria),session, true);
             }
         });
     }
 
     @SuppressWarnings("unchecked")
     private List<Flow> findPurgeCandidates(final FlowPurgeCriteria purgeCriteria) {
-        return getHibernateTemplate().<List<Flow>> execute(new HibernateCallback() {
+        return getHibernateTemplate().<List<Flow>>executeWithNativeSession(new HibernateCallback() {
             @Override
             public Object doInHibernate(Session session) throws HibernateException {
                 return execute(purgeCriteria, createPurgeCriteria(purgeCriteria), session);

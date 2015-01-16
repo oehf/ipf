@@ -37,8 +37,8 @@ import org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback;
 import org.openehealth.ipf.commons.flow.tx.TestTransactionManager;
 import org.openehealth.ipf.commons.flow.util.Flows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -191,7 +191,8 @@ public class FlowRepositoryFulltextTest {
 
     @SuppressWarnings("unchecked")
     private Flow searchFlow(final String content) {
-        List<Flow> results = (List)hibernateTemplate.execute(new HibernateCallback() {
+        List<Flow> results = (List)hibernateTemplate.executeWithNativeSession(new HibernateCallback() {
+            @Override
             public Object doInHibernate(Session session) {
                 return searchCallback.findFlowsByMessageQuery(session, content);
             }
@@ -207,7 +208,8 @@ public class FlowRepositoryFulltextTest {
     
     @SuppressWarnings("unchecked")
     private List<FlowPart> searchFlowParts(final String content) {
-        return (List)hibernateTemplate.execute(new HibernateCallback() {
+        return (List)hibernateTemplate.executeWithNativeSession(new HibernateCallback() {
+            @Override
             public Object doInHibernate(Session session) {
                 return searchCallback.findFlowPartsByMessageQuery(session, content);
             }

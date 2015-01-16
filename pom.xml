@@ -76,17 +76,17 @@
         <derby-version>10.9.1.0</derby-version>
         <easymock-version>3.2</easymock-version>
         <ehcache-version>2.8.3</ehcache-version>
-        <geronimo-jpa_2.0_spec.version>1.1</geronimo-jpa_2.0_spec.version>
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
         <geronimo-spec-servlet-api-30-version>1.0</geronimo-spec-servlet-api-30-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <groovy-version>2.3.7</groovy-version>
         <hapi-version>2.2</hapi-version>
-        <hibernate-version>3.5.6-Final</hibernate-version>
-        <hibernate-commons-annotations-version>3.2.0.Final</hibernate-commons-annotations-version>
-        <hibernate-javassist-version>3.17.1-GA</hibernate-javassist-version>
-        <hibernate-search-version>3.2.1.Final</hibernate-search-version>
+        <hibernate-version>4.3.8.Final</hibernate-version>
+        <hibernate-commons-annotations-version>4.0.5.Final</hibernate-commons-annotations-version>
+        <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
+        <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
+        <hibernate-search-version>5.0.1.Final</hibernate-search-version>
         <ipf-gazelle-version>1.0-SNAPSHOT</ipf-gazelle-version>
         <jaxb-impl-version>2.2.7</jaxb-impl-version>
         <jasypt-version>1.9.2</jasypt-version>
@@ -97,6 +97,7 @@
         <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.17</log4j-version>
         <lombok-version>1.14.8</lombok-version>
+        <lucene-version>4.10.3</lucene-version>
         <mdht-version>1.2.0.201212201425</mdht-version>
         <mina2-version>2.0.8</mina2-version>
         <oht-atna-version>2.0.0</oht-atna-version>
@@ -741,10 +742,6 @@
                         <artifactId>jta</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>antlr</groupId>
-                        <artifactId>antlr</artifactId>
-                    </exclusion>
-                    <exclusion>
                         <groupId>xml-apis</groupId>
                         <artifactId>xml-apis</artifactId>
                     </exclusion>
@@ -771,56 +768,24 @@
                 <version>${geronimo-spec-javamail-14-version}</version>
             </dependency>			
             <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-annotations</artifactId>
-                <version>${hibernate-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hibernate.javax.persistence</groupId>
-                        <artifactId>hibernate-jpa-2.0-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-commons-annotations</artifactId>
-                <version>${hibernate-commons-annotations-version}</version>
+                <groupId>org.hibernate.javax.persistence</groupId>
+                <artifactId>hibernate-jpa-2.1-api</artifactId>
+                <version>${hibernate-jpa-2.1-api-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-search</artifactId>
                 <version>${hibernate-search-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.transaction</groupId>
-                        <artifactId>jta</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>ejb3-persistence</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.hibernate.javax.persistence</groupId>
-                        <artifactId>hibernate-jpa-2.0-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.solr</groupId>
-                        <artifactId>solr-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.lucene</groupId>
-                        <artifactId>lucene-snowball</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jpa_2.0_spec</artifactId>
-                <version>${geronimo-jpa_2.0_spec.version}</version>
+                <groupId>org.hibernate.common</groupId>
+                <artifactId>hibernate-commons-annotations</artifactId>
+                <version>${hibernate-commons-annotations-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-queryparser</artifactId>
+                <version>${lucene-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.derby</groupId>

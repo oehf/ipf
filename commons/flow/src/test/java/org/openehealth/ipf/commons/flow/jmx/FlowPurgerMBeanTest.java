@@ -61,7 +61,7 @@ public class FlowPurgerMBeanTest {
     @Autowired
     private FlowRepositoryImpl flowRepository;    
 
-    private FlowFinderCriteria allFlows = new FlowFinderCriteria(new Date(0), null, "test");
+    private final FlowFinderCriteria allFlows = new FlowFinderCriteria(new Date(0), null, "test");
 
     private static final String PURGE_SCHEDULE_EXPRESSION = "0/2 * * * * ?";
     
@@ -69,7 +69,7 @@ public class FlowPurgerMBeanTest {
     
     private static final long WAIT_TIMEOUT = 5;
 
-    private CountDownLatch latch = new CountDownLatch(1);
+    private final CountDownLatch latch = new CountDownLatch(1);
     
     @Before
     public void setUp() throws Exception {

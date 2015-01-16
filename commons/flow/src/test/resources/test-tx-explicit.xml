@@ -45,7 +45,7 @@
   <!-- ================================================================= -->
 
   <bean id="hibernateTransactionManager"
-    class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    class="org.springframework.orm.hibernate4.HibernateTransactionManager">
     <property name="sessionFactory" ref="hibernateSessionFactory"/>
   </bean>
 
@@ -57,10 +57,9 @@
   <!--  Hibernate Setup                                                  -->
   <!-- ================================================================= -->
 
-  <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+  <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
     <property name="dataSource" ref="testDataSource"/>
     <property name="configLocation" value="classpath:hibernate-flow.xml"/>
-    <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
     <property name="hibernateProperties">
       <props>
       	<!-- For Hibernate version < 3.5.x use org.openehealth.ipf.commons.flow.derby.DerbyDialect -->
@@ -68,36 +67,17 @@
         <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
         <prop key="hibernate.show_sql">false</prop>
         <prop key="hibernate.format_sql">false</prop>
-        <prop key="hibernate.search.autoregister_listeners">false</prop>
-        <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
+        <prop key="hibernate.search.autoregister_listeners">true</prop>
+        <prop key="hibernate.search.default.directory_provider">filesystem</prop>
         <prop key="hibernate.search.default.indexBase">./target/lucene</prop>
       </props>
-    </property>
-    <property name="eventListeners">
-      <map>
-        <entry key="pre-update" value-ref="textEncryptorEventListener"/>
-        <entry key="post-update">
-          <list>
-            <ref bean="textDecryptorEventListener"/>
-            <ref bean="textIndexEventListener"/>
-          </list>
-        </entry>
-        <entry key="pre-insert" value-ref="textEncryptorEventListener"/>
-        <entry key="post-insert">
-          <list>
-            <ref bean="textDecryptorEventListener"/>
-            <ref bean="textIndexEventListener"/>
-          </list>
-        </entry>
-        <entry key="post-delete" value-ref="textIndexEventListener"/>
-        <entry key="post-load" value-ref="textDecryptorEventListener"/>
-      </map>
     </property>
   </bean>
 
   <bean id="hibernateTemplate"
-    class="org.springframework.orm.hibernate3.HibernateTemplate">
+    class="org.springframework.orm.hibernate4.HibernateTemplate">
     <property name="sessionFactory" ref="hibernateSessionFactory" />
+    <property name="checkWriteOperations" value="false"></property>
   </bean>
 
   <!-- ================================================================= -->
@@ -141,7 +121,7 @@
   <!--  Fulltext search setup                                            -->
   <!-- ================================================================= -->
  
-  <bean id="textIndexEventListener" class="org.hibernate.search.event.FullTextIndexEventListener" />
+  <bean id="textIndexEventListener" class="org.hibernate.search.event.impl.FullTextIndexEventListener" />
   <bean id="flowSearchCallback" class="org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback" />
 
 </beans>

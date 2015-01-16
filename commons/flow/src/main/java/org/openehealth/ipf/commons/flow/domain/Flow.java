@@ -19,7 +19,6 @@ import static org.openehealth.ipf.commons.flow.domain.FlowStatus.CLEAN;
 import static org.openehealth.ipf.commons.flow.domain.FlowStatus.ERROR;
 import static org.openehealth.ipf.commons.flow.transfer.FlowInfo.ACK_COUNT_EXPECTED_UNDEFINED;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -43,7 +42,6 @@ import org.hibernate.annotations.Index;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
-import org.openehealth.ipf.commons.flow.hibernate.HibernateUtils;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 
 /**
@@ -86,7 +84,7 @@ public class Flow {
     
     @Lob
     @Column(name="C_PACKET", length=Integer.MAX_VALUE)
-    private Blob packet;
+    private byte[] packet;
 
     @Column(name="C_CREATION_TIME")
     private Date creationTime;
@@ -114,7 +112,7 @@ public class Flow {
     
     @IndexedEmbedded(depth = 1)
     @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="FLOW_MESSAGE_ID", unique=true, nullable=true, updatable=true)
+    @JoinColumn(name="FLOW_MESSAGE_ID", unique=false, nullable=true, updatable=true)
     @Cascade({CascadeType.ALL})
     private FlowMessage flowMessage;
     
@@ -162,7 +160,7 @@ public class Flow {
      * @return a byte[] or <code>null</code>.
      */
     public byte[] getPacket() {
-        return HibernateUtils.toByteArray(packet);
+        return packet;
     }
     
     /**
@@ -173,7 +171,7 @@ public class Flow {
      *            a byte array or <code>null</code>.
      */
     public void setPacket(byte[] packet) {
-        this.packet = HibernateUtils.toBlob(packet, this.packet);
+        this.packet = packet;
     }
     
     public Date getCreationTime() {

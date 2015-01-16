@@ -70,7 +70,7 @@ public class FlowPart {
     
     @IndexedEmbedded(depth = 1)
     @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="FLOW_PART_MESSAGE_ID", unique=true, nullable=true, updatable=true)
+    @JoinColumn(name="FLOW_PART_MESSAGE_ID", unique=false, nullable=true, updatable=true)
     @Cascade({CascadeType.ALL})
     private FlowPartMessage flowPartMessage;
     

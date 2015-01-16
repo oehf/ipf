@@ -17,12 +17,10 @@ package org.openehealth.ipf.commons.flow.hibernate;
 
 import java.io.Serializable;
 
-import org.hibernate.cfg.Configuration;
-import org.hibernate.event.Initializable;
-import org.hibernate.event.PreInsertEvent;
-import org.hibernate.event.PreInsertEventListener;
-import org.hibernate.event.PreUpdateEvent;
-import org.hibernate.event.PreUpdateEventListener;
+import org.hibernate.event.spi.PreInsertEvent;
+import org.hibernate.event.spi.PreInsertEventListener;
+import org.hibernate.event.spi.PreUpdateEvent;
+import org.hibernate.event.spi.PreUpdateEventListener;
 import org.jasypt.encryption.StringEncryptor;
 import org.openehealth.ipf.commons.flow.domain.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class RenderedMessageEncryptEventListener implements
         PreInsertEventListener, 
-        PreUpdateEventListener, 
-        Initializable {
+        PreUpdateEventListener{
 
     private static final long serialVersionUID = -7516699694816986560L;
 
@@ -52,10 +49,6 @@ public class RenderedMessageEncryptEventListener implements
 
     public void setStringEncryptor(StringEncryptor stringEncryptor) {
         this.stringEncryptor = stringEncryptor;
-    }
-    
-    @Override
-    public void initialize(Configuration cfg) {
     }
 
     @Override
