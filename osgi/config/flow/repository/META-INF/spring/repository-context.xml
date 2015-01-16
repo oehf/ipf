@@ -45,10 +45,9 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
   <!--  Hibernate Setup                                                  -->
   <!-- ================================================================= -->
 
-  <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+  <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
     <property name="dataSource" ref="${derby.deployment.mode}FlowDataSource"/>
     <property name="configLocation" value="classpath:hibernate-flow.xml"/>
-    <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
     <property name="hibernateProperties">
       <props>
         <prop key="hibernate.dialect">org.openehealth.ipf.commons.flow.derby.DerbyDialect</prop>
@@ -61,12 +60,12 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
   </bean>
 
   <bean id="hibernateTemplate"
-    class="org.springframework.orm.hibernate3.HibernateTemplate">
+    class="org.springframework.orm.hibernate4.HibernateTemplate">
     <property name="sessionFactory" ref="hibernateSessionFactory" />
   </bean>
 
   <bean id="hibernateTransactionManager"
-    class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    class="org.springframework.orm.hibernate4.HibernateTransactionManager">
     <property name="sessionFactory" ref="hibernateSessionFactory"/>
   </bean>
 
