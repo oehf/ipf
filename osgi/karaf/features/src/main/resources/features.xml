@@ -18,6 +18,9 @@
 -->
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.0.0" name="ipf-${project.version}">
 
+    <!-- PAX Maven Protocol Syntax -->
+    <!-- mvn-uri := 'mvn:' [ repository-url '!' ] group-id '/' artifact-id [ '/' [version] [ '/' [type] [ '/' classifier ] ] ] ]-->
+
     <feature name="ipf" description="IPF support" version="${project.version}" resolver="(obr)">
         <feature>spring-dm</feature>
         <feature version="${project.version}">ipf-specs</feature>
@@ -51,6 +54,7 @@
         <bundle start-level='20' dependency="true">mvn:net.sf.ehcache/ehcache/${ehcache-version}</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-httpclient/3.1_7</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saxon/9.6.0-2_1</bundle>
+        <bundle start-level='20' dependency="true">wrap:mvn:net.sf.saxon/Saxon-HE/9.6.0-2//xqj</bundle>
         <bundle start-level='20' dependency="true">mvn:org.openhealthtools.ihe/atna-bundle/${oht-atna-version}-p4</bundle>
         <bundle start-level='10' dependency="true">mvn:org.antlr/com.springsource.antlr/2.7.6</bundle>
         <bundle start-level='10' dependency="true">mvn:org.codehaus.groovy/groovy-all/${groovy-version}</bundle>
@@ -75,23 +79,36 @@
     <feature name="ipf-core-flow" description="IPF Flow Manager core support" version="${project.version}">
         <feature version="${project.version}">ipf-core</feature>
         <feature version="${project.version}">ipf-core-extenders</feature>
-        <bundle start-level="30">mvn:javax.persistence/com.springsource.javax.persistence/1.99.0</bundle>
-        <bundle start-level="30">mvn:org.apache.lucene/com.springsource.org.apache.lucene/2.3.0</bundle>
-        <bundle start-level="30">mvn:org.objectweb.asm/com.springsource.org.objectweb.asm/1.5.3</bundle>
-        <bundle start-level="30">mvn:org.javassist/javassist/${hibernate-javassist-version}</bundle>
         <bundle start-level='30'>mvn:commons-dbcp/commons-dbcp/${commons-dbcp-version}</bundle>
         <bundle start-level='30'>mvn:commons-pool/commons-pool/1.6</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jasypt/1.9.2_1</bundle>
-        <bundle start-level="30">mvn:org.quartz-scheduler/quartz/${quartz-version}</bundle>
-        <bundle start-level="30">mvn:com.mchange.c3p0/com.springsource.com.mchange.v2.c3p0/0.9.1.2</bundle>
-        <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate/3.3.2.GA</bundle>
-        <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.search/3.0.1.GA</bundle>
-        <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.annotations/3.4.0.GA-A</bundle>
-        <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.annotations.common/3.3.0.ga</bundle>
-        <bundle start-level="30">mvn:org.hibernate/com.springsource.org.hibernate.ejb/3.4.0.GA-A</bundle>
-        <bundle start-level="30">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/2.2_2</bundle>
+        <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5</bundle>
+        <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jasypt/1.9.2_1</bundle>
+        <bundle start-level='30'>mvn:org.quartz-scheduler/quartz/${quartz-version}</bundle>
+        <bundle start-level='30'>mvn:com.mchange.c3p0/com.springsource.com.mchange.v2.c3p0/0.9.1.2</bundle>
+        <bundle start-level='30'>mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/${hibernate-jpa-2.1-api-version}</bundle>
+        <bundle start-level="30">mvn:org.javassist/javassist/${hibernate-javassist-version}</bundle>
+
+        <bundle start-level='30'>wrap:mvn:org.apache.lucene/lucene-core/${lucene-version}$Export-Package=org.apache.lucene;version="${lucene-version}",org.apache.lucene.analysis;version="${lucene-version}",org.apache.lucene.analysis.tokenattributes;version="${lucene-version}",org.apache.lucene.codecs;version="${lucene-version}",org.apache.lucene.codecs.compressing;version="${lucene-version}",org.apache.lucene.codecs.lucene3x;version="${lucene-version}",org.apache.lucene.codecs.lucene40;version="${lucene-version}",org.apache.lucene.codecs.lucene41;version="${lucene-version}",org.apache.lucene.codecs.lucene42;version="${lucene-version}",org.apache.lucene.codecs.lucene45;version="${lucene-version}",org.apache.lucene.codecs.lucene46;version="${lucene-version}",org.apache.lucene.codecs.perfield;version="${lucene-version}",org.apache.lucene.document;version="${lucene-version}",org.apache.lucene.index;version="${lucene-version}",org.apache.lucene.search;version="${lucene-version}",org.apache.lucene.search.payloads;version="${lucene-version}",org.apache.lucene.search.similarities;version="${lucene-version}",org.apache.lucene.search.spans;version="${lucene-version}",org.apache.lucene.store;version="${lucene-version}",org.apache.lucene.util;version="${lucene-version}",org.apache.lucene.util.automaton;version="${lucene-version}",org.apache.lucene.util.fst;version="${lucene-version}",org.apache.lucene.util.mutable;version="${lucene-version}",org.apache.lucene.util.packed;version="${lucene-version}"</bundle>
+        <bundle start-level='30'>wrap:mvn:org.apache.lucene/lucene-queryparser/${lucene-version}</bundle>
+        <bundle start-level='30'>wrap:mvn:org.apache.lucene/lucene-queries/${lucene-version}$Export-Package=org.apache.lucene.queries;version="${lucene-version}",org.apache.lucene.queries.function;version="${lucene-version}",org.apache.lucene.queries.mlt;version="${lucene-version}"</bundle>
+        <bundle start-level='30'>wrap:mvn:org.apache.lucene/lucene-sandbox/${lucene-version}</bundle>
+        <bundle start-level='30'>wrap:mvn:org.apache.lucene/lucene-analyzers-common/${lucene-version}$Export-Package=org.apache.lucene.analysis.ar;version="${lucene-version}",org.apache.lucene.analysis.bg;version="${lucene-version}",org.apache.lucene.analysis.br;version="${lucene-version}",org.apache.lucene.analysis.ca;version="${lucene-version}",org.apache.lucene.analysis.charfilter;version="${lucene-version}",org.apache.lucene.analysis.cjk;version="${lucene-version}",org.apache.lucene.analysis.cn;version="${lucene-version}",org.apache.lucene.analysis.commongrams;version="${lucene-version}",org.apache.lucene.analysis.compound;version="${lucene-version}",org.apache.lucene.analysis.core;version="${lucene-version}",org.apache.lucene.analysis.cz;version="${lucene-version}",org.apache.lucene.analysis.da;version="${lucene-version}",org.apache.lucene.analysis.de;version="${lucene-version}",org.apache.lucene.analysis.el;version="${lucene-version}",org.apache.lucene.analysis.en;version="${lucene-version}",org.apache.lucene.analysis.es;version="${lucene-version}",org.apache.lucene.analysis.eu;version="${lucene-version}",org.apache.lucene.analysis.fa;version="${lucene-version}",org.apache.lucene.analysis.fi;version="${lucene-version}",org.apache.lucene.analysis.fr;version="${lucene-version}",org.apache.lucene.analysis.ga;version="${lucene-version}",org.apache.lucene.analysis.gl;version="${lucene-version}",org.apache.lucene.analysis.hi;version="${lucene-version}",org.apache.lucene.analysis.hu;version="${lucene-version}",org.apache.lucene.analysis.hunspell;version="${lucene-version}",org.apache.lucene.analysis.hy;version="${lucene-version}",org.apache.lucene.analysis.id;version="${lucene-version}",org.apache.lucene.analysis.in;version="${lucene-version}",org.apache.lucene.analysis.it;version="${lucene-version}",org.apache.lucene.analysis.lv;version="${lucene-version}",org.apache.lucene.analysis.miscellaneous;version="${lucene-version}",org.apache.lucene.analysis.ngram;version="${lucene-version}",org.apache.lucene.analysis.nl;version="${lucene-version}",org.apache.lucene.analysis.no;version="${lucene-version}",org.apache.lucene.analysis.path;version="${lucene-version}",org.apache.lucene.analysis.pattern;version="${lucene-version}",org.apache.lucene.analysis.payloads;version="${lucene-version}",org.apache.lucene.analysis.position;version="${lucene-version}",org.apache.lucene.analysis.pt;version="${lucene-version}",org.apache.lucene.analysis.query;version="${lucene-version}",org.apache.lucene.analysis.reverse;version="${lucene-version}",org.apache.lucene.analysis.ro;version="${lucene-version}",org.apache.lucene.analysis.ru;version="${lucene-version}",org.apache.lucene.analysis.shingle;version="${lucene-version}",org.apache.lucene.analysis.sinks;version="${lucene-version}",org.apache.lucene.analysis.snowball;version="${lucene-version}",org.apache.lucene.analysis.standard;version="${lucene-version}",org.apache.lucene.analysis.sv;version="${lucene-version}",org.apache.lucene.analysis.synonym;version="${lucene-version}",org.apache.lucene.analysis.th;version="${lucene-version}",org.apache.lucene.analysis.tr;version="${lucene-version}",org.apache.lucene.analysis.util;version="${lucene-version}",org.apache.lucene.analysis.wikipedia;version="${lucene-version}"</bundle>
+        <bundle start-level='30'>wrap:mvn:org.apache.lucene/lucene-facet/${lucene-version}$Export-Package=org.apache.lucene.facet.collections;version="${lucene-version}"</bundle>
+        <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.regexp/1.3_1</bundle>
+        <bundle start-level='30'>mvn:org.jboss.logging/jboss-logging/3.1.3.GA</bundle>
+        <bundle start-level='30'>mvn:org.jboss/jandex/1.2.2.Final</bundle>
+        <bundle start-level='30'>mvn:com.fasterxml/classmate/1.1.0</bundle>
+
+        <bundle start-level='30'>mvn:org.hibernate.common/hibernate-commons-annotations/${hibernate-commons-annotations-version}</bundle>
+        <bundle start-level='30'>mvn:org.hibernate/hibernate-core/${hibernate-version}</bundle>
+        <bundle start-level='30'>mvn:org.hibernate/hibernate-entitymanager/${hibernate-version}</bundle>
+        <bundle start-level='30'>mvn:org.hibernate/hibernate-osgi/${hibernate-version}</bundle>
+        <bundle start-level='30'>mvn:org.hibernate/hibernate-search-engine/${hibernate-search-version}</bundle>
+        <bundle start-level='30'>mvn:org.hibernate/hibernate-search-orm/${hibernate-search-version}</bundle>
+
+        <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/2.2_2</bundle>
         <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.derby/10.9.1.0_1</bundle>
+
         <bundle start-level='80'>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-flow-repository/${project.version}</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.commons/ipf-commons-flow/${project.version}</bundle>
     </feature>
@@ -103,7 +120,6 @@
         <bundle start-level='20' dependency="true">mvn:commons-cli/commons-cli/1.2</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/2.9.1_5</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/2.7.1_5</bundle>
-        <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlresolver/1.2_5</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/2.7.1_4</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jdom/1.1_4</bundle>
         <bundle start-level='20' dependency="true">mvn:xml-apis/xml-apis/1.3.4-v200806030440</bundle>
@@ -147,6 +163,7 @@
 
     <feature name="ipf-platform-camel-flow" description="IPF Platform Camel support for Flow Manager" version="${project.version}">
         <feature version="${project.version}">ipf-core-flow</feature>
+        <feature version="${ipf-gazelle-version}">ipf-gazelle</feature>
         <feature version="${project.version}">ipf-platform-camel</feature>
         <bundle start-level='30'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aspectj/1.8.4_1</bundle>
         <bundle start-level='80'>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-flow-manager/${project.version}</bundle>
@@ -215,6 +232,7 @@
     <feature name="ipf-specs" version="${project.version}" resolver='(obr)'>
         <bundle start-level='20' dependency="true">mvn:org.apache.geronimo.specs/geronimo-servlet_3.0_spec/1.0</bundle>
         <bundle start-level='10' dependency="true">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.1/2.4.0</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlresolver/1.2_5</bundle>
         <bundle start-level='10' dependency="true">mvn:org.apache.geronimo.specs/geronimo-jms_1.1_spec/1.1.1</bundle>
         <bundle start-level='10' dependency="true">mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec/1.1.1</bundle>
         <bundle start-level='10'>mvn:org.apache.geronimo.specs/geronimo-annotation_1.0_spec/1.1.1</bundle>
@@ -271,7 +289,6 @@
         <bundle start-level='50'>mvn:org.apache.camel/camel-core/${camel-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.camel/camel-hl7/${camel-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.camel/camel-jms/${camel-version}</bundle>
-        <!--<bundle start-level='50'>mvn:org.apache.camel/camel-jetty/${camel-version}</bundle>-->
         <bundle start-level='50'>mvn:org.apache.camel/camel-http/${camel-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.camel/camel-mina2/${camel-version}</bundle>
     </feature>

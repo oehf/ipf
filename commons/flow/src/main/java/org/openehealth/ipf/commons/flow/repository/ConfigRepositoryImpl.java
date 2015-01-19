@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.flow.repository;
 import java.util.List;
 
 import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 /**
  * @author Martin Krasser

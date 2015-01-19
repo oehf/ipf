@@ -13,17 +13,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:camel="http://camel.apache.org/schema/spring"
        xmlns:http="http://cxf.apache.org/transports/http/configuration"
-       xmlns:sec="http://cxf.apache.org/configuration/security"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/beans/spring-beans.xsd
 http://camel.apache.org/schema/spring 
 http://camel.apache.org/schema/spring/camel-spring.xsd 
-http://cxf.apache.org/transports/http/configuration 
-http://cxf.apache.org/schemas/configuration/http-conf.xsd 
-http://cxf.apache.org/configuration/security 
-http://cxf.apache.org/schemas/configuration/security.xsd 
-">
+http://cxf.apache.org/transports/http/configuration
+http://cxf.apache.org/schemas/configuration/http-conf.xsd">
 
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />

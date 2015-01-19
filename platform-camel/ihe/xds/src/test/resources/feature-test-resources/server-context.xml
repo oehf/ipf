@@ -19,13 +19,16 @@
        xmlns:cxf="http://cxf.apache.org/core"
        xmlns:p="http://cxf.apache.org/policy" xmlns:wsp="http://www.w3.org/2006/07/ws-policy"
        xsi:schemaLocation="
-http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
-http://cxf.apache.org/policy http://cxf.apache.org/schemas/policy.xsd
-http://www.w3.org/2006/07/ws-policy http://www.w3.org/2006/07/ws-policy.xsd
-http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
-">
+ http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://camel.apache.org/schema/spring
+ http://camel.apache.org/schema/spring/camel-spring.xsd
+ http://cxf.apache.org/policy
+ http://cxf.apache.org/schemas/policy.xsd
+ http://www.w3.org/2006/07/ws-policy
+ http://www.w3.org/2006/07/ws-policy.xsd
+ http://cxf.apache.org/core
+ http://cxf.apache.org/schemas/core.xsd">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>

@@ -19,8 +19,9 @@ import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.search.FullTextQuery;
@@ -34,8 +35,8 @@ import org.openehealth.ipf.commons.flow.domain.FlowPart;
  */
 class Query {
 
-    public static final Analyzer DEFAULT_INBOUND_TEXT_ANALYZER = new StandardAnalyzer();
-    public static final Analyzer DEFAULT_OUTBOUND_TEXT_ANALYZER = new StandardAnalyzer();
+    public static final Analyzer DEFAULT_INBOUND_TEXT_ANALYZER = new StandardAnalyzer(Version.LUCENE_36);
+    public static final Analyzer DEFAULT_OUTBOUND_TEXT_ANALYZER = new StandardAnalyzer(Version.LUCENE_36);
 
     private static final String INBOUND_TEXT_FIELD = "flowMessage.text";
     private static final String OUTBOUND_TEXT_FIELD = "flowPartMessage.text";
@@ -98,7 +99,7 @@ class Query {
     }
     
     private FullTextQuery createFullTextQuery(String query) {
-        FullTextSession fullTextSession = Search.createFullTextSession(session);
+        FullTextSession fullTextSession = Search.getFullTextSession(session);
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
                 createLuceneQuery(query), domainClass);
         return fullTextQuery.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);

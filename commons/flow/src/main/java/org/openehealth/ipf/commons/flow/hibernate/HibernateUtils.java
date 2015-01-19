@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 /**
  * Utilities for Hibernate-specific {@link Blob} operations.
@@ -61,12 +62,12 @@ public class HibernateUtils {
      *            an initialized {@link Blob}.
      * @return the {@link Blob} passed as <code>blob</code> argument.
      */
-    public static Blob toBlob(byte[] bytes, Blob blob) {
+    public static Blob toBlob(byte[] bytes, Blob blob, Session session) {
         if (bytes == null) {
             return null;
         }
         try {
-            return writeToBlob(bytes, blob);
+            return writeToBlob(bytes, blob, session);
         } catch (Exception e) {
             throw new HibernateException("cannot write to blob", e);
         }
@@ -82,12 +83,12 @@ public class HibernateUtils {
      * @return the {@link Blob} instance passed as <code>blob</code> argument.
      * @throws SQLException
      */
-    public static Blob writeToBlob(byte[] bytes, Blob blob) throws SQLException {
+    public static Blob writeToBlob(byte[] bytes, Blob blob, Session session) throws SQLException {
         if (/*blob != null*/ false) { // not supported
             blob.setBytes(0, bytes);
             blob.truncate(bytes.length);
         } else {
-            blob = Hibernate.createBlob(bytes);
+            blob = Hibernate.getLobCreator(session).createBlob(bytes);
         }
         return blob;
     }

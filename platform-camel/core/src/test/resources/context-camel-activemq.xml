@@ -19,7 +19,7 @@
        xmlns:amq="http://activemq.apache.org/schema/core"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
-http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/beans/spring-beans.xsd
 http://activemq.apache.org/schema/core
 http://activemq.apache.org/schema/core/activemq-core.xsd">
 

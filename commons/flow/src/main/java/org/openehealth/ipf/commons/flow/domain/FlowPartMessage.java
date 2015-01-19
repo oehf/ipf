@@ -40,7 +40,7 @@ public class FlowPartMessage implements TextMessage {
     @Column(name = "C_ID", length = 128)
     private final String identifier; // internal
 
-    @Field(index = Index.TOKENIZED, store = Store.NO)
+    @Field(index = Index.YES, store = Store.NO)
     @Column(name = "C_TEXT", length = Integer.MAX_VALUE)
     @Lob
     private String text;

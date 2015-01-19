@@ -17,14 +17,13 @@ package org.openehealth.ipf.commons.flow.hibernate;
 
 import java.io.Serializable;
 
-import org.hibernate.cfg.Configuration;
-import org.hibernate.event.Initializable;
-import org.hibernate.event.PostInsertEvent;
-import org.hibernate.event.PostInsertEventListener;
-import org.hibernate.event.PostLoadEvent;
-import org.hibernate.event.PostLoadEventListener;
-import org.hibernate.event.PostUpdateEvent;
-import org.hibernate.event.PostUpdateEventListener;
+import org.hibernate.event.spi.PostInsertEvent;
+import org.hibernate.event.spi.PostInsertEventListener;
+import org.hibernate.event.spi.PostLoadEvent;
+import org.hibernate.event.spi.PostLoadEventListener;
+import org.hibernate.event.spi.PostUpdateEvent;
+import org.hibernate.event.spi.PostUpdateEventListener;
+import org.hibernate.persister.entity.EntityPersister;
 import org.jasypt.encryption.StringEncryptor;
 import org.openehealth.ipf.commons.flow.domain.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RenderedMessageDecryptEventListener implements
         PostLoadEventListener, 
         PostInsertEventListener,
-        PostUpdateEventListener, 
-        Initializable {
+        PostUpdateEventListener{
 
     private static final long serialVersionUID = -7516699694816986560L;
 
@@ -56,10 +54,6 @@ public class RenderedMessageDecryptEventListener implements
 
     public void setStringEncryptor(StringEncryptor stringEncryptor) {
         this.stringEncryptor = stringEncryptor;
-    }
-
-    @Override
-    public void initialize(Configuration cfg) {
     }
 
     @Override
@@ -97,6 +91,11 @@ public class RenderedMessageDecryptEventListener implements
                 entity.setText(decryptedString);
             }
         }
+    }
+
+    @Override
+    public boolean requiresPostCommitHanding(EntityPersister persister) {
+        return false;
     }
 
 }
