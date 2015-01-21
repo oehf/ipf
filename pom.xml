@@ -99,7 +99,7 @@
         <lombok-version>1.14.8</lombok-version>
         <lucene-version>4.10.3</lucene-version>
         <mdht-version>1.2.0.201212201425</mdht-version>
-        <mina2-version>2.0.8</mina2-version>
+        <mina2-version>2.0.9</mina2-version>
         <oht-atna-version>2.0.0</oht-atna-version>
         <oht-cdar-version>1.1.0-p2</oht-cdar-version>
         <opensaml-version>2.6.1</opensaml-version>
