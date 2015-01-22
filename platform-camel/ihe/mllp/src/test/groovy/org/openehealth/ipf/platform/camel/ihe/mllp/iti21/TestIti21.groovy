@@ -179,7 +179,7 @@ class TestIti21 extends MllpTestContainer {
     
     @Test
     void testServerDoesNotNeedToAcceptCertificate() {
-        doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContext=#sslContext&?timeout=${TIMEOUT}", 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
     }
     
     /**
@@ -213,7 +213,7 @@ class TestIti21 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
-        def endpointUri = "pdq-iti21://localhost:18210??timeout=${TIMEOUT}"
+        def endpointUri = "pdq-iti21://localhost:18210?timeout=${TIMEOUT}"
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
                 [process : { Exchange e -> /* nop */ }] as Processor
@@ -259,7 +259,7 @@ class TestIti21 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = "pdq-iti21://localhost:18210??timeout=${TIMEOUT}"
+        def endpointUri = "pdq-iti21://localhost:18210?timeout=${TIMEOUT}"
         def body = getMessageString(msh9, msh12)
         def failed = true;
         
@@ -283,7 +283,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testAutoNak() throws Exception {
         def body = getMessageString('QBP^Q22', '2.5')
-        def endpointUri = "pdq-iti21://localhost:18213??timeout=${TIMEOUT}"
+        def endpointUri = "pdq-iti21://localhost:18213?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertEquals(2, auditSender.messages.size())
         assertNAKwithQPD(msg, 'RSP', 'K22')
@@ -295,7 +295,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testMagicNak() throws Exception {
         def body = getMessageString('QBP^Q22', '2.5')
-        def endpointUri = "pdq-iti21://localhost:18219??timeout=${TIMEOUT}"
+        def endpointUri = "pdq-iti21://localhost:18219?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertEquals(2, auditSender.messages.size())
         assertNAKwithQPD(msg, 'RSP', 'K22')
@@ -308,7 +308,7 @@ class TestIti21 extends MllpTestContainer {
                 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
                 '20081031112704||QCN^J01|324406609|P|2.5|||ER|||||\n' +
                 'QID|dummy|gummy||\n'
-        def endpointUri = "pdq-iti21://localhost:18212??timeout=${TIMEOUT}"
+        def endpointUri = "pdq-iti21://localhost:18212?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertEquals(0, auditSender.messages.size())
         assertACK(msg)
