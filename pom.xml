@@ -87,7 +87,7 @@
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
         <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
-        <ipf-gazelle-version>1.0-SNAPSHOT</ipf-gazelle-version>
+        <ipf-gazelle-version>1.0.1</ipf-gazelle-version>
         <jaxb-impl-version>2.2.7</jaxb-impl-version>
         <jasypt-version>1.9.2</jasypt-version>
         <jdom-version>2.0.2</jdom-version>
