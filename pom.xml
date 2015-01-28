@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
@@ -26,17 +25,17 @@
         <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
         <osgi.import.pkg>org.slf4j.*;version="[1.6,2)",*</osgi.import.pkg>
-        <osgi.dynamic.import.pkg/>
-        <osgi.private.pkg/>
-        <osgi.bundle.activator/>
-        <osgi.bundle.classpath/>
-        <osgi.embed.dependency/>
-        <osgi.fragment.host/>
-        <osgi.require.bundle/>
-        <osgi.spring.context/>
-        <ipf.extension.classes/>
-        <ipf.extension.beans/>
-        <eclipse.supplement.bundle/>
+        <osgi.dynamic.import.pkg />
+        <osgi.private.pkg />
+        <osgi.bundle.activator />
+        <osgi.bundle.classpath />
+        <osgi.embed.dependency />
+        <osgi.fragment.host />
+        <osgi.require.bundle />
+        <osgi.spring.context />
+        <ipf.extension.classes />
+        <ipf.extension.beans />
+        <eclipse.supplement.bundle />
         <osgi.bundle.vendor>Open eHealth Foundation</osgi.bundle.vendor>
         <osgi.bundle.license>Apache License, Version 2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache foundation</osgi.bundle.license>
         <osgi.bundle.category>healthcare</osgi.bundle.category>
@@ -87,7 +86,7 @@
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
         <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
-        <ipf-gazelle-version>1.0-SNAPSHOT</ipf-gazelle-version>
+        <ipf-gazelle-version>1.0.1</ipf-gazelle-version>
         <jaxb-impl-version>2.2.7</jaxb-impl-version>
         <jasypt-version>1.9.2</jasypt-version>
         <jdom-version>2.0.2</jdom-version>

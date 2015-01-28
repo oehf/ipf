@@ -37,6 +37,8 @@ import static org.junit.Assert.*
  */
 class TestIti21 extends MllpTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti21/iti-21.xml'
+
+    private static String TIMEOUT = '300000'
     
     static void main(args) {
         init(CONTEXT_DESCRIPTOR, true)
@@ -59,16 +61,16 @@ class TestIti21 extends MllpTestContainer {
     
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:18210', 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18210?timeout=${TIMEOUT}", 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:18887?audit=false', 0)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18887?audit=false&timeout=${TIMEOUT}", 0)
     }
     
     @Test
     void testHappyCaseAndAuditSecure() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContext', 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
     }
 
     // Client without certificates (empty key store in SSL context) should fail
@@ -78,35 +80,35 @@ class TestIti21 extends MllpTestContainer {
     void testHappyCaseAndAuditSecureWant() {
         boolean failed = false
         try {
-            doTestHappyCaseAndAudit('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextWithoutKeyStore', 3)
+            doTestHappyCaseAndAudit("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 3)
         } catch (Exception e) {
             failed = true
         }
         assert failed
 
         auditSender.messages.clear()
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore', 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 2)
     }
 
     @Test
     void testHappyCaseWithSSLv3() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3', 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3&timeout=${TIMEOUT}", 2)
     }
     
     @Test
     void testHappyCaseWithSSLv3AndTLSv1() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:18217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1', 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1&timeout=${TIMEOUT}", 2)
     }
     
     @Test
     void testHappyCaseWithCiphers() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA', 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA&timeout=${TIMEOUT}", 2)
     }
     
     @Test
     void testSSLFailureWithIncompatibleProtocols() {
         try {
-            send('pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1', getMessageString('QBP^Q22', '2.5'))
+            send("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
         } catch (Exception expected) {
             // FIXME: race condition throws one of two possible exceptions
@@ -118,7 +120,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testSSLFailureWithIncompatibleCiphers() {
         try {
-            send('pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5', getMessageString('QBP^Q22', '2.5'))
+            send("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
         } catch (Exception expected) {
             // FIXME: race condition throws one of two possible exceptions
@@ -135,7 +137,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testSSLFailureWithIncompatibleKeystores() {
         try {
-            send('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
+            send("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextOther&timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(RuntimeCamelException.class))
         } catch (Exception expected) {
             // FIXME: race condition throws one of two possible exceptions
@@ -147,7 +149,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testSSLFailureDueToNonSSLClient() {
         try {
-            send('pdq-iti21://localhost:18211', getMessageString('QBP^Q22', '2.5'))
+            send("pdq-iti21://localhost:18211?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
         } catch (Exception expected) {
             // FIXME: race condition throws one of two possible exceptions
@@ -169,7 +171,7 @@ class TestIti21 extends MllpTestContainer {
     
     @Test
     void testCustomInterceptorCanThrowAuthenticationException() {
-        send('pdq-iti21://localhost:18214', getMessageString('QBP^Q22', '2.5'))
+        send("pdq-iti21://localhost:18214?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
         def messages = auditSender.messages
         assertEquals(3, messages.size())
         assertTrue(messages[0] instanceof SecurityAlertEvent)
@@ -177,7 +179,7 @@ class TestIti21 extends MllpTestContainer {
     
     @Test
     void testServerDoesNotNeedToAcceptCertificate() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:18215?secure=true&sslContext=#sslContext', 2)
+        doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
     }
     
     /**
@@ -211,7 +213,7 @@ class TestIti21 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
-        def endpointUri = 'pdq-iti21://localhost:18210'
+        def endpointUri = "pdq-iti21://localhost:18210?timeout=${TIMEOUT}"
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
                 [process : { Exchange e -> /* nop */ }] as Processor
@@ -257,7 +259,7 @@ class TestIti21 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = 'pdq-iti21://localhost:18210'
+        def endpointUri = "pdq-iti21://localhost:18210?timeout=${TIMEOUT}"
         def body = getMessageString(msh9, msh12)
         def failed = true;
         
@@ -281,7 +283,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testAutoNak() throws Exception {
         def body = getMessageString('QBP^Q22', '2.5')
-        def endpointUri = 'pdq-iti21://localhost:18213'
+        def endpointUri = "pdq-iti21://localhost:18213?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertEquals(2, auditSender.messages.size())
         assertNAKwithQPD(msg, 'RSP', 'K22')
@@ -293,7 +295,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testMagicNak() throws Exception {
         def body = getMessageString('QBP^Q22', '2.5')
-        def endpointUri = 'pdq-iti21://localhost:18219'
+        def endpointUri = "pdq-iti21://localhost:18219?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertEquals(2, auditSender.messages.size())
         assertNAKwithQPD(msg, 'RSP', 'K22')
@@ -306,7 +308,7 @@ class TestIti21 extends MllpTestContainer {
                 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
                 '20081031112704||QCN^J01|324406609|P|2.5|||ER|||||\n' +
                 'QID|dummy|gummy||\n'
-        def endpointUri = 'pdq-iti21://localhost:18212'
+        def endpointUri = "pdq-iti21://localhost:18212?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertEquals(0, auditSender.messages.size())
         assertACK(msg)
