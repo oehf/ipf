@@ -15,9 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
+import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.dropTimeZone
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
@@ -101,7 +106,10 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	 * to output. Otherwise "asOtherIDs" will be ignored.
 	 */
 	boolean useOtherIds = true
-	
+
+    private static final HapiContext PIX_FEED_CONTEXT = HapiContextFactory.createHapiContext(
+            CustomModelClassUtils.createFactory("pix", "2.3.1"),
+            PixPdqTransactions.ITI8)
 
 	/**
 	 * Adds patient identifiers from the given GPath source.
@@ -146,9 +154,9 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	    def xml           = slurp(xmlText)
 	    def interactionId = xml.interactionId.@extension.text()
         def triggerEvent  = interactionId.map('hl7v2v3-interactionId-eventStructure')[0]
-	    
-        def adt   = Message."ADT_${triggerEvent}"('2.3.1')
-        def grp   = (triggerEvent == 'A40') ? adt.PIDPD1MRGPV1(0) : adt
+
+        def adt = MessageUtils.makeMessage(PIX_FEED_CONTEXT, 'ADT', triggerEvent, '2.3.1')
+        def grp   = (triggerEvent == 'A40') ? adt.PATIENT(0) : adt
 
         // Segment MSH
         fillMshFromSlurper(xml, adt, this.useSenderDeviceName, this.useReceiverDeviceName)                       

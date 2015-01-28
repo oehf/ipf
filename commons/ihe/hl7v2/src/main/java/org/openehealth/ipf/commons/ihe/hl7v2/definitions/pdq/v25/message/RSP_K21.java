@@ -68,6 +68,10 @@ public class RSP_K21 extends AbstractMessage {
         return s;
     }
 
+    public String getVersion() {
+        return "2.5";
+    }
+
     /**
      * Returns MSH (Message Header) - creates it if necessary
      */

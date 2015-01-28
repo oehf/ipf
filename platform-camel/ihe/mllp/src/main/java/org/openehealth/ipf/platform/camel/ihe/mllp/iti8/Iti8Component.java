@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8;
 
 import ca.uhn.hl7v2.ErrorCode;
 import org.apache.camel.CamelContext;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
@@ -42,7 +43,9 @@ public class Iti8Component extends MllpTransactionComponent<Iti8AuditDataset> {
                 new String[] {"*"},
                 new boolean[] {true},
                 new boolean[] {false},
-                HapiContextFactory.createHapiContext(PixPdqTransactions.ITI8));
+                HapiContextFactory.createHapiContext(
+                        CustomModelClassUtils.createFactory("pix", "2.3.1"),
+                        PixPdqTransactions.ITI8));
   
     private static final MllpAuditStrategy<Iti8AuditDataset> CLIENT_AUDIT_STRATEGY = 
         new Iti8ClientAuditStrategy();

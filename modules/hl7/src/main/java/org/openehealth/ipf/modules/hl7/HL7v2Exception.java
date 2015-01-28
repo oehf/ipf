@@ -31,6 +31,7 @@ public class HL7v2Exception extends RuntimeException {
 	private HL7Exception nested;
 
 	public HL7v2Exception(HL7Exception nested) {
+        super(nested);
         this.nested = nested;
 	}
 

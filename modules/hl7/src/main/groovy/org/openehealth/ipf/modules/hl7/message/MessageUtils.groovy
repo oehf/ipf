@@ -152,11 +152,9 @@ class MessageUtils {
             String version,
             String sendingApplication,
             String sendingFacility,
-            String msh9)
-    {
+            String msh9) {
         def cause = encodeHL7String(e.message ?: e.class.simpleName, null)
         def now = hl7Now()
-        
         def cannedNak = "MSH|^~\\&|${sendingApplication}|${sendingFacility}|unknown|unknown|$now||${msh9}|unknown|T|$version|\r" +
                 "MSA|AE|MsgIdUnknown|$cause|\r"
         def nak = new GenericParser().parse(cannedNak)
