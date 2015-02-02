@@ -41,6 +41,7 @@ class MllpTestContainer {
     static MockedSender auditSender
     static ClassPathXmlApplicationContext appContext
 
+    static int TEST_TIMEOUT = 300000
     static String TIMEOUT = '300000'
     
     /**
