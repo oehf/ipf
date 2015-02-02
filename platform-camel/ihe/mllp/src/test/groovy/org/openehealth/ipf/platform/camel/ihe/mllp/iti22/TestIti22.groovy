@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti22
 
+import org.junit.Ignore
+
 import static org.junit.Assert.*
 
 import org.apache.camel.Exchange
@@ -33,6 +35,7 @@ import ca.uhn.hl7v2.parser.PipeParser
  * Unit tests for the PDQ transaction aka ITI-22.
  * @author Dmytro Rud
  */
+@Ignore
 class TestIti22 extends MllpTestContainer {
     
     
