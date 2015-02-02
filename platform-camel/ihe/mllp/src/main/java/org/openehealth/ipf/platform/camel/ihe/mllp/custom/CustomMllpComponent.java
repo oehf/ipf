@@ -20,10 +20,11 @@ import java.util.Map;
 import lombok.Getter;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
-import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.*;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
 /**
  * Component for custom MLLP components. The HL7v2 configuration as well as the ATNA audit strategies must be

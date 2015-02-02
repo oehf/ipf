@@ -38,7 +38,7 @@ import static org.junit.Assert.*
 class TestIti21 extends MllpTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti21/iti-21.xml'
 
-    private static String TIMEOUT = '300000'
+
     
     static void main(args) {
         init(CONTEXT_DESCRIPTOR, true)

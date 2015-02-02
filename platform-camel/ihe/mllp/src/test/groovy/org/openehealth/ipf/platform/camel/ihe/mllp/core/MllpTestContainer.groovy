@@ -40,7 +40,8 @@ class MllpTestContainer {
     static CamelContext camelContext
     static MockedSender auditSender
     static ClassPathXmlApplicationContext appContext
-    
+
+    static String TIMEOUT = '300000'
     
     /**
      * Initializes a test on the basis of a Spring descriptor.
