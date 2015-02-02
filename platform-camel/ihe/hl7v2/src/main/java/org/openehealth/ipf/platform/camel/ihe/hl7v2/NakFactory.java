@@ -122,7 +122,7 @@ public class NakFactory {
         return MessageUtils.defaultNak(
                 hl7Exception,
                 useCAckTypeCodes ? AcknowledgmentCode.CR : AcknowledgmentCode.AR,
-                config.getHl7Version(),
+                config.getHl7Versions()[0].getVersion(),
                 config.getSendingApplication(),
                 config.getSendingFacility(),
                 defaultNakMsh9);

@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 import javax.xml.namespace.QName;
 
 import ca.uhn.hl7v2.ErrorCode;
+import ca.uhn.hl7v2.Version;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
@@ -47,7 +48,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
             false);
 
     public static final Hl7v2TransactionConfiguration HL7V2_CONFIG = new Hl7v2TransactionConfiguration(
-            "2.6",
+            new Version[] {Version.V26},
             "PCD01",
             "IPF",
             ErrorCode.APPLICATION_INTERNAL_ERROR,

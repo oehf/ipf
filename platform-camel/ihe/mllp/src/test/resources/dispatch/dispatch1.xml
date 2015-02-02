@@ -29,7 +29,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     </camel:camelContext>
 
     <bean id="routeBuilder"
-        class="org.openehealth.ipf.platform.camel.ihe.mllp.dispatch.DispatchRouteBuilder">
+        class="org.openehealth.ipf.platform.camel.ihe.mllp.dispatch.DispatchRouteBuilder1">
     </bean>
     
     <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">

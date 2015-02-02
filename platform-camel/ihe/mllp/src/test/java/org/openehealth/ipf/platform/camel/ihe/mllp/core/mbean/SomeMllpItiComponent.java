@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean;
 
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.ErrorCode;
+import ca.uhn.hl7v2.Version;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
@@ -29,7 +30,7 @@ public class SomeMllpItiComponent extends MllpTransactionComponent {
     
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
-                "2.x",
+                new Version[] {Version.V25},
                 "Some MLLP adapter",
                 "IPF-Test",
                 ErrorCode.APPLICATION_INTERNAL_ERROR,

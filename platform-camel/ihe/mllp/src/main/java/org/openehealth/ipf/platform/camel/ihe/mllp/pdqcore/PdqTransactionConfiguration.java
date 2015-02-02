@@ -19,6 +19,7 @@ import java.util.List;
 
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HapiContext;
+import ca.uhn.hl7v2.Version;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 
 /**
@@ -28,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguratio
 public class PdqTransactionConfiguration extends Hl7v2TransactionConfiguration {
    
     public PdqTransactionConfiguration(
-            String hl7Version,
+            Version[] hl7Version,
             String sendingApplication, 
             String sendingFacility,
             ErrorCode requestErrorDefaultErrorCode,

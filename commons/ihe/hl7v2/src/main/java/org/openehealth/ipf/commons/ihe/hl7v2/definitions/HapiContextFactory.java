@@ -18,10 +18,14 @@ package org.openehealth.ipf.commons.ihe.hl7v2.definitions;
 
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HapiContext;
+import ca.uhn.hl7v2.conf.store.ProfileStore;
+import ca.uhn.hl7v2.conf.store.ProfileStoreFactory;
 import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 import ca.uhn.hl7v2.util.idgenerator.FileBasedHiLoGenerator;
 import ca.uhn.hl7v2.util.idgenerator.IDGenerator;
+import ca.uhn.hl7v2.validation.builder.ValidationRuleBuilder;
+import ca.uhn.hl7v2.validation.builder.support.DefaultValidationWithoutTNBuilder;
 import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
 import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
 import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
@@ -51,6 +55,26 @@ public class HapiContextFactory {
     }
 
     /**
+     * Returns a default HapiContext
+     * @return
+     */
+    public static HapiContext createHapiContext() {
+        return new DefaultHapiContext();
+    }
+
+    /**
+     * Returns a HapiContext for the provided model class factory
+     * @param modelClassFactory model clas factory
+     * @return HapiContext
+     */
+    public static HapiContext createHapiContext(ModelClassFactory modelClassFactory) {
+        return createHapiContext(
+                modelClassFactory,
+                new DefaultValidationWithoutTNBuilder(),
+                ProfileStoreFactory.getProfileStore());
+    }
+
+    /**
      * Returns a HapiContext for the provided
      * {@link org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions HL7v2 transaction}, using
      * a {@link ca.uhn.hl7v2.parser.DefaultModelClassFactory default HL7 model}
@@ -59,8 +83,11 @@ public class HapiContextFactory {
      * @return HapiContext
      */
     public static HapiContext createHapiContext(HL7v2Transactions transactions) {
-        return createHapiContext(new DefaultModelClassFactory(), transactions);
+        return createHapiContext(
+                new DefaultModelClassFactory(),
+                transactions);
     }
+
 
     /**
      * Returns a HapiContext for the provided
@@ -72,9 +99,22 @@ public class HapiContextFactory {
      * @return HapiContext
      */
     public static HapiContext createHapiContext(ModelClassFactory modelClassFactory, HL7v2Transactions transactions) {
+        return createHapiContext(
+                modelClassFactory,
+                new ConformanceProfileBasedValidationBuilder(transactions),
+                new GazelleProfileStore());
+    }
+
+    /**
+     * @param modelClassFactory     transaction-specific model-class factory
+     * @param validationRuleBuilder validation rule builder
+     * @param profileStore          profile store
+     * @return HapiContext
+     */
+    public static HapiContext createHapiContext(ModelClassFactory modelClassFactory, ValidationRuleBuilder validationRuleBuilder, ProfileStore profileStore) {
         HapiContext context = new DefaultHapiContext(modelClassFactory);
-        context.setProfileStore(new GazelleProfileStore());
-        context.setValidationRuleBuilder(new ConformanceProfileBasedValidationBuilder(transactions));
+        context.setProfileStore(profileStore);
+        context.setValidationRuleBuilder(validationRuleBuilder);
         context.getParserConfiguration().setValidating(false);
         context.getParserConfiguration().setIdGenerator(idGenerator);
         context.setValidationExceptionHandlerFactory(new SimpleValidationExceptionHandler(context));

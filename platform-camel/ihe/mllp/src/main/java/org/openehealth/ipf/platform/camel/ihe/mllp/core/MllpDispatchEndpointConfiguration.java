@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.Getter;
 import org.apache.camel.CamelException;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 
 import java.util.Map;
 
@@ -33,12 +34,8 @@ public class MllpDispatchEndpointConfiguration extends MllpEndpointConfiguration
 
     protected MllpDispatchEndpointConfiguration(MllpComponent component, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
-
         String routesString = stripToNull(component.getAndRemoveParameter(parameters, "routes", String.class));
-        if (routesString == null) {
-            throw new CamelException("Endpoint URL parameter 'routes' must be not empty");
-        }
-        routes = routesString.split("\\s*,\\s*");
+        routes = routesString != null ? routesString.split("\\s*,\\s*") : new String[0];
     }
 
 }

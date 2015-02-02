@@ -23,7 +23,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.*
 /**
  * @author Dmytro Rud
  */
-class DispatchRouteBuilder extends SpringRouteBuilder {
+class DispatchRouteBuilder1 extends SpringRouteBuilder {
 
     @Override
     void configure() throws Exception {
@@ -38,7 +38,7 @@ class DispatchRouteBuilder extends SpringRouteBuilder {
         from('xpid-iti64://0.0.0.0:18502')
                 .routeId('xadpid')
                 .process(validatingProcessor())
-                .transform(HL7v2.ack())
+                .transform(ack())
                 .process(validatingProcessor())
 
     }

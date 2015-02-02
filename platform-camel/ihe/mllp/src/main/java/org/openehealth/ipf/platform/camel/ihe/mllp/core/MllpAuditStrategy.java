@@ -24,7 +24,8 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 
 
 /**
- * ATNA audit strategy base for IHE PIX/PDQ transactions.
+ * ATNA audit strategy base for MLLP-based transactions. This strategy is accompanied with a
+ * dedicated subclass of {@link MllpAuditDataset} containing the data for the audit record.
  * 
  * @author Dmytro Rud
  */

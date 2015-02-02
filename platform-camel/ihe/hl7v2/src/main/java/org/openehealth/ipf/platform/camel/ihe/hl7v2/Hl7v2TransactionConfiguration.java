@@ -33,11 +33,12 @@ import static org.apache.commons.lang3.Validate.*;
 
 /**
  * Endpoint-agnostic parameters of an HL7v2-based transaction.
+ *
  * @author Dmytro Rud
  */
 public class Hl7v2TransactionConfiguration {
 
-    private final String hl7Version;
+    private final Version[] hl7Versions;
     private final String sendingApplication;
     private final String sendingFacility;
     
@@ -59,8 +60,8 @@ public class Hl7v2TransactionConfiguration {
     /**
      * Constructor.
      *
-     * @param hl7Version
-     *      HL7 version for acceptance checks and default NAKs (MSH-12).
+     * @param hl7Versions
+     *      HL7 versions for acceptance checks (MSH-12). The first version of this array is used for default NAKs.
      * @param sendingApplication
      *      sending application for default NAKs (MSH-3).
      * @param sendingFacility
@@ -83,17 +84,17 @@ public class Hl7v2TransactionConfiguration {
      *      ignored for messages of type "ACK".
      * @param auditabilityFlags
      *      flags of whether the messages of corresponding
-     *      type should be audited.
+     *      message type should be audited.
      *      If <code>null</code>, the transaction will not perform any auditing.
      * @param responseContinuabilityFlags
      *      flags of whether the messages of corresponding
-     *      type should support HL7 response continuations.
+     *      message type should support HL7 response continuations.
      *      If <code>null</code>, no continuations will be supported.
      * @param hapiContext
      *      transaction-specific HAPI Context
      */
     public Hl7v2TransactionConfiguration(
-            String hl7Version,
+            Version[] hl7Versions,
             String sendingApplication,
             String sendingFacility,
             ErrorCode requestErrorDefaultErrorCode,
@@ -106,7 +107,7 @@ public class Hl7v2TransactionConfiguration {
             boolean[] responseContinuabilityFlags,
             HapiContext hapiContext)
     {
-        notNull(hl7Version);
+        notNull(hl7Versions);
         notNull(sendingApplication);
         notNull(sendingFacility);
 
@@ -129,7 +130,7 @@ public class Hl7v2TransactionConfiguration {
         
         // QC passed ;)
         
-        this.hl7Version = hl7Version;
+        this.hl7Versions = hl7Versions;
         this.sendingApplication = sendingApplication;
         this.sendingFacility = sendingFacility;
         
@@ -333,9 +334,7 @@ public class Hl7v2TransactionConfiguration {
             String version,
             boolean isRequest) throws Hl7v2AcceptanceException
     {
-        if (! hl7Version.equals(version)) {
-            throw new Hl7v2AcceptanceException("Invalid HL7 version " + version, ErrorCode.UNSUPPORTED_VERSION_ID);
-        }
+        checkMessageVersion(version);
 
         boolean messageTypeSupported = isRequest
                 ? isSupportedRequestMessageType(messageType)
@@ -381,11 +380,20 @@ public class Hl7v2TransactionConfiguration {
         }
     }
 
+    private void checkMessageVersion(String version) throws Hl7v2AcceptanceException {
+        Version messageVersion = Version.versionOf(version);
+        for (Version hl7Version : hl7Versions) {
+            if (hl7Version.equals(messageVersion))
+                return;
+        }
+        throw new Hl7v2AcceptanceException("Invalid HL7 version " + version + ", must be one of " + hl7Versions,
+                ErrorCode.UNSUPPORTED_VERSION_ID);
+    }
 
     // ----- automatically generated getters -----
 
-    public String getHl7Version() {
-        return hl7Version;
+    public Version[] getHl7Versions() {
+        return hl7Versions;
     }
     
     public ErrorCode getRequestErrorDefaultErrorCode() {

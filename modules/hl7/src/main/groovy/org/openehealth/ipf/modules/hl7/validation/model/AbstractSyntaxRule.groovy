@@ -73,9 +73,9 @@ class AbstractSyntaxRule extends AbstractMessageRule {
     private AbstractSyntaxValidator validator
     private Object[] args
 
-    private static final Map<String, StaticDef> staticDefCache = new LinkedHashMap<String, StaticDef>(10, 0.75f) {
+    private static final Map<String, StaticDef> STATIC_DEF_CACHE = new LinkedHashMap<String, StaticDef>(10, 0.75f) {
         @Override
-        protected boolean removeEldestEntry(Map.Entry eldest) {
+        protected boolean removeEldestEntry(Map.Entry<String, StaticDef> eldest) {
             return size() > 100;
         }
     }
@@ -91,15 +91,15 @@ class AbstractSyntaxRule extends AbstractMessageRule {
         String msgStructID = MessageUtils.messageStructure(msg)
         StaticDef staticDef
         synchronized (this) {
-            if (staticDefCache.containsKey(msgStructID)) {
-                staticDef = staticDefCache.get(msgStructID)
+            if (STATIC_DEF_CACHE.containsKey(msgStructID)) {
+                staticDef = STATIC_DEF_CACHE.get(msgStructID)
             } else {
                 staticDef = new StaticDef()
                 staticDef.msgStructID = msgStructID
                 staticDef.eventType = MessageUtils.triggerEvent(msg)
                 staticDef.msgType = MessageUtils.eventType(msg)
                 analyzeSegments(staticDef, 1, args)
-                staticDefCache.put(msgStructID, staticDef)
+                STATIC_DEF_CACHE.put(msgStructID, staticDef)
             }
         }
         validator.validate(msg, staticDef)

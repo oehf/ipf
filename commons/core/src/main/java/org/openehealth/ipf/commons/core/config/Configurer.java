@@ -28,7 +28,7 @@ public interface Configurer<T, R extends Registry> {
      * @param configuration custom configuration object
      * used for specific configuration task
      */
-    public void configure(T configuration);
+    public void configure(T configuration) throws Exception;
     
     public Collection<T> lookup(R registry);
 

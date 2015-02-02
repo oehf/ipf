@@ -19,6 +19,7 @@ import java.util.Map;
 
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.ErrorCode;
+import ca.uhn.hl7v2.Version;
 import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
@@ -30,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointConfiguration> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
             new Hl7v2TransactionConfiguration(
-                    "2.5",
+                    new Version[] {Version.V25}, // not relevant for acceptance checking
                     "MLLP Dispatcher",
                     "IPF",
                     ErrorCode.APPLICATION_INTERNAL_ERROR,
