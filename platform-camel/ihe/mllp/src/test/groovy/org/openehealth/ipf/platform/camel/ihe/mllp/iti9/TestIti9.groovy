@@ -64,11 +64,11 @@ class TestIti9 extends MllpTestContainer {
      */
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit('pix-iti9://localhost:18090?timeout=${TIMEOUT}', 2)
+        doTestHappyCaseAndAudit("pix-iti9://localhost:18090?timeout=${TIMEOUT}", 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit('pix-iti9://localhost:18091?audit=false&timeout=${TIMEOUT}', 0)
+        doTestHappyCaseAndAudit("pix-iti9://localhost:18091?audit=false&timeout=${TIMEOUT}", 0)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -155,7 +155,7 @@ class TestIti9 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = 'pix-iti9://localhost:18090'
+        def endpointUri = "pix-iti9://localhost:18090?timeout=${TIMEOUT}"
         def body = getMessageString(msh9, msh12)
         def failed = true;
         
@@ -179,7 +179,7 @@ class TestIti9 extends MllpTestContainer {
     @Test
     void testAutoNak() throws Exception {
         def body = getMessageString('QBP^Q23', '2.5')
-        def endpointUri = 'pix-iti9://localhost:18093'
+        def endpointUri = "pix-iti9://localhost:18093?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertEquals(2, auditSender.messages.size())
         assertNAKwithQPD(msg, 'RSP', 'K23')
@@ -191,7 +191,7 @@ class TestIti9 extends MllpTestContainer {
     @Test
     void testMagicNak() throws Exception {
         def body = getMessageString('QBP^Q23', '2.5')
-        def endpointUri = 'pix-iti9://localhost:18094'
+        def endpointUri = "pix-iti9://localhost:18094?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertEquals(2, auditSender.messages.size())
         assertNAKwithQPD(msg, 'RSP', 'K23')

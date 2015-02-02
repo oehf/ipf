@@ -74,7 +74,7 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
         try {
             msg = config.getParser().parse(trimToEmpty(request).replaceAll("\n", "\r\n"));
             config.checkRequestAcceptance(msg);
-        } catch (Exception e) {
+        } catch (HL7Exception e) {
             LOG.error(formatErrMsg("Request not acceptable"), e);
             return render(nakFactory.createDefaultNak(e));
         }

@@ -110,14 +110,14 @@ public class NakFactory {
     /**
      * Generates a "default" HL7v2 NAK message on the basis
      * of the thrown exception.
-     * @param t
+     * @param e
      *      thrown exception.
      */
-    public Message createDefaultNak(Throwable t) {
+    public Message createDefaultNak(HL7Exception e) {
         HL7Exception hl7Exception = new HL7Exception(
-                formatErrorMessage(t),
+                formatErrorMessage(e),
                 config.getRequestErrorDefaultErrorCode(),
-                t);
+                e);
 
         return MessageUtils.defaultNak(
                 hl7Exception,

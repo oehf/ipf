@@ -157,8 +157,8 @@ public final class ConsumerDispatchingInterceptor extends AbstractMllpIntercepto
         if (!found) {
             LOG.debug("Nobody can process message with MSH-9-1='{}', MSH-9-2='{}', MSH-9-3='{}', MSH-12='{}'",
                     messageType, triggerEvent, messageStructure, version);
-            HL7v2Exception exception = new HL7v2Exception(new HL7Exception(
-                    "Unsupported message type and/or version", ErrorCode.APPLICATION_INTERNAL_ERROR));
+            HL7Exception exception = new HL7Exception(
+                    "Unsupported message type and/or version", ErrorCode.APPLICATION_INTERNAL_ERROR);
             resultMessage(exchange).setBody(getNakFactory().createDefaultNak(exception).encode());
         }
     }

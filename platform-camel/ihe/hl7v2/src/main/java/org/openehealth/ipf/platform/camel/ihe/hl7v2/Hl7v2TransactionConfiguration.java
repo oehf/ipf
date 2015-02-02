@@ -41,7 +41,7 @@ public class Hl7v2TransactionConfiguration {
     private final Version[] hl7Versions;
     private final String sendingApplication;
     private final String sendingFacility;
-    
+
     private final ErrorCode requestErrorDefaultErrorCode;
     private final ErrorCode responseErrorDefaultErrorCode;
 
@@ -60,38 +60,26 @@ public class Hl7v2TransactionConfiguration {
     /**
      * Constructor.
      *
-     * @param hl7Versions
-     *      HL7 versions for acceptance checks (MSH-12). The first version of this array is used for default NAKs.
-     * @param sendingApplication
-     *      sending application for default NAKs (MSH-3).
-     * @param sendingFacility
-     *      sending application for default NAKs (MSH-4).
-     * @param requestErrorDefaultErrorCode
-     *      default error code for request-related NAKs.
-     * @param responseErrorDefaultErrorCode
-     *      default error code for response-related NAKs.
-     * @param allowedRequestMessageTypes
-     *      array of allowed request message types,
-     *      e.g. <code>{"ADT", "MDM"}</code>.
-     * @param allowedRequestTriggerEvents
-     *      array of allowed request trigger events
-     *      for each request message type,
-     *      e.g. <code>{"A01 A02 A03", "T06 T07 T08"}</code>.
-     * @param allowedResponseMessageTypes
-     *      array of allowed response message types, e.g. <code>{"ACK", "RSP"}</code>.
-     * @param allowedResponseTriggerEvents
-     *      array of allowed response trigger events for each message type,
-     *      ignored for messages of type "ACK".
-     * @param auditabilityFlags
-     *      flags of whether the messages of corresponding
-     *      message type should be audited.
-     *      If <code>null</code>, the transaction will not perform any auditing.
-     * @param responseContinuabilityFlags
-     *      flags of whether the messages of corresponding
-     *      message type should support HL7 response continuations.
-     *      If <code>null</code>, no continuations will be supported.
-     * @param hapiContext
-     *      transaction-specific HAPI Context
+     * @param hl7Versions                   HL7 versions for acceptance checks (MSH-12). The first version of this array is used for default NAKs.
+     * @param sendingApplication            sending application for default NAKs (MSH-3).
+     * @param sendingFacility               sending application for default NAKs (MSH-4).
+     * @param requestErrorDefaultErrorCode  default error code for request-related NAKs.
+     * @param responseErrorDefaultErrorCode default error code for response-related NAKs.
+     * @param allowedRequestMessageTypes    array of allowed request message types,
+     *                                      e.g. <code>{"ADT", "MDM"}</code>.
+     * @param allowedRequestTriggerEvents   array of allowed request trigger events
+     *                                      for each request message type,
+     *                                      e.g. <code>{"A01 A02 A03", "T06 T07 T08"}</code>.
+     * @param allowedResponseMessageTypes   array of allowed response message types, e.g. <code>{"ACK", "RSP"}</code>.
+     * @param allowedResponseTriggerEvents  array of allowed response trigger events for each message type,
+     *                                      ignored for messages of type "ACK".
+     * @param auditabilityFlags             flags of whether the messages of corresponding
+     *                                      message type should be audited.
+     *                                      If <code>null</code>, the transaction will not perform any auditing.
+     * @param responseContinuabilityFlags   flags of whether the messages of corresponding
+     *                                      message type should support HL7 response continuations.
+     *                                      If <code>null</code>, no continuations will be supported.
+     * @param hapiContext                   transaction-specific HAPI Context
      */
     public Hl7v2TransactionConfiguration(
             Version[] hl7Versions,
@@ -105,8 +93,7 @@ public class Hl7v2TransactionConfiguration {
             String[] allowedResponseTriggerEvents,
             boolean[] auditabilityFlags,
             boolean[] responseContinuabilityFlags,
-            HapiContext hapiContext)
-    {
+            HapiContext hapiContext) {
         notNull(hl7Versions);
         notNull(sendingApplication);
         notNull(sendingFacility);
@@ -124,16 +111,16 @@ public class Hl7v2TransactionConfiguration {
         if (auditabilityFlags != null) {
             isTrue(allowedRequestMessageTypes.length == auditabilityFlags.length);
         }
-        if (responseContinuabilityFlags != null){
+        if (responseContinuabilityFlags != null) {
             isTrue(allowedRequestMessageTypes.length == responseContinuabilityFlags.length);
         }
-        
+
         // QC passed ;)
-        
+
         this.hl7Versions = hl7Versions;
         this.sendingApplication = sendingApplication;
         this.sendingFacility = sendingFacility;
-        
+
         this.requestErrorDefaultErrorCode = requestErrorDefaultErrorCode;
         this.responseErrorDefaultErrorCode = responseErrorDefaultErrorCode;
 
@@ -148,7 +135,7 @@ public class Hl7v2TransactionConfiguration {
         this.hapiContext = hapiContext;
     }
 
-    
+
     /**
      * Returns <code>true</code> when request messages
      * of the given type belong to this transaction.
@@ -159,8 +146,8 @@ public class Hl7v2TransactionConfiguration {
 
 
     /**
-     * Returns <code>true</code> when the given trigger event  
-     * is valid for request messages of the given type. 
+     * Returns <code>true</code> when the given trigger event
+     * is valid for request messages of the given type.
      */
     private boolean isSupportedRequestTriggerEvent(String messageType, String triggerEvent) {
         int index = indexOf(allowedRequestMessageTypes, messageType);
@@ -171,24 +158,24 @@ public class Hl7v2TransactionConfiguration {
         return contains(StringUtils.split(triggerEvents, ' '), triggerEvent);
     }
 
-    
+
     /**
-     * Returns <code>true</code> when response messages  
-     * of the given type belong to this transaction. 
+     * Returns <code>true</code> when response messages
+     * of the given type belong to this transaction.
      * "ACK" is always supported.
      */
     private boolean isSupportedResponseMessageType(String messageType) {
         return "ACK".equals(messageType) || contains(allowedResponseMessageTypes, messageType);
     }
 
-    
+
     /**
-     * Returns <code>true</code> when the given trigger event  
-     * is valid for response messages of the given type. 
+     * Returns <code>true</code> when the given trigger event
+     * is valid for response messages of the given type.
      * For "ACK" message type, every trigger event is considered valid.
      */
     private boolean isSupportedResponseTriggerEvent(String messageType, String triggerEvent) {
-        if("ACK".equals(messageType)) {
+        if ("ACK".equals(messageType)) {
             return true;
         }
         int index = indexOf(allowedResponseMessageTypes, messageType);
@@ -198,8 +185,8 @@ public class Hl7v2TransactionConfiguration {
         String triggerEvents = allowedResponseTriggerEvents[index];
         return contains(StringUtils.split(triggerEvents, ' '), triggerEvent);
     }
-    
-    
+
+
     /**
      * Returns <code>true</code> when messages of the given type are auditable.
      */
@@ -216,10 +203,10 @@ public class Hl7v2TransactionConfiguration {
 
 
     /**
-     * Returns <code>true</code> when messages of the given [request] type 
+     * Returns <code>true</code> when messages of the given [request] type
      * can be split by means of interactive continuation.
-     * <p>
-     * When this method returns true, the request message structure must 
+     * <p/>
+     * When this method returns true, the request message structure must
      * be able to contain segments RCP, QPD, DSC; and the response message
      * structure -- segments DSC, QAK.
      */
@@ -233,21 +220,21 @@ public class Hl7v2TransactionConfiguration {
         }
         throw new IllegalArgumentException("Unknown message type " + messageType);
     }
-    
-    
+
+
     /**
-     * Returns <code>true</code> if the given element of the given list 
+     * Returns <code>true</code> if the given element of the given list
      * contains a start segment of a data record.
      */
     public boolean isDataStartSegment(List<String> segments, int index) {
         return false;
     }
 
-    
+
     /**
-     * Returns <code>true</code> if the given element of the given list 
-     * contains a segment which belongs to segments following the data 
-     * records ("footer"). 
+     * Returns <code>true</code> if the given element of the given list
+     * contains a segment which belongs to segments following the data
+     * records ("footer").
      */
     public boolean isFooterStartSegment(List<String> segments, int index) {
         return false;
@@ -256,6 +243,7 @@ public class Hl7v2TransactionConfiguration {
 
     /**
      * Performs transaction-specific acceptance test of the given request message.
+     *
      * @param message {@link Message} object.
      */
     public void checkRequestAcceptance(Message message) throws Hl7v2AcceptanceException {
@@ -265,16 +253,16 @@ public class Hl7v2TransactionConfiguration {
 
     /**
      * Performs transaction-specific acceptance test of the given response message.
+     *
      * @param message {@link Message} object.
      */
     public void checkResponseAcceptance(Message message) throws Hl7v2AcceptanceException {
         checkMessageAcceptance(message, false);
 
         try {
-            if (! ArrayUtils.contains(
-                    new String[] {"AA", "AR", "AE", "CA", "CR", "CE"},
-                    new Terser(message).get("MSA-1")))
-            {
+            if (!ArrayUtils.contains(
+                    new String[]{"AA", "AR", "AE", "CA", "CR", "CE"},
+                    new Terser(message).get("MSA-1"))) {
                 throw new Hl7v2AcceptanceException("Bad response: missing or invalid MSA segment", ErrorCode.REQUIRED_FIELD_MISSING);
             }
         } catch (HL7Exception e) {
@@ -285,17 +273,14 @@ public class Hl7v2TransactionConfiguration {
 
     /**
      * Performs acceptance test of the given message.
-     * @param message
-     *      HAPI {@link Message} object.
-     * @param isRequest
-     *      <code>true</code> iff the message is a request.
-     * @throws Hl7v2AcceptanceException
-     *      when the message is not acceptable.
+     *
+     * @param message   HAPI {@link Message} object.
+     * @param isRequest <code>true</code> iff the message is a request.
+     * @throws Hl7v2AcceptanceException when the message is not acceptable.
      */
     public void checkMessageAcceptance(
             Message message,
-            boolean isRequest) throws Hl7v2AcceptanceException
-    {
+            boolean isRequest) throws Hl7v2AcceptanceException {
         try {
             Segment msh = (Segment) message.get("MSH");
             checkMessageAcceptance(
@@ -314,33 +299,27 @@ public class Hl7v2TransactionConfiguration {
 
     /**
      * Performs acceptance test of the message with the given attributes.
-     * @param messageType
-     *      value from MSH-9-1, can be empty or <code>null</code>.
-     * @param triggerEvent
-     *      value from MSH-9-PAI2, can be empty or <code>null</code>.
-     * @param messageStructure
-     *      value from MSH-9-3, can be empty or <code>null</code>.
-     * @param version
-     *      value from MSH-12, can be empty or <code>null</code>.
-     * @param isRequest
-     *      <code>true</code> iff the message under consideration is a request.
-     * @throws Hl7v2AcceptanceException
-     *      when the message is not acceptable.
+     *
+     * @param messageType      value from MSH-9-1, can be empty or <code>null</code>.
+     * @param triggerEvent     value from MSH-9-PAI2, can be empty or <code>null</code>.
+     * @param messageStructure value from MSH-9-3, can be empty or <code>null</code>.
+     * @param version          value from MSH-12, can be empty or <code>null</code>.
+     * @param isRequest        <code>true</code> iff the message under consideration is a request.
+     * @throws Hl7v2AcceptanceException when the message is not acceptable.
      */
     public void checkMessageAcceptance(
             String messageType,
             String triggerEvent,
             String messageStructure,
             String version,
-            boolean isRequest) throws Hl7v2AcceptanceException
-    {
+            boolean isRequest) throws Hl7v2AcceptanceException {
         checkMessageVersion(version);
 
         boolean messageTypeSupported = isRequest
                 ? isSupportedRequestMessageType(messageType)
                 : isSupportedResponseMessageType(messageType);
 
-        if (! messageTypeSupported) {
+        if (!messageTypeSupported) {
             throw new Hl7v2AcceptanceException("Invalid message type " + messageType, ErrorCode.UNSUPPORTED_MESSAGE_TYPE);
         }
 
@@ -348,11 +327,11 @@ public class Hl7v2TransactionConfiguration {
                 ? isSupportedRequestTriggerEvent(messageType, triggerEvent)
                 : isSupportedResponseTriggerEvent(messageType, triggerEvent);
 
-        if(! triggerEventSupported) {
+        if (!triggerEventSupported) {
             throw new Hl7v2AcceptanceException("Invalid trigger event " + triggerEvent, ErrorCode.UNSUPPORTED_EVENT_CODE);
         }
 
-        if (! StringUtils.isEmpty(messageStructure)) {
+        if (!StringUtils.isEmpty(messageStructure)) {
             // This may not work as the custom event map cannot be distinguished from the
             // default one! This needs to be fixed for HAPI 2.1
             String event = messageType + "_" + triggerEvent;
@@ -374,7 +353,7 @@ public class Hl7v2TransactionConfiguration {
             // but second components may be omitted in acknowledgements
             boolean bothAreEqual = messageStructure.equals(expectedMessageStructure);
             boolean bothAreAcks = (messageStructure.startsWith("ACK") && expectedMessageStructure.startsWith("ACK"));
-            if (! (bothAreEqual || bothAreAcks)) {
+            if (!(bothAreEqual || bothAreAcks)) {
                 throw new Hl7v2AcceptanceException("Invalid message structure " + messageStructure, ErrorCode.APPLICATION_INTERNAL_ERROR);
             }
         }
@@ -386,8 +365,17 @@ public class Hl7v2TransactionConfiguration {
             if (hl7Version.equals(messageVersion))
                 return;
         }
-        throw new Hl7v2AcceptanceException("Invalid HL7 version " + version + ", must be one of " + hl7Versions,
+
+        throw new Hl7v2AcceptanceException("Invalid HL7 version " + version + ", must be one of " + supportedVersions(hl7Versions),
                 ErrorCode.UNSUPPORTED_VERSION_ID);
+    }
+
+    private String supportedVersions(Version[] hl7versions) {
+        StringBuilder builder = new StringBuilder();
+        for (Version v : hl7versions) {
+            builder.append(v.getVersion()).append(" ");
+        }
+        return builder.toString();
     }
 
     // ----- automatically generated getters -----
@@ -395,7 +383,7 @@ public class Hl7v2TransactionConfiguration {
     public Version[] getHl7Versions() {
         return hl7Versions;
     }
-    
+
     public ErrorCode getRequestErrorDefaultErrorCode() {
         return requestErrorDefaultErrorCode;
     }
@@ -411,7 +399,7 @@ public class Hl7v2TransactionConfiguration {
     public String getSendingFacility() {
         return sendingFacility;
     }
-    
+
     public String[] getAllowedRequestMessageTypes() {
         return allowedRequestMessageTypes;
     }

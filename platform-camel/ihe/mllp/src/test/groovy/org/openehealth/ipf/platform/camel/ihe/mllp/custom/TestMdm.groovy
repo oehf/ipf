@@ -1,19 +1,19 @@
 /*
- * Copyright 2009 the original author or authors.
- * 
+ * Copyright 2015 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
+package org.openehealth.ipf.platform.camel.ihe.mllp.custom
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
@@ -33,9 +33,9 @@ import static org.junit.Assert.*
  * Unit tests for the PIX Feed transaction a.k.a. ITI-8.
  * @author Dmytro Rud
  */
-class TestIti8 extends MllpTestContainer {
+class TestMdm extends MllpTestContainer {
     
-    def static CONTEXT_DESCRIPTOR = 'iti8/iti-8.xml'
+    def static CONTEXT_DESCRIPTOR = 'custom/mdm.xml'
     
     static void main(args) {
         init(CONTEXT_DESCRIPTOR, true)
@@ -54,29 +54,17 @@ class TestIti8 extends MllpTestContainer {
     //   4. Incomplete audit datasets
     //   5. Exceptions in the route
     //   6. Alternative HL7 codec factory
-    //   7. Secure Esnpoint
+    //   7. Secure Endpoint
     // -----------------------------------
     
-    
-    /**
-     * Happy case, audit either enabled or disabled.
-     * Expected result: ACK response, two or zero audit items.
-     */
+
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit("xds-iti8://localhost:18082?timeout=${TIMEOUT}", 2)
-    }
-    @Test
-    void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit("pix-iti8://localhost:18082?audit=true&timeout=${TIMEOUT}", 2)
-    }
-    @Test
-    void testHappyCaseAndAudit3() {
-        doTestHappyCaseAndAudit("xds-iti8://localhost:18081?audit=false&timeout=${TIMEOUT}", 0)
+        doTestHappyCaseAndAudit("mllp://localhost:19081?hl7TransactionConfig=#hl7TransactionConfig&audit=false&timeout=${TIMEOUT}", 0)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
-        final String body = getMessageString('ADT^A01', '2.3.1')
+        final String body = getMessageString('MDM^T01', '2.5')
         def msg = send(endpointUri, body)
         assertACK(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size())
@@ -93,27 +81,27 @@ class TestIti8 extends MllpTestContainer {
      */
     @Test
     public void testInacceptanceOnConsumer1() {
-        doTestInacceptanceOnConsumer('MDM^T01', '2.3.1')
-    }
-    @Test
-    public void testInacceptanceOnConsumer2() {
-        doTestInacceptanceOnConsumer('ADT^A02', '2.3.1')
-    }
-    @Test
-    public void testInacceptanceOnConsumer3() {
         doTestInacceptanceOnConsumer('ADT^A01', '2.5')
     }
     @Test
+    public void testInacceptanceOnConsumer2() {
+        doTestInacceptanceOnConsumer('MDM^T01', '2.3.1')
+    }
+    @Test
+    public void testInacceptanceOnConsumer3() {
+        doTestInacceptanceOnConsumer('MDM^T11', '2.5')
+    }
+    @Test
     public void testInacceptanceOnConsumer4() {
-        doTestInacceptanceOnConsumer('ADT^A01', '3.1415926')
+        doTestInacceptanceOnConsumer('MDM^T01', '3.1415926')
     }
     @Test
     public void testInacceptanceOnConsumer5() {
-        doTestInacceptanceOnConsumer('ADT^A01^ADT_A02', '2.3.1')
+        doTestInacceptanceOnConsumer('MDM^T01^MDM_T02', '2.5')
     }
     
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
-        def endpointUri = 'pix-iti8://localhost:18084'
+        def endpointUri = 'mllp://localhost:19081?hl7TransactionConfig=#hl7TransactionConfig&audit=false'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
                 [process : { Exchange e -> /* nop */ }] as Processor
@@ -139,27 +127,27 @@ class TestIti8 extends MllpTestContainer {
      */
     @Test
     void testInacceptanceOnProducer1() {
-        doTestInacceptanceOnProducer('MDM^T01', '2.3.1')
+        doTestInacceptanceOnProducer('ADT^A01', '2.5')
     }
     @Test
     void testInacceptanceOnProducer2() {
-        doTestInacceptanceOnProducer('ADT^A02', '2.3.1')
+        doTestInacceptanceOnProducer('MDM^T11', '2.5')
     }
     @Test
     void testInacceptanceOnProducer3() {
-        doTestInacceptanceOnProducer('ADT^A01', '2.4')
+        doTestInacceptanceOnProducer('MDM^T01', '2.3.1')
     }
     @Test
     void testInacceptanceOnProducer4() {
-        doTestInacceptanceOnProducer('ADT^A01', '3.1415926')
+        doTestInacceptanceOnProducer('MDM^T01', '3.1415926')
     }
     @Test
     void testInacceptanceOnProducer5() {
-        doTestInacceptanceOnProducer('ADT^A01^ADT_A02', '2.3.1')
+        doTestInacceptanceOnProducer('MDM^T01^MDM^T02', '2.5')
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = "xds-iti8://localhost:18084?timeout=${TIMEOUT}"
+        def endpointUri = 'mllp://localhost:19081?hl7TransactionConfig=#hl7TransactionConfig&audit=false'
         def body = getMessageString(msh9, msh12)
         def failed = true;
         
@@ -179,13 +167,13 @@ class TestIti8 extends MllpTestContainer {
     
 
     /**
-     * Tests how the exceptions in tte route are handled.
+     * Tests how the exceptions in the route are handled.
      */
     @Test
     void testExceptions() {
-        def body = getMessageString('ADT^A01', '2.3.1')
-        doTestException("pix-iti8://localhost:18085?timeout=${TIMEOUT}", body, 'you cry')
-        doTestException("pix-iti8://localhost:18086?timeout=${TIMEOUT}", body, 'lazy dog')
+        def body = getMessageString('MDM^T01', '2.5')
+        doTestException('mllp://localhost:19085?hl7TransactionConfig=#hl7TransactionConfig&audit=false', body, 'you cry')
+        doTestException('mllp://localhost:19086?hl7TransactionConfig=#hl7TransactionConfig&audit=false', body, 'lazy dog')
     }
     
     def doTestException(String endpointUri, String body, String wantedOutputContent) {
@@ -200,8 +188,8 @@ class TestIti8 extends MllpTestContainer {
      */
     @Test
     void testAlterativeHl7CodecFactory() {
-        def endpointUri1 = 'pix-iti8://fake.address.no.uri:180?codec=#alternativeCodec'
-        def endpointUri2 = 'xds-iti8://localhost:18085'
+        def endpointUri1 = 'mllp://fake.address.no.uri:180?codec=#alternativeCodec&hl7TransactionConfig=#hl7TransactionConfig&audit=false'
+        def endpointUri2 = 'mllp://localhost:19085?hl7TransactionConfig=#hl7TransactionConfig&audit=false'
         def endpoint1 = camelContext.getEndpoint(endpointUri1)
         def endpoint2 = camelContext.getEndpoint(endpointUri2)
         assertEquals('UTF-8', endpoint1.charsetName)
@@ -210,32 +198,32 @@ class TestIti8 extends MllpTestContainer {
 
     @Test
     void testSecureEndpoint() {
-        final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = "xds-iti8://localhost:18087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&timeout=${TIMEOUT}"
+        final String body = getMessageString('MDM^T01', '2.5')
+        def endpointUri = 'mllp://localhost:19087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&hl7TransactionConfig=#hl7TransactionConfig&audit=false'
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
     
     @Test(expected=CamelExchangeException.class)
     void testUnsecureProducer() {
-        final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = "xds-iti8://localhost:18087?timeout=${TIMEOUT}"
+        final String body = getMessageString('MDM^T01', '2.5')
+        def endpointUri = 'mllp://localhost:19087?hl7TransactionConfig=#hl7TransactionConfig&audit=false'
         send(endpointUri, body)
         fail()
     }
 
     @Test
     void testSecureEndpointWithCamelJsseConfigOk() {
-        final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = "xds-iti8://localhost:18088?sslContextParameters=#sslContextParameters&timeout=${TIMEOUT}"
+        final String body = getMessageString('MDM^T01', '2.5')
+        def endpointUri = 'mllp://localhost:19088?sslContextParameters=#sslContextParameters&hl7TransactionConfig=#hl7TransactionConfig&audit=false'
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
 
     @Test(expected=CamelExchangeException.class)
     void testSecureEndpointWithCamelJsseConfigClientFails() {
-        final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = "xds-iti8://localhost:18088?timeout=${TIMEOUT}"
+        final String body = getMessageString('MDM^T01', '2.5')
+        def endpointUri = 'mllp://localhost:19088?hl7TransactionConfig=#hl7TransactionConfig&audit=false'
         send(endpointUri, body)
         fail()
     }
