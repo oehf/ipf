@@ -87,7 +87,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         
         PatientInfo sourcePatientInfo = new PatientInfo();
         sourcePatientInfo.setAddress(address);
-        sourcePatientInfo.setDateOfBirth("dateOfBirth");
+        sourcePatientInfo.setDateOfBirth("19800102");
         sourcePatientInfo.setGender("F");
         sourcePatientInfo.setName(createName(3));
         sourcePatientInfo.getIds().add(createIdentifiable(5));
@@ -99,7 +99,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         documentEntry.setClassCode(createCode(1));
         documentEntry.setComments(createLocal(10));
-        documentEntry.setCreationTime("123");
+        documentEntry.setCreationTime("20150206");
         documentEntry.setEntryUuid("uuid");
         documentEntry.setFormatCode(createCode(2));
         documentEntry.setHash("hash");
@@ -109,8 +109,8 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.setMimeType("text/plain");
         documentEntry.setPatientId(createIdentifiable(3));
         documentEntry.setPracticeSettingCode(createCode(4));
-        documentEntry.setServiceStartTime("234");
-        documentEntry.setServiceStopTime("345");
+        documentEntry.setServiceStartTime("20150207");
+        documentEntry.setServiceStopTime("20150208");
         documentEntry.setSize(174L);
         documentEntry.setSourcePatientId(createIdentifiable(4));
         documentEntry.setSourcePatientInfo(sourcePatientInfo);
@@ -155,11 +155,11 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertEquals(createLocal(11), ebXML.getName());
         
         List<EbXMLSlot> slots = ebXML.getSlots();
-        assertSlot(SLOT_NAME_CREATION_TIME, slots, "123");
+        assertSlot(SLOT_NAME_CREATION_TIME, slots, "20150206000000");
         assertSlot(SLOT_NAME_HASH, slots, "hash");
         assertSlot(SLOT_NAME_LANGUAGE_CODE, slots, "languageCode");
-        assertSlot(SLOT_NAME_SERVICE_START_TIME, slots, "234");
-        assertSlot(SLOT_NAME_SERVICE_STOP_TIME, slots, "345");
+        assertSlot(SLOT_NAME_SERVICE_START_TIME, slots, "20150207000000");
+        assertSlot(SLOT_NAME_SERVICE_STOP_TIME, slots, "20150208000000");
         assertSlot(SLOT_NAME_SIZE, slots, "174");
         assertSlot(SLOT_NAME_SOURCE_PATIENT_ID, slots, "id 4^^^&uni 4&uniType 4");
         assertSlot(SLOT_NAME_URI, slots, "1|uri");
@@ -168,7 +168,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slots, 
                 "PID-3|id 5^^^&uni 5&uniType 5~id 6^^^&uni 6&uniType 6",
                 "PID-5|familyName 3^givenName 3^prefix 3^second 3^suffix 3^degree 3",
-                "PID-7|dateOfBirth",
+                "PID-7|19800102",
                 "PID-8|F",
                 "PID-11|streetAddress^otherDesignation^city^stateOrProvince^zipOrPostalCode^country^^^countyParishCode");
 

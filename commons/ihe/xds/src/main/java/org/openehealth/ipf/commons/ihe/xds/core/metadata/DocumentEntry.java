@@ -18,7 +18,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.joda.time.DateTime;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -52,7 +54,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     @Getter private final List<Code> confidentialityCodes = new ArrayList<>();
     @XmlSchemaType(name = "dateTime")
     @XmlJavaTypeAdapter(value = DateAdapter.class)
-    @Getter @Setter private String creationTime;
+    @Getter private DateTime creationTime;
     @XmlElement(name = "eventCode")
     @Getter private final List<Code> eventCodeList = new ArrayList<>();
     @Getter @Setter private Code formatCode;
@@ -64,10 +66,10 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     @Getter @Setter private Code practiceSettingCode;
     @XmlSchemaType(name = "dateTime")
     @XmlJavaTypeAdapter(value = DateAdapter.class)
-    @Getter @Setter private String serviceStartTime;
+    @Getter private DateTime serviceStartTime;
     @XmlSchemaType(name = "dateTime")
     @XmlJavaTypeAdapter(value = DateAdapter.class)
-    @Getter @Setter private String serviceStopTime;
+    @Getter private DateTime serviceStopTime;
     @Getter @Setter private Long size;
     @Getter @Setter private Identifiable sourcePatientId;
     @Getter @Setter private PatientInfo sourcePatientInfo;
@@ -95,4 +97,30 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     public Author getAuthor() {
         return authors.isEmpty() ? null : authors.get(0);
     }
+
+
+    public void setCreationTime(DateTime creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public void setCreationTime(String creationTime) {
+        this.creationTime = DateTransformer.fromHL7(creationTime);
+    }
+
+    public void setServiceStartTime(DateTime serviceStartTime) {
+        this.serviceStartTime = serviceStartTime;
+    }
+
+    public void setServiceStartTime(String serviceStartTime) {
+        this.serviceStartTime = DateTransformer.fromHL7(serviceStartTime);
+    }
+
+    public void setServiceStopTime(DateTime serviceStopTime) {
+        this.serviceStopTime = serviceStopTime;
+    }
+
+    public void setServiceStopTime(String serviceStopTime) {
+        this.serviceStopTime = DateTransformer.fromHL7(serviceStopTime);
+    }
+
 }

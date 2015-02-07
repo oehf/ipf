@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import java.text.SimpleDateFormat
+import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer
+
 import java.util.regex.Pattern
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based
 
@@ -74,19 +75,12 @@ public class Comparators {
          texts
      }
 
-     static def isInRange(range, timeStr) {
+     static def isInRange(range, time) {
          if (range == null) 
              return true
 
-         def time = parseDate(timeStr)
-         
-         (range.from == null || time >= parseDate(range.from)) && 
-                (range.to == null || time <= parseDate(range.to))
+         (range.from == null || time.millis >= range.from.millis) &&
+                (range.to == null || time.millis <= range.to.millis)
      }
 
-     private static def parseDate(dateStr) {
-         def format = new SimpleDateFormat("yyyyMMddHHmmss")
-         dateStr = dateStr + "00000101000000".substring(dateStr.length())
-         format.parse(dateStr).time
-     }
 }

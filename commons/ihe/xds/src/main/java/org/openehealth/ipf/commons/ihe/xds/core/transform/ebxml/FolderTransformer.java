@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
 
 import java.util.List;
 
@@ -88,7 +89,7 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
     protected void addSlots(Folder folder, EbXMLRegistryPackage regPackage, EbXMLObjectLibrary objectLibrary) {
         super.addSlots(folder, regPackage, objectLibrary);
         
-        regPackage.addSlot(SLOT_NAME_LAST_UPDATE_TIME, folder.getLastUpdateTime());        
+        regPackage.addSlot(SLOT_NAME_LAST_UPDATE_TIME, toHL7(folder.getLastUpdateTime()));
     }
 
     @Override

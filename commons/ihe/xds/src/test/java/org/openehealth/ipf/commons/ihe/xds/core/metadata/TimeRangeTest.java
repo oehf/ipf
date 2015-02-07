@@ -57,6 +57,9 @@ public class TimeRangeTest {
         jaxbElement = (JAXBElement<T>) unmarshaller.unmarshal(marshalledNode, TimeRange.class);
         T objectToo = jaxbElement.getValue();
 
-        Assert.assertEquals(object, objectToo);
+        // .toString() is used because org.joda.DateTime.equals() compares not only
+        // the actual timestamps, but also chronologies, and even if they are almost
+        // identical, like ISO and Gregorian, equals() will return false
+        Assert.assertEquals(object.toString(), objectToo.toString());
     }
 }
