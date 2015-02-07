@@ -35,7 +35,7 @@ class DomBuildersThreadLocal extends ThreadLocal<DocumentBuilder> {
     }
 
     public DocumentBuilder get() {
-        DocumentBuilder builder = (DocumentBuilder) super.get();
+        DocumentBuilder builder = super.get();
         builder.reset();
         return builder;
     }

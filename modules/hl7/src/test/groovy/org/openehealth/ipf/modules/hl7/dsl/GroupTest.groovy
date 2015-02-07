@@ -203,8 +203,8 @@ class GroupTest extends groovy.test.GroovyAssert {
 
     @Test
 	void testIsEmpty() {
-		assert message.PATIENT_RESULT.isEmpty() == false
-		assert message.PATIENT_RESULT.PATIENT.VISIT.isEmpty() == true
+		assert ! message.PATIENT_RESULT.isEmpty()
+		assert message.PATIENT_RESULT.PATIENT.VISIT.isEmpty()
 	}
 
     @Test

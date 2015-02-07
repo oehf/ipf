@@ -57,7 +57,7 @@ public class Hl7v3ValidationProfile implements CombinedXmlValidationProfile {
     private final Map<String, Row> map;
 
     public Hl7v3ValidationProfile(Row... rows) {
-        map = new HashMap<String, Row>(rows.length);
+        map = new HashMap<>(rows.length);
         for (Row row : rows) {
             map.put(row.rootElementName, row);
         }

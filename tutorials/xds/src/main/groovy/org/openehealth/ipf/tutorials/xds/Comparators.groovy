@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer
-
 import java.util.regex.Pattern
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based
 

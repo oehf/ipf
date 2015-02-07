@@ -66,7 +66,7 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
     @SuppressWarnings("unchecked")
     public OutputStream render(ClinicalDocument doc,
             OutputStream os, Object... options) throws IOException {
-        XMLResource resources = (XMLResource) new CDAResourceFactoryImpl()
+        XMLResource resources = new CDAResourceFactoryImpl()
                 .createResource(URI.createURI(CDAPackage.eNS_URI));
         // set to true if want the XML declaration printed, set to FALSE if you
         // don't. TODO merge this with dynamic options.

@@ -381,14 +381,11 @@ public class SubmitObjectsRequestValidatorTest {
         expectFailure(EMPTY_SLOT_VALUE, ebXML);
     }
     
-    /*
-    @Test
+    @Test(expected = XDSMetaDataException.class)
     public void testInvalidTime() {
         docEntry.setCreationTime("lol");
-        expectFailure(INVALID_TIME);
     }
-    */
-    
+
     @Test    
     public void testNullUri() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);

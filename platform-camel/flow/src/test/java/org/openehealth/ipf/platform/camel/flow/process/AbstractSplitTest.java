@@ -78,7 +78,7 @@ public abstract class AbstractSplitTest {
     public void testIpfSplitter() throws InterruptedException {
         mock1.expectedBodiesReceived("test", "bla");
         
-        Exchange result = (Exchange)producerTemplate.send("direct:split-test-ipfsplit", 
+        Exchange result = producerTemplate.send("direct:split-test-ipfsplit",
                 createMessage("test,bla").getExchange());
         
         mock1.assertIsSatisfied();
@@ -96,7 +96,7 @@ public abstract class AbstractSplitTest {
         
         Exchange exchange = createMessage("test,bla").getExchange();
         
-        Exchange result = (Exchange)producerTemplate.send(
+        Exchange result = producerTemplate.send(
                 "direct:split-test-ipfsplit-agg", exchange);
         
         mock1.assertIsSatisfied();
@@ -115,7 +115,7 @@ public abstract class AbstractSplitTest {
     public void testIpfSplitterSingleResultSplit() throws Exception {
         mock1.expectedBodiesReceived("test");
         
-        Exchange result = (Exchange)producerTemplate.send("direct:split-test-ipfsplit", 
+        Exchange result = producerTemplate.send("direct:split-test-ipfsplit",
                 createMessage("test").getExchange());
         
         mock1.assertIsSatisfied();

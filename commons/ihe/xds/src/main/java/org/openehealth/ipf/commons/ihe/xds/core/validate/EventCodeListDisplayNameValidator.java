@@ -54,7 +54,7 @@ public class EventCodeListDisplayNameValidator extends SlotValueValidation {
                 }
             }
         }
-        if (haveNonEmptySlotValue == true) {
+        if (haveNonEmptySlotValue) {
             assertDisplayNamePresent((EbXMLClassification) classification, SLOT_NAME_CODING_SCHEME);
         }
     }

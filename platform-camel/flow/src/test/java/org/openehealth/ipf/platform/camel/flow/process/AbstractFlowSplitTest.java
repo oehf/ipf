@@ -78,7 +78,7 @@ public abstract class AbstractFlowSplitTest {
     public void testConvertCamelSplitter() throws InterruptedException {
         mock1.expectedBodiesReceived("test");
         mock2.expectedBodiesReceived("test");
-        Exchange result = (Exchange)producerTemplate.send("direct:flow-test-split", 
+        Exchange result = producerTemplate.send("direct:flow-test-split",
                 createMessage("test").getExchange());
         mock1.assertIsSatisfied();
         mock2.assertIsSatisfied();
@@ -93,7 +93,7 @@ public abstract class AbstractFlowSplitTest {
     public void testConvertCamelPipeline() throws InterruptedException {
         mock1.expectedBodiesReceived("test");
         mock2.expectedBodiesReceived("test");
-        Exchange result = (Exchange)producerTemplate.send("direct:flow-test-pipe", 
+        Exchange result = producerTemplate.send("direct:flow-test-pipe",
                 createMessage("test").getExchange());
         mock1.assertIsSatisfied();
         mock2.assertIsSatisfied();

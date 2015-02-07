@@ -79,7 +79,7 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
     }
 
     private CamelContext getContext() {
-        return (CamelContext) super.getCamelContext();
+        return (CamelContext) getCamelContext();
     }
 
     private MBeanServer getMBeanServer() {

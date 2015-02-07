@@ -96,9 +96,7 @@ public class JaxWsServiceFactory {
     public ServerFactoryBean createServerFactory(Class<?> serviceImplClass) {
         try {
             return createServerFactory(serviceImplClass.newInstance());
-        } catch (InstantiationException e) {
-            throw new IllegalStateException(e);
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             throw new IllegalStateException(e);
         }
     }

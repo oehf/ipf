@@ -1176,11 +1176,6 @@
                         <artifactId>groovy-eclipse-batch</artifactId>
                         <version>${groovy-eclipse-batch-version}</version>
                     </dependency>
-					<dependency>
-						<groupId>org.projectlombok</groupId>
-						<artifactId>lombok</artifactId>
-						<version>${lombok-version}</version>
-					</dependency>					
 				</dependencies>
             </plugin>
             <plugin>
