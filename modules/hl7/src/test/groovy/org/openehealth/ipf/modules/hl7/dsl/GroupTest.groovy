@@ -74,8 +74,8 @@ class GroupTest extends groovy.test.GroovyAssert {
     void testPath(){
          assert message.path == null
          assert message.PATIENT_RESULT(0).path == 'PATIENT_RESULT(0)'
-         assert message.PATIENT_RESULT(0).PATIENT.PID.path == 'PATIENT_RESULT(0).PATIENT.PID'
-         assert message.PATIENT_RESULT(0).PATIENT.PID.path == 'PATIENT_RESULT(0).PATIENT.PID'
+         assert message.PATIENT_RESULT(0).PATIENT.PID.path == 'PATIENT_RESULT(0).PATIENT(0).PID'
+         assert message.PATIENT_RESULT(0).PATIENT.PID.path == 'PATIENT_RESULT(0).PATIENT(0).PID'
          assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0)'
          assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(0).path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0)'
          assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.OBR.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBR'
@@ -173,8 +173,9 @@ class GroupTest extends groovy.test.GroovyAssert {
 		message.eachWithIndex { structure, index ->
 			found << index
 		}
+        println found
 		assert found.contains('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).NTE(17)')
-		assert found.contains('PATIENT_RESULT(0).PATIENT.PID')
+		assert found.contains('PATIENT_RESULT(0).PATIENT(0).PID')
 		assert found.contains('MSH')
 	}
 
