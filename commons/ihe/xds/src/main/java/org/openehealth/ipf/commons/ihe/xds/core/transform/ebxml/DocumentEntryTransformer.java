@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
 
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PatientInfoTransformer;
 
@@ -122,11 +123,11 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     protected void addSlots(DocumentEntry docEntry, EbXMLExtrinsicObject extrinsic, EbXMLObjectLibrary objectLibrary) {
         super.addSlots(docEntry, extrinsic, objectLibrary);
         
-        extrinsic.addSlot(SLOT_NAME_CREATION_TIME, docEntry.getCreationTime());        
+        extrinsic.addSlot(SLOT_NAME_CREATION_TIME, toHL7(docEntry.getCreationTime()));
         extrinsic.addSlot(SLOT_NAME_HASH, docEntry.getHash());
         extrinsic.addSlot(SLOT_NAME_LANGUAGE_CODE, docEntry.getLanguageCode());
-        extrinsic.addSlot(SLOT_NAME_SERVICE_START_TIME, docEntry.getServiceStartTime());
-        extrinsic.addSlot(SLOT_NAME_SERVICE_STOP_TIME, docEntry.getServiceStopTime());
+        extrinsic.addSlot(SLOT_NAME_SERVICE_START_TIME, toHL7(docEntry.getServiceStartTime()));
+        extrinsic.addSlot(SLOT_NAME_SERVICE_STOP_TIME, toHL7(docEntry.getServiceStopTime()));
         extrinsic.addSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, docEntry.getRepositoryUniqueId());
         extrinsic.addSlot(SLOT_NAME_URI, uriTransformer.toEbXML(docEntry.getUri()));
         extrinsic.addSlot(SLOT_NAME_DOCUMENT_AVAILABILITY,

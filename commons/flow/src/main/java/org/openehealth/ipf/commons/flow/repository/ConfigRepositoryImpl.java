@@ -33,8 +33,7 @@ public class ConfigRepositoryImpl extends HibernateDaoSupport implements ConfigR
 
     @Override
     public ApplicationConfig find(String application) {
-        return (ApplicationConfig)getHibernateTemplate().get(
-                ApplicationConfig.class, application);
+        return getHibernateTemplate().get(ApplicationConfig.class, application);
     }
 
     @Override

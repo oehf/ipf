@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
@@ -48,8 +49,8 @@ public class FindFoldersQueryTransformer extends AbstractStoredQueryTransformer<
 
         slots.fromString(FOLDER_PATIENT_ID, Hl7v2Based.render(query.getPatientId()));
         
-        slots.fromNumber(FOLDER_LAST_UPDATE_TIME_FROM, query.getLastUpdateTime().getFrom());
-        slots.fromNumber(FOLDER_LAST_UPDATE_TIME_TO, query.getLastUpdateTime().getTo());
+        slots.fromNumber(FOLDER_LAST_UPDATE_TIME_FROM, toHL7(query.getLastUpdateTime().getFrom()));
+        slots.fromNumber(FOLDER_LAST_UPDATE_TIME_TO, toHL7(query.getLastUpdateTime().getTo()));
 
         slots.fromCode(FOLDER_CODES, query.getCodes());
         

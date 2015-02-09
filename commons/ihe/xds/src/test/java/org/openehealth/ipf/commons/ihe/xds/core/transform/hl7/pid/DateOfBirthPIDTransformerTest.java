@@ -17,10 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
 import static org.junit.Assert.*;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.DateOfBirthPIDTransformer;
 
 /**
  * Tests for {@link DateOfBirthPIDTransformer}.
@@ -37,8 +38,8 @@ public class DateOfBirthPIDTransformerTest {
     @Test
     public void testToHL7() {
         PatientInfo patientInfo = new PatientInfo();
-        patientInfo.setDateOfBirth("123456+0100");
-        assertEquals("123456+0100", transformer.toHL7(patientInfo).get(0));
+        patientInfo.setDateOfBirth("19800102030405+0100");
+        assertEquals("19800102", transformer.toHL7(patientInfo).get(0));
     }
     
     @Test
@@ -50,8 +51,9 @@ public class DateOfBirthPIDTransformerTest {
     @Test
     public void testFromHL7() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7("6543-0100^sdf", patientInfo);
-        assertEquals("6543-0100", patientInfo.getDateOfBirth());
+        transformer.fromHL7("19800102030405-0100^sdf", patientInfo);
+        DateTime expected = new DateTime(1980, 1, 2, 3, 4, 5, DateTimeZone.forOffsetHoursMinutes(-1, 0));
+        assertEquals(expected.toDateTime(DateTimeZone.UTC), patientInfo.getDateOfBirth());
     }
 
     @Test

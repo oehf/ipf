@@ -50,8 +50,8 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         query = new FindFoldersForMultiplePatientsQuery();
 
         query.setPatientIds(Arrays.asList(new Identifiable("id1", new AssigningAuthority("uni1", "uniType1")), new Identifiable("id2", new AssigningAuthority("uni2", "uniType2"))));
-        query.getLastUpdateTime().setFrom("1");
-        query.getLastUpdateTime().setTo("2");
+        query.getLastUpdateTime().setFrom("20150102030405");
+        query.getLastUpdateTime().setTo("20150102030406");
         QueryList<Code> codes = new QueryList<>();
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
@@ -73,9 +73,9 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         assertEquals(Arrays.asList("('id1^^^&uni1&uniType1')","('id2^^^&uni2&uniType2')"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_PATIENT_ID.getSlotName()));
         
-        assertEquals(Arrays.asList("1"),
+        assertEquals(Arrays.asList("20150102030405"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_LAST_UPDATE_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("2"),
+        assertEquals(Arrays.asList("20150102030406"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_LAST_UPDATE_TIME_TO.getSlotName()));
 
         List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.FOLDER_CODES.getSlotName());

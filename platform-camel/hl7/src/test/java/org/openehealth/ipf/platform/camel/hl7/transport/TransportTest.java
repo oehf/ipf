@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.hl7.transport;
 
 import java.util.Scanner;
 
-import ca.uhn.hl7v2.parser.PipeParser;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;

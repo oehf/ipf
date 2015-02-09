@@ -84,7 +84,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         
         PatientInfo sourcePatientInfo = new PatientInfo();
         sourcePatientInfo.setAddress(address);
-        sourcePatientInfo.setDateOfBirth("dateOfBirth");
+        sourcePatientInfo.setDateOfBirth("1980");
         sourcePatientInfo.setGender("F");
         sourcePatientInfo.setName(createName(3));
         sourcePatientInfo.getIds().add(createIdentifiable(5));
@@ -95,7 +95,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         set.getAuthors().add(author2);
         set.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         set.setComments(createLocal(10));
-        set.setSubmissionTime("123");
+        set.setSubmissionTime("20150102030405");
         set.setEntryUuid("uuid");
         set.setPatientId(createIdentifiable(3));
         set.setTitle(createLocal(11));
@@ -127,7 +127,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         assertEquals(createLocal(10), ebXML.getDescription());        
         assertEquals(createLocal(11), ebXML.getName());
         
-        assertSlot(SLOT_NAME_SUBMISSION_TIME, ebXML.getSlots(), "123");
+        assertSlot(SLOT_NAME_SUBMISSION_TIME, ebXML.getSlots(), "20150102030405");
         
         assertSlot(SLOT_NAME_INTENDED_RECIPIENT, ebXML.getSlots(),
                 "orgName 20^^^^^&uni 20&uniType 20^^^^id 20|id 22^familyName 22^givenName 22^prefix 22^second 22^suffix 22^degree 22^^&uni 22&uniType 22",

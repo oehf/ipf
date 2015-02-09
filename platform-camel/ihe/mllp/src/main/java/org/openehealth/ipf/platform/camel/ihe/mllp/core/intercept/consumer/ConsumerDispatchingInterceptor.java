@@ -20,7 +20,6 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.preparser.PreParser;
 import org.apache.camel.*;
 import org.apache.camel.component.mina2.Mina2Consumer;
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;

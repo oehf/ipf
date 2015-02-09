@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.DocumentsQuery;
 
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
@@ -46,14 +47,14 @@ abstract class DocumentsQueryTransformer<T extends DocumentsQuery> extends Abstr
         
         slots.fromStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
 
-        slots.fromNumber(DOC_ENTRY_CREATION_TIME_FROM, query.getCreationTime().getFrom());
-        slots.fromNumber(DOC_ENTRY_CREATION_TIME_TO, query.getCreationTime().getTo());
+        slots.fromNumber(DOC_ENTRY_CREATION_TIME_FROM, toHL7(query.getCreationTime().getFrom()));
+        slots.fromNumber(DOC_ENTRY_CREATION_TIME_TO, toHL7(query.getCreationTime().getTo()));
 
-        slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_FROM, query.getServiceStartTime().getFrom());
-        slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_TO, query.getServiceStartTime().getTo());
+        slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_FROM, toHL7(query.getServiceStartTime().getFrom()));
+        slots.fromNumber(DOC_ENTRY_SERVICE_START_TIME_TO, toHL7(query.getServiceStartTime().getTo()));
         
-        slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM, query.getServiceStopTime().getFrom());
-        slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO, query.getServiceStopTime().getTo());
+        slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM, toHL7(query.getServiceStopTime().getFrom()));
+        slots.fromNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO, toHL7(query.getServiceStopTime().getTo()));
 
         slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
         slots.fromCode(DOC_ENTRY_CLASS_CODE, query.getClassCodes());

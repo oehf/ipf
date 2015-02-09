@@ -47,7 +47,7 @@ public class SequenceRepositoryImpl extends HibernateDaoSupport implements Seque
     }
     
     private FlowNumber lockNumber() {
-        return (FlowNumber)getHibernateTemplate().get(FlowNumber.class, DEFAULT_SEQUENCE, LockMode.UPGRADE);
+        return getHibernateTemplate().get(FlowNumber.class, DEFAULT_SEQUENCE, LockMode.UPGRADE);
     }
     
 }

@@ -28,6 +28,7 @@ import java.util.List;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
 
 /**
  * Transforms between a {@link SubmissionSet} and its ebXML representation.
@@ -93,7 +94,7 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
         }
         ebXML.addSlot(SLOT_NAME_INTENDED_RECIPIENT, slotValues.toArray(new String[slotValues.size()]));
         
-        ebXML.addSlot(SLOT_NAME_SUBMISSION_TIME, metaData.getSubmissionTime());        
+        ebXML.addSlot(SLOT_NAME_SUBMISSION_TIME, toHL7(metaData.getSubmissionTime()));
     }
     
     @Override

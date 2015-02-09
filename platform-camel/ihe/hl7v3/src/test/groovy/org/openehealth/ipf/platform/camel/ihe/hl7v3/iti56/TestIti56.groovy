@@ -81,8 +81,7 @@ class TestIti56 extends StandardTestContainer {
         }
 
         // wait for completion of asynchronous routes
-        Iti56TestRouteBuilder routeBuilder = StandardTestContainer.appContext
-                .getBean(Iti56TestRouteBuilder.class)
+        Iti56TestRouteBuilder routeBuilder = appContext.getBean(Iti56TestRouteBuilder.class)
 
         routeBuilder.countDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
         routeBuilder.asyncCountDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)

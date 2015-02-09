@@ -16,9 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.Getter;
-import org.apache.camel.CamelException;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
-
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.stripToNull;

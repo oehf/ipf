@@ -19,7 +19,6 @@ import java.util.Map;
 
 import lombok.Getter;
 import org.apache.camel.CamelContext;
-import org.apache.camel.Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
