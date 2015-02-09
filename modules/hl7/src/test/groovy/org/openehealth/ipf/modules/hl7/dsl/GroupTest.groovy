@@ -75,7 +75,6 @@ class GroupTest extends groovy.test.GroovyAssert {
          assert message.path == null
          assert message.PATIENT_RESULT(0).path == 'PATIENT_RESULT(0)'
          assert message.PATIENT_RESULT(0).PATIENT.PID.path == 'PATIENT_RESULT(0).PATIENT(0).PID'
-         assert message.PATIENT_RESULT(0).PATIENT.PID.path == 'PATIENT_RESULT(0).PATIENT(0).PID'
          assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0)'
          assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(0).path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0)'
          assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.OBR.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBR'
