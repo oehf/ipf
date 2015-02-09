@@ -141,8 +141,8 @@ required dependencies, usage and parameters.
 [ITI-18]: http://www.google.de
 [ITI-19]: http://www.google.de
 [ITI-20]: http://www.google.de
-[ITI-21]: http://www.google.de
-[ITI-22]: http://www.google.de
+[ITI-21]: mllp/iti21.html
+[ITI-22]: mllp/iti22.html
 [ITI-38]: http://www.google.de
 [ITI-39]: http://www.google.de
 [ITI-41]: http://www.google.de
@@ -159,10 +159,10 @@ required dependencies, usage and parameters.
 [ITI-61]: http://www.google.de
 [ITI-62]: http://www.google.de
 [ITI-63]: http://www.google.de
-[ITI-64]: http://www.google.de
+[ITI-64]: mllp/iti64.html
 [RAD-69]: http://www.google.de
 [RAD-75]: http://www.google.de
 [PCC-1]: http://www.google.de
 [PCD-01]: http://www.google.de
-[All]: http://www.google.de
-[Custom]: http://www.google.de
+[All]: mllp/mllpDispatch.html
+[Custom]: mllp/mllpCustom.html

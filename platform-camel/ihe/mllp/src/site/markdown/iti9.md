@@ -1,18 +1,17 @@
 
-## `pix-iti8` / `xds-iti8` component
+## `pix-iti9` component
 
-The pix-iti8/xds-iti8 component provides interfaces for actors of the *Patient Identity Feed* IHE transaction (ITI-8),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.8](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
-This transaction relates to both PIX and XDS IHE profiles, therefore the same component is available under two different names.
+The pix-iti9 component provides interfaces for actors of the *Patient Identity Query* IHE transaction (ITI-9),
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.9](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
 
 ### Actors
 
 The transaction defines the following actors:
 
-![ITI-8 actors](images/iti8.png)
+![ITI-9 actors](images/iti9.png)
 
-Producer side corresponds to the *Patient Identity Source* actor.
-Consumer side corresponds to both *Patient Identifier Cross-reference Manager* and *XDS Document Registry* actors.
+Producer side corresponds to the *Patient Identifier Cross-reference Consumer* actor.
+Consumer side corresponds to the *Patient Identifier Cross-reference Manager* actor.
 
 ### Dependencies
 
@@ -28,11 +27,10 @@ In a Maven-based environment, the following dependency should be registered in `
 
 ### Endpoint URI Format
 
-The endpoint URI format of the `pix-iti8`/`xds-iti8` component is identical for producers and consumers:
+The endpoint URI format of the `pix-iti9` component is identical for producers and consumers:
 
 ```
-pix-iti8://hostname:port[?parameters]
-xds-iti8://hostname:port[?parameters]
+pix-iti9://hostname:port[?parameters]
 ```
 
 where *hostname* is either an IP address or a domain name, and *port* is a number. For the consumer side, the host name
@@ -51,7 +49,7 @@ components and requires that an [HL7v2 Codec](codec.html) is available in the Ca
 This is an example on how to use the component on the consumer side:
 
 ```java
-from("pix-iti8://0.0.0.0:8777?audit=true&secure=true")
+from("pix-iti9://0.0.0.0:8777?audit=true&secure=true")
   .process(myProcessor)
   // process the incoming request and create a response
 ```
@@ -72,11 +70,6 @@ from("pix-iti8://0.0.0.0:8777?audit=true&secure=true")
 * [Interceptor chain configuration]
 * [Segment fragmentation]
 * [Unsolicited request message fragmentation]
-
-
-### Remarks for this component
-
-* ITI-8 is the only HL7v2-based transaction that uses HL7 v2.3.1, while most others use HL7 v2.5
 
 
 [ATNA auditing]: ../atna.html

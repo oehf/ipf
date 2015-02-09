@@ -1,18 +1,14 @@
 
-## `pix-iti8` / `xds-iti8` component
+## `mllp` component
 
-The pix-iti8/xds-iti8 component provides interfaces for actors of the *Patient Identity Feed* IHE transaction (ITI-8),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.8](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
-This transaction relates to both PIX and XDS IHE profiles, therefore the same component is available under two different names.
+The mllp component allows for custom MLLP-based interfaces to benefit from all features that are available to
+MLLP-based IHE transactions, e.g. message fragmentation, ATNA auditing, message dispatching etc.
+This is particularly valuable if you already use IHE transaction components but you need additional interfaces for
+which there is no defined IHE profile.
 
 ### Actors
 
-The transaction defines the following actors:
-
-![ITI-8 actors](images/iti8.png)
-
-Producer side corresponds to the *Patient Identity Source* actor.
-Consumer side corresponds to both *Patient Identifier Cross-reference Manager* and *XDS Document Registry* actors.
+Both consumer and producer sides are supported. There is no mapping to a particular actor.
 
 ### Dependencies
 
@@ -28,17 +24,22 @@ In a Maven-based environment, the following dependency should be registered in `
 
 ### Endpoint URI Format
 
-The endpoint URI format of the `pix-iti8`/`xds-iti8` component is identical for producers and consumers:
+The endpoint URI format of the `mllp` component is identical for producers and consumers:
 
 ```
-pix-iti8://hostname:port[?parameters]
-xds-iti8://hostname:port[?parameters]
+mllp://hostname:port[?parameters]
 ```
 
 where *hostname* is either an IP address or a domain name, and *port* is a number. For the consumer side, the host name
 `0.0.0.0` allows the access from any remote host.
 These two obligatory URI parts represent the address of the MLLP endpoint which is to be served by the given consumer or
-accessed by the given producer. URI parameters controlling the transaction features are described below.
+accessed by the given producer.
+
+Additionally, the URI parameter *hl7TransactionConfig* is mandatory and references a bean of type
+`org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration` that defines the contract of the transaction.
+
+The parameters *clientAuditStrategy* and *serverAuditStrategy* are mandatory unless [ATNA auditing] is disabled in the
+endpoints. The strategy parameters must reference an instance of type `org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy`.
 
 
 ### HL7v2 Codec
@@ -51,7 +52,7 @@ components and requires that an [HL7v2 Codec](codec.html) is available in the Ca
 This is an example on how to use the component on the consumer side:
 
 ```java
-from("pix-iti8://0.0.0.0:8777?audit=true&secure=true")
+from("mllp://0.0.0.0:8777?hl7TransactionConfig=#config&clientAuditStrategy=#clientStrategy&serverAuditStrategy=#serverStrategy")
   .process(myProcessor)
   // process the incoming request and create a response
 ```
@@ -59,7 +60,6 @@ from("pix-iti8://0.0.0.0:8777?audit=true&secure=true")
 ### Basic Common Component Features
 
 * [ATNA auditing]
-* [Message validation]
 
 ### Basic MLLP Component Features
 
@@ -72,11 +72,6 @@ from("pix-iti8://0.0.0.0:8777?audit=true&secure=true")
 * [Interceptor chain configuration]
 * [Segment fragmentation]
 * [Unsolicited request message fragmentation]
-
-
-### Remarks for this component
-
-* ITI-8 is the only HL7v2-based transaction that uses HL7 v2.3.1, while most others use HL7 v2.5
 
 
 [ATNA auditing]: ../atna.html
