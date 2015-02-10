@@ -10,8 +10,8 @@ These parameters are:
 | Parameter name        | Type       | Constant value | 
 |:----------------------|:-----------|:---------------|
 | `sync`                | boolean    | true           |
-| 'lazySessionCreation` | boolean    | true           |
-| 'transferExchange`    | boolean    | false          | 
+| `lazySessionCreation` | boolean    | true           |
+| `transferExchange`    | boolean    | false          | 
 | `encoding`            | String     | corresponds to the charset name configured for the HL7 codec factory, as described below |
 
 All other URI parameters defined in [camel-mina2] remain fully functional and configurable by the user.
@@ -19,9 +19,9 @@ All other URI parameters defined in [camel-mina2] remain fully functional and co
 ### HL7 Codec Parameters
 
 [camel-mina2] defines a parameter named `codec`, which is expected to contain the name of a bean that corresponds to an codec factory, that translates the
-network stream into a suitable application ptocol and vice versa. 
-[camel-hl7] comes with an implementation of an HL7 codec factory. MLLP-based IPF IHE components set "#hl7codec" as a default value for this parameter. 
-The corresponding bean must still be defined:
+network stream into a suitable application protocol and vice versa. 
+[camel-hl7] comes with an implementation of an HL7 codec factory. MLLP-based IPF IHE components set `#hl7codec` as a default value for this parameter. 
+The corresponding bean must always be defined:
 
 ```xml
 <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">

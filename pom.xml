@@ -553,6 +553,11 @@
                 <version>${activemq-version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-client</artifactId>
+                <version>${activemq-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-core</artifactId>
                 <version>${cxf-version}</version>
