@@ -63,6 +63,16 @@
             <artifactId>camel-hl7</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
             <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
             <scope>test</scope>
