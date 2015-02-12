@@ -20,7 +20,6 @@ import javax.jms.*;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
-import org.apache.activemq.command.ActiveMQTextMessage;
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 
@@ -55,15 +54,11 @@ public class HL7MessageConverter implements MessageConverter {
     @Override
     public Message toMessage(Object o, Session session) throws JMSException, MessageConversionException {
         if (o instanceof String) {
-            TextMessage msg = new ActiveMQTextMessage();
-            msg.setText((String) o);
-            return msg;
+            return session.createTextMessage((String)o);
         }
         if (o instanceof ca.uhn.hl7v2.model.Message) {
-            TextMessage msg = new ActiveMQTextMessage();
             try {
-                msg.setText(((ca.uhn.hl7v2.model.Message) o).encode());
-                return msg;
+                return session.createTextMessage(((ca.uhn.hl7v2.model.Message) o).encode());
             } catch (HL7Exception e) {
                 throw new RuntimeException(e);
             }
