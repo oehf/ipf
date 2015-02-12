@@ -5,10 +5,10 @@ The general functionality of [file-based payload logging] is provided for MLLP e
 in form of a set of [interceptors] located within the package `org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept`,
 which have to be deployed on the endpoints:
 
-* `...consumer.ConsumerInPayloadLoggerInterceptor` for inbound messages on consumer side,
-* `...consumer.ConsumerOutPayloadLoggerInterceptor` for outbound messages on consumer side,
-* `...producer.ProducerInPayloadLoggerInterceptor` for inbound messages on producer side,
-* `...producer.ProducerOutPayloadLoggerInterceptor` for outbound messages on producer side,
+* `...consumer.ConsumerInPayloadLoggerInterceptor` for inbound messages on consumer side
+* `...consumer.ConsumerOutPayloadLoggerInterceptor` for outbound messages on consumer side
+* `...producer.ProducerInPayloadLoggerInterceptor` for inbound messages on producer side
+* `...producer.ProducerOutPayloadLoggerInterceptor` for outbound messages on producer side
 
     
 ### Example
