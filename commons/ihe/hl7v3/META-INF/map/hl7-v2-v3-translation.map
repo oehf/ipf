@@ -73,4 +73,14 @@ mappings = {
         (ELSE) : ''
     )
 
+    'hl7v2v3_nameTypeCode-nameUse' (
+        'A'    : 'P',
+        'S'    : 'P',
+        'M'    : 'BR',
+        'B'    : 'BR',
+        'L'    : 'L',
+        'T'    : 'I',
+        (ELSE) : 'L'
+    )
+
 }

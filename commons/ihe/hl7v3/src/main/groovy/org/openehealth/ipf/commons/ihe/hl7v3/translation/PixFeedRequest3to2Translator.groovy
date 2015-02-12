@@ -212,6 +212,10 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
                 } else if (this.birthNameCopyTo == 'PID-6') {
                     grp.PID[6](0)[1] = birthName
                 }
+            } else {
+                if (pid5[1].value || pid5[2].value) {
+                    pid5[7].value = name.@use.text().map('hl7v2v3_nameTypeCode-nameUse')
+                }
             }
         }
 
