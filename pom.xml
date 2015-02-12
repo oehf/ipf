@@ -60,6 +60,7 @@
         <!-- Dependency version properties -->
         <activemq-version>5.11.0</activemq-version>
         <aspectj-version>1.8.4</aspectj-version>
+        <bouncycastle-version>1.51</bouncycastle-version>
         <camel-version>2.14.1</camel-version>
         <cglib-version>3.1</cglib-version>
         <commons-codec-version>1.10</commons-codec-version>
@@ -985,12 +986,21 @@
                         <groupId>xalan</groupId>
                         <artifactId>xalan</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcprov-jdk15</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
                 <groupId>ca.juliusdavies</groupId>
                 <artifactId>not-yet-commons-ssl</artifactId>
                 <version>${not-yet-commons-ssl-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${bouncycastle-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.santuario</groupId>
