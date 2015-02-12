@@ -71,9 +71,7 @@ public class RemoveDocumentSetTransformer {
     private Query createQuery(QueryType queryType) {
         try {
             return queryType.getType().newInstance();
-        } catch (InstantiationException e) {
-            throw new IllegalStateException("Invalid query class for type: " + queryType, e);
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             throw new IllegalStateException("Invalid query class for type: " + queryType, e);
         }
     }

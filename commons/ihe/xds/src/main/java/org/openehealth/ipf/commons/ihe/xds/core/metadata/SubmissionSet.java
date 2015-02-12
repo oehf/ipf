@@ -15,9 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.joda.time.DateTime;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -37,25 +40,19 @@ import java.util.List;
 @XmlType(name = "SubmissionSet", propOrder = {
         "sourceId", "submissionTime", "authors", "intendedRecipients", "contentTypeCode"})
 @XmlRootElement(name = "submissionSet")
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class SubmissionSet extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = 5961980266312684583L;
     
     @XmlElement(name = "author")
-    private final List<Author> authors = new ArrayList<>();
-    private Code contentTypeCode;
+    @Getter private final List<Author> authors = new ArrayList<>();
+    @Getter @Setter private Code contentTypeCode;
     @XmlElement(name = "intendedRecipient")
-    private final List<Recipient> intendedRecipients = new ArrayList<>();
-    private String sourceId;
+    @Getter private final List<Recipient> intendedRecipients = new ArrayList<>();
+    @Getter @Setter private String sourceId;
     @XmlSchemaType(name = "dateTime")
     @XmlJavaTypeAdapter(value = DateAdapter.class)
-    private String submissionTime;
-
-    /**
-     * @return the list of authors of the submission. Cannot be <code>null</code>.
-     */
-    public List<Author> getAuthors() {
-        return authors;
-    }
+    @Getter private DateTime submissionTime;
 
     /**
      * @param author
@@ -75,111 +72,12 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
         return authors.isEmpty() ? null : authors.get(0);
     }
 
-    /**
-     * @return the code describing the content type.
-     */
-    public Code getContentTypeCode() {
-        return contentTypeCode;
-    }
-    
-    /**
-     * @param contentTypeCode
-     *          the code describing the content type.
-     */
-    public void setContentTypeCode(Code contentTypeCode) {
-        this.contentTypeCode = contentTypeCode;
-    }
-    
-    /**
-     * @return the ID of the source.
-     */
-    public String getSourceId() {
-        return sourceId;
-    }
-    
-    /**
-     * @param sourceId
-     *          the ID of the source.
-     */
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
-    }
-    
-    /**
-     * @return the time this set was submitted.
-     */
-    public String getSubmissionTime() {
-        return submissionTime;
-    }
-    
-    /**
-     * @param submissionTime
-     *          the time this set was submitted.
-     */
-    public void setSubmissionTime(String submissionTime) {
+    public void setSubmissionTime(DateTime submissionTime) {
         this.submissionTime = submissionTime;
     }
-    
-    /**
-     * @return the recipients that this submission set was created for. 
-     *          Never <code>null</code>.
-     */
-    public List<Recipient> getIntendedRecipients() {
-        return intendedRecipients;
+
+    public void setSubmissionTime(String submissionTime) {
+        this.submissionTime = DateTransformer.fromHL7(submissionTime);
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((authors == null) ? 0 : authors.hashCode());
-        result = prime * result + ((contentTypeCode == null) ? 0 : contentTypeCode.hashCode());
-        result = prime * result
-                + ((intendedRecipients == null) ? 0 : intendedRecipients.hashCode());
-        result = prime * result + ((sourceId == null) ? 0 : sourceId.hashCode());
-        result = prime * result + ((submissionTime == null) ? 0 : submissionTime.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        SubmissionSet other = (SubmissionSet) obj;
-        if (authors == null) {
-            if (other.authors != null)
-                return false;
-        } else if (!authors.equals(other.authors))
-            return false;
-        if (contentTypeCode == null) {
-            if (other.contentTypeCode != null)
-                return false;
-        } else if (!contentTypeCode.equals(other.contentTypeCode))
-            return false;
-        if (intendedRecipients == null) {
-            if (other.intendedRecipients != null)
-                return false;
-        } else if (!intendedRecipients.equals(other.intendedRecipients))
-            return false;
-        if (sourceId == null) {
-            if (other.sourceId != null)
-                return false;
-        } else if (!sourceId.equals(other.sourceId))
-            return false;
-        if (submissionTime == null) {
-            if (other.submissionTime != null)
-                return false;
-        } else if (!submissionTime.equals(other.submissionTime))
-            return false;
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

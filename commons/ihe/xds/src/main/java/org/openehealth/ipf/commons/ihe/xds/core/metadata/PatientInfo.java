@@ -23,7 +23,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.joda.time.DateTime;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -45,12 +47,12 @@ public class PatientInfo implements Serializable {
     private static final long serialVersionUID = 7202574584233259959L;
 
     @XmlElement(name = "id")
-    private final List<Identifiable> ids = new ArrayList<>();   // PID-3
+    private final List<Identifiable> ids = new ArrayList<>();               // PID-3
     private Name name;                                                      // PID-5
     @XmlElement(name = "birthTime")
     @XmlSchemaType(name = "dateTime")
     @XmlJavaTypeAdapter(value = DateAdapter.class)
-    private String dateOfBirth;                                             // PID-7
+    private DateTime dateOfBirth;                                           // PID-7
     private String gender;                                                  // PID-8
     private Address address;                                                // PID-11
     
@@ -84,7 +86,7 @@ public class PatientInfo implements Serializable {
     /**
      * @return the date of birth (PID-7).
      */
-    public String getDateOfBirth() {
+    public DateTime getDateOfBirth() {
         return dateOfBirth;
     }
     
@@ -92,10 +94,18 @@ public class PatientInfo implements Serializable {
      * @param dateOfBirth
      *          the date of birth (PID-7).
      */
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(DateTime dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
-    
+
+    /**
+     * @param dateOfBirth
+     *          the date of birth (PID-7).
+     */
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = DateTransformer.fromHL7(dateOfBirth);
+    }
+
     /**
      * @return the gender (PID-8).
      */

@@ -141,7 +141,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         if (responseMessage != null) {
             // a prepared response fragment found -- perform some post-processing and send it to the user
             LOG.debug("Use prepared fragment for {}", continuationPointer);
-            synchronized (responseMessage) {
+            synchronized (storage.get(continuationPointer, chainId)) {
                 Terser responseTerser = new Terser(responseMessage);
                 responseTerser.set("MSH-7", MessageUtils.hl7Now());
                 responseTerser.set("MSH-10", uniqueId());

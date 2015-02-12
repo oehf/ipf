@@ -25,8 +25,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
-import org.openehealth.ipf.commons.test.http.client.Client;
-import org.openehealth.ipf.commons.test.http.client.ResponseHandler;
 
 /**
  * @author Martin Krasser

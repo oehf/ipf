@@ -37,6 +37,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 
 import javax.net.ssl.SSLContext;
 import java.util.ArrayList;
@@ -316,6 +317,9 @@ public abstract class MllpEndpoint
         return config.getCustomInterceptorFactories();
     }
 
+    public ConsumerDispatchingInterceptor getDispatcher() {
+        return config.getDispatcher();
+    }
 
 
     /**

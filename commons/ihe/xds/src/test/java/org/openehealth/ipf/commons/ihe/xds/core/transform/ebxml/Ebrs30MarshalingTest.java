@@ -71,7 +71,7 @@ public class Ebrs30MarshalingTest {
     
     @SuppressWarnings("unchecked")
     private static JAXBElement<IdentifiableType> getJaxbElement(QName qname, IdentifiableType object) {
-        return new JAXBElement<IdentifiableType>(qname, (Class)object.getClass(), object);         
+        return new JAXBElement<>(qname, (Class)object.getClass(), object);
     }
     
     @Test

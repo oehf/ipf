@@ -92,11 +92,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
             T xdsModelObject = xdsModelClass.newInstance();
             MESSAGE.getParser().parse(xdsModelObject.getHapiObject(), hl7String, XdsHl7v2Renderer.ENCODING_CHARACTERS);
             return xdsModelObject.isEmpty() ? null : xdsModelObject;
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (HL7Exception e) {
+        } catch (InstantiationException | IllegalAccessException | HL7Exception e) {
             throw new RuntimeException(e);
         }
     }

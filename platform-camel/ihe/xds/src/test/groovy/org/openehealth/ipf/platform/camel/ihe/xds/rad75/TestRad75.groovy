@@ -87,8 +87,7 @@ class TestRad75 extends StandardTestContainer {
         }
 
         // wait for completion of asynchronous routes
-        Rad75TestRouteBuilder routeBuilder = StandardTestContainer.appContext
-                .getBean(Rad75TestRouteBuilder.class)
+        Rad75TestRouteBuilder routeBuilder = appContext.getBean(Rad75TestRouteBuilder.class)
         routeBuilder.countDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
         routeBuilder.asyncCountDownLatch.await(AWAIT_DELAY, TimeUnit.MILLISECONDS)
 

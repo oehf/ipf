@@ -56,7 +56,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         folder.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         folder.setComments(createLocal(10));
         folder.setEntryUuid("uuid");
-        folder.setLastUpdateTime("123");
+        folder.setLastUpdateTime("20150102030405");
         folder.setPatientId(createIdentifiable(3));
         folder.setTitle(createLocal(11));
         folder.setUniqueId("uniqueId");
@@ -84,8 +84,8 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         assertEquals(createLocal(10), ebXML.getDescription());        
         assertEquals(createLocal(11), ebXML.getName());
         
-        assertSlot(Vocabulary.SLOT_NAME_LAST_UPDATE_TIME, ebXML.getSlots(), "123");
-        
+        assertSlot(Vocabulary.SLOT_NAME_LAST_UPDATE_TIME, ebXML.getSlots(), "20150102030405");
+
         EbXMLClassification classification = 
             assertClassification(Vocabulary.FOLDER_CODE_LIST_CLASS_SCHEME, ebXML, 0, "code 6", 6);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 6");

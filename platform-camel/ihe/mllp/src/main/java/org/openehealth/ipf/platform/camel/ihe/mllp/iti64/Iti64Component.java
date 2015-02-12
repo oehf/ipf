@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti64;
 
 import ca.uhn.hl7v2.ErrorCode;
+import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
@@ -31,7 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent
 public class Iti64Component extends MllpTransactionComponent<Iti64AuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
-                "2.5",
+                new Version[] {Version.V25},
                 "XPID adapter",
                 "IPF",
                 ErrorCode.APPLICATION_INTERNAL_ERROR,

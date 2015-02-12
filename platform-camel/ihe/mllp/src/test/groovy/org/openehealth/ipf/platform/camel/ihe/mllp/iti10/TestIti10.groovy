@@ -52,11 +52,11 @@ class TestIti10 extends MllpTestContainer {
      */
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit('pix-iti10://localhost:18108', 2)
+        doTestHappyCaseAndAudit("pix-iti10://localhost:18108?timeout=${TIMEOUT}", 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit('pix-iti10://localhost:18107?audit=false', 0)
+        doTestHappyCaseAndAudit("pix-iti10://localhost:18107?audit=false&timeout=${TIMEOUT}", 0)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {

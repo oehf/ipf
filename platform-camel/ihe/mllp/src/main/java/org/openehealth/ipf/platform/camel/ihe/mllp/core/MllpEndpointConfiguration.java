@@ -16,6 +16,11 @@
 
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import javax.net.ssl.SSLContext;
+
 import lombok.Getter;
 import org.apache.camel.spring.GenericBeansException;
 import org.apache.camel.spring.SpringCamelContext;
@@ -23,12 +28,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 import org.springframework.context.ApplicationContext;
-
-import javax.net.ssl.SSLContext;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Configuration of an MLLP endpoint.
@@ -49,6 +50,8 @@ public class MllpEndpointConfiguration implements Serializable {
 
     @Getter private final boolean supportSegmentFragmentation;
     @Getter private final int segmentFragmentationThreshold;
+
+    @Getter private ConsumerDispatchingInterceptor dispatcher;
 
 
     protected MllpEndpointConfiguration(MllpComponent component, Map<String, Object> parameters) throws Exception {
@@ -82,6 +85,9 @@ public class MllpEndpointConfiguration implements Serializable {
                 parameters, "interceptorFactories", Hl7v2InterceptorFactory.class);
 
         customInterceptorBeans = extractInterceptorBeanNames(component, parameters);
+
+        dispatcher = component.resolveAndRemoveReferenceParameter(parameters, "dispatcher", ConsumerDispatchingInterceptor.class);
+
     }
 
 

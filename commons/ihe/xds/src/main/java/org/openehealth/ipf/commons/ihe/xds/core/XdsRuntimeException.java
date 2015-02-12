@@ -23,6 +23,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
  * @author Dmytro Rud
  */
 public class XdsRuntimeException extends RuntimeException {
+    private static final long serialVersionUID = -5969918509312648991L;
+
     private final ErrorCode errorCode;
     private final String codeContext;
     private final Severity severity;

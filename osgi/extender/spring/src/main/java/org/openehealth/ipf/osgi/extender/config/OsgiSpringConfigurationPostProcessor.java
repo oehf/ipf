@@ -24,6 +24,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.InvalidSyntaxException;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.osgi.extender.OsgiBeanFactoryPostProcessor;
 
@@ -32,39 +33,47 @@ import org.springframework.osgi.extender.OsgiBeanFactoryPostProcessor;
  * and {@link OsgiSpringConfigurer}. Every time a new bundle with existing
  * spring definition is registered inside of the BundleContext, this
  * extender loops through its defined configurers and looks-up for
- * eventual configuration objects inside of them. 
- * 
+ * eventual configuration objects inside of them.
+ *
  * @author Boris Stanojevic
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class OsgiSpringConfigurationPostProcessor implements OsgiBeanFactoryPostProcessor {
 
     private List<OrderedConfigurer> springConfigurers;
-    
+
     private List<OsgiSpringConfigurer> osgiSpringConfigurers;
 
     @Override
     public void postProcessBeanFactory(BundleContext bundleContext,
-            ConfigurableListableBeanFactory beanFactory) throws BeansException,
+                                       ConfigurableListableBeanFactory beanFactory) throws BeansException,
             InvalidSyntaxException, BundleException {
 
         OsgiServiceRegistry registry = new OsgiServiceRegistry(bundleContext);
         registry.setBeanFactory(beanFactory);
 
-        for (OsgiSpringConfigurer osc: osgiSpringConfigurers){
+        for (OsgiSpringConfigurer osc : osgiSpringConfigurers) {
             Collection configurations = osc.lookup(bundleContext, registry);
-            if (configurations != null && configurations.size() > 0){
-                for (Object configuration: configurations){
-                    osc.configure(configuration);
+            if (configurations != null && configurations.size() > 0) {
+                for (Object configuration : configurations) {
+                    try {
+                        osc.configure(configuration);
+                    } catch (Exception e) {
+                        throw new BeanInitializationException("Cannot initialize " + configuration, e);
+                    }
                 }
             }
         }
-        
-        for (OrderedConfigurer sc: springConfigurers){
+
+        for (OrderedConfigurer sc : springConfigurers) {
             Collection configurations = sc.lookup(registry);
-            if (configurations != null && configurations.size() > 0){
-                for (Object configuration: configurations){
-                    sc.configure(configuration);
+            if (configurations != null && configurations.size() > 0) {
+                for (Object configuration : configurations) {
+                    try {
+                        sc.configure(configuration);
+                    } catch (Exception e) {
+                        throw new BeanInitializationException("Cannot initialize " + configuration, e);
+                    }
                 }
             }
         }
@@ -87,5 +96,5 @@ public class OsgiSpringConfigurationPostProcessor implements OsgiBeanFactoryPost
             List<OsgiSpringConfigurer> osgiSpringConfigurers) {
         this.osgiSpringConfigurers = osgiSpringConfigurers;
     }
-    
+
 }

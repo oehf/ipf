@@ -110,8 +110,8 @@ public class DocumentTest {
     public final void getContentsSize() {
         Document doc = new Document(docEntry, someData);
         doc.setContent(String.class, "data1");
-        doc.setContent(Integer.class, Integer.valueOf(2));
-        doc.setContent(Integer.class, Integer.valueOf(4));
+        doc.setContent(Integer.class, 2);
+        doc.setContent(Integer.class, 4);
         assertEquals("Size of the contents should be 3!", 3, doc.getContentsCount());
     }
 
@@ -119,8 +119,8 @@ public class DocumentTest {
     public final void getContentsKeySet() {
         Document doc = new Document(docEntry, someData);
         doc.setContent(String.class, "data1");
-        doc.setContent(Integer.class, Integer.valueOf(2));
-        doc.setContent(Integer.class, Integer.valueOf(4));
+        doc.setContent(Integer.class, 2);
+        doc.setContent(Integer.class, 4);
         Class<?>[] classArray = new Class<?>[] {String.class, Integer.class, DataHandler.class};
         for (Class<?> clazz : classArray) {
             assertTrue(doc.hasContent(clazz));

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersForMultiplePatientsQuery;
 
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
@@ -47,8 +48,8 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
         
         slots.fromPatientIdList(FOLDER_PATIENT_ID, query.getPatientIds());
         
-        slots.fromNumber(FOLDER_LAST_UPDATE_TIME_FROM, query.getLastUpdateTime().getFrom());
-        slots.fromNumber(FOLDER_LAST_UPDATE_TIME_TO, query.getLastUpdateTime().getTo());
+        slots.fromNumber(FOLDER_LAST_UPDATE_TIME_FROM, toHL7(query.getLastUpdateTime().getFrom()));
+        slots.fromNumber(FOLDER_LAST_UPDATE_TIME_TO, toHL7(query.getLastUpdateTime().getTo()));
 
         slots.fromCode(FOLDER_CODES, query.getCodes());
         

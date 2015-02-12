@@ -59,7 +59,7 @@ public class TtlHeaderUtils {
             if (o instanceof Element) {
                 Node child = ((Element) o).getFirstChild();
                 if (child instanceof Text) {
-                    String value = ((Text) child).getNodeValue();
+                    String value = child.getNodeValue();
                     try {
                         return DatatypeFactory.newInstance().newDuration(value);
                     } catch (Exception e) {

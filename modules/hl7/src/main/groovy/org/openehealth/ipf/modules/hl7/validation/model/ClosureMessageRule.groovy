@@ -29,6 +29,11 @@ import ca.uhn.hl7v2.validation.ValidationException
  */
 public class ClosureMessageRule extends ClosureRuleSupport implements MessageRule {
 
+    // Basically only for deserialization
+    ClosureMessageRule() {
+        super()
+    }
+
     ClosureMessageRule(Closure testClosure) {
         super(testClosure)
     }

@@ -49,10 +49,10 @@ class TestIti55 extends StandardTestContainer {
     final String SERVICE1_ASYNC_RESPONSE_URI = "http://localhost:${port}/iti55service-async-response"
     final String SERVICE1_DEFERRED_RESPONSE_URI = "http://localhost:${port}/iti55service-deferred-response"
 
-    final String REQUEST = StandardTestContainer.readFile('iti55/iti55-sample-request.xml')
+    final String REQUEST = readFile('iti55/iti55-sample-request.xml')
     
     final String REQUEST_DEFERRED =
-        StandardTestContainer.readFile('iti55/iti55-sample-request-deferred.xml').replace(
+        readFile('iti55/iti55-sample-request-deferred.xml').replace(
                 '***REPLACEME***', SERVICE1_DEFERRED_RESPONSE_URI)
 
 

@@ -129,7 +129,7 @@ public class AuthorTransformer {
             Class<T> targetClass)
     {
         for (String source : sourceClassification.getSlotValues(sourceSlotName)) {
-            T target = Hl7v2Based.<C, T>parse(source, targetClass);
+            T target = Hl7v2Based.parse(source, targetClass);
             if (target != null) {
                 targetCollection.add(target);
             }

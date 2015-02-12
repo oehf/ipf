@@ -265,7 +265,7 @@ public abstract class SampleData {
         
         PatientInfo patientInfo = new PatientInfo();
         patientInfo.setAddress(address);
-        patientInfo.setDateOfBirth("12334");
+        patientInfo.setDateOfBirth("1980");
         patientInfo.setGender("M");
         patientInfo.setName(new XpnName("Susi", null, null, null, null, null));
         

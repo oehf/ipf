@@ -44,7 +44,6 @@
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
         </dependency>
-
         <!-- dependencies for test -->
         <dependency>
             <groupId>org.apache.camel</groupId>

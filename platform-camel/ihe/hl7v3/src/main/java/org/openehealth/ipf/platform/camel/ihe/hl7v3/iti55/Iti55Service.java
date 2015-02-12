@@ -103,7 +103,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
     @Override
     protected String doProcess(String request) {
-        final String requestString = (String) request;
+        final String requestString = request;
         final GPathResult requestXml = Hl7v3Utils.slurp(requestString);
         final String processingMode = Iti55Utils.processingMode(requestXml);
 

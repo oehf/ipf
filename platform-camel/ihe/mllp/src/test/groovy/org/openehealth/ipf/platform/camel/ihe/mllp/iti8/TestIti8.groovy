@@ -64,15 +64,15 @@ class TestIti8 extends MllpTestContainer {
      */
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit('xds-iti8://localhost:18082', 2)
+        doTestHappyCaseAndAudit("xds-iti8://localhost:18082?timeout=${TIMEOUT}", 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit('pix-iti8://localhost:18082?audit=true', 2)
+        doTestHappyCaseAndAudit("pix-iti8://localhost:18082?audit=true&timeout=${TIMEOUT}", 2)
     }
     @Test
     void testHappyCaseAndAudit3() {
-        doTestHappyCaseAndAudit('xds-iti8://localhost:18081?audit=false', 0)
+        doTestHappyCaseAndAudit("xds-iti8://localhost:18081?audit=false&timeout=${TIMEOUT}", 0)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -159,7 +159,7 @@ class TestIti8 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = 'xds-iti8://localhost:18084'
+        def endpointUri = "xds-iti8://localhost:18084?timeout=${TIMEOUT}"
         def body = getMessageString(msh9, msh12)
         def failed = true;
         
@@ -184,8 +184,8 @@ class TestIti8 extends MllpTestContainer {
     @Test
     void testExceptions() {
         def body = getMessageString('ADT^A01', '2.3.1')
-        doTestException('pix-iti8://localhost:18085', body, 'you cry')
-        doTestException('pix-iti8://localhost:18086', body, 'lazy dog')
+        doTestException("pix-iti8://localhost:18085?timeout=${TIMEOUT}", body, 'you cry')
+        doTestException("pix-iti8://localhost:18086?timeout=${TIMEOUT}", body, 'lazy dog')
     }
     
     def doTestException(String endpointUri, String body, String wantedOutputContent) {
@@ -211,7 +211,7 @@ class TestIti8 extends MllpTestContainer {
     @Test
     void testSecureEndpoint() {
         final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = 'xds-iti8://localhost:18087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1'
+        def endpointUri = "xds-iti8://localhost:18087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
@@ -219,7 +219,7 @@ class TestIti8 extends MllpTestContainer {
     @Test(expected=CamelExchangeException.class)
     void testUnsecureProducer() {
         final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = 'xds-iti8://localhost:18087'
+        def endpointUri = "xds-iti8://localhost:18087?timeout=${TIMEOUT}"
         send(endpointUri, body)
         fail()
     }
@@ -227,7 +227,7 @@ class TestIti8 extends MllpTestContainer {
     @Test
     void testSecureEndpointWithCamelJsseConfigOk() {
         final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = 'xds-iti8://localhost:18088?sslContextParameters=#sslContextParameters'
+        def endpointUri = "xds-iti8://localhost:18088?sslContextParameters=#sslContextParameters&timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
@@ -235,7 +235,7 @@ class TestIti8 extends MllpTestContainer {
     @Test(expected=CamelExchangeException.class)
     void testSecureEndpointWithCamelJsseConfigClientFails() {
         final String body = getMessageString('ADT^A01', '2.3.1')
-        def endpointUri = 'xds-iti8://localhost:18088'
+        def endpointUri = "xds-iti8://localhost:18088?timeout=${TIMEOUT}"
         send(endpointUri, body)
         fail()
     }

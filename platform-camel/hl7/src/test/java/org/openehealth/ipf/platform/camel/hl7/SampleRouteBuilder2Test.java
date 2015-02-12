@@ -17,14 +17,11 @@ package org.openehealth.ipf.platform.camel.hl7;
 
 import java.util.Scanner;
 
-import ca.uhn.hl7v2.model.AbstractMessage;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Message;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.After;
 import org.junit.Test;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.hl7.extend.AbstractExtensionTest;
 import org.springframework.test.context.ContextConfiguration;
 

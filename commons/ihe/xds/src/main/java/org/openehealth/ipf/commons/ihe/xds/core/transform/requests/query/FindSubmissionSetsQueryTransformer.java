@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
@@ -50,8 +51,8 @@ public class FindSubmissionSetsQueryTransformer extends AbstractStoredQueryTrans
         
         slots.fromStringList(SUBMISSION_SET_SOURCE_ID, query.getSourceIds());
         
-        slots.fromNumber(SUBMISSION_SET_SUBMISSION_TIME_FROM, query.getSubmissionTime().getFrom());
-        slots.fromNumber(SUBMISSION_SET_SUBMISSION_TIME_TO, query.getSubmissionTime().getTo());
+        slots.fromNumber(SUBMISSION_SET_SUBMISSION_TIME_FROM, toHL7(query.getSubmissionTime().getFrom()));
+        slots.fromNumber(SUBMISSION_SET_SUBMISSION_TIME_TO, toHL7(query.getSubmissionTime().getTo()));
 
         slots.fromString(SUBMISSION_SET_AUTHOR_PERSON, query.getAuthorPerson());
         

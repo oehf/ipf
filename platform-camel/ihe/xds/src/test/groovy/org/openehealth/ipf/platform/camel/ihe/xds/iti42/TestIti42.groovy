@@ -124,12 +124,12 @@ class TestIti42 extends StandardTestContainer {
 
     @Test
     void checkIti42AdditionalPropertiesSet(){
-        XdsEndpoint endpoint = StandardTestContainer.camelContext.getEndpoint(
+        XdsEndpoint endpoint = camelContext.getEndpoint(
             'xds-iti42:xds-iti42-service4?schemaLocations=#schemaLocations&properties=#props', XdsEndpoint.class)
         assert endpoint != null
         assert endpoint.schemaLocations.size() == 1
         assert endpoint.properties.size() == 2
-        assert Boolean.valueOf(endpoint.properties['mtom-enabled']) == true
+        assert Boolean.valueOf(endpoint.properties['mtom-enabled'])
     }
 
     @Test

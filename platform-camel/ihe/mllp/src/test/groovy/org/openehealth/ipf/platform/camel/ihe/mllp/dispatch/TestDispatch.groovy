@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2015 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.dispatch
 
 import org.apache.camel.impl.DefaultExchange
-import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
@@ -26,8 +25,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 /**
  * @author Dmytro Rud
  */
-class TestDispatch extends MllpTestContainer {
-    static final String CONTEXT_DESCRIPTOR = 'dispatch/dispatch.xml'
+abstract class TestDispatch extends MllpTestContainer {
 
     static final String ITI_8_REQUEST =
         'MSH|^~\\&|MESA_PD_SUPPLIER|XYZ_HOSPITAL|dummy|dummy|20081204114742||ADT^A01|123456|T|2.3.1|||ER\n' +
@@ -51,31 +49,21 @@ class TestDispatch extends MllpTestContainer {
         'MRG|old^^^&1.2.3.4&ISO|||\n'
 
 
-    static void main(args) {
-        init(CONTEXT_DESCRIPTOR, true)
-    }
-
-    @BeforeClass
-    static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR, false)
-    }
-
-
     // ITI-8 and ITI-64 can be dispatched, ITI-9 must fail
     @Test
     void testHappyCaseAndAudit1() {
         DefaultExchange exchange = new DefaultExchange(camelContext);
 
-        exchange.in.body = send('pix-iti8://localhost:18500', ITI_8_REQUEST)
+        exchange.in.body = send('pix-iti8://localhost:' + getDispatcherPort(), ITI_8_REQUEST)
         validatingProcessor().process(exchange)
         assertACK(exchange.in.body)
 
-        exchange.in.body = send('pix-iti9://localhost:18500', ITI_9_REQUEST)
+        exchange.in.body = send('pix-iti9://localhost:' + getDispatcherPort(), ITI_9_REQUEST)
         // This does not pass response validation!!
         // iti9ResponseValidator().process(exchange)
         assertNAK(exchange.in.body)
 
-        exchange.in.body = send('xpid-iti64://localhost:18500', ITI_64_REQUEST)
+        exchange.in.body = send('xpid-iti64://localhost:' + getDispatcherPort(), ITI_64_REQUEST)
         validatingProcessor().process(exchange)
         assertACK(exchange.in.body)
 
@@ -101,5 +89,7 @@ class TestDispatch extends MllpTestContainer {
             it.auditMessage.eventIdentification.eventOutcomeIndicator == 0}
         .size())
     }
+
+    protected abstract String getDispatcherPort();
 
 }

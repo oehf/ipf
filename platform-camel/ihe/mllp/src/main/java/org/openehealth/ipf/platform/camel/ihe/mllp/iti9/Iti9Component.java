@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ca.uhn.hl7v2.ErrorCode;
+import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
@@ -40,7 +41,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 public class Iti9Component extends MllpTransactionComponent<QueryAuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
             new Hl7v2TransactionConfiguration(
-                    "2.5",
+                    new Version[] {Version.V25},
                     "PIX adapter",
                     "IPF",
                     ErrorCode.APPLICATION_INTERNAL_ERROR,

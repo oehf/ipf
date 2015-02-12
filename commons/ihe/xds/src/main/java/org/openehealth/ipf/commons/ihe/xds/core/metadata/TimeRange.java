@@ -19,9 +19,13 @@ import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.joda.time.DateTime;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
 
 /**
  * Represents a date and time range used in queries.
@@ -29,79 +33,35 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapte
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TimeRange", propOrder = {"from", "to"})
+@EqualsAndHashCode(callSuper = false, doNotUseGetters = true)
 public class TimeRange implements Serializable {
     private static final long serialVersionUID = -5468726370729209318L;
     
     @XmlAttribute
     @XmlSchemaType(name = "dateTime")
     @XmlJavaTypeAdapter(value = DateAdapter.class)
-    private String from;
+    @Getter private DateTime from;
     @XmlAttribute
     @XmlSchemaType(name = "dateTime")
     @XmlJavaTypeAdapter(value = DateAdapter.class)
-    private String to;
-    
-    /**
-     * @return the start time of the range.
-     */
-    public String getFrom() {
-        return from;
-    }
-    
-    /**
-     * @param from
-     *          the start time of the range.
-     */
-    public void setFrom(String from) {
+    @Getter private DateTime to;
+
+    public void setFrom(DateTime from) {
         this.from = from;
     }
-    
-    /**
-     * @return the end time of the range.
-     */
-    public String getTo() {
-        return to;
+
+    public void setFrom(String from) {
+        this.from = DateTransformer.fromHL7(from);
     }
 
-    /**
-     * @param to
-     *          the end time of the range.
-     */
-    public void setTo(String to) {
+    public void setTo(DateTime to) {
         this.to = to;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((from == null) ? 0 : from.hashCode());
-        result = prime * result + ((to == null) ? 0 : to.hashCode());
-        return result;
+    public void setTo(String to) {
+        this.to = DateTransformer.fromHL7(to);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        TimeRange other = (TimeRange) obj;
-        if (from == null) {
-            if (other.from != null)
-                return false;
-        } else if (!from.equals(other.from))
-            return false;
-        if (to == null) {
-            if (other.to != null)
-                return false;
-        } else if (!to.equals(other.to))
-            return false;
-        return true;
-    }
-    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

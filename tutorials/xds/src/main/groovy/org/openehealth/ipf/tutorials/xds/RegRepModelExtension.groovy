@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import java.text.SimpleDateFormat
+import org.joda.time.DateTime
+
 import org.apache.camel.model.ProcessorDefinition
 import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
@@ -104,9 +105,7 @@ class RegRepModelExtension {
     // Updates the last update time and ensures that the time is actually changed
     static ProcessorDefinition updateTimeStamp(ProcessorDefinition self) {
         self.process {
-            def formatter = new SimpleDateFormat('yyyyMMddHHmmss')
-            def newTime = formatter.format(new Date())
-            it.in.body.entry.lastUpdateTime = newTime
+            it.in.body.entry.lastUpdateTime = DateTime.now()
         }
     }
     

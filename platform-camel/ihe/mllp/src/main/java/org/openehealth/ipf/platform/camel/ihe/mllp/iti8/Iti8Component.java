@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8;
 
 import ca.uhn.hl7v2.ErrorCode;
+import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
@@ -32,7 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent
 public class Iti8Component extends MllpTransactionComponent<Iti8AuditDataset> {
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
-                "2.3.1", 
+                new Version[] {Version.V231},
                 "PIX adapter", 
                 "IPF",
                 ErrorCode.APPLICATION_INTERNAL_ERROR,

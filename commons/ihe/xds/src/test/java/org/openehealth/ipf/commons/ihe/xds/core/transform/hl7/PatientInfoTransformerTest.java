@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
@@ -53,7 +55,7 @@ public class PatientInfoTransformerTest {
         address.setStreetAddress("Jo Str. 3");
         patientInfo.setAddress(address);
 
-        patientInfo.setDateOfBirth("1234");
+        patientInfo.setDateOfBirth("19800102");
         patientInfo.setGender("A");
         
         List<String> hl7Data = transformer.toHL7(patientInfo);
@@ -61,7 +63,7 @@ public class PatientInfoTransformerTest {
         
         assertEquals("PID-3|abcdef", hl7Data.get(0));
         assertEquals("PID-5|Joman", hl7Data.get(1));
-        assertEquals("PID-7|1234", hl7Data.get(2));
+        assertEquals("PID-7|19800102", hl7Data.get(2));
         assertEquals("PID-8|A", hl7Data.get(3));
         assertEquals("PID-11|Jo Str. 3", hl7Data.get(4));
     }
@@ -85,7 +87,7 @@ public class PatientInfoTransformerTest {
         address.setStreetAddress("Jo Str. 3");
         patientInfo.setAddress(address);
 
-        patientInfo.setDateOfBirth("1234");
+        patientInfo.setDateOfBirth("19800102");
         patientInfo.setGender("A");
 
         List<String> hl7Data = transformer.toHL7(patientInfo);
@@ -93,7 +95,7 @@ public class PatientInfoTransformerTest {
 
         assertEquals("PID-3|abcdef~ghijkl", hl7Data.get(0));
         assertEquals("PID-5|Joman", hl7Data.get(1));
-        assertEquals("PID-7|1234", hl7Data.get(2));
+        assertEquals("PID-7|19800102", hl7Data.get(2));
         assertEquals("PID-8|A", hl7Data.get(3));
         assertEquals("PID-11|Jo Str. 3", hl7Data.get(4));
     }
@@ -117,7 +119,7 @@ public class PatientInfoTransformerTest {
         List<String> hl7PID = Arrays.asList(
             "PID-3|abcdef~fedcba",
             "PID-5|Joman",
-            "PID-7|1234",
+            "PID-7|19800102",
             "PID-8|A",
             "PID-9|Not used",
             "PID-11|Jo Str. 3");
@@ -128,7 +130,7 @@ public class PatientInfoTransformerTest {
         assertEquals("abcdef", patientInfo.getIds().get(0).getId());
         assertEquals("fedcba", patientInfo.getIds().get(1).getId());
         assertEquals("Joman", patientInfo.getName().getFamilyName());
-        assertEquals("1234", patientInfo.getDateOfBirth());
+        assertEquals(new DateTime(1980, 1, 2, 0, 0, DateTimeZone.UTC), patientInfo.getDateOfBirth());
         assertEquals("A", patientInfo.getGender());
         assertEquals("Jo Str. 3", patientInfo.getAddress().getStreetAddress());
     }

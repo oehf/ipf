@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -48,7 +49,11 @@ public class SpringConfigurationPostProcessor implements
             if (configurations != null && configurations.size() > 0) {
                 for (Object configuration : configurations) {
                     LOG.debug("Configuring extension {}", configuration);
-                    sc.configure(configuration);
+                    try {
+                        sc.configure(configuration);
+                    } catch (Exception e) {
+                        throw new BeanInitializationException("Cannot initialize " + configuration, e);
+                    }
                 }
             }
         }
@@ -85,6 +90,7 @@ public class SpringConfigurationPostProcessor implements
             LOG.info("Number of extension beans: " + springConfigurers.size());
             configure(registry);
             refreshed = true;
+
         } else {
             LOG.info("Spring context has already been initialized before");
         }

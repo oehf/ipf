@@ -53,7 +53,7 @@ public class ExtensionConfigurer<R extends Registry> extends
     }
 
     @Override
-    public void configure(Extension configuration) {
+    public void configure(Extension configuration) throws Exception {
         extensionActivator.activate(configuration);
         LOG.debug("Extension configured... {}", configuration);
     }

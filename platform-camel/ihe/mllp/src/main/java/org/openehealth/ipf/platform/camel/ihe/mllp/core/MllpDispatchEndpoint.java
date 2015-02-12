@@ -37,12 +37,18 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
         super(mllpComponent, wrappedEndpoint, config);
     }
 
-
     @Override
     protected List<Hl7v2Interceptor> createInitialConsumerInterceptorChain() {
         List<Hl7v2Interceptor> initialChain = new ArrayList<>();
         initialChain.add(new ConsumerStringProcessingInterceptor());
-        initialChain.add(new ConsumerDispatchingInterceptor(getCamelContext(), getConfig().getRoutes()));
+
+        ConsumerDispatchingInterceptor dispatcher = getConfig().getDispatcher();
+        if (dispatcher != null) {
+            dispatcher.addTransactionRoutes(getConfig().getRoutes());
+        } else {
+            dispatcher = new ConsumerDispatchingInterceptor(getCamelContext(), getConfig().getRoutes());
+        }
+        initialChain.add(dispatcher);
         return initialChain;
     }
 
