@@ -20,13 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBException;
 
+import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.Severity;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.GenericParser;
-import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.validation.MessageRule;
+import ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang3.Validate;
@@ -34,6 +35,7 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.gazelle.validation.core.CachingGazelleProfileRule;
 import org.openehealth.ipf.gazelle.validation.profile.ConformanceProfile;
 import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
+import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 
 /**
@@ -50,11 +52,16 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
  */
 public final class ConformanceProfileValidators {
 
-    private static final Parser FALLBACK = new GenericParser();
+    private static final HapiContext FALLBACK_HAPI_CONTEXT;
+
+    static {
+        FALLBACK_HAPI_CONTEXT = new DefaultHapiContext();
+        FALLBACK_HAPI_CONTEXT.setProfileStore(new GazelleProfileStore());
+        FALLBACK_HAPI_CONTEXT.setValidationContext(ValidationContextFactory.noValidation());
+    }
 
     private ConformanceProfileValidators() {
     }
-
 
     /**
      * Returns a validating Camel processor for a dedicated profile
@@ -127,8 +134,8 @@ public final class ConformanceProfileValidators {
             message = (Message)body;
         } else if (body instanceof String) {
             HapiContext context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
-            Parser parser = context != null ? context.getGenericParser() : FALLBACK;
-            message = parser.parse((String)body);
+            context = context != null ? context : FALLBACK_HAPI_CONTEXT;
+            message = new GenericParser(context).parse((String)body);
         } else {
             // try type conversion
             message = exchange.getIn().getBody(Message.class);
