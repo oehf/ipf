@@ -67,4 +67,4 @@ patientName = msg.findPID()[5][1].value  // equivalent, shorter, and group-struc
 ```
 
 [Groovy]: http://groovy.codehaus.org
-[hl7v2dslSmart]: hl7v2dslSmart.html
+[hl7v2dslSmart]: hl7v2dslSmartNavigation.html

@@ -120,7 +120,7 @@ IPF does not change or extend the [HAPI] on how to parse or render HL7 message.
 [hl7v2dslStructures]: hl7v2dslStructures.html
 [hl7v2dslFields]: hl7v2dslFields.html
 [hl7v2dslRepetitions]: hl7v2dslRepetitions.html
-[hl7v2dslSmart]: hl7v2dslSmart.html
+[hl7v2dslSmart]: hl7v2dslSmartNavigation.html
 [hl7v2dslIteration]: hl7v2dslIteration.html
 [hl7v2dslCreation]: hl7v2dslCreation.html
 [hl7v2dslManipulation]: l7v2dslManipulation.html
