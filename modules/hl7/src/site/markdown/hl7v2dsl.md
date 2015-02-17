@@ -10,7 +10,7 @@ The ´ipf-modules-hl7` library is basically a [Groovy extension module] that add
 model classes. These methods are used "under the hood" by the actual DSL.
 
 **Note**:
-IPF 2.x used a dedicated ´ipf-modules-hl7dsl` library and achieved the same goal by using adapters
+IPF 2.x used a dedicated `ipf-modules-hl7dsl` library and achieved the same goal by using adapters
 wrapped around the [HAPI] model classes. With IPF 3, this library and all wrappers have been deprecated, and we
 strongly recommend to migrate your applications.
 
@@ -37,13 +37,13 @@ Details are described [here][hl7v2dslStructures].
 
 #### Accessing fields and field values
 
-Obtaining fields is similar to obtaining groups and fields except that fields are often referred to by number instead
+Obtaining fields is similar to obtaining groups and segments except that fields are often referred to by number instead
 of by name. Fields are accessed like an array field. Components in a composite field are accessed like a two-dimensional array.
 Subcomponents are accessed like a three-dimensional array.
 
 ```groovy
 String messageType = message.MSH[9][1].value
-String street = message.PATIENT_RESULT.PATIENT.PID[11][1][1]
+String street = message.PATIENT_RESULT.PATIENT.PID[11][1][1].value
 ```
 
 Details are described [here][hl7v2dslFields].
@@ -93,9 +93,24 @@ Details are described [here][hl7v2dslIteration].
 
 ### Creating HL7 messages (and their internal structures)
 
+New messages can be created from scratch by just specifying HL7 event type, trigger event and version, i.e. it is not required to know
+about the object type to be instantiated.
+The message header fields are populated with the event type, trigger event, version, the current time as message date, and the common separators.
+
+Just as creating a message, segments and fields can be created without actually knowing their respective type.
+
+Details are described [here][hl7v2dslCreation].
+
 ### Manipulating HL7 messages
 
-### Rendering HL7 messages
+Message manipulation is as straightforward as read access. You navigate to a segment or field and assign it a new object or String value.
+
+Details are described [here][hl7v2dslManipulation].
+
+
+### Parsing and Rendering HL7 messages
+
+IPF does not change or extend the [HAPI] on how to parse or render HL7 message.
 
 
 [HAPI]: http://hl7api.sourceforge.net
@@ -107,3 +122,5 @@ Details are described [here][hl7v2dslIteration].
 [hl7v2dslRepetitions]: hl7v2dslRepetitions.html
 [hl7v2dslSmart]: hl7v2dslSmart.html
 [hl7v2dslIteration]: hl7v2dslIteration.html
+[hl7v2dslCreation]: hl7v2dslCreation.html
+[hl7v2dslManipulation]: l7v2dslManipulation.html
