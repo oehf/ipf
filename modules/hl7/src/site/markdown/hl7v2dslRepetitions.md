@@ -30,8 +30,9 @@ def phone = group.NK1(0)[5]()
 
 ### Counting Repetitions
 
-The number of repetitions are counted by simply using the `count()` method;
+The number of repetitions are counted by simply using the `count()` method:
 
+```
 // Use the DSL count method for counting the field repetitions                        
 int groups = message.count('PATIENT_RESULT')
 
