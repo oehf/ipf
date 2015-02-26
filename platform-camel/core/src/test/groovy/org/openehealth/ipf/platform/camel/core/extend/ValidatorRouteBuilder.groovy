@@ -29,28 +29,28 @@ class ValidatorRouteBuilder extends SpringRouteBuilder {
         onException(ValidationException.class).to('mock:error')
         
         from('direct:input1') 
-            .validate {body -> body == 'blah'}  
+            .verify {body -> body == 'blah'}
             .to('mock:output')
     
         from('direct:input2') 
-            .validate {throw new ValidationException('juhu')}  
+            .verify {throw new ValidationException('juhu')}
             .to('mock:output')
     
         from('direct:input3') 
-            .validate {body, profile -> 
+            .verify {body, profile ->
                 !profile // profile is null
             }  
             .to('mock:output')
     
         from('direct:input4') 
-            .validate {body, profile -> 
+            .verify {body, profile ->
                 profile == 'abcd'
             }
             .staticProfile('abcd')
             .to('mock:output')
 
         from('direct:input5') 
-            .validate {message, profile -> 
+            .verify {message, profile ->
                 profile == message.body
             }
             .input {exchange -> exchange.in}
@@ -58,17 +58,17 @@ class ValidatorRouteBuilder extends SpringRouteBuilder {
             .to('mock:output')
 
         from('direct:input6') 
-            .validate('sampleValidator')
+            .verify('sampleValidator')
             .staticProfile('bean')
             .to('mock:output')
     
         from('direct:input7') 
-            .validate(new TestValidator())
+            .verify(new TestValidator())
             .staticProfile('object')
             .to('mock:output')
             
         from('direct:input8') 
-            .validate {body, profile -> profile == 'derived'}
+            .verify {body, profile -> profile == 'derived'}
             .profile { it.in.headers.profile }
             .to('mock:output')
     }

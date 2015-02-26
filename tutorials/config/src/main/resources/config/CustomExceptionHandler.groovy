@@ -25,13 +25,12 @@ import org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilder
 class CustomExceptionHandler extends CustomRouteBuilder {
 
     void configure() {
+
         onException(ca.uhn.hl7v2.HL7Exception.class)
           .maximumRedeliveries(0)
           .handled(true)
-          .transform()
-          .exceptionMessage()
+          .transform().exceptionMessage()
           .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
-          .end()
           .setHeader(Exchange.FILE_NAME) { exhg ->
               "error-${System.currentTimeMillis()}.txt"
            }

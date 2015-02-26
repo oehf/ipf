@@ -90,23 +90,7 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
        from('direct:input9') 
            .validation {throw new RuntimeException('failed')}
            .to('mock:output')
-      
-       // -------------------------------------------------------------
-       // Use in combination with intercept() extension
-       // -------------------------------------------------------------
 
-        from('direct:validation-test-1')
-        .intercept(helper.validation('direct:positive-validator'))
-        .to('mock:output');
-
-        from('direct:validation-test-2')
-        .intercept(helper.validation('direct:fault-validator'))
-        .to('mock:output');
-
-        from('direct:validation-test-3')
-        .errorHandler(noErrorHandler())
-        .intercept(helper.validation('direct:error-validator'))
-        .to('mock:output');
 
         from('direct:positive-validator').errorHandler(noErrorHandler()).process(successValidator());
         from('direct:fault-validator').errorHandler(noErrorHandler()).process(failureValidator(false));

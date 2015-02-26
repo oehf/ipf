@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.osgi.route.file
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.spring.SpringRouteBuilder
+
 /**
  * @author Martin Krasser
  */
@@ -25,11 +26,11 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
 
          from('file:workspace/input')
              .initFlow(this.class.package.name).application('osgi-file')
-             .unmarshal().ghl7()
-             .validate().ghl7()
+             .unmarshal().hl7()
+             .verify().hl7()
              .transmogrify('admissionTransmogrifier')
              .dedupeFlow()
-             .marshal().ghl7()
+             .marshal().hl7()
              .to('jms:queue:delivery-file')
              
          from('jms:queue:delivery-file')

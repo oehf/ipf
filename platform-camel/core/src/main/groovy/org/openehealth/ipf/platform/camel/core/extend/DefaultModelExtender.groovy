@@ -15,9 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import org.springframework.beans.factory.InitializingBeanimport org.openehealth.ipf.commons.core.extend.DefaultActivator
+import org.springframework.beans.factory.InitializingBean
+import org.openehealth.ipf.commons.core.extend.DefaultActivator
 import org.openehealth.ipf.commons.core.extend.ExtensionActivator
-/**
+
+/**
  * Activates route model extensions that have been injected as 
  * routeModelExtensions list. Each element in the list is an object that
  * defines an instance closure named 'extensions'. For example:
@@ -47,6 +49,8 @@ import org.openehealth.ipf.commons.core.extend.ExtensionActivator
  * </pre>
  * 
  * @author Martin Krasser
+ *
+ * @deprecated use Extension Modules or Dynamic extensions
  */
 class DefaultModelExtender implements RouteModelExtender, InitializingBean {
     

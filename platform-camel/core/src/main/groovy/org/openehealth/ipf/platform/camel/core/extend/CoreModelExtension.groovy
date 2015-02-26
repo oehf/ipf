@@ -19,17 +19,17 @@ import org.apache.camel.Expression
 import org.apache.camel.Processor
 import org.apache.camel.builder.DataFormatClause
 import org.apache.camel.builder.ExpressionClause
-import org.apache.camel.model.ChoiceDefinition
-import org.apache.camel.model.OnExceptionDefinition
+import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.ProcessorDefinition
-import org.apache.camel.processor.DelegateProcessor
 import org.apache.camel.processor.aggregate.AggregationStrategy
 import org.openehealth.ipf.commons.core.modules.api.*
-import org.apache.camel.builder.RouteBuilder
+
 import java.util.concurrent.ExecutorService
 
 /**
  * @author Martin Krasser
+ *
+ * @deprecated use Extension Modules
  */
 class CoreModelExtension {
     
@@ -41,60 +41,8 @@ class CoreModelExtension {
         //  Core Extensions
         // ----------------------------------------------------------------
 
-        ProcessorDefinition.metaClass.process = { String processorBeanName ->
-            CoreExtensionModule.process(delegate, processorBeanName)
-        }
-
-        ProcessorDefinition.metaClass.process = { Closure processorLogic ->
-            CoreExtensionModule.process(delegate, processorLogic)
-        }
-            
-        ProcessorDefinition.metaClass.intercept = {DelegateProcessor delegateProcessor ->
-            CoreExtensionModule.intercept(delegate, delegateProcessor)
-        }
-
-        ProcessorDefinition.metaClass.intercept = { Closure interceptorLogic ->
-            CoreExtensionModule.intercept(delegate, interceptorLogic)
-        }
-
-        ProcessorDefinition.metaClass.intercept = { String interceptorBean ->
-            CoreExtensionModule.intercept(delegate, interceptorBean)
-        }
-        
         ProcessorDefinition.metaClass.unhandled = { ProcessorDefinition processorDefinition ->
             CoreExtensionModule.unhandled(delegate, processorDefinition)
-        }
-        
-        ProcessorDefinition.metaClass.filter = { Closure predicateLogic ->
-            CoreExtensionModule.filter(delegate, predicateLogic)
-        }
-        
-        ProcessorDefinition.metaClass.transform = { Closure transformExpression ->
-            CoreExtensionModule.transform(delegate, transformExpression)
-        }
-    
-        ProcessorDefinition.metaClass.setExchangeProperty = { String name, Closure propertyExpression ->
-            CoreExtensionModule.setExchangeProperty(delegate, name, propertyExpression)
-        }
-
-        ProcessorDefinition.metaClass.setHeader = { String name, Closure headerExpression ->
-            CoreExtensionModule.setHeader(delegate, name, headerExpression)
-        }
-
-        ProcessorDefinition.metaClass.setOutHeader = { String name, Closure headerExpression ->
-            CoreExtensionModule.setOutHeader(delegate, name, headerExpression)
-        }
-
-        ProcessorDefinition.metaClass.setFaultHeader = { String name, Closure headerExpression ->
-            CoreExtensionModule.setFaultHeader(delegate, name, headerExpression)
-        }
-
-        ProcessorDefinition.metaClass.setBody = {Closure bodyExpression ->
-            CoreExtensionModule.setBody(delegate, bodyExpression)
-        }
-        
-        ChoiceDefinition.metaClass.when = { Closure predicateLogic ->
-            CoreExtensionModule.when(delegate, predicateLogic)
         }
     
         // ----------------------------------------------------------------
@@ -112,42 +60,7 @@ class CoreModelExtension {
         ProcessorDefinition.metaClass.validation = { Closure validatorLogic ->
             CoreExtensionModule.validation(delegate, validatorLogic)
         }
-            
-        ProcessorDefinition.metaClass.enrich = { String resourceUri, Closure aggregationLogic ->
-            CoreExtensionModule.enrich(delegate, resourceUri, aggregationLogic)
-        }
-    
-        ProcessorDefinition.metaClass.ipf = { ->
-            CoreExtensionModule.ipf(delegate)
-	    }
-                
-         // ----------------------------------------------------------------
-         //  Platform DataFormatClause extensions
-         // ----------------------------------------------------------------
-         
-         DataFormatClause.metaClass.gnode = { String schemaResource, boolean namespaceAware ->
-             CoreExtensionModule.gnode(delegate, schemaResource, namespaceAware)
-         }
-        
-         DataFormatClause.metaClass.gnode = { boolean namespaceAware ->
-             CoreExtensionModule.gnode(delegate, namespaceAware)
-         }
-     
-         DataFormatClause.metaClass.gnode = { ->
-             CoreExtensionModule.gnode(delegate)
-         }
 
-         DataFormatClause.metaClass.gpath = { String schemaResource, boolean namespaceAware ->
-             CoreExtensionModule.gpath(delegate, schemaResource, namespaceAware)
-         }       
-        
-         DataFormatClause.metaClass.gpath = { boolean namespaceAware ->
-             CoreExtensionModule.gpath(delegate, namespaceAware)
-         }
-
-         DataFormatClause.metaClass.gpath = { ->
-             CoreExtensionModule.gpath(delegate)
-         }
      
          // ----------------------------------------------------------------
          //  Platform ExpressionClause extensions
@@ -160,14 +73,6 @@ class CoreModelExtension {
          ExpressionClause.metaClass.exceptionMessage = { ->
              CoreExtensionModule.exceptionMessage(delegate)
          }
-  
-        // ----------------------------------------------------------------
-        //  Platform ExceptionDefinition extensions
-        // ----------------------------------------------------------------
-        
-        OnExceptionDefinition.metaClass.onWhen = { Closure predicate ->
-            CoreExtensionModule.onWhen(delegate, predicate)
-        }
 
         // ----------------------------------------------------------------
         //  Adapter Extensions for RouteBuilder
@@ -175,26 +80,6 @@ class CoreModelExtension {
 
         org.apache.camel.spring.SpringRouteBuilder.metaClass.aggregationStrategy = { Aggregator aggregator ->
             CoreExtensionModule.aggregationStrategy(delegate, aggregator)
-        }
-
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.aggregationStrategy = { String aggregatorBeanName ->
-            CoreExtensionModule.aggregationStrategy(delegate, aggregatorBeanName)
-        }
-
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.aggregationStrategy = { Closure aggregationLogic ->
-            CoreExtensionModule.aggregationStrategy(delegate, aggregationLogic)
-        }
-        
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.predicate = { Predicate predicate ->
-            CoreExtensionModule.predicate(delegate, predicate)
-        }
-
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.predicate = { String predicateBeanName ->
-            CoreExtensionModule.predicate(delegate, predicateBeanName)
-        }
-
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.predicate = { Closure predicateLogic ->
-            CoreExtensionModule.predicate(delegate, predicateLogic)
         }
     
         // ----------------------------------------------------------------
@@ -215,22 +100,10 @@ class CoreModelExtension {
         
         ProcessorDefinition.metaClass.transmogrify = { ->
             CoreExtensionModule.transmogrify(delegate)
-        }        
-
-        ProcessorDefinition.metaClass.validate = { ->
-            CoreExtensionModule.validate(delegate)
         }
     
         ProcessorDefinition.metaClass.validate = { Validator validator ->
             CoreExtensionModule.validate(delegate, validator)
-        }
-        
-        ProcessorDefinition.metaClass.validate = { String validatorBeanName ->
-            CoreExtensionModule.validate(delegate, validatorBeanName)
-        }
-    
-        ProcessorDefinition.metaClass.validate = { Closure validatorLogic ->
-            CoreExtensionModule.validate(delegate, validatorLogic)
         }
     
         ProcessorDefinition.metaClass.parse = { Parser parser ->
@@ -267,6 +140,27 @@ class CoreModelExtension {
     
         DataFormatClause.metaClass.render = { String rendererBeanName ->
             CoreExtensionModule.render(delegate, rendererBeanName)
+        }
+
+        // ----------------------------------------------------------------
+        //  Adapter Extensions for ProcessorDefinition
+        // ----------------------------------------------------------------
+
+
+        ProcessorDefinition.metaClass.verify = { ->
+            CoreExtensionModule.verify(delegate)
+        }
+
+        ProcessorDefinition.metaClass.verify = { Validator validator ->
+            CoreExtensionModule.verify(delegate, validator)
+        }
+
+        ProcessorDefinition.metaClass.verify = { String validatorBeanName ->
+            CoreExtensionModule.verify(delegate, validatorBeanName)
+        }
+
+        ProcessorDefinition.metaClass.verify = { Closure validatorLogic ->
+            CoreExtensionModule.verify(delegate, validatorLogic)
         }
 
         // ----------------------------------------------------------------

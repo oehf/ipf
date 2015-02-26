@@ -15,33 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.core.builder;
 
-import javax.xml.transform.stream.StreamSource;
-
 import org.apache.camel.Endpoint;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.Builder;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.apache.camel.util.CamelContextHelper;
-import org.openehealth.ipf.commons.core.modules.api.Aggregator;
-import org.openehealth.ipf.commons.core.modules.api.Converter;
-import org.openehealth.ipf.commons.core.modules.api.Parser;
-import org.openehealth.ipf.commons.core.modules.api.Predicate;
-import org.openehealth.ipf.commons.core.modules.api.Renderer;
-import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
-import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.core.modules.api.*;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
-import org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter;
-import org.openehealth.ipf.platform.camel.core.adapter.ConverterAdapter;
-import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter;
-import org.openehealth.ipf.platform.camel.core.adapter.ParserAdapter;
-import org.openehealth.ipf.platform.camel.core.adapter.PredicateAdapter;
-import org.openehealth.ipf.platform.camel.core.adapter.RendererAdapter;
-import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
-import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.*;
 import org.openehealth.ipf.platform.camel.core.process.Enricher;
 import org.openehealth.ipf.platform.camel.core.process.Validation;
+
+import javax.xml.transform.stream.StreamSource;
 
 /**
  * Helper class for creating IPF extensions in Java-based route definitions.
@@ -222,6 +209,7 @@ public class RouteHelper {
     public AggregatorAdapter aggregationStrategy(Aggregator aggregator) {
         return new AggregatorAdapter(aggregator);
     }
+
     
     /**
      * Creates a new {@link AggregatorAdapter} that adapts a

@@ -24,6 +24,7 @@ import org.apache.camel.processor.aggregate.AggregationStrategy;
  * An aggregation strategy that delegates to a {@link Closure}.
  * 
  * @author Martin Krasser
+ *
  */
 public class DelegatingAggregationStrategy extends ClosureAdapter implements AggregationStrategy {
 

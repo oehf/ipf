@@ -15,15 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.flow.extend
 
-import org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder
 import org.apache.camel.model.ProcessorDefinition
 
 /**
  * @author Martin Krasser
  */
 class FlowModelExtension {
-    
-    RouteBuilder routeBuilder // for config backwards-compatibility only (not used internally)
      
     static extensions = {
 

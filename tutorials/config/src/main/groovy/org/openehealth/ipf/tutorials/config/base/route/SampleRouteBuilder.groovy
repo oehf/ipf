@@ -35,12 +35,12 @@ class SampleRouteBuilder extends CustomRouteBuilder {
 		
 		from('jetty:http://0.0.0.0:8800/map')
             .convertBodyTo(String.class)
-            .unmarshal().ghl7()
-            .validate().ghl7()
+            .unmarshal().hl7()
+            .verify().hl7()
 			.to('direct:map')
 
         from('direct:map')
-            .marshal().ghl7()
+            .marshal().hl7()
             .to('direct:file-save')
             .transmogrify{'map response ok!'}
 		

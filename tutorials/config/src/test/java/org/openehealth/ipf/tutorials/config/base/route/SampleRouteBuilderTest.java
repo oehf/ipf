@@ -77,7 +77,8 @@ public class SampleRouteBuilderTest {
             producerTemplate.requestBody(JETTY_URI + "/map", "BLAH");
         } catch (Exception e) {
             assertTrue(e.getCause() instanceof HttpOperationFailedException);
-            assertTrue(((HttpOperationFailedException)e.getCause()).getResponseBody().startsWith("Determine encoding"));
+            String response = ((HttpOperationFailedException)e.getCause()).getResponseBody();
+            assertTrue(response.startsWith("Message encoding is not recognized"));
             assertEquals(400, ((HttpOperationFailedException)e.getCause()).getStatusCode());            
         }
     }

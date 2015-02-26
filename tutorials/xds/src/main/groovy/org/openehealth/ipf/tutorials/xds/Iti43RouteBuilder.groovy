@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
+import org.apache.camel.Exchange
+import org.apache.camel.processor.aggregate.AbstractListAggregationStrategy
+
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
 import org.apache.camel.spring.SpringRouteBuilder
@@ -41,11 +44,22 @@ class Iti43RouteBuilder extends SpringRouteBuilder {
     		.process(iti43RequestValidator())
     		.convertBodyTo(RetrieveDocumentSet.class)
     		// Retrieve each requested document and aggregate them in a list
-    		.ipf().split { it.in.body.documents }
-    		.aggregationStrategy { target, next -> target.out.body.addAll(next.out.body) }
-    		.retrieve()    		
-    		.end()
+    		.split { it.in.body.documents }
+                .aggregationStrategy(new RetrievedDocumentAggregator())
+    		    .retrieve()
+                .end()
             // Create success response
-            .transform { new RetrievedDocumentSet(Status.SUCCESS, it.in.body) }
+            .transform {
+                new RetrievedDocumentSet(Status.SUCCESS, it.in.body)
+            }
+
 	}
+
+    private class RetrievedDocumentAggregator extends AbstractListAggregationStrategy<RetrievedDocument> {
+
+        @Override
+        RetrievedDocument getValue(Exchange exchange) {
+            exchange.in.getBody(RetrievedDocument.class)
+        }
+    }
 }

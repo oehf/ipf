@@ -22,7 +22,7 @@ package org.openehealth.ipf.commons.core.extend.config;
  * This is an alternative to the standard Extension Module mechanism provided by Groovy
  * Instead of a module descriptor in META-INF/services you simply define a Spring bean that
  * extends this type and adheres to the structure described in
- * {@link http://docs.codehaus.org/display/GROOVY/Creating+an+extension+module}.
+ * http://docs.codehaus.org/display/GROOVY/Creating+an+extension+module.
  * </p><p>
  * This interface defines method that provide information that the module descriptor
  * would usually deliver. Bean instance of this type are picked up by the

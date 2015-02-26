@@ -28,26 +28,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         <camel:routeBuilder ref="routeBuilder" />
     </camel:camelContext>
 
-    <bean id="routeBuilder" depends-on="routeModelExtender"
+    <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.flow.extend.GroovySplitRouteBuilder">
-    </bean>
-
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="flowModelExtension"
-        class="org.openehealth.ipf.platform.camel.flow.extend.FlowModelExtension">
-    </bean>
-
-    <bean id="routeModelExtender" 
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-                <ref bean="flowModelExtension" />
-            </list>
-        </property>
     </bean>
 
 </beans>

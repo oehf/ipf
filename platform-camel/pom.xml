@@ -14,11 +14,10 @@
 
     <modules>
         <module>core</module>
+        <module>core-legacy</module>
         <module>flow</module>
         <module>ihe</module>
         <module>hl7</module>
-        <!-- IPF 3.0 : removed -->
-        <!-- <module>test</module> -->
         <module>cda</module>
         <module>mdht</module>
     </modules>

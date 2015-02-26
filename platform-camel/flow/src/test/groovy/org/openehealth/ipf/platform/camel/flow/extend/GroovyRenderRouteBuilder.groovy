@@ -36,7 +36,7 @@ class GroovyRenderRouteBuilder extends SpringRouteBuilder {
                 .application("test")
                 .renderer('initRenderer')
                 .outType(String.class)
-            .validate { body ->
+            .verify { body ->
                 if (body == 'error') {
                     throw new Exception('message rejected')
                 }

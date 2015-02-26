@@ -44,7 +44,7 @@ class Ghl7RouteBuilder extends SpringRouteBuilder {
             
         from("direct:input4")
             .unmarshal().ghl7()
-            .validate().ghl7()
+            .verify().ghl7()
             .to('mock:output')
 
         from("direct:input5")

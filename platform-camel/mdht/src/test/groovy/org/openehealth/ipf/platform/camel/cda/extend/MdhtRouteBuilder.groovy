@@ -40,7 +40,7 @@ class MdhtRouteBuilder extends SpringRouteBuilder {
                 .to('mock:error')
                 .end()
             .unmarshal(mdht)
-            .validate().mdht()
+            .verify().mdht()
             .to('mock:output')
             
         from("direct:input4")
@@ -48,7 +48,7 @@ class MdhtRouteBuilder extends SpringRouteBuilder {
                 .to('mock:error')
                 .end()
             .unmarshal(mdht)
-            .validate().mdht()
+            .verify().mdht()
             .to('mock:output')             
     }
     

@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.flow.model;
 
 import groovy.lang.Closure;
-
 import org.apache.camel.Expression;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
@@ -25,31 +24,51 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 /**
  * Models IPF DSL extensions that conflict with Camel DSL elements. Usage
  * example:
- * 
+ *
  * <pre>
  * from('direct:input').ipf().split()...
  * </pre>
- * 
+ *
  * This selects the IPF splitter rather than the Camel splitter.
- * 
+ *
  * @author Martin Krasser
  */
-public class IpfDefinition extends org.openehealth.ipf.platform.camel.core.model.IpfDefinition {
+public class IpfDefinition {
 
-	public IpfDefinition(ProcessorDefinition<RouteDefinition> processorDefinition) {
-		super(processorDefinition);
-	}
-	
-	@Override
+    private final ProcessorDefinition<RouteDefinition> processorDefinition;
+
+    public IpfDefinition(ProcessorDefinition<RouteDefinition> processorDefinition) {
+        this.processorDefinition = processorDefinition;
+    }
+
+    /**
+     * Splits an exchange by evaluating the expression
+     *
+     * @param splitExpression the expression that returns the collection of sub exchanges
+     */
     public SplitterDefinition split(Expression splitExpression) {
-        SplitterDefinition answer = new SplitterDefinition(splitExpression);        
-        getProcessorDefinition().addOutput(answer);
+        SplitterDefinition answer = new SplitterDefinition(splitExpression);
+        processorDefinition.addOutput(answer);
         return answer;
     }
-	
-	@Override
-    public SplitterDefinition split(Closure splitLogic) {
-    	return split(new DelegatingExpression(splitLogic));
+
+    /**
+     * Splits an exchange by evaluating the expression defined by a bean reference
+     *
+     * @param splitExpressionBeanName the name of an expression bean that returns the collection of sub exchanges
+     */
+    public SplitterDefinition split(String splitExpressionBeanName) {
+        SplitterDefinition answer = new SplitterDefinition(splitExpressionBeanName);
+        processorDefinition.addOutput(answer);
+        return answer;
     }
-	
+
+    /**
+     * Splits an exchange by evaluating the split logic
+     *
+     * @param splitLogic a closure implementing the split logic that returns the collection of sub exchanges
+     */
+    public SplitterDefinition split(Closure splitLogic) {
+        return split(new DelegatingExpression(splitLogic));
+    }
 }

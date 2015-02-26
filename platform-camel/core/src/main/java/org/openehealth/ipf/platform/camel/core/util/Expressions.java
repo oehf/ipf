@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.core.util;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
+import org.openehealth.ipf.commons.core.modules.api.ValidationException;
+import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.platform.camel.core.xml.MarkupBuilder;
 
 /**
@@ -94,6 +96,22 @@ public class Expressions {
                 return type.cast(throwable == null ? null : throwable.getMessage());
             }
         };
+    }
+
+    public static <S, P> Expression validatorExpression(final Validator<S, P> validator, final P profile, final Class<? extends S> clazz) {
+        return new Expression() {
+            @Override
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
+                try {
+                    S body = exchange.getIn().getBody(clazz);
+                    validator.validate(body, profile);
+                    return type.cast(true);
+                } catch (ValidationException e) {
+                    return type.cast(false);
+                }
+            }
+        };
+
     }
 
     private static Throwable exception(Exchange exchange) {

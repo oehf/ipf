@@ -36,13 +36,12 @@ class RegRepModelExtension {
     
     static ProcessorDefinition retrieve(ProcessorDefinition self) {
         self.transform { 
-            [ new RetrievedDocument(dataStore().get(
+            new RetrievedDocument(dataStore().get(
                 it.in.body.documentUniqueId), 
                 it.in.body, 
                 null, 
                 null, 
-                'text/plain') 
-            ]
+                'text/plain')
         }
     }
     
@@ -67,7 +66,7 @@ class RegRepModelExtension {
     }
     
     static ProcessorDefinition splitEntries(ProcessorDefinition self, entriesClosure) {
-        self.ipf().split { exchange ->
+        self.split { exchange ->
             def body = exchange.in.body
             def entries = entriesClosure(body) 
             entries.collect { entry -> body.clone() + [entry: entry] }
