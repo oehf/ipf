@@ -103,8 +103,8 @@ required dependencies, usage and parameters.
 | [ITI-16]     | XDS.a         | Query Registry                       | `xds-iti16`             | SOAP/HTTP(S)  | ebXML
 | [ITI-17]     | XDS.a         | Retrieve Document                    | `xds-iti17`             | HTTP(S)       | HTTP
 | [ITI-18]     | XDS.a+b       | Registry Stored Query                | `xds-iti18`             | SOAP/HTTP(S)  | ebXML
-| [ITI-19]     | ATNA          | Authenticate Node                    | n/a                     | n/a           | n/a
-| [ITI-20]     | ATNA          | Record Audit Event                   | n/a                     | Syslog (+TLS) | RFC-3881
+| ITI-19       | ATNA          | Authenticate Node                    | n/a                     | n/a           | n/a
+| ITI-20       | ATNA          | Record Audit Event                   | n/a                     | Syslog (+TLS) | RFC-3881
 | [ITI-21]     | PDQ           | Patient Demographics Query           | `pdq-iti21`             | MLLP(S)       | HL7 v2.5
 | [ITI-22]     | PDQ           | Patient Demographics and Visit Query | `pdq-iti22`             | MLLP(S)       | HL7 v2.5
 | [ITI-38]     | XCA           | Cross-Gateway Query                  | `xca-iti38`             | SOAP/HTTP(S)  | ebXML
@@ -134,35 +134,33 @@ required dependencies, usage and parameters.
 [ITI-8]: mllp/iti8.html
 [ITI-9]: mllp/iti9.html
 [ITI-10]: mllp/iti10.html
-[ITI-14]: http://www.google.de
-[ITI-15]: http://www.google.de
-[ITI-16]: http://www.google.de
-[ITI-17]: http://www.google.de
-[ITI-18]: http://www.google.de
-[ITI-19]: http://www.google.de
-[ITI-20]: http://www.google.de
+[ITI-14]: xds/iti14.html
+[ITI-15]: xds/iti15.html
+[ITI-16]: xds/iti16.html
+[ITI-17]: xds/iti17.html
+[ITI-18]: xds/iti18.html
 [ITI-21]: mllp/iti21.html
 [ITI-22]: mllp/iti22.html
-[ITI-38]: http://www.google.de
-[ITI-39]: http://www.google.de
-[ITI-41]: http://www.google.de
-[ITI-42]: http://www.google.de
-[ITI-43]: http://www.google.de
-[ITI-44]: http://www.google.de
-[ITI-45]: http://www.google.de
-[ITI-46]: http://www.google.de
-[ITI-47]: http://www.google.de
-[ITI-51]: http://www.google.de
-[ITI-55]: http://www.google.de
-[ITI-56]: http://www.google.de
-[ITI-57]: http://www.google.de
-[ITI-61]: http://www.google.de
-[ITI-62]: http://www.google.de
-[ITI-63]: http://www.google.de
+[ITI-38]: xds/iti38.html
+[ITI-39]: xds/iti39.html
+[ITI-41]: xds/iti41.html
+[ITI-42]: xds/iti42.html
+[ITI-43]: xds/iti43.html
+[ITI-44]: hl7v3/iti44.html
+[ITI-45]: hl7v3/iti45.html
+[ITI-46]: hl7v3/iti46.html
+[ITI-47]: hl7v3/iti47.html
+[ITI-51]: xds/iti51.html
+[ITI-55]: hl7v3/iti55.html
+[ITI-56]: hl7v3/iti56.html
+[ITI-57]: xds/iti57.html
+[ITI-61]: xds/iti61.html
+[ITI-62]: xds/iti62.html
+[ITI-63]: xds/iti63.html
 [ITI-64]: mllp/iti64.html
-[RAD-69]: http://www.google.de
-[RAD-75]: http://www.google.de
-[PCC-1]: http://www.google.de
-[PCD-01]: http://www.google.de
+[RAD-69]: xds/rad69.html
+[RAD-75]: xds/rad75.html
+[PCC-1]: hl7v3/pcc1.html
+[PCD-01]: hl7v2ws/pcd01.html
 [All]: mllp/mllpDispatch.html
 [Custom]: mllp/mllpCustom.html

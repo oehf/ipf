@@ -27,7 +27,7 @@ In a Maven-based environment, the following dependency should be registered in `
 
 ### Endpoint URI Format
 
-The endpoint URI format of the `pix-iti10` component is identical for producers and consumers:
+The endpoint URI format of the `xpid-iti64` component is identical for producers and consumers:
 
 ```
 xpid-iti64://hostname:port[?parameters]
