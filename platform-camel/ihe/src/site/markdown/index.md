@@ -1,34 +1,84 @@
 
 ## IPF components for eHealth integration profiles
 
-IPF provides support for several eHealth profiles, primarily from the [IHE](http://www.ihe.net) ITI domain.
+IPF provides support for several eHealth profiles, primarily from the [IHE] ITI domain.
 The basic idea is to offer a [Camel component](http://camel.apache.org/components.html) for each profile transaction.
 These components ensure that the technical requirements of the profile are met by applications built on top of the
 IPF eHealth Integration Profiles support.
 
+### Context
+
+Core concepts of IHE profiles are:
+
+| Concept          | IHE Definition (Technical Framework, Volume 1) | Description  | Example
+|------------------|------------------------------------------------|--------------|--------
+| Actor            | Actors are information systems or components of information systems that produce, manage, or act on categories of information required by operational activities in the enterprise. | An application role in a distributed system | Patient Identity Cross-Reference Manager aka PIX Manager.
+| Transaction      | Transactions are interactions between actors that communicate the required information through standards-based messages. 	                                                         | A message exchange between actors           | Patient Identity Deed between the Patient Identity Source and the PIX Manager
+| Profile          | Each integration profile is a representation of a real-world capability that is supported by a set of actors that interact through transactions.                                    | A set of actors and transactions            | PIX profile
+
+IPF is a development framework with special support for the implementation of IHE concepts (i.e. profiles).
+This is illustrated with an abstract IHE profile the figure below.
+
+The profile defines three actors and two transactions. Transaction 1 is between actor 1 and actor 2 whereas transaction 2 is between actor 1 and actor 3.
+
+![Abstract IHE Profile](images/ihe-1.JPG)
+
+With IPF, these IHE concepts are mapped to [Camel components](http://camel.apache.org/component.html), partly by reusing
+or extended existing Camel components or by providing [custom components](http://camel.apache.org/writing-components.html).
+
+| Concept          | Mapping to the IPF/Camel programming model
+|------------------|----------------------------------------------------------------------
+| Actor            | Producer or Consumer of a [Camel endpoint](http://camel.apache.org/endpoint.html)
+| Transaction      | Camel component, e.g. `pix-iti8`
+| Profile          | Group of Camel components, e.g. `pix`, `xds`
+
+
+IHE Profiles are grouped by their underlying technical foundation, particularly by their *message format* and
+*transport protocol* into IPF modules that can be included as dependencies in the Maven project descriptor:
+
+| Module                           | Provided IHE transactions
+|----------------------------------|-----------------------------------------
+| ipf-platform-camel-ihe-mllp      | [ITI-8], [ITI-9], [ITI-10], [ITI-21], [ITI-22], [ITI-46]
+| ipf-platform-camel-ihe-xds       | [ITI-14], [ITI-15], [ITI-16], [ITI-17], [ITI-18], [ITI-38], [ITI-39], [ITI-41], [ITI-42], [ITI-43], [ITI-51], [ITI-57], [ITI-61], [ITI-62], [ITI-63], [RAD-69], [RAD-75]
+| ipf-platform-camel-ihe-hl7v3     | [ITI-44], [ITI-45], [ITI-46], [ITI-47], [ITI-55], [ITI-56], [PCC-1]
+| ipf-platform-camel-ihe-hl7v2ws   | [PCD-01]
 
 ### Example
 
+An implementation of a *Patient Identity Cross-Reference Manager* actor for the *Patient Identity Feed* (PIX ITI-8) transaction
+shall be created. PIX ITI-8 is a HL7v2-based transaction using MLLP as transport protocol.
 Receiving actors are implemented as a [Camel consumer](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Consumer.html).
-The basic pattern is to specify the component name in the URI parameter of a `from`-clause at the beginning of a Camel route:
+
+Thus, the following dependency must be registered in `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>org.openehealth.ipf.platform-camel</groupId>
+    <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
+    <version>${ipf-version}</version>
+</dependency>
+```
+
+The basic pattern for consumers is to specify the component name in the URI parameter of a `from`-clause at the beginning of a Camel route:
 
 ```java
 // IHEConsumer.java
 from("pix-iti8://0.0.0.0:8777?parameters....")
   .process(...)
-  // process the incoming request and create a response
+  // process the incoming HL7v2 request and create a response
 ```
 
-While stepping through the route, a proper response (or an Exception) must be generated that is sent back to the caller.
+While stepping through the Camel route, a proper response (or an Exception) must be generated that is sent back to the caller.
 
-Sending actors are implemented as a [Camel producer](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Producer.html).
-The basic pattern is to specify the component name in the URI parameter of a to-clause at the end of a Camel route:
+On the other side of the transaction, sending actors (for ITI-8 the *Patient Identity Source*) are implemented as a
+[Camel producer](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Producer.html).
+The basic pattern for producers is to specify the component name in the URI parameter of a to-clause at the end of a Camel route:
 
 ```java
 // IHEProducer.java
 from(...)
   .process(...)
-  // create a request
+  // create a ITI-8 request (i.e. HL7v2 message)
   .to("pix-iti8://mpiserver.com:8888?parameters....")
   // optionally process the response
 ```
@@ -164,3 +214,4 @@ required dependencies, usage and parameters.
 [PCD-01]: hl7v2ws/pcd01.html
 [All]: mllp/mllpDispatch.html
 [Custom]: mllp/mllpCustom.html
+[IHE]: http://www.ihe.net

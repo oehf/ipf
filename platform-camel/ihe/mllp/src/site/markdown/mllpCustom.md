@@ -12,7 +12,7 @@ Both consumer and producer sides are supported. There is no mapping to a particu
 
 ### Dependencies
 
-In a Maven-based environment, the following dependency should be registered in `pom.xml`:
+In a Maven-based environment, the following dependency must be registered in `pom.xml`:
 
 ```xml
 <dependency>

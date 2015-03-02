@@ -120,5 +120,5 @@ all extension modules by default before any other configuration takes place.
 
 [Custom Mappings] : commons/map/customMappings.html
 [Custom HL7 Model Classes] : modules/hl7/customModelClasses.html
-[Custom Groovy Extension Modules] :
+[Custom Groovy Extension Modules] : commons/core/customExtensions.html
 [Custom Route Builders] :

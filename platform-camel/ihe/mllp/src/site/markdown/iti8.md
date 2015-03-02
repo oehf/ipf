@@ -16,7 +16,7 @@ Consumer side corresponds to both *Patient Identifier Cross-reference Manager* a
 
 ### Dependencies
 
-In a Maven-based environment, the following dependency should be registered in `pom.xml`:
+In a Maven-based environment, the following dependency must be registered in `pom.xml`:
 
 ```xml
 <dependency>

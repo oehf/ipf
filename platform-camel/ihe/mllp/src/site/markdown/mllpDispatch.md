@@ -11,7 +11,7 @@ Only consumer side is supported. There is no mapping to a particular actor.
 
 ### Dependencies
 
-In a Maven-based environment, the following dependency should be registered in `pom.xml`:
+In a Maven-based environment, the following dependency must be registered in `pom.xml`:
 
 ```xml
 <dependency>

@@ -14,13 +14,12 @@ systems in the eHealth domain. IPF provides domain-specific languages (DSLs) for
 in general-purpose as well as healthcare-specific integration solutions.
 
 
-
 ## Use it
 
 IPF uses [Maven](http://maven.apache.org) as build tool.
 Depending on your project needs you might want to define dependencies to various IPF artifacts. For example,
 the following statements will include all dependencies needed to work with IPF interfaces for MLLP-based
-HL7v2 transactions:
+HL7v2 [IHE][ihe] transactions:
 
 
 ```xml
@@ -32,6 +31,34 @@ HL7v2 transactions:
 ```
 
 Now you can expose or consume IHE-compliant transaction endpoints.
+
+
+## Features
+
+The following table summarizes the IPF features related to the eHealth domain:
+
+| Feature                                         | Description
+|-------------------------------------------------|-----------------------------------------------
+| [Support for eHealth integration profiles]      | A set of components for creating actor interfaces as specified in IHE and Continua integration profiles. IPF currently supports creation of actor interfaces for the IHE profiles XDS.a, XDS.b, PIX, PDQ, PIXv3, PDQv3, QED, XCPD, XCA, XCA-I, XCF, XPID, PCD, as well as for Continua profiles HRN and WAN.
+| [HL7 Message processing]                        | Basis for HL7 message processing is the HL7v2 DSL. These provides the basis for implementing [HL7 message processing Camel routes].
+| [CDA Support]                                   | Wrapping a number of CDA-related libraries, providing the basis for implementing [CDA processing Camel routes].
+
+
+Other IPF features provide part of the underlying foundation or supporting functionality:
+
+| Feature                                         | Description
+|-------------------------------------------------|-----------------------------------------------
+| [Core Features]                                 | Domain-neutral message processors and DSL extensions usable for general-purpose message processing.
+| [Code System Mapping]                           | A simplistic mechanism for mapping code values between code systems
+| [Dynamic Feature Registration]                  | Aids in building up modular integration solutions where each module contributes routes, services etc. to the overall application
+
+
+IPF is prepared to run in OSGi environments as well:
+
+| Feature                                         | Description
+|-------------------------------------------------|-----------------------------------------------
+| [OSGi Support]                                  | Enables the deployment of IPF modules (bundles) to OSGi platforms. IPF service bundles register platform services at the OSGi service registry for consumption by IPF applications
+
 
 
 ## Contribute
@@ -49,3 +76,11 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [contribute]: contribute.html
 [ipf-github]: http://github.com/oehf/ipf
 [ihe]: http://www.ihe.net
+
+[Support for eHealth integration profiles]: platform-camel/ihe/index.html
+[HL7 Message processing]: modules/hl7/index.html
+[HL7 message processing Camel routes]: platform-camel/hl7/index.html
+[CDA Support]: modules/cda/index.html
+[CDA processing Camel routes]: platform-camel/cda/index.html
+[Core Features]: platform-camel/core/index.html
+[Code System Mapping]: commons/map/index.html

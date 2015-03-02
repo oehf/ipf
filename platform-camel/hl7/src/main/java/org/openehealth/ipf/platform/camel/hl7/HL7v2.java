@@ -107,18 +107,31 @@ public final class HL7v2 {
      * @return a validating Camel processor for a message
      */
     public static Processor validatingProcessor() {
+        return validatingProcessor(null);
+    }
+
+    /**
+     * Returns a validating Camel processor for a message. The actual validation rules
+     * to be used is defined in the message's HapiContext. Unlike {@link #messageConforms()}, this processor
+     * throws an exception with details about the validation result instead of just returning true or false.
+     *
+     * @param context HAPI context
+     *
+     * @return a validating Camel processor for a message
+     */
+    public static Processor validatingProcessor(final HapiContext context) {
         return new Processor() {
 
             @Override
             public void process(Exchange exchange) throws Exception {
                 Message msg = bodyMessage(exchange);
-                HapiContext context = msg.getParser().getHapiContext();
+                HapiContext ctx = context == null ? msg.getParser().getHapiContext() : context;
 
                 // We could also write an exception handler on top of SimpleValidationExceptionHandler that
                 // encapsulates the behavior below, but that may restrict custom validation...
-                SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(context);
+                SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(ctx);
                 handler.setMinimumSeverityToCollect(Severity.ERROR);
-                if (context.<Boolean>getMessageValidator().validate(msg, handler)) {
+                if (ctx.<Boolean>getMessageValidator().validate(msg, handler)) {
                     throw new ValidationException("Message validation failed", handler.getExceptions());
                 }
             }

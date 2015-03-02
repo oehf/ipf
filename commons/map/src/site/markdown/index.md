@@ -22,7 +22,7 @@ You are free to implement and use your own service as long as it implements the
 
 ### Dependencies
 
-In a Maven-based environment, the following dependency should be registered in `pom.xml`:
+In a Maven-based environment, the following dependency must be registered in `pom.xml`:
 
 ```xml
 <dependency>
