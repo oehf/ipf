@@ -13,7 +13,7 @@
 
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.osgi.config.atna.*</osgi.export.pkg>
-        <osgi.fragment.host>org.openhealthtools.ihe.atna-bundle</osgi.fragment.host>
+        <osgi.fragment.host>org.openehealth.ipf.oht.atna.ipf-oht-atna-osgi</osgi.fragment.host>
     </properties>
 
     <dependencies>
