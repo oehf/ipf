@@ -96,7 +96,7 @@
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
         <ipf-gazelle-version>1.0.3</ipf-gazelle-version>
         <ipf-oht-atna-version>3.0.0</ipf-oht-atna-version>
-        <jaxb-impl-version>2.2.11</jaxb-impl-version>
+        <jaxb-impl-version>2.2.7</jaxb-impl-version>
         <jasypt-version>1.9.2</jasypt-version>
         <jboss-logging-version>3.2.1.Final</jboss-logging-version>
         <jboss-logging-annotations-version>1.2.0.Final</jboss-logging-annotations-version>

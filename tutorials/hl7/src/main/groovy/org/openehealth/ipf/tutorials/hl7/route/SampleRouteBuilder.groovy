@@ -33,8 +33,13 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
 
         // Set up HL7 context with the custom validation rules
         HapiContext context = new DefaultHapiContext(lookup(SampleRulesBuilder))
+        context.getParserConfiguration().setValidating(false)
         HL7DataFormat hl7 = new HL7DataFormat()
         hl7.setHapiContext(context)
+
+        from('file:target/input')
+                .convertBodyTo(String)
+                .to('direct:input')
 
         from('direct:input')
                 .unmarshal(hl7)

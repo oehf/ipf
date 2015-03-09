@@ -16,7 +16,6 @@
 package org.openehealth.ipf.tutorials.config.base.route
 
 import org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilder
-import groovy.xml.MarkupBuilder
 
 /**
  * 

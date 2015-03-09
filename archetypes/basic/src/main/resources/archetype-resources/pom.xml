@@ -14,14 +14,14 @@
     <properties>
         <!-- libraries -->
         <ipf-version>${archetypeVersion}</ipf-version>
-        <lombok-version>1.12.6</lombok-version>
+        <lombok-version>1.14.8</lombok-version>
 
         <!-- plugins -->
         <assembly-plugin-version>2.4</assembly-plugin-version>
-        <compiler-plugin-version>3.0</compiler-plugin-version>
-        <eclipse-plugin-version>2.8</eclipse-plugin-version>
-        <groovy-eclipse-batch-version>2.1.8-01</groovy-eclipse-batch-version>
-        <groovy-eclipse-compiler-version>2.7.0-01</groovy-eclipse-compiler-version>
+        <compiler-plugin-version>3.2</compiler-plugin-version>
+        <eclipse-plugin-version>2.9</eclipse-plugin-version>
+        <groovy-eclipse-batch-version>2.3.7-01</groovy-eclipse-batch-version>
+        <groovy-eclipse-compiler-version>2.9.0-01</groovy-eclipse-compiler-version>
     </properties>
 
     <dependencyManagement>
@@ -80,8 +80,8 @@
 	                <version>${symbol_dollar}{compiler-plugin-version}</version>
 	                <configuration>
 						<compilerId>groovy-eclipse-compiler</compilerId>
-	                    <source>1.6</source>
-	                    <target>1.6</target>
+	                    <source>1.7</source>
+	                    <target>1.7</target>
 						<fork>true</fork>
 						<verbose>false</verbose>
 						<compilerArguments>
@@ -169,56 +169,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>openehealth.releases</id>
-            <name>Open eHealth Maven Repository</name>
-            <url>http://repo.openehealth.org/maven2/releases</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>openehealth.snapshots</id>
-            <name>Open eHealth Maven Repository</name>
-            <url>http://repo.openehealth.org/maven2/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>codehaus nexus</id>
-            <name>Codehaus Nexus Maven Repository</name>
-            <url>https://nexus.codehaus.org/content/repositories/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>codehaus</id>
-            <name>Codehaus Maven Repository</name>
-            <url>http://repository.codehaus.org</url>
-        </repository>
-        <repository>
-            <id>java.net</id>
-            <name>java.net Maven Repository</name>
-            <url>http://download.java.net/maven/2/</url>
-        </repository>
-        <repository>
-            <id>jboss</id>
-            <name>JBoss Maven Repository</name>
-            <url>http://repository.jboss.com/maven2</url>
-        </repository>
-    </repositories>
 
 </project>

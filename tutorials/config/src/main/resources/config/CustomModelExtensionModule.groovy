@@ -36,7 +36,7 @@ class CustomModelExtensionModule implements DynamicExtension {
 
     @Override
     String getModuleVersion() {
-        '2.5'
+        '3.0'
     }
 
     @Override

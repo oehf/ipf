@@ -61,13 +61,26 @@ IPF is prepared to run in OSGi environments as well:
 | [OSGi Support]                                  | Enables the deployment of IPF modules (bundles) to OSGi platforms. IPF service bundles register platform services at the OSGi service registry for consumption by IPF applications
 
 
+
+## Tutorials and Examples
+
+| Tutorial                                        | Description
+|-------------------------------------------------|-----------------------------------------------
+| [HL7 Support tutorial]                          | How to integration HL7 message processing into Camel
+| [XDS tutorial]                                  | A Groovy based implementation of an XDS repository
+| [Dynamic extension tutorial]                    | How to have IPF-based application modules contributing to an application
+| [IHE Client Example]                            | Some examples how to use IPF producer endpoints
+| [OSGi tutorial]                                 | OSGi Tutorial
+
+
+
 ## Migration
 
 IPF 3.x is not fully backwards-compatible with IPF 2.x. Read the [Migration Instructions] for how to migrate a
 IPF 2.x-based integration solution.
 
 
-## Contribute
+## Development
 
 [Contribute][development] by reporting issues, suggesting new features, or forking the
 Git repository on [GitHub][ipf-github] and provide some good pull requests!
@@ -95,3 +108,7 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 
 [OSGi Support]: osgi/index.html
 [Migration Instructions]: migration.html
+
+[HL7 Support tutorial]: ipf-tutorials-hl7/index.html
+[XDS tutorial]: ipf-tutorials-xds/index.html
+[Dynamic extension tutorial]: ipf-tutorials-config/index.html
