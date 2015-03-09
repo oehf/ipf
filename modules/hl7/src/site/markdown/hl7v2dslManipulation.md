@@ -121,4 +121,4 @@ obx[5](0)[3] = 'SNM'
 ```
 
 
-[hl7v2dslSmart]: hl7v2dslSmart.html
+[hl7v2dslSmart]: hl7v2dslSmartNavigation.html

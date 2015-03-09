@@ -130,8 +130,8 @@ Other features like audit trail, interactive response continuation, and unsolici
 configured in the transaction-specific routes served by the given MLLP dispatcher.
 
 
-[ATNA auditing]: ../atna.html
-[Message validation]: ../messageValidation.html
+[ATNA auditing]: ../ipf-platform-camel-ihe/atna.html
+[Message validation]: ../ipf-platform-camel-ihe/messageValidation.html
 [HL7v2 Codec]: codec.html
 [Message types and exception handling]: messageTypes.html
 [Secure transport]: secureTransport.html

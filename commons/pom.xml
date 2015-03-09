@@ -5,6 +5,7 @@
     <artifactId>ipf-commons</artifactId>
     <name>ipf-commons</name>
     <packaging>pom</packaging>
+    <description>Container project for IPF commons</description>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
@@ -20,4 +21,12 @@
         <module>xml</module>
         <module>map</module>
     </modules>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
 </project>

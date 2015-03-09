@@ -4,6 +4,7 @@
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>ipf-platform-camel-flow</artifactId>
     <name>ipf-platform-camel-flow</name>
+    <description>Flow Management extensions for Apache Camel</description>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
@@ -143,4 +144,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
 </project>

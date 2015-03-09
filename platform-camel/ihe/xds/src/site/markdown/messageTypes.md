@@ -71,7 +71,7 @@ Some XDS model classes from the package `org.openehealth.ipf.commons.ihe.xds.cor
 | Class Name         | HL7 v2 data holder type
 |--------------------|------------------------------
 | Address            | XAD
-| AssigningAuthority | Holder<HD>
+| AssigningAuthority | Holder&lt;HD&gt;
 | Code               | CE
 | Identifiable       | CX
 | Organization       | XON

@@ -51,4 +51,4 @@ assert msg.MSH[9].mapMessageType() == 'PRPA_IN402001'
 ```
 
 [HAPI]: http://hl7api.sourceforge.net
-[Mapping Service]: xxx
+[Mapping Service]: ../ipf-commons-map/index.html

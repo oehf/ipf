@@ -184,4 +184,4 @@ public class ClosureRulesBuilder extends NoValidationBuilder {
 
 [HAPI]: http://hl7api.sourceforge.net
 [HAPI Validation Examples]: http://hl7api.sourceforge.net/devbyexample.html
-[Mapping Service]: xxx
+[Mapping Service]: ../ipf-commons-map/index.html

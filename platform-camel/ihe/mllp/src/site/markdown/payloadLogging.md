@@ -53,4 +53,4 @@ from("pdq-iti21://localhost:12354&interceptors=#serverInLogger,#serverOutLogger"
 
 
 [interceptors]: interceptorChain.html
-[file-based payload logging]: ../commonPayloadLogging.html
+[file-based payload logging]: ../ipf-platform-camel-ihe/commonPayloadLogging.html

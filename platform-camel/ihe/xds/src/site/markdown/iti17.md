@@ -142,6 +142,6 @@ from("xds-iti17:iti17Service?audit=true")
 * [Secure transport]
 
 
-[ATNA auditing]: ../atna.html
-[Secure Transport]: ../ws/secureTransport.html
+[ATNA auditing]: ../ipf-platform-camel-ihe/atna.html
+[Secure Transport]: ../ipf-platform-camel-ihe-ws/secureTransport.html
 

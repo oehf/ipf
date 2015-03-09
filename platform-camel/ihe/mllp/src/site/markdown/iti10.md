@@ -72,8 +72,8 @@ from("pix-iti10://0.0.0.0:8777?audit=true&secure=true")
 * [Unsolicited request message fragmentation]
 
 
-[ATNA auditing]: ../atna.html
-[Message validation]: ../messageValidation.html
+[ATNA auditing]: ../ipf-platform-camel-ihe/atna.html
+[Message validation]: ../ipf-platform-camel-ihe/messageValidation.html
 [HL7v2 Codec]: codec.html
 [Message types and exception handling]: messageTypes.html
 [Secure transport]: secureTransport.html

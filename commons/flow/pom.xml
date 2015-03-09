@@ -4,6 +4,7 @@
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>ipf-commons-flow</artifactId>
     <name>ipf-commons-flow</name>
+    <description>IPF Flow Management</description>
     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
@@ -156,5 +157,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 
 </project>

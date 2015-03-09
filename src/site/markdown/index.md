@@ -40,7 +40,8 @@ The following table summarizes the IPF features related to the eHealth domain:
 | Feature                                         | Description
 |-------------------------------------------------|-----------------------------------------------
 | [Support for eHealth integration profiles]      | A set of components for creating actor interfaces as specified in IHE and Continua integration profiles. IPF currently supports creation of actor interfaces for the IHE profiles XDS.a, XDS.b, PIX, PDQ, PIXv3, PDQv3, QED, XCPD, XCA, XCA-I, XCF, XPID, PCD, as well as for Continua profiles HRN and WAN.
-| [HL7 Message processing]                        | Basis for HL7 message processing is the HL7v2 DSL. These provides the basis for implementing [HL7 message processing Camel routes].
+| [HL7 Message processing]                        | Basis for HL7 message processing is the HL7v2 DSL. These provides the basis for implementing [HL7 Message processing Camel routes].
+| [HL7 Message translation]                       | Translation utilities for translating between HL7v3 and HL7v2 messages for correspdoning IHE transactions
 | [CDA Support]                                   | Wrapping a number of CDA-related libraries, providing the basis for implementing [CDA processing Camel routes].
 
 
@@ -60,10 +61,15 @@ IPF is prepared to run in OSGi environments as well:
 | [OSGi Support]                                  | Enables the deployment of IPF modules (bundles) to OSGi platforms. IPF service bundles register platform services at the OSGi service registry for consumption by IPF applications
 
 
+## Migration
+
+IPF 3.x is not fully backwards-compatible with IPF 2.x. Read the [Migration Instructions] for how to migrate a
+IPF 2.x-based integration solution.
+
 
 ## Contribute
 
-[Contribute][contribute] by reporting issues, suggesting new features, or forking the
+[Contribute][development] by reporting issues, suggesting new features, or forking the
 Git repository on [GitHub][ipf-github] and provide some good pull requests!
 
 
@@ -73,14 +79,19 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 
 
 [apache-license]: http://www.apache.org/licenses/LICENSE-2.0
-[contribute]: contribute.html
+[development]: development.html
 [ipf-github]: http://github.com/oehf/ipf
 [ihe]: http://www.ihe.net
 
-[Support for eHealth integration profiles]: platform-camel/ihe/index.html
-[HL7 Message processing]: modules/hl7/index.html
-[HL7 message processing Camel routes]: platform-camel/hl7/index.html
-[CDA Support]: modules/cda/index.html
-[CDA processing Camel routes]: platform-camel/cda/index.html
-[Core Features]: platform-camel/core/index.html
-[Code System Mapping]: commons/map/index.html
+[Support for eHealth integration profiles]: ipf-platform-camel-ihe/index.html
+[HL7 Message processing]: ipf-modules-hl7/index.html
+[HL7 Message processing Camel routes]: ipf-platform-camel-hl7/index.html
+[HL7 Message translation]: ipf-commons-ihe-hl7v3/index.html
+[CDA Support]: ipf-modules-cda/index.html
+[CDA processing Camel routes]: ipf-platform-camel-cda/index.html
+[Core Features]: ipf-platform-camel-core/index.html
+[Code System Mapping]: ipf-commons-map/index.html
+[Dynamic Feature Registration]: dynamic.html
+
+[OSGi Support]: osgi/index.html
+[Migration Instructions]: migration.html

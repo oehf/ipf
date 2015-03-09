@@ -4,6 +4,7 @@
     <groupId>org.openehealth.ipf.modules</groupId>
     <artifactId>ipf-modules-hl7dsl</artifactId>
     <name>ipf-modules-hl7dsl</name>
+    <description>Deprecated HL7 DSl support</description>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
@@ -67,5 +68,12 @@
             <scope>test</scope>
         </dependency>        
     </dependencies>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 
 </project>

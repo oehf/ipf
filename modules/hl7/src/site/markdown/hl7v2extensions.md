@@ -48,4 +48,4 @@ Details are described [here][hl7v2mapping].
 [hl7v2cmcf]: hl7v2cmcf.html
 [hl7v2creating]: hl7v2creating.html
 [hl7v2mapping]: hl7v2mapping.html
-[Mapping Service]: xxx
+[Mapping Service]: ../ipf-commons-map/index.html

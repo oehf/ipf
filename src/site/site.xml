@@ -59,7 +59,7 @@
             <slogan>eHealth standards on steroids</slogan>
             <titleTemplate>%2$s | %1$s</titleTemplate>
             <!-- Use Table of Contents at the top of the page (max 6 elements) -->
-            <toc>top</toc>
+            <toc>false</toc>
             <tocTopMax>6</tocTopMax>
             <!-- Include the documentation and tools in the top navigation (in addition to links) -->
             <topNav>Documentation|Tools|Contribute</topNav>
@@ -81,7 +81,6 @@
                     <!-- no breadcrumbs on the main index page -->
                     <breadcrumbs>false</breadcrumbs>
                     <!-- no ToC on the main index page -->
-                    <toc>false</toc>
                     <markPageHeader>false</markPageHeader>
                     <sections>
                         <columns>2</columns>
@@ -98,6 +97,7 @@
                 <!-- Disable source highlighting for Maven reports -->
                 <source-repository>
                     <highlightJs>false</highlightJs>
+                    <toc>false</toc>
                 </source-repository>
                 <issue-tracking>
                     <highlightJs>false</highlightJs>
@@ -129,7 +129,7 @@
         </head>
 
         <links>
-            <item name="Download" href="skin/index.html#Usage" />
+            <item name="Download" href="http://github.com/oehf/ipf" />
             <item name="GitHub project" href="http://github.com/oehf/ipf" />
         </links>
 
@@ -147,10 +147,17 @@
             <item name="License" href="license.html" />
         </menu>
         <menu name="Documentation" inherit="bottom">
-            <item name="eHealth Integration Profile" href="platform-camel/ihe/" />
-            <item name="HL7v2 Message Processing" href="modules/hl7/" />
-            <item name="Camel Groovy layer" href="platform-camel/core/" />
-
+            <item name="eHealth Integration Profile" href="ipf-platform-camel-ihe/index.html" />
+            <item name="HL7v2 Message Processing" href="ipf-modules-hl7/index.html" />
+            <item name="HL7 Message translation" href="ipf-commons-ihe-hl7v3/index.html" />
+            <item name="CDA Support" href="ipf-modules-cda/index.html" />
+            <item name="Camel Groovy layer" href="ipf-platform-camel-core/index.html" />
+            <item name="Camel HL7 processing" href="ipf-platform-camel-hl7/index.html" />
+            <item name="Camel CDA processing" href="ipf-platform-camel-cda/index.html" />
+            <item name="Code System Mapping" href="ipf-commons-map/index.html" />
+            <item name="Dynamic Registration of IPF Features" href="dynamic.html" />
+            <item name="OSGi Support" href="ipf-osgi-karaf/index.html" />
+            <item name="Tutorials" href="ipf-tutorials/index.html" />
         </menu>
         <menu name="Contribute" inherit="bottom">
             <item name="Contribute" href="contribute.html" />

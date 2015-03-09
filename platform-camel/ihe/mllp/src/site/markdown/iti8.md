@@ -79,8 +79,8 @@ from("pix-iti8://0.0.0.0:8777?audit=true&secure=true")
 * ITI-8 is the only HL7v2-based transaction that uses HL7 v2.3.1, while most others use HL7 v2.5
 
 
-[ATNA auditing]: ../atna.html
-[Message validation]: ../messageValidation.html
+[ATNA auditing]: ../ipf-platform-camel-ihe/atna.html
+[Message validation]: ../ipf-platform-camel-ihe/messageValidation.html
 [HL7v2 Codec]: codec.html
 [Message types and exception handling]: messageTypes.html
 [Secure transport]: secureTransport.html

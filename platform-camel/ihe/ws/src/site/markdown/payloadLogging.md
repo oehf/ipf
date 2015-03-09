@@ -50,4 +50,4 @@ from("xca-iti39:iti39service" +
 
 
 [interceptors]: customInterceptors.html
-[file-based payload logging]: ../commonPayloadLogging.html
+[file-based payload logging]: ../ipf-platform-camel-ihe/commonPayloadLogging.html

@@ -98,19 +98,19 @@ from("pdqv3-iti47:iti47Service?audit=true")
 
 
 
-[ATNA auditing]: ../atna.html
-[Message validation]: ../messageValidation.html
+[ATNA auditing]: ../ipf-platform-camel-ihe/atna.html
+[Message validation]: ../ipf-platform-camel-ihe/messageValidation.html
 
-[deployment container]: ../ws/deployment.html
-[Secure Transport]: ../ws/secureTransport.html
-[File-Based payload logging]: ../ws/payloadLogging.html
+[deployment container]: ../ipf-platform-camel-ihe-ws/deployment.html
+[Secure Transport]: ../ipf-platform-camel-ihe-ws/secureTransport.html
+[File-Based payload logging]: ../ipf-platform-camel-ihe-ws/payloadLogging.html
 
 [Message types]: messageTypes.html
 
-[Handling Protocol Handlers]: ../ws/protocolHeaders.html
-[Deploying custom CXF interceptors]: ../ws/customInterceptors.html
-[Handling automatically rejected messages]: ../handlingRejected.html
-[Using CXF features]: ../ws/cxfFeatures.html
+[Handling Protocol Handlers]: ../ipf-platform-camel-ihe-ws/protocolHeaders.html
+[Deploying custom CXF interceptors]: ../ipf-platform-camel-ihe-ws/customInterceptors.html
+[Handling automatically rejected messages]: ../ipf-platform-camel-ihe-ws/handlingRejected.html
+[Using CXF features]: ../ipf-platform-camel-ihe-ws/cxfFeatures.html
 
 
 

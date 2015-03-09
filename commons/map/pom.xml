@@ -4,6 +4,7 @@
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>ipf-commons-map</artifactId>
     <name>ipf-commons-map</name>
+    <description>Generic IPF Mapping Service</description>
     
     <properties>
         <osgi.import.pkg>
@@ -61,5 +62,13 @@
             <artifactId>easymock</artifactId>
         </dependency> 		        
     </dependencies>
+
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 
 </project>

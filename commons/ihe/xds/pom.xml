@@ -4,6 +4,7 @@
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>ipf-commons-ihe-xds</artifactId>
     <name>ipf-commons-ihe-xds</name>
+    <description>XDS-specific IHE support</description>
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>

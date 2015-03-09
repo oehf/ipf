@@ -134,4 +134,4 @@ applied when inserting a custom interceptor "X" into the given chain (see class 
 [interactive response continuation]: interactiveContinuation.html
 [segment fragmentation]: segmentFragmentation.html
 [segment defragmentation]: segmentFragmentation.html
-[ATNA auditing]: ../atna.html
+[ATNA auditing]: ../ipf-platform-camel-ihe/atna.html

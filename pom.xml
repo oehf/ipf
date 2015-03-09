@@ -22,6 +22,12 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
 
+        <github.global.server>github</github.global.server>
+        <site.path>${project.version}</site.path>
+        <site.url>http://oehf.github.io/ipf</site.url>
+        <site.deploy.id>gh-pages</site.deploy.id>
+        <site.deploy.url />
+
         <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
         <osgi.import.pkg>org.slf4j.*;version="[1.6,2)",*</osgi.import.pkg>
@@ -56,6 +62,7 @@
         <release-plugin-version>2.1</release-plugin-version>
         <resources-plugin-version>2.7</resources-plugin-version>
         <sources-plugin-version>2.2.1</sources-plugin-version>
+        <github-site-version>0.9</github-site-version>
 
         <!-- Dependency version properties -->
         <activemq-version>5.11.1</activemq-version>
@@ -87,7 +94,7 @@
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
         <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
-        <ipf-gazelle-version>1.0.1</ipf-gazelle-version>
+        <ipf-gazelle-version>1.0.3</ipf-gazelle-version>
         <jaxb-impl-version>2.2.7</jaxb-impl-version>
         <jasypt-version>1.9.2</jasypt-version>
         <jboss-logging-version>3.2.1.Final</jboss-logging-version>
@@ -119,7 +126,7 @@
         <xmlsec-version>2.0.3</xmlsec-version>
     </properties>
 
-    <url>http://www.openehealth.org/display/ipf2</url>
+    <url>${site.url}</url>
 
     <description>IPF is an eHealth Integration Framework</description>
 
@@ -129,10 +136,11 @@
     </organization>
 
     <developers>
+
         <developer>
-            <id>mrt1nz</id>
-            <name>Martin Krasser</name>
-            <email>krasserm@googlemail.com</email>
+            <id>boris</id>
+            <name>Boris Stanojevic</name>
+            <email>boris.stanojevic@icw.de</email>
             <organization>InterComponentWare AG</organization>
             <organizationUrl>http://www.icw-global.com/</organizationUrl>
             <roles>
@@ -152,11 +160,19 @@
             <timezone>+1</timezone>
         </developer>
         <developer>
+            <id>rnd</id>
+            <name>Dmytro Rud</name>
+            <email>dmytro.rud@gmail.com</email>
+            <organization>Roche Diagnostics International AG</organization>
+            <organizationUrl>http://www.roche-diagnostics.ch/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
             <id>riemschneider</id>
             <name>Jens Riemschneider</name>
-            <email>jens.riemschneider@icw.de</email>
-            <organization>InterComponentWare AG</organization>
-            <organizationUrl>http://www.icw-global.com/</organizationUrl>
             <roles>
                 <role>Developer</role>
             </roles>
@@ -166,41 +182,30 @@
             <id>mkolev</id>
             <name>Mitko Kolev</name>
             <email>me2stk@gmail.com</email>
-            <organization>InterComponentWare AG</organization>
-            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <organization>SAP AG</organization>
+            <organizationUrl>http://www.sap.com/</organizationUrl>
             <roles>
                 <role>Developer</role>
             </roles>
             <timezone>+1</timezone>
         </developer>
         <developer>
-            <id>boris</id>
-            <name>Boris Stanojevic</name>
-            <email>boris.stanojevic@icw.de</email>
-            <organization>InterComponentWare AG</organization>
-            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <id>mrt1nz</id>
+            <name>Martin Krasser</name>
+            <email>krasserm@googlemail.com</email>
             <roles>
                 <role>Developer</role>
             </roles>
             <timezone>+1</timezone>
         </developer>
-        <developer>
-            <id>rnd</id>
-            <name>Dmytro Rud</name>
-            <email>dmytro.rud@gmail.com</email>
-            <organization>InterComponentWare AG</organization>
-            <organizationUrl>http://www.icw-global.com/</organizationUrl>
-            <roles>
-                <role>Developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
+
+
         <developer>
             <id>4effo</id>
             <name>Stefan Ivanov</name>
             <email>stefko.ivanov@gmail.com</email>
-            <organization>InterComponentWare AG</organization>
-            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <organization>SAP AG</organization>
+            <organizationUrl>http://www.sap.com/</organizationUrl>
             <roles>
                 <role>Developer</role>
             </roles>
@@ -247,8 +252,9 @@
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <site>
-            <id>openehealth.site</id>
-            <url>file:/data/sites/ipf/reports/ipf-${project.version}</url>
+            <id>${site.deploy.id}</id>
+            <name>Deployment through GitHub's site deployment plugin</name>
+            <url>${site.deploy.url}</url>
         </site>
     </distributionManagement>
 
@@ -317,13 +323,6 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io-version}</version>
             </dependency>
-            <!--
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>${commons-lang-version}</version>
-            </dependency>
-            -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
@@ -433,7 +432,7 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.gazelle</groupId>
-                <artifactId>ipf-gazelle-validation-profiles-iti-pcd</artifactId>
+                <artifactId>ipf-gazelle-validation-profiles-pcd</artifactId>
                 <version>${ipf-gazelle-version}</version>
             </dependency>
             <dependency>
@@ -1129,6 +1128,8 @@
                         <skipDeploy>true</skipDeploy>
                     </configuration>
                 </plugin>
+                <!-- Provided by profiles -->
+                <!--
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -1139,6 +1140,7 @@
                     <artifactId>maven-surefire-report-plugin</artifactId>
                     <version>${surefire-report-plugin-version}</version>
                 </plugin>
+                -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jxr-plugin</artifactId>
@@ -1148,6 +1150,10 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>${project-info-reports-plugin-version}</version>
+                    <configuration>
+                        <anonymousConnection>scm:git:git@github.com:oehf/ipf.git</anonymousConnection>
+                        <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.openehealth.ipf.labs.maven</groupId>
@@ -1249,6 +1255,7 @@
                 <version>${release-plugin-version}</version>
                 <configuration>
                     <preparationGoals>clean verify install</preparationGoals>
+                    <goals>deploy site site-deploy</goals>
                 </configuration>
             </plugin>
             <plugin>
@@ -1277,6 +1284,19 @@
                     <execution>
                         <id>attach-sources</id>
                         <phase>verify</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -1414,6 +1434,26 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>${site-plugin-version}</version>
             </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>${github-site-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>site-deploy</phase>
+                        <configuration>
+                            <server>github</server>
+                            <message>Updating site for ${project.artifactId}, ${project.version}</message>
+                            <path>${project.distributionManagement.site.url}</path>
+                            <merge>true</merge>
+                            <dryRun>true</dryRun>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -1448,6 +1488,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${javadoc-plugin-version}</version>
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1458,11 +1506,34 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
                 <version>${jxr-plugin-version}</version>
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <reports>
+                            <report>aggregate</report>
+                            <report>test-aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>${project-info-reports-plugin-version}</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                            <report>summary</report>
+                            <report>project-team</report>
+                            <report>modules</report>
+                            <report>dependencies</report>
+                            <report>license</report>
+                            <report>mailing-list</report>
+                            <report>scm</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
             <plugin>
                 <groupId>org.openehealth.ipf.labs.maven</groupId>
@@ -1594,12 +1665,20 @@
                                     <link>http://docs.spring.io/spring/docs/4.1.x/javadoc-api/</link>
                                 </links>
                                 <source>1.7</source>
-                                <aggregate>true</aggregate>
-                                <linksource>true</linksource>
+                                <linksource>false</linksource>
                                 <excludePackageNames>*.tutorials,*.test</excludePackageNames>
-                                <additionalJOption>-J-Xmx256m</additionalJOption>
+                                <additionalJOption>-J-Xmx512m</additionalJOption>
                                 <additionalparam>-Xdoclint:none</additionalparam>
                             </configuration>
+                            <executions>
+                                <execution>
+                                    <id>aggregate</id>
+                                    <goals>
+                                        <goal>aggregate</goal>
+                                    </goals>
+                                    <phase>site</phase>
+                                </execution>
+                            </executions>
                         </plugin>
                     </plugins>
                 </pluginManagement>
@@ -1635,11 +1714,26 @@
                                     <link>http://docs.spring.io/spring/docs/4.1.x/javadoc-api/</link>
                                 </links>
                                 <source>1.7</source>
-                                <aggregate>true</aggregate>
-                                <linksource>true</linksource>
+                                <linksource>false</linksource>
                                 <excludePackageNames>*.tutorials,*.test</excludePackageNames>
                                 <additionalJOption>-J-Xmx256m</additionalJOption>
                             </configuration>
+                            <executions>
+                                <execution>
+                                    <id>aggregate</id>
+                                    <goals>
+                                        <goal>aggregate</goal>
+                                    </goals>
+                                    <phase>site</phase>
+                                </execution>
+                                <execution>
+                                    <id>attach-javadocs</id>
+                                    <goals>
+                                        <goal>jar</goal>
+                                    </goals>
+                                    <phase>package</phase>
+                                </execution>
+                            </executions>
                         </plugin>
                     </plugins>
                 </pluginManagement>
@@ -1699,7 +1793,7 @@
                             <dependency>
                                 <groupId>sun.jdk</groupId>
                                 <artifactId>tools</artifactId>
-                                <version>1.6</version>
+                                <version>1.7</version>
                                 <scope>system</scope>
                                 <systemPath>${java.home}/../lib/tools.jar</systemPath>
                             </dependency>
@@ -1707,6 +1801,37 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+
+        <!-- Use the stage profile to a local staging or mock directory.
+             It can be used to test that links between module sites in a multi-module build work. -->
+
+        <profile>
+            <id>stage</id>
+            <properties>
+                <site.deploy.url>http://github.com/oehf/ipf/tree/gh-pages/</site.deploy.url>
+            </properties>
+
+            <build>
+                <plugins>
+                    <!-- Configure Maven site plugin to perform stage -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-site-plugin</artifactId>
+                        <version>${site-plugin-version}</version>
+                        <executions>
+                            <execution>
+                                <id>stage</id>
+                                <goals>
+                                    <goal>stage</goal>
+                                </goals>
+                                <phase>site</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
         </profile>
     </profiles>
 </project>

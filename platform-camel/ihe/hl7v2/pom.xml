@@ -4,6 +4,7 @@
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>ipf-platform-camel-ihe-hl7v2</artifactId>
     <name>ipf-platform-camel-ihe-hl7v2</name>
+    <description>HL7v2 support for Apache Camel IHE components</description>
 
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.hl7v2.*</osgi.export.pkg>
@@ -53,5 +54,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 
 </project>

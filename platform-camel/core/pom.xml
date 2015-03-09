@@ -4,6 +4,7 @@
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>ipf-platform-camel-core</artifactId>
     <name>ipf-platform-camel-core</name>
+    <description>Apache Camel extensions</description>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
@@ -108,4 +109,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
 </project>

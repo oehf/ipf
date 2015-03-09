@@ -40,4 +40,4 @@ those that are directly configured in the `CamelContext` bean - are not able to 
 must be initialized as [Custom Route Builders] as well.
 
 
-[Custom Route Builders]: ../../platform-camel/core/customRouteBuilders.html
+[Custom Route Builders]: ../ipf-platform-camel-core/customRouteBuilders.html

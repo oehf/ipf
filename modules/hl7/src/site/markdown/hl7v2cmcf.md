@@ -202,4 +202,4 @@ dynamically typed environment (e.g. Groovy classes/scripts), and particularly in
 [IPF extension mechanism].
 
 
-[IPF extension mechanism]: xxx
+[IPF extension mechanism]: customModelClasses.html

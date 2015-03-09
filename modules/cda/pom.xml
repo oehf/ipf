@@ -5,6 +5,7 @@
     <artifactId>ipf-modules-cda</artifactId>
     <name>ipf-modules-cda</name>
     <packaging>pom</packaging>
+    <description>Container project CDA suppotr</description>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
@@ -18,5 +19,13 @@
         <!-- IPF 3.0: removed -->
         <!-- <module>oht</module> -->
     </modules>
-    
+
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
 </project>

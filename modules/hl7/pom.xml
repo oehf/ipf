@@ -3,6 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf-modules-hl7</artifactId>
     <name>ipf-modules-hl7</name>
+    <description>HL7 extensions and HL7 DSL support</description>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
@@ -127,5 +128,13 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>	
+	</build>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
 </project>

@@ -18,5 +18,12 @@
         <module>hl7v3</module>
         <module>xds</module>
     </modules>
-    
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
 </project>

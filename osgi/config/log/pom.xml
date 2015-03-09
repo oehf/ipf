@@ -14,5 +14,12 @@
     <properties>
         <osgi.fragment.host>log4j</osgi.fragment.host>
     </properties>
-        
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
 </project>
