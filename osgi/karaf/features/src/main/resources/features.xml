@@ -45,17 +45,17 @@
         <feature>spring-dm</feature>
         <feature version="${project.version}">ipf-specs</feature>
         <feature version="${project.version}">ipf-spring</feature>
-        <bundle start-level='20' dependency="true">mvn:commons-lang/commons-lang/${commons-lang-version}</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.apache.commons/commons-lang/2.6</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.commons/commons-lang3/${commons-lang3-version}</bundle>
-        <bundle start-level='20' dependency="true">mvn:commons-io/commons-io/2.4</bundle>
-        <bundle start-level='20' dependency="true">mvn:commons-codec/commons-codec/1.6</bundle>
+        <bundle start-level='20' dependency="true">mvn:commons-io/commons-io/${commons-io-version}</bundle>
+        <bundle start-level='20' dependency="true">mvn:commons-codec/commons-codec/${commons-codec-version}</bundle>
         <bundle start-level='20' dependency="true">mvn:commons-collections/commons-collections/${commons-collections-version}</bundle>
         <bundle start-level='20' dependency="true">mvn:commons-configuration/commons-configuration/1.10</bundle>
         <bundle start-level='20' dependency="true">mvn:net.sf.ehcache/ehcache/${ehcache-version}</bundle>
         <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-httpclient/3.1_7</bundle>
-        <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saxon/9.6.0-2_1</bundle>
-        <bundle start-level='20' dependency="true">wrap:mvn:net.sf.saxon/Saxon-HE/9.6.0-2//xqj</bundle>
-        <bundle start-level='20' dependency="true">mvn:org.openhealthtools.ihe/atna-bundle/${oht-atna-version}-p4</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saxon/${saxon-he-version}</bundle>
+        <bundle start-level='20' dependency="true">wrap:mvn:net.sf.saxon/Saxon-HE/${saxon-he-version}/xqj</bundle>
+        <bundle start-level='20' dependency="true">mvn:org.openehealth.ipf.oht.atna/ipf-oht-atna-osgi/${ipf-oht-atna-version}</bundle>
         <bundle start-level='10' dependency="true">mvn:org.antlr/com.springsource.antlr/2.7.6</bundle>
         <bundle start-level='10' dependency="true">mvn:org.codehaus.groovy/groovy-all/${groovy-version}</bundle>
         <bundle start-level='10' dependency="true">mvn:org.ow2.asm/asm-all/4.0</bundle>
@@ -284,7 +284,7 @@
     <feature name="ipf-camel" version="${project.version}" resolver='(obr)'>
         <feature version="${project.version}">ipf-modules-hl7</feature>
         <feature version="[1.2,2)">spring-dm</feature>
-        <bundle start-level='30'>mvn:org.apache.mina/mina-core/2.0.7</bundle>
+        <bundle start-level='30'>mvn:org.apache.mina/mina-core/${mina2-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.camel/camel-spring/${camel-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.camel/camel-core/${camel-version}</bundle>
         <bundle start-level='50'>mvn:org.apache.camel/camel-hl7/${camel-version}</bundle>

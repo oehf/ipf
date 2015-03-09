@@ -95,7 +95,8 @@
         <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
         <ipf-gazelle-version>1.0.3</ipf-gazelle-version>
-        <jaxb-impl-version>2.2.7</jaxb-impl-version>
+        <ipf-oht-atna-version>3.0.0</ipf-oht-atna-version>
+        <jaxb-impl-version>2.2.11</jaxb-impl-version>
         <jasypt-version>1.9.2</jasypt-version>
         <jboss-logging-version>3.2.1.Final</jboss-logging-version>
         <jboss-logging-annotations-version>1.2.0.Final</jboss-logging-annotations-version>
@@ -110,7 +111,6 @@
         <mdht-version>1.2.0.201212201425</mdht-version>
         <mina2-version>2.0.9</mina2-version>
         <not-yet-commons-ssl-version>0.3.11</not-yet-commons-ssl-version>
-        <oht-atna-version>2.0.0</oht-atna-version>
         <oht-cdar-version>1.1.0-p2</oht-cdar-version> <!-- I think we don't need this anymore -->
         <opensaml-version>2.6.1</opensaml-version>
         <osgi-api-version>1.4.0</osgi-api-version>
@@ -926,14 +926,14 @@
                 <version>${saxon-he-version}</version>
             </dependency> 
             <dependency>
-                <groupId>org.openhealthtools.ihe</groupId>
-                <artifactId>org.openhealthtools.ihe.atna.auditor</artifactId>
-                <version>${oht-atna-version}-p5</version>
+                <groupId>org.openehealth.ipf.oht.atna</groupId>
+                <artifactId>ipf-oht-atna-auditor</artifactId>
+                <version>${ipf-oht-atna-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.openhealthtools.ihe</groupId>
-                <artifactId>org.openhealthtools.ihe.atna.nodeauth</artifactId>
-                <version>${oht-atna-version}</version>
+                <groupId>org.openehealth.ipf.oht.atna</groupId>
+                <artifactId>ipf-oht-atna-nodeauth</artifactId>
+                <version>${ipf-oht-atna-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openhealthtools.ihe</groupId>
