@@ -33,9 +33,9 @@ In addition, the message body can contain an `Exception` instance, which will be
 Any exceptions thrown in the route that are not handled otherwise will lead to NAK responses as well.
 When neither the data type of the response message is supported nor an exception has been thrown in the route, the message header `org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent.ACK_TYPE_CODE_HEADER` will be taken into consideration. 
 
-When the value of this header belongs to the enumeration type `ca.uhn.hl7v2.AcknowledgementCode`, an acknowledgement will be 
-automatically generated and sent back to the client — a positive one for `AcknowledgementCode.AA`, 
-a negative one (NAK) for `AcknowledgementCode.AE` and `AcknowledgementCode.AR`.
+When the value of this header belongs to the enumeration type `ca.uhn.hl7v2.AcknowledgmentCode`, an acknowledgement will be
+automatically generated and sent back to the client — a positive one for `AcknowledgmentCode.AA`,
+a negative one (NAK) for `AcknowledgmentCode.AE` and `AcknowledgmentCode.AR`.
 
 When even this header is not set or when its value is not of desired type, the consumer route fails.
 
