@@ -22,6 +22,7 @@ import org.openhealthtools.mdht.uml.cda.util.CDAUtil.ValidationHandler;
 
 /**
  * Validation Handler
+ *
  * @author Stefan Ivanov
  *
  */

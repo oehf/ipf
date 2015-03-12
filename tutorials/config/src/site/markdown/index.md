@@ -1,6 +1,6 @@
 ## IPF extension tutorial
 
-This tutorial is targeted at developers who want to learn more about the new IPF extension mechanism.
+This tutorial is targeted at developers who want to learn more about the dynamic IPF extension mechanism.
 Before going through this tutorial we recommend you first to read the [IPF extension mechanism](../dynamic.html) documentation.
 
 Please also work through the [HL7 Tutorial](../ipf-tutorials-hl7/index.html) for the basic steps of creating

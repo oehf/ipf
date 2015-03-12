@@ -22,11 +22,14 @@ import org.openhealthtools.mdht.uml.cda.consol.ConsolPackage;
 import org.openhealthtools.mdht.uml.cda.hitsp.HITSPPackage;
 import org.openhealthtools.mdht.uml.cda.ihe.IHEPackage;
 
-public class CDAR2Utils {
+public final class CDAR2Utils {
 
     static {
         @SuppressWarnings("unused")
         CDAPackage cdaPackageInstance = CDAPackage.eINSTANCE;
+    }
+
+    private CDAR2Utils() {
     }
 
     public static CCDPackage initCCD() {

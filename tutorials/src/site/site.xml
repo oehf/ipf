@@ -147,7 +147,7 @@
             <item name="License" href="license.html" />
         </menu>
         <menu name="Documentation" inherit="bottom">
-            <item name="eHealth Integration Profile" href="ipf-platform-camel-ihe/index.html" />
+            <item name="eHealth Integration Profiles" href="ipf-platform-camel-ihe/index.html" />
             <item name="HL7v2 Message Processing" href="ipf-modules-hl7/index.html" />
             <item name="HL7 Message translation" href="ipf-commons-ihe-hl7v3/index.html" />
             <item name="CDA Support" href="ipf-modules-cda/index.html" />

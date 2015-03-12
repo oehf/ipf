@@ -104,7 +104,6 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
      */
     public Writer render(ClinicalDocument doc, Writer writer,
             Object... options) throws IOException {
-        // TODO avoid temporary string object
         String s = render(doc, options);
         writer.write(s);
         return writer;
