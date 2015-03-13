@@ -44,15 +44,15 @@ and memory saving reasons.
 Provide a derived implementation in form of a Spring bean:
 
 ```xml
-<bean id="myRejectionHandlingStrategy"
-    class="org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01.MyRejectionHandlingStrategy" />
+    <bean id="myRejectionHandlingStrategy"
+        class="org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01.MyRejectionHandlingStrategy" />
 ```
 
 Reference it in the URI of the corresponding consumer endpoint:
 
 ```java
-from("pcd-pcd01:myEndpoint?rejectionHandlingStrategy=#myRejectionHandlingStrategy")
-  ...
+    from("pcd-pcd01:myEndpoint?rejectionHandlingStrategy=#myRejectionHandlingStrategy")
+      ...
 ```
 
 ### Important Hints

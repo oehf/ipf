@@ -32,16 +32,16 @@ case the instantiation will look like (supposed that `wsCorrelationCache` is def
 
 ```xml
 
-<bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
+    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
 
-<bean id="correlator"
-      class="org.openehealth.ipf.commons.ihe.ws.correlation.EhcacheAsynchronyCorrelator">
-    <constructor-arg>
-        <bean factory-bean="ehcacheManager" factory-method="getCache">
-            <constructor-arg value="wsCorrelationCache" />
-        </bean>
-    </constructor-arg>
-</bean>
+    <bean id="correlator"
+          class="org.openehealth.ipf.commons.ihe.ws.correlation.EhcacheAsynchronyCorrelator">
+        <constructor-arg>
+            <bean factory-bean="ehcacheManager" factory-method="getCache">
+                <constructor-arg value="wsCorrelationCache" />
+            </bean>
+        </constructor-arg>
+    </bean>
 
 
 ```
@@ -58,9 +58,9 @@ for an XCPD Initiating Gateway (ITI-55 client):
 
 ```java
 
-from("xcpd-iti55-async-response:iti55service-response?correlator=#correlator")
-    .process(iti55ResponseValidator())
-    ...
+    from("xcpd-iti55-async-response:iti55service-response?correlator=#correlator")
+        .process(iti55ResponseValidator())
+        ...
 
 ```
 
@@ -77,10 +77,10 @@ Moreover, the correlator bean should be referenced in the producer endpoint URI.
 
 ```java
 
-from("direct:foobar")
-    .setHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME,
-               constant("http://localhost:8889/iti55service-response"))
-    .to("xcpd-iti55://somehost.uri/XCPDRespondingGateway?correlator=#correlator")
+    from("direct:foobar")
+        .setHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME,
+                   constant("http://localhost:8889/iti55service-response"))
+        .to("xcpd-iti55://somehost.uri/XCPDRespondingGateway?correlator=#correlator")
 
 ```
 

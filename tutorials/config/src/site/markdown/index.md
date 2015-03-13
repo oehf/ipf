@@ -39,43 +39,43 @@ the SampleRouteBuilder extends the `org.openehealth.ipf.platform.camel.core.conf
 
 ```groovy
 
-package org.openehealth.ipf.tutorials.config.base.route
+    package org.openehealth.ipf.tutorials.config.base.route
 
-import org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilder
+    import org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilder
 
-class SampleRouteBuilder extends CustomRouteBuilder {
+    class SampleRouteBuilder extends CustomRouteBuilder {
 
-    void configure() {
+        void configure() {
 
-        // Receive from HTTP endpoint and forward to two direct endpoints
-        from('jetty:http://0.0.0.0:8800/reverse')
-            .convertBodyTo(String.class)
-            .multicast().to('direct:file-save','direct:reverse-response')
+            // Receive from HTTP endpoint and forward to two direct endpoints
+            from('jetty:http://0.0.0.0:8800/reverse')
+                .convertBodyTo(String.class)
+                .multicast().to('direct:file-save','direct:reverse-response')
 
-        // Response: revert input string
-        from('direct:reverse-response')
-            .transmogrify{'reversed response: ' + it.reverse()}
+            // Response: revert input string
+            from('direct:reverse-response')
+                .transmogrify{'reversed response: ' + it.reverse()}
 
-        // Receive HL7 string from other HTTP endpoint, parse, validate
-		from('jetty:http://0.0.0.0:8800/map')
-            .convertBodyTo(String.class)
-            .unmarshal().hl7()
-            .verify().hl7()
-			.to('direct:map')
+            // Receive HL7 string from other HTTP endpoint, parse, validate
+            from('jetty:http://0.0.0.0:8800/map')
+                .convertBodyTo(String.class)
+                .unmarshal().hl7()
+                .verify().hl7()
+                .to('direct:map')
 
-        // Marshal mapped message and write into file
-        from('direct:map')
-            .marshal().hl7()
-            .to('direct:file-save')
-            .transmogrify{'map response ok!'}
+            // Marshal mapped message and write into file
+            from('direct:map')
+                .marshal().hl7()
+                .to('direct:file-save')
+                .transmogrify{'map response ok!'}
 
-        // Write message into destination directory
-		from('direct:file-save')
-            .setFileHeaderFrom('destination')
-            .to('file:target/output')
+            // Write message into destination directory
+            from('direct:file-save')
+                .setFileHeaderFrom('destination')
+                .to('file:target/output')
+        }
+
     }
-
-}
 
 ```
 
@@ -96,16 +96,16 @@ Since it extends `CustomRouteBuilder`, the IPF extension mechanism will do that 
 
 ```xml
 
-...
-  <camel:camelContext id="camelContext" />
+    ...
+      <camel:camelContext id="camelContext" />
 
-  <bean id="baseRoute"
-        class="org.openehealth.ipf.tutorials.config.base.route.SampleRouteBuilder" />
+      <bean id="baseRoute"
+            class="org.openehealth.ipf.tutorials.config.base.route.SampleRouteBuilder" />
 
-  <bean id="bidiMappingService"
-      class="org.openehealth.ipf.commons.map.BidiMappingService" />
+      <bean id="bidiMappingService"
+          class="org.openehealth.ipf.commons.map.BidiMappingService" />
 
-...
+    ...
 
 ```
 
@@ -171,15 +171,15 @@ it by means of the `htmlTransmogrifier`. `CustomInterceptor.groovy´ can be foun
 
 ```groovy
 
-class CustomInterceptor extends CustomRouteBuilder {
+    class CustomInterceptor extends CustomRouteBuilder {
 
-    void configure() {
-        interceptFrom('direct:file-save')
-            .transmogrify('htmlTransmogrifier')
-            .setDestinationHeader()
-        ...
-   }
-}
+        void configure() {
+            interceptFrom('direct:file-save')
+                .transmogrify('htmlTransmogrifier')
+                .setDestinationHeader()
+            ...
+       }
+    }
 
 ```
 
@@ -187,29 +187,29 @@ The `setDestinationHeader()` Camel DSL extension is automatically activated by t
 
 ```groovy
 
-class CustomModelExtensionModule implements DynamicExtension {
+    class CustomModelExtensionModule implements DynamicExtension {
 
-    static ProcessorDefinition setDestinationHeader(ProcessorDefinition delegate) {
-        delegate.setHeader('destination') { exchange ->
-            "transmogrified-${System.currentTimeMillis()}.html"
+        static ProcessorDefinition setDestinationHeader(ProcessorDefinition delegate) {
+            delegate.setHeader('destination') { exchange ->
+                "transmogrified-${System.currentTimeMillis()}.html"
+            }
+        }
+
+        @Override
+        String getModuleName() {
+            'CustomModelExtensionModule'
+        }
+
+        @Override
+        String getModuleVersion() {
+            '3.0'
+        }
+
+        @Override
+        boolean isStatic() {
+            false
         }
     }
-
-    @Override
-    String getModuleName() {
-        'CustomModelExtensionModule'
-    }
-
-    @Override
-    String getModuleVersion() {
-        '3.0'
-    }
-
-    @Override
-    boolean isStatic() {
-        false
-    }
-}
 
 ```
 
@@ -218,18 +218,18 @@ Here is the snippet of the `customInterceptor`, `htmlTransmogrifier` and `custom
 
 ```xml
 
-...
-  <lang:groovy id="interceptorRoute"
-     script-source="classpath:config/CustomInterceptor.groovy" >
-    <lang:property name="intercepted" ref="baseRoute" />
-  </lang:groovy>
+    ...
+      <lang:groovy id="interceptorRoute"
+         script-source="classpath:config/CustomInterceptor.groovy" >
+        <lang:property name="intercepted" ref="baseRoute" />
+      </lang:groovy>
 
-  <lang:groovy id="customExtensionModule"
-     script-source="classpath:config/CustomModelExtensionModule.groovy" />
+      <lang:groovy id="customExtensionModule"
+         script-source="classpath:config/CustomModelExtensionModule.groovy" />
 
-  <lang:groovy id="htmlTransmogrifier"
-     script-source="classpath:config/HtmlTransmogrifier.groovy" />
-...
+      <lang:groovy id="htmlTransmogrifier"
+         script-source="classpath:config/HtmlTransmogrifier.groovy" />
+    ...
 ```
 
 The `intercepted` property of the `interceptorRoute` bean tells the IPF extension mechanism to inject this
@@ -271,14 +271,14 @@ exception message to the `target/hl7-error/error-<timestamp>.txt` file.
 
 ```groovy
 
-class CustomInterceptor extends CustomRouteBuilder {
+    class CustomInterceptor extends CustomRouteBuilder {
 
-    void configure() {
-        ...
-        interceptFrom('direct:map')
-            .transmogrify('genderTransmogrifier')
+        void configure() {
+            ...
+            interceptFrom('direct:map')
+                .transmogrify('genderTransmogrifier')
+        }
     }
-}
 
 ```
 
@@ -286,13 +286,13 @@ The `genderTransmogrifier` makes use of custom mapping definition (`mapGender`) 
 
 ```groovy
 
-class GenderTransmogrifier implements Transmogrifier {
+    class GenderTransmogrifier implements Transmogrifier {
 
-    Object zap(Object msg, Object... params) {
-        msg.PID[8] = msg.PID[8].mapGender()
-        msg
+        Object zap(Object msg, Object... params) {
+            msg.PID[8] = msg.PID[8].mapGender()
+            msg
+        }
     }
-}
 
 ```
 
@@ -300,12 +300,12 @@ The custom mapping is defined in `conf/gender.map`:
 
 ```groovy
 
-mappings = {
-    gender(
-        F      : 'W',
-        (ELSE) : { it }
-    )
-}
+    mappings = {
+        gender(
+            F      : 'W',
+            (ELSE) : { it }
+        )
+    }
 
 ```
 
@@ -319,21 +319,21 @@ This exception handler is again defined in a separate route builder `CustomExcep
 
 ```groovy
 
-class CustomExceptionHandler extends CustomRouteBuilder {
+    class CustomExceptionHandler extends CustomRouteBuilder {
 
-    void configure() {
+        void configure() {
 
-        onException(ca.uhn.hl7v2.HL7Exception)
-          .maximumRedeliveries(0)
-          .handled(true)
-          .transform().exceptionMessage()
-          .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
-          .setHeader(Exchange.FILE_NAME) { exhg ->
-              "error-${System.currentTimeMillis()}.txt"
-           }
-          .to('file:target/hl7-error')
+            onException(ca.uhn.hl7v2.HL7Exception)
+              .maximumRedeliveries(0)
+              .handled(true)
+              .transform().exceptionMessage()
+              .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
+              .setHeader(Exchange.FILE_NAME) { exhg ->
+                  "error-${System.currentTimeMillis()}.txt"
+               }
+              .to('file:target/hl7-error')
+        }
     }
-}
 
 ```
 

@@ -23,13 +23,13 @@ Here is a fragment of a base custom route builder class:
 
 ```groovy
 
-class BaseRoute extends CustomRouteBuilder {
-    void configure() {
-        ...
-        from('seda:input')...
-        ...
+    class BaseRoute extends CustomRouteBuilder {
+        void configure() {
+            ...
+            from('seda:input')...
+            ...
+        }
     }
-}
 
 ```
 
@@ -68,16 +68,16 @@ the functionality of the `BaseRoute` by intercepting the inputs from the `'seda:
 
 ```groovy
 
-class CustomInterceptingRoute extends CustomRouteBuilder{
-    void configure() {
+    class CustomInterceptingRoute extends CustomRouteBuilder{
+        void configure() {
 
-        onException(MyCustomTransmogrifierException)
-           .handled(true)
-           // do some more stuff to handle this exception
+            onException(MyCustomTransmogrifierException)
+               .handled(true)
+               // do some more stuff to handle this exception
 
-        interceptFrom('seda:input').transmogrify('customTransmogrifier')
+            interceptFrom('seda:input').transmogrify('customTransmogrifier')
+        }
     }
-}
 
 ```
 
@@ -89,24 +89,24 @@ is added to the `intercepted` route.
 
 ```xml
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:lang="http://www.springframework.org/schema/lang"
-       xsi:schemaLocation="
-http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/lang
->
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:lang="http://www.springframework.org/schema/lang"
+           xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/lang
+    >
 
-  <lang:groovy id="interceptorRoute"
-      script-source="classpath:config/CustomInterceptingRoute.groovy" >
-      <lang:property name="intercepted" ref="baseRoute" />
-  </lang:groovy>
+      <lang:groovy id="interceptorRoute"
+          script-source="classpath:config/CustomInterceptingRoute.groovy" >
+          <lang:property name="intercepted" ref="baseRoute" />
+      </lang:groovy>
 
-  <lang:groovy id="customTransmogrifier"
-      script-source="classpath:config/CustomTransmogrifier.groovy" />
+      <lang:groovy id="customTransmogrifier"
+          script-source="classpath:config/CustomTransmogrifier.groovy" />
 
-</beans>
+    </beans>
 
 ```
 

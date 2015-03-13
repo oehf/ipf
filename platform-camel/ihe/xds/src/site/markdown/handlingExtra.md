@@ -22,23 +22,23 @@ Here is an example of how to set extra metadata using Groovy.
 
 ```groovy
 
-RegisterDocumentSet request = ...
+    RegisterDocumentSet request = ...
 
-request.documentEntries[0].extraMetadata = [
-   'urn:oehf:name' : ['Open eHealth Foundation'],
-   'urn:oehf:web'  : ['www.openehealth.org']]
+    request.documentEntries[0].extraMetadata = [
+       'urn:oehf:name' : ['Open eHealth Foundation'],
+       'urn:oehf:web'  : ['www.openehealth.org']]
 
-request.submissionSet.extraMetadata = [
-   'urn:oehf:framework'        : ['IPF'],
-   'urn:oehf:frameworkVersion' : ['2.5.2']]
+    request.submissionSet.extraMetadata = [
+       'urn:oehf:framework'        : ['IPF'],
+       'urn:oehf:frameworkVersion' : ['2.5.2']]
 
-request.associations[1].extraMetadata = [
-   'urn:acme:extraSlot1' : ['value1', 'value2', 'value3'],
-   'urn:acme:extraSlot2' : ['123', '456']]
+    request.associations[1].extraMetadata = [
+       'urn:acme:extraSlot1' : ['value1', 'value2', 'value3'],
+       'urn:acme:extraSlot2' : ['123', '456']]
 
-request.folders[0].extraMetadata = [
-   'urn:xyz:values'  : ['i', 'ii', 'iii'],
-   'urn:acme:values' : ['vii', 'viii']]
+    request.folders[0].extraMetadata = [
+       'urn:xyz:values'  : ['i', 'ii', 'iii'],
+       'urn:acme:values' : ['vii', 'viii']]
 
 ```
 
@@ -59,17 +59,17 @@ Here is an example of how to set extra query parameters using Java.
 
 ```java
 
-GetDocumentsQuery query = ...;
+    GetDocumentsQuery query = ...;
 
-QueryList<String> extraParams1 = new QueryList<String>();
-extraParams1.getOuterList().add(Arrays.asList("para-11", "para-12"));
-extraParams1.getOuterList().add(Arrays.asList("para-21", "para-22", "para-23"));
+    QueryList<String> extraParams1 = new QueryList<String>();
+    extraParams1.getOuterList().add(Arrays.asList("para-11", "para-12"));
+    extraParams1.getOuterList().add(Arrays.asList("para-21", "para-22", "para-23"));
 
-QueryList<String> extraParams2 = new QueryList<String>();
-extraParams2.getOuterList().add(Arrays.asList("dia-31", "dia-32", "dia-33"));
-extraParams2.getOuterList().add(Arrays.asList("dia-41"));
+    QueryList<String> extraParams2 = new QueryList<String>();
+    extraParams2.getOuterList().add(Arrays.asList("dia-31", "dia-32", "dia-33"));
+    extraParams2.getOuterList().add(Arrays.asList("dia-41"));
 
-query.getExtraParameters().put("$Perimeter", extraParams1);
-query.getExtraParameters().put("$Diameter", extraParams2);
+    query.getExtraParameters().put("$Perimeter", extraParams1);
+    query.getExtraParameters().put("$Diameter", extraParams2);
 
 ```

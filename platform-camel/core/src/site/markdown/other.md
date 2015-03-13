@@ -8,10 +8,10 @@ A convenience DSL extension provided by IPF is the `unhandled` DSL element. It r
 `errorHandler(noErrorHandler())` statement in route definitions i.e. it drops the error handler from a route.
 
 ```groovy
-from('direct:input')
-    .unhandled()
-    // further processing here ...
-    .to('mock:output')
+    from('direct:input')
+        .unhandled()
+        // further processing here ...
+        .to('mock:output')
 ```
 
 ### Exception message and object
@@ -20,22 +20,22 @@ The class `org.apache.camel.builder.ExpressionClause` has been extended with exp
 or the exception message of an exchange. The corresponding DSL extensions are `exceptionMessage` and `exceptionObject`.
 
 ```groovy
-from('direct:input1')
-    .onException(ValidationException)
-        .transform().exceptionMessage()
-        .handled(true)
-        .to('mock:error')
-        .end()
-    // ... ValidationException thrown here ...
-    .to('mock:output')
+    from('direct:input1')
+        .onException(ValidationException)
+            .transform().exceptionMessage()
+            .handled(true)
+            .to('mock:error')
+            .end()
+        // ... ValidationException thrown here ...
+        .to('mock:output')
 
-from('direct:input2')
-    .onException(ValidationException)
-        .setHeader('foo').exceptionObject()
-        .to('mock:error')
-        .end()
-    // ... ValidationException thrown here ...
-    .to('mock:output')
+    from('direct:input2')
+        .onException(ValidationException)
+            .setHeader('foo').exceptionObject()
+            .to('mock:error')
+            .end()
+        // ... ValidationException thrown here ...
+        .to('mock:output')
 
 ```
 
@@ -45,12 +45,12 @@ These extensions are just to minimize code for commonly used Camel endpoints. Th
  be written like this:
 
 ```groovy
-direct('input1')
-    .onException(ValidationException)
-        .transform().exceptionMessage()
-        .handled(true)
-        .mock('error')
-        .end()
- // ... ValidationException thrown here ...
- .to('mock:output')
+    direct('input1')
+        .onException(ValidationException)
+            .transform().exceptionMessage()
+            .handled(true)
+            .mock('error')
+            .end()
+     // ... ValidationException thrown here ...
+     .to('mock:output')
 ``

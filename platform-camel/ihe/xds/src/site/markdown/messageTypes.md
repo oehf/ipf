@@ -109,33 +109,33 @@ Although the route is written in Groovy, type conversion does not require the Gr
 
 ```groovy
 
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
+    import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 
-import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
-import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
+    import org.apache.camel.spring.SpringRouteBuilder
+    import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
+    import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
+    import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
+    import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
+    import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
-public class RouteBuilder extends SpringRouteBuilder {
-    @Override
-    public void configure() throws Exception {
-        from("xds-iti18:myIti18Service")
-            .convertBodyTo(QueryRegistry.class)
-            .choice()
-                // Return an object reference for a find documents query
-                .when { it.in.body.query instanceof FindDocumentsQuery }
-                    .transform {
-                        def response = new QueryResponse(SUCCESS)
-                        response.references.add(new ObjectReference('document01'))
-                        response
-                    }
-                // Any other query else is a failure
-                .otherwise()
-                    .transform { new QueryResponse(FAILURE) }
+    public class RouteBuilder extends SpringRouteBuilder {
+        @Override
+        public void configure() throws Exception {
+            from("xds-iti18:myIti18Service")
+                .convertBodyTo(QueryRegistry.class)
+                .choice()
+                    // Return an object reference for a find documents query
+                    .when { it.in.body.query instanceof FindDocumentsQuery }
+                        .transform {
+                            def response = new QueryResponse(SUCCESS)
+                            response.references.add(new ObjectReference('document01'))
+                            response
+                        }
+                    // Any other query else is a failure
+                    .otherwise()
+                        .transform { new QueryResponse(FAILURE) }
+        }
     }
-}
 
 ```
 

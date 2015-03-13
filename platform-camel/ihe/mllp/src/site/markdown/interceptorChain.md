@@ -87,16 +87,16 @@ Such interceptors shall be instantiated as Spring beans with scope="prototype", 
 listed in the endpoint URI parameter *interceptors*, e.g.:
 
 ```java
-from("pdq-iti21://0.0.0.0:18214?interceptors=#myInterceptor,#authenticationInterceptor")
-   ....
+    from("pdq-iti21://0.0.0.0:18214?interceptors=#myInterceptor,#authenticationInterceptor")
+       ....
 ```
 
 If using Spring beans with `scope="prototype"` is not possible (e.g. because the beans are wrapped into a Proxy), 
 you can also provide a singleton bean instance of `org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory`:
 
 ```java
-from("pdq-iti21://0.0.0.0:18214?interceptorFactories=#myInterceptorFactory,#authenticationInterceptorFactory")
-   ....
+    from("pdq-iti21://0.0.0.0:18214?interceptorFactories=#myInterceptorFactory,#authenticationInterceptorFactory")
+       ....
 ```
 
 Each `Hl7v2InterceptorFactory` must implement the `getNewInstance()` method so that for each call a new instance 
@@ -107,14 +107,14 @@ In order to be placed appropriately in the chain, custom interceptors should def
 Example:
 
 ```java
-public class MyInterceptor extends AbstractHl7v2Interceptor {
-    public MyInterceptor() {
-        addAfter(ConsumerStringProcessingInterceptor.class.getName(),
-                 ConsumerRequestDefragmenterInterceptor.class.getName());
-        addBefore(ConsumerMarshalInterceptor.class.getName());
+    public class MyInterceptor extends AbstractHl7v2Interceptor {
+        public MyInterceptor() {
+            addAfter(ConsumerStringProcessingInterceptor.class.getName(),
+                     ConsumerRequestDefragmenterInterceptor.class.getName());
+            addBefore(ConsumerMarshalInterceptor.class.getName());
+        }
+        .....
     }
-    .....
-}
 ```
 
 A list may contain multiple IDs when some of corresponding interceptors are optional. In general, the following rules are 

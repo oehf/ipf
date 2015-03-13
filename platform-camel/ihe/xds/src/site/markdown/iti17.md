@@ -20,11 +20,11 @@ Consumer side corresponds to the *Document Repository* actor.
 In a Maven-based environment, the following dependency must be registered in `pom.xml`:
 
 ```xml
-<dependency>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-ihe-xds</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
+    <dependency>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel-ihe-xds</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 ```
 
 ### Endpoint URI Format
@@ -54,52 +54,52 @@ for ITI-17 consumers. The sample web application descriptor below shows how to u
 
 ```xml
 
-<?xml version="1.0"?>
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-     ">
+    <?xml version="1.0"?>
+    <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+         ">
 
-<web-app>
-  <display-name>Test IPF IHE Web-App</display-name>
-  <context-param>
-    <!-- configures the classpath of the Spring application context -->
-    <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:example/context.xml</param-value>
-  </context-param>
+    <web-app>
+      <display-name>Test IPF IHE Web-App</display-name>
+      <context-param>
+        <!-- configures the classpath of the Spring application context -->
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:example/context.xml</param-value>
+      </context-param>
 
-  <listener>
-    <listener-class>
-      org.springframework.web.context.ContextLoaderListener
-    </listener-class>
-  </listener>
+      <listener>
+        <listener-class>
+          org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+      </listener>
 
-  <servlet>
-    <!-- Servlet used for all CXF web services -->
-    <servlet-name>CXFServlet</servlet-name>
-    <servlet-class>
-        org.apache.cxf.transport.servlet.CXFServlet
-    </servlet-class>
-  </servlet>
+      <servlet>
+        <!-- Servlet used for all CXF web services -->
+        <servlet-name>CXFServlet</servlet-name>
+        <servlet-class>
+            org.apache.cxf.transport.servlet.CXFServlet
+        </servlet-class>
+      </servlet>
 
-  <servlet>
-    <!-- Servlet used only for ITI-17 -->
-    <servlet-name>Iti17Servlet</servlet-name>
-    <servlet-class>
-        org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet
-    </servlet-class>
-  </servlet>
+      <servlet>
+        <!-- Servlet used only for ITI-17 -->
+        <servlet-name>Iti17Servlet</servlet-name>
+        <servlet-class>
+            org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet
+        </servlet-class>
+      </servlet>
 
-  <servlet-mapping>
-    <!-- configures the address of the servlet path under which our web services are published -->
-    <servlet-name>CXFServlet</servlet-name>
-    <url-pattern>/services/*</url-pattern>
-  </servlet-mapping>
+      <servlet-mapping>
+        <!-- configures the address of the servlet path under which our web services are published -->
+        <servlet-name>CXFServlet</servlet-name>
+        <url-pattern>/services/*</url-pattern>
+      </servlet-mapping>
 
-  <servlet-mapping>
-    <!-- configures the address of the servlet path under which the ITI-17 transaction is published -->
-    <servlet-name>Iti17Servlet</servlet-name>
-    <url-pattern>/iti17/*</url-pattern>
-  </servlet-mapping>
-</web-app>
+      <servlet-mapping>
+        <!-- configures the address of the servlet path under which the ITI-17 transaction is published -->
+        <servlet-name>Iti17Servlet</servlet-name>
+        <url-pattern>/iti17/*</url-pattern>
+      </servlet-mapping>
+    </web-app>
 
 ```
 
@@ -130,9 +130,9 @@ Streaming capabilities are provided out-of-box
 This is an example on how to use the component on the consumer side:
 
 ```java
-from("xds-iti17:iti17Service?audit=true")
-  .process(myProcessor)
-  // process the incoming request and create a response
+    from("xds-iti17:iti17Service?audit=true")
+      .process(myProcessor)
+      // process the incoming request and create a response
 ```
 
 

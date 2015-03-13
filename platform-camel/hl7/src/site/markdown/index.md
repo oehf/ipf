@@ -14,19 +14,19 @@ Otherwise, the following dependency must be registered in `pom.xml`:
 
 ```xml
 
-<!-- IPF HL7 extensions and DSL -->
-<dependency>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-hl7</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
+    <!-- IPF HL7 extensions and DSL -->
+    <dependency>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel-hl7</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 
-<!-- For each HL7 version being used, add structure library as well, e.g. v2.5 -->
-<dependency>
-    <groupId>ca.uhn.hapi</groupId>
-    <artifactId>hapi-structures-v25</artifactId>
-    <version>${hapi-version}</version>
-</dependency>
+    <!-- For each HL7 version being used, add structure library as well, e.g. v2.5 -->
+    <dependency>
+        <groupId>ca.uhn.hapi</groupId>
+        <artifactId>hapi-structures-v25</artifactId>
+        <version>${hapi-version}</version>
+    </dependency>
 
 ```
 
@@ -56,10 +56,10 @@ was provided by the [HAPI] validator classes.
 
 ```groovy
 
-from(...)
-  .unmarshal().hl7()
-  .verify().hl7()
-  ...
+    from(...)
+      .unmarshal().hl7()
+      .verify().hl7()
+      ...
 
 ```
 
@@ -68,18 +68,18 @@ parsed. A different validation context can be used by specifying the `.profile(E
 
 ```groovy
 
-from(...)
-  .unmarshal().hl7()
-  .verify().hl7().profile { exchange ->
-     // Calculate `ValidationContext`, `ValidationRuleBuilder` or `HapiContext`
-  ...
+    from(...)
+      .unmarshal().hl7()
+      .verify().hl7().profile { exchange ->
+         // Calculate `ValidationContext`, `ValidationRuleBuilder` or `HapiContext`
+      ...
 
-from(...)
-  .unmarshal().hl7()
-  // context can be a `ValidationContext`, `ValidationRuleBuilder` or `HapiContext`
-  .verify().hl7().staticProfile(context)
+    from(...)
+      .unmarshal().hl7()
+      // context can be a `ValidationContext`, `ValidationRuleBuilder` or `HapiContext`
+      .verify().hl7().staticProfile(context)
 
-  ...
+      ...
 
 ```
 
@@ -87,15 +87,15 @@ When using plain Java routes, the same behavior can be obtained by using the cor
 
 ```java
 
-import org.openehealth.ipf.platform.camel.hl7.HL7v2;
+    import org.openehealth.ipf.platform.camel.hl7.HL7v2;
 
-from(...)
-  .unmarshal().hl7()
-  .process(HL7v2.validatingProcessor())
+    from(...)
+      .unmarshal().hl7()
+      .process(HL7v2.validatingProcessor())
 
-from(...)
-  .unmarshal().hl7()
-  .process(HL7v2.validatingProcessor(myOtherHapiContext))
+    from(...)
+      .unmarshal().hl7()
+      .process(HL7v2.validatingProcessor(myOtherHapiContext))
 
 ```
 

@@ -43,66 +43,66 @@ OSGi service registry and the coupling between configurers and the post processo
 
 ```xml
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:camel="http://camel.apache.org/schema/spring"
-       xsi:schemaLocation="
-http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans.xsd
-http://camel.apache.org/schema/spring
->
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/spring"
+           xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://camel.apache.org/schema/spring
+    >
 
-  <!-- Some basic beans -->
+      <!-- Some basic beans -->
 
-  <camel:camelContext id="camelContext" />
+      <camel:camelContext id="camelContext" />
 
-  <bean id="mappingService" class="org.openehealth.ipf.commons.map.BidiMappingService"/>
+      <bean id="mappingService" class="org.openehealth.ipf.commons.map.BidiMappingService"/>
 
-  <!-- Picking up custom mappings -->
-  <bean id="customMappingsConfigurer"
-        class="org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer">
-      <property name="mappingService" ref="mappingService" />
-  </bean>
+      <!-- Picking up custom mappings -->
+      <bean id="customMappingsConfigurer"
+            class="org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer">
+          <property name="mappingService" ref="mappingService" />
+      </bean>
 
-  <bean id="customModelClassFactory"
-        class="org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory" />
+      <bean id="customModelClassFactory"
+            class="org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory" />
 
-  <!-- For HL7 model scripts compiled at runtime, use:
-  <bean id="customModelClassFactory"
-        class="org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory" />
-  -->
+      <!-- For HL7 model scripts compiled at runtime, use:
+      <bean id="customModelClassFactory"
+            class="org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory" />
+      -->
 
-  <!-- Picking up custom HL7v2 model class factories -->
-  <bean id="customModelClassesConfigurer"
-        class="org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer">
-    <property name="customModelClassFactory" ref="customModelClassFactory" />
-  </bean>
+      <!-- Picking up custom HL7v2 model class factories -->
+      <bean id="customModelClassesConfigurer"
+            class="org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer">
+        <property name="customModelClassFactory" ref="customModelClassFactory" />
+      </bean>
 
-  <!-- Picking up custom route builders -->
-  <bean id="customRouteBuilderConfigurer"
-        class="org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilderConfigurer">
-    <property name="camelContext" ref="camelContext" />
-  </bean>
+      <!-- Picking up custom route builders -->
+      <bean id="customRouteBuilderConfigurer"
+            class="org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilderConfigurer">
+        <property name="camelContext" ref="camelContext" />
+      </bean>
 
-  <!-- Picking up dynamic extension modules -->
-  <bean id="customExtensionConfigurer"
-        class="org.openehealth.ipf.commons.core.extend.config.DynamicExtensionConfigurer">
-  </bean>
+      <!-- Picking up dynamic extension modules -->
+      <bean id="customExtensionConfigurer"
+            class="org.openehealth.ipf.commons.core.extend.config.DynamicExtensionConfigurer">
+      </bean>
 
 
-  <bean id="postProcessor"
-        class="org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor">
-      <property name="springConfigurers" >
-        <list>
-          <ref bean="customMappingsConfigurer" />
-          <ref bean="customModelClassesConfigurer" />
-          <ref bean="customRouteBuilderConfigurer" />
-          <ref bean="customExtensionConfigurer" />
-        </list>
-      </property>
-  </bean>
-...
-</beans>
+      <bean id="postProcessor"
+            class="org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor">
+          <property name="springConfigurers" >
+            <list>
+              <ref bean="customMappingsConfigurer" />
+              <ref bean="customModelClassesConfigurer" />
+              <ref bean="customRouteBuilderConfigurer" />
+              <ref bean="customExtensionConfigurer" />
+            </list>
+          </property>
+      </bean>
+    ...
+    </beans>
 
 ```
 

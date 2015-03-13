@@ -16,30 +16,30 @@ which have to be deployed on the endpoints:
 This is a Spring configuration fragment that defines a set of parameterized interceptor beans:
 
 ```xml
-<bean id="logFileNamePrefix" class="java.lang.String">
-    <constructor-arg value="#{systemProperties['IPF_LOG_DIR']}/[processId]/[date('yyyyMMdd-HH00')]/[sequenceId]" />
-</bean>
- 
-<bean id="serverInLogger" scope="prototype"
-      class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInPayloadLoggerInterceptor">
-    <constructor-arg value="#{@logFileNamePrefix}-server-in.txt" />
-    <property name="locallyEnabled" value="true" />
-</bean>
- 
-<bean id="serverOutLogger" scope="prototype"
-      class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerOutPayloadLoggerInterceptor">
-    <constructor-arg value="#{@logFileNamePrefix}-server-out.txt" />
-</bean>
- 
-<bean id="clientInLogger" scope="prototype"
-      class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerInPayloadLoggerInterceptor">
-    <constructor-arg value="#{@logFileNamePrefix}-client-in.txt" />
-</bean>
- 
-<bean id="clientOutLogger" scope="prototype"
-      class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerOutPayloadLoggerInterceptor">
-    <constructor-arg value="#{@logFileNamePrefix}-client-out.txt" />
-</bean>
+    <bean id="logFileNamePrefix" class="java.lang.String">
+        <constructor-arg value="#{systemProperties['IPF_LOG_DIR']}/[processId]/[date('yyyyMMdd-HH00')]/[sequenceId]" />
+    </bean>
+
+    <bean id="serverInLogger" scope="prototype"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInPayloadLoggerInterceptor">
+        <constructor-arg value="#{@logFileNamePrefix}-server-in.txt" />
+        <property name="locallyEnabled" value="true" />
+    </bean>
+
+    <bean id="serverOutLogger" scope="prototype"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerOutPayloadLoggerInterceptor">
+        <constructor-arg value="#{@logFileNamePrefix}-server-out.txt" />
+    </bean>
+
+    <bean id="clientInLogger" scope="prototype"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerInPayloadLoggerInterceptor">
+        <constructor-arg value="#{@logFileNamePrefix}-client-in.txt" />
+    </bean>
+
+    <bean id="clientOutLogger" scope="prototype"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerOutPayloadLoggerInterceptor">
+        <constructor-arg value="#{@logFileNamePrefix}-client-out.txt" />
+    </bean>
 ```
 
 In this example, a common prefix for log file names is defined. Referencing the JVM property IPF_LOG_DIR gives an 
@@ -47,8 +47,8 @@ additional possibility for path customization by the user.
 The consumer endpoint URI which uses these interceptors may look like:
 
 ```java
-from("pdq-iti21://localhost:12354&interceptors=#serverInLogger,#serverOutLogger")
-    .....
+    from("pdq-iti21://localhost:12354&interceptors=#serverInLogger,#serverOutLogger")
+        .....
 ```
 
 

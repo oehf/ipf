@@ -15,11 +15,11 @@ Both consumer and producer sides are supported. There is no mapping to a particu
 In a Maven-based environment, the following dependency must be registered in `pom.xml`:
 
 ```xml
-<dependency>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
+    <dependency>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 ```
 
 ### Endpoint URI Format
@@ -52,9 +52,9 @@ components and requires that an [HL7v2 Codec](codec.html) is available in the Ca
 This is an example on how to use the component on the consumer side:
 
 ```java
-from("mllp://0.0.0.0:8777?hl7TransactionConfig=#config&clientAuditStrategy=#clientStrategy&serverAuditStrategy=#serverStrategy")
-  .process(myProcessor)
-  // process the incoming request and create a response
+    from("mllp://0.0.0.0:8777?hl7TransactionConfig=#config&clientAuditStrategy=#clientStrategy&serverAuditStrategy=#serverStrategy")
+      .process(myProcessor)
+      // process the incoming request and create a response
 ```
 
 ### Basic Common Component Features

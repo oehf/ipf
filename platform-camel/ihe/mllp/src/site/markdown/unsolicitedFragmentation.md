@@ -42,16 +42,16 @@ Here's an example of how to configure it in the Spring context descriptor, suppo
 is defined in Ehcache configuration file:
 
 ```xml
-<bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
- 
-<bean id="myUFStorage"
-      class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheUnsolicitedFragmentationStorage">
-    <constructor-arg index="0">
-        <bean factory-bean="ehcacheManager" factory-method="getCache">
-            <constructor-arg value="unsolicitedFragmentationCache" />
-        </bean>
-    </constructor-arg>
-</bean>
+    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
+
+    <bean id="myUFStorage"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheUnsolicitedFragmentationStorage">
+        <constructor-arg index="0">
+            <bean factory-bean="ehcacheManager" factory-method="getCache">
+                <constructor-arg value="unsolicitedFragmentationCache" />
+            </bean>
+        </constructor-arg>
+    </bean>
 ```
 
 The consumer endpoint URI can then contain the parameters `"&supportUnsolicitedFragmentation=true&unsolicitedFragmentationStorage=#myUFStorage"`.

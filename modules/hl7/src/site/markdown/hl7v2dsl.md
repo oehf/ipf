@@ -25,12 +25,12 @@ expressions (see the [Terser] class in HAPI).
 Groups and segments can be accessed by name like an object property.
 
 ```groovy
-import ca.uhn.hl7v2.model.Message
+    import ca.uhn.hl7v2.model.Message
 
-Message message = ...
-def msh   = message.MSH
-def group = message.PATIENT_RESULT
-def pid   = message.PATIENT_RESULT.PATIENT.PID
+    Message message = ...
+    def msh   = message.MSH
+    def group = message.PATIENT_RESULT
+    def pid   = message.PATIENT_RESULT.PATIENT.PID
 ```
 
 Details are described [here][hl7v2dslStructures].
@@ -42,8 +42,8 @@ of by name. Fields are accessed like an array field. Components in a composite f
 Subcomponents are accessed like a three-dimensional array.
 
 ```groovy
-String messageType = message.MSH[9][1].value
-String street = message.PATIENT_RESULT.PATIENT.PID[11][1][1].value
+    String messageType = message.MSH[9][1].value
+    String street = message.PATIENT_RESULT.PATIENT.PID[11][1][1].value
 ```
 
 Details are described [here][hl7v2dslFields].
@@ -54,8 +54,8 @@ Groups, segments and fields may be repeatable. Parentheses like with regular met
 certain element of a repeating structure.
 
 ```groovy
-def group = message.PATIENT_RESULT(0).PATIENT
-def nk1   = group.NK1(1)
+    def group = message.PATIENT_RESULT(0).PATIENT
+    def nk1   = group.NK1(1)
 ```
 
 Details are described [here][hl7v2dslRepetitions].
@@ -71,7 +71,7 @@ This appears to be backwards compatible on printed messages, but requires differ
 Smart navigation resolves these problems by assuming reasonable defaults when repetitions or component operators are omitted
 
 ```groovy
-assert group.NK1(0)[2][1][1].value == group.NK1[2].value
+    assert group.NK1(0)[2][1][1].value == group.NK1[2].value
 ```
 
 Details are described [here][hl7v2dslSmart].
@@ -83,10 +83,10 @@ HL7 messages and groups. Due to their nested structures, iteration is implemente
 non-empty substructures, i.e. non-empty groups and segments.
 
 ```groovy
-import ca.uhn.hl7v2.model.Message
+    import ca.uhn.hl7v2.model.Message
 
-boolean hasGroups = message.any { it instanceof Group }
-def allStructureNames = message*.name
+    boolean hasGroups = message.any { it instanceof Group }
+    def allStructureNames = message*.name
 ```
 
 Details are described [here][hl7v2dslIteration].

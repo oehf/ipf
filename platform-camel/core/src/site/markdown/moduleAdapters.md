@@ -27,11 +27,11 @@ a [transmogrifier](images/transmogrifier.png) converts anything into whatever yo
 Transmogrification is accompanied by a loud *zap*:
 
 ```java
-public interface Transmogrifier<S, T> {
+    public interface Transmogrifier<S, T> {
 
-    T zap(S object, Object... params);
+        T zap(S object, Object... params);
 
-}
+    }
 ```
 
 Implementations of Transmogrifier are used for message transformation. Transformation input is given by the object parameter
@@ -40,11 +40,11 @@ To include a `Transmogrifier` instance into a Camel route we use the `transmogri
 
 ```groovy
 
-// this is a Groovy route
-Transmogrifier transmogrifier = new MyTransmogrifier()
-from('direct:input')
-    .transmogrify(transmogrifier)
-    .to('mock:output')
+    // this is a Groovy route
+    Transmogrifier transmogrifier = new MyTransmogrifier()
+    from('direct:input')
+        .transmogrify(transmogrifier)
+        .to('mock:output')
 
 ```
 
@@ -58,16 +58,16 @@ There are three different ways of including a transmogrifier into a Camel route:
 
 ```groovy
 
-from('direct:input1')
-    .transmogrify('myTransmogrifierBean')
-    .to('mock:output')
+    from('direct:input1')
+        .transmogrify('myTransmogrifierBean')
+        .to('mock:output')
 
-from('direct:input2')
-    .transmogrify { body, headers ->
-        def result = ... // create result from input body and headers
-        return result    // return the transformation result
-    }
-    .to('mock:output')
+    from('direct:input2')
+        .transmogrify { body, headers ->
+            def result = ... // create result from input body and headers
+            return result    // return the transformation result
+        }
+        .to('mock:output')
 ```
 
 This pattern also applies to all other DSL extensions for IPF module adapters: `verify`, `parse`, `render`, and `aggregationStrategy`.
@@ -94,13 +94,13 @@ The following snippet causes the transmogrifier's `zap` method to be called with
 and the messages *bar*-header as the second argument:
 
 ```groovy
-from('direct:input')
-    .transmogrify { fooHeader, barHeader ->
-        // ...
-    }
-    .input { it.in.headers.foo }
-    .params { it.in.headers.bar }
-    .to('mock:output')
+    from('direct:input')
+        .transmogrify { fooHeader, barHeader ->
+            // ...
+        }
+        .input { it.in.headers.foo }
+        .params { it.in.headers.bar }
+        .to('mock:output')
 ```
 
 The `params` DSL extension also supports predefined expressions. These are accessible by calling `params` without arguments.
@@ -114,25 +114,25 @@ The following predefined expressions are currently supported as part of the DSL:
 Thus, the example above could be rewritten to:
 
 ```groovy
-from('direct:input')
-    .transmogrify { fooHeader, barHeader ->
-        // ...
-    }
-    .input { it.in.headers.foo }
-    .params().header('bar')
-    .to('mock:output')
+    from('direct:input')
+        .transmogrify { fooHeader, barHeader ->
+            // ...
+        }
+        .input { it.in.headers.foo }
+        .params().header('bar')
+        .to('mock:output')
 ```
 
 The `staticParams` extension can be used to pass constant values to the transmogrifier or transmogrifier closure.
 This extension method defines a variable argument parameter. For example to pass a String array with elements 'a', 'b' and 'c':
 
 ```groovy
-from('direct:input')
-    .transmogrify { body, stringArray ->
-        // ...
-    }
-    .staticParams('a', 'b', 'c')
-    .to('mock:output')
+    from('direct:input')
+        .transmogrify { body, stringArray ->
+            // ...
+        }
+        .staticParams('a', 'b', 'c')
+        .to('mock:output')
 ```
 
 #### Output
@@ -167,31 +167,31 @@ are available in the stylesheet unless you define parameters by either using `pa
 
 ```groovy
 
-from('direct:input1')
-    .transmogrify().xslt().staticParams('path/to/stylesheet') // static stylesheet
-    .to('mock:output')
+    from('direct:input1')
+        .transmogrify().xslt().staticParams('path/to/stylesheet') // static stylesheet
+        .to('mock:output')
 
-from('direct:input1')
-    .transmogrify().xslt().staticParams('path/to/stylesheet', parameterMap) // static stylesheet with parameters
-    .to('mock:output')
+    from('direct:input1')
+        .transmogrify().xslt().staticParams('path/to/stylesheet', parameterMap) // static stylesheet with parameters
+        .to('mock:output')
 
-from('direct:input3')
-    .setHeader('stylesheet', constant('path/to/stylesheet'))
-    .transmogrify().xslt().params().header('stylesheet') // dynamic stylesheet
-    .to('mock:output')
+    from('direct:input3')
+        .setHeader('stylesheet', constant('path/to/stylesheet'))
+        .transmogrify().xslt().params().header('stylesheet') // dynamic stylesheet
+        .to('mock:output')
 
-// In most cases you will need the SchematronValidator, which scans the Schematron report
-// for failed assertions. Use only if you require custom processing of the report in the
-// route.
+    // In most cases you will need the SchematronValidator, which scans the Schematron report
+    // for failed assertions. Use only if you require custom processing of the report in the
+    // route.
 
-from('direct:input3')
-    .transmogrify().schematron().staticParams('path/to/rules', options ) // static rules
-    .to('mock:output')
+    from('direct:input3')
+        .transmogrify().schematron().staticParams('path/to/rules', options ) // static rules
+        .to('mock:output')
 
-from('direct:input4')
-    .setHeader('rules', constant('path/to/rules'))
-    .transmogrify('schematron').params().header('rules') // dynamic rules
-    .to('mock:output')
+    from('direct:input4')
+        .setHeader('rules', constant('path/to/rules'))
+        .transmogrify('schematron').params().header('rules') // dynamic rules
+        .to('mock:output')
 
 ```
 
@@ -201,14 +201,14 @@ using a Class parameter to the xslt()/schematron() extensions or with a subseque
 
 ```groovy
 
-from('direct:input1')
-    .transmogrify().xslt(InputStream.class).staticParams('path/to/stylesheet')
-    .to('mock:output')
+    from('direct:input1')
+        .transmogrify().xslt(InputStream.class).staticParams('path/to/stylesheet')
+        .to('mock:output')
 
-from('direct:input2')
-    .transmogrify().xslt().staticParams('path/to/stylesheet')
-    .convertBodyTo(InputStream.class)
-    .to('mock:output')
+    from('direct:input2')
+        .transmogrify().xslt().staticParams('path/to/stylesheet')
+        .convertBodyTo(InputStream.class)
+        .to('mock:output')
 ```
 
 ##### XQuery
@@ -223,23 +223,23 @@ can be used also with the XQuery Transmogrifier. The main difference with the Ap
 collections directly from the classpath.
 
 ```groovy
-from('direct:input24') // using a dedicated XqjTransmogrifier bean
-    .convertBodyTo(StreamSource.class)
-    .transmogrify('xqj').staticParams('xquery/extract.xq', [id:'someid'])
-    .to('mock:output')
+    from('direct:input24') // using a dedicated XqjTransmogrifier bean
+        .convertBodyTo(StreamSource.class)
+        .transmogrify('xqj').staticParams('xquery/extract.xq', [id:'someid'])
+        .to('mock:output')
 
-from('direct:input29') // passing classpath parameters as stream
-    .transmogrify().xquery()
-    .staticParams('xquery/extract-map-document.xq', [id:'someid',
-        map: new StreamSource(new ClassPathResource('xquery/mapping.xml').getInputStream())])
-    .to('mock:output')
+    from('direct:input29') // passing classpath parameters as stream
+        .transmogrify().xquery()
+        .staticParams('xquery/extract-map-document.xq', [id:'someid',
+            map: new StreamSource(new ClassPathResource('xquery/mapping.xml').getInputStream())])
+        .to('mock:output')
 
-from('direct:input29') // passing parameters as map
-    .transmogrify().xquery().params{
-        [(XqjTransmogrifier.RESOURCE_LOCATION) : 'xquery/extract-map-document.xq',
-          map: new StreamSource(new ClassPathResource('xquery/mapping.xml').getInputStream()),
-          id:'someid']}
-    .to('mock:output')
+    from('direct:input29') // passing parameters as map
+        .transmogrify().xquery().params{
+            [(XqjTransmogrifier.RESOURCE_LOCATION) : 'xquery/extract-map-document.xq',
+              map: new StreamSource(new ClassPathResource('xquery/mapping.xml').getInputStream()),
+              id:'someid']}
+        .to('mock:output')
 ```
 
 ### Validator
@@ -266,53 +266,53 @@ Some examples:
 
 ```groovy
 
-// validation will fail if the in-message body doesn't equal 'blah'
-from('direct:input1')
-     .verify {body -> body == 'blah'}
-     .to('mock:output')
+    // validation will fail if the in-message body doesn't equal 'blah'
+    from('direct:input1')
+         .verify {body -> body == 'blah'}
+         .to('mock:output')
 
-// validation will fail because a ValidationException is thrown directly
-from('direct:input2')
-     .verify { throw new ValidationException('always fail') }
-     .to('mock:output')
+    // validation will fail because a ValidationException is thrown directly
+    from('direct:input2')
+         .verify { throw new ValidationException('always fail') }
+         .to('mock:output')
 
-// a second parameter is used for passing a validation profile. By default it is null but it can be customized
-// via the staticProfile DSL extension
-from('direct:input3')
-     .verify {body, profile ->
-         body == profile
-     }
-     .staticProfile('blah')
-     .to('mock:output')
+    // a second parameter is used for passing a validation profile. By default it is null but it can be customized
+    // via the staticProfile DSL extension
+    from('direct:input3')
+         .verify {body, profile ->
+             body == profile
+         }
+         .staticProfile('blah')
+         .to('mock:output')
 
-// input is used to pass the in-message's foo-header as first argument to the validation closure.
-// If the foo-header doesn't equal 'abcd' validation will fail.
-from('direct:input4')
-     .verify {fooHeader, profile ->
-         fooHeader == profile
-     }
-     .input { it.in.headers.foo }
-     .staticProfile('abcd')
-     .to('mock:output')
+    // input is used to pass the in-message's foo-header as first argument to the validation closure.
+    // If the foo-header doesn't equal 'abcd' validation will fail.
+    from('direct:input4')
+         .verify {fooHeader, profile ->
+             fooHeader == profile
+         }
+         .input { it.in.headers.foo }
+         .staticProfile('abcd')
+         .to('mock:output')
 
-// a validation profile is obtained from the in-messages's customProfile header using the profile() DSL extension and a closure
-from('direct:input5')
-     .verify(...)
-     .input(...)
-     .profile { exchange ->
-         exchange.in.headers.customProfile
-     }
-     .to('mock:output')
+    // a validation profile is obtained from the in-messages's customProfile header using the profile() DSL extension and a closure
+    from('direct:input5')
+         .verify(...)
+         .input(...)
+         .profile { exchange ->
+             exchange.in.headers.customProfile
+         }
+         .to('mock:output')
 
-// can also use validator objects
-     ...
-     .verify(new MyCustomValidator())
-     ...
+    // can also use validator objects
+         ...
+         .verify(new MyCustomValidator())
+         ...
 
-// can use validator beans
-     ...
-     .verify('myValidatorBean')
-     ...
+    // can use validator beans
+         ...
+         .verify('myValidatorBean')
+         ...
 ```
 
 #### Skipping Validation
@@ -331,19 +331,19 @@ IPF provides a Validator implementation that validates an XML Source against an 
 The schema location value can be either a URL or a non-URL string, in the latter case the classpath is searched for the schema resource.
 
 ```groovy
-from('direct:input1')
-     .validate().xsd().staticProfile('schema location')
-     .to('mock:output')
+    from('direct:input1')
+         .validate().xsd().staticProfile('schema location')
+         .to('mock:output')
 ```
 
 IPF also provides a Validator implementation that validates an XML Source against a set of *Schematron* rules.
 
 ```groovy
-import org.openehealth.ipf.commons.xml.SchematronProfile;
-...
-from('direct:input1')
-     .validate().schematron().staticProfile(new SchematronProfile('rules location', options))
-     .to('mock:output')
+    import org.openehealth.ipf.commons.xml.SchematronProfile;
+    ...
+    from('direct:input1')
+         .validate().schematron().staticProfile(new SchematronProfile('rules location', options))
+         .to('mock:output')
 ```
 
 Note that you have to provide an instance of `SchematronProfile`, not just the plain Schematron rules location.
@@ -373,15 +373,15 @@ Examples:
 
 ```groovy
 
-from('direct:input1')
-    .parse(new MyParser())
-    .to('mock:output')
+    from('direct:input1')
+        .parse(new MyParser())
+        .to('mock:output')
 
-from('direct:input2')
-    .parse('myParserBean')
-    .input { it.in.headers.foo }
-    .params { it.in.headers.bar }
-    .to('mock:output')
+    from('direct:input2')
+        .parse('myParserBean')
+        .input { it.in.headers.foo }
+        .params { it.in.headers.bar }
+        .to('mock:output')
 ```
 
 *Note*: Prefer using Camel's [Data Format](http://camel.apache.org/data-format.html) or [bean integration] for this purpose.
@@ -395,15 +395,15 @@ Examples:
 
 ```groovy
 
-from('direct:input1')
-    .render(new MyRenderer())
-    .to('mock:output')
+    from('direct:input1')
+        .render(new MyRenderer())
+        .to('mock:output')
 
-from('direct:input2')
-    .render('myRendererBean')
-    .input { it.in.body[0] }
-    .params { it.in.headers.bar }
-    .to('mock:output')
+    from('direct:input2')
+        .render('myRendererBean')
+        .input { it.in.body[0] }
+        .params { it.in.headers.bar }
+        .to('mock:output')
 ```
 
 *Note*: Prefer using Camel's [Data Format](http://camel.apache.org/data-format.html) or [bean integration] for this purpose.
@@ -415,11 +415,11 @@ collection of input object into a result object. The result object is the return
 
 ```java
 
-public interface Transmogrifier<S, T> {
-    T zap(S object, Object... params);
-}
+    public interface Transmogrifier<S, T> {
+        T zap(S object, Object... params);
+    }
 
-public interface Aggregator<S, T> extends Transmogrifier<Collection<S>, T>
+    public interface Aggregator<S, T> extends Transmogrifier<Collection<S>, T>
 ```
 
 The `aggregationStrategy` DSL extension can be used to include an `Aggregator` into Camel routes.

@@ -13,12 +13,12 @@ The following dependency must be registered in `pom.xml`:
 
 ```xml
 
-<!-- IPF MDHT extensions and DSL -->
-<dependency>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-mdht</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
+    <!-- IPF MDHT extensions and DSL -->
+    <dependency>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel-mdht</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 
 ```
 
@@ -43,10 +43,10 @@ was provided by the [MDHT support] validator classes.
 
 ```groovy
 
-from(...)
-  .unmarshal().mdht()
-  .verify().mdht()
-  ...
+    from(...)
+      .unmarshal().mdht()
+      .verify().mdht()
+      ...
 
 ```
 

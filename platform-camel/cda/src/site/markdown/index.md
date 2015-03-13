@@ -12,20 +12,18 @@ the client.
 The following dependency must be registered in `pom.xml`:
 
 ```xml
+    <!-- IPF CDA extensions and DSL -->
 
-<!-- IPF CDA extensions and DSL -->
-
-<dependency>
-    <groupId>org.apache-camel</groupId>
-    <artifactId>camel-groovy</artifactId>
-    <version>${camel-version}</version>
-</dependency>
-<dependency>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-cda</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
-
+    <dependency>
+        <groupId>org.apache-camel</groupId>
+        <artifactId>camel-groovy</artifactId>
+        <version>${camel-version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel-cda</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 ```
 
 
@@ -56,13 +54,13 @@ was provided by the [Generic CDA support] validator classes.
 
 ```groovy
 
-from(...)
-  .unmarshal().gpath(true)
-  // Validate against the schema
-  .verify().xsd().ccda_schema()
-  // Validate more closely using Schematron rules
-  .verify().schematron().ccda()
-  ...
+    from(...)
+      .unmarshal().gpath(true)
+      // Validate against the schema
+      .verify().xsd().ccda_schema()
+      // Validate more closely using Schematron rules
+      .verify().schematron().ccda()
+      ...
 
 ```
 

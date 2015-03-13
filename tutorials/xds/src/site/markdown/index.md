@@ -123,40 +123,40 @@ A `from(...)` is all it takes. Take a look at the following snippets:
 
 ```groovy
 
-// Iti18RouteBuilder.groovy
+    // Iti18RouteBuilder.groovy
 
-public void configure() throws Exception {
-        ...
-        // Entry point for Stored Query
-        from('xds-iti18:xds-iti18')
-           ...
-
-```
-
-```groovy
-
-// Iti42RouteBuilder.groovy
-
-public void configure() throws Exception {
-        ...
-        // Entry point for Provide and Register Document Set
-        from('xds-iti41:xds-iti41')
-        ...
-        // Entry point for Register Document Set
-        from('xds-iti42:xds-iti42')
-        ...
+    public void configure() throws Exception {
+            ...
+            // Entry point for Stored Query
+            from('xds-iti18:xds-iti18')
+               ...
 
 ```
 
 ```groovy
 
-// Iti43RouteBuilder.groovy
+    // Iti42RouteBuilder.groovy
 
-public void configure() throws Exception {
-        ...
-        // Entry point for Retrieve Document Set
-        from('xds-iti43:xds-iti43')
-        ...
+    public void configure() throws Exception {
+            ...
+            // Entry point for Provide and Register Document Set
+            from('xds-iti41:xds-iti41')
+            ...
+            // Entry point for Register Document Set
+            from('xds-iti42:xds-iti42')
+            ...
+
+```
+
+```groovy
+
+    // Iti43RouteBuilder.groovy
+
+    public void configure() throws Exception {
+            ...
+            // Entry point for Retrieve Document Set
+            from('xds-iti43:xds-iti43')
+            ...
 
 ```
 
@@ -175,12 +175,12 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
 ...
 
-// Iti43RouteBuilder.groovy
-...
-        // Entry point for Retrieve Document Set
-        from('xds-iti43:xds-iti43')
-            .log(log) { 'received iti43: ' + it.in.getBody(RetrieveDocumentSet.class) }
-    		.process(iti43RequestValidator())
+    // Iti43RouteBuilder.groovy
+    ...
+            // Entry point for Retrieve Document Set
+            from('xds-iti43:xds-iti43')
+                .log(log) { 'received iti43: ' + it.in.getBody(RetrieveDocumentSet.class) }
+                .process(iti43RequestValidator())
 ```
 
 A validation failure will throw an `XDSMetaDataException`. It is not necessary to put any `onException` handling in the
@@ -192,12 +192,12 @@ not track patients yet, it simply throws an exception if this specific patient I
 
 ```groovy
 
-// Iti4142RouteBuilder.groovy
-...
-    from('direct:checkPatientIds')
-            .choice().when { it.in.body.req.submissionSet.patientId.id == '1111111' }
-                .fail(UNKNOWN_PATIENT_ID)
-            ...
+    // Iti4142RouteBuilder.groovy
+    ...
+        from('direct:checkPatientIds')
+                .choice().when { it.in.body.req.submissionSet.patientId.id == '1111111' }
+                    .fail(UNKNOWN_PATIENT_ID)
+                ...
 
 ```
 
@@ -206,12 +206,12 @@ A failure is reported by throwing an `XDSMetaDataException` via the `fail` DSL e
 
 ```groovy
 
-// RegRepModelExtension.groovy
-...
+    // RegRepModelExtension.groovy
+    ...
 
-    static ProcessorDefinition fail(ProcessorDefinition self, message) {
-        self.process { throw new XDSMetaDataException(message) }
-    }
+        static ProcessorDefinition fail(ProcessorDefinition self, message) {
+            self.process { throw new XDSMetaDataException(message) }
+        }
 
 ```
 
@@ -236,12 +236,12 @@ This is done in the ITI-43 route:
 
 ```groovy
 
-// Entry point for Retrieve Document Set
-        from('xds-iti43:xds-iti43')
-            .log(log) { 'received iti43: ' + it.in.getBody(RetrieveDocumentSet.class) }
-            // Validate and convert the request
-            .validate().iti43Request()
-            .convertBodyTo(RetrieveDocumentSet.class)
+    // Entry point for Retrieve Document Set
+            from('xds-iti43:xds-iti43')
+                .log(log) { 'received iti43: ' + it.in.getBody(RetrieveDocumentSet.class) }
+                // Validate and convert the request
+                .validate().iti43Request()
+                .convertBodyTo(RetrieveDocumentSet.class)
 
 ```
 
@@ -250,13 +250,13 @@ that contains the actual request object. This allows access to the request at an
 
 ```groovy
 
-from('xds-iti41:xds-iti41')
-            .log(log) { 'received iti41: ' + it.in.getBody(ProvideAndRegisterDocumentSet.class) }
-            // Validate and convert the request
-            .validate().iti41Request()
-            .transform {
-                [ 'req': it.in.getBody(ProvideAndRegisterDocumentSet.class), 'uuidMap': [:] ]
-            }
+    from('xds-iti41:xds-iti41')
+                .log(log) { 'received iti41: ' + it.in.getBody(ProvideAndRegisterDocumentSet.class) }
+                // Validate and convert the request
+                .validate().iti41Request()
+                .transform {
+                    [ 'req': it.in.getBody(ProvideAndRegisterDocumentSet.class), 'uuidMap': [:] ]
+                }
 ```
 
 In contrast to `convertBodyTo`, getBody does not replace the body of the message. Check out the log step at the beginning of the route.
@@ -280,34 +280,34 @@ All query types that are defined by the IHE specification are listed in the enum
 
 ```groovy
 
-// Iti18RouteBuilder
+    // Iti18RouteBuilder
 
-public void configure() throws Exception {
-        ...
-
-        from('xds-iti18:xds-iti18')
+    public void configure() throws Exception {
             ...
-            // Dispatch to the correct query implementation
-            .choice()
-                .when { queryType(it) == FIND_DOCUMENTS }.to('direct:findDocs')
-                .when { queryType(it) == FIND_SUBMISSION_SETS }.to('direct:findSets')
-                .when { queryType(it) == FIND_FOLDERS }.to('direct:findFolders')
-                .when { queryType(it) == GET_SUBMISSION_SET_AND_CONTENTS }.to('direct:getSetAndContents')
-                .when { queryType(it) == GET_DOCUMENTS }.to('direct:getDocs')
-                .when { queryType(it) == GET_FOLDER_AND_CONTENTS }.to('direct:getFolderAndContents')
-                .when { queryType(it) == GET_FOLDERS }.to('direct:getFolders')
-                .when { queryType(it) == GET_SUBMISSION_SETS }.to('direct:getSets')
-                .when { queryType(it) == GET_ASSOCIATIONS }.to('direct:getAssocs')
-                .when { queryType(it) == GET_DOCUMENTS_AND_ASSOCIATIONS }.to('direct:getDocsAndAssocs')
-                .when { queryType(it) == GET_FOLDERS_FOR_DOCUMENT }.to('direct:getFoldersForDoc')
-                .when { queryType(it) == GET_RELATED_DOCUMENTS }.to('direct:getRelatedDocs')
-                .otherwise().fail(ErrorCode.UNKNOWN_STORED_QUERY)
-            .end()
 
-         ...
-    }
+            from('xds-iti18:xds-iti18')
+                ...
+                // Dispatch to the correct query implementation
+                .choice()
+                    .when { queryType(it) == FIND_DOCUMENTS }.to('direct:findDocs')
+                    .when { queryType(it) == FIND_SUBMISSION_SETS }.to('direct:findSets')
+                    .when { queryType(it) == FIND_FOLDERS }.to('direct:findFolders')
+                    .when { queryType(it) == GET_SUBMISSION_SET_AND_CONTENTS }.to('direct:getSetAndContents')
+                    .when { queryType(it) == GET_DOCUMENTS }.to('direct:getDocs')
+                    .when { queryType(it) == GET_FOLDER_AND_CONTENTS }.to('direct:getFolderAndContents')
+                    .when { queryType(it) == GET_FOLDERS }.to('direct:getFolders')
+                    .when { queryType(it) == GET_SUBMISSION_SETS }.to('direct:getSets')
+                    .when { queryType(it) == GET_ASSOCIATIONS }.to('direct:getAssocs')
+                    .when { queryType(it) == GET_DOCUMENTS_AND_ASSOCIATIONS }.to('direct:getDocsAndAssocs')
+                    .when { queryType(it) == GET_FOLDERS_FOR_DOCUMENT }.to('direct:getFoldersForDoc')
+                    .when { queryType(it) == GET_RELATED_DOCUMENTS }.to('direct:getRelatedDocs')
+                    .otherwise().fail(ErrorCode.UNKNOWN_STORED_QUERY)
+                .end()
 
-    def queryType(exchange) { exchange.in.body.req.query.type }
+             ...
+        }
+
+        def queryType(exchange) { exchange.in.body.req.query.type }
 
 ```
 
@@ -328,33 +328,33 @@ Finally, the message is transformed, putting the aggregated list into the meta c
 
 ```groovy
 
-// Iti43RouteBuilder.groovy
-...
-        // Entry point for Retrieve Document Set
-        from('xds-iti43:xds-iti43')
-            .log(log) { 'received iti43: ' + it.in.getBody(RetrieveDocumentSet.class) }
-            // Validate and convert the request
-    		.process(iti43RequestValidator())
-    		.convertBodyTo(RetrieveDocumentSet.class)
+    // Iti43RouteBuilder.groovy
+    ...
+            // Entry point for Retrieve Document Set
+            from('xds-iti43:xds-iti43')
+                .log(log) { 'received iti43: ' + it.in.getBody(RetrieveDocumentSet.class) }
+                // Validate and convert the request
+                .process(iti43RequestValidator())
+                .convertBodyTo(RetrieveDocumentSet.class)
 
-    		// Retrieve each requested document and aggregate them in a list
-    		.split { it.in.body.documents }
-                .aggregationStrategy(new RetrievedDocumentAggregator())
-    		    .retrieve()
-                .end()
-            // Create success response
-            .transform {
-                new RetrievedDocumentSet(Status.SUCCESS, it.in.body)
+                // Retrieve each requested document and aggregate them in a list
+                .split { it.in.body.documents }
+                    .aggregationStrategy(new RetrievedDocumentAggregator())
+                    .retrieve()
+                    .end()
+                // Create success response
+                .transform {
+                    new RetrievedDocumentSet(Status.SUCCESS, it.in.body)
+                }
+    ...
+
+        private class RetrievedDocumentAggregator extends AbstractListAggregationStrategy<RetrievedDocument> {
+
+            @Override
+            RetrievedDocument getValue(Exchange exchange) {
+                exchange.in.getBody(RetrievedDocument.class)
             }
-...
-
-    private class RetrievedDocumentAggregator extends AbstractListAggregationStrategy<RetrievedDocument> {
-
-        @Override
-        RetrievedDocument getValue(Exchange exchange) {
-            exchange.in.getBody(RetrievedDocument.class)
         }
-    }
 
 ```
 
@@ -367,13 +367,13 @@ With the embedded Tomcat class of the XDS test package, this is only a few lines
 
 ```groovy
 
-// Server.groovy
-...
-    servletServer.secure = args.length == 1 && args[0].equals('secure')
-        servletServer.keystoreFile = 'keystore'
-        servletServer.keystorePass = 'changeit'
-        servletServer.truststoreFile = 'keystore'
-        servletServer.truststorePass = 'changeit'
+    // Server.groovy
+    ...
+        servletServer.secure = args.length == 1 && args[0].equals('secure')
+            servletServer.keystoreFile = 'keystore'
+            servletServer.keystorePass = 'changeit'
+            servletServer.truststoreFile = 'keystore'
+            servletServer.truststorePass = 'changeit'
 ```
 
 ### ATNA Auditing
@@ -383,11 +383,11 @@ The configuration of the syslog server that receives auditing messages can be fo
 
 ```groovy
 
-// Server.groovy
-...
+    // Server.groovy
+    ...
         AuditorModuleContext.context.config.auditRepositoryHost = 'localhost'
         AuditorModuleContext.context.config.auditRepositoryPort = SYSLOG_PORT
-...
+    ...
 ```
 
 Auditing messages will always be send. Because they are send unreliably via the UDP protocol (this is the default),

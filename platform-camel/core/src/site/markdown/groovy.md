@@ -8,25 +8,25 @@ Some examples:
 
 ```groovy
 
-// Processor closure
-from('direct:input1')
-    .process {exchange ->
-        exchange.in.body = exchange.in.body.reverse()
-    }
-    .to('mock:output')
+    // Processor closure
+    from('direct:input1')
+        .process {exchange ->
+            exchange.in.body = exchange.in.body.reverse()
+        }
+        .to('mock:output')
 
-// Filter closure
-from('direct:input2')
-    .filter {exchange ->
-        exchange.in.body == 'blah'
-    }
-    .to('mock:output')
+    // Filter closure
+    from('direct:input2')
+        .filter {exchange ->
+            exchange.in.body == 'blah'
+        }
+        .to('mock:output')
 
-// Transform closure
-from('direct:input3')
-    .transform {exchange ->
-        exchange.in.body.reverse()
-    }
-
+    // Transform closure
+    from('direct:input3')
+        .transform {exchange ->
+            exchange.in.body.reverse()
+        }
+```
 
 [camel-groovy]: http://camel.apache.org/groovy-dsl.html

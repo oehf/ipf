@@ -72,6 +72,11 @@ IPF is prepared to run in OSGi environments as well:
 | [IHE Client Example]                            | Some examples how to use IPF producer endpoints
 | [OSGi tutorial]                                 | OSGi Tutorial
 
+## Non-functional aspects
+
+| Feature                                         | Description
+|-------------------------------------------------|-----------------------------------------------
+| [Recoverability]                                | Recoverability means that a system can recover from crashes or service failures without losing messages or data
 
 
 ## Migration
@@ -108,6 +113,7 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 
 [OSGi Support]: osgi/index.html
 [Migration Instructions]: migration.html
+|Recoverability]: recoverability.html
 
 [HL7 Support tutorial]: ipf-tutorials-hl7/index.html
 [XDS tutorial]: ipf-tutorials-xds/index.html

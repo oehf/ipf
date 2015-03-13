@@ -48,16 +48,16 @@ URI parameter of the consumer endpoint. This bean must implement the interface
 Here is an example of how to configure the Spring context descriptor, supposed that "interactiveContinuationCache" is defined in Ehcache configuration file:
 
 ```xml
-<bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
+    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
 
-<bean id="myICStorage"
-      class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage">
-    <constructor-arg>
-        <bean factory-bean="ehcacheManager" factory-method="getCache">
-            <constructor-arg value="interactiveContinuationCache" />
-        </bean>
-    </constructor-arg>
-</bean>
+    <bean id="myICStorage"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage">
+        <constructor-arg>
+            <bean factory-bean="ehcacheManager" factory-method="getCache">
+                <constructor-arg value="interactiveContinuationCache" />
+            </bean>
+        </constructor-arg>
+    </bean>
 ```
 
 The consumer endpoint URI can then contain parameters `"&supportInteractiveContinuation=true&interactiveContinuationStorage=#myICStorage"`.

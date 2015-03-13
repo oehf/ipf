@@ -17,9 +17,9 @@ If validation succeeds the message is forwarded as in-only exchange to mock:outp
 The response returned from direct:validator is returned to the direct:input endpoint.
 
 ```groovy
-from('direct:input')
-    .validation('direct:validator')
-    .to('mock:output')
+    from('direct:input')
+        .validation('direct:validator')
+        .to('mock:output')
 ```
 
 The validation process interprets a message exchange as failed if any of the following conditions is true:
@@ -32,16 +32,16 @@ Instead of providing an endpoint, the validator logic can also be provided as Gr
 
 ```groovy
 
-Processor validator = new MyFamousValidator()
+    Processor validator = new MyFamousValidator()
 
-from('direct:input1')
-    .validation(validator)
-    .to('mock:output')
+    from('direct:input1')
+        .validation(validator)
+        .to('mock:output')
 
-from('direct:input2')
-    // throw a validation exception
-    .validation { throw new ValidationException('input sucks in any case') }
-    .to('mock:output')
+    from('direct:input2')
+        // throw a validation exception
+        .validation { throw new ValidationException('input sucks in any case') }
+        .to('mock:output')
 
 ```
 
@@ -57,9 +57,9 @@ The DSL element therefore requires three parameters:
 * aggregationStrategy: strategy for aggregating received responses
 
 ```groovy
-from('direct:input')
-    .multiplast(splitter, recipients, aggregator)
-    .to('mock:output')
+    from('direct:input')
+        .multiplast(splitter, recipients, aggregator)
+        .to('mock:output')
 ```
 
 

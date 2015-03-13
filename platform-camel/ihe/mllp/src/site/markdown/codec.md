@@ -24,9 +24,9 @@ network stream into a suitable application protocol and vice versa.
 The corresponding bean must always be defined:
 
 ```xml
-<bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
-    <property name="charset" value="iso-8859-1"/>
-</bean>
+    <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
+        <property name="charset" value="iso-8859-1"/>
+    </bean>
 ```
 
 The character set name set up for the HL7 codec factory will be automatically

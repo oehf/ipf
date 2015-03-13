@@ -3,18 +3,18 @@
 Groups and segments can be accessed by name like an object property.
 
 ```groovy
-import ca.uhn.hl7v2.model.Message
+    import ca.uhn.hl7v2.model.Message
 
-Message message = ...
+    Message message = ...
 
-// Accessing a segment
-def msh   = message.MSH
+    // Accessing a segment
+    def msh   = message.MSH
 
-// Accessing a group
-def group = message.PATIENT_RESULT
+    // Accessing a group
+    def group = message.PATIENT_RESULT
 
-// Accessing a segment nested within groups
-def pid   = message.PATIENT_RESULT.PATIENT.PID
+    // Accessing a segment nested within groups
+    def pid   = message.PATIENT_RESULT.PATIENT.PID
 ```
 
 In case the structure is [repeating][hl7v2dslRepetitions], this simple syntax only returns the first repetition

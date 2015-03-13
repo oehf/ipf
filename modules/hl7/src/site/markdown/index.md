@@ -30,19 +30,19 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 ```xml
 
-<!-- IPF HL7 extensions and DSL -->
-<dependency>
-    <groupId>org.openehealth.ipf.modules</groupId>
-    <artifactId>ipf-modules-hl7</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
+    <!-- IPF HL7 extensions and DSL -->
+    <dependency>
+        <groupId>org.openehealth.ipf.modules</groupId>
+        <artifactId>ipf-modules-hl7</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 
-<!-- For each HL7 version being used, add structure library, e.g. v2.5 -->
-<dependency>
-    <groupId>ca.uhn.hapi</groupId>
-    <artifactId>hapi-structures-v25</artifactId>
-    <version>${hapi-version}</version>
-</dependency>
+    <!-- For each HL7 version being used, add structure library, e.g. v2.5 -->
+    <dependency>
+        <groupId>ca.uhn.hapi</groupId>
+        <artifactId>hapi-structures-v25</artifactId>
+        <version>${hapi-version}</version>
+    </dependency>
 
 ```
 

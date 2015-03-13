@@ -29,32 +29,32 @@ must be made available through corresponding Camel message header:
 
 ```groovy
 
-import static AbstractWsEndpoint.*
+    import static AbstractWsEndpoint.*
 
-.process {
-    def headerName = new QName('urn:ihe:iti:ihe:2007', 'CustomXdsHeader')
-    def header = new Header(headerName, "simple contents", new JAXBDataBinding(String.class))
-    if (! it.in.headers.containsKey(OUTGOING_SOAP_HEADERS)) {
-        it.in.headers[OUTGOING_SOAP_HEADERS] = []
+    .process {
+        def headerName = new QName('urn:ihe:iti:ihe:2007', 'CustomXdsHeader')
+        def header = new Header(headerName, "simple contents", new JAXBDataBinding(String.class))
+        if (! it.in.headers.containsKey(OUTGOING_SOAP_HEADERS)) {
+            it.in.headers[OUTGOING_SOAP_HEADERS] = []
+        }
+        it.in.headers[OUTGOING_SOAP_HEADERS] << header
     }
-    it.in.headers[OUTGOING_SOAP_HEADERS] << header
-}
 
 ```
 
 ### Example of configuring custom HTTP headers
 
 ```groovy
+    
+    import static AbstractWsEndpoint.*
 
-import static AbstractWsEndpoint.*
-
-.process {
-   def myRequestHeader = it.in.headers[INCOMING_HTTP_HEADERS]['MyRequestHeader']
-   if (! it.in.headers.containsKey(OUTGOING_HTTP_HEADERS)) {
-       it.in.headers[OUTGOING_HTTP_HEADERS] = [:]
-   }
-   it.in.headers[OUTGOING_HTTP_HEADERS]['SAMLToken'] = '...'
-   it.in.headers[OUTGOING_HTTP_HEADERS]['MyResponseHeader'] = 'Re: ' + myRequestHeader
-}
+    .process {
+       def myRequestHeader = it.in.headers[INCOMING_HTTP_HEADERS]['MyRequestHeader']
+       if (! it.in.headers.containsKey(OUTGOING_HTTP_HEADERS)) {
+           it.in.headers[OUTGOING_HTTP_HEADERS] = [:]
+       }
+       it.in.headers[OUTGOING_HTTP_HEADERS]['SAMLToken'] = '...'
+       it.in.headers[OUTGOING_HTTP_HEADERS]['MyResponseHeader'] = 'Re: ' + myRequestHeader
+    }
 
 ```

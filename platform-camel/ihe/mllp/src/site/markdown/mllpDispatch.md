@@ -14,11 +14,11 @@ Only consumer side is supported. There is no mapping to a particular actor.
 In a Maven-based environment, the following dependency must be registered in `pom.xml`:
 
 ```xml
-<dependency>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
+    <dependency>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 ```
 
 ### Endpoint URI Format
@@ -57,21 +57,21 @@ are not required to be accessible from the outside and thus can be bound e.g. to
 
 ```java
 
-void configure() throws Exception {
+    void configure() throws Exception {
 
-    // Camel does not allow empty routes, therefore a dummy processor
-    // is required after from(...).  This processor will be in fact never
-    // executed; it means, even .throwException(...) would be Ok here.
-    from('mllp-dispatch://0.0.0.0:18500?routes=pixfeed,xadpid').process {}
+        // Camel does not allow empty routes, therefore a dummy processor
+        // is required after from(...).  This processor will be in fact never
+        // executed; it means, even .throwException(...) would be Ok here.
+        from('mllp-dispatch://0.0.0.0:18500?routes=pixfeed,xadpid').process {}
 
-    from('pix-iti8://localhost:18501')
-        .routeId('pixfeed')
-        .....
+        from('pix-iti8://localhost:18501')
+            .routeId('pixfeed')
+            .....
 
-    from('xpid-iti64://localhost:18502')
-        .routeId('xadpid')
-        .....
-}
+        from('xpid-iti64://localhost:18502')
+            .routeId('xadpid')
+            .....
+    }
 
 ```
 

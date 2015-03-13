@@ -150,58 +150,58 @@ in the `configure()` method:
 
 ```groovy
 
-package org.openehealth.ipf.tutorials.hl7.route
+    package org.openehealth.ipf.tutorials.hl7.route
 
-import ca.uhn.hl7v2.DefaultHapiContext
-import ca.uhn.hl7v2.HapiContext
-import org.apache.camel.Exchange
-import org.apache.camel.component.hl7.HL7DataFormat
-import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.tutorials.hl7.validation.SampleRulesBuilder
+    import ca.uhn.hl7v2.DefaultHapiContext
+    import ca.uhn.hl7v2.HapiContext
+    import org.apache.camel.Exchange
+    import org.apache.camel.component.hl7.HL7DataFormat
+    import org.apache.camel.spring.SpringRouteBuilder
+    import org.openehealth.ipf.tutorials.hl7.validation.SampleRulesBuilder
 
-import static org.apache.camel.component.hl7.HL7.messageConforms
+    import static org.apache.camel.component.hl7.HL7.messageConforms
 
 
-public class SampleRouteBuilder extends SpringRouteBuilder {
+    public class SampleRouteBuilder extends SpringRouteBuilder {
 
-    void configure() {
+        void configure() {
 
-        // Set up HL7 context with the custom validation rules and disable validation during parsing
-        HapiContext context = new DefaultHapiContext(lookup(SampleRulesBuilder))
-        context.getParserConfiguration().setValidating(false)
+            // Set up HL7 context with the custom validation rules and disable validation during parsing
+            HapiContext context = new DefaultHapiContext(lookup(SampleRulesBuilder))
+            context.getParserConfiguration().setValidating(false)
 
-        // Set up Camel HL7 Data format using the HapiContext defined above
-        HL7DataFormat hl7 = new HL7DataFormat()
-        hl7.setHapiContext(context)
+            // Set up Camel HL7 Data format using the HapiContext defined above
+            HL7DataFormat hl7 = new HL7DataFormat()
+            hl7.setHapiContext(context)
 
-        // Read file from directory and forward to direct endpoint
-        from('file:target/input')
-                .convertBodyTo(String)
-                .to('direct:input')
+            // Read file from directory and forward to direct endpoint
+            from('file:target/input')
+                    .convertBodyTo(String)
+                    .to('direct:input')
 
-        // Main processing: parse message, validate, transform
-        from('direct:input')
-                .unmarshal(hl7)
-                // validate that the message conforms to the rules defined in the HapiContext
-                .validate(messageConforms())
-                .transmogrify { msg ->
-                    msg.PV1[3][2] = '' // clear room nr.
-                    msg.PV1[3][3] = '' // clear bed nr.
-                    msg.PID[7][1] = msg.PID[7][1].value.substring(0, 8) // format birth date
-                    msg.PID[8] = msg.PID[8].mapGender()                 // map gender
-                    msg
-                }
+            // Main processing: parse message, validate, transform
+            from('direct:input')
+                    .unmarshal(hl7)
+                    // validate that the message conforms to the rules defined in the HapiContext
+                    .validate(messageConforms())
+                    .transmogrify { msg ->
+                        msg.PV1[3][2] = '' // clear room nr.
+                        msg.PV1[3][3] = '' // clear bed nr.
+                        msg.PID[7][1] = msg.PID[7][1].value.substring(0, 8) // format birth date
+                        msg.PID[8] = msg.PID[8].mapGender()                 // map gender
+                        msg
+                    }
 
-                // Set header so Camel knows the file to write into
-                .setHeader(Exchange.FILE_NAME) { exchange ->
-                    exchange.in.body.MSH[4].value + '.hl7'
-                }
+                    // Set header so Camel knows the file to write into
+                    .setHeader(Exchange.FILE_NAME) { exchange ->
+                        exchange.in.body.MSH[4].value + '.hl7'
+                    }
 
-                // Convert message to string and write to file
-                .convertBodyTo(String)
-                .to('file:target/output')
+                    // Convert message to string and write to file
+                    .convertBodyTo(String)
+                    .to('file:target/output')
+        }
     }
-}
 
 ```
 
@@ -210,33 +210,33 @@ and segments for this message. The file must be added to the `src/main/groovy` d
 
 ```groovy
 
-package org.openehealth.tutorial
+    package org.openehealth.tutorial
 
-import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
-import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
-import org.openehealth.ipf.modules.hl7.validation.builder.ValidationContextBuilder
+    import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
+    import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
+    import org.openehealth.ipf.modules.hl7.validation.builder.ValidationContextBuilder
 
-class SampleRulesBuilder extends ValidationContextBuilder {
+    class SampleRulesBuilder extends ValidationContextBuilder {
 
-    // We define only a subset of the segments defined in the HL7 2.2 spec
+        // We define only a subset of the segments defined in the HL7 2.2 spec
 
-    public RuleBuilder forContext(DefaultValidationContext context) {
-        new RuleBuilder(context)
-          .forVersion('2.2')
-            .message('ADT', 'A01').abstractSyntax(
-                    'MSH',
-                    'EVN',
-                    'PID',
-                    [  {  'NK1'  }  ],
-                    'PV1',
-                    [  {  INSURANCE(
-                              'IN1',
-                              [  'IN2'  ] ,
-                              [  'IN3'  ]
-                    )}]
-            )
+        public RuleBuilder forContext(DefaultValidationContext context) {
+            new RuleBuilder(context)
+              .forVersion('2.2')
+                .message('ADT', 'A01').abstractSyntax(
+                        'MSH',
+                        'EVN',
+                        'PID',
+                        [  {  'NK1'  }  ],
+                        'PV1',
+                        [  {  INSURANCE(
+                                  'IN1',
+                                  [  'IN2'  ] ,
+                                  [  'IN3'  ]
+                        )}]
+                )
+        }
     }
-}
 
 ```
 
@@ -279,13 +279,13 @@ The application context configures the code mapping service to use a mappingScri
 In our example, we only need a single gender mapping table an entry that maps 'F' to 'W' and one entry that
 leaves all other codes unchanged.
 
-```
-mappings = {
-  gender(
-    F      : 'W',
-    (ELSE) : { it }
-  )
-}
+```groovy
+    mappings = {
+      gender(
+        F      : 'W',
+        (ELSE) : { it }
+      )
+    }
 ```
 
 This format is valid Groovy syntax and is understood by the default bi-directional mapping service provided by IPF.
@@ -320,54 +320,54 @@ replace its content with the following:
 
 ```java
 
-package org.openehealth.ipf.tutorials.hl7.route;
+    package org.openehealth.ipf.tutorials.hl7.route;
 
-import java.io.InputStream;
-import java.util.Scanner;
+    import java.io.InputStream;
+    import java.util.Scanner;
 
-import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.PipeParser;
-import org.apache.camel.ProducerTemplate;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+    import ca.uhn.hl7v2.HL7Exception;
+    import ca.uhn.hl7v2.model.Message;
+    import ca.uhn.hl7v2.parser.PipeParser;
+    import org.apache.camel.ProducerTemplate;
+    import org.junit.After;
+    import org.junit.Before;
+    import org.junit.Test;
+    import org.junit.runner.RunWith;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.core.io.ClassPathResource;
+    import org.springframework.core.io.FileSystemResource;
+    import org.springframework.core.io.Resource;
+    import org.springframework.test.context.ContextConfiguration;
+    import org.springframework.test.context.TestExecutionListeners;
+    import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+    import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import static org.junit.Assert.assertEquals;
+    import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
-@ContextConfiguration(locations = { "/context.xml" })
-public class SampleRouteTest {
+    @RunWith(SpringJUnit4ClassRunner.class)
+    @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
+    @ContextConfiguration(locations = { "/context.xml" })
+    public class SampleRouteTest {
 
-    @Autowired
-    private ProducerTemplate producerTemplate;
+        @Autowired
+        private ProducerTemplate producerTemplate;
 
-    @Test
-    public void testRoute() throws Exception {
-        Resource input = new ClassPathResource("/msg-01.hl7");
-        producerTemplate.sendBody("direct:input", input.getInputStream());
-        Resource result = new FileSystemResource("target/output/HZL.hl7");
-        assertEquals(
-                load(getClass().getResourceAsStream("/msg-01.hl7.expected")).toString(),
-                load(result.getInputStream()).toString());
+        @Test
+        public void testRoute() throws Exception {
+            Resource input = new ClassPathResource("/msg-01.hl7");
+            producerTemplate.sendBody("direct:input", input.getInputStream());
+            Resource result = new FileSystemResource("target/output/HZL.hl7");
+            assertEquals(
+                    load(getClass().getResourceAsStream("/msg-01.hl7.expected")).toString(),
+                    load(result.getInputStream()).toString());
+        }
+
+        // Helper method to load and parse a HL7v2 message from a file
+        protected static <T extends Message> T load(InputStream is) throws HL7Exception {
+            return (T)new PipeParser().parse(
+                    new Scanner(is).useDelimiter("\\A").next());
+        }
     }
-
-    // Helper method to load and parse a HL7v2 message from a file
-    protected static <T extends Message> T load(InputStream is) throws HL7Exception {
-        return (T)new PipeParser().parse(
-                new Scanner(is).useDelimiter("\\A").next());
-    }
-}
 
 ```
 

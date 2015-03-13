@@ -13,11 +13,10 @@ Smart navigation resolves these problems by assuming reasonable defaults when re
 If a repetition operator () is omitted, the first repetition of a group, segment or field is assumed
 
 ```groovy
-assert message.PATIENT_RESULT.PATIENT == message.PATIENT_RESULT(0).PATIENT(0)
+    assert message.PATIENT_RESULT.PATIENT == message.PATIENT_RESULT(0).PATIENT(0)
 
-
-assert group.NK1(0)[5](0)[1].value == group.NK1[5](0)[1].value
-assert group.NK1(0)[5](0)[1].value == group.NK1[5][1].value
+    assert group.NK1(0)[5](0)[1].value == group.NK1[5](0)[1].value
+    assert group.NK1(0)[5](0)[1].value == group.NK1[5][1].value
 ```
 
 ### Omitting component index
@@ -25,8 +24,8 @@ assert group.NK1(0)[5](0)[1].value == group.NK1[5][1].value
 If a component index is omitted, the first component or subcomponent of a composite is assumed.
 
 ```groovy
-def group = message.PATIENT_RESULT.PATIENT
-assert group.NK1(0)[2][1][1].value == group.NK1(0)[2].value
+    def group = message.PATIENT_RESULT.PATIENT
+    assert group.NK1(0)[2][1][1].value == group.NK1(0)[2].value
 ```
 
 ### Combining smart navigation with finders
@@ -34,8 +33,8 @@ assert group.NK1(0)[2][1][1].value == group.NK1(0)[2].value
 Both repetition on component index can be omitted.
 
 ```groovy
-def group = message.PATIENT_RESULT.PATIENT
-assert group.NK1(0)[5](0)[1].value2 == group.NK1[5].value2  
+    def group = message.PATIENT_RESULT.PATIENT
+    assert group.NK1(0)[5](0)[1].value2 == group.NK1[5].value2
 ```
 
 But even so, it is still required to specify the full path to the `NK1` segment.
@@ -44,8 +43,8 @@ Here, the [iterative functions][hl7v2dslIteration] come to rescue. They e.g. all
 the first structure with a given name within the message:
 
 ```groovy
-def phone = message.PATIENT_RESULT(0).PATIENT(0).NK1(0)[5](0)[1].value 
-phone = message.findNK1()[5].value    // equivalent
+    def phone = message.PATIENT_RESULT(0).PATIENT(0).NK1(0)[5](0)[1].value
+    phone = message.findNK1()[5].value    // equivalent
 ```
 
 

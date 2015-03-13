@@ -7,14 +7,14 @@ populated with the event type, trigger event, version, the current time as messa
 
 ```groovy
 
-import ca.uhn.hl7v2.model.Message
+    import ca.uhn.hl7v2.model.Message
 
-// creates a ca.uhn.hl7v2.model.v25.message.ADT_A01 object
-def msg = Message.ADT_A01(hapiContext, '2.5')
+    // creates a ca.uhn.hl7v2.model.v25.message.ADT_A01 object
+    def msg = Message.ADT_A01(hapiContext, '2.5')
 
-// also creates a ca.uhn.hl7v2.model.v25.message.ADT_A01 object, because a
-// ADT^A04 uses the ADT_A01 message structure
-msg = Message.ADT_A04(hapiContext, '2.5')
+    // also creates a ca.uhn.hl7v2.model.v25.message.ADT_A01 object, because a
+    // ADT^A04 uses the ADT_A01 message structure
+    msg = Message.ADT_A04(hapiContext, '2.5')
 
 ```
 
@@ -23,13 +23,10 @@ While [HAPI] already allows to create acknowledgements on `Message` objects, IPF
 
 The response
 
-
 * is in the same HL7 version as the original message
 * refers to the message metadata of the original message (e.g. swapped sender and receiver fields)
 * contains the current timestamp as message date
 * has a populated MSA segment
-
-
 
 
 ### New segments
@@ -40,10 +37,10 @@ which determines the HL7 version to be used.
 
 ```groovy
 
-import ca.uhn.hl7v2.model.Segment
+    import ca.uhn.hl7v2.model.Segment
 
-// creates a ca.uhn.hl7v2.mode.v25.segment.OBX object
-def obx = Segment.OBX(msg)
+    // creates a ca.uhn.hl7v2.mode.v25.segment.OBX object
+    def obx = Segment.OBX(msg)
 
 ```
 
@@ -58,14 +55,14 @@ Primitives may be initialized with a literal string value.
 
 ```groovy
 
-import ca.uhn.hl7v2.model.Composite
-import ca.uhn.hl7v2.model.Primitive
+    import ca.uhn.hl7v2.model.Composite
+    import ca.uhn.hl7v2.model.Primitive
 
-// Static method extension to the HAPI Composite class
-def ce = Composite.CE(msg, [identifier:'T57000', text:'GALLBLADDER', nameOfCodingSystem:'SNM'])
+    // Static method extension to the HAPI Composite class
+    def ce = Composite.CE(msg, [identifier:'T57000', text:'GALLBLADDER', nameOfCodingSystem:'SNM'])
 
-// Static method extension to the HAPI Primitive class
-def st = Primitive.ST(msg, 'value')
+    // Static method extension to the HAPI Primitive class
+    def st = Primitive.ST(msg, 'value')
 
 ```
 

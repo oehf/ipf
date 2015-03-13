@@ -95,56 +95,56 @@ Corresponding IPF Validation Rule:
 
 ```groovy
 
-import ca.uhn.hl7v2.validation.builder.support.NoValidationBuilder
+    import ca.uhn.hl7v2.validation.builder.support.NoValidationBuilder
 
-public class SampleRulesBuilder extends NoValidationBuilder {
+    public class SampleRulesBuilder extends NoValidationBuilder {
 
-    @Override
-    protected void configure() {
-        super.configure()
+        @Override
+        protected void configure() {
+            super.configure()
 
-       forVersion(Version.V25)
-          .message('ORU', 'R01').abstractSyntax(
-              'MSH',
-              [  {  'SFT'  }  ],
-              {PATIENT_RESULT(
-                 [PATIENT(
-                    'PID',
-                    [  'PD1'  ],
-                    [  {  'NTE'  }  ],
-                    [  {  'NK1'  }  ],
-                    [VISIT(
-                       'PV1',
-                       [  'PV2'  ]
-                   )]
-                 )],
-                 {ORDER_OBSERVATION(
-                    [  'ORC'  ],
-                     'OBR',
-                     [{  'NTE'  }],
-                     [{TIMING_QTY(
-                        'TQ1',
-                        [{  'TQ2'  }]
-                     )}],
+           forVersion(Version.V25)
+              .message('ORU', 'R01').abstractSyntax(
+                  'MSH',
+                  [  {  'SFT'  }  ],
+                  {PATIENT_RESULT(
+                     [PATIENT(
+                        'PID',
+                        [  'PD1'  ],
+                        [  {  'NTE'  }  ],
+                        [  {  'NK1'  }  ],
+                        [VISIT(
+                           'PV1',
+                           [  'PV2'  ]
+                       )]
+                     )],
+                     {ORDER_OBSERVATION(
+                        [  'ORC'  ],
+                         'OBR',
+                         [{  'NTE'  }],
+                         [{TIMING_QTY(
+                            'TQ1',
+                            [{  'TQ2'  }]
+                         )}],
 
-                     [  'CTD'  ],
-                     [{OBSERVATION(
-                        'OBX',
-                        [  {  'NTE'  }  ]
-                     )}],
+                         [  'CTD'  ],
+                         [{OBSERVATION(
+                            'OBX',
+                            [  {  'NTE'  }  ]
+                         )}],
 
-                     [{  'FT1'  }],
-                     [{  'CTI'  }],
-                     [{SPECIMEN(
-                        'SPM',
-                        [{  'OBX'  }]
-                     )}]
-                  )}
-               )},
-               [ 'DSC' ]
-            )
+                         [{  'FT1'  }],
+                         [{  'CTI'  }],
+                         [{SPECIMEN(
+                            'SPM',
+                            [{  'OBX'  }]
+                         )}]
+                      )}
+                   )},
+                   [ 'DSC' ]
+                )
+        }
     }
-}
 ```
 
 ### Closure rules
@@ -160,23 +160,23 @@ messages.
 
 ```groovy
 
-import ca.uhn.hl7v2.validation.builder.support.NoValidationBuilder
+    import ca.uhn.hl7v2.validation.builder.support.NoValidationBuilder
 
-public class ClosureRulesBuilder extends NoValidationBuilder {
+    public class ClosureRulesBuilder extends NoValidationBuilder {
 
-    @Override
-    protected void configure() {
-        super.configure()
+        @Override
+        protected void configure() {
+            super.configure()
 
-       forVersion().asOf(Version.V23)
-          .primitive("ID", "IS").checkIf { String value ->
-              value.size() < 200 ? passed() : failed("too long!")
-          }
-          .message('ADT', '*').checkIf { Message msg ->
-              // validate the message
-          }
+           forVersion().asOf(Version.V23)
+              .primitive("ID", "IS").checkIf { String value ->
+                  value.size() < 200 ? passed() : failed("too long!")
+              }
+              .message('ADT', '*').checkIf { Message msg ->
+                  // validate the message
+              }
+        }
     }
-}
 
 ```
 
