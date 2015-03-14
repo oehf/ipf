@@ -15,25 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
-import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.Parser;
-import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
 import org.openehealth.ipf.platform.camel.hl7.HL7v2;
 import org.openehealth.ipf.platform.camel.hl7.validation.ConformanceProfileValidators;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
-
-import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
 
 /**
  * @author Mitko Kolev
  *
  */
 public class Hl7v2WsCamelValidators {
-
-    // private static final Validator<Object, Object> CONTINUA_WAN_VALIDATOR = new ContinuaWanValidator();
 
     public static Processor pcdValidator() {
         return HL7v2.validatingProcessor();
@@ -69,23 +60,4 @@ public class Hl7v2WsCamelValidators {
         return ConformanceProfileValidators.validatingProcessor(PcdTransactions.PCD1);
     }
     
-    private static Processor newValidatingProcessor(final Validator<Object,Object> validator , final Parser parser) {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                doValidate(exchange, validator, parser);
-            }
-        };
-    }
-    
-    private static void doValidate(Exchange exchange, Validator<Object, Object> validator, Parser parser) throws Exception {
-        if (! validationEnabled(exchange)) {
-            return;
-        }
-        Message msg = Hl7v2MarshalUtils.extractHapiMessage(
-                exchange.getIn(),
-                exchange.getProperty(Exchange.CHARSET_NAME, String.class),
-                parser);
-        validator.validate(msg, null);
-    }
 }
