@@ -43,9 +43,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openhealthtools.mdht</groupId>
-            <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
-            <version>${mdht-version}</version>
+            <groupId>org.openehealth.ipf.oht.mdht</groupId>
+            <artifactId>ipf-oht-mdht-uml-cda-ccd</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
