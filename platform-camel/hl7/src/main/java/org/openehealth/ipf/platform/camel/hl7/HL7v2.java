@@ -30,6 +30,7 @@ import org.apache.camel.component.hl7.HL7;
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
 /**
  * Factory class for commonly used HL7-related expressions, predicates and
@@ -124,6 +125,10 @@ public final class HL7v2 {
 
             @Override
             public void process(Exchange exchange) throws Exception {
+                if (! ValidatorAdapter.validationEnabled(exchange)) {
+                    return;
+                }
+
                 Message msg = bodyMessage(exchange);
                 HapiContext ctx = context == null ? msg.getParser().getHapiContext() : context;
 

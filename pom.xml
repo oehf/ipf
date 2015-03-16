@@ -17,7 +17,7 @@
         <surefire-report-plugin-version>2.18</surefire-report-plugin-version>
         <jxr-plugin-version>2.5</jxr-plugin-version>
         <project-info-reports-plugin-version>2.7</project-info-reports-plugin-version>
-        <maven-dsldoc-plugin-version>1.5</maven-dsldoc-plugin-version>
+        <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
 
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
@@ -68,7 +68,7 @@
         <activemq-version>5.11.1</activemq-version>
         <aspectj-version>1.8.4</aspectj-version>
         <bouncycastle-version>1.51</bouncycastle-version>
-        <camel-version>2.14.1</camel-version>
+        <camel-version>2.15.0</camel-version>
         <cglib-version>3.1</cglib-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
@@ -78,7 +78,7 @@
         <commons-io-version>2.4</commons-io-version>
         <commons-lang3-version>3.3.2</commons-lang3-version>
         <commons-math3-version>3.4.1</commons-math3-version>
-        <cxf-version>3.0.3</cxf-version>
+        <cxf-version>3.0.4</cxf-version>
         <derby-version>10.9.1.0</derby-version>
         <easymock-version>3.3.1</easymock-version>
         <ehcache-version>2.8.3</ehcache-version>
@@ -94,9 +94,10 @@
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
         <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
-        <ipf-gazelle-version>1.1-SNAPSHOT</ipf-gazelle-version>
+        <ipf-gazelle-version>1.0.5</ipf-gazelle-version>
         <ipf-oht-atna-version>3.0.0</ipf-oht-atna-version>
-        <jaxb-impl-version>2.2.7</jaxb-impl-version>
+        <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
+        <jaxb-impl-version>2.2.11</jaxb-impl-version>
         <jasypt-version>1.9.2</jasypt-version>
         <jboss-logging-version>3.2.1.Final</jboss-logging-version>
         <jboss-logging-annotations-version>1.2.0.Final</jboss-logging-annotations-version>
@@ -108,16 +109,14 @@
         <log4j-version>1.2.17</log4j-version>
         <lombok-version>1.14.8</lombok-version>
         <lucene-version>4.10.3</lucene-version>
-        <mdht-version>1.2.0.201212201425</mdht-version>
         <mina2-version>2.0.9</mina2-version>
         <not-yet-commons-ssl-version>0.3.11</not-yet-commons-ssl-version>
-        <oht-cdar-version>1.1.0-p2</oht-cdar-version> <!-- I think we don't need this anymore -->
         <opensaml-version>2.6.1</opensaml-version>
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.1</quartz-version>
         <saxon-he-version>9.6.0-4</saxon-he-version>
         <slf4j-version>1.7.10</slf4j-version>
-        <spring-version>4.1.4.RELEASE</spring-version>
+        <spring-version>4.1.5.RELEASE</spring-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.39</tomcat-version>
@@ -936,37 +935,38 @@
                 <version>${ipf-oht-atna-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.openhealthtools.ihe</groupId>
-                <artifactId>org.openhealthtools.ihe.common.cdar2</artifactId>
-                <version>${oht-cdar-version}</version>
+                <groupId>org.openehealth.ipf.oht.mdht</groupId>
+                <artifactId>ipf-oht-mdht-uml-cda</artifactId>
+                <version>${ipf-oht-mdht-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.openhealthtools.mdht</groupId>
-                <artifactId>org.openhealthtools.mdht.uml.cda</artifactId>
-                <version>${mdht-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openhealthtools.mdht</groupId>
-                <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
-                <version>${mdht-version}</version>
+                <groupId>org.openehealth.ipf.oht.mdht</groupId>
+                <artifactId>ipf-oht-mdht-uml-cda-ccd</artifactId>
+                <version>${ipf-oht-mdht-version}</version>
                 <optional>true</optional>
             </dependency>
             <dependency>
-                <groupId>org.openhealthtools.mdht</groupId>
-                <artifactId>org.openhealthtools.mdht.uml.cda.hitsp</artifactId>
-                <version>${mdht-version}</version>
+                <groupId>org.openehealth.ipf.oht.mdht</groupId>
+                <artifactId>ipf-oht-mdht-uml-cda-hitsp</artifactId>
+                <version>${ipf-oht-mdht-version}</version>
                 <optional>true</optional>
             </dependency>
             <dependency>
-                <groupId>org.openhealthtools.mdht</groupId>
-                <artifactId>org.openhealthtools.mdht.uml.cda.consol</artifactId>
-                <version>${mdht-version}</version>
+                <groupId>org.openehealth.ipf.oht.mdht</groupId>
+                <artifactId>ipf-oht-mdht-uml-cda-consol</artifactId>
+                <version>${ipf-oht-mdht-version}</version>
                 <optional>true</optional>
             </dependency>
             <dependency>
-                <groupId>org.openhealthtools.mdht</groupId>
-                <artifactId>org.openhealthtools.mdht.uml.cda.ihe</artifactId>
-                <version>${mdht-version}</version>
+                <groupId>org.openehealth.ipf.oht.mdht</groupId>
+                <artifactId>ipf-oht-mdht-uml-cda-ihe</artifactId>
+                <version>${ipf-oht-mdht-version}</version>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.oht.mdht</groupId>
+                <artifactId>ipf-oht-mdht-uml-cda-cdt</artifactId>
+                <version>${ipf-oht-mdht-version}</version>
                 <optional>true</optional>
             </dependency>
             <dependency>

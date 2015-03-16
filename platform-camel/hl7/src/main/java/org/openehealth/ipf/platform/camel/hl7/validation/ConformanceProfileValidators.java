@@ -37,6 +37,7 @@ import org.openehealth.ipf.gazelle.validation.profile.ConformanceProfile;
 import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
 import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
 /**
  * Factory for manually triggering a validation of a message depending on a profile or a defined
@@ -76,7 +77,9 @@ public final class ConformanceProfileValidators {
 
             @Override
             public void process(Exchange exchange) throws Exception {
-                doValidate(bodyMessage(exchange), rule);
+                if (ValidatorAdapter.validationEnabled(exchange)) {
+                    doValidate(bodyMessage(exchange), rule);
+                }
             }
         };
     }
@@ -85,7 +88,7 @@ public final class ConformanceProfileValidators {
      * Returns a validating Camel processor for a message in a IHE transaction. The actual profile
      * to be used is guessed from the message's event type and version
      *
-     * @param iheTransaction IHE transaktion
+     * @param iheTransaction IHE transaction
      * @return a validating Camel processor for a message in a IHE transaction
      */
     public static Processor validatingProcessor(final HL7v2Transactions iheTransaction) {
@@ -95,7 +98,9 @@ public final class ConformanceProfileValidators {
 
             @Override
             public void process(Exchange exchange) throws Exception {
-                doValidate(bodyMessage(exchange), rule);
+                if (ValidatorAdapter.validationEnabled(exchange)) {
+                    doValidate(bodyMessage(exchange), rule);
+                }
             }
         };
     }
