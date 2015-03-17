@@ -34,4 +34,21 @@ IPF depends on Maven, Groovy and Lombok.
 Dependening on the choice of your IDE, you may need to install the corresponding plugins.
 
 
+### Module Dependencies
+
+The following figure gives an overview of the IPF modules, their dependencies and their names.
+The modules of the IHE subpackages are shown in the figure below.
+
+The module names match the jar file names in the Maven repository.
+
+![Dependencies](images/dependencies.png)
+
+The next figure shows the IPF eHealth modules. The Camel-independent modules are contained in the `ipf.commons.ihe` package,
+Camel-specific eHealth integration modules are contained in the `ipf.platform-camel.ihe` package.
+These modules can be used to implement actor interfaces of standard IHE and Continua transactions, as well for implementation
+of project-specific ones. For list of currently supported IHE transactions visit the [eHealth support pages].
+
+![IHE Dependencies](images/dependencies-ihe.png)
+
 [Maven Central]: http://search.maven.org
+[eHealth support pages]: ../platform-camel-ihe/index.html

@@ -93,6 +93,7 @@
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
         <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
+        <!-- TODO 1.0.6 and 3.0.1 -->
         <ipf-gazelle-version>1.0.5</ipf-gazelle-version>
         <ipf-oht-atna-version>3.0.0</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
@@ -842,6 +843,14 @@
                     <exclusion>
                         <groupId>asm</groupId>
                         <artifactId>asm</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
