@@ -46,7 +46,7 @@ public class CDAR2Validator implements Validator<ClinicalDocument, Map<Object, O
      * default validation handler.
      * 
      * @param context
-     * @return
+     * @return Validation handler
      */
     private ValidationHandler retrieveValidationHandler(Map<Object, Object> context) {
         if (context != null) {

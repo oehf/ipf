@@ -16,11 +16,10 @@
 package org.openehealth.ipf.commons.core.modules.api;
 
 /**
- * Translates one internal data structure into another one. The name of class
- * and method are inspired by the Transmogrifier, a fictional device invented by
- * Calvin (in Calvin & Hobbes) capable of transmogrifying any object into any
- * other object, also cf. {@link http://en.wikipedia.org/wiki/Transmogrifier}
- * 
+ * Translates one internal data structure into another one.
+ *
+ * @see <a href="http://en.wikipedia.org/wiki/Transmogrifier"/>
+ *
  * @author Christian Ohr
  * 
  * @param <S>

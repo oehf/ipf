@@ -36,7 +36,7 @@ public abstract class AbstractMessage extends
 		ca.uhn.hl7v2.model.AbstractMessage {
 
 	protected enum Cardinality {
-        REQUIRED, OPTIONAL, REQUIRED_REPEATING, OPTIONAL_REPEATING;
+        REQUIRED, OPTIONAL, REQUIRED_REPEATING, OPTIONAL_REPEATING
     }
 
     public AbstractMessage() {
@@ -80,28 +80,28 @@ public abstract class AbstractMessage extends
 
 
     /**
-     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, Class)
+     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, Class)}
      */
     protected <T extends Structure> T get(Class<T> structureClass) {
         return super.getTyped(structureClass.getSimpleName(), structureClass);
     }
 
     /**
-     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, Class)
+     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, Class)}
      */
     protected <T extends Structure> T get(String structure, Class<T> structureClass) {
         return super.getTyped(structure, structureClass);
     }
 
     /**
-     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, int, Class)
+     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, int, Class)}
      */
     protected <T extends Structure> T get(Class<T> structureClass, int rep) {
         return super.getTyped(structureClass.getSimpleName(), rep, structureClass);
     }
 
     /**
-     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, int, Class)
+     * @deprecated use {@link ca.uhn.hl7v2.model.AbstractMessage#getTyped(String, int, Class)}
      */
     protected <T extends Structure> T get(String structure, Class<T> structureClass, int rep) {
     	return super.getTyped(structure, rep, structureClass);

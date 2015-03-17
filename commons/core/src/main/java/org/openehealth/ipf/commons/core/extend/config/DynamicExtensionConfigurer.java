@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * interface using Groovy 2.x Extension Modules
  *
  * @author Christian Ohr
- * @see http://docs.codehaus.org/display/GROOVY/Creating+an+extension+module
+ *
  * @see DynamicExtension
  * @see DynamicExtensionModule
  */
