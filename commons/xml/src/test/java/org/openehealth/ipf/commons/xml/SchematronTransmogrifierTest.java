@@ -37,10 +37,6 @@ public class SchematronTransmogrifierTest {
         svi = new SchematronTransmogrifier<>(String.class);
     }
 
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
     public void testConvert() throws IOException {
         Source testXml = new StreamSource(new ClassPathResource(

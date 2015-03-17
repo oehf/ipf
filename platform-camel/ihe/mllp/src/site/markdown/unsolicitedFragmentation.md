@@ -35,7 +35,8 @@ The `MSH` segment of the resulting request message is contained in the very firs
 will contain its message control ID from field `MSH-10` in its field `MSA-2`.
 
 Consumers accumulate received fragments in special storages. The user should provide storage beans via consumer endpoint URIs, 
-whereby the beans should correspond to the interface org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage. 
+whereby the beans should correspond to the interface
+[`org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage`](../apidocs/org/openehealth/ipf/platform/camel/ihe/mllp/core/UnsolicitedFragmentationStorage.html).
 An Ehcache-based implementation is provided by IPF. 
 
 Here's an example of how to configure it in the Spring context descriptor, supposed that "unsolicitedFragmentationCache" 

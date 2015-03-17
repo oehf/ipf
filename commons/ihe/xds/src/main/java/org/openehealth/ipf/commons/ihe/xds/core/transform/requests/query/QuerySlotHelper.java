@@ -542,6 +542,7 @@ public class QuerySlotHelper {
                 result = Integer.valueOf(slotValue);
             }
         } catch (NumberFormatException nfe){
+            // ok, return null
         }
         return result;
     }

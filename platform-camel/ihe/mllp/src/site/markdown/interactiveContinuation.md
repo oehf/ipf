@@ -43,7 +43,8 @@ Interaction steps performed by the consumer are shown on the diagram below:
 
 Fragments are stored internally, whereby the user must provide a storage via the `interactiveContinuationStorage`
 URI parameter of the consumer endpoint. This bean must implement the interface
-`org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage`. An Ehcache-based implementation is provided by the IPF.
+[`org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage`](../apidocs/org/openehealth/ipf/platform/camel/ihe/mllp/core/InteractiveContinuationStorage.html).
+An Ehcache-based implementation is provided by the IPF.
 
 Here is an example of how to configure the Spring context descriptor, supposed that "interactiveContinuationCache" is defined in Ehcache configuration file:
 

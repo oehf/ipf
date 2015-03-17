@@ -2,7 +2,8 @@
 
 Working with HL7 messages is explained in the [HL7 Messaging] section.
 
-However, [HAPI] HL7 `Message` objects are also transferred through Camel routes, and at times it is convenient
+However, [HAPI] HL7 [`Message`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/model/Message.html) objects are
+also transferred through Camel routes, and at times it is convenient
 to have access to these APIs directly in Camel's routing DSL, e.g. to generate an acknowledge that shall be returned to
 the client.
 
@@ -48,11 +49,12 @@ HL7 v2 messages can be validated in routes with the `verify().hl7()` extension. 
 predicate of Camel in one important aspect:
 
 The Camel predicate can be used for filters or validators, however, by design it just returns `true` or `false`, and the
-resulting `PredicateValidationException` gives no details whatsoever about the details, i.e. *why* the HL7 validation as
+resulting [`PredicateValidationException`](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/processor/validation/PredicateValidationException.html)
+gives no details whatsoever about the details, i.e. *why* the HL7 validation as
 failed and the location of the failure in the message.
 
-In contrast, the IPF validator throws a `ValidationException` containing all the details about the validation failure that
-was provided by the [HAPI] validator classes.
+In contrast, the IPF validator throws a [`ValidationException`](../apidocs/org/openehealth/ipf/commons/core/modules/api/ValidationException.html) containing all the details
+about the validation failure that was provided by the [HAPI] validator classes.
 
 ```groovy
 
@@ -63,7 +65,8 @@ was provided by the [HAPI] validator classes.
 
 ```
 
-The code above uses the [HAPI] `ValidationContext` associated with the `HapiContext` under which the message was
+The code above uses the [HAPI] [`ValidationContext`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/validation/ValidationContext.html)
+associated with the [`HapiContext`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/HapiContext.html) under which the message was
 parsed. A different validation context can be used by specifying the `.profile(Expression)` or `.staticProfile(Object)` modifiers:
 
 ```groovy
@@ -102,24 +105,26 @@ When using plain Java routes, the same behavior can be obtained by using the cor
 
 #### Expressions
 
-By means of the helper class `org.openehealth.ipf.platform.camel.hl7.HL7v2`
+By means of the helper class [`org.openehealth.ipf.platform.camel.hl7.HL7v2`](../apidocs/org/openehealth/ipf/platform/camel/hl7/HL7v2.html)
 IPF also provides a number of expressions that can be used to extract values from HL7 messages in
 Camel exchanges are translate them into a different message. These expression do **not** require the
 Groovy programming language.
 
-* `get(String terserSpec)` : returns the value from the field specified with the [HAPI] Terser spec
-* `set(String terserSpec, Expression value)` : sets the value of the field specified with the [HAPI] Terser spec
+* `get(String terserSpec)` : returns the value from the field specified with the HAPI [`Terser`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/util/Terser.html) spec
+* `set(String terserSpec, Expression value)` : sets the value of the field specified with the HAPI [`Terser`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/util/Terser.html) spec
 * `ack(...)` : various methods to create an acknowledgement message
 * `response(String eventType, String triggerEvent)` : create a response message of the given event type
 
 
 #### JMS Serialization
 
-Although [HAPI] messages as such are serializable, their associated Parser and HapiContext objects are
+Although HAPI messages as such are serializable, their associated
+[`Parser`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/parser/Parser.html) and
+[`HapiContext`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/HapiContext.html) objects are
 transient and get lost when a message is routes through a JMS message queue.
 
 The `org.openehealth.ipf.platform.camel.hl7.converter.HL7MessageConverter` can be used to transparently
-convert the [HAPI] message into a text when writing into the JMS queue and back into a [HAPI] message object
+convert the HAPI message into a text when writing into the JMS queue and back into a HAPI message object
 when reading from the JMS queue (you need to provide a dedicated `HapiContext` for the latter operation).
 
 You need to add dependencies to Spring and the JMS API in the `pom.xml` Maven project descriptor, e.g.:

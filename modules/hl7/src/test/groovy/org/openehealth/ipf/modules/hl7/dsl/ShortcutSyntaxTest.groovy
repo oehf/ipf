@@ -16,6 +16,8 @@
 package org.openehealth.ipf.modules.hl7.dsl
 
 import ca.uhn.hl7v2.model.v231.message.ADT_A40
+import ca.uhn.hl7v2.model.v24.message.ORU_R01
+import ca.uhn.hl7v2.model.v25.message.ADT_A01
 import org.junit.Before
 import org.junit.Test
 
@@ -27,8 +29,8 @@ import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.load
 public class ShortcutSyntaxTest extends groovy.test.GroovyAssert {
 
      ca.uhn.hl7v2.model.v22.message.ADT_A01 msg1
-     ca.uhn.hl7v2.model.v25.message.ADT_A01 msg2
-     ca.uhn.hl7v2.model.v24.message.ORU_R01 msg3
+     ADT_A01 msg2
+     ORU_R01 msg3
 
     @Before
      void setUp() {

@@ -40,10 +40,6 @@ public class SchematronValidatorTest {
         v = new SchematronValidator();
     }
 
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
     public void testValidate() throws IOException {
         Source testXml = new StreamSource(new ClassPathResource(

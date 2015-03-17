@@ -1,3 +1,1 @@
-The IPF 2.5-m1 release notes are available at
 
-http://openehealth.org/display/ipf2/IPF+2.5-m1

@@ -316,9 +316,9 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             grp.PID[23].value = person.birthPlace.birthplace.name.text()
         }
 
-        if (person.multipleBirthInd?.@value == 'true' || person.multipleBirthOrderNumber?.@value.text()) {
+        if (person.multipleBirthInd?.@value == 'true' || person.multipleBirthOrderNumber?.@value?.text()) {
             grp.PID[24].value = 'Y'
-            grp.PID[25].value = person.multipleBirthOrderNumber?.@value.text() ?: ''
+            grp.PID[25].value = person.multipleBirthOrderNumber?.@value?.text() ?: ''
         } else if (person.multipleBirthInd?.@value == 'false') {
             grp.PID[24].value = 'N'
         }
@@ -331,9 +331,9 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             }
         }
 
-        if (person.deceasedInd?.@value == 'true' || person.deceasedTime?.@value.text()) {
+        if (person.deceasedInd?.@value == 'true' || person.deceasedTime?.@value?.text()) {
             grp.PID[30].value = 'Y'
-            grp.PID[29][1].value = person.deceasedTime?.@value.text() ?: ''
+            grp.PID[29][1].value = person.deceasedTime?.@value?.text() ?: ''
         } else if (person.deceasedInd?.@value == 'false') {
             grp.PID[24].value = 'N'
         }

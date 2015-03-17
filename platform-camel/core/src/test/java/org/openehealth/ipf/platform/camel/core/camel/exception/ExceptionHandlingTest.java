@@ -44,15 +44,13 @@ public class ExceptionHandlingTest extends TestSupport {
     
     @EndpointInject(uri="mock:error3")
     private MockEndpoint error3;
-    
-    @Override
+
     @After
     public void tearDown() throws Exception {
         success.reset();
         error1.reset();
         error2.reset();
         error3.reset();
-        super.tearDown();
     }
 
     @Test

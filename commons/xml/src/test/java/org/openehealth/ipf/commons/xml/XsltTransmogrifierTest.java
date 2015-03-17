@@ -39,10 +39,6 @@ public class XsltTransmogrifierTest {
         transformer = new XsltTransmogrifier<>(String.class);
     }
 
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
     public void testConvertString() throws IOException {
         Source source = new StreamSource(new ClassPathResource(

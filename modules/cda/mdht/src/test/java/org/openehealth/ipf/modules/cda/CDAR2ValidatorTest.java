@@ -35,7 +35,6 @@ public class CDAR2ValidatorTest {
     private static final Logger LOG = LoggerFactory.getLogger(CDAR2ValidatorTest.class.getName());
 
     private CDAR2Validator validator;
-    private Map<Object, Object> context;
 
     // Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=364797
     static {
@@ -47,7 +46,7 @@ public class CDAR2ValidatorTest {
     @Before
     public void setUp() throws Exception {
         validator = new CDAR2Validator();
-        context = new HashMap<>();
+        Map<Object, Object> context = new HashMap<>();
         context.put(CDAUtil.ValidationHandler.class, new DefaultValidationHandler());
         CDAR2Utils.initCCD();
         CDAR2Utils.initHITSPC32();

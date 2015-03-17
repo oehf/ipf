@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>ipf-commons-ihe-hl7v2ws</artifactId>
     <name>ipf-commons-ihe-hl7v2ws</name>
     <description>HL7v2 Web-Service specific IHE support</description>
@@ -45,18 +44,6 @@
             <groupId>org.openehealth.ipf.gazelle</groupId>
             <artifactId>ipf-gazelle-validation-profiles-pcd</artifactId>
             <version>${ipf-gazelle-version}</version>
-        </dependency>
-        
-        <!-- Dependencies for test -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>

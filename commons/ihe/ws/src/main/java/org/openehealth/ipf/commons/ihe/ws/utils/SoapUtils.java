@@ -147,11 +147,7 @@ public abstract class SoapUtils {
             pos2 = soapEnvelope.indexOf(":", pos1);
             String soapPrefix = ((pos2 == -1) || (pos5 < pos2)) ?
                     "" : soapEnvelope.substring(pos1 + 2, pos2 + 1);
-            String bodyElementStart = new StringBuilder()
-                .append('<')
-                .append(soapPrefix)
-                .append("Body")
-                .toString();
+            String bodyElementStart = "<" + soapPrefix + "Body";
             pos3 = soapEnvelope.indexOf(bodyElementStart);
             pos4 = soapEnvelope.indexOf('>', pos3 + bodyElementStart.length());
             return soapEnvelope.substring(pos4 + 1, pos1);

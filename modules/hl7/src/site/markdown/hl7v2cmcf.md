@@ -2,8 +2,10 @@
 
 ### CustomModelClassFactory
 
-The factory implementation org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory can be configured to map a HL7 version
-to a list of package names in which the HAPI model classes are looked up. If it fails to find the requested class, the call is delegated to HAPI's default implementation.
+The factory implementation
+[`org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory`](../apidocs/org/openehealth/ipf/modules/hl7/parser/CustomModelClassFactory.html) can be configured to map a HL7 version
+to a list of package names in which the HAPI model classes are looked up.
+If it fails to find the requested class, the call is delegated to HAPI's default implementation.
 
 #### Example
 

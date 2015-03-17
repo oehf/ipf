@@ -52,20 +52,20 @@ Receiving actors are implemented as a [Camel consumer](http://camel.apache.org/m
 Thus, the following dependency must be registered in `pom.xml`:
 
 ```xml
-<dependency>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
+    <dependency>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 ```
 
 The basic pattern for consumers is to specify the component name in the URI parameter of a `from`-clause at the beginning of a Camel route:
 
 ```java
-// IHEConsumer.java
-from("pix-iti8://0.0.0.0:8777?parameters....")
-  .process(...)
-  // process the incoming HL7v2 request and create a response
+    // IHEConsumer.java
+    from("pix-iti8://0.0.0.0:8777?parameters....")
+      .process(...)
+      // process the incoming HL7v2 request and create a response
 ```
 
 While stepping through the Camel route, a proper response (or an Exception) must be generated that is sent back to the caller.
@@ -75,12 +75,12 @@ On the other side of the transaction, sending actors (for ITI-8 the *Patient Ide
 The basic pattern for producers is to specify the component name in the URI parameter of a to-clause at the end of a Camel route:
 
 ```java
-// IHEProducer.java
-from(...)
-  .process(...)
-  // create a ITI-8 request (i.e. HL7v2 message)
-  .to("pix-iti8://mpiserver.com:8888?parameters....")
-  // optionally process the response
+    // IHEProducer.java
+    from(...)
+      .process(...)
+      // create a ITI-8 request (i.e. HL7v2 message)
+      .to("pix-iti8://mpiserver.com:8888?parameters....")
+      // optionally process the response
 ```
 
 

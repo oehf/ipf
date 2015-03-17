@@ -40,14 +40,6 @@ public abstract class TestSupport {
 
     @Autowired
     protected ProducerTemplate producerTemplate;
-    
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
 
     protected List<String> sendBodies(String endpointUri, ExchangePattern pattern, String body, int repeats) {
         ArrayList<String> result = new ArrayList<>(repeats);

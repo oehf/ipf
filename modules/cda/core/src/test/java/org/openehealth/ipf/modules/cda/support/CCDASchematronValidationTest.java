@@ -45,8 +45,6 @@ public class CCDASchematronValidationTest {
                                                            "HandP 1", "Op Note 1", "Proc Note 1", "Progress Note 1",
                                                            "UD 1", "UD 2"};
 
-    private String ccdaFilePathFormat = "ccda/%s.xml";
-
     @Before
     public void setUp() throws Exception {
         params = new HashMap<>();
@@ -57,6 +55,7 @@ public class CCDASchematronValidationTest {
     @Test
     public void validateSchemaGoodSamples() throws Exception {
         for (String ccdaFile: ccdaFiles){
+            String ccdaFilePathFormat = "ccda/%s.xml";
             String ccdaFilePath = String.format(ccdaFilePathFormat, ccdaFile);
             Source testXml = new StreamSource(
                     new ClassPathResource(ccdaFilePath).getInputStream());

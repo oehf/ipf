@@ -124,7 +124,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
         try {
             return p.evaluate(val) ?
                     null :
-                    new ValidationException(String.format("requires to be %s", val, p.getDescription()));
+                    new ValidationException(String.format("%s requires to be %s", val, p.getDescription()));
         } catch (ValidationException e) {
             return e;
         }
@@ -171,18 +171,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
     protected String msg(String prefix, Composite element, int component, String path) {
         String reference = getSectionReference();
         String elementType = element.getClass().getSimpleName();
-        return new StringBuilder()
-                .append("Validation error: ")
-                .append((reference == null) ? ("rule for type " + elementType) : reference)
-                .append(" : ")
-                .append(prefix)
-                .append(" of type ")
-                .append(elementType)
-                .append(", component ")
-                .append(component)
-                .append(", path ")
-                .append(path)
-                .toString();
+        return "Validation error: " + ((reference == null) ? ("rule for type " + elementType) : reference) + " : " + prefix + " of type " + elementType + ", component " + component + ", path " + path;
     }
 
     @Override

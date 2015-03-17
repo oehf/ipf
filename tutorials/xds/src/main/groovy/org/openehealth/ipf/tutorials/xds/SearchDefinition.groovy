@@ -28,15 +28,15 @@ import org.apache.camel.Processor
  * @author Jens Riemschneider
  */
 class SearchDefinition extends OutputDefinition<SearchDefinition> {
+    def filters = []
 	def containerClosure
 	def resultTypes
-	def filters = []
 	def resultField
 	def indexEvals = [:]
 	
 	SearchDefinition(List<?> types) {
 	    resultTypes = types
-	    by { entry, param -> types.any { it.isOfType(entry) } }
+	    by({ entry, param -> types.any { it.isOfType(entry) } })
 	}
 	
     SearchDefinition(SearchResult type) { this([type]) }
@@ -47,12 +47,12 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
 	}
 	
 	def by(filter) {
-		filters += filter
+		filters.add(filter)
 		this
 	}
 
-	def byIndex(indexEval) {
-		indexEvals += indexEval
+	def byIndex(key, value) {
+		indexEvals.put(key, value)
 		this
 	}
 	
@@ -61,46 +61,46 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
 	}
 	
 	def targets(field) {
-        byIndex([targetUuid: { param -> get(param, field)*.entryUuid }])
+        byIndex('targetUuid', { param -> get(param, field)*.entryUuid })
 	}
 	
 	def targetUuids(field) {
-	    byIndex([targetUuid: { param -> get(param, field)}])
+	    byIndex('targetUuid', { param -> get(param, field)})
 	}
 	
     def targetUuid(field) {
-        byIndex([targetUuid: { param -> get(param, field)}])
+        byIndex('targetUuid', { param -> get(param, field)})
     }
     
 	def sources(field) {
-        byIndex([sourceUuid: { param -> get(param, field)*.entryUuid}])
+        byIndex('sourceUuid', { param -> get(param, field)*.entryUuid})
 	}
 	
 	def sourceUuids(field) {
-        byIndex([sourceUuid: { param -> get(param, field)}]) 
+        byIndex('sourceUuid', { param -> get(param, field)})
 	}
 	
 	def uniqueIds(field) {
-		byIndex([uniqueId: { param -> get(param, field)}])
+		byIndex('uniqueId', { param -> get(param, field)})
 	} 
 	
     def uniqueId(field) {
-		byIndex([uniqueId: { param -> get(param, field)}])
+		byIndex('uniqueId', { param -> get(param, field)})
     }
 
 	def uuids(field) {
-		byIndex([entryUuid: { param -> get(param, field)}])
+		byIndex('entryUuid', { param -> get(param, field)})
 	}     
 	
     def uuid(field) {
-		byIndex([entryUuid: { param -> get(param, field)}])
+		byIndex('entryUuid', { param -> get(param, field)})
     }     
         
     def referenced(field) {
-        byIndex([entryUuid: { param -> 
+        byIndex('entryUuid', { param ->
             def assocs = get(param, field)
             assocs*.sourceUuid + assocs*.targetUuid 
-        }])
+        })
     }
     
 	def status(status) {
@@ -134,7 +134,7 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
     }
     
     def patientId(field) {
-        byIndex([patientId: { param -> get(param, field)}])
+        byIndex('patientId', {param -> get(param, field)})
     }
     
 	def withoutPatientId(field) {

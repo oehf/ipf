@@ -189,6 +189,7 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
         try {
 			getProcessor().process(exchange);
 		} catch (Exception e) {
+            // ok
 		}
         if (exchange.isFailed()) {
             setFailureHandled(exchange);

@@ -19,7 +19,7 @@ public class XsltTestService {
 
     public String getValue(String s) {
         int i, len = s.length();
-        StringBuffer dest = new StringBuffer(len);
+        StringBuilder dest = new StringBuilder(len);
         for (i = (len - 1); i >= 0; i--)
             dest.append(s.charAt(i));
         return dest.toString();

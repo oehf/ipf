@@ -23,6 +23,7 @@ import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Segment
+import ca.uhn.hl7v2.model.v22.datatype.ID
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
 import ca.uhn.hl7v2.model.v24.message.ACK
 import ca.uhn.hl7v2.model.v25.segment.NK1
@@ -238,8 +239,8 @@ public class HapiModelExtensionTest {
         assert ['x','y'].map('listTest2', ['a','b']) == ['c','d']
         ADT_A01 msg = new ADT_A01()
         msg.initQuickstart('ADT', 'A01', 'P')
-        def x = new ca.uhn.hl7v2.model.v22.datatype.ID(msg, 100)
-    	def y = new ca.uhn.hl7v2.model.v22.datatype.ID(msg, 100)
+        def x = new ID(msg, 100)
+    	def y = new ID(msg, 100)
     	x.setValue('a')
     	y.setValue('b')
     	assert [x,y].map('listTest') == ['c','d']    	

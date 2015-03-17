@@ -416,7 +416,7 @@ regionOfInterest(schema:'clinicalStatement',factory:'POCDMT000040_REGION_OF_INTE
         values(collection:'value', min: 1){
             value(factory: 'POCDMT000040_REGION_OF_INTEREST_VALUE'){
               properties{
-                value(factory: java.math.BigInteger)
+                value(factory: BigInteger)
                 unsorted(def:false)
               }
             }

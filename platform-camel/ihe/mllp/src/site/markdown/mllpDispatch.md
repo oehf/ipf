@@ -37,7 +37,7 @@ The URI parameter *routes* is optional and contains a comma-separated list of ro
 Each referenced route must be a consumer route of an IPF MLLP component.
 
 You can also choose to omit the routes parameter and instead provide a parameter referencing a bean of type
-`org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor` to both the dispatcher
+[`org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor`](../apidocs/org/openehealth/ipf/platform/camel/ihe/mllp/core/intercept/consumer/ConsumerDispatchingInterceptor.html) to both the dispatcher
 endpoint and the transaction endpoints.
 
 

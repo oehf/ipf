@@ -52,10 +52,6 @@ public class HITSPC32ValidationTest {
         schematron = new SchematronValidator();
 	}
 
-	@After
-	public void tearDown() throws Exception {
-	}
-
     @Test
     public void validateSchemaGoodSample24() throws Exception {
         Source testXml = new StreamSource(

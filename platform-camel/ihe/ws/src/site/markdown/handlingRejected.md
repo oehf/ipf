@@ -22,11 +22,13 @@ them and even to be notified about them:
 
 ### Solution
 
-It is possible to configure a user-defined strategy (i.e. an implementation of the interface `WsRejectionHandlingStrategy`)
+It is possible to configure a user-defined strategy (i.e. an implementation of the interface
+[`WsRejectionHandlingStrategy`](../apidocs/org/openehealth/ipf/commons/ihe/ws/cxf/WsRejectionHandlingStrategy.html))
 which handles all rejected messages.
 
-IPF provides two alternative abstract base classes for such strategies — a generic `AbstractWsRejectionHandlingStrategy`
-and a HL7v2-over-WS specific `AbstractHl7v2WsRejectionHandlingStrategy`. They differ in determination logic of whether
+IPF provides two alternative abstract base classes for such strategies — a generic
+[`AbstractWsRejectionHandlingStrategy`](../apidocs/org/openehealth/ipf/commons/ihe/ws/cxf/AbstractWsRejectionHandlingStrategy.html)
+and a HL7v2-over-WS specific [`AbstractHl7v2WsRejectionHandlingStrategy`](../apidocs/org/openehealth/ipf/platform/camel/ihe/hl7v2ws/AbstractHl7v2WsRejectionHandlingStrategy.html). They differ in determination logic of whether
 the given interaction (represented by a CXF exchange) can be considered as failed.
 
 On every message rejection, the provided strategy instance will receive a
@@ -35,7 +37,8 @@ in various formats, the automatically generated response message (SOAP fault or 
 
 ![Message Rejection](images/rejection-after.png)
 
-One of available SOAP message formats thereby is `StringPayloadHolder`. Before the SOAP Body has been parsed, this object holds
+One of available SOAP message formats thereby is [`StringPayloadHolder`](../apidocs/org/openehealth/ipf/commons/ihe/ws/cxf/payload/StringPayloadHolder.html).
+Before the SOAP Body has been parsed, this object holds
 the whole HTTP payload (possibly as MIME, i.e. with all attachments); after that, only SOAP payload is present for performance
 and memory saving reasons.
 

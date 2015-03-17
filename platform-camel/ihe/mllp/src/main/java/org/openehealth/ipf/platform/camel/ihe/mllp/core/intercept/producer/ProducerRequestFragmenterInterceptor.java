@@ -129,21 +129,11 @@ public class ProducerRequestFragmenterInterceptor extends AbstractMllpIntercepto
                 String controlId = mshFields.get(9);
                 
                 if (! "ACK".equals(messageType)) {
-                    throw new RuntimeException(new StringBuilder() 
-                        .append("Server responded with ")
-                        .append(messageType)
-                        .append(" instead of ACK to the fragment with control ID ")
-                        .append(mshFields.get(9))
-                        .toString());
+                    throw new RuntimeException("Server responded with " + messageType + " instead of ACK to the fragment with control ID " + mshFields.get(9));
                 }
                 if ("AA".equals(acknowledgementCode) || "CA".equals(acknowledgementCode)) {
                     if (! controlId.equals(responseTerser.get("MSA-2"))) {
-                        throw new RuntimeException(new StringBuilder()
-                            .append("Expected ")
-                            .append(controlId)
-                            .append(" in MSA-2, but got ")
-                            .append(responseTerser.get("MSA-2"))
-                            .toString());
+                        throw new RuntimeException("Expected " + controlId + " in MSA-2, but got " + responseTerser.get("MSA-2"));
                     }
                 } else {
                     // NAKs will go to the route

@@ -49,7 +49,7 @@ public class CamelEndpointSenderRegistration {
      * @param auditMessageSender
      *            incoming CamelEndpointSender which replaces the default
      *            auditSender
-     * @param map
+     * @param map unused
      */
     public void setCamelEndpointSenderService(
             CamelEndpointSender auditMessageSender, Map<?, ?> map) {
@@ -69,7 +69,7 @@ public class CamelEndpointSenderRegistration {
      * @param auditMessageSender
      *            the outgoing CamelEndpointSender, will be replaced with the
      *            old default sender
-     * @param map
+     * @param map unused
      */
     public void unsetCamelEndpointSenderService(
             CamelEndpointSender auditMessageSender, Map<?, ?> map) {

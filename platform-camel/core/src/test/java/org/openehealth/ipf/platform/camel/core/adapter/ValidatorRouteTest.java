@@ -41,17 +41,9 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     @EndpointInject(uri = "mock:error")
     protected MockEndpoint error;
 
-    @Override
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @Override
     @After
-    public void tearDown() throws Exception {
+    public void tearDownError() throws Exception {
         error.reset();
-        super.tearDown();
     }
 
     @Test

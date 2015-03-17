@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory
 /**
  * @author Dmytro Rud
  */
+@SuppressWarnings("GroovyVariableNotAssigned")
 class ChainUtils {
     private static final transient Logger LOG = LoggerFactory.getLogger(ChainUtils.class)
 
@@ -80,8 +81,8 @@ class ChainUtils {
                 List<Integer> beforeIndices = c.before.collect { chainIds.indexOf(it) }.findAll { it >= 0 }
                 List<Integer>  afterIndices =  c.after.collect { chainIds.indexOf(it) }.findAll { it >= 0 }
 
-                int minBeforePosition
-                int maxAfterPosition
+                int minBeforePosition = 0
+                int maxAfterPosition = 0
 
                 if (beforeIndices) {
                     minBeforePosition = beforeIndices.min()

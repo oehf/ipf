@@ -58,7 +58,6 @@ class DocumentationExamplesTest extends groovy.test.GroovyAssert {
 	
 	@Test
 	public void testConstruction(){
-        ORU_R01 msg = load('dsl/oru-r01-25.hl7');
         ORU_R01 messageCopy = message.copy();
         ORU_R01 messageFromString = make(messageCopy.toString())
 	}

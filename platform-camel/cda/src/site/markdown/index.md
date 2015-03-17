@@ -49,8 +49,8 @@ The Camel predicate can be used for filters or validators, however, by design it
 resulting `PredicateValidationException` gives no details whatsoever about the details, i.e. *why* the MDHT validation has
 failed and the location of the failure in the document.
 
-In contrast, the IPF validator throws a `ValidationException` containing all the details about the validation failure that
-was provided by the [Generic CDA support] validator classes.
+In contrast, the IPF validator throws a [`ValidationException`](../apidocs/org/openehealth/ipf/commons/core/modules/api/ValidationException.html)
+containing all the details about the validation failure that was provided by the [Generic CDA support] validator classes.
 
 ```groovy
 

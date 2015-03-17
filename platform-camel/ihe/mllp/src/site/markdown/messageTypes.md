@@ -20,20 +20,21 @@ is transformed into a HAPI Message object. When unmarshalling fails, an exceptio
 Consumer-side responses are accepted in a number of data types that will be converted into a HL7 message stream
 to be returned to the client:
 
-* HAPI `ca.uhn.hl7v2.model.Message`
+* HAPI [`ca.uhn.hl7v2.model.Message`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/model/Message.html)
 * `String`
 * `byte[]`
 * `java.nio.ByteBuffer`
 * `java.io.InputStream`
 * `java.io.File`
-* `org.apache.camel.component.file.GenericFile<File>`
-* `org.apache.camel.WrappedFile<File>`
+* [`org.apache.camel.component.file.GenericFile<File>`](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/file/GenericFile.html)
+* [`org.apache.camel.WrappedFile<File>`](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/WrappedFile.html)
 
 In addition, the message body can contain an `Exception` instance, which will be transformed into a NAK response. 
 Any exceptions thrown in the route that are not handled otherwise will lead to NAK responses as well.
-When neither the data type of the response message is supported nor an exception has been thrown in the route, the message header `org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent.ACK_TYPE_CODE_HEADER` will be taken into consideration. 
+When neither the data type of the response message is supported nor an exception has been thrown in the route, the message header
+`org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent.ACK_TYPE_CODE_HEADER` will be taken into consideration.
 
-When the value of this header belongs to the enumeration type `ca.uhn.hl7v2.AcknowledgmentCode`, an acknowledgement will be
+When the value of this header belongs to the enumeration type [`ca.uhn.hl7v2.AcknowledgmentCode`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/AcknowledgmentCode.html), an acknowledgement will be
 automatically generated and sent back to the client — a positive one for `AcknowledgmentCode.AA`,
 a negative one (NAK) for `AcknowledgmentCode.AE` and `AcknowledgmentCode.AR`.
 

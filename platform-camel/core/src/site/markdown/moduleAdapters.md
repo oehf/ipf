@@ -1,7 +1,13 @@
 ## DSL extensions for IPF module adapters
 
-The `org.openehealth.ipf.commons.core.modules.api` package, which is part of the ipf-commons-core component, defines a
-number of interfaces representing typical message processors like Validator, Aggregator or Transmogrifer (a transformer).
+The [`org.openehealth.ipf.commons.core.modules.api`](../apidocs/org/openehealth/ipf/commons/core/modules/api/package-summary.html) package,
+which is part of the `ipf-commons-core` component, defines a
+number of interfaces representing typical message processors like
+
+* [`Validator`](../apidocs/org/openehealth/ipf/commons/core/modules/api/Validator.html),
+* [`Aggregator`](../apidocs/org/openehealth/ipf/commons/core/modules/api/Aggregator.html)
+* [`Transmogrifer`](../apidocs/org/openehealth/ipf/commons/core/modules/api/Transmogrifer.html) (a transformer)
+
 The intention of these interfaces was to define message processors that are independent of integration infrastructures
 like Apache Camel in order to increase their reusability in other contexts.
 
@@ -20,7 +26,8 @@ This section is organized in the following way.
 ### Transmogrifier
 
 The easiest way to describe the DSL extensions for IPF module adapters is to start with an example.
-Let's use the `org.openehealth.ipf.commons.core.modules.api.Transmogrifier` interface for that purpose.
+Let's use the [`org.openehealth.ipf.commons.core.modules.api.Transmogrifier`](../apidocs/org/openehealth/ipf/commons/core/modules/api/Transmogrifer.html)
+interface for that purpose.
 Inspired by [Calvin and Hobbes](http://en.wikipedia.org/wiki/Calvin_hobbes),
 a [transmogrifier](images/transmogrifier.png) converts anything into whatever you like.
 
@@ -34,7 +41,7 @@ Transmogrification is accompanied by a loud *zap*:
     }
 ```
 
-Implementations of Transmogrifier are used for message transformation. Transformation input is given by the object parameter
+Implementations of `Transmogrifier` are used for message transformation. Transformation input is given by the object parameter
 and optionally some additional params. The transformation result is the return value of the `zap` method.
 To include a `Transmogrifier` instance into a Camel route we use the `transmogrify` DSL extension:
 
@@ -149,9 +156,9 @@ is copied onto the out-message before the result is written (this is useful e.g.
 
 IPF provides three Transmogrifier implementations out of the box:
 
-* `org.openehealth.ipf.commons.xml.XsltTransmogrifier` for xslt transforming XML documents
-* `org.openehealth.ipf.commons.xml.SchematronTransmogrifier` for creating Schematron validation reports from XML documents
-* `org.openehealth.ipf.commons.xml.XqjTransmogrifier` for xquering XML documents or collections
+* [`org.openehealth.ipf.commons.xml.XsltTransmogrifier`](../apidocs/org/openehealth/ipf/commons/xml/XsltTransmogrifier.html) for xslt transforming XML documents
+* [`org.openehealth.ipf.commons.xml.SchematronTransmogrifier`](../apidocs/org/openehealth/ipf/commons/xml/SchematronTransmogrifier.html) for creating Schematron validation reports from XML documents
+* [`org.openehealth.ipf.commons.xml.XqjTransmogrifier`](../apidocs/org/openehealth/ipf/commons/xml/XqjTransmogrifier.html) for xquering XML documents or collections
 
 ##### XSLT and Schematron
 
@@ -244,7 +251,9 @@ collections directly from the classpath.
 
 ### Validator
 
-The API in the `ipf-commons-core` module defines an `org.openehealth.ipf.commons.core.modules.api.Validator` interface for message validation.
+The API in the `ipf-commons-core` module defines an
+[`org.openehealth.ipf.commons.core.modules.api.Validator`](../apidocs/org/openehealth/ipf/commons/core/modules/api/Validator.html)
+interface for message validation.
 
 ```java
 public interface Validator<S, P> {
@@ -255,7 +264,7 @@ public interface Validator<S, P> {
 ```
 
 It defines a single `validate` method that validates a message against a profile. If validation fails, an
-`org.openehealth.ipf.commons.core.modules.api.ValidationException` shall be thrown.
+[`org.openehealth.ipf.commons.core.modules.api.ValidationException`](../apidocs/org/openehealth/ipf/commons/core/modules/api/ValidationException.html) is thrown.
 
 The validator is included into Camel routes via the `verify` DSL extension. The `verify` extension accepts either a validator object,
 a validator bean name or a validator closure as argument. If a closure is used, a failed validation is either indicated by throwing an
@@ -336,7 +345,7 @@ The schema location value can be either a URL or a non-URL string, in the latter
          .to('mock:output')
 ```
 
-IPF also provides a Validator implementation that validates an XML Source against a set of *Schematron* rules.
+IPF also provides a `Validator` implementation that validates an XML Source against a set of *Schematron* rules.
 
 ```groovy
     import org.openehealth.ipf.commons.xml.SchematronProfile;
@@ -366,7 +375,8 @@ Schematron's validation process. Please refer to the [Schematron website](http:/
 
 ### Parser
 
-The API in the `ipf-commons-core` module defines an `org.openehealth.ipf.commons.core.modules.api.Parser` interface for parsing
+The API in the `ipf-commons-core` module defines an
+[`org.openehealth.ipf.commons.core.modules.api.Parser`](../apidocs/org/openehealth/ipf/commons/core/modules/api/Parser.html) interface for parsing
 an external representation of information into an internal model.
 
 Examples:
@@ -388,7 +398,8 @@ Examples:
 
 ### Renderer
 
-The API in the `ipf-commons-core` module defines an `org.openehealth.ipf.commons.core.modules.api.Renderer` interface for
+The API in the `ipf-commons-core` module defines an
+[`org.openehealth.ipf.commons.core.modules.api.Renderer`](../apidocs/org/openehealth/ipf/commons/core/modules/api/Renderer.html) interface for
 creating an external representation of an internal model.
 
 Examples:
@@ -410,7 +421,8 @@ Examples:
 
 ### Aggregator
 
-The `org.openehealth.ipf.commons.core.modules.api.Aggregator` interface is a `transmogrifier` that combines/aggregates a
+The [`org.openehealth.ipf.commons.core.modules.api.Aggregator`](../apidocs/org/openehealth/ipf/commons/core/modules/api/Aggregator.html)
+interface is a `transmogrifier` that combines/aggregates a
 collection of input object into a result object. The result object is the return value of the `zap` method.
 
 ```java

@@ -109,7 +109,7 @@ public class ApplicationConfig {
      * Set to <code>true</code> to enable filtering of flows. Default is
      * <code>true</code>.
      * 
-     * @param flowFilterEnabled
+     * @param flowFilterEnabled whether filter is enabled
      * @see #FLOW_FILTER_ENABLED_DEFAULT
      */
     public void setFlowFilterEnabled(boolean flowFilterEnabled) {
@@ -124,7 +124,7 @@ public class ApplicationConfig {
      * Set to <code>true</code> to cleanup (remove message content from)
      * successful flow. Default is <code>false</code>.
      * 
-     * @param flowCleanupEnabled
+     * @param flowCleanupEnabled whether cleanup is enabled
      * @see #FLOW_CLEANUP_ENABLED_DEFAULT
      */
     public void setFlowCleanupEnabled(boolean flowCleanupEnabled) {
@@ -143,7 +143,7 @@ public class ApplicationConfig {
      * Set to <code>true</code> is a flow purge job has been scheduled. Default
      * is <code>false</code>.
      * 
-     * @param flowPurgeScheduled
+     * @param flowPurgeScheduled whether purge is scheduled
      * @see #FLOW_PURGE_SCHEDULED_DEFAULT
      */
     public void setFlowPurgeScheduled(boolean flowPurgeScheduled) {
@@ -162,7 +162,7 @@ public class ApplicationConfig {
      * Set to <code>true</code> to exclude ERROR flows from being purged.
      * Default is <code>false</code>.
      * 
-     * @param doNotPurgeErrorFlows
+     * @param doNotPurgeErrorFlows whether purge is disabled
      * @see #DO_NOT_PURGE_ERROR_FLOWS_DEFAULT
      */
     public void setDoNotPurgeErrorFlows(boolean doNotPurgeErrorFlows) {
@@ -181,7 +181,7 @@ public class ApplicationConfig {
      * Sets the purge schedule's Cron expression. Default is
      * <code>0 0 1 * * ?</code> which means 1:00 am every day.
      * 
-     * @param flowPurgeSchedule
+     * @param flowPurgeSchedule purge schedule
      * @see #FLOW_PURGE_SCHEDULE_DEFAULT
      */
     public void setFlowPurgeSchedule(String flowPurgeSchedule) {
@@ -202,7 +202,7 @@ public class ApplicationConfig {
      * <code>30d</code> which means flows older than 30 days will be purged by
      * jobs triggered by the given purge schedule.
      * 
-     * @param purgeFlowsOlderThan
+     * @param purgeFlowsOlderThan time after which flows shall be purged
      * @see #PURGE_FLOWS_OLDER_THAN_DEFAULT
      */
     public void setPurgeFlowsOlderThan(String purgeFlowsOlderThan) {

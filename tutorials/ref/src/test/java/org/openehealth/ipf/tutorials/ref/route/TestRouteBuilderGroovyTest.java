@@ -63,10 +63,6 @@ public class TestRouteBuilderGroovyTest {
     
     @EndpointInject(uri="mock:error-sys")
     private MockEndpoint mockErrorSys;
-    
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @After
     public void tearDown() throws Exception {

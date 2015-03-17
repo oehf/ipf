@@ -57,10 +57,6 @@ public class PHMRValidationTest {
         params.put("phase", "errors");
     }
     
-    @After
-    public void tearDown() throws Exception {
-    }
-    
     @Test
     public void validateSchemaGoodSample() throws Exception {
         Source testXml = new StreamSource(new ClassPathResource(sample_good).getInputStream());

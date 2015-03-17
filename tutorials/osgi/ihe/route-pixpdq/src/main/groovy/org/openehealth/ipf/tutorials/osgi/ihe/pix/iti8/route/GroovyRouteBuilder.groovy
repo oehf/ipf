@@ -37,7 +37,7 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
         // normal processing with auditing
         from('pix-iti8://0.0.0.0:8882')
             .process(validatingProcessor())
-            .transform(HL7v2.ack())
+            .transform(ack())
             .process(validatingProcessor())
     }
 }

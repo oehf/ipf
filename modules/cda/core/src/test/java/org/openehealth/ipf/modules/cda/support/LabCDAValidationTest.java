@@ -55,10 +55,6 @@ public class LabCDAValidationTest {
         params.put("phase", "errors");
     }
     
-    @After
-    public void tearDown() throws Exception {
-    }
-    
     @Test
     public void testSchemaValidate() throws Exception {
         Source testXml = new StreamSource(new ClassPathResource(sample).getInputStream());

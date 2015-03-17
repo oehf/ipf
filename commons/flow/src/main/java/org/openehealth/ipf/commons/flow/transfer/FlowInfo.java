@@ -180,7 +180,7 @@ public class FlowInfo implements Serializable {
 
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("Flow (id = ").append(identifier).append(")").append(NEWLINE);
         buf.append("- overall status       = ").append(status).append(NEWLINE);
         buf.append("- application          = ").append(application).append(NEWLINE);

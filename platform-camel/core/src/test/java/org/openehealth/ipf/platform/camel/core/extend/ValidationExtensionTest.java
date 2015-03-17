@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend;
 
-import static org.junit.Assert.*;
-
 import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Martin Krasser

@@ -91,7 +91,7 @@ public class TransactedRouteTest extends StandardTestContainer {
         assertTrue(response.contains("MSA|AR"));
     }
     
-    public String sendRequest(final String url, final String body) throws Exception {
+    public String sendRequest(final String url, final String body) {
         final Exchange exchange = new DefaultExchange(
                 getCamelContext(), ExchangePattern.InOut);
         exchange.getIn().setBody(body);

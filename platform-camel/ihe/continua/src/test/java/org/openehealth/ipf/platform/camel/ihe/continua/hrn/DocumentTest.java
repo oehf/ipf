@@ -42,12 +42,11 @@ import org.springframework.core.convert.support.GenericConversionService;
  */
 public class DocumentTest {
     private DocumentEntry docEntry;
-    private Identifiable somePatientID;
     private DataHandler someData;
     
     @Before
     public void setUp() throws Exception {
-        somePatientID = new Identifiable("id1", new AssigningAuthority("1.3"));
+        Identifiable somePatientID = new Identifiable("id1", new AssigningAuthority("1.3"));
         someData = SampleData.createDataHandler();
         docEntry = SampleData.createDocumentEntry(somePatientID);
 

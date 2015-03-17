@@ -48,7 +48,7 @@ public class XCNValidator implements ValueValidator {
 //        Spec actually allows the assigning authority to be missing:
 //          "If component 1 (ID Number) is specified, component 9 (Assigning Authority) shall be present if available"
         HD hd = xcn.getXcn9_AssigningAuthority();
-        boolean condition = isNotEmpty(xcn.getXcn1_IDNumber().getValue())? isNotEmptyField(hd) : true;
+        boolean condition = !isNotEmpty(xcn.getXcn1_IDNumber().getValue()) || isNotEmptyField(hd);
         metaDataAssert(condition, PERSON_HD_MISSING, hl7xcn);
 
         if (! isEmptyField(hd)) {

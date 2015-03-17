@@ -18,11 +18,11 @@ Consumer side corresponds to the *Patient Identifier Cross-Reference Consumer* a
 In a Maven-based environment, the following dependency must be registered in `pom.xml`:
 
 ```xml
-<dependency>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-ihe-hl7v3</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
+    <dependency>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel-ihe-hl7v3</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 ```
 
 ### Endpoint URI Format
@@ -69,9 +69,9 @@ Additional URI parameters are optional and control special features as described
 This is an example on how to use the component on the consumer side:
 
 ```java
-from("pixv3-iti46:iti46Service?audit=true")
-  .process(myProcessor)
-  // process the incoming request and create a response
+    from("pixv3-iti46:iti46Service?audit=true")
+      .process(myProcessor)
+      // process the incoming request and create a response
 ```
 
 

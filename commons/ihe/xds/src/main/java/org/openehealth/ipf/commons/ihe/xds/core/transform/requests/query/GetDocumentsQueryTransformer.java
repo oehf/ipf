@@ -36,7 +36,7 @@ public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDoc
      *
      * @param query
      *          the query. Can be <code>null</code>.
-     * @param ebXML
+     * @param ebXML ebXML object
      */
     public void toEbXML(GetDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
@@ -54,7 +54,7 @@ public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDoc
      *
      * @param query
      *          the query. Can be <code>null</code>.
-     * @param ebXML
+     * @param ebXML ebXML object
      */
     public void fromEbXML(GetDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {

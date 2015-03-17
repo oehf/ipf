@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import ca.uhn.hl7v2.AcknowledgmentCode
+import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
@@ -88,7 +89,7 @@ class DatatypesRouteBuilder extends SpringRouteBuilder {
              
          // HAPI Message
          case 1:
-             assertTrue(x instanceof ca.uhn.hl7v2.model.Message)
+             assertTrue(x instanceof Message)
              assertTrue(typeSupported(x))
              resultMessage(exchange).body = x
              break

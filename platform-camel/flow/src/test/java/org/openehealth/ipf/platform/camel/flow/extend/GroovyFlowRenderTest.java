@@ -90,6 +90,7 @@ public class GroovyFlowRenderTest {
             // DeadLetterChannel marks Exception as handled
             // No failure should be reported
         } catch (RuntimeCamelException e) {
+            // ok
         }
         out.assertIsSatisfied();
         err.assertIsSatisfied();

@@ -314,7 +314,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
                 .getInputStream());
     }
 
-    private void assertXqueryOutput(String resultXml) throws InterruptedException, SAXException, IOException {
+    private void assertXqueryOutput(String resultXml) throws InterruptedException {
         mockOutput.assertIsSatisfied();
         String result = mockOutput.getExchanges().get(0).getIn()
                 .getBody(String.class);
@@ -322,7 +322,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
         assertTrue(result.contains("<item name=\"pid\">" + resultXml + "</item>"));
     }
 
-    private void assertXsltOutput(String processingCode, String processingMode) throws IOException, InterruptedException {
+    private void assertXsltOutput(String processingCode, String processingMode) throws InterruptedException {
         mockOutput.assertIsSatisfied();
         String result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
         assertNotNull(result);

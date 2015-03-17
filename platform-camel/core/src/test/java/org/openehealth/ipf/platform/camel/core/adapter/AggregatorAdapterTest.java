@@ -32,10 +32,6 @@ import org.openehealth.ipf.platform.camel.core.support.transform.min.TestAggrega
 public class AggregatorAdapterTest {
 
     private AggregationStrategy strategy;
-    
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @Test
     public void testAggregateDefault() {

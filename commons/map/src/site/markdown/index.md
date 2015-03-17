@@ -1,6 +1,7 @@
 ## Mapping Service
 
-The `org.openehealth.ipf.commons.map.MappingService` interface deals with the requirement that message processing often
+The [`org.openehealth.ipf.commons.map.MappingService`](../apidocs/org/openehealth/ipf/commons/map/MappingService.html)
+interface deals with the requirement that message processing often
 involves mapping between code systems, i.e. from one set of codes into a corresponding set of codes.
 For example, HL7 version 2 to HL7 version 3 use different code systems for most coded values like message type, gender,
 clinical encounter type, marital status codes, address and telecommunication use codes, just to mention a few.
@@ -10,14 +11,15 @@ remote terminology service.
 
 The `ipf-commons-map` component extends the `java.lang.String` and `java.util.Collection` classes with methods targeted at mapping.
 
-The ipf-commons-map library provides one MappingService implementation (`org.openehealth.ipf.commons.map.BidiMappingService`), which implements
+The ipf-commons-map library provides one MappingService implementation
+([`org.openehealth.ipf.commons.map.BidiMappingService`](../apidocs/org/openehealth/ipf/commons/map/BidiMappingService.html)), which implements
 
 *  bidirectional mapping
 *  mapping of arbitrary objects
 *  definitions of mappings using external Groovy Scripts
 
 You are free to implement and use your own service as long as it implements the
-`org.openehealth.ipf.commons.map.MappingService` interface.
+[`org.openehealth.ipf.commons.map.MappingService`](../apidocs/org/openehealth/ipf/commons/map/MappingService.html) interface.
 
 
 ### Dependencies
@@ -34,7 +36,7 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 ### Configuring the Mapping Service
 
-Here is how to configure IPF's `BidiMappingService` using Spring:
+Here is how to configure IPF's [`BidiMappingService`](../apidocs/org/openehealth/ipf/commons/map/BidiMappingService.html) using Spring:
 
 ```xml
 

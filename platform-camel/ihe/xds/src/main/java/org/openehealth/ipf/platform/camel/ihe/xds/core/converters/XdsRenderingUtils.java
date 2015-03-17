@@ -240,15 +240,7 @@ abstract public class XdsRenderingUtils {
         }
 
         private static String attachmentDescription(String name, String size, String contentType) {
-            return new StringBuilder()
-                    .append("Attachment: name='")
-                    .append(defaultString(name, "[unknown]"))
-                    .append("', size='")
-                    .append(defaultString(size, "[unknown]"))
-                    .append("', content type='")
-                    .append(defaultString(contentType, "[unknown]"))
-                    .append('\'')
-                    .toString();
+            return "Attachment: name='" + defaultString(name, "[unknown]") + "', size='" + defaultString(size, "[unknown]") + "', content type='" + defaultString(contentType, "[unknown]") + '\'';
         }
 
     }

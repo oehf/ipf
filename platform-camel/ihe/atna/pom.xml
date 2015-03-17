@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>ipf-platform-camel-ihe-atna</artifactId>
     <name>ipf-platform-camel-ihe-atna</name>
     <description>ATNA support for Apache Camel IHE components</description>
@@ -19,9 +18,8 @@
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-ihe-core</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.openehealth.ipf.oht.atna</groupId>
+            <artifactId>ipf-oht-atna-auditor</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>

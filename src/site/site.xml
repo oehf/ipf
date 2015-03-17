@@ -47,6 +47,7 @@
             <highlightJs>true</highlightJs>
             <highlightJsTheme>github</highlightJsTheme>
             <absoluteResourceURL>http://oehf.github.io/ipf/</absoluteResourceURL>
+            <breadcrumbs>false</breadcrumbs>
             <brand>
                 <!-- Brand text in top-left part of the site -->
                 <name>
@@ -78,8 +79,6 @@
                 <index project="ipf">
                     <!-- Override the title -->
                     <titleTemplate>Open eHealth Integration Platform</titleTemplate>
-                    <!-- no breadcrumbs on the main index page -->
-                    <breadcrumbs>false</breadcrumbs>
                     <!-- no ToC on the main index page -->
                     <markPageHeader>false</markPageHeader>
                     <sections>
@@ -91,8 +90,20 @@
 
                 <!-- Contribution -->
                 <development>
-                    <breadcrumbs>false</breadcrumbs>
+                    <toc>false</toc>
                 </development>
+                <migration>
+                    <toc>false</toc>
+                </migration>
+                <performance>
+                    <toc>false</toc>
+                </performance>
+                <recoverability>
+                    <toc>false</toc>
+                </recoverability>
+                <dynamic>
+                    <toc>false</toc>
+                </dynamic>
 
                 <!-- Disable source highlighting for Maven reports -->
                 <source-repository>
@@ -112,6 +123,24 @@
                 <project-info>
                     <toc>false</toc>
                 </project-info>
+                <summary>
+                    <toc>false</toc>
+                </summary>
+                <modules>
+                    <toc>false</toc>
+                </modules>
+                <team-list>
+                    <toc>false</toc>
+                </team-list>
+                <mailing-list>
+                    <toc>false</toc>
+                </mailing-list>
+                <source-repository>
+                    <toc>false</toc>
+                </source-repository>
+                <surefire-report>
+                    <toc>false</toc>
+                </surefire-report>
                 <github-report>
                     <toc>false</toc>
                 </github-report>

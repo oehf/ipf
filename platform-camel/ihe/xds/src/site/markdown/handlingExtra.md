@@ -45,7 +45,9 @@ Here is an example of how to set extra metadata using Groovy.
 ### Handling extra query parameters
 
 The simplified XDS data model supports additional (user-defined) parameter slots — they are mapped to the field
-`extraParameters` of the `StoredQuery`class. This field is a map from slot names (`String`) to instances of `QueryList`.
+`extraParameters` of the [`StoredQuery`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/query/StoredQuery.html) class.
+This field is a map from slot names (`String`) to instances of
+[`QueryList`](../apidocs/org/openehealth/ipf/commons/ihe/xds/core/requests/query/QueryList.html).
 
 In that way, AND/OR semantics of parameter values can be expressed by the means of multiple slots with the same name,
 with multiple values in each (see IHE IT Infrastructure Technical Framework, Volume 2a , section 3.18.4.1.2.3.5).

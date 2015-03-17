@@ -47,8 +47,6 @@ public class SplitterTest {
     private static CamelContext camelContext;
 
     private Splitter splitter;
-    private TestSplitRule splitRule;
-    private TestAggregationStrategy aggregationStrat;
     private TestProcessor dest;
 
     @BeforeClass
@@ -58,8 +56,8 @@ public class SplitterTest {
 
     @Before
     public void setUp() {
-        splitRule = new TestSplitRule();
-        aggregationStrat = new TestAggregationStrategy();
+        TestSplitRule splitRule = new TestSplitRule();
+        TestAggregationStrategy aggregationStrat = new TestAggregationStrategy();
         dest = new TestProcessor();
         
         splitter = new Splitter(splitRule, dest);

@@ -131,16 +131,7 @@ public class FlowPartInfo implements Serializable {
 
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
-        buf.append("Flow part (path = ").append(path).append(")").append(NEWLINE);
-        buf.append("- status             = ").append(status).append(NEWLINE);
-        buf.append("- flow duration (ms) = ").append(durationString(pathDuration)).append(NEWLINE);
-        buf.append("- contribution time  = ").append(dateString(contributionTime)).append(NEWLINE);
-        buf.append("- filter time        = ").append(dateString(filterTime)).append(NEWLINE);
-        buf.append("- contribution count = ").append(contributionCount).append(NEWLINE);
-        buf.append("- filter count       = ").append(filterCount).append(NEWLINE);
-        buf.append("- text               = ").append(textString(text)).append(NEWLINE);
-        return buf.toString();
+        return "Flow part (path = " + path + ")" + NEWLINE + "- status             = " + status + NEWLINE + "- flow duration (ms) = " + durationString(pathDuration) + NEWLINE + "- contribution time  = " + dateString(contributionTime) + NEWLINE + "- filter time        = " + dateString(filterTime) + NEWLINE + "- contribution count = " + contributionCount + NEWLINE + "- filter count       = " + filterCount + NEWLINE + "- text               = " + textString(text) + NEWLINE;
     }
     
 }

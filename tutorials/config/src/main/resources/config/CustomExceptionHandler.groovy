@@ -15,6 +15,7 @@
  */
 package config
 
+import ca.uhn.hl7v2.HL7Exception
 import org.apache.camel.Exchange
 import org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilder
 
@@ -26,7 +27,7 @@ class CustomExceptionHandler extends CustomRouteBuilder {
 
     void configure() {
 
-        onException(ca.uhn.hl7v2.HL7Exception.class)
+        onException(HL7Exception.class)
           .maximumRedeliveries(0)
           .handled(true)
           .transform().exceptionMessage()

@@ -43,10 +43,6 @@ public class InOnlyBridgeTest {
         exchange = new DefaultExchange(new DefaultCamelContext());
     }
 
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
     public void testProcessInOut() throws Exception {
         exchange.setPattern(ExchangePattern.InOut);

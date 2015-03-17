@@ -25,13 +25,34 @@ The following IPF modules have been removed.
 * ipf-platform-camel-test
 
 
+### Dependencies
+
+Due to moving the release artifacts to Maven Central, Maven group IDs of some third-party libraries
+have been changed. As these dependencies are all transitive, there should be no migration required:
+
+* MDHT: org.openhealthtools.mdht -> org.openehealth.ipf.oht.mdht
+* Eclipse OCL: org.eclipse -> org.openehealth.ipf.eclipse.ocl
+* Eclipse EMF: org.eclipse -> org.eclipse.birt.runtime
+* LPG: net.sourceforge.lpg -> lpg.runtime
+
+IPF heavily depends on Apache Camel, but excludes the following transitive dependencies in favor
+of explicit dependencies. In case your `pom.xml` depends directly on Camel libraries as well, make
+sure to exclude the following dependencies to avoid packaging and version conflicts:
+
+* Exclude `org.codehaus.groovy:groovy-all` from dependencies to `camel-groovy`
+* Exclude `com.sun.xml.bind:jaxb-impl` and `com.sun.xml.bind:jaxb-core` in favor of `org.glassfish.jaxb:jaxb-runtime`
+
+The latter comes from a packaging reorganization of the JAXB reference implementation in their 2.2.11 release, which
+requires the additional `jaxb-core` dependency. `jaxb-impl` is marked as "old", however, so IPF uses the recommended
+`jaxb-runtime` instead.
+
 ### HL7v2 DSL API
 
 With IPF 3, the `ipf-modules-hl7dsl` module and all contained classes have been **deprecated**.
 Instead of using the adapter classes around the regular [HAPI] model classes
 (e.g. `org.openehealth.ipf.modules.hl7dsl.MessageAdapter` around `ca.uhn.hl7v2.model.Message` ), the DSL can now be
 applied directly on the HAPI classes. This has been achieved by including the DSML into the Groovy
-[extension module](http://groovy.codehaus.org/Creating+an+extension+module) `ipf-modules-hl7`.
+[extension module](http://www.groovy-lang.org/metaprogramming.html#_extension_modules) `ipf-modules-hl7`.
 
 Due to this change, the HL7v2 DSL has undergone some minor changes:
 
@@ -100,14 +121,37 @@ and all of their implementations now translate to or from `ca.uhn.hl7v2.model.Me
 The module `ipf-platform-camel-core` had some obsolete extensions and also conflicts when used together with a current Camel version.
 In order to resolve this issue with a certain degree of backwards compatibility, the module was reorganized:
 
-
 * All Camel DSL extensions involving Groovy closure support that is available over the `camel-groovy` component have been moved to `ipf-platform-camel-core-legacy`
 * The `validate` Camel DSL extension that conflicts with Camel's `validate` EIP method has been renamed to `verify`. The `validate` extension can still be found in `ipf-platform-camel-core-legacy`.
 * The `ipf().split` extension has been moved to `ipf-platform-camel-flow`. It's only relevant when used with the flow manager, otherwise the standard Camel splitter works good enough.
 * Some already deprecated classes of the legacy Groovy metaclass machinery (like the old `DefaultModelExtender`) have been removed
 * No other IPF module depends on `ipf-platform-camel-core-legacy`, so you don't get accidental transitive dependencies
 
-For migration, you usually just have to include the `org.apache.camel:camel-groovy` dependency into your pom.
+For migration, you have to include the `org.apache.camel:camel-groovy` dependency into your pom:
+
+```xml
+    <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-groovy</artifactId>
+        <version>${camel-version}</version>
+        <!-- Exclude Groovy bundle in favor of a explicit groovy dependency -->
+        <!-- in order to avoid version conflicts -->
+        <exclusions>
+            <exclusion>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-core</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+```
 
 In case your routes depend on deprecated extensions and/or including `camel-groovy` is not possible, you can also add a
 dependency on `ipf-platform-camel-core-legacy`. This module, however, will be removed in one of the next versions,
@@ -115,7 +159,6 @@ so we strongly recommend to migrate the respective parts of your routes.
 
 
 ### IHE Runtime
-
 
 * Validators for HL7v2-based transactions are now based on Conformance Profiles downloaded from [Gazelle]. In general, validation has become much stricter and conforms closely with the IHE specification, so you may expect validation exceptions for test messages.
 * All HL7v2-based IHE consumers and producers do not create and accept the deprecated `MessageAdapter` objects but plain [HAPI] `Message` objects.

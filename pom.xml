@@ -13,10 +13,9 @@
 
         <!-- Report version properties -->
         <site-plugin-version>3.4</site-plugin-version>
-        <cobertura-plugin-version>2.5.2</cobertura-plugin-version>
         <surefire-report-plugin-version>2.18</surefire-report-plugin-version>
         <jxr-plugin-version>2.5</jxr-plugin-version>
-        <project-info-reports-plugin-version>2.7</project-info-reports-plugin-version>
+        <project-info-reports-plugin-version>2.8</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
 
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -49,20 +48,20 @@
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.5.1</assembly-plugin-version>
         <build-helper-version>1.9.1</build-helper-version>
-        <bundle-plugin-version>2.0.1</bundle-plugin-version>
+        <bundle-plugin-version>2.5.3</bundle-plugin-version>
         <compiler-plugin-version>3.2</compiler-plugin-version>
         <eclipse-plugin-version>2.9</eclipse-plugin-version>
-        <enforcer-plugin-version>1.3.1</enforcer-plugin-version>
+        <enforcer-plugin-version>1.4</enforcer-plugin-version>
+        <github-site-version>0.9</github-site-version>
         <groovy-eclipse-batch-version>2.3.7-01</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>2.9.0-01</groovy-eclipse-compiler-version>
-        <jar-plugin-version>2.5</jar-plugin-version>
+        <jar-plugin-version>2.6</jar-plugin-version>
         <javadoc-plugin-version>2.10.1</javadoc-plugin-version>
         <jaxb-plugin-version>1.6</jaxb-plugin-version>
         <pax-plugin-version>1.5</pax-plugin-version>
-        <release-plugin-version>2.1</release-plugin-version>
+        <release-plugin-version>2.5.1</release-plugin-version>
         <resources-plugin-version>2.7</resources-plugin-version>
-        <sources-plugin-version>2.2.1</sources-plugin-version>
-        <github-site-version>0.9</github-site-version>
+        <sources-plugin-version>2.4</sources-plugin-version>
 
         <!-- Dependency version properties -->
         <activemq-version>5.11.1</activemq-version>
@@ -97,7 +96,7 @@
         <ipf-gazelle-version>1.0.5</ipf-gazelle-version>
         <ipf-oht-atna-version>3.0.0</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
-        <jaxb-impl-version>2.2.11</jaxb-impl-version>
+        <jaxb-version>2.2.11</jaxb-version>
         <jasypt-version>1.9.2</jasypt-version>
         <jboss-logging-version>3.2.1.Final</jboss-logging-version>
         <jboss-logging-annotations-version>1.2.0.Final</jboss-logging-annotations-version>
@@ -127,7 +126,7 @@
 
     <url>${site.url}</url>
 
-    <description>IPF is an eHealth Integration Framework</description>
+    <description>IPF - eHealth Integration on steroids</description>
 
     <organization>
         <name>Open eHealth Foundation</name>
@@ -197,8 +196,6 @@
             </roles>
             <timezone>+1</timezone>
         </developer>
-
-
         <developer>
             <id>4effo</id>
             <name>Stefan Ivanov</name>
@@ -272,6 +269,219 @@
         <module>platform-camel</module>
         <module>tutorials</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>jdk8</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${surefire-report-plugin-version}</version>
+                            <configuration>
+                                <argLine>-Xms64m -Xmx512m</argLine>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>${javadoc-plugin-version}</version>
+                            <inherited>false</inherited>
+                            <configuration>
+                                <links>
+                                    <link>http://docs.oracle.com/javase/7/docs/api/</link>
+                                    <link>http://hl7api.sourceforge.net/apidocs/</link>
+                                    <link>http://groovy.codehaus.org/api/</link>
+                                    <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
+                                    <link>http://docs.spring.io/spring/docs/4.1.x/javadoc-api/</link>
+                                </links>
+                                <source>1.7</source>
+                                <linksource>false</linksource>
+                                <excludePackageNames>*.tutorials,*.test</excludePackageNames>
+                                <additionalJOption>-J-Xmx512m</additionalJOption>
+                                <additionalparam>-Xdoclint:none</additionalparam>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>aggregate</id>
+                                    <goals>
+                                        <goal>aggregate</goal>
+                                    </goals>
+                                    <phase>site</phase>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>jdk7</id>
+            <activation>
+                <jdk>1.7</jdk>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${surefire-report-plugin-version}</version>
+                            <configuration>
+                                <argLine>-Xms64m -Xmx512m -XX:MaxPermSize=256m</argLine>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>${javadoc-plugin-version}</version>
+                            <inherited>false</inherited>
+                            <configuration>
+                                <links>
+                                    <link>http://docs.oracle.com/javase/7/docs/api/</link>
+                                    <link>http://hl7api.sourceforge.net/apidocs/</link>
+                                    <link>http://groovy.codehaus.org/api/</link>
+                                    <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
+                                    <link>http://docs.spring.io/spring/docs/4.1.x/javadoc-api/</link>
+                                </links>
+                                <source>1.7</source>
+                                <linksource>false</linksource>
+                                <excludePackageNames>*.tutorials,*.test</excludePackageNames>
+                                <additionalJOption>-J-Xmx512m</additionalJOption>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>aggregate</id>
+                                    <goals>
+                                        <goal>aggregate</goal>
+                                    </goals>
+                                    <phase>site</phase>
+                                </execution>
+                                <execution>
+                                    <id>attach-javadocs</id>
+                                    <goals>
+                                        <goal>jar</goal>
+                                    </goals>
+                                    <phase>package</phase>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <!-- This profile generates groovystubs with last gmaven plugin        -->
+            <!-- which still respects the javadocs annotations on stub generation. -->
+            <!-- It also generates delomboked java sources required for decent javadoc generation. -->
+            <!-- To deploy javadocs with groovydocs+deloboked java sources it should be run like follows: -->
+            <!-- 1. mvn generate-sources -Pgenerate-stubs' -->
+            <!-- 2. mvn clean javadoc:jar -Dsourcepath=./generate-stubs deploy -->
+            <id>generate-stubs</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <output-folder>${basedir}</output-folder>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.groovy.maven</groupId>
+                        <artifactId>gmaven-plugin</artifactId>
+                        <version>1.0</version>
+                        <executions>
+                            <execution>
+                                <id>generate-stubs</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generateStubs</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok-maven-plugin</artifactId>
+                        <version>${lombok-version}.0</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>delombok</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                            <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>sun.jdk</groupId>
+                                <artifactId>tools</artifactId>
+                                <version>1.7</version>
+                                <scope>system</scope>
+                                <systemPath>${java.home}/../lib/tools.jar</systemPath>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Use the staging profile to a local staging or mock directory.
+             It can be used to test that links between module sites in a multi-module build work. -->
+        <profile>
+            <id>staging</id>
+            <properties>
+                <site.deploy.url>http://github.com/oehf/ipf/tree/gh-pages/</site.deploy.url>
+            </properties>
+
+            <build>
+                <plugins>
+                    <!-- Configure Maven site plugin to perform stage -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-site-plugin</artifactId>
+                        <version>${site-plugin-version}</version>
+                        <executions>
+                            <execution>
+                                <id>stage</id>
+                                <goals>
+                                    <goal>stage</goal>
+                                </goals>
+                                <phase>site</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
+    </profiles>
 
     <dependencyManagement>
         <dependencies>
@@ -438,6 +648,16 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-core</artifactId>
                 <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -450,6 +670,20 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-groovy</artifactId>
                 <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -468,8 +702,12 @@
                 <version>${camel-version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>org.hl7</groupId>
-                        <artifactId>hapi</artifactId>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -521,6 +759,14 @@
                         <groupId>commons-codec</groupId>
                         <artifactId>commons-codec</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -538,6 +784,16 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-mina2</artifactId>
                 <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -547,6 +803,14 @@
                     <exclusion>
                         <groupId>org.springframework</groupId>
                         <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -624,6 +888,22 @@
                 </exclusions>
             </dependency>
             <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-ws-security</artifactId>
+                <version>${cxf-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf.services.sts</groupId>
+                <artifactId>cxf-services-sts-core</artifactId>
+                <version>${cxf-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.mina</groupId>
                 <artifactId>mina-core</artifactId>
                 <version>${mina2-version}</version>
@@ -637,13 +917,13 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j-version}</version>
-                <optional>true</optional>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>jcl-over-slf4j</artifactId>
                 <version>${slf4j-version}</version>
-                <optional>true</optional>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -1070,15 +1350,9 @@
                 <version>${jdom-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-impl</artifactId>
-                <version>${jaxb-impl-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.xml.bind</groupId>
-                        <artifactId>jsr173_api</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>${jaxb-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -1170,6 +1444,14 @@
                         <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
                     </configuration>
                     <extensions>true</extensions>
+                    <!-- remove this once 2.5.4 is released -->
+                    <dependencies>
+                        <dependency>
+                            <groupId>biz.aQute.bnd</groupId>
+                            <artifactId>bndlib</artifactId>
+                            <version>2.4.0</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -1518,306 +1800,5 @@
         </plugins>
     </reporting>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>openehealth.releases</id>
-            <name>Open eHealth Maven Repository</name>
-            <url>http://repo.openehealth.org/maven2/releases</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>openehealth.snapshots</id>
-            <name>Open eHealth Maven Repository</name>
-            <url>http://repo.openehealth.org/maven2/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
-    <repositories>
-        <repository>
-            <id>openehealth.releases</id>
-            <name>Open eHealth Maven Repository</name>
-            <url>http://repo.openehealth.org/maven2/releases</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>openehealth.snapshots</id>
-            <name>Open eHealth Maven Repository</name>
-            <url>http://repo.openehealth.org/maven2/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>repo1</id>
-            <name>Maven Repository</name>
-            <url>http://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>repo2</id>
-            <name>Maven Repository</name>
-            <url>http://repo2.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>codehaus nexus</id>
-            <name>Codehaus Nexus Maven Repository</name>
-            <url>https://nexus.codehaus.org/content/repositories/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>codehaus</id>
-            <name>Codehaus Maven Repository</name>
-            <url>http://repository.codehaus.org</url>
-        </repository>
-        <repository>
-            <id>java.net</id>
-            <name>java.net Maven Repository</name>
-            <url>http://download.java.net/maven/2/</url>
-        </repository>
-        <repository>
-            <id>jboss</id>
-            <name>JBoss Maven Repository</name>
-            <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-        </repository>
-        <repository>
-            <id>servicemix</id>
-            <name>Apache ServiceMix Repository</name>
-            <url>http://svn.apache.org/repos/asf/servicemix/m2-repo/</url>
-        </repository>
-    </repositories>
-    <profiles>
-        <profile>
-            <id>jdk8</id>
-            <activation>
-                <jdk>1.8</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>${surefire-report-plugin-version}</version>
-                            <configuration>
-                                <argLine>-Xms64m -Xmx512m</argLine>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>${javadoc-plugin-version}</version>
-                            <inherited>false</inherited>
-                            <configuration>
-                                <links>
-                                    <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                                    <link>http://hl7api.sourceforge.net/apidocs/</link>
-                                    <link>http://groovy.codehaus.org/api/</link>
-                                    <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
-                                    <link>http://docs.spring.io/spring/docs/4.1.x/javadoc-api/</link>
-                                </links>
-                                <source>1.7</source>
-                                <linksource>false</linksource>
-                                <excludePackageNames>*.tutorials,*.test</excludePackageNames>
-                                <additionalJOption>-J-Xmx512m</additionalJOption>
-                                <additionalparam>-Xdoclint:none</additionalparam>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>aggregate</id>
-                                    <goals>
-                                        <goal>aggregate</goal>
-                                    </goals>
-                                    <phase>site</phase>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
-            <id>jdk7</id>
-            <activation>
-                <jdk>1.7</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>${surefire-report-plugin-version}</version>
-                            <configuration>
-                                <argLine>-Xms64m -Xmx512m -XX:MaxPermSize=256m</argLine>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>${javadoc-plugin-version}</version>
-                            <inherited>false</inherited>
-                            <configuration>
-                                <links>
-                                    <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                                    <link>http://hl7api.sourceforge.net/apidocs/</link>
-                                    <link>http://groovy.codehaus.org/api/</link>
-                                    <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
-                                    <link>http://docs.spring.io/spring/docs/4.1.x/javadoc-api/</link>
-                                </links>
-                                <source>1.7</source>
-                                <linksource>false</linksource>
-                                <excludePackageNames>*.tutorials,*.test</excludePackageNames>
-                                <additionalJOption>-J-Xmx256m</additionalJOption>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>aggregate</id>
-                                    <goals>
-                                        <goal>aggregate</goal>
-                                    </goals>
-                                    <phase>site</phase>
-                                </execution>
-                                <execution>
-                                    <id>attach-javadocs</id>
-                                    <goals>
-                                        <goal>jar</goal>
-                                    </goals>
-                                    <phase>package</phase>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
-            <!-- This profile generates groovystubs with last gmaven plugin        -->
-            <!-- which still respects the javadocs annotations on stub generation. -->
-            <!-- It also generates delomboked java sources required for decent javadoc generation. -->
-            <!-- To deploy javadocs with groovydocs+deloboked java sources it should be run like follows: -->
-            <!-- 1. mvn generate-sources -Pgenerate-stubs' -->
-            <!-- 2. mvn clean javadoc:jar -Dsourcepath=./generate-stubs deploy -->
-            <id>generate-stubs</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <output-folder>${basedir}</output-folder>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.groovy.maven</groupId>
-                        <artifactId>gmaven-plugin</artifactId>
-                        <version>1.0</version>
-                        <executions>
-                            <execution>
-                                <id>generate-stubs</id>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>generateStubs</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok-maven-plugin</artifactId>
-                        <version>${lombok-version}.0</version>
-                        <executions>
-                            <execution>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>delombok</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <encoding>UTF-8</encoding>
-                            <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                            <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>sun.jdk</groupId>
-                                <artifactId>tools</artifactId>
-                                <version>1.7</version>
-                                <scope>system</scope>
-                                <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- Use the staging profile to a local staging or mock directory.
-             It can be used to test that links between module sites in a multi-module build work. -->
-        <profile>
-            <id>staging</id>
-            <properties>
-                <site.deploy.url>http://github.com/oehf/ipf/tree/gh-pages/</site.deploy.url>
-            </properties>
-
-            <build>
-                <plugins>
-                    <!-- Configure Maven site plugin to perform stage -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-site-plugin</artifactId>
-                        <version>${site-plugin-version}</version>
-                        <executions>
-                            <execution>
-                                <id>stage</id>
-                                <goals>
-                                    <goal>stage</goal>
-                                </goals>
-                                <phase>site</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-
-        </profile>
-    </profiles>
 </project>

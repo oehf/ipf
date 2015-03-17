@@ -65,10 +65,6 @@ public abstract class AbstractFlowReplayTest {
     
     @EndpointInject(uri="mock:error")
     private MockEndpoint error;
-    
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @After
     public void tearDown() throws Exception {
@@ -92,11 +88,11 @@ public abstract class AbstractFlowReplayTest {
     @Test
     public void testReplayMarshal() throws InterruptedException {
         mock.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:flow-test-2", Double.valueOf(1.1));
+        producerTemplate.sendBody("direct:flow-test-2", 1.1);
         mock.assertIsSatisfied();
         Long flowId = firstFlowId(); 
         mock.reset();
-        mock.expectedBodiesReceived(Double.valueOf(1.1));
+        mock.expectedBodiesReceived(1.1);
         flowManager.replayFlow(flowId);
         mock.assertIsSatisfied();
         assertEquals("test-2", firstHeader("foo"));
@@ -105,7 +101,7 @@ public abstract class AbstractFlowReplayTest {
     @Test
     public void testReplaySkip() throws InterruptedException {
         mock.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:flow-test-3", Double.valueOf(1.1));
+        producerTemplate.sendBody("direct:flow-test-3", 1.1);
         mock.assertIsSatisfied();
         Long flowId = firstFlowId(); 
         mock.reset();
@@ -169,7 +165,7 @@ public abstract class AbstractFlowReplayTest {
         // outFormat(StringDataFormat) is not applied, when outConversion(false)
         // is set.
         mock.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:flow-test-7", Double.valueOf(1.1));
+        producerTemplate.sendBody("direct:flow-test-7", 1.1);
         mock.assertIsSatisfied();
         Long flowId = firstFlowId();
         assertEquals(Double.class, firstBody().getClass());
@@ -189,7 +185,7 @@ public abstract class AbstractFlowReplayTest {
         // outFormat(StringDataFormat)
         // is correctly applied, when outConversion(true) is set.
         mock.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:flow-test-8", Double.valueOf(1.1));
+        producerTemplate.sendBody("direct:flow-test-8", 1.1);
         mock.assertIsSatisfied();
         Long flowId = firstFlowId();
         assertEquals(String.class, firstBody().getClass());

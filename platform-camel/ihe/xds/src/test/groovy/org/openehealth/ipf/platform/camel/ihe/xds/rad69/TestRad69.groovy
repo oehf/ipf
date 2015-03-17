@@ -100,14 +100,14 @@ class TestRad69 extends StandardTestContainer {
         checkSource(message.ActiveParticipant[0], SERVICE2_ADDR, 'false')
         checkDestination(message.ActiveParticipant[1], 'true')
         checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 0 : 0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 4 : 1], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 1 : 2], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 5 : 3], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 2 : 4], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 6 : 5], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 3 : 6], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
-        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 7 : 7], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
+        checkImageDocument(message.ParticipantObjectIdentification[7]                , 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
 
         message = getAudit('C', SERVICE2_ADDR)[0]
         
@@ -120,14 +120,14 @@ class TestRad69 extends StandardTestContainer {
         checkEvent(message.EventIdentification, '110107', 'RAD-69', 'C', outcome)
         checkSource(message.ActiveParticipant[0], 'false')
         checkDestination(message.ActiveParticipant[1], 'true')
-        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 0 : 0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
+        checkImageDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 4 : 1], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 1 : 2], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 5 : 3], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.2')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 2 : 4], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 6 : 5], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 3 : 6], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
-        checkImageDocument(message.ParticipantObjectIdentification[reordered ? 7 : 7], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
+        checkImageDocument(message.ParticipantObjectIdentification[7]                , 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.2', 'urn:oid:1.2.2')
     }
     
     void checkForMTOM(response) {

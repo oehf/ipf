@@ -36,10 +36,12 @@ These two obligatory URI parts represent the address of the MLLP endpoint which 
 accessed by the given producer.
 
 Additionally, the URI parameter *hl7TransactionConfig* is mandatory and references a bean of type
-`org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration` that defines the contract of the transaction.
+[`org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration`](../apidocs/org/openehealth/ipf/platform/camel/ihe/hl7v2/Hl7v2TransactionConfiguration.html)
+that defines the contract of the transaction.
 
 The parameters *clientAuditStrategy* and *serverAuditStrategy* are mandatory unless [ATNA auditing] is disabled in the
-endpoints. The strategy parameters must reference an instance of type `org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy`.
+endpoints. The strategy parameters must reference an instance of type
+[`org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy`](../apidocs/org/openehealth/ipf/platform/camel/ihe/mllp/core/MllpAuditStrategy.html).
 
 
 ### HL7v2 Codec

@@ -91,10 +91,7 @@ public class Flows {
     }
 
     public static String createMessageText(String searchKey) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("Created: ").append(new Date()).append(NEWLINE);
-        buffer.append("Content: ").append(searchKey).append(NEWLINE);
-        return buffer.toString();
+        return "Created: " + new Date() + NEWLINE + "Content: " + searchKey + NEWLINE;
 
     }
     

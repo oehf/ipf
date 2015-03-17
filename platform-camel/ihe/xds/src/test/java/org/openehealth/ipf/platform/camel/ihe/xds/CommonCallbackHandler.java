@@ -26,9 +26,9 @@ public class CommonCallbackHandler implements CallbackHandler {
 
     public void handle(Callback[] callbacks) throws IOException,
             UnsupportedCallbackException {
-        for (int i = 0; i < callbacks.length; i++) {
-            if (callbacks[i] instanceof WSPasswordCallback) { // CXF
-                WSPasswordCallback pc = (WSPasswordCallback) callbacks[i];
+        for (Callback callback : callbacks) {
+            if (callback instanceof WSPasswordCallback) { // CXF
+                WSPasswordCallback pc = (WSPasswordCallback) callback;
                 if ("myclientkey".equals(pc.getIdentifier())) {
                     pc.setPassword("ckpass");
                     break;

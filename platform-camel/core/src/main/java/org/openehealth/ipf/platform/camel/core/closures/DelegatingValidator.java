@@ -35,7 +35,7 @@ public class DelegatingValidator extends ClosureAdapter implements Validator<Obj
     public void validate(Object message, Object profile) {
         Object result;
         result = validateInternal(message, profile);
-        if (result instanceof Boolean == false) {
+        if (!(result instanceof Boolean)) {
             return;
         }
         if (!(Boolean)result) {

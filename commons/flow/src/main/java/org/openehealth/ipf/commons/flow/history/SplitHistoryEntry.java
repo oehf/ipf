@@ -175,11 +175,7 @@ public class SplitHistoryEntry implements Serializable {
      */
     @Override
     public String toString() {
-        return new StringBuffer()
-            .append(NODE_OPEN)
-            .append(index)
-            .append(last ? NODE_LAST : "")
-            .append(NODE_CLOSE).toString();
+        return NODE_OPEN + index + (last ? NODE_LAST : "") + NODE_CLOSE;
     }
     
     /**

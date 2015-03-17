@@ -252,14 +252,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
                 ? assertion.getIssuer().getValue() : null;
 
         if (StringUtils.isNotEmpty(issuer) && StringUtils.isNotEmpty(userName)) {
-            StringBuilder sb = new StringBuilder()
-                    .append(assertion.getSubject().getNameID().getSPProvidedID())
-                    .append('<')
-                    .append(userName)
-                    .append('@')
-                    .append(issuer)
-                    .append('>');
-            auditDataset.setUserName(sb.toString());
+            auditDataset.setUserName(assertion.getSubject().getNameID().getSPProvidedID() + '<' + userName + '@' + issuer + '>');
         }
 
         // collect purposes of use

@@ -37,13 +37,12 @@ public class ListMappingsCommand extends OsgiCommandSupport {
         if (mappingService != null && mappingService.getMap() != null){
             System.out.println("\nAvailable Mappings(" + mappingService.getMap().size() + ")");
             System.out.println("======================== ");
-            for (Iterator it = mappingService.getMap().keySet().iterator(); it.hasNext(); ){
-                Object key = it.next();
+            for (Object key : mappingService.getMap().keySet()) {
                 System.out.println("\n\tKey: " + key);
                 Map map = mappingService.getMap().get(key);
                 System.out.println("\t-------------------------------------------------");
-                for (Iterator entries = map.entrySet().iterator(); entries.hasNext(); ){
-                    Map.Entry entry = (Map.Entry)entries.next();
+                for (Object o : map.entrySet()) {
+                    Map.Entry entry = (Map.Entry) o;
                     System.out.println("\t\t" + entry.getKey() + " -> " + entry.getValue());
                 }
             }

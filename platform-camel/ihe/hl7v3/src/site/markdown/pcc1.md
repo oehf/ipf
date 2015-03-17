@@ -18,11 +18,11 @@ Consumer side corresponds to the *Clinical Data Source* actor.
 In a Maven-based environment, the following dependency must be registered in `pom.xml`:
 
 ```xml
-<dependency>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-ihe-hl7v3</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
+    <dependency>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>ipf-platform-camel-ihe-hl7v3</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 ```
 
 ### Endpoint URI Format
@@ -69,9 +69,9 @@ Additional URI parameters are optional and control special features as described
 This is an example on how to use the component on the consumer side:
 
 ```java
-from("qed-pcc1:pcc1Service?audit=true")
-  .process(myProcessor)
-  // process the incoming request and create a response
+    from("qed-pcc1:pcc1Service?audit=true")
+      .process(myProcessor)
+      // process the incoming request and create a response
 ```
 
 ### Remarks for this component

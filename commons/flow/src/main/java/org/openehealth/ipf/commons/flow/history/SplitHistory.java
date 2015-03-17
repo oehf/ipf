@@ -112,7 +112,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
      * @return a string representation of the {@link #indexPath()}.
      */
     public String indexPathString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int[] ip = indexPath();
         for (int i = 0; i < ip.length - 1; i++) {
             result.append(Integer.toString(ip[i]));
@@ -214,10 +214,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
         if (!isLastUpTo(last)) {
             return false;
         }
-        if (!history.isFirstUpTo(last)) {
-            return false;
-        }
-        return true;
+        return history.isFirstUpTo(last);
 
     }
 
@@ -251,11 +248,8 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
         if (!isFirstUpTo(last)) {
             return false;
         }
-        if (!history.isLastUpTo(last)) {
-            return false;
-        }
-        return true;
-        
+        return history.isLastUpTo(last);
+
     }
 
     /**
@@ -355,7 +349,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
 	 */
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(PATH_OPEN);
         for (int i = 0; i < entries.size() - 1; i++) {
             buf.append(entries.get(i));

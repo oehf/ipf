@@ -32,7 +32,7 @@ public class TestTransmogrifier implements Transmogrifier<Dog, Cat>{
         if (params == null) {
             return "";
         }
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (Object param : params) {
             buffer.append(param);
         }

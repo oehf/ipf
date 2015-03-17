@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import ca.uhn.hl7v2.model.Segment
 import org.junit.Before
 import org.junit.Test
 
@@ -144,7 +145,7 @@ class SegmentAdapterTest extends groovy.test.GroovyAssert {
 
     @Test
     void testGetTarget() {
-        assert nk1.target instanceof ca.uhn.hl7v2.model.Segment
+        assert nk1.target instanceof Segment
     }
 
     @Test

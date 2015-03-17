@@ -110,7 +110,9 @@ public class CxfEndpointTest {
             runRequest();
             Assert.fail("Expected Exception: " + RuntimeException.class);
         }
-        catch (RuntimeException e) {}
+        catch (RuntimeException e) {
+            // ok
+        }
     }
 
     private Response runRequest() {

@@ -25,7 +25,7 @@ import groovy.util.XmlSlurper
 /**
  * Abstract validator class from which the CDA validators should inherit from.
  * It provides a variety of helper assert methods, each of them throw an
- * {@link ValidationException} if the assertion is not true.
+ * ValidationException if the assertion is not true.
  * 
  * @author Christian Ohr
  */
@@ -158,7 +158,7 @@ public abstract class AbstractValidator implements Validator {
 	    def codeSystem = vocabulary.system.find { 
 	        it.@root == root
 	    }
-	    def found = codeSystem?.code.findAll {
+	    def found = codeSystem?.code?.findAll {
 	        it.@value == code.code && 
 	        it.@codeSystem == code.codeSystem
 	    }.size()

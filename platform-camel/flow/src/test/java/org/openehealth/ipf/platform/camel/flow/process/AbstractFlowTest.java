@@ -45,10 +45,6 @@ public abstract class AbstractFlowTest {
     
     @EndpointInject(uri="mock:mock")
     protected MockEndpoint mock;
-    
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @After
     public void tearDown() throws Exception {
@@ -64,15 +60,15 @@ public abstract class AbstractFlowTest {
     
     @Test
     public void testMarshal() throws InterruptedException {
-        mock.expectedBodiesReceived(Double.valueOf(1.1));
-        producerTemplate.sendBody("direct:flow-test-2", Double.valueOf(1.1));
+        mock.expectedBodiesReceived(1.1);
+        producerTemplate.sendBody("direct:flow-test-2", 1.1);
         mock.assertIsSatisfied();
     }
     
     @Test
     public void testSkip() throws InterruptedException {
-        mock.expectedBodiesReceived(Double.valueOf(1.1));
-        producerTemplate.sendBody("direct:flow-test-3", Double.valueOf(1.1));
+        mock.expectedBodiesReceived(1.1);
+        producerTemplate.sendBody("direct:flow-test-3", 1.1);
         mock.assertIsSatisfied();
     }
     

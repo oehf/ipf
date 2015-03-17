@@ -41,7 +41,7 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
                 .maximumRedeliveries(0)
                 .end()
             .process(validatingProcessor())
-            .transform(HL7v2.ack())
+            .transform(ack())
             .process(validatingProcessor())
     }
 } 

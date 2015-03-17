@@ -5,6 +5,7 @@
     <artifactId>ipf-archetypes</artifactId>
     <name>ipf-archetypes</name>
     <packaging>pom</packaging>
+    <description>IPF Maven Archtypes</description>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
@@ -16,5 +17,12 @@
         <module>basic</module>
         <!--<module>hl7</module>-->
     </modules>
-    
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
 </project>

@@ -11,7 +11,7 @@ Before building, adjust `MAVEN_OPTS` to assign Maven more heap space.
 ``XX:MaxPermSize`` can be omitted for buildung with Java 8.
 
 ```
-    set MAVEN_OPTS=-Xmx512m -XX:MaxPermSize=128m
+    set MAVEN_OPTS=-Xmx1024m -XX:MaxPermSize=128m
     mvn clean install
 ```
 

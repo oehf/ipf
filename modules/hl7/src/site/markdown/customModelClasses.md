@@ -1,6 +1,7 @@
 ## Dynamic Custom Model Class Factories
 
-Custom HL7 message structures are added by defining an `org.openehealth.ipf.modules.hl7.config.CustomModelClasses`
+Custom HL7 message structures are added by defining an
+[`org.openehealth.ipf.modules.hl7.config.CustomModelClasses`](../apidocs/org/openehealth/ipf/modules/hl7/config/CustomModelClasses.html)
 bean in a custom Spring application context file. This bean definition represents a mapping with a message structure
 version as a mapping-key and the package name of custom model classes as a mapping-value.
 
@@ -22,10 +23,11 @@ These custom message structures have priority over the existing message structur
 
 ```
 
-The custom model classes from the given package will be picked up by the `CustomModelClassFactoryConfigurer` and automatically
-added to the shared `CustomModelClassFactory`.
+The custom model classes from the given package will be picked up by the
+[`CustomModelClassFactoryConfigurer`](../apidocs/org/openehealth/ipf/modules/hl7/config/CustomModelClassFactoryConfigurer.html) and automatically
+added to the shared [`CustomModelClassFactory`](../apidocs/org/openehealth/ipf/modules/hl7/parser/CustomModelClassFactory.html).
 
-It is also possible to use the `GroovyCustomModelClassFactory` and mix script-based with class-based model class definitions:
+It is also possible to use the`GroovyCustomModelClassFactory` and mix script-based with class-based model class definitions:
 
 ```xml
       <bean id="groovyCustomModelClassFactory"

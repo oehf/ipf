@@ -67,8 +67,8 @@ public class Duration {
      * 
      * If no unit is given it defaults to milliseconds.
      * 
-     * @param duration
-     * @return
+     * @param duration duration string
+     * @return parsed duration
      */
     public static Duration parse(String duration) {
         String d = duration.trim();

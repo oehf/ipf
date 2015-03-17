@@ -6,15 +6,16 @@ With the custom route builders it is possible to:
 * extend the existing route builder functionality by injecting additional [interceptors](http://camel.apache.org/intercept.html) to this route builder
 * extend the existing route builder exception handling by injecting additional [exception handlers](http://camel.apache.org/exception-clause.html) to this route builder
 
-The abstract class `org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilder`  must be extended by all your
+The abstract class [`org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilder`](../apidocs/org/openehealth/ipf/platform/camel/core/config/CustomRouteBuilder.html)  must be extended by all your
 custom route builders (also the ones in the base application). If the `intercepted` property is set, it is assumed
-that the custom route builder is an interceptor or an exception handler and the `CustomRouteBuilderConfigurer` will try
+that the custom route builder is an interceptor or an exception handler and the
+[`CustomRouteBuilderConfigurer`](../apidocs/org/openehealth/ipf/platform/camel/core/config/CustomRouteBuilderConfigurer.html) will try
 to inject it to the referenced intercepted route builder.
 
-Otherwise if the `intercepted` property is *not* set, the CustomRouteBuilderConfigurer will inject this custom route builder
+Otherwise if the `intercepted` property is *not* set, the `CustomRouteBuilderConfigurer` will inject this custom route builder
 to the existing camel context.
 
-The CustomRouteBuilder beans will be recognized by the `CustomRouteBuilderConfigurer` and added in desired order to the camel context respectively.
+The `CustomRouteBuilder` beans will be recognized by the `CustomRouteBuilderConfigurer` and added in desired order to the camel context respectively.
 
 
 ### Example

@@ -47,14 +47,6 @@ public class SampleRouteTest {
 
     @Autowired
     private ProducerTemplate producerTemplate;
-    
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
 
     @Test
     public void testRoute() throws Exception {

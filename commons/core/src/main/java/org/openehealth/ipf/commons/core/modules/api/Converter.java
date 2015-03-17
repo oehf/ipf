@@ -40,8 +40,8 @@ public abstract class Converter<S, T> implements Parser<S>, Renderer<T>, Transmo
      * Parses a message and renders the internal model into a different external
      * representation.
      * 
-     * @param message
-     * @return
+     * @param message message to be converted
+     * @return converted message
      * @throws ParseException
      * @throws RenderException
      */

@@ -8,7 +8,7 @@ in Integrating the Healthcare Enterprise ([IHE][ihe]) profiles.
 IPF can be easily embedded into any Java application and additionally supports deployments inside OSGi environments.
 
 IPF is built upon and extends the [Apache Camel](http://camel.apache.org) routing and mediation engine. It has an application programming layer
-based on the [Groovy](http://groovy.codehaus.org) programming language and comes with comprehensive support for message processing and connecting
+based on the [Groovy](http://www.groovy-lang.org) programming language and comes with comprehensive support for message processing and connecting
 systems in the eHealth domain. IPF provides domain-specific languages (DSLs) for implementing
 [Enterprise Integration Patterns](http://www.enterpriseintegrationpatterns.com/)
 in general-purpose as well as healthcare-specific integration solutions.
@@ -77,7 +77,7 @@ IPF is prepared to run in OSGi environments as well:
 | Feature                                         | Description
 |-------------------------------------------------|-----------------------------------------------
 | [Recoverability]                                | Recoverability means that a system can recover from crashes or service failures without losing messages or data
-| [Performance Monitoring]                        | Monitor performance and throughput of routes
+| [Performance] Monitoring                        | Monitor performance and throughput of routes
 
 
 ## Migration
@@ -101,7 +101,6 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [development]: development.html
 [ipf-github]: http://github.com/oehf/ipf
 [ihe]: http://www.ihe.net
-
 [Support for eHealth integration profiles]: ipf-platform-camel-ihe/index.html
 [HL7 Message processing]: ipf-modules-hl7/index.html
 [HL7 Message processing Camel routes]: ipf-platform-camel-hl7/index.html
@@ -111,12 +110,10 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [Core Features]: ipf-platform-camel-core/index.html
 [Code System Mapping]: ipf-commons-map/index.html
 [Dynamic Feature Registration]: dynamic.html
-
 [OSGi Support]: osgi/index.html
 [Migration Instructions]: migration.html
-|Recoverability]: recoverability.html
-[Performance Monitoring]: performance.html
-
+[Recoverability]: recoverability.html
+[Performance]: performance.html
 [HL7 Support tutorial]: ipf-tutorials-hl7/index.html
 [XDS tutorial]: ipf-tutorials-xds/index.html
 [Dynamic extension tutorial]: ipf-tutorials-config/index.html

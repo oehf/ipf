@@ -1,7 +1,8 @@
 ## Custom DSL extensions definition
 
-Custom DSL extensions implement the `org.openehealth.ipf.commons.core.extend.config.DynamicExtension` marker interface
-in order to be picked up and activated from its corresponding extension configurer.
+Custom DSL extensions implement the
+[`org.openehealth.ipf.commons.core.extend.config.DynamicExtension`](../apidocs/org/openehealth/ipf/commons/core/extend/config/DynamicExtension.html)
+ marker interface in order to be picked up and activated from its corresponding extension configurer.
 
 The following Groovy script `CustomModelExtension.groovy` defines a simple extension to the Camel DSL:
 

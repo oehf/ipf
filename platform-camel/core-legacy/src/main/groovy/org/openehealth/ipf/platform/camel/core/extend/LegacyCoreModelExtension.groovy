@@ -25,6 +25,7 @@ import org.apache.camel.model.OnExceptionDefinition
 import org.apache.camel.model.ProcessorDefinition
 import org.apache.camel.processor.DelegateProcessor
 import org.apache.camel.processor.aggregate.AggregationStrategy
+import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.commons.core.modules.api.*
 
 import java.util.concurrent.ExecutorService
@@ -148,27 +149,27 @@ class LegacyCoreModelExtension {
         //  Adapter Extensions for RouteBuilder
         // ----------------------------------------------------------------
 
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.aggregationStrategy = { Aggregator aggregator ->
+        SpringRouteBuilder.metaClass.aggregationStrategy = { Aggregator aggregator ->
             LegacyCoreExtensionModule.aggregationStrategy(delegate, aggregator)
         }
 
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.aggregationStrategy = { String aggregatorBeanName ->
+        SpringRouteBuilder.metaClass.aggregationStrategy = { String aggregatorBeanName ->
             LegacyCoreExtensionModule.aggregationStrategy(delegate, aggregatorBeanName)
         }
 
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.aggregationStrategy = { Closure aggregationLogic ->
+        SpringRouteBuilder.metaClass.aggregationStrategy = { Closure aggregationLogic ->
             LegacyCoreExtensionModule.aggregationStrategy(delegate, aggregationLogic)
         }
         
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.predicate = { Predicate predicate ->
+        SpringRouteBuilder.metaClass.predicate = { Predicate predicate ->
             LegacyCoreExtensionModule.predicate(delegate, predicate)
         }
 
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.predicate = { String predicateBeanName ->
+        SpringRouteBuilder.metaClass.predicate = { String predicateBeanName ->
             LegacyCoreExtensionModule.predicate(delegate, predicateBeanName)
         }
 
-        org.apache.camel.spring.SpringRouteBuilder.metaClass.predicate = { Closure predicateLogic ->
+        SpringRouteBuilder.metaClass.predicate = { Closure predicateLogic ->
             LegacyCoreExtensionModule.predicate(delegate, predicateLogic)
         }
     

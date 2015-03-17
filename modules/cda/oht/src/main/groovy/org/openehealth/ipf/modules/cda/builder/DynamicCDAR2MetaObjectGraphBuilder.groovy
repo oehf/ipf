@@ -37,7 +37,7 @@ public class DynamicCDAR2MetaObjectGraphBuilder extends CDAR2MetaObjectGraphBuil
      }     
 
      
-     public java.lang.Object invokeMethod(java.lang.String methodName, java.lang.Object args) {
+     public Object invokeMethod(String methodName, Object args) {
          if ('make'.equals(methodName)) {
                  InvokerHelper.invokeMethod(getMetaBuilder(), 'build', args)
          } else {

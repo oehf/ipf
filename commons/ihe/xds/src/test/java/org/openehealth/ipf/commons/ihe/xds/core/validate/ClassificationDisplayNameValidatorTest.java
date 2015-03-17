@@ -48,12 +48,11 @@ public class ClassificationDisplayNameValidatorTest {
 
     private static final SlotValueValidation[] NO_SLOT_VALUE_VALIDATION = new SlotValueValidation[] {};
 
-    private EbXMLProvideAndRegisterDocumentSetRequest ebXMLObject;
     private EbXMLExtrinsicObject extrinsicObject;
 
     @Before
     public void setUp() throws Exception {
-        ebXMLObject = createProvideAndRegisterDocumentSetRequest();
+        EbXMLProvideAndRegisterDocumentSetRequest ebXMLObject = createProvideAndRegisterDocumentSetRequest();
         extrinsicObject = ebXMLObject.getExtrinsicObjects().get(0);
         //marshalEbXML(ebXMLObject);
     }
@@ -112,10 +111,9 @@ public class ClassificationDisplayNameValidatorTest {
     
     private ClassificationValidation buildEventListValidator(){
         SlotValueValidation [] eventCodeListValidator = new SlotValueValidation [] {  new EventCodeListDisplayNameValidator()};
-        ClassificationValidation validator = new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME,
+        return new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME,
                                                                            OPTIONAL,
                                                                            eventCodeListValidator);
-        return validator;
     }
     
     
@@ -123,12 +121,11 @@ public class ClassificationDisplayNameValidatorTest {
         EbXMLFactory factory = new EbXMLFactory30();
         ProvideAndRegisterDocumentSet request = SampleData.createProvideAndRegisterDocumentSet();
         ProvideAndRegisterDocumentSetTransformer transformer = new ProvideAndRegisterDocumentSetTransformer(factory);
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        return ebXML;
+        return transformer.toEbXML(request);
     }
     /**
      * Helper method to print the content of a EbXMLProvideAndRegisterDocumentSetRequest. Can be used to understand the test.
-     * @param ebXML
+     * @param ebXML ebXML object
      */
     @SuppressWarnings("unused")
     private void marshalEbXML(EbXMLProvideAndRegisterDocumentSetRequest ebXML) {

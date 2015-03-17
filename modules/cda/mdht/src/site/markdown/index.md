@@ -1,7 +1,11 @@
 ## MDHT Support
 
-The `ipf-modules-cda-mdht` module wraps the [MDHT] libraries from OpenHealthTools and provides Parser, Renderer,
-and Validator implementations. These implementations do not require Groovy to be used.
+The `ipf-modules-cda-mdht` module wraps the [MDHT] libraries from OpenHealthTools and provides
+[Parser](../apidocs/org/openehealth/ipf/commons/core/modules/api/Parser.html),
+[Renderer](../apidocs/org/openehealth/ipf/commons/core/modules/api/Renderer.html), and
+[Validator](../apidocs/org/openehealth/ipf/commons/core/modules/api/Validator.html) implementations.
+
+These implementations do not require Groovy to be used.
 
 ### Dependencies
 

@@ -25,7 +25,7 @@ import java.util.Set;
  * Base for an element of interceptor chain.
  * @author Dmytro Rud
  */
-abstract public class ChainableImpl implements Chainable {
+public abstract class ChainableImpl implements Chainable {
     private String id = getClass().getName();
     private Set<String> before = new HashSet<>();
     private Set<String> after = new HashSet<>();

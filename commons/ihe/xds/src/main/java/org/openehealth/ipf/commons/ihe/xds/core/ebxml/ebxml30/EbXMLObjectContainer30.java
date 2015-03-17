@@ -183,12 +183,8 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     }
 
     private boolean matchesFilter(RegistryPackageType regPackage, Set<String> acceptedIds, String classificationNode) {
-        if (regPackage == null) {
-            return false;
-        }
-        
-        return acceptedIds.contains(regPackage.getId()) 
-                || hasClassificationNode(regPackage, classificationNode);
+        return regPackage != null && (acceptedIds.contains(regPackage.getId()) || hasClassificationNode(regPackage, classificationNode));
+
     }
 
     private boolean hasClassificationNode(RegistryPackageType regPackage, String classificationNode) {

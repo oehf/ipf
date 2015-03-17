@@ -88,9 +88,7 @@ public final class SplitIndex {
         SplitIndex other = (SplitIndex) obj;
         if (index != other.index)
             return false;
-        if (last != other.last)
-            return false;
-        return true;
+        return last == other.last;
     }
     
     /* (non-Javadoc)
@@ -98,14 +96,7 @@ public final class SplitIndex {
      */
     @Override
     public String toString() {
-        return new StringBuffer()
-            .append("(")
-            .append(Splitter.class.getName())
-            .append(": index=")
-            .append(index)
-            .append(", last=")
-            .append(last)
-            .append(")").toString();
+        return "(" + Splitter.class.getName() + ": index=" + index + ", last=" + last + ")";
     }
 
     // Please use factory methods instead of constructor {@link #valueOf}
