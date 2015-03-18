@@ -1,6 +1,8 @@
-h2. Overview
+# Open eHealth Integration Platform
 
 [![Build Status](https://buildhive.cloudbees.com/job/oehf/job/ipf/badge/icon)](https://buildhive.cloudbees.com/job/oehf/job/ipf/)
+
+## IPF Overview
 
 The eHealth Integration Framework (IPF) is an extension of the Apache Camel routing and mediation engine and comes with
 comprehensive support for message processing and connecting information systems in the healthcare sector.
@@ -15,7 +17,7 @@ creation, parsing, rendering, navigation and modification.
 
 * [Detailed overview](http://repo.openehealth.org/confluence/display/ipf2/IPF+Overview)
 
-h2. Documentation
+## Documentation
 
 The IPF 3 documentation is located at [github](https://oehf.github.io/ipf)
 
@@ -25,7 +27,7 @@ The old IPF 2 documentation is available at:
 * [Multi-page view](http://repo.openehealth.org/confluence/display/ipf2/IPF+reference+-+multi)
 * [Introductory article](http://architects.dzone.com/articles/introduction-open-ehealth)
 
-h2. Mailing Lists
+## Mailing Lists
 
 * [ipf-dev](http://groups.google.com/group/ipf-dev)
 * [ipf-user](http://groups.google.com/group/ipf-user)
