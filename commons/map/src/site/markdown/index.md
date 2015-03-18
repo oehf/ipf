@@ -27,11 +27,11 @@ You are free to implement and use your own service as long as it implements the
 In a Maven-based environment, the following dependency must be registered in `pom.xml`:
 
 ```xml
-<dependency>
-    <groupId>org.openehealth.ipf.commons</groupId>
-    <artifactId>ipf-commons-map</artifactId>
-    <version>${ipf-version}</version>
-</dependency>
+    <dependency>
+        <groupId>org.openehealth.ipf.commons</groupId>
+        <artifactId>ipf-commons-map</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
 ```
 
 ### Configuring the Mapping Service
@@ -40,29 +40,29 @@ Here is how to configure IPF's [`BidiMappingService`](../apidocs/org/openehealth
 
 ```xml
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"
-       xsi:schemaLocation="
-http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans.xsd
-http://openehealth.org/schema/ipf-commons-core
-http://openehealth.org/schema/ipf-commons-core.xsd">
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"
+           xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://openehealth.org/schema/ipf-commons-core
+    http://openehealth.org/schema/ipf-commons-core.xsd">
 
-<!-- Register Spring as global registry -->
-<ipf:globalContext id="globalContext"/>
+    <!-- Register Spring as global registry -->
+    <ipf:globalContext id="globalContext"/>
 
-...
-<!-- Groovy class that provides the operations on the mappings -->
-<bean id="myMappingService" class="org.openehealth.ipf.commons.map.BidiMappingService">
-   <property name="mappingScripts">
-       <list>
-          <value>classpath:example.groovy"</value>
-          <!-- could add more mapping files -->
-       </list>
-   </property>
-</bean>
-...
+    ...
+    <!-- Groovy class that provides the operations on the mappings -->
+    <bean id="myMappingService" class="org.openehealth.ipf.commons.map.BidiMappingService">
+       <property name="mappingScripts">
+           <list>
+              <value>classpath:example.groovy"</value>
+              <!-- could add more mapping files -->
+           </list>
+       </property>
+    </bean>
+    ...
 
 ```
 

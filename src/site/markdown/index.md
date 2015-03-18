@@ -92,7 +92,7 @@ IPF 2.x-based integration solution.
 Git repository on [GitHub][ipf-github] and provide some good pull requests!
 
 
-### License
+## License
 
 IPF code is Open Source and licensed under [Apache license][apache-license].
 

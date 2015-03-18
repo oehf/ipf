@@ -38,10 +38,6 @@ import org.openhealthtools.mdht.uml.cda.internal.resource.CDAResourceFactoryImpl
  */
 public class CDAR2Renderer implements Renderer<ClinicalDocument> {
 
-    /*
-     * (non-Javadoc)
-     * @see org.openehealth.ipf.commons.core.modules.api.Renderer#render(java.lang.Object, java.lang.Object[])
-     */
     public String render(ClinicalDocument doc, Object... options) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
@@ -55,9 +51,7 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
 
     /**
      * Renders the clinical document as XML. Options can be specified for
-     * dynamic configuration of the rendering process. 
-     * See {@link http://help.eclipse.org/stable/index.jsp?topic=/org.eclipse.emf.doc/references/javadoc/org/eclipse/emf/ecore/xmi/XMLResource.html} 
-     * for details.
+     * dynamic configuration of the rendering process.
      * 
      * @param doc the clinical document
      * @param os the stream to write the XML to
@@ -89,19 +83,11 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
         return os;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.openehealth.ipf.commons.core.modules.api.Renderer#render(java.lang.Object, javax.xml.transform.Result, java.lang.Object[])
-     */
     public Result render(ClinicalDocument doc, Result result,
             Object... options) throws IOException {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.openehealth.ipf.commons.core.modules.api.Renderer#render(java.lang.Object, java.io.Writer, java.lang.Object[])
-     */
     public Writer render(ClinicalDocument doc, Writer writer,
             Object... options) throws IOException {
         String s = render(doc, options);

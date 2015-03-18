@@ -69,7 +69,7 @@
                 <column>Main|Tools</column>
                 <column>Download|Development</column>
                 <column>Documentation</column>
-                <column>reports</column>
+                <column>Reports</column>
             </bottomNav>
 
             <!-- Describe the layout of the pages -->

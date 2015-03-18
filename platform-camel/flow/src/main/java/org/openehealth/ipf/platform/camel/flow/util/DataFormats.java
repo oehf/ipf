@@ -40,7 +40,7 @@ public class DataFormats {
      * @return marshalled object.
      * @throws DataFormatException
      * 
-     * @see {@link DataFormat#marshal(Exchange, Object, java.io.OutputStream)}
+     * @see DataFormat#marshal(Exchange, Object, java.io.OutputStream)
      */
     public static byte[] marshal(Object object, Exchange exchange, DataFormat dataFormat) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -63,7 +63,7 @@ public class DataFormats {
      * @return unmarshalled object.
      * @throws DataFormatException
      * 
-     * @see {@link DataFormat#unmarshal(Exchange, java.io.InputStream)}
+     * @see DataFormat#unmarshal(Exchange, java.io.InputStream)
      */
     public static Object unmarshal(byte[] bytes, Exchange exchange, DataFormat dataFormat) {
         ByteArrayInputStream stream = new ByteArrayInputStream(bytes);

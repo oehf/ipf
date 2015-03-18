@@ -56,7 +56,8 @@ public class HapiContextFactory {
 
     /**
      * Returns a default HapiContext
-     * @return
+     *
+     * @return default HapiContext
      */
     public static HapiContext createHapiContext() {
         return new DefaultHapiContext();
@@ -64,6 +65,7 @@ public class HapiContextFactory {
 
     /**
      * Returns a HapiContext for the provided model class factory
+     *
      * @param modelClassFactory model clas factory
      * @return HapiContext
      */

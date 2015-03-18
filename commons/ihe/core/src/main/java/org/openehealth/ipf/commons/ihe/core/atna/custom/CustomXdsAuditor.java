@@ -496,15 +496,15 @@ public class CustomXdsAuditor extends XDSAuditor {
      *      network endpoint URI of the Responding Gateway actor.
      * @param clientIpAddress
      *      IP address of the Initiating Gateway actor.
-     * @param studyInstanceUniqueIds,
+     * @param studyInstanceUniqueIds
      *      list of study instance unique IDs.
-     * @param seriesInstanceUniqueIds,
+     * @param seriesInstanceUniqueIds
      *      list of series instance unique IDs.
-     * @param documentUniqueIds,
+     * @param documentUniqueIds
      *      list of document unique IDs.
-     * @param repositoryUniqueIds,
+     * @param repositoryUniqueIds
      *      list of unique IDs of document repositories.
-     * @param homeCommunityIds,
+     * @param homeCommunityIds
      *      list of home community IDs.
      * @param patientId
      *      patient ID as an HL7 v2 CX string (if known).

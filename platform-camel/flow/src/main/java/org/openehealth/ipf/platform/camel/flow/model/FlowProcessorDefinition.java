@@ -44,7 +44,6 @@ public abstract class FlowProcessorDefinition extends OutputDefinition<RouteDefi
      * Defines the type into which incoming messages are converted
      * @param inType
      *          the type
-     * @ipfdoc Flow Management#Parameterization of initFlow 
      */
     public FlowProcessorDefinition inType(Class<?> inType) {
         this.inType = inType;
