@@ -19,3 +19,12 @@ work
 /platform-camel/core/KahaDB/db.data
 /platform-camel/core/KahaDB/db.redo
 /platform-camel/core/KahaDB/lock
+/commons/core/generated-stubs
+/commons/flow/generated-stubs
+/commons/ihe/core/generated-stubs
+/commons/ihe/hl7v2/generated-stubs
+/commons/ihe/hl7v2ws/generated-stubs
+/commons/ihe/hl7v3/generated-stubs
+/commons/ihe/ws/generated-stubs
+/commons/ihe/xds/generated-stubs
+generated-stubs

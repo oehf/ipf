@@ -8,18 +8,18 @@ The following Groovy script `CustomModelExtension.groovy` defines a simple exten
 
 ```groovy
 
-package org.openehealth.ipf.tutorial.config.extend
+    package org.openehealth.ipf.tutorial.config.extend
 
-import org.apache.camel.builder.RouteBuilder
-import org.openehealth.ipf.commons.core.extend.config.DynamicExtension
+    import org.apache.camel.builder.RouteBuilder
+    import org.openehealth.ipf.commons.core.extend.config.DynamicExtension
 
-class CustomModelExtensionModule implements DynamicExtension {
+    class CustomModelExtensionModule implements DynamicExtension {
 
-    static RouteBuilder direct(RouteBuilder delegate, String endpointName) {
-        delegate.from('direct:' + endpointName)
+        static RouteBuilder direct(RouteBuilder delegate, String endpointName) {
+            delegate.from('direct:' + endpointName)
+        }
+
     }
-
-}
 
 ```
 
@@ -27,10 +27,10 @@ In addition a bean needs to be defined in thecustom spring context file, running
 
 ```xml
 
-...
-<lang:groovy id="customExtension"
-     script-source="classpath:org/openehealth/ipf/tutorial/config/extend/CustomModelExtension.groovy" />
-...
+    ...
+    <lang:groovy id="customExtension"
+         script-source="classpath:org/openehealth/ipf/tutorial/config/extend/CustomModelExtension.groovy" />
+    ...
 
 ```
 

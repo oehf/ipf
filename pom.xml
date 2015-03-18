@@ -53,6 +53,7 @@
         <eclipse-plugin-version>2.9</eclipse-plugin-version>
         <enforcer-plugin-version>1.4</enforcer-plugin-version>
         <github-site-version>0.9</github-site-version>
+        <gmavenplus-plugin-version>1.5</gmavenplus-plugin-version>
         <groovy-eclipse-batch-version>2.3.7-01</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>2.9.0-01</groovy-eclipse-compiler-version>
         <jar-plugin-version>2.6</jar-plugin-version>
@@ -93,9 +94,8 @@
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
         <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
-        <!-- TODO 1.0.6 and 3.0.1 -->
-        <ipf-gazelle-version>1.0.5</ipf-gazelle-version>
-        <ipf-oht-atna-version>3.0.0</ipf-oht-atna-version>
+        <ipf-gazelle-version>1.0.6</ipf-gazelle-version>
+        <ipf-oht-atna-version>3.0.1</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.2.11</jaxb-version>
         <jasypt-version>1.9.2</jasypt-version>
@@ -297,7 +297,7 @@
                                 <links>
                                     <link>http://docs.oracle.com/javase/7/docs/api/</link>
                                     <link>http://hl7api.sourceforge.net/apidocs/</link>
-                                    <link>http://groovy.codehaus.org/api/</link>
+                                    <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
                                     <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
                                     <link>http://docs.spring.io/spring/docs/4.1.x/javadoc-api/</link>
                                 </links>
@@ -306,6 +306,35 @@
                                 <excludePackageNames>*.tutorials,*.test</excludePackageNames>
                                 <additionalJOption>-J-Xmx512m</additionalJOption>
                                 <additionalparam>-Xdoclint:none</additionalparam>
+                                <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
+                                <sourcepath>
+                                    commons/core/generated-stubs:
+                                    commons/flow/generated-stubs:
+                                    commons/ihe/core/generated-stubs:
+                                    commons/ihe/hl7v2/generated-stubs:
+                                    commons/ihe/hl7v3/generated-stubs:
+                                    commons/ihe/ws/generated-stubs:
+                                    commons/ihe/xds/generated-stubs:
+                                    commons/map/generated-stubs:
+                                    commons/xml/generated-stubs:
+                                    modules/cda/core/generated-stubs:
+                                    modules/cda/mdht/generated-stubs:
+                                    modules/hl7/generated-stubs:
+                                    platform-camel/cda/generated-stubs:
+                                    platform-camel/core/generated-stubs:
+                                    platform-camel/core-legacy/generated-stubs:
+                                    platform-camel/flow/generated-stubs:
+                                    platform-camel/hl7/generated-stubs:
+                                    platform-camel/ihe/atna/generated-stubs:
+                                    platform-camel/ihe/continua/generated-stubs:
+                                    platform-camel/ihe/hl7v2/generated-stubs:
+                                    platform-camel/ihe/hl7v2ws/generated-stubs:
+                                    platform-camel/ihe/hl7v3/generated-stubs:
+                                    platform-camel/ihe/mllp/generated-stubs:
+                                    platform-camel/ihe/ws/generated-stubs:
+                                    platform-camel/ihe/xds/generated-stubs:
+                                    platform-camel/mdht/generated-stubs
+                                </sourcepath>
                             </configuration>
                             <executions>
                                 <execution>
@@ -346,7 +375,7 @@
                                 <links>
                                     <link>http://docs.oracle.com/javase/7/docs/api/</link>
                                     <link>http://hl7api.sourceforge.net/apidocs/</link>
-                                    <link>http://groovy.codehaus.org/api/</link>
+                                    <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
                                     <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
                                     <link>http://docs.spring.io/spring/docs/4.1.x/javadoc-api/</link>
                                 </links>
@@ -354,6 +383,35 @@
                                 <linksource>false</linksource>
                                 <excludePackageNames>*.tutorials,*.test</excludePackageNames>
                                 <additionalJOption>-J-Xmx512m</additionalJOption>
+                                <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
+                                <sourcepath>
+                                    commons/core/generated-stubs:
+                                    commons/flow/generated-stubs:
+                                    commons/ihe/core/generated-stubs:
+                                    commons/ihe/hl7v2/generated-stubs:
+                                    commons/ihe/hl7v3/generated-stubs:
+                                    commons/ihe/ws/generated-stubs:
+                                    commons/ihe/xds/generated-stubs:
+                                    commons/map/generated-stubs:
+                                    commons/xml/generated-stubs:
+                                    modules/cda/core/generated-stubs:
+                                    modules/cda/mdht/generated-stubs:
+                                    modules/hl7/generated-stubs:
+                                    platform-camel/cda/generated-stubs:
+                                    platform-camel/core/generated-stubs:
+                                    platform-camel/core-legacy/generated-stubs:
+                                    platform-camel/flow/generated-stubs:
+                                    platform-camel/hl7/generated-stubs:
+                                    platform-camel/ihe/atna/generated-stubs:
+                                    platform-camel/ihe/continua/generated-stubs:
+                                    platform-camel/ihe/hl7v2/generated-stubs:
+                                    platform-camel/ihe/hl7v2ws/generated-stubs:
+                                    platform-camel/ihe/hl7v3/generated-stubs:
+                                    platform-camel/ihe/mllp/generated-stubs:
+                                    platform-camel/ihe/ws/generated-stubs:
+                                    platform-camel/ihe/xds/generated-stubs:
+                                    platform-camel/mdht/generated-stubs
+                                </sourcepath>
                             </configuration>
                             <executions>
                                 <execution>
@@ -377,34 +435,36 @@
             </build>
         </profile>
         <profile>
-            <!-- This profile generates groovystubs with last gmaven plugin        -->
+            <!-- This profile generates groovystubs and delomboked sources with last gmaven plugin        -->
             <!-- which still respects the javadocs annotations on stub generation. -->
             <!-- It also generates delomboked java sources required for decent javadoc generation. -->
-            <!-- To deploy javadocs with groovydocs+deloboked java sources it should be run like follows: -->
-            <!-- 1. mvn generate-sources -Pgenerate-stubs' -->
-            <!-- 2. mvn clean javadoc:jar -Dsourcepath=./generate-stubs deploy -->
+            <!-- To deploy javadocs with groovydocs+delomboked java sources it should be run like follows: -->
+            <!-- 1. mvn clean generate-sources -Pgenerate-stubs' -->
+            <!-- 2. mvn install site site-deploy .... -->
             <id>generate-stubs</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <output-folder>${basedir}</output-folder>
+                <output-folder>${project.build.directory}</output-folder>
             </properties>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.codehaus.groovy.maven</groupId>
-                        <artifactId>gmaven-plugin</artifactId>
-                        <version>1.0</version>
+                        <groupId>org.codehaus.gmavenplus</groupId>
+                        <artifactId>gmavenplus-plugin</artifactId>
+                        <version>${gmavenplus-plugin-version}</version>
                         <executions>
                             <execution>
                                 <id>generate-stubs</id>
                                 <phase>generate-sources</phase>
                                 <goals>
+                                    <goal>addSources</goal>
                                     <goal>generateStubs</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
+                                    <stubsOutputDirectory>${project.basedir}/generated-stubs</stubsOutputDirectory>
+                                    <targetBytecode>${maven.compiler.target}</targetBytecode>
                                 </configuration>
                             </execution>
                         </executions>
@@ -423,8 +483,9 @@
                         </executions>
                         <configuration>
                             <encoding>UTF-8</encoding>
+                            <addOutputDirectory>false</addOutputDirectory>
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                            <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
+                            <outputDirectory>${project.basedir}/generated-stubs</outputDirectory>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -435,19 +496,6 @@
                                 <systemPath>${java.home}/../lib/tools.jar</systemPath>
                             </dependency>
                         </dependencies>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>
@@ -1662,6 +1710,22 @@
                     <classpathContainers>
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
                     </classpathContainers>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourcepath>target/generated-stubs</sourcepath>
                 </configuration>
             </plugin>
             <plugin>
