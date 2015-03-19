@@ -54,11 +54,13 @@
         <enforcer-plugin-version>1.4</enforcer-plugin-version>
         <github-site-version>0.9</github-site-version>
         <gmavenplus-plugin-version>1.5</gmavenplus-plugin-version>
+        <gpg-plugin-version>1.5</gpg-plugin-version>
         <groovy-eclipse-batch-version>2.3.7-01</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>2.9.0-01</groovy-eclipse-compiler-version>
         <jar-plugin-version>2.6</jar-plugin-version>
         <javadoc-plugin-version>2.10.1</javadoc-plugin-version>
         <jaxb-plugin-version>1.6</jaxb-plugin-version>
+        <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <pax-plugin-version>1.5</pax-plugin-version>
         <release-plugin-version>2.5.1</release-plugin-version>
         <resources-plugin-version>2.7</resources-plugin-version>
@@ -67,7 +69,7 @@
         <!-- Dependency version properties -->
         <activemq-version>5.11.1</activemq-version>
         <aspectj-version>1.8.4</aspectj-version>
-        <bouncycastle-version>1.51</bouncycastle-version>
+        <bouncycastle-version>1.50</bouncycastle-version>
         <camel-version>2.15.0</camel-version>
         <cglib-version>3.1</cglib-version>
         <commons-codec-version>1.10</commons-codec-version>
@@ -237,17 +239,14 @@
     </mailingLists>
 
     <distributionManagement>
-        <repository>
-            <id>openehealth.releases</id>
-            <name>Open eHealth Releases Repository</name>
-            <url>file:/data/repositories/maven2/releases</url>
-        </repository>
         <snapshotRepository>
-            <id>openehealth.snapshots</id>
-            <name>Open eHealth Snapshots Repository</name>
-            <url>file:/data/repositories/maven2/snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
         <site>
             <id>${site.deploy.id}</id>
             <name>Deployment through GitHub's site deployment plugin</name>
@@ -529,6 +528,27 @@
                 </plugins>
             </build>
 
+        </profile>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${gpg-plugin-version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
@@ -1609,9 +1629,8 @@
                 <executions>
                     <execution>
                         <id>attach-sources</id>
-                        <phase>verify</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -1782,6 +1801,17 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus-staging-plugin-version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
