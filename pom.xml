@@ -445,7 +445,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <output-folder>${project.build.directory}</output-folder>
+                <output-folder>${project.basedir}</output-folder>
             </properties>
             <build>
                 <plugins>
@@ -462,7 +462,7 @@
                                     <goal>generateStubs</goal>
                                 </goals>
                                 <configuration>
-                                    <stubsOutputDirectory>${project.basedir}/generated-stubs</stubsOutputDirectory>
+                                    <stubsOutputDirectory>${output-folder}/generated-stubs</stubsOutputDirectory>
                                     <targetBytecode>${maven.compiler.target}</targetBytecode>
                                 </configuration>
                             </execution>
@@ -484,7 +484,7 @@
                             <encoding>UTF-8</encoding>
                             <addOutputDirectory>false</addOutputDirectory>
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                            <outputDirectory>${project.basedir}/generated-stubs</outputDirectory>
+                            <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -1743,9 +1743,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <sourcepath>target/generated-stubs</sourcepath>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
