@@ -67,9 +67,9 @@
             <!-- Split menus in the bottom navigation -->
             <bottomNav maxSpan="9" >
                 <column>Main|Tools</column>
-                <column>Download|Development</column>
+                <column>Download|Development|Submodules</column>
                 <column>Documentation</column>
-                <column>Reports</column>
+                <column>Maven Reports</column>
             </bottomNav>
 
             <!-- Describe the layout of the pages -->
@@ -193,6 +193,7 @@
             <item name="Issues" href="http://github.com/oehf/ipf/issues/" />
             <item name="Fork on GitHub" href="http://github.com/oehf/ipf/" />
         </menu>
-        <menu name="Maven documentation" ref="reports" inherit="bottom"/>
+        <menu name="Maven Reports" ref="reports" inherit="bottom"/>
+        <menu name="Submodules" ref="modules" inherit="bottom"/>
     </body>
 </project>
