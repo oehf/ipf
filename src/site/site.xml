@@ -46,7 +46,7 @@
             <theme>default</theme>
             <highlightJs>true</highlightJs>
             <highlightJsTheme>github</highlightJsTheme>
-            <absoluteResourceURL>http://oehf.github.io/ipf/</absoluteResourceURL>
+            <!--<absoluteResourceURL>http://oehf.github.io/ipf/blorg</absoluteResourceURL>-->
             <breadcrumbs>false</breadcrumbs>
             <brand>
                 <!-- Brand text in top-left part of the site -->
