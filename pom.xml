@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
     <artifactId>ipf</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>3.1-SNAPSHOT</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
@@ -48,7 +48,7 @@
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.5.1</assembly-plugin-version>
         <build-helper-version>1.9.1</build-helper-version>
-        <bundle-plugin-version>2.5.3</bundle-plugin-version>
+        <bundle-plugin-version>2.0.1</bundle-plugin-version>
         <compiler-plugin-version>3.2</compiler-plugin-version>
         <eclipse-plugin-version>2.9</eclipse-plugin-version>
         <enforcer-plugin-version>1.4</enforcer-plugin-version>
@@ -1535,14 +1535,6 @@
                         <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
                     </configuration>
                     <extensions>true</extensions>
-                    <!-- remove this once 2.5.4 is released -->
-                    <dependencies>
-                        <dependency>
-                            <groupId>biz.aQute.bnd</groupId>
-                            <artifactId>bndlib</artifactId>
-                            <version>2.4.0</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
