@@ -4,6 +4,7 @@
     <artifactId>ipf-tutorials-osgi</artifactId>
     <name>ipf-tutorials-osgi</name>
     <packaging>pom</packaging>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>

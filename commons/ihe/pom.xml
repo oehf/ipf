@@ -5,6 +5,7 @@
     <name>ipf-commons-ihe</name>
     <packaging>pom</packaging>
     <description>Container module for IHE support</description>
+    <url>${site.url}/${project.artifactId}</url>
      
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>

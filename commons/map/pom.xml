@@ -4,6 +4,7 @@
     <artifactId>ipf-commons-map</artifactId>
     <name>ipf-commons-map</name>
     <description>Generic IPF Mapping Service</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <properties>
         <osgi.import.pkg>
@@ -69,5 +70,6 @@
             <url>${site.deploy.url}${project.artifactId}</url>
         </site>
     </distributionManagement>
+
 
 </project>

@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-ihe-hl7v2</artifactId>
     <name>ipf-platform-camel-ihe-hl7v2</name>
     <description>HL7v2 support for Apache Camel IHE components</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.hl7v2.*</osgi.export.pkg>

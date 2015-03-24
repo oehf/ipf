@@ -4,6 +4,7 @@
     <artifactId>ipf-modules-hl7dsl</artifactId>
     <name>ipf-modules-hl7dsl</name>
     <description>Deprecated HL7 DSL support</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>

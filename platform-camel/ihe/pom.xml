@@ -5,6 +5,7 @@
     <name>ipf-platform-camel-ihe</name>
     <packaging>pom</packaging>
     <description>Generic IHE extensions for Apache Camel</description>
+    <url>${site.url}/${project.artifactId}</url>
      
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

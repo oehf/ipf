@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-flow</artifactId>
     <name>ipf-platform-camel-flow</name>
     <description>Flow Management extensions for Apache Camel</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

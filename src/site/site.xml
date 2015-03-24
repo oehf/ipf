@@ -46,7 +46,7 @@
             <theme>default</theme>
             <highlightJs>true</highlightJs>
             <highlightJsTheme>github</highlightJsTheme>
-            <!--<absoluteResourceURL>http://oehf.github.io/ipf/blorg</absoluteResourceURL>-->
+            <absoluteResourceURL>http://oehf.github.io/ipf</absoluteResourceURL>
             <breadcrumbs>false</breadcrumbs>
             <brand>
                 <!-- Brand text in top-left part of the site -->
@@ -172,7 +172,7 @@
             <item name="Release notes" href="release-notes.html" />
         </menu>
         <menu name="Download" inherit="top">
-            <item name="Download" href="skin/index.html#Usage" />
+            <item name="Download" href="http://github.com/oehf/ipf" />
             <item name="License" href="license.html" />
         </menu>
         <menu name="Documentation" inherit="bottom">

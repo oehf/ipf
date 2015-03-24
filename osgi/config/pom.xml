@@ -5,6 +5,7 @@
     <name>ipf-osgi-config</name>
     <packaging>pom</packaging>
     <description>Container project for OSGi configuration support</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>

@@ -4,6 +4,7 @@
     <artifactId>ipf-commons-ihe-core</artifactId>
     <name>ipf-commons-ihe-core</name>
     <description>Generic IHE support</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.commons.ihe.core.*</osgi.export.pkg>

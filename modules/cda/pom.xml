@@ -5,6 +5,7 @@
     <name>ipf-modules-cda</name>
     <packaging>pom</packaging>
     <description>Container project CDA support</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>

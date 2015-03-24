@@ -4,6 +4,7 @@
     <artifactId>ipf-commons-xml</artifactId>
     <name>ipf-commons-xml</name>
     <description>Generic IPF support for XML validation</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <properties>
         <osgi.export.pkg>

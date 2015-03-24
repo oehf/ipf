@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-core</artifactId>
     <name>ipf-platform-camel-core</name>
     <description>Apache Camel extensions</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

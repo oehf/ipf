@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-hl7</artifactId>
     <name>ipf-platform-camel-hl7</name>
     <description>HL7 extensions for Apache Camel</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

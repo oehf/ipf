@@ -4,6 +4,7 @@
     <artifactId>ipf-modules-cda-core</artifactId>
     <name>ipf-modules-cda-core</name>
     <description>Generic CDA support</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>

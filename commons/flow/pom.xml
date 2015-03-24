@@ -4,6 +4,7 @@
     <artifactId>ipf-commons-flow</artifactId>
     <name>ipf-commons-flow</name>
     <description>IPF Flow Management</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>

@@ -3,6 +3,7 @@
     <artifactId>ipf-archetype-basic</artifactId>
     <name>ipf-archetype-basic</name>
     <packaging>maven-archetype</packaging>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf.archetypes</groupId>

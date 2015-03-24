@@ -4,6 +4,7 @@
     <artifactId>ipf-osgi-extender</artifactId>
     <name>ipf-osgi-extender</name>
     <packaging>pom</packaging>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>

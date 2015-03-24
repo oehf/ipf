@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-ihe-xds</artifactId>
     <name>ipf-platform-camel-ihe-xds</name>
     <description>XDS IHE components for Apache Camel</description>
+    <url>${site.url}/${project.artifactId}</url>
      
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

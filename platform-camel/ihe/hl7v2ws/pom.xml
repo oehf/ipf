@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-ihe-hl7v2ws</artifactId>
     <name>ipf-platform-camel-ihe-hl7v2ws</name>
     <description>HL7v2 web service IHE components for Apache Camel</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

@@ -6,6 +6,7 @@
     <name>ipf-modules</name>
     <packaging>pom</packaging>
     <description>Container project for IPF modules</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>

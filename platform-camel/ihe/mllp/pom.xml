@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
     <name>ipf-platform-camel-ihe-mllp</name>
     <description>MLLP IHE components for Apache Camel</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.mllp.*</osgi.export.pkg>

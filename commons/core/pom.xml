@@ -4,6 +4,7 @@
     <artifactId>ipf-commons-core</artifactId>
     <name>ipf-commons-core</name>
     <description>Generic interfaces and helpers</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.commons.core.*</osgi.export.pkg>

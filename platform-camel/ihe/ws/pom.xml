@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-ihe-ws</artifactId>
     <name>ipf-platform-camel-ihe-ws</name>
     <description>Web service support for IHE components</description>
+    <url>${site.url}/${project.artifactId}</url>
      
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.ws.*</osgi.export.pkg>

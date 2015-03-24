@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-cda</artifactId>
     <name>ipf-platform-camel-cda</name>
     <description>CDA support fro Apache Camel</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

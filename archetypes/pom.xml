@@ -6,6 +6,7 @@
     <name>ipf-archetypes</name>
     <packaging>pom</packaging>
     <description>IPF Maven Archtypes</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>

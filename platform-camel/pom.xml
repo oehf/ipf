@@ -6,6 +6,7 @@
     <name>ipf-platform-camel</name>
     <packaging>pom</packaging>
     <description>Container project for Apache Camel support</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>

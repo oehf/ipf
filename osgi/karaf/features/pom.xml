@@ -4,6 +4,7 @@
     <artifactId>ipf-osgi-karaf-features</artifactId>
     <name>ipf-osgi-karaf-features</name>
     <packaging>pom</packaging>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>

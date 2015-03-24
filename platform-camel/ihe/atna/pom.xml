@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-ihe-atna</artifactId>
     <name>ipf-platform-camel-ihe-atna</name>
     <description>ATNA support for Apache Camel IHE components</description>
+    <url>${site.url}/${project.artifactId}</url>
      
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.atna.*</osgi.export.pkg>

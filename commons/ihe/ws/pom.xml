@@ -4,6 +4,7 @@
     <artifactId>ipf-commons-ihe-ws</artifactId>
     <name>ipf-commons-ihe-ws</name>
     <description>Web-Service specific IHE support</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.commons.ihe.ws.*</osgi.export.pkg>

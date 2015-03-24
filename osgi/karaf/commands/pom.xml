@@ -3,6 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf-osgi-karaf-commands</artifactId>
     <name>ipf-osgi-karaf-commands</name>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>

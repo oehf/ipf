@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-mdht</artifactId>
     <name>ipf-platform-camel-mdht</name>
     <description>MDHT support for Apache Camel</description>
+    <url>${site.url}/${project.artifactId}</url>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

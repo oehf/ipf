@@ -6,6 +6,7 @@
     <name>ipf-osgi</name>
     <packaging>pom</packaging>
     <description>OSGi support</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>

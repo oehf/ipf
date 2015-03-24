@@ -4,6 +4,7 @@
     <artifactId>ipf-platform-camel-ihe-continua</artifactId>
     <name>ipf-platform-camel-ihe-continua</name>
     <description>Continua support for Apache Camel</description>
+    <url>${site.url}/${project.artifactId}</url>
      
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

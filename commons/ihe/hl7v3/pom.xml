@@ -4,6 +4,7 @@
     <artifactId>ipf-commons-ihe-hl7v3</artifactId>
     <name>ipf-commons-ihe-hl7v3</name>
     <description>HL7v3-specific IHE support</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>

@@ -6,6 +6,7 @@
     <name>ipf-tutorials</name>
     <packaging>pom</packaging>
     <description>IPF Tutorials</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>

@@ -4,6 +4,7 @@
     <artifactId>ipf-tutorials-hl7</artifactId>
     <name>ipf-tutorials-hl7</name>
     <packaging>jar</packaging>
+    <url>${site.url}/${project.artifactId}</url>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
