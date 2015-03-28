@@ -162,13 +162,25 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
 
 
     protected static void setValue(Primitive p, String value) {
-        try {
-            p.setValue(value);
-        } catch (DataTypeException e) {
-            throw new RuntimeException(e);
+        if (value == null) {
+            p.clear();
+        } else {
+            try {
+                p.setValue(value);
+            } catch (DataTypeException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
+    protected static void setValue(Primitive p, Integer value) {
+        setValue(p, (value == null) ? null : value.toString());
+    }
+
+    protected static Integer getIntegerValue(Primitive p) {
+        String value = p.getValue();
+        return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : new Integer(value);
+    }
 
     /**
      * Helper method used for copying data elements of an assigning authority.

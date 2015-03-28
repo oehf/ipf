@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
@@ -30,6 +31,13 @@ public class XTNValidatorTest {
     public void testValidateGoodCases() throws XDSMetaDataException {
         validator.validate("^^Internet^a@x.ua");
         validator.validate("^^Internet^a@x.ua^^^^^");
+        validator.validate("^NET^Internet^a@x.ua^^^^^");
+        validator.validate("^^PH^^11^22^33^44^");
+        validator.validate("^PRN^PH^^11^22^33^44^");
+        validator.validate("^^PH^^^^33");
+        validator.validate("^PRN^PH^^^^33^^");
+        validator.validate("^^CP^^11^22^33^44^");
+        validator.validate("^PRN^CP^^11^22^33^44^");
     }
     
     @Test 
@@ -37,9 +45,13 @@ public class XTNValidatorTest {
         assertFails("");
         assertFails("^^^");
         assertFails("^^Internet^");
-        assertFails("^^Internet^x.yz");
         assertFails("^^Floppynet^blabla");
         assertFails("^^Internet^a@x.ua^12345");
+        assertFails("^^Internet^^11^22^33^44");
+        assertFails("^NET^PH^^11^22^33^44");
+        assertFails("^^PH^^^^^^55^^^");
+        assertFails("^^CP^^11^22^^44");
+        assertFails("^^PH^abc@de.com^11^22^33^44");
     }
 
     private static void assertFails(String value) {

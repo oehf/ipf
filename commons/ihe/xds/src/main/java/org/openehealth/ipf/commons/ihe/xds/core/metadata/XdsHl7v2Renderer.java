@@ -78,7 +78,7 @@ abstract public class XdsHl7v2Renderer {
         addInclusion(CX.class,  ReferenceId.class,  1, 4, 5, 6);
         addInclusion(HD.class,  null,               2, 3);
         addInclusion(XON.class, null,               1, 6, 10);
-        addInclusion(XTN.class, null,               3, 4);
+        addInclusion(XTN.class, null,               2, 3, 4, 5, 6, 7, 8);
     }
 
 

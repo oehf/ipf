@@ -49,7 +49,7 @@ public class XdsHl7v2RenderingTest {
     public void testTelecomRendering() {
         String xtn = "1^2^3^4^5^6^7^8^9^0^a^b^c^d^^^";
         Telecom telecom = Hl7v2Based.parse(xtn, Telecom.class);
-        assertEquals("^^3^4", Hl7v2Based.render(telecom));
+        assertEquals("^2^3^4^5^6^7^8", Hl7v2Based.render(telecom));
         assertEquals("1^2^3^4^5^6^7^8^9^0^a^b^c^d", Hl7v2Based.rawRender(telecom));
     }
 }
