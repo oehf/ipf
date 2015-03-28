@@ -120,7 +120,6 @@ public class JaxWsClientFactory {
             MustUnderstandDecoratorInterceptor interceptor = new MustUnderstandDecoratorInterceptor();
             for (String nsUri : SoapUtils.WS_ADDRESSING_NS_URIS) {
                 interceptor.addHeader(new QName(nsUri, "Action"));
-                interceptor.addHeader(new QName(nsUri, "ReplyTo"));
             }
 
             client.getOutInterceptors().add(interceptor);
