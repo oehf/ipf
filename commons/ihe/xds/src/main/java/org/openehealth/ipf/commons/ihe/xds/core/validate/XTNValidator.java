@@ -15,9 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.apache.commons.lang3.StringUtils.countMatches;
-import static org.apache.commons.lang3.StringUtils.stripEnd;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_TELECOM;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Telecom;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
@@ -28,8 +30,24 @@ public class XTNValidator implements ValueValidator {
 
     @Override
     public void validate(String hl7XTN) throws XDSMetaDataException {
-        metaDataAssert(hl7XTN.length() >= 17, WRONG_TELECOM, hl7XTN);   // 17 is the length of "^^Internet^a@b.de"
-        metaDataAssert(hl7XTN.startsWith("^^Internet^"), WRONG_TELECOM, hl7XTN);
-        metaDataAssert(countMatches(stripEnd(hl7XTN, "^"), "^") == 3, WRONG_TELECOM, hl7XTN);
+        Telecom telecom = Hl7v2Based.parse(hl7XTN, Telecom.class);
+        metaDataAssert(telecom != null, MISSING_TELECOM_PARAM, hl7XTN);
+
+        if ("Internet".equals(telecom.getType())) {
+            metaDataAssert(isEmpty(telecom.getUse()) || "NET".equals(telecom.getUse()), WRONG_TELECOM_USE, hl7XTN);
+            metaDataAssert(! isEmpty(telecom.getEmail()), MISSING_TELECOM_PARAM, hl7XTN);
+            metaDataAssert(telecom.getCountryCode() == null, INCONSISTENT_TELECOM_PARAM, hl7XTN);
+            metaDataAssert(telecom.getAreaCityCode() == null, INCONSISTENT_TELECOM_PARAM, hl7XTN);
+            metaDataAssert(telecom.getLocalNumber() == null, INCONSISTENT_TELECOM_PARAM, hl7XTN);
+            metaDataAssert(telecom.getExtension() == null, INCONSISTENT_TELECOM_PARAM, hl7XTN);
+
+        } else if ("PH".equals(telecom.getType()) || "CP".equals(telecom.getType())) {
+            metaDataAssert(! "NET".equals(telecom.getUse()), WRONG_TELECOM_USE, hl7XTN);
+            metaDataAssert(isEmpty(telecom.getEmail()), INCONSISTENT_TELECOM_PARAM, hl7XTN);
+            metaDataAssert(telecom.getLocalNumber() != null, MISSING_TELECOM_PARAM, hl7XTN);
+
+        } else {
+            throw new XDSMetaDataException(WRONG_TELECOM_TYPE, hl7XTN);
+        }
     }
 }

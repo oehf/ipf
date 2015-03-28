@@ -257,8 +257,8 @@ public abstract class SampleData {
         author.getAuthorRole().add(new Identifiable("role2", null));
         author.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("1.2.3.3", "ISO")));
         author.getAuthorSpecialty().add(new Identifiable("spec2", null));
-        author.getAuthorTelecom().add(new Telecom("author1@acme.org", "Internet"));
-        author.getAuthorTelecom().add(new Telecom("author2@acme.org", "Internet"));
+        author.getAuthorTelecom().add(new Telecom("author1@acme.org"));
+        author.getAuthorTelecom().add(new Telecom("author2@acme.org"));
 
         Address address = new Address();
         address.setStreetAddress("hier");

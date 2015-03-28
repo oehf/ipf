@@ -70,8 +70,8 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         author.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
         author.getAuthorSpecialty().add(new Identifiable("spec2", null));
 
-        author.getAuthorTelecom().add(new Telecom("5.25 in", "Floppynet"));
-        author.getAuthorTelecom().add(new Telecom("2:465/46.40", "Fidonet"));
+        author.getAuthorTelecom().add(new Telecom(null, null, 7771, null));
+        author.getAuthorTelecom().add(new Telecom(null, null, 7772, null));
     }
     
     @Test
@@ -97,7 +97,7 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         assertEquals(Arrays.asList("spec1^^^&2.3.3&ISO", "spec2"), slots.get(3).getValueList());
 
         assertEquals(Vocabulary.SLOT_NAME_AUTHOR_TELECOM, slots.get(4).getName());
-        assertEquals(Arrays.asList("^^Floppynet^5.25 in", "^^Fidonet^2:465/46.40"), slots.get(4).getValueList());
+        assertEquals(Arrays.asList("^PRN^PH^^^^7771", "^PRN^PH^^^^7772"), slots.get(4).getValueList());
     }
     
     @Test
