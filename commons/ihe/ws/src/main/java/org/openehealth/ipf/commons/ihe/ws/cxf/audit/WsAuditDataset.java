@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.cxf.ws.addressing.EndpointReferenceUtils;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
@@ -54,7 +53,7 @@ public class WsAuditDataset extends AuditDataset {
     /**
      * Client user ID (WS-Addressing &lt;Reply-To&gt; header).
      */
-    @Setter private String userId;
+    @Getter @Setter private String userId;
 
     /**
      * Client user name (WS-Security &lt;Username&gt; header).
@@ -105,19 +104,6 @@ public class WsAuditDataset extends AuditDataset {
      */
     public void setRequestPayload(StringPayloadHolder payloadHolder) {
         this.requestPayload = (payloadHolder != null) ? payloadHolder.get(SOAP_BODY) : null;
-    }
-
-    /**
-     * Returns User ID.
-     * <p>
-     * When the user ID could not be extracted from WS-Addressing header
-     * &lt;ReplyTo&gt;, the special "WS-Addressing anonymous address" 
-     * will be returned, as prescribed in 
-     * http://www.w3.org/TR/2006/REC-ws-addr-soap-20060509/#anonaddress
-     * @return client user ID (WS-Addressing &lt;Reply-To&gt; header).
-     */
-    public String getUserId() {
-        return (userId != null) ? userId : EndpointReferenceUtils.ANONYMOUS_ADDRESS;
     }
 
 }

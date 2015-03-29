@@ -98,7 +98,7 @@ class TestRad69 extends StandardTestContainer {
         
         checkEvent(message.EventIdentification, '110106', 'RAD-69', 'R', outcome)
         checkSource(message.ActiveParticipant[0], SERVICE2_ADDR, 'false')
-        checkDestination(message.ActiveParticipant[1], 'true')
+        checkDestination(message.ActiveParticipant[1], 'true', false)
         checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
         checkImageDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 4 : 1], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
@@ -118,8 +118,8 @@ class TestRad69 extends StandardTestContainer {
         assert message.children().size() == 12
         
         checkEvent(message.EventIdentification, '110107', 'RAD-69', 'C', outcome)
-        checkSource(message.ActiveParticipant[0], 'false')
-        checkDestination(message.ActiveParticipant[1], 'true')
+        checkSource(message.ActiveParticipant[0], SERVICE2_ADDR, 'false')
+        checkDestination(message.ActiveParticipant[1], 'true', false)
         checkImageDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 4 : 1], 'doc2',     'urn:oid:1.2.4', 'repo2', 'urn:oid:1.1.1', 'urn:oid:1.2.1')
         checkImageDocument(message.ParticipantObjectIdentification[reordered ? 1 : 2], docIdValue, 'urn:oid:1.2.3', 'repo1', 'urn:oid:1.1.1', 'urn:oid:1.2.2')

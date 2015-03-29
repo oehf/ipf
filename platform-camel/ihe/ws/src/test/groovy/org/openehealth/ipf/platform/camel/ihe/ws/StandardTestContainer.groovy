@@ -238,14 +238,16 @@ class StandardTestContainer {
          assert event.@EventOutcomeIndicator == outcome
      }
      
-     def checkSource(source, httpAddr, requestor) {
-         checkSource(source, requestor)
+     def checkSource(source, String httpAddr, String requestor) {
+         checkSource(source, requestor, true)
          assert source.@UserID == httpAddr
      }
      
-     def checkSource(source, requestor) {
+     def checkSource(source, String requestor, boolean userIdRequired = false) {
          // This should be something useful, but it isn't fully specified yet (see CP-402)
-         assert source.@UserID != null && source.@UserID != ''  
+         if (userIdRequired) {
+             assert source.@UserID != null && source.@UserID != ''
+         }
          assert source.@UserIsRequestor == requestor
          assert source.@NetworkAccessPointTypeCode == '2' || source.@NetworkAccessPointTypeCode == '1'
          assert source.@NetworkAccessPointID != null && source.@NetworkAccessPointID != '' 
@@ -254,14 +256,16 @@ class StandardTestContainer {
          checkCode(source.RoleIDCode, '110153', 'DCM')
      }
 
-     def checkDestination(destination, httpAddr, requestor) {
-         checkDestination(destination, requestor)
+     def checkDestination(destination, String httpAddr, String requestor) {
+         checkDestination(destination, requestor, true)
          assert destination.@UserID == httpAddr
      }
      
-     def checkDestination(destination, requestor) {
+     def checkDestination(destination, String requestor, boolean userIdRequired = true) {
          // This should be something useful, but it isn't fully specified yet (see CP-402)
-         assert destination.@UserID != null && destination.@UserID != ''
+         if (userIdRequired) {
+             assert destination.@UserID != null && destination.@UserID != ''
+         }
          assert destination.@UserIsRequestor == requestor
          assert destination.@NetworkAccessPointTypeCode == '1' || destination.@NetworkAccessPointTypeCode == '2'
          assert destination.@NetworkAccessPointID != null && destination.@NetworkAccessPointID != '' 
@@ -270,7 +274,7 @@ class StandardTestContainer {
          checkCode(destination.RoleIDCode, '110152', 'DCM')
      }
      
-     def checkAuditSource(auditSource, sourceId) {
+     def checkAuditSource(auditSource, String sourceId) {
          assert auditSource.@AuditSourceID == sourceId 
      }
      
@@ -287,7 +291,7 @@ class StandardTestContainer {
          assert patient.@ParticipantObjectID in allowedIds
      }
      
-     def checkQuery(query, iti, queryText, queryUuid) {
+     def checkQuery(query, String iti, String queryText, String queryUuid) {
          assert query.@ParticipantObjectTypeCode == '2'
          assert query.@ParticipantObjectTypeCodeRole == '24'
          checkCode(query.ParticipantObjectIDTypeCode, iti, 'IHE Transactions')
@@ -297,7 +301,7 @@ class StandardTestContainer {
          assert decoded.contains(queryText)
      }
      
-     def checkUri(uri, docUri, docUniqueId) {
+     def checkUri(uri, String docUri, String docUniqueId) {
          assert uri.@ParticipantObjectTypeCode == '2'
          assert uri.@ParticipantObjectTypeCodeRole == '3'
          checkCode(uri.ParticipantObjectIDTypeCode, '12', 'RFC-3881')
@@ -305,7 +309,7 @@ class StandardTestContainer {
          assert uri.@ParticipantObjectDetail == docUniqueId
      }
      
-    def checkDocument(uri, docUniqueId, homeId, repoId) {
+    def checkDocument(uri, String docUniqueId, String homeId, String repoId) {
         assert uri.@ParticipantObjectTypeCode == '2'
         assert uri.@ParticipantObjectTypeCodeRole == '3'
         checkCode(uri.ParticipantObjectIDTypeCode, '9', 'RFC-3881')
@@ -315,7 +319,7 @@ class StandardTestContainer {
         checkParticipantObjectDetail(uri.ParticipantObjectDetail[1], 'ihe:homeCommunityID', homeId)
     }
 
-    def checkImageDocument(uri, docUniqueId, homeId, repoId, studyId, seriesId) {
+    def checkImageDocument(uri, String docUniqueId, String homeId, String repoId, String studyId, String seriesId) {
         assert uri.@ParticipantObjectTypeCode == '2'
         assert uri.@ParticipantObjectTypeCodeRole == '3'
         checkCode(uri.ParticipantObjectIDTypeCode, '9', 'RFC-3881')
@@ -327,7 +331,7 @@ class StandardTestContainer {
         checkParticipantObjectDetail(uri.ParticipantObjectDetail[3], 'ihe:homeCommunityID', homeId)
     }
 
-     def checkParticipantObjectDetail(detail, expectedType, expectedValue) {
+     def checkParticipantObjectDetail(detail, String expectedType, String expectedValue) {
          assert detail.@type == expectedType
          String base64Expected = new String(Base64.encodeBase64(expectedValue.getBytes('UTF8')))
          String base64Actual = detail.@value
