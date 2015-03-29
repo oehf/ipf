@@ -91,7 +91,7 @@ class TestIti43 extends StandardTestContainer {
         
         checkEvent(message.EventIdentification, '110106', 'ITI-43', 'R', outcome)
         checkSource(message.ActiveParticipant[0], SERVICE2_ADDR, 'false')
-        checkDestination(message.ActiveParticipant[1], 'true')
+        checkDestination(message.ActiveParticipant[1], 'true', false)
         checkAuditSource(message.AuditSourceIdentification, 'repositoryId')
         checkDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1')
         checkDocument(message.ParticipantObjectIdentification[1], 'doc2', 'urn:oid:1.2.4', 'repo2')
@@ -105,8 +105,8 @@ class TestIti43 extends StandardTestContainer {
         assert message.children().size() == 6
         
         checkEvent(message.EventIdentification, '110107', 'ITI-43', 'C', outcome)
-        checkSource(message.ActiveParticipant[0], 'false')
-        checkDestination(message.ActiveParticipant[1], 'true')
+        checkSource(message.ActiveParticipant[0], SERVICE2_ADDR, 'false')
+        checkDestination(message.ActiveParticipant[1], 'true', false)
         checkDocument(message.ParticipantObjectIdentification[0], docIdValue, 'urn:oid:1.2.3', 'repo1')
         checkDocument(message.ParticipantObjectIdentification[1], 'doc2', 'urn:oid:1.2.4', 'repo2')
     }

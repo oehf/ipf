@@ -43,17 +43,18 @@ public class RadAuditorTest extends TestCase {
     private static final List<CodedValueType> PURPOSES_OF_USE;
     static {
         PURPOSES_OF_USE = new ArrayList<>();
-        CodedValueType cvt = new CodedValueType();
 
-        cvt.setCode("12");
-        cvt.setCodeSystemName("1.0.14265.1");
-        cvt.setOriginalText("Law Enforcement");
-        PURPOSES_OF_USE.add(cvt);
+        CodedValueType cvt1 = new CodedValueType();
+        cvt1.setCode("12");
+        cvt1.setCodeSystemName("1.0.14265.1");
+        cvt1.setOriginalText("Law Enforcement");
+        PURPOSES_OF_USE.add(cvt1);
 
-        cvt.setCode("13");
-        cvt.setCodeSystemName("1.0.14265.1");
-        cvt.setOriginalText("Something Else");
-        PURPOSES_OF_USE.add(cvt);
+        CodedValueType cvt2 = new CodedValueType();
+        cvt2.setCode("13");
+        cvt2.setCodeSystemName("1.0.14265.1");
+        cvt2.setOriginalText("Something Else");
+        PURPOSES_OF_USE.add(cvt2);
     }
 
     private MockedSender sender;
