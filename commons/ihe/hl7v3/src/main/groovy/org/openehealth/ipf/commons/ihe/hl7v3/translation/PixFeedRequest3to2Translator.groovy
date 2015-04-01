@@ -313,7 +313,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         }
 
         if (person.birthPlace) {
-            grp.PID[23].value = person.birthPlace.birthplace.name.text()
+            grp.PID[23].value = person.birthPlace.addr?.city?.text() ?: person.birthPlace.birthplace?.name?.text()
         }
 
         if (person.multipleBirthInd?.@value == 'true' || person.multipleBirthOrderNumber?.@value?.text()) {
