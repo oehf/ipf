@@ -87,3 +87,12 @@ As a result, no explicit validation processor must be provided anymore:
         }
     }
 ```
+
+### Disabling message validation
+
+It is possible to switch off validation by means of a Camel message header. 
+When there is input message header named {{org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter#NEED_VALIDATION_HEADER_NAME}} 
+and its value equals to {{Boolean.FALSE}}, the validation step will be skipped. This gives the possibility to validate conditionally 
+based of user-defined properties and/or make it configurable e.g. via JMX.
+
+Please be aware that the aforementioned Camel message header will remain untouched and deactivate subsequent validation steps as well.

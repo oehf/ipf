@@ -20,12 +20,15 @@ import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
 import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.spi.Synchronization
 import org.junit.After
 import org.junit.AfterClass
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.context.support.ClassPathXmlApplicationContext
+
+import java.util.concurrent.Future
 
 import static org.junit.Assert.*
 
@@ -139,6 +142,15 @@ class MllpTestContainer {
         }
         def response = Exchanges.resultMessage(result)
         response.getBody(Message.class)
+    }
+
+    /**
+     * Sends a request into the route.
+     */
+    static Future<Exchange> sendAsync(String endpoint, Object body, Synchronization s) {
+        def inExchange = new DefaultExchange(camelContext)
+        inExchange.in.body = body
+        producerTemplate.asyncCallback(endpoint, inExchange, s)
     }
     
     

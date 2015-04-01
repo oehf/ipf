@@ -25,7 +25,7 @@ import org.springframework.beans.factory.ListableBeanFactory;
 
 /**
  * Class that bridges the {@link Registry} interface to a Spring
- * {@link ListableBeanFactory}. You simply need to declare a  Spring
+ * {@link ListableBeanFactory}. You simply need to declare a Spring
  * bean like this:
  * <p>
  * <bean class="org.openehealth.ipf.commons.core.config.SpringRegistry"/>
