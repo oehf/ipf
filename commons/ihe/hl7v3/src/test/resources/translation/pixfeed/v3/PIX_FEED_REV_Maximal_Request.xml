@@ -100,6 +100,11 @@
                   </name>
                 </relationshipHolder1>
               </personalRelationship>
+              <birthPlace classCode="BIRTHPL">
+                <addr>
+                  <city>Chicago</city>
+                </addr>
+              </birthPlace>
             </patientPerson>
             <providerOrganization classCode="ORG" determinerCode="INSTANCE">
               <id root="1.2.840.114350.1.13.99998.8734"/>
