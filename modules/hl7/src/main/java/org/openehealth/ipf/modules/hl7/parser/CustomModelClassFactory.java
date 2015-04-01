@@ -1,9 +1,5 @@
 package org.openehealth.ipf.modules.hl7.parser;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.Version;
 import ca.uhn.hl7v2.model.Group;
@@ -12,8 +8,10 @@ import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * CustomModelClassFactory implementation that fixes a HAPI 2.2 bug and adds caching.
@@ -22,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public class CustomModelClassFactory extends ca.uhn.hl7v2.parser.CustomModelClassFactory {
 
     private ModelClassFactory defaultFactory;
-    private static final ConcurrentMap<String, Class<?>> classMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, Class<?>> classMap = new ConcurrentHashMap<>();
 
     public CustomModelClassFactory() {
         this(null);
@@ -48,7 +46,7 @@ public class CustomModelClassFactory extends ca.uhn.hl7v2.parser.CustomModelClas
         Class<? extends Message> clazz = (Class<? extends Message>)classMap.get(key);
         if (clazz == null) {
             clazz = super.getMessageClass(name, version, isExplicit);
-            classMap.putIfAbsent(key, clazz);
+            if (clazz != null) classMap.putIfAbsent(key, clazz);
         }
         return clazz;
     }
@@ -59,7 +57,7 @@ public class CustomModelClassFactory extends ca.uhn.hl7v2.parser.CustomModelClas
         Class<? extends Group> clazz = (Class<? extends Group>)classMap.get(key);
         if (clazz == null) {
             clazz = super.getGroupClass(name, version);
-            classMap.putIfAbsent(key, clazz);
+            if (clazz != null) classMap.putIfAbsent(key, clazz);
         }
         return clazz;
     }
@@ -70,7 +68,7 @@ public class CustomModelClassFactory extends ca.uhn.hl7v2.parser.CustomModelClas
         Class<? extends Segment> clazz = (Class<? extends Segment>)classMap.get(key);
         if (clazz == null) {
             clazz = super.getSegmentClass(name, version);
-            classMap.putIfAbsent(key, clazz);
+            if (clazz != null) classMap.putIfAbsent(key, clazz);
         }
         return clazz;
     }
@@ -81,7 +79,7 @@ public class CustomModelClassFactory extends ca.uhn.hl7v2.parser.CustomModelClas
         Class<? extends Type> clazz = (Class<? extends Type>)classMap.get(key);
         if (clazz == null) {
             clazz = super.getTypeClass(name, version);
-            classMap.putIfAbsent(key, clazz);
+            if (clazz != null) classMap.putIfAbsent(key, clazz);
         }
         return clazz;
     }
@@ -112,4 +110,5 @@ public class CustomModelClassFactory extends ca.uhn.hl7v2.parser.CustomModelClas
     public ModelClassFactory getDelegate() {
         return defaultFactory;
     }
+
 }
