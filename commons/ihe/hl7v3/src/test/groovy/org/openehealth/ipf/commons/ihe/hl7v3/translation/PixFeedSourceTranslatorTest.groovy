@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 import ca.uhn.hl7v2.model.Message
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
@@ -34,7 +35,9 @@ class PixFeedSourceTranslatorTest extends Hl7TranslationTestContainer {
         doSetUp('pixsource',
                 null,
                 new PixFeedRequest2to3Translator(),
-                HapiContextFactory.createHapiContext(PixPdqTransactions.ITI8))
+                HapiContextFactory.createHapiContext(
+                        CustomModelClassUtils.createFactory("pix", "2.3.1"),
+                        PixPdqTransactions.ITI8));
     }
 
 	@Test

@@ -27,7 +27,7 @@ final class Iti8AuditStrategyUtils  {
     static void enrichAuditDatasetFromRequest(Iti8AuditDataset auditDataset, Message msg, Exchange exchange) {
         auditDataset.patientId = msg.findPID()[3].encodeRepetitions()
         if(msg.MSH[9][2].value == 'A40') {
-            auditDataset.oldPatientId = msg.PIDPD1MRGPV1.MRG[1].encodeRepetitions()
+            auditDataset.oldPatientId = msg.PATIENT.MRG[1].encodeRepetitions()
         }
     }
 
