@@ -19,6 +19,7 @@ import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
 import org.junit.Test
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
@@ -31,7 +32,9 @@ class Iti8AuditStrategyUtilsTest {
 
     @Test
     void testExtractPatientId(){
-        Message message = load(HapiContextFactory.createHapiContext(PixPdqTransactions.ITI8), 'iti8/iti8-a40.hl7')
+        Message message = load(HapiContextFactory.createHapiContext(
+                CustomModelClassUtils.createFactory("pix", "2.3.1"), PixPdqTransactions.ITI8),
+                'iti8/iti8-a40.hl7')
         Iti8AuditDataset dataset = new Iti8AuditDataset(true);
         Iti8AuditStrategyUtils.enrichAuditDatasetFromRequest(dataset, message, null);
         assertEquals('305014^^^MPI-NS-P&2.16.840.1.113883.3.37.4.1.1.2.1.1&ISO'

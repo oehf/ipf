@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.group.ADT_A40_
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 /**
- * Custom ADT_A40 structire that renames the PATIENT group
+ * Custom ADT_A40 structure that renames the PATIENT group
  */
 public class ADT_A40 extends AbstractMessage {
 

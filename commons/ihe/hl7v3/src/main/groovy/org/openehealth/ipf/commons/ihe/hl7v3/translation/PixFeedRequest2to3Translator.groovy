@@ -122,7 +122,7 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
                 statusCode(code: 'obsolete')
                 subject1(typeCode: 'SBJ'){
                     priorRegisteredRole(classCode: 'PAT'){
-                        buildInstanceIdentifier(builder, 'id', false, adt.PIDPD1MRGPV1.MRG[1](0))
+                        buildInstanceIdentifier(builder, 'id', false, adt.PATIENT.MRG[1](0))
                     }
                 }
             }
