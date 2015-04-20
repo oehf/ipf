@@ -17,16 +17,18 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.apache.commons.lang3.StringUtils;
+import org.openehealth.ipf.commons.ihe.core.TransactionOptions;
 
 import java.util.Map;
 
 /**
  * Camel component for MLLP-based eHealth transactions (like IHE PIX, PDQ, XAD-PID, etc.).
+ *
  * @author Dmytro Rud
  */
 public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAuditDataset>
-        extends MllpComponent<MllpTransactionEndpointConfiguration>
-{
+        extends MllpComponent<MllpTransactionEndpointConfiguration> {
 
     protected MllpTransactionComponent() {
         super();
@@ -55,4 +57,5 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
      * Returns client-side ATNA audit strategy.
      */
     public abstract MllpAuditStrategy<AuditDatasetType> getClientAuditStrategy();
+
 }

@@ -92,6 +92,12 @@ public abstract class AuditorManager {
             return PDQConsumerAuditor.getAuditor();
         }
     }
+
+    public static PAMSourceAuditor getPAMSourceAuditor() {
+        synchronized (sync) {
+            return PAMSourceAuditor.getAuditor();
+        }
+    }
     
     public static Hl7v3Auditor getHl7v3Auditor() {
         synchronized (sync) {

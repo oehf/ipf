@@ -45,6 +45,11 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>ipf-gazelle-validation-profiles-iti-pam</artifactId>
+            <version>${ipf-gazelle-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
             <artifactId>ipf-gazelle-validation-commons-core</artifactId>
             <version>${ipf-gazelle-version}</version>
         </dependency>
