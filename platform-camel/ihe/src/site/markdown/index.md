@@ -38,7 +38,7 @@ IHE Profiles are grouped by their underlying technical foundation, particularly 
 
 | Module                           | Provided IHE transactions
 |----------------------------------|-----------------------------------------
-| ipf-platform-camel-ihe-mllp      | [ITI-8], [ITI-9], [ITI-10], [ITI-21], [ITI-22], [ITI-46]
+| ipf-platform-camel-ihe-mllp      | [ITI-8], [ITI-9], [ITI-10], [ITI-21], [ITI-22], [ITI-30], [ITI-31], [ITI-46]
 | ipf-platform-camel-ihe-xds       | [ITI-14], [ITI-15], [ITI-16], [ITI-17], [ITI-18], [ITI-38], [ITI-39], [ITI-41], [ITI-42], [ITI-43], [ITI-51], [ITI-57], [ITI-61], [ITI-62], [ITI-63], [RAD-69], [RAD-75]
 | ipf-platform-camel-ihe-hl7v3     | [ITI-44], [ITI-45], [ITI-46], [ITI-47], [ITI-55], [ITI-56], [PCC-1]
 | ipf-platform-camel-ihe-hl7v2ws   | [PCD-01]
@@ -111,6 +111,8 @@ A special case is the MLLP dispatcher component which allows to accept requests 
 * [ITI-20] Record Audit Event
 * [ITI-21] Patient Demographics Query
 * [ITI-22] Patient Demographics and Visit Query
+* [ITI-30] Patient Identity Management
+* [ITI-31] Patient Encounter Management
 * [ITI-38] Cross-Gateway Query
 * [ITI-39] Cross-Gateway Retrieve
 * [ITI-41] Provide & Register Document Set
@@ -157,6 +159,8 @@ required dependencies, usage and parameters.
 | ITI-20       | ATNA          | Record Audit Event                   | n/a                     | Syslog (+TLS) | RFC-3881
 | [ITI-21]     | PDQ           | Patient Demographics Query           | `pdq-iti21`             | MLLP(S)       | HL7 v2.5
 | [ITI-22]     | PDQ           | Patient Demographics and Visit Query | `pdq-iti22`             | MLLP(S)       | HL7 v2.5
+| [ITI-30]     | PAM           | Patient Identity Management          | `pam-iti30`             | MLLP(S)       | HL7 v2.5
+| [ITI-31]     | PAM           | Patient Encounter Management         | `pam-iti31`             | MLLP(S)       | HL7 v2.5
 | [ITI-38]     | XCA           | Cross-Gateway Query                  | `xca-iti38`             | SOAP/HTTP(S)  | ebXML
 | [ITI-39]     | XCA           | Cross-Gateway Retrieve               | `xca-iti39`             | SOAP/HTTP(S)  | ebXML
 | [ITI-41], Continua HRN | XDS.b, Continua | Provide & Register Document Set | `xds-iti41`      | SOAP/HTTP(S)  | ebXML
@@ -191,6 +195,8 @@ required dependencies, usage and parameters.
 [ITI-18]: ../ipf-platform-camel-ihe-xds/iti18.html
 [ITI-21]: ../ipf-platform-camel-ihe-mllp/iti21.html
 [ITI-22]: ../ipf-platform-camel-ihe-mllp/iti22.html
+[ITI-30]: ../ipf-platform-camel-ihe-mllp/iti30.html
+[ITI-31]: ../ipf-platform-camel-ihe-mllp/iti31.html
 [ITI-38]: ../ipf-platform-camel-ihe-xds/iti38.html
 [ITI-39]: ../ipf-platform-camel-ihe-xds/iti39.html
 [ITI-41]: ../ipf-platform-camel-ihe-xds/iti41.html
