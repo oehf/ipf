@@ -73,13 +73,13 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
         this(new XsltTransmogrifier<>(String.class), outputFormat, staticParams);
     }
 
-    public SchematronTransmogrifier(XsltTransmogrifier<String> t, Class<T> clazz) {
-        super(clazz);
+    public SchematronTransmogrifier(XsltTransmogrifier<String> t, Class<T> outputFormat) {
+        super(outputFormat);
         xsltTransmogrifier = t;
     }
     
-    public SchematronTransmogrifier(XsltTransmogrifier<String> t, Class<T> clazz, Map<String, Object> staticParams) {
-        super(clazz, staticParams);
+    public SchematronTransmogrifier(XsltTransmogrifier<String> t, Class<T> outputFormat, Map<String, Object> staticParams) {
+        super(outputFormat, staticParams);
         xsltTransmogrifier = t;
     }
 

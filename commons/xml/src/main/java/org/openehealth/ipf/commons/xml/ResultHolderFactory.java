@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.commons.xml;
 
+import org.openehealth.ipf.commons.xml.svrl.SchematronOutput;
+
+import javax.xml.transform.dom.DOMResult;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
-
-import javax.xml.transform.dom.DOMResult;
 
 /**
  * @author Christian Ohr
@@ -38,6 +39,8 @@ class ResultHolderFactory {
             return (ResultHolder<T>) new WriterResultHolder();
         } else if (DOMResult.class == clazz) {
             return (ResultHolder<T>) new DOMResultHolder();
+        } else if (SchematronOutput.class == clazz) {
+            return (ResultHolder<T>) new SvrlResultHolder();
         } else {
             return null;
         }
