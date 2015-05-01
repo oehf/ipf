@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  
+        (c) International Organization for Standardization 2005. 
+        Permission to copy in any form is granted for use with conforming 
+        SGML systems and applications as defined in ISO 8879, 
+        provided this notice is included in all copies.
+  
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://purl.oclc.org/dsdl/svrl" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+  <xs:element name="schematron-output">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="svrl:text"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="svrl:ns-prefix-in-attribute-values"/>
+        <xs:sequence maxOccurs="unbounded">
+          <xs:element ref="svrl:active-pattern"/>
+          <xs:sequence maxOccurs="unbounded">
+            <xs:element ref="svrl:fired-rule"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="svrl:failed-assert"/>
+              <xs:element ref="svrl:successful-report"/>
+            </xs:choice>
+          </xs:sequence>
+        </xs:sequence>
+      </xs:sequence>
+      <xs:attribute name="title"/>
+      <xs:attribute name="phase" type="xs:NMTOKEN"/>
+      <xs:attribute name="schemaVersion"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- only namespaces from sch:ns need to be reported -->
+  <xs:element name="ns-prefix-in-attribute-values">
+    <xs:complexType>
+      <xs:attribute name="prefix" use="required" type="xs:NMTOKEN"/>
+      <xs:attribute name="uri" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- only active patterns are reported -->
+  <xs:element name="active-pattern">
+    <xs:complexType>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="name"/>
+      <xs:attribute name="role" type="xs:NMTOKEN"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- only rules that are fired are reported, -->
+  <xs:element name="fired-rule">
+    <xs:complexType>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="context" use="required"/>
+      <xs:attribute name="role" type="xs:NMTOKEN"/>
+      <xs:attribute name="flag" type="xs:NMTOKEN"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- only references are reported, not the diagnostic -->
+  <xs:element name="diagnostic-reference">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="svrl:text"/>
+      </xs:sequence>
+      <xs:attribute name="diagnostic" use="required" type="xs:NMTOKEN"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- only failed assertions are reported -->
+  <xs:element name="failed-assert">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="svrl:diagnostic-reference"/>
+        <xs:element ref="svrl:text"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="svrl:attlist.assert-and-report"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- only successful asserts are reported -->
+  <xs:element name="successful-report">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="svrl:diagnostic-reference"/>
+        <xs:element ref="svrl:text"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="svrl:attlist.assert-and-report"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="text" type="xs:string"/>
+  <xs:attributeGroup name="attlist.assert-and-report">
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="location" use="required"/>
+    <xs:attribute name="test" use="required"/>
+    <xs:attribute name="role" type="xs:NMTOKEN"/>
+    <xs:attribute name="flag" type="xs:NMTOKEN"/>
+  </xs:attributeGroup>
+</xs:schema>

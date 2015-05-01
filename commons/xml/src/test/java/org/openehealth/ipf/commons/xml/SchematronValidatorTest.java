@@ -22,10 +22,8 @@ import java.io.IOException;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.springframework.core.io.ClassPathResource;
 
 /**
@@ -55,9 +53,11 @@ public class SchematronValidatorTest {
         try {
             v.validate(testXml, new SchematronProfile(
                     "schematron/schematron-test-rules.xml"));
-        } catch (ValidationException e) {
+            assertEquals("This line shall be not reachable", 0, 1);
+        } catch (SchematronValidationException e) {
             Throwable[] cause = e.getCauses();
             assertEquals(3, cause.length);
+            assertEquals(10, e.getSvrl().getActivePatternAndFiredRuleAndFailedAssert().size());
         }
     }
 

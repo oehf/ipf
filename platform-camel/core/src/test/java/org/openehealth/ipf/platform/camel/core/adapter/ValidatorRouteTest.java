@@ -26,9 +26,9 @@ import org.apache.camel.Processor;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
+import org.openehealth.ipf.commons.xml.SchematronValidationException;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 import org.springframework.core.io.ClassPathResource;
 
@@ -62,8 +62,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
                         exchange.getIn().setBody("incorrect");
                     }
                 });
-        assertEquals(ValidationException.class, exchange.getException()
-                .getClass());
+        assertEquals(ValidationException.class, exchange.getException().getClass());
         error.assertIsSatisfied(2000);
     }
 
@@ -114,8 +113,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
                         exchange.getIn().setBody(xml);
                     }
                 });
-        assertEquals(ValidationException.class, exchange.getException()
-                .getClass());
+        assertEquals(SchematronValidationException.class, exchange.getException().getClass());
         ValidationException e = (ValidationException) exchange.getException();
         assertEquals(3, e.getCauses().length);
         error.assertIsSatisfied(2000);
