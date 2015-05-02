@@ -37,11 +37,8 @@ import java.util.List;
  */
 public class SchematronValidator implements Validator<Source, SchematronProfile> {
 
-    private final SchematronTransmogrifier<SchematronOutput> schematronTransmogrifier;
-
-    public SchematronValidator() {
-        this.schematronTransmogrifier = new ValidatingSchematronTransmogrifier<>(SchematronOutput.class);
-    }
+    private final SchematronTransmogrifier<SchematronOutput> schematronTransmogrifier =
+            new SchematronTransmogrifier<>(SchematronOutput.class);
 
     public void validate(Source message, SchematronProfile profile) {
         SchematronOutput svrl = schematronTransmogrifier.zap(message, profile);
