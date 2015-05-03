@@ -109,7 +109,7 @@
         <junit-version>4.12</junit-version>
         <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.17</log4j-version>
-        <lombok-version>1.14.8</lombok-version>
+        <lombok-version>1.16.4</lombok-version>
         <lucene-version>4.10.3</lucene-version>
         <mina2-version>2.0.9</mina2-version>
         <not-yet-commons-ssl-version>0.3.11</not-yet-commons-ssl-version>
@@ -1580,7 +1580,7 @@
                     <fork>true</fork>
                     <verbose>false</verbose>
                     <compilerArguments>
-                        <javaAgentClass>lombok.core.Agent</javaAgentClass>
+                        <javaAgentClass>lombok.launch.Agent</javaAgentClass>
                     </compilerArguments>
                 </configuration>
                 <dependencies>
