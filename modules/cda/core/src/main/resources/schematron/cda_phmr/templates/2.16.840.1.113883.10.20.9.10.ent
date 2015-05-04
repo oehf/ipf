@@ -1,0 +1,54 @@
+<!--  HL7 PHMR Sampling Frequency Observation: 2.16.840.1.113883.10.20.9.10 -->
+
+<!-- errors -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.10-errors">
+    <title>HL7 PHMR Sampling Frequency Observation - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.10"]'>
+
+    <assert test='self::cda:observation[@classCode="OBS"][@moodCode="DEF"]'>
+    Error: CONF-PHMR-86: A Sampling Frequency Observation SHALL be represented with an
+    observation element where @classCode is OBS and @moodCode is DEF.
+    </assert>
+
+    <assert test='cda:code[@code = "MDC_ATTR_TIME_PD_SAMP" and @codeSystem="2.16.840.1.113883.6.24"]'>
+    Error: CONF-PHMR-88: A code element SHALL be present where @code is
+    MDC_ATTR_TIME_PD_SAMP and @codeSystem is 2.16.840.1.113883.6.24 IEEE
+    11073 (STATIC)
+    </assert>
+
+    <assert test='cda:value[@xsi:type="PQ" and @unit="ms"]'>
+    Error: CONF-PHMR-89: A value element SHALL be present where @xsi:type is PQ
+    containing the sampling period in milliseconds (@unit="ms").
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.10-warnings">
+    <title>HL7 PHMR Sampling Frequency Observation - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.10"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>
+
+  <!-- notes -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.10-notes">
+
+    <title>HL7 PHMR Sampling Frequency Observation - notes validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.10"]'>
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

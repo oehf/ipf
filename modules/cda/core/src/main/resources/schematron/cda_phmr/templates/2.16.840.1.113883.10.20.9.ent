@@ -1,331 +1,382 @@
-<!-- HL7 PHMR Rel. 1, Nov 2008 Templates Root: 2.16.840.1.113883.10.20.9 -->
+<!--  HL7 PHMR Document: 2.16.840.1.113883.10.20.9 -->
 
-<!-- ERRORS -->
-<pattern id='p-2.16.840.1.113883.10.20.9-errors' see='#p-2.16.840.1.113883.10.20.9-errors'>
-    <title>PHMR Templates Root - errors validation phase</title>
+<!-- errors -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9-errors">
+    <title>HL7 PHMR Document - errors validation phase</title>
+
+    <rule context='/'>
+    <assert test='//cda:templateId/@root="2.16.840.1.113883.10.20.9"'>
+    Error: CONF-PHMR-2: A ClinicalDocument/templateId element SHALL be present where
+    @root is 2.16.840.1.113883.10.20.9. This indicates conformance to this DSTU.
+    </assert>
+    </rule>
+
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9"]'>
-        <assert test="self::cda:ClinicalDocument">
-        Error CONF-PHMR-1: The root of a PHM report SHALL be a ClinicalDocument 
-        element from the urn:hl7-org:v3 namespace.
-        </assert>
-        
-        <assert test="cda:templateId/@root='2.16.840.1.113883.10.20.9'">
-        Error CONF-PHMR-2: A ClinicalDocument/templateId element SHALL be present
-         where @root is 2.16.840.1.113883.10.20.9.
-        </assert>
-        
-        <assert test='cda:code[@code="53576-5"][@codeSystem="2.16.840.1.113883.6.1"][@displayName="Personal Health Monitoring Report"]'>
-        Error CONF-PHMR-3: The ClinicalDocument/code element SHALL be present. The value 
-        for 'ClinicalDocument/code' SHALL be '53576-5' 'Personal Health Monitoring Report' 
-        2.16.840.1.113883.6.1 LOINC STATIC.
-        </assert>
-        
-        <!-- FIXME: duplicated rule -->
-        <assert test='cda:effectiveTime/@nullFlavor or 
-                      string-length(cda:effectiveTime/@value) = 8 or
-                      (string-length(cda:effectiveTime/@value) > 8 and contains(translate(cda:effectiveTime/@value,"+-","ZZ"),"Z"))'>
-        Error CONF-PHMR-8: Times or time intervals found in the ClinicalDocument/effectiveTime, 
-        author/time, dataEnterer/time, legalAuthenticator/time, authenticator/time and 
-        encompassingEncounter/effectiveTime elements SHALL be precise to the day, 
-        SHALL include a time zone if more precise than to the day, and SHOULD be precise to the second.
-        </assert>
-        
-        
-        <assert test="cda:typeId[@root='2.16.840.1.113883.1.3'][@extension='POCD_HD000040']">
-        Error: The ClinicalDocument/typeId SHALL be '2.16.840.1.113883.1.3' 'POCD_HD000040'.
-        </assert>
-        
-        <assert test="cda:id/@root">
-        Error CONF-PHMR-12: The ClinicalDocument/id element SHALL be present. The ClinicalDocument/id/@root 
-        attribute SHALL be a syntactically correct UUID or OID
-        </assert>
-        
-        <assert test="cda:title">
-        Error CONF-PHMR-15: ClinicalDocument/title SHALL be present.
-        </assert>
-        
-        <assert test="cda:effectiveTime">
-        Error CONF-PHMR-16: ClinicalDocument/effectiveTime SHALL be present and SHOULD be precise to the second.
-        </assert>
-        
-        <assert test="cda:languageCode">
-        Error CONF-PHMR-17: ClinicalDocument/languageCode SHALL be present.
-        </assert>
-        
-        <assert test='matches(cda:languageCode/@code,"(([a-z]{2})(\-[A-Z]{2})?)")'>
-        Error CONF-PHMR-18: ClinicalDocument/languageCode SHALL be in the form nn, or nn-CC.
-        </assert>
-        
-        <assert test="(not(cda:setId) and not(cda:versionNumber)) or (cda:setId and cda:versionNumber)">
-        Error CONF-PHMR-21: Both ClinicalDocument/setId and ClinicalDocument/versionNumber 
-        SHALL be present or both SHALL be absent.
-        </assert>
-        
-        <assert test="not((cda:setId/@extension = cda:id/@extension) and (cda:setId/@root = cda:id/@root))">
-        Error CONF-PHMR-22: The @extension and/or @root of ClinicalDocument/setId and 
-        ClinicalDocument/id SHALL be different when both are present.
-        </assert>
-        
-        <assert test="not(cda:copyTime)">
-        Error CONF-PHMR-23: A ClinicalDocument/copyTime element SHALL NOT be present.
-        </assert>
-        
-        <assert test="cda:recordTarget/cda:patientRole">
-        Error CONF-PHMR-24: At least one recordTarget/patientRole element SHALL be present.
-        </assert>
-        
-        <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime and 
-                      string-length(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value) >= 4">
-        Error CONF-PHMR-25: A patient/birthTime element SHALL be present. The patient/birthTime 
-        element SHALL be precise at least to the year.
-        </assert>
 
-        <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:administrativeGenderCode">
-        Error CONF-PHMR-26: A patient/administrativeGenderCode element SHALL be present.  
-        </assert>
-        
-        <assert test="cda:author/cda:time">
-        Error CONF-PHMR-29: The author/time element represents the start time of the author’s participation 
-        in the creation of the clinical document. The author/time element SHALL be present.
-        </assert>
-        
-        <assert test="cda:author/cda:assignedAuthor/cda:id">
-        Error CONF-PHMR-30: The assignedAuthor/id element SHALL be present.
-        </assert>
+    <assert test='self::cda:ClinicalDocument'>
+    Error: CONF-PHMR-1: The root of a PHM report SHALL be a ClinicalDocument element
+    from the urn:hl7-org:v3 namespace.
+    </assert>
 
-        <assert test="cda:author/cda:assignedAuthor/cda:assignedPerson or 
-                      cda:author/cda:assignedAuthor/cda:assignedAuthoringDevice">
-        Error CONF-PHMR-31:An assignedAuthor element SHALL contain at least one assignedPerson or 
-        assignedAuthoringDevice element.
-        </assert>
-        
-        <assert test="cda:documentationOf/cda:serviceEvent">
-        Error CONF-PHMR-40: The documentationOf/serviceEvent element SHALL be present.
-        </assert>
+    <assert test='cda:code[@code="53576-5" and @codeSystem="2.16.840.1.113883.6.1"]'>
+    Error: CONF-PHMR-3: The ClinicalDocument/code element SHALL be present. The value
+    for "ClinicalDocument/code" SHALL be "53576-5" "Personal Health Monitoring
+    Report" 2.16.840.1.113883.6.1 LOINC STATIC.
+    </assert>
 
-        <assert test="cda:documentationOf/cda:serviceEvent[@classCode='MPROT']">
-        Error CONF-PHMR-41: The value for ClinicalDocument/documentationOf/serviceEvent/@classCode SHALL 
-        be MPROT (Monitoring Program) 2.16.840.1.113883.5.6 ActClass STATIC.
-        </assert>        
-        
-        <assert test="cda:documentationOf/cda:serviceEvent/cda:effectiveTime">
-        Error CONF-PHMR-42: A serviceEvent/effectiveTime element SHALL be present, and SHALL reflect 
-        the period of time for which the patient's health was monitored.
-        </assert> 
-        
-    </rule>
-    
-    <rule context="*[self::cda:patient or 
-                     self::cda:guardianPerson or 
-                     self::cda:assignedPerson or 
-                     self::cda:maintainingPerson or 
-                     self::cda:relatedPerson or
-                     self::cda:intendedRecipient/cda:informationRecipient or
-                     self::cda:associatedPerson or
-                     self::cda:relatedSubject/cda:subject]">
-        <assert test="cda:name/@nullFlavor or 
-                      cda:name or 
-                      cda:informationRecipient/cda:name or
-                      cda:subject/cda:name">
-        Error CONF-PHMR-4: All patient, guardianPerson, assignedPerson, maintainingPerson, 
-        relatedPerson, intendedRecipient/informationRecipient, associatedPerson, and 
-        relatedSubject/subject elements SHALL have a name.
-        </assert>
-    </rule>
+    <assert test="cda:id/@root and (matches(cda:id/@root,'([0-2])(.([1-9][0-9]*|0))+') or matches(cda:id/@root,'([A-Fa-f0-9]{8})(\-[A-Fa-f0-9]{4}){3}(\-[A-Fa-f0-9]{12})'))">
+    Error: CONF-PHMR-12: The ClinicalDocument/id element SHALL be present.  The ClinicalDocument/id/@root attribute SHALL be a syntactically
+    correct UUID or OID.
+    CONF-PHMR-13: UUIDs SHALL be represented in the form
+    XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX, where each X is a character from the set
+    [A-Fa-f0-9].
+    CONF-PHMR-14: OIDs SHALL be represented in dotted decimal notation, where each
+    decimal number is either 0, or starts with a nonzero digit.  More formally,
+    an OID SHALL be in the form ([0-2])(.([1-9][0-9]*|0))+.
+    </assert>
 
-    <rule context="*[self::cda:guardianOrganization or 
-                     self::cda:providerOrganization or 
-                     self::cda:wholeOrganization or 
-                     self::cda:representedOrganization or 
-                     self::cda:representedCustodianOrganization or
-                     self::cda:receivedOrganization or
-                     self::cda:scopingOrganization or
-                     self::cda:serviceProviderOrganization]">
-        <assert test="(cda:name/@nullFlavor or cda:name) and
-                      (cda:addr/@nullFlavor or cda:addr) and 
-                      (cda:telecom/@nullFlavor or cda:telecom)">
-        Error CONF-PHMR-7: All guardianOrganization, providerOrganization, wholeOrganization, 
-        representedOrganization, representedCustodianOrganization, receivedOrganization, 
-        scopingOrganization, and serviceProviderOrganization elements SHALL have 
-        name, addr, and telecom elements.
-        </assert>
-    </rule>
-    
-    <rule context="*[self::cda:author or 
-                     self::cda:dataEnterer or 
-                     self::cda:legalAuthenticator or
-                     self::cda:authenticator or
-                     self::cda:encompassingEncounter]">
-        <assert test='(cda:time/@nullFlavor or 
-                          string-length(cda:time/@value) = 8 or
-                          (string-length(cda:time/@value) > 8 and contains(translate(cda:time/@value,"+-","ZZ"),"Z"))) or
-                      (cda:effectiveTime/@nullFlavor or 
-                          string-length(cda:effectiveTime/@value) = 8 or
-                          (string-length(cda:effectiveTime/@value) > 8 and contains(translate(cda:effectiveTime/@value,"+-","ZZ"),"Z"))) or
-                      (cda:time/cda:low/@nullFlavor or 
-                          string-length(cda:time/cda:low/@value) = 8 or
-                          (string-length(cda:time/cda:low/@value) > 8 and contains(translate(cda:time/cda:low/@value,"+-","ZZ"),"Z"))) or
-                      (cda:effectiveTime/cda:low/@nullFlavor or 
-                          string-length(cda:effectiveTime/cda:low/@value) = 8 or
-                          (string-length(cda:effectiveTime/cda:low/@value) > 8 and contains(translate(cda:effectiveTime/cda:low/@value,"+-","ZZ"),"Z"))) or
-                      (cda:time/cda:high/@nullFlavor or 
-                          string-length(cda:time/cda:high/@value) = 8 or
-                          (string-length(cda:time/cda:high/@value) > 8 and contains(translate(cda:time/cda:high/@value,"+-","ZZ"),"Z"))) or
-                      (cda:effectiveTime/cda:high/@nullFlavor or
-                          string-length(cda:effectiveTime/cda:high/@value) = 8 or 
-                          (string-length(cda:effectiveTime/cda:high/@value) > 8 and contains(translate(cda:effectiveTime/cda:high/@value,"+-","ZZ"),"Z"))) or
-                      (cda:time/cda:center/@nullFlavor or 
-                          string-length(cda:time/cda:center/@value) = 8 or
-                          (string-length(cda:time/cda:center/@value) > 8 and contains(translate(cda:time/cda:center/@value,"+-","ZZ"),"Z"))) or
-                      (cda:effectiveTime/cda:center/@nullFlavor or 
-                          string-length(cda:effectiveTime/cda:center/@value) = 8 or
-                          (string-length(cda:effectiveTime/cda:center/@value) > 8 and contains(translate(cda:effectiveTime/cda:center/@value,"+-","ZZ"),"Z"))) or
-                      (cda:time/cda:width/@nullFlavor or 
-                          string-length(cda:time/cda:width/@value) = 8 or 
-                          (string-length(cda:time/cda:width/@value) > 8 and contains(translate(cda:time/cda:width/@value,"+-","ZZ"),"Z"))) or
-                      (cda:effectiveTime/cda:width/@nullFlavor or 
-                          string-length(cda:effectiveTime/cda:width/@value) = 8 or
-                          (string-length(cda:effectiveTime/cda:width/@value) > 8 and contains(translate(cda:effectiveTime/cda:width/@value,"+-","ZZ"),"Z")))'>
-        Error CONF-PHMR-8: Times or time intervals found in the ClinicalDocument/effectiveTime, 
-        author/time, dataEnterer/time, legalAuthenticator/time, authenticator/time and 
-        encompassingEncounter/effectiveTime elements SHALL be precise to the day, 
-        SHALL include a time zone if more precise than to the day, and SHOULD be precise to the second.
-        </assert>
-    </rule>
-    
-    <rule context="*[self::cda:asOrganizationPartOf or
-                     self::cda:serviceEvent or 
-                     self::cda:asMaintainedEntity or 
-                     self::cda:relatedEntity or
-                     self::cda:serviceEvent or 
-                     self::cda:ClinicalDocument/cda:participant or
-                     self::cda:serviceEvent/cda:performer or
-                     self::cda:encounterParticipant]">
-        <assert test='(cda:effectiveTime/cda:low/@nullFlavor or string-length(cda:effectiveTime/cda:low/@value) >= 4) or
-                      (cda:time/@nullFlavor or string-length(cda:time/@value) >= 4) or
-                      (cda:effectiveTime/@nullFlavor or string-length(cda:effectiveTime/@value) >= 4) or
-                      (cda:time/cda:low/@nullFlavor or string-length(cda:time/cda:low/@value) >= 4) or
-                      (cda:time/cda:high/@nullFlavor or string-length(cda:time/cda:high/@value) >= 4) or
-                      (cda:effectiveTime/cda:high/@nullFlavor or string-length(cda:effectiveTime/cda:high/@value) >= 4) or 
-                      (cda:time/cda:center/@nullFlavor or string-length(cda:time/cda:center/@value) >= 4) or
-                      (cda:effectiveTime/cda:center/@nullFlavor or string-length(cda:effectiveTime/cda:center/@value) >= 4) or
-                      (cda:time/cda:width/@nullFlavor or string-length(cda:time/cda:width/@value) = 8) or 
-                      (cda:effectiveTime/cda:width/@nullFlavor or string-length(cda:effectiveTime/cda:width/@value) >= 4)'>
-        Error CONF-PHMR-9: Times or time intervals found in the asOrganizationPartOf/effectiveTime, 
-        asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime, serviceEvent/effectiveTime, 
-        ClinicalDocument/participant/time, serviceEvent/performer/time, and encounterParticipant/time 
-        elements SHALL be precise at least to the year, SHOULD be precise to the day, and MAY omit 
-        time zone.
-        </assert>
-    </rule>
-    
-    <rule context="*[self::cda:id]">
-        <assert test="matches(@root,'([0-2])(.([1-9][0-9]*|0))+') or 
-                      matches(@root,'([A-Fa-f0-9]{8})(\-[A-Fa-f0-9]{4}){3}(\-[A-Fa-f0-9]{12})')">
-        Error CONF-PHMR-13 or CONF-PHMR-14:
-        UUIDs SHALL be represented in the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX, 
-        where each X is a character from the set [A-Fa-f0-9].
-        OIDs SHALL be represented in dotted decimal notation, where each decimal number is either 0, 
-        or starts with a nonzero digit. More formally, an OID SHALL be in the form ([0-2])(.([1-9][0-9]*|0))+
-        </assert>
-    </rule> 
+    <assert test="cda:title">
+    Error: CONF-PHMR-15: ClinicalDocument/title SHALL be present.
+    </assert>
 
-    <rule context="*[self::cda:assignedEntity[parent::cda:dataEnterer]]">
-        <assert test="cda:assignedPerson">
-        Error CONF-PHMR-33: When dataEnterer is present, an assignedEntity/assignedPerson 
-        element SHALL be present.
-        </assert>
+    <assert test="cda:effectiveTime">
+    Error: CONF-PHMR-16: The ClinicalDocument/effectiveTime element SHALL be present.
+    </assert>
+
+    <assert test="cda:languageCode">
+    Error: CONF-PHMR-17: ClinicalDocument / languageCode element SHALL be present.
+    </assert>
+
+    <assert test="matches(cda:languageCode/@code,'(([a-z]{2})(\-[A-Z]{2})?)')">
+    Error: CONF-PHMR-18: ClincalDocument / languageCode SHALL be in the form nn, or nn-CC.
+    </assert>
+
+    <assert test="(not(cda:setId) and not(cda:versionNumber)) or (cda:setId and cda:versionNumber)">
+    Error: CONF-PHMR-21: Both ClinicalDocument/setId and ClinicalDocument/versionNumber SHALL
+    be present or both SHALL be absent.
+    </assert>
+
+    <assert test="not((cda:setId/@extension = cda:id/@extension)
+                                      and (cda:setId/@root = cda:id/@root))">
+    Error: CONF-PHMR-22: The @extension and/or @root of ClinicalDocument/setId and
+    ClinicalDocument/id SHALL be different when both are present.
+    </assert>
+
+    <assert test="not(cda:copyTime)">
+    Error: CONF-PHMR-23: A ClinicalDocument/copyTime element SHALL NOT be present.
+    </assert>
+
+    <assert test="cda:recordTarget/cda:patientRole">
+    Error: CONF-PHMR-24: At least one recordTarget/patientRole element SHALL be present.
+    </assert>
+
+    <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value and string-length(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value) >= 4">
+    Error: CONF-PHMR-25: A patient/birthTime element SHALL be present. The patient/birthTime
+    element SHALL be precise at least to the year.
+    </assert>
+
+    <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:administrativeGenderCode">
+    Error: CONF-PHMR-26: A patient/administrativeGenderCode element SHALL be present.
+    </assert>
+
+    <assert test="cda:author/cda:time">
+    Error: CONF-PHMR-29: The author/time element represents the start time of the author's
+    participation in the creation of the clinical document. The author/time element
+    SHALL be present.
+    </assert>
+
+    <assert test="cda:author/cda:assignedAuthor/cda:id">
+    Error: CONF-PHMR-30: The assignedAuthor/id element SHALL be present.
+    </assert>
+
+    <assert test="cda:author/cda:assignedAuthor/cda:assignedPerson or cda:author/cda:assignedAuthor/cda:assignedAuthoringDevice">
+    Error: CONF-PHMR-31: An assignedAuthor element SHALL contain at least one assignedPerson
+    or assignedAuthoringDevice elements.
+    </assert>
+
+    <assert test='not(cda:informant) or cda:informant[cda:assignedEntity/cda:assignedPerson or cda:relatedEntity/cda:relatedPerson]'>
+    Error: CONF-PHMR-36: When informant is present, an assignedEntity/assignedPerson
+    or relatedEntity/relatedPerson element SHALL be present.
+    </assert>
+
+    <assert test='not(cda:informationRecipient) or cda:informationRecipient[cda:intendedRecipient/cda:informationRecipient or 
+                                                                            cda:intendedRecipient/cda:receivedOrganization]'>
+    Error: CONF-PHMR-37: When informationRecipient is used, at least one
+    informationRecipient/intendedRecipient/informationRecipient or
+    informationRecipient/intendedRecipient/receivedOrganization SHALL be
+    present.
+    </assert>
+
+    <assert test='not(cda:legalAuthenticator) or cda:legalAuthenticator[cda:assignedEntity/cda:assignedPerson or
+                                                                        cda:assignedEntity/cda:representedOrganization]'>
+    Error: CONF-PHMR-38: The assignedEntity/assignedPerson and/or
+    assignedEntity/representedOrganization element SHALL be present in
+    legalAuthenticator.
+    </assert>
+
+    <assert test='not(cda:authenticator) or cda:authenticator/cda:assignedEntity/cda:assignedPerson'>
+    Error: CONF-PHMR-39: The assignedEntity/assignedPerson element SHALL be present in an authenticator
+    element.
+    </assert>
+
+    <assert test='cda:documentationOf/cda:serviceEvent'>
+    Error: CONF-PHMR-40: The documentationOf/serviceEvent element SHALL be present.
+    </assert>
+
+    <assert test='cda:documentationOf/cda:serviceEvent/@classCode="MPROT"'>
+    Error: CONF-PHMR-41: The value for
+    ClinicalDocument/documentationOf/serviceEvent/@classCode SHALL be
+    MPROT (Monitoring Program) 2.16.840.1.113883.5.6 ActClass STATIC.
+    </assert>
+
+    <assert test='cda:documentationOf/cda:serviceEvent/cda:effectiveTime'>
+    Error: CONF-PHMR-42: A serviceEvent/effectiveTime element SHALL be present, and
+    SHALL reflect the period of time for which the patient's health was monitored.
+    </assert>
+
+    <assert test='cda:component/cda:structuredBody'>
+    Error: CONF-PHMR-43: A Personal Healthcare Monitoring Report SHALL have a
+    structuredBody element. The content of this element makes up the human-
+    readable text of the document. This information SHALL be organized into sections
+    and MAY have subsections.
+    </assert>
+
+    <assert test='//cda:templateId/@root="2.16.840.1.113883.10.20.9.1"'>
+    Error: CONF-PHMR-47: A personal healthcare monitoring report SHALL contain a Medical
+    Equipment section.
+    </assert>
+
+    <assert test='//cda:templateId/@root="2.16.840.1.113883.10.20.9.2" or
+                  //cda:templateId/@root="2.16.840.1.113883.10.20.9.14"'>
+    Error: CONF-PHMR-48: A personal healthcare monitoring report SHALL contain either a
+    Vital Signs section or Results section, and MAY contain both.
+    </assert>
+
+
     </rule>
 
-    <rule context="*[self::cda:assignedEntity[parent::cda:informant]]">
-        <assert test="cda:assignedPerson or cda:relatedPerson">
-        Error CONF-PHMR-36: When informant is present, an assignedEntity/assignedPerson or 
-        relatedEntity/relatedPerson element SHALL be present.
-        </assert>
+    <rule context="*[self::cda:patient or self::cda:guardianPerson or self::cda:assignedPerson or
+                     self::cda:maintainingPerson or self::cda:relatedPerson or self::cda:associatedPerson]">
+    <assert test="cda:name">
+    Error: CONF-PHMR-4: All patient guardianPerson, assignedPerson, maintainingPerson, relatedPerson,
+    intendedRecipient/informationRecipient, associatedPerson, and relatedSubject/subject
+    elements SHALL have a name.
+    </assert>
     </rule>
 
-    <!-- TODO: add custodian constraints -->
-    
-    <rule context="*[self::cda:intendedRecipient[parent::cda:informationRecipient]]">
-        <assert test="cda:informationRecipient or cda:receivedOrganization">
-        Error CONF-PHMR-37: The ClinicalDocument/informationRecipient element MAY be present. When informationRecipient 
-        is used, at least one informationRecipient/intendedRecipient/informationRecipient or 
-        informationRecipient/intendedRecipient/receivedOrganization SHALL be present.
-        </assert>
+    <rule context="*[self::cda:intendedRecipient/cda:informationRecipient or self::cda:relatedSubject/cda:subject]">
+    <assert test="cda:informationRecipient/cda:name or cda:subject/cda:name">
+    Error: CONF-PHMR-4: All patient guardianPerson, assignedPerson, maintainingPerson, relatedPerson,
+    intendedRecipient/informationRecipient, associatedPerson, and relatedSubject/subject
+    elements SHALL have a name.
+    </assert>
     </rule>
-    
-    <!-- TODO -->
-    <!-- CONF-PHMR-38 -->
-    <!-- CONF-PHMR-39 -->
-    <!-- CONF-PHMR-40 -->
-    <!-- CONF-PHMR-41 -->
-    <!-- CONF-PHMR-42 -->
-    
-</pattern>
 
-<!-- WARNINGS -->
-<pattern id="p-2.16.840.1.113883.10.20.9-warning" see='#p-2.16.840.1.113883.10.20.9-warnings'>
-    <title>PHMR Templates Root - warnings validation phase</title>
-    <rule context="*[self::cda:patientRole or 
-                     self::cda:assignedAuthor or 
-                     self::cda:associatedEntity]">
-        <assert test="(cda:addr/@nullFlavor or cda:addr) and 
-                      (cda:telecom/@nullFlavor or cda:telecom)">
-        Warning CONF-PHMR-5: All patientRole, assignedAuthor, and associatedEntity elements SHOULD 
-        have addr and telecom elements.
-        </assert>
+    <rule context="*[self::cda:guardianOrganization or self::cda:providerOrganization or self::cda:wholeOrganization or self::cda:representedOrganization or self::cda:representedCustodianOrganization or self::cda:receivedOrganization or self::cda:scopingOrganization or self::cda:serviceProviderOrganization]">
+    <assert test="cda:name and cda:addr and cda:telecom">
+    Error: CONF-PHMR-7: All guardianOrganization, providerOrganization, wholeOrganization,
+    representedOrganization, representedCustodianOrganization, receivedOrganization,
+    scopingOrganization and serviceProviderOrganization elements SHALL have name,
+    addr and telecom elements.
+    </assert>
     </rule>
-    
-    <rule context="*[self::cda:guardian or 
-                     self::cda:dataEnterer/cda:assignedEntity or 
-                     self::cda:relatedEntity or
-                     self::cda:intendedRecipient or
-                     self::cda:relatedSubject or
-                     self::cda:participantRole]">
-        <assert test="(cda:addr/@nullFlavor or cda:addr) and 
-                      (cda:telecom/@nullFlavor or cda:telecom)">
-        Warning CONF-PHMR-6: All guardian, dataEnterer/assignedEntity, relatedEntity, intendedRecipient, relatedSubject, and 
-        participantRole elements SHOULD have addr and telecom elements.
-        </assert>
+
+    <rule context="*[self::cda:ClinicalDocument or self::cda:author or self::cda:dataEnterer or self::cda:encompassingEncounter]">
+    <assert test="(cda:time/@nullFlavor or string-length(cda:time/@value) >= 8) or
+                  (cda:effectiveTime/@nullFlavor or string-length(cda:effectiveTime/@value) >= 8) or
+                  (cda:time/cda:low/@nullFlavor or string-length(cda:time/cda:low/@value) >= 8) or
+                  (cda:effectiveTime/cda:low/@nullFlavor or string-length(cda:effectiveTime/cda:low/@value) >= 8) or
+                  (cda:time/cda:high/@nullFlavor or string-length(cda:time/cda:high/@value) >= 8) or
+                  (cda:effectiveTime/cda:high/@nullFlavor or string-length(cda:effectiveTime/cda:high/@value) >= 8) or
+                  (cda:time/cda:center/@nullFlavor or string-length(cda:time/cda:center/@value) >= 8) or
+                  (cda:effectiveTime/cda:center/@nullFlavor or string-length(cda:effectiveTime/cda:center/@value) >= 8) or
+                  (cda:time/cda:width/@nullFlavor or string-length(cda:time/cda:width/@value) >= 8) or
+                  (cda:effectiveTime/cda:width/@nullFlavor or string-length(cda:effectiveTime/cda:width/@value) >= 8)">
+    Error: CONF-PHMR-8: Times or time intervals found in the ClinicalDocument/effectiveTime,
+    author/time, dataEnterer/time, legalAuthenticator/time, authenticator/time and
+    encompassingEncounter/effectiveTime elements SHALL be precise to the day, and SHALL
+    include a time zone if more precise than to the day.
+    </assert>
     </rule>
-    
+
+    <rule context="*[self::cda:authenticator]">
+    <assert test="(cda:time/@nullFlavor or string-length(cda:time/@value) >= 8) or
+                  (cda:effectiveTime/@nullFlavor or string-length(cda:effectiveTime/@value) >= 8) or
+                  (cda:time/cda:low/@nullFlavor or string-length(cda:time/cda:low/@value) >= 8) or
+                  (cda:effectiveTime/cda:low/@nullFlavor or string-length(cda:effectiveTime/cda:low/@value) >= 8) or
+                  (cda:time/cda:high/@nullFlavor or string-length(cda:time/cda:high/@value) >= 8) or
+                  (cda:effectiveTime/cda:high/@nullFlavor or string-length(cda:effectiveTime/cda:high/@value) >= 8) or
+                  (cda:time/cda:center/@nullFlavor or string-length(cda:time/cda:center/@value) >= 8) or
+                  (cda:effectiveTime/cda:center/@nullFlavor or string-length(cda:effectiveTime/cda:center/@value) >= 8) or
+                  (cda:time/cda:width/@nullFlavor or string-length(cda:time/cda:width/@value) >= 8) or
+                  (cda:effectiveTime/cda:width/@nullFlavor or string-length(cda:effectiveTime/cda:width/@value) >= 8)">
+    Error: CONF-PHMR-8: Times or time intervals found in the ClinicalDocument/effectiveTime,
+    author/time, dataEnterer/time, legalAuthenticator/time, authenticator/time and
+    encompassingEncounter/effectiveTime elements SHALL be precise to the day, and SHALL
+    include a time zone if more precise than to the day.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:asOrganizationPartOf or self::cda:asMaintainedEntity or self::cda:relatedEntity or self::cda:serviceEvent or self::cda:serviceEvent/cda:performer or self::cda:encounterParticipant]">
+    <assert test="(not(cda:time/@value) or string-length(cda:time/@value) >= 4) and
+                  (not(cda:effectiveTime/@value) or string-length(cda:effectiveTime/@value) >= 4) and
+                  (not(cda:effectiveTime/cda:low/@value) or string-length(cda:effectiveTime/cda:low/@value) >= 4) and
+                  (not(cda:effectiveTime/cda:high/@value) or string-length(cda:effectiveTime/cda:high/@value) >= 4) and
+                  (not(cda:effectiveTime/cda:center/@value) or string-length(cda:effectiveTime/cda:center/@value) >= 4) and
+                  (not(cda:effectiveTime/cda:width/@value) or string-length(cda:effectiveTime/cda:width/@value) >= 4)">
+    Error: CONF-PHMR-8: Times or time intervals found in the asOrganizationPartOf/effectiveTime,
+    asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime, serviceEvent/effectiveTime,
+    ClinicalDocument/participant/time, serviceEvent/performer/time and encounterParticipant/time
+    SHALL be precise at least to the year.
+    </assert>
+    </rule>
+
+    <rule context="/cda:ClinicalDocument/cda:participant/cda:time">
+    <assert test="not(./@value) or string-length(./@value) >= 4">
+    Error: CONF-PHMR-8: Times or time intervals found in the asOrganizationPartOf/effectiveTime,
+    asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime, serviceEvent/effectiveTime,
+    ClinicalDocument/participant/time, serviceEvent/performer/time and encounterParticipant/time
+    SHALL be precise at least to the year.
+    </assert>
+    </rule>
+
+    <rule context="//*[self::cda:telecom]">
+    <assert test="not(starts-with(@value,'tel:')) or matches(@value,'tel:\+?[-0-9().]+')">
+    Error: CONF-PHMR-10: Telephone numbers SHALL match the regular expression pattern tel:\+?[-0-9().]+
+    </assert>
+    <assert test="not(starts-with(@value,'tel:')) or matches(@value,'.\d+.' )">
+    Error: CONF-PHMR-11: At least one dialing digit SHALL be present in the phone number after visual
+    separators are removed.
+    </assert>
+    </rule>
+
+    <rule context="*[cda:dataEnterer]">
+    <assert test="cda:assignedEntity/cda:assignedPerson">
+    Error: CONF-PHMR-33: When dataEnterer is present, an assignedEntity/assignedPerson element SHALL
+    be present.
+    </assert>
+    </rule>
+
+    <rule context="//cda:section">
+    <assert test='cda:code'>
+    Error: CONF-PHMR-45: All section elements in the body of the document SHALL have a
+    code element.
+    </assert>
+
+    <assert test='string-length(cda:text) > 0 or .//cda:section'>
+    Error: CONF-PHMR-46: All section elements in the body of the document SHALL have some
+    nonblank text or one or more subsections, even if the purpose of the text is only to
+    indicate that information is unknown.
+    </assert>
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9-warnings">
+    <title>HL7 PHMR Document - warning validation phase</title>
+
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9"]'>
-    
-        <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:administrativeGenderCode/@codeSystem='2.16.840.1.113883.5.1'">
-        Warning CONF-PHMR-26: A patient/administrativeGenderCode element SHALL be present. Values for administrativeGenderCode SHOULD 
-        be drawn from the HL7 AdministrativeGender vocabulary.    
-        </assert>
-        
-        <!-- TODO: CONF-PHMR-27: The guardian element SHOULD be present when the patient is a minor child. -->
-        
-        <assert test="count(cda:author) >= 1 and cda:author/cda:assignedAuthor/cda:assignedPerson">
-        Warning CONF-PHMR-32: A Personal Healthcare Monitoring Report SHOULD contain one or more 
-        ClinicalDocument/author elements where assignedAuthor/assignedPerson is present, representing a 
-        person (such as a disease management professional) who finalized the document.
-        </assert>  
+
+    <assert test="string-length(cda:effectiveTime/@value) >= 14">
+    Warning: CONF-PHMR-16: The ClinicalDocument/effectiveTime element SHOULD be precise to the second
+    </assert>
+
+    <assert test="string-length(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value) >= 8">
+    Warning: CONF-PHMR-25: A patient/birthTime element SHOULD be precise at least to the day.
+    </assert>
+
+    <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:administrativeGenderCode[(@code='M' or @code='F' or @code='UN') and @codeSystem='2.16.840.1.113883.5.1']">
+    Warning: CONF-PHMR-26: Values for administrativeGenderCode SHOULD be drawn from the HL7
+    AdministrativeGender vocabulary.
+    </assert>
+
     </rule>
-</pattern>
 
-<pattern id="p-2.16.840.1.113883.10.20.9-note">
-     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9"]'>
-        <assert test="cda:templateId/@root='2.16.840.1.113883.10.20.3'">    
-        Note CONF-PHMR-2: U.S. realm implementations MAY also include an additional templateId where 
-        @root is 2.16.840.1.113883.10.20.3, indicating conformance to the general header constraints 
-        defined in the History and Physical Implementation Guide
-        </assert>
-        
-        <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:providerOrganization">        
-        Note CONF-PHMR-28: The providerOrganization element MAY be present.
-        </assert>
+    <rule context="*[self::cda:ClinicalDocument or self::cda:author or self::cda:dataEnterer or self::cda:legalAuthenticator or self::cda:authenticator or self::cda:encompassingEncounter]">
+    <assert test="(cda:time/@nullFlavor or string-length(cda:time/@value) >= 14) or
+                  (cda:effectiveTime/@nullFlavor or string-length(cda:effectiveTime/@value) >= 14) or
+                  (cda:time/cda:low/@nullFlavor or string-length(cda:time/cda:low/@value) >= 14) or
+                  (cda:effectiveTime/cda:low/@nullFlavor or string-length(cda:effectiveTime/cda:low/@value) >= 14) or
+                  (cda:time/cda:high/@nullFlavor or string-length(cda:time/cda:high/@value) >= 14) or
+                  (cda:effectiveTime/cda:high/@nullFlavor or string-length(cda:effectiveTime/cda:high/@value) >= 14) or
+                  (cda:time/cda:center/@nullFlavor or string-length(cda:time/cda:center/@value) >= 14) or
+                  (cda:effectiveTime/cda:center/@nullFlavor or string-length(cda:effectiveTime/cda:center/@value) >= 14) or
+                  (cda:time/cda:width/@nullFlavor or string-length(cda:time/cda:width/@value) >= 14) or
+                  (cda:effectiveTime/cda:width/@nullFlavor or string-length(cda:effectiveTime/cda:width/@value) >= 14)">
+    Warning: CONF-PHMR-8: Times or time intervals found in the ClinicalDocument/effectiveTime,
+    author/time, dataEnterer/time, legalAuthenticator/time, authenticator/time and
+    encompassingEncounter/effectiveTime elements SHOULD be precise to the second.
+    </assert>
+    </rule>
 
-        <assert test="cda:informant">        
-        Note CONF-PHMR-35:The informant element MAY be present.
-        </assert>  
-        
-        <assert test="cda:informationRecipient">
-        Note CONF-PHMR-37: The ClinicalDocument/informationRecipient element MAY be present. When informationRecipient 
-        is used, at least one informationRecipient/intendedRecipient/informationRecipient or 
-        informationRecipient/intendedRecipient/receivedOrganization SHALL be present.
-        </assert>    
-	</rule>
-</pattern>
+    <rule context="*[self::cda:high[ancestor::cda:effectiveTime[parent::cda:asOrganizationPartOf]] or self::cda:high[ancestor::cda:effectiveTime[parent::cda:asMaintainedEntity]] or self::cda:high[ancestor::cda:effectiveTime[parent::cda:relatedEntity]] or self::cda:high[ancestor::cda:effectiveTime[parent::cda:serviceEvent]] or self::cda:high[ancestor::cda:time[parent::cda:encounterParticipant]]]">
+    <assert test="not(./@value) or string-length(./@value) >= 8">
+    Warning: CONF-PHMR-9: Times or time intervals found in the asOrganizationPartOf/effectiveTime,
+    asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime,
+    ClinicalDocument/participant/time, serviceEvent/effectiveTime, serviceEvent/performer/time
+    and encounterParticipant/time ... SHOULD be precise to the day.
+    </assert>
+    </rule>
+
+    <rule context="*[self::cda:low[ancestor::cda:effectiveTime[parent::cda:asOrganizationPartOf]] or self::cda:low[ancestor::cda:effectiveTime[parent::cda:asMaintainedEntity]] or self::cda:low[ancestor::cda:effectiveTime[parent::cda:relatedEntity]] or self::cda:low[ancestor::cda:effectiveTime[parent::cda:serviceEvent]] or self::cda:low[ancestor::cda:time[parent::cda:encounterParticipant]]]">
+    <assert test="not(./@value) or string-length(./@value) >= 8">
+    Warning: CONF-PHMR-9: Times or time intervals found in the asOrganizationPartOf/effectiveTime,
+    asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime,
+    ClinicalDocument/participant/time, serviceEvent/effectiveTime, serviceEvent/performer/time
+    and encounterParticipant/time ... SHOULD be precise to the day.
+    </assert>
+    </rule>
+
+
+    <rule context="/cda:ClinicalDocument/cda:participant/cda:time">
+    <assert test="not(./@value) or string-length(./@value) >= 8">
+    Warning: CONF-PHMR-9: Times or time intervals found in the asOrganizationPartOf/effectiveTime,
+    asMaintainedEntity/effectiveTime, relatedEntity/effectiveTime,
+    ClinicalDocument/participant/time, serviceEvent/effectiveTime, serviceEvent/performer/time
+    and encounterParticipant/time ... SHOULD be precise to the day.
+    </assert>
+    </rule>
+
+
+  </pattern>
+
+  <!-- notes -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9-notes">
+
+    <title>HL7 PHMR Document - notes validation phase</title>
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9"]'>
+    <assert test='cda:informant'>
+    Note: CONF-PHMR-35: The informant element MAY be present.
+    </assert>
+
+    <assert test='cda:informationRecipient'>
+    Note: CONF-PHMR-37: The ClinicalDocument/informationRecipient element MAY be
+    present.
+    </assert>
+
+    <assert test='cda:authenticator'>
+    Note: CONF-PHMR-39: An authenticator MAY be present.
+    </assert>
+
+    </rule>
+
+    <rule context="*[cda:patientRole]">
+    <assert test='cda:providerOrganization'>
+    Note: CONF-PHMR-28: The providerOrganization element MAY be present.
+    </assert>
+    </rule>
+
+    <rule context="*[cda:dataEnterer]">
+    <assert test="cda:time">
+    Note: CONF-PHMR-34: The time element MAY be present. If present, it represents the starting
+    time of entry of the data.
+    </assert>
+    </rule>
+
+  </pattern>
+

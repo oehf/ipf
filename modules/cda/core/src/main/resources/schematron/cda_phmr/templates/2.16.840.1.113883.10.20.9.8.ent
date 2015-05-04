@@ -1,40 +1,58 @@
-<!-- HL7 PHMR Rel. 1, Nov 2008 Templates Root: 2.16.840.1.113883.10.20.9 Capitel 3.5.9 Numeric Observation Contents -->
+<!--  HL7 PHMR Numeric Observation: 2.16.840.1.113883.10.20.9.8 -->
 
-<!-- ERRORS -->
-<pattern id='p-2.16.840.1.113883.10.20.9.8-errors' see='#p-2.16.840.1.113883.10.20.9.8-errors'>
-    <title>PHMR Templates Product Instance - errors validation phase</title>
-    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.8"]'>
-    
-        <assert test="self::cda:observation and self::cda:observation[@moodCode='EVN'][@classCode='OBS']">
-        Error CONF-PHMR-102: A Numeric Observation SHALL be represented with an observation element where 
-        @classCode is OBS and @moodCode is EVN.
-        </assert>        
-        
-        <assert test="cda:code and cda:code[@codeSystem='2.16.840.1.113883.6.96' or @codeSystem='2.16.840.1.113883.6.24']">
-        Error CONF-PHMR-105:A code element SHALL be present where @codeSystem is 2.16.840.1.113883.6.96 
-        SNOMED CT (DYNAMIC) or 2.16.840.1.113883.6.24 MDC (DYNAMIC).
-        </assert>
-        
-        <assert test="cda:value and cda:value[@xsi:type='PQ']">
-        Error CCONF-PHMR-106: A value element SHALL be present where @xsi:type is PQ (physical quantity).
-        </assert>
-        
-    </rule>
-</pattern>
+<!-- errors -->
 
-<!-- WARNINGS -->
-<pattern id="p-2.16.840.1.113883.10.20.9.8-warning" see='#p-2.16.840.1.113883.10.20.9.8-warning'>
-    <title>PHMR Templates Product Instance - warning validation phase</title>
+  <pattern id="p-2.16.840.1.113883.10.20.9.8-errors">
+    <title>HL7 PHMR Numeric Observation - errors validation phase</title>
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.8"]'>
-    
-        <assert test="parent::cda:entry">
-        Error CONF-PHMR-54: One or more Numeric Observations (templateId 2.16.840.1.113883.10.20.9.8) SHOULD 
-        be present inside entry elements.
-        </assert>
-        
-        <assert test="cda:scopingEntity/cda:desc">
-        Warning CONF-PHMR-82: A scopingEntity/desc element SHOULD be present containing the manufacturer's name.
-        </assert>
-        
+
+    <assert test='self::cda:observation[@classCode="OBS" and @moodCode="EVN"]'>
+    Error: CONF-PHMR-102: A Numeric Observation SHALL be represented with an observation
+    element where @classCode is OBS and @moodCode is EVN.
+    </assert>
+
+    <assert test='cda:code[@codeSystem="2.16.840.1.113883.6.96" or @codeSystem="2.16.840.1.113883.6.24"]'>
+    Error: CONF-PHMR-105: A code element SHALL be present where @codeSystem is
+    2.16.840.1.113883.6.96 SNOMED CT (DYNAMIC) or 2.16.840.1.113883.6.24
+    MDC (DYNAMIC).
+    </assert>
+
+    <assert test='cda:value[@xsi:type="PQ" and @unit]'>
+    Error: CONF-PHMR-106: A value element SHALL be present where @xsi:type is PQ (physical
+    quantity) and the unit of measure is expressed using a valid Unified Code for Units
+    of Measure (UCUM) expression.
+    </assert>
+
     </rule>
-</pattern>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.8-warnings">
+    <title>HL7 PHMR Numeric Observation - warning validation phase</title>
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.8"]'>
+
+    <assert test='cda:participant//cda:templateId[@root="2.16.840.1.113883.10.20.9.9"]'>
+    Warning: CONF-PHMR-107: A participant element SHOULD be present conforming to the
+    constraints of a PHMR Product Instance Reference.
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- notes -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.8-notes">
+
+    <title>HL7 PHMR Numeric Observation - notes validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.8"]'>
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

@@ -1,27 +1,66 @@
-<!-- HL7 PHMR Rel. 1, Nov 2008 Templates Root: 2.16.840.1.113883.10.20.9 Capitel 3.3.3 Results Contents -->
+<!--  HL7 PHMR Results Section: 2.16.840.1.113883.10.20.9.14 -->
 
-<!-- ERRORS -->
-<pattern id='p-2.16.840.1.113883.10.20.9.14-errors' see='#p-2.16.840.1.113883.10.20.9.14-errors'>
-    <title>PHMR Templates Results - errors validation phase</title>
-    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.14"]'>
-    
-        <assert test="not(count(descendant::*[cda:templateId/@root='2.16.840.1.113883.10.20.9.8']) = 0 and
-                      cda:text and string-length(normalize-space(cda:text/text())) = 0)">
-        Error CONF-PHMR-60: If no results are recorded, this section SHALL contain a text element noting this fact.
-        </assert>
-        
-    </rule>
-</pattern>
+<!-- errors -->
 
-<!-- WARNINGS -->
-<pattern id="p-2.16.840.1.113883.10.20.9.14-warning" see='#p-2.16.840.1.113883.10.20.9.4-warning'>
-    <title>PHMR Templates Results - warning validation phase</title>
+  <pattern id="p-2.16.840.1.113883.10.20.9.14-errors">
+    <title>HL7 PHMR Results Section - errors validation phase</title>
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.14"]'>
-    
-        <assert test="count(descendant::*[cda:templateId/@root='2.16.840.1.113883.10.20.9.8']) >=1">
-        Warning CONF-PHMR-58: One or more Numeric Observations (templateId 2.16.840.1.113883.10.20.9.8)
-        SHOULD be present inside entry elements.
-        </assert>
-        
+
+       <assert test='self::cda:section'>
+       Error: A Results Section is a section element in the HL7 V3 namespace.  See Section 3.2.
+       </assert>
+
+       <assert test="cda:code[@code='30954-2'][@codeSystem='2.16.840.1.113883.6.1']">
+       Error: A Results Section SHALL contain the LOINC code 30954-2.  See Section 3.2, Section 3.3.3, and Table 2.
+       </assert>
+
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.1.14"'>
+       Error: CONF-PHMR-57: A Results section SHALL contain two templateIds. CCD
+       templateId 2.16.840.1.113883.10.20.1.14 SHALL be present and the section
+       SHALL conform to all the constraints specified in CCD for that template. An
+       additional templateId SHALL be present where the value of @root is
+       2.16.840.1.113883.10.20.9.14, indicating conformance to the constraints
+       specified in this DSTU.
+       </assert>
+
+       <assert test='(.//cda:templateId/@root="2.16.840.1.113883.10.20.9.8") or 
+                     (.//cda:templateId/@root="2.16.840.1.113883.10.20.9.12") or
+                     cda:text'>
+       Error: CONF-PHMR-60: If no results are recorded, this section SHALL contain a text
+       element noting this fact.
+       </assert>
+
     </rule>
-</pattern>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.14-warnings">
+    <title>HL7 PHMR Results Section - warning validation phase</title>
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.14"]'>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.10.20.9.8"'>
+       Warning: CONF-PHMR-58: One or more Numeric Organizers (templateId
+       2.16.840.1.113883.10.20.9.8) SHOULD be present inside entry elements.
+       </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.14-notes">
+    <title>HL7 PHMR Results Section - notes validation phase</title>
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.14"]'>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.10.20.9.12"'>
+       Note: CONF-PHMR-59: One or more Waveform Series Organizers (templateId
+       2.16.840.1.113883.10.20.9.12) MAY be present inside entry elements.
+       </assert>
+
+    </rule>
+
+  </pattern>
+

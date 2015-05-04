@@ -1,21 +1,61 @@
-<!-- HL7 PHMR Rel. 1, Nov 2008 Templates Root: 2.16.840.1.113883.10.20.9 Capitel 3.3.1 Medical Equipment Contents -->
+<!--  HL7 PHMR Medical Equipment: 2.16.840.1.113883.10.20.9.1 -->
 
-<!-- ERRORS -->
-<pattern id='p-2.16.840.1.113883.10.20.9.1-errors' see='#p-2.16.840.1.113883.10.20.9.1-errors'>
-    <title>PHMR Templates Medical Equipment - errors validation phase</title>
+<!-- errors -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.1-errors">
+    <title>HL7 PHMR Medical Equipment - errors validation phase</title>
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.1"]'>
 
-    </rule>
-</pattern>
+       <assert test='self::cda:section'>
+       Error: A Medical Equipment Section is a section element in the HL7 V3 namespace.  See Section 3.2.
+       </assert>
 
-<!-- WARNINGS -->
-<pattern id="p-2.16.840.1.113883.10.20.9.1-warning" see='#p-2.16.840.1.113883.10.20.9.1-warning'>
-    <title>PHMR Templates Medical Equipment - warning validation phase</title>
-    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.1"]'>
-        
-        <assert test="count(descendant::*[cda:templateId/@root='2.16.840.1.113883.10.20.9.4']) >= 1">
-        Warning CONF-PHMR-50: One or more Device Definition Organizers (templateId 2.16.840.1.113883.10.20.9.4) SHOULD be present.
-        </assert>
-        
+       <assert test="cda:code[@code='46264-8'][@codeSystem='2.16.840.1.113883.6.1']">
+       Error: A Medical Equiment Section SHALL contain the LOINC code 46264-8.  See Section 3.2, Section 3.3, and Table 2.
+       </assert>
+
+       <assert test='cda:templateId/@root="2.16.840.1.113883.10.20.1.7"'>
+       Error: CONF-PHMR-49: A Medical Equipment section SHALL contain two templateIds. CCD
+       templateId 2.16.840.1.113883.10.20.1.7 SHALL be present and the section
+       SHALL conform to all the constraints specified in CCD for that template. An
+       additional templateId SHALL be present where the value of @root is
+       2.16.840.1.113883.10.20.9.1, indicating conformance to the constraints
+       specified in this DSTU.
+       </assert>
+
+       <assert test='(.//cda:templateId/@root="2.16.840.1.113883.10.20.9.4") or cda:text'>
+       Error: CONF-PHMR-51: If no medical devices are defined, this section SHALL contain a text
+       element noting this fact.  (See also CONF-PHMR-50.)
+       </assert>
+
     </rule>
-</pattern>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.1-warnings">
+    <title>HL7 PHMR Medical Equipment - warning validation phase</title>
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.1"]'>
+       <assert test='.//cda:templateId/@root="2.16.840.1.113883.10.20.9.4"'>
+       Warning: CONF-PHMR-50: One or more Device Definition Organizers (templateId
+       2.16.840.1.113883.10.20.9.4) (see section 3.5.2) SHOULD be present.
+       </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.1-notes">
+    <title>HL7 PHMR Medical Equipment - notes validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.1"]'>
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

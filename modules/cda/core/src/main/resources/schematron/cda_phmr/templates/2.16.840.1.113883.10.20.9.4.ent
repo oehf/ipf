@@ -1,26 +1,67 @@
-<!-- HL7 PHMR Rel. 1, Nov 2008 Templates Root: 2.16.840.1.113883.10.20.9 Capitel 3.5.2 Device Definition Organizer Contents -->
+<!--  HL7 PHMR Device Definition Organizer: 2.16.840.1.113883.10.20.9.4 -->
 
-<!-- ERRORS -->
-<pattern id='p-2.16.840.1.113883.10.20.9.4-errors' see='#p-2.16.840.1.113883.10.20.9.4-errors'>
-    <title>PHMR Templates Device Definition Organizer - errors validation phase</title>
-    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.4"]'>
-    
-        <assert test="self::cda:organizer and self::cda:organizer[@moodCode='EVN'][@classCode='CLUSTER']">
-        Error CONF-PHMR-69: A Device Definition Organizer SHALL be represented with an organizer element where @classCode is CLUSTER and @moodCode is EVN.
-        </assert>
-        
-        <assert test="cda:participant and cda:participant[@typeCode='SBJ'] and 
-                      count(descendant::*[cda:templateId/@root='2.16.840.1.113883.10.20.9.9']) = 1">
-        Error CONF-PHMR-71: A participant element where @typeCode is SBJ SHALL be present. It SHALL contain a 
-        single PHMR Product Instance template (templateId 2.16.840.1.113883.10.20.9.9).
-        </assert>
-    </rule>
-</pattern>
+<!-- errors -->
 
-<!-- WARNINGS -->
-<pattern id="p-2.16.840.1.113883.10.20.9.4-warning" see='#p-2.16.840.1.113883.10.20.9.4-warning'>
-    <title>PHMR Templates Device Definition Organizer - warning validation phase</title>
+  <pattern id="p-2.16.840.1.113883.10.20.9.4-errors">
+    <title>HL7 PHMR Device Definition Organizer - errors validation phase</title>
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.4"]'>
 
+    <assert test='self::cda:organizer[@classCode="CLUSTER"][@moodCode="EVN"]'>
+    Error: CONF-PHMR-69: A Device Definition Organizer SHALL be represented with an
+    organizer element where @classCode is CLUSTER and @moodCode is EVN.
+    </assert>
+
+    <assert test='cda:participant[@typeCode="SBJ"]//cda:templateId[@root="2.16.840.1.113883.10.20.9.9"]'>
+    Error: CONF-PHMR-71: A participant element where @typeCode is SBJ SHALL be present.
+    It SHALL contain a single PHMR Product Instance template (templateId
+    2.16.840.1.113883.10.20.9.9).
+    </assert>
+
     </rule>
-</pattern>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.4-warnings">
+    <title>HL7 PHMR Device Definition Organizer - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.4"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.4-notes">
+    <title>HL7 PHMR Device Definition Organizer - notes validation phase</title>
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.4"]'>
+
+    <assert test='.//cda:templateId[@root="2.16.840.1.113883.10.20.9.10"]'>
+    Note: CONF-PHMR-72: A single Sampling Frequency Observation (templateId
+    2.16.840.1.113883.10.20.9.10) MAY be present inside a component element.
+    </assert>
+
+    <assert test='.//cda:templateId[@root="2.16.840.1.113883.10.20.9.5"]'>
+    Note: CONF-PHMR-73: A single Device Measurement Range Observation (templateId
+    2.16.840.1.113883.10.20.9.5) MAY be present inside a component element.
+    </assert>
+
+    <assert test='.//cda:templateId[@root="2.16.840.1.113883.10.20.9.6"]'>
+    Note: CONF-PHMR-74: A single Device Resolution Observation (templateId
+    2.16.840.1.113883.10.20.9.6) MAY be present inside a component element.
+    </assert>
+
+    <assert test='.//cda:templateId[@root="2.16.840.1.113883.10.20.9.3"]'>
+    Note: CONF-PHMR-75: A single Device Accuracy Observation (templateId
+    2.16.840.1.113883.10.20.9.3) MAY be present inside a component element.
+    </assert>
+
+
+    </rule>
+  </pattern>
+

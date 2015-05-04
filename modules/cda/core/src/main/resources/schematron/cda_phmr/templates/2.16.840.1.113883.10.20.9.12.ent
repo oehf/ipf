@@ -1,0 +1,71 @@
+<!--  HL7 PHMR Waveform Series Observation: 2.16.840.1.113883.10.20.9.12 -->
+
+<!-- errors -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.12-errors">
+    <title>HL7 PHMR Waveform Series Observation - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.12"]'>
+
+    <assert test='self::cda:observation[@classCode="OBSSER" and @moodCode="EVN"]'>
+    Error: CONF-PHMR-108: A Waveform Observation SHALL be represented with an
+    observation element where @classCode is OBSSER and @moodCode is EVN.
+    </assert>
+
+    <assert test='cda:code[@codeSystem="2.16.840.1.113883.6.96"]'>
+    Error: CONF-PHMR-110: A code element SHALL be present where @code is either 364681001
+    Waveform-observable or from the Waveform-observable hierarchy in SNOMED CT®,
+    and @codeSystem is 2.16.840.1.113883.6.96 SNOMED CT (DYNAMIC).
+    </assert>
+
+    <assert test='cda:effectiveTime[cda:high and cda:low]'>
+    Error: CONF-PHMR-111: An effectiveTime element SHALL be present containing low and
+    high elements, where low represents the time of the first data point on the
+    waveform, and high represents the time of the last data point.
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.12-warnings">
+    <title>HL7 PHMR Waveform Series Observation - warning validation phase</title>
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.12"]'>
+
+    <assert test='cda:participant//cda:templateId[@root="2.16.840.1.113883.10.20.9.9"]'>
+    Warning: CONF-PHMR-112: A participant element SHOULD be present conforming to the
+    constraints of a PHMR Product Instance Reference.
+    </assert>
+
+    <assert test='cda:entryRelationship//cda:observationMedia'>
+    Warning: CONF-PHMR-113: An entryRelationship element SHOULD be present containing an
+    observableMedia element. If present, the observableMedia element SHALL include
+    a reference to a displayable graphic containing a graphic representation of the data
+    in the waveform.
+    </assert>
+
+    <assert test='cda:entryRelationship[@typeCode="COMP"]//cda:observation[@classCode="OBSCOR" and @moodCode="EVN"]'>
+    Warning: CONF-PHMR-114: An entryRelationship element where @typeCode is COMP SHOULD
+    be present containing an observation element where @classCode is OBSCOR,
+    @moodeCode is EVN, representing a container for series of correlated observations.
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- notes -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.12-notes">
+
+    <title>HL7 PHMR Waveform Series Observation - notes validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.12"]'>
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

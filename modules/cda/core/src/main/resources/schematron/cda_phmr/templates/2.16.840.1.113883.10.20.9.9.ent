@@ -1,47 +1,70 @@
-<!-- HL7 PHMR Rel. 1, Nov 2008 Templates Root: 2.16.840.1.113883.10.20.9 Capitel 3.5.3 PHMR  Product Instance Contents -->
+<!--  HL7 PHMR Product Instance: 2.16.840.1.113883.10.20.9.9 -->
 
-<!-- ERRORS -->
-<pattern id='p-2.16.840.1.113883.10.20.9.9-errors' see='#p-2.16.840.1.113883.10.20.9.9-errors'>
-    <title>PHMR Templates PHMR Product Instance - errors validation phase</title>
+<!-- errors -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.9-errors">
+    <title>HL7 PHMR Product Instance - errors validation phase</title>
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.9"]'>
-    
-        <assert test="cda:templateId[@root='2.16.840.1.113883.10.20.1.52']">
-        Error CONF-PHMR-76: A PHMR Product Instance SHALL conform to the constraints of the 
-        CCD Product Instance template (CCD templateId 2.16.840.1.113883.10.20.1.52).
-        </assert>
-        
-        <assert test="cda:id[@root='1.2.840.10004.1.1.1.0.0.1.0.0.1.2680'][matches(@extension, '^([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})$', 'i')]">
-        Error CONF-PHMR-78: An id element SHALL be present where @root is OID of device numbering space 
-        and @extension is a valid device ID within that space. (e.g. @root is 1.2.840.10004.1.1.1.0.0.1.0.0.1.2680 
-        and @extension is a valid EUI-64 device ID).
-        </assert>
-        
-        <assert test="cda:playingDevice/cda:code and cda:playingDevice/cda:code[@codeSystem='2.16.840.1.113883.6.24']">
-        Error CONF-PHMR-80: A playingDevice/code element SHALL be present indicating the type of device, where @code SHALL be drawn from code system 2.16.840.1.113883.6.24 MDC DYNAMIC. An equivalent SNOMED CT® code MAY be used as a translation.
-        </assert>
-        
-        <assert test="cda:playingDevice/cda:manufacturerModelName  and 
-                      cda:playingDevice/cda:manufacturerModelName[string-length(text()) > 0]">
-        CONF-PHMR-81: A playingDevice/manufacturerModelName element SHALL be present. It SHALL contain the following data 
-        items from the Continua data model: ...
-        </assert>
-        
-        
-    </rule>
-</pattern>
+    <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.1.52"]'>
+    Error: CONF-PHMR-76: A PHMR Product Instance SHALL conform to the constraints of the
+    CCD Product Instance template (CCD templateId
+    2.16.840.1.113883.10.20.1.52).
+    </assert>
 
-<!-- WARNINGS -->
-<pattern id="p-2.16.840.1.113883.10.20.9.9-warning" see='#p-2.16.840.1.113883.10.20.9.9-warning'>
-    <title>PHMR Templates Product Instance - warning validation phase</title>
+    <assert test='cda:id[@root and @extension]'>
+    Error: CONF-PHMR-78: An id element SHALL be present where @root is OID of device
+    numbering space and @extension is a valid device ID within that space. (e.g. @root
+    is 1.2.840.10004.1.1.1.0.0.1.0.0.1.2680 and @extension is a valid EUI-64
+    device ID).
+    </assert>
+
+    <assert test='cda:playingDevice/cda:code[@code and @codeSystem="2.16.840.1.113883.6.24"]'>
+    Error: CONF-PHMR-80: A playingDevice/code element SHALL be present indicating the
+    type of device, where @code SHALL be drawn from code system
+    2.16.840.1.113883.6.24 MDC DYNAMIC. An equivalent SNOMED CT code MAY be
+    used as a translation. Also, the value for ProdSpecGMDN from the Continua data
+    model MAY be present as a translation. (See Appendix C -- PHMR Data Model).
+    </assert>
+
+    <assert test='cda:playingDevice/cda:manufacturerModelName'>
+    Error: CONF-PHMR-81: A playingDevice/manufacturerModelName element SHALL be
+    present. It SHALL contain the following data items from the Continua data model
+    (See Appendix C -- PHMR Data Model): Model, Unspecified, SerialNumber,
+    PartNumber, HardwareRevision, SoftwareRevision, and ProtocolRevision. The
+    manufacturerModelName may also contain device certification information. No
+    constraints are placed on the ordering or formatting of those items.
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.9-warnings">
+    <title>HL7 PHMR Product Instance - warning validation phase</title>
+
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.9"]'>
-
+    <assert test='cda:scopingEntity/cda:desc'>
+    Warning: CONF-PHMR-82: A scopingEntity/desc element SHOULD be present containing the
+    manufacturer's name.
+    </assert>
     </rule>
-</pattern>
 
-<!--
-<pattern id="p-2.16.840.1.113883.10.20.9.9-note">
-    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.52"]'>
-       
-	</rule>	
-</pattern>
--->
+  </pattern>
+
+  <!-- notes -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.9-notes">
+
+    <title>HL7 PHMR Product Instance - notes validation phase</title>
+
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.9"]'>
+    <assert test='cda:code[@nullFlavor="OTH"]/cda:originalText'>
+    Note: CONF-PHMR-79: A code element MAY be present where @nullFlavor is OTH (other)
+    containing an originalText element describing the regulatory status of the device
+    in plain text (e.g., "Regulated Device" or "Unregulated Device").
+    </assert>
+    </rule>
+  </pattern>
+

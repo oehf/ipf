@@ -1,0 +1,55 @@
+<!--  HL7 PHMR Device Resolution Observation: 2.16.840.1.113883.10.20.9.6 -->
+
+<!-- errors -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.6-errors">
+    <title>HL7 PHMR Device Resolution Observation - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.6"]'>
+
+    <assert test='self::cda:observation[@classCode="OBS" and @moodCode="DEF"]'>
+    Error: CONF-PHMR-94: A Device Resolution Observation SHALL be represented with an
+    observation element where @classCode is OBS and @moodCode is DEF.
+    </assert>
+
+    <assert test='cda:code[@code="17441009" and @codeSystem="2.16.840.1.113883.6.96"]'>
+    Error: CONF-PHMR-96: A code element SHALL be present where @code is 17441009 and
+    @codeSystem is 2.16.840.1.113883.6.96 SNOMED CT (STATIC).
+    </assert>
+
+    <assert test='cda:value[(@xsi:type="PQ" or @xsi:type="ST") and @unit]'>
+    Error: CONF-PHMR-97: A value element SHALL be present where @xsi:type is PQ (for a
+    physical quantity) or ST (for a simple text description) describing the resolution of
+    the device, in whatever units are appropriate for the device in question (though
+    units must still be a valid UCUM expression).
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.6-warnings">
+    <title>HL7 PHMR Device Resolution Observation - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.6"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>
+
+  <!-- notes -->
+
+  <pattern id="p-2.16.840.1.113883.10.20.9.6-notes">
+
+    <title>HL7 PHMR Device Resolution Observation - notes validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.6"]'>
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+
