@@ -70,7 +70,7 @@
         <activemq-version>5.11.1</activemq-version>
         <aspectj-version>1.8.4</aspectj-version>
         <bouncycastle-version>1.50</bouncycastle-version>
-        <camel-version>2.15.1</camel-version>
+        <camel-version>2.15.2</camel-version>
         <cglib-version>3.1</cglib-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>

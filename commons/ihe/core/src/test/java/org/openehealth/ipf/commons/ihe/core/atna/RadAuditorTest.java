@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
@@ -27,7 +29,7 @@ import java.util.List;
 /**
  * @author Clay Sebourn
  */
-public class RadAuditorTest extends TestCase {
+public class RadAuditorTest extends Assert {
 
     private static final String USER_ID                 = "user-id";
     private static final String USER_NAME               = "alias<user@issuer>";
@@ -59,14 +61,15 @@ public class RadAuditorTest extends TestCase {
 
     private MockedSender sender;
 
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         sender = new MockedSender();
         AuditorModuleContext.getContext().setSender(sender);
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
     }
 
-
+    @Test
     public void testAuditors() {
         final CustomXdsAuditor auditor = AuditorManager.getCustomXdsAuditor();
 

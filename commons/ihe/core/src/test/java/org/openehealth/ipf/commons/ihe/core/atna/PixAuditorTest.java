@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomPixAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
@@ -23,7 +25,7 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 /**
  * @author Dmytro Rud
  */
-public class PixAuditorTest extends TestCase {
+public class PixAuditorTest extends Assert {
 
     private static final String CLIENT_IP               = "141.44.162.126";
     private static final String SENDING_FACILITY        = "sendingFacility";
@@ -39,15 +41,15 @@ public class PixAuditorTest extends TestCase {
 
     private MockedSender sender;
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         sender = new MockedSender();
         AuditorModuleContext.getContext().setSender(sender);
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
     }
 
-    
+    @Test
     public void testAuditors() {
         final CustomPixAuditor auditor = AuditorManager.getCustomPixAuditor();
 

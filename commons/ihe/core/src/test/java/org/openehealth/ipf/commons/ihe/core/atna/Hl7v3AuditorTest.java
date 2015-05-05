@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.Hl7v3Auditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * @author Dmytro Rud
  */
-public class Hl7v3AuditorTest extends TestCase {
+public class Hl7v3AuditorTest extends Assert {
 
     private static final String REPLY_TO_URI    = "http://141.44.162.126:8090/services/iti55-response";
     private static final String USER_NAME       = "alias<user@issuer>";
@@ -62,15 +63,15 @@ public class Hl7v3AuditorTest extends TestCase {
 
     private MockedSender sender;
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         sender = new MockedSender();
         AuditorModuleContext.getContext().setSender(sender);
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
     }
 
-    
+    @Test
     public void testAuditors() {
         final Hl7v3Auditor auditor = AuditorManager.getHl7v3Auditor();
 

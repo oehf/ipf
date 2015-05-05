@@ -15,32 +15,23 @@
  */
 package org.openehealth.ipf.tutorials.ref;
 
-import java.io.InputStream;
-import java.net.URL;
-
-import junit.framework.TestCase;
-
 import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
+import java.io.InputStream;
+import java.net.URL;
+
 /**
  * @author Martin Krasser
  */
 @RunWith(BlockJUnit4ClassRunner.class)
-public class TutorialRouteBuilderIntegrationTest extends TestCase {
+public class TutorialRouteBuilderIntegrationTest extends Assert {
 
     private static Client client;
-
-    public TutorialRouteBuilderIntegrationTest() {
-        super();
-    }
-    
-    public TutorialRouteBuilderIntegrationTest(String name) {
-        super(name);
-    }
     
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
