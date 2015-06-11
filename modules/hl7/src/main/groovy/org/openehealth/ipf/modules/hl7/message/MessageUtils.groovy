@@ -28,8 +28,6 @@ import org.openehealth.ipf.modules.hl7.HL7v2Exception
 
 import java.lang.reflect.Constructor
 
-import static org.openehealth.ipf.modules.hl7.dsl.Messages.copyMessage
-
 /**
  * This is a utility class that offers convenience methods for
  * accessing and creating HL7 messages. It's primarily used by
@@ -37,7 +35,7 @@ import static org.openehealth.ipf.modules.hl7.dsl.Messages.copyMessage
  * methods directly to the affected classes.
  * 
  * @author Christian Ohr
- * @author Marek Vaclavic
+ * @author Marek Vaclavik
  * @author Dmytro Rud
  */
 class MessageUtils {
@@ -121,17 +119,20 @@ class MessageUtils {
     static String triggerEvent(Message msg) {
         Terser.get(msg.MSH, 9, 0, 2, 1)
     }
-    
+
+    /**
+     * @return structure of the message, e.g. 'ADT_A01'
+     */
+    static String messageStructure(String messageType, String triggerEvent, String version, ModelClassFactory factory) {
+        def structName = "${messageType}_${triggerEvent}"
+        return factory.getMessageStructureForEvent(structName, Version.versionOf(version)) ?: structName
+    }
+
     /**
      * @return structure of the message, e.g. 'ADT_A01'
      */
     static String messageStructure(Message msg) {
-        def structName = eventType(msg) + '_' + triggerEvent(msg)
-        if (atLeastVersion(msg, '2.4')) {
-            structName = msg.parser.hapiContext.modelClassFactory
-                    .getMessageStructureForEvent(structName, Version.versionOf(msg.version))
-        }
-        structName
+        return messageStructure(eventType(msg), triggerEvent(msg), msg.version, msg.parser.hapiContext.modelClassFactory)
     }
 
     /**
@@ -179,7 +180,7 @@ class MessageUtils {
             def triggerEvent = list[1]
             return makeMessage(context, eventType, triggerEvent, version)
         } else {
-            throw new HL7v2Exception("Must have valid version to create message")
+            throw new HL7Exception("Must have valid version to create message")
         }
     }
 
@@ -254,18 +255,11 @@ class MessageUtils {
      * @return new message
      */
     public static Message makeMessage(HapiContext context, String eventType, String triggerEvent, String version) {
-        def structName
         ModelClassFactory factory = context.modelClassFactory
 
-        if (eventType == 'ACK') {
-            structName = 'ACK'
-        } else {
-            structName = "${eventType}_${triggerEvent}"
-            if (atLeastVersion(version, '2.4')) {
-                structName = factory.getMessageStructureForEvent(structName, Version.versionOf(version))
-            }
-        }
-        
+        def structName = (eventType == 'ACK') ? 'ACK' :
+                messageStructure(eventType, triggerEvent, version, factory)
+
         Class<? extends Message> c = factory.getMessageClass(structName, version, true);
         if (!c) {
             HL7Exception e = new HL7Exception("Can't instantiate message ${structName}", ErrorCode.UNSUPPORTED_MESSAGE_TYPE)
@@ -289,7 +283,7 @@ class MessageUtils {
         HapiContext context = message.getParser().getHapiContext()
         Class<? extends Segment> c = context.modelClassFactory.getSegmentClass(name, message?.version);
         if (!c) {
-            throw new HL7v2Exception("Can't instantiate Segment $name")
+            throw new HL7Exception("Can't instantiate Segment $name")
         }
         ReflectionUtil.instantiateStructure(c, message, context.modelClassFactory)
     }
@@ -305,7 +299,7 @@ class MessageUtils {
         HapiContext context = message.getParser().getHapiContext()
         Class<? extends Group> c = context.modelClassFactory.getGroupClass(name, message?.version);
         if (!c) {
-            throw new HL7v2Exception("Can't instantiate Group $name")
+            throw new HL7Exception("Can't instantiate Group $name")
         }
         ReflectionUtil.instantiateStructure(c, message, context.modelClassFactory)
     }
@@ -322,7 +316,7 @@ class MessageUtils {
         HapiContext context = message.getParser().getHapiContext()
         Class<? extends Type> c = context.modelClassFactory.getTypeClass(name, message?.version);
         if (!c) {
-            throw new HL7v2Exception("Can't instantiate Type $name")
+            throw new HL7Exception("Can't instantiate Type $name")
         }
         AbstractPrimitive primitive = c.newInstance([message]as Object[])
         if (value) {
@@ -345,7 +339,7 @@ class MessageUtils {
         HapiContext context = message.getParser().getHapiContext()
         Class c = context.modelClassFactory.getTypeClass(name, message?.version);
         if (!c) {
-            throw new HL7v2Exception("Can't instantiate Type $name")
+            throw new HL7Exception("Can't instantiate Type $name")
         }
         Composite composite = c.newInstance([message]as Object[])
         map?.each { k, v ->

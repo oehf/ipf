@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.group;
 
 import ca.uhn.hl7v2.model.Group;
-import ca.uhn.hl7v2.model.v231.group.ADT_A04_IN1IN2IN3;
+import ca.uhn.hl7v2.model.v231.group.ADT_A39_PIDPD1MRGPV1;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 
 /**
  *
  */
-public class ADT_A04_INSURANCE extends ADT_A04_IN1IN2IN3 {
+public class ADT_A39_PATIENT extends ADT_A39_PIDPD1MRGPV1 {
 
-    public ADT_A04_INSURANCE(Group parent, ModelClassFactory factory) {
+    public ADT_A39_PATIENT(Group parent, ModelClassFactory factory) {
         super(parent, factory);
     }
-    
 }
