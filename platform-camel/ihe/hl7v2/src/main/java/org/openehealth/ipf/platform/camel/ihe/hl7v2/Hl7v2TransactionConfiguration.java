@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
-import java.util.List;
-
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
@@ -25,10 +23,12 @@ import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
+import lombok.Getter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import static org.apache.commons.lang3.ArrayUtils.*;
+import java.util.*;
+
 import static org.apache.commons.lang3.Validate.*;
 
 /**
@@ -38,23 +38,34 @@ import static org.apache.commons.lang3.Validate.*;
  */
 public class Hl7v2TransactionConfiguration {
 
-    private final Version[] hl7Versions;
-    private final String sendingApplication;
-    private final String sendingFacility;
+    private static class Definition {
+        private final Set<String> triggerEvents;
+        private final boolean auditable;
+        private final boolean responseContinuable;
 
-    private final ErrorCode requestErrorDefaultErrorCode;
-    private final ErrorCode responseErrorDefaultErrorCode;
+        Definition(String triggerEventsString, boolean auditable, boolean responseContinuable) {
+            this.triggerEvents = new HashSet<>(Arrays.asList(StringUtils.split(triggerEventsString, ' ')));
+            this.auditable = auditable;
+            this.responseContinuable = responseContinuable;
+        }
+        
+        boolean isAllowedTriggerEvent(String triggerEvent) {
+            return triggerEvents.contains("*") || triggerEvents.contains(triggerEvent);
+        }
+    }
 
-    private final String[] allowedRequestMessageTypes;
-    private final String[] allowedRequestTriggerEvents;
 
-    private final String[] allowedResponseMessageTypes;
-    private final String[] allowedResponseTriggerEvents;
+    @Getter private final String sendingApplication;
+    @Getter private final String sendingFacility;
 
-    private final boolean[] auditabilityFlags;
-    private final boolean[] responseContinuabilityFlags;
+    @Getter private final ErrorCode requestErrorDefaultErrorCode;
+    @Getter private final ErrorCode responseErrorDefaultErrorCode;
 
-    private final HapiContext hapiContext;
+    @Getter private final HapiContext hapiContext;
+    @Getter private final Version[] hl7Versions;
+
+    // true = request, false = response
+    private final Map<Boolean, Map<String, Definition>> definitions;
 
 
     /**
@@ -93,7 +104,8 @@ public class Hl7v2TransactionConfiguration {
             String[] allowedResponseTriggerEvents,
             boolean[] auditabilityFlags,
             boolean[] responseContinuabilityFlags,
-            HapiContext hapiContext) {
+            HapiContext hapiContext)
+    {
         notNull(hl7Versions);
         notNull(sendingApplication);
         notNull(sendingFacility);
@@ -124,86 +136,51 @@ public class Hl7v2TransactionConfiguration {
         this.requestErrorDefaultErrorCode = requestErrorDefaultErrorCode;
         this.responseErrorDefaultErrorCode = responseErrorDefaultErrorCode;
 
-        this.allowedRequestMessageTypes = allowedRequestMessageTypes;
-        this.allowedRequestTriggerEvents = allowedRequestTriggerEvents;
-        this.allowedResponseMessageTypes = allowedResponseMessageTypes;
-        this.allowedResponseTriggerEvents = allowedResponseTriggerEvents;
-
-        this.auditabilityFlags = auditabilityFlags;
-        this.responseContinuabilityFlags = responseContinuabilityFlags;
-
         this.hapiContext = hapiContext;
-    }
 
+        this.definitions = new HashMap<>();
+        definitions.put(true, createDefinitionsMap(allowedRequestMessageTypes, allowedRequestTriggerEvents,
+                auditabilityFlags, responseContinuabilityFlags));
+        definitions.put(false, createDefinitionsMap(allowedResponseMessageTypes, allowedResponseTriggerEvents,
+                auditabilityFlags, responseContinuabilityFlags));
 
-    /**
-     * Returns <code>true</code> when request messages
-     * of the given type belong to this transaction.
-     */
-    private boolean isSupportedRequestMessageType(String messageType) {
-        return contains(allowedRequestMessageTypes, messageType);
-    }
-
-
-    /**
-     * Returns <code>true</code> when the given trigger event
-     * is valid for request messages of the given type.
-     */
-    private boolean isSupportedRequestTriggerEvent(String messageType, String triggerEvent) {
-        int index = indexOf(allowedRequestMessageTypes, messageType);
-        if (index == INDEX_NOT_FOUND) {
-            throw new IllegalArgumentException("Unknown message type " + messageType);
+        if (! definitions.get(false).containsKey("ACK")) {
+            definitions.get(false).put("ACK", new Definition("*", false, false));
         }
-        String triggerEvents = allowedRequestTriggerEvents[index];
-        return contains(StringUtils.split(triggerEvents, ' '), triggerEvent);
     }
 
-
-    /**
-     * Returns <code>true</code> when response messages
-     * of the given type belong to this transaction.
-     * "ACK" is always supported.
-     */
-    private boolean isSupportedResponseMessageType(String messageType) {
-        return "ACK".equals(messageType) || contains(allowedResponseMessageTypes, messageType);
-    }
-
-
-    /**
-     * Returns <code>true</code> when the given trigger event
-     * is valid for response messages of the given type.
-     * For "ACK" message type, every trigger event is considered valid.
-     */
-    private boolean isSupportedResponseTriggerEvent(String messageType, String triggerEvent) {
-        if ("ACK".equals(messageType)) {
-            return true;
+    private static Map<String, Definition> createDefinitionsMap(
+            String[] allowedMessageTypes,
+            String[] allowedTriggerEvents,
+            boolean[] auditabilityFlags,
+            boolean[] responseContinuabilityFlags)
+    {
+        Map<String, Definition> result = new HashMap<>();
+        for (int i = 0; i < allowedMessageTypes.length; ++i) {
+            Definition definition = new Definition(
+                    allowedTriggerEvents[i],
+                    (auditabilityFlags != null) && auditabilityFlags[i],
+                    (responseContinuabilityFlags != null) && responseContinuabilityFlags[i]);
+            result.put(allowedMessageTypes[i], definition);
         }
-        int index = indexOf(allowedResponseMessageTypes, messageType);
-        if (index == INDEX_NOT_FOUND) {
-            throw new IllegalArgumentException("Unknown message type " + messageType);
-        }
-        String triggerEvents = allowedResponseTriggerEvents[index];
-        return contains(StringUtils.split(triggerEvents, ' '), triggerEvent);
+        return result;
     }
 
 
     /**
-     * Returns <code>true</code> when messages of the given type are auditable.
+     * Returns <code>true</code> when request messages of the given type are auditable.
      */
     public boolean isAuditable(String messageType) {
-        if (auditabilityFlags == null) {
-            return false;
+        Definition definition = definitions.get(true).get(messageType);
+        if (definition == null) {
+            throw new IllegalArgumentException("Unknown message type " + messageType);
         }
-        int index = indexOf(allowedRequestMessageTypes, messageType);
-        if (index != INDEX_NOT_FOUND) {
-            return auditabilityFlags[index];
-        }
-        throw new IllegalArgumentException("Unknown message type " + messageType);
+        return definition.auditable;
     }
 
 
     /**
-     * Returns <code>true</code> when messages of the given [request] type
+     * Returns <code>true</code> when request messages of the given type
      * can be split by means of interactive continuation.
      * <p/>
      * When this method returns true, the request message structure must
@@ -211,14 +188,11 @@ public class Hl7v2TransactionConfiguration {
      * structure -- segments DSC, QAK.
      */
     public boolean isContinuable(String messageType) {
-        if (responseContinuabilityFlags == null) {
-            return false;
+        Definition definition = definitions.get(true).get(messageType);
+        if (definition == null) {
+            throw new IllegalArgumentException("Unknown message type " + messageType);
         }
-        int index = indexOf(allowedRequestMessageTypes, messageType);
-        if (index != INDEX_NOT_FOUND) {
-            return responseContinuabilityFlags[index];
-        }
-        throw new IllegalArgumentException("Unknown message type " + messageType);
+        return definition.responseContinuable;
     }
 
 
@@ -262,7 +236,8 @@ public class Hl7v2TransactionConfiguration {
         try {
             if (!ArrayUtils.contains(
                     new String[]{"AA", "AR", "AE", "CA", "CR", "CE"},
-                    new Terser(message).get("MSA-1"))) {
+                    new Terser(message).get("MSA-1")))
+            {
                 throw new Hl7v2AcceptanceException("Bad response: missing or invalid MSA segment", ErrorCode.REQUIRED_FIELD_MISSING);
             }
         } catch (HL7Exception e) {
@@ -312,23 +287,20 @@ public class Hl7v2TransactionConfiguration {
             String triggerEvent,
             String messageStructure,
             String version,
-            boolean isRequest) throws Hl7v2AcceptanceException {
+            boolean isRequest) throws Hl7v2AcceptanceException
+    {
         checkMessageVersion(version);
 
-        boolean messageTypeSupported = isRequest
-                ? isSupportedRequestMessageType(messageType)
-                : isSupportedResponseMessageType(messageType);
+        Definition definition = definitions.get(isRequest).get(messageType);
 
-        if (!messageTypeSupported) {
-            throw new Hl7v2AcceptanceException("Invalid message type " + messageType, ErrorCode.UNSUPPORTED_MESSAGE_TYPE);
+        if (definition == null) {
+            throw new Hl7v2AcceptanceException("Invalid message type " + messageType + ", must be one of " +
+                    join(definitions.get(isRequest).keySet()), ErrorCode.UNSUPPORTED_MESSAGE_TYPE);
         }
 
-        boolean triggerEventSupported = isRequest
-                ? isSupportedRequestTriggerEvent(messageType, triggerEvent)
-                : isSupportedResponseTriggerEvent(messageType, triggerEvent);
-
-        if (!triggerEventSupported) {
-            throw new Hl7v2AcceptanceException("Invalid trigger event " + triggerEvent, ErrorCode.UNSUPPORTED_EVENT_CODE);
+        if (! definition.isAllowedTriggerEvent(triggerEvent)) {
+            throw new Hl7v2AcceptanceException("Invalid trigger event " + triggerEvent + ", must be one of " +
+                    join(definition.triggerEvents), ErrorCode.UNSUPPORTED_EVENT_CODE);
         }
 
         if (!StringUtils.isEmpty(messageStructure)) {
@@ -354,66 +326,34 @@ public class Hl7v2TransactionConfiguration {
             boolean bothAreEqual = messageStructure.equals(expectedMessageStructure);
             boolean bothAreAcks = (messageStructure.startsWith("ACK") && expectedMessageStructure.startsWith("ACK"));
             if (!(bothAreEqual || bothAreAcks)) {
-                throw new Hl7v2AcceptanceException("Invalid message structure " + messageStructure, ErrorCode.APPLICATION_INTERNAL_ERROR);
+                throw new Hl7v2AcceptanceException("Invalid message structure " + messageStructure + 
+                        ", must be " + expectedMessageStructure, ErrorCode.APPLICATION_INTERNAL_ERROR);
             }
         }
     }
 
     private void checkMessageVersion(String version) throws Hl7v2AcceptanceException {
         Version messageVersion = Version.versionOf(version);
-        for (Version hl7Version : hl7Versions) {
-            if (hl7Version.equals(messageVersion))
-                return;
+        if (! ArrayUtils.contains(hl7Versions, messageVersion)) {
+            throw new Hl7v2AcceptanceException("Invalid HL7 version " + version + ", must be one of " + supportedVersions(hl7Versions),
+                    ErrorCode.UNSUPPORTED_VERSION_ID);
         }
-
-        throw new Hl7v2AcceptanceException("Invalid HL7 version " + version + ", must be one of " + supportedVersions(hl7Versions),
-                ErrorCode.UNSUPPORTED_VERSION_ID);
     }
 
     private String supportedVersions(Version[] hl7versions) {
         StringBuilder builder = new StringBuilder();
         for (Version v : hl7versions) {
-            builder.append(v.getVersion()).append(" ");
+            builder.append(v.getVersion()).append(' ');
         }
         return builder.toString();
-    }
-
-    // ----- automatically generated getters -----
-
-    public Version[] getHl7Versions() {
-        return hl7Versions;
-    }
-
-    public ErrorCode getRequestErrorDefaultErrorCode() {
-        return requestErrorDefaultErrorCode;
-    }
-
-    public ErrorCode getResponseErrorDefaultErrorCode() {
-        return responseErrorDefaultErrorCode;
-    }
-
-    public String getSendingApplication() {
-        return sendingApplication;
-    }
-
-    public String getSendingFacility() {
-        return sendingFacility;
-    }
-
-    public String[] getAllowedRequestMessageTypes() {
-        return allowedRequestMessageTypes;
-    }
-
-    public String[] getAllowedResponseMessageTypes() {
-        return allowedResponseMessageTypes;
     }
 
     public Parser getParser() {
         return getHapiContext().getPipeParser();
     }
 
-    public HapiContext getHapiContext() {
-        return hapiContext;
+    private static String join(Collection<String> collection) {
+        return StringUtils.join(collection, ' ');
     }
 
 }
