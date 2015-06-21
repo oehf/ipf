@@ -53,7 +53,7 @@ public class WsPayloadLoggerBase
         Long sequenceId = InterceptorUtils.findContextualProperty(message, SEQUENCE_ID_PROPERTY_NAME);
         if (sequenceId == null) {
             sequenceId = getNextSequenceId();
-            message.setContextualProperty(SEQUENCE_ID_PROPERTY_NAME, sequenceId);
+            message.getExchange().put(SEQUENCE_ID_PROPERTY_NAME, sequenceId);
         }
 
         WsPayloadLoggingSpelContext spelContext = new WsPayloadLoggingSpelContext(

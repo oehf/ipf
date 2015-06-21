@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import org.eclipse.jetty.http.ssl.SslContextFactory;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;

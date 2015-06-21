@@ -59,8 +59,8 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         author1.getAuthorRole().add(new Identifiable("role2", null));
         author1.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
         author1.getAuthorSpecialty().add(new Identifiable("spec2", null));
-        author1.getAuthorTelecom().add(new Telecom("5.25 in", "Floppynet"));
-        author1.getAuthorTelecom().add(new Telecom("2:465/46.40", "Fidonet"));
+        author1.getAuthorTelecom().add(new Telecom(41, 76, 73901, 0));
+        author1.getAuthorTelecom().add(new Telecom(41, 76, 73901, 1));
 
         Author author2 = new Author();
         author2.setAuthorPerson(createPerson(30));
@@ -70,8 +70,8 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         author2.getAuthorRole().add(new Identifiable("role4", null));
         author2.getAuthorSpecialty().add(new Identifiable("spec3", new AssigningAuthority("2.3.7", "ISO")));
         author2.getAuthorSpecialty().add(new Identifiable("spec4", null));
-        author2.getAuthorTelecom().add(new Telecom("3.5 in", "Floppynet"));
-        author2.getAuthorTelecom().add(new Telecom("2:465/168.8", "Fidonet"));
+        author2.getAuthorTelecom().add(new Telecom(41, 76, 73901, 2));
+        author2.getAuthorTelecom().add(new Telecom(41, 76, 73901, 3));
 
         Address address = new Address();
         address.setCity("city");
@@ -140,14 +140,14 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1^^^&2.3.1&ISO", "role2");
         assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1^^^&2.3.3&ISO", "spec2");
-        assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), "^^Floppynet^5.25 in", "^^Fidonet^2:465/46.40");
+        assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), "^PRN^PH^^41^76^73901^0", "^PRN^PH^^41^76^73901^1");
 
         classification = assertClassification(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 1, "", -1);
         assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^degree 30^^&uni 30&uniType 30");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst3", "inst4");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role3^^^&2.3.5&ISO", "role4");
         assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec3^^^&2.3.7&ISO", "spec4");
-        assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), "^^Floppynet^3.5 in", "^^Fidonet^2:465/168.8");
+        assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), "^PRN^PH^^41^76^73901^2", "^PRN^PH^^41^76^73901^3");
 
         classification = assertClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, ebXML, 0, "code 6", 6);
         assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 6");

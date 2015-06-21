@@ -35,7 +35,7 @@ public class DisablePayloadCollectingDeactivationInterceptor extends AbstractPha
 
     @Override
     public void handleMessage(Message message) throws Fault {
-        message.setContextualProperty(
+        message.getExchange().put(
                 OutPayloadExtractorInterceptor.PAYLOAD_COLLECTING_DEACTIVATION_ENABLED,
                 Boolean.FALSE);
     }

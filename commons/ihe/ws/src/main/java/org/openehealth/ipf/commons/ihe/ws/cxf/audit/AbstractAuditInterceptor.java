@@ -129,7 +129,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
                 LOG.warn("Cannot obtain audit dataset instance, NPE is pending");
                 return null;
             }
-            message.setContextualProperty(DATASET_CONTEXT_KEY, auditDataset);
+            message.getExchange().put(DATASET_CONTEXT_KEY, auditDataset);
         }
         return auditDataset;
     }
@@ -241,7 +241,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
                 return;
             }
 
-            message.setContextualProperty(XUA_SAML_ASSERTION, assertion);
+            message.getExchange().put(XUA_SAML_ASSERTION, assertion);
         }
 
         // set ATNA XUA userName element
