@@ -164,8 +164,8 @@
             <id>rnd</id>
             <name>Dmytro Rud</name>
             <email>dmytro.rud@gmail.com</email>
-            <organization>Roche Diagnostics International AG</organization>
-            <organizationUrl>http://www.roche-diagnostics.ch/</organizationUrl>
+            <organization>Open eHealth Foundation</organization>
+            <organizationUrl>http://www.openehealth.org/</organizationUrl>
             <roles>
                 <role>Developer</role>
             </roles>
@@ -1637,6 +1637,7 @@
                         <id>attach-sources</id>
                         <goals>
                             <goal>jar-no-fork</goal>
+                            <goal>test-jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>
