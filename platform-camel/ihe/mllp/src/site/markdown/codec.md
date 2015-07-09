@@ -29,6 +29,15 @@ The corresponding bean must always be defined:
     </bean>
 ```
 
+In case you need to set an `HapiContext` on the codec, you need to use the IPF implementation of the HL7 codec factory:
+
+```xml
+    <bean id="hl7codec" class="org.apache.camel.component.hl7.CustomHL7MLLPCodec">
+        <property name="charset" value="iso-8859-1"/>
+        <property name="hapiContext" ref="hapiContext"/>
+    </bean>
+```
+
 The character set name set up for the HL7 codec factory will be automatically
 
 * propagated to the Camel component (see parameter encoding in the table above)

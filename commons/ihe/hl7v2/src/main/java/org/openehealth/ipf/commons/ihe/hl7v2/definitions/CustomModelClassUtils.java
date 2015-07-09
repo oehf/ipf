@@ -30,6 +30,8 @@ import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
  */
 public final class CustomModelClassUtils {
 
+    private static final String CUSTOM_EVENT_MAP_DIRECTORY = "org/openehealth/ipf/commons/ihe/hl7v2/";
+
     private CustomModelClassUtils() {
         throw new IllegalStateException("Utility class, cannot instantiate");
     }
@@ -43,7 +45,9 @@ public final class CustomModelClassUtils {
                 transaction,
                 Version.versionOf(version).getPackageVersion());
         Map<String, String[]> map = Collections.singletonMap(version, new String[]{packageName});
-        return new CustomModelClassFactory(map);
+        CustomModelClassFactory cmcf = new CustomModelClassFactory(map);
+        cmcf.setEventMapDirectory(CUSTOM_EVENT_MAP_DIRECTORY);
+        return cmcf;
     }
 
     /**
