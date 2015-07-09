@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
         <artifactId>ipf-tutorials-osgi</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>3.0.3</version>
     </parent>
 
     <properties>
