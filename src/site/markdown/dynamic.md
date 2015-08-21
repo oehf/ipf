@@ -23,7 +23,7 @@ Here is a brief overview of supported extension points:
 The IPF extension mechanism can be leveraged for both OSGi and non-OSGi based IPF applications. As it uses the bean lifecycle
 interfaces of Spring framework to perform the customization, it can be used in Spring based applications only.
 
-![Extension Mechanism](images/extension-machanism.png)
+![Extension Mechanism](images/extension-mechanism.png)
 
 On application startup the dynamic registration mechanism searches for any contribution present in the Spring application
 context and extends/customizes the application with that contribution.
