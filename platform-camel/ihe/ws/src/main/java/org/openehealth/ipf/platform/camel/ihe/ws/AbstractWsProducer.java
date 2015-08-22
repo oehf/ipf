@@ -19,6 +19,7 @@ import java.util.UUID;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.soap.SOAPFaultException;
 
+import com.ctc.wstx.exc.WstxEOFException;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
@@ -149,7 +150,7 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
             // see also: https://issues.apache.org/jira/browse/CXF-3768
             if ((replyToUri == null) ||
                 (fault.getCause() == null) ||
-                ! fault.getCause().getClass().getName().equals("com.ctc.wstx.exc.WstxEOFException"))
+                ! (fault.getCause() instanceof WstxEOFException))
             {
                 throw fault;
             }

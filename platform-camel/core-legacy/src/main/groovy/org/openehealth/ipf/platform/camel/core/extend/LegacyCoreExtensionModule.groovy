@@ -285,7 +285,7 @@ public class LegacyCoreExtensionModule {
 
     /**
      * Unmarshal an XML stream or string using a 
-     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
+     * <a href="http://docs.groovy-lang.org/latest/html/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
      * with a specific schema
      *
      * Note: conflicts with camel-groovy
@@ -302,7 +302,7 @@ public class LegacyCoreExtensionModule {
 
     /**
      * Unmarshal an XML stream or string using a 
-     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
+     * <a href="http://docs.groovy-lang.org/latest/html/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
      *
      * Note: conflicts with camel-groovy
      *
@@ -316,7 +316,7 @@ public class LegacyCoreExtensionModule {
 
     /**
      * Unmarshal an XML stream or string using a 
-     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
+     * <a href="http://docs.groovy-lang.org/latest/html/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
      * (by default namespace aware)
      *
      * Note: conflicts with camel-groovy
@@ -329,7 +329,7 @@ public class LegacyCoreExtensionModule {
 
     /**
      * Unmarshal an XML stream or string using a 
-     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
+     * <a href="http://docs.groovy-lang.org/latest/html/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
      * with a specific schema
      *
      * Note: conflicts with camel-groovy
@@ -346,7 +346,7 @@ public class LegacyCoreExtensionModule {
 
     /**
      * Unmarshal an XML stream or string using a 
-     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
+     * <a href="http://docs.groovy-lang.org/latest/html/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
      *
      * Note: conflicts with camel-groovy
      *
@@ -360,7 +360,7 @@ public class LegacyCoreExtensionModule {
 
     /**
      * Unmarshal an XML stream or string using a 
-     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
+     * <a href="http://docs.groovy-lang.org/latest/html/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
      * (by default namespace aware)
      *
      * Note: conflicts with camel-groovy

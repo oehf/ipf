@@ -117,7 +117,7 @@
 				<configuration>
                     <links>
                         <java>http://java.sun.com/javase/7/docs/api/java</java>
-                        <groovy>http://groovy.codehaus.org/api</groovy>
+                        <groovy>http://docs.groovy-lang.org/latest/html/api/</groovy>
                         <org.openehealth.ipf>apidocs/org/openehealth/ipf</org.openehealth.ipf>
                         <org.apache.camel>http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel</org.apache.camel>
                     </links>
