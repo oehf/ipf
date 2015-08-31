@@ -28,8 +28,8 @@
 
     <types>
         <xsd:schema elementFormDefault="qualified">
-            <xsd:import namespace="urn:ihe:iti:xds-b:2007" schemaLocation="classpath:wsdl/schema/IHE/IHEXDSB.xsd"/>
-            <xsd:import namespace="urn:ihe:rad:xdsi-b:2009" schemaLocation="classpath:wsdl/schema/IHE/IHEXDSIB.xsd"/>
+            <xsd:import namespace="urn:ihe:iti:xds-b:2007" schemaLocation="schema/IHE/IHEXDSB.xsd"/>
+            <xsd:import namespace="urn:ihe:rad:xdsi-b:2009" schemaLocation="schema/IHE/IHEXDSIB.xsd"/>
         </xsd:schema>
     </types>
 

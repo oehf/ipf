@@ -26,8 +26,8 @@
 
     <types>
         <xsd:schema elementFormDefault="qualified">
-            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1" schemaLocation="classpath:wsdl/schema/ebRS21/query.xsd"/>
-            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1" schemaLocation="classpath:wsdl/schema/ebRS21/rs.xsd"/>
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1" schemaLocation="schema/ebRS21/query.xsd"/>
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1" schemaLocation="schema/ebRS21/rs.xsd"/>
         </xsd:schema>
     </types>
 
