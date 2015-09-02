@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Base for an element of interceptor chain.
+ * Base for an element of a chain.
  * @author Dmytro Rud
  */
 public abstract class ChainableImpl implements Chainable {
@@ -32,16 +32,16 @@ public abstract class ChainableImpl implements Chainable {
 
 
     /**
-     * Sets the ID of this interceptor.
+     * Sets the ID of this chain element.
      * @param id
-     *      ID of this interceptor.
+     *      ID of this chain element.
      */
     public void setId(String id) {
         this.id = Validate.notEmpty(id);
     }
 
     /**
-     * @return ID of this interceptor.
+     * @return ID of this chain element.
      */
     @Override
     public String getId() {
@@ -49,25 +49,25 @@ public abstract class ChainableImpl implements Chainable {
     }
 
     /**
-     * Configures this interceptor to be deployed before the given ones.
+     * Configures this chain element to be deployed before the given ones.
      * @param ids
-     *      IDs of interceptors this interceptor should be deployed before.
+     *      IDs of chain elements this chain element should be deployed before.
      */
     public void addBefore(String... ids) {
         Collections.addAll(before, ids);
     }
 
     /**
-     * Configures this interceptor to be deployed after the given ones.
+     * Configures this chain element to be deployed after the given ones.
      * @param ids
-     *      IDs of interceptors this interceptor should be deployed after.
+     *      IDs of chain elements this chain element should be deployed after.
      */
     public void addAfter(String... ids) {
         Collections.addAll(after, ids);
     }
 
     /**
-     * @return IDs of interceptors this interceptor will be/has been deployed before.
+     * @return IDs of chain elements this chain element will be/has been deployed before.
      */
     @Override
     public Set<String> getBefore() {
@@ -75,7 +75,7 @@ public abstract class ChainableImpl implements Chainable {
     }
 
     /**
-     * @return IDs of interceptors this interceptor will be/has been deployed after.
+     * @return IDs of chain elements this chain element will be/has been deployed after.
      */
     @Override
     public Set<String> getAfter() {

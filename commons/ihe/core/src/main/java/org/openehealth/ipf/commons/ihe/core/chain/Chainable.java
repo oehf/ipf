@@ -18,23 +18,23 @@ package org.openehealth.ipf.commons.ihe.core.chain;
 import java.util.Set;
 
 /**
- * Base for an element of interceptor chain.
+ * Base for an element of a chain.
  * @author Dmytro Rud
  */
 public interface Chainable {
 
     /**
-     * @return ID of this interceptor.
+     * @return ID of this chain element.
      */
     String getId();
 
     /**
-     * @return IDs of interceptors this interceptor will be/has been deployed before.
+     * @return IDs of chain elements this chain element will be/has been deployed before.
      */
     Set<String> getBefore();
 
     /**
-     * @return IDs of interceptors this interceptor will be/has been deployed after.
+     * @return IDs of chain elements this chain element will be/has been deployed after.
      */
     Set<String> getAfter();
 }
