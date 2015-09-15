@@ -16,6 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti51
 
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
@@ -60,8 +63,17 @@ class Iti51TestRouteBuilder extends SpringRouteBuilder {
 
     def checkValue(exchange, expected) {
         def query = exchange.in.getBody(QueryRegistry.class).query
-        def value = query.authorPersons[0]        
-        def response = new QueryResponse(expected == value ? SUCCESS : FAILURE)
+        def value = query.authorPersons[0]
+        def response
+        if (expected != value) {
+            response = new QueryResponse(FAILURE)
+        } else {
+            response = SampleData.createQueryResponseWithLeafClass(
+                    SUCCESS,
+                    new Identifiable("id3", new AssigningAuthority("1.3")),
+                    new Identifiable("id4", new AssigningAuthority("1.4")))
+        }
+
         Exchanges.resultMessage(exchange).body = response
     }
 }

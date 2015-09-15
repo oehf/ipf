@@ -35,29 +35,38 @@ public abstract class SampleData {
     private SampleData() {
         throw new UnsupportedOperationException("Utility class");
     }
-    
+
+    public static QueryResponse createQueryResponseWithLeafClass() {
+        return createQueryResponseWithLeafClass(
+                Status.PARTIAL_SUCCESS,
+                new Identifiable("id3", new AssigningAuthority("1.3")));
+    }
+
+
     /**
      * @return a sample query response using leaf class return type.
      */
-    public static QueryResponse createQueryResponseWithLeafClass() {
-        Identifiable patientID = new Identifiable("id3", new AssigningAuthority("1.3"));
-
-        SubmissionSet submissionSet = createSubmissionSet(patientID);        
-        DocumentEntry docEntry = createDocumentEntry(patientID);
-        Folder folder = createFolder(patientID);
-        
-        Association docAssociation = createAssociationDocEntryToSubmissionSet();
-        Association folderAssociation = createAssociationFolderToSubmissionSet();
-        Association docFolderAssociation = createAssociationDocEntryToFolder();
-        
+    public static QueryResponse createQueryResponseWithLeafClass(Status status, Identifiable... patientIDs) {
         QueryResponse response = new QueryResponse();
-        response.getSubmissionSets().add(submissionSet);
-        response.getDocumentEntries().add(docEntry);
-        response.getFolders().add(folder);
-        response.getAssociations().add(docAssociation);
-        response.getAssociations().add(folderAssociation);
-        response.getAssociations().add(docFolderAssociation);
-        response.setStatus(Status.PARTIAL_SUCCESS);
+
+        for (Identifiable patientID : patientIDs) {
+            SubmissionSet submissionSet = createSubmissionSet(patientID);
+            DocumentEntry docEntry = createDocumentEntry(patientID);
+            Folder folder = createFolder(patientID);
+
+            Association docAssociation = createAssociationDocEntryToSubmissionSet();
+            Association folderAssociation = createAssociationFolderToSubmissionSet();
+            Association docFolderAssociation = createAssociationDocEntryToFolder();
+
+            response.getSubmissionSets().add(submissionSet);
+            response.getDocumentEntries().add(docEntry);
+            response.getFolders().add(folder);
+            response.getAssociations().add(docAssociation);
+            response.getAssociations().add(folderAssociation);
+            response.getAssociations().add(docFolderAssociation);
+        }
+
+        response.setStatus(status);
         
         return response;
     }   

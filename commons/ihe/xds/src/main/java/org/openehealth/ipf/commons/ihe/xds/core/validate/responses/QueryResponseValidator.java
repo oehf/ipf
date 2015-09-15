@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
@@ -53,7 +54,9 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse, Val
             metaDataAssert(objRef.getId() != null, MISSING_OBJ_REF);
         }
 
-        validatePatientIdsAreIdentical(response);
+        if (profile.getInteractionId() != IpfInteractionId.ITI_51) {
+            validatePatientIdsAreIdentical(response);
+        }
     }
 
     private void validatePatientIdsAreIdentical(EbXMLObjectContainer container) throws XDSMetaDataException {
