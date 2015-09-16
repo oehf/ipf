@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.openehealth.ipf.archetypes</groupId>
         <artifactId>ipf-archetypes</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>3.0.4</version>
     </parent>
 
     <build>
