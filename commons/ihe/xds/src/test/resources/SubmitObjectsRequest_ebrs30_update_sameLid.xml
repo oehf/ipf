@@ -3,7 +3,7 @@
     <rim:RegistryObjectList xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0">
         
         <rim:ExtrinsicObject
-            id="Document01"
+            id="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
             objectType="urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1"
             status="urn:oasis:names:tc:ebxml-regrep:StatusType:Approved"
             mimeType="text/plain"
@@ -92,7 +92,7 @@
                id="cl1"
                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
                classificationScheme="urn:uuid:93606bcf-9494-43ec-9b4e-a7748d1a838d"
-               classifiedObject="Document01"
+               classifiedObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
                nodeRepresentation=""
                home="">
             <rim:Slot
@@ -129,7 +129,7 @@
                id="cl2"
                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
                classificationScheme="urn:uuid:93606bcf-9494-43ec-9b4e-a7748d1a838d"
-               classifiedObject="Document01"
+               classifiedObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
                nodeRepresentation=""
                home="">
             <rim:Slot
@@ -166,7 +166,7 @@
                id="cl3"
                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
                classificationScheme="urn:uuid:41a5887f-8865-4c09-adf7-e362475b143a"
-               classifiedObject="Document01"
+               classifiedObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
                nodeRepresentation="Evaluation and management"
                home="">
             <rim:Slot
@@ -189,7 +189,7 @@
                id="cl4"
                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
                classificationScheme="urn:uuid:f4f85eac-e6cb-4883-b524-f2705394840f"
-               classifiedObject="Document01"
+               classifiedObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
                nodeRepresentation="1.3.6.1.4.1.21367.2006.7.102"
                home="">
             <rim:Slot
@@ -212,7 +212,7 @@
                id="cl5"
                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
                classificationScheme="urn:uuid:a09d5840-386c-46f2-b5ad-9c3699a4309d"
-               classifiedObject="Document01"
+               classifiedObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
                nodeRepresentation="CDAR2/IHE 1.0"
                home="">
             <rim:Slot
@@ -235,7 +235,7 @@
                id="cl6"
                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
                classificationScheme="urn:uuid:f33fb8ac-18af-42cc-ae0e-ed0b0bdb91e1"
-               classifiedObject="Document01"
+               classifiedObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
                nodeRepresentation="Outpatient"
                home="">
             <rim:Slot
@@ -258,7 +258,7 @@
                id="cl7"
                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
                classificationScheme="urn:uuid:cccf5598-8b07-4b77-a05e-ae952c785ead"
-               classifiedObject="Document01"
+               classifiedObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
                nodeRepresentation="Dialysis"
                home="">
             <rim:Slot
@@ -281,7 +281,7 @@
                id="cl8"
                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
                classificationScheme="urn:uuid:2c6b8cb7-8b2a-4051-b291-b1ae6a575ef4"
-               classifiedObject="Document01"
+               classifiedObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
                nodeRepresentation="T-D4909"
                home="">
             <rim:Slot
@@ -304,7 +304,7 @@
                id="cl9"
                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
                classificationScheme="urn:uuid:2c6b8cb7-8b2a-4051-b291-b1ae6a575ef4"
-               classifiedObject="Document01"
+               classifiedObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
                nodeRepresentation="T-62002"
                home="">
             <rim:Slot
@@ -327,7 +327,7 @@
                id="cl10"
                objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
                classificationScheme="urn:uuid:f0306f51-975f-434e-a61c-c59651d33983"
-               classifiedObject="Document01"
+               classifiedObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464"
                nodeRepresentation="34108-1"
                home="">
             <rim:Slot
@@ -353,7 +353,7 @@
                value="714f4004f80540c^^^&amp;1.3.6.1.4.1.21367.2005.3.7&amp;ISO"
                home=""
                lid="urn:uuid:3dfc8e3a-bdfb-48d0-ab3c-c440f8a48f16"
-               registryObject="Document01">
+               registryObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464">
             <rim:Name>
                <rim:LocalizedString
                      xml:lang="en-us"
@@ -370,7 +370,7 @@
                identificationScheme="urn:uuid:2e82c1f6-a085-4c72-9da3-8640a32e42ab"
                value="1.42.20100709101812.2"
                home=""
-               registryObject="Document01">
+               registryObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464">
             <rim:Name>
                <rim:LocalizedString
                      xml:lang="en-us"
@@ -896,7 +896,7 @@
             objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Association"
             associationType="urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember"
             sourceObject="SubmissionSet"
-            targetObject="Document01">
+            targetObject="urn:uuid:3add0984-7adf-4e05-913d-20c65ef6a464">
             <rim:Slot
                 name="SubmissionSetStatus">
                 <rim:ValueList>

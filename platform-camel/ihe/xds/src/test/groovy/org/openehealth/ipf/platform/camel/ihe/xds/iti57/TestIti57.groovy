@@ -69,7 +69,7 @@ class TestIti57 extends StandardTestContainer {
         docEntry.version = new Version('123')
         docEntry.documentAvailability = DocumentAvailability.ONLINE
         folder = request.folders[0]
-        folder.logicalUuid = 'urn:uuid:20744602-ba65-44e9-87ee-a52303a5183g'
+        folder.logicalUuid = 'urn:uuid:9d3c87c2-dfbb-4188-94f0-9b7440737bce'
         folder.version = new Version('124')
     }
     
