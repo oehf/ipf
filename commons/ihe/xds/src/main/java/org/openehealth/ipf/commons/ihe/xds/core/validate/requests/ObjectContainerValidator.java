@@ -53,6 +53,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final CXValidator cxValidatorOptionalAA = new CXValidator(false);
     private final XTNValidator xtnValidator = new XTNValidator();
     private final CXiValidator cxiValidator = new CXiValidator();
+    private final UUIDValidator uuidValidator = new UUIDValidator();
 
     private final SlotValueValidation[] authorValidations = new SlotValueValidation[] {
         new SlotValueValidation(SLOT_NAME_AUTHOR_PERSON, xcnValidator, 0, 1),
@@ -164,10 +165,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             runValidations(folder, folderSlotValidations);
 
             AvailabilityStatus status = folder.getStatus();
-            if ((profile.getInteractionId() == IpfInteractionId.ITI_18) || (profile.getInteractionId() == IpfInteractionId.ITI_57)) {
-                metaDataAssert(status != null,
-                        FOLDER_INVALID_AVAILABILITY_STATUS, status);
-            } else if (profile.isQuery() || (status != null)) {
+            if (profile.isQuery() || status != null) {
                 metaDataAssert(status == AvailabilityStatus.APPROVED,
                         FOLDER_INVALID_AVAILABILITY_STATUS, status);
             }
@@ -410,11 +408,9 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     private void validateUpdateObject(EbXMLRegistryObject registryObject, EbXMLObjectContainer container){
         metaDataAssert(registryObject.getLid() != null, LOGICAL_ID_MISSING);
+        uuidValidator.validate(registryObject.getLid());
         metaDataAssert(!registryObject.getLid().equals(registryObject.getId()), LOGICAL_ID_EQUALS_ENTRY_UUID,
                 registryObject.getLid(), registryObject.getId());
-        metaDataAssert(registryObject.getVersionInfo() != null &&
-                !"".equals(registryObject.getVersionInfo().getVersionName()),
-                VERSION_INFO_MISSING);
 
         boolean foundHasMemberAssociation = false;
         for (EbXMLAssociation association : container.getAssociations()){

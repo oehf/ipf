@@ -57,6 +57,7 @@ public enum ValidationMessage {
     OID_TOO_LONG("OID must not be longer than 64 characters: %1s"),
     INVALID_OID("OID contains invalid characters: %1s"),
     INVALID_PID("Invalid PID format: %1s"),
+    INVALID_UUID("UUID contains invalid characters: %1s"),
     UNSUPPORTED_PID("PID number not supported in XDS: %1s"),
     INVALID_NUMBER_FORMAT("Invalid number format: %1s"),
     RECIPIENT_LIST_EMPTY("Recipient list should not be empty"),
