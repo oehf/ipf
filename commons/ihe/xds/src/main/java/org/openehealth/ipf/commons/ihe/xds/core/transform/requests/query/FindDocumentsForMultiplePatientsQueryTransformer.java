@@ -38,6 +38,7 @@ public class FindDocumentsForMultiplePatientsQueryTransformer extends DocumentsQ
         slots.fromPatientIdList(DOC_ENTRY_PATIENT_ID, query.getPatientIds());
         slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
         slots.fromStatus(DOC_ENTRY_STATUS, query.getStatus());
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
 
 
@@ -52,5 +53,6 @@ public class FindDocumentsForMultiplePatientsQueryTransformer extends DocumentsQ
         query.setPatientIds(slots.toPatientIdList(DOC_ENTRY_PATIENT_ID));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
 }

@@ -54,6 +54,7 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
         slots.fromCode(FOLDER_CODES, query.getCodes());
         
         slots.fromStatus(FOLDER_STATUS, query.getStatus());
+        slots.fromInteger(METADATA_LEVEL, query.getMetadataLevel());
     }
     
     /**
@@ -81,5 +82,6 @@ public class FindFoldersForMultiplePatientsQueryTransformer extends AbstractStor
         query.getLastUpdateTime().setTo(slots.toNumber(FOLDER_LAST_UPDATE_TIME_TO));
         
         query.setStatus(slots.toStatus(FOLDER_STATUS));
+        query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
     }
 }

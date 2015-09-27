@@ -32,7 +32,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FindFoldersForMultiplePatientsQuery",
-        propOrder = {"status", "lastUpdateTime", "codes", "patientIds"})
+        propOrder = {"status", "lastUpdateTime", "codes", "patientIds", "metadataLevel"})
 @XmlRootElement(name = "findFoldersForMultiplePatientsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class FindFoldersForMultiplePatientsQuery extends StoredQuery  {
@@ -42,6 +42,7 @@ public class FindFoldersForMultiplePatientsQuery extends StoredQuery  {
     @XmlElement(name = "code")
     @Getter @Setter private QueryList<Code> codes;
     @Getter @Setter private List<Identifiable> patientIds;
+    @Getter @Setter private Integer metadataLevel;
 
     @Getter private final TimeRange lastUpdateTime = new TimeRange();
 

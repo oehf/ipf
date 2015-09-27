@@ -57,7 +57,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
     static {
         ALLOWED_MULTIPLE_SLOTS = new HashMap<>();
 
-        addAllowedMultipleSlots(FIND_DOCUMENTS, 
+        addAllowedMultipleSlots(FIND_DOCUMENTS,
                 DOC_ENTRY_CLASS_CODE,
                 DOC_ENTRY_TYPE_CODE,
                 DOC_ENTRY_PRACTICE_SETTING_CODE,
@@ -92,7 +92,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 DOC_ENTRY_CONFIDENTIALITY_CODE,
                 DOC_ENTRY_AUTHOR_PERSON,
                 DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_STATUS);
+                DOC_ENTRY_STATUS,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(FIND_SUBMISSION_SETS,
                 SUBMISSION_SET_SOURCE_ID,
@@ -107,7 +108,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         addAllowedMultipleSlots(FIND_FOLDERS_MPQ,
                 FOLDER_PATIENT_ID,
                 FOLDER_CODES,
-                FOLDER_STATUS);
+                FOLDER_STATUS,
+                METADATA_LEVEL);
 
         addAllowedMultipleSlots(GET_ALL,
                 DOC_ENTRY_STATUS,

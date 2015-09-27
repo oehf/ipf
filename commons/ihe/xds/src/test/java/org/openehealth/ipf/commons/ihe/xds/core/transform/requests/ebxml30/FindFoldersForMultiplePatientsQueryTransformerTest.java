@@ -60,6 +60,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         query.setCodes(codes);
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setHomeCommunityId("12.21.41");
+        query.setMetadataLevel(43);
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -85,8 +86,10 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_STATUS.getSlotName()));
-        
-        assertEquals(6, ebXML.getSlots().size());
+
+        assertEquals("43", ebXML.getSingleSlotValue(QueryParameter.METADATA_LEVEL.getSlotName()));
+
+        assertEquals(7, ebXML.getSlots().size());
     }
     
     @Test

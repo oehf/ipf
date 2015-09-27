@@ -32,7 +32,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FindDocumentsForMultiplePatientsQuery",
-        propOrder = {"patientIds","status", "documentEntryTypes"})
+        propOrder = {"patientIds","status", "documentEntryTypes", "metadataLevel"})
 @XmlRootElement(name = "findDocumentsForMultiplePatientsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class FindDocumentsForMultiplePatientsQuery extends DocumentsQuery implements DocumentEntryTypeAwareStoredQuery {
@@ -42,6 +42,7 @@ public class FindDocumentsForMultiplePatientsQuery extends DocumentsQuery implem
     @Getter @Setter private List<AvailabilityStatus> status;
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
+    @Getter @Setter private Integer metadataLevel;
 
     /**
      * Constructs the query.
