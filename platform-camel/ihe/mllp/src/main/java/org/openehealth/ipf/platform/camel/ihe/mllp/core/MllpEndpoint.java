@@ -157,7 +157,7 @@ public abstract class MllpEndpoint
             }
         }
 
-        return consumer;
+        return new MllpConsumer(consumer);
     }
 
 

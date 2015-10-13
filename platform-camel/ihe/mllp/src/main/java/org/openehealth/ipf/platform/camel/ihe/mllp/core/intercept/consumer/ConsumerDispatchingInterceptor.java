@@ -19,10 +19,10 @@ import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.preparser.PreParser;
 import org.apache.camel.*;
-import org.apache.camel.component.mina2.Mina2Consumer;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpConsumer;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpDispatchEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
@@ -108,7 +108,7 @@ public final class ConsumerDispatchingInterceptor extends AbstractMllpIntercepto
     private boolean addTargets(CamelContext camelContext) throws CamelException {
         for (String routeId : routeIds) {
             try {
-                Mina2Consumer consumer = (Mina2Consumer) camelContext.getRoute(routeId).getConsumer();
+                MllpConsumer consumer = (MllpConsumer) camelContext.getRoute(routeId).getConsumer();
                 Hl7v2Interceptor interceptor = (Hl7v2Interceptor) consumer.getProcessor();
                 while (!(interceptor instanceof ConsumerStringProcessingInterceptor)) {
                     interceptor = (Hl7v2Interceptor) interceptor.getWrappedProcessor();

@@ -36,7 +36,6 @@ import static org.junit.Assert.*
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
-@Ignore
 class TestIti21 extends MllpTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti21/iti-21.xml'
 
@@ -92,7 +91,7 @@ class TestIti21 extends MllpTestContainer {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 2)
     }
 
-    @Test(timeout = 300000L)
+    @Ignore @Test(timeout = 300000L)
     void testHappyCaseWithSSLv3() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3&timeout=${TIMEOUT}", 2)
     }

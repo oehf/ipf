@@ -31,7 +31,7 @@ import ca.uhn.hl7v2.parser.PipeParser
 
 
 /**
- * Unit tests for the PIX Update Notification transaction a.k.a. ITI-10.
+ * Unit tests for the PIX Query transaction a.k.a. ITI-9.
  * @author Dmytro Rud
  */
 class TestIti9 extends MllpTestContainer {
