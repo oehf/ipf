@@ -62,7 +62,7 @@ public class QpdAwareNakFactory extends NakFactory {
     }
 
 
-    public Message createNak0(Message originalMessage, HL7Exception t, AcknowledgmentCode ackTypeCode)
+    public Message createNak0(Message originalMessage, HL7Exception e, AcknowledgmentCode ackTypeCode)
         throws HL7Exception, IllegalAccessException, NoSuchFieldException
     {
         AbstractMessage ack = (AbstractMessage) MessageUtils.response(
@@ -72,6 +72,7 @@ public class QpdAwareNakFactory extends NakFactory {
 
         LOG.info("Creating NAK response event of type {}", ack.getClass().getName());
 
+        e.populateResponse(ack, ackTypeCode, 0);
 
         Segment msa = (Segment) ack.get("MSA");
         Terser.set(msa, 1, 0, 1, 1, ackTypeCode.name());

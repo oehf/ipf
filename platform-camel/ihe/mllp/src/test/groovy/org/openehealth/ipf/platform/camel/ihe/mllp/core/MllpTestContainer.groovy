@@ -93,15 +93,15 @@ class MllpTestContainer {
         assertTrue(msg.MSH[9][1].value == 'RSP')
         assertFalse(msg.MSA[1].value[1] in ['R', 'E'])
     }
-    
-    
+
+
     /**
      * Checks whether the message represents a NAK.
      */
     static void assertNAK(Message msg) {
         assertTrue(msg.MSH[9][1].value == 'ACK')
         assertTrue(msg.MSA[1].value[1] in ['R', 'E'])
-        assertNotNull(msg.ERR)
+        assertFalse(msg.ERR.empty)
     }
     
     /**
@@ -111,9 +111,9 @@ class MllpTestContainer {
         assertTrue(msg.MSH[9][1].value == messageType)
         assertTrue(msg.MSH[9][2].value == triggerEvent)
         assertTrue(msg.MSA[1].value[1] in ['R', 'E'])
-        assertNotNull(msg.ERR)
-        assertNotNull(msg.QAK)
-        assertNotNull(msg.QPD)
+        assertFalse("ERR segment must be present", msg.ERR.empty)
+        assertFalse("QAK segment must be present", msg.QAK.empty)
+        assertFalse("QPD segment must be present", msg.QPD.empty)
     }
     
     /**
