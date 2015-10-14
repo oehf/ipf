@@ -36,6 +36,7 @@ import static org.junit.Assert.*
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
+@Ignore
 class TestIti21 extends MllpTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti21/iti-21.xml'
 
