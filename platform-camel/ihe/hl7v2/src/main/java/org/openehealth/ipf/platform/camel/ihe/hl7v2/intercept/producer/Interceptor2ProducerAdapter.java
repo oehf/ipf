@@ -66,12 +66,10 @@ public class Interceptor2ProducerAdapter implements Producer, DelegateProcessor,
 
     @Override
     public void start() throws Exception {
-        originalProducer.start();
     }
 
     @Override
     public void stop() throws Exception {
-        originalProducer.stop();
     }
 
     @Override
