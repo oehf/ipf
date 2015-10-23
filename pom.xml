@@ -92,6 +92,7 @@
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
         <groovy-version>2.4.3</groovy-version>
         <hapi-version>2.2</hapi-version>
+        <hapi-fhir-version>1.2</hapi-fhir-version>
         <hibernate-version>4.3.8.Final</hibernate-version>
         <hibernate-commons-annotations-version>4.0.5.Final</hibernate-commons-annotations-version>
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
@@ -712,6 +713,16 @@
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v26</artifactId>
                 <version>${hapi-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-base</artifactId>
+                <version>${hapi-fhir-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-structures-dstu2</artifactId>
+                <version>${hapi-fhir-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.gazelle</groupId>
