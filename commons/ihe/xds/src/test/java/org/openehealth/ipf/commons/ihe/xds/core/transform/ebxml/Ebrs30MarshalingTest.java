@@ -15,10 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLExtrinsicObject30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
@@ -40,6 +42,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for marshaling objects created with our ebxml 2.1 classes.
@@ -162,7 +166,22 @@ public class Ebrs30MarshalingTest {
 
         QuerySlotHelper slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(original));
         List<String> patientIdList = slotHelper.toStringList(QueryParameter.DOC_ENTRY_PATIENT_ID);
-        assertEquals(0, patientIdList.size());
+        assertEquals(1, patientIdList.size());
+    }
+
+    @Test
+    public void testPatientIdMPQSlotRegexp() throws Exception {
+        File file = new File(getClass().getClassLoader().getResource("iti51request.xml").toURI());
+
+        JAXBContext context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+
+        Object unmarshalled = unmarshaller.unmarshal(file);
+        AdhocQueryRequest original = (AdhocQueryRequest) unmarshalled;
+
+        QuerySlotHelper slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(original));
+        List<String> patientIdList = slotHelper.toStringList(QueryParameter.DOC_ENTRY_PATIENT_ID);
+        assertEquals(2, patientIdList.size());
     }
 
     private SubmitObjectsRequest send() throws JAXBException {

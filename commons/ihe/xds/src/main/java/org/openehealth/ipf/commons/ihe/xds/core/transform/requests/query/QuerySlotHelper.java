@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
@@ -28,10 +26,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Wrapper class for ebXML query request to simplify access to slots.
@@ -44,8 +42,6 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @author Dmytro Rud
  */
 public class QuerySlotHelper {
-    private static final Pattern PATTERN =
-            Pattern.compile("\\s*,?\\s*'((?:[^']*(?:'')*[^']*)*+)'(.*)", Pattern.DOTALL);
 
     private final EbXMLAdhocQueryRequest ebXML;
 
@@ -578,20 +574,18 @@ public class QuerySlotHelper {
         }
 
         list = list.trim();
-        if (list.startsWith("(") && list.endsWith(")")) {
-            list = list.substring(1, list.length() - 1);
+        if (list.startsWith("(")) {
+            list = list.substring(1);
+        }
+        if (list.endsWith(")")) {
+            list = list.substring(0, list.length() - 1);
         }
         
         List<String> values = new ArrayList<>();
-
-        Matcher matcher = PATTERN.matcher(list);
-        while (matcher.matches() && matcher.groupCount() == 2) {
-            String value = matcher.group(1);
-            value = value.replaceAll("''", "'");
-            values.add(value);
-            matcher = PATTERN.matcher(matcher.group(2));
+        for (String value: list.split(",")){
+            String decodedValue = isNotBlank(value)? decodeString(value.trim()): "";
+            values.add(decodedValue);
         }
-        
         return values;
     }
 }
