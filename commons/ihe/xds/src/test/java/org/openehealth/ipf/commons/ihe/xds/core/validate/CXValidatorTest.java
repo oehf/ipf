@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link CXValidator}.
@@ -40,6 +40,8 @@ public class CXValidatorTest {
         assertFails("45^^^&LOL&ISO");
         assertFails("45^^^&1.2.840.113519.6.197");
         assertFails("45^^^&1.2.840.113519.6.197&LOL");
+        assertFails("1^^^&1.2.3.4&ISO';'2^^^&1.2.3.4&ISO");
+        assertFails("593603^^^&2.16.756.5.33.2.5.1.5.1&ISO''%20and%20611%3d611--%20");
     }
 
     private static void assertFails(String value) {
