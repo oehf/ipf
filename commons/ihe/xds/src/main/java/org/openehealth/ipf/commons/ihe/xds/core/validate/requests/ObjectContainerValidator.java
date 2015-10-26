@@ -70,26 +70,27 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     };
 
 
-    private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile) {
+    private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile, boolean onDemandProvided) {
         List<RegistryObjectValidator> validators = new ArrayList<>();
         boolean isContinuaHRN = (profile.getInteractionId() == IpfInteractionId.Continua_HRN);
-        boolean isIti61       = (profile.getInteractionId() == IpfInteractionId.ITI_61);
+        boolean isOnDemand    = (profile.getInteractionId() == IpfInteractionId.ITI_61) ||
+                                (profile.isQuery() && onDemandProvided);
 
-        boolean needHashAndSize = isContinuaHRN || profile.isQuery() ||
-                (profile.getInteractionId() == IpfInteractionId.ITI_42);
+        boolean needHashAndSize = (! isOnDemand) &&
+                (isContinuaHRN || profile.isQuery() || (profile.getInteractionId() == IpfInteractionId.ITI_42));
 
         Collections.addAll(validators,
-            new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator, 0, isIti61 ? 0 : 1),
+            new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator, 0, isOnDemand ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_HASH, hashValidator,
                     needHashAndSize ? 1 : 0,
-                    isIti61 ? 0 : 1),
+                    isOnDemand ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, 0, 1),
-            new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, isIti61 ? 0 : 1),
+            new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, isOnDemand ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SIZE, positiveNumberValidator,
                     needHashAndSize ? 1 : 0,
-                    isIti61 ? 0 : 1),
+                    isOnDemand ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_ID, cxValidatorRequiredAA,
                     profile.isEbXml30Based() ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
@@ -114,7 +115,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
             new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
 
-        if ((profile.getInteractionId() == IpfInteractionId.ITI_42) || isIti61 || profile.isQuery()) {
+        if ((profile.getInteractionId() == IpfInteractionId.ITI_42) || isOnDemand || profile.isQuery()) {
             validators.add(new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
         }
         return validators;
@@ -204,7 +205,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(profile.isQuery() || (onDemandExpected == onDemandProvided),
                     WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
 
-            runValidations(docEntry, documentEntrySlotValidators(profile));
+            runValidations(docEntry, documentEntrySlotValidators(profile, onDemandProvided));
 
             AvailabilityStatus status = docEntry.getStatus();
             if (profile.isQuery()) {

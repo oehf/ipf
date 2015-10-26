@@ -16,7 +16,10 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
@@ -112,6 +115,25 @@ public class QueryResponseValidatorTest {
     public void testValidateDocumentEntryHasInvalidAvailabilityStatus() {
         docEntry.setAvailabilityStatus(AvailabilityStatus.SUBMITTED);
         expectFailure(DOC_ENTRY_INVALID_AVAILABILITY_STATUS);
+    }
+
+    /**
+     * Test the case when a Query returned an On-Demand Document Entry.
+     */
+    @Test
+    public void testOnDemandDocumentEntryValidation() {
+        assertNotNull(docEntry.getSize());
+        assertNotNull(docEntry.getHash());
+        docEntry.setType(DocumentEntryType.ON_DEMAND);
+        expectFailure(WRONG_NUMBER_OF_SLOT_VALUES);
+
+        docEntry.setSize(null);
+        docEntry.setHash(null);
+        expectFailure(WRONG_NUMBER_OF_SLOT_VALUES);
+
+        docEntry.setCreationTime((DateTime) null);
+        docEntry.setLegalAuthenticator(null);
+        validator.validate(transformer.toEbXML(response), profile);
     }
 
     private void expectFailure(ValidationMessage expectedMessage) {
