@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.flow.extend
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
+
 
 /**
  * @author Martin Krasser
  */
-class GroovyRenderRouteBuilder extends SpringRouteBuilder {
+class GroovyRenderRouteBuilder extends RouteBuilder {
     
     void configure() {
     

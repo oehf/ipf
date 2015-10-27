@@ -29,7 +29,6 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.xml.sax.SAXException;
 
@@ -229,7 +228,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     public void testSchematronTransmogrifier() throws InterruptedException,
             IOException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input23", content("schematron/schematron-test.xml"));
+        producerTemplate.sendBody("direct:input23", content("/schematron/schematron-test.xml"));
         mockOutput.assertIsSatisfied();
         String result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
         assertFalse(result.contains("svrl:failed-assert"));
@@ -239,7 +238,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     public void testInvalidSchematronTransmogrifier() throws InterruptedException,
             IOException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input23", content("schematron/schematron-test-fail.xml"));
+        producerTemplate.sendBody("direct:input23", content("/schematron/schematron-test-fail.xml"));
         mockOutput.assertIsSatisfied();
         String result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
         assertTrue(result.contains("svrl:failed-assert"));
@@ -250,7 +249,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
             throws InterruptedException,
             IOException, SAXException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input24", content("xquery/labreport.xml"));
+        producerTemplate.sendBody("direct:input24", content("/xquery/labreport.xml"));
         assertXqueryOutput("someid");
     }
 
@@ -258,7 +257,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     public void testXqueryTransmogrifier() throws InterruptedException,
             IOException, SAXException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input25", content("xquery/labreport.xml"));
+        producerTemplate.sendBody("direct:input25", content("/xquery/labreport.xml"));
         assertXqueryOutput("headerId");
     }
 
@@ -266,7 +265,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     public void testXqueryTransmogrifierReturningInputStream()
             throws InterruptedException, IOException, SAXException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input26", content("xquery/labreport.xml"));
+        producerTemplate.sendBody("direct:input26", content("/xquery/labreport.xml"));
         mockOutput.assertIsSatisfied();
         InputStream result = mockOutput.getExchanges().get(0).getIn()
                 .getBody(InputStream.class);
@@ -277,7 +276,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     public void testXqueryTransmogrifierReturningDOMResult()
             throws InterruptedException, IOException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input27", content("xquery/labreport.xml"));
+        producerTemplate.sendBody("direct:input27", content("/xquery/labreport.xml"));
         mockOutput.assertIsSatisfied();
         DOMResult result = mockOutput.getExchanges().get(0).getIn()
                 .getBody(DOMResult.class);
@@ -288,7 +287,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     public void testXqueryTransmogrifierExternalRessource()
             throws InterruptedException, IOException, SAXException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input28", content("xquery/labreport.xml"));
+        producerTemplate.sendBody("direct:input28", content("/xquery/labreport.xml"));
         assertXqueryOutput("mapid");
     }
 
@@ -296,7 +295,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     public void testXqueryTransmogrifierExternalSourceParam()
             throws InterruptedException, IOException, SAXException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input29", content("xquery/labreport.xml"));
+        producerTemplate.sendBody("direct:input29", content("/xquery/labreport.xml"));
         assertXqueryOutput("externalid");
     }
 
@@ -304,14 +303,13 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     public void testXqueryWithHeaderParams()
             throws InterruptedException, IOException, SAXException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input30", content("xquery/labreport.xml"));
+        producerTemplate.sendBody("direct:input30", content("/xquery/labreport.xml"));
         mockOutput.assertIsSatisfied();
     }
 
     
     private String xsltInput() throws IOException {
-        return IOUtils.toString(new ClassPathResource("xslt/createPatient.xml")
-                .getInputStream());
+        return IOUtils.toString(getClass().getResourceAsStream("/xslt/createPatient.xml"));
     }
 
     private void assertXqueryOutput(String resultXml) throws InterruptedException {
@@ -331,7 +329,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     }
 
     private String content(String path) throws IOException {
-        return IOUtils.toString(new ClassPathResource(path).getInputStream());
+        return IOUtils.toString(getClass().getResourceAsStream(path));
     }
 
 }

@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import org.springframework.beans.factory.InitializingBean
 import org.openehealth.ipf.commons.core.extend.DefaultActivator
 import org.openehealth.ipf.commons.core.extend.ExtensionActivator
 
@@ -52,7 +51,7 @@ import org.openehealth.ipf.commons.core.extend.ExtensionActivator
  *
  * @deprecated use Extension Modules or Dynamic extensions
  */
-class DefaultModelExtender implements RouteModelExtender, InitializingBean {
+class DefaultModelExtender implements RouteModelExtender {
     
     ExtensionActivator extensionActivator
     

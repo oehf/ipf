@@ -85,9 +85,6 @@ public abstract class MllpEndpoint
 
     private synchronized List<Hl7v2Interceptor> getCustomInterceptors() {
         List<Hl7v2Interceptor> result = new ArrayList<>();
-        for (String beanName : config.getCustomInterceptorBeans()) {
-            result.add(getCamelContext().getRegistry().lookupByNameAndType(beanName, Hl7v2Interceptor.class));
-        }
         for (Hl7v2InterceptorFactory customInterceptorFactory : config.getCustomInterceptorFactories()) {
             result.add(customInterceptorFactory.getNewInstance());
         }
@@ -300,14 +297,6 @@ public abstract class MllpEndpoint
     @ManagedAttribute(description = "Client Authentication Type")
     public String getClientAuthTypeClass() {
         return getClientAuthType().toString();
-    }
-
-    /**
-     * @return the customInterceptors as array of bean names.
-     */
-    @ManagedAttribute(description = "Custom Interceptor Beans")
-    public String[] getCustomInterceptorBeans() {
-        return config.getCustomInterceptorBeans();
     }
 
     /**

@@ -15,14 +15,15 @@
  */
 package org.openehealth.ipf.tutorials.osgi.atna.route.sender
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
+
 /**
  * Camel endpoint sender tutorial route
  * 
  * @author Boris Stanojevic
  *
  */
-class GroovyRouteBuilder extends SpringRouteBuilder {
+class GroovyRouteBuilder extends RouteBuilder {
 
     void configure() throws Exception {
 

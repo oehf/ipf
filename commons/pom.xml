@@ -21,6 +21,7 @@
         <module>ihe</module>
         <module>xml</module>
         <module>map</module>
+        <module>spring</module>
     </modules>
 
     <dependencies>

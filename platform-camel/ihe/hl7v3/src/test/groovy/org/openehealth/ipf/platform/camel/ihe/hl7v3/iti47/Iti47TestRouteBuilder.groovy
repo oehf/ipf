@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Exception
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqRequest3to2Translator
@@ -23,12 +23,14 @@ import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqResponse2to3Translat
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.*
+
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.translatorHL7v2toHL7v3
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.translatorHL7v3toHL7v2
 
 /**
  * @author Dmytro Rud
  */
-class Iti47TestRouteBuilder extends SpringRouteBuilder {
+class Iti47TestRouteBuilder extends RouteBuilder {
     private static final PdqRequest3to2Translator REQUEST_TRANSLATOR =
         new PdqRequest3to2Translator(translateInitialQuantity: true)
 

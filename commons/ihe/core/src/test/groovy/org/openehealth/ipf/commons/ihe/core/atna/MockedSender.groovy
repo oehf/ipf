@@ -33,7 +33,7 @@ import static org.openehealth.ipf.commons.xml.XmlUtils.source
 class MockedSender implements AuditMessageSender {
     private static final transient Logger LOG = LoggerFactory.getLogger(MockedSender.class)
 
-    private static final String VALIDATION_SCHEMA = 'dicomModified.xsd'
+    private static final String VALIDATION_SCHEMA = '/dicomModified.xsd'
 
     List<AuditEventMessage> messages = Collections.synchronizedList(new ArrayList<AuditEventMessage>())
     XsdValidator validator = new XsdValidator()

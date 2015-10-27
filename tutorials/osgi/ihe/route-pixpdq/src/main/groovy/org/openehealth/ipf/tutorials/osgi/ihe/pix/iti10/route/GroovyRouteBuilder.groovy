@@ -15,18 +15,17 @@
  */
 package org.openehealth.ipf.tutorials.osgi.ihe.pix.iti10.route
 
-import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.platform.camel.hl7.HL7v2
+import org.apache.camel.builder.RouteBuilder
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-import static org.openehealth.ipf.platform.camel.hl7.HL7v2.*
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
+import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 
 
 /**
  * @author Dmytro Rud
  * @author Boris Stanojevic 
  */
-class GroovyRouteBuilder extends SpringRouteBuilder {
+class GroovyRouteBuilder extends RouteBuilder {
 
     void configure() throws Exception {
 

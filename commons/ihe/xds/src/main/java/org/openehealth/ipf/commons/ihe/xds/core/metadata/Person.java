@@ -16,9 +16,9 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.XCN;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.springframework.beans.BeanUtils;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -108,7 +108,12 @@ public class Person extends Hl7v2Based<XCN> {
      */
     public void setName(Name name) {
         if (name != null) {
-            BeanUtils.copyProperties(name, new XcnName(getHapiObject()));
+            try {
+                Name thisName = new XcnName(getHapiObject());
+                BeanUtils.copyProperties(thisName, name);
+            } catch (Exception e) {
+                throw new RuntimeException("Could not copy properties");
+            }
         }
         else {
             XCN xcn = getHapiObject();

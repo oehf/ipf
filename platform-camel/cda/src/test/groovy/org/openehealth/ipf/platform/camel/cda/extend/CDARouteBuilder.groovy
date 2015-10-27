@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
+
 
 /**
  * @author Christian Ohr
  */
-class CDARouteBuilder extends SpringRouteBuilder {
+class CDARouteBuilder extends RouteBuilder {
       
     void configure() {
             

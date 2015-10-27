@@ -72,6 +72,7 @@
         <bouncycastle-version>1.50</bouncycastle-version>
         <camel-version>2.15.2</camel-version>
         <cglib-version>3.1</cglib-version>
+        <commons-beanutils-version>1.9.2</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
@@ -580,6 +581,11 @@
                 <version>${osgi-api-version}</version>
             </dependency>
             <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec-version}</version>
@@ -1045,6 +1051,11 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context-support</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
                 <version>${spring-version}</version>
             </dependency>
             <dependency>

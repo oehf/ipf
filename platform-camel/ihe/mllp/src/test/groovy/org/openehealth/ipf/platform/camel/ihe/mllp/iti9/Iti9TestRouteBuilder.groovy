@@ -16,14 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti9
 
 import ca.uhn.hl7v2.AcknowledgmentCode
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
 
 /**
  * Camel route for generic unit tests.
  * @author Dmytro Rud
  */
-class Iti9TestRouteBuilder extends SpringRouteBuilder {
+class Iti9TestRouteBuilder extends RouteBuilder {
 
     def rsp = '''MSH|^~\\&|MESA_XREF|XYZ_HOSPITAL|MESA_PIX_CLIENT|MESA_DEPARTMENT|20090901141123||RSP^K23^RSP_K23|356813|P|2.5
          MSA|AA|10501108

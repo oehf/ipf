@@ -16,21 +16,22 @@
 package org.openehealth.ipf.tutorials.xds
 
 import org.apache.camel.Exchange
+import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.processor.aggregate.AbstractListAggregationStrategy
-
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
-
-import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
-import org.openehealth.ipf.commons.ihe.xds.core.responses.*
+import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
+import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti43RequestValidator
 
 /**
  * Route builder for ITI-43.
  * @author Jens Riemschneider
  */
-class Iti43RouteBuilder extends SpringRouteBuilder {
+class Iti43RouteBuilder extends RouteBuilder {
     private final static Logger log = LoggerFactory.getLogger(Iti43RouteBuilder.class);
     
     @Override

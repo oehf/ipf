@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44
 
-import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * @author Dmytro Rud
  */
-class Iti44TestRouteBuilder extends SpringRouteBuilder {
+class Iti44TestRouteBuilder extends RouteBuilder {
 
     private static final String ACK =
             StandardTestContainer.readFile('translation/pixfeed/v3/Ack.xml')

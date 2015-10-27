@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.tutorials.osgi.ihe.pdq.iti21.route
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.*
 
 /**
  * @author Boris Stanojevic
  */
-class GroovyRouteBuilder extends SpringRouteBuilder {
+class GroovyRouteBuilder extends RouteBuilder {
 
      def rsp = '''MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|20090901140929||RSP^K22^RSP_K21|356757|P|2.5
 MSA|AA|1305506339

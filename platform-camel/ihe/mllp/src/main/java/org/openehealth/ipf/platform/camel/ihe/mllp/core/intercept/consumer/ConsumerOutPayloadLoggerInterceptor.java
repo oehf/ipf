@@ -17,6 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import lombok.experimental.Delegate;
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.ihe.core.payload.ExpressionResolver;
+import org.openehealth.ipf.commons.ihe.core.payload.SpringExpressionResolver;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactorySupport;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLoggerBase;
 
@@ -28,12 +32,28 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLog
  *
  * @author Dmytro Rud
  */
-public class ConsumerOutPayloadLoggerInterceptor extends AbstractMllpInterceptor {
+public class ConsumerOutPayloadLoggerInterceptor extends AbstractMllpInterceptor<MllpEndpoint> {
     @Delegate private final MllpPayloadLoggerBase base = new MllpPayloadLoggerBase();
 
+    /**
+     * Instantiation, implicitly using a {@link SpringExpressionResolver}
+     *
+     * @param fileNamePattern file name pattern
+     */
     public ConsumerOutPayloadLoggerInterceptor(String fileNamePattern) {
+        this(new SpringExpressionResolver(fileNamePattern));
+    }
+
+    /**
+     * Instantiation, explicitly using a ExpressionResolver instance
+     *
+     * @param resolver ExpressionResolver instance
+     * @since 3.1
+     */
+    public ConsumerOutPayloadLoggerInterceptor(ExpressionResolver resolver) {
+        super();
         addBefore(ConsumerStringProcessingInterceptor.class.getName());
-        setFileNamePattern(fileNamePattern);
+        setExpressionResolver(resolver);
     }
 
     @Override
@@ -44,4 +64,29 @@ public class ConsumerOutPayloadLoggerInterceptor extends AbstractMllpInterceptor
         }
     }
 
+    public static class Factory extends Hl7v2InterceptorFactorySupport<ConsumerOutPayloadLoggerInterceptor> {
+
+        private final ExpressionResolver resolver;
+        private boolean locallyEnabled = true;
+
+        public Factory(String fileNamePattern) {
+            this(new SpringExpressionResolver(fileNamePattern));
+        }
+
+        public Factory(ExpressionResolver resolver) {
+            super(ConsumerOutPayloadLoggerInterceptor.class);
+            this.resolver = resolver;
+        }
+
+        @Override
+        public ConsumerOutPayloadLoggerInterceptor getNewInstance() {
+            ConsumerOutPayloadLoggerInterceptor interceptor = new ConsumerOutPayloadLoggerInterceptor(resolver);
+            interceptor.setLocallyEnabled(locallyEnabled);
+            return interceptor;
+        }
+
+        public void setLocallyEnabled(boolean locallyEnabled) {
+            this.locallyEnabled = locallyEnabled;
+        }
+    }
 }

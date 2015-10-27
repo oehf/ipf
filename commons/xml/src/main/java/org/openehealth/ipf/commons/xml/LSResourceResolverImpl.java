@@ -17,10 +17,10 @@ package org.openehealth.ipf.commons.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
@@ -46,10 +46,11 @@ public class LSResourceResolverImpl implements LSResourceResolver {
     public LSInput resolveResource(String type, String namespaceURI,
             String publicId, String systemId, String baseURI) {
 
-        ClassPathResource resource = new ClassPathResource(systemId);
+
         LSInput lsInput = null;
         try {
-            InputStream is = resource.getInputStream();
+            URL resource = new URL(systemId);
+            InputStream is = resource.openStream();
             lsInput = new LSInputImpl(is);
         } catch (IOException e) {
             LOG.debug("Referenced external file {} could not be found. Falling back to "

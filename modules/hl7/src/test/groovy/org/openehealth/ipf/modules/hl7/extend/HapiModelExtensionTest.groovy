@@ -36,7 +36,6 @@ import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory
-import org.springframework.core.io.ClassPathResource
 
 import static org.easymock.EasyMock.*
 import static org.junit.Assert.*
@@ -52,7 +51,7 @@ public class HapiModelExtensionTest {
     @BeforeClass
     static void setUp() {
         BidiMappingService mappingService = new BidiMappingService()
-        mappingService.addMappingScript(new ClassPathResource("example2.map"))
+        mappingService.addMappingScript(HapiModelExtensionTest.class.getResource("/example2.map"))
         ModelClassFactory mcf = new CustomModelClassFactory()
         HapiContext context = new DefaultHapiContext(mcf)
         Registry registry = createMock(Registry)

@@ -25,7 +25,6 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -53,7 +52,7 @@ public class TransportTest {
     @Test
     public void testMessage02() throws Exception {
         String message = inputMessage("message/msg-02.hl7");
-        String content = IOUtils.toString(new ClassPathResource("message/msg-02.content").getInputStream());
+        String content = IOUtils.toString(getClass().getResourceAsStream("/message/msg-02.content"));
         mockOutput.expectedBodiesReceived(content);
         producerTemplate.sendBody("mina2:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec", message);
         mockOutput.assertIsSatisfied();

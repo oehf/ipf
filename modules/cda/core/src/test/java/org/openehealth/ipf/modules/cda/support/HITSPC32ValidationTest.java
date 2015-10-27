@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
-import org.springframework.core.io.ClassPathResource;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -42,7 +41,7 @@ public class HITSPC32ValidationTest {
 	private SchematronValidator schematron;
 	private Map<String, Object> params;
 
-	private String sample_c32 = "MU_Rev3_HITSP_C32C83_4Sections_RobustEntries_NoErrors.xml";
+	private static final String sample_c32 = "/MU_Rev3_HITSP_C32C83_4Sections_RobustEntries_NoErrors.xml";
 
 	@Before
 	public void setUp() throws Exception {
@@ -54,30 +53,26 @@ public class HITSPC32ValidationTest {
 
     @Test
     public void validateSchemaGoodSample24() throws Exception {
-        Source testXml = new StreamSource(
-                new ClassPathResource(sample_c32).getInputStream());
+        Source testXml = new StreamSource(getClass().getResourceAsStream(sample_c32));
         validator.validate(testXml, HITSP_32_2_4_SCHEMA);
     }
 
     @Test
     public void validateSchemaGoodSample25() throws Exception {
-        Source testXml = new StreamSource(
-                new ClassPathResource(sample_c32).getInputStream());
+        Source testXml = new StreamSource(getClass().getResourceAsStream(sample_c32));
         validator.validate(testXml, HITSP_32_2_5_SCHEMA);
     }
 
 	@Test
 	public void validateComplete24() throws Exception {
-		Source testXml = new StreamSource(
-				new ClassPathResource(sample_c32).getInputStream());
+        Source testXml = new StreamSource(getClass().getResourceAsStream(sample_c32));
 		schematron.validate(testXml, new SchematronProfile(
 				HITSP_32_2_4_SCHEMATRON_RULES, params));
 	}
 
     @Test
     public void validateComplete25() throws Exception {
-        Source testXml = new StreamSource(
-                new ClassPathResource(sample_c32).getInputStream());
+        Source testXml = new StreamSource(getClass().getResourceAsStream(sample_c32));
         schematron.validate(testXml, new SchematronProfile(
                 HITSP_32_2_5_SCHEMATRON_RULES, params));
     }

@@ -28,7 +28,6 @@ import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.springframework.core.io.ClassPathResource
 
 import ca.uhn.hl7v2.parser.DefaultModelClassFactory
 import ca.uhn.hl7v2.parser.ModelClassFactory
@@ -41,7 +40,7 @@ class Testiti47CamelOnly extends StandardTestContainer {
     @BeforeClass
     public static void setUpClass() {
         BidiMappingService mappingService = new BidiMappingService()
-        mappingService.addMappingScript(new ClassPathResource("example2.map"))
+        mappingService.addMappingScript(Testiti47CamelOnly.class.getResource("/example2.map"))
         ModelClassFactory mcf = new DefaultModelClassFactory()
         Registry registry = createMock(Registry)
         ContextFacade.setRegistry(registry)

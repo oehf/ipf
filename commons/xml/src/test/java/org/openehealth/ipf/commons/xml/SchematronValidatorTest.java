@@ -15,16 +15,14 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Christian Ohr
@@ -40,19 +38,16 @@ public class SchematronValidatorTest {
 
     @Test
     public void testValidate() throws IOException {
-        Source testXml = new StreamSource(new ClassPathResource(
-                "schematron/schematron-test.xml").getInputStream());
-        v.validate(testXml, new SchematronProfile(
-                "schematron/schematron-test-rules.xml"));
+        Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test.xml"));
+        v.validate(testXml, new SchematronProfile("/schematron/schematron-test-rules.xml"));
     }
 
     @Test
     public void testValidateFail() throws IOException {
-        Source testXml = new StreamSource(new ClassPathResource(
-                "schematron/schematron-test-fail.xml").getInputStream());
+        Source testXml = new StreamSource(getClass().getResourceAsStream(
+                "/schematron/schematron-test-fail.xml"));
         try {
-            v.validate(testXml, new SchematronProfile(
-                    "schematron/schematron-test-rules.xml"));
+            v.validate(testXml, new SchematronProfile("/schematron/schematron-test-rules.xml"));
             assertEquals("This line shall be not reachable", 0, 1);
         } catch (SchematronValidationException e) {
             Throwable[] cause = e.getCauses();

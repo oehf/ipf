@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import ca.uhn.hl7v2.AcknowledgmentCode
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
@@ -28,7 +28,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
  * 
  * @author Dmytro Rud
  */
-class Iti8TestValidationRouteBuilder extends SpringRouteBuilder {
+class Iti8TestValidationRouteBuilder extends RouteBuilder {
 
      void configure() throws Exception {
 

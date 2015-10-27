@@ -15,10 +15,11 @@
  */
 package org.openehealth.ipf.tutorials.osgi.ihe.xds.iti15.route
 
+import org.apache.camel.builder.RouteBuilder
+
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsACamelValidators.*
 
-import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 
@@ -27,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
  * @author Jens Riemschneider
  * @author Boris Stanojevic 
  */
-public class GroovyRouteBuilder extends SpringRouteBuilder {
+public class GroovyRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti15:xds-iti15-service1')

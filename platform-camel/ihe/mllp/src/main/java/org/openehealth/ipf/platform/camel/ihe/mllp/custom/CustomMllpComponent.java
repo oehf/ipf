@@ -25,7 +25,6 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
-import org.springframework.beans.factory.BeanInitializationException;
 
 /**
  * Component for custom MLLP components. The HL7v2 configuration as well as the ATNA audit strategies must be
@@ -56,15 +55,15 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
         MllpTransactionEndpointConfiguration transactionConfig = super.createConfig(parameters);
         configuration = resolveAndRemoveReferenceParameter(parameters, "hl7TransactionConfig", Hl7v2TransactionConfiguration.class);
         if (configuration == null) {
-            throw new BeanInitializationException("Must provide hl7TransactionConfig attribute with custom MLLP component");
+            throw new IllegalArgumentException("Must provide hl7TransactionConfig attribute with custom MLLP component");
         }
         clientAuditStrategy = resolveAndRemoveReferenceParameter(parameters, "clientAuditStrategy", MllpAuditStrategy.class);
         if (transactionConfig.isAudit() && clientAuditStrategy == null) {
-            throw new BeanInitializationException("Consumer or Producer require ATNA audit, but no clientAuditStrategy is defined for custom MLLP component");
+            throw new IllegalArgumentException("Consumer or Producer require ATNA audit, but no clientAuditStrategy is defined for custom MLLP component");
         }
         serverAuditStrategy = resolveAndRemoveReferenceParameter(parameters, "serverAuditStrategy", MllpAuditStrategy.class);
         if (transactionConfig.isAudit() && serverAuditStrategy == null) {
-            throw new BeanInitializationException("Consumer or Producer require ATNA audit, but no serverAuditStrategy is defined for custom MLLP component");
+            throw new IllegalArgumentException("Consumer or Producer require ATNA audit, but no serverAuditStrategy is defined for custom MLLP component");
         }
         return transactionConfig;
     }

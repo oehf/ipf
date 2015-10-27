@@ -15,26 +15,22 @@
  */
 package org.openehealth.ipf.modules.cda.support;
 
-import static org.openehealth.ipf.modules.cda.CDAR2Constants.IHE_LAB_SCHEMA;
-import static org.openehealth.ipf.modules.cda.CDAR2Constants.HITSP_37_SCHEMATRON_RULES;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
-import org.springframework.core.io.ClassPathResource;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.openehealth.ipf.modules.cda.CDAR2Constants.HITSP_37_SCHEMATRON_RULES;
+import static org.openehealth.ipf.modules.cda.CDAR2Constants.IHE_LAB_SCHEMA;
 
 /**
  * Validates the HITSP C37 schematron rule set.
@@ -48,9 +44,9 @@ public class HITSPC37ValidationTest {
 	private SchematronValidator schematron;
 	private Map<String, Object> params;
 
-	private String sample_good = "HITSP_C37_With_CBC_GTT_GS_Sensitivity.xml";
-	private String sample_lab = "IHE_LabReport_20080103.xml";
-	private String sample_wrong = "CDA_PHMR_WRONG.xml";
+	private static final String sample_good = "/HITSP_C37_With_CBC_GTT_GS_Sensitivity.xml";
+	private static final String sample_lab = "/IHE_LabReport_20080103.xml";
+	private static final String sample_wrong = "/CDA_PHMR_WRONG.xml";
 
 	@Before
 	public void setUp() throws Exception {
@@ -62,15 +58,13 @@ public class HITSPC37ValidationTest {
 
 	@Test
 	public void validateSchemaGoodSample() throws Exception {
-		Source testXml = new StreamSource(
-				new ClassPathResource(sample_good).getInputStream());
+		Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
 		validator.validate(testXml, IHE_LAB_SCHEMA);
 	}
 
 	@Test
 	public void validateComplete() throws Exception {
-		Source testXml = new StreamSource(
-				new ClassPathResource(sample_good).getInputStream());
+        Source testXml = new StreamSource(getClass().getResourceAsStream(sample_good));
 		schematron.validate(testXml, new SchematronProfile(
 				HITSP_37_SCHEMATRON_RULES, params));
 	}
@@ -78,8 +72,7 @@ public class HITSPC37ValidationTest {
 	@Test
 	public void validateCompleteWrong() throws Exception {
 		try {
-			Source testXml = new StreamSource(new ClassPathResource(
-					sample_wrong).getInputStream());
+            Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
 			schematron.validate(testXml, new SchematronProfile(
 					HITSP_37_SCHEMATRON_RULES, params));
 			fail();
@@ -90,8 +83,7 @@ public class HITSPC37ValidationTest {
 
 	@Test
 	public void validateLab() throws Exception {
-		Source testXml = new StreamSource(
-				new ClassPathResource(sample_lab).getInputStream());
+        Source testXml = new StreamSource(getClass().getResourceAsStream(sample_lab));
 		schematron.validate(testXml, new SchematronProfile(
 				HITSP_37_SCHEMATRON_RULES, params));
 	}

@@ -22,7 +22,6 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * @author Jens Riemschneider
@@ -56,13 +56,13 @@ public class TestServers {
     }
 
     private void checkServer(ServletServer server, int port) throws Exception {
-        ClassPathResource contextResource = new ClassPathResource("test.xml");
+        URL contextResource = getClass().getResource("/test.xml");
 
         server.setServlet(new Servlet());
         server.setPort(port);
         server.setContextPath("/testContext");
         server.setServletPath("/testServlet/*");
-        server.setContextResource(contextResource.getURI().toString());
+        server.setContextResource(contextResource.toURI().toString());
         server.start();
         checkPostRequest(port);
         server.stop();

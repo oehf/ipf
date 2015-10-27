@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.tutorials.osgi.ihe.xds.iti62.route
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
@@ -26,7 +26,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti6
 /**
  * @author Boris Stanojevic
  */
-public class GroovyRouteBuilder extends SpringRouteBuilder {
+public class GroovyRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti62:xds-iti62-service1')

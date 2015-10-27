@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.cda.dataformat.MdhtDataFormat
 
 /**
  * @author Christian Ohr
  */
-class MdhtRouteBuilder extends SpringRouteBuilder {
+class MdhtRouteBuilder extends RouteBuilder {
 
     private MdhtDataFormat mdht = new MdhtDataFormat();
 

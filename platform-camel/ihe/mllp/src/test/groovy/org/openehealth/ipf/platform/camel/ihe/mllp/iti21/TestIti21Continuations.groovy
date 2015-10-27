@@ -65,7 +65,7 @@ class TestIti21Continuations extends MllpTestContainer {
             "&unsolicitedFragmentationStorage=#unsolicitedFragmentationStorage" +
             "&supportSegmentFragmentation=${supportSegmentFragmentation}" +
             "&autoCancel=${autoCancel}" +
-            "&interceptors=#${isServerSide ? 'server' : 'client'}InLogger," +
+            "&interceptorFactories=#${isServerSide ? 'server' : 'client'}InLogger," +
                           "#${isServerSide ? 'server' : 'client'}OutLogger"
     }
     

@@ -21,7 +21,6 @@ import java.io.InputStream;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 
 /**
@@ -30,8 +29,8 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(locations = { "/config/context-extend.xml" })
 public class CDAModelExtensionTest extends AbstractExtensionTest {
 
-    private String cdaExample = "message/SampleCDADocument.xml";
-    private String ccdExample = "message/SampleCCDDocument.xml";
+    private String cdaExample = "/message/SampleCDADocument.xml";
+    private String ccdExample = "/message/SampleCCDDocument.xml";
 
     @EndpointInject(uri="mock:error")
     protected MockEndpoint mockError;
@@ -60,7 +59,7 @@ public class CDAModelExtensionTest extends AbstractExtensionTest {
     }
     
     private static InputStream inputStream(String resource) throws IOException {
-        return new ClassPathResource(resource).getInputStream();
+        return CDAModelExtensionTest.class.getResourceAsStream(resource);
     }
     
 }

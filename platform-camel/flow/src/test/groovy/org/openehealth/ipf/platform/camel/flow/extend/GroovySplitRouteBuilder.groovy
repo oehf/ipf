@@ -16,12 +16,12 @@
 package org.openehealth.ipf.platform.camel.flow.extend
 
 import org.apache.camel.Exchange
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 
 /**
  * @author Jens Riemschneider
  */
-class GroovySplitRouteBuilder extends SpringRouteBuilder {
+class GroovySplitRouteBuilder extends RouteBuilder {
     
     void configure() {
         

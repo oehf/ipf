@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.tutorials.osgi.ihe.pixv3.iti44.route
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.*
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.*
@@ -24,7 +24,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslat
  * @author Dmytro Rud
  * @author Boris Stanojevic
  */
-class GroovyRouteBuilder extends SpringRouteBuilder {
+class GroovyRouteBuilder extends RouteBuilder {
 
     def pixFeedRequestTranslator
     def pixFeedAckTranslator

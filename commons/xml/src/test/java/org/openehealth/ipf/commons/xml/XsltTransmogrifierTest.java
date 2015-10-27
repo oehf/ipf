@@ -15,17 +15,14 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Christian Ohr
@@ -41,10 +38,8 @@ public class XsltTransmogrifierTest {
 
     @Test
     public void testConvertString() throws IOException {
-        Source source = new StreamSource(new ClassPathResource(
-                "xslt/createPatient.xml").getInputStream());
-        String result = transformer.zap(source,
-                "xslt/createPatient.xslt");
+        Source source = new StreamSource(getClass().getResourceAsStream("/xslt/createPatient.xml"));
+        String result = transformer.zap(source, "/xslt/createPatient.xslt");
         assertNotNull(result);
     }
 

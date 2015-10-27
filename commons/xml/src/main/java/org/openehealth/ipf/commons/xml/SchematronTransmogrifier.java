@@ -99,26 +99,26 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
     }
 
     @Override
-    protected Templates createResource(Object... params) throws Exception {
+    protected Templates createResource(Object... params) {
         try {
             LOG.debug("Creating new Schematron stylesheet");
             Source rules = resourceContent(params);
             Map<String, Object> parameters = resourceParameters(params);
             LOG.debug("step 1 of 3");
             Source source = step(xsltTransmogrifier, rules,
-                    "schematron/iso_dsdl_include.xsl", parameters);
+                    "/schematron/iso_dsdl_include.xsl", parameters);
             LOG.debug("step 2 of 3");
             source = step(xsltTransmogrifier, source,
-                    "schematron/iso_abstract_expand.xsl", parameters);
+                    "/schematron/iso_abstract_expand.xsl", parameters);
             LOG.debug("step 3 of 3");
             source = step(xsltTransmogrifier, source,
-                    "schematron/iso_svrl_for_xslt2.xsl", parameters);
+                    "/schematron/iso_svrl_for_xslt2.xsl", parameters);
             Templates template = getFactory().newTemplates(source);
             LOG.debug("done!");
             return template;
         } catch (Exception e) {
             throw new IllegalArgumentException("The schematron rules resource "
-                    + resourceLocation(params) + " is not valid");
+                    + resourceLocation(params) + " is not valid", e);
         }
     }
 

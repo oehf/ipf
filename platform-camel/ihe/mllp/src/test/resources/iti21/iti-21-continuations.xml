@@ -62,20 +62,20 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <!--<constructor-arg value="c:/iti21-logs/[processId]/[sequenceId]" />-->
     </bean>
 
-    <bean id="serverInLogger" scope="prototype" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInPayloadLoggerInterceptor">
+    <bean id="serverInLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInPayloadLoggerInterceptor$Factory">
         <constructor-arg value="#{@logFileNamePrefix}-server-in.txt" />
         <property name="locallyEnabled" value="true" />
     </bean>
 
-    <bean id="serverOutLogger" scope="prototype" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerOutPayloadLoggerInterceptor">
+    <bean id="serverOutLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerOutPayloadLoggerInterceptor$Factory">
         <constructor-arg value="#{@logFileNamePrefix}-server-out.txt" />
     </bean>
 
-    <bean id="clientInLogger" scope="prototype" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerInPayloadLoggerInterceptor">
+    <bean id="clientInLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerInPayloadLoggerInterceptor$Factory">
         <constructor-arg value="#{@logFileNamePrefix}-client-in.txt" />
     </bean>
 
-    <bean id="clientOutLogger" scope="prototype" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerOutPayloadLoggerInterceptor">
+    <bean id="clientOutLogger" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerOutPayloadLoggerInterceptor$Factory">
         <constructor-arg value="#{@logFileNamePrefix}-client-out.txt" />
     </bean>
 

@@ -15,15 +15,13 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import org.springframework.core.io.ClassPathResource;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -45,7 +43,7 @@ public class XsdValidatorTest {
 	@Test
 	public void testValidate() throws Exception {
 		cache.clear();
-		Source testXml = new StreamSource(new ClassPathResource("xsd/test.xml").getInputStream());
+		Source testXml = new StreamSource(getClass().getResourceAsStream("/xsd/test.xml"));
 		validator.validate(testXml, SCHEMA_RESOURCE);
 		Assert.assertTrue(cache.containsKey(SCHEMA_RESOURCE));
 	}
@@ -54,8 +52,8 @@ public class XsdValidatorTest {
 	public void testValidateFails() throws Exception {
 		boolean schemaExisted = cache.containsKey(SCHEMA_RESOURCE);
 		int cacheSize = cache.size();
-		Source testXml = new StreamSource(new ClassPathResource(
-				"xsd/invalidtest.xml").getInputStream());
+		Source testXml = new StreamSource(getClass().getResourceAsStream(
+				"/xsd/invalidtest.xml"));
 		validator.validate(testXml, SCHEMA_RESOURCE);
 		if (schemaExisted) {
 			Assert.assertEquals(cacheSize, cache.size());

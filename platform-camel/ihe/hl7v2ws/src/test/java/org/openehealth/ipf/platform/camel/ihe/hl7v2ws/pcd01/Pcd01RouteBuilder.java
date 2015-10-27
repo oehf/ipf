@@ -20,7 +20,7 @@ import java.util.Scanner;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.model.Message;
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
@@ -30,7 +30,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidat
 /**
  * @author Mitko Kolev
  */
-public class Pcd01RouteBuilder extends SpringRouteBuilder {
+public class Pcd01RouteBuilder extends RouteBuilder {
 
     public static final Message PCD_01_SPEC_RESPONSE = load(
             HapiContextFactory.createHapiContext(PcdTransactions.PCD1),

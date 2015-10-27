@@ -15,22 +15,20 @@
  */
 package org.openehealth.ipf.osgi.config.ihe.atna;
 
-import java.util.Map;
-
+import org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender;
+import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
+import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender;
-import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
+
+import java.util.Map;
 
 /**
- * 
  * Listener bean to registration of AuditMessageSender type in the OSGi service
  * registry and sets it as a default sender to AuditorModuleContext. On
  * unregister it sets back the previous sender.
- * 
+ *
  * @author Boris Stanojevic
- * 
  */
 public class CamelEndpointSenderRegistration {
 
@@ -45,11 +43,9 @@ public class CamelEndpointSenderRegistration {
     private int auditRepositoryPort;
 
     /**
-     * 
-     * @param auditMessageSender
-     *            incoming CamelEndpointSender which replaces the default
-     *            auditSender
-     * @param map unused
+     * @param auditMessageSender incoming CamelEndpointSender which replaces the default
+     *                           auditSender
+     * @param map                unused
      */
     public void setCamelEndpointSenderService(
             CamelEndpointSender auditMessageSender, Map<?, ?> map) {
@@ -65,11 +61,9 @@ public class CamelEndpointSenderRegistration {
     }
 
     /**
-     * 
-     * @param auditMessageSender
-     *            the outgoing CamelEndpointSender, will be replaced with the
-     *            old default sender
-     * @param map unused
+     * @param auditMessageSender the outgoing CamelEndpointSender, will be replaced with the
+     *                           old default sender
+     * @param map                unused
      */
     public void unsetCamelEndpointSenderService(
             CamelEndpointSender auditMessageSender, Map<?, ?> map) {
@@ -79,7 +73,7 @@ public class CamelEndpointSenderRegistration {
     }
 
     private synchronized void replaceSender(AuditMessageSender sender,
-            String host, int port) {
+                                            String host, int port) {
         iheAuditorContext.setSender(sender);
         iheAuditorContext.getConfig().setAuditRepositoryHost(host);
         iheAuditorContext.getConfig().setAuditRepositoryPort(port);

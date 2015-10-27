@@ -32,13 +32,13 @@ public class ValidatorRouteBuilder extends RouteBuilderSupport {
                 helper.validator("testValidator").staticProfile("correct"));
 
         from("direct:validator-xml-test").process(
-                helper.xsdValidator().staticProfile("xsd/test.xsd")).setBody()
+                helper.xsdValidator().staticProfile("/xsd/test.xsd")).setBody()
                 .constant("passed");
 
         from("direct:validator-schematron-test").process(
                 helper.schematronValidator().staticProfile(
                         new SchematronProfile(
-                                "schematron/schematron-test-rules.xml")))
+                                "/schematron/schematron-test-rules.xml")))
                 .setBody().constant("passed");
     }
 

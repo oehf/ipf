@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 
-import org.apache.camel.spring.GenericBeansException;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -35,7 +34,7 @@ public class Hl7v2InterceptorFactorySupport<T extends Hl7v2Interceptor> implemen
         try {
             return clazz.newInstance();
         } catch (Exception e) {
-            throw new GenericBeansException("Could not create interceptor instance of class " + clazz.getName(), e);
+            throw new RuntimeException("Could not create interceptor instance of class " + clazz.getName(), e);
         }
     }
 }

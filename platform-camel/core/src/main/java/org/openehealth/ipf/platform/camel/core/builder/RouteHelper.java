@@ -18,8 +18,8 @@ package org.openehealth.ipf.platform.camel.core.builder;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.Builder;
+import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
-import org.apache.camel.spring.SpringRouteBuilder;
 import org.apache.camel.util.CamelContextHelper;
 import org.openehealth.ipf.commons.core.modules.api.*;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
@@ -37,16 +37,16 @@ import javax.xml.transform.stream.StreamSource;
  */
 public class RouteHelper {
     
-    private SpringRouteBuilder routeBuilder;
+    private RouteBuilder routeBuilder;
 
-    public RouteHelper(SpringRouteBuilder routeBuilder) {
+    public RouteHelper(RouteBuilder routeBuilder) {
         this.routeBuilder = routeBuilder;
     }
     
     /**
      * @param routeBuilder the routeBuilder to set
      */
-    public void setRouteBuilder(SpringRouteBuilder routeBuilder) {
+    public void setRouteBuilder(RouteBuilder routeBuilder) {
         this.routeBuilder = routeBuilder;
     }
  
@@ -67,7 +67,8 @@ public class RouteHelper {
      * @return an adapted {@link Predicate} bean.
      */
     public PredicateAdapter predicate(String predicateBeanName) {
-        return new PredicateAdapter(routeBuilder.lookup(predicateBeanName, Predicate.class));
+        return new PredicateAdapter(routeBuilder.getContext().getRegistry()
+                .lookupByNameAndType(predicateBeanName, Predicate.class));
     }
     
     /**
@@ -80,7 +81,8 @@ public class RouteHelper {
      * @return an adapted {@link Converter} bean.
      */
     public ConverterAdapter converter(String converterBeanName) {
-        return new ConverterAdapter(routeBuilder.lookup(converterBeanName, Converter.class));
+        return new ConverterAdapter(routeBuilder.getContext().getRegistry()
+                .lookupByNameAndType(converterBeanName, Converter.class));
     }
 
     /**
@@ -93,7 +95,8 @@ public class RouteHelper {
      * @return an adapted {@link Parser} bean.
      */
     public ParserAdapter parser(String parserBeanName) {
-        return new ParserAdapter(routeBuilder.lookup(parserBeanName, Parser.class));
+        return new ParserAdapter(routeBuilder.getContext().getRegistry()
+                .lookupByNameAndType(parserBeanName, Parser.class));
     }
 
     public ParserAdapter parser(Parser<?> parser) {
@@ -110,7 +113,8 @@ public class RouteHelper {
      * @return an adapted {@link Renderer} bean.
      */
     public RendererAdapter renderer(String rendererBeanName) {
-        return new RendererAdapter(routeBuilder.lookup(rendererBeanName, Renderer.class));
+        return new RendererAdapter(routeBuilder.getContext().getRegistry()
+                .lookupByNameAndType(rendererBeanName, Renderer.class));
     }
 
     /**
@@ -134,7 +138,8 @@ public class RouteHelper {
      * @return an adapted {@link Transmogrifier} bean.
      */
     public TransmogrifierAdapter transmogrifier(String transmogrifierBeanName) {
-        return new TransmogrifierAdapter(routeBuilder.lookup(transmogrifierBeanName, Transmogrifier.class));
+        return new TransmogrifierAdapter(routeBuilder.getContext().getRegistry()
+                .lookupByNameAndType(transmogrifierBeanName, Transmogrifier.class));
     }
  
     /**
@@ -159,7 +164,8 @@ public class RouteHelper {
      * @return an adapted {@link Validator} bean.
      */
     public ValidatorAdapter validator(String validatorBeanName) {
-        return new ValidatorAdapter(routeBuilder.lookup(validatorBeanName, Validator.class));
+        return new ValidatorAdapter(routeBuilder.getContext().getRegistry()
+                .lookupByNameAndType(validatorBeanName, Validator.class));
     }
 
     /**
@@ -221,7 +227,8 @@ public class RouteHelper {
      * @return an adapted {@link Aggregator} bean.
      */
     public AggregatorAdapter aggregationStrategy(String aggregatorBeanName) {
-        return new AggregatorAdapter(routeBuilder.lookup(aggregatorBeanName, Aggregator.class));
+        return new AggregatorAdapter(routeBuilder.getContext().getRegistry()
+                .lookupByNameAndType(aggregatorBeanName, Aggregator.class));
     }
     
     public DataFormatAdapter dataFormatParser(Parser<?> parser) {
@@ -229,7 +236,8 @@ public class RouteHelper {
     }
     
     public DataFormatAdapter dataFormatParser(String parserBeanName) {
-        return new DataFormatAdapter(routeBuilder.lookup(parserBeanName, Parser.class));
+        return new DataFormatAdapter(routeBuilder.getContext().getRegistry()
+                .lookupByNameAndType(parserBeanName, Parser.class));
     }
     
     public DataFormatAdapter dataFormatRenderer(Renderer<?> renderer) {
@@ -237,7 +245,8 @@ public class RouteHelper {
     }
     
     public DataFormatAdapter dataFormatRenderer(String rendererBeanName) {
-        return new DataFormatAdapter(routeBuilder.lookup(rendererBeanName, Renderer.class));
+        return new DataFormatAdapter(routeBuilder.getContext().getRegistry()
+                .lookupByNameAndType(rendererBeanName, Renderer.class));
     }
     
     // ----------------------------------------------------------------

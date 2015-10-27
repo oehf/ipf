@@ -15,18 +15,15 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SchematronTransmogrifierTest {
 
@@ -39,19 +36,15 @@ public class SchematronTransmogrifierTest {
 
     @Test
     public void testConvert() throws IOException {
-        Source testXml = new StreamSource(new ClassPathResource(
-                "schematron/schematron-test.xml").getInputStream());
-        String result = svi
-                .zap(testXml, "schematron/schematron-test-rules.xml");
+        Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test.xml"));
+        String result = svi.zap(testXml, "/schematron/schematron-test-rules.xml");
         assertFalse(result.contains("svrl:failed-assert"));
     }
 
     @Test
     public void testConvertFail() throws IOException {
-        Source testXml = new StreamSource(new ClassPathResource(
-                "schematron/schematron-test-fail.xml").getInputStream());
-        String result = svi
-                .zap(testXml, "schematron/schematron-test-rules.xml");
+        Source testXml = new StreamSource(getClass().getResourceAsStream("/schematron/schematron-test-fail.xml"));
+        String result = svi.zap(testXml, "/schematron/schematron-test-rules.xml");
         assertTrue(result.contains("<svrl:failed-assert")); // 3 occurrences
     }
 }

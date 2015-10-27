@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import ca.uhn.hl7v2.AcknowledgmentCode
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
 
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack;
@@ -25,7 +25,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack;
  * Camel route for generic unit tests.
  * @author Dmytro Rud
  */
-class Iti21TestRouteBuilder extends SpringRouteBuilder {
+class Iti21TestRouteBuilder extends RouteBuilder {
 
      def rsp = '''MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|20090901140929||RSP^K22^RSP_K21|356757|P|2.5
 MSA|AA|1305506339
@@ -68,7 +68,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
              }
              
 
-         from('pdq-iti21://0.0.0.0:18214?interceptors=#dummyInterceptor,#authenticationInterceptor')
+         from('pdq-iti21://0.0.0.0:18214?interceptorFactories=#dummyInterceptor,#authenticationInterceptor')
                  .transform(constant(rsp))
 
          from('pdq-iti21://0.0.0.0:18215?secure=true&sslContext=#sslContext')

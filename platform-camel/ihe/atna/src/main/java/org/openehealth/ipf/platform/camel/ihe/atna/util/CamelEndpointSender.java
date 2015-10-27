@@ -15,19 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.atna.util;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.ProducerTemplate;
+import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage;
+import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender;
+
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
-
-import org.apache.camel.CamelContext;
-import org.apache.camel.ProducerTemplate;
-import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage;
-import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * An audit message sender that sends audit messages to a configured Camel
@@ -36,11 +33,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author Martin Krasser
  */
-public class CamelEndpointSender implements AuditMessageSender, InitializingBean, DisposableBean {
+public class CamelEndpointSender implements AuditMessageSender {
 
     public static final String HEADER_NAMESPACE = "org.openehealth.ipf.platform.camel.ihe.atna";
-    
-    @Autowired(required=false)
+
     private CamelContext camelContext;
     
     private ProducerTemplate producerTemplate;
@@ -69,14 +65,12 @@ public class CamelEndpointSender implements AuditMessageSender, InitializingBean
         endpointUriString = endpointUri;
         endpointUriObject = new URI(endpointUri);
     }
-    
-    @Override
-    public void afterPropertiesSet() throws Exception {
+
+    public void init() throws Exception {
         producerTemplate = camelContext.createProducerTemplate();
         producerTemplate.start();
     }
 
-    @Override
     public void destroy() throws Exception {
         producerTemplate.stop();
     }

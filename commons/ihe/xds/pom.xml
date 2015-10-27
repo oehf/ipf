@@ -25,6 +25,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-spring</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>ca.uhn.hapi</groupId>
             <artifactId>hapi-base</artifactId>
         </dependency>
@@ -40,7 +45,10 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-core</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
         <!-- Dependencies for test -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>

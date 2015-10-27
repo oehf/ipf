@@ -51,6 +51,10 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
+        </dependency>
+        <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>        
@@ -66,8 +70,9 @@
             <artifactId>easymock</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.gazelle</groupId>
-            <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

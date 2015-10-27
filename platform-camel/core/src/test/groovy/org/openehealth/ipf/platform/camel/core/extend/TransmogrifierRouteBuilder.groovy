@@ -25,7 +25,6 @@ import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
 import org.openehealth.ipf.platform.camel.core.support.transform.ext.StaticTransmogrifier
 import org.openehealth.ipf.platform.camel.core.transform.TestTransmogrifier
-import org.springframework.core.io.ClassPathResource
 
 /**
  * @author Martin Krasser
@@ -150,35 +149,35 @@ class TransmogrifierRouteBuilder extends SpringRouteBuilder {
 
         from('direct:input15') // using a dedicated XsltTransmogrifier bean
                 .convertBodyTo(StreamSource.class)
-                .transmogrify('xslt').staticParams('xslt/createPatient.xslt')
+                .transmogrify('xslt').staticParams('/xslt/createPatient.xslt')
                 .to('mock:output')
 
         from('direct:input16') // using an anonymous XsltTransmogrifier
-                .transmogrify().xslt().staticParams('xslt/createPatient.xslt')
+                .transmogrify().xslt().staticParams('/xslt/createPatient.xslt')
                 .to('mock:output')
 
         from('direct:input17') // using an anonymous XsltTransmogrifier with a different output format
-                .transmogrify().xslt(InputStream.class).staticParams('xslt/createPatient.xslt')
+                .transmogrify().xslt(InputStream.class).staticParams('/xslt/createPatient.xslt')
                 .to('mock:output')
 
         from('direct:input18') // passing in Xslt parameters
-                .transmogrify().xslt().staticParams('xslt/createPatient.xslt',
+                .transmogrify().xslt().staticParams('/xslt/createPatient.xslt',
                 [processingCodeParam:'D',processingModeCodeParam:'I'])
                 .to('mock:output')
 
         from('direct:input19') // specify stylesheet as named parameter
-                .transmogrify().xslt().staticParams([(RESOURCE_LOCATION) : 'xslt/createPatient.xslt',
+                .transmogrify().xslt().staticParams([(RESOURCE_LOCATION) : '/xslt/createPatient.xslt',
                     processingCodeParam:'D',
                     processingModeCodeParam:'I'])
                 .to('mock:output')
 
         from('direct:input20') // take stylesheet from message header
-                .setHeader('stylesheet', constant('xslt/createPatient.xslt'))
+                .setHeader('stylesheet', constant('/xslt/createPatient.xslt'))
                 .transmogrify().xslt().params().header('stylesheet')
                 .to('mock:output')
 
         from('direct:input21') // take stylesheet and parameters from message headers
-                .setHeader(RESOURCE_LOCATION, constant('xslt/createPatient.xslt'))
+                .setHeader(RESOURCE_LOCATION, constant('/xslt/createPatient.xslt'))
                 .setHeader('processingCodeParam', constant('D'))
                 .setHeader('processingModeCodeParam', constant('I'))
                 .transmogrify().xslt()
@@ -187,17 +186,17 @@ class TransmogrifierRouteBuilder extends SpringRouteBuilder {
         // Schematron transmogrification
         from('direct:input22') // using a dedicated SchematronTransmogrifier bean
                 .convertBodyTo(StreamSource.class)
-                .transmogrify('schematron').staticParams('schematron/schematron-test-rules.xml')
+                .transmogrify('schematron').staticParams('/schematron/schematron-test-rules.xml')
                 .to('mock:output')
 
         from('direct:input23') // using an anonymous SchematronTransmogrifier
-                .transmogrify().schematron().staticParams('schematron/schematron-test-rules.xml')
+                .transmogrify().schematron().staticParams('/schematron/schematron-test-rules.xml')
                 .to('mock:output')
 
         // xqj transmogrifier
         from('direct:input24') // using a dedicated XqjTransmogrifier bean
                 .convertBodyTo(StreamSource.class)
-                .transmogrify('xqj').staticParams('xquery/extract.xq', [id:'someid'])
+                .transmogrify('xqj').staticParams('/xquery/extract.xq', [id:'someid'])
                 .to('mock:output')
 
         from('direct:input25') // using an anonymous XqjTransmogrifier
@@ -205,33 +204,33 @@ class TransmogrifierRouteBuilder extends SpringRouteBuilder {
                 .transmogrify().xquery()
                 .params{
                     ([
-                        'xquery/extract.xq',
+                        '/xquery/extract.xq',
                         [id: it.in.headers.someid]]
                     as Object[])}
                 .to('mock:output')
 
         from('direct:input26') // using an anonymous XqjTransmogrifier with a different output format
-                .transmogrify().xquery(InputStream.class).staticParams('xquery/extract.xq', [id:'someid'])
+                .transmogrify().xquery(InputStream.class).staticParams('/xquery/extract.xq', [id:'someid'])
                 .to('mock:output')
 
         from('direct:input27') // using an anonymous XqjTransmogrifier with a different output format
-                .transmogrify().xquery(DOMResult.class).staticParams('xquery/extract.xq', [id:'someid'])
+                .transmogrify().xquery(DOMResult.class).staticParams('/xquery/extract.xq', [id:'someid'])
                 .to('mock:output')
 
         from('direct:input28') // passing classpath parameters
                 .transmogrify().xquery()
-                .staticParams('xquery/extract-map-resource.xq',[id:'mapid', mapfile:'xquery/mapping.xml'])
+                .staticParams('/xquery/extract-map-resource.xq',[id:'mapid', mapfile:'xquery/mapping.xml'])
                 .to('mock:output')
 
         from('direct:input29') // passing parameters as map
                 .transmogrify().xquery().params{
-                    [(RESOURCE_LOCATION) : 'xquery/extract-map-document.xq',
-                                map: new StreamSource(new ClassPathResource('xquery/mapping.xml').getInputStream()),
+                    [(RESOURCE_LOCATION) : '/xquery/extract-map-document.xq',
+                                map: new StreamSource(getClass().getResourceAsStream('/xquery/mapping.xml')),
                                 id:'externalid']}
                 .to('mock:output')
 
         from('direct:input30') // passing classpath parameters
-                .setHeader(RESOURCE_LOCATION, constant('xquery/extract-headers.xq'))
+                .setHeader(RESOURCE_LOCATION, constant('/xquery/extract-headers.xq'))
                 .setHeader('breadcrumbId', simple('${id}'))
                 .transmogrify().xquery()
                 .to('mock:output')

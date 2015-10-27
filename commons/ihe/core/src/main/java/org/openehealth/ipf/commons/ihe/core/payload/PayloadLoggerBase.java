@@ -20,10 +20,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.common.TemplateParserContext;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.io.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -52,7 +48,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author Dmytro Rud
  */
-abstract public class PayloadLoggerBase<T extends PayloadLoggingSpelContext> {
+abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
     private static final transient Logger LOG = LoggerFactory.getLogger(PayloadLoggerBase.class);
 
     private static final AtomicLong SEQUENCE_ID_GENERATOR = new AtomicLong(0L);
@@ -60,31 +56,20 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingSpelContext> {
     public static final String SEQUENCE_ID_PROPERTY_NAME =
             PayloadLoggerBase.class.getName() + ".sequence.id";
 
-    private static final ExpressionParser SPEL_PARSER = new SpelExpressionParser();
-    private static final TemplateParserContext SPEL_PARSER_CONTEXT =
-            new TemplateParserContext("[", "]");
-
-    private final ThreadLocal<Expression> SPEL_EXPRESSIONS = new ThreadLocal<Expression>() {
-        @Override
-        protected Expression initialValue() {
-            return SPEL_PARSER.parseExpression(fileNamePattern, SPEL_PARSER_CONTEXT);
-        }
-    };
-
     private static boolean globallyEnabled = true;
 
-    private String fileNamePattern = null;
     private boolean locallyEnabled = true;
 
     private int errorCountLimit = -1;
     private int errorCount;
 
+    private ExpressionResolver resolver;
 
     protected static Long getNextSequenceId() {
         return SEQUENCE_ID_GENERATOR.getAndIncrement();
     }
 
-    protected void doLogPayload(T spelContext, String charsetName, String... payloadPieces) {
+    protected void doLogPayload(T context, String charsetName, String... payloadPieces) {
         // check whether we can process
         if (! canProcess()) {
             return;
@@ -95,7 +80,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingSpelContext> {
         }
 
         // compute file path
-        String path = SPEL_EXPRESSIONS.get().getValue(spelContext, String.class);
+        String path = resolver.resolveExpression(context);
 
         // write payload pieces into the file
         Writer writer = null;
@@ -168,23 +153,6 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingSpelContext> {
     }
 
     /**
-     * @return
-     *      file name pattern for payload logs.
-     */
-    public String getFileNamePattern() {
-        return fileNamePattern;
-    }
-
-    /**
-     * Sets the file name pattern for payload logs.
-     * @param fileNamePattern
-     *      file name pattern for payload logs.
-     */
-    public void setFileNamePattern(String fileNamePattern) {
-        this.fileNamePattern = Validate.notEmpty(fileNamePattern, "log file path/name pattern");
-    }
-
-    /**
      * @return maximal allowed count of file creation errors, negative value means "no limit".
      */
     public int getErrorCountLimit() {
@@ -200,4 +168,11 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingSpelContext> {
         this.errorCountLimit = errorCountLimit;
     }
 
+    public ExpressionResolver getExpressionResolver() {
+        return resolver;
+    }
+
+    public void setExpressionResolver(ExpressionResolver resolver) {
+        this.resolver = resolver;
+    }
 }

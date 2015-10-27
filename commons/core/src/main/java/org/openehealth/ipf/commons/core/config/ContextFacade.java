@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
  * statically access, i.e. calling the getBean methods of this class. Before
  * this can be done, the registry must be set by calling {@link #setRegistry(Registry)}.
  *
- * @see SpringRegistry
  * @since 2.5
  */
 public class ContextFacade {

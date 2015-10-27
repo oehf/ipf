@@ -46,9 +46,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 public class CxfEndpointTest {
@@ -64,10 +64,10 @@ public class CxfEndpointTest {
     private JettyServer server;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws IOException, URISyntaxException {
         port = ServletServer.getFreePort();
         server = new JettyServer();
-        server.setContextResource(new ClassPathResource("cxf-context.xml").getURI().toString());
+        server.setContextResource(getClass().getResource("/cxf-context.xml").toURI().toString());
         server.setPort(port);
         server.setContextPath("");
         server.setServletPath("/*");

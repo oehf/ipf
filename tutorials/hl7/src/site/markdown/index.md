@@ -334,9 +334,7 @@ replace its content with the following:
     import org.junit.Test;
     import org.junit.runner.RunWith;
     import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.core.io.ClassPathResource;
     import org.springframework.core.io.FileSystemResource;
-    import org.springframework.core.io.Resource;
     import org.springframework.test.context.ContextConfiguration;
     import org.springframework.test.context.TestExecutionListeners;
     import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -354,8 +352,7 @@ replace its content with the following:
 
         @Test
         public void testRoute() throws Exception {
-            Resource input = new ClassPathResource("/msg-01.hl7");
-            producerTemplate.sendBody("direct:input", input.getInputStream());
+            producerTemplate.sendBody("direct:input", getClass().getResourceAsStream("/msg-01.hl7"));
             Resource result = new FileSystemResource("target/output/HZL.hl7");
             assertEquals(
                     load(getClass().getResourceAsStream("/msg-01.hl7.expected")).toString(),

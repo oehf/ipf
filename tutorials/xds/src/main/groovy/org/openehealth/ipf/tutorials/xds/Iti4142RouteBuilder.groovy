@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
+import org.apache.camel.builder.RouteBuilder
+
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.*
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*
@@ -35,7 +37,7 @@ import org.slf4j.LoggerFactory
  * Route builder for ITI-41 and -42.
  * @author Jens Riemschneider
  */
-class Iti4142RouteBuilder extends SpringRouteBuilder {
+class Iti4142RouteBuilder extends RouteBuilder {
     private final static Logger log = LoggerFactory.getLogger(Iti4142RouteBuilder.class);
     
     @Override

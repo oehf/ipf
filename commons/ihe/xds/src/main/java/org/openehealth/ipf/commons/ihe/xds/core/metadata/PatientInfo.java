@@ -21,12 +21,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
-import org.springframework.beans.BeanUtils;
 
 /**
  * Represents additional info about a patient.
@@ -70,7 +70,11 @@ public class PatientInfo implements Serializable {
     public void setName(Name name) {
         if (name != null) {
             this.name = new XpnName();
-            BeanUtils.copyProperties(name, this.name);
+            try {
+                BeanUtils.copyProperties(this.name, name);
+            } catch (Exception e) {
+                throw new RuntimeException("Could not copy properties");
+            }
         } else {
             this.name = null;
         }

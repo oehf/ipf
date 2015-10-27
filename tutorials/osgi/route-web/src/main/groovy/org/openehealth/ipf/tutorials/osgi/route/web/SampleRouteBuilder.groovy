@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.tutorials.osgi.route.web
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 
 /**
  * @author Martin Krasser
  */
-public class SampleRouteBuilder extends SpringRouteBuilder {
+public class SampleRouteBuilder extends RouteBuilder {
 
      void configure() {
 

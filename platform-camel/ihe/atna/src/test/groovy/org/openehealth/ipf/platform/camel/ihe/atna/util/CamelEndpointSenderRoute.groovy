@@ -15,15 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.atna.util
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
+
+
 /**
  * @author Martin Krasser
  */
-class CamelEndpointSenderRoute extends SpringRouteBuilder {
+class CamelEndpointSenderRoute extends RouteBuilder {
 
     void configure() {
-        from('direct:input')
-        .to('mock:mock')
+        from('direct:input').to('mock:mock')
     }
     
 }

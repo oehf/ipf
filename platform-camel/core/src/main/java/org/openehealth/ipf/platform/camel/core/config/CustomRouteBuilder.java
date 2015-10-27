@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.core.config;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.spring.SpringRouteBuilder;
 
 /**
  * RouteBuilders, Interceptors, ExceptionClauses should extend this
@@ -25,7 +24,7 @@ import org.apache.camel.spring.SpringRouteBuilder;
  * 
  * @author Boris Stanojevic
  */
-public abstract class CustomRouteBuilder extends SpringRouteBuilder
+public abstract class CustomRouteBuilder extends RouteBuilder
        implements Comparable<CustomRouteBuilder> {
 
     private RouteBuilder intercepted;

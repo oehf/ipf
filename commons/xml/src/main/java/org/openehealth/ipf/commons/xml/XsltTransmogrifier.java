@@ -15,22 +15,17 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Templates;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
+
+import javax.xml.transform.*;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Xslt Processor transforming a {@link Source} into an object of type T. The stylesheet to be used is passed with the
@@ -46,7 +41,7 @@ import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates> implements Transmogrifier<Source, T> {
     private static final Logger LOG = LoggerFactory.getLogger(XsltTransmogrifier.class);
 
-    private static final Map<String, Templates> XSLT_CACHE = new HashMap<>();
+    private static final ConcurrentMap<String, Loader<Templates>> XSLT_CACHE = new ConcurrentHashMap<>();
 
     @Getter @Setter private Map<String, Object> staticParams;
     @Getter private final TransformerFactory factory;
@@ -71,7 +66,7 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
     }
 
     @Override
-    protected Map<String, Templates> getCache() {
+    protected ConcurrentMap<String, Loader<Templates>> getCache() {
         return XSLT_CACHE;
     }
 
@@ -144,8 +139,12 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
     }
 
     @Override
-    protected Templates createResource(Object... params) throws Exception {
-        return factory.newTemplates(resourceContent(params));
+    protected Templates createResource(Object... params) {
+        try {
+            return factory.newTemplates(resourceContent(params));
+        } catch (TransformerConfigurationException e) {
+            throw new IllegalArgumentException("Could not initialize XSLT template", e);
+        }
     }
 
 }

@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 package org.openehealth.ipf.commons.map
-
-import java.util.Map
-
-
 /**
  * Groovy builder for generating a map suitable for the BidiMappingService.
  * Mapping definitions are always in the following Groovy syntax:

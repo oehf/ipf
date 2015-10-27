@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.staticResponse
@@ -25,7 +25,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
  * Camel route for continuations unit tests.
  * @author Dmytro Rud
  */
-class Iti21TestContinuationsRouteBuilder extends SpringRouteBuilder {
+class Iti21TestContinuationsRouteBuilder extends RouteBuilder {
 
      static final String BIG_RESPONSE =
          'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' + 

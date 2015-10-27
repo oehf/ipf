@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.custom
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
 
 
-class MdmTestRouteBuilder extends SpringRouteBuilder {
+class MdmTestRouteBuilder extends RouteBuilder {
     
     void configure() throws Exception {
         

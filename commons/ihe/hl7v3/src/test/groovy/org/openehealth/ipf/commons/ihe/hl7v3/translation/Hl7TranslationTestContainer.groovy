@@ -31,7 +31,6 @@ import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.modules.hl7.validation.ValidatorAdapter
-import org.springframework.core.io.ClassPathResource
 
 import static org.easymock.EasyMock.*
 
@@ -71,7 +70,7 @@ class Hl7TranslationTestContainer {
         Hl7TranslationTestContainer.context = context
 
         BidiMappingService mappingService = new BidiMappingService()
-        mappingService.addMappingScript(new ClassPathResource('META-INF/map/hl7-v2-v3-translation.map'))
+        mappingService.addMappingScript(getClass().getResource('/META-INF/map/hl7-v2-v3-translation.map'))
         Registry registry = createMock(Registry)
         ContextFacade.setRegistry(registry)
         expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()

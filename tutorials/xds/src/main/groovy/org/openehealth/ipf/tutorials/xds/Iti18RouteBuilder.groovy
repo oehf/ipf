@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
+import org.apache.camel.builder.RouteBuilder
+
 import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
@@ -32,7 +34,7 @@ import org.slf4j.LoggerFactory
  * Route builder for ITI-18.
  * @author Jens Riemschneider
  */
-class Iti18RouteBuilder extends SpringRouteBuilder {
+class Iti18RouteBuilder extends RouteBuilder {
     private final static Logger log = LoggerFactory.getLogger(Iti18RouteBuilder.class);
     
     static final def DOCS = 'resp.documentEntries'

@@ -15,13 +15,12 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-
 import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Abstract parent class for XML validators, transmogrifiers, and other classes
@@ -30,12 +29,12 @@ import java.util.Map;
  * On the basis of validator/transmogrifier parameters (<code>Object... params</code>),
  * instances of this class determine:
  * <ul>
- *     <li>Location of the raw resource (i.e. an unparsed XSLT document as opposed
- *     to its compiled representation in memory) &mdash; method {@link #resourceLocation(Object...)},
- *     <li>Parameters of resource instantiation (compilation) and execution (application) &mdash;
- *     method {@link #resourceParameters(Object...)},
- *     <li>Key to store the compiled resource in the cache &mdash;
- *     method {@link #resourceCacheKey(Object...)}.
+ * <li>Location of the raw resource (i.e. an unparsed XSLT document as opposed
+ * to its compiled representation in memory) &mdash; method {@link #resourceLocation(Object...)},
+ * <li>Parameters of resource instantiation (compilation) and execution (application) &mdash;
+ * method {@link #resourceParameters(Object...)},
+ * <li>Key to store the compiled resource in the cache &mdash;
+ * method {@link #resourceCacheKey(Object...)}.
  * </ul>
  * The main method to get a ready-to-use resource instance is {@link #resource(Object...)},
  * which takes over instantiation, initialization, caching, and other aspects of resource
@@ -49,32 +48,41 @@ abstract public class AbstractCachingXmlProcessor<T> {
 
     public static final String RESOURCE_LOCATION = "org.openehealth.ipf.commons.xml.ResourceLocation";
 
-    private final ResourceLoader resourceLoader;
+    private final ClassLoader classLoader;
 
+    protected static abstract class Loader<S> {
+
+        private S loaded;
+
+        abstract protected S load() throws RuntimeException;
+
+        synchronized S get() {
+            if (loaded == null) loaded = load();
+            return loaded;
+        }
+    }
 
     /**
      * Constructor.
-     * @param classLoader
-     *      class loader, may be <code>null</code>.
+     *
+     * @param classLoader class loader, may be <code>null</code>.
      */
     protected AbstractCachingXmlProcessor(ClassLoader classLoader) {
-        this.resourceLoader = (classLoader == null)
-            ? new DefaultResourceLoader()
-            : new DefaultResourceLoader(classLoader);
+        super();
+        this.classLoader = classLoader == null ? this.getClass().getClassLoader() : classLoader;
     }
 
     /**
      * @return static cache for the configured resource type.
      * Note that the returned Map is not necessarily synchronized.
      */
-    abstract protected Map<String, T> getCache();
+    abstract protected ConcurrentMap<String, Loader<T>> getCache();
 
     /**
      * Extracts (constructs) resource location from validator/transmogrifier parameters.
-     * @param params
-     *      validator/transmogrifier parameters.
-     * @return
-     *      resource location as a String.
+     *
+     * @param params validator/transmogrifier parameters.
+     * @return resource location as a String.
      */
     protected String resourceLocation(Object... params) {
         if (params[0] instanceof String) {
@@ -90,13 +98,11 @@ abstract public class AbstractCachingXmlProcessor<T> {
 
     /**
      * Extracts (constructs) resource cache key validator/transmogrifier parameters.
-     * <p>
+     * <p/>
      * Per default, the key equals to the resource location.
      *
-     * @param params
-     *      validator/transmogrifier parameters.
-     * @return
-     *      cache key as a String.
+     * @param params validator/transmogrifier parameters.
+     * @return cache key as a String.
      */
     protected String resourceCacheKey(Object... params) {
         return resourceLocation(params);
@@ -105,11 +111,10 @@ abstract public class AbstractCachingXmlProcessor<T> {
     /**
      * Extracts (constructs) resource creation/application parameters from
      * validator/transmogrifier parameters.
-     * @param params
-     *      validator/transmogrifier parameters.
-     * @return
-     *      resource creation/application parameters as a Map,
-     *      or <code>null</code> if not found.
+     *
+     * @param params validator/transmogrifier parameters.
+     * @return resource creation/application parameters as a Map,
+     * or <code>null</code> if not found.
      */
     protected Map<String, Object> resourceParameters(Object... params) {
         if (params[0] instanceof Map) {
@@ -128,64 +133,67 @@ abstract public class AbstractCachingXmlProcessor<T> {
      * further attributes.  If necessary, creates the resource by means of
      * {@link #createResource(Object...)} and stores it into the cache.
      * The cache key is a combination of the location and further attributes.
-     * <p>
+     * <p/>
      * This method MUST be re-entrant, its result MUST be thread-safe.
      *
-     * @param params
-     *      validator/transmogrifier parameters.
-     * @return
-     *      resource instance.
+     * @param params validator/transmogrifier parameters.
+     * @return resource instance.
      * @throws Exception
      */
-    protected T resource(Object... params) throws Exception {
+    protected T resource(final Object... params) throws Exception {
         String key = resourceCacheKey(params);
-        if (! getCache().containsKey(key)) {
-            synchronized (getCache()) {
-                // yes, check the same condition again
-                if (! getCache().containsKey(key)) {
-                    T resource = createResource(params);
-                    getCache().put(key, resource);
-                }
+        getCache().putIfAbsent(key, new Loader<T>() {
+            @Override
+            protected T load() throws RuntimeException {
+                return createResource(params);
             }
-        }
-        return getCache().get(key);
+        });
+        return getCache().get(key).get();
     }
 
     /**
      * Creates a ready-to-use resource (e.g. an XML Schema instance) for the given key.
      * Insertion into the cache will happen externally, this method's purpose
      * is only to instantiate the resource to be cached.
-     * <p>
+     * <p/>
      * This method does not need to be re-entrant, but its result MUST be thread-safe.
      *
-     * @param params
-     *      validator/transmogrifier parameters.
-     * @return
-     *      resource of the configured type.
+     * @param params validator/transmogrifier parameters.
+     * @return resource of the configured type.
      * @throws Exception
      */
-    abstract protected T createResource(Object... params) throws Exception;
+    abstract protected T createResource(Object... params);
 
     /**
      * Loads the resource into memory and returns it as a Stream.
-     * <p>
+     * <p/>
      * This method does not need to be re-entrant.
      *
-     * @param params
-     *      validator/transmogrifier parameters.
-     * @return
-     *      resource of the configured type.
+     * @param params validator/transmogrifier parameters.
+     * @return resource of the configured type.
      * @throws IOException
+     *
+     * FIXME: make this more flexible as replacement for not using Spring Resource objects anymore
      */
-    protected StreamSource resourceContent(Object... params) throws IOException {
+    protected StreamSource resourceContent(Object... params) {
         String location = resourceLocation(params);
-        Resource r = resourceLoader.getResource(location);
-        if (r == null) {
-            throw new IllegalArgumentException("Cannot load resource from " + location);
+        URL url;
+        try {
+            if (location.startsWith("/")) {
+                url = getClass().getResource(location);
+            } else {
+                try {
+                    // Try to parse the location as a URL...
+                    url = new URL(location);
+                } catch (MalformedURLException ex) {
+                    // No URL -> resolve as resource path.
+                    url = getClass().getResource(location);
+                }
+            }
+            return new StreamSource(url.openStream(), url.toExternalForm());
+        } catch (IOException e) {
+            throw new IllegalArgumentException("The resource " + location + " is not valid", e);
         }
-        return (r.getURL() == null)
-                ? new StreamSource(r.getInputStream())
-                : new StreamSource(r.getInputStream(), r.getURL().toExternalForm());
     }
 
 }

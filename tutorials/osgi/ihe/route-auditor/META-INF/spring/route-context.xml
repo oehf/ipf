@@ -25,8 +25,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
     <bean id="routeBuilder" class="org.openehealth.ipf.tutorials.osgi.atna.route.sender.GroovyRouteBuilder"/>
 
     <bean id="camelEndpointSender"
-        class="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender">
-        <!-- autowired if not explicitly configured -->
+        class="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender" init-method="init" destroy-method="destroy">
         <property name="camelContext" ref="camelContext" />
         <!-- endpoint registered in the Camel context -->
         <property name="endpointUri" value="direct:atnaEndpointSender" />

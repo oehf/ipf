@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.map.extend
 
-import org.codehaus.groovy.runtime.InvokerHelperimport org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.MappingService
 
 import static org.openehealth.ipf.commons.map.extend.MappingExtensionModule.*
 

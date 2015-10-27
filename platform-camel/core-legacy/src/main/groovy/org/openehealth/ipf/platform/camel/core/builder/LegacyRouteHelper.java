@@ -17,7 +17,7 @@
 package org.openehealth.ipf.platform.camel.core.builder;
 
 import groovy.lang.Closure;
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingAggregator;
 
@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingAggregator;
  */
 public class LegacyRouteHelper extends RouteHelper {
 
-    public LegacyRouteHelper(SpringRouteBuilder routeBuilder) {
+    public LegacyRouteHelper(RouteBuilder routeBuilder) {
         super(routeBuilder);
     }
 

@@ -80,10 +80,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
           factory-method="newInstance" />
 
     <bean id="dummyInterceptor"
-          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.DummyInterceptor"
-          scope="prototype"/>
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.DummyInterceptor$Factory"/>
 
     <bean id="authenticationInterceptor"
-          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.AuthenticationInterceptor"
-          scope="prototype"/>
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.AuthenticationInterceptor$Factory"/>
 </beans>

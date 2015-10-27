@@ -26,7 +26,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-core</artifactId>
+            <artifactId>ipf-commons-spring</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -49,6 +49,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
     private static final transient Logger LOG = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
 
     public ProducerMarshalAndInteractiveResponseReceiverInterceptor() {
+        super();
         setId(ProducerMarshalInterceptor.class.getName());
     }
 

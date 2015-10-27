@@ -15,18 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti22
 
-
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.apache.camel.Exchange
-import org.apache.camel.spring.SpringRouteBuilder
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-
+import org.apache.camel.builder.RouteBuilder
 
 /**
  * Camel route for generic unit tests.
  * @author Dmytro Rud
  */
-class Iti22TestRouteBuilder extends SpringRouteBuilder {
+class Iti22TestRouteBuilder extends RouteBuilder {
 
      def rsp = '''MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|20090901140929||RSP^ZV2|356757|P|2.5
 MSA|AA|1305506339

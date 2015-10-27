@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.openehealth.ipf.modules.cda.CDAR2Parser;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import static org.junit.Assert.assertTrue;
 
@@ -35,8 +34,8 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration(locations = { "/config/context-extend.xml" })
 public class MdhtModelExtensionTest extends AbstractExtensionTest {
 
-    private String cdaExample = "message/SampleCDADocument.xml";
-    private String ccdExample = "message/SampleCCDDocument.xml";
+    private String cdaExample = "/message/SampleCDADocument.xml";
+    private String ccdExample = "/message/SampleCCDDocument.xml";
 
     @EndpointInject(uri="mock:error")
     protected MockEndpoint mockError;
@@ -104,7 +103,7 @@ public class MdhtModelExtensionTest extends AbstractExtensionTest {
     }   
     
     private static InputStream inputStream(String resource) throws IOException {
-        return new ClassPathResource(resource).getInputStream();
+        return MdhtModelExtensionTest.class.getResourceAsStream(resource);
     }
 
     private ClinicalDocument inputMessage(String resource) throws IOException {

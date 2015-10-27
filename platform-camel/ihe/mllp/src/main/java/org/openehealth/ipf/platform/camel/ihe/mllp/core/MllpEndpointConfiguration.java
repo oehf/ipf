@@ -16,20 +16,16 @@
 
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import javax.net.ssl.SSLContext;
-
 import lombok.Getter;
-import org.apache.camel.spring.GenericBeansException;
-import org.apache.camel.spring.SpringCamelContext;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
-import org.springframework.context.ApplicationContext;
+
+import javax.net.ssl.SSLContext;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Configuration of an MLLP endpoint.
@@ -42,7 +38,6 @@ public class MllpEndpointConfiguration implements Serializable {
 
     @Getter private final boolean audit;
     @Getter private final SSLContext sslContext;
-    @Getter private final String[] customInterceptorBeans;
     @Getter private final List<Hl7v2InterceptorFactory> customInterceptorFactories;
     @Getter private final ClientAuthType clientAuthType;
     @Getter private final String[] sslProtocols;
@@ -84,8 +79,6 @@ public class MllpEndpointConfiguration implements Serializable {
         customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
                 parameters, "interceptorFactories", Hl7v2InterceptorFactory.class);
 
-        customInterceptorBeans = extractInterceptorBeanNames(component, parameters);
-
         dispatcher = component.resolveAndRemoveReferenceParameter(parameters, "dispatcher", ConsumerDispatchingInterceptor.class);
 
     }
@@ -93,28 +86,6 @@ public class MllpEndpointConfiguration implements Serializable {
 
     private static String extractBeanName(String originalBeanName) {
         return originalBeanName.startsWith("#") ? originalBeanName.substring(1) : originalBeanName;
-    }
-
-
-    private String[] extractInterceptorBeanNames(MllpComponent component, Map<String, Object> parameters) {
-        SpringCamelContext camelContext = (SpringCamelContext) component.getCamelContext();
-        ApplicationContext applicationContext = camelContext.getApplicationContext();
-
-        String paramValue = component.getAndRemoveParameter(parameters, "interceptors", String.class);
-        if (StringUtils.isEmpty(paramValue)) {
-            return new String[0];
-        }
-
-        String[] beanNames = paramValue.split(",");
-        for (int i = 0; i < beanNames.length; ++i) {
-            beanNames[i] = extractBeanName(beanNames[i]);
-            if (! applicationContext.isPrototype(beanNames[i])) {
-                throw new GenericBeansException("Custom HL7v2 interceptor bean '" +
-                        beanNames[i] + "' shall have scope=\"prototype\"");
-            }
-        }
-
-        return beanNames;
     }
 
 }

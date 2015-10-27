@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.AcknowledgmentCode
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.hl7.HL7v2
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
 
@@ -34,7 +34,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.typ
  * Camel route to test datatypes handling.
  * @author Dmytro Rud
  */
-class DatatypesRouteBuilder extends SpringRouteBuilder {
+class DatatypesRouteBuilder extends RouteBuilder {
 
      // for datatype-related tests
      final static int CONTENT_TYPE_COUNT = 18

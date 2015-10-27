@@ -15,9 +15,7 @@
  */
 package org.openehealth.ipf.commons.map
 
-import org.springframework.beans.factory.InitializingBean
 import org.springframework.core.io.Resource
-import org.apache.commons.io.IOUtils
 
 /**
  * An simple example of a MappingService implementation, backed by a
@@ -25,186 +23,218 @@ import org.apache.commons.io.IOUtils
  * mapping from the value back to the key (if unique). The mapping
  * is initialized by an external Groovy script, see {@link MappingsBuilder}
  * for details on the syntax. 
- * 
+ *
  * @author Christian Ohr
  * @author Martin Krasser
  * @see MappingsBuilder
  *
  */
-class BidiMappingService implements MappingService, InitializingBean {
+class BidiMappingService implements MappingService {
 
-	private static final String KEYSYSTEM  = '_%KEYSYSTEM%_'
-	private static final String VALUESYSTEM = '_%VALUESYSTEM%_'
-	private static final String ELSE = '_%ELSE%_'
-   	private static final String SEPARATOR = '~'
-	
-	Map<Object, Map> map = [:]	
+    private static final String KEYSYSTEM = '_%KEYSYSTEM%_'
+    private static final String VALUESYSTEM = '_%VALUESYSTEM%_'
+    private static final String ELSE = '_%ELSE%_'
+    private static final String SEPARATOR = '~'
+
+    Map<Object, Map> map = [:]
     Map reverseMap = [:]
-	String separator
+    String separator
 
     boolean ignoreResourceNotFound = false
-    List<Resource> resources = []
+    List<URL> resources = []
 
-	
+
     public BidiMappingService() {
-    	this(SEPARATOR)
+        this(SEPARATOR)
     }
 
     public BidiMappingService(String separator) {
-    	this.separator = separator
+        this.separator = separator
     }
 
     // bean configuration support
     void setMappingScript(Resource resource) {
-        this.resources.add(resource)
-    }
-    
-    // bean configuration support 
-    void setMappingScripts(Resource[] resources) {
-        this.resources.addAll(resources)
+        try {
+            setMappingScript(resource.URL)
+        } catch (IOException e) {
+            if (!ignoreResourceNotFound) throw e
+        }
     }
 
-    @Override
-    void afterPropertiesSet() {
-        addMappingScripts(resources.toArray(new Resource[0]))
+    void setMappingScript(URL resource) {
+        this.resources.add(resource)
+        addMappingScript(resource)
+    }
+
+    // bean configuration support 
+    void setMappingScripts(Resource[] resources) {
+        for (Resource resource : resources) {
+            setMappingScript(resource)
+        }
+    }
+
+    void setMappingScripts(URL[] resources) {
+        this.resources.addAll(resources)
+        addMappingScripts(resources)
     }
 
     // Read in the mapping definition
     synchronized void addMappingScript(Resource resource) {
-        Binding binding = new Binding()
-        GroovyShell shell = new GroovyShell(binding);
-        evaluateResource(resource, shell, binding)
+        try {
+            addMappingScript(resource.URL)
+        } catch (IOException e) {
+            if (!ignoreResourceNotFound) throw e
+        }
     }
-    
+
     // Read in several mapping definition
     synchronized void addMappingScripts(Resource[] resources) {
         Binding binding = new Binding()
         GroovyShell shell = new GroovyShell(binding);
         resources.each { resource ->
-           evaluateResource(resource, shell, binding)    
+            try {
+                evaluateResource(resource.URL, shell, binding)
+            } catch (IOException e) {
+                if (!ignoreResourceNotFound) throw e
+            }
         }
     }
-    
-    private void evaluateResource(Resource resource, GroovyShell shell, Binding binding) {
-    	try {
-        	shell.evaluate(IOUtils.toString(resource.inputStream))
-        	Closure c = binding.mappings
-        	def mb = new MappingsBuilder()
-        	c?.delegate = this
-        	map.putAll(mb.mappings(c))
-           	updateReverseMap()   		
+
+    synchronized void addMappingScript(URL resource) {
+        Binding binding = new Binding()
+        GroovyShell shell = new GroovyShell(binding);
+        evaluateResource(resource, shell, binding)
+    }
+
+    // Read in several mapping definition
+    synchronized void addMappingScripts(URL[] resources) {
+        Binding binding = new Binding()
+        GroovyShell shell = new GroovyShell(binding);
+        resources.each { resource ->
+            evaluateResource(resource, shell, binding)
+        }
+    }
+
+    private void evaluateResource(URL url, GroovyShell shell, Binding binding) {
+        try {
+            shell.evaluate(url.toURI())
+            Closure c = binding.mappings
+            def mb = new MappingsBuilder()
+            c?.delegate = this
+            map.putAll(mb.mappings(c))
+            updateReverseMap()
         } catch (IOException e) {
-            if (! ignoreResourceNotFound) {
+            if (!ignoreResourceNotFound) {
                 throw e
             }
         } catch (Exception e) {
-    		// TODO handle CompilationException (error in script)
-    		throw e
-    	}
-        
+            // TODO handle CompilationException (error in script)
+            throw e
+        }
+
     }
-     	
- 	public Object get(Object mappingKey, Object key){
- 		splitKey(retrieve(map, mappingKey, joinKey(key)))
- 	}	
 
- 	public Object getKey(Object mappingKey, Object value){
- 		splitKey(retrieve(reverseMap, mappingKey, joinKey(value)))
- 	}	
+    public Object get(Object mappingKey, Object key) {
+        splitKey(retrieve(map, mappingKey, joinKey(key)))
+    }
 
- 	public Object get(Object mappingKey, Object key, Object defaultValue){
- 		def v = splitKey(retrieve(map, mappingKey, joinKey(key)))
- 		v ? v :	defaultValue
- 	}	
+    public Object getKey(Object mappingKey, Object value) {
+        splitKey(retrieve(reverseMap, mappingKey, joinKey(value)))
+    }
 
- 	public Object getKey(Object mappingKey, Object value, Object defaultValue){
- 		checkMappingKey(reverseMap, mappingKey)
- 		def v = splitKey(retrieve(reverseMap, mappingKey, joinKey(value)))
- 		v ? v : defaultValue
- 	}
- 	
- 	public Object getKeySystem(Object mappingKey){
- 		checkMappingKey(map, mappingKey)
- 		map[mappingKey][KEYSYSTEM]
- 	}	
+    public Object get(Object mappingKey, Object key, Object defaultValue) {
+        def v = splitKey(retrieve(map, mappingKey, joinKey(key)))
+        v ? v : defaultValue
+    }
 
- 	public Object getValueSystem(Object mappingKey){
- 		checkMappingKey(map, mappingKey)
- 		map[mappingKey][VALUESYSTEM]
- 	}	
+    public Object getKey(Object mappingKey, Object value, Object defaultValue) {
+        checkMappingKey(reverseMap, mappingKey)
+        def v = splitKey(retrieve(reverseMap, mappingKey, joinKey(value)))
+        v ? v : defaultValue
+    }
 
- 	public Set<?> mappingKeys(){
- 		map.keySet()
- 	}	
+    public Object getKeySystem(Object mappingKey) {
+        checkMappingKey(map, mappingKey)
+        map[mappingKey][KEYSYSTEM]
+    }
 
- 	public Set<?> keys(Object mappingKey){
- 		checkMappingKey(map, mappingKey)
- 		Set<?> result = map[mappingKey].keySet().findAll { !(it.startsWith('_%')) }
+    public Object getValueSystem(Object mappingKey) {
+        checkMappingKey(map, mappingKey)
+        map[mappingKey][VALUESYSTEM]
+    }
+
+    public Set<?> mappingKeys() {
+        map.keySet()
+    }
+
+    public Set<?> keys(Object mappingKey) {
+        checkMappingKey(map, mappingKey)
+        Set<?> result = map[mappingKey].keySet().findAll { !(it.startsWith('_%')) }
         result
- 	}
- 	
- 	public Collection<?> values(Object mappingKey){
- 		checkMappingKey(map, mappingKey)
- 		map[mappingKey].findAll({ 
-          !(it.key.startsWith('_%')) 
+    }
+
+    public Collection<?> values(Object mappingKey) {
+        checkMappingKey(map, mappingKey)
+        map[mappingKey].findAll({
+            !(it.key.startsWith('_%'))
         }).values()
- 	}
- 	
- 	private Object retrieve(Map<Object, Map> m, Object mappingKey, Object key) {
- 		checkMappingKey(m, mappingKey) 
- 		m[mappingKey][key] ?: retrieveElse(m, mappingKey, key)
- 	}
- 	
- 	private Object retrieveElse(Map<Object, Map> m, Object mappingKey, Object key) {
- 		def elseClause = m[mappingKey][ELSE]
- 		if (elseClause instanceof Closure) {
- 			return elseClause.call(key)
- 		}
- 		elseClause
- 	}
- 	
+    }
+
+    private Object retrieve(Map<Object, Map> m, Object mappingKey, Object key) {
+        checkMappingKey(m, mappingKey)
+        m[mappingKey][key] ?: retrieveElse(m, mappingKey, key)
+    }
+
+    private Object retrieveElse(Map<Object, Map> m, Object mappingKey, Object key) {
+        def elseClause = m[mappingKey][ELSE]
+        if (elseClause instanceof Closure) {
+            return elseClause.call(key)
+        }
+        elseClause
+    }
+
     private void updateReverseMap() {
         def reverseElseKey
-    	map?.each { mappingKey, m ->
-			reverseMap[mappingKey] = [:]
-			m.each { key, value ->
-				if (key != KEYSYSTEM && key != VALUESYSTEM) {
-					if (key != ELSE) {
-					    if (value != ELSE) {
-					        reverseMap[mappingKey][joinKey(value)] = key
-					    } else {
-					        reverseMap[mappingKey][ELSE] = key
-					        reverseElseKey = key
-					    }
-					}
-				}
-			}
-	        if (reverseElseKey) {
-	            m.remove(reverseElseKey)
-	            reverseElseKey = null
-	        }
-    	}
+        map?.each { mappingKey, m ->
+            reverseMap[mappingKey] = [:]
+            m.each { key, value ->
+                if (key != KEYSYSTEM && key != VALUESYSTEM) {
+                    if (key != ELSE) {
+                        if (value != ELSE) {
+                            reverseMap[mappingKey][joinKey(value)] = key
+                        } else {
+                            reverseMap[mappingKey][ELSE] = key
+                            reverseElseKey = key
+                        }
+                    }
+                }
+            }
+            if (reverseElseKey) {
+                m.remove(reverseElseKey)
+                reverseElseKey = null
+            }
+        }
     }
-    
- 	private void checkMappingKey(Map<Object, Map> map, Object mappingKey) {
- 		if (!map[mappingKey])
- 			throw new IllegalArgumentException("Unknown key $mappingKey")
- 	} 	
-    
+
+    private void checkMappingKey(Map<Object, Map> map, Object mappingKey) {
+        if (!map[mappingKey])
+            throw new IllegalArgumentException("Unknown key $mappingKey")
+    }
+
     private Object joinKey(Object x) {
-    	if (x instanceof Collection) {
-    		return x.join(separator)
-    	} else {
-    		return x
-    	}
-   }
-    
-    private Object splitKey(Object x) {
-    	if (x instanceof String) {
-    		def list = x?.split(separator)?.collect { it.toString() }
-    		return list?.size() == 1 ? list[0] : list
-    	} else {
-    		return x
-    	}
+        if (x instanceof Collection) {
+            return x.join(separator)
+        } else {
+            return x
+        }
     }
- }
+
+    private Object splitKey(Object x) {
+        if (x instanceof String) {
+            def list = x?.split(separator)?.collect { it.toString() }
+            return list?.size() == 1 ? list[0] : list
+        } else {
+            return x
+        }
+    }
+}

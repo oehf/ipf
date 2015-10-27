@@ -16,12 +16,14 @@
 package org.openehealth.ipf.platform.camel.flow.builder;
 
 import org.apache.camel.Expression;
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe;
 import org.openehealth.ipf.platform.camel.flow.process.FlowBeginProcessor;
 import org.openehealth.ipf.platform.camel.flow.process.FlowEndProcessor;
 import org.openehealth.ipf.platform.camel.flow.process.FlowErrorProcessor;
 import org.openehealth.ipf.platform.camel.flow.process.Splitter;
+
+import java.util.Set;
 
 /**
  * Helper class for creating IPF extensions in Java-based route definitions.
@@ -30,13 +32,13 @@ import org.openehealth.ipf.platform.camel.flow.process.Splitter;
  */
 public class RouteHelper {
 
-    private SpringRouteBuilder routeBuilder;
+    private RouteBuilder routeBuilder;
     
-    public RouteHelper(SpringRouteBuilder routeBuilder) {
+    public RouteHelper(RouteBuilder routeBuilder) {
         this.routeBuilder = routeBuilder;
     }
     
-    public void setRouteBuilder(SpringRouteBuilder routeBuilder) {
+    public void setRouteBuilder(RouteBuilder routeBuilder) {
         this.routeBuilder = routeBuilder;
     }
     
@@ -50,7 +52,7 @@ public class RouteHelper {
      * @return a new {@link FlowBeginProcessor}.
      */
     public FlowBeginProcessor flowBegin(String identifier) {
-        FlowBeginProcessor processor = routeBuilder.lookup(FlowBeginProcessor.class);
+        FlowBeginProcessor processor = lookup(FlowBeginProcessor.class);
         processor.identifier(identifier).register();
         return processor;
     }
@@ -61,7 +63,7 @@ public class RouteHelper {
      * @return a new {@link FlowEndProcessor}.
      */
     public FlowEndProcessor flowEnd() {
-        return routeBuilder.lookup(FlowEndProcessor.class);
+        return lookup(FlowEndProcessor.class);
     }
 
     /**
@@ -70,7 +72,7 @@ public class RouteHelper {
      * @return a new {@link FlowErrorProcessor}.
      */
     public FlowErrorProcessor flowError() {
-        return routeBuilder.lookup(FlowErrorProcessor.class);
+        return lookup(FlowErrorProcessor.class);
     }
 
     /**
@@ -79,7 +81,7 @@ public class RouteHelper {
      * @return a new {@link Dedupe}.
      */
     public Dedupe dedupe() {
-        return routeBuilder.lookup(Dedupe.class);
+        return lookup(Dedupe.class);
     }
     
     // ----------------------------------------------------------------
@@ -97,4 +99,14 @@ public class RouteHelper {
         return new Splitter(splitRule, null);
     }
 
+    private <T> T lookup(Class<T> type) {
+        Set<T> processors = routeBuilder.getContext().getRegistry().findByType(type);
+        if (processors.isEmpty() || processors.size() > 1) {
+            throw new IllegalArgumentException("Must have exactly one processor of type " + type.getName() + ", but found " + processors.size());
+        } else {
+            T processor = processors.iterator().next();
+            return processor;
+        }
+
+    }
 }

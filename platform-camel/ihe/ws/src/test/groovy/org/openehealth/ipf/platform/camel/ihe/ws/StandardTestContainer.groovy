@@ -35,7 +35,7 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
-import org.springframework.core.io.ClassPathResource
+
 import org.springframework.web.context.support.WebApplicationContextUtils
 
 /**
@@ -62,13 +62,13 @@ class StandardTestContainer {
      public static int DEMO_APP_PORT = 8999
      
      static void startServer(servlet, String appContextName, boolean secure, int serverPort) {
-         def contextResource = new ClassPathResource(appContextName)
+         URL contextResource = StandardTestContainer.class.getResource(appContextName.startsWith("/") ? appContextName : "/" + appContextName)
          
          port = serverPort
          log.info("Publishing services on port: ${port}")
          
          servletServer = new JettyServer(
-                 contextResource: contextResource.getURI().toString(),
+                 contextResource: contextResource.toURI().toString(),
                  port: port,
                  contextPath: '',
                  servletPath: '/*',

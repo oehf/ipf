@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
+package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55
+
+import org.apache.camel.builder.RouteBuilder;
 
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55ResponseValidator
@@ -24,7 +26,6 @@ import javax.xml.datatype.Duration
 
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
-import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -34,7 +35,7 @@ import org.slf4j.LoggerFactory
  * Test routes for ITI-55.
  * @author Dmytro Rud
  */
-class Iti55TestRouteBuilder extends SpringRouteBuilder {
+class Iti55TestRouteBuilder extends RouteBuilder {
     private static final transient LOG = LoggerFactory.getLogger(Iti55TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()

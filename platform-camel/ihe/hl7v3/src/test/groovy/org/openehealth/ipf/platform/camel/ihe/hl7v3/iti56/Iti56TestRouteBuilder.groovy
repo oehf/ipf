@@ -15,10 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56
 
+import org.apache.camel.builder.RouteBuilder
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.camel.ExchangePattern;
-import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -29,7 +30,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidato
  * Test routes for ITI-56.
  * @author Dmytro Rud
  */
-class Iti56TestRouteBuilder extends SpringRouteBuilder {
+class Iti56TestRouteBuilder extends RouteBuilder {
 
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()

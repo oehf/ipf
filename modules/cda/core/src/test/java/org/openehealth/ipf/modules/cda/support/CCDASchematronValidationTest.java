@@ -22,14 +22,13 @@ import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.openehealth.ipf.modules.cda.CDAR2Constants.*;
+import static org.openehealth.ipf.modules.cda.CDAR2Constants.CCDA_SCHEMATRON_RULES;
 
 /**
  * @author Boris Stanojevic
@@ -55,10 +54,9 @@ public class CCDASchematronValidationTest {
     @Test
     public void validateSchemaGoodSamples() throws Exception {
         for (String ccdaFile: ccdaFiles){
-            String ccdaFilePathFormat = "ccda/%s.xml";
+            String ccdaFilePathFormat = "/ccda/%s.xml";
             String ccdaFilePath = String.format(ccdaFilePathFormat, ccdaFile);
-            Source testXml = new StreamSource(
-                    new ClassPathResource(ccdaFilePath).getInputStream());
+            Source testXml = new StreamSource(getClass().getResourceAsStream(ccdaFilePath));
             LOG.info("Testing {} ...", ccdaFile);
             schematron.validate(testXml, new SchematronProfile(CCDA_SCHEMATRON_RULES, params));
             LOG.info("{} - OK", ccdaFile);

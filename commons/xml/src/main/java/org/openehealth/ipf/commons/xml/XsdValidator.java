@@ -15,23 +15,25 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import java.io.IOException;
-import java.util.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.core.modules.api.ValidationException;
+import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Validation of XML documents based on a XML Schema. Before using this class
@@ -42,7 +44,7 @@ import org.xml.sax.SAXParseException;
 public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements Validator<Source, String> {
     private static final Logger LOG = LoggerFactory.getLogger(XsdValidator.class);
 
-    private static final Map<String, Schema> XSD_CACHE = new HashMap<>();
+    private static final ConcurrentMap<String, Loader<Schema>> XSD_CACHE = new ConcurrentHashMap<>();
     private static final LSResourceResolverImpl RESOURCE_RESOLVER = new LSResourceResolverImpl();
 
     @Getter @Setter private String schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;
@@ -56,7 +58,7 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
     }
 
     @Override
-    protected Map<String, Schema> getCache() {
+    protected ConcurrentMap<String, Loader<Schema>> getCache() {
         return XSD_CACHE;
     }
 
@@ -97,13 +99,17 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
     }
 
     @Override
-    protected Schema createResource(Object... params) throws IOException, SAXException {
+    protected Schema createResource(Object... params) {
         // SchemaFactory is neither thread-safe nor reentrant
         SchemaFactory factory = SchemaFactory.newInstance(getSchemaLanguage());
 
         // Register resource resolver to resolve external XML schemas
         factory.setResourceResolver(RESOURCE_RESOLVER);
-        return factory.newSchema(resourceContent(params));
+        try {
+            return factory.newSchema(resourceContent(params));
+        } catch (SAXException e) {
+            throw new IllegalArgumentException("Could not initialize XSD schema", e);
+        }
     }
 
 

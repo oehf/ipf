@@ -51,6 +51,25 @@ public class BidiMappingServiceTest {
 		assert mappingService.getKey("reverseElseTest", "b") == "a"
 		assert mappingService.getKey("reverseElseTest", "c") == "a"		
 	}
+
+    @Test
+    void testMappingServiceURL() {
+        mappingService.addMappingScript(getClass().getResource("/example2.map"))
+        assert mappingService.mappingKeys().contains("encounterType")
+        assert mappingService.get("encounterType", "I") == "IMP"
+        assert mappingService.get("messageType", "ADT^A01") == "PRPA_IN402001"
+        assert mappingService.get("messageType", "ADT^A04") == null
+        assert mappingService.keys("encounterType").sort() == ['E','I','O']
+        assert mappingService.keys("vip") == ["Y"] as Set
+        assert mappingService.get("vip", "X") == "X"
+        assert mappingService.getKey("encounterType", "IMP") == "I"
+        assert mappingService.getKeySystem("encounterType") == "2.16.840.1.113883.12.4"
+        assert mappingService.get("nullTest", null) == "not null"
+        assert mappingService.get("reverseElseTest", "a") == "b"
+        assert mappingService.get("reverseElseTest", "d") == "c"
+        assert mappingService.getKey("reverseElseTest", "b") == "a"
+        assert mappingService.getKey("reverseElseTest", "c") == "a"
+    }
 	
 	/**
 	 * Tests that the second mapping file overrides the first one 
@@ -72,6 +91,23 @@ public class BidiMappingServiceTest {
 		assert mappingService.get("nullTest", null) == "not null"
 	}
 
+    @Test
+    void testMappingServiceURL2() {
+        def resources = [getClass().getResource("/example2.map"),
+                         getClass().getResource("/example3.map")] as URL[]
+        mappingService.addMappingScripts(resources)
+        assert mappingService.mappingKeys().contains("encounterType")
+        assert mappingService.get("encounterType", "I") == "IMP"
+        assert mappingService.get("messageType", "ADT^A04") == "PRPA_IN401001"
+        assert mappingService.get("messageType", "ADT^A01") == null
+        assert mappingService.keys("encounterType").sort() == ['E','I','O']
+        assert mappingService.keys("vip") == ["Y"] as Set
+        assert mappingService.get("vip", "X") == "X"
+        assert mappingService.getKey("encounterType", "IMP") == "I"
+        assert mappingService.getKeySystem("encounterType") == "2.16.840.1.113883.12.4"
+        assert mappingService.get("nullTest", null) == "not null"
+    }
+
     /**
      * Tests whether the "ignoreResourceNotFound" option works.
      */
@@ -79,9 +115,9 @@ public class BidiMappingServiceTest {
     void testIgnoreResourceNotFound() {
         def resources = [new ClassPathResource("example2.map.NONEXISTENT"),
                          new ClassPathResource("example3.map")] as Resource[]
-        mappingService.setMappingScripts(resources)
+
         mappingService.ignoreResourceNotFound = true
-        mappingService.afterPropertiesSet()
+        mappingService.setMappingScripts(resources)
 
         boolean failed = false
         assert mappingService.get('messageType', 'ADT^A04') == 'PRPA_IN401001'

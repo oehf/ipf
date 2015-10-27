@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47
 
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.apache.commons.lang3.Validate
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqRequest3to2Translator
@@ -30,7 +30,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslat
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti47RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti47ResponseValidator
 
-class CamelOnlyRouteBuilder extends SpringRouteBuilder {
+class CamelOnlyRouteBuilder extends RouteBuilder {
 
     private static final PdqRequest3to2Translator REQUEST_TRANSLATOR = new PdqRequest3to2Translator();
     private static final PdqResponse2to3Translator RESPONSE_TRANSLATOR = new PdqResponse2to3Translator();

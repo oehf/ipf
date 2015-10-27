@@ -168,8 +168,7 @@ Now an instance of `CamelEndpointSender` can be configured in the application co
     </bean>
 
     <bean id="camelEndpointSender"
-          class="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender">
-       <!-- autowired if not explicitly configured -->
+          class="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender" init-method="init" destroy-method="destroy">
        <property name="camelContext" ref="camelContext" />
        <!-- endpoint registered in the Camel context -->
        <property name="endpointUri" value="direct:input" />

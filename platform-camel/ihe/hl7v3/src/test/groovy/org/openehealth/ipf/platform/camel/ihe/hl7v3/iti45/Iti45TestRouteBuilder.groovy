@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti45
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 /**
  * @author Dmytro Rud
  */
-class Iti45TestRouteBuilder extends SpringRouteBuilder {
+class Iti45TestRouteBuilder extends RouteBuilder {
 
     private static final String RESPONSE =
         StandardTestContainer.readFile('translation/pixquery/v3/07_PIXQuery1Response.xml')

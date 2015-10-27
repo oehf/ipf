@@ -21,10 +21,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Evaluation context of SPEL expressions for payload log file names.
+ * Evaluation context of expressions for payload log file names. Expression or templating engines being
+ * used should be able to call
+ *
  * @author Dmytro Rud
  */
-public class PayloadLoggingSpelContext {
+public class PayloadLoggingContext {
     private static final String PROCESS_ID;
 
     static {
@@ -35,19 +37,35 @@ public class PayloadLoggingSpelContext {
     private final String sequenceId;
     private final Date currentDate;
 
-    public PayloadLoggingSpelContext(Long sequenceId) {
+    /**
+     * Initializes this context with a sequence ID
+     *
+     * @param sequenceId sequence ID
+     */
+    public PayloadLoggingContext(Long sequenceId) {
         this.sequenceId = String.format("%012d", sequenceId);
         this.currentDate = new Date();
     }
 
+    /**
+     * @return the current process ID
+     */
     public String getProcessId() {
         return PROCESS_ID;
     }
 
+    /**
+     * @return the sequence ID
+     */
     public String getSequenceId() {
         return sequenceId;
     }
 
+    /**
+     * @param formatSpecification date format specification
+     * @return the current date/time of this context
+     * @see SimpleDateFormat
+     */
     public String date(String formatSpecification) {
         return new SimpleDateFormat(formatSpecification).format(currentDate);
     }

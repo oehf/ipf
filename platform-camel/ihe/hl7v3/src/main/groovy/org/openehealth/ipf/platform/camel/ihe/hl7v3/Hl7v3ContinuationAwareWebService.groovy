@@ -47,7 +47,7 @@ abstract public class Hl7v3ContinuationAwareWebService
 {
     private static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3ContinuationAwareWebService.class)
 
-    private static final String XSLT_TEMPLATE = 'xslt/hl7v3-continuations-fragmentize.xslt'
+    private static final String XSLT_TEMPLATE = '/xslt/hl7v3-continuations-fragmentize.xslt'
     private static final XsltTransmogrifier XSLT_TRANSMOGRIFIER = new XsltTransmogrifier(String.class)
     private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
 

@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean;
 
-import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
 
 /**
  * 
  * @author Stefan Ivanov
  */
-public class SomeMllpItiRouteBuilder extends SpringRouteBuilder {
+public class SomeMllpItiRouteBuilder extends RouteBuilder {
     
     @Override
     public void configure() throws Exception {

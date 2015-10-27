@@ -45,7 +45,6 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
     
     // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  
     private UnsolicitedFragmentationStorage storage;
-    
 
     @Override
     public void setConfigurationHolder(Hl7v2ConfigurationHolder configurationHolder) {

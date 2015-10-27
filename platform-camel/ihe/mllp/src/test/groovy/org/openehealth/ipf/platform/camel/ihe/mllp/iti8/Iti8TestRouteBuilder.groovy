@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
@@ -25,7 +25,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
  * Camel route for generic unit tests.
  * @author Dmytro Rud
  */
-class Iti8TestRouteBuilder extends SpringRouteBuilder {
+class Iti8TestRouteBuilder extends RouteBuilder {
     
     void configure() throws Exception {
         

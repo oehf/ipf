@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.dispatch
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.hl7.HL7v2
 
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.*
@@ -23,7 +23,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.*
 /**
  * @author Dmytro Rud
  */
-class DispatchRouteBuilder1 extends SpringRouteBuilder {
+class DispatchRouteBuilder1 extends RouteBuilder {
 
     @Override
     void configure() throws Exception {

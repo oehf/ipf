@@ -15,12 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
+import org.junit.Ignore
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInPayloadLoggerInterceptor
 
 /**
  * @author Dmytro Rud
  */
+
+@Ignore
 class MixinTest {
 
     @Test

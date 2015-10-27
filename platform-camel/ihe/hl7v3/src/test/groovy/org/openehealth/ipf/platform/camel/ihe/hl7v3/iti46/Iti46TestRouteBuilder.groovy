@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti46
 
-import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.apache.camel.Exchange
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.apache.camel.builder.RouteBuilder
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * @author Dmytro Rud
  */
-class Iti46TestRouteBuilder extends SpringRouteBuilder {
+class Iti46TestRouteBuilder extends RouteBuilder {
 
     private static final String ACK =
             StandardTestContainer.readFile('translation/pixfeed/v3/Ack.xml')

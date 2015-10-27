@@ -16,8 +16,8 @@
 package org.openehealth.ipf.platform.camel.core.util;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.spring.SpringCamelContext;
-import org.springframework.context.ApplicationContext;
+
+import java.util.Set;
 
 /**
  * @author Martin Krasser
@@ -35,11 +35,10 @@ public class Contexts {
     }
     
     public static <T> T beanOrNull(Class<T> type, CamelContext camelContext) {
-        ApplicationContext springContext = getApplicationContext(camelContext);
-        String[] names = springContext.getBeanNamesForType(type, true, true);
-        int count = names == null ? 0 : names.length;
+        Set<T> beans = camelContext.getRegistry().findByType(type);
+        int count = beans.size();
         if (count == 1) {
-            return type.cast(springContext.getBean(names[0]));
+            return beans.iterator().next();
         } else if (count == 0) {
             return null; 
         } else {
@@ -47,14 +46,6 @@ public class Contexts {
                     "Too many beans in the application context of type: " 
                     + type + ". Found: " + count);
         }
-    }
-
-    public static ApplicationContext getApplicationContext(CamelContext camelContext) {
-        if (camelContext instanceof SpringCamelContext) {
-            SpringCamelContext springContext = (SpringCamelContext)camelContext;
-            return springContext.getApplicationContext();
-        }
-        throw new IllegalArgumentException("context argument is not a SpringCamelContext");
     }
     
 }

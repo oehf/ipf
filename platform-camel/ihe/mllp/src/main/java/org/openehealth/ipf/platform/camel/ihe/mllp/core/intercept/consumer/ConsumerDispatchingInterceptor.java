@@ -36,7 +36,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
 /**
  * Interceptor which dispatches an incoming request message to another MLLP route.
  *
- * TODO maybe reference to dispatchingendpoint, start endpoint withour route??
+ * TODO maybe reference to dispatchingendpoint, start endpoint without route??
  *
  * @author Dmytro Rud
  */

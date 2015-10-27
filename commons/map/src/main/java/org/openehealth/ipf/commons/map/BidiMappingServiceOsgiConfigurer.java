@@ -21,8 +21,6 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -88,17 +86,17 @@ public class BidiMappingServiceOsgiConfigurer implements BundleListener {
         if (entries == null){
             return;
         }
-        List<Resource> urlResources = new ArrayList<>();
+        List<URL> urlResources = new ArrayList<>();
         while (entries.hasMoreElements()){
             URL url = entries.nextElement();
-            urlResources.add(new UrlResource(url));
+            urlResources.add(url);
         }
-        Resource[] resources = urlResources.toArray(new Resource[urlResources.size()]);
+        URL[] resources = urlResources.toArray(new URL[urlResources.size()]);
 
         // configure mapping service with mapping resources
         if (resources.length > 0) {
             service.addMappingScripts(resources);
-            for (Resource resource: resources) {
+            for (URL resource: resources) {
                 LOG.info("Added mapping resource {} to mapping service", resource);
             }
             LOG.debug("Current mappings: {}", service.getReverseMap());

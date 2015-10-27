@@ -26,7 +26,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 
 import ca.uhn.hl7v2.model.AbstractMessage;
@@ -35,11 +34,12 @@ import ca.uhn.hl7v2.model.v22.message.ADT_A01;
 /**
  * @author Martin Krasser
  */
+@Ignore
 @ContextConfiguration(locations = { "/config/context-extend.xml" })
 public class Ghl7ExtensionTest extends AbstractExtensionTest {
 
-    private String resource = "message/msg-01.hl7";
-    private String resourceUTF8 = "message/msg-01-utf8.hl7";
+    private String resource = "/message/msg-01.hl7";
+    private String resourceUTF8 = "/message/msg-01-utf8.hl7";
     
     @Test
     public void testMarshalDefault() throws Exception {
@@ -106,7 +106,7 @@ public class Ghl7ExtensionTest extends AbstractExtensionTest {
     }
     
     private static InputStream inputStream(String resource) throws IOException {
-        return new ClassPathResource(resource).getInputStream();
+        return Ghl7ExtensionTest.class.getResourceAsStream(resource);
     }
 
     private static <T extends AbstractMessage> MessageAdapter<T> inputMessage(String resource) {

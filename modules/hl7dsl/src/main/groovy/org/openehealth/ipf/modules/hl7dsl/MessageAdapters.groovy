@@ -35,11 +35,11 @@ public class MessageAdapters {
 	// -----------------------------------------------------------------
 	
 	static <T extends AbstractMessage>  MessageAdapter<T> load(String resource) {
-		make(MessageAdapter.class.classLoader.getResource(resource)?.text)
+		make(MessageAdapters.class.classLoader.getResource(resource)?.text)
 	}
 	
 	static <T extends AbstractMessage>  MessageAdapter<T>  load(String resource, String charset) {
-		make(MessageAdapter.class.classLoader.getResource(resource)?.getText(charset))
+		make(MessageAdapters.class.classLoader.getResource(resource)?.getText(charset))
 	}
 	
 	static <T extends AbstractMessage>  MessageAdapter<T>  make(InputStream stream) {

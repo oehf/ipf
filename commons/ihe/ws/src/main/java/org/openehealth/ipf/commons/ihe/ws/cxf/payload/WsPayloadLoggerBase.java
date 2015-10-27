@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase;
-import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingSpelContext;
+import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingContext;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,19 +32,17 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
 /**
  * Base class for CXF interceptors which store incoming and outgoing HTTP payload
  * into files with user-defined name patterns.
- * <p>
+ * <p/>
  * It introduces an additional parameter available in SPEL file name expressions:
  * <ul>
- *     <li><tt>partialResponse</tt>&nbsp;&mdash; returns <code>true</code>,
- *          when the message under consideration is a WS-Addressing partial response.
+ * <li><tt>partialResponse</tt>&nbsp;&mdash; returns <code>true</code>,
+ * when the message under consideration is a WS-Addressing partial response.
  * </ul>
  *
  * @author Dmytro Rud
  */
 public class WsPayloadLoggerBase
-        extends PayloadLoggerBase<WsPayloadLoggerBase.WsPayloadLoggingSpelContext>
-{
-    private static final Logger LOG = LoggerFactory.getLogger(WsPayloadLoggerBase.class);
+        extends PayloadLoggerBase<WsPayloadLoggerBase.WsPayloadLoggingContext> {
 
 
     public void logPayload(Message message) {
@@ -56,7 +52,7 @@ public class WsPayloadLoggerBase
             message.getExchange().put(SEQUENCE_ID_PROPERTY_NAME, sequenceId);
         }
 
-        WsPayloadLoggingSpelContext spelContext = new WsPayloadLoggingSpelContext(
+        WsPayloadLoggingContext spelContext = new WsPayloadLoggingContext(
                 sequenceId,
                 Boolean.TRUE.equals(message.get(Message.PARTIAL_RESPONSE_MESSAGE)));
 
@@ -73,8 +69,8 @@ public class WsPayloadLoggerBase
 
     /**
      * Appends generic HTTP headers to the given String builder.
-     * @param message
-     *      CXF message which contains the headers.
+     *
+     * @param message CXF message which contains the headers.
      * @return message's HTTP headers as a String.
      */
     private static String getHeadersPayload(Message message) {
@@ -148,15 +144,13 @@ public class WsPayloadLoggerBase
     }
 
 
-
-
     /**
      * SPEL evaluation context for patterns of file names where WS-based payload should be saved.
      */
-    static class WsPayloadLoggingSpelContext extends PayloadLoggingSpelContext {
+    static class WsPayloadLoggingContext extends PayloadLoggingContext {
         private final boolean partialResponse;
 
-        WsPayloadLoggingSpelContext(long sequenceId, boolean partialResponse) {
+        WsPayloadLoggingContext(long sequenceId, boolean partialResponse) {
             super(sequenceId);
             this.partialResponse = partialResponse;
         }

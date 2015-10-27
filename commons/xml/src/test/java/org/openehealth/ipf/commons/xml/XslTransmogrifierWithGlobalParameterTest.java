@@ -27,7 +27,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
 
 /**
  * Tests passing in global parameters (e.g. services) into a stylesheet. See
@@ -58,9 +57,8 @@ public class XslTransmogrifierWithGlobalParameterTest {
      */
     @Test
     public void testConvertString() throws IOException {
-        Source content = new StreamSource(new ClassPathResource(
-                "xslt/parameterExample.xml").getInputStream());
-        String s = transformer.zap(content, "xslt/parameter.xslt", parameters);
+        Source content = new StreamSource(getClass().getResourceAsStream("/xslt/parameterExample.xml"));
+        String s = transformer.zap(content, "/xslt/parameter.xslt", parameters);
         assertTrue(s.contains("ein negeR mi tgaz ellezaG tim regeN niE"));
     }
 

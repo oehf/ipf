@@ -18,8 +18,8 @@ package org.openehealth.ipf.tutorials.hl7.route
 import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.HapiContext
 import org.apache.camel.Exchange
+import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.hl7.HL7DataFormat
-import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.tutorials.hl7.validation.SampleRulesBuilder
 
 import static org.apache.camel.component.hl7.HL7.messageConforms
@@ -27,12 +27,12 @@ import static org.apache.camel.component.hl7.HL7.messageConforms
 /**
  * @author Christian Ohr
  */
-public class SampleRouteBuilder extends SpringRouteBuilder {
+public class SampleRouteBuilder extends RouteBuilder {
 
     void configure() {
 
         // Set up HL7 context with the custom validation rules
-        HapiContext context = new DefaultHapiContext(lookup(SampleRulesBuilder))
+        HapiContext context = new DefaultHapiContext(getContext().getRegistry().lookupByName('myCustomRules'))
         context.getParserConfiguration().setValidating(false)
         HL7DataFormat hl7 = new HL7DataFormat()
         hl7.setHapiContext(context)
