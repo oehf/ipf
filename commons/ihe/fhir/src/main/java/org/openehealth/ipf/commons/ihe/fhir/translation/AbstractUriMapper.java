@@ -30,7 +30,7 @@ public abstract class AbstractUriMapper implements UriMapper {
     public String uriToOid(String uri) throws URISyntaxException {
         if (URN.isURN(uri)) {
             URN urn = URN.create(uri);
-            if (Objects.equals(urn.getNamespaceId(), URN.Namespace.oid.name())) {
+            if (Objects.equals(urn.getNamespaceId(), URN.OID)) {
                 return urn.getNamespaceSpecificString();
             } else {
                 throw new FhirTranslationException("Unknown URN scheme ${urn.namespaceId}");
@@ -47,7 +47,7 @@ public abstract class AbstractUriMapper implements UriMapper {
         } catch (Exception e) {
             // handled below
         }
-        return new URN(URN.Namespace.oid.name(), oid).toString();
+        return new URN(URN.OID, oid).toString();
     }
 
     /**

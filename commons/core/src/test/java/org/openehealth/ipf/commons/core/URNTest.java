@@ -24,7 +24,7 @@ public class URNTest {
         assertTrue(URN.isURN(text));
         URN urn = URN.create(text);
         assertEquals("OID", urn.getNamespaceId());
-        assertEquals(URN.OID, urn.getNamespaceId());
+        assertTrue(urn.isNamespace(URN.OID));
         assertEquals(nss, urn.getNamespaceSpecificString());
         assertEquals(text, urn.toString());
     }
@@ -34,7 +34,7 @@ public class URNTest {
         UUID uuid = UUID.randomUUID();
         URN urn = new URN(uuid);
         assertEquals("uuid", urn.getNamespaceId());
-        assertEquals(URN.UUID, urn.getNamespaceId());
+        assertTrue(urn.isNamespace(URN.UUID));
         assertEquals(uuid.toString(), urn.getNamespaceSpecificString());
     }
 

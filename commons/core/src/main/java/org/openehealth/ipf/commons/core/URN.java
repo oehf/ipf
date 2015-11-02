@@ -1,7 +1,5 @@
 package org.openehealth.ipf.commons.core;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -95,6 +93,10 @@ public final class URN implements Comparable<URN>, Serializable {
         return this.part(1);
     }
 
+    public boolean isNamespace(String namespace) {
+        return getNamespaceId().equalsIgnoreCase(namespace);
+    }
+
     /**
      * @return namespace-specific string, i.e. an OID or UUID value
      */
@@ -112,6 +114,6 @@ public final class URN implements Comparable<URN>, Serializable {
     }
 
     private String part(final int index) {
-        return StringUtils.splitPreserveAllTokens(uri.toString(), SEP, 3)[index];
+        return uri.toString().split(SEP, 3)[index];
     }
 }
