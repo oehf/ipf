@@ -15,17 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
-import static org.apache.commons.lang3.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static org.apache.commons.lang3.Validate.notNull;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
  * Query parameter validation for parameters that are Code-based.
@@ -50,6 +51,7 @@ public class AssociationValidation implements QueryParameterValidation {
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
         List<String> slotValues = request.getSlotValues(param.getSlotName());
+        metaDataAssert(!slotValues.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, param);
         for (String slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
             metaDataAssert(PATTERN.matcher(slotValue).matches(),
@@ -59,8 +61,12 @@ public class AssociationValidation implements QueryParameterValidation {
         QuerySlotHelper slots = new QuerySlotHelper(request);
         List<AssociationType> associationTypes = slots.toAssociationType(param);
 
-        for (AssociationType type : associationTypes) {
-            metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);
+        if (associationTypes != null) {
+            for (AssociationType type : associationTypes) {
+                metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);
+            }
+        } else {
+            throw new XDSMetaDataException(INVALID_ASSOCIATION_TYPE);
         }
     }
 }
