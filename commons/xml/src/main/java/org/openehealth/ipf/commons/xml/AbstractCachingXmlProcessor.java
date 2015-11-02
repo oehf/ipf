@@ -173,7 +173,6 @@ abstract public class AbstractCachingXmlProcessor<T> {
      * @return resource of the configured type.
      * @throws IOException
      *
-     * FIXME: make this more flexible as replacement for not using Spring Resource objects anymore
      */
     protected StreamSource resourceContent(Object... params) {
         String location = resourceLocation(params);
@@ -187,7 +186,7 @@ abstract public class AbstractCachingXmlProcessor<T> {
                     url = new URL(location);
                 } catch (MalformedURLException ex) {
                     // No URL -> resolve as resource path.
-                    url = getClass().getResource(location);
+                    url = getClass().getClassLoader().getResource(location);
                 }
             }
             return new StreamSource(url.openStream(), url.toExternalForm());

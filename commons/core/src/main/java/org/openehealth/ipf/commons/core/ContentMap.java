@@ -15,10 +15,9 @@
  */
 package org.openehealth.ipf.commons.core;
 
-import org.apache.commons.lang3.Validate;
+import org.openehealth.ipf.commons.core.config.TypeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
 
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.HashMap;
@@ -35,7 +34,7 @@ public class ContentMap {
     // synchronized manually
     private transient final Map<Class<?>, Object> map = new HashMap<>();
 
-    private static transient ConversionService conversionService;
+    private static transient TypeConverter conversionService;
 
 
     /**
@@ -93,8 +92,8 @@ public class ContentMap {
      */
     @SuppressWarnings("unchecked")
     public <T> T setContent(Class<T> key, T content) {
-        Validate.notNull(key, "content type must be provided");
-        Validate.notNull(content, "null content is not allowed");
+        if (key == null) throw new IllegalArgumentException("content type must be provided");
+        if (content == null) throw new IllegalArgumentException("null content is not allowed");
         synchronized (map) {
             return (T) map.put(key, content);
         }
@@ -139,7 +138,7 @@ public class ContentMap {
     /**
      * Returns conversion service for document contents.
      */
-    public static ConversionService getConversionService() {
+    public static TypeConverter getConversionService() {
         return conversionService;
     }
 
@@ -147,7 +146,7 @@ public class ContentMap {
     /**
      * Sets conversion service for document contents.
      */
-    public static void setConversionService(ConversionService conversionService) {
+    public static void setConversionService(TypeConverter conversionService) {
         ContentMap.conversionService = conversionService;
     }
 

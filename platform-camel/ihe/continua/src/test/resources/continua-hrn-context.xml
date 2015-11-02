@@ -49,12 +49,16 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd">
         </property>
     </bean>
 
+    <bean id="springTypeConverter" class="org.openehealth.ipf.commons.core.config.SpringTypeConverter">
+        <constructor-arg ref="conversionService"/>
+    </bean>
+
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="targetClass" value="org.openehealth.ipf.commons.ihe.xds.core.metadata.Document"/>
         <property name="targetMethod" value="setConversionService"/>
         <property name="arguments">
             <list>
-                <ref bean="conversionService" />
+                <ref bean="springTypeConverter" />
             </list>
         </property>
     </bean>
