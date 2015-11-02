@@ -1,0 +1,113 @@
+/*
+ * Copyright 2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.openehealth.ipf.commons.ihe.fhir.iti83
+
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
+import org.apache.commons.lang3.Validate
+import org.hl7.fhir.instance.model.Identifier
+import org.hl7.fhir.instance.model.OperationOutcome
+import org.hl7.fhir.instance.model.Parameters
+import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
+import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
+
+/**
+ * Translates HL7v2 PIX Query Response message into a {@link Parameters} resource
+ * Also cares about error responses and throws the appropriate Exceptions for the
+ * FHIR framework
+ */
+class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir<RSP_K23, Parameters> {
+
+    private final UriMapper uriMapper
+
+    /**
+     * @param uriMapper mapping for translating FHIR URIs into OIDs
+     */
+    PixQueryResponseToPixmResponseTranslator(UriMapper uriMapper) {
+        Validate.notNull(uriMapper, "URI Mapper must not be null")
+        this.uriMapper = uriMapper
+    }
+
+    @Override
+    Parameters translateHL7v2ToFhir(RSP_K23 message) {
+        String ackCode = message.QAK[2].value
+        switch (ackCode) {
+            case 'OK': return handleRegularResponse(message.QUERY_RESPONSE.PID[3]()) // Case 1
+            case 'NF': return handleRegularResponse(null)  // Case 2
+            case 'AE': throw handleErrorResponse(message) // Cases 3-5
+            default: throw new InternalErrorException("Unexpected ack code " + ackCode)
+        }
+    }
+
+    // Handle a regular response
+    private Parameters handleRegularResponse(pid3collection) {
+        Parameters parameters = new Parameters()
+        if (pid3collection) {
+            for (pid3 in pid3collection) {
+                Identifier identifier = new Identifier()
+                        .setSystem(uriMapper.oidToUri(pid3[4][2].value))
+                        .setValue(pid3[1].value)
+                        .setUse(Identifier.IdentifierUse.OFFICIAL)
+                Parameters.ParametersParameterComponent parameter = new Parameters.ParametersParameterComponent()
+                        .setName('targetIdentifier')
+                        .setValue(identifier)
+                parameters.addParameter(parameter)
+            }
+        }
+        parameters
+    }
+
+    // Handle an error response from the Cross-reference manager
+    private BaseServerResponseException handleErrorResponse(RSP_K23 message) {
+
+        // Check error locations
+        OperationOutcome oo = new OperationOutcome()
+        int errorField = Integer.parseInt(message.ERR[2][3].value)
+        int errorComponent = Integer.parseInt(message.ERR[2][5].value)
+
+
+        if (errorField == 3 && errorComponent == 1) {
+            // Case 3: Patient ID not found
+            oo.addIssue()
+                    .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                    .setCode(OperationOutcome.IssueType.VALUE)
+            return new InvalidRequestException('Unknown Patient ID', oo)
+
+        } else if (errorField == 3 && errorComponent == 4) {
+            // Case 4: Patient Domain unknown
+            oo.addIssue()
+                    .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                    .setCode(OperationOutcome.IssueType.NOTSUPPORTED) // not-supported
+            return new InvalidRequestException('Unknown Patient Domain', oo)
+        } else if (errorField == 4) {
+            // Case 5: What Domains Returned unknown
+            oo.addIssue()
+                    .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                    .setCode(OperationOutcome.IssueType.NOTFOUND) // unknown-key-identifier
+            return new InvalidRequestException('Unknown Target Domain', oo)
+        } else {
+            // WTF
+            oo.addIssue()
+                    .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                    .setCode(OperationOutcome.IssueType.EXCEPTION)
+            return new InternalErrorException('Unexpected response from server', oo)
+        }
+
+    }
+
+}

@@ -30,6 +30,7 @@ import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
@@ -239,6 +240,15 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
      */
     public void setHomeCommunityId(String homeCommunityId) {
         this.homeCommunityId = homeCommunityId;
+    }
+
+    /**
+     * Configures homeCommunityId for this endpoint.
+     * @param urn
+     *      homeCommunityId in format "urn:oid:1.2.3.4.5".
+     */
+    public void setHomeCommunityId(URN urn) {
+        this.homeCommunityId = urn.toString()
     }
 
     /**

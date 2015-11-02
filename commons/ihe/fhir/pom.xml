@@ -33,8 +33,9 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
-            <artifactId>gazelle-validation-profiles-iti-pixpdq</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
+            <version>${ipf-gazelle-version}</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
