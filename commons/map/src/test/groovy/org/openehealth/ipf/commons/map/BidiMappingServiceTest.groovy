@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.map
 
 import org.junit.Before
 import org.junit.Test
-import org.springframework.core.io.Resource
-import org.springframework.core.io.ClassPathResource
 
 /**
  * @author Christian Ohr
@@ -35,7 +33,7 @@ public class BidiMappingServiceTest {
 
     @Test
 	void testMappingService() {
-		mappingService.addMappingScript(new ClassPathResource("example2.map"))
+		mappingService.addMappingScript(getClass().getResource("/example2.map"))
 		assert mappingService.mappingKeys().contains("encounterType")
 		assert mappingService.get("encounterType", "I") == "IMP"
 		assert mappingService.get("messageType", "ADT^A01") == "PRPA_IN402001"
@@ -76,8 +74,8 @@ public class BidiMappingServiceTest {
 	 */
     @Test
 	void testMappingService2() {
-		def resources = [new ClassPathResource("example2.map"),
-		                 new ClassPathResource("example3.map")] as Resource[]
+		def resources = [getClass().getResource("/example2.map"),
+                         getClass().getResource("/example3.map")] as URL[]
 		mappingService.addMappingScripts(resources)
 		assert mappingService.mappingKeys().contains("encounterType")
 		assert mappingService.get("encounterType", "I") == "IMP"
@@ -108,24 +106,5 @@ public class BidiMappingServiceTest {
         assert mappingService.get("nullTest", null) == "not null"
     }
 
-    /**
-     * Tests whether the "ignoreResourceNotFound" option works.
-     */
-    @Test
-    void testIgnoreResourceNotFound() {
-        def resources = [new ClassPathResource("example2.map.NONEXISTENT"),
-                         new ClassPathResource("example3.map")] as Resource[]
 
-        mappingService.ignoreResourceNotFound = true
-        mappingService.setMappingScripts(resources)
-
-        boolean failed = false
-        assert mappingService.get('messageType', 'ADT^A04') == 'PRPA_IN401001'
-        try {
-            mappingService.get('O', 'encounterType')
-        } catch (IllegalArgumentException e) {
-            failed = (e.message == 'Unknown key O')
-        }
-        assert failed
-    }
 }

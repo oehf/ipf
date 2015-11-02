@@ -56,7 +56,7 @@ OSGi service registry and the coupling between configurers and the post processo
 
       <camel:camelContext id="camelContext" />
 
-      <bean id="mappingService" class="org.openehealth.ipf.commons.map.BidiMappingService"/>
+      <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService"/>
 
       <!-- Picking up custom mappings -->
       <bean id="customMappingsConfigurer"

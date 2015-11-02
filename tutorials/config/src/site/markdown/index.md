@@ -103,7 +103,7 @@ Since it extends `CustomRouteBuilder`, the IPF extension mechanism will do that 
             class="org.openehealth.ipf.tutorials.config.base.route.SampleRouteBuilder" />
 
       <bean id="bidiMappingService"
-          class="org.openehealth.ipf.commons.map.BidiMappingService" />
+          class="org.openehealth.ipf.commons.map.SpringBidiMappingService" />
 
     ...
 

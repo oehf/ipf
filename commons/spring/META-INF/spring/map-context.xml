@@ -15,5 +15,19 @@ http://www.springframework.org/schema/context/spring-context.xsd">
         class="org.openehealth.ipf.commons.core.extend.config.ExtensionConfigurer">
         <property name="order" value="2" />
     </bean-->
+
+    <bean id="mappingService"
+          class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
+    </bean>
+
+    <bean id="mappingExtension"
+          class="org.openehealth.ipf.commons.map.extend.MappingExtension">
+        <property name="mappingService" ref="mappingService" />
+    </bean>
+
+    <bean id="customMappingsConfigurer"
+          class="org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer">
+        <property name="mappingService" ref="mappingService" />
+    </bean>
     
 </beans>

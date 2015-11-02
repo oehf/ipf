@@ -15,4 +15,20 @@ http://www.springframework.org/schema/context/spring-context.xsd">
         interface="org.openehealth.ipf.commons.core.config.OrderedConfigurer" >
     </osgi:service-->
 
+    <bean class="org.openehealth.ipf.commons.map.BidiMappingServiceOsgiConfigurer">
+        <constructor-arg
+                type="org.openehealth.ipf.commons.map.BidiMappingService"
+                ref="mappingService"/>
+        <constructor-arg
+                type="org.osgi.framework.BundleContext"
+                ref="bundleContext"/>
+    </bean>
+
+    <osgi:service ref="mappingService"
+                  interface="org.openehealth.ipf.commons.map.MappingService">
+    </osgi:service>
+
+    <osgi:service ref="customMappingsConfigurer"
+                  interface="org.openehealth.ipf.commons.core.config.OrderedConfigurer" />
+
 </beans>

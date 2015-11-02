@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.commons.map
 
-import org.springframework.core.io.Resource
+import javax.xml.transform.stream.StreamSource
 
 /**
  * An simple example of a MappingService implementation, backed by a
  * nested Map structure. It also allows bidrectional mapping, i.e.
  * mapping from the value back to the key (if unique). The mapping
  * is initialized by an external Groovy script, see {@link MappingsBuilder}
- * for details on the syntax. 
+ * for details on the syntax.
+ * <p>
+ * As of version 3.1, the add/setMappingScript(Resource) methods have been outfactored
+ * into the class SpringBidiMappingService located in the ipf-commons-spring module.
  *
  * @author Christian Ohr
  * @author Martin Krasser
@@ -31,18 +34,17 @@ import org.springframework.core.io.Resource
  */
 class BidiMappingService implements MappingService {
 
-    private static final String KEYSYSTEM = '_%KEYSYSTEM%_'
-    private static final String VALUESYSTEM = '_%VALUESYSTEM%_'
-    private static final String ELSE = '_%ELSE%_'
-    private static final String SEPARATOR = '~'
+    protected static final String KEYSYSTEM = '_%KEYSYSTEM%_'
+    protected static final String VALUESYSTEM = '_%VALUESYSTEM%_'
+    protected static final String ELSE = '_%ELSE%_'
+    protected static final String SEPARATOR = '~'
 
     Map<Object, Map> map = [:]
     Map reverseMap = [:]
     String separator
-
     boolean ignoreResourceNotFound = false
-    List<URL> resources = []
 
+    List<URL> resources = []
 
     public BidiMappingService() {
         this(SEPARATOR)
@@ -52,52 +54,14 @@ class BidiMappingService implements MappingService {
         this.separator = separator
     }
 
-    // bean configuration support
-    void setMappingScript(Resource resource) {
-        try {
-            setMappingScript(resource.URL)
-        } catch (IOException e) {
-            if (!ignoreResourceNotFound) throw e
-        }
-    }
-
     void setMappingScript(URL resource) {
         this.resources.add(resource)
         addMappingScript(resource)
     }
 
-    // bean configuration support 
-    void setMappingScripts(Resource[] resources) {
-        for (Resource resource : resources) {
-            setMappingScript(resource)
-        }
-    }
-
     void setMappingScripts(URL[] resources) {
         this.resources.addAll(resources)
         addMappingScripts(resources)
-    }
-
-    // Read in the mapping definition
-    synchronized void addMappingScript(Resource resource) {
-        try {
-            addMappingScript(resource.URL)
-        } catch (IOException e) {
-            if (!ignoreResourceNotFound) throw e
-        }
-    }
-
-    // Read in several mapping definition
-    synchronized void addMappingScripts(Resource[] resources) {
-        Binding binding = new Binding()
-        GroovyShell shell = new GroovyShell(binding);
-        resources.each { resource ->
-            try {
-                evaluateResource(resource.URL, shell, binding)
-            } catch (IOException e) {
-                if (!ignoreResourceNotFound) throw e
-            }
-        }
     }
 
     synchronized void addMappingScript(URL resource) {
@@ -116,22 +80,12 @@ class BidiMappingService implements MappingService {
     }
 
     private void evaluateResource(URL url, GroovyShell shell, Binding binding) {
-        try {
-            shell.evaluate(url.toURI())
-            Closure c = binding.mappings
-            def mb = new MappingsBuilder()
-            c?.delegate = this
-            map.putAll(mb.mappings(c))
-            updateReverseMap()
-        } catch (IOException e) {
-            if (!ignoreResourceNotFound) {
-                throw e
-            }
-        } catch (Exception e) {
-            // TODO handle CompilationException (error in script)
-            throw e
-        }
-
+        shell.evaluate(url.toURI())
+        Closure c = binding.mappings
+        def mb = new MappingsBuilder()
+        c?.delegate = this
+        map.putAll(mb.mappings(c))
+        updateReverseMap()
     }
 
     public Object get(Object mappingKey, Object key) {
@@ -180,12 +134,12 @@ class BidiMappingService implements MappingService {
         }).values()
     }
 
-    private Object retrieve(Map<Object, Map> m, Object mappingKey, Object key) {
+    protected Object retrieve(Map<Object, Map> m, Object mappingKey, Object key) {
         checkMappingKey(m, mappingKey)
         m[mappingKey][key] ?: retrieveElse(m, mappingKey, key)
     }
 
-    private Object retrieveElse(Map<Object, Map> m, Object mappingKey, Object key) {
+    protected Object retrieveElse(Map<Object, Map> m, Object mappingKey, Object key) {
         def elseClause = m[mappingKey][ELSE]
         if (elseClause instanceof Closure) {
             return elseClause.call(key)
@@ -193,7 +147,7 @@ class BidiMappingService implements MappingService {
         elseClause
     }
 
-    private void updateReverseMap() {
+    protected void updateReverseMap() {
         def reverseElseKey
         map?.each { mappingKey, m ->
             reverseMap[mappingKey] = [:]
@@ -216,12 +170,12 @@ class BidiMappingService implements MappingService {
         }
     }
 
-    private void checkMappingKey(Map<Object, Map> map, Object mappingKey) {
+    protected void checkMappingKey(Map<Object, Map> map, Object mappingKey) {
         if (!map[mappingKey])
             throw new IllegalArgumentException("Unknown key $mappingKey")
     }
 
-    private Object joinKey(Object x) {
+    protected Object joinKey(Object x) {
         if (x instanceof Collection) {
             return x.join(separator)
         } else {
@@ -229,12 +183,28 @@ class BidiMappingService implements MappingService {
         }
     }
 
-    private Object splitKey(Object x) {
+    protected Object splitKey(Object x) {
         if (x instanceof String) {
             def list = x?.split(separator)?.collect { it.toString() }
             return list?.size() == 1 ? list[0] : list
         } else {
             return x
         }
+    }
+
+    private URL getURL(String location) throws IOException {
+        URL url;
+        if (location.startsWith("/")) {
+            url = getClass().getResource(location);
+        } else {
+            try {
+                // Try to parse the location as a URL...
+                url = new URL(location);
+            } catch (MalformedURLException ex) {
+                // No URL -> resolve as resource path.
+                url = getClass().getClassLoader().getResource(location);
+            }
+        }
+        return url
     }
 }

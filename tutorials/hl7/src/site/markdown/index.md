@@ -134,7 +134,7 @@ This file is located under `src/main/resources`. In addition to the default conf
         <ipf:globalContext id="globalContext"/>
 
         <bean id="mappingService"
-            class="org.openehealth.ipf.commons.map.BidiMappingService">
+            class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
             <property name="mappingScript" value="classpath:tutorial.map"/>
         </bean>
 
