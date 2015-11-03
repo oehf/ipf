@@ -11,12 +11,15 @@ remote terminology service.
 
 The `ipf-commons-map` component extends the `java.lang.String` and `java.util.Collection` classes with methods targeted at mapping.
 
-The ipf-commons-map library provides one MappingService implementation
+The ipf-commons-map library provides the MappingService implementation
 ([`org.openehealth.ipf.commons.map.BidiMappingService`](../apidocs/org/openehealth/ipf/commons/map/BidiMappingService.html)), which implements
 
 *  bidirectional mapping
 *  mapping of arbitrary objects
 *  definitions of mappings using external Groovy Scripts
+
+Additionally there is [`org.openehealth.ipf.commons.map.SpringBidiMappingService`](../apidocs/org/openehealth/ipf/commons/map/SpringBidiMappingService.html)
+that adds the possibility to configure mapping scripts as Spring `Resource`s.
 
 You are free to implement and use your own service as long as it implements the
 [`org.openehealth.ipf.commons.map.MappingService`](../apidocs/org/openehealth/ipf/commons/map/MappingService.html) interface.
@@ -34,9 +37,19 @@ In a Maven-based environment, the following dependency must be registered in `po
     </dependency>
 ```
 
+When using Spring, you should also depend on:
+
+```xml
+    <dependency>
+        <groupId>org.openehealth.ipf.commons</groupId>
+        <artifactId>ipf-commons-spring</artifactId>
+        <version>${ipf-version}</version>
+    </dependency>
+```
+
 ### Configuring the Mapping Service
 
-Here is how to configure IPF's [`BidiMappingService`](../apidocs/org/openehealth/ipf/commons/map/BidiMappingService.html) using Spring:
+Here is how to configure IPF's [`SpringBidiMappingService`](../apidocs/org/openehealth/ipf/commons/map/SpringBidiMappingService.html) using Spring:
 
 ```xml
 
@@ -54,7 +67,7 @@ Here is how to configure IPF's [`BidiMappingService`](../apidocs/org/openehealth
 
     ...
     <!-- Groovy class that provides the operations on the mappings -->
-    <bean id="myMappingService" class="org.openehealth.ipf.commons.map.BidiMappingService">
+    <bean id="myMappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
        <property name="mappingScripts">
            <list>
               <value>classpath:example.groovy"</value>

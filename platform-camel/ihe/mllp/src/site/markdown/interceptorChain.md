@@ -82,26 +82,7 @@ The standard producer-side chain is shown in the figure below:
 
 ### Configuring Custom Interceptors
 
-There is the possibility to enrich standard chains with custom (user-defined, project-specific) interceptors. 
-Such interceptors shall be instantiated as Spring beans with scope="prototype", and their bean IDs should be then 
-listed in the endpoint URI parameter *interceptors*, e.g.:
-
-```java
-    from("pdq-iti21://0.0.0.0:18214?interceptors=#myInterceptor,#authenticationInterceptor")
-       ....
-```
-
-If using Spring beans with `scope="prototype"` is not possible (e.g. because the beans are wrapped into a Proxy), 
-you can also provide a singleton bean instance of `org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory`:
-
-```java
-    from("pdq-iti21://0.0.0.0:18214?interceptorFactories=#myInterceptorFactory,#authenticationInterceptorFactory")
-       ....
-```
-
-Each `Hl7v2InterceptorFactory` must implement the `getNewInstance()` method so that for each call a new instance 
-of the interceptor is returned. For convenience, there is an abstract class `Hl7v2InterceptorFactorySupport` 
-that takes the interceptor class as constructor parameter and instantiates interceptor instances by calling `Class#newInstance()`.
+There is the possibility to enrich standard chains with custom (user-defined, project-specific) interceptors.
 
 In order to be placed appropriately in the chain, custom interceptors should define lists of IDs of interceptors they should be placed "before" and "after".
 Example:
@@ -127,7 +108,28 @@ applied when inserting a custom interceptor "X" into the given chain (see class 
 5. If neither "before" nor "after" are defined, "X" will be inserted at the end of the chain (thus providing compatible behavior with older IPF versions).
 6. If there are any conflicts, e.g. when the "bottommost" interceptor from the X's "after" list is placed below the "uppermost" one from the "before" list, or when circular dependencies are discovered, the chain construction fails.
 
+For thread-safety, the interceptor instances must be instantiated using a `org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory`
+together with the *interceptorFactories* parameter:
 
+```java
+    from("pdq-iti21://0.0.0.0:18214?interceptorFactories=#myInterceptorFactory,#authenticationInterceptorFactory")
+       ....
+```
+
+Each `Hl7v2InterceptorFactory` must implement the `getNewInstance()` method so that for each call a new instance 
+of the interceptor is returned. For convenience, there is an abstract class `Hl7v2InterceptorFactorySupport` 
+that takes the interceptor class as constructor parameter and instantiates interceptor instances by calling `Class#newInstance()`.
+
+
+In IPF 3.0.x, interceptors can also be instantiated as Spring beans with scope="prototype", and their bean IDs should be then 
+listed in the endpoint URI parameter *interceptors*, e.g.:
+
+```java
+    from("pdq-iti21://0.0.0.0:18214?interceptors=#myInterceptor,#authenticationInterceptor")
+       ....
+```
+
+Notes that the *interceptors* parameter has been removed as of IPF 3.1.
 
 
 [unsolicited request fragmentation]: unsolicitedFragmentation.html

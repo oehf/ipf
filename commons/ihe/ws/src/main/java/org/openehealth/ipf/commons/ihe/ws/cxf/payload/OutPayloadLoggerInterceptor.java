@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
 import lombok.experimental.Delegate;
 import org.apache.cxf.binding.soap.SoapMessage;
-import org.apache.cxf.interceptor.AttachmentInInterceptor;
 import org.apache.cxf.interceptor.AttachmentOutInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;

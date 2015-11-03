@@ -82,8 +82,8 @@ IPF is prepared to run in OSGi environments as well:
 
 ## Migration
 
-IPF 3.x is not fully backwards-compatible with IPF 2.x. Read the [Migration Instructions] for how to migrate a
-IPF 2.x-based integration solution.
+* IPF 3.0.x is not backwards-compatible with IPF 2.x. Read the [Migration Instructions] for how to migrate a IPF 2.x-based integration solution.
+* IPF 3.1.x introduces a few minor incompatibilities compared to IPF 3.0.x due to having less mandatory dependencies on the Spring framework. Read the [3.1 Update Instructions] for how to update from IPF 3.0.x
 
 
 ## Development
@@ -112,6 +112,7 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [Dynamic Feature Registration]: dynamic.html
 [OSGi Support]: osgi/index.html
 [Migration Instructions]: migration.html
+[3.1 Update Instructions]: migration-3.1.html
 [Recoverability]: recoverability.html
 [Performance]: performance.html
 [HL7 Support tutorial]: ipf-tutorials-hl7/index.html

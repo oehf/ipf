@@ -48,6 +48,23 @@ The endpoint URI which uses these interceptors can look like:
          "&outFaultInterceptors=#serverOutLogger")
 ```
 
+### Custom file name expression resolvers
+
+The logger beans in the example above implicitly use the Spring Expression language, which requires you to add the following
+runtime dependency to your `pom.xml` file:
+
+```xml
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-expression</artifactId>
+        <version>${spring.version}</version>
+        <scope>runtime</scope>
+    </dependency>
+```
+
+You can also provide your own implementation of `org.openehealth.ipf.commons.ihe.core.payload.ExpressionResolver` and
+pass an instance with the constructors of the payload loggers instead.
+
 
 [interceptors]: customInterceptors.html
 [file-based payload logging]: ../ipf-platform-camel-ihe/commonPayloadLogging.html

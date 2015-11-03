@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 package org.openehealth.ipf.commons.map
-
-import javax.xml.transform.stream.StreamSource
-
 /**
  * An simple example of a MappingService implementation, backed by a
  * nested Map structure. It also allows bidrectional mapping, i.e.

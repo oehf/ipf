@@ -35,7 +35,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     
 	<ipf:globalContext id="globalContext"/>    
 
-    <bean id="mappingService" class="org.openehealth.ipf.commons.map.BidiMappingService">
+    <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
         <property name="mappingScripts">
             <list>
                  <value>classpath:META-INF/map/hl7-v2-v3-translation.map</value>

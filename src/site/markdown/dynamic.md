@@ -8,7 +8,7 @@ A closely related challenge is to build up modular integration solutions where e
 services etc. to the overall application without having a single definition that actually references all these contributions.
 
 IPF provides an dynamic registration mechanism to help developers to overcome this problem.
-The mechanism allows developers to
+The mechanism currently depends on the Spring dependency injection framework and allows developers to
 
  * assemble routes, mappings, HL7 model classes etc. into a general context
  * add routes, mappings, HL7 model classes etc. to existing IPF applications without modifying any configuration or source files of those applications

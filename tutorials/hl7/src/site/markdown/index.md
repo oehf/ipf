@@ -75,6 +75,10 @@ into the Maven project descriptor `pom.xml`.
             <artifactId>ipf-platform-camel-hl7</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-spring</artifactId>
+        </dependency>        
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-groovy</artifactId>
         </dependency>

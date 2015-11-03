@@ -13,9 +13,14 @@ Currently supported transaction pairs are
 
 ### Dependencies
 
-In a Maven-based environment, the following dependency should be registered in `pom.xml`:
+In a Maven-based environment, the following dependencies should be registered in `pom.xml`:
 
 ```xml
+<dependency>
+    <groupId>org.openehealth.ipf.commons</groupId>
+    <artifactId>ipf-commons-spring</artifactId>
+    <version>${ipf-version}</version>
+</dependency>
 <dependency>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>ipf-platform-camel-ihe-hl7v3</artifactId>
@@ -37,7 +42,7 @@ This depends transitively on the required module:
 ### Configuring the Mapping Service
 
 For translation of PIX Feed and PDQ messages, the IPF [Mapping Service] must be activated and configured to use the mapping
-provided by the IPF (which can be accessed as a classpath resource). Here is a snippet of Spring-based configuration:
+provided by IPF (which can be accessed as a classpath resource). Here is a snippet of Spring-based configuration:
 
 ```
 <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
