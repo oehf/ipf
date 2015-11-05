@@ -51,6 +51,7 @@ public class JettyServer extends ServletServer {
 
         context.setContextPath(getContextPath());
         ServletHolder holder = new ServletHolder(getServlet());
+        holder.setName(getServletName());
         context.addServlet(holder, getServletPath());
         
         server.setHandler(context);

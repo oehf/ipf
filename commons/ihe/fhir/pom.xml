@@ -37,6 +37,13 @@
             <version>${ipf-gazelle-version}</version>
             <optional>true</optional>
         </dependency>
+
+        <!-- FIXME get rid of this -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

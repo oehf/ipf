@@ -1,37 +1,66 @@
+/*
+ * Copyright 2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.SuspendableService;
-import org.apache.camel.component.http.HttpConsumer;
-import org.apache.camel.component.http.HttpEndpoint;
-import org.apache.camel.util.ExchangeHelper;
+import org.apache.camel.impl.DefaultConsumer;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.Map;
 
 /**
- *
+ * FHIR consumer
  */
-public class FhirConsumer extends HttpConsumer implements SuspendableService {
+public abstract class FhirConsumer<AuditDatasetType extends FhirAuditDataset, ComponentType extends FhirComponent> extends DefaultConsumer implements SuspendableService {
 
-    public FhirConsumer(HttpEndpoint endpoint, Processor processor) {
+    public FhirConsumer(FhirEndpoint<AuditDatasetType, ComponentType> endpoint, Processor processor) {
         super(endpoint, processor);
+    }
+
+    protected void doStart() throws Exception {
+        super.doStart();
+        this.getEndpoint().connect(this);
+    }
+
+    protected void doStop() throws Exception {
+        this.getEndpoint().disconnect(this);
+        super.doStop();
+    }
+
+    @Override
+    public FhirEndpoint<AuditDatasetType, ComponentType> getEndpoint() {
+        return (FhirEndpoint<AuditDatasetType, ComponentType>)super.getEndpoint();
     }
 
     /**
      * This method can be called by {@link ca.uhn.fhir.rest.server.IResourceProvider} objects to send the received
      * (and potentially handled) request further down a Camel route.
      *
-     * @param payload
-     * @param headers
-     * @param resultClass
+     * @param payload FHIR request content
+     * @param headers headers
+     * @param resultClass class of the result resource
      * @param <T>
-     * @return
+     * @return result of processing the FHIR request in Camel
      */
-    final <T extends IBaseResource> T process(Object payload, Map<String, Object> headers, Class<T> resultClass) {
+    final <T extends IBaseResource> T processInRoute(Object payload, Map<String, Object> headers, Class<T> resultClass) {
         Exchange exchange = getEndpoint().createExchange();
         exchange.getIn().setBody(payload);
         if (headers != null) {

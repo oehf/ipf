@@ -28,6 +28,6 @@ public interface MllpInterceptor<T extends MllpEndpoint> extends Hl7v2Intercepto
     /**
      * Returns the endpoint instance to which this interceptor belongs.
      */
-    public T getMllpEndpoint();
+    T getMllpEndpoint();
 
 }

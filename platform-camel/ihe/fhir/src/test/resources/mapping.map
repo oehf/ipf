@@ -1,0 +1,8 @@
+mappings = {
+
+		uriToOid (
+				'http://org.openehealth/ipf/commons/ihe/fhir/1' : '1.2.3.4',
+				'http://org.openehealth/ipf/commons/ihe/fhir/2' : '1.2.3.4.5.6'
+		)
+
+}

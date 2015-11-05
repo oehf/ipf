@@ -61,7 +61,7 @@ class StandardTestContainer {
       */
      public static int DEMO_APP_PORT = 8999
      
-     static void startServer(servlet, String appContextName, boolean secure, int serverPort) {
+     static void startServer(servlet, String appContextName, boolean secure, int serverPort, String servletName = null) {
          URL contextResource = StandardTestContainer.class.getResource(appContextName.startsWith("/") ? appContextName : "/" + appContextName)
          
          port = serverPort
@@ -73,6 +73,7 @@ class StandardTestContainer {
                  contextPath: '',
                  servletPath: '/*',
                  servlet: servlet,
+                 servletName: servletName,
                  secure: secure,
                  keystoreFile: 'server.jks',
                  keystorePass: 'changeit',
@@ -146,12 +147,14 @@ class StandardTestContainer {
          AuditorModuleContext.context.sender = auditSender
      }
 
-     static void startServer(servlet, String appContextName) {
-         startServer(servlet, appContextName, false)
+     static int startServer(servlet, String appContextName, String servletName = null) {
+         startServer(servlet, appContextName, false, servletName)
      }
      
-     static void startServer(servlet, String appContextName, boolean secure) {
-         startServer(servlet, appContextName, secure, JettyServer.freePort)
+     static int startServer(servlet, String appContextName, boolean secure, String servletName = null) {
+         int port = JettyServer.freePort
+         startServer(servlet, appContextName, secure, port, servletName)
+         port
      }
 
      

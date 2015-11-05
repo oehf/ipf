@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti83
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
+import ca.uhn.hl7v2.model.Message
 import org.apache.commons.lang3.Validate
 import org.hl7.fhir.instance.model.Identifier
 import org.hl7.fhir.instance.model.OperationOutcome
@@ -31,7 +32,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
  * Also cares about error responses and throws the appropriate Exceptions for the
  * FHIR framework
  */
-class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir<RSP_K23, Parameters> {
+class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir {
 
     private final UriMapper uriMapper
 
@@ -44,7 +45,7 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir<
     }
 
     @Override
-    Parameters translateHL7v2ToFhir(RSP_K23 message) {
+    Parameters translateHL7v2ToFhir(Message message) {
         String ackCode = message.QAK[2].value
         switch (ackCode) {
             case 'OK': return handleRegularResponse(message.QUERY_RESPONSE.PID[3]()) // Case 1

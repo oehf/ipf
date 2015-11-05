@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 /**
  *
  */
-public interface TranslatorFhirToHL7v2<M extends Message, F extends FhirObject> {
+public interface TranslatorFhirToHL7v2 {
 
     /**
      * Translates a FhirObject into a HL7v2 message
@@ -29,6 +29,6 @@ public interface TranslatorFhirToHL7v2<M extends Message, F extends FhirObject> 
      * @param fhir FhirObject
      * @return HL7v2 message
      */
-    M translateFhirToHL7v2(F fhir);
+    Message translateFhirToHL7v2(FhirObject fhir);
 
 }

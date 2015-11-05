@@ -17,12 +17,11 @@ package org.openehealth.ipf.commons.ihe.fhir.translation;
 
 import ca.uhn.hl7v2.model.Message;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 
 /**
  *
  */
-public interface TranslatorHL7v2ToFhir<M extends Message, F extends IBaseResource> {
+public interface TranslatorHL7v2ToFhir {
 
     /**
      * Translates a HL7v2 message into a FHIR resource
@@ -30,6 +29,6 @@ public interface TranslatorHL7v2ToFhir<M extends Message, F extends IBaseResourc
      * @param message HL7v2 message
      * @return FHIR resource
      */
-    F translateHL7v2ToFhir(M message);
+    IBaseResource translateHL7v2ToFhir(Message message);
 
 }

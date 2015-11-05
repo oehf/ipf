@@ -32,7 +32,6 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
-import org.springframework.core.io.ClassPathResource
 
 /**
  *
@@ -49,7 +48,7 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
     @Before
     public void setup() {
         mappingService = new BidiMappingService()
-        mappingService.addMappingScript(new ClassPathResource('mapping.map'))
+        mappingService.addMappingScript(getClass().getClassLoader().getResource('mapping.map'))
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid')
         translator = new PixQueryResponseToPixmResponseTranslator(mapper)
     }

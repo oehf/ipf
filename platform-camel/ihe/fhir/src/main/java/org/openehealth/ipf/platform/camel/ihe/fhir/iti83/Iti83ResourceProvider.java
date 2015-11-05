@@ -1,36 +1,70 @@
+/*
+ * Copyright 2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
-import ca.uhn.fhir.model.dstu2.resource.Parameters;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.UriParam;
+import org.hl7.fhir.instance.model.*;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequest;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.AbstractResourceProvider;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
 
 /**
- *
+ * According to the PIXM specification, this resource provider must handle requests in the form
+ * GET [base]/Patient/$ihe-pix?sourceIdentifier=[token]]{&targetSystem=[uri]}{&_format=[mime-type]}
  */
 public class Iti83ResourceProvider extends AbstractResourceProvider {
 
+    /**
+     * Signals that $pix-query operations are directed against the Patient resource type
+     * @return Patient.class
+     */
     @Override
     public Class<? extends IBaseResource> getResourceType() {
-        return Parameters.class;
+        return Patient.class;
     }
 
-    @Operation(name=PIXM_OPERATION_NAME)
-    public Parameters pixQuery(
-            @OperationParam(name=SOURCE_IDENTIFIER_NAME) TokenParam sourceIdentifier,
-            @OperationParam(name=TARGET_SYSTEM_NAME) UriParam targetSystem) {
+    /**
+     * Handles the PIXm Query
+     * @param sourceIdentifierString Identifier to search for. Should be an {@link Identifier}, but obviously
+     *                               non-primitive types are forbidden in GET operations
+     * @param targetSystem target system URI
+     * @return {@link Parameters} containing found identifiers
+     */
+    @Operation(name=PIXM_OPERATION_NAME, idempotent = true)
+    public Parameters pixmQuery(
+            @OperationParam(name=SOURCE_IDENTIFIER_NAME) StringType sourceIdentifierString,
+            @OperationParam(name=TARGET_SYSTEM_NAME) UriType targetSystem,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) {
 
-        // Run down the route, if any
-        return process(new PixmRequest(sourceIdentifier, targetSystem), null, Parameters.class);
+        // Split up the primitive String into an {@link Identifier}
+        String[] parts = sourceIdentifierString.getValueAsString().split("\\|");
+        Identifier sourceIdentifier = new Identifier()
+                .setSystem(parts[0])
+                .setValue(parts[1]);
+
+        // Run down the route
+        return processInRoute(new PixmRequest(sourceIdentifier, targetSystem), Parameters.class, httpServletRequest, httpServletResponse);
     }
 
 }

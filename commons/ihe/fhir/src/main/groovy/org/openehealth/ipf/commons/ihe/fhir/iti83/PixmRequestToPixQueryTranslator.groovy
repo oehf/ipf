@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.fhir.translation
+package org.openehealth.ipf.commons.ihe.fhir.iti83
 
-import ca.uhn.fhir.rest.param.TokenParam
-import ca.uhn.fhir.rest.param.UriParam
 import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.lang3.Validate
-import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequest
+import org.hl7.fhir.instance.model.Identifier
+import org.hl7.fhir.instance.model.UriType
+import org.openehealth.ipf.commons.ihe.fhir.FhirObject
+import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
+import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
+import org.openehealth.ipf.commons.ihe.fhir.translation.Utils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
@@ -29,7 +32,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
 /**
  * Translates a {@link PixmRequest} into a HL7v2 PIX Query message
  */
-class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2<QBP_Q21, PixmRequest> {
+class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
 
     /**
      * Predefined fix value of QPD-1 (as String)
@@ -55,7 +58,8 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2<QBP_Q21, 
     }
 
     @Override
-    QBP_Q21 translateFhirToHL7v2(PixmRequest request) {
+    QBP_Q21 translateFhirToHL7v2(FhirObject request) {
+        PixmRequest pixmRequest = (PixmRequest)request
         QBP_Q21 qry = MessageUtils.makeMessage(PIX_QUERY_CONTEXT, 'QBP', 'Q23', '2.5')
 
         qry.MSH[3] = senderDeviceName
@@ -69,10 +73,10 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2<QBP_Q21, 
         qry.QPD[1] = this.queryName
         qry.QPD[2] = UUID.randomUUID().toString()
 
-        TokenParam sourceIdentifier = request.sourceIdentifier
+        Identifier sourceIdentifier = pixmRequest.sourceIdentifier
         populateIdentifier(qry.QPD[3], sourceIdentifier.system, sourceIdentifier.value)
 
-        UriParam requestedDomain = request.requestedDomain
+        UriType requestedDomain = pixmRequest.requestedDomain
         if (requestedDomain) {
             populateIdentifier(Utils.nextRepetition(qry.QPD[4]), requestedDomain.value)
         }

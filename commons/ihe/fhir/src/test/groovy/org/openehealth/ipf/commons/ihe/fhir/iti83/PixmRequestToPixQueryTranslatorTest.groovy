@@ -16,15 +16,14 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti83
 
-import ca.uhn.fhir.rest.param.TokenParam
-import ca.uhn.fhir.rest.param.UriParam
+import org.hl7.fhir.instance.model.Identifier
+import org.hl7.fhir.instance.model.UriType
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.openehealth.ipf.commons.core.URN
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslationException
-import org.openehealth.ipf.commons.ihe.fhir.translation.PixmRequestToPixQueryTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
 import org.openehealth.ipf.commons.map.BidiMappingService
@@ -41,15 +40,17 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
     @Before
     public void setup() {
         mappingService = new BidiMappingService()
-        mappingService.addMappingScript(getClass().getResource('mapping.map'))
+        mappingService.addMappingScript(getClass().getResource('/mapping.map'))
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid')
         translator = new PixmRequestToPixQueryTranslator(mapper)
     }
 
     @Test
     public void testSuccessfulTranslateWithOids() {
-        TokenParam systemIdentifier = new TokenParam('urn:oid:1.2.3.4', '4711ABC')
-        UriParam domainsReturned = new UriParam('urn:oid:1.2.3.5.6')
+        Identifier systemIdentifier = new Identifier()
+                .setSystem('urn:oid:1.2.3.4')
+                .setValue('4711ABC')
+        UriType domainsReturned = new UriType('urn:oid:1.2.3.5.6')
         PixmRequest request = new PixmRequest(systemIdentifier, domainsReturned)
         QBP_Q21 translated = translator.translateFhirToHL7v2(request)
 
@@ -60,8 +61,10 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
 
     @Test
     public void testSuccessfulTranslateWithUris() {
-        TokenParam systemIdentifier = new TokenParam('http://org.openehealth/ipf/commons/ihe/fhir/1', '4711ABC')
-        UriParam domainsReturned = new UriParam('http://org.openehealth/ipf/commons/ihe/fhir/2')
+        Identifier systemIdentifier = new Identifier()
+                .setSystem('http://org.openehealth/ipf/commons/ihe/fhir/1')
+                .setValue('4711ABC')
+        UriType domainsReturned = new UriType('http://org.openehealth/ipf/commons/ihe/fhir/2')
         PixmRequest request = new PixmRequest(systemIdentifier, domainsReturned)
         QBP_Q21 translated = translator.translateFhirToHL7v2(request)
 
@@ -72,8 +75,10 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
 
     @Test(expected = FhirTranslationException)
     public void testUnknownURNScheme() {
-        TokenParam systemIdentifier = new TokenParam('urn:isbn:1.2.3.4', '4711ABC')
-        UriParam domainsReturned = new UriParam('urn:oid:1.2.3.5.6')
+        Identifier systemIdentifier = new Identifier()
+                .setSystem('urn:isbn:1.2.3.4')
+                .setValue('4711ABC')
+        UriType domainsReturned = new UriType('urn:oid:1.2.3.5.6')
         PixmRequest request = new PixmRequest(systemIdentifier, domainsReturned)
         translator.translateFhirToHL7v2(request)
     }

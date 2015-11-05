@@ -248,7 +248,7 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
      *      homeCommunityId in format "urn:oid:1.2.3.4.5".
      */
     public void setHomeCommunityId(URN urn) {
-        this.homeCommunityId = urn.toString()
+        this.homeCommunityId = urn.toString();
     }
 
     /**

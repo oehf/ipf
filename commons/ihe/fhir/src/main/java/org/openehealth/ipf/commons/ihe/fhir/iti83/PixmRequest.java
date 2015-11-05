@@ -1,8 +1,8 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.UriParam;
 import org.apache.commons.lang3.Validate;
+import org.hl7.fhir.instance.model.Identifier;
+import org.hl7.fhir.instance.model.UriType;
 import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 
 /**
@@ -10,20 +10,20 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
  */
 public class PixmRequest implements FhirObject {
 
-    private final TokenParam sourceIdentifier;
-    private final UriParam requestedDomain;
+    private final Identifier sourceIdentifier;
+    private final UriType requestedDomain;
 
-    public PixmRequest(TokenParam sourceIdentifier, UriParam requestedDomain) {
+    public PixmRequest(Identifier sourceIdentifier, UriType requestedDomain) {
         Validate.notNull(sourceIdentifier, "source Identifier is null");
         this.sourceIdentifier = sourceIdentifier;
         this.requestedDomain = requestedDomain;
     }
 
-    public TokenParam getSourceIdentifier() {
+    public Identifier getSourceIdentifier() {
         return sourceIdentifier;
     }
 
-    public UriParam getRequestedDomain() {
+    public UriType getRequestedDomain() {
         return requestedDomain;
     }
 
