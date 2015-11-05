@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.*;
  */
 public class Iti83Component extends FhirComponent<Iti83AuditDataset> {
 
-    public static final FhirComponentConfiguration<Iti83AuditDataset> CONFIGURATION =
+    private static final FhirComponentConfiguration<Iti83AuditDataset> CONFIGURATION =
             new FhirComponentConfiguration<>(
                     FhirContext.forDstu2Hl7Org(),
                     new Iti83ResourceProvider());

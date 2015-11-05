@@ -16,10 +16,12 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept;
 
+import java.io.Serializable;
+
 /**
  *
  */
-public interface FhirInterceptorFactory<T extends FhirInterceptor> {
+public interface FhirInterceptorFactory<T extends FhirInterceptor> extends Serializable {
 
     /**
      * Returns a new instance of an FhirInterceptor

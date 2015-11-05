@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  *
  */
-public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset> extends UriEndpointComponent {
+public abstract class FhirComponent<T extends FhirAuditDataset> extends UriEndpointComponent {
 
     public FhirComponent() {
         super(FhirEndpoint.class);
@@ -38,16 +38,16 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset> e
         super(context, FhirEndpoint.class);
     }
 
-    protected FhirEndpointConfiguration createConfig(Map<String, Object> parameters) throws Exception {
-        return new FhirEndpointConfiguration(this, parameters);
+    protected FhirEndpointConfiguration<T> createConfig(Map<String, Object> parameters) throws Exception {
+        return new FhirEndpointConfiguration<>(this, parameters);
         // return new FhirEndpointConfiguration(this, parameters);
     }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         String servletName = getAndRemoveParameter(parameters, "servletName", String.class, CamelFhirServlet.DEFAULT_SERVLET_NAME);
-        FhirEndpointConfiguration config = createConfig(parameters);
-        FhirEndpoint endpoint = doCreateEndpoint(uri, config);
+        FhirEndpointConfiguration<T> config = createConfig(parameters);
+        FhirEndpoint<T> endpoint = doCreateEndpoint(uri, config);
         endpoint.setServletName(servletName);
         return endpoint;
     }
@@ -81,21 +81,21 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset> e
      * @param config FhirEndpointConfiguration
      * @return a new endpoint instance
      */
-    protected abstract FhirEndpoint<AuditDatasetType> doCreateEndpoint(String uri, FhirEndpointConfiguration<AuditDatasetType> config);
+    protected abstract FhirEndpoint<T> doCreateEndpoint(String uri, FhirEndpointConfiguration<T> config);
 
     /**
      * @return static component-specific configuration
      */
-    public abstract FhirComponentConfiguration<AuditDatasetType> getFhirComponentConfiguration();
+    public abstract FhirComponentConfiguration<T> getFhirComponentConfiguration();
 
     /**
      * Returns server-side ATNA audit strategy.
      */
-    public abstract FhirAuditStrategy<AuditDatasetType> getServerAuditStrategy();
+    public abstract FhirAuditStrategy<T> getServerAuditStrategy();
 
     /**
      * Returns client-side ATNA audit strategy.
      */
-    public abstract FhirAuditStrategy<AuditDatasetType> getClientAuditStrategy();
+    public abstract FhirAuditStrategy<T> getClientAuditStrategy();
 
 }

@@ -38,7 +38,7 @@ public abstract class FhirProducer<T extends FhirAuditDataset> extends DefaultPr
     protected void doStart() throws Exception {
         super.doStart();
         FhirContext context = getEndpoint().getFhirComponentConfiguration().getContext();
-        client = context.newRestfulGenericClient("bla");
+        client = context.newRestfulGenericClient("bla"); // FIXME URI!
     }
 
     @Override

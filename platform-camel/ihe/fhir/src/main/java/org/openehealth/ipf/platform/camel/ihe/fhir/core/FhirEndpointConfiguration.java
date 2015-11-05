@@ -18,8 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.FhirInterceptorFactory;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,9 +36,15 @@ public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Se
     @UriParam
     private AbstractResourceProvider<T> resourceProvider;
 
+    @UriParam
+    private List<FhirInterceptorFactory> customInterceptorFactories;
+
     protected FhirEndpointConfiguration(FhirComponent component, Map<String, Object> parameters) throws Exception {
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
-        resourceProvider = component.getAndRemoveOrResolveReferenceParameter(parameters, "resourceProvider", AbstractResourceProvider.class, null);
+        resourceProvider = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "resourceProvider", AbstractResourceProvider.class, null);
+        customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
+                parameters, "interceptorFactories", FhirInterceptorFactory.class);
     }
 
     public boolean isAudit() {
@@ -45,5 +53,9 @@ public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Se
 
     public AbstractResourceProvider<T> getResourceProvider() {
         return resourceProvider;
+    }
+
+    public List<FhirInterceptorFactory> getCustomInterceptorFactories() {
+        return customInterceptorFactories;
     }
 }

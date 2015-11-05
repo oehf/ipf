@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 public final class FhirCamelTranslators {
 
     private FhirCamelTranslators() {
-        
+
     }
 
     /**

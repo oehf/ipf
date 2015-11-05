@@ -22,6 +22,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ import java.util.Map;
  * Abstract resource provider that allows subclasses to forward the received payload into the
  * Camel route served by the consumer.
  */
-public abstract class AbstractResourceProvider<T extends FhirAuditDataset> implements IResourceProvider {
+public abstract class AbstractResourceProvider<T extends FhirAuditDataset> implements IResourceProvider, Serializable {
 
     private transient FhirConsumer<T> consumer;
 
