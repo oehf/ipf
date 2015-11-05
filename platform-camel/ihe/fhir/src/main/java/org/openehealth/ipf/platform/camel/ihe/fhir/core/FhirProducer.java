@@ -26,7 +26,7 @@ import org.apache.camel.impl.DefaultProducer;
 /**
  *
  */
-public abstract class FhirProducer<AuditDatasetType extends FhirAuditDataset, ComponentType extends FhirComponent> extends DefaultProducer {
+public abstract class FhirProducer<T extends FhirAuditDataset> extends DefaultProducer {
 
     private IGenericClient client;
 
@@ -47,8 +47,8 @@ public abstract class FhirProducer<AuditDatasetType extends FhirAuditDataset, Co
     }
 
     @Override
-    public FhirEndpoint<AuditDatasetType, ComponentType> getEndpoint() {
-        return (FhirEndpoint<AuditDatasetType, ComponentType>)super.getEndpoint();
+    public FhirEndpoint<T> getEndpoint() {
+        return (FhirEndpoint<T>)super.getEndpoint();
     }
 
     @Override

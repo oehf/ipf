@@ -23,12 +23,14 @@ import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequestToPixQueryTranslato
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir;
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper;
-import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelTranslators.*;
+
+import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorFhirToHL7v2;
+import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorHL7v2ToFhir;
 
 /**
  *
  */
-public class Iti83TestRouteBuilder extends RouteBuilder{
+public class Iti83TestRouteBuilder extends RouteBuilder {
 
     private final TranslatorFhirToHL7v2 requestTranslator;
     private final TranslatorHL7v2ToFhir responseTranslator;
@@ -44,9 +46,9 @@ public class Iti83TestRouteBuilder extends RouteBuilder{
         from(TestIti83.SERVICE) // pixm-iti83://localhost:8999/patient/
                 // Translate into ITI-9
                 .process(translatorFhirToHL7v2(requestTranslator))
-                // Create some static response
+                        // Create some static response
                 .transform(new Iti9Responder(AcknowledgmentCode.AA, "OK"))
-                // Translate back into FHIR
+                        // Translate back into FHIR
                 .process(translatorHL7v2ToFhir(responseTranslator));
 
     }

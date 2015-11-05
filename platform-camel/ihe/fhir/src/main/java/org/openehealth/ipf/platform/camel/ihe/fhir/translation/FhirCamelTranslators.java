@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.fhir.core;
+package org.openehealth.ipf.platform.camel.ihe.fhir.translation;
 
-import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir;
@@ -29,8 +27,11 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
  *
  * @author Christian Ohr
  */
-abstract public class FhirCamelTranslators {
+public final class FhirCamelTranslators {
 
+    private FhirCamelTranslators() {
+        
+    }
 
     /**
      * Returns a processor for translating FHIR messages to Hl7v2

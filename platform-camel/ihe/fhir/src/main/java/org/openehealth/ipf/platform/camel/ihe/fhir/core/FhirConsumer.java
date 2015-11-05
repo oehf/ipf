@@ -29,9 +29,10 @@ import java.util.Map;
 /**
  * FHIR consumer
  */
-public abstract class FhirConsumer<AuditDatasetType extends FhirAuditDataset, ComponentType extends FhirComponent> extends DefaultConsumer implements SuspendableService {
+public abstract class FhirConsumer<T extends FhirAuditDataset>
+        extends DefaultConsumer implements SuspendableService {
 
-    public FhirConsumer(FhirEndpoint<AuditDatasetType, ComponentType> endpoint, Processor processor) {
+    public FhirConsumer(FhirEndpoint<T> endpoint, Processor processor) {
         super(endpoint, processor);
     }
 
@@ -46,8 +47,8 @@ public abstract class FhirConsumer<AuditDatasetType extends FhirAuditDataset, Co
     }
 
     @Override
-    public FhirEndpoint<AuditDatasetType, ComponentType> getEndpoint() {
-        return (FhirEndpoint<AuditDatasetType, ComponentType>)super.getEndpoint();
+    public FhirEndpoint<T> getEndpoint() {
+        return (FhirEndpoint<T>)super.getEndpoint();
     }
 
     /**
@@ -57,10 +58,10 @@ public abstract class FhirConsumer<AuditDatasetType extends FhirAuditDataset, Co
      * @param payload FHIR request content
      * @param headers headers
      * @param resultClass class of the result resource
-     * @param <T>
+     * @param <R> Resource type being returned
      * @return result of processing the FHIR request in Camel
      */
-    final <T extends IBaseResource> T processInRoute(Object payload, Map<String, Object> headers, Class<T> resultClass) {
+    final <R extends IBaseResource> R processInRoute(Object payload, Map<String, Object> headers, Class<R> resultClass) {
         Exchange exchange = getEndpoint().createExchange();
         exchange.getIn().setBody(payload);
         if (headers != null) {
@@ -76,6 +77,7 @@ public abstract class FhirConsumer<AuditDatasetType extends FhirAuditDataset, Co
         // Handle exceptions!!
 
         Message resultMessage = Exchanges.resultMessage(exchange);
-        return getEndpoint().getCamelContext().getTypeConverter().convertTo(resultClass, exchange, resultMessage.getBody());
+        return getEndpoint().getCamelContext().getTypeConverter()
+                .convertTo(resultClass, exchange, resultMessage.getBody());
     }
 }

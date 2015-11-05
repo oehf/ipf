@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirProducer;
 /**
  * Producer for PIXm Queries
  */
-public class Iti83Producer extends FhirProducer<Iti83AuditDataset, Iti83Component> {
+public class Iti83Producer extends FhirProducer<Iti83AuditDataset> {
 
     public Iti83Producer(Endpoint endpoint) {
         super(endpoint);

@@ -23,9 +23,9 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 /**
  *
  */
-public class Iti83Consumer extends FhirConsumer<Iti83AuditDataset, Iti83Component> {
+public class Iti83Consumer extends FhirConsumer<Iti83AuditDataset> {
 
-    public Iti83Consumer(FhirEndpoint<Iti83AuditDataset, Iti83Component> endpoint, Processor processor) {
+    public Iti83Consumer(FhirEndpoint<Iti83AuditDataset> endpoint, Processor processor) {
         super(endpoint, processor);
     }
 }

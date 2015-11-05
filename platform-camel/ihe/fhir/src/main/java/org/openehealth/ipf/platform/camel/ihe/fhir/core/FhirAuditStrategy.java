@@ -27,19 +27,20 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 /**
  * ATNA audit strategy base for FHIR-based transactions. This strategy is accompanied with a
  * dedicated subclass of {@link FhirAuditDataset} containing the data for the audit record.
- * 
+ *
  * @author Dmytro Rud
  */
-abstract public class FhirAuditStrategy<AuditDatasetType extends FhirAuditDataset> {
+abstract public class FhirAuditStrategy<T extends FhirAuditDataset> {
     // whether we audit on server (true) or on client (false)
-    @Getter(AccessLevel.PROTECTED) private final boolean serverSide;
+    @Getter(AccessLevel.PROTECTED)
+    private final boolean serverSide;
 
 
     /**
      * Constructor.
-     * @param serverSide
-     *      <code>true</code> when this strategy is a server-side one;
-     *      <code>false</code> otherwise.
+     *
+     * @param serverSide <code>true</code> when this strategy is a server-side one;
+     *                   <code>false</code> otherwise.
      */
     protected FhirAuditStrategy(boolean serverSide) {
         this.serverSide = serverSide;
@@ -49,62 +50,57 @@ abstract public class FhirAuditStrategy<AuditDatasetType extends FhirAuditDatase
     /**
      * Creates a new audit dataset instance.
      */
-    abstract public AuditDatasetType createAuditDataset();
+    abstract public T createAuditDataset();
 
 
     /**
-     * Enriches the given audit dataset with transaction-specific 
+     * Enriches the given audit dataset with transaction-specific
      * contents of the request message and Camel exchange.
-     * @param auditDataset
-     *      audit dataset to be enriched.
-     * @param msg
-     *      {@link Message} representing the message.
-     * @param exchange
-     *      Camel exchange
+     *
+     * @param auditDataset audit dataset to be enriched.
+     * @param msg          {@link Message} representing the message.
+     * @param exchange     Camel exchange
      */
     abstract public void enrichAuditDatasetFromRequest(
-            AuditDatasetType auditDataset,
+            T auditDataset,
             FhirObject msg,
             Exchange exchange);
-    
-    
+
+
     /**
-     * Enriches the given audit dataset with transaction-specific 
+     * Enriches the given audit dataset with transaction-specific
      * contents of the response message.
-     * @param auditDataset
-     *      audit dataset to be enriched.
-     * @param msg
-     *      {@link Message} representing the message.
+     *
+     * @param auditDataset audit dataset to be enriched.
+     * @param msg          {@link Message} representing the message.
      */
     public void enrichAuditDatasetFromResponse(
-            AuditDatasetType auditDataset,
-            FhirObject msg)
-    {
+            T auditDataset,
+            FhirObject msg) {
         // does nothing per default
     }
-    
-    
+
+
     /**
      * Performs the actual ATNA audit.
-     * @param eventOutcome
-     *          Transaction completion status.
-     * @param auditDataset
-     *          Collected audit dataset. 
+     *
+     * @param eventOutcome Transaction completion status.
+     * @param auditDataset Collected audit dataset.
      */
     abstract public void doAudit(
             RFC3881EventOutcomeCodes eventOutcome,
-            AuditDatasetType auditDataset);
+            T auditDataset);
 
 
     /**
      * Audits an authentication node failure.
-     * @param hostAddress
-     *          the address of the node that is responsible for the failure.
+     *
+     * @param hostAddress the address of the node that is responsible for the failure.
      */
     public static void auditAuthenticationNodeFailure(String hostAddress) {
         AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure(
-            true, null, "IPF FHIR Component", null, hostAddress, null);
+                true, null, "IPF FHIR Component", null, hostAddress, null);
     }
-    
-    
+
+
 }

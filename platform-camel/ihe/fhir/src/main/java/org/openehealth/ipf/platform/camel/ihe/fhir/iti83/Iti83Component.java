@@ -25,10 +25,9 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.*;
  */
 public class Iti83Component extends FhirComponent<Iti83AuditDataset> {
 
-    public static final FhirComponentConfiguration CONFIGURATION =
-            new FhirComponentConfiguration(
+    public static final FhirComponentConfiguration<Iti83AuditDataset> CONFIGURATION =
+            new FhirComponentConfiguration<>(
                     FhirContext.forDstu2Hl7Org(),
-                    true,
                     new Iti83ResourceProvider());
 
     private static final FhirAuditStrategy<Iti83AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti83ClientAuditStrategy();
@@ -44,12 +43,12 @@ public class Iti83Component extends FhirComponent<Iti83AuditDataset> {
 
 
     @Override
-    public FhirComponentConfiguration getFhirComponentConfiguration() {
+    public FhirComponentConfiguration<Iti83AuditDataset> getFhirComponentConfiguration() {
         return CONFIGURATION;
     }
 
     @Override
-    protected Iti83Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration config) {
+    protected Iti83Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration<Iti83AuditDataset> config) {
         return new Iti83Endpoint(uri, this, config);
     }
 

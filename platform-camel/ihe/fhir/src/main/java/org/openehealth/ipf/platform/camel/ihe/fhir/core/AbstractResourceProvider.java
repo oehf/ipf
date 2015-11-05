@@ -29,9 +29,9 @@ import java.util.Map;
  * Abstract resource provider that allows subclasses to forward the received payload into the
  * Camel route served by the consumer.
  */
-public abstract class AbstractResourceProvider implements IResourceProvider {
+public abstract class AbstractResourceProvider<T extends FhirAuditDataset> implements IResourceProvider {
 
-    private transient FhirConsumer<? extends FhirAuditDataset, ? extends IBaseResource> consumer;
+    private transient FhirConsumer<T> consumer;
 
     /**
      *
@@ -39,7 +39,7 @@ public abstract class AbstractResourceProvider implements IResourceProvider {
      * @param resultType exepcted result type
      * @param httpServletRequest servlet request
      * @param httpServletResponse servlet response
-     * @param <T>
+     * @param <T> AuditDataSet type
      * @return result of route processing
      */
     protected final <T extends IBaseResource> T processInRoute(Object payload, Class<T> resultType,
@@ -63,7 +63,7 @@ public abstract class AbstractResourceProvider implements IResourceProvider {
     }
 
     // Ensure this is only used once!
-    void setConsumer(FhirConsumer<? extends FhirAuditDataset, ? extends IBaseResource> consumer) {
+    void setConsumer(FhirConsumer<T> consumer) {
         if (this.consumer != null) {
             throw new IllegalStateException("This provider is already used by a different consumer");
         }

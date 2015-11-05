@@ -31,14 +31,13 @@ import java.util.List;
 /**
  * Generic FHIR endpoint
  */
-public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, ComponentType extends FhirComponent>
-        extends DefaultEndpoint {
+public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEndpoint {
 
     private final FhirEndpointConfiguration config;
     private String servletName;
-    private final ComponentType fhirComponent;
+    private final FhirComponent<T> fhirComponent;
 
-    public FhirEndpoint(String uri, ComponentType fhirComponent, FhirEndpointConfiguration config) {
+    public FhirEndpoint(String uri, FhirComponent<T> fhirComponent, FhirEndpointConfiguration config) {
         super(uri, fhirComponent);
         this.fhirComponent = fhirComponent;
         this.config = config;
@@ -73,8 +72,8 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @param consumer FhirConsumer
      * @throws Exception
      */
-    public void connect(FhirConsumer consumer) throws Exception {
-        AbstractResourceProvider provider = getResourceProvider();
+    public void connect(FhirConsumer<T> consumer) throws Exception {
+        AbstractResourceProvider<T> provider = getResourceProvider();
         // Make consumer known to provider
         provider.setConsumer(consumer);
         // Register provider with CamelFhirServlet
@@ -87,8 +86,8 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @param consumer FhirConsumer
      * @throws Exception
      */
-    public void disconnect(FhirConsumer consumer) throws Exception {
-        AbstractResourceProvider provider = getResourceProvider();
+    public void disconnect(FhirConsumer<T> consumer) throws Exception {
+        AbstractResourceProvider<T> provider = getResourceProvider();
         CamelFhirServlet.unregisterProvider(servletName, provider);
     }
 
@@ -101,7 +100,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     protected List<FhirInterceptor> createInitialConsumerInterceptorChain() {
         List<FhirInterceptor> initialChain = new ArrayList<>();
         if (isAudit()) {
-            initialChain.add(new ConsumerAuditInterceptor<AuditDatasetType, ComponentType>());
+            initialChain.add(new ConsumerAuditInterceptor<T>());
         }
         return initialChain;
     }
@@ -125,21 +124,21 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return true;
     }
 
-    public FhirComponentConfiguration getFhirComponentConfiguration() {
+    public FhirComponentConfiguration<T> getFhirComponentConfiguration() {
         return fhirComponent.getFhirComponentConfiguration();
     }
 
     /**
      * Returns client-side audit strategy instance.
      */
-    public FhirAuditStrategy<AuditDatasetType> getClientAuditStrategy() {
+    public FhirAuditStrategy<T> getClientAuditStrategy() {
         return fhirComponent.getClientAuditStrategy();
     }
 
     /**
      * Returns server-side audit strategy instance.
      */
-    public FhirAuditStrategy<AuditDatasetType> getServerAuditStrategy() {
+    public FhirAuditStrategy<T> getServerAuditStrategy() {
         return fhirComponent.getServerAuditStrategy();
     }
 
@@ -150,11 +149,10 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
 
     // Private stuff
 
-    private AbstractResourceProvider getResourceProvider() {
-        AbstractResourceProvider provider = config.getResourceProvider();
+    private AbstractResourceProvider<T> getResourceProvider() {
+        AbstractResourceProvider<T> provider = config.getResourceProvider();
         if (provider == null) {
             provider = getFhirComponentConfiguration().getStaticResourceProvider();
-            ;
         }
         return provider;
     }
@@ -174,8 +172,8 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     /**
      * @return a list of endpoint-specific interceptors
      */
-    private synchronized List<FhirInterceptor> getCustomInterceptors() {
-        List<FhirInterceptor> result = new ArrayList<>();
+    private synchronized List<FhirInterceptor<?>> getCustomInterceptors() {
+        List<FhirInterceptor<?>> result = new ArrayList<>();
         /*
         for (FhirInterceptorFactory customInterceptorFactory : config.getCustomInterceptorFactories()) {
             result.add(customInterceptorFactory.getNewInstance());

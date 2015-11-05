@@ -19,8 +19,6 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.AbstractFhirInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.AuditInterceptor;
 import org.slf4j.Logger;
@@ -34,12 +32,9 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  *
  * @author Dmytro Rud
  */
-public class ConsumerAuditInterceptor<
-        AuditDatasetType extends FhirAuditDataset,
-        ComponentType extends FhirComponent<AuditDatasetType>>
-
-        extends AbstractFhirInterceptor<AuditDatasetType, ComponentType>
-        implements AuditInterceptor<AuditDatasetType, ComponentType> {
+public class ConsumerAuditInterceptor<T extends FhirAuditDataset>
+        extends AbstractFhirInterceptor<T>
+        implements AuditInterceptor<T> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConsumerAuditInterceptor.class);
 
@@ -53,7 +48,7 @@ public class ConsumerAuditInterceptor<
         //     return;
         // }
 
-        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
+        T auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
         // determineParticipantsAddresses(interceptor, exchange, auditDataset);
 
         boolean failed = false;
@@ -71,7 +66,7 @@ public class ConsumerAuditInterceptor<
     }
 
     @Override
-    public FhirAuditStrategy<AuditDatasetType> getAuditStrategy() {
+    public FhirAuditStrategy<T> getAuditStrategy() {
         return getFhirEndpoint().getServerAuditStrategy();
     }
 
@@ -81,12 +76,12 @@ public class ConsumerAuditInterceptor<
      *
      * @return newly created audit dataset or <code>null</code> when creation failed.
      */
-    private AuditDatasetType createAndEnrichAuditDatasetFromRequest(
-            FhirAuditStrategy<AuditDatasetType> strategy,
+    private T createAndEnrichAuditDatasetFromRequest(
+            FhirAuditStrategy<T> strategy,
             Exchange exchange,
             FhirObject msg) {
         try {
-            AuditDatasetType auditDataset = strategy.createAuditDataset();
+            T auditDataset = strategy.createAuditDataset();
             // AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
             strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);
             return auditDataset;
@@ -102,8 +97,8 @@ public class ConsumerAuditInterceptor<
      * All exception are ignored.
      */
     private void enrichAuditDatasetFromResponse(
-            FhirAuditStrategy<AuditDatasetType> strategy,
-            AuditDatasetType auditDataset,
+            FhirAuditStrategy<T> strategy,
+            T auditDataset,
             FhirObject msg) {
         try {
             strategy.enrichAuditDatasetFromResponse(auditDataset, msg);

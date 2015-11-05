@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.core.chain.Chainable;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 
 
@@ -27,9 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
  *
  * @author Christian Ohr
  */
-public interface FhirInterceptor<
-        AuditDatasetType extends FhirAuditDataset,
-        ComponentType extends FhirComponent<AuditDatasetType>> extends Processor, Chainable {
+public interface FhirInterceptor<T extends FhirAuditDataset> extends Processor, Chainable {
 
     /**
      * @return the processor instance wrapped by this interceptor.
@@ -43,5 +40,5 @@ public interface FhirInterceptor<
      */
     void setWrappedProcessor(Processor wrappedProcessor);
 
-    FhirEndpoint<AuditDatasetType, ComponentType> getFhirEndpoint();
+    FhirEndpoint<T> getFhirEndpoint();
 }

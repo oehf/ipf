@@ -22,15 +22,13 @@ import ca.uhn.fhir.context.FhirContext;
  * Static configuration for FHIR components. This configuration cannot be altered in the
  * endpoint URI.
  */
-public class FhirComponentConfiguration {
+public class FhirComponentConfiguration<T extends FhirAuditDataset> {
 
     private final FhirContext context;
-    private final boolean auditable;
-    private final AbstractResourceProvider staticResourceProvider;
+    private final AbstractResourceProvider<T> staticResourceProvider;
 
-    public FhirComponentConfiguration(FhirContext context, boolean auditable, AbstractResourceProvider resourceProvider) {
+    public FhirComponentConfiguration(FhirContext context, AbstractResourceProvider<T> resourceProvider) {
         this.context = context;
-        this.auditable = auditable;
         this.staticResourceProvider = resourceProvider;
     }
 
@@ -38,11 +36,7 @@ public class FhirComponentConfiguration {
         return context;
     }
 
-    public boolean isAuditable() {
-        return auditable;
-    }
-
-    public AbstractResourceProvider getStaticResourceProvider() {
+    public AbstractResourceProvider<T> getStaticResourceProvider() {
         return staticResourceProvider;
     }
 }

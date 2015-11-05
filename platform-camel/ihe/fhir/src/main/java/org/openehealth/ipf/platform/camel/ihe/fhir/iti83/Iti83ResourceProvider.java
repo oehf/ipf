@@ -32,10 +32,11 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  * According to the PIXM specification, this resource provider must handle requests in the form
  * GET [base]/Patient/$ihe-pix?sourceIdentifier=[token]]{&targetSystem=[uri]}{&_format=[mime-type]}
  */
-public class Iti83ResourceProvider extends AbstractResourceProvider {
+public class Iti83ResourceProvider extends AbstractResourceProvider<Iti83AuditDataset> {
 
     /**
      * Signals that $pix-query operations are directed against the Patient resource type
+     *
      * @return Patient.class
      */
     @Override
@@ -45,15 +46,17 @@ public class Iti83ResourceProvider extends AbstractResourceProvider {
 
     /**
      * Handles the PIXm Query
+     *
      * @param sourceIdentifierString Identifier to search for. Should be an {@link Identifier}, but obviously
      *                               non-primitive types are forbidden in GET operations
-     * @param targetSystem target system URI
+     * @param targetSystem           target system URI
      * @return {@link Parameters} containing found identifiers
      */
-    @Operation(name=PIXM_OPERATION_NAME, idempotent = true)
+    @SuppressWarnings("unused")
+    @Operation(name = PIXM_OPERATION_NAME, idempotent = true)
     public Parameters pixmQuery(
-            @OperationParam(name=SOURCE_IDENTIFIER_NAME) StringType sourceIdentifierString,
-            @OperationParam(name=TARGET_SYSTEM_NAME) UriType targetSystem,
+            @OperationParam(name = SOURCE_IDENTIFIER_NAME) StringType sourceIdentifierString,
+            @OperationParam(name = TARGET_SYSTEM_NAME) UriType targetSystem,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 

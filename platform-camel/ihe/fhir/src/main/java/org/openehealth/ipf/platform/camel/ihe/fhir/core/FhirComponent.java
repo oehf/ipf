@@ -21,7 +21,9 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.FhirInterceptor;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -68,7 +70,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset> e
      *
      * @return a list of component-specific (i.e. transaction-specific) FHIR interceptors
      */
-    public List<FhirInterceptor> getAdditionalConsumerInterceptors() {
+    public List<FhirInterceptor<?>> getAdditionalConsumerInterceptors() {
         return Collections.emptyList();
     }
 
@@ -79,12 +81,12 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset> e
      * @param config FhirEndpointConfiguration
      * @return a new endpoint instance
      */
-    protected abstract FhirEndpoint doCreateEndpoint(String uri, FhirEndpointConfiguration config);
+    protected abstract FhirEndpoint<AuditDatasetType> doCreateEndpoint(String uri, FhirEndpointConfiguration<AuditDatasetType> config);
 
     /**
      * @return static component-specific configuration
      */
-    public abstract FhirComponentConfiguration getFhirComponentConfiguration();
+    public abstract FhirComponentConfiguration<AuditDatasetType> getFhirComponentConfiguration();
 
     /**
      * Returns server-side ATNA audit strategy.

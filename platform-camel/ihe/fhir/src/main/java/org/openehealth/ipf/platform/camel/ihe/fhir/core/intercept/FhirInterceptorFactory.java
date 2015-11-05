@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.core;
-
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.FhirInterceptor;
+package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept;
 
 /**
  *

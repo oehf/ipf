@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * PIXM Query endpoint (ITI-83)
  */
 @UriEndpoint(scheme = "pixm-iti83", title = "ITI-83 PIXm", syntax = "pixm-iti83:host:port", consumerClass = Iti83Consumer.class, label = "http")
-public class Iti83Endpoint extends FhirEndpoint<Iti83AuditDataset, Iti83Component> {
+public class Iti83Endpoint extends FhirEndpoint<Iti83AuditDataset> {
 
     public Iti83Endpoint(String uri, Iti83Component fhirComponent, FhirEndpointConfiguration config) {
         super(uri, fhirComponent, config);

@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
+import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.LoggingInterceptor;
@@ -63,6 +64,7 @@ public class CamelFhirServlet extends RestfulServer {
     public void init(ServletConfig config) throws ServletException {
         this.servletName = config.getServletName();
         SERVLETS.put(servletName, this);
+        LOG.debug("Initializing CamelFhirServlet " + servletName);
 
         logging = Boolean.parseBoolean(config.getInitParameter(SERVLET_LOGGING_PARAMETER_NAME));
         responseHighlighting = Boolean.parseBoolean(config.getInitParameter(SERVLET_RESPONSE_HIGHLIGHTING_PARAMETER_NAME));
@@ -79,6 +81,7 @@ public class CamelFhirServlet extends RestfulServer {
      */
     @Override
     protected void initialize() throws ServletException {
+        setFhirContext(FhirContext.forDstu2Hl7Org());
         setResourceProviders(PROVIDERS.get(getServletName()));
 
         if (logging) {
@@ -98,14 +101,14 @@ public class CamelFhirServlet extends RestfulServer {
         }
     }
 
-    public static void registerProvider(String name, AbstractResourceProvider provider) {
+    public static void registerProvider(String name, AbstractResourceProvider<?> provider) {
         if (!PROVIDERS.containsKey(name)) {
             PROVIDERS.put(name, new ArrayList<IResourceProvider>());
         }
         PROVIDERS.get(name).add(provider);
     }
 
-    public static void unregisterProvider(String name, AbstractResourceProvider provider) throws Exception {
+    public static void unregisterProvider(String name, AbstractResourceProvider<?> provider) throws Exception {
         PROVIDERS.get(name).remove(provider);
         SERVLETS.get(name).unregisterProvider(provider);
     }

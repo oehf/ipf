@@ -17,8 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept;
 
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 
 /**
  * Interface for FHIR auditing interceptors.
@@ -26,10 +24,8 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
  * @author Christian Ohr
  */
 public interface AuditInterceptor<
-        AuditDatasetType extends FhirAuditDataset,
-        ComponentType extends FhirComponent<AuditDatasetType>>
-
-        extends FhirInterceptor<AuditDatasetType, ComponentType> {
+        AuditDatasetType extends FhirAuditDataset>
+        extends FhirInterceptor<AuditDatasetType> {
 
     /**
      * Returns the audit strategy instance configured for this interceptor.

@@ -26,13 +26,13 @@ import java.util.Map;
  * Configuration of a FHIR endpoint instance
  */
 @UriParams
-public class FhirEndpointConfiguration implements Serializable {
+public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Serializable {
 
     @UriParam(defaultValue = "false")
     private boolean audit = false;
 
     @UriParam
-    private AbstractResourceProvider resourceProvider;
+    private AbstractResourceProvider<T> resourceProvider;
 
     protected FhirEndpointConfiguration(FhirComponent component, Map<String, Object> parameters) throws Exception {
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
@@ -43,7 +43,7 @@ public class FhirEndpointConfiguration implements Serializable {
         return audit;
     }
 
-    public AbstractResourceProvider getResourceProvider() {
+    public AbstractResourceProvider<T> getResourceProvider() {
         return resourceProvider;
     }
 }
