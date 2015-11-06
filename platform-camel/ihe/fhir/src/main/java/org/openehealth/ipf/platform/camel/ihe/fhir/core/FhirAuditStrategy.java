@@ -61,10 +61,7 @@ abstract public class FhirAuditStrategy<T extends FhirAuditDataset> {
      * @param msg          {@link Message} representing the message.
      * @param exchange     Camel exchange
      */
-    abstract public void enrichAuditDatasetFromRequest(
-            T auditDataset,
-            FhirObject msg,
-            Exchange exchange);
+    abstract public T enrichAuditDatasetFromRequest(T auditDataset, FhirObject msg, Exchange exchange);
 
 
     /**
@@ -74,10 +71,8 @@ abstract public class FhirAuditStrategy<T extends FhirAuditDataset> {
      * @param auditDataset audit dataset to be enriched.
      * @param msg          {@link Message} representing the message.
      */
-    public void enrichAuditDatasetFromResponse(
-            T auditDataset,
-            FhirObject msg) {
-        // does nothing per default
+    public T enrichAuditDatasetFromResponse(T auditDataset, FhirObject msg) {
+        return auditDataset;
     }
 
 
@@ -87,9 +82,7 @@ abstract public class FhirAuditStrategy<T extends FhirAuditDataset> {
      * @param eventOutcome Transaction completion status.
      * @param auditDataset Collected audit dataset.
      */
-    abstract public void doAudit(
-            RFC3881EventOutcomeCodes eventOutcome,
-            T auditDataset);
+    abstract public void doAudit(RFC3881EventOutcomeCodes eventOutcome, T auditDataset);
 
 
     /**

@@ -35,15 +35,13 @@ public abstract class Iti83AuditStrategy extends FhirAuditStrategy<Iti83AuditDat
     }
 
     @Override
-    public void enrichAuditDatasetFromRequest(Iti83AuditDataset auditDataset,
-            FhirObject msg, Exchange exchange) {
-        Iti83AuditStrategyUtils.enrichAuditDatasetFromRequest(auditDataset, (PixmRequest)msg);
+    public Iti83AuditDataset enrichAuditDatasetFromRequest(Iti83AuditDataset auditDataset, FhirObject msg, Exchange exchange) {
+        return auditDataset;
     }
 
     @Override
-    public void enrichAuditDatasetFromResponse(Iti83AuditDataset auditDataset,
-                                               FhirObject msg) {
-        Iti83AuditStrategyUtils.enrichAuditDatasetFromResponse(auditDataset, msg);
+    public Iti83AuditDataset enrichAuditDatasetFromResponse(Iti83AuditDataset auditDataset, FhirObject msg) {
+        return auditDataset;
     }
 
     

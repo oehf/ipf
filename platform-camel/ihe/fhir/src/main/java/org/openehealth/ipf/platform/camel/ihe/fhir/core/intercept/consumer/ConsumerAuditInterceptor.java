@@ -30,7 +30,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
 /**
  * Consumer-side ATNA auditing Camel interceptor.
  *
- * @author Dmytro Rud
+ * @author Christian Ohr
  */
 public class ConsumerAuditInterceptor<T extends FhirAuditDataset>
         extends AbstractFhirInterceptor<T>
@@ -76,15 +76,11 @@ public class ConsumerAuditInterceptor<T extends FhirAuditDataset>
      *
      * @return newly created audit dataset or <code>null</code> when creation failed.
      */
-    private T createAndEnrichAuditDatasetFromRequest(
-            FhirAuditStrategy<T> strategy,
-            Exchange exchange,
-            FhirObject msg) {
+    private T createAndEnrichAuditDatasetFromRequest(FhirAuditStrategy<T> strategy, Exchange exchange, FhirObject msg) {
         try {
             T auditDataset = strategy.createAuditDataset();
             // AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
-            strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);
-            return auditDataset;
+            return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);
             return null;
@@ -96,14 +92,12 @@ public class ConsumerAuditInterceptor<T extends FhirAuditDataset>
      * Enriches the given audit dataset with data from the response message.
      * All exception are ignored.
      */
-    private void enrichAuditDatasetFromResponse(
-            FhirAuditStrategy<T> strategy,
-            T auditDataset,
-            FhirObject msg) {
+    private T enrichAuditDatasetFromResponse(FhirAuditStrategy<T> strategy, T auditDataset, FhirObject msg) {
         try {
-            strategy.enrichAuditDatasetFromResponse(auditDataset, msg);
+            return strategy.enrichAuditDatasetFromResponse(auditDataset, msg);
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from response", e);
+            return auditDataset;
         }
     }
 
