@@ -45,11 +45,8 @@ public abstract class FhirComponent<T extends FhirAuditDataset> extends UriEndpo
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        String servletName = getAndRemoveParameter(parameters, "servletName", String.class, CamelFhirServlet.DEFAULT_SERVLET_NAME);
         FhirEndpointConfiguration<T> config = createConfig(parameters);
-        FhirEndpoint<T> endpoint = doCreateEndpoint(uri, config);
-        endpoint.setServletName(servletName);
-        return endpoint;
+        return doCreateEndpoint(uri, config);
     }
 
     /**
@@ -70,7 +67,7 @@ public abstract class FhirComponent<T extends FhirAuditDataset> extends UriEndpo
      *
      * @return a list of component-specific (i.e. transaction-specific) FHIR interceptors
      */
-    public List<FhirInterceptor<?>> getAdditionalConsumerInterceptors() {
+    public List<FhirInterceptor> getAdditionalConsumerInterceptors() {
         return Collections.emptyList();
     }
 

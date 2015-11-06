@@ -23,6 +23,7 @@ import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.openehealth.ipf.commons.ihe.core.chain.ChainUtils;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.FhirInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.FhirInterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer.ConsumerAuditInterceptor;
 
 import java.util.ArrayList;
@@ -33,14 +34,15 @@ import java.util.List;
  */
 public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEndpoint {
 
-    private final FhirEndpointConfiguration config;
+    private final FhirEndpointConfiguration<T> config;
     private String servletName;
     private final FhirComponent<T> fhirComponent;
 
-    public FhirEndpoint(String uri, FhirComponent<T> fhirComponent, FhirEndpointConfiguration config) {
+    public FhirEndpoint(String uri, FhirComponent<T> fhirComponent, FhirEndpointConfiguration<T> config) {
         super(uri, fhirComponent);
         this.fhirComponent = fhirComponent;
         this.config = config;
+        this.servletName = config.getServletName();
     }
 
     @Override
@@ -52,6 +54,7 @@ public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEn
         for (int i = chain.size() - 1; i >= 0; --i) {
             FhirInterceptor interceptor = chain.get(i);
             interceptor.setWrappedProcessor(processor);
+            interceptor.setFhirEndpoint(this);
             processor = interceptor;
         }
         // Create the component-specific consumer
@@ -100,7 +103,7 @@ public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEn
     protected List<FhirInterceptor> createInitialConsumerInterceptorChain() {
         List<FhirInterceptor> initialChain = new ArrayList<>();
         if (isAudit()) {
-            initialChain.add(new ConsumerAuditInterceptor<T>());
+            initialChain.add(new ConsumerAuditInterceptor<T>(getServerAuditStrategy()));
         }
         return initialChain;
     }
@@ -142,11 +145,6 @@ public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEn
         return fhirComponent.getServerAuditStrategy();
     }
 
-    public void setServletName(String servletName) {
-        this.servletName = servletName;
-    }
-
-
     // Private stuff
 
     private AbstractResourceProvider<T> getResourceProvider() {
@@ -172,13 +170,12 @@ public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEn
     /**
      * @return a list of endpoint-specific interceptors
      */
-    private synchronized List<FhirInterceptor<?>> getCustomInterceptors() {
-        List<FhirInterceptor<?>> result = new ArrayList<>();
-        /*
-        for (FhirInterceptorFactory customInterceptorFactory : config.getCustomInterceptorFactories()) {
+    private synchronized List<FhirInterceptor> getCustomInterceptors() {
+        List<FhirInterceptor> result = new ArrayList<>();
+        List<FhirInterceptorFactory> factories = config.getCustomInterceptorFactories();
+        for (FhirInterceptorFactory customInterceptorFactory : factories) {
             result.add(customInterceptorFactory.getNewInstance());
         }
-        */
         return result;
     }
 }

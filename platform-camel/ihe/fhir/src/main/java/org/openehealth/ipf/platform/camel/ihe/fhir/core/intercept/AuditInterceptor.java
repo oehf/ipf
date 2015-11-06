@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept;
 
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditStrategy;
 
@@ -23,12 +24,10 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditStrategy;
  *
  * @author Christian Ohr
  */
-public interface AuditInterceptor<
-        AuditDatasetType extends FhirAuditDataset>
-        extends FhirInterceptor<AuditDatasetType> {
+public interface AuditInterceptor<T extends FhirAuditDataset> extends FhirInterceptor {
 
     /**
      * Returns the audit strategy instance configured for this interceptor.
      */
-    FhirAuditStrategy<AuditDatasetType> getAuditStrategy();
+    FhirAuditStrategy<T> getAuditStrategy();
 }

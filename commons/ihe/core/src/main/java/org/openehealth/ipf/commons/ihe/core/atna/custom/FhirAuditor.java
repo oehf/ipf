@@ -19,23 +19,18 @@ import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
-import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
-import org.openhealthtools.ihe.atna.auditor.events.ihe.PatientRecordEvent;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.QueryEvent;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ParticipantObjectIdentificationType;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
-import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.util.Collections;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
 /**
  * Implementation of Fhir Auditors to send audit messages for
  * <ul>
- *     <li>ITI-83 (PIXM Query)</li>
+ * <li>ITI-83 (PIXM Query)</li>
  * </ul>
  *
  * @author Christian Ohr
@@ -50,14 +45,10 @@ public class FhirAuditor extends IHEAuditor {
     public void auditIti83(
             boolean serverSide,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
-            String userName,
             String pixManagerUri,
             String clientIpAddress,
-            String queryPayload,
-            String[] patientIds,
-            List<CodedValueType> purposesOfUse)
-    {
-        if (! isAuditorEnabled()) {
+            String queryString) {
+        if (!isAuditorEnabled()) {
             return;
         }
 
@@ -65,11 +56,10 @@ public class FhirAuditor extends IHEAuditor {
                 true,
                 eventOutcome,
                 new IHETransactionEventTypeCodes.PIXMQuery(),
-                purposesOfUse);
+                Collections.<CodedValueType>emptyList());
 
-        configureEvent(this, serverSide, event, null, userName, pixManagerUri, pixManagerUri, clientIpAddress);
-        addPatientParticipantObjects(event, patientIds, null);
-        event.addQueryParticipantObject(null, null, payloadBytes(queryPayload), null,
+        configureEvent(this, serverSide, event, null, null, pixManagerUri, pixManagerUri, clientIpAddress);
+        event.addQueryParticipantObject("PIXmQuery", null, payloadBytes(queryString), null,
                 new IHETransactionEventTypeCodes.PIXMQuery());
         audit(event);
     }
@@ -83,28 +73,6 @@ public class FhirAuditor extends IHEAuditor {
             return payload.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
             return payload.getBytes();
-        }
-    }
-
-
-    protected static void addPatientParticipantObjects(
-            GenericIHEAuditEventMessage event,
-            String[] patientIds,
-            String messageId)
-    {
-        if (! EventUtils.isEmptyOrNull(patientIds)) {
-            for (String patientId : patientIds) {
-                event.addPatientParticipantObject(patientId);
-            }
-
-            if (messageId != null) {
-                TypeValuePairType tvp = new TypeValuePairType();
-                tvp.setType("II");
-                tvp.setValue(payloadBytes(messageId));
-                for (ParticipantObjectIdentificationType type : event.getAuditMessage().getParticipantObjectIdentification()) {
-                    type.getParticipantObjectDetail().add(tvp);
-                }
-            }
         }
     }
 

@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
  *
  * @author Christian Ohr
  */
-public interface FhirInterceptor<T extends FhirAuditDataset> extends Processor, Chainable {
+public interface FhirInterceptor extends Processor, Chainable {
 
     /**
      * @return the processor instance wrapped by this interceptor.
@@ -40,5 +40,14 @@ public interface FhirInterceptor<T extends FhirAuditDataset> extends Processor, 
      */
     void setWrappedProcessor(Processor wrappedProcessor);
 
-    FhirEndpoint<T> getFhirEndpoint();
+    /**
+     * @return the endpoint this interceptor is called from
+     */
+    FhirEndpoint<?> getFhirEndpoint();
+
+    /**
+     * Sets the endpoint this interceptor is called from
+     * @param fhirEndpoint the endpoint this interceptor is called from
+     */
+    void setFhirEndpoint(FhirEndpoint<?> fhirEndpoint);
 }

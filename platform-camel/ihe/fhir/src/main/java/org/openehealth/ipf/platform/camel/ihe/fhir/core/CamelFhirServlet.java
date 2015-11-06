@@ -84,6 +84,7 @@ public class CamelFhirServlet extends RestfulServer {
         setFhirContext(FhirContext.forDstu2Hl7Org());
         setResourceProviders(PROVIDERS.get(getServletName()));
 
+        // TODO I wonder if this should be rather used per endpoint
         if (logging) {
             LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
             registerInterceptor(loggingInterceptor);
@@ -99,6 +100,21 @@ public class CamelFhirServlet extends RestfulServer {
             ResponseHighlighterInterceptor interceptor = new ResponseHighlighterInterceptor();
             registerInterceptor(interceptor);
         }
+
+        /*
+		 * Use a narrative generator. This is a completely optional step,
+		 * but can be useful as it causes HAPI to generate narratives for
+		 * resources which don't otherwise have one.
+		 */
+        //INarrativeGenerator narrativeGen = new DefaultThymeleafNarrativeGenerator();
+        //getFhirContext().setNarrativeGenerator(narrativeGen);
+
+		/*
+		 * Tells HAPI to use content types which are not technically FHIR compliant when a browser is detected as the
+		 * requesting client. This prevents browsers from trying to download resource responses instead of displaying them
+		 * inline which can be handy for troubleshooting.
+		 */
+        setUseBrowserFriendlyContentTypes(true);
     }
 
     public static void registerProvider(String name, AbstractResourceProvider<?> provider) {

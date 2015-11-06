@@ -19,10 +19,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -31,7 +27,6 @@ import java.util.List;
  * @author Dmytro Rud
  */
 abstract public class FhirAuditDataset extends AuditDataset {
-    private static final long serialVersionUID = -4427222097816361541L;
 
     /**
      * Event outcome code as defined in RFC 3881.
@@ -39,36 +34,25 @@ abstract public class FhirAuditDataset extends AuditDataset {
     @Getter @Setter private RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcomeCode;
 
     /**
-     * Request SOAP Body (XML) payload.
+     * Request payload.
      */
     @Getter private String requestPayload;
 
     /**
-     * Client user ID (WS-Addressing &lt;Reply-To&gt; header).
+     * Client user ID
      */
     @Getter @Setter private String userId;
 
     /**
-     * Client user name (WS-Security &lt;Username&gt; header).
-     */
-    @Getter @Setter private String userName;
-
-    /**
-     * Client IP address.
+     * Client IP address
      */
     @Getter @Setter private String clientIpAddress;
 
     /**
-     * Service (i.e. registry or repository) endpoint URL.
+     * Service endpoint URL
      */
     @Getter @Setter private String serviceEndpointUrl;
 
-    /**
-     * Purposes of use, see ITI TF-2a section 3.20.7.8 and ITI TF-2b section 3.40.4.1.2.3.
-     */
-    @Getter private final List<CodedValueType> purposesOfUse = new ArrayList<>();
-
-    @Getter @Setter private String[] patientIds;
 
     /**
      * Constructor.

@@ -30,6 +30,7 @@ public class FhirTestContainer extends StandardTestContainer {
 
     protected static IGenericClient startClient(String base) {
         context = FhirContext.forDstu2Hl7Org();
+        context.getRestfulClientFactory().setSocketTimeout(1000000); // for debugging
         client = context.newRestfulGenericClient(base);
         return client;
     }

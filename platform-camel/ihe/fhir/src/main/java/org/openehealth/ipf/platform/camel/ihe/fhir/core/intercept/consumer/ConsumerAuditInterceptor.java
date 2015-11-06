@@ -16,11 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.AbstractFhirInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.AuditInterceptor;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,41 +35,50 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  * @author Christian Ohr
  */
 public class ConsumerAuditInterceptor<T extends FhirAuditDataset>
-        extends AbstractFhirInterceptor<T>
-        implements AuditInterceptor<T> {
+        extends AbstractFhirInterceptor implements AuditInterceptor<T> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConsumerAuditInterceptor.class);
+
+    private final FhirAuditStrategy<T> serverAuditStrategy;
+
+    public ConsumerAuditInterceptor(FhirAuditStrategy<T> serverAuditStrategy) {
+        this.serverAuditStrategy = serverAuditStrategy;
+    }
 
     @Override
     public void process(Exchange exchange) throws Exception {
         FhirObject msg = exchange.getIn().getBody(FhirObject.class);
 
-        // pass in case of non-auditable message types
-        // if (!isAuditable(msg)) {
-        //     getWrappedProcessor().process(exchange);
-        //     return;
-        // }
-
-        T auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
+        T auditDataset = createAndEnrichAuditDatasetFromRequest(serverAuditStrategy, exchange, msg);
         // determineParticipantsAddresses(interceptor, exchange, auditDataset);
 
         boolean failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            FhirObject result = resultMessage(exchange).getBody(FhirObject.class);
-            enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, msg);
-            // failed = !AuditUtils.isPositiveAck(result);
+            IBaseResource result = resultMessage(exchange).getBody(IBaseResource.class);
+            failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
         } catch (Exception e) {
+            // FHIR exception or unexpected exception
             failed = true;
             throw e;
         } finally {
-            // AuditUtils.finalizeAudit(auditDataset, getAuditStrategy(), failed);
+            if (auditDataset != null) {
+                try {
+                    RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome = failed ?
+                            RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE :
+                            RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
+                    getAuditStrategy().doAudit(eventOutcome, auditDataset);
+                } catch (Exception e) {
+                    LOG.error("ATNA auditing failed", e);
+                }
+            }
         }
     }
 
+
     @Override
     public FhirAuditStrategy<T> getAuditStrategy() {
-        return getFhirEndpoint().getServerAuditStrategy();
+        return serverAuditStrategy;
     }
 
     /**
@@ -92,13 +103,8 @@ public class ConsumerAuditInterceptor<T extends FhirAuditDataset>
      * Enriches the given audit dataset with data from the response message.
      * All exception are ignored.
      */
-    private T enrichAuditDatasetFromResponse(FhirAuditStrategy<T> strategy, T auditDataset, FhirObject msg) {
-        try {
-            return strategy.enrichAuditDatasetFromResponse(auditDataset, msg);
-        } catch (Exception e) {
-            LOG.error("Exception when enriching audit dataset from response", e);
-            return auditDataset;
-        }
+    private boolean enrichAuditDatasetFromResponse(FhirAuditStrategy<T> strategy, T auditDataset, IBaseResource response) {
+        return strategy.enrichAuditDatasetFromResponse(auditDataset, response);
     }
 
 

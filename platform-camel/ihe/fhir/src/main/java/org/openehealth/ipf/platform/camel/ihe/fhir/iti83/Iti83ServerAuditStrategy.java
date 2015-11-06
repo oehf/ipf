@@ -28,20 +28,12 @@ public class Iti83ServerAuditStrategy extends Iti83AuditStrategy {
     public void doAudit(RFC3881EventOutcomeCodes eventOutcome,
             Iti83AuditDataset auditDataset) {
 
-        throw new UnsupportedOperationException("not yet implemented");
-
-        /*
-        // FIXME wrong!!
         AuditorManager.getFhirAuditor().auditIti83(
                 true,
                 auditDataset.getEventOutcomeCode(),
-                auditDataset.getUserName(),
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getClientIpAddress(),
-                auditDataset.getRequestPayload(),
-                auditDataset.getPatientIds(),
-                auditDataset.getPurposesOfUse());
-                */
+                auditDataset.getQueryString());
     }
 
 }

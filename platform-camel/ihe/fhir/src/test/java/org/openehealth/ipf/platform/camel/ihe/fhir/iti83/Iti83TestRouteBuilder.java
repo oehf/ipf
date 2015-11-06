@@ -43,7 +43,7 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from(TestIti83.SERVICE) // pixm-iti83://localhost:8999/patient/
+        from("pixm-iti83:gablorg?audit=true")
                 // Translate into ITI-9
                 .process(translatorFhirToHL7v2(requestTranslator))
                         // Create some static response

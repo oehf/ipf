@@ -17,8 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequest;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditStrategy;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -36,14 +37,11 @@ public abstract class Iti83AuditStrategy extends FhirAuditStrategy<Iti83AuditDat
 
     @Override
     public Iti83AuditDataset enrichAuditDatasetFromRequest(Iti83AuditDataset auditDataset, FhirObject msg, Exchange exchange) {
+        auditDataset.setUserId(exchange.getIn().getHeader(Exchange.HTTP_URI, String.class));
+        auditDataset.setServiceEndpointUrl(exchange.getIn().getHeader(Exchange.HTTP_URI, String.class));
+        auditDataset.setClientIpAddress(exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class).getRemoteAddr());
+        auditDataset.setQueryString(exchange.getIn().getHeader(Exchange.HTTP_QUERY, String.class));
         return auditDataset;
     }
-
-    @Override
-    public Iti83AuditDataset enrichAuditDatasetFromResponse(Iti83AuditDataset auditDataset, FhirObject msg) {
-        return auditDataset;
-    }
-
-    
 
 }

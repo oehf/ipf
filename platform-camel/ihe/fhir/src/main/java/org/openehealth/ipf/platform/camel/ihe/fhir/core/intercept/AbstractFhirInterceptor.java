@@ -18,17 +18,15 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept;
 
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.core.chain.ChainableImpl;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 
 /**
  *
  */
-public abstract class AbstractFhirInterceptor<T extends FhirAuditDataset> extends ChainableImpl
-        implements FhirInterceptor<T> {
+public abstract class AbstractFhirInterceptor extends ChainableImpl implements FhirInterceptor {
 
     private Processor wrappedProcessor;
-    private FhirEndpoint<T> fhirEndpoint;
+    private FhirEndpoint<?> fhirEndpoint;
 
     @Override
     public Processor getWrappedProcessor() {
@@ -40,13 +38,13 @@ public abstract class AbstractFhirInterceptor<T extends FhirAuditDataset> extend
         this.wrappedProcessor = wrappedProcessor;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public FhirEndpoint<T> getFhirEndpoint() {
+    public FhirEndpoint<?> getFhirEndpoint() {
         return fhirEndpoint;
     }
 
-    public void setFhirEndpoint(FhirEndpoint<T> fhirEndpoint) {
+    @Override
+    public void setFhirEndpoint(FhirEndpoint<?> fhirEndpoint) {
         this.fhirEndpoint = fhirEndpoint;
     }
 }

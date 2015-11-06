@@ -38,7 +38,7 @@ public class TestIti83 extends FhirTestContainer {
     private static final String CONTEXT_DESCRIPTOR = "iti-83.xml";
     private static final Logger LOG = LoggerFactory.getLogger(TestIti83.class);
 
-    static final String SERVICE = String.format("pixm-iti83://localhost:%d/patient/", DEMO_APP_PORT);
+    static final String SERVICE = String.format("pixm-iti83://localhost/patient/");
 
     @BeforeClass
     public static void setUpClass() throws ServletException {

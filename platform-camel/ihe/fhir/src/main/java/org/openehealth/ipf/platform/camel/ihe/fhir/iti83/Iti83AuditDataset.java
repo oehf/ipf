@@ -25,10 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirAuditDataset;
 @SuppressWarnings("serial")
 public class Iti83AuditDataset extends FhirAuditDataset {
 
-    @Getter @Setter private String[] patientIds;
-
-    /** Request payload. */
-    @Getter @Setter private String payload;
+    @Getter @Setter private String queryString;
 
     public Iti83AuditDataset(boolean serverSide) {
         super(serverSide);

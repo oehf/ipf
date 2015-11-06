@@ -33,6 +33,9 @@ public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Se
     @UriParam(defaultValue = "false")
     private boolean audit = false;
 
+    @UriParam(defaultValue = "FhirServlet")
+    private String servletName = CamelFhirServlet.DEFAULT_SERVLET_NAME;
+
     @UriParam
     private AbstractResourceProvider<T> resourceProvider;
 
@@ -41,6 +44,7 @@ public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Se
 
     protected FhirEndpointConfiguration(FhirComponent component, Map<String, Object> parameters) throws Exception {
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
+        servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, CamelFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "resourceProvider", AbstractResourceProvider.class, null);
         customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
@@ -57,5 +61,9 @@ public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Se
 
     public List<FhirInterceptorFactory> getCustomInterceptorFactories() {
         return customInterceptorFactories;
+    }
+
+    public String getServletName() {
+        return servletName;
     }
 }

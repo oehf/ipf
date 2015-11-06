@@ -15,20 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
-import ca.uhn.hl7v2.model.Message;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.apache.camel.Exchange;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-
 
 /**
  * ATNA audit strategy base for FHIR-based transactions. This strategy is accompanied with a
  * dedicated subclass of {@link FhirAuditDataset} containing the data for the audit record.
  *
- * @author Dmytro Rud
+ * @author Christian Ohr
  */
 abstract public class FhirAuditStrategy<T extends FhirAuditDataset> {
     // whether we audit on server (true) or on client (false)
@@ -58,7 +57,7 @@ abstract public class FhirAuditStrategy<T extends FhirAuditDataset> {
      * contents of the request message and Camel exchange.
      *
      * @param auditDataset audit dataset to be enriched.
-     * @param msg          {@link Message} representing the message.
+     * @param msg          {@link FhirObject} representing the request.
      * @param exchange     Camel exchange
      */
     abstract public T enrichAuditDatasetFromRequest(T auditDataset, FhirObject msg, Exchange exchange);
@@ -69,10 +68,11 @@ abstract public class FhirAuditStrategy<T extends FhirAuditDataset> {
      * contents of the response message.
      *
      * @param auditDataset audit dataset to be enriched.
-     * @param msg          {@link Message} representing the message.
+     * @param resource     {@link IBaseResource} representing the responded resource.
+     * @return true if response indicates success, false otherwise
      */
-    public T enrichAuditDatasetFromResponse(T auditDataset, FhirObject msg) {
-        return auditDataset;
+    public boolean enrichAuditDatasetFromResponse(T auditDataset, IBaseResource resource) {
+        return true;
     }
 
 
