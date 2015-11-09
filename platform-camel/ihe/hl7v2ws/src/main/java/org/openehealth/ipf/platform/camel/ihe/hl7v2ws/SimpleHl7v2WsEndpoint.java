@@ -24,11 +24,14 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerResponseAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
@@ -41,7 +44,7 @@ import java.util.Map;
 /**
  * Camel endpoint for HL7v2-WS transaction with a single operation.
  */
-public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsComponent> {
+public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsComponent> implements HL7v2Endpoint {
 
     /**
      * Constructs the endpoint.
@@ -69,8 +72,8 @@ public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsCom
     }
 
 
-    protected List<Hl7v2Interceptor> getProducerInterceptorChain() {
-        return Arrays.<Hl7v2Interceptor> asList(
+    protected List<Interceptor> getProducerInterceptorChain() {
+        return Arrays.<Interceptor> asList(
                 new ProducerMarshalInterceptor(),
                 new ProducerResponseAcceptanceInterceptor(),
                 new ProducerRequestAcceptanceInterceptor(),
@@ -83,7 +86,7 @@ public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsCom
     public Producer createProducer() throws Exception {
         return Hl7v2InterceptorUtils.adaptProducerChain(
                 getProducerInterceptorChain(),
-                getComponent(),
+                this,
                 getComponent().getProducer(this, getJaxWsClientFactory()));
     }
 
@@ -118,5 +121,15 @@ public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsCom
                 null,
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
+    }
+
+    @Override
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+        return getComponent().getHl7v2TransactionConfiguration();
+    }
+
+    @Override
+    public NakFactory getNakFactory() {
+        return getComponent().getNakFactory();
     }
 }

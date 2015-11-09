@@ -15,11 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
-import java.util.Scanner;
-import java.util.Set;
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.model.Message;
@@ -35,10 +30,15 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.Interceptor2ProducerAdapter;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import java.util.Scanner;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -110,8 +110,8 @@ public class Pcd01Test extends StandardTestContainer {
         Endpoint endpoint = getCamelContext().getEndpoint(uri);
         Processor processor = endpoint.createProducer();
         processor = ((Interceptor2ProducerAdapter) processor).getProcessor();
-        while (processor instanceof Hl7v2Interceptor) {
-            processor = ((Hl7v2Interceptor) processor).getWrappedProcessor();
+        while (processor instanceof Interceptor) {
+            processor = ((Interceptor) processor).getWrappedProcessor();
         }
         Exchange exchange = new DefaultExchange(getCamelContext());
         exchange.getIn().setBody(PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));

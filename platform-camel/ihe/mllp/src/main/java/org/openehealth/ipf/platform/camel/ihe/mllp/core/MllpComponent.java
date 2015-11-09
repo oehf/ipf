@@ -15,22 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina2.Mina2Component;
 import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -141,7 +141,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
      *              because interceptors cannot be reused by multiple endpoints.
      *      </ul>
      */
-    public List<Hl7v2Interceptor> getAdditionalConsumerInterceptors() {
+    public List<Interceptor> getAdditionalConsumerInterceptors() {
         return Collections.emptyList();
     }
 
@@ -163,7 +163,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
      *              because interceptors cannot be reused by multiple endpoints.
      *      </ul>
      */
-    public List<Hl7v2Interceptor> getAdditionalProducerInterceptors() {
+    public List<Interceptor> getAdditionalProducerInterceptors() {
         return Collections.emptyList();
     }
 

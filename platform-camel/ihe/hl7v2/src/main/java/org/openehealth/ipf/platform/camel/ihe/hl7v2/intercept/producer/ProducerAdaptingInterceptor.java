@@ -16,12 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 
 import ca.uhn.hl7v2.model.Message;
+import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.commons.lang3.ClassUtils;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 
 
 /**
@@ -30,7 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Inter
  *  
  * @author Dmytro Rud
  */
-public class ProducerAdaptingInterceptor extends AbstractHl7v2Interceptor {
+public class ProducerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoint> {
 
     private final String charsetName;
 
@@ -71,7 +73,7 @@ public class ProducerAdaptingInterceptor extends AbstractHl7v2Interceptor {
         Message msg = Hl7v2MarshalUtils.extractHapiMessage(
                 exchange.getIn(),
                 characterSet(exchange),
-                getHl7v2TransactionConfiguration().getParser());
+                getEndpoint().getHl7v2TransactionConfiguration().getParser());
         
         if (msg == null) {
             throw new Hl7v2AdaptingException("Cannot create HL7v2 message from the given " +

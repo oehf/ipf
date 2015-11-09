@@ -18,7 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.FhirInterceptorFactory;
+import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 
 import java.io.Serializable;
 import java.util.List;
@@ -26,6 +27,8 @@ import java.util.Map;
 
 /**
  * Configuration of a FHIR endpoint instance
+ *
+ * @since 3.1
  */
 @UriParams
 public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Serializable {
@@ -40,7 +43,7 @@ public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Se
     private AbstractResourceProvider<T> resourceProvider;
 
     @UriParam
-    private List<FhirInterceptorFactory> customInterceptorFactories;
+    private List<InterceptorFactory> customInterceptorFactories;
 
     protected FhirEndpointConfiguration(FhirComponent component, Map<String, Object> parameters) throws Exception {
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
@@ -48,7 +51,7 @@ public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Se
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "resourceProvider", AbstractResourceProvider.class, null);
         customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
-                parameters, "interceptorFactories", FhirInterceptorFactory.class);
+                parameters, "interceptorFactories", InterceptorFactory.class);
     }
 
     public boolean isAudit() {
@@ -59,7 +62,7 @@ public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Se
         return resourceProvider;
     }
 
-    public List<FhirInterceptorFactory> getCustomInterceptorFactories() {
+    public List<InterceptorFactory> getCustomInterceptorFactories() {
         return customInterceptorFactories;
     }
 

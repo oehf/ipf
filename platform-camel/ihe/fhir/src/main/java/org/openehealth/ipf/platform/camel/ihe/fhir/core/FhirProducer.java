@@ -22,9 +22,10 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.InvalidPayloadException;
 import org.apache.camel.impl.DefaultProducer;
+import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
 
 /**
- *
+ * @since 3.1
  */
 public abstract class FhirProducer<T extends FhirAuditDataset> extends DefaultProducer {
 

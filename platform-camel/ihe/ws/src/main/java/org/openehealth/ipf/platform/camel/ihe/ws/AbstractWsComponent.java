@@ -31,6 +31,8 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 /**
  * Base component class for Web Service-based IHE components.
  * @author Dmytro Rud
+ *
+ * TODO make this implement AuditableComponent
  */
 abstract public class AbstractWsComponent<ConfigType extends WsTransactionConfiguration>
         extends DefaultComponent

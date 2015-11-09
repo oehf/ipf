@@ -15,19 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21;
 
+import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactorySupport;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactorySupport;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
 
-public class AuthenticationInterceptor extends AbstractHl7v2Interceptor {
+public class AuthenticationInterceptor extends InterceptorSupport<Endpoint> {
 
     @Override
     public void process(Exchange exchange) throws Exception {
         throw new MllpAuthenticationFailure("test");
     }
 
-    public static class Factory extends Hl7v2InterceptorFactorySupport<AuthenticationInterceptor> {
+    public static class Factory extends InterceptorFactorySupport<Endpoint, AuthenticationInterceptor> {
         public Factory() {
             super(AuthenticationInterceptor.class);
         }

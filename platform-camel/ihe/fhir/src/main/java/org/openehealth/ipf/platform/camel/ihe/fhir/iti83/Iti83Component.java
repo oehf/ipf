@@ -18,6 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
 import ca.uhn.fhir.context.FhirContext;
 import org.apache.camel.CamelContext;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83AuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.*;
 
 /**
@@ -30,8 +34,8 @@ public class Iti83Component extends FhirComponent<Iti83AuditDataset> {
                     FhirContext.forDstu2Hl7Org(),
                     new Iti83ResourceProvider());
 
-    private static final FhirAuditStrategy<Iti83AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti83ClientAuditStrategy();
-    private static final FhirAuditStrategy<Iti83AuditDataset> SERVER_AUDIT_STRATEGY = new Iti83ServerAuditStrategy();
+    private static final AuditStrategy<Iti83AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti83ClientAuditStrategy();
+    private static final AuditStrategy<Iti83AuditDataset> SERVER_AUDIT_STRATEGY = new Iti83ServerAuditStrategy();
 
     public Iti83Component() {
         super();
@@ -53,12 +57,12 @@ public class Iti83Component extends FhirComponent<Iti83AuditDataset> {
     }
 
     @Override
-    public FhirAuditStrategy<Iti83AuditDataset> getServerAuditStrategy() {
+    public AuditStrategy<Iti83AuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
 
     @Override
-    public FhirAuditStrategy<Iti83AuditDataset> getClientAuditStrategy() {
+    public AuditStrategy<Iti83AuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 }

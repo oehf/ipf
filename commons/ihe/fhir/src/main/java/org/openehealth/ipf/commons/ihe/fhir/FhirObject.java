@@ -17,6 +17,8 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 /**
  * Marker interface for an object carrying FHIR resources
+ *
+ * @since 3.1
  */
 public interface FhirObject {
 }

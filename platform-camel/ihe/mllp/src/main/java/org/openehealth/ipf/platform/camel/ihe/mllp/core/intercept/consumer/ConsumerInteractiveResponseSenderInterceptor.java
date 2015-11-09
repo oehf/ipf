@@ -15,24 +15,24 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
+import org.openehealth.ipf.commons.ihe.hl7v2.Constants;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -44,22 +44,21 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * as described in paragraph 5.6.3 of the HL7 v2.5 specification.
  * @author Dmytro Rud
  */
-public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpInterceptor<MllpTransactionEndpoint> {
+public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSupport<MllpTransactionEndpoint> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerInteractiveResponseSenderInterceptor.class);
     private InteractiveContinuationStorage storage;
 
 
     @Override
-    public void setConfigurationHolder(Hl7v2ConfigurationHolder configurationHolder) {
-        super.setConfigurationHolder(configurationHolder);
-        this.storage = Validate.notNull(getMllpEndpoint().getInteractiveContinuationStorage());
+    public void setEndpoint(MllpTransactionEndpoint endpoint) {
+        super.setEndpoint(endpoint);
+        this.storage = Validate.notNull(getEndpoint().getInteractiveContinuationStorage());
     }
-
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Parser parser = getHl7v2TransactionConfiguration().getParser();
-        Message requestMessage = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
+        Parser parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
+        Message requestMessage = exchange.getIn().getHeader(Constants.ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
         Terser requestTerser = new Terser(requestMessage);
         String requestMessageType = requestTerser.get("MSH-9-1");
 
@@ -87,7 +86,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         }
 
         // check whether responses to messages of this type can even be splitted
-        if (! getHl7v2TransactionConfiguration().isContinuable(requestMessageType)) {
+        if (! getEndpoint().getHl7v2TransactionConfiguration().isContinuable(requestMessageType)) {
             getWrappedProcessor().process(exchange);
             return;
         }
@@ -108,7 +107,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             LOG.warn("Cannot parse RCP-2-1, try to use default threshold", nfe);
         }
         if (threshold < 1) {
-            threshold = getMllpEndpoint().getInteractiveContinuationDefaultThreshold();
+            threshold = getEndpoint().getInteractiveContinuationDefaultThreshold();
         }
         if (threshold < 1) {
             LOG.debug("Cannot perform interactive continuation: invalid or missing threshold");
@@ -194,7 +193,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         final int fragmentsCount = (recordBoundaries.size() + threshold - 2) / threshold; 
         
         // create a new chain of fragments
-        Parser parser = getHl7v2TransactionConfiguration().getParser();
+        Parser parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
         String continuationPointer = null;
         for (int currentFragmentIndex = 0; currentFragmentIndex < fragmentsCount; ++currentFragmentIndex) {
             // create the current fragment as String 
@@ -238,7 +237,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
      * For N data records there will be N+1 boundaries.
      */
     private List<Integer> getRecordBoundaries(List<String> segments) {
-        Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
+        Hl7v2TransactionConfiguration config = getEndpoint().getHl7v2TransactionConfiguration();
         List<Integer> recordBoundaries = new ArrayList<>();
         boolean foundFooter = false;
         for (int i = 1; i < segments.size(); ++i) {

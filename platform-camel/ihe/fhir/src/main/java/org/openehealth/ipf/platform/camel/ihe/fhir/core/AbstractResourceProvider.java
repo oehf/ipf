@@ -17,8 +17,8 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import org.apache.camel.Exchange;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,9 +26,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
+
 /**
  * Abstract resource provider that allows subclasses to forward the received payload into the
  * Camel route served by the consumer.
+ *
+ * @since 3.1
  */
 public abstract class AbstractResourceProvider<T extends FhirAuditDataset> implements IResourceProvider, Serializable {
 
@@ -40,25 +44,24 @@ public abstract class AbstractResourceProvider<T extends FhirAuditDataset> imple
      * @param resultType exepcted result type
      * @param httpServletRequest servlet request
      * @param httpServletResponse servlet response
-     * @param <T> AuditDataSet type
+     * @param <R> Result type
      * @return result of route processing
      */
-    protected final <T extends IBaseResource> T processInRoute(Object payload, Class<T> resultType,
+    protected final <R extends IBaseResource> R processInRoute(Object payload, Class<R> resultType,
                                                                HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         if (consumer == null) {
             throw new IllegalStateException("Consumer is not initialized");
         }
 
-        // Populate some headers
+        // Populate some headers. FIXME: remove Camel dependencies!
         Map<String, Object> headers = new HashMap<>();
-        headers.put(Exchange.HTTP_URI, httpServletRequest.getRequestURI());
-        headers.put(Exchange.HTTP_METHOD, httpServletRequest.getMethod());
-        headers.put(Exchange.HTTP_QUERY, httpServletRequest.getQueryString());
-        headers.put(Exchange.HTTP_CHARACTER_ENCODING, httpServletRequest.getCharacterEncoding());
-        headers.put(Exchange.CONTENT_TYPE, httpServletRequest.getContentType());
-        headers.put(Exchange.HTTP_PROTOCOL_VERSION, httpServletRequest.getProtocol());
-        headers.put(Exchange.HTTP_SERVLET_REQUEST, httpServletRequest);
-        headers.put(Exchange.HTTP_SERVLET_RESPONSE, httpServletResponse);
+        headers.put(HTTP_URI, httpServletRequest.getRequestURI());
+        headers.put(HTTP_METHOD, httpServletRequest.getMethod());
+        headers.put(HTTP_QUERY, httpServletRequest.getQueryString());
+        headers.put(HTTP_CHARACTER_ENCODING, httpServletRequest.getCharacterEncoding());
+        headers.put(HTTP_CONTENT_TYPE, httpServletRequest.getContentType());
+        headers.put(HTTP_PROTOCOL_VERSION, httpServletRequest.getProtocol());
+        headers.put(HTTP_CLIENT_IP_ADDRESS, httpServletRequest.getRemoteAddr());
 
         return consumer.processInRoute(payload, headers, resultType);
     }

@@ -19,16 +19,21 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.FhirInterceptor;
+import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * Abstract FHIR Camel component
  *
+ * @since 3.1
  */
-public abstract class FhirComponent<T extends FhirAuditDataset> extends UriEndpointComponent {
+public abstract class FhirComponent<T extends FhirAuditDataset>
+        extends UriEndpointComponent implements AuditableComponent<T> {
 
     public FhirComponent() {
         super(FhirEndpoint.class);
@@ -40,7 +45,6 @@ public abstract class FhirComponent<T extends FhirAuditDataset> extends UriEndpo
 
     protected FhirEndpointConfiguration<T> createConfig(Map<String, Object> parameters) throws Exception {
         return new FhirEndpointConfiguration<>(this, parameters);
-        // return new FhirEndpointConfiguration(this, parameters);
     }
 
     @Override
@@ -67,7 +71,7 @@ public abstract class FhirComponent<T extends FhirAuditDataset> extends UriEndpo
      *
      * @return a list of component-specific (i.e. transaction-specific) FHIR interceptors
      */
-    public List<FhirInterceptor> getAdditionalConsumerInterceptors() {
+    public List<Interceptor> getAdditionalConsumerInterceptors() {
         return Collections.emptyList();
     }
 
@@ -84,15 +88,5 @@ public abstract class FhirComponent<T extends FhirAuditDataset> extends UriEndpo
      * @return static component-specific configuration
      */
     public abstract FhirComponentConfiguration<T> getFhirComponentConfiguration();
-
-    /**
-     * Returns server-side ATNA audit strategy.
-     */
-    public abstract FhirAuditStrategy<T> getServerAuditStrategy();
-
-    /**
-     * Returns client-side ATNA audit strategy.
-     */
-    public abstract FhirAuditStrategy<T> getClientAuditStrategy();
 
 }

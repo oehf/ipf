@@ -31,6 +31,8 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 /**
  * Translates a {@link PixmRequest} into a HL7v2 PIX Query message
+ *
+ * @since 3.1
  */
 class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
 

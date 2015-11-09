@@ -41,7 +41,7 @@ that defines the contract of the transaction.
 
 The parameters *clientAuditStrategy* and *serverAuditStrategy* are mandatory unless [ATNA auditing] is disabled in the
 endpoints. The strategy parameters must reference an instance of type
-[`org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy`](../apidocs/org/openehealth/ipf/platform/camel/ihe/mllp/core/MllpAuditStrategy.html).
+[`org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy`](../apidocs/org/openehealth/ipf/commons/ihe/core/atna/MllpAuditStrategy.html).
 
 
 ### HL7v2 Codec

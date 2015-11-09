@@ -22,12 +22,15 @@ import org.apache.camel.Processor;
 import org.apache.camel.SuspendableService;
 import org.apache.camel.impl.DefaultConsumer;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.Map;
 
 /**
  * FHIR consumer
+ *
+ * @since 3.1
  */
 public abstract class FhirConsumer<T extends FhirAuditDataset>
         extends DefaultConsumer implements SuspendableService {

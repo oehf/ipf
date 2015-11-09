@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.model.Message;
 import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 
 /**
- *
+ * @since 3.1
  */
 public interface TranslatorFhirToHL7v2 {
 

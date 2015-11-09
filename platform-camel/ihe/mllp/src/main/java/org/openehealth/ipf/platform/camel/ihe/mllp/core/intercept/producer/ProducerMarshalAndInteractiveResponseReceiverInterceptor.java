@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
-import java.util.List;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
@@ -26,12 +24,14 @@ import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -45,7 +45,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  *
  * @author Dmytro Rud
  */
-public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends AbstractMllpInterceptor<MllpTransactionEndpoint> {
+public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends InterceptorSupport<MllpTransactionEndpoint> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
 
     public ProducerMarshalAndInteractiveResponseReceiverInterceptor() {
@@ -59,7 +59,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
+        Hl7v2TransactionConfiguration config = getEndpoint().getHl7v2TransactionConfiguration();
         Message request = exchange.getIn().getBody(Message.class);
         
         Terser requestTerser = null;
@@ -72,7 +72,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         //     2. It must be allowed for the given request message type.
         //     3. The user must not have already filled the DSC segment.
         boolean supportContinuations = false;
-        if (getMllpEndpoint().isSupportInteractiveContinuation()) {
+        if (getEndpoint().isSupportInteractiveContinuation()) {
             requestTerser = new Terser(request);
             if (config.isContinuable(requestTerser.get("MSH-9-1")) && isEmpty(requestTerser.get("DSC-1"))) {
                 supportContinuations = true;
@@ -171,7 +171,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
 
             // prepare and send automatic cancel request, if necessary.
             // All errors will be ignored
-            if (getMllpEndpoint().isAutoCancel()) {
+            if (getEndpoint().isAutoCancel()) {
                 try {
                     String cancel = createCancelMessage(request, config.getParser());
                     exchange.getIn().setBody(cancel);

@@ -21,6 +21,8 @@ import org.openehealth.ipf.commons.map.MappingService;
 /**
  * Default URI Mapper implementation that requires a {@link MappingService}
  * for URI-to-OID translation
+ *
+ * @since 3.1
  */
 public class DefaultUriMapper extends AbstractUriMapper {
 

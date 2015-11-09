@@ -31,6 +31,8 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
  * Translates HL7v2 PIX Query Response message into a {@link Parameters} resource
  * Also cares about error responses and throws the appropriate Exceptions for the
  * FHIR framework
+ *
+ * @since 3.1
  */
 class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir {
 

@@ -32,7 +32,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * HAPI FHIR restful server implementation
  *
+ * @since 3.1
  */
 public class CamelFhirServlet extends RestfulServer {
 

@@ -31,11 +31,12 @@ import org.apache.mina.core.filterchain.IoFilter;
 import org.apache.mina.core.session.IoSession;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.commons.ihe.core.chain.ChainUtils;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditUtils;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 
@@ -55,7 +56,7 @@ public abstract class MllpEndpoint
             ConfigType extends MllpEndpointConfiguration,
             ComponentType extends MllpComponent<ConfigType>
         >
-        extends DefaultEndpoint implements Hl7v2ConfigurationHolder
+        extends DefaultEndpoint implements HL7v2Endpoint
 {
 
     @Getter(AccessLevel.PROTECTED) private final ConfigType config;
@@ -83,25 +84,26 @@ public abstract class MllpEndpoint
     }
 
 
-    private synchronized List<Hl7v2Interceptor> getCustomInterceptors() {
-        List<Hl7v2Interceptor> result = new ArrayList<>();
-        for (Hl7v2InterceptorFactory customInterceptorFactory : config.getCustomInterceptorFactories()) {
+    private synchronized List<Interceptor> getCustomInterceptors() {
+        List<Interceptor> result = new ArrayList<>();
+        List<InterceptorFactory> factories = config.getCustomInterceptorFactories();
+        for (InterceptorFactory customInterceptorFactory : factories) {
             result.add(customInterceptorFactory.getNewInstance());
         }
         return result;
     }
 
 
-    protected abstract List<Hl7v2Interceptor> createInitialConsumerInterceptorChain();
-    protected abstract List<Hl7v2Interceptor> createInitialProducerInterceptorChain();
+    protected abstract List<Interceptor> createInitialConsumerInterceptorChain();
+    protected abstract List<Interceptor> createInitialProducerInterceptorChain();
 
 
-    private List<Hl7v2Interceptor> getConsumerInterceptorChain() {
+    private List<Interceptor> getConsumerInterceptorChain() {
         // set up initial interceptor chain
-        List<Hl7v2Interceptor> initialChain = createInitialConsumerInterceptorChain();
+        List<Interceptor> initialChain = createInitialConsumerInterceptorChain();
 
         // add interceptors provided by the user
-        List<Hl7v2Interceptor> additionalInterceptors = new ArrayList<>();
+        List<Interceptor> additionalInterceptors = new ArrayList<>();
         additionalInterceptors.addAll(mllpComponent.getAdditionalConsumerInterceptors());
         additionalInterceptors.addAll(getCustomInterceptors());
 
@@ -109,12 +111,12 @@ public abstract class MllpEndpoint
     }
 
 
-    private List<Hl7v2Interceptor> getProducerInterceptorChain() {
+    private List<Interceptor> getProducerInterceptorChain() {
         // set up initial interceptor chain
-        List<Hl7v2Interceptor> initialChain = createInitialProducerInterceptorChain();
+        List<Interceptor> initialChain = createInitialProducerInterceptorChain();
 
         // add interceptors provided by the user
-        List<Hl7v2Interceptor> additionalInterceptors = new ArrayList<>();
+        List<Interceptor> additionalInterceptors = new ArrayList<>();
         additionalInterceptors.addAll(mllpComponent.getAdditionalProducerInterceptors());
         additionalInterceptors.addAll(getCustomInterceptors());
 
@@ -131,11 +133,11 @@ public abstract class MllpEndpoint
     @Override
     public Consumer createConsumer(Processor originalProcessor) throws Exception {
         // configure interceptor chain
-        List<Hl7v2Interceptor> chain = getConsumerInterceptorChain();
+        List<Interceptor> chain = getConsumerInterceptorChain();
         Processor processor = originalProcessor;
         for (int i = chain.size() - 1; i >= 0; --i) {
-            Hl7v2Interceptor interceptor = chain.get(i);
-            interceptor.setConfigurationHolder(this);
+            Interceptor interceptor = chain.get(i);
+            interceptor.setEndpoint(this);
             interceptor.setWrappedProcessor(processor);
             processor = interceptor;
         }
@@ -189,7 +191,7 @@ public abstract class MllpEndpoint
         public void run(IoSession session) {
             if (config.isAudit()) {
                 String hostAddress = session.getRemoteAddress().toString();
-                MllpAuditStrategy.auditAuthenticationNodeFailure(hostAddress);
+                MllpAuditUtils.auditAuthenticationNodeFailure(hostAddress);
             }
         }
     }
@@ -302,7 +304,7 @@ public abstract class MllpEndpoint
     /**
      * @return the customInterceptorFactories
      */
-    public List<Hl7v2InterceptorFactory> getCustomInterceptorFactories() {
+    public List<InterceptorFactory> getCustomInterceptorFactories() {
         return config.getCustomInterceptorFactories();
     }
 

@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 
+import org.apache.camel.Endpoint;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.Interceptor2ProducerAdapter;
 
@@ -28,13 +30,13 @@ import java.util.List;
 public class Hl7v2InterceptorUtils {
 
     public static Producer adaptProducerChain(
-            List<Hl7v2Interceptor> chain,
-            Hl7v2ConfigurationHolder configurationHolder,
+            List<Interceptor> chain,
+            Endpoint endpoint,
             Producer originalProducer)
     {
         Processor processor = originalProducer;
-        for (Hl7v2Interceptor interceptor : chain) {
-            interceptor.setConfigurationHolder(configurationHolder);
+        for (Interceptor interceptor : chain) {
+            interceptor.setEndpoint(endpoint);
             interceptor.setWrappedProcessor(processor);
             processor = interceptor;
         }

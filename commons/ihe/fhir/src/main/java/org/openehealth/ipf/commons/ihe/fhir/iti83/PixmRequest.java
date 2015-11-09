@@ -7,6 +7,9 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 
 /**
  * A ITI-83 PIXm request object
+ *
+ * @author Christian Ohr
+ * @since 3.1
  */
 public class PixmRequest implements FhirObject {
 

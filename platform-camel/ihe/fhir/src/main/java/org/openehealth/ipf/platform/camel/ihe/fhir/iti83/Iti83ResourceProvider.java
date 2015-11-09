@@ -20,6 +20,7 @@ import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import org.hl7.fhir.instance.model.*;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequest;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.AbstractResourceProvider;
 

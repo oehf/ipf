@@ -88,7 +88,7 @@ In order to be placed appropriately in the chain, custom interceptors should def
 Example:
 
 ```java
-    public class MyInterceptor extends AbstractHl7v2Interceptor {
+    public class MyInterceptor extends InterceptorSupport {
         public MyInterceptor() {
             addAfter(ConsumerStringProcessingInterceptor.class.getName(),
                      ConsumerRequestDefragmenterInterceptor.class.getName());
@@ -108,7 +108,7 @@ applied when inserting a custom interceptor "X" into the given chain (see class 
 5. If neither "before" nor "after" are defined, "X" will be inserted at the end of the chain (thus providing compatible behavior with older IPF versions).
 6. If there are any conflicts, e.g. when the "bottommost" interceptor from the X's "after" list is placed below the "uppermost" one from the "before" list, or when circular dependencies are discovered, the chain construction fails.
 
-For thread-safety, the interceptor instances must be instantiated using a `org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory`
+For thread-safety, the interceptor instances must be instantiated using a `org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory`
 together with the *interceptorFactories* parameter:
 
 ```java
@@ -116,8 +116,8 @@ together with the *interceptorFactories* parameter:
        ....
 ```
 
-Each `Hl7v2InterceptorFactory` must implement the `getNewInstance()` method so that for each call a new instance 
-of the interceptor is returned. For convenience, there is an abstract class `Hl7v2InterceptorFactorySupport` 
+Each `InterceptorFactory` must implement the `getNewInstance()` method so that for each call a new instance 
+of the interceptor is returned. For convenience, there is an abstract class `InterceptorFactorySupport` 
 that takes the interceptor class as constructor parameter and instantiates interceptor instances by calling `Class#newInstance()`.
 
 

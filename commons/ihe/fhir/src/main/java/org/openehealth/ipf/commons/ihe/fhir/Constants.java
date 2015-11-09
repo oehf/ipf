@@ -17,12 +17,23 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 /**
- *
+ * @since 3.1
  */
 public interface Constants {
 
     String PIXM_OPERATION_NAME = "$ihe-pix";
     String SOURCE_IDENTIFIER_NAME = "sourceIdentifier";
     String TARGET_SYSTEM_NAME = "targetSystem";
+
+    // Parameter information from the HttpServletRequest
+    String HTTP_URI = "FhirHttpUri";
+    String HTTP_METHOD = "FhirHttpMethod";
+    String HTTP_QUERY = "FhirHttpQuery";
+    String HTTP_CHARACTER_ENCODING = "FhirHttpCharacterEncoding";
+    String HTTP_CONTENT_TYPE = "FhirHttpContentType";
+    String HTTP_PROTOCOL_VERSION = "FhirHttpProtocolVersion";
+    String HTTP_CLIENT_IP_ADDRESS = "FhirHttpClientIpAddress";
+
+
 
 }

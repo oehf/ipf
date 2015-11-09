@@ -40,6 +40,8 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
  * Camel endpoint used to create producers and consumers based on webservice calls.
  * @author Jens Riemschneider
  * @author Dmytro Rud
+ *
+ * TODO make this implement AuditableEndpoint?
  */
 @ManagedResource(description = "Managed IPF eHealth Web Service Endpoint")
 public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsComponent<?>>

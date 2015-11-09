@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.model.Message;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 /**
- *
+ * @since 3.1
  */
 public interface TranslatorHL7v2ToFhir {
 

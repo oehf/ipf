@@ -19,7 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 import lombok.Getter;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 
 import javax.net.ssl.SSLContext;
@@ -38,7 +38,7 @@ public class MllpEndpointConfiguration implements Serializable {
 
     @Getter private final boolean audit;
     @Getter private final SSLContext sslContext;
-    @Getter private final List<Hl7v2InterceptorFactory> customInterceptorFactories;
+    @Getter private final List<InterceptorFactory> customInterceptorFactories;
     @Getter private final ClientAuthType clientAuthType;
     @Getter private final String[] sslProtocols;
     @Getter private final String[] sslCiphers;
@@ -77,7 +77,7 @@ public class MllpEndpointConfiguration implements Serializable {
                 parameters, "segmentFragmentationThreshold", int.class, -1);                // >= 5 characters
 
         customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
-                parameters, "interceptorFactories", Hl7v2InterceptorFactory.class);
+                parameters, "interceptorFactories", InterceptorFactory.class);
 
         dispatcher = component.resolveAndRemoveReferenceParameter(parameters, "dispatcher", ConsumerDispatchingInterceptor.class);
 

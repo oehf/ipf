@@ -26,6 +26,8 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Basis for Strategy pattern implementation for ATNA Auditing
  * in Web Service-based IHE transactions.
  *
+ * TODO can this be replaced with AuditStrategy/AuditStrategySupport ?
+ *
  * @param <T>
  *     type of audit dataset.
  *

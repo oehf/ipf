@@ -19,6 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.spi.UriEndpoint;
+import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 

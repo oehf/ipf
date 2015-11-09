@@ -16,12 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptorUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpAuditInterceptor;
 
 import java.net.InetAddress;
 
@@ -31,8 +31,8 @@ import java.net.InetAddress;
  * @author Dmytro Rud
  */
 public class ProducerAuditInterceptor<T extends MllpAuditDataset>
-        extends AbstractMllpInterceptor<MllpTransactionEndpoint<T>>
-        implements AuditInterceptor {
+        extends InterceptorSupport<MllpTransactionEndpoint<T>>
+        implements MllpAuditInterceptor<T> {
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -46,12 +46,11 @@ public class ProducerAuditInterceptor<T extends MllpAuditDataset>
             MllpAuditDataset auditDataset) throws Exception
     {
         auditDataset.setLocalAddress(InetAddress.getLocalHost().getCanonicalHostName());
-        auditDataset.setRemoteAddress(getMllpEndpoint().getEndpointUri());
+        auditDataset.setRemoteAddress(getEndpoint().getEndpointUri());
     }
 
-
     @Override
-    public MllpAuditStrategy<T> getAuditStrategy() {
-        return getMllpEndpoint().getClientAuditStrategy();
+    public AuditStrategy<T> getAuditStrategy() {
+        return getEndpoint().getClientAuditStrategy();
     }
 }

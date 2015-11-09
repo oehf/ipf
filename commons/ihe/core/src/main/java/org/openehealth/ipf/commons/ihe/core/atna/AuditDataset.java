@@ -21,8 +21,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * A generic data structure used to store information pieces 
- * needed for ATNA auditing.
+ * A generic data structure used to store information pieces needed for ATNA auditing.
  * 
  * @author Dmytro Rud
  */

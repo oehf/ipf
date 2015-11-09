@@ -17,10 +17,13 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
+import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
 
 /**
  * Static configuration for FHIR components. This configuration cannot be altered in the
  * endpoint URI.
+ *
+ * @since 3.1
  */
 public class FhirComponentConfiguration<T extends FhirAuditDataset> {
 

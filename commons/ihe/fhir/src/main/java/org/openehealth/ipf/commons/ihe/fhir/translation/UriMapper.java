@@ -19,8 +19,13 @@ package org.openehealth.ipf.commons.ihe.fhir.translation;
 import java.net.URISyntaxException;
 
 /**
- * FHIR usually works with URIs in order to identify assigning authorities, code systems etc.
- * in contrast to HL7v2 and HL7v3 that either use OIDs or just namespace identifiers.
+ * The FHIR Identifier type introduces a new mechanism for conveying the originating system of a particular identifier.
+ * Whereas HL7 Version 2 and Version 3 messages identify an assigning 1480 organization as a HD or an OID in the “root”
+ * attribute respectively, HL7 FHIR permits the use of a URI. This requires some configuration on the part of actors
+ * to correctly map a URL to an OID or HD to maintain consistency with other actors which are not implementing the
+ * FHIR specification.
+ *
+ * @since 3.1
  */
 public interface UriMapper {
 

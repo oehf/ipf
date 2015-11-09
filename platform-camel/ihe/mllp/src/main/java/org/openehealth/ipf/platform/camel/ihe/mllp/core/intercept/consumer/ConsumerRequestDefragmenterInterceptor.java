@@ -23,10 +23,9 @@ import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,19 +39,19 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * 
  * @author Dmytro Rud
  */
-public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpInterceptor<MllpTransactionEndpoint> {
+public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<MllpTransactionEndpoint> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerRequestDefragmenterInterceptor.class);
     
     // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  
     private UnsolicitedFragmentationStorage storage;
 
+
     @Override
-    public void setConfigurationHolder(Hl7v2ConfigurationHolder configurationHolder) {
-        super.setConfigurationHolder(configurationHolder);
-        this.storage = getMllpEndpoint().getUnsolicitedFragmentationStorage();
+    public void setEndpoint(MllpTransactionEndpoint endpoint) {
+        super.setEndpoint(endpoint);
+        this.storage = getEndpoint().getUnsolicitedFragmentationStorage();
         Validate.notNull(storage);
     }
-
 
     /**
      * Accumulates fragments and passes the "big" message to the processing route. 
@@ -60,7 +59,7 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
     @Override
     public void process(Exchange exchange) throws Exception {
         String requestString = exchange.getIn().getBody(String.class);
-        Parser parser = getHl7v2TransactionConfiguration().getParser();
+        Parser parser = getEndpoint().getHl7v2TransactionConfiguration().getParser();
         Message requestMessage = parser.parse(requestString);
         Terser requestTerser = new Terser(requestMessage);
         String msh14 = requestTerser.get("MSH-14");

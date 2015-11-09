@@ -19,13 +19,14 @@ import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.preparser.PreParser;
 import org.apache.camel.*;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpConsumer;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpDispatchEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,12 +41,12 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  *
  * @author Dmytro Rud
  */
-public final class ConsumerDispatchingInterceptor extends AbstractMllpInterceptor<MllpDispatchEndpoint>
+public final class ConsumerDispatchingInterceptor extends InterceptorSupport<MllpDispatchEndpoint>
         implements StartupListener {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerDispatchingInterceptor.class);
 
     private final List<String> routeIds = new ArrayList<>();
-    private Map<String, Hl7v2Interceptor> map = new HashMap<>();
+    private Map<String, Interceptor<? extends MllpEndpoint>> map = new HashMap<>();
 
 
     /**
@@ -109,12 +110,12 @@ public final class ConsumerDispatchingInterceptor extends AbstractMllpIntercepto
         for (String routeId : routeIds) {
             try {
                 MllpConsumer consumer = (MllpConsumer) camelContext.getRoute(routeId).getConsumer();
-                Hl7v2Interceptor interceptor = (Hl7v2Interceptor) consumer.getProcessor();
+                Interceptor interceptor = (Interceptor) consumer.getProcessor();
                 while (!(interceptor instanceof ConsumerStringProcessingInterceptor)) {
-                    interceptor = (Hl7v2Interceptor) interceptor.getWrappedProcessor();
+                    interceptor = (Interceptor) interceptor.getWrappedProcessor();
                 }
                 LOG.debug("Adding MLLP transaction route {} to dispatcher", routeId);
-                map.put(routeId, (Hl7v2Interceptor) interceptor.getWrappedProcessor());
+                map.put(routeId, (Interceptor) interceptor.getWrappedProcessor());
             } catch (NullPointerException e) {
                 throw new CamelException("Route with ID='" + routeId + "' not found or is not an IPF MLLP route", e);
             } catch (ClassCastException e) {
@@ -138,8 +139,8 @@ public final class ConsumerDispatchingInterceptor extends AbstractMllpIntercepto
         // check who can accept the message
         boolean found = false;
         for (String routeId : routeIds) {
-            Hl7v2Interceptor interceptor = map.get(routeId);
-            Hl7v2TransactionConfiguration config = interceptor.getConfigurationHolder().getHl7v2TransactionConfiguration();
+            Interceptor<? extends MllpEndpoint> interceptor = map.get(routeId);
+            Hl7v2TransactionConfiguration config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
             try {
                 config.checkMessageAcceptance(messageType, triggerEvent, messageStructure, version, true);
 
@@ -158,7 +159,7 @@ public final class ConsumerDispatchingInterceptor extends AbstractMllpIntercepto
                     messageType, triggerEvent, messageStructure, version);
             HL7Exception exception = new HL7Exception(
                     "Unsupported message type and/or version", ErrorCode.APPLICATION_INTERNAL_ERROR);
-            resultMessage(exchange).setBody(getNakFactory().createDefaultNak(exception).encode());
+            resultMessage(exchange).setBody(getEndpoint().getNakFactory().createDefaultNak(exception).encode());
         }
     }
 

@@ -23,6 +23,8 @@ import java.util.Objects;
 
 /**
  * URI mapper base implementation that recognizes and creates OID URNs
+ *
+ * @since 3.1
  */
 public abstract class AbstractUriMapper implements UriMapper {
 

@@ -18,7 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 
 /**
  * Consumer-side HL7v2 interceptor which echoes one segment from
@@ -28,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Inter
  *
  * @author Dmytro Rud
  */
-public class ConsumerSegmentEchoingInterceptor extends AbstractHl7v2Interceptor {
+public class ConsumerSegmentEchoingInterceptor extends InterceptorSupport<HL7v2Endpoint> {
     private final String segmentName;
 
 
