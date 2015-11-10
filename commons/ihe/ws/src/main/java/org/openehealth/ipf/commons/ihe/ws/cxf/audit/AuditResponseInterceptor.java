@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -37,10 +38,10 @@ import org.w3c.dom.Element;
  * 
  * @author Dmytro Rud
  */
-public class AuditResponseInterceptor extends AbstractAuditInterceptor {
+public class AuditResponseInterceptor<T extends WsAuditDataset> extends AbstractAuditInterceptor<T> {
     private static final transient Logger LOG = LoggerFactory.getLogger(AuditResponseInterceptor.class);
 
-    private final AsynchronyCorrelator correlator;
+    private final AsynchronyCorrelator<T> correlator;
     private final boolean asyncReceiver;
     private final boolean serverSide;
     
@@ -60,9 +61,9 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
      *      on the asynchronous receiver side. 
      */
     public AuditResponseInterceptor(
-            WsAuditStrategy auditStrategy,
+            AuditStrategy<T> auditStrategy,
             boolean serverSide,
-            AsynchronyCorrelator correlator,
+            AsynchronyCorrelator<T> correlator,
             boolean asyncReceiver) 
     {
         super(isClient(asyncReceiver, serverSide) ? Phase.INVOKE : Phase.PREPARE_SEND, auditStrategy);
@@ -99,12 +100,12 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
 
         // check whether the response is relevant for ATNA audit finalization
         Object response = extractPojo(message);
-        WsAuditStrategy auditStrategy = getAuditStrategy();
+        AuditStrategy<T> auditStrategy = getAuditStrategy();
         if (! auditStrategy.isAuditableResponse(response)) {
             return;
         }
 
-        WsAuditDataset auditDataset = null;
+        T auditDataset = null;
 
         // try to get the audit dataset from the asynchrony correlator --
         // will work only when we are on asynchronous receiver, and the WSA
@@ -147,11 +148,11 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
         {
             auditDataset.setEventOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
         } else {
-            auditStrategy.enrichDatasetFromResponse(response, auditDataset);
+            auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response);
         }
         
         // perform transaction-specific auditing
-        auditStrategy.audit(auditDataset);
+        auditStrategy.doAudit(auditDataset);
     }
     
 }

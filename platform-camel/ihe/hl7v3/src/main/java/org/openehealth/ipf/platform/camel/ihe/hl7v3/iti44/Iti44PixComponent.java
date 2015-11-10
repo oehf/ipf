@@ -25,6 +25,7 @@ import javax.xml.namespace.QName;
  * The Camel component for the ITI-44 transaction (PIX Feed v3).
  */
 public class Iti44PixComponent extends AbstractIti44Component {
+
     private static final String NS_URI_PIX = "urn:ihe:iti:pixv3:2007";
     public static final Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             IpfInteractionId.ITI_44_PIX,

@@ -60,10 +60,10 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
 
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, Iti64AuditDataset auditDataset) {
+    public void doAudit(Iti64AuditDataset auditDataset) {
         AuditorManager.getCustomPixAuditor().auditIti64(
                 isServerSide(),
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 isServerSide() ? auditDataset.getRemoteAddress() : auditDataset.getLocalAddress(),
                 auditDataset.getSendingFacility(),
                 auditDataset.getSendingApplication(),

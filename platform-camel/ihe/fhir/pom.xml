@@ -44,7 +44,7 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
-            <scope>optional</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>

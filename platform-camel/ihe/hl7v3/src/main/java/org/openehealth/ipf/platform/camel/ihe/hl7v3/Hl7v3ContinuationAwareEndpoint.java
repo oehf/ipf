@@ -17,12 +17,15 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import java.util.List;
 import java.util.Map;
@@ -30,11 +33,11 @@ import java.util.Map;
 /**
  * Camel endpoint implementation for HL7v3-based IHE components
  * with interactive response continuation support.
+ *
  * @author Dmytro Rud
  */
 public class Hl7v3ContinuationAwareEndpoint
-        extends Hl7v3Endpoint<Hl7v3ContinuationAwareWsTransactionConfiguration>
-{
+        extends Hl7v3Endpoint<Hl7v3ContinuationAwareWsTransactionConfiguration> {
     /**
      * Whether this endpoint should support HL7v3 continuation.
      */
@@ -70,15 +73,18 @@ public class Hl7v3ContinuationAwareEndpoint
     public Hl7v3ContinuationAwareEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<Hl7v3ContinuationAwareWsTransactionConfiguration> component,
+            Hl7v3Component<Hl7v3ContinuationAwareWsTransactionConfiguration> component,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
-            Map<String, Object> properties)
-    {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties);
+            Map<String, Object> properties) {
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, null);
     }
 
+    @Override
+    public AbstractWsProducer getProducer(AbstractWsEndpoint<Hl7v3AuditDataset,Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint, JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
+        return new Hl7v3ContinuationAwareProducer(this, getJaxWsClientFactory());
+    }
 
     /**
      * Returns <code>true</code> when this endpoint supports HL7v3 continuation.
@@ -96,7 +102,7 @@ public class Hl7v3ContinuationAwareEndpoint
      * fragment, when the request does not contain "initialQuantity" element.
      * Negative values mean "no continuation, when initialQuantity is not
      * specified".
-     * <p>
+     * <p/>
      * This parameter is relevant only on consumer side.
      */
     public int getDefaultContinuationThreshold() {
@@ -109,7 +115,7 @@ public class Hl7v3ContinuationAwareEndpoint
 
     /**
      * Returns storage bean for continuation fragments.
-     * <p>
+     * <p/>
      * This parameter is relevant only on consumer side.
      */
     public Hl7v3ContinuationStorage getContinuationStorage() {
@@ -124,8 +130,8 @@ public class Hl7v3ContinuationAwareEndpoint
      * Returns <code>true</code> when a "cancel continuation" message should
      * be automatically sent to the server after all continuation fragments
      * have been read.
-     * <p>
-     * This parameter is relevant only on producer side. 
+     * <p/>
+     * This parameter is relevant only on producer side.
      */
     public boolean isAutoCancel() {
         return autoCancel;
@@ -136,9 +142,8 @@ public class Hl7v3ContinuationAwareEndpoint
     }
 
     /**
-     * @return
-     *      <code>true</code> when messages, which are internally handled
-     *      when performing HL7v3 interactive continuation, should be validated.
+     * @return <code>true</code> when messages, which are internally handled
+     * when performing HL7v3 interactive continuation, should be validated.
      */
     public boolean isValidationOnContinuation() {
         return validationOnContinuation;
@@ -150,10 +155,9 @@ public class Hl7v3ContinuationAwareEndpoint
 
 
     /**
-     * @return
-     *      <code>true</code> if ATNA audit strategies must be manually applied
-     *      in Camel producer and consumer instead of CXF interceptors.
-     *      This will be the case when interactive response continuation is supported.
+     * @return <code>true</code> if ATNA audit strategies must be manually applied
+     * in Camel producer and consumer instead of CXF interceptors.
+     * This will be the case when interactive response continuation is supported.
      */
     public boolean isManualAudit() {
         return (isAudit() && isSupportContinuation());
@@ -161,7 +165,7 @@ public class Hl7v3ContinuationAwareEndpoint
 
 
     @Override
-    public JaxWsClientFactory getJaxWsClientFactory() {
+    public JaxWsClientFactory<Hl7v3AuditDataset> getJaxWsClientFactory() {
         return new Hl7v3ClientFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
@@ -172,7 +176,7 @@ public class Hl7v3ContinuationAwareEndpoint
 
 
     @Override
-    public JaxWsServiceFactory getJaxWsServiceFactory() {
+    public JaxWsServiceFactory<Hl7v3AuditDataset> getJaxWsServiceFactory() {
         return new Hl7v3ServiceFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),

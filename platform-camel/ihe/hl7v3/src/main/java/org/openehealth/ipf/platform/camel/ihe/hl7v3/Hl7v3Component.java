@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.fhir.atna.iti83;
 
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+package org.openehealth.ipf.platform.camel.ihe.hl7v3;
+
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
 /**
- * Strategy for auditing ITI-83 transactions on the client side
+ * Base class for all Camel components implementing IHE HL7v3 transactions
  *
+ * @param <ConfigType> configuration type
  * @since 3.1
  */
-public class Iti83ClientAuditStrategy extends Iti83AuditStrategy {
-
-    public Iti83ClientAuditStrategy() {
-        super(false);
-    }
-
-    @Override
-    public void doAudit(Iti83AuditDataset auditDataset) {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+public abstract class Hl7v3Component<ConfigType extends Hl7v3WsTransactionConfiguration>
+        extends AbstractWsComponent<Hl7v3AuditDataset, ConfigType> {
 
 }

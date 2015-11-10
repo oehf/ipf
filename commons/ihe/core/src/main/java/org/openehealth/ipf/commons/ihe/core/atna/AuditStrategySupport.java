@@ -60,4 +60,5 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
     public boolean isAuditableResponse(Object response) {
         return true;
     }
+
 }

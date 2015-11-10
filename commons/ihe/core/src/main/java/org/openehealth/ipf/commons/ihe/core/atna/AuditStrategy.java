@@ -24,6 +24,7 @@ import java.util.Map;
  * dedicated subclass of {@link AuditDataset} containing the data for the audit record.
  *
  * @author Christian Ohr
+ * @since 3.1
  */
 public interface AuditStrategy<T extends AuditDataset> {
 
@@ -59,10 +60,9 @@ public interface AuditStrategy<T extends AuditDataset> {
     /**
      * Performs the actual ATNA audit.
      *
-     * @param eventOutcome Transaction completion status.
      * @param auditDataset Collected audit dataset.
      */
-    void doAudit(RFC3881EventOutcomeCodes eventOutcome, T auditDataset);
+    void doAudit(T auditDataset);
 
     /**
      * Determines whether the given response finalizes the interaction

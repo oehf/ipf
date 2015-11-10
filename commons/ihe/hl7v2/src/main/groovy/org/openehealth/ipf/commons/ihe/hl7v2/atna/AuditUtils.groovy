@@ -81,11 +81,10 @@ class AuditUtils {
         }
         
         try {
-            RFC3881EventOutcomeCodes eventOutcome = fault ?
+            auditDataset.eventOutcomeCode = fault ?
                     RFC3881EventOutcomeCodes.MAJOR_FAILURE :
                     RFC3881EventOutcomeCodes.SUCCESS;
-
-            auditStrategy.doAudit(eventOutcome, auditDataset);
+            auditStrategy.doAudit(auditDataset);
 
         } catch (Exception e) {
             LOG.error('ATNA auditing failed', e);

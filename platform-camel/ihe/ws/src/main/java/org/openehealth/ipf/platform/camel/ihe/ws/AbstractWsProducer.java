@@ -36,6 +36,7 @@ import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,10 +56,12 @@ import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserD
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public abstract class AbstractWsProducer<InType, OutType> extends DefaultProducer {
+public abstract class AbstractWsProducer<
+        AuditDatasetType extends WsAuditDataset,
+        ConfigType extends WsTransactionConfiguration, InType, OutType> extends DefaultProducer {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractWsProducer.class);
 
-    private final JaxWsClientFactory clientFactory;
+    private final JaxWsClientFactory<AuditDatasetType> clientFactory;
     private final Class<InType> requestClass;
     private final Class<OutType> responseClass;
 
@@ -76,8 +79,8 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
      */
     @SuppressWarnings("unchecked")
     public AbstractWsProducer(
-            AbstractWsEndpoint endpoint,
-            JaxWsClientFactory clientFactory,
+            AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint,
+            JaxWsClientFactory<AuditDatasetType> clientFactory,
             Class<InType> requestClass, 
             Class<OutType> responseClass)
     {

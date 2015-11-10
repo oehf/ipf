@@ -17,15 +17,16 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
+
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
 
@@ -33,7 +34,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * Factory for HL7 v3 Web Services.
  * @author Dmytro Rud
  */
-public class Hl7v3ServiceFactory extends JaxWsServiceFactory {
+public class Hl7v3ServiceFactory extends JaxWsServiceFactory<Hl7v3AuditDataset> {
     /**
      * Constructs the factory.
      * @param wsTransactionConfiguration
@@ -50,7 +51,7 @@ public class Hl7v3ServiceFactory extends JaxWsServiceFactory {
     public Hl7v3ServiceFactory(
             Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
-            WsAuditStrategy auditStrategy,
+            AuditStrategy<Hl7v3AuditDataset> auditStrategy,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
@@ -68,11 +69,11 @@ public class Hl7v3ServiceFactory extends JaxWsServiceFactory {
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
-            svrFactory.getInInterceptors().add(new AuditInRequestInterceptor(
+            svrFactory.getInInterceptors().add(new AuditInRequestInterceptor<>(
                     auditStrategy, getWsTransactionConfiguration()));
 
-            AuditResponseInterceptor auditInterceptor =
-                new AuditResponseInterceptor(auditStrategy, true, null, false);
+            AuditResponseInterceptor<Hl7v3AuditDataset> auditInterceptor =
+                new AuditResponseInterceptor<>(auditStrategy, true, null, false);
             svrFactory.getOutInterceptors().add(auditInterceptor);
             svrFactory.getOutFaultInterceptors().add(auditInterceptor);
         }

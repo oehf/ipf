@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
@@ -27,7 +27,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Basis for Strategy pattern implementation for ATNA Auditing in XDS transactions.
  * @author Dmytro Rud
  */
-public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends WsAuditStrategy<T> {
+public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditStrategySupport<T> {
 
     /**
      * Constructs an XDS audit strategy.
@@ -72,7 +72,10 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends WsAudi
 
 
     @Override
-    public void enrichDatasetFromResponse(Object response, T auditDataset) throws Exception {
-        auditDataset.setEventOutcomeCode(getEventOutcomeCode(response));
+    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
+        RFC3881EventOutcomeCodes outcomeCodes = getEventOutcomeCode(response);
+        auditDataset.setEventOutcomeCode(outcomeCodes);
+        return outcomeCodes == RFC3881EventOutcomeCodes.SUCCESS;
     }
+
 }

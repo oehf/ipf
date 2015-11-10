@@ -18,7 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 import groovy.util.slurpersupport.GPathResult;
 import org.apache.camel.Exchange;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55PortType;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -34,10 +36,10 @@ import java.util.Map;
  * with support of the Deferred Response option.
  * @author Dmytro Rud
  */
-class Iti55Producer extends AbstractWsProducer<String, String> {
+class Iti55Producer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, String, String> {
     private static final String PROCESSING_MODE_PROPERTY = Iti55Producer.class.getName() + ".MODE";
 
-    Iti55Producer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
+    Iti55Producer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint, JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
         super(endpoint, clientFactory, String.class, String.class);
     }
 

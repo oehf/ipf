@@ -15,26 +15,33 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
-import javax.xml.namespace.QName;
-
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
+import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.SimpleHl7v2WsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
+
+import javax.xml.namespace.QName;
+import java.util.Map;
 
 
 /**
  * Camel component for the IHE PCD-01 transaction.
  */
-public class Pcd01Component extends AbstractHl7v2WsComponent {
+public class Pcd01Component extends AbstractHl7v2WsComponent<WsAuditDataset> {
+
     private static final String NS_URI = "urn:ihe:pcd:dec:2010";
     public static final WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName(NS_URI, "DeviceObservationConsumer_Service", "ihe"),
@@ -63,6 +70,25 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
 
     private static final NakFactory NAK_FACTORY = new NakFactory(HL7V2_CONFIG, false, "ACK^R01^ACK");
 
+    @Override
+    @SuppressWarnings("unchecked") // Required because of base class
+    protected Endpoint createEndpoint(String uri, String remaining, @SuppressWarnings("rawtypes") Map parameters) throws Exception {
+        return new SimpleHl7v2WsEndpoint<WsAuditDataset, Pcd01Component>(
+                uri,
+                remaining,
+                this,
+                getCustomInterceptors(parameters),
+                getFeatures(parameters),
+                getSchemaLocations(parameters),
+                getProperties(parameters),
+                Pcd01Service.class) {
+            @Override
+            public AbstractWsProducer getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint,
+                                                  JaxWsClientFactory<WsAuditDataset> clientFactory) {
+                return new SimpleWsProducer<>(endpoint, clientFactory, String.class, String.class);
+            }
+        };
+    }
 
     @Override
     public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
@@ -80,17 +106,13 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<WsAuditDataset> getClientAuditStrategy() {
         return null;  // not defined for this transaction
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<WsAuditDataset> getServerAuditStrategy() {
         return null;   // not defined for this transaction
     }
 
-    @Override
-    public AbstractWebService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return new Pcd01Service();
-    }
 }

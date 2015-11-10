@@ -15,26 +15,27 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56;
 
-import java.util.Map;
-
-import javax.xml.namespace.QName;
-
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56PortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
+
+import javax.xml.namespace.QName;
+import java.util.Map;
 
 /**
  * The Camel component for the ITI-56 transaction (XCPD).
  */
-public class Iti56Component extends AbstractWsComponent<Hl7v3WsTransactionConfiguration> {
+public class Iti56Component extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
     public final static Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             IpfInteractionId.ITI_56,
@@ -48,14 +49,21 @@ public class Iti56Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
             true,
             true);
 
-    @SuppressWarnings({ "unchecked", "rawtypes" }) // Required because of base class
+    @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Hl7v3Endpoint<>(uri, remaining, this,
+        return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters),
+                Iti56Service.class) {
+            @Override
+            public AbstractWsProducer getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
+                                                  JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
+                return new SimpleWsProducer<>(endpoint, clientFactory, String.class, String.class);
+            }
+        };
     }
 
     @Override
@@ -64,22 +72,13 @@ public class Iti56Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
         return new Iti56AuditStrategy(false);
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
         return new Iti56AuditStrategy(true);
     }
 
-    @Override
-    public Iti56Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return new Iti56Service();
-    }
-
-    @Override
-    public SimpleWsProducer<String, String> getProducer(AbstractWsEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
-        return new SimpleWsProducer<>(endpoint, clientFactory, String.class, String.class);
-    }
 }

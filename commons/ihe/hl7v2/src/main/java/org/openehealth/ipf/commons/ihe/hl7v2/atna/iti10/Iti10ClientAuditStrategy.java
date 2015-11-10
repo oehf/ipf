@@ -26,10 +26,9 @@ public class Iti10ClientAuditStrategy extends Iti10AuditStrategy {
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome,
-            QueryAuditDataset auditDataset) {
+    public void doAudit(QueryAuditDataset auditDataset) {
         AuditorManager.getPIXManagerAuditor().auditUpdateNotificationEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getLocalAddress(),
                 auditDataset.getSendingFacility(),
                 auditDataset.getSendingApplication(),

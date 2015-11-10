@@ -26,10 +26,9 @@ public class Iti31ServerAuditStrategy extends Iti31AuditStrategy {
 
     @Override
     protected void callCreateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti31AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXManagerAuditor().auditCreatePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getSendingFacility(),
                 auditDataset.getSendingApplication(),
@@ -43,10 +42,9 @@ public class Iti31ServerAuditStrategy extends Iti31AuditStrategy {
 
     @Override
     protected void callUpdateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti31AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXManagerAuditor().auditUpdatePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getSendingFacility(),
                 auditDataset.getSendingApplication(),
@@ -60,10 +58,9 @@ public class Iti31ServerAuditStrategy extends Iti31AuditStrategy {
 
     @Override
     protected void callDeleteAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti31AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXManagerAuditor().auditDeletePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getSendingFacility(),
                 auditDataset.getSendingApplication(),

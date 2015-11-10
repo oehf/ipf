@@ -66,10 +66,10 @@ public class ConsumerAuditInterceptor<T extends FhirAuditDataset>
         } finally {
             if (auditDataset != null) {
                 try {
-                    RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome = failed ?
+                    auditDataset.setEventOutcomeCode(failed ?
                             RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE :
-                            RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
-                    getAuditStrategy().doAudit(eventOutcome, auditDataset);
+                            RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS);
+                    getAuditStrategy().doAudit(auditDataset);
                 } catch (Exception e) {
                     LOG.error("ATNA auditing failed", e);
                 }

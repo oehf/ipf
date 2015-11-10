@@ -33,9 +33,9 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
     
     
     @Override
-    void enrichDatasetFromRequest(Object request, Hl7v3AuditDataset auditDataset) {
+    Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         request = slurp(request)
-        super.enrichDatasetFromRequest(request, auditDataset)
+        super.enrichAuditDatasetFromRequest(auditDataset, request, parameters)
 
         // query ID
         auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
@@ -43,6 +43,7 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
         // home community ID
         auditDataset.homeCommunityId = 
             request.sender.device.asAgent.representedOrganization.id.@root.text() ?: null
+        auditDataset
     }
 
 

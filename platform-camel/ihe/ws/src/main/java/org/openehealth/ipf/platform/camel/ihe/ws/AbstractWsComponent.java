@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
-import java.util.List;
-import java.util.Map;
-
 import org.apache.camel.impl.DefaultComponent;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
@@ -26,21 +23,25 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.message.Message;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Base component class for Web Service-based IHE components.
- * @author Dmytro Rud
+
+ * @param <AuditDatasetType> audit type
+ * @param <ConfigType> configuration type
  *
- * TODO make this implement AuditableComponent
+ * @author Dmytro Rud
  */
-abstract public class AbstractWsComponent<ConfigType extends WsTransactionConfiguration>
-        extends DefaultComponent
-{
+abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDataset, ConfigType extends WsTransactionConfiguration>
+        extends DefaultComponent implements AuditableComponent<AuditDatasetType> {
 
     protected InterceptorProvider getCustomInterceptors(Map<String, Object> parameters) {
         AbstractBasicInterceptorProvider provider = new AbstractBasicInterceptorProvider() {};
-        
         provider.setInInterceptors(castList(resolveAndRemoveReferenceListParameter(
                 parameters, "inInterceptors", Interceptor.class)));
         provider.setInFaultInterceptors(castList(resolveAndRemoveReferenceListParameter(
@@ -65,42 +66,6 @@ abstract public class AbstractWsComponent<ConfigType extends WsTransactionConfig
      *      server endpoints of this transaction.
      */
     public abstract ConfigType getWsTransactionConfiguration();
-
-    /**
-     * @return
-     *      transaction-specific client-side ATNA audit strategy instance.
-     */
-    public abstract WsAuditStrategy getClientAuditStrategy();
-
-    /**
-     * @return
-     *      transaction-specific server-side ATNA audit strategy instance.
-     */
-    public abstract WsAuditStrategy getServerAuditStrategy();
-
-    /**
-     * Constructs and returns a transaction-specific service class instance
-     * for the given endpoint.
-     * @param endpoint
-     *      Camel endpoint.
-     * @return
-     *      service class instance for the given endpoint.
-     */
-    public abstract AbstractWebService getServiceInstance(AbstractWsEndpoint<?> endpoint);
-
-    /**
-     * Constructs and returns a transaction-specific Camel producer instance
-     * for the given endpoint.
-     * @param endpoint
-     *      Camel endpoint.
-     * @param clientFactory
-     *      JAX-WS client factory instance.
-     * @return
-     *      Camel producer instance.
-     */
-    public abstract AbstractWsProducer getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory);
 
 
     protected List<AbstractFeature> getFeatures(Map<String, Object> parameters) {

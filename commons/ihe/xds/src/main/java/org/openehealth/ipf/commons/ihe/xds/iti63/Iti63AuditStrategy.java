@@ -30,7 +30,7 @@ public class Iti63AuditStrategy extends XdsQueryAuditStrategy30 {
     }
 
     @Override
-    public void doAudit(XdsQueryAuditDataset auditDataset) throws Exception {
+    public void doAudit(XdsQueryAuditDataset auditDataset) {
         AuditorManager.getCustomXdsAuditor().auditIti63(
                 isServerSide(),
                 auditDataset.getEventOutcomeCode(),

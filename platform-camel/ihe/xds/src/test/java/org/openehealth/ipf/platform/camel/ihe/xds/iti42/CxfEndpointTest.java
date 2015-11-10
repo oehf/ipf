@@ -30,6 +30,7 @@ import org.openehealth.ipf.commons.ihe.ws.server.ServletServer;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
@@ -85,7 +86,7 @@ public class CxfEndpointTest {
     public void test() throws Exception {
         runRequestAndExpectFailure();
 
-        JaxWsServiceFactory serviceFactory = new XdsServiceFactory(
+        JaxWsServiceFactory<XdsAuditDataset> serviceFactory = new XdsServiceFactory<>(
                 Iti42Component.WS_CONFIG, "/iti-42", null, null, null);
         ServerFactoryBean factory = serviceFactory.createServerFactory(MyIti42.class);
         Server serviceServer = factory.create();

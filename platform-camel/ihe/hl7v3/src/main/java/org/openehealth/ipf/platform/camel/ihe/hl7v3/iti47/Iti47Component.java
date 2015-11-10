@@ -15,28 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47;
 
-import java.util.Map;
-
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47PortType;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import javax.xml.namespace.QName;
+import java.util.Map;
 
 /**
  * The Camel component for the ITI-47 transaction (PDQ v3).
  */
-public class Iti47Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsTransactionConfiguration> {
+public class Iti47Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransactionConfiguration> {
+
     private final static String NS_URI = "urn:ihe:iti:pdqv3:2007";
     public final static Hl7v3ContinuationAwareWsTransactionConfiguration WS_CONFIG = new Hl7v3ContinuationAwareWsTransactionConfiguration(
             IpfInteractionId.ITI_47,
@@ -59,7 +57,17 @@ public class Iti47Component extends AbstractWsComponent<Hl7v3ContinuationAwareWs
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters)) {
+
+            @Override
+            protected <T extends AbstractWebService> T getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
+                Hl7v3ContinuationAwareEndpoint endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
+                return endpoint2.isSupportContinuation() ?
+                        (T)new Iti47ContinuationAwareService(endpoint2) :
+                        (T)new Iti47Service();
+            }
+
+        };
     }
 
     @Override
@@ -68,30 +76,14 @@ public class Iti47Component extends AbstractWsComponent<Hl7v3ContinuationAwareWs
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
         return new Iti47AuditStrategy(false);
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
         return new Iti47AuditStrategy(true);
     }
 
-    @Override
-    public AbstractHl7v3WebService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        Hl7v3ContinuationAwareEndpoint endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
-        return endpoint2.isSupportContinuation() ?
-                new Iti47ContinuationAwareService(endpoint2) :
-                new Iti47Service();
-    }
 
-    @Override
-    public AbstractWsProducer getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        return new Hl7v3ContinuationAwareProducer(
-                (Hl7v3ContinuationAwareEndpoint) endpoint,
-                clientFactory);
-    }
 }

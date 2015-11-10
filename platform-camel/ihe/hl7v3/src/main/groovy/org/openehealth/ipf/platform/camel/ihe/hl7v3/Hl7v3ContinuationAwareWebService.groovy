@@ -15,25 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
-import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
-import static org.openehealth.ipf.commons.xml.XmlUtils.source
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
 import groovy.util.slurpersupport.GPathResult
-
-import javax.xml.transform.Source
-
 import org.apache.commons.lang3.Validate
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
-import org.slf4j.LoggerFactory
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import javax.xml.transform.Source
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
+import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
+import static org.openehealth.ipf.commons.xml.XmlUtils.source
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions
@@ -54,7 +55,7 @@ abstract public class Hl7v3ContinuationAwareWebService
     private final Hl7v3ContinuationStorage storage
     private final int defaultThreshold
     private final boolean validation
-    private final WsAuditStrategy auditStrategy
+    private final AuditStrategy<Hl7v3AuditDataset> auditStrategy
 
     
     public Hl7v3ContinuationAwareWebService(Hl7v3ContinuationAwareEndpoint endpoint) {

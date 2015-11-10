@@ -30,9 +30,7 @@ public class Iti83ServerAuditStrategy extends Iti83AuditStrategy {
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome,
-                        Iti83AuditDataset auditDataset) {
-
+    public void doAudit(Iti83AuditDataset auditDataset) {
         AuditorManager.getFhirAuditor().auditIti83(
                 true,
                 auditDataset.getEventOutcomeCode(),

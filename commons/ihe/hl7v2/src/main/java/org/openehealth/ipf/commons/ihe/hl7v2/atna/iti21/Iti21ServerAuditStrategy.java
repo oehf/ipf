@@ -32,9 +32,9 @@ public class Iti21ServerAuditStrategy extends PdqAuditStrategy {
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome,
-            QueryAuditDataset auditDataset) {
-        AuditorManager.getPIXManagerAuditor().auditPDQQueryEvent(eventOutcome,
+    public void doAudit(QueryAuditDataset auditDataset) {
+        AuditorManager.getPIXManagerAuditor().auditPDQQueryEvent(
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getSendingFacility(),
                 auditDataset.getSendingApplication(),

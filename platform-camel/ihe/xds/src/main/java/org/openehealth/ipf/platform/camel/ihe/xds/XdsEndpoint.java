@@ -19,8 +19,11 @@ import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
@@ -30,37 +33,39 @@ import java.util.Map;
 /**
  * Camel Endpoint implementation for XDS-like transactions
  * which have only a single Web Service operation.
+ *
  * @author Dmytro Rud
  */
-public class XdsEndpoint extends AbstractWsEndpoint<AbstractWsComponent<?>> {
+public abstract class XdsEndpoint<AuditDatasetType extends XdsAuditDataset>
+        extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> {
 
     public XdsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<?> component,
+            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration> component,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
-            Map<String, Object> properties)
-    {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties);
+            Map<String, Object> properties,
+            Class<? extends AbstractWebService> serviceClass) {
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
     }
 
 
     @Override
-    public JaxWsClientFactory getJaxWsClientFactory() {
-        return new XdsClientFactory(
+    public JaxWsClientFactory<AuditDatasetType> getJaxWsClientFactory() {
+        return new XdsClientFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
-                isAudit() ? getComponent().getClientAuditStrategy() : null,
+                isAudit() ? getClientAuditStrategy() : null,
                 getCorrelator(),
                 getCustomInterceptors());
     }
 
 
     @Override
-    public JaxWsServiceFactory getJaxWsServiceFactory() {
-        return new XdsServiceFactory(
+    public JaxWsServiceFactory<AuditDatasetType> getJaxWsServiceFactory() {
+        return new XdsServiceFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,

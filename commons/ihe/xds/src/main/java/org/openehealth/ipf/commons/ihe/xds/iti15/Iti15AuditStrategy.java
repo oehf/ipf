@@ -25,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
+import java.util.Map;
+
 /**
  * Audit strategy for ITI-15.
  * @author Dmytro Rud
@@ -36,10 +38,11 @@ abstract class Iti15AuditStrategy extends XdsAuditStrategy<XdsSubmitAuditDataset
     }
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, XdsSubmitAuditDataset auditDataset) {
+    public XdsSubmitAuditDataset enrichAuditDatasetFromRequest(XdsSubmitAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         SubmitObjectsRequest request = (SubmitObjectsRequest) pojo;
         EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest21(request);
         auditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
+        return auditDataset;
     }
 
     @Override

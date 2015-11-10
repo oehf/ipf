@@ -19,6 +19,7 @@ import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.wsdl.interceptors.DocLiteralInInterceptor;
 import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 
@@ -29,13 +30,13 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
  *
  * @author Dmytro Rud
  */
-public class AuditInRequestInterceptor extends AbstractAuditInterceptor {
+public class AuditInRequestInterceptor<T extends WsAuditDataset> extends AbstractAuditInterceptor<T> {
     private final WsTransactionConfiguration wsTransactionConfiguration;
 
     /**
      * Constructor.
      */
-    public AuditInRequestInterceptor(WsAuditStrategy auditStrategy, WsTransactionConfiguration wsTransactionConfiguration) {
+    public AuditInRequestInterceptor(AuditStrategy<T> auditStrategy, WsTransactionConfiguration wsTransactionConfiguration) {
         super(Phase.UNMARSHAL, auditStrategy);
         addAfter(DocLiteralInInterceptor.class.getName());
         this.wsTransactionConfiguration = wsTransactionConfiguration;
@@ -48,7 +49,7 @@ public class AuditInRequestInterceptor extends AbstractAuditInterceptor {
             return;
         }
 
-        WsAuditDataset auditDataset = getAuditDataset(message);
+        T auditDataset = getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
         extractXuaUserNameFromSaml2Assertion(message, Header.Direction.DIRECTION_IN, auditDataset);
         
@@ -56,7 +57,7 @@ public class AuditInRequestInterceptor extends AbstractAuditInterceptor {
             auditDataset.setRequestPayload(message.getContent(StringPayloadHolder.class));
         }
 
-        getAuditStrategy().enrichDatasetFromRequest(extractPojo(message), auditDataset);
+        getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, extractPojo(message), null);
     }
 
 }

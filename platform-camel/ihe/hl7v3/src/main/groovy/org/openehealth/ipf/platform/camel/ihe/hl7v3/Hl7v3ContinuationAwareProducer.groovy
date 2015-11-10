@@ -13,26 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v3;
+package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
-import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS
-import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
-import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.*
 import groovy.util.slurpersupport.GPathResult
 import groovy.xml.XmlUtil
-
-import javax.xml.ws.BindingProvider
-
 import org.apache.camel.Exchange
 import org.apache.cxf.message.Message
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer
@@ -43,13 +35,21 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.NodeList
 
+import javax.xml.ws.BindingProvider
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS
+import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
+import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.*
+
 /**
  * Camel producer HL7 v3-based IHE transactions with Continuation support.
  * <p>
  * Format of continuation messages is described, for example,
  * in the IHE PIXv3/PDQv3 Supplement August 2010, pp. 85-87 and 117-119.
  */
-class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> {
+class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration, String, String> {
     private static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3ContinuationAwareProducer.class)
 
     private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal()
@@ -61,7 +61,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> 
     private final boolean autoCancel
     private final boolean validationOnContinuation
 
-    private final WsAuditStrategy auditStrategy
+    private final AuditStrategy<Hl7v3AuditDataset> auditStrategy
 
     // TODO: make this value configurable
     private final int defaultContinuationQuantity = 10
@@ -69,7 +69,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> 
 
     public Hl7v3ContinuationAwareProducer(
             Hl7v3ContinuationAwareEndpoint endpoint,
-            JaxWsClientFactory clientFactory)
+            JaxWsClientFactory<Hl7v3AuditDataset> clientFactory)
     {
         super(endpoint, clientFactory, String.class, String.class)
 
@@ -131,14 +131,14 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> 
         GPathResult request,
         String fragmentString)
     {
-        WsAuditDataset auditDataset = null
+        Hl7v3AuditDataset auditDataset = null
 
         // fill request-related ATNA audit fields
         try {
             auditDataset = auditStrategy.createAuditDataset()
             Map requestContext = ((BindingProvider) client).requestContext
             auditDataset.serviceEndpointUrl = requestContext.get(Message.ENDPOINT_ADDRESS)
-            auditStrategy.enrichDatasetFromRequest(request, auditDataset)
+            auditStrategy.enrichAuditDatasetFromRequest(auditDataset, request, null)
         } catch (Exception e) {
             LOG.error("Phase 1 of client-side ATNA auditing failed", e);
         }
@@ -155,9 +155,9 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> 
             if (exception) {
                 auditDataset.eventOutcomeCode = RFC3881EventOutcomeCodes.SERIOUS_FAILURE
             } else {
-                auditStrategy.enrichDatasetFromResponse(responseString, auditDataset)
+                auditStrategy.enrichAuditDatasetFromResponse(auditDataset, responseString)
             }
-            auditStrategy.audit(auditDataset)
+            auditStrategy.doAudit(auditDataset)
         } catch (Exception e) {
             LOG.error("Phase 2 of client-side ATNA auditing failed", e);
         } finally {

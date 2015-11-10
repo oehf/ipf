@@ -26,15 +26,16 @@ import javax.xml.namespace.QName;
  * @author Dmytro Rud
  */
 public class DocumentRegistryTransactionConfiguration extends WsTransactionConfiguration {
+
     public DocumentRegistryTransactionConfiguration() {
         super(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
-              DocumentRegistryPortType.class,
-              new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
-              true,
-              "dispatch/DocumentRegistry.wsdl",
-              true,
-              false,
-              true,
-              false);
+                DocumentRegistryPortType.class,
+                new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
+                true,
+                "dispatch/DocumentRegistry.wsdl",
+                true,
+                false,
+                true,
+                false);
     }
 }

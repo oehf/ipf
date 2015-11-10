@@ -26,10 +26,10 @@ public class Iti9ServerAuditStrategy extends Iti9AuditStrategy {
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome,
-            QueryAuditDataset auditDataset) {
+    public void doAudit(QueryAuditDataset auditDataset) {
 
-        AuditorManager.getPIXManagerAuditor().auditPIXQueryEvent(eventOutcome,
+        AuditorManager.getPIXManagerAuditor().auditPIXQueryEvent(
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getSendingFacility(),
                 auditDataset.getSendingApplication(),

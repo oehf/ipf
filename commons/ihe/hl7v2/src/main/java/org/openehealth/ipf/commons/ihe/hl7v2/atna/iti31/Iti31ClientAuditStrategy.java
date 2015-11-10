@@ -26,10 +26,9 @@ public class Iti31ClientAuditStrategy extends Iti31AuditStrategy {
 
     @Override
     protected void callCreateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti31AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPAMSourceAuditor().auditCreatePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getReceivingFacility(),
                 auditDataset.getReceivingApplication(),
@@ -42,10 +41,9 @@ public class Iti31ClientAuditStrategy extends Iti31AuditStrategy {
 
     @Override
     protected void callUpdateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti31AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPAMSourceAuditor().auditUpdatePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getReceivingFacility(),
                 auditDataset.getReceivingApplication(),
@@ -58,10 +56,9 @@ public class Iti31ClientAuditStrategy extends Iti31AuditStrategy {
 
     @Override
     protected void callDeleteAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti31AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPAMSourceAuditor().auditDeletePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getReceivingFacility(),
                 auditDataset.getReceivingApplication(),

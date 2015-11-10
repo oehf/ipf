@@ -76,17 +76,12 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
     </appender>
 
 	<logger name="org.openehealth.ipf.platform.camel.ihe.mllp.core">
-		<level value="INFO"/>
+		<level value="WARN"/>
 	</logger>
 
     <logger name="org.openehealth.ipf.gazelle.validation.core">
-        <level value="INFO"/>
+        <level value="WARN"/>
     </logger>
-
-    <logger name="org.openehealth.ipf.platform.camel.ihe.mllp.iti8">
-        <level value="INFO"/>
-    </logger>
-
 
     <root>
         <level value="WARN"/>

@@ -36,31 +36,28 @@ public abstract class Iti8AuditStrategy extends AuditStrategySupport<Iti8AuditDa
 
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, Iti8AuditDataset auditDataset) {
+    public void doAudit(Iti8AuditDataset auditDataset) {
         if("A08".equals(auditDataset.getMessageType())) {
-            callUpdateAuditRoutine(eventOutcome, auditDataset, true);
+            callUpdateAuditRoutine(auditDataset, true);
         } else if("A40".equals(auditDataset.getMessageType())) {
-            callDeleteAuditRoutine(eventOutcome, auditDataset, false);
-            callUpdateAuditRoutine(eventOutcome, auditDataset, true);
+            callDeleteAuditRoutine(auditDataset, false);
+            callUpdateAuditRoutine(auditDataset, true);
         } else {        
             // A01, A04, A05
-            callCreateAuditRoutine(eventOutcome, auditDataset, true);
+            callCreateAuditRoutine(auditDataset, true);
         }
     }
 
 
     protected abstract void callCreateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti8AuditDataset auditDataset,
             boolean newPatientId);
 
     protected abstract void callUpdateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti8AuditDataset auditDataset,
             boolean newPatientId);
     
     protected abstract void callDeleteAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti8AuditDataset auditDataset,
             boolean newPatientId);    
 

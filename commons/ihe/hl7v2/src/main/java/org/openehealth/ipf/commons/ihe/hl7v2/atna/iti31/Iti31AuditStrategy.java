@@ -35,31 +35,28 @@ public abstract class Iti31AuditStrategy extends AuditStrategySupport<Iti31Audit
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, Iti31AuditDataset auditDataset) {
+    public void doAudit(Iti31AuditDataset auditDataset) {
         if (auditDataset.isUpdate()) {
-            callUpdateAuditRoutine(eventOutcome, auditDataset, true);
+            callUpdateAuditRoutine(auditDataset, true);
         } else if (auditDataset.isDelete()) {
-            callDeleteAuditRoutine(eventOutcome, auditDataset, false);
+            callDeleteAuditRoutine(auditDataset, false);
         } else if (auditDataset.isMerge()) {
-            callDeleteAuditRoutine(eventOutcome, auditDataset, false);
-            callUpdateAuditRoutine(eventOutcome, auditDataset, true);
+            callDeleteAuditRoutine(auditDataset, false);
+            callUpdateAuditRoutine(auditDataset, true);
         } else if (auditDataset.isCreate()) {
-            callCreateAuditRoutine(eventOutcome, auditDataset, true);
+            callCreateAuditRoutine(auditDataset, true);
         }
     }
 
     protected abstract void callCreateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti31AuditDataset auditDataset,
             boolean newPatientId);
 
     protected abstract void callUpdateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti31AuditDataset auditDataset,
             boolean newPatientId);
 
     protected abstract void callDeleteAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti31AuditDataset auditDataset,
             boolean newPatientId);
 

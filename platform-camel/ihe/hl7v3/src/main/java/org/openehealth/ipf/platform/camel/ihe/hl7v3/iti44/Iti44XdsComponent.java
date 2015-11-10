@@ -25,6 +25,7 @@ import javax.xml.namespace.QName;
  * The Camel component for the ITI-44 transaction (XDS.b).
  */
 public class Iti44XdsComponent extends AbstractIti44Component {
+
     private static final String NS_URI_XDS = "urn:ihe:iti:xds-b:2007";
     public final static Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             IpfInteractionId.ITI_44_XDS,

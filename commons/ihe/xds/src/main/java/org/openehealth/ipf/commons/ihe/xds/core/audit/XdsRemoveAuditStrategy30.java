@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseT
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
@@ -38,7 +39,7 @@ abstract public class XdsRemoveAuditStrategy30 extends XdsAuditStrategy<XdsRemov
 
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, XdsRemoveAuditDataset auditDataset) {
+    public XdsRemoveAuditDataset enrichAuditDatasetFromRequest(XdsRemoveAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         RemoveObjectsRequest request = (RemoveObjectsRequest) pojo;
 
         List<ObjectRefType> references = request.getObjectRefList().getObjectRef();
@@ -57,6 +58,7 @@ abstract public class XdsRemoveAuditStrategy30 extends XdsAuditStrategy<XdsRemov
             auditDataset.setObjectIds(documentUniqueIds);
             auditDataset.setHomeCommunityIds(homeCommunityIds);
         }
+        return auditDataset;
     }
 
 

@@ -25,11 +25,9 @@ public class Iti30ServerAuditStrategy extends Iti30AuditStrategy {
     }
 
     @Override
-    protected void callCreateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
-            Iti30AuditDataset auditDataset, boolean newPatientId) {
+    protected void callCreateAuditRoutine(Iti30AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXManagerAuditor().auditCreatePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getSendingFacility(),
                 auditDataset.getSendingApplication(),
@@ -42,11 +40,9 @@ public class Iti30ServerAuditStrategy extends Iti30AuditStrategy {
     }
 
     @Override
-    protected void callUpdateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
-            Iti30AuditDataset auditDataset, boolean newPatientId) {
+    protected void callUpdateAuditRoutine(Iti30AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXManagerAuditor().auditUpdatePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getSendingFacility(),
                 auditDataset.getSendingApplication(),
@@ -59,11 +55,9 @@ public class Iti30ServerAuditStrategy extends Iti30AuditStrategy {
     }
 
     @Override
-    protected void callDeleteAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
-            Iti30AuditDataset auditDataset, boolean newPatientId) {
+    protected void callDeleteAuditRoutine(Iti30AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXManagerAuditor().auditDeletePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getSendingFacility(),
                 auditDataset.getSendingApplication(),

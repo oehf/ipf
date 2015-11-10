@@ -26,10 +26,9 @@ public class Iti8ClientAuditStrategy extends Iti8AuditStrategy {
 
     @Override
     protected void callCreateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti8AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXSourceAuditor().auditCreatePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getReceivingFacility(),
                 auditDataset.getReceivingApplication(),
@@ -42,10 +41,9 @@ public class Iti8ClientAuditStrategy extends Iti8AuditStrategy {
 
     @Override
     protected void callUpdateAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti8AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXSourceAuditor().auditUpdatePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getReceivingFacility(),
                 auditDataset.getReceivingApplication(),
@@ -58,10 +56,9 @@ public class Iti8ClientAuditStrategy extends Iti8AuditStrategy {
 
     @Override
     protected void callDeleteAuditRoutine(
-            RFC3881EventOutcomeCodes eventOutcome,
             Iti8AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXSourceAuditor().auditDeletePatientRecordEvent(
-                eventOutcome,
+                auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
                 auditDataset.getReceivingFacility(),
                 auditDataset.getReceivingApplication(),

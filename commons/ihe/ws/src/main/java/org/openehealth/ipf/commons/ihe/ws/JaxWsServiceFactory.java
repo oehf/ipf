@@ -20,10 +20,11 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.ws.addressing.WSAddressingFeature;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.Cxf3791WorkaroundInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.RejectionHandlerInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 
 import java.util.Collections;
@@ -34,7 +35,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * Factory for Web Services
  * @author Jens Riemschneider
  */
-public class JaxWsServiceFactory {
+public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
 
     /**
      * Transaction configuration.
@@ -55,7 +56,7 @@ public class JaxWsServiceFactory {
     /**
      * Server-side ATNA audit strategy.
      */
-    protected final WsAuditStrategy auditStrategy;
+    protected final AuditStrategy<AuditDatasetType> auditStrategy;
 
     /**
      * Constructs the factory.
@@ -74,7 +75,7 @@ public class JaxWsServiceFactory {
     public JaxWsServiceFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
-            WsAuditStrategy auditStrategy,
+            AuditStrategy<AuditDatasetType> auditStrategy,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {

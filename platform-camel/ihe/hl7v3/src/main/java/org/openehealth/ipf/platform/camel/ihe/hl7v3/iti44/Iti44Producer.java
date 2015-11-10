@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti44.GenericIti44PortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
@@ -25,7 +27,7 @@ import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName;
 /**
  * Producer implementation for the ITI-44 component (PIX Feed v3).
  */
-public class Iti44Producer extends AbstractWsProducer<String, String> {
+public class Iti44Producer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, String, String> {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -33,7 +35,7 @@ public class Iti44Producer extends AbstractWsProducer<String, String> {
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public Iti44Producer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
+    public Iti44Producer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint, JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
         super(endpoint, clientFactory, String.class, String.class);
     }
 

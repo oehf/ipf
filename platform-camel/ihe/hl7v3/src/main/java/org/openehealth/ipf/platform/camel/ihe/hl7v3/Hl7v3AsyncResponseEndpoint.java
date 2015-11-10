@@ -18,12 +18,14 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AsyncResponseServiceFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3DeferredResponderFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import java.util.List;
 import java.util.Map;
@@ -34,25 +36,26 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
-        extends AbstractWsEndpoint<AbstractWsComponent<ConfigType>>
+        extends AbstractWsEndpoint<Hl7v3AuditDataset, ConfigType>
 {
 
     public Hl7v3AsyncResponseEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<ConfigType> component,
+            Hl7v3Component<ConfigType> component,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
-            Map<String, Object> properties)
+            Map<String, Object> properties,
+            Class<? extends AbstractWebService> serviceClass)
     {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties);
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
     }
 
 
     // currently is used for deferred response receivers only!
     @Override
-    public JaxWsClientFactory getJaxWsClientFactory() {
+    public JaxWsClientFactory<Hl7v3AuditDataset> getJaxWsClientFactory() {
         return new Hl7v3DeferredResponderFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
@@ -62,7 +65,7 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
 
 
     @Override
-    public JaxWsServiceFactory getJaxWsServiceFactory() {
+    public JaxWsServiceFactory<Hl7v3AuditDataset> getJaxWsServiceFactory() {
         return new Hl7v3AsyncResponseServiceFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
@@ -71,4 +74,9 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
                 getCustomInterceptors());
     }
 
+    @Override
+    public AbstractWsProducer getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, ConfigType> endpoint,
+                                          JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
+        throw new IllegalStateException("No producer support for asynchronous response endpoints");
+    }
 }
