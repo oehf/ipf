@@ -25,7 +25,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResp
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ServerAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.ws.*;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
@@ -49,7 +52,7 @@ public class Iti38Component extends XdsComponent<XdsQueryAuditDataset> {
             true);
 
     @Override
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new XdsEndpoint<XdsQueryAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
@@ -65,8 +68,8 @@ public class Iti38Component extends XdsComponent<XdsQueryAuditDataset> {
             }
 
             @Override
-            protected <T extends AbstractWebService> T getCustomServiceInstance(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint) {
-                return (T)new Iti38Service(endpoint);
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint) {
+                return new Iti38Service(endpoint.getHomeCommunityId());
             }
         };
     }

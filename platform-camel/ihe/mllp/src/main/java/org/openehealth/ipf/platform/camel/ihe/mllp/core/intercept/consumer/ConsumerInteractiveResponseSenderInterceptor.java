@@ -44,13 +44,13 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * as described in paragraph 5.6.3 of the HL7 v2.5 specification.
  * @author Dmytro Rud
  */
-public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSupport<MllpTransactionEndpoint> {
+public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerInteractiveResponseSenderInterceptor.class);
     private InteractiveContinuationStorage storage;
 
 
     @Override
-    public void setEndpoint(MllpTransactionEndpoint endpoint) {
+    public void setEndpoint(MllpTransactionEndpoint<?> endpoint) {
         super.setEndpoint(endpoint);
         this.storage = Validate.notNull(getEndpoint().getInteractiveContinuationStorage());
     }

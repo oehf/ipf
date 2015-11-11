@@ -48,7 +48,7 @@ public class Iti63Component extends XdsComponent<XdsQueryAuditDataset> {
             true);
 
     @Override
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new XdsEndpoint<XdsQueryAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
@@ -64,8 +64,8 @@ public class Iti63Component extends XdsComponent<XdsQueryAuditDataset> {
             }
 
             @Override
-            protected <T extends AbstractWebService> T getCustomServiceInstance(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint) {
-                return (T) new Iti63Service(endpoint);
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint) {
+                return new Iti63Service(endpoint.getHomeCommunityId());
             }
         };
     }

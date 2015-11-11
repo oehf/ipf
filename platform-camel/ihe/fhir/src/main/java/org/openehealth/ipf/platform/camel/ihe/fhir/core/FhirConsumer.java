@@ -32,10 +32,10 @@ import java.util.Map;
  *
  * @since 3.1
  */
-public abstract class FhirConsumer<T extends FhirAuditDataset>
+public abstract class FhirConsumer<AuditDatasetType extends FhirAuditDataset>
         extends DefaultConsumer implements SuspendableService {
 
-    public FhirConsumer(FhirEndpoint<T> endpoint, Processor processor) {
+    public FhirConsumer(FhirEndpoint<AuditDatasetType> endpoint, Processor processor) {
         super(endpoint, processor);
     }
 
@@ -50,8 +50,8 @@ public abstract class FhirConsumer<T extends FhirAuditDataset>
     }
 
     @Override
-    public FhirEndpoint<T> getEndpoint() {
-        return (FhirEndpoint<T>)super.getEndpoint();
+    public FhirEndpoint<AuditDatasetType> getEndpoint() {
+        return (FhirEndpoint<AuditDatasetType>)super.getEndpoint();
     }
 
     /**

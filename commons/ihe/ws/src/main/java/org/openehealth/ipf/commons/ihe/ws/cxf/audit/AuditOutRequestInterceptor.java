@@ -35,7 +35,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
  * @author Dmytro Rud
  */
 public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends AbstractAuditInterceptor<T> {
-    private final AsynchronyCorrelator correlator;
+    private final AsynchronyCorrelator<T> correlator;
     private final WsTransactionConfiguration wsTransactionConfiguration;
 
     /**
@@ -43,7 +43,7 @@ public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends Abstra
      */
     public AuditOutRequestInterceptor(
             AuditStrategy<T> auditStrategy,
-            AsynchronyCorrelator correlator,
+            AsynchronyCorrelator<T> correlator,
             WsTransactionConfiguration wsTransactionConfiguration)
     {
         super(Phase.WRITE_ENDING, auditStrategy);

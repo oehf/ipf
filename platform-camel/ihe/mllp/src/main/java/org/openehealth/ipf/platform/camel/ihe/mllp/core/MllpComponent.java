@@ -79,7 +79,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
      * @return
      *      configured MLLP endpoint instance which wraps the MINA2 one.
      */
-    protected abstract MllpEndpoint createEndpoint(Mina2Endpoint wrappedEndpoint, ConfigType config);
+    protected abstract MllpEndpoint<?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, ConfigType config);
 
 
     /**

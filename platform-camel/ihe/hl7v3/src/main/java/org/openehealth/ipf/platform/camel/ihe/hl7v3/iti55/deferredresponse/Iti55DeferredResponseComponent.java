@@ -51,7 +51,7 @@ public class Iti55DeferredResponseComponent extends Hl7v3Component<Hl7v3WsTransa
             false,
             false);
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings("raw") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Hl7v3AsyncResponseEndpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this,
@@ -61,7 +61,8 @@ public class Iti55DeferredResponseComponent extends Hl7v3Component<Hl7v3WsTransa
                 getProperties(parameters),
                 Iti55DeferredResponseService.class) {
             @Override
-            public AbstractWsProducer getProducer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
+            public AbstractWsProducer getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
+                                                  JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
                 return new Iti55DeferredResponseProducer(endpoint, clientFactory);
             }
         };

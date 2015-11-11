@@ -25,12 +25,12 @@ import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
  *
  * @since 3.1
  */
-public class FhirComponentConfiguration<T extends FhirAuditDataset> {
+public class FhirComponentConfiguration<AuditDatasetType extends FhirAuditDataset> {
 
     private final FhirContext context;
-    private final AbstractResourceProvider<T> staticResourceProvider;
+    private final AbstractResourceProvider<AuditDatasetType> staticResourceProvider;
 
-    public FhirComponentConfiguration(FhirContext context, AbstractResourceProvider<T> resourceProvider) {
+    public FhirComponentConfiguration(FhirContext context, AbstractResourceProvider<AuditDatasetType> resourceProvider) {
         this.context = context;
         this.staticResourceProvider = resourceProvider;
     }
@@ -39,7 +39,7 @@ public class FhirComponentConfiguration<T extends FhirAuditDataset> {
         return context;
     }
 
-    public AbstractResourceProvider<T> getStaticResourceProvider() {
+    public AbstractResourceProvider<AuditDatasetType> getStaticResourceProvider() {
         return staticResourceProvider;
     }
 }

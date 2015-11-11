@@ -31,7 +31,7 @@ import java.util.Map;
  * @since 3.1
  */
 @UriParams
-public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Serializable {
+public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> implements Serializable {
 
     @UriParam(defaultValue = "false")
     private boolean audit = false;
@@ -40,12 +40,12 @@ public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Se
     private String servletName = CamelFhirServlet.DEFAULT_SERVLET_NAME;
 
     @UriParam
-    private AbstractResourceProvider<T> resourceProvider;
+    private AbstractResourceProvider<AuditDatasetType> resourceProvider;
 
     @UriParam
     private List<InterceptorFactory> customInterceptorFactories;
 
-    protected FhirEndpointConfiguration(FhirComponent component, Map<String, Object> parameters) throws Exception {
+    protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, Map<String, Object> parameters) throws Exception {
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, CamelFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(
@@ -58,7 +58,7 @@ public class FhirEndpointConfiguration<T extends FhirAuditDataset> implements Se
         return audit;
     }
 
-    public AbstractResourceProvider<T> getResourceProvider() {
+    public AbstractResourceProvider<AuditDatasetType> getResourceProvider() {
         return resourceProvider;
     }
 

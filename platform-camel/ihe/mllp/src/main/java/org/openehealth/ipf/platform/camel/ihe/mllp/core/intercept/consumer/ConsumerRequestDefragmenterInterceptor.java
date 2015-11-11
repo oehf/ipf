@@ -39,7 +39,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * 
  * @author Dmytro Rud
  */
-public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<MllpTransactionEndpoint> {
+public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerRequestDefragmenterInterceptor.class);
     
     // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  
@@ -47,7 +47,7 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport<M
 
 
     @Override
-    public void setEndpoint(MllpTransactionEndpoint endpoint) {
+    public void setEndpoint(MllpTransactionEndpoint<?> endpoint) {
         super.setEndpoint(endpoint);
         this.storage = getEndpoint().getUnsolicitedFragmentationStorage();
         Validate.notNull(storage);

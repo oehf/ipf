@@ -45,7 +45,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  *
  * @author Dmytro Rud
  */
-public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends InterceptorSupport<MllpTransactionEndpoint> {
+public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
 
     public ProducerMarshalAndInteractiveResponseReceiverInterceptor() {

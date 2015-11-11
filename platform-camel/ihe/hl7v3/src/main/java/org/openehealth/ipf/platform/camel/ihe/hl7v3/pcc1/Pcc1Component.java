@@ -50,7 +50,7 @@ public class Pcc1Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransa
             "QUPC_IN043100UV01",
             "QUPC_IN043200UV01");
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this,
@@ -59,11 +59,11 @@ public class Pcc1Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransa
                 getSchemaLocations(parameters),
                 getProperties(parameters)) {
             @Override
-            protected <T extends AbstractWebService> T getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
                 Hl7v3ContinuationAwareEndpoint endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
                 return endpoint2.isSupportContinuation() ?
-                        (T)new Pcc1ContinuationAwareService(endpoint2) :
-                        (T)new Pcc1Service();
+                        new Pcc1ContinuationAwareService(endpoint2) :
+                        new Pcc1Service();
             }
         };
     }

@@ -44,7 +44,7 @@ public class Iti39AsyncResponseComponent extends XdsComponent<XdsRetrieveAuditDa
             false,
             false);
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings("raw") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new XdsAsyncResponseEndpoint<>(uri, remaining, this,

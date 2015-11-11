@@ -37,14 +37,14 @@ import java.util.List;
  *
  * @since 3.1
  */
-public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEndpoint
-        implements AuditableEndpoint<T> {
+public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset> extends DefaultEndpoint
+        implements AuditableEndpoint<AuditDatasetType> {
 
-    private final FhirEndpointConfiguration<T> config;
+    private final FhirEndpointConfiguration<AuditDatasetType> config;
     private String servletName;
-    private final FhirComponent<T> fhirComponent;
+    private final FhirComponent<AuditDatasetType> fhirComponent;
 
-    public FhirEndpoint(String uri, FhirComponent<T> fhirComponent, FhirEndpointConfiguration<T> config) {
+    public FhirEndpoint(String uri, FhirComponent<AuditDatasetType> fhirComponent, FhirEndpointConfiguration<AuditDatasetType> config) {
         super(uri, fhirComponent);
         this.fhirComponent = fhirComponent;
         this.config = config;
@@ -80,8 +80,8 @@ public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEn
      * @param consumer FhirConsumer
      * @throws Exception
      */
-    public void connect(FhirConsumer<T> consumer) throws Exception {
-        AbstractResourceProvider<T> provider = getResourceProvider();
+    public void connect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
+        AbstractResourceProvider<AuditDatasetType> provider = getResourceProvider();
         // Make consumer known to provider
         provider.setConsumer(consumer);
         // Register provider with CamelFhirServlet
@@ -94,8 +94,8 @@ public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEn
      * @param consumer FhirConsumer
      * @throws Exception
      */
-    public void disconnect(FhirConsumer<T> consumer) throws Exception {
-        AbstractResourceProvider<T> provider = getResourceProvider();
+    public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
+        AbstractResourceProvider<AuditDatasetType> provider = getResourceProvider();
         CamelFhirServlet.unregisterProvider(servletName, provider);
     }
 
@@ -132,7 +132,7 @@ public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEn
         return true;
     }
 
-    public FhirComponentConfiguration<T> getFhirComponentConfiguration() {
+    public FhirComponentConfiguration<AuditDatasetType> getFhirComponentConfiguration() {
         return fhirComponent.getFhirComponentConfiguration();
     }
 
@@ -140,7 +140,7 @@ public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEn
      * Returns client-side audit strategy instance.
      */
     @Override
-    public AuditStrategy<T> getClientAuditStrategy() {
+    public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
         return fhirComponent.getClientAuditStrategy();
     }
 
@@ -148,14 +148,14 @@ public abstract class FhirEndpoint<T extends FhirAuditDataset> extends DefaultEn
      * Returns server-side audit strategy instance.
      */
     @Override
-    public AuditStrategy<T> getServerAuditStrategy() {
+    public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
         return fhirComponent.getServerAuditStrategy();
     }
 
     // Private stuff
 
-    private AbstractResourceProvider<T> getResourceProvider() {
-        AbstractResourceProvider<T> provider = config.getResourceProvider();
+    private AbstractResourceProvider<AuditDatasetType> getResourceProvider() {
+        AbstractResourceProvider<AuditDatasetType> provider = config.getResourceProvider();
         if (provider == null) {
             provider = getFhirComponentConfiguration().getStaticResourceProvider();
         }

@@ -152,12 +152,12 @@ public abstract class AbstractWsEndpoint<
      *
      * @return service class instance for the given endpoint.
      */
-    public <T extends AbstractWebService> T getServiceInstance() {
-        T service = getCustomServiceInstance(this);
+    public AbstractWebService getServiceInstance() {
+        AbstractWebService service = getCustomServiceInstance(this);
         if (service == null) {
             if (serviceClass != null) {
                 try {
-                    return (T) serviceClass.newInstance();
+                    return serviceClass.newInstance();
                 } catch (InstantiationException | IllegalAccessException e) {
                     throw new RuntimeException("Could not instantiate service of type " + serviceClass, e);
                 }
@@ -175,7 +175,7 @@ public abstract class AbstractWsEndpoint<
      * @param endpoint this endpoint as paramater
      * @return service class instance
      */
-    protected <T extends AbstractWebService> T getCustomServiceInstance(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint) {
+    protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint) {
         return null;
     }
 

@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15ServerAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
@@ -47,7 +46,7 @@ public class Iti15Component extends XdsComponent<XdsSubmitAuditDataset> {
             false,
             false);
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this,
@@ -57,7 +56,8 @@ public class Iti15Component extends XdsComponent<XdsSubmitAuditDataset> {
                 getProperties(parameters),
                 Iti15Service.class) {
             @Override
-            public AbstractWsProducer getProducer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
+            public AbstractWsProducer getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
+                                                  JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
                 return new Iti15Producer(endpoint, clientFactory);
             }
         };

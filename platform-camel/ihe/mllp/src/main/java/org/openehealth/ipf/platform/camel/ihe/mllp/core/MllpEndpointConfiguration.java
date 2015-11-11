@@ -49,7 +49,7 @@ public class MllpEndpointConfiguration implements Serializable {
     @Getter private ConsumerDispatchingInterceptor dispatcher;
 
 
-    protected MllpEndpointConfiguration(MllpComponent component, Map<String, Object> parameters) throws Exception {
+    protected MllpEndpointConfiguration(MllpComponent<?> component, Map<String, Object> parameters) throws Exception {
         codecFactory = component.getCamelContext().getRegistry().lookupByNameAndType(
                 extractBeanName((String) parameters.get("codec")),
                 ProtocolCodecFactory.class);

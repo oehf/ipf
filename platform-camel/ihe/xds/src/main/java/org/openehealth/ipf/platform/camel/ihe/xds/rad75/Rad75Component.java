@@ -47,7 +47,7 @@ public class Rad75Component extends XdsComponent<XdsRetrieveAuditDataset> {
             true);
 
     @Override
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new XdsEndpoint<XdsRetrieveAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
@@ -63,8 +63,8 @@ public class Rad75Component extends XdsComponent<XdsRetrieveAuditDataset> {
             }
 
             @Override
-            protected <T extends AbstractWebService> T getCustomServiceInstance(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint) {
-                return (T) new Rad75Service(endpoint);
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint) {
+                return new Rad75Service(endpoint.getHomeCommunityId());
             }
         };
     }

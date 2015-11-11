@@ -15,16 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti51;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51PortType;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsAdhocQueryService;
 
 /**
  * Service implementation for the IHE ITI-51 transaction (Registry Stored Query).
@@ -33,18 +27,14 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  * 
  * @author Jens Riemschneider
  */
-@Slf4j
-public class Iti51Service extends AbstractWebService implements Iti51PortType {
+public class Iti51Service extends XdsAdhocQueryService implements Iti51PortType {
+
+    public Iti51Service() {
+        super(null);
+    }
+
     @Override
     public AdhocQueryResponse documentRegistryMultiPatientStoredQuery(AdhocQueryRequest body) {
-        Exchange result = process(body);
-        Exception exception = Exchanges.extractException(result);
-        if (exception != null) {
-            log.debug("ITI-51 service failed", exception);
-            QueryResponse errorResponse = new QueryResponse(exception, ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
-            return EbXML30Converters.convert(errorResponse);
-        }
-        
-        return Exchanges.resultMessage(result).getBody(AdhocQueryResponse.class);            
+        return processRequest(body);
     }
 }

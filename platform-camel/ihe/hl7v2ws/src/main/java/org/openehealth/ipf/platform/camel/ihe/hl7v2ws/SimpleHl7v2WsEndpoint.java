@@ -95,7 +95,7 @@ public abstract class SimpleHl7v2WsEndpoint<
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        AbstractHl7v2WebService serviceInstance = getServiceInstance();
+        AbstractHl7v2WebService serviceInstance = (AbstractHl7v2WebService)getServiceInstance();
         serviceInstance.setHl7v2Configuration(this);
         ServerFactoryBean serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
         Server server = serverFactory.create();

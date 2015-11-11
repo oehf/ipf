@@ -51,7 +51,7 @@ public class Iti45Component extends Hl7v3Component<Hl7v3WsTransactionConfigurati
             false,
             false);
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this,

@@ -126,7 +126,7 @@ public abstract class AbstractWsProducer<
             String messageId = "urn:uuid:" + UUID.randomUUID().toString();
             configureWSAHeaders(messageId, replyToUri, requestContext);
 
-            AsynchronyCorrelator correlator = getEndpoint().getCorrelator();
+            AsynchronyCorrelator<AuditDatasetType> correlator = getEndpoint().getCorrelator();
             correlator.storeServiceEndpointUri(messageId, getEndpoint().getEndpointUri());
             
             String correlationKey = exchange.getIn().getHeader(
@@ -219,8 +219,8 @@ public abstract class AbstractWsProducer<
 
 
     @Override
-    public AbstractWsEndpoint getEndpoint() {
-        return (AbstractWsEndpoint) super.getEndpoint();
+    public AbstractWsEndpoint<AuditDatasetType, ConfigType> getEndpoint() {
+        return (AbstractWsEndpoint<AuditDatasetType, ConfigType>) super.getEndpoint();
     }
 
 

@@ -71,7 +71,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent<WsAuditDataset> {
     private static final NakFactory NAK_FACTORY = new NakFactory(HL7V2_CONFIG, false, "ACK^R01^ACK");
 
     @Override
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings("raw") // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, @SuppressWarnings("rawtypes") Map parameters) throws Exception {
         return new SimpleHl7v2WsEndpoint<WsAuditDataset, Pcd01Component>(
                 uri,

@@ -34,9 +34,10 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  *
  * @since 3.1
  */
-public abstract class AbstractResourceProvider<T extends FhirAuditDataset> implements IResourceProvider, Serializable {
+public abstract class AbstractResourceProvider<AuditDatasetType extends FhirAuditDataset>
+        implements IResourceProvider, Serializable {
 
-    private transient FhirConsumer<T> consumer;
+    private transient FhirConsumer<AuditDatasetType> consumer;
 
     /**
      *
@@ -67,7 +68,7 @@ public abstract class AbstractResourceProvider<T extends FhirAuditDataset> imple
     }
 
     // Ensure this is only used once!
-    void setConsumer(FhirConsumer<T> consumer) {
+    void setConsumer(FhirConsumer<AuditDatasetType> consumer) {
         if (this.consumer != null) {
             throw new IllegalStateException("This provider is already used by a different consumer");
         }

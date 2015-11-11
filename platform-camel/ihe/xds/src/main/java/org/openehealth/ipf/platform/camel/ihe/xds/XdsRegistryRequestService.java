@@ -1,11 +1,11 @@
 /*
- * Copyright 2013 the original author or authors.
+ * Copyright 2015 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.xds.iti62;
+package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
@@ -22,26 +22,31 @@ import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
-import org.openehealth.ipf.platform.camel.ihe.xds.XdsRegistryRequestService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
- * Service implementation for the IHE ITI-62 transaction (Register Document Set).
- * <p>
- * This implementation delegates to a Camel consumer by creating an exchange.
+ * Base class for XDS Registry Request services
  *
- * @author Boris Stanojevic
+ * @since 3.1
  */
 @Slf4j
-public class Iti62Service extends XdsRegistryRequestService<RemoveObjectsRequest> implements Iti62PortType {
+public abstract class XdsRegistryRequestService<T> extends AbstractWebService {
 
-    @Override
-    public RegistryResponseType documentRegistryDeleteDocumentSet(RemoveObjectsRequest body) {
-        return processRequest(body);
+    protected RegistryResponseType processRequest(T body) {
+        Exchange result = process(body, XdsJaxbDataBinding.getCamelHeaders(body), ExchangePattern.InOut);
+        Exception exception = Exchanges.extractException(result);
+        if (exception != null) {
+            log.debug(getClass().getSimpleName() + " service failed", exception);
+            Response errorResponse = new Response(
+                    exception,
+                    ErrorCode.REGISTRY_METADATA_ERROR,
+                    ErrorCode.REGISTRY_ERROR, null);
+            return EbXML30Converters.convert(errorResponse);
+        }
+
+        return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);
     }
 }

@@ -45,7 +45,7 @@ public class Iti38AsyncResponseComponent extends XdsComponent<XdsQueryAuditDatas
             false);
 
     @Override
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings("raw") // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new XdsAsyncResponseEndpoint<>(uri, remaining, this,
                 getCustomInterceptors(parameters),

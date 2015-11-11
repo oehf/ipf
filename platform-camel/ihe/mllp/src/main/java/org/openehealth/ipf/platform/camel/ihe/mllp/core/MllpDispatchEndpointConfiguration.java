@@ -29,7 +29,7 @@ public class MllpDispatchEndpointConfiguration extends MllpEndpointConfiguration
 
     @Getter private final String[] routes;
 
-    protected MllpDispatchEndpointConfiguration(MllpComponent component, Map<String, Object> parameters) throws Exception {
+    protected MllpDispatchEndpointConfiguration(MllpComponent<MllpDispatchEndpointConfiguration> component, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
         String routesString = stripToNull(component.getAndRemoveParameter(parameters, "routes", String.class));
         routes = routesString != null ? routesString.split("\\s*,\\s*") : new String[0];

@@ -32,8 +32,8 @@ import java.util.Map;
  *
  * @since 3.1
  */
-public abstract class FhirComponent<T extends FhirAuditDataset>
-        extends UriEndpointComponent implements AuditableComponent<T> {
+public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
+        extends UriEndpointComponent implements AuditableComponent<AuditDatasetType> {
 
     public FhirComponent() {
         super(FhirEndpoint.class);
@@ -43,13 +43,13 @@ public abstract class FhirComponent<T extends FhirAuditDataset>
         super(context, FhirEndpoint.class);
     }
 
-    protected FhirEndpointConfiguration<T> createConfig(Map<String, Object> parameters) throws Exception {
+    protected FhirEndpointConfiguration<AuditDatasetType> createConfig(Map<String, Object> parameters) throws Exception {
         return new FhirEndpointConfiguration<>(this, parameters);
     }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        FhirEndpointConfiguration<T> config = createConfig(parameters);
+        FhirEndpointConfiguration<AuditDatasetType> config = createConfig(parameters);
         return doCreateEndpoint(uri, config);
     }
 
@@ -82,11 +82,11 @@ public abstract class FhirComponent<T extends FhirAuditDataset>
      * @param config FhirEndpointConfiguration
      * @return a new endpoint instance
      */
-    protected abstract FhirEndpoint<T> doCreateEndpoint(String uri, FhirEndpointConfiguration<T> config);
+    protected abstract FhirEndpoint<AuditDatasetType> doCreateEndpoint(String uri, FhirEndpointConfiguration<AuditDatasetType> config);
 
     /**
      * @return static component-specific configuration
      */
-    public abstract FhirComponentConfiguration<T> getFhirComponentConfiguration();
+    public abstract FhirComponentConfiguration<AuditDatasetType> getFhirComponentConfiguration();
 
 }

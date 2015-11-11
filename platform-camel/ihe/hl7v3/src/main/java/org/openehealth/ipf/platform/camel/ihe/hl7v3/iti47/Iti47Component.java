@@ -50,7 +50,7 @@ public class Iti47Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTrans
             "PRPA_IN201305UV02",
             "PRPA_IN201306UV02");
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this,
@@ -60,11 +60,11 @@ public class Iti47Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTrans
                 getProperties(parameters)) {
 
             @Override
-            protected <T extends AbstractWebService> T getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
                 Hl7v3ContinuationAwareEndpoint endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
                 return endpoint2.isSupportContinuation() ?
-                        (T)new Iti47ContinuationAwareService(endpoint2) :
-                        (T)new Iti47Service();
+                        new Iti47ContinuationAwareService(endpoint2) :
+                        new Iti47Service();
             }
 
         };

@@ -46,7 +46,7 @@ public class Iti55AsyncResponseComponent extends Hl7v3Component<Hl7v3WsTransacti
             false,
             false);
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings("raw") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Hl7v3AsyncResponseEndpoint<>(uri, remaining, this,
