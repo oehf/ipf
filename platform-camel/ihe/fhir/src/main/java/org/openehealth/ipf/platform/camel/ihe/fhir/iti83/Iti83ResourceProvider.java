@@ -27,6 +27,9 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.AbstractResourceProvider
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
 
 /**
@@ -67,8 +70,12 @@ public class Iti83ResourceProvider extends AbstractResourceProvider<Iti83AuditDa
                 .setSystem(parts[0])
                 .setValue(parts[1]);
 
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put(SOURCE_IDENTIFIER_NAME, sourceIdentifier);
+        parameters.put(TARGET_SYSTEM_NAME, targetSystem);
+
         // Run down the route
-        return processInRoute(new PixmRequest(sourceIdentifier, targetSystem), Parameters.class, httpServletRequest, httpServletResponse);
+        return processInRoute(null, parameters, Parameters.class, httpServletRequest, httpServletResponse);
     }
 
 }

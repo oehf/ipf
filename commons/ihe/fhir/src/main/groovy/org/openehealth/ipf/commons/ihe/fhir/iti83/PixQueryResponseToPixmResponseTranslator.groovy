@@ -47,7 +47,7 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
     }
 
     @Override
-    Parameters translateHL7v2ToFhir(Message message) {
+    Parameters translateHL7v2ToFhir(Message message, Map<String, Object> parameters) {
         String ackCode = message.QAK[2].value
         switch (ackCode) {
             case 'OK': return handleRegularResponse(message.QUERY_RESPONSE.PID[3]()) // Case 1

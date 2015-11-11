@@ -16,7 +16,10 @@
 package org.openehealth.ipf.commons.ihe.fhir.translation;
 
 import ca.uhn.hl7v2.model.Message;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
+
+import java.util.Map;
 
 /**
  * @since 3.1
@@ -29,6 +32,6 @@ public interface TranslatorFhirToHL7v2 {
      * @param fhir FhirObject
      * @return HL7v2 message
      */
-    Message translateFhirToHL7v2(FhirObject fhir);
+    Message translateFhirToHL7v2(IBaseResource fhir, Map<String, Object> parameters);
 
 }

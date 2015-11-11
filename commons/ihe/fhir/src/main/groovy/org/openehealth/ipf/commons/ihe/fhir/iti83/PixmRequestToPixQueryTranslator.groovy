@@ -19,6 +19,8 @@ import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.lang3.Validate
 import org.hl7.fhir.instance.model.Identifier
 import org.hl7.fhir.instance.model.UriType
+import org.hl7.fhir.instance.model.api.IBaseResource
+import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.FhirObject
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
@@ -60,8 +62,7 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
     }
 
     @Override
-    QBP_Q21 translateFhirToHL7v2(FhirObject request) {
-        PixmRequest pixmRequest = (PixmRequest)request
+    QBP_Q21 translateFhirToHL7v2(IBaseResource request, Map<String, Object> parameters) {
         QBP_Q21 qry = MessageUtils.makeMessage(PIX_QUERY_CONTEXT, 'QBP', 'Q23', '2.5')
 
         qry.MSH[3] = senderDeviceName
@@ -75,10 +76,10 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
         qry.QPD[1] = this.queryName
         qry.QPD[2] = UUID.randomUUID().toString()
 
-        Identifier sourceIdentifier = pixmRequest.sourceIdentifier
+        Identifier sourceIdentifier = parameters[Constants.SOURCE_IDENTIFIER_NAME]
         populateIdentifier(qry.QPD[3], sourceIdentifier.system, sourceIdentifier.value)
 
-        UriType requestedDomain = pixmRequest.requestedDomain
+        UriType requestedDomain = parameters[Constants.TARGET_SYSTEM_NAME]
         if (requestedDomain) {
             populateIdentifier(Utils.nextRepetition(qry.QPD[4]), requestedDomain.value)
         }

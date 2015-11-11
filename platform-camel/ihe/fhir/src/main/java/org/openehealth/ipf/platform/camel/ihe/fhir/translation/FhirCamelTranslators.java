@@ -17,10 +17,13 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.translation;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+
+import java.util.Map;
 
 /**
  * Camel processors for translation of messages between FHIR and HL7v2
@@ -42,11 +45,12 @@ public final class FhirCamelTranslators {
             @Override
             public void process(Exchange exchange) throws Exception {
                 // ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
-                FhirObject fhir = exchange.getIn().getMandatoryBody(FhirObject.class);
+                IBaseResource fhir = exchange.getIn().getBody(IBaseResource.class);
+                Map<String, Object> parameters = exchange.getIn().getHeaders();
                 // exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
                 org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);
                 resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-                resultMessage.setBody(translator.translateFhirToHL7v2(fhir));
+                resultMessage.setBody(translator.translateFhirToHL7v2(fhir, parameters));
             }
         };
     }
@@ -62,10 +66,11 @@ public final class FhirCamelTranslators {
             public void process(Exchange exchange) throws Exception {
                 // String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
                 ca.uhn.hl7v2.model.Message msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.class);
+                Map<String, Object> parameters = exchange.getIn().getHeaders();
                 // exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
                 org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);
                 resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-                resultMessage.setBody(translator.translateHL7v2ToFhir(msg));
+                resultMessage.setBody(translator.translateHL7v2ToFhir(msg, parameters));
             }
         };
     }

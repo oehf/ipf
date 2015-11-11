@@ -43,13 +43,13 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         super(context, FhirEndpoint.class);
     }
 
-    protected FhirEndpointConfiguration<AuditDatasetType> createConfig(Map<String, Object> parameters) throws Exception {
-        return new FhirEndpointConfiguration<>(this, parameters);
+    protected FhirEndpointConfiguration<AuditDatasetType> createConfig(String remaining, Map<String, Object> parameters) throws Exception {
+        return new FhirEndpointConfiguration<>(this, remaining, parameters);
     }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        FhirEndpointConfiguration<AuditDatasetType> config = createConfig(parameters);
+        FhirEndpointConfiguration<AuditDatasetType> config = createConfig(remaining, parameters);
         return doCreateEndpoint(uri, config);
     }
 

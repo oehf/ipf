@@ -163,17 +163,16 @@ public class BridgeRouteBuilder extends SpringRouteBuilder {
 
 
 ```
-[ITI-8]: ../../../platform-camel/ihe/mllp/iti8.html
-[ITI-9]: ../../../platform-camel/ihe/mllp/iti9.html
-[ITI-10]: ../../../platform-camel/ihe/mllp/iti10.html
-[ITI-14]: ../../../platform-camel/ihe/xds/iti14.html
-[ITI-21]: ../../../platform-camel/ihe/mllp/iti21.html
+[ITI-8]: ../ipf-platform-camel-mllp/iti8.html
+[ITI-9]: ../ipf-platform-camel-mllp/iti9.html
+[ITI-10]: ../ipf-platform-camel-mllp/iti10.html
+[ITI-21]: ../ipf-platform-camel-mllp/iti21.html
 
-[ITI-44]: ../../../platform-camel/ihe/hl7v3/iti44.html
-[ITI-45]: ../../../platform-camel/ihe/hl7v3/iti45.html
-[ITI-46]: ../../../platform-camel/ihe/hl7v3/iti46.html
-[ITI-47]: ../../../platform-camel/ihe/hl7v3/iti47.html
+[ITI-44]: ../ipf-platform-camel-hl7v3/iti44.html
+[ITI-45]: ../ipf-platform-camel-hl7v3/iti45.html
+[ITI-46]: ../ipf-platform-camel-hl7v3/iti46.html
+[ITI-47]: ../ipf-platform-camel-hl7v3/iti47.html
 
-[Mapping Service]: ../../map/index.html
+[Mapping Service]: ../ipf-commons-map/index.html
 
 [IHE]: http://www.ihe.net
