@@ -23,8 +23,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import java.util.Arrays;
-
 /**
  * Query parameter validation to ensure that only one of the given parameters is specified.
  * Also has the "either ... or ... " check to avoid the case that all paramaters haven't a
@@ -49,11 +47,11 @@ public class ChoiceValidation implements QueryParameterValidation {
         boolean defined = false;
         for (QueryParameter param : params) {
             String value = request.getSingleSlotValue(param.getSlotName());
-            metaDataAssert(value == null || !defined, QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, Arrays.asList(params));
+            metaDataAssert(value == null || !defined, QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, new Object[] {params});
             defined |= value != null;
         }
         if (!defined){
-            throw new XDSMetaDataException(MISSING_REQUIRED_QUERY_PARAMETER, Arrays.asList(params));
+            throw new XDSMetaDataException(MISSING_REQUIRED_QUERY_PARAMETER, new Object[] {params});
         }
     }
 }

@@ -212,7 +212,7 @@ public class AdhocQueryRequestValidatorTest {
     @Test
     public void testMissingPatientIdFolder() throws XDSMetaDataException {
         ((FindFoldersQuery)folderRequest.getQuery()).setPatientId(null);
-        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER,transformer.toEbXML(folderRequest), iti18Profile );
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, transformer.toEbXML(folderRequest), iti18Profile);
     }
 
     @Test

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 
 
 /**
@@ -35,7 +36,7 @@ public class XDSMetaDataException extends ValidationException {
      *          objects required by the message text formatting.
      */
     public XDSMetaDataException(ValidationMessage validationMessage, Object... details) {
-        super(String.format(validationMessage.getText(), details));
+        super(String.format(validationMessage.getText(), unwrapQueryParameterNames(details)));
         this.validationMessage = validationMessage;
     }
 
@@ -45,4 +46,35 @@ public class XDSMetaDataException extends ValidationException {
     public ValidationMessage getValidationMessage() {
         return validationMessage;
     }
+
+    /**
+     * Recursively replaces all
+     * {@link org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter}
+     * elements found in the given array * with their corresponding ebXML slot names.
+     * @param array
+     *      array potentially containing
+     *      {@link org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter}
+     *      elements
+     * @return the same array instance, possibly modified in-place.
+     */
+    private static Object[] unwrapQueryParameterNames(Object[] array) {
+        for (int i = 0; i < array.length; ++i) {
+            if (array[i] instanceof QueryParameter) {
+                QueryParameter param = (QueryParameter) array[i];
+                array[i] = param.getSlotName();
+            }
+            else if (array[i] instanceof QueryParameter[]) {
+                QueryParameter[] params = (QueryParameter[]) array[i];
+                if (params.length > 0) {
+                    StringBuilder sb = new StringBuilder();
+                    for (QueryParameter param : params) {
+                        sb.append(", ").append(param.getSlotName());
+                    }
+                    array[i] = sb.replace(0, 2, "[").append(']').toString();
+                }
+            }
+        }
+        return array;
+    }
+
 }
