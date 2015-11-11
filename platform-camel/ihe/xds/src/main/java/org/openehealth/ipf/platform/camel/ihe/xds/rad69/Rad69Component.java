@@ -58,7 +58,7 @@ public class Rad69Component extends XdsComponent<XdsRetrieveAuditDataset> {
                 getProperties(parameters),
                 Rad69Service.class) {
             @Override
-            public AbstractWsProducer getProducer(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<XdsRetrieveAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint,
                                                   JaxWsClientFactory<XdsRetrieveAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, RetrieveImagingDocumentSetRequestType.class, RetrieveDocumentSetResponseType.class);

@@ -24,7 +24,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSe
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75PortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.*;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
@@ -56,8 +59,8 @@ public class Rad75Component extends XdsComponent<XdsRetrieveAuditDataset> {
                 getProperties(parameters),
                 null) {
             @Override
-            public AbstractWsProducer getProducer(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint,
-                                                  JaxWsClientFactory<XdsRetrieveAuditDataset> clientFactory) {
+            public AbstractWsProducer<XdsRetrieveAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint,
+                                                                                                    JaxWsClientFactory<XdsRetrieveAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, RetrieveImagingDocumentSetRequestType.class, RetrieveDocumentSetResponseType.class);
             }

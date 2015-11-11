@@ -56,7 +56,7 @@ public class Iti17Endpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransact
     }
 
     @Override
-    public AbstractWsProducer getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint,
+    public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint,
                                           JaxWsClientFactory<WsAuditDataset> clientFactory) {
         // not called
         return null;

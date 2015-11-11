@@ -61,7 +61,7 @@ public class Iti45Component extends Hl7v3Component<Hl7v3WsTransactionConfigurati
                 getProperties(parameters),
                 Iti45Service.class) {
             @Override
-            public AbstractWsProducer getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
                                                   JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, String.class, String.class);
             }

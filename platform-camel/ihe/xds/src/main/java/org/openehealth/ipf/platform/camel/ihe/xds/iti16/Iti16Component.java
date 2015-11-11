@@ -60,7 +60,7 @@ public class Iti16Component extends XdsComponent<XdsQueryAuditDataset> {
                 getProperties(parameters),
                 Iti16Service.class) {
             @Override
-            public AbstractWsProducer getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<XdsQueryAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint,
                                                   JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, AdhocQueryRequest.class, RegistryResponse.class);

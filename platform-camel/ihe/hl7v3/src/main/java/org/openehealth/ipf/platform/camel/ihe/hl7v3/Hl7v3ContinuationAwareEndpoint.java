@@ -82,7 +82,7 @@ public class Hl7v3ContinuationAwareEndpoint
     }
 
     @Override
-    public AbstractWsProducer getProducer(AbstractWsEndpoint<Hl7v3AuditDataset,Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint, JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
+    public AbstractWsProducer<Hl7v3AuditDataset,Hl7v3ContinuationAwareWsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset,Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint, JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
         return new Hl7v3ContinuationAwareProducer(this, getJaxWsClientFactory());
     }
 

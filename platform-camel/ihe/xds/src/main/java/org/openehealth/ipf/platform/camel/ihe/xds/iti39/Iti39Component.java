@@ -61,7 +61,7 @@ public class Iti39Component extends XdsComponent<XdsRetrieveAuditDataset> {
                 getProperties(parameters),
                 null) {
             @Override
-            public AbstractWsProducer getProducer(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<XdsRetrieveAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint,
                                                   JaxWsClientFactory<XdsRetrieveAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, RetrieveDocumentSetRequestType.class, RetrieveDocumentSetResponseType.class);

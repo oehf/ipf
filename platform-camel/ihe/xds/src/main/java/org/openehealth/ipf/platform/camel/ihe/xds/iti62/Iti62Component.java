@@ -61,7 +61,7 @@ public class Iti62Component extends XdsComponent<XdsRemoveAuditDataset> {
                 getProperties(parameters),
                 Iti62Service.class) {
             @Override
-            public AbstractWsProducer getProducer(AbstractWsEndpoint<XdsRemoveAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<XdsRemoveAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsRemoveAuditDataset, WsTransactionConfiguration> endpoint,
                                                   JaxWsClientFactory<XdsRemoveAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, RemoveObjectsRequest.class, RegistryResponseType.class);

@@ -83,7 +83,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent<WsAuditDataset> {
                 getProperties(parameters),
                 Pcd01Service.class) {
             @Override
-            public AbstractWsProducer getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint,
                                                   JaxWsClientFactory<WsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, String.class, String.class);
             }

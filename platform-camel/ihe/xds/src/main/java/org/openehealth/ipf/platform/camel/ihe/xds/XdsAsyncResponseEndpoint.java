@@ -68,7 +68,7 @@ public class XdsAsyncResponseEndpoint<AuditDatasetType extends XdsAuditDataset> 
     }
 
     @Override
-    public AbstractWsProducer getProducer(AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> endpoint,
+    public AbstractWsProducer<AuditDatasetType, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> endpoint,
                                           JaxWsClientFactory<AuditDatasetType> clientFactory) {
         throw new IllegalStateException("No producer support for asynchronous response endpoints");
     }

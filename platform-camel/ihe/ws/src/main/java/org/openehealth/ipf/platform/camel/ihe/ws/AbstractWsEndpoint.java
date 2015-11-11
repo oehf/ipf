@@ -391,7 +391,7 @@ public abstract class AbstractWsEndpoint<
      *
      * @since 3.1
      */
-    public abstract AbstractWsProducer getProducer(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint, JaxWsClientFactory<AuditDatasetType> clientFactory);
+    public abstract AbstractWsProducer<AuditDatasetType, ConfigType, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint, JaxWsClientFactory<AuditDatasetType> clientFactory);
 
 
     //special managed attributes

@@ -60,7 +60,7 @@ public class Iti57Component extends XdsComponent<XdsSubmitAuditDataset> {
                 getProperties(parameters),
                 Iti57Service.class) {
             @Override
-            public AbstractWsProducer getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
+            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
                                                   JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, SubmitObjectsRequest.class,RegistryResponseType.class);

@@ -75,7 +75,7 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
     }
 
     @Override
-    public AbstractWsProducer getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, ConfigType> endpoint,
+    public AbstractWsProducer<Hl7v3AuditDataset, ConfigType, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, ConfigType> endpoint,
                                           JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
         throw new IllegalStateException("No producer support for asynchronous response endpoints");
     }
