@@ -39,6 +39,9 @@ public abstract class InterceptableEndpointConfiguration implements Serializable
                 parameters, "interceptorFactories", InterceptorFactory.class);
     }
 
+    /**
+     * @return configured interceptor factories for the endpoint
+     */
     public List<InterceptorFactory> getCustomInterceptorFactories() {
         return customInterceptorFactories;
     }

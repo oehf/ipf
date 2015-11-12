@@ -26,6 +26,8 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.*;
 
 /**
  * Component for PIXm (ITI-83)
+ *
+ * @since 3.1
  */
 public class Iti83Component extends FhirComponent<Iti83AuditDataset> {
 

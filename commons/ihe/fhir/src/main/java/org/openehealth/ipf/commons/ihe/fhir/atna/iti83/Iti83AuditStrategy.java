@@ -40,7 +40,9 @@ public abstract class Iti83AuditStrategy extends AuditStrategySupport<Iti83Audit
     @Override
     public Iti83AuditDataset enrichAuditDatasetFromRequest(Iti83AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         auditDataset.setUserId((String)parameters.get(HTTP_URI));
-        auditDataset.setServiceEndpointUrl(parameters.get(HTTP_URL).toString());
+        if (parameters.get(HTTP_URL) != null) {
+            auditDataset.setServiceEndpointUrl(parameters.get(HTTP_URL).toString());
+        }
         auditDataset.setClientIpAddress((String)parameters.get(HTTP_CLIENT_IP_ADDRESS));
         auditDataset.setQueryString((String)parameters.get(HTTP_QUERY));
         return auditDataset;

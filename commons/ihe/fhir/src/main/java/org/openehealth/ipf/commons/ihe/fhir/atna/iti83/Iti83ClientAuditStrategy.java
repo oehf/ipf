@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.atna.iti83;
 
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 
 /**
  * Strategy for auditing ITI-83 transactions on the client side
@@ -30,7 +30,12 @@ public class Iti83ClientAuditStrategy extends Iti83AuditStrategy {
 
     @Override
     public void doAudit(Iti83AuditDataset auditDataset) {
-        throw new UnsupportedOperationException("not yet implemented");
+        AuditorManager.getFhirAuditor().auditIti83(
+                false,
+                auditDataset.getEventOutcomeCode(),
+                auditDataset.getServiceEndpointUrl(),
+                auditDataset.getClientIpAddress(),
+                auditDataset.getQueryString());
     }
 
 }

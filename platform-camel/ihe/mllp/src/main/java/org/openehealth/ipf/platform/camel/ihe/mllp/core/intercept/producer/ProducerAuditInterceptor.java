@@ -18,10 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptorUtils;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpAuditInterceptor;
 
 import java.net.InetAddress;
 
@@ -30,9 +30,9 @@ import java.net.InetAddress;
  * Producer-side ATNA auditing Camel interceptor.
  * @author Dmytro Rud
  */
-public class ProducerAuditInterceptor<T extends MllpAuditDataset>
-        extends InterceptorSupport<MllpTransactionEndpoint<T>>
-        implements MllpAuditInterceptor<T> {
+public class ProducerAuditInterceptor<AuditDatasetType extends MllpAuditDataset>
+        extends InterceptorSupport<MllpTransactionEndpoint<AuditDatasetType>>
+        implements AuditInterceptor<AuditDatasetType, MllpTransactionEndpoint<AuditDatasetType>> {
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -50,7 +50,7 @@ public class ProducerAuditInterceptor<T extends MllpAuditDataset>
     }
 
     @Override
-    public AuditStrategy<T> getAuditStrategy() {
+    public AuditStrategy<AuditDatasetType> getAuditStrategy() {
         return getEndpoint().getClientAuditStrategy();
     }
 }

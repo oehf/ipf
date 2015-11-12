@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequestToPixQueryTranslato
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir;
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 
 import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorFhirToHL7v2;
 import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorHL7v2ToFhir;
@@ -43,7 +44,11 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("pixm-iti83:gablorg?audit=true")
+
+        from("direct:input")
+                .toF("pixm-iti83:localhost:%d", FhirTestContainer.DEMO_APP_PORT);
+
+        from("pixm-iti83:translation?audit=true")
                 // Translate into ITI-9
                 .process(translatorFhirToHL7v2(requestTranslator))
                         // Create some static response

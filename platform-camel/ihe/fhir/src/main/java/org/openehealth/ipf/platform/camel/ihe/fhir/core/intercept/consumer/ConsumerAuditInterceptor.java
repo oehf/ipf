@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer;
 import org.apache.camel.Exchange;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
@@ -27,6 +26,8 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
@@ -43,18 +44,13 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     private static final Logger LOG = LoggerFactory.getLogger(ConsumerAuditInterceptor.class);
 
-    private final AuditStrategy<AuditDatasetType> serverAuditStrategy;
-
-    public ConsumerAuditInterceptor(AuditStrategy<AuditDatasetType> serverAuditStrategy) {
-        this.serverAuditStrategy = serverAuditStrategy;
-    }
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        FhirObject msg = exchange.getIn().getBody(FhirObject.class);
+        IBaseResource msg = exchange.getIn().getBody(IBaseResource.class);
 
-        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(serverAuditStrategy, exchange, msg);
-        // determineParticipantsAddresses(interceptor, exchange, auditDataset);
+        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
+        determineParticipantsAddresses(exchange, auditDataset);
 
         boolean failed = false;
         try {
@@ -79,10 +75,15 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         }
     }
 
+    @Override
+    public void determineParticipantsAddresses(Exchange exchange, AuditDatasetType auditDataset) throws Exception {
+        // auditDataset.setClientIpAddress(exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST, HttpServletRequest.class).getRemoteAddr());
+        // auditDataset.setLocalAddress
+    }
 
     @Override
     public AuditStrategy<AuditDatasetType> getAuditStrategy() {
-        return serverAuditStrategy;
+        return getEndpoint().getServerAuditStrategy();
     }
 
     /**
@@ -91,7 +92,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      *
      * @return newly created audit dataset or <code>null</code> when creation failed.
      */
-    private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, FhirObject msg) {
+    private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, IBaseResource msg) {
         try {
             AuditDatasetType auditDataset = strategy.createAuditDataset();
             // AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
@@ -102,7 +103,6 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         }
     }
 
-
     /**
      * Enriches the given audit dataset with data from the response message.
      * All exception are ignored.
@@ -110,6 +110,5 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
     private boolean enrichAuditDatasetFromResponse(AuditStrategy<AuditDatasetType> strategy, AuditDatasetType auditDataset, IBaseResource response) {
         return strategy.enrichAuditDatasetFromResponse(auditDataset, response);
     }
-
 
 }

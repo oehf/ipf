@@ -21,20 +21,18 @@ import ca.uhn.fhir.rest.annotation.OperationParam;
 import org.hl7.fhir.instance.model.*;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83AuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequest;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.AbstractResourceProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
 
 /**
  * According to the PIXM specification, this resource provider must handle requests in the form
  * GET [base]/Patient/$ihe-pix?sourceIdentifier=[token]]{&targetSystem=[uri]}{&_format=[mime-type]}
+ *
+ * @since 3.1
  */
 public class Iti83ResourceProvider extends AbstractResourceProvider<Iti83AuditDataset> {
 

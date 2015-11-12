@@ -39,11 +39,13 @@ public abstract class FhirConsumer<AuditDatasetType extends FhirAuditDataset>
         super(endpoint, processor);
     }
 
+    @Override
     protected void doStart() throws Exception {
         super.doStart();
         this.getEndpoint().connect(this);
     }
 
+    @Override
     protected void doStop() throws Exception {
         this.getEndpoint().disconnect(this);
         super.doStop();

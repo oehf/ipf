@@ -24,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.AuditUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
+import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +53,9 @@ public final class AuditInterceptorUtils {
      * Does not produce any own exceptions, only rethrows exceptions
      * raised during the proper call.
      */
-    public static <T extends MllpAuditDataset> void doProcess(MllpAuditInterceptor<T> interceptor, Exchange exchange) throws Exception {
+    public static <AuditDatasetType extends MllpAuditDataset> void doProcess(
+            AuditInterceptor<AuditDatasetType, MllpTransactionEndpoint<AuditDatasetType>> interceptor,
+            Exchange exchange) throws Exception {
         Message msg = exchange.getIn().getBody(Message.class);
 
         // pass in case of non-auditable message types
@@ -60,8 +64,8 @@ public final class AuditInterceptorUtils {
             return;
         }
 
-        AuditStrategy<T> strategy = interceptor.getAuditStrategy();
-        T auditDataset = createAndEnrichAuditDatasetFromRequest(strategy, exchange, msg);
+        AuditStrategy<AuditDatasetType> strategy = interceptor.getAuditStrategy();
+        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(strategy, exchange, msg);
         determineParticipantsAddresses(interceptor, exchange, auditDataset);
 
         boolean failed = false;
@@ -84,7 +88,7 @@ public final class AuditInterceptorUtils {
      * Checks whether the given message should be audited.
      * All exceptions are ignored.
      */
-    private static <T extends MllpAuditDataset> boolean isAuditable(MllpAuditInterceptor<T> interceptor, Message message) {
+    private static <AuditDatasetType extends MllpAuditDataset> boolean isAuditable(AuditInterceptor<AuditDatasetType, MllpTransactionEndpoint<AuditDatasetType>> interceptor, Message message) {
         try {
             Terser terser = new Terser(message);
 
@@ -126,9 +130,9 @@ public final class AuditInterceptorUtils {
      * Enriches the given audit dataset with data from the response message.
      * All exception are ignored.
      */
-    private static <T extends MllpAuditDataset> void enrichAuditDatasetFromResponse(
-            AuditStrategy<T> strategy,
-            T auditDataset,
+    private static <AuditDatasetType extends MllpAuditDataset> void enrichAuditDatasetFromResponse(
+            AuditStrategy<AuditDatasetType> strategy,
+            AuditDatasetType auditDataset,
             Message msg) {
         try {
             strategy.enrichAuditDatasetFromResponse(auditDataset, msg);
@@ -142,10 +146,10 @@ public final class AuditInterceptorUtils {
      * Determines addresses of local and remote participants and stores them
      * into the audit dataset.  All exception are ignored.
      */
-    private static <T extends MllpAuditDataset> void determineParticipantsAddresses(
-            MllpAuditInterceptor<T> interceptor,
+    private static <AuditDatasetType extends MllpAuditDataset> void determineParticipantsAddresses(
+            AuditInterceptor<AuditDatasetType, MllpTransactionEndpoint<AuditDatasetType>> interceptor,
             Exchange exchange,
-            T auditDataset) {
+            AuditDatasetType auditDataset) {
         try {
             interceptor.determineParticipantsAddresses(exchange, auditDataset);
         } catch (Exception e) {

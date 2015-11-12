@@ -35,11 +35,19 @@ public abstract class FhirProducer<AuditDatasetType extends FhirAuditDataset> ex
         super(endpoint);
     }
 
-    @Override
-    protected void doStart() throws Exception {
-        super.doStart();
-        FhirContext context = getEndpoint().getFhirComponentConfiguration().getContext();
-        client = context.newRestfulGenericClient("bla"); // FIXME URI!
+    protected synchronized IGenericClient getClient() throws Exception {
+        if (client == null) {
+            FhirContext context = getEndpoint().getFhirComponentConfiguration().getContext();
+
+            // For the producer, the path is supposed to be the server URL
+            String path = getEndpoint().getInterceptableConfiguration().getPath();
+
+            // For now, assume http as only protocol
+
+            path = "http://" + path;
+            client = context.newRestfulGenericClient(path);
+        }
+        return client;
     }
 
     @Override
@@ -54,7 +62,7 @@ public abstract class FhirProducer<AuditDatasetType extends FhirAuditDataset> ex
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        doProcess(exchange, client);
+        doProcess(exchange, getClient());
     }
 
     protected abstract void doProcess(Exchange exchange, IGenericClient client) throws InvalidPayloadException;

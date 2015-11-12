@@ -22,6 +22,8 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirConsumer;
 
 /**
  * PIXM Consumer
+ *
+ * @since 3.1
  */
 public class Iti83Consumer extends FhirConsumer<Iti83AuditDataset> {
 

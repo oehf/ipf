@@ -66,7 +66,7 @@ public class TestIti83 extends FhirTestContainer {
     }
 
     @Test
-    public void testSendPixm() {
+    public void testSendManualPixm() {
         Parameters inParams = new Parameters();
         inParams.addParameter()
                 .setName(Constants.SOURCE_IDENTIFIER_NAME)
@@ -82,13 +82,15 @@ public class TestIti83 extends FhirTestContainer {
                 .useHttpGet()
                 .execute();
 
+        printAsXML(result);
+
         Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
         assertEquals(Iti9Responder.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
         MockedSender sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().iterator().next().getAuditMessage();
+        AuditMessage event = sender.getMessages().get(0).getAuditMessage();
 
         assertEquals("E", event.getEventIdentification().getEventActionCode());
         CodedValueType eventId = event.getEventIdentification().getEventID();
@@ -115,8 +117,27 @@ public class TestIti83 extends FhirTestContainer {
         assertEquals("Mobile Patient Identifier Cross-reference Query", poitTypeCode.getOriginalText());
         assertEquals("PIXmQuery", poit.getParticipantObjectID());
         // assertEquals("targetSystem=urn%3Aoid%3A1.2.3.4.6&sourceIdentifier=urn%3Aoid%3A1.2.3.4%7C0815", new String(poit.getParticipantObjectQuery()));
+    }
 
-        // printAsXML(result);
+    @Test
+    public void testSendEndpointPixm() {
+        Parameters inParams = new Parameters();
+        inParams.addParameter()
+                .setName(Constants.SOURCE_IDENTIFIER_NAME)
+                .setValue(new StringType("urn:oid:1.2.3.4|0815"));
+        inParams.addParameter()
+                .setName(Constants.TARGET_SYSTEM_NAME)
+                .setValue(new UriType("urn:oid:1.2.3.4.6"));
+        Parameters result = getProducerTemplate().requestBody("direct:input", inParams, Parameters.class);
+        printAsXML(result);
+
+        Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
+        assertEquals(Iti9Responder.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
+
+        // Check ATNA Audit
+        MockedSender sender = getAuditSender();
+        assertEquals(2, sender.getMessages().size());
+        // FIXME client-side audit message needs ip addresses, target URL and queryString
 
     }
 

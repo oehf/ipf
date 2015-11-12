@@ -26,6 +26,8 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
 
 /**
  * PIXM Query endpoint (ITI-83)
+ *
+ * @since 3.1
  */
 @UriEndpoint(scheme = "pixm-iti83", title = "ITI-83 PIXm", syntax = "pixm-iti83:host:port", consumerClass = Iti83Consumer.class, label = "http")
 public class Iti83Endpoint extends FhirEndpoint<Iti83AuditDataset, Iti83Component> {
@@ -41,7 +43,7 @@ public class Iti83Endpoint extends FhirEndpoint<Iti83AuditDataset, Iti83Componen
 
     @Override
     protected Producer doCreateProducer() throws Exception {
-        return null;
+        return new Iti83Producer(this);
     }
 
     @Override

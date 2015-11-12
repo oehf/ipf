@@ -43,18 +43,12 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     private static final Logger LOG = LoggerFactory.getLogger(ProducerAuditInterceptor.class);
 
-    private final AuditStrategy<AuditDatasetType> serverAuditStrategy;
-
-    public ProducerAuditInterceptor(AuditStrategy<AuditDatasetType> serverAuditStrategy) {
-        this.serverAuditStrategy = serverAuditStrategy;
-    }
-
     @Override
     public void process(Exchange exchange) throws Exception {
         FhirObject msg = exchange.getIn().getBody(FhirObject.class);
 
-        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(serverAuditStrategy, exchange, msg);
-        // determineParticipantsAddresses(interceptor, exchange, auditDataset);
+        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
+        determineParticipantsAddresses(exchange, auditDataset);
 
         boolean failed = false;
         try {
@@ -79,10 +73,14 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         }
     }
 
+    @Override
+    public void determineParticipantsAddresses(Exchange exchange, AuditDatasetType auditDataset) throws Exception {
+
+    }
 
     @Override
     public AuditStrategy<AuditDatasetType> getAuditStrategy() {
-        return serverAuditStrategy;
+        return getEndpoint().getClientAuditStrategy();
     }
 
     /**
@@ -94,7 +92,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, FhirObject msg) {
         try {
             AuditDatasetType auditDataset = strategy.createAuditDataset();
-            // AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
+            // TODO set client-side headers
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);

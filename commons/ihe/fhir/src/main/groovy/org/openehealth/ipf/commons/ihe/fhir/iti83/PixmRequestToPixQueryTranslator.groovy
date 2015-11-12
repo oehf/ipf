@@ -22,7 +22,6 @@ import org.hl7.fhir.instance.model.Parameters
 import org.hl7.fhir.instance.model.UriType
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
-import org.openehealth.ipf.commons.ihe.fhir.FhirObject
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.fhir.translation.Utils
@@ -33,7 +32,7 @@ import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 /**
- * Translates a {@link PixmRequest} into a HL7v2 PIX Query message
+ * Translates a {@link IBaseResource} into a HL7v2 PIX Query message
  *
  * @since 3.1
  */

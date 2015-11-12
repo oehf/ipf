@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.atna.interceptor;
 
+import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
@@ -33,4 +34,12 @@ public interface AuditInterceptor<T extends AuditDataset, E extends AuditableEnd
      * Returns the audit strategy instance configured for this interceptor.
      */
     AuditStrategy<T> getAuditStrategy();
+
+    /**
+     * Determines local and remote network addresses on the basis of the
+     * given exchange and stores them into the given audit dataset.
+     */
+    void determineParticipantsAddresses(
+            Exchange exchange,
+            T auditDataset) throws Exception;
 }
