@@ -19,10 +19,8 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
 
-import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,7 +29,7 @@ import java.util.Map;
  * @since 3.1
  */
 @UriParams
-public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> implements Serializable {
+public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> extends InterceptableEndpointConfiguration {
 
     private String serviceName;
 
@@ -44,17 +42,14 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     @UriParam
     private AbstractResourceProvider<AuditDatasetType> resourceProvider;
 
-    @UriParam
-    private List<InterceptorFactory> customInterceptorFactories;
-
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String serviceName, Map<String, Object> parameters) throws Exception {
+        super(component, parameters);
+
         this.serviceName = serviceName;
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, CamelFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "resourceProvider", AbstractResourceProvider.class, null);
-        customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
-                parameters, "interceptorFactories", InterceptorFactory.class);
     }
 
     public boolean isAudit() {
@@ -63,10 +58,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     public AbstractResourceProvider<AuditDatasetType> getResourceProvider() {
         return resourceProvider;
-    }
-
-    public List<InterceptorFactory> getCustomInterceptorFactories() {
-        return customInterceptorFactories;
     }
 
     public String getServletName() {

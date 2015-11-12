@@ -16,18 +16,14 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
-import org.apache.camel.Consumer;
-import org.apache.camel.Processor;
-import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
-import org.apache.camel.impl.DefaultEndpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.core.chain.ChainUtils;
 import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer.ConsumerAuditInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer.ProducerAuditInterceptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +33,15 @@ import java.util.List;
  *
  * @since 3.1
  */
-public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset> extends DefaultEndpoint
+public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, ComponentType extends FhirComponent<AuditDatasetType>>
+        extends InterceptableEndpoint<FhirEndpointConfiguration<AuditDatasetType>, ComponentType>
         implements AuditableEndpoint<AuditDatasetType> {
 
     private final FhirEndpointConfiguration<AuditDatasetType> config;
     private String servletName;
-    private final FhirComponent<AuditDatasetType> fhirComponent;
+    private final ComponentType fhirComponent;
 
-    public FhirEndpoint(String uri, FhirComponent<AuditDatasetType> fhirComponent, FhirEndpointConfiguration<AuditDatasetType> config) {
+    public FhirEndpoint(String uri, ComponentType fhirComponent, FhirEndpointConfiguration<AuditDatasetType> config) {
         super(uri, fhirComponent);
         this.fhirComponent = fhirComponent;
         this.config = config;
@@ -52,27 +49,9 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset> ex
     }
 
     @Override
-    public final Consumer createConsumer(Processor originalProcessor) throws Exception {
-
-        // Configure interceptor chain
-        List<Interceptor> chain = getConsumerInterceptorChain();
-        Processor processor = originalProcessor;
-        for (int i = chain.size() - 1; i >= 0; --i) {
-            Interceptor interceptor = chain.get(i);
-            interceptor.setWrappedProcessor(processor);
-            processor = interceptor;
-        }
-        // Create the component-specific consumer
-        return doCreateConsumer(processor);
+    protected ComponentType getInterceptableComponent() {
+        return fhirComponent;
     }
-
-    /**
-     * Create the actual consumer
-     *
-     * @param processor processor that may have been wrapped with a number of interceptors
-     * @return the actual consumer
-     */
-    protected abstract Consumer doCreateConsumer(Processor processor);
 
     /**
      * Called when a {@link FhirConsumer} is started. Registers the resource provider
@@ -100,11 +79,12 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset> ex
     }
 
     /**
-     * Returns a list of interceptors that are default for FHIR endpoints. Subclasses
+     * Returns a list of interceptors that are default for FHIR consumers. Subclasses
      * can add additional interceptors that are required for a concrete FHIR endpoint.
      *
      * @return list of default interceptors
      */
+    @Override
     protected List<Interceptor> createInitialConsumerInterceptorChain() {
         List<Interceptor> initialChain = new ArrayList<>();
         if (isAudit()) {
@@ -114,17 +94,27 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset> ex
     }
 
     /**
+     * Returns a list of interceptors that are default for FHIR producers. Subclasses
+     * can add additional interceptors that are required for a concrete FHIR endpoint.
+     *
+     * @return list of default interceptors
+     */
+    @Override
+    protected List<Interceptor> createInitialProducerInterceptorChain() {
+        List<Interceptor> initialChain = new ArrayList<>();
+        if (isAudit()) {
+            initialChain.add(new ProducerAuditInterceptor<>(getClientAuditStrategy()));
+        }
+        return initialChain;
+    }
+
+    /**
      * Returns <tt>true</tt> when ATNA auditing should be performed.
      */
+    @Override
     @ManagedAttribute(description = "Audit Enabled")
     public boolean isAudit() {
         return config.isAudit();
-    }
-
-
-    @Override
-    public Producer createProducer() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet");
     }
 
     @Override
@@ -134,6 +124,11 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset> ex
 
     public FhirComponentConfiguration<AuditDatasetType> getFhirComponentConfiguration() {
         return fhirComponent.getFhirComponentConfiguration();
+    }
+
+    @Override
+    protected FhirEndpointConfiguration<AuditDatasetType> getInterceptableConfiguration() {
+        return config;
     }
 
     /**
@@ -162,27 +157,4 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset> ex
         return provider;
     }
 
-    private List<Interceptor> getConsumerInterceptorChain() {
-        // set up initial interceptor chain
-        List<Interceptor> initialChain = createInitialConsumerInterceptorChain();
-
-        List<Interceptor> additionalInterceptors = new ArrayList<>();
-        additionalInterceptors.addAll(fhirComponent.getAdditionalConsumerInterceptors());
-        // add interceptors provided by the user
-        additionalInterceptors.addAll(getCustomInterceptors());
-
-        return ChainUtils.createChain(initialChain, additionalInterceptors);
-    }
-
-    /**
-     * @return a list of endpoint-specific interceptors
-     */
-    private synchronized List<Interceptor> getCustomInterceptors() {
-        List<Interceptor> result = new ArrayList<>();
-        List<InterceptorFactory> factories = config.getCustomInterceptorFactories();
-        for (InterceptorFactory customInterceptorFactory : factories) {
-            result.add(customInterceptorFactory.getNewInstance());
-        }
-        return result;
-    }
 }

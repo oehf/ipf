@@ -24,30 +24,27 @@ import org.apache.camel.component.mina2.Mina2Configuration;
 import org.apache.camel.component.mina2.Mina2Consumer;
 import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.apache.camel.component.mina2.Mina2Producer;
-import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.commons.lang3.Validate;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.filterchain.IoFilter;
 import org.apache.mina.core.session.IoSession;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
-import org.openehealth.ipf.commons.ihe.core.chain.ChainUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditUtils;
-import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 
 import javax.net.ssl.SSLContext;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * A wrapper for standard camel-mina endpoint 
  * which provides support for IHE PIX/PDQ-related extensions.
+ *
  * @author Dmytro Rud
  */
 @ManagedResource(description = "Managed IPF MLLP ITI Endpoint")
@@ -56,13 +53,12 @@ public abstract class MllpEndpoint
             ConfigType extends MllpEndpointConfiguration,
             ComponentType extends MllpComponent<ConfigType>
         >
-        extends DefaultEndpoint implements HL7v2Endpoint
+        extends InterceptableEndpoint<ConfigType, ComponentType> implements HL7v2Endpoint
 {
 
     @Getter(AccessLevel.PROTECTED) private final ConfigType config;
     @Getter(AccessLevel.PROTECTED) private final ComponentType mllpComponent;
     @Getter(AccessLevel.PROTECTED) private final Mina2Endpoint wrappedEndpoint;
-
 
     /**
      * Constructor.
@@ -78,70 +74,50 @@ public abstract class MllpEndpoint
             Mina2Endpoint wrappedEndpoint,
             ConfigType config)
     {
+        super(wrappedEndpoint.getEndpointUri(), mllpComponent);
         this.mllpComponent = Validate.notNull(mllpComponent);
         this.wrappedEndpoint = Validate.notNull(wrappedEndpoint);
         this.config = Validate.notNull(config);
     }
 
-
-    private synchronized List<Interceptor> getCustomInterceptors() {
-        List<Interceptor> result = new ArrayList<>();
-        List<InterceptorFactory> factories = config.getCustomInterceptorFactories();
-        for (InterceptorFactory customInterceptorFactory : factories) {
-            result.add(customInterceptorFactory.getNewInstance());
-        }
-        return result;
+    @Override
+    protected ComponentType getInterceptableComponent() {
+        return mllpComponent;
     }
 
-
-    protected abstract List<Interceptor> createInitialConsumerInterceptorChain();
-    protected abstract List<Interceptor> createInitialProducerInterceptorChain();
-
-
-    private List<Interceptor> getConsumerInterceptorChain() {
-        // set up initial interceptor chain
-        List<Interceptor> initialChain = createInitialConsumerInterceptorChain();
-
-        // add interceptors provided by the user
-        List<Interceptor> additionalInterceptors = new ArrayList<>();
-        additionalInterceptors.addAll(mllpComponent.getAdditionalConsumerInterceptors());
-        additionalInterceptors.addAll(getCustomInterceptors());
-
-        return ChainUtils.createChain(initialChain, additionalInterceptors);
+    @Override
+    protected ConfigType getInterceptableConfiguration() {
+        return config;
     }
-
-
-    private List<Interceptor> getProducerInterceptorChain() {
-        // set up initial interceptor chain
-        List<Interceptor> initialChain = createInitialProducerInterceptorChain();
-
-        // add interceptors provided by the user
-        List<Interceptor> additionalInterceptors = new ArrayList<>();
-        additionalInterceptors.addAll(mllpComponent.getAdditionalProducerInterceptors());
-        additionalInterceptors.addAll(getCustomInterceptors());
-
-        return ChainUtils.createChain(initialChain, additionalInterceptors);
-    }
-
 
     /**
-     * Wraps the original starting point of the consumer route 
-     * into a set of PIX/PDQ-specific interceptors.
-     * @param originalProcessor
-     *      The original consumer processor.
+     * Wraps the original camel-mina producer
+     * into a set of PIX/PDQ-specific ones.
      */
     @Override
-    public Consumer createConsumer(Processor originalProcessor) throws Exception {
-        // configure interceptor chain
-        List<Interceptor> chain = getConsumerInterceptorChain();
-        Processor processor = originalProcessor;
-        for (int i = chain.size() - 1; i >= 0; --i) {
-            Interceptor interceptor = chain.get(i);
-            interceptor.setEndpoint(this);
-            interceptor.setWrappedProcessor(processor);
-            processor = interceptor;
+    protected Producer doCreateProducer() throws Exception {
+        Mina2Producer producer = (Mina2Producer)wrappedEndpoint.createProducer();
+        if (config.getSslContext() != null) {
+            DefaultIoFilterChainBuilder filterChain = producer.getFilterChain();
+            if (!filterChain.contains("ssl")) {
+                HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(config.getSslContext());
+                filter.setUseClientMode(true);
+                filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
+                filter.setEnabledProtocols(config.getSslProtocols());
+                filter.setEnabledCipherSuites(config.getSslCiphers());
+                filterChain.addFirst("ssl", filter);
+            }
         }
+        return producer;
+    }
 
+    /**
+     * Wraps the original starting point of the consumer route
+     * into a set of PIX/PDQ-specific interceptors.
+     * @param processor The original consumer processor.
+     */
+    @Override
+    protected Consumer doCreateConsumer(Processor processor) throws Exception {
         Mina2Consumer consumer = (Mina2Consumer) wrappedEndpoint.createConsumer(processor);
         if (config.getSslContext() != null) {
             DefaultIoFilterChainBuilder filterChain = consumer.getAcceptor().getFilterChain();
@@ -155,34 +131,7 @@ public abstract class MllpEndpoint
                 filterChain.addFirst("ssl", filter);
             }
         }
-
         return new MllpConsumer(consumer);
-    }
-
-
-    /**
-     * Wraps the original camel-mina producer  
-     * into a set of PIX/PDQ-specific ones.
-     */
-    @Override
-    public Producer createProducer() throws Exception {
-        Mina2Producer producer = (Mina2Producer)wrappedEndpoint.createProducer();
-
-        if (config.getSslContext() != null) {
-            DefaultIoFilterChainBuilder filterChain = producer.getFilterChain();
-            if (!filterChain.contains("ssl")) {
-                HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(config.getSslContext());
-                filter.setUseClientMode(true);
-                filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
-                filter.setEnabledProtocols(config.getSslProtocols());
-                filter.setEnabledCipherSuites(config.getSslCiphers());
-                filterChain.addFirst("ssl", filter);
-            }
-        }
-        return Hl7v2InterceptorUtils.adaptProducerChain(
-                getProducerInterceptorChain(),
-                this,
-                producer);
     }
 
 

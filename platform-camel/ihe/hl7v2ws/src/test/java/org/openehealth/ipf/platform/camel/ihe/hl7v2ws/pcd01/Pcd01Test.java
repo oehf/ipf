@@ -32,7 +32,7 @@ import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.Interceptor2ProducerAdapter;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor2ProducerAdapter;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 import javax.management.MBeanServer;

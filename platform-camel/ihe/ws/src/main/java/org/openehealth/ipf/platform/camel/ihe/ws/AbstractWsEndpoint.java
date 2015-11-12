@@ -223,6 +223,7 @@ public abstract class AbstractWsEndpoint<
     /**
      * @return <code>true</code> if auditing is turned on. <code>true</code> by default.
      */
+    @Override
     @ManagedAttribute(description = "Audit Enabled")
     public boolean isAudit() {
         return audit;

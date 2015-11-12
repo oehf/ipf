@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer;
+package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer;
 
 import org.apache.camel.Exchange;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -37,15 +37,15 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  * @author Christian Ohr
  * @since 3.1
  */
-public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
+public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         extends InterceptorSupport<FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>>
         implements AuditInterceptor<AuditDatasetType, FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ConsumerAuditInterceptor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProducerAuditInterceptor.class);
 
     private final AuditStrategy<AuditDatasetType> serverAuditStrategy;
 
-    public ConsumerAuditInterceptor(AuditStrategy<AuditDatasetType> serverAuditStrategy) {
+    public ProducerAuditInterceptor(AuditStrategy<AuditDatasetType> serverAuditStrategy) {
         this.serverAuditStrategy = serverAuditStrategy;
     }
 

@@ -31,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
@@ -86,7 +86,7 @@ public abstract class SimpleHl7v2WsEndpoint<
 
     @Override
     public Producer createProducer() throws Exception {
-        return Hl7v2InterceptorUtils.adaptProducerChain(
+        return InterceptorUtils.adaptProducerChain(
                 getProducerInterceptorChain(),
                 this,
                 getProducer(this, getJaxWsClientFactory()));

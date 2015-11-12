@@ -42,14 +42,13 @@ public abstract class AbstractResourceProvider<AuditDatasetType extends FhirAudi
     /**
      *
      * @param payload FHIR request resource
-     * @param parameters FHIR request parameters
      * @param resultType exepcted result type
      * @param httpServletRequest servlet request
      * @param httpServletResponse servlet response
      * @param <R> Result type
      * @return result of route processing
      */
-    protected final <R extends IBaseResource> R processInRoute(Object payload, Map<String, Object> parameters, Class<R> resultType,
+    protected final <R extends IBaseResource> R processInRoute(Object payload, Class<R> resultType,
                                                                HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         if (consumer == null) {
             throw new IllegalStateException("Consumer is not initialized");
@@ -58,14 +57,13 @@ public abstract class AbstractResourceProvider<AuditDatasetType extends FhirAudi
         // Populate some headers.
         Map<String, Object> headers = new HashMap<>();
         headers.put(HTTP_URI, httpServletRequest.getRequestURI());
+        headers.put(HTTP_URL, httpServletRequest.getRequestURL());
         headers.put(HTTP_METHOD, httpServletRequest.getMethod());
         headers.put(HTTP_QUERY, httpServletRequest.getQueryString());
         headers.put(HTTP_CHARACTER_ENCODING, httpServletRequest.getCharacterEncoding());
         headers.put(HTTP_CONTENT_TYPE, httpServletRequest.getContentType());
         headers.put(HTTP_PROTOCOL_VERSION, httpServletRequest.getProtocol());
         headers.put(HTTP_CLIENT_IP_ADDRESS, httpServletRequest.getRemoteAddr());
-
-        headers.putAll(parameters);
 
         return consumer.processInRoute(payload, headers, resultType);
     }

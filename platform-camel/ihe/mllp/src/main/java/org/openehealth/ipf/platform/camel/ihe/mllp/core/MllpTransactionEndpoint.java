@@ -112,6 +112,7 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
     /**
      * Returns <tt>true</tt> when ATNA auditing should be performed.
      */
+    @Override
     @ManagedAttribute(description = "Audit Enabled")
     public boolean isAudit() {
         return getConfig().isAudit();

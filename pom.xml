@@ -99,7 +99,7 @@
         <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
         <ipf-gazelle-version>1.0.8</ipf-gazelle-version>
-        <ipf-oht-atna-version>3.0-SNAPSHOT</ipf-oht-atna-version>
+        <ipf-oht-atna-version>3.1-SNAPSHOT</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.2.11</jaxb-version>
         <jasypt-version>1.9.2</jasypt-version>

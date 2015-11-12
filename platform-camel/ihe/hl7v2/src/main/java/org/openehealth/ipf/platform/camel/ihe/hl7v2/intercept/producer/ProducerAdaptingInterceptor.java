@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 
 import ca.uhn.hl7v2.model.Message;
-import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.commons.lang3.ClassUtils;

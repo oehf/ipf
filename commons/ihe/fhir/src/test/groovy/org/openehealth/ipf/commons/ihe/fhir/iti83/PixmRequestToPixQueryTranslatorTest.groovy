@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti83
 
 import org.hl7.fhir.instance.model.Identifier
+import org.hl7.fhir.instance.model.Parameters
 import org.hl7.fhir.instance.model.UriType
 import org.junit.Assert
 import org.junit.Before
@@ -52,10 +53,14 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
                 .setSystem('urn:oid:1.2.3.4')
                 .setValue('4711ABC')
         UriType domainsReturned = new UriType('urn:oid:1.2.3.5.6')
-        Map<String, Object> parameters = new HashMap<>()
-        parameters.put(Constants.SOURCE_IDENTIFIER_NAME, systemIdentifier)
-        parameters.put(Constants.TARGET_SYSTEM_NAME, domainsReturned)
-        QBP_Q21 translated = translator.translateFhirToHL7v2(null, parameters)
+        Parameters params = new Parameters()
+        params.addParameter()
+                .setName(Constants.SOURCE_IDENTIFIER_NAME)
+                .setValue(systemIdentifier)
+        params.addParameter()
+                .setName(Constants.TARGET_SYSTEM_NAME)
+                .setValue(domainsReturned)
+        QBP_Q21 translated = translator.translateFhirToHL7v2(params, null)
 
         assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
         assertEquals(URN.create(systemIdentifier.system).namespaceSpecificString, translated.QPD[3][4][2].value)
@@ -68,10 +73,14 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
                 .setSystem('http://org.openehealth/ipf/commons/ihe/fhir/1')
                 .setValue('4711ABC')
         UriType domainsReturned = new UriType('http://org.openehealth/ipf/commons/ihe/fhir/2')
-        Map<String, Object> parameters = new HashMap<>()
-        parameters.put(Constants.SOURCE_IDENTIFIER_NAME, systemIdentifier)
-        parameters.put(Constants.TARGET_SYSTEM_NAME, domainsReturned)
-        QBP_Q21 translated = translator.translateFhirToHL7v2(null, parameters)
+        Parameters params = new Parameters()
+        params.addParameter()
+                .setName(Constants.SOURCE_IDENTIFIER_NAME)
+                .setValue(systemIdentifier)
+        params.addParameter()
+                .setName(Constants.TARGET_SYSTEM_NAME)
+                .setValue(domainsReturned)
+        QBP_Q21 translated = translator.translateFhirToHL7v2(params, null)
 
         assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
         assertEquals(mappingService.get('uriToOid', systemIdentifier.system), translated.QPD[3][4][2].value)
@@ -84,9 +93,13 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
                 .setSystem('urn:isbn:1.2.3.4')
                 .setValue('4711ABC')
         UriType domainsReturned = new UriType('urn:oid:1.2.3.5.6')
-        Map<String, Object> parameters = new HashMap<>()
-        parameters.put(Constants.SOURCE_IDENTIFIER_NAME, systemIdentifier)
-        parameters.put(Constants.TARGET_SYSTEM_NAME, domainsReturned)
-        translator.translateFhirToHL7v2(null, parameters)
+        Parameters params = new Parameters()
+        params.addParameter()
+                .setName(Constants.SOURCE_IDENTIFIER_NAME)
+                .setValue(systemIdentifier)
+        params.addParameter()
+                .setName(Constants.TARGET_SYSTEM_NAME)
+                .setValue(domainsReturned)
+        translator.translateFhirToHL7v2(params, null)
     }
 }

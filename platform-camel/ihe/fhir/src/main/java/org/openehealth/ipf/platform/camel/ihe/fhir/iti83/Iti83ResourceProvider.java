@@ -70,12 +70,12 @@ public class Iti83ResourceProvider extends AbstractResourceProvider<Iti83AuditDa
                 .setSystem(parts[0])
                 .setValue(parts[1]);
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put(SOURCE_IDENTIFIER_NAME, sourceIdentifier);
-        parameters.put(TARGET_SYSTEM_NAME, targetSystem);
+        Parameters inParams = new Parameters();
+        inParams.addParameter().setName(SOURCE_IDENTIFIER_NAME).setValue(sourceIdentifier);
+        inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetSystem);
 
         // Run down the route
-        return processInRoute(null, parameters, Parameters.class, httpServletRequest, httpServletResponse);
+        return processInRoute(inParams, Parameters.class, httpServletRequest, httpServletResponse);
     }
 
 }

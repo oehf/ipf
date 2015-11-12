@@ -31,4 +31,20 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
           class="org.openehealth.ipf.platform.camel.ihe.fhir.iti83.Iti83TestRouteBuilder">
         <constructor-arg index="0" ref="uriMapper"/>
     </bean>
+
+    <!-- Set dummy host and port -->
+    <bean id="auditModuleConfig" factory-method="getConfig" factory-bean="auditModuleContext">
+        <property name="auditRepositoryHost" value="0.0.0.0" />
+        <property name="auditRepositoryPort" value="0" />
+        <property name="auditorEnabled" value="true" />
+        <property name="auditRepositoryTransport" value="UDP" />
+        <property name="auditSourceId" value="IPF" />
+        <property name="auditEnterpriseSiteId" value="IPF" />
+    </bean>
+
+    <bean id="auditModuleContext" factory-method="getContext"
+          class="org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext">
+
+    </bean>
+
 </beans>

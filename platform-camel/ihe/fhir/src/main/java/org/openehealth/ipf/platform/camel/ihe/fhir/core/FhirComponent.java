@@ -21,6 +21,7 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
 import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 
 import java.util.Collections;
@@ -33,7 +34,7 @@ import java.util.Map;
  * @since 3.1
  */
 public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
-        extends UriEndpointComponent implements AuditableComponent<AuditDatasetType> {
+        extends UriEndpointComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent {
 
     public FhirComponent() {
         super(FhirEndpoint.class);
@@ -53,25 +54,13 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         return doCreateEndpoint(uri, config);
     }
 
-    /**
-     * Returns a list of component-specific (i.e. transaction-specific)
-     * FHIR interceptors which will be integrated into the interceptor
-     * chain of each consumer instance created by this component.
-     * <p/>
-     * Per default returns an empty list.
-     * <br>
-     * When overwriting this method, please note:
-     * <ul>
-     * <li>Neither the returned list nor any element of it
-     * are allowed to be <code>null</code>.
-     * <li>Each invocation should return freshly created instances
-     * of interceptors (like prototype-scope beans in Spring),
-     * because interceptors cannot be reused by multiple endpoints.
-     * </ul>
-     *
-     * @return a list of component-specific (i.e. transaction-specific) FHIR interceptors
-     */
+    @Override
     public List<Interceptor> getAdditionalConsumerInterceptors() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Interceptor> getAdditionalProducerInterceptors() {
         return Collections.emptyList();
     }
 
@@ -82,7 +71,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      * @param config FhirEndpointConfiguration
      * @return a new endpoint instance
      */
-    protected abstract FhirEndpoint<AuditDatasetType> doCreateEndpoint(String uri, FhirEndpointConfiguration<AuditDatasetType> config);
+    protected abstract FhirEndpoint<?, ?> doCreateEndpoint(String uri, FhirEndpointConfiguration<AuditDatasetType> config);
 
     /**
      * @return static component-specific configuration

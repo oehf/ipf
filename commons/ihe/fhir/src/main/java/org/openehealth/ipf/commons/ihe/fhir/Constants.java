@@ -27,6 +27,7 @@ public interface Constants {
 
     // Parameter information from the HttpServletRequest
     String HTTP_URI = "FhirHttpUri";
+    String HTTP_URL = "FhirHttpUrl";
     String HTTP_METHOD = "FhirHttpMethod";
     String HTTP_QUERY = "FhirHttpQuery";
     String HTTP_CHARACTER_ENCODING = "FhirHttpCharacterEncoding";

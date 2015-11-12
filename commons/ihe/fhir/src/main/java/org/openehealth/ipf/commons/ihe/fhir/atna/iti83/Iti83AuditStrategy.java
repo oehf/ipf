@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.atna.iti83;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83AuditDataset;
 
 import java.util.Map;
 
@@ -41,7 +40,7 @@ public abstract class Iti83AuditStrategy extends AuditStrategySupport<Iti83Audit
     @Override
     public Iti83AuditDataset enrichAuditDatasetFromRequest(Iti83AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         auditDataset.setUserId((String)parameters.get(HTTP_URI));
-        auditDataset.setServiceEndpointUrl((String)parameters.get(HTTP_URI));
+        auditDataset.setServiceEndpointUrl(parameters.get(HTTP_URL).toString());
         auditDataset.setClientIpAddress((String)parameters.get(HTTP_CLIENT_IP_ADDRESS));
         auditDataset.setQueryString((String)parameters.get(HTTP_QUERY));
         return auditDataset;

@@ -20,6 +20,7 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina2.Mina2Component;
 import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
@@ -35,15 +36,15 @@ import java.util.Map;
 
 /**
  * Generic Camel component for MLLP.
+ *
  * @author Dmytro Rud
  */
 public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration>
-        extends Mina2Component implements Hl7v2ConfigurationHolder
-{
+        extends Mina2Component implements InterceptableComponent, Hl7v2ConfigurationHolder {
     private static final transient Logger LOG = LoggerFactory.getLogger(MllpComponent.class);
-    
+
     public static final String ACK_TYPE_CODE_HEADER = ConsumerAdaptingInterceptor.ACK_TYPE_CODE_HEADER;
-    
+
     private static final String DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME = "#hl7codec";
 
     protected MllpComponent() {
@@ -62,22 +63,19 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
 
     /**
      * Creates a configuration object.
-     * @param parameters
-     *      URL parameters.
-     * @return
-     *      configuration object filled with values from the provided parameter map.
+     *
+     * @param parameters URL parameters.
+     * @return configuration object filled with values from the provided parameter map.
      */
     protected abstract ConfigType createConfig(Map<String, Object> parameters) throws Exception;
 
 
     /**
      * Creates an endpoint object.
-     * @param wrappedEndpoint
-     *      standard Camel MINA2 endpoint instance.
-     * @param config
-     *      endpoint configuration.
-     * @return
-     *      configured MLLP endpoint instance which wraps the MINA2 one.
+     *
+     * @param wrappedEndpoint standard Camel MINA2 endpoint instance.
+     * @param config          endpoint configuration.
+     * @return configured MLLP endpoint instance which wraps the MINA2 one.
      */
     protected abstract MllpEndpoint<?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, ConfigType config);
 
@@ -88,9 +86,8 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
     @Override
     protected Endpoint createEndpoint(
             String uri,
-            String remaining, 
-            Map<String, Object> parameters) throws Exception
-    {
+            String remaining,
+            Map<String, Object> parameters) throws Exception {
         // explicitly overwrite some standard camel-mina parameters
         if (parameters == Collections.EMPTY_MAP) {
             parameters = new HashMap<>();
@@ -98,7 +95,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
         parameters.put("sync", true);
         parameters.put("lazySessionCreation", true);
         parameters.put("transferExchange", false);
-        if (! parameters.containsKey("codec")) {
+        if (!parameters.containsKey("codec")) {
             parameters.put("codec", DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME);
         }
 
@@ -107,14 +104,14 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
         Charset charset = null;
         try {
             charset = ((HL7MLLPCodec) config.getCodecFactory()).getCharset();
-        } catch(ClassCastException cce) {
+        } catch (ClassCastException cce) {
             LOG.error("Unsupported HL7 codec factory type " + config.getCodecFactory().getClass().getName());
         }
         if (charset == null) {
             charset = Charset.defaultCharset();
         }
         parameters.put("encoding", charset.name());
-        
+
         // construct the endpoint
         Endpoint endpoint = super.createEndpoint(uri, "tcp://" + remaining, parameters);
         Mina2Endpoint minaEndpoint = (Mina2Endpoint) endpoint;
@@ -123,46 +120,12 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
         return createEndpoint(minaEndpoint, config);
     }
 
-
-    /**
-     * @return
-     *      a list of component-specific (i.e. transaction-specific)
-     *      HL7v2 interceptors which will be integrated into the interceptor
-     *      chain of each consumer instance created by this component.
-     *      <p>
-     *      Per default returns an empty list.
-     *      <br>
-     *      When overwriting this method, please note:
-     *      <ul>
-     *          <li>Neither the returned list nor any element of it
-     *              are allowed to be <code>null</code>.
-     *          <li>Each invocation should return freshly created instances
-     *              of interceptors (like prototype-scope beans in Spring),
-     *              because interceptors cannot be reused by multiple endpoints.
-     *      </ul>
-     */
+    @Override
     public List<Interceptor> getAdditionalConsumerInterceptors() {
         return Collections.emptyList();
     }
 
-
-    /**
-     * @return
-     *      a list of component-specific (i.e. transaction-specific)
-     *      HL7v2 interceptors which will be integrated into the interceptor
-     *      chain of each consumer instance created by this component.
-     *      <p>
-     *      Per default returns an empty list.
-     *      <br>
-     *      When overwriting this method, please note:
-     *      <ul>
-     *          <li>Neither the returned list nor any element of it
-     *              are allowed to be <code>null</code>.
-     *          <li>Each invocation should return freshly created instances
-     *              of interceptors (like prototype-scope beans in Spring),
-     *              because interceptors cannot be reused by multiple endpoints.
-     *      </ul>
-     */
+    @Override
     public List<Interceptor> getAdditionalProducerInterceptors() {
         return Collections.emptyList();
     }

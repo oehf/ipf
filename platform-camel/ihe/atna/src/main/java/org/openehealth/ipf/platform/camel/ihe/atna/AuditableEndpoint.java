@@ -41,4 +41,9 @@ public interface AuditableEndpoint<AuditDatasetType extends AuditDataset> extend
      * @return server-side audit strategy instance
      */
     AuditStrategy<AuditDatasetType> getServerAuditStrategy();
+
+    /**
+     * Returns <tt>true</tt> when ATNA auditing should be performed.
+     */
+    boolean isAudit();
 }

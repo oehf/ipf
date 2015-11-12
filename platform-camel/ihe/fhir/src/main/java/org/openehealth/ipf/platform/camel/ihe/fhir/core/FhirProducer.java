@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
 /**
  * @since 3.1
  */
-public abstract class FhirProducer<T extends FhirAuditDataset> extends DefaultProducer {
+public abstract class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends DefaultProducer {
 
     private IGenericClient client;
 
@@ -48,8 +48,8 @@ public abstract class FhirProducer<T extends FhirAuditDataset> extends DefaultPr
     }
 
     @Override
-    public FhirEndpoint<T> getEndpoint() {
-        return (FhirEndpoint<T>)super.getEndpoint();
+    public FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>> getEndpoint() {
+        return (FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>)super.getEndpoint();
     }
 
     @Override
