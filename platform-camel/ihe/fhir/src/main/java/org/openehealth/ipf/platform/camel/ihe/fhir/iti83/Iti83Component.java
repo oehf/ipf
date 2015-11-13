@@ -16,13 +16,14 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
-import ca.uhn.fhir.context.FhirContext;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83AuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83ServerAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.*;
+import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83AuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ServerAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
 /**
  * Component for PIXm (ITI-83)
@@ -31,26 +32,22 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.*;
  */
 public class Iti83Component extends FhirComponent<Iti83AuditDataset> {
 
-    private static final FhirComponentConfiguration<Iti83AuditDataset> CONFIGURATION =
-            new FhirComponentConfiguration<>(
-                    FhirContext.forDstu2Hl7Org(),
-                    new Iti83ResourceProvider());
+    private static final FhirComponentConfiguration<Iti83AuditDataset> DEFAULT_CONFIGURATION = new Iti83Configuration();
 
     private static final AuditStrategy<Iti83AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti83ClientAuditStrategy();
     private static final AuditStrategy<Iti83AuditDataset> SERVER_AUDIT_STRATEGY = new Iti83ServerAuditStrategy();
 
     public Iti83Component() {
-        super();
+        super(DEFAULT_CONFIGURATION);
     }
 
     public Iti83Component(CamelContext context) {
         super(context);
+        setFhirComponentConfiguration(DEFAULT_CONFIGURATION);
     }
 
-
-    @Override
-    public FhirComponentConfiguration<Iti83AuditDataset> getFhirComponentConfiguration() {
-        return CONFIGURATION;
+    public Iti83Component(FhirComponentConfiguration<Iti83AuditDataset> configuration) {
+        super(configuration);
     }
 
     @Override

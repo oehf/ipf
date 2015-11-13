@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.fhir.atna.iti83;
+package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * Strategy for auditing ITI-83 transactions on the server side

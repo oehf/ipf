@@ -16,10 +16,11 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
+import ca.uhn.fhir.context.FhirContext;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
-import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
@@ -36,6 +37,8 @@ import java.util.Map;
 public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         extends UriEndpointComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent {
 
+    private FhirComponentConfiguration<AuditDatasetType> fhirComponentConfiguration;
+
     public FhirComponent() {
         super(FhirEndpoint.class);
     }
@@ -44,8 +47,13 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         super(context, FhirEndpoint.class);
     }
 
+    public FhirComponent(FhirComponentConfiguration<AuditDatasetType> configuration) {
+        this();
+        this.fhirComponentConfiguration = configuration;
+    }
+
     protected FhirEndpointConfiguration<AuditDatasetType> createConfig(String remaining, Map<String, Object> parameters) throws Exception {
-        return new FhirEndpointConfiguration<>(this, remaining, parameters);
+        return new FhirEndpointConfiguration<>(this, FhirContext.forDstu2Hl7Org(), remaining, parameters);
     }
 
     @Override
@@ -76,6 +84,11 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     /**
      * @return static component-specific configuration
      */
-    public abstract FhirComponentConfiguration<AuditDatasetType> getFhirComponentConfiguration();
+    public FhirComponentConfiguration<AuditDatasetType> getFhirComponentConfiguration() {
+        return fhirComponentConfiguration;
+    }
 
+    protected void setFhirComponentConfiguration(FhirComponentConfiguration<AuditDatasetType> fhirComponentConfiguration) {
+        this.fhirComponentConfiguration = fhirComponentConfiguration;
+    }
 }

@@ -16,9 +16,13 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
+import org.apache.http.client.HttpClient;
+import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
 
 import java.util.Map;
@@ -31,7 +35,8 @@ import java.util.Map;
 @UriParams
 public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> extends InterceptableEndpointConfiguration {
 
-    private String path;
+    private final String path;
+    private FhirContext context;
 
     @UriParam(defaultValue = "false")
     private boolean audit = false;
@@ -42,14 +47,43 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     @UriParam
     private AbstractResourceProvider<AuditDatasetType> resourceProvider;
 
+    @UriParam
+    private ClientRequestFactory<? extends IClientExecutable<?, ?>> clientRequestFactory;
+
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
+        this(component, FhirContext.forDstu2Hl7Org(), path, parameters);
+    }
+
+    protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, FhirContext context, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
 
         this.path = path;
+        this.context = context;
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, CamelFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "resourceProvider", AbstractResourceProvider.class, null);
+        clientRequestFactory = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "clientRequestFactory", ClientRequestFactory.class, null);
+
+        Integer connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
+        if (connectTimeout != null) {
+            setConnectTimeout(connectTimeout);
+        }
+        Integer timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
+        if (timeout != null) {
+            setTimeout(timeout);
+        }
+
+        boolean secure = component.getAndRemoveParameter(parameters, "secure", Boolean.class, false);
+        if (secure) {
+            throw new UnsupportedOperationException("secure transport not yet supported");
+        }
+
+    }
+
+    public FhirContext getContext() {
+        return context;
     }
 
     public boolean isAudit() {
@@ -66,5 +100,17 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     public String getPath() {
         return path;
+    }
+
+    public <T extends IClientExecutable<?, ?>> ClientRequestFactory<T> getClientRequestFactory() {
+        return (ClientRequestFactory<T>) clientRequestFactory;
+    }
+
+    public void setConnectTimeout(int connectTimeout) {
+        context.getRestfulClientFactory().setConnectTimeout(connectTimeout);
+    }
+
+    public void setTimeout(int timeout) {
+        context.getRestfulClientFactory().setSocketTimeout(timeout);
     }
 }

@@ -16,9 +16,14 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
+import ca.uhn.fhir.context.FhirContext;
+import org.apache.camel.Consumer;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
@@ -53,6 +58,11 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return fhirComponent;
     }
 
+    @Override
+    protected Producer doCreateProducer() throws Exception {
+        return new FhirProducer<AuditDatasetType>(this);
+    }
+
     /**
      * Called when a {@link FhirConsumer} is started. Registers the resource provider
      *
@@ -76,6 +86,10 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
         AbstractResourceProvider<AuditDatasetType> provider = getResourceProvider();
         CamelFhirServlet.unregisterProvider(servletName, provider);
+    }
+
+    public FhirContext getContext() {
+        return getInterceptableConfiguration().getContext();
     }
 
     /**
@@ -147,12 +161,25 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return fhirComponent.getServerAuditStrategy();
     }
 
+    @Override
+    public Consumer doCreateConsumer(Processor processor) throws Exception {
+        return new FhirConsumer<>(this, processor);
+    }
+
     // Private stuff
 
     private AbstractResourceProvider<AuditDatasetType> getResourceProvider() {
         AbstractResourceProvider<AuditDatasetType> provider = config.getResourceProvider();
         if (provider == null) {
             provider = getFhirComponentConfiguration().getStaticResourceProvider();
+        }
+        return provider;
+    }
+
+    public ClientRequestFactory<?> getClientRequestFactory() {
+        ClientRequestFactory<?> provider = config.getClientRequestFactory();
+        if (provider == null) {
+            provider = getFhirComponentConfiguration().getStaticClientRequestFactory();
         }
         return provider;
     }

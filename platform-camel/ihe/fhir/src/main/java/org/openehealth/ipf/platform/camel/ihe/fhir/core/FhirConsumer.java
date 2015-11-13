@@ -22,7 +22,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.SuspendableService;
 import org.apache.camel.impl.DefaultConsumer;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.Map;
@@ -32,8 +32,7 @@ import java.util.Map;
  *
  * @since 3.1
  */
-public abstract class FhirConsumer<AuditDatasetType extends FhirAuditDataset>
-        extends DefaultConsumer implements SuspendableService {
+public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends DefaultConsumer implements SuspendableService {
 
     public FhirConsumer(FhirEndpoint<AuditDatasetType, ? extends FhirComponent<AuditDatasetType>> endpoint, Processor processor) {
         super(endpoint, processor);

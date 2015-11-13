@@ -13,21 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
-
-import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.ihe.fhir.atna.iti83.Iti83AuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirConsumer;
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 
 /**
- * PIXM Consumer
+ * @author Christian Ohr
  *
  * @since 3.1
  */
-public class Iti83Consumer extends FhirConsumer<Iti83AuditDataset> {
+@SuppressWarnings("serial")
+public class Iti83AuditDataset extends FhirAuditDataset {
 
-    public Iti83Consumer(Iti83Endpoint endpoint, Processor processor) {
-        super(endpoint, processor);
+    @Getter @Setter private String queryString;
+
+    public Iti83AuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 }

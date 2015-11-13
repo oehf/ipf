@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.fhir.atna;
+package org.openehealth.ipf.commons.ihe.fhir;
 
 import lombok.Getter;
 import lombok.Setter;

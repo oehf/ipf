@@ -21,13 +21,16 @@ import ca.uhn.fhir.rest.client.IGenericClient;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.InvalidPayloadException;
+import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
-import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 /**
  * @since 3.1
  */
-public abstract class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends DefaultProducer {
+public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends DefaultProducer {
 
     private IGenericClient client;
 
@@ -37,7 +40,7 @@ public abstract class FhirProducer<AuditDatasetType extends FhirAuditDataset> ex
 
     protected synchronized IGenericClient getClient() throws Exception {
         if (client == null) {
-            FhirContext context = getEndpoint().getFhirComponentConfiguration().getContext();
+            FhirContext context = getEndpoint().getContext();
 
             // For the producer, the path is supposed to be the server URL
             String path = getEndpoint().getInterceptableConfiguration().getPath();
@@ -60,10 +63,22 @@ public abstract class FhirProducer<AuditDatasetType extends FhirAuditDataset> ex
         return (FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>)super.getEndpoint();
     }
 
+    /**
+     * Processes the exchange
+     * @param exchange
+     * @throws Exception
+     */
     @Override
     public void process(Exchange exchange) throws Exception {
-        doProcess(exchange, getClient());
+        Object parameters = getRequestDataFromExchange(exchange);
+        ClientRequestFactory<?> requestFactory = getEndpoint().getClientRequestFactory();
+        Object result = requestFactory.getClientExecutable(getClient(), parameters).execute();
+        Message resultMessage = Exchanges.resultMessage(exchange);
+        resultMessage.setBody(result);
     }
 
-    protected abstract void doProcess(Exchange exchange, IGenericClient client) throws InvalidPayloadException;
+    protected Object getRequestDataFromExchange(Exchange exchange) throws InvalidPayloadException {
+        return exchange.getIn().getBody();
+    }
+
 }

@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.fhir.atna.iti83;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.fhir.atna.FhirAuditDataset;
+package org.openehealth.ipf.commons.ihe.fhir;
+
+import ca.uhn.fhir.rest.client.IGenericClient;
+import ca.uhn.fhir.rest.gclient.IClientExecutable;
 
 /**
- * @author Christian Ohr
- *
- * @since 3.1
+ * Factory for creating a FHIR request using a FHIR client and a sequence of input data
  */
-@SuppressWarnings("serial")
-public class Iti83AuditDataset extends FhirAuditDataset {
+public interface ClientRequestFactory<T extends IClientExecutable<?,?>> {
 
-    @Getter @Setter private String queryString;
-
-    public Iti83AuditDataset(boolean serverSide) {
-        super(serverSide);
-    }
+    /**
+     * Returns a FHIR request using a FHIR client and a sequence of input data
+     * @param client FHIR client
+     * @param requestData request data
+     * @return FHIR request executable
+     */
+    IClientExecutable<T, ?> getClientExecutable(IGenericClient client, Object requestData);
 }

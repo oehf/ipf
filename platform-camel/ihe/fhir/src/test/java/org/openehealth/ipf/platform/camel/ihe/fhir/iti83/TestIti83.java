@@ -82,7 +82,7 @@ public class TestIti83 extends FhirTestContainer {
                 .useHttpGet()
                 .execute();
 
-        printAsXML(result);
+        // printAsXML(result);
 
         Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
         assertEquals(Iti9Responder.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
