@@ -91,6 +91,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
             }
             else if ((target instanceof SubmitObjectsRequest) && Boolean.TRUE.equals(RESULTS.get())) {
                 getCamelHeaders(target).put(SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.TRUE);
+                RESULTS.remove();
             }
         }
 
