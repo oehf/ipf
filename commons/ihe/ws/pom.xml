@@ -78,7 +78,7 @@
         </dependency>
         <dependency>
             <groupId>org.opensaml</groupId>
-            <artifactId>opensaml</artifactId>
+            <artifactId>opensaml-saml-impl</artifactId>
         </dependency>
         <dependency>
             <groupId>ca.juliusdavies</groupId>

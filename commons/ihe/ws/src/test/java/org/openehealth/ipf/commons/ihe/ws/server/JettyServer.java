@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;
 
@@ -37,9 +35,11 @@ public class JettyServer extends ServletServer {
     @Override
     @SuppressWarnings("unchecked")  // Required by getInitParams implementation
     public void start() {
-        Connector connector = isSecure() ? createSecureConnector() : new SelectChannelConnector(); 
-        
         server = new Server();
+        ServerConnector connector = isSecure()
+                ? new ServerConnector(server, createSecureContextFactory())
+                : new ServerConnector(server);
+
         server.addConnector(connector);
         connector.setPort(getPort());
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
@@ -62,15 +62,15 @@ public class JettyServer extends ServletServer {
         }
     }
 
-    private SslSocketConnector createSecureConnector() {
+    private SslContextFactory createSecureContextFactory() {
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setKeyStorePath(getKeystoreFile());
         sslContextFactory.setKeyStorePassword(getKeystorePass());
-        sslContextFactory.setTrustStore(getTruststoreFile());
+        sslContextFactory.setTrustStorePath(getTruststoreFile());
         sslContextFactory.setTrustStorePassword(getTruststorePass());
         sslContextFactory.setNeedClientAuth(getClientAuthType() == ClientAuthType.MUST);
         sslContextFactory.setWantClientAuth(getClientAuthType() == ClientAuthType.WANT);
-        return new SslSocketConnector(sslContextFactory);
+        return sslContextFactory;
     }
 
     @Override

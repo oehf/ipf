@@ -98,7 +98,7 @@ public class CxfEndpointTest {
         serviceServer.stop();
         runRequestAndExpectFailure();
 
-        serviceServer = factory.create();
+        //serviceServer = factory.create();
         serviceServer.start();
         Assert.assertEquals(Status.SUCCESS, runRequest().getStatus());
 

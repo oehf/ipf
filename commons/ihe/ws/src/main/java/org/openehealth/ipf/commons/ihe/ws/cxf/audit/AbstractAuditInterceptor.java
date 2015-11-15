@@ -32,17 +32,18 @@ import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
-import org.opensaml.Configuration;
-import org.opensaml.DefaultBootstrap;
-import org.opensaml.common.xml.SAMLConstants;
-import org.opensaml.saml2.core.Assertion;
-import org.opensaml.saml2.core.Attribute;
-import org.opensaml.saml2.core.AttributeStatement;
-import org.opensaml.xml.ConfigurationException;
-import org.opensaml.xml.XMLObject;
-import org.opensaml.xml.io.Unmarshaller;
-import org.opensaml.xml.io.UnmarshallerFactory;
-import org.opensaml.xml.io.UnmarshallingException;
+import org.opensaml.core.config.ConfigurationService;
+import org.opensaml.core.config.InitializationException;
+import org.opensaml.core.config.InitializationService;
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistry;
+import org.opensaml.core.xml.io.Unmarshaller;
+import org.opensaml.core.xml.io.UnmarshallerFactory;
+import org.opensaml.core.xml.io.UnmarshallingException;
+import org.opensaml.saml.common.xml.SAMLConstants;
+import org.opensaml.saml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Attribute;
+import org.opensaml.saml.saml2.core.AttributeStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -84,14 +85,15 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
 
     static {
         try {
-            DefaultBootstrap.bootstrap();
-            SAML_UNMARSHALLER_FACTORY = Configuration.getUnmarshallerFactory();
-        } catch (ConfigurationException e) {
+            InitializationService.initialize();
+            XMLObjectProviderRegistry registry = ConfigurationService.get(XMLObjectProviderRegistry.class);
+            SAML_UNMARSHALLER_FACTORY = registry.getUnmarshallerFactory();
+        } catch (InitializationException e) {
             throw new RuntimeException(e);
         }
     }
 
-    
+
     /**
      * Constructor which sets a strategy.
      * 

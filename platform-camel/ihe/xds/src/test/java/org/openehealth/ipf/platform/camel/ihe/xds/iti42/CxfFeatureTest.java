@@ -73,9 +73,10 @@ public class CxfFeatureTest extends StandardTestContainer {
         Iti42PortType client =
                 getClient("feature-test-resources/iti42-with-policy.wsdl", "http://localhost:" + getPort() + "/xds-iti42");
 
-        STSClient stsClient = (STSClient)((BindingProvider)client).getRequestContext().get(SecurityConstants.STS_CLIENT);
+        Map<String, Object> requestContext = ((BindingProvider) client).getRequestContext();
+        //STSClient stsClient = (STSClient) requestContext.get(SecurityConstants.STS_CLIENT);
+        STSClient stsClient = (STSClient) requestContext.get("ws-security.sts.client");
         stsClient.setWsdlLocation("http://localhost:" + getPort() + "/X509?wsdl");
-
 
         try {
             client.documentRegistryRegisterDocumentSetB(new SubmitObjectsRequest());
