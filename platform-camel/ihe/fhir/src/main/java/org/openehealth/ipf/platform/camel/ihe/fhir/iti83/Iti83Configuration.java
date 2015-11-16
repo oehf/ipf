@@ -16,9 +16,8 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
-import ca.uhn.fhir.context.FhirContext;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83AuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ClientRequestFactory;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
 
 /**

@@ -45,7 +45,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        FhirObject msg = exchange.getIn().getBody(FhirObject.class);
+        IBaseResource msg = exchange.getIn().getBody(IBaseResource.class);
 
         AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
         determineParticipantsAddresses(exchange, auditDataset);
@@ -89,7 +89,7 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      *
      * @return newly created audit dataset or <code>null</code> when creation failed.
      */
-    private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, FhirObject msg) {
+    private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, IBaseResource msg) {
         try {
             AuditDatasetType auditDataset = strategy.createAuditDataset();
             // TODO set client-side headers

@@ -19,16 +19,22 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.rest.client.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 
+import java.util.Map;
+
 /**
  * Factory for creating a FHIR request using a FHIR client and a sequence of input data
+ *
+ * @since 3.1
  */
-public interface ClientRequestFactory<T extends IClientExecutable<?,?>> {
+public interface ClientRequestFactory<T extends IClientExecutable<?, ?>> {
 
     /**
      * Returns a FHIR request using a FHIR client and a sequence of input data
-     * @param client FHIR client
-     * @param requestData request data
+     *
+     * @param client      FHIR client
+     * @param requestData main request data (usually an implementation of {@link org.hl7.fhir.instance.model.api.IBaseResource}
+     * @param parameters  parameter map
      * @return FHIR request executable
      */
-    IClientExecutable<T, ?> getClientExecutable(IGenericClient client, Object requestData);
+    IClientExecutable<T, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters);
 }

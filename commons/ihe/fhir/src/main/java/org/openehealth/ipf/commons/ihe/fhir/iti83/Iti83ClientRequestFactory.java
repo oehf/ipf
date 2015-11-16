@@ -24,6 +24,8 @@ import org.hl7.fhir.instance.model.Patient;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
+import java.util.Map;
+
 /**
  * Request Factory for Iti-83 requests
  *
@@ -31,13 +33,12 @@ import org.openehealth.ipf.commons.ihe.fhir.Constants;
  */
 public class Iti83ClientRequestFactory implements ClientRequestFactory<IOperationUntypedWithInput<Parameters>> {
 
-
     @Override
-    public IClientExecutable<IOperationUntypedWithInput<Parameters>, ?> getClientExecutable(IGenericClient client, Object parameters) {
+    public IClientExecutable<IOperationUntypedWithInput<Parameters>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
         return client.operation()
                 .onType(Patient.class)
                 .named(Constants.PIXM_OPERATION_NAME)
-                .withParameters((Parameters)parameters)
+                .withParameters((Parameters)requestData)
                 .useHttpGet();
     }
 }

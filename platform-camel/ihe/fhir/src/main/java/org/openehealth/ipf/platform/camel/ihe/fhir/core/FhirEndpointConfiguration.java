@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
+import lombok.Getter;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 import org.apache.http.client.HttpClient;
@@ -35,20 +36,38 @@ import java.util.Map;
 @UriParams
 public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> extends InterceptableEndpointConfiguration {
 
+    @Getter
     private final String path;
+
+    @Getter
     private FhirContext context;
 
+    // Consumer only
+
+    @Getter
     @UriParam(defaultValue = "false")
     private boolean audit = false;
 
+    @Getter
     @UriParam(defaultValue = "FhirServlet")
     private String servletName = CamelFhirServlet.DEFAULT_SERVLET_NAME;
 
+    @Getter
     @UriParam
     private AbstractResourceProvider<AuditDatasetType> resourceProvider;
 
+    // Producer only
+
     @UriParam
     private ClientRequestFactory<? extends IClientExecutable<?, ?>> clientRequestFactory;
+
+    @Getter
+    @UriParam
+    private String authUserName;
+
+    @Getter
+    @UriParam
+    private String authPassword;
 
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         this(component, FhirContext.forDstu2Hl7Org(), path, parameters);
@@ -56,7 +75,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, FhirContext context, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
-
         this.path = path;
         this.context = context;
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
@@ -80,26 +98,11 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
             throw new UnsupportedOperationException("secure transport not yet supported");
         }
 
-    }
+        authUserName = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "authUserName", String.class, null);
+        authPassword = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "authPassword", String.class, null);
 
-    public FhirContext getContext() {
-        return context;
-    }
-
-    public boolean isAudit() {
-        return audit;
-    }
-
-    public AbstractResourceProvider<AuditDatasetType> getResourceProvider() {
-        return resourceProvider;
-    }
-
-    public String getServletName() {
-        return servletName;
-    }
-
-    public String getPath() {
-        return path;
     }
 
     public <T extends IClientExecutable<?, ?>> ClientRequestFactory<T> getClientRequestFactory() {

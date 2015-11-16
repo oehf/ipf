@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.IGenericClient;
+import ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor;
+import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.InvalidPayloadException;
@@ -26,6 +28,8 @@ import org.apache.camel.impl.DefaultProducer;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+
+import java.util.Map;
 
 /**
  * @since 3.1
@@ -46,16 +50,15 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
             String path = getEndpoint().getInterceptableConfiguration().getPath();
 
             // For now, assume http as only protocol
-
             path = "http://" + path;
             client = context.newRestfulGenericClient(path);
+
+            if (getEndpoint().getInterceptableConfiguration().getAuthUserName() != null)
+            client.registerInterceptor(new BasicAuthInterceptor(
+                    getEndpoint().getInterceptableConfiguration().getAuthUserName(),
+                    getEndpoint().getInterceptableConfiguration().getAuthPassword()));
         }
         return client;
-    }
-
-    @Override
-    protected void doStop() throws Exception {
-        super.doStop();
     }
 
     @Override
@@ -64,21 +67,24 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
     }
 
     /**
-     * Processes the exchange
-     * @param exchange
+     * Processes the exchange. Body and Headers are forwarded to
+     * {@link ClientRequestFactory#getClientExecutable(IGenericClient, Object, Map)}, so that
+     * the actual query can be dynamically constructed from the exchange.
+     *
+     * @param exchange Camel exchange
      * @throws Exception
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        Object parameters = getRequestDataFromExchange(exchange);
         ClientRequestFactory<?> requestFactory = getEndpoint().getClientRequestFactory();
-        Object result = requestFactory.getClientExecutable(getClient(), parameters).execute();
+        IClientExecutable<?, ?> executableClient = requestFactory.getClientExecutable(
+                getClient(),
+                exchange.getIn().getBody(),
+                exchange.getIn().getHeaders());
+        Object result = executableClient.execute();
         Message resultMessage = Exchanges.resultMessage(exchange);
         resultMessage.setBody(result);
     }
 
-    protected Object getRequestDataFromExchange(Exchange exchange) throws InvalidPayloadException {
-        return exchange.getIn().getBody();
-    }
 
 }
