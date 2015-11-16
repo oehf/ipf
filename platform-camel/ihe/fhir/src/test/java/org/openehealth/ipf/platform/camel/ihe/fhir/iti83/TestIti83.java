@@ -44,8 +44,6 @@ public class TestIti83 extends FhirTestContainer {
     private static final String CONTEXT_DESCRIPTOR = "iti-83.xml";
     private static final Logger LOG = LoggerFactory.getLogger(TestIti83.class);
 
-    static final String SERVICE = String.format("pixm-iti83://localhost/patient/");
-
     @BeforeClass
     public static void setUpClass() throws ServletException {
         CamelFhirServlet servlet = new CamelFhirServlet();
@@ -85,7 +83,7 @@ public class TestIti83 extends FhirTestContainer {
         // printAsXML(result);
 
         Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
-        assertEquals(Iti9Responder.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
+        assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
         MockedSender sender = getAuditSender();
@@ -132,7 +130,7 @@ public class TestIti83 extends FhirTestContainer {
         printAsXML(result);
 
         Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
-        assertEquals(Iti9Responder.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
+        assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
         MockedSender sender = getAuditSender();

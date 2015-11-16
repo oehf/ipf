@@ -19,6 +19,8 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +39,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
 public abstract class AbstractResourceProvider<AuditDatasetType extends FhirAuditDataset>
         implements IResourceProvider, Serializable {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractResourceProvider.class);
     private transient FhirConsumer<AuditDatasetType> consumer;
 
     /**
@@ -71,8 +74,16 @@ public abstract class AbstractResourceProvider<AuditDatasetType extends FhirAudi
     // Ensure this is only used once!
     void setConsumer(FhirConsumer<AuditDatasetType> consumer) {
         if (this.consumer != null) {
-            throw new IllegalStateException("This provider is already used by a different consumer");
+            throw new IllegalStateException("This provider is already used by a different consumer: " + consumer);
         }
         this.consumer = consumer;
+        LOG.info("Connected consumer {} to provider {}", consumer, this);
+    }
+
+    void unsetConsumer(FhirConsumer<AuditDatasetType> consumer) {
+        if (this.consumer == consumer) {
+            this.consumer = null;
+            LOG.info("Disconnected consumer {} from provider {}", consumer, this);
+        }
     }
 }

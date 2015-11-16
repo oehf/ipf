@@ -25,6 +25,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="routeBuilder"
           class="org.openehealth.ipf.platform.camel.ihe.fhir.iti83.Iti83TestRouteBuilder">
         <constructor-arg index="0" ref="uriMapper"/>
+        <property name="response" value="NO_PATIENT"/>
     </bean>
 
 </beans>

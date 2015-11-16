@@ -16,6 +16,8 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
@@ -78,7 +80,11 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
             getExceptionHandler().handleException(e);
         }
 
-        // Handle exceptions!!
+        // If the exchange has failed, throw the exception back into the servlet
+        if (exchange.isFailed()) {
+            BaseServerResponseException e = exchange.getException(BaseServerResponseException.class);
+            throw (e != null) ? e : new InternalErrorException("Unexpected server error", exchange.getException());
+        }
 
         Message resultMessage = Exchanges.resultMessage(exchange);
         return getEndpoint().getCamelContext().getTypeConverter()

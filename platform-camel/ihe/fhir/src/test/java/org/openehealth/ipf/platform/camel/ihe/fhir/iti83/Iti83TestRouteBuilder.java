@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
-import ca.uhn.hl7v2.AcknowledgmentCode;
 import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.PixQueryResponseToPixmResponseTranslator;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequestToPixQueryTranslator;
@@ -36,10 +35,16 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
     private final TranslatorFhirToHL7v2 requestTranslator;
     private final TranslatorHL7v2ToFhir responseTranslator;
 
+    private ResponseCase responseCase = ResponseCase.OK;
+
     public Iti83TestRouteBuilder(UriMapper uriMapper) {
         super();
         this.requestTranslator = new PixmRequestToPixQueryTranslator(uriMapper);
         this.responseTranslator = new PixQueryResponseToPixmResponseTranslator(uriMapper);
+    }
+
+    public void setResponse(String responseCase) {
+        this.responseCase = ResponseCase.valueOf(responseCase);
     }
 
     @Override
@@ -50,12 +55,12 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
 
         from("pixm-iti83:translation?audit=true")
                 // Translate into ITI-9
+                .errorHandler(noErrorHandler())
                 .process(translatorFhirToHL7v2(requestTranslator))
                         // Create some static response
-                .transform(new Iti9Responder(AcknowledgmentCode.AA, "OK"))
+                .transform(new Iti9Responder(responseCase))
                         // Translate back into FHIR
                 .process(translatorHL7v2ToFhir(responseTranslator));
-
     }
 
 

@@ -86,6 +86,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
         AbstractResourceProvider<AuditDatasetType> provider = getResourceProvider();
         CamelFhirServlet.unregisterProvider(servletName, provider);
+        provider.unsetConsumer(consumer);
     }
 
     public FhirContext getContext() {
