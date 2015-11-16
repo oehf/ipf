@@ -73,14 +73,14 @@
         <camel-version>2.15.0</camel-version>
         <cglib-version>3.1</cglib-version>
         <commons-codec-version>1.10</commons-codec-version>
-        <commons-collections-version>3.2.1</commons-collections-version>
+        <commons-collections-version>3.2.2</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
         <commons-fileupload-version>1.3</commons-fileupload-version>
         <commons-httpclient-version>3.1</commons-httpclient-version>
         <commons-io-version>2.4</commons-io-version>
         <commons-lang3-version>3.3.2</commons-lang3-version>
         <commons-math3-version>3.4.1</commons-math3-version>
-        <cxf-version>3.0.4</cxf-version>
+        <cxf-version>3.0.7</cxf-version>
         <derby-version>10.9.1.0</derby-version>
         <easymock-version>3.3.1</easymock-version>
         <ehcache-version>2.9.1</ehcache-version>
