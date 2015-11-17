@@ -87,6 +87,12 @@
             <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <distributionManagement>

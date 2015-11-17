@@ -26,9 +26,9 @@ import javax.servlet.ServletException;
 /**
  *
  */
-public class TestIti83NoPatient extends AbstractTestIti83 {
+public class TestIti83UnknownTarget extends AbstractTestIti83 {
 
-    private static final String CONTEXT_DESCRIPTOR = "iti-83-no-patient.xml";
+    private static final String CONTEXT_DESCRIPTOR = "iti-83-unknown-target.xml";
 
     @BeforeClass
     public static void setUpClass() throws ServletException {
@@ -40,8 +40,10 @@ public class TestIti83NoPatient extends AbstractTestIti83 {
         try {
             sendManually();
         } catch (InvalidRequestException e) {
-            assertAndRethrowException(e, OperationOutcome.IssueType.VALUE);
+            assertAndRethrowException(e, OperationOutcome.IssueType.NOTFOUND);
         }
+
     }
+
 
 }

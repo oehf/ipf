@@ -16,20 +16,17 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
-import org.hl7.fhir.instance.model.*;
-import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.instance.model.Conformance;
+import org.hl7.fhir.instance.model.Identifier;
+import org.hl7.fhir.instance.model.Parameters;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.CamelFhirServlet;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ActiveParticipantType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ParticipantObjectIdentificationType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 
@@ -39,16 +36,13 @@ import static org.junit.Assert.assertFalse;
 /**
  *
  */
-public class TestIti83 extends FhirTestContainer {
+public class TestIti83Success extends AbstractTestIti83 {
 
     private static final String CONTEXT_DESCRIPTOR = "iti-83.xml";
-    private static final Logger LOG = LoggerFactory.getLogger(TestIti83.class);
 
     @BeforeClass
     public static void setUpClass() throws ServletException {
-        CamelFhirServlet servlet = new CamelFhirServlet();
-        startServer(servlet, CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT, "FhirServlet");
-        startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
+        startServer(CONTEXT_DESCRIPTOR);
     }
 
     @Test
@@ -65,20 +59,8 @@ public class TestIti83 extends FhirTestContainer {
 
     @Test
     public void testSendManualPixm() {
-        Parameters inParams = new Parameters();
-        inParams.addParameter()
-                .setName(Constants.SOURCE_IDENTIFIER_NAME)
-                .setValue(new StringType("urn:oid:1.2.3.4|0815"));
-        inParams.addParameter()
-                .setName(Constants.TARGET_SYSTEM_NAME)
-                .setValue(new UriType("urn:oid:1.2.3.4.6"));
 
-        Parameters result = client.operation()
-                .onType(Patient.class)
-                .named(Constants.PIXM_OPERATION_NAME)
-                .withParameters(inParams)
-                .useHttpGet()
-                .execute();
+        Parameters result = sendManually();
 
         // printAsXML(result);
 
@@ -119,14 +101,7 @@ public class TestIti83 extends FhirTestContainer {
 
     @Test
     public void testSendEndpointPixm() {
-        Parameters inParams = new Parameters();
-        inParams.addParameter()
-                .setName(Constants.SOURCE_IDENTIFIER_NAME)
-                .setValue(new StringType("urn:oid:1.2.3.4|0815"));
-        inParams.addParameter()
-                .setName(Constants.TARGET_SYSTEM_NAME)
-                .setValue(new UriType("urn:oid:1.2.3.4.6"));
-        Parameters result = getProducerTemplate().requestBody("direct:input", inParams, Parameters.class);
+        Parameters result = getProducerTemplate().requestBody("direct:input", queryParameters(), Parameters.class);
         printAsXML(result);
 
         Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
@@ -136,11 +111,7 @@ public class TestIti83 extends FhirTestContainer {
         MockedSender sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
         // FIXME client-side audit message needs ip addresses, target URL and queryString
-
     }
 
-    private void printAsXML(IBaseResource resource) {
-        LOG.info(context.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
-    }
 
 }

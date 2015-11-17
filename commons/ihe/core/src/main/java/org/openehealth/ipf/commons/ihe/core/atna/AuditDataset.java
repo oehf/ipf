@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import java.io.Serializable;
-
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+
+import java.io.Serializable;
 
 /**
  * A generic data structure used to store information pieces needed for ATNA auditing.
@@ -37,7 +35,6 @@ public class AuditDataset implements Serializable {
     /**
      * Event outcome code as defined in RFC 3881.
      */
-    @Getter @Setter
     private RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcomeCode;
 
     /**
@@ -56,7 +53,13 @@ public class AuditDataset implements Serializable {
         return serverSide;
     }
 
+    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode() {
+        return eventOutcomeCode;
+    }
 
+    public void setEventOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcomeCode) {
+        this.eventOutcomeCode = eventOutcomeCode;
+    }
 
     @Override
     public String toString() {

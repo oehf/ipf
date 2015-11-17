@@ -28,10 +28,7 @@ import java.util.Map;
  */
 public abstract class AuditStrategySupport<T extends AuditDataset> implements AuditStrategy<T> {
 
-    // whether we audit on server (true) or on client (false)
-    @Getter(AccessLevel.PROTECTED)
     private final boolean serverSide;
-
 
     /**
      * @param serverSide <code>true</code> when this strategy is a server-side one;
@@ -61,4 +58,7 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
         return true;
     }
 
+    protected boolean isServerSide() {
+        return serverSide;
+    }
 }

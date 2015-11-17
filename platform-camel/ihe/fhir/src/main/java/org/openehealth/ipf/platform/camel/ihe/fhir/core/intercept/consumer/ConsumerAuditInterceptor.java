@@ -53,10 +53,13 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         boolean failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            IBaseResource result = resultMessage(exchange).getBody(IBaseResource.class);
-            failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
+            failed = exchange.isFailed();
+            if (!failed) {
+                IBaseResource result = resultMessage(exchange).getBody(IBaseResource.class);
+                failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
+            }
         } catch (Exception e) {
-            // FHIR exception or unexpected exception
+            // In case of an nexpected exception
             failed = true;
             throw e;
         } finally {

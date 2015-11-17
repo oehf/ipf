@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.slf4j.Logger;
@@ -47,7 +45,7 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
     private static final ConcurrentMap<String, Loader<Schema>> XSD_CACHE = new ConcurrentHashMap<>();
     private static final LSResourceResolverImpl RESOURCE_RESOLVER = new LSResourceResolverImpl();
 
-    @Getter @Setter private String schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+    private String schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
     public XsdValidator() {
         super(null);
@@ -112,6 +110,13 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
         }
     }
 
+    public String getSchemaLanguage() {
+        return schemaLanguage;
+    }
+
+    public void setSchemaLanguage(String schemaLanguage) {
+        this.schemaLanguage = schemaLanguage;
+    }
 
     /**
      * Error handler that collects {@link SAXParseException}s and provides them

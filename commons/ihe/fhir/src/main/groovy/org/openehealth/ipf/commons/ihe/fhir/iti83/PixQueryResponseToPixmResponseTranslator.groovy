@@ -80,9 +80,8 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
 
         // Check error locations
         OperationOutcome oo = new OperationOutcome()
-        int errorField = Integer.parseInt(message.ERR[2][3].value)
-        int errorComponent = Integer.parseInt(message.ERR[2][5].value)
-
+        int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0
+        int errorComponent = message.ERR[2][5]?.value ? Integer.parseInt(message.ERR[2][5]?.value) : 0
 
         if (errorField == 3 && errorComponent == 1) {
             // Case 3: Patient ID not found
@@ -104,7 +103,7 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
                     .setCode(OperationOutcome.IssueType.NOTFOUND) // unknown-key-identifier
             return new InvalidRequestException('Unknown Target Domain', oo)
         } else {
-            // WTF
+            // WTF!!
             oo.addIssue()
                     .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                     .setCode(OperationOutcome.IssueType.EXCEPTION)
