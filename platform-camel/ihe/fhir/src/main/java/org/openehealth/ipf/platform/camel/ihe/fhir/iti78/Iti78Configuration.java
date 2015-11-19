@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78ResourceProvider;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
 
 /**
- * Standard Configuration for Iti83Component
+ * Standard Configuration for Iti78Component
  *
  * @since 3.1
  */

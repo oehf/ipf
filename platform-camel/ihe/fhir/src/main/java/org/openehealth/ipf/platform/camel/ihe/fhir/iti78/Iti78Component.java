@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfigurati
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
 /**
- * Component for PIXm (ITI-83)
+ * Component for PDQm (ITI-78)
  *
  * @since 3.1
  */

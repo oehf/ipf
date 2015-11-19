@@ -20,7 +20,7 @@ import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83AuditStrategy;
 
 /**
- * Strategy for auditing ITI-83 transactions on the client side
+ * Strategy for auditing ITI-78 transactions on the client side
  *
  * @since 3.1
  */

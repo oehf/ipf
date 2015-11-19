@@ -37,8 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * According to the PIXM specification, this resource provider must handle requests in the form
- * GET [base]/Patient/$ihe-pix?sourceIdentifier=[token]]{&targetSystem=[uri]}{&_format=[mime-type]}
+ * Resource Provider for PDQm (ITI-78) as if it was written for DSTU2
  *
  * @since 3.1
  */
