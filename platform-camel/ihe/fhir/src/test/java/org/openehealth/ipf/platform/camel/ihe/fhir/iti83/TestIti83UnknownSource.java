@@ -38,7 +38,7 @@ public class TestIti83UnknownSource extends AbstractTestIti83 {
     @Test(expected = InvalidRequestException.class)
     public void testSendManualPixm() {
         try {
-            sendManually();
+            sendManually(validQueryParameters());
         } catch (InvalidRequestException e) {
             assertAndRethrowException(e, OperationOutcome.IssueType.NOTSUPPORTED);
         }

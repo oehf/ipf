@@ -63,7 +63,7 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
         if (pid3collection) {
             for (pid3 in pid3collection) {
                 Identifier identifier = new Identifier()
-                        .setSystem(uriMapper.oidToUri(pid3[4][2].value))
+                        .setSystem(uriMapper.oidToUri(pid3[4][2]?.value))
                         .setValue(pid3[1].value)
                         .setUse(Identifier.IdentifierUse.OFFICIAL)
                 Parameters.ParametersParameterComponent parameter = new Parameters.ParametersParameterComponent()

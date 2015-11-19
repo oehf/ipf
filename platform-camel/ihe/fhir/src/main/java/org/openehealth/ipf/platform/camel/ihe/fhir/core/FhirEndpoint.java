@@ -22,6 +22,8 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
+import org.openehealth.ipf.commons.ihe.fhir.CamelFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
@@ -70,7 +72,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @throws Exception
      */
     public void connect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        AbstractResourceProvider<AuditDatasetType> provider = getResourceProvider();
+        AbstractPlainProvider<AuditDatasetType> provider = getResourceProvider();
         // Make consumer known to provider
         provider.setConsumer(consumer);
         // Register provider with CamelFhirServlet
@@ -84,7 +86,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @throws Exception
      */
     public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        AbstractResourceProvider<AuditDatasetType> provider = getResourceProvider();
+        AbstractPlainProvider<AuditDatasetType> provider = getResourceProvider();
         CamelFhirServlet.unregisterProvider(servletName, provider);
         provider.unsetConsumer(consumer);
     }
@@ -169,8 +171,8 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
 
     // Private stuff
 
-    private AbstractResourceProvider<AuditDatasetType> getResourceProvider() {
-        AbstractResourceProvider<AuditDatasetType> provider = config.getResourceProvider();
+    private AbstractPlainProvider<AuditDatasetType> getResourceProvider() {
+        AbstractPlainProvider<AuditDatasetType> provider = config.getResourceProvider();
         if (provider == null) {
             provider = getFhirComponentConfiguration().getStaticResourceProvider();
         }

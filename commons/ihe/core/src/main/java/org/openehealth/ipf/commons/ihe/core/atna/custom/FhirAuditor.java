@@ -43,6 +43,28 @@ public class FhirAuditor extends IHEAuditor {
         return (FhirAuditor) ctx.getAuditor(FhirAuditor.class);
     }
 
+    public void auditIti78(
+            boolean serverSide,
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String pdqSupplierUri,
+            String clientIpAddress,
+            String queryString) {
+        if (!isAuditorEnabled()) {
+            return;
+        }
+
+        QueryEvent event = new QueryEvent(
+                true,
+                eventOutcome,
+                new IHETransactionEventTypeCodes.PDQMQuery(),
+                Collections.<CodedValueType>emptyList());
+
+        configureEvent(this, serverSide, event, null, null, pdqSupplierUri, pdqSupplierUri, clientIpAddress);
+        event.addQueryParticipantObject("MobilePatientDemographicsQuery", null, payloadBytes(queryString), null,
+                new IHETransactionEventTypeCodes.PDQMQuery());
+        audit(event);
+    }
+
     public void auditIti83(
             boolean serverSide,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,

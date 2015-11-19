@@ -22,6 +22,10 @@ import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequestToPixQueryTranslato
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
+import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter
+import org.openehealth.ipf.platform.camel.hl7.HL7v2
+import org.openehealth.ipf.platform.camel.ihe.fhir.iti83.Iti9Responder
+import org.openehealth.ipf.platform.camel.ihe.fhir.iti83.ResponseCase
 
 import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorFhirToHL7v2
 import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorHL7v2ToFhir
@@ -36,6 +40,9 @@ class Iti83RouteBuilder extends RouteBuilder {
     private final String host;
     private final int port
 
+    private Boolean validateIti9Request = false;
+    private Boolean validateIti9Response = false;
+
     public Iti83RouteBuilder(UriMapper uriMapper, String host, int iti9Port) {
         super();
         this.requestTranslator = new PixmRequestToPixQueryTranslator(uriMapper);
@@ -44,14 +51,29 @@ class Iti83RouteBuilder extends RouteBuilder {
         this.port = iti9Port
     }
 
+    void setValidateIti9Request(boolean validateIti9Request) {
+        this.validateIti9Request = validateIti9Request
+    }
+
+    void setValidateIti9Response(boolean validateIti9Response) {
+        this.validateIti9Response = validateIti9Response
+    }
+
     @Override
     public void configure() throws Exception {
         from("pixm-iti83:translation?audit=true")
                 .errorHandler(noErrorHandler())
         // Translate into ITI-9 QBP_Q23
                 .process(translatorFhirToHL7v2(requestTranslator))
-        // Call ITI-9 endpoint
-                .to("pix-iti9:${host}:${port}")
+        // Validate translated request if desired
+                .setHeader(ValidatorAdapter.NEED_VALIDATION_HEADER_NAME, { validateIti9Request })
+                .process(HL7v2.validatingProcessor())
+        // Call ITI-9 endpoint. TODO add logging
+                .transform(new Iti9Responder(ResponseCase.OK))
+                //.to("pix-iti9:${host}:${port}?audit=false")
+        // Validate if response desired
+                .setHeader(ValidatorAdapter.NEED_VALIDATION_HEADER_NAME, { validateIti9Response })
+                .process(HL7v2.validatingProcessor())
         // Translate back into FHIR
                 .process(translatorHL7v2ToFhir(responseTranslator))
     }

@@ -25,16 +25,21 @@ import org.apache.camel.SuspendableService;
 import org.apache.camel.impl.DefaultConsumer;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.RequestConsumer;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
+import java.util.List;
 import java.util.Map;
 
 /**
- * FHIR consumer
+ * FHIR consumer, which is an implementation of a {@link RequestConsumer} that handles requests
+ * by sending the request data and parameters into a Camel route and returning the result of
+ * the route processing.
  *
  * @since 3.1
  */
-public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends DefaultConsumer implements SuspendableService {
+public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends DefaultConsumer
+        implements SuspendableService, RequestConsumer {
 
     public FhirConsumer(FhirEndpoint<AuditDatasetType, ? extends FhirComponent<AuditDatasetType>> endpoint, Processor processor) {
         super(endpoint, processor);
@@ -54,24 +59,42 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
 
     @Override
     public FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>> getEndpoint() {
-        return (FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>)super.getEndpoint();
+        return (FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>) super.getEndpoint();
     }
 
     /**
      * This method can be called by {@link ca.uhn.fhir.rest.server.IResourceProvider} objects to send the received
      * (and potentially handled) request further down a Camel route.
      *
-     * @param payload FHIR request content
-     * @param headers headers
+     * @param payload     FHIR request content
+     * @param headers     headers
      * @param resultClass class of the result resource
-     * @param <R> Resource type being returned
+     * @param <R>         Resource type being returned
      * @return result of processing the FHIR request in Camel
      */
-    final <R extends IBaseResource> R processInRoute(Object payload, Map<String, Object> headers, Class<R> resultClass) {
+    @Override
+    public final <R extends IBaseResource> R handleResourceRequest(Object payload, Map<String, Object> headers, Class<R> resultClass) {
+        return (R) handleInRoute(payload, headers, resultClass);
+    }
+
+    @Override
+    public <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> headers) {
+        return (List<R>) handleInRoute(payload, headers, List.class);
+    }
+
+    /**
+     * Forwards the request to be handled into a Camel route
+     *
+     * @param payload     request payload, will become the Camel message body
+     * @param headers     request parameters, will be added to the Camel headers
+     * @param resultClass expected body type to be returned
+     * @return request result, type-converted into the required result class
+     */
+    protected Object handleInRoute(Object payload, Map<String, Object> headers, Class<?> resultClass) {
         Exchange exchange = getEndpoint().createExchange();
         exchange.getIn().setBody(payload);
         if (headers != null) {
-            exchange.getIn().setHeaders(headers);
+            exchange.getIn().getHeaders().putAll(headers);
         }
 
         try {

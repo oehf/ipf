@@ -21,9 +21,19 @@ package org.openehealth.ipf.commons.ihe.fhir;
  */
 public interface Constants {
 
+    // PIXm stuff
     String PIXM_OPERATION_NAME = "$ihe-pix";
     String SOURCE_IDENTIFIER_NAME = "sourceIdentifier";
     String TARGET_SYSTEM_NAME = "targetSystem";
+
+    // PDQm stuff
+    String SP_RESOURCE_IDENTIFIER = "_id";
+    String SP_MULTIPLE_BIRTH_ORDER_NUMBER = "multipleBirthInteger";
+    String SP_MOTHERS_MAIDEN_NAME_GIVEN = "mothersMaidenName.given";
+    String SP_MOTHERS_MAIDEN_NAME_FAMILY = "mothersMaidenName.family";
+
+    // Request parameter information
+    String FHIR_REQUEST_PARAMETERS = "FhirRequestParameters";
 
     // Parameter information from the HttpServletRequest
     String HTTP_URI = "FhirHttpUri";

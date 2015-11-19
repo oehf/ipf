@@ -60,7 +60,7 @@ public class TestIti83Success extends AbstractTestIti83 {
     @Test
     public void testSendManualPixm() {
 
-        Parameters result = sendManually();
+        Parameters result = sendManually(validQueryParameters());
 
         // printAsXML(result);
 
@@ -101,7 +101,7 @@ public class TestIti83Success extends AbstractTestIti83 {
 
     @Test
     public void testSendEndpointPixm() {
-        Parameters result = getProducerTemplate().requestBody("direct:input", queryParameters(), Parameters.class);
+        Parameters result = getProducerTemplate().requestBody("direct:input", validQueryParameters(), Parameters.class);
         printAsXML(result);
 
         Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();

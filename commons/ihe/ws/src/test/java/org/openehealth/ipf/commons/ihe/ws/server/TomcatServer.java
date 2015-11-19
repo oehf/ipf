@@ -24,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;
+
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -52,11 +54,17 @@ public class TomcatServer extends ServletServer {
         // Each servlet should get an unique name, otherwise all servers will reuse
         // one and the same servlet instance.  Note that name clashes with servlets
         // created somewhere else are still possible.
-        String servletName = "ipf-servlet-" + SERVLET_COUNTER.getAndIncrement();
+        String servletName = getServletName() == null ?
+                "ipf-servlet-" + SERVLET_COUNTER.getAndIncrement() :
+                getServletName();
 
         wrapper = context.createWrapper();
         wrapper.setName(servletName);
         wrapper.setServletClass(getServlet().getClass().getName());
+
+        for (Map.Entry<String, String> parameters : getInitParameters().entrySet()) {
+            wrapper.addInitParameter(parameters.getKey(), parameters.getValue());
+        }
 
         context.addChild(wrapper);
         context.addServletMapping(getServletPath(), servletName);

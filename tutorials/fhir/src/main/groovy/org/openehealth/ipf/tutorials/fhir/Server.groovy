@@ -17,7 +17,7 @@ package org.openehealth.ipf.tutorials.fhir
 
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.commons.ihe.ws.server.TomcatServer
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.CamelFhirServlet
+import org.openehealth.ipf.commons.ihe.fhir.CamelFhirServlet
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.core.io.ClassPathResource
 
@@ -46,11 +46,16 @@ public class Server {
         servletServer.contextPath = ''
         servletServer.servletPath = '/*'
         servletServer.servlet = servlet
+        servletServer.servletName = 'FhirServlet'
         servletServer.secure = args.length == 1 && args[0].equals('secure')
         servletServer.keystoreFile = 'keystore'
         servletServer.keystorePass = 'changeit'
         servletServer.truststoreFile = 'keystore'
         servletServer.truststorePass = 'changeit'
+
+        servletServer.initParameters.put("logging", "true")
+        servletServer.initParameters.put("highlight", "true")
+
         servletServer.start()
         
         AuditorModuleContext.context.config.auditRepositoryHost = 'localhost'

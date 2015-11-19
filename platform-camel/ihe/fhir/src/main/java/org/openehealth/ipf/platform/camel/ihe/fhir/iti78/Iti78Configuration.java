@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83AuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ResourceProvider;
+import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78AuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78QueryResourceClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78ResourceProvider;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
 
 /**
@@ -26,11 +26,11 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfigurati
  *
  * @since 3.1
  */
-public class Iti83Configuration extends FhirComponentConfiguration<Iti83AuditDataset> {
+public class Iti78Configuration extends FhirComponentConfiguration<Iti78AuditDataset> {
 
-    public Iti83Configuration() {
+    public Iti78Configuration() {
         super(
-                new Iti83ResourceProvider(),        // Consumer side. accept $ihe-pix operation
-                new Iti83ClientRequestFactory());   // Formulate queries
+                new Iti78ResourceProvider(),                    // Consumer side. accept patient searches
+                new Iti78QueryResourceClientRequestFactory());  // Formulate queries
     }
 }

@@ -21,7 +21,7 @@ import org.hl7.fhir.instance.model.*;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.CamelFhirServlet;
+import org.openehealth.ipf.commons.ihe.fhir.CamelFhirServlet;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
@@ -45,7 +45,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 
-    protected Parameters queryParameters() {
+    protected Parameters validQueryParameters() {
         Parameters inParams = new Parameters();
         inParams.addParameter()
                 .setName(Constants.SOURCE_IDENTIFIER_NAME)
@@ -56,11 +56,11 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
         return inParams;
     }
 
-    protected Parameters sendManually() {
+    protected Parameters sendManually(Parameters queryParameters) {
         Parameters result = client.operation()
                 .onType(Patient.class)
                 .named(Constants.PIXM_OPERATION_NAME)
-                .withParameters(queryParameters())
+                .withParameters(queryParameters)
                 .useHttpGet()
                 .execute();
         return result;

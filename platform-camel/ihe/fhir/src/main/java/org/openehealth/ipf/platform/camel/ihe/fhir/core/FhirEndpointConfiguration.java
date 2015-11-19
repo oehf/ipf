@@ -21,7 +21,8 @@ import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.apache.http.client.HttpClient;
+import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
+import org.openehealth.ipf.commons.ihe.fhir.CamelFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
@@ -54,7 +55,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     @Getter
     @UriParam
-    private AbstractResourceProvider<AuditDatasetType> resourceProvider;
+    private AbstractPlainProvider<AuditDatasetType> resourceProvider;
 
     // Producer only
 
@@ -80,7 +81,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, CamelFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(
-                parameters, "resourceProvider", AbstractResourceProvider.class, null);
+                parameters, "resourceProvider", AbstractPlainProvider.class, null);
         clientRequestFactory = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "clientRequestFactory", ClientRequestFactory.class, null);
 

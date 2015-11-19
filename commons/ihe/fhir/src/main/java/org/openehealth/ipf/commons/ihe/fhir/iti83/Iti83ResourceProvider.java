@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
+package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import org.hl7.fhir.instance.model.*;
-import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83AuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.AbstractResourceProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,17 +33,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  *
  * @since 3.1
  */
-public class Iti83ResourceProvider extends AbstractResourceProvider<Iti83AuditDataset> {
-
-    /**
-     * Signals that $pix-query operations are directed against the Patient resource type
-     *
-     * @return Patient.class
-     */
-    @Override
-    public Class<? extends IBaseResource> getResourceType() {
-        return Patient.class;
-    }
+public class Iti83ResourceProvider extends AbstractPlainProvider<Iti83AuditDataset> {
 
     /**
      * Handles the PIXm Query
@@ -55,7 +44,7 @@ public class Iti83ResourceProvider extends AbstractResourceProvider<Iti83AuditDa
      * @return {@link Parameters} containing found identifiers
      */
     @SuppressWarnings("unused")
-    @Operation(name = PIXM_OPERATION_NAME, idempotent = true)
+    @Operation(name = PIXM_OPERATION_NAME, type = Patient.class, idempotent = true)
     public Parameters pixmQuery(
             @OperationParam(name = SOURCE_IDENTIFIER_NAME) StringType sourceIdentifierString,
             @OperationParam(name = TARGET_SYSTEM_NAME) UriType targetSystem,
@@ -73,7 +62,7 @@ public class Iti83ResourceProvider extends AbstractResourceProvider<Iti83AuditDa
         inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetSystem);
 
         // Run down the route
-        return processInRoute(inParams, Parameters.class, httpServletRequest, httpServletResponse);
+        return requestResource(inParams, Parameters.class, httpServletRequest, httpServletResponse);
     }
 
 }
