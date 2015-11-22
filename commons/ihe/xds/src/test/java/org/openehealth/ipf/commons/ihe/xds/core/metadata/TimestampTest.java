@@ -93,26 +93,32 @@ public class TimestampTest {
 
     @Test
     public void testEquivalence() {
-        // Somewhere in Japan, with 777 milliseconds...
         Timestamp ts1 = Timestamp.fromHL7("20150102100405.777+0800");
 
-        // ...and in Berlin, with only 123 milliseconds, but...
-        Timestamp ts2 = new Timestamp(
-                new DateTime(2015, 1, 2, 3, 4, 5, 123, DateTimeZone.forID("CET")),
-                Timestamp.Precision.SECOND);
+        ts1.setPrecision(Timestamp.Precision.YEAR);
+        assertEquals   (ts1, Timestamp.fromHL7("2015"));
+        assertNotEquals(ts1, Timestamp.fromHL7("2017"));
 
-        // ...the both timestamps can be considered equal.
-        assertEquals(ts1, ts2);
+        ts1.setPrecision(Timestamp.Precision.MONTH);
+        assertEquals   (ts1, Timestamp.fromHL7("201501"));
+        assertNotEquals(ts1, Timestamp.fromHL7("201507"));
 
-        ts2.setPrecision(Timestamp.Precision.MINUTE);
-        assertNotEquals(ts1, ts2);
+        ts1.setPrecision(Timestamp.Precision.DAY);
+        assertEquals   (ts1, Timestamp.fromHL7("20150102"));
+        assertNotEquals(ts1, Timestamp.fromHL7("20150107"));
+
+        ts1.setPrecision(Timestamp.Precision.HOUR);
+        assertEquals   (ts1, Timestamp.fromHL7("2015010204+0200"));
+        assertNotEquals(ts1, Timestamp.fromHL7("2015010207+0200"));
 
         ts1.setPrecision(Timestamp.Precision.MINUTE);
-        assertEquals(ts1, ts2);
+        assertEquals   (ts1, Timestamp.fromHL7("201501020404+0200"));
+        assertNotEquals(ts1, Timestamp.fromHL7("201501020407+0200"));
 
-        // introduce a difference of 1 second
-        ts1.setDateTime(ts1.getDateTime().minus(1000L));
-        assertNotEquals(ts1, ts2);
+        ts1.setPrecision(Timestamp.Precision.SECOND);
+        assertEquals   (ts1, Timestamp.fromHL7("20150102040405.123+0200"));
+        assertNotEquals(ts1, Timestamp.fromHL7("20150102040407.777+0200"));
+
     }
 
 }

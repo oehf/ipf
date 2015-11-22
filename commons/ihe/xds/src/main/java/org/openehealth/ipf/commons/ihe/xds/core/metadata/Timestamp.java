@@ -22,7 +22,6 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeFieldType;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -40,7 +39,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * HL7 timestamps (data type DTM) with particular precision.
+ * HL7 timestamps (data type DTM) with particular precision, normalized to UTC.
  *
  * @author Dmytro Rud
  */
@@ -142,7 +141,6 @@ public class Timestamp implements Serializable {
         } catch (DataTypeException e) {
             throw new XDSMetaDataException(ValidationMessage.INVALID_TIME, s);
         }
-
     }
 
     /**
@@ -153,11 +151,11 @@ public class Timestamp implements Serializable {
      *      HL7 representation of the timestamp, or <code>null</code> if the parameter is <code>null</code>.
      */
     public static String toHL7(Timestamp timestamp) {
-        if (timestamp == null) {
-            return null;
-        }
-        DateTime instant = timestamp.dateTime.toDateTime(DateTimeZone.UTC);
-        return FORMATTERS.get(timestamp.getPrecision()).print(instant);
+        return (timestamp != null) ? timestamp.toHL7() : null;
+    }
+
+    private String toHL7() {
+        return FORMATTERS.get(precision).print(dateTime.toDateTime(DateTimeZone.UTC));
     }
 
     /**
@@ -166,7 +164,7 @@ public class Timestamp implements Serializable {
      *      must be not <code>null</code>.
      */
     public void setDateTime(DateTime dateTime) {
-        this.dateTime = Validate.notNull(dateTime);
+        this.dateTime = Validate.notNull(dateTime).toDateTime(DateTimeZone.UTC);
     }
 
     /**
@@ -184,8 +182,8 @@ public class Timestamp implements Serializable {
     }
 
     /**
-     * Two HL7 timestamps are equal when they have the same precision and point to the same second.
-     * It means that milliseconds, time zones, and all other non-relevant decorations are ignored.
+     * Two HL7 timestamps are equal when they have the same values in the relevant fields
+     * (i.e. in the ones covered by the precision).
      */
     @Override
     public boolean equals(Object o) {
@@ -193,10 +191,7 @@ public class Timestamp implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         Timestamp timestamp = (Timestamp) o;
-
-        long myMillis = dateTime.getMillis() - dateTime.get(DateTimeFieldType.millisOfSecond());
-        long theirMillis = timestamp.dateTime.getMillis() - timestamp.dateTime.get(DateTimeFieldType.millisOfSecond());
-        return precision.equals(timestamp.precision) && (myMillis == theirMillis);
+        return toHL7().equals(timestamp.toHL7());
     }
 
     @Override
