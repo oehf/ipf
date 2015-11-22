@@ -160,7 +160,6 @@ abstract public class AbstractCachingXmlProcessor<T> {
      *
      * @param params validator/transmogrifier parameters.
      * @return resource of the configured type.
-     * @throws Exception
      */
     abstract protected T createResource(Object... params);
 
@@ -171,8 +170,6 @@ abstract public class AbstractCachingXmlProcessor<T> {
      *
      * @param params validator/transmogrifier parameters.
      * @return resource of the configured type.
-     * @throws IOException
-     *
      */
     protected StreamSource resourceContent(Object... params) {
         String location = resourceLocation(params);

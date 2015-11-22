@@ -50,7 +50,7 @@ public class XDSMetaDataException extends ValidationException {
     /**
      * Recursively replaces all
      * {@link org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter}
-     * elements found in the given array * with their corresponding ebXML slot names.
+     * elements found in the given array with their corresponding ebXML slot names.
      * @param array
      *      array potentially containing
      *      {@link org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter}

@@ -23,6 +23,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * @author Christian Ohr
@@ -48,7 +49,7 @@ public class SchematronValidatorTest {
                 "/schematron/schematron-test-fail.xml"));
         try {
             v.validate(testXml, new SchematronProfile("/schematron/schematron-test-rules.xml"));
-            assertEquals("This line shall be not reachable", 0, 1);
+            fail("This line shall be not reachable");
         } catch (SchematronValidationException e) {
             Throwable[] cause = e.getCauses();
             assertEquals(3, cause.length);

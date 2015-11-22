@@ -25,8 +25,7 @@ package org.openehealth.ipf.commons.core.extend.config;
  * http://docs.codehaus.org/display/GROOVY/Creating+an+extension+module.
  * </p><p>
  * This interface defines method that provide information that the module descriptor
- * would usually deliver. Bean instance of this type are picked up by the
- * {@link org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor} when
+ * would usually deliver. Bean instance of this type are picked up by Spring when
  * it contains a {@link DynamicExtensionConfigurer} and dynamically registered in
  * Groovy's metaclass/metamethod registry.
  * </p><p>

@@ -38,7 +38,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 public class CxfFeatureTest extends StandardTestContainer {
 
-    static private String CONTEXT_DESCRIPTOR = "feature-test-resources/server-context.xml";
+    static private final String CONTEXT_DESCRIPTOR = "feature-test-resources/server-context.xml";
 
     @BeforeClass
     public static void setUp() throws IOException {
@@ -58,6 +58,7 @@ public class CxfFeatureTest extends StandardTestContainer {
         Iti42PortType client = (Iti42PortType) clientFactory.getClient();
         try {
             client.documentRegistryRegisterDocumentSetB(new SubmitObjectsRequest());
+            Assert.fail("This line must be not reachable");
         } catch(SOAPFaultException ex) {
             Assert.assertTrue(ex.getMessage().contains("These policy alternatives can not be satisfied"));
         }
