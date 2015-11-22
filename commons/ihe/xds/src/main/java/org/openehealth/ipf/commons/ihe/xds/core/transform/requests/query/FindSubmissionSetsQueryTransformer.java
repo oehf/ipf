@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;

@@ -131,7 +131,7 @@ public class QueryResponseValidatorTest {
         docEntry.setHash(null);
         expectFailure(WRONG_NUMBER_OF_SLOT_VALUES);
 
-        docEntry.setCreationTime((DateTime) null);
+        docEntry.setCreationTime((Timestamp) null);
         docEntry.setLegalAuthenticator(null);
         validator.validate(transformer.toEbXML(response), profile);
     }

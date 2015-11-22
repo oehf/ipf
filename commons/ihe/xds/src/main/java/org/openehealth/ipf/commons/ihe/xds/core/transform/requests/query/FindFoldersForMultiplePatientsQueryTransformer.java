@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersForMultiplePatientsQuery;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**

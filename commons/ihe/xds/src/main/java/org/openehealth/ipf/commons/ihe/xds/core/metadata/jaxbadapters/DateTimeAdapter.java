@@ -21,7 +21,7 @@ import org.joda.time.DateTimeZone;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.Calendar;
 
-public class DateAdapter extends XmlAdapter<Calendar, DateTime> {
+public class DateTimeAdapter extends XmlAdapter<Calendar, DateTime> {
 
     @Override
     public Calendar marshal(DateTime dateTime) throws Exception {

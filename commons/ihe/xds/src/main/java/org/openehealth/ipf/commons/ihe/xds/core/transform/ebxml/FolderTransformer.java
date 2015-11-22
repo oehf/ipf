@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 
 import java.util.List;
 

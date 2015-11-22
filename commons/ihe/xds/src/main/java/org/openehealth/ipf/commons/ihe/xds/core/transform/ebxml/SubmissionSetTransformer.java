@@ -28,7 +28,7 @@ import java.util.List;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer.toHL7;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 
 /**
  * Transforms between a {@link SubmissionSet} and its ebXML representation.

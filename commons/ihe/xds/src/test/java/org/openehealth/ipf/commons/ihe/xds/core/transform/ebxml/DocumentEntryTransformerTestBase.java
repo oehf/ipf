@@ -155,11 +155,11 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertEquals(createLocal(11), ebXML.getName());
         
         List<EbXMLSlot> slots = ebXML.getSlots();
-        assertSlot(SLOT_NAME_CREATION_TIME, slots, "20150206000000");
+        assertSlot(SLOT_NAME_CREATION_TIME, slots, "20150206");
         assertSlot(SLOT_NAME_HASH, slots, "hash");
         assertSlot(SLOT_NAME_LANGUAGE_CODE, slots, "languageCode");
-        assertSlot(SLOT_NAME_SERVICE_START_TIME, slots, "20150207000000");
-        assertSlot(SLOT_NAME_SERVICE_STOP_TIME, slots, "20150208000000");
+        assertSlot(SLOT_NAME_SERVICE_START_TIME, slots, "20150207");
+        assertSlot(SLOT_NAME_SERVICE_STOP_TIME, slots, "20150208");
         assertSlot(SLOT_NAME_SIZE, slots, "174");
         assertSlot(SLOT_NAME_SOURCE_PATIENT_ID, slots, "id 4^^^&uni 4&uniType 4");
         assertSlot(SLOT_NAME_URI, slots, "1|uri");

@@ -20,6 +20,7 @@ import org.joda.time.DateTime
 import org.apache.camel.model.ProcessorDefinition
 import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException
 import javax.activation.DataHandler
@@ -104,7 +105,7 @@ class RegRepModelExtension {
     // Updates the last update time and ensures that the time is actually changed
     static ProcessorDefinition updateTimeStamp(ProcessorDefinition self) {
         self.process {
-            it.in.body.entry.lastUpdateTime = DateTime.now()
+            it.in.body.entry.lastUpdateTime = new Timestamp(DateTime.now(), Timestamp.Precision.SECOND)
         }
     }
     

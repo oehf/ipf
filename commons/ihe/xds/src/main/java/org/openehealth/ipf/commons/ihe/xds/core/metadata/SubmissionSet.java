@@ -18,12 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.time.DateTime;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +46,7 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
     @XmlElement(name = "intendedRecipient")
     @Getter private final List<Recipient> intendedRecipients = new ArrayList<>();
     @Getter @Setter private String sourceId;
-    @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = DateAdapter.class)
-    @Getter private DateTime submissionTime;
+    @Getter private Timestamp submissionTime;
 
     /**
      * @param author
@@ -72,12 +66,12 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
         return authors.isEmpty() ? null : authors.get(0);
     }
 
-    public void setSubmissionTime(DateTime submissionTime) {
+    public void setSubmissionTime(Timestamp submissionTime) {
         this.submissionTime = submissionTime;
     }
 
     public void setSubmissionTime(String submissionTime) {
-        this.submissionTime = DateTransformer.fromHL7(submissionTime);
+        this.submissionTime = Timestamp.fromHL7(submissionTime);
     }
 
 }

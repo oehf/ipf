@@ -22,6 +22,7 @@ import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp;
 
 /**
  * Tests for {@link DateOfBirthPIDTransformer}.
@@ -53,7 +54,9 @@ public class DateOfBirthPIDTransformerTest {
         PatientInfo patientInfo = new PatientInfo();
         transformer.fromHL7("19800102030405-0100^sdf", patientInfo);
         DateTime expected = new DateTime(1980, 1, 2, 3, 4, 5, DateTimeZone.forOffsetHoursMinutes(-1, 0));
-        assertEquals(expected.toDateTime(DateTimeZone.UTC), patientInfo.getDateOfBirth());
+        assertEquals(
+                new Timestamp(expected, Timestamp.Precision.SECOND),
+                patientInfo.getDateOfBirth());
     }
 
     @Test

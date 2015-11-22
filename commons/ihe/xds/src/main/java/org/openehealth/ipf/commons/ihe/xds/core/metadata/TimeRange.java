@@ -16,16 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.joda.time.DateTime;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
 
 /**
  * Represents a date and time range used in queries.
@@ -37,29 +33,23 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
 public class TimeRange implements Serializable {
     private static final long serialVersionUID = -5468726370729209318L;
     
-    @XmlAttribute
-    @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = DateAdapter.class)
-    @Getter private DateTime from;
-    @XmlAttribute
-    @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = DateAdapter.class)
-    @Getter private DateTime to;
+    @Getter private Timestamp from;
+    @Getter private Timestamp to;
 
-    public void setFrom(DateTime from) {
+    public void setFrom(Timestamp from) {
         this.from = from;
     }
 
     public void setFrom(String from) {
-        this.from = DateTransformer.fromHL7(from);
+        this.from = Timestamp.fromHL7(from);
     }
 
-    public void setTo(DateTime to) {
+    public void setTo(Timestamp to) {
         this.to = to;
     }
 
     public void setTo(String to) {
-        this.to = DateTransformer.fromHL7(to);
+        this.to = Timestamp.fromHL7(to);
     }
 
     @Override

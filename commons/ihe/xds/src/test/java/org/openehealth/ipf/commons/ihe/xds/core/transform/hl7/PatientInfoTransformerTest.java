@@ -130,7 +130,9 @@ public class PatientInfoTransformerTest {
         assertEquals("abcdef", patientInfo.getIds().get(0).getId());
         assertEquals("fedcba", patientInfo.getIds().get(1).getId());
         assertEquals("Joman", patientInfo.getName().getFamilyName());
-        assertEquals(new DateTime(1980, 1, 2, 0, 0, DateTimeZone.UTC), patientInfo.getDateOfBirth());
+        assertEquals(
+                new Timestamp(new DateTime(1980, 1, 2, 0, 0, DateTimeZone.UTC), Timestamp.Precision.DAY),
+                patientInfo.getDateOfBirth());
         assertEquals("A", patientInfo.getGender());
         assertEquals("Jo Str. 3", patientInfo.getAddress().getStreetAddress());
     }

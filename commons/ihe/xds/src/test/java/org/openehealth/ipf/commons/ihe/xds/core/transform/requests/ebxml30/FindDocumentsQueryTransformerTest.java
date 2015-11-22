@@ -87,19 +87,19 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('code3^^scheme3')", "('code4^^scheme4')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PRACTICE_SETTING_CODE.getSlotName()));
         
-        assertEquals(Arrays.asList("19800101000000"),
+        assertEquals(Arrays.asList("1980"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CREATION_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("19810101000000"),
+        assertEquals(Arrays.asList("1981"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CREATION_TIME_TO.getSlotName()));
 
-        assertEquals(Arrays.asList("19820101000000"),
+        assertEquals(Arrays.asList("1982"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_START_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("19830101000000"),
+        assertEquals(Arrays.asList("1983"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_START_TIME_TO.getSlotName()));
 
-        assertEquals(Arrays.asList("19840101000000"),
+        assertEquals(Arrays.asList("1984"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("19850101000000"),
+        assertEquals(Arrays.asList("1985"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_TO.getSlotName()));
         
         assertEquals(Arrays.asList("('code5^^scheme5')", "('code6^^scheme6')"),

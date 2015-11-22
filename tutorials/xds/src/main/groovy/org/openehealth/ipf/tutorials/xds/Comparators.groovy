@@ -77,8 +77,8 @@ public class Comparators {
          if (range == null) 
              return true
 
-         (range.from == null || time.millis >= range.from.millis) &&
-                (range.to == null || time.millis <= range.to.millis)
+         (range.from == null || time.millis >= range.from.dateTime.millis) &&
+                (range.to == null || time.millis <= range.to.dateTime.millis)
      }
 
 }

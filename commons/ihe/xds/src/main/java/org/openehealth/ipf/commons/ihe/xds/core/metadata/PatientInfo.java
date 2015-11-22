@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +23,6 @@ import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.joda.time.DateTime;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
 
 /**
  * Represents additional info about a patient.
@@ -50,9 +46,7 @@ public class PatientInfo implements Serializable {
     private final List<Identifiable> ids = new ArrayList<>();               // PID-3
     private Name name;                                                      // PID-5
     @XmlElement(name = "birthTime")
-    @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = DateAdapter.class)
-    private DateTime dateOfBirth;                                           // PID-7
+    private Timestamp dateOfBirth;                                          // PID-7
     private String gender;                                                  // PID-8
     private Address address;                                                // PID-11
     
@@ -90,7 +84,7 @@ public class PatientInfo implements Serializable {
     /**
      * @return the date of birth (PID-7).
      */
-    public DateTime getDateOfBirth() {
+    public Timestamp getDateOfBirth() {
         return dateOfBirth;
     }
     
@@ -98,7 +92,7 @@ public class PatientInfo implements Serializable {
      * @param dateOfBirth
      *          the date of birth (PID-7).
      */
-    public void setDateOfBirth(DateTime dateOfBirth) {
+    public void setDateOfBirth(Timestamp dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -107,7 +101,7 @@ public class PatientInfo implements Serializable {
      *          the date of birth (PID-7).
      */
     public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = DateTransformer.fromHL7(dateOfBirth);
+        this.dateOfBirth = Timestamp.fromHL7(dateOfBirth);
     }
 
     /**

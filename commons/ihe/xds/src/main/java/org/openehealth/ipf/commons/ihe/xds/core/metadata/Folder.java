@@ -16,16 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.joda.time.DateTime;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateAdapter;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
 
 /**
  * Represents an XDS folder according to the IHE XDS specification.
@@ -44,17 +40,15 @@ public class Folder extends XDSMetaClass implements Serializable {
     
     @XmlElement(name = "code")
     @Getter private final List<Code> codeList = new ArrayList<>();
-    @XmlSchemaType(name = "dateTime")
-    @XmlJavaTypeAdapter(value = DateAdapter.class)
-    @Getter private DateTime lastUpdateTime;
+    @Getter private Timestamp lastUpdateTime;
 
 
-    public void setLastUpdateTime(DateTime lastUpdateTime) {
+    public void setLastUpdateTime(Timestamp lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
     }
 
     public void setLastUpdateTime(String lastUpdateTime) {
-        this.lastUpdateTime = DateTransformer.fromHL7(lastUpdateTime);
+        this.lastUpdateTime = Timestamp.fromHL7(lastUpdateTime);
     }
 
 }

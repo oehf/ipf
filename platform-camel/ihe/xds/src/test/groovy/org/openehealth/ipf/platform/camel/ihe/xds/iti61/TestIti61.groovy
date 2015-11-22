@@ -21,6 +21,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
@@ -59,7 +60,7 @@ class TestIti61 extends StandardTestContainer {
         request.documentEntries.each { entry ->
             // validation should fail when one of the following lines is deactivated
             entry.type = DocumentEntryType.ON_DEMAND
-            entry.creationTime = null
+            entry.setCreationTime((Timestamp) null)
             entry.hash = null
             entry.size = null
             entry.legalAuthenticator = null

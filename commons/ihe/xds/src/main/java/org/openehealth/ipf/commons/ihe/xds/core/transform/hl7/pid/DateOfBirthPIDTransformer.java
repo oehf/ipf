@@ -19,7 +19,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.DateTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +43,14 @@ public class DateOfBirthPIDTransformer implements PIDTransformer {
     @Override
     public List<String> toHL7(PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
-        String date = DateTransformer.toHL7(patientInfo.getDateOfBirth());
-        return (date == null) ? null : Collections.singletonList(date.substring(0, 8));
+        if (patientInfo.getDateOfBirth() == null) {
+            return null;
+        }
+
+        String date = Timestamp.toHL7(patientInfo.getDateOfBirth());
+        if (date.length() > 8) {
+            date = date.substring(0, 8);
+        }
+        return Collections.singletonList(date);
     }
 }
