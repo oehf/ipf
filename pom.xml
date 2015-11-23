@@ -68,15 +68,15 @@
 
         <!-- Dependency version properties -->
         <activemq-version>5.12.1</activemq-version>
-        <aspectj-version>1.8.6</aspectj-version>
+        <aspectj-version>1.8.7</aspectj-version>
         <bouncycastle-version>1.52</bouncycastle-version>
-        <camel-version>2.16.0</camel-version>
+        <camel-version>2.16.1</camel-version>
         <cglib-version>3.1</cglib-version>
         <commons-beanutils-version>1.9.2</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-collections-version>3.2.2</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
-        <commons-fileupload-version>1.3</commons-fileupload-version>
+        <commons-fileupload-version>1.3.1</commons-fileupload-version>
         <commons-httpclient-version>3.1</commons-httpclient-version>
         <commons-io-version>2.4</commons-io-version>
         <commons-lang3-version>3.4</commons-lang3-version>
@@ -84,7 +84,7 @@
         <cxf-version>3.1.4</cxf-version>
         <derby-version>10.11.1.1</derby-version>
         <easymock-version>3.3.1</easymock-version>
-        <ehcache-version>2.10.0</ehcache-version>
+        <ehcache-version>2.10.1</ehcache-version>
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-servlet-api-30-version>1.0</geronimo-spec-servlet-api-30-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
@@ -119,7 +119,7 @@
         <quartz-version>2.2.1</quartz-version>
         <saxon-he-version>9.6.0-4</saxon-he-version>
         <slf4j-version>1.7.12</slf4j-version>
-        <spring-version>4.1.6.RELEASE</spring-version>
+        <spring-version>4.1.8.RELEASE</spring-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.39</tomcat-version>
@@ -473,7 +473,7 @@
                     <plugin>
                         <groupId>org.projectlombok</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
-                        <version>${lombok-version}.0</version>
+                        <version>${lombok-version}.1</version>
                         <executions>
                             <execution>
                                 <phase>generate-sources</phase>

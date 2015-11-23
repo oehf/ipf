@@ -70,7 +70,7 @@ public class Timestamp implements Serializable {
     @Getter private DateTime dateTime;
 
     /**
-     * Precision of the timestamp (smallest present element, e.g. YEAR for "1980".
+     * Precision of the timestamp (smallest present element, e.g. YEAR for "1980").
      */
     @XmlAttribute
     @Getter private Precision precision;
