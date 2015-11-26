@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.commons.map.config;
 
-import java.util.Collection;
-
-import org.openehealth.ipf.commons.map.SpringBidiMappingService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.openehealth.ipf.commons.core.config.Configurer;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.commons.map.BidiMappingService;
-import org.springframework.core.io.Resource;
+import org.openehealth.ipf.commons.map.SpringBidiMappingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
 
 /**
  * {@link Configurer} used to add all {@link CustomMappings} 
@@ -60,8 +59,7 @@ public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigu
             LOG.debug("Mapping script added {}", configuration);
         }
         if (configuration.getMappingScripts() != null) {
-            mappingService.addMappingScripts(configuration.getMappingScripts()
-                .toArray(new Resource[configuration.getMappingScripts().size()]));
+            mappingService.addMappingScripts(configuration.getMappingScripts());
             LOG.debug("Mapping scripts added {}", configuration);
         }        
     }

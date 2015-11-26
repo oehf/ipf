@@ -21,6 +21,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 
+import java.util.List;
+
 /**
  * Adds mapping scripts to a reference BidiMappingService instance. Due
  * to introduction of the new IPF's extension framework, this
@@ -35,13 +37,13 @@ public class BidiMappingServiceConfigurer implements InitializingBean {
     private SpringBidiMappingService mappingService;
 
     @Getter @Setter
-    private Resource[] mappingScripts;
+    private List<? extends Resource> mappingScripts;
 
     @Getter @Setter
     private Resource mappingScript;
 
     public void afterPropertiesSet() {
-        if (mappingScripts != null && mappingScripts.length > 0) {
+        if (mappingScripts != null && !mappingScripts.isEmpty()) {
             mappingService.addMappingScripts(mappingScripts);
         }
         if (mappingScript != null) {
