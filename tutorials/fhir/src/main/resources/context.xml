@@ -14,8 +14,6 @@
   ~ limitations under the License.
   -->
 
-<!-- We can add more CXF related namespaces here if we need to add something to
-     the default CXF configuration. -->
 <beans xmlns="http://www.springframework.org/schema/beans" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:camel="http://camel.apache.org/schema/spring"
@@ -28,6 +26,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 http://openehealth.org/schema/ipf-commons-core
 http://openehealth.org/schema/ipf-commons-core.xsd">
 
+    <ipf:globalContext id="globalContext"/>
 
     <!-- Camel context and producer -->
     <camel:camelContext id="camelContext">
@@ -36,28 +35,28 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <camel:routeBuilder ref="iti78RouteBuilder"/>
     </camel:camelContext>
 
-    <!-- Our route builders for the ITI-83 transaction and translation to ITI-9 -->
+    <!-- Route builders for the ITI-83 transaction and translation to ITI-9 -->
     <bean id="iti83RouteBuilder"
           class="org.openehealth.ipf.tutorials.fhir.Iti83RouteBuilder">
         <constructor-arg index="0" ref="uriMapper"/>
-        <constructor-arg index="1" value="localhost" />
-        <constructor-arg index="2" value="3710"/>
+        <constructor-arg index="1" value="127.0.0.1" />
+        <constructor-arg index="2" value="13710"/>
 
         <property name="validateIti9Request" value="false"/>
         <property name="validateIti9Response" value="false" />
     </bean>
 
+    <!-- Route builders for the ITI-78 transaction and translation to ITI-21. DOES NOT WORK YET -->
     <bean id="iti78RouteBuilder" class="org.openehealth.ipf.tutorials.fhir.Iti78RouteBuilder">
-
     </bean>
 
 
+    <!-- URI Mapping stuff -->
     <bean id="uriMapper" class="org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper">
         <constructor-arg index="0" ref="mappingService"/>
         <constructor-arg index="1" value="uriToOid"/>
+        <constructor-arg index="2" value="uriToNamespace"/>
     </bean>
-
-	<ipf:globalContext id="globalContext"/>
 
     <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
         <property name="mappingScripts">
@@ -67,11 +66,9 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         </property>
     </bean>
 
+    <!-- Codec for creating and accepting MLLP frames for HL7v2 transactions -->
     <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
         <property name="charset" value="UTF-8"/>
     </bean>
 
 </beans>
-
-
-        

@@ -28,19 +28,26 @@ public class DefaultUriMapper extends AbstractUriMapper {
 
     private final MappingService mappingService;
     private final String uriToOidMappingKey;
+    private final String uriToNamespaceMappingKey;
 
-    public DefaultUriMapper(MappingService mappingService, String uriToOidMappingKey) {
+    public DefaultUriMapper(MappingService mappingService, String uriToOidMappingKey, String uriToNamespaceMappingKey) {
         this.mappingService = mappingService;
         this.uriToOidMappingKey = uriToOidMappingKey;
+        this.uriToNamespaceMappingKey = uriToNamespaceMappingKey;
     }
 
     @Override
     protected String mapUriToOid(String uri) {
-        return mappingService.get(uriToOidMappingKey, uri).toString();
+        return (String)mappingService.get(uriToOidMappingKey, uri);
     }
 
     @Override
     protected String mapOidToUri(String oid) {
-        return mappingService.getKey(uriToOidMappingKey, oid).toString();
+        return (String)mappingService.getKey(uriToOidMappingKey, oid);
+    }
+
+    @Override
+    protected String mapUriToNamespace(String uri) {
+        return (String)mappingService.get(uriToNamespaceMappingKey, uri);
     }
 }

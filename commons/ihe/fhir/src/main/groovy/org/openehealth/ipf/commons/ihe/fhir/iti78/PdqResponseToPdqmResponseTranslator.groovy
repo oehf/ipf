@@ -23,6 +23,7 @@ import org.apache.commons.lang3.Validate
 import org.hl7.fhir.instance.model.*
 import org.hl7.fhir.instance.model.ContactPoint.ContactPointUse
 import org.hl7.fhir.instance.model.valuesets.V3MaritalStatus
+import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_K21
@@ -139,21 +140,11 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
     protected BaseServerResponseException handleErrorResponse(RSP_K21 message) {
 
         // Check error locations
-        OperationOutcome oo = new OperationOutcome()
         int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0
-
         if (errorField == 8) {
-            // Case 3: What Domains Returned unknown
-            oo.addIssue()
-                    .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                    .setCode(OperationOutcome.IssueType.NOTFOUND) // unknown-key-identifier
-            return new InvalidRequestException('Unknown Target Domain', oo)
+            throw Utils.unknownTargetDomain()
         } else {
-            // WTF!!
-            oo.addIssue()
-                    .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                    .setCode(OperationOutcome.IssueType.EXCEPTION)
-            return new InternalErrorException('Unexpected response from server', oo)
+            throw Utils.unexpectedProblem()
         }
 
     }
@@ -179,7 +170,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         identifier
     }
 
-    private void convertAddresses(xads, List<Address> addresses) {
+    protected void convertAddresses(xads, List<Address> addresses) {
         for (def xad : xads) {
             addresses.add(convertAddress(xad))
         }
@@ -203,7 +194,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         address
     }
 
-    private void convertNames(xpns, List<HumanName> names) {
+    protected void convertNames(xpns, List<HumanName> names) {
         for (def xpn : xpns) {
             names.add(convertName(xpn))
         }
@@ -225,7 +216,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         name
     }
 
-    private void convertTelecoms(xtns, List<ContactPoint> telecoms, ContactPoint.ContactPointUse defaultUse) {
+    protected void convertTelecoms(xtns, List<ContactPoint> telecoms, ContactPoint.ContactPointUse defaultUse) {
         for (def xtn : xtns) {
             telecoms.add(convertTelecom(xtn, defaultUse))
         }

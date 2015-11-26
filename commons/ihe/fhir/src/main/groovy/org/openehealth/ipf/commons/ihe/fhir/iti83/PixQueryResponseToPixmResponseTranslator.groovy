@@ -23,6 +23,7 @@ import org.apache.commons.lang3.Validate
 import org.hl7.fhir.instance.model.Identifier
 import org.hl7.fhir.instance.model.OperationOutcome
 import org.hl7.fhir.instance.model.Parameters
+import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
@@ -85,29 +86,13 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
 
         if (errorField == 3 && errorComponent == 1) {
             // Case 3: Patient ID not found
-            oo.addIssue()
-                    .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                    .setCode(OperationOutcome.IssueType.VALUE)
-            return new InvalidRequestException('Unknown Patient ID', oo)
-
+            return Utils.unknownPatientId();
         } else if (errorField == 3 && errorComponent == 4) {
-            // Case 4: Patient Domain unknown
-            oo.addIssue()
-                    .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                    .setCode(OperationOutcome.IssueType.NOTSUPPORTED) // not-supported
-            return new InvalidRequestException('Unknown Patient Domain', oo)
+            return Utils.unknownPatientDomain()
         } else if (errorField == 4) {
-            // Case 5: What Domains Returned unknown
-            oo.addIssue()
-                    .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                    .setCode(OperationOutcome.IssueType.NOTFOUND) // unknown-key-identifier
-            return new InvalidRequestException('Unknown Target Domain', oo)
+            return Utils.unknownTargetDomain()
         } else {
-            // WTF!!
-            oo.addIssue()
-                    .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                    .setCode(OperationOutcome.IssueType.EXCEPTION)
-            return new InternalErrorException('Unexpected response from server', oo)
+            return Utils.unexpectedProblem();
         }
 
     }

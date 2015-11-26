@@ -17,16 +17,19 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78
 
 import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.lang3.Validate
+import org.hl7.fhir.instance.model.Identifier
+import org.hl7.fhir.instance.model.Patient
 import org.hl7.fhir.instance.model.UriType
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
-import org.openehealth.ipf.commons.ihe.fhir.translation.Utils
+import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
+import org.openehealth.ipf.modules.hl7.dsl.Repeatable
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 /**
@@ -78,21 +81,64 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
 
         Map<String, Object> map = parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
 
+        Identifier identifier = map.get(Patient.SP_IDENTIFIER)
+        String namespace, oid
+        if (identifier) {
+            namespace = uriMapper.uriToNamespace(identifier.system)
+            oid = uriMapper.uriToOid(identifier.system)
+            if (!(namespace || oid)) {
+                throw Utils.unknownPatientDomain()
+            }
+        }
+
         // FIXME convert search parameters!
+        def searchParams = [
+                '@PID.3.1'    : identifier?.value,
+                '@PID.3.4.1'  : namespace,
+                '@PID.3.4.2'  : oid,
+                '@PID.3.4.3'  : oid ? 'ISO' : null,
+                '@PID.5.1'    : map.get(Patient.SP_FAMILY) + "*",
+                '@PID.5.2'    : map.get(Patient.SP_GIVEN) + "*",
+                '@PID.6.1'    : map.get(Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) + "*",
+                '@PID.6.2'    : map.get(Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN) + "*",
+                '@PID.7'      : map.get(Patient.SP_BIRTHDATE), // TODO convert
+                '@PID.8'      : map.get(Patient.SP_GENDER), // TODO convert
+                '@PID.11.1'   : map.get(Patient.SP_ADDRESS),
+                '@PID.11.3'   : map.get(Patient.SP_ADDRESSCITY),
+                '@PID.11.4'   : map.get(Patient.SP_ADDRESSSTATE),
+                '@PID.11.5'   : map.get(Patient.SP_ADDRESSPOSTALCODE),
+                '@PID.11.6'   : map.get(Patient.SP_ADDRESSCOUNTRY),
+                '@PID.13'     : map.get(Patient.SP_PHONE),
+                '@PID.25'     : map.get(Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER)
+        ]
+
+        fillSearchParameters(searchParams, qry.QPD[3])
 
         UriType requestedDomain = map[Constants.TARGET_SYSTEM_NAME]
         if (requestedDomain) {
-            populateIdentifier(Utils.nextRepetition(qry.QPD[8]), requestedDomain.value)
+            if (!Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[8]), uriMapper, requestedDomain.value)) {
+                throw Utils.unknownTargetDomain()
+            }
         }
 
         qry.RCP[1] = 'I'
         return qry
     }
 
-    protected void populateIdentifier(def cx, String uri, String identifier = null) {
-        cx[1] = identifier ?: ''
-        cx[4][2] = uriMapper.uriToOid(uri)
-        cx[4][3] = 'ISO'
+    /**
+     * Creates in the given target HL7 v2 data structure a set of repeatable fields
+     * which correspond to the items of the given source map.
+     * <p>
+     * E.g. the source is <code>['abc' : '123', 'cde' : '456']</code> and the
+     * target is <code>msg.QPD[3]</code>.  A call to this function will lead to
+     * <code>QPD|...|...|abc^123~cde^456|...</code>.
+     */
+    static void fillSearchParameters(Map<String, String> parameters, Repeatable target) {
+        for (parameter in parameters.findAll { it.value }) {
+            def field = Utils.nextRepetition(target)
+            field[1].value = parameter.key
+            field[2].value = parameter.value
+        }
     }
 
 }

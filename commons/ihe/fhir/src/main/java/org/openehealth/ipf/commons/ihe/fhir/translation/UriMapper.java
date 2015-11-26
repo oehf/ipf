@@ -34,10 +34,19 @@ public interface UriMapper {
      * be used as the OID.
      *
      * @param uri the URI
-     * @return the mapped OID
+     * @return the mapped OID or null if no OID could be identified
      * @throws URISyntaxException if the uri string is no valid URI
      */
     String uriToOid(String uri) throws URISyntaxException;
+
+    /**
+     * Translates an URI into a Namespace.
+     *
+     * @param uri the URI
+     * @return the mapped namespace or null if no namespace could be identified
+     * @throws URISyntaxException if the uri string is no valid URI
+     */
+    String uriToNamespace(String uri) throws URISyntaxException;
 
     /**
      * Translates an OID into an URI. Instead of a real mapping, an URN can be derived from the OID

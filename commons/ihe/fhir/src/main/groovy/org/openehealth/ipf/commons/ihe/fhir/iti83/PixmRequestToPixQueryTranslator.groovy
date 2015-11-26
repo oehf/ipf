@@ -24,7 +24,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
-import org.openehealth.ipf.commons.ihe.fhir.translation.Utils
+import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
@@ -84,21 +84,22 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
         }
 
         Identifier sourceIdentifier = map[Constants.SOURCE_IDENTIFIER_NAME]
-        populateIdentifier(qry.QPD[3], sourceIdentifier.system, sourceIdentifier.value)
+        if (!sourceIdentifier.value) {
+            throw Utils.unknownPatientId();
+        }
+        if (!Utils.populateIdentifier(qry.QPD[3], uriMapper, sourceIdentifier.system, sourceIdentifier.value)) {
+            throw Utils.unknownPatientDomain();
+        }
 
         UriType requestedDomain = map[Constants.TARGET_SYSTEM_NAME]
         if (requestedDomain) {
-            populateIdentifier(Utils.nextRepetition(qry.QPD[4]), requestedDomain.value)
+            if (!Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[4]), uriMapper, requestedDomain.value)) {
+                throw Utils.unknownTargetDomain();
+            }
         }
 
         qry.RCP[1] = 'I'
         return qry
-    }
-
-    protected void populateIdentifier(def cx, String uri, String identifier = null) {
-        cx[1] = identifier ?: ''
-        cx[4][2] = uriMapper.uriToOid(uri)
-        cx[4][3] = 'ISO'
     }
 
 }

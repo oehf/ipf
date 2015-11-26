@@ -54,8 +54,8 @@ public class Iti83ResourceProvider extends AbstractPlainProvider<Iti83AuditDatas
         // Split up the primitive String into an {@link Identifier}
         String[] parts = sourceIdentifierString.getValueAsString().split("\\|");
         Identifier sourceIdentifier = new Identifier()
-                .setSystem(parts[0])
-                .setValue(parts[1]);
+                .setSystem(parts.length > 0 ? parts[0] : null)
+                .setValue(parts.length > 1 ? parts[1] : null);
 
         Parameters inParams = new Parameters();
         inParams.addParameter().setName(SOURCE_IDENTIFIER_NAME).setValue(sourceIdentifier);

@@ -42,6 +42,11 @@ public abstract class AbstractUriMapper implements UriMapper {
     }
 
     @Override
+    public String uriToNamespace(String uri) throws URISyntaxException {
+        return mapUriToNamespace(uri);
+    }
+
+    @Override
     public String oidToUri(String oid) throws URISyntaxException {
         try {
             String uri = mapOidToUri(oid);
@@ -59,6 +64,14 @@ public abstract class AbstractUriMapper implements UriMapper {
      * @return OID string
      */
     protected abstract String mapUriToOid(String uri);
+
+    /**
+     * Translate a non-URN URI (e.g. a URL) into an OID
+     *
+     * @param uri URI
+     * @return OID string
+     */
+    protected abstract String mapUriToNamespace(String uri);
 
     /**
      * Translate a OID into an URI. Can either return null or throw and
