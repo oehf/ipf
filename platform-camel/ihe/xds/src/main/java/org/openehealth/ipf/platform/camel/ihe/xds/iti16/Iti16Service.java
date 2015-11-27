@@ -35,6 +35,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Convert
  */
 @Slf4j
 public class Iti16Service extends AbstractWebService implements Iti16PortType {
+
     @Override
     public RegistryResponse documentRegistryQueryRegistry(AdhocQueryRequest body) {
         Exchange result = process(body);

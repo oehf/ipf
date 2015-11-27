@@ -1,0 +1,16 @@
+
+mappings = {
+
+		uriToOid (
+				'http://org.openehealth/ipf/commons/ihe/fhir/0' : '2.16.840.1.113883.3.37.4.1.1.2.1.1',
+				'http://org.openehealth/ipf/commons/ihe/fhir/1' : '2.16.840.1.113883.3.37.4.1.1.2.411.1',
+				'http://org.openehealth/ipf/commons/ihe/fhir/2' : '2.16.840.1.113883.3.37.4.1.1.2.511.1'
+		)
+
+		uriToNamespace (
+				'http://org.openehealth/ipf/commons/ihe/fhir/0' : 'MPI',
+				'http://org.openehealth/ipf/commons/ihe/fhir/1' : 'HZLN',
+				'http://org.openehealth/ipf/commons/ihe/fhir/2' : 'PKLN'
+		)
+
+}

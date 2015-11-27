@@ -44,7 +44,7 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
     private static final ConcurrentMap<String, Loader<Templates>> XSLT_CACHE = new ConcurrentHashMap<>();
 
     @Getter @Setter private Map<String, Object> staticParams;
-    @Getter private final TransformerFactory factory;
+    private final TransformerFactory factory;
     private final URIResolver resolver;
     private final Class<T> outputFormat;
 
@@ -63,6 +63,10 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
 
     public XsltTransmogrifier(Class<T> outputFormat, Map<String, Object> staticParams) {
         this(outputFormat, null, staticParams);
+    }
+
+    public TransformerFactory getFactory() {
+        return factory;
     }
 
     @Override

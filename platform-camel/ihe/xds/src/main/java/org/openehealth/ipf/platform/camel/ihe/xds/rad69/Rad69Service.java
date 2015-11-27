@@ -15,36 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.rad69;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69PortType;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsRetrieveDocumentSetService;
 
 /**
  * Service implementation for the IHE RAD-69 transaction (Retrieve Imaging Document Set).
- * <p>
+ * <p/>
  * This implementation delegates to a Camel consumer by creating an exchange.
  *
  * @author Clay Sebourn
  */
-@Slf4j
-public class Rad69Service extends AbstractWebService implements Rad69PortType {
+public class Rad69Service extends XdsRetrieveDocumentSetService<RetrieveImagingDocumentSetRequestType> implements Rad69PortType {
+
+    public Rad69Service() {
+        super(null);
+    }
+
     @Override
     public RetrieveDocumentSetResponseType documentRepositoryRetrieveImagingDocumentSet(RetrieveImagingDocumentSetRequestType body) {
-        Exchange result = process(body);
-        Exception exception = Exchanges.extractException(result);
-        if (exception != null) {
-            log.debug("RAD-69 service failed", exception);
-            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(exception, ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
-            return EbXML30Converters.convert(errorResponse);
-        }
-        
-        return Exchanges.resultMessage(result).getBody(RetrieveDocumentSetResponseType.class);
+        return processRequest(body);
     }
 }

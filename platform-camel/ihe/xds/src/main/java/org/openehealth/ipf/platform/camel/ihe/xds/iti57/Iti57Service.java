@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.platform.camel.ihe.xds.iti57;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
@@ -26,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsReq
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsRegistryRequestService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
@@ -36,19 +35,10 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  *
  * @author Boris Stanojevic
  */
-@Slf4j
-public class Iti57Service extends AbstractWebService implements Iti57PortType {
+public class Iti57Service extends XdsRegistryRequestService<SubmitObjectsRequest> implements Iti57PortType {
 
     @Override
     public RegistryResponseType documentRegistryUpdateDocumentSet(SubmitObjectsRequest body) {
-        Exchange result = process(body, XdsJaxbDataBinding.getCamelHeaders(body), ExchangePattern.InOut);
-        Exception exception = Exchanges.extractException(result);
-        if (exception != null) {
-            log.debug("ITI-57 service failed", exception);
-            Response errorResponse = new Response(exception, ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
-            return EbXML30Converters.convert(errorResponse);
-        }
-
-        return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);
+        return processRequest(body);
     }
 }

@@ -16,15 +16,17 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti63.asyncresponse;
 
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti63.asyncresponse.Iti63AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 
 import javax.xml.namespace.QName;
 import java.util.Map;
@@ -32,7 +34,7 @@ import java.util.Map;
 /**
  * The Camel component for the ITI-63 (XCF) async response.
  */
-public class Iti63AsyncResponseComponent extends AbstractWsComponent<WsTransactionConfiguration> {
+public class Iti63AsyncResponseComponent extends XdsComponent<XdsQueryAuditDataset> {
     private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Service", "ihe"),
             Iti63AsyncResponsePortType.class,
@@ -44,14 +46,15 @@ public class Iti63AsyncResponseComponent extends AbstractWsComponent<WsTransacti
             false,
             false);
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings("raw") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new XdsAsyncResponseEndpoint(uri, remaining, this,
+        return new XdsAsyncResponseEndpoint<>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters),
+                Iti63AsyncResponseService.class);
     }
 
     @Override
@@ -60,25 +63,13 @@ public class Iti63AsyncResponseComponent extends AbstractWsComponent<WsTransacti
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
         return null;   // no producer support
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
         return new Iti63AuditStrategy(false);
     }
 
-    @Override
-    public Iti63AsyncResponseService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return new Iti63AsyncResponseService();
-    }
-
-    @Override
-    public AbstractWsProducer getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        throw new IllegalStateException("No producer support for asynchronous response endpoints");
-    }
 }

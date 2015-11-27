@@ -17,8 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.dispatch;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39ServerAuditStrategy;
@@ -46,12 +47,13 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 @Slf4j
-public class DispatchAuditStrategy extends WsAuditStrategy {
+public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrategySupport<T> {
 
-    private final Map<QName, WsAuditStrategy> map = new HashMap<>();
+    private final Map<QName, XdsAuditStrategy<? extends XdsAuditDataset>> map;
 
-    public DispatchAuditStrategy(Map<QName, WsAuditStrategy> additionalMappings) {
+    public DispatchAuditStrategy(Map<QName, XdsAuditStrategy<? extends XdsAuditDataset>> additionalMappings) {
         super(true);
+        map = new HashMap<>();
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegistryStoredQuery"),
                 new Iti18ServerAuditStrategy());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayQuery"),
@@ -85,30 +87,32 @@ public class DispatchAuditStrategy extends WsAuditStrategy {
     }
 
     @Override
-    public WsAuditDataset createAuditDataset() {
-        WsAuditStrategy strategy = getAuditStrategy();
-        return (strategy != null) ? strategy.createAuditDataset() : null;
+    public T createAuditDataset() {
+        XdsAuditStrategy<? extends XdsAuditDataset> strategy = getAuditStrategy();
+        return (strategy != null) ? (T)strategy.createAuditDataset() : null;
     }
 
     @Override
-    public void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset) throws Exception {
-        WsAuditStrategy strategy = getAuditStrategy();
+    public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters ) {
+        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
         if (strategy != null) {
-            strategy.enrichDatasetFromRequest(request, auditDataset);
+            return strategy.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
         }
+        return null;
     }
 
     @Override
-    public void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset) throws Exception {
-        WsAuditStrategy strategy = getAuditStrategy();
+    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
+        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
         if (strategy != null) {
-            strategy.enrichDatasetFromResponse(response, auditDataset);
+            return strategy.enrichAuditDatasetFromResponse(auditDataset, response);
         }
+        return false;
     }
 
     @Override
-    public void doAudit(WsAuditDataset auditDataset) throws Exception {
-        WsAuditStrategy strategy = getAuditStrategy();
+    public void doAudit(T auditDataset) {
+        XdsAuditStrategy<T> strategy = (XdsAuditStrategy<T>)getAuditStrategy();
         if (strategy != null) {
             strategy.doAudit(auditDataset);
         }
@@ -116,11 +120,11 @@ public class DispatchAuditStrategy extends WsAuditStrategy {
 
     @Override
     public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object response) {
-        WsAuditStrategy strategy = getAuditStrategy();
+        XdsAuditStrategy<? extends XdsAuditDataset> strategy = getAuditStrategy();
         return (strategy != null) ? strategy.getEventOutcomeCode(response) : null;
     }
 
-    private WsAuditStrategy getAuditStrategy() {
+    private XdsAuditStrategy<? extends XdsAuditDataset> getAuditStrategy() {
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
         if ("GET".equals(messageContext.get(MessageContext.HTTP_REQUEST_METHOD))) {
             return null;
@@ -130,7 +134,7 @@ public class DispatchAuditStrategy extends WsAuditStrategy {
         }
 
         QName operationName = (QName) messageContext.get(MessageContext.WSDL_OPERATION);
-        WsAuditStrategy auditStrategy = map.get(operationName);
+        XdsAuditStrategy<? extends XdsAuditDataset> auditStrategy = map.get(operationName);
         if (auditStrategy == null) {
             log.debug("No strategy could be found for operation {}", operationName);
         } else {

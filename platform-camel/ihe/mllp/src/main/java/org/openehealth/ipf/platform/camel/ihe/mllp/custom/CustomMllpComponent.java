@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.custom;
 
-import java.util.Map;
-
 import lombok.Getter;
 import org.apache.camel.CamelContext;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
+
+import java.util.Map;
 
 /**
  * Component for custom MLLP components. The HL7v2 configuration as well as the ATNA audit strategies must be
@@ -37,9 +37,9 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
     private Hl7v2TransactionConfiguration configuration;
 
     @Getter
-    private MllpAuditStrategy<AuditDatasetType> clientAuditStrategy;
+    private AuditStrategy<AuditDatasetType> clientAuditStrategy;
     @Getter
-    private MllpAuditStrategy<AuditDatasetType> serverAuditStrategy;
+    private AuditStrategy<AuditDatasetType> serverAuditStrategy;
 
 
     public CustomMllpComponent() {
@@ -57,11 +57,11 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
         if (configuration == null) {
             throw new IllegalArgumentException("Must provide hl7TransactionConfig attribute with custom MLLP component");
         }
-        clientAuditStrategy = resolveAndRemoveReferenceParameter(parameters, "clientAuditStrategy", MllpAuditStrategy.class);
+        clientAuditStrategy = resolveAndRemoveReferenceParameter(parameters, "clientAuditStrategy", AuditStrategy.class);
         if (transactionConfig.isAudit() && clientAuditStrategy == null) {
             throw new IllegalArgumentException("Consumer or Producer require ATNA audit, but no clientAuditStrategy is defined for custom MLLP component");
         }
-        serverAuditStrategy = resolveAndRemoveReferenceParameter(parameters, "serverAuditStrategy", MllpAuditStrategy.class);
+        serverAuditStrategy = resolveAndRemoveReferenceParameter(parameters, "serverAuditStrategy", AuditStrategy.class);
         if (transactionConfig.isAudit() && serverAuditStrategy == null) {
             throw new IllegalArgumentException("Consumer or Producer require ATNA audit, but no serverAuditStrategy is defined for custom MLLP component");
         }

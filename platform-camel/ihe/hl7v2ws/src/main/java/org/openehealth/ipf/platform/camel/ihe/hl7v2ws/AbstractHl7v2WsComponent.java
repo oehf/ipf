@@ -15,42 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
-import java.util.Map;
-
-import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 
 /**
  * @author Dmytro Rud
  */
-abstract public class AbstractHl7v2WsComponent
-        extends AbstractWsComponent<WsTransactionConfiguration>
-        implements Hl7v2ConfigurationHolder
-{
+abstract public class AbstractHl7v2WsComponent<AuditDatasetType extends WsAuditDataset>
+        extends AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration>
+        implements Hl7v2ConfigurationHolder {
 
-    @Override
-    @SuppressWarnings("unchecked") // Required because of base class
-    protected Endpoint createEndpoint(String uri, String remaining, @SuppressWarnings("rawtypes") Map parameters) throws Exception {
-        return new SimpleHl7v2WsEndpoint(
-                uri,
-                remaining,
-                this,
-                getCustomInterceptors(parameters),
-                getFeatures(parameters),
-                getSchemaLocations(parameters),
-                getProperties(parameters));
-    }
-
-    @Override
-    public SimpleWsProducer<String, String> getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        return new SimpleWsProducer<>(endpoint, clientFactory, String.class, String.class);
-    }
 }

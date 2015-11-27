@@ -17,13 +17,14 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
@@ -32,7 +33,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * @author Jens Riemschneide
  * @author Dmytro Rud
  */
-public class XdsServiceFactory extends JaxWsServiceFactory {
+public class XdsServiceFactory<AuditDatasetType extends XdsAuditDataset> extends JaxWsServiceFactory<AuditDatasetType> {
 
     /**
      * Constructs the factory.
@@ -50,7 +51,7 @@ public class XdsServiceFactory extends JaxWsServiceFactory {
     public XdsServiceFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
-            WsAuditStrategy auditStrategy,
+            AuditStrategy<AuditDatasetType> auditStrategy,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
@@ -69,11 +70,11 @@ public class XdsServiceFactory extends JaxWsServiceFactory {
                 svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(SOAP_BODY));
             }
 
-            svrFactory.getInInterceptors().add(new AuditInRequestInterceptor(
+            svrFactory.getInInterceptors().add(new AuditInRequestInterceptor<>(
                     auditStrategy, getWsTransactionConfiguration()));
 
-            AuditResponseInterceptor auditInterceptor =
-                new AuditResponseInterceptor(auditStrategy, true, null, false);
+            AuditResponseInterceptor<AuditDatasetType> auditInterceptor =
+                new AuditResponseInterceptor<>(auditStrategy, true, null, false);
             svrFactory.getOutInterceptors().add(auditInterceptor);
             svrFactory.getOutFaultInterceptors().add(auditInterceptor);
         }

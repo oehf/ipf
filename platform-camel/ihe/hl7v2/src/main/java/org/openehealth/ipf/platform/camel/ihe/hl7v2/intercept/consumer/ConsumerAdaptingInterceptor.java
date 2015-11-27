@@ -15,19 +15,21 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 
-import java.io.IOException;
-
 import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.ClassUtils;
+import org.openehealth.ipf.commons.ihe.hl7v2.Constants;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
@@ -38,7 +40,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  *
  * @author Dmytro Rud
  */
-public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
+public class ConsumerAdaptingInterceptor extends InterceptorSupport<HL7v2Endpoint> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerAdaptingInterceptor.class);
     public static final String ACK_TYPE_CODE_HEADER = "ipf.hl7v2.AckTypeCode";
 
@@ -75,7 +77,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        Message originalMessage = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
+        Message originalMessage = exchange.getIn().getHeader(Constants.ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, Message.class);
 
         // run the route
         try {
@@ -86,7 +88,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
             }
         } catch (Exception e) {
             LOG.warn("Message processing failed", e);
-            resultMessage(exchange).setBody(getNakFactory().createNak(originalMessage, e));
+            resultMessage(exchange).setBody(getEndpoint().getNakFactory().createNak(originalMessage, e));
         }
 
         org.apache.camel.Message m = Exchanges.resultMessage(exchange);
@@ -99,11 +101,11 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
         Message msg = Hl7v2MarshalUtils.extractHapiMessage(
                 m,
                 characterSet(exchange),
-                getHl7v2TransactionConfiguration().getParser());
+                getEndpoint().getHl7v2TransactionConfiguration().getParser());
         
         // additionally: an Exception in the body?
         if((msg == null) && (body instanceof Throwable)) {
-           msg = getNakFactory().createNak(originalMessage, (Throwable) body);
+           msg = getEndpoint().getNakFactory().createNak(originalMessage, (Throwable) body);
         }
         
         // no known data type --> determine user's intention on the basis of a header 
@@ -135,13 +137,13 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
 
         Message ack;
         if ((header == AcknowledgmentCode.AA) || (header == AcknowledgmentCode.CA)) {
-            ack = getNakFactory().createAck(
+            ack = getEndpoint().getNakFactory().createAck(
                     originalMessage);
         } else {
             HL7Exception exception = new HL7Exception(
                     "HL7v2 processing failed",
-                    getHl7v2TransactionConfiguration().getResponseErrorDefaultErrorCode());
-            ack = getNakFactory().createNak(
+                    getEndpoint().getHl7v2TransactionConfiguration().getResponseErrorDefaultErrorCode());
+            ack = getEndpoint().getNakFactory().createNak(
                     originalMessage,
                     exception, 
                     (AcknowledgmentCode) header);

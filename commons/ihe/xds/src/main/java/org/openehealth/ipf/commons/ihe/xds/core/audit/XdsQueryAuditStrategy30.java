@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySl
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
@@ -47,7 +48,7 @@ abstract public class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryA
 
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, XdsQueryAuditDataset auditDataset) {
+    public XdsQueryAuditDataset enrichAuditDatasetFromRequest(XdsQueryAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         AdhocQueryRequest request = (AdhocQueryRequest) pojo;
         AdhocQueryType adHocQuery = request.getAdhocQuery();
         if (adHocQuery != null) {
@@ -60,6 +61,7 @@ abstract public class XdsQueryAuditStrategy30 extends XdsAuditStrategy<XdsQueryA
         if (patientIdList != null) {
             auditDataset.getPatientIds().addAll(patientIdList);
         }
+        return auditDataset;
     }
 
 

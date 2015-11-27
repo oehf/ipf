@@ -15,45 +15,45 @@
  */
 package org.openehealth.ipf.commons.ihe.ws;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
-import java.net.URL;
-import java.util.Map;
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.interceptor.InterceptorProvider;
+import org.apache.cxf.ws.addressing.MAPAggregator;
+import org.apache.cxf.ws.addressing.soap.MAPCodec;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.Cxf3791WorkaroundInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.FixContentTypeOutInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.MustUnderstandDecoratorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
+import java.net.URL;
+import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.interceptor.InterceptorProvider;
-import org.apache.cxf.ws.addressing.MAPAggregator;
-import org.apache.cxf.ws.addressing.soap.MAPCodec;
-import org.openehealth.ipf.commons.ihe.ws.cxf.Cxf3791WorkaroundInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.FixContentTypeOutInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.MustUnderstandDecoratorInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Factory for ITI Web Service stubs.
  * @author Jens Riemschneider
  */
-public class JaxWsClientFactory {
+public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
     private static final Logger LOG = LoggerFactory.getLogger(JaxWsClientFactory.class);
 
     protected final ThreadLocal<Object> threadLocalPort = new ThreadLocal<>();
     protected final WsTransactionConfiguration wsTransactionConfiguration;
     protected final String serviceUrl;
     protected final InterceptorProvider customInterceptors;
-    protected final WsAuditStrategy auditStrategy;
+    protected final AuditStrategy<AuditDatasetType> auditStrategy;
 
     /**
      * Constructs the factory.
@@ -69,7 +69,7 @@ public class JaxWsClientFactory {
     public JaxWsClientFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
             String serviceUrl,
-            WsAuditStrategy auditStrategy,
+            AuditStrategy<AuditDatasetType> auditStrategy,
             InterceptorProvider customInterceptors) 
     {
         notNull(wsTransactionConfiguration, "wsTransactionConfiguration");

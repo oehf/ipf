@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.custom;
 
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 
 
 @SuppressWarnings("serial")

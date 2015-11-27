@@ -113,10 +113,11 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
     
     <!-- Loggers for IPF HL7 v2 and v3 output -->
     <logger name="org.openehealth.ipf.platform.camel.ihe.mllp.core">
-        <level value="DEBUG"/>
+        <level value="WARN"/>
     </logger>
+
     <logger name="org.openehealth.ipf.platform.camel.ihe.hl7v3">
-        <level value="DEBUG"/>
+        <level value="WARN"/>
     </logger>
 
     <root>

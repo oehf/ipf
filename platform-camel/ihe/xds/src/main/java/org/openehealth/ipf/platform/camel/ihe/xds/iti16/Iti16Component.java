@@ -15,28 +15,30 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16;
 
-import java.util.Map;
-
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import javax.xml.namespace.QName;
+import java.util.Map;
 
 /**
  * The Camel component for the ITI-16 transaction.
  */
-public class Iti16Component extends AbstractWsComponent<WsTransactionConfiguration> {
+public class Iti16Component extends XdsComponent<XdsQueryAuditDataset> {
+
     private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
             Iti16PortType.class,
@@ -49,13 +51,21 @@ public class Iti16Component extends AbstractWsComponent<WsTransactionConfigurati
             false);
 
     @Override
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new XdsEndpoint(uri, remaining, this,
+        return new XdsEndpoint<XdsQueryAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters),
+                Iti16Service.class) {
+            @Override
+            public AbstractWsProducer<XdsQueryAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint,
+                                                  JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
+                return new SimpleWsProducer<>(
+                        endpoint, clientFactory, AdhocQueryRequest.class, RegistryResponse.class);
+            }
+        };
     }
 
     @Override
@@ -64,26 +74,13 @@ public class Iti16Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
         return new Iti16ClientAuditStrategy();
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
         return new Iti16ServerAuditStrategy();
     }
 
-    @Override
-    public Iti16Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return new Iti16Service();
-    }
-
-    @Override
-    public SimpleWsProducer<AdhocQueryRequest, RegistryResponse> getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        return new SimpleWsProducer<>(
-                endpoint, clientFactory, AdhocQueryRequest.class, RegistryResponse.class);
-    }
 }

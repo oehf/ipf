@@ -15,28 +15,30 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14;
 
-import java.util.Map;
-
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14ServerAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import javax.xml.namespace.QName;
+import java.util.Map;
 
 /**
  * The Camel component for the ITI-14 transaction.
  */
-public class Iti14Component extends AbstractWsComponent<WsTransactionConfiguration> {
+public class Iti14Component extends XdsComponent<XdsSubmitAuditDataset> {
+
     private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
             Iti14PortType.class,
@@ -48,14 +50,32 @@ public class Iti14Component extends AbstractWsComponent<WsTransactionConfigurati
             false,
             false);
 
-    @SuppressWarnings("unchecked") // Required because of base class
     @Override
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new XdsEndpoint(uri, remaining, this,
+        return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters),
+                Iti14Service.class) {
+            @Override
+            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
+                                                  JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
+                return new SimpleWsProducer<>(
+                        endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponse.class);
+            }
+        };
+    }
+
+    @Override
+    public AuditStrategy<XdsSubmitAuditDataset> getClientAuditStrategy() {
+        return new Iti14ClientAuditStrategy();
+    }
+
+    @Override
+    public AuditStrategy<XdsSubmitAuditDataset> getServerAuditStrategy() {
+        return new Iti14ServerAuditStrategy();
     }
 
     @Override
@@ -63,27 +83,4 @@ public class Iti14Component extends AbstractWsComponent<WsTransactionConfigurati
         return WS_CONFIG;
     }
 
-    @Override
-    public WsAuditStrategy getClientAuditStrategy() {
-        return new Iti14ClientAuditStrategy();
-    }
-
-    @Override
-    public WsAuditStrategy getServerAuditStrategy() {
-        return new Iti14ServerAuditStrategy();
-    }
-
-    @Override
-    public Iti14Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return new Iti14Service();
-    }
-
-    @Override
-    public SimpleWsProducer<SubmitObjectsRequest, RegistryResponse> getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        return new SimpleWsProducer<>(
-                endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponse.class);
-    }
 }

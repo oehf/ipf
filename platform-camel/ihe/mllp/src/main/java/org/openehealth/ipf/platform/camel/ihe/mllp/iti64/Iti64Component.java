@@ -18,11 +18,13 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti64;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
 /**
@@ -45,8 +47,8 @@ public class Iti64Component extends MllpTransactionComponent<Iti64AuditDataset> 
                 new boolean[] {false},
                 HapiContextFactory.createHapiContext(PixPdqTransactions.ITI64));
 
-    private static final MllpAuditStrategy<Iti64AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti64AuditStrategy(false);
-    private static final MllpAuditStrategy<Iti64AuditDataset> SERVER_AUDIT_STRATEGY = new Iti64AuditStrategy(true);
+    private static final AuditStrategy<Iti64AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti64AuditStrategy(false);
+    private static final AuditStrategy<Iti64AuditDataset> SERVER_AUDIT_STRATEGY = new Iti64AuditStrategy(true);
     private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
 
@@ -59,12 +61,12 @@ public class Iti64Component extends MllpTransactionComponent<Iti64AuditDataset> 
     }
     
     @Override
-    public MllpAuditStrategy<Iti64AuditDataset> getClientAuditStrategy() {
+    public AuditStrategy<Iti64AuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
-    public MllpAuditStrategy<Iti64AuditDataset> getServerAuditStrategy() {
+    public AuditStrategy<Iti64AuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
     

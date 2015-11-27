@@ -43,7 +43,10 @@ public class Iti41Service extends AbstractWebService implements Iti41PortType {
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug("ITI-41 service failed", exception);
-            Response errorResponse = new Response(exception, ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
+            Response errorResponse = new Response(
+                    exception,
+                    ErrorCode.REPOSITORY_METADATA_ERROR,
+                    ErrorCode.REPOSITORY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
         

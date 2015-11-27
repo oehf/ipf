@@ -19,8 +19,9 @@ import lombok.experimental.Delegate;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.core.payload.ExpressionResolver;
 import org.openehealth.ipf.commons.ihe.core.payload.SpringExpressionResolver;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactorySupport;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactorySupport;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLoggerBase;
 
 /**
@@ -31,7 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpPayloadLog
  *
  * @author Dmytro Rud
  */
-public class ProducerInPayloadLoggerInterceptor extends AbstractMllpInterceptor {
+public class ProducerInPayloadLoggerInterceptor extends InterceptorSupport<MllpEndpoint<?, ?>> {
     @Delegate private final MllpPayloadLoggerBase base = new MllpPayloadLoggerBase();
 
     /**
@@ -63,7 +64,7 @@ public class ProducerInPayloadLoggerInterceptor extends AbstractMllpInterceptor 
         }
     }
 
-    public static class Factory extends Hl7v2InterceptorFactorySupport<ProducerInPayloadLoggerInterceptor> {
+    public static class Factory extends InterceptorFactorySupport<MllpEndpoint<?, ?>, ProducerInPayloadLoggerInterceptor> {
 
         private final ExpressionResolver resolver;
         private boolean locallyEnabled = true;

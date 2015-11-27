@@ -15,52 +15,61 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
-import javax.xml.namespace.QName;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.cxf.common.i18n.Exception;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.core.URN;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
+
+import javax.xml.namespace.QName;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Camel endpoint used to create producers and consumers based on webservice calls.
+ *
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
 @ManagedResource(description = "Managed IPF eHealth Web Service Endpoint")
-public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsComponent<?>>
-    extends DefaultEndpoint {
+public abstract class AbstractWsEndpoint<
+        AuditDatasetType extends WsAuditDataset,
+        ConfigType extends WsTransactionConfiguration>
+        extends DefaultEndpoint implements AuditableEndpoint<AuditDatasetType> {
 
     private static final String ENDPOINT_PROTOCOL = "http://";
     private static final String ENDPOINT_PROTOCOL_SECURE = "https://";
 
     /**
      * Name of incoming Camel header where the user should store the URL
-     * of asynchronous response endpoint (WS-Addressing header "ReplyTo").  
+     * of asynchronous response endpoint (WS-Addressing header "ReplyTo").
      */
     public static final String WSA_REPLYTO_HEADER_NAME =
             AbstractWsEndpoint.class.getName() + ".REPLY_TO";
-    
+
     /**
-     * Name of Camel message header where the user should store 
-     * the optional correlation key.  
+     * Name of Camel message header where the user should store
+     * the optional correlation key.
      */
     public static final String CORRELATION_KEY_HEADER_NAME =
             AbstractWsEndpoint.class.getName() + ".CORRELATION_KEY";
-    
+
     /**
      * Name of Camel message header where incoming HTTP headers
      * will be stored as a <code>Map&lt;String, String&gt;</code>.
@@ -69,7 +78,7 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
             AbstractWsEndpoint.class.getName() + ".INCOMING_HTTP_HEADERS";
 
     /**
-     * Name of Camel message header from where additional user-defined HTTP 
+     * Name of Camel message header from where additional user-defined HTTP
      * headers will be taken as a <code>Map&lt;String, String&gt;</code>.
      */
     public static final String OUTGOING_HTTP_HEADERS =
@@ -83,7 +92,7 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
             AbstractWsEndpoint.class.getName() + ".INCOMING_SOAP_HEADERS";
 
     /**
-     * Name of Camel message header from where additional user-defined HTTP 
+     * Name of Camel message header from where additional user-defined HTTP
      * headers will be taken as a <code>List&lt;{@link Header}&gt;</code>.
      */
     public static final String OUTGOING_SOAP_HEADERS =
@@ -92,51 +101,92 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
     private final String address;
 
     private String serviceAddress;
-    private String serviceUrl;    
+    private String serviceUrl;
     private boolean secure;
     private boolean audit = true;
-    private AsynchronyCorrelator correlator = null;
+    private AsynchronyCorrelator<AuditDatasetType> correlator = null;
     private InterceptorProvider customInterceptors = null;
     private String homeCommunityId = null;
     private WsRejectionHandlingStrategy rejectionHandlingStrategy = null;
     private List<AbstractFeature> features;
     private List<String> schemaLocations;
+    private Class<? extends AbstractWebService> serviceClass;
     private Map<String, Object> properties;
 
     /**
      * Constructs the endpoint.
-     * @param endpointUri
-     *          the URI of the endpoint.
-     * @param address
-     *          the endpoint address from the URI.
-     * @param component
-     *          the component creating this endpoint.
-     * @param customInterceptors
-     *          user-defined set of additional CXF interceptors.
-     * @param features
-     *          user-defined list of CXF features.
+     *
+     * @param endpointUri        the URI of the endpoint.
+     * @param address            the endpoint address from the URI.
+     * @param component          the component creating this endpoint.
+     * @param customInterceptors user-defined set of additional CXF interceptors.
+     * @param features           user-defined list of CXF features.
      */
     protected AbstractWsEndpoint(
             String endpointUri,
             String address,
-            ComponentType component,
+            AbstractWsComponent<AuditDatasetType, ConfigType> component,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
-            Map<String, Object> properties)
-    {
+            Map<String, Object> properties,
+            Class<? extends AbstractWebService> serviceClass) {
         super(endpointUri, component);
         this.address = address;
         this.customInterceptors = customInterceptors;
         this.features = features;
         this.schemaLocations = schemaLocations;
         this.properties = properties;
+        this.serviceClass = serviceClass;
         configure();
     }
 
     private void configure() {
         serviceUrl = (secure ? ENDPOINT_PROTOCOL_SECURE : ENDPOINT_PROTOCOL) + address;
         serviceAddress = "/" + address;
+    }
+
+    /**
+     * Constructs and returns a transaction-specific service class instance
+     * for the given endpoint.
+     *
+     * @return service class instance for the given endpoint.
+     */
+    public AbstractWebService getServiceInstance() {
+        AbstractWebService service = getCustomServiceInstance(this);
+        if (service == null) {
+            if (serviceClass != null) {
+                try {
+                    return serviceClass.newInstance();
+                } catch (InstantiationException | IllegalAccessException e) {
+                    throw new RuntimeException("Could not instantiate service of type " + serviceClass, e);
+                }
+            } else {
+                throw new RuntimeException("Could not instantiate service of for endpoint of class " + getClass());
+            }
+        }
+        return service;
+    }
+
+    /**
+     * Returns a new instance of a service class.
+     * Overwrite this method if a simple call to {@link Class#newInstance()} is not sufficient.
+     *
+     * @param endpoint this endpoint as paramater
+     * @return service class instance
+     */
+    protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint) {
+        return null;
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
+        return getComponent().getClientAuditStrategy();
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
+        return getComponent().getServerAuditStrategy();
     }
 
     @Override
@@ -147,9 +197,10 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
 
     /**
      * Returns the URL of the service.
-     * <p>
+     * <p/>
      * The URL is derived from the endpoint URI defined in the constructor. If the
      * URI does not represent a producer, this method throws an exception.
+     *
      * @return the service URL.
      */
     public String getServiceUrl() {
@@ -158,9 +209,10 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
 
     /**
      * Returns the address of the service.
-     * <p>
+     * <p/>
      * The address is derived from the endpoint URI defined in the constructor. If the
      * URI does not represent a consumer, this method throws an exception.
+     *
      * @return the service address.
      */
     @ManagedAttribute(description = "Service Address")
@@ -171,14 +223,14 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
     /**
      * @return <code>true</code> if auditing is turned on. <code>true</code> by default.
      */
+    @Override
     @ManagedAttribute(description = "Audit Enabled")
     public boolean isAudit() {
         return audit;
     }
 
     /**
-     * @param audit
-     *          <code>true</code> if auditing is turned on.
+     * @param audit <code>true</code> if auditing is turned on.
      */
     public void setAudit(boolean audit) {
         this.audit = audit;
@@ -186,7 +238,7 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
 
     /**
      * @return <code>true</code> if https should be used instead of http. Defaults
-     *          to <code>false</code>.
+     * to <code>false</code>.
      */
     @ManagedAttribute(description = "Security Enabled")
     public boolean isSecure() {
@@ -194,8 +246,7 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
     }
 
     /**
-     * @param secure
-     *          <code>true</code> if https should be used instead of http.
+     * @param secure <code>true</code> if https should be used instead of http.
      */
     public void setSecure(boolean secure) {
         this.secure = secure;
@@ -205,14 +256,14 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
     /**
      * Configures the asynchrony correlator for this endpoint.
      */
-    public void setCorrelator(AsynchronyCorrelator correlator) {
+    public void setCorrelator(AsynchronyCorrelator<AuditDatasetType> correlator) {
         this.correlator = correlator;
     }
 
     /**
      * Returns the correlator.
      */
-    public AsynchronyCorrelator getCorrelator() {
+    public AsynchronyCorrelator<AuditDatasetType> getCorrelator() {
         return correlator;
     }
 
@@ -224,8 +275,7 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
     }
 
     /**
-     * @return
-     *      homeCommunityId of this endpoint.
+     * @return homeCommunityId of this endpoint.
      */
     @ManagedAttribute(description = "HomeCommunityId")
     public String getHomeCommunityId() {
@@ -234,48 +284,52 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
 
     /**
      * Configures homeCommunityId for this endpoint.
-     * @param homeCommunityId
-     *      homeCommunityId in format "urn:oid:1.2.3.4.5".
+     *
+     * @param homeCommunityId homeCommunityId in format "urn:oid:1.2.3.4.5".
      */
     public void setHomeCommunityId(String homeCommunityId) {
         this.homeCommunityId = homeCommunityId;
     }
 
     /**
-     * @return
-     *      rejection handling strategy, if any configured.
+     * Configures homeCommunityId for this endpoint.
+     *
+     * @param urn homeCommunityId in format "urn:oid:1.2.3.4.5".
+     */
+    public void setHomeCommunityId(URN urn) {
+        this.homeCommunityId = urn.toString();
+    }
+
+    /**
+     * @return rejection handling strategy, if any configured.
      */
     public WsRejectionHandlingStrategy getRejectionHandlingStrategy() {
         return rejectionHandlingStrategy;
     }
 
     /**
-     * @param rejectionHandlingStrategy
-     *      a rejection handling strategy instance.
+     * @param rejectionHandlingStrategy a rejection handling strategy instance.
      */
     public void setRejectionHandlingStrategy(WsRejectionHandlingStrategy rejectionHandlingStrategy) {
         this.rejectionHandlingStrategy = rejectionHandlingStrategy;
     }
 
     /**
-     * @return
-     *      CXF features configured for this endpoint.
+     * @return CXF features configured for this endpoint.
      */
     public List<AbstractFeature> getFeatures() {
         return features;
     }
 
     /**
-     * @return
-     *      CXF schema locations configured for this endpoint.
+     * @return CXF schema locations configured for this endpoint.
      */
     public List<String> getSchemaLocations() {
         return schemaLocations;
     }
 
     /**
-     * @return
-     *      CXF schema locations configured for this endpoint.
+     * @return CXF schema locations configured for this endpoint.
      */
     public Map<String, Object> getProperties() {
         return properties;
@@ -283,30 +337,24 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
 
     @SuppressWarnings("unchecked")
     @Override
-    public ComponentType getComponent() {
-        return (ComponentType) super.getComponent();
+    public AbstractWsComponent<AuditDatasetType, ConfigType> getComponent() {
+        return (AbstractWsComponent<AuditDatasetType, ConfigType>) super.getComponent();
     }
 
     /**
      * @return JAX-WS client object factory.
      */
-    public abstract JaxWsClientFactory getJaxWsClientFactory();
+    public abstract JaxWsClientFactory<AuditDatasetType> getJaxWsClientFactory();
 
     /**
      * @return JAX-WS service object factory.
      */
-    public abstract JaxWsServiceFactory getJaxWsServiceFactory();
-
-
-    @Override
-    public Producer createProducer() throws Exception {
-        return getComponent().getProducer(this, getJaxWsClientFactory());
-    }
+    public abstract JaxWsServiceFactory<AuditDatasetType> getJaxWsServiceFactory();
 
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        AbstractWebService serviceInstance = getComponent().getServiceInstance(this);
+        AbstractWebService serviceInstance = getServiceInstance();
         ServerFactoryBean serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
         if (features != null) {
             serverFactory.getFeatures().addAll(features);
@@ -318,7 +366,7 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
                 serverFactory.getSchemaLocations().addAll(schemaLocations);
             }
         }
-        if (properties != null){
+        if (properties != null) {
             if (serverFactory.getProperties() == null) {
                 serverFactory.setProperties(properties);
             } else {
@@ -328,11 +376,27 @@ public abstract class AbstractWsEndpoint<ComponentType extends AbstractWsCompone
 
         Server server = serverFactory.create();
         AbstractWebService service = (AbstractWebService) serverFactory.getServiceBean();
-        return new DefaultWsConsumer(this, processor, service, server);
+        return new DefaultWsConsumer<>(this, processor, service, server);
     }
+
+    @Override
+    public Producer createProducer() throws java.lang.Exception {
+        return getProducer(this, getJaxWsClientFactory());
+    }
+
+    /**
+     * Constructs and returns a transaction-specific Camel producer instance
+     *
+     * @param clientFactory JAX-WS client factory instance.
+     * @return Camel producer instance.
+     *
+     * @since 3.1
+     */
+    public abstract AbstractWsProducer<AuditDatasetType, ConfigType, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint, JaxWsClientFactory<AuditDatasetType> clientFactory);
 
 
     //special managed attributes
+
     /**
      * @return <code>true</code> if WS-Addressing enabled.
      */

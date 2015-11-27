@@ -19,6 +19,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 import org.apache.cxf.endpoint.Server;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -28,7 +30,9 @@ import static org.apache.commons.lang3.Validate.notNull;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public class DefaultWsConsumer extends DefaultConsumer {
+public class DefaultWsConsumer<
+        AuditDatasetType extends WsAuditDataset,
+        ConfigType extends WsTransactionConfiguration> extends DefaultConsumer {
     private final Server server;
 
     /**
@@ -42,7 +46,7 @@ public class DefaultWsConsumer extends DefaultConsumer {
      * @param server
      *          the CXF server instance driving the service.
      */
-    public DefaultWsConsumer(AbstractWsEndpoint endpoint, Processor processor, AbstractWebService service, Server server) {
+    public DefaultWsConsumer(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint, Processor processor, AbstractWebService service, Server server) {
         super(endpoint, processor);
         notNull(service, "service cannot be null");
         notNull(server, "server cannot be null");

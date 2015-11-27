@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseT
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsRegistryRequestService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
@@ -37,18 +38,10 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  * @author Boris Stanojevic
  */
 @Slf4j
-public class Iti62Service extends AbstractWebService implements Iti62PortType {
+public class Iti62Service extends XdsRegistryRequestService<RemoveObjectsRequest> implements Iti62PortType {
 
     @Override
     public RegistryResponseType documentRegistryDeleteDocumentSet(RemoveObjectsRequest body) {
-        Exchange result = process(body, XdsJaxbDataBinding.getCamelHeaders(body), ExchangePattern.InOut);
-        Exception exception = Exchanges.extractException(result);
-        if (exception != null) {
-            log.debug("ITI-62 service failed", exception);
-            Response errorResponse = new Response(exception, ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
-            return EbXML30Converters.convert(errorResponse);
-        }
-
-        return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);
+        return processRequest(body);
     }
 }

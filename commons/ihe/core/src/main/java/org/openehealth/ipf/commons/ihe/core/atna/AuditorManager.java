@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.core.atna;
 
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomPixAuditor;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor;
+import org.openehealth.ipf.commons.ihe.core.atna.custom.FhirAuditor;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.Hl7v3Auditor;
 import org.openhealthtools.ihe.atna.auditor.*;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
@@ -102,6 +103,12 @@ public abstract class AuditorManager {
     public static Hl7v3Auditor getHl7v3Auditor() {
         synchronized (sync) {
             return Hl7v3Auditor.getAuditor();
+        }
+    }
+
+    public static FhirAuditor getFhirAuditor() {
+        synchronized (sync) {
+            return FhirAuditor.getAuditor();
         }
     }
 

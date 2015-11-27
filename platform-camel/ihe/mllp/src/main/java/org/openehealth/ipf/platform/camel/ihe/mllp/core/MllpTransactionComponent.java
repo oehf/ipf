@@ -17,8 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.component.mina2.Mina2Endpoint;
-import org.apache.commons.lang3.StringUtils;
-import org.openehealth.ipf.commons.ihe.core.TransactionOptions;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 
 import java.util.Map;
 
@@ -28,7 +28,7 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAuditDataset>
-        extends MllpComponent<MllpTransactionEndpointConfiguration> {
+        extends MllpComponent<MllpTransactionEndpointConfiguration> implements AuditableComponent<AuditDatasetType> {
 
     protected MllpTransactionComponent() {
         super();
@@ -44,18 +44,8 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
     }
 
     @Override
-    protected MllpEndpoint createEndpoint(Mina2Endpoint wrappedEndpoint, MllpTransactionEndpointConfiguration config) {
+    protected MllpEndpoint<?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, MllpTransactionEndpointConfiguration config) {
         return new MllpTransactionEndpoint<>(this, wrappedEndpoint, config);
     }
-
-    /**
-     * Returns server-side ATNA audit strategy.
-     */
-    public abstract MllpAuditStrategy<AuditDatasetType> getServerAuditStrategy();
-
-    /**
-     * Returns client-side ATNA audit strategy.
-     */
-    public abstract MllpAuditStrategy<AuditDatasetType> getClientAuditStrategy();
 
 }

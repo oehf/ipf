@@ -21,6 +21,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSe
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType.DocumentResponse;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
+import java.util.Map;
+
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
  * in ebXML 3.0-based retrieval-related XDS transactions.
@@ -35,7 +37,7 @@ abstract public class XdsRetrieveAuditStrategy30 extends XdsAuditStrategy<XdsRet
 
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, XdsRetrieveAuditDataset auditDataset) {
+    public XdsRetrieveAuditDataset enrichAuditDatasetFromRequest(XdsRetrieveAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         RetrieveDocumentSetRequestType request = (RetrieveDocumentSetRequestType) pojo;
         if (request.getDocumentRequest() != null) {
             for (DocumentRequest document : request.getDocumentRequest()) {
@@ -47,11 +49,12 @@ abstract public class XdsRetrieveAuditStrategy30 extends XdsAuditStrategy<XdsRet
                         null);
             }
         }
+        return auditDataset;
     }
 
 
     @Override
-    public void enrichDatasetFromResponse(Object pojo, XdsRetrieveAuditDataset auditDataset) throws Exception {
+    public boolean enrichAuditDatasetFromResponse(XdsRetrieveAuditDataset auditDataset, Object pojo) {
         RetrieveDocumentSetResponseType response = (RetrieveDocumentSetResponseType) pojo;
         if (response.getDocumentResponse() != null) {
             for (DocumentResponse documentResponse : response.getDocumentResponse()) {
@@ -61,6 +64,7 @@ abstract public class XdsRetrieveAuditStrategy30 extends XdsAuditStrategy<XdsRet
                         documentResponse.getHomeCommunityId());
             }
         }
+        return true;
     }
 
 

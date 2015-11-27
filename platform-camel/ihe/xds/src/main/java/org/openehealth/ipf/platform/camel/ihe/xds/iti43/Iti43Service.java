@@ -15,36 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
-import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
+import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43PortType;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsRetrieveDocumentSetService;
 
 /**
  * Service implementation for the IHE ITI-43 transaction (Retrieve Document Set).
- * <p>
+ * <p/>
  * This implementation delegates to a Camel consumer by creating an exchange.
  *
  * @author Jens Riemschneider
  */
-@Slf4j
-public class Iti43Service extends AbstractWebService implements Iti43PortType {
+public class Iti43Service extends XdsRetrieveDocumentSetService<RetrieveDocumentSetRequestType> implements Iti43PortType {
+
+    public Iti43Service() {
+        super(null);
+    }
+
     @Override
     public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
-        Exchange result = process(body);
-        Exception exception = Exchanges.extractException(result);
-        if (exception != null) {
-            log.debug("ITI-43 service failed", exception);
-            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(exception, ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
-            return EbXML30Converters.convert(errorResponse);
-        }
-        
-        return Exchanges.resultMessage(result).getBody(RetrieveDocumentSetResponseType.class);            
+        return processRequest(body);
     }
 }

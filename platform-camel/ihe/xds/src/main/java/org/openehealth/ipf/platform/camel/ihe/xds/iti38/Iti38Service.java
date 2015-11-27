@@ -15,44 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti38;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Exchange;
-import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38PortType;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
+import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38PortType;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsAdhocQueryService;
 
 /**
  * Service implementation for the IHE ITI-38 transaction.
  */
-@Slf4j
-public class Iti38Service extends AbstractWebService implements Iti38PortType {
-    private final AbstractWsEndpoint endpoint;
+public class Iti38Service extends XdsAdhocQueryService implements Iti38PortType {
 
-    public Iti38Service(AbstractWsEndpoint endpoint) {
-        this.endpoint = endpoint;
+    public Iti38Service(String homeCommunityId) {
+        super(homeCommunityId);
     }
 
     @Override
     public AdhocQueryResponse documentRegistryRegistryStoredQuery(AdhocQueryRequest body) {
-        Exchange result = process(body);
-        Exception exception = Exchanges.extractException(result);
-        if (exception != null) {
-            log.debug("ITI-38 service failed", exception);
-            QueryResponse errorResponse = new QueryResponse(
-                    exception,
-                    ErrorCode.REGISTRY_METADATA_ERROR,
-                    ErrorCode.REGISTRY_ERROR,
-                    endpoint.getHomeCommunityId());
-            errorResponse.getErrors().get(0).setLocation(endpoint.getHomeCommunityId());
-            return EbXML30Converters.convert(errorResponse);
-        }
-
-        return Exchanges.resultMessage(result).getBody(AdhocQueryResponse.class);            
+        return processRequest(body);
     }
 }

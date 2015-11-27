@@ -19,6 +19,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSe
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
@@ -34,7 +35,7 @@ abstract public class XdsIRetrieveAuditStrategy30 extends XdsRetrieveAuditStrate
 
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, XdsRetrieveAuditDataset auditDataset) {
+    public XdsRetrieveAuditDataset enrichAuditDatasetFromRequest(XdsRetrieveAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         RetrieveImagingDocumentSetRequestType request = (RetrieveImagingDocumentSetRequestType) pojo;
         List<RetrieveImagingDocumentSetRequestType.StudyRequest> requestedStudies = request.getStudyRequest();
         if (requestedStudies != null) {
@@ -57,6 +58,7 @@ abstract public class XdsIRetrieveAuditStrategy30 extends XdsRetrieveAuditStrate
                 }
             }
         }
+        return auditDataset;
     }
 
 }

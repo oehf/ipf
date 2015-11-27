@@ -19,11 +19,14 @@ import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.core.TransactionOptionUtils;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pam.PamTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
 
@@ -38,9 +41,9 @@ import java.util.Map;
  */
 public class Iti30Component extends MllpTransactionComponent<Iti30AuditDataset> {
 
-    private static final MllpAuditStrategy<Iti30AuditDataset> CLIENT_AUDIT_STRATEGY =
+    private static final AuditStrategy<Iti30AuditDataset> CLIENT_AUDIT_STRATEGY =
             new Iti30ClientAuditStrategy();
-    private static final MllpAuditStrategy<Iti30AuditDataset> SERVER_AUDIT_STRATEGY =
+    private static final AuditStrategy<Iti30AuditDataset> SERVER_AUDIT_STRATEGY =
             new Iti30ServerAuditStrategy();
 
     private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
@@ -56,12 +59,12 @@ public class Iti30Component extends MllpTransactionComponent<Iti30AuditDataset> 
     }
 
     @Override
-    public MllpAuditStrategy<Iti30AuditDataset> getClientAuditStrategy() {
+    public AuditStrategy<Iti30AuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
-    public MllpAuditStrategy<Iti30AuditDataset> getServerAuditStrategy() {
+    public AuditStrategy<Iti30AuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
 

@@ -17,23 +17,24 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
+
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
 /**
  * Factory for HL7 v3 Web Service clients.
  * @author Dmytro Rud
  */
-public class Hl7v3ClientFactory extends JaxWsClientFactory {
-    private final AsynchronyCorrelator correlator;
+public class Hl7v3ClientFactory extends JaxWsClientFactory<Hl7v3AuditDataset> {
+    private final AsynchronyCorrelator<Hl7v3AuditDataset> correlator;
 
     /**
      * Constructs the factory.
@@ -51,8 +52,8 @@ public class Hl7v3ClientFactory extends JaxWsClientFactory {
     public Hl7v3ClientFactory(
             Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceUrl,
-            WsAuditStrategy auditStrategy,
-            AsynchronyCorrelator correlator,
+            AuditStrategy<Hl7v3AuditDataset> auditStrategy,
+            AsynchronyCorrelator<Hl7v3AuditDataset> correlator,
             InterceptorProvider customInterceptors)
     {
         super(wsTransactionConfiguration, serviceUrl, auditStrategy, customInterceptors);
@@ -70,11 +71,11 @@ public class Hl7v3ClientFactory extends JaxWsClientFactory {
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
-            client.getOutInterceptors().add(new AuditOutRequestInterceptor(
+            client.getOutInterceptors().add(new AuditOutRequestInterceptor<>(
                     auditStrategy, correlator, getWsTransactionConfiguration()));
 
-            AuditResponseInterceptor auditInterceptor =
-                new AuditResponseInterceptor(auditStrategy, false, correlator, false);
+            AuditResponseInterceptor<Hl7v3AuditDataset> auditInterceptor =
+                new AuditResponseInterceptor<>(auditStrategy, false, correlator, false);
             client.getInInterceptors().add(auditInterceptor);
             client.getInFaultInterceptors().add(auditInterceptor);
         }

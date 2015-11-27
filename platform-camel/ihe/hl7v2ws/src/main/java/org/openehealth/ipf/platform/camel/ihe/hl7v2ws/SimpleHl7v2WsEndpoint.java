@@ -18,17 +18,23 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.cxf.common.i18n.Exception;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerResponseAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
@@ -41,36 +47,35 @@ import java.util.Map;
 /**
  * Camel endpoint for HL7v2-WS transaction with a single operation.
  */
-public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsComponent> {
+public abstract class SimpleHl7v2WsEndpoint<
+        AuditDatasetType extends WsAuditDataset,
+        ComponentType extends AbstractHl7v2WsComponent<AuditDatasetType>>
+        extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> implements HL7v2Endpoint {
 
     /**
      * Constructs the endpoint.
-     * @param endpointUri
-     *          the endpoint URI.
-     * @param address
-     *          the endpoint address from the URI.
-     * @param component
-     *          the component creating this endpoint.
-     * @param customInterceptors
-     *          user-defined CXF interceptors.
-     * @param features
-     *          user-defined list of CXF features.
+     *
+     * @param endpointUri        the endpoint URI.
+     * @param address            the endpoint address from the URI.
+     * @param component          the component creating this endpoint.
+     * @param customInterceptors user-defined CXF interceptors.
+     * @param features           user-defined list of CXF features.
      */
     public SimpleHl7v2WsEndpoint(
             String endpointUri,
             String address,
-            AbstractHl7v2WsComponent component,
+            AbstractHl7v2WsComponent<AuditDatasetType> component,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
-            Map<String, Object> properties)
-    {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties);
+            Map<String, Object> properties,
+            Class<? extends AbstractWebService> serviceClass) {
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
     }
 
 
-    protected List<Hl7v2Interceptor> getProducerInterceptorChain() {
-        return Arrays.<Hl7v2Interceptor> asList(
+    protected List<Interceptor> getProducerInterceptorChain() {
+        return Arrays.<Interceptor>asList(
                 new ProducerMarshalInterceptor(),
                 new ProducerResponseAcceptanceInterceptor(),
                 new ProducerRequestAcceptanceInterceptor(),
@@ -81,28 +86,27 @@ public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsCom
 
     @Override
     public Producer createProducer() throws Exception {
-        return Hl7v2InterceptorUtils.adaptProducerChain(
+        return InterceptorUtils.adaptProducerChain(
                 getProducerInterceptorChain(),
-                getComponent(),
-                getComponent().getProducer(this, getJaxWsClientFactory()));
+                this,
+                getProducer(this, getJaxWsClientFactory()));
     }
 
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        AbstractHl7v2WebService serviceInstance =
-                (AbstractHl7v2WebService) getComponent().getServiceInstance(this);
-        serviceInstance.setHl7v2Configuration(getComponent());
+        AbstractHl7v2WebService serviceInstance = (AbstractHl7v2WebService)getServiceInstance();
+        serviceInstance.setHl7v2Configuration(this);
         ServerFactoryBean serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
         Server server = serverFactory.create();
         AbstractWebService service = (AbstractWebService) serverFactory.getServiceBean();
-        return new DefaultWsConsumer(this, processor, service, server);
+        return new DefaultWsConsumer<>(this, processor, service, server);
     }
 
 
     @Override
-    public JaxWsClientFactory getJaxWsClientFactory() {
-        return new JaxWsClientFactory(
+    public JaxWsClientFactory<AuditDatasetType> getJaxWsClientFactory() {
+        return new JaxWsClientFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 null,
@@ -111,12 +115,27 @@ public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsCom
 
 
     @Override
-    public JaxWsServiceFactory getJaxWsServiceFactory() {
-        return new JaxWsServiceFactory(
+    public JaxWsServiceFactory<AuditDatasetType> getJaxWsServiceFactory() {
+        return new JaxWsServiceFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 null,
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
+    }
+
+    @Override
+    public ComponentType getComponent() {
+        return (ComponentType)super.getComponent();
+    }
+
+    @Override
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+        return getComponent().getHl7v2TransactionConfiguration();
+    }
+
+    @Override
+    public NakFactory getNakFactory() {
+        return getComponent().getNakFactory();
     }
 }

@@ -22,7 +22,9 @@ import javax.activation.DataHandler;
 import javax.xml.ws.BindingProvider;
 
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
@@ -33,7 +35,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 /**
  * The producer implementation for the ITI-15 component.
  */
-public class Iti15Producer extends AbstractWsProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponse> {
+public class Iti15Producer extends AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ProvideAndRegisterDocumentSetRequestType, RegistryResponse> {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -41,7 +43,7 @@ public class Iti15Producer extends AbstractWsProducer<ProvideAndRegisterDocument
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public Iti15Producer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
+    public Iti15Producer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
         super(endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class, RegistryResponse.class);
     }
 

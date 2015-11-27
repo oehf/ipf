@@ -2,7 +2,7 @@
 ## `xpid-iti64` component
 
 The xpid-iti64 component provides interfaces for actors of the *Notify XAD-PID Link Change* IHE transaction (ITI-64),
-which is described in the [XAD-PID Change Management (XPID) Supplement, Section 3.64](http://www.ihe.net/Technical_Framework/upload/IHE_ITI_Suppl_XPID_Rev1-1_TI_2011-08_19.pdf).
+which is described in the [XAD-PID Change Management (XPID) Supplement, Section 3.64](http://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_XPID.pdf).
 
 ### Actors
 

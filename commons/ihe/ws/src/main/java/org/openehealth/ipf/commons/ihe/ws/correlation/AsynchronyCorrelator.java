@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
  * Web Service-based eHealth transactions.
  * @author Dmytro Rud
  */
-public interface AsynchronyCorrelator {
+public interface AsynchronyCorrelator<AuditDatasetType extends WsAuditDataset> {
 
     /**
      * When the Web Service context of an outgoing request message contains
@@ -31,7 +31,7 @@ public interface AsynchronyCorrelator {
      * in the configured asynchrony correlator instance, even when the
      * WS-Addressing <tt>&lt;ReplyTo&gt;</tt> header is not set.
      */
-    public static final String FORCE_CORRELATION = AsynchronyCorrelator.class.getName() + ".FORCE";
+    String FORCE_CORRELATION = AsynchronyCorrelator.class.getName() + ".FORCE";
 
     /**
      * Stores a service endpoint URI.
@@ -77,7 +77,7 @@ public interface AsynchronyCorrelator {
      * Returns the audit dataset for the request message with the
      * given ID, or <code>null</code> if the message is unknown.
      */
-    WsAuditDataset getAuditDataset(String messageId);
+    AuditDatasetType getAuditDataset(String messageId);
 
     /**
      * Stores a set of alternative keys for the message with the given

@@ -32,8 +32,8 @@ abstract class CustomAuditorUtils {
             String userName,
             String destinationUserId,
             String destinationUri,
-            String sourceIpAddress)
-    {
+            String sourceIpAddress) {
+
         event.setAuditSourceId(
                 auditor.getAuditSourceId(),
                 auditor.getAuditEnterpriseSiteId());
@@ -47,7 +47,7 @@ abstract class CustomAuditorUtils {
                 true);
 
         // Set the human requestor active participant (from XUA)
-        if (! EventUtils.isEmptyOrNull(userName)) {
+        if (!EventUtils.isEmptyOrNull(userName)) {
             event.addHumanRequestorActiveParticipant(userName, null, userName, null);
         }
 

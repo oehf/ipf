@@ -15,26 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti15;
 
-import java.util.Map;
-
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import javax.xml.namespace.QName;
+import java.util.Map;
 
 /**
  * The Camel component for the ITI-15 transaction.
  */
-public class Iti15Component extends AbstractWsComponent<WsTransactionConfiguration> {
+public class Iti15Component extends XdsComponent<XdsSubmitAuditDataset> {
     private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Service", "ihe"),
             Iti15PortType.class,
@@ -46,14 +46,21 @@ public class Iti15Component extends AbstractWsComponent<WsTransactionConfigurati
             false,
             false);
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new XdsEndpoint(uri, remaining, this,
+        return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters),
+                Iti15Service.class) {
+            @Override
+            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
+                                                  JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
+                return new Iti15Producer(endpoint, clientFactory);
+            }
+        };
     }
 
     @Override
@@ -62,26 +69,14 @@ public class Iti15Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<XdsSubmitAuditDataset> getClientAuditStrategy() {
         return new Iti15ClientAuditStrategy();
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<XdsSubmitAuditDataset> getServerAuditStrategy() {
         return new Iti15ServerAuditStrategy();
     }
 
-    @Override
-    public Iti15Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return new Iti15Service();
-    }
-
-    @Override
-    public AbstractWsProducer getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        return new Iti15Producer(endpoint, clientFactory);
-    }
 
 }

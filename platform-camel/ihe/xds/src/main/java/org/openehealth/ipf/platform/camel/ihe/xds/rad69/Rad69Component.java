@@ -16,16 +16,18 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.rad69;
 
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69PortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import javax.xml.namespace.QName;
@@ -34,7 +36,7 @@ import java.util.Map;
 /**
  * The Camel component for the RAD-69 transaction.
  */
-public class Rad69Component extends AbstractWsComponent<WsTransactionConfiguration> {
+public class Rad69Component extends XdsComponent<XdsRetrieveAuditDataset> {
     private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName("urn:ihe:rad:xdsi-b:2009", "DocumentRepository_Service", "iherad"),
             Rad69PortType.class,
@@ -47,13 +49,21 @@ public class Rad69Component extends AbstractWsComponent<WsTransactionConfigurati
             false);
 
     @Override
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new XdsEndpoint(uri, remaining, this,
+        return new XdsEndpoint<XdsRetrieveAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters),
+                Rad69Service.class) {
+            @Override
+            public AbstractWsProducer<XdsRetrieveAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint,
+                                                  JaxWsClientFactory<XdsRetrieveAuditDataset> clientFactory) {
+                return new SimpleWsProducer<>(
+                        endpoint, clientFactory, RetrieveImagingDocumentSetRequestType.class, RetrieveDocumentSetResponseType.class);
+            }
+        };
     }
 
     @Override
@@ -62,26 +72,13 @@ public class Rad69Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<XdsRetrieveAuditDataset> getClientAuditStrategy() {
         return new Rad69AuditStrategy(false);
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<XdsRetrieveAuditDataset> getServerAuditStrategy() {
         return new Rad69AuditStrategy(true);
     }
 
-    @Override
-    public Rad69Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return new Rad69Service();
-    }
-
-    @Override
-    public SimpleWsProducer<RetrieveImagingDocumentSetRequestType, RetrieveDocumentSetResponseType> getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        return new SimpleWsProducer<>(
-                endpoint, clientFactory, RetrieveImagingDocumentSetRequestType.class, RetrieveDocumentSetResponseType.class);
-    }
 }

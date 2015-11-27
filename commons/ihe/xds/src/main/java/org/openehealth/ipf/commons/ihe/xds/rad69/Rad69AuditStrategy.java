@@ -32,7 +32,7 @@ public class Rad69AuditStrategy extends XdsIRetrieveAuditStrategy30 {
 
 
     @Override
-    public void doAudit(XdsRetrieveAuditDataset auditDataset) throws Exception {
+    public void doAudit(XdsRetrieveAuditDataset auditDataset) {
         for (Status status : Status.values()) {
             if (auditDataset.hasDocuments(status)) {
                 AuditorManager.getCustomXdsAuditor().auditRad69(

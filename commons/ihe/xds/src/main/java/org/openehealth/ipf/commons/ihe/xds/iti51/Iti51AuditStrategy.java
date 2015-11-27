@@ -53,7 +53,7 @@ public class Iti51AuditStrategy extends XdsQueryAuditStrategy30 {
 
 
     @Override
-    public void doAudit(XdsQueryAuditDataset auditDataset) throws Exception {
+    public void doAudit(XdsQueryAuditDataset auditDataset) {
         if (auditDataset.getPatientIds().isEmpty()) {
             // when no patient IDs were present in the request,
             // then we create one ATNA audit record without ID

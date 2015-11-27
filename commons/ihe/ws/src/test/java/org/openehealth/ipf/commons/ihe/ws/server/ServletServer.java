@@ -20,6 +20,8 @@ import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import javax.servlet.Servlet;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static org.apache.commons.lang3.Validate.notNull;
@@ -32,6 +34,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public abstract class ServletServer {
     private Servlet servlet;
+    private String servletName;
     private int port;
     private String contextPath;
     private String servletPath;
@@ -41,6 +44,7 @@ public abstract class ServletServer {
     private String keystorePass;
     private String truststoreFile;
     private String truststorePass;
+    private Map<String, String> initParameters = new HashMap<>();
     private ClientAuthType clientAuthType;
 
     /**
@@ -56,6 +60,10 @@ public abstract class ServletServer {
      * Note: any exceptions thrown are treated as assertion failures.
      */
     public abstract void stop();
+
+    public Map<String, String> getInitParameters() {
+        return initParameters;
+    }
 
     /**
      * @param servletPath
@@ -119,6 +127,14 @@ public abstract class ServletServer {
      */
     public Servlet getServlet() {
         return servlet;
+    }
+
+    public String getServletName() {
+        return servletName;
+    }
+
+    public void setServletName(String servletName) {
+        this.servletName = servletName;
     }
 
     /**
