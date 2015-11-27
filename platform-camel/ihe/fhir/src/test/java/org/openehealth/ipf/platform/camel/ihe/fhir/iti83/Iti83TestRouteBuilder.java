@@ -58,15 +58,13 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
         from("pixm-iti83:translation?audit=true")
                 // Translate into ITI-9
                 .errorHandler(noErrorHandler())
-                .process(validateSchema())
                 .process(translatorFhirToHL7v2(requestTranslator))
                 .process(itiValidator())
                 // Create some static response
                 .transform(new Iti9Responder(responseCase))
                 // Translate back into FHIR
                 .process(itiValidator())
-                .process(translatorHL7v2ToFhir(responseTranslator))
-                .process(validateSchema());
+                .process(translatorHL7v2ToFhir(responseTranslator));
     }
 
 
