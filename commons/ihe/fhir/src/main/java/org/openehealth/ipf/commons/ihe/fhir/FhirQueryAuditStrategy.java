@@ -13,31 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.fhir.iti83;
+
+package org.openehealth.ipf.commons.ihe.fhir;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
 
 import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
 
 /**
- * Strategy for auditing ITI-83 transactions
+ * Generic Audit Strategy for FHIR query transctions
  *
  * @since 3.1
  */
-public abstract class Iti83AuditStrategy extends FhirQueryAuditStrategy {
+public abstract class FhirQueryAuditStrategy extends AuditStrategySupport<FhirQueryAuditDataset> {
 
-    protected Iti83AuditStrategy(boolean serverSide) {
+    protected FhirQueryAuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public FhirQueryAuditDataset createAuditDataset() {
-        return new FhirQueryAuditDataset(isServerSide());
+    public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
+        auditDataset.setUserId((String)parameters.get(HTTP_URI));
+        if (parameters.get(HTTP_URL) != null) {
+            auditDataset.setServiceEndpointUrl(parameters.get(HTTP_URL).toString());
+        }
+        auditDataset.setClientIpAddress((String)parameters.get(HTTP_CLIENT_IP_ADDRESS));
+        auditDataset.setQueryString((String)parameters.get(HTTP_QUERY));
+        return auditDataset;
     }
-
-
 }

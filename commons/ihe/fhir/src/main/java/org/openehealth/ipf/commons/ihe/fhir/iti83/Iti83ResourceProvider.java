@@ -20,7 +20,7 @@ import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import org.hl7.fhir.instance.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83AuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +33,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  *
  * @since 3.1
  */
-public class Iti83ResourceProvider extends AbstractPlainProvider<Iti83AuditDataset> {
+public class Iti83ResourceProvider extends AbstractPlainProvider<FhirQueryAuditDataset> {
 
     /**
      * Handles the PIXm Query

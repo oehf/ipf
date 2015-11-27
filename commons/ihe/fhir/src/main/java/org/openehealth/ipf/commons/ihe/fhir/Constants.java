@@ -32,8 +32,11 @@ public interface Constants {
     String SP_MOTHERS_MAIDEN_NAME_GIVEN = "mothersMaidenName.given";
     String SP_MOTHERS_MAIDEN_NAME_FAMILY = "mothersMaidenName.family";
 
+    String FHIR_CONTEXT = "FhirContext";
+
     // Request parameter information
     String FHIR_REQUEST_PARAMETERS = "FhirRequestParameters";
+
 
     // Parameter information from the HttpServletRequest
     String HTTP_URI = "FhirHttpUri";

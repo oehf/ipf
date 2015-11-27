@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
 import org.apache.camel.spi.UriParam;
@@ -36,6 +37,9 @@ import java.util.Map;
  */
 @UriParams
 public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> extends InterceptableEndpointConfiguration {
+
+    private static final String STRICT = "strict";
+    private static final String LENIENT = "lenient";
 
     @Getter
     private final String path;
@@ -85,6 +89,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         clientRequestFactory = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "clientRequestFactory", ClientRequestFactory.class, null);
 
+
         Integer connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
         if (connectTimeout != null) {
             setConnectTimeout(connectTimeout);
@@ -92,6 +97,13 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         Integer timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
         if (timeout != null) {
             setTimeout(timeout);
+        }
+
+        String parserErrorHandling = component.getAndRemoveParameter(parameters, "validation", String.class, "lenient");
+        if (STRICT.equals(parserErrorHandling)) {
+            context.setParserErrorHandler(new StrictErrorHandler());
+        } else if (!LENIENT.equals(parserErrorHandling)) {
+            throw new IllegalArgumentException("Validation must be either " + LENIENT + " (default) or " + STRICT);
         }
 
         boolean secure = component.getAndRemoveParameter(parameters, "secure", Boolean.class, false);

@@ -58,6 +58,7 @@ class Iti83RouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("pixm-iti83:translation?audit=true")
+                .routeId("pixm-adapter")
                 // pass back errors to the endpoint
                 .errorHandler(noErrorHandler())
                 // translate, forward, translate back

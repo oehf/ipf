@@ -40,6 +40,7 @@ class Iti78RouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("pdqm-iti78:translation?audit=true")
+                .routeId("pdqm-adapter")
                 .errorHandler(noErrorHandler())
                 .log(LoggingLevel.ERROR, "Not implemented yet");
     }

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 
 /**
  * Strategy for auditing ITI-83 transactions on the server side
@@ -29,7 +30,7 @@ public class Iti83ServerAuditStrategy extends Iti83AuditStrategy {
     }
 
     @Override
-    public void doAudit(Iti83AuditDataset auditDataset) {
+    public void doAudit(FhirQueryAuditDataset auditDataset) {
         AuditorManager.getFhirAuditor().auditIti83(
                 true,
                 auditDataset.getEventOutcomeCode(),

@@ -26,6 +26,8 @@ import java.util.Map;
  * request data received to an instance of this interface to be processed. This decouples
  * request reception from request handling, so you can e.g. use the IHE resource providers
  * outside of Apache Camel.
+ *
+ * @since 3.1
  */
 
 public interface RequestConsumer {

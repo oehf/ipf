@@ -26,6 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 
 import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorFhirToHL7v2;
 import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorHL7v2ToFhir;
+import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirResourceValidators.validateSchema;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator;
 
 /**
@@ -57,13 +58,15 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
         from("pixm-iti83:translation?audit=true")
                 // Translate into ITI-9
                 .errorHandler(noErrorHandler())
+                .process(validateSchema())
                 .process(translatorFhirToHL7v2(requestTranslator))
                 .process(itiValidator())
                 // Create some static response
                 .transform(new Iti9Responder(responseCase))
                 // Translate back into FHIR
                 .process(itiValidator())
-                .process(translatorHL7v2ToFhir(responseTranslator));
+                .process(translatorHL7v2ToFhir(responseTranslator))
+                .process(validateSchema());
     }
 
 

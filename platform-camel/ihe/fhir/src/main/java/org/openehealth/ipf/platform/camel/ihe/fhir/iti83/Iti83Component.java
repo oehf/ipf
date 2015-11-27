@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83AuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
@@ -30,12 +30,12 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  *
  * @since 3.1
  */
-public class Iti83Component extends FhirComponent<Iti83AuditDataset> {
+public class Iti83Component extends FhirComponent<FhirQueryAuditDataset> {
 
-    private static final FhirComponentConfiguration<Iti83AuditDataset> DEFAULT_CONFIGURATION = new Iti83Configuration();
+    private static final FhirComponentConfiguration<FhirQueryAuditDataset> DEFAULT_CONFIGURATION = new Iti83Configuration();
 
-    private static final AuditStrategy<Iti83AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti83ClientAuditStrategy();
-    private static final AuditStrategy<Iti83AuditDataset> SERVER_AUDIT_STRATEGY = new Iti83ServerAuditStrategy();
+    private static final AuditStrategy<FhirQueryAuditDataset> CLIENT_AUDIT_STRATEGY = new Iti83ClientAuditStrategy();
+    private static final AuditStrategy<FhirQueryAuditDataset> SERVER_AUDIT_STRATEGY = new Iti83ServerAuditStrategy();
 
     public Iti83Component() {
         super(DEFAULT_CONFIGURATION);
@@ -46,22 +46,22 @@ public class Iti83Component extends FhirComponent<Iti83AuditDataset> {
         setFhirComponentConfiguration(DEFAULT_CONFIGURATION);
     }
 
-    public Iti83Component(FhirComponentConfiguration<Iti83AuditDataset> configuration) {
+    public Iti83Component(FhirComponentConfiguration<FhirQueryAuditDataset> configuration) {
         super(configuration);
     }
 
     @Override
-    protected Iti83Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration<Iti83AuditDataset> config) {
+    protected Iti83Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration<FhirQueryAuditDataset> config) {
         return new Iti83Endpoint(uri, this, config);
     }
 
     @Override
-    public AuditStrategy<Iti83AuditDataset> getServerAuditStrategy() {
+    public AuditStrategy<FhirQueryAuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
 
     @Override
-    public AuditStrategy<Iti83AuditDataset> getClientAuditStrategy() {
+    public AuditStrategy<FhirQueryAuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 }

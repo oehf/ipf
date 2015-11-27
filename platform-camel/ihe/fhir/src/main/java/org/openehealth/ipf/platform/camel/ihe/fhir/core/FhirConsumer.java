@@ -24,6 +24,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.SuspendableService;
 import org.apache.camel.impl.DefaultConsumer;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.RequestConsumer;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -96,6 +97,9 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         if (headers != null) {
             exchange.getIn().getHeaders().putAll(headers);
         }
+
+        // Add the FHIR context as header
+        exchange.getIn().getHeaders().put(Constants.FHIR_CONTEXT, getEndpoint().getInterceptableConfiguration().getContext());
 
         try {
             getProcessor().process(exchange);

@@ -15,38 +15,23 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83AuditDataset;
-
-import java.util.Map;
-
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
+import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
 
 /**
  * Strategy for auditing ITI-78 transactions
  *
  * @since 3.1
  */
-public abstract class Iti78AuditStrategy extends AuditStrategySupport<Iti78AuditDataset> {
+public abstract class Iti78AuditStrategy extends FhirQueryAuditStrategy {
 
     protected Iti78AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public Iti78AuditDataset createAuditDataset() {
-        return new Iti78AuditDataset(isServerSide());
-    }
-
-    @Override
-    public Iti78AuditDataset enrichAuditDatasetFromRequest(Iti78AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        auditDataset.setUserId((String)parameters.get(HTTP_URI));
-        if (parameters.get(HTTP_URL) != null) {
-            auditDataset.setServiceEndpointUrl(parameters.get(HTTP_URL).toString());
-        }
-        auditDataset.setClientIpAddress((String)parameters.get(HTTP_CLIENT_IP_ADDRESS));
-        auditDataset.setQueryString((String)parameters.get(HTTP_QUERY));
-        return auditDataset;
+    public FhirQueryAuditDataset createAuditDataset() {
+        return new FhirQueryAuditDataset(isServerSide());
     }
 
 }

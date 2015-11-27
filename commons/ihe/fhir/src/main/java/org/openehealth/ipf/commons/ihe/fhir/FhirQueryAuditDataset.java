@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.fhir.iti83;
+package org.openehealth.ipf.commons.ihe.fhir;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 
 /**
- * @author Christian Ohr
+ * Generic Audit Dataset for FHIR Query transactions
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 @SuppressWarnings("serial")
-public class Iti83AuditDataset extends FhirAuditDataset {
+public class FhirQueryAuditDataset extends FhirAuditDataset {
 
-    @Getter @Setter private String queryString;
+    @Getter
+    @Setter
+    private String queryString;
 
-    public Iti83AuditDataset(boolean serverSide) {
+    public FhirQueryAuditDataset(boolean serverSide) {
         super(serverSide);
     }
 }
