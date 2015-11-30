@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons</artifactId>
-        <version>3.1-20151130</version>
+        <version>3.1-SNAPSHOT</version>
     </parent>
     
     <dependencies>
