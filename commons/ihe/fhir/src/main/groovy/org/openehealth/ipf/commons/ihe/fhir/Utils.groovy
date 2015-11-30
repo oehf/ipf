@@ -56,6 +56,13 @@ class Utils {
         return cx[4][1].value && cx[4][2].value
     }
 
+    static boolean populateIdentifier(def cx, String oid, String identifier = null) {
+        cx[1] = identifier ?: ''
+        cx[4][2] = oid
+        cx[4][3] = 'ISO'
+
+    }
+
     static BaseServerResponseException unknownPatientId() {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()

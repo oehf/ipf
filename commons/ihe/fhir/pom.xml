@@ -53,6 +53,10 @@
             <artifactId>spring-core</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

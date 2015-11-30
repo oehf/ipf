@@ -44,7 +44,7 @@ mappings = {
         'T': 'P',               // domestic partner
         'P': 'O',               // polygamic
         (ELSE) : 'U'             // unknown stuff
-    ),
+    )
 
     'hl7v2fhir-address-use'(['2.16.840.1.113883.5.290', 'http://hl7.org/fhir/ValueSet/address-use'],
         'H' : 'home',
@@ -53,7 +53,7 @@ mappings = {
         'B' : 'work',
         'BA': 'old',
         (ELSE): ''
-    ),
+    )
 
     'hl7v2fhir-name-use'(['2.16.840.1.113883.5.200', 'http://hl7.org/fhir/ValueSet/name-use'],
         'D'     : 'usual',
@@ -62,7 +62,7 @@ mappings = {
         'N'     : 'nickname',
         'S'     : 'anonymous',
         'BAD'   : 'old',
-        'M'     : 'maiden'
+        'M'     : 'maiden',
         (ELSE)  : ''
     )
 
@@ -80,7 +80,7 @@ mappings = {
         'FX'        : 'fax',
         'Internet'  : 'email',
         'BP'        : 'pager',
-        'CP'        : 'phone'
+        'CP'        : 'phone',
         (ELSE)  : ''
     )
 
@@ -91,5 +91,5 @@ mappings = {
         'O' : 'other',
         'U' : 'unknown',
         (ELSE): ''
-    ),
+    )
 }

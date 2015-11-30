@@ -20,12 +20,8 @@ import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.NumberParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.*;
 import org.hl7.fhir.instance.model.IdType;
-import org.hl7.fhir.instance.model.Identifier;
 import org.hl7.fhir.instance.model.Patient;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
@@ -47,17 +43,17 @@ public class Iti78ResourceProvider extends AbstractPlainProvider<FhirQueryAuditD
     /**
      * Handles the PDQm Query request
      *
-     * @param identifier              patient identifier search parameter
-     * @param family                  family name search parameter
-     * @param given                   family name search parameter
+     * @param identifiers             patient identifier search parameter
+     * @param family                  family name search parameter(s)
+     * @param given                   family name search parameter(s)
      * @param birthDate               birth date search parameter
      * @param address                 address search parameter
      * @param gender                  gender search parameter
      * @param resourceId              _id search parameter
      * @param telecom                 telecom search parameter
      * @param multipleBirthNumber     multiple birth number search parameter (pediatric option)
-     * @param mothersMaidenNameGiven  mothers maiden given name search parameter (pediatric option)
-     * @param mothersMaidenNameFamily mothers maiden family name search parameter (pediatric option)
+     * @param mothersMaidenNameGiven  mothers maiden given name search parameter(s) (pediatric option)
+     * @param mothersMaidenNameFamily mothers maiden family name search parameter(s) (pediatric option)
      * @param httpServletRequest      servlet request
      * @param httpServletResponse     servlet response
      * @return list of identified patients
@@ -65,24 +61,24 @@ public class Iti78ResourceProvider extends AbstractPlainProvider<FhirQueryAuditD
     @SuppressWarnings("unused")
     @Search(type = Patient.class)
     public List<? extends Patient> pdqmSearch(
-            @OptionalParam(name = Patient.SP_IDENTIFIER) TokenParam identifier,
-            @OptionalParam(name = Patient.SP_FAMILY) StringParam family,
-            @OptionalParam(name = Patient.SP_GIVEN) StringParam given,
+            @OptionalParam(name = Patient.SP_IDENTIFIER) TokenAndListParam identifiers,
+            @OptionalParam(name = Patient.SP_FAMILY) StringAndListParam family,
+            @OptionalParam(name = Patient.SP_GIVEN) StringAndListParam given,
             @OptionalParam(name = Patient.SP_BIRTHDATE) DateParam birthDate,
             @OptionalParam(name = Patient.SP_ADDRESS) StringParam address,
             @OptionalParam(name = Patient.SP_GENDER) TokenParam gender,
             @OptionalParam(name = Constants.SP_RESOURCE_IDENTIFIER) TokenParam resourceId,
-            // below only relevant for pediatric
+            // below only relevant for pediatric option
             @OptionalParam(name = Patient.SP_TELECOM) StringParam telecom,
             @OptionalParam(name = Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER) NumberParam multipleBirthNumber,
-            @OptionalParam(name = Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN) StringParam mothersMaidenNameGiven,
-            @OptionalParam(name = Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) StringParam mothersMaidenNameFamily,
+            @OptionalParam(name = Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN) StringAndListParam mothersMaidenNameGiven,
+            @OptionalParam(name = Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) StringAndListParam mothersMaidenNameFamily,
 
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
         Map<String, Object> searchParameters = new HashMap<>();
-        addParameter(searchParameters, Patient.SP_IDENTIFIER, identifier);
+        addParameter(searchParameters, Patient.SP_IDENTIFIER, identifiers);
         addParameter(searchParameters, Patient.SP_FAMILY, family);
         addParameter(searchParameters, Patient.SP_GIVEN, given);
         addParameter(searchParameters, Patient.SP_BIRTHDATE, birthDate);

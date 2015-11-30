@@ -15,19 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti78
 
+import ca.uhn.fhir.rest.param.*
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
 import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.lang3.Validate
-import org.hl7.fhir.instance.model.Identifier
+import org.apache.commons.lang3.time.FastDateFormat
+import org.hl7.fhir.instance.model.Enumerations
 import org.hl7.fhir.instance.model.Patient
-import org.hl7.fhir.instance.model.UriType
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
+import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
-import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
@@ -53,7 +55,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     private final UriMapper uriMapper;
 
     private static final HapiContext PDQ_QUERY_CONTEXT = HapiContextFactory.createHapiContext(
-            CustomModelClassUtils.createFactory("pix", "2.5"),
+            CustomModelClassUtils.createFactory("pdq", "2.5"),
             PixPdqTransactions.ITI21)
 
     /**
@@ -64,6 +66,13 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         this.uriMapper = uriMapper
     }
 
+    /**
+     * Translate PDQm query map into a PDQ QBP^Q22 request message
+     *
+     * @param request empty request, ignored
+     * @param parameters query parameters
+     * @return QBP^Q22 request message
+     */
     @Override
     QBP_Q21 translateFhirToHL7v2(IBaseResource request, Map<String, Object> parameters) {
         QBP_Q21 qry = MessageUtils.makeMessage(PDQ_QUERY_CONTEXT, 'QBP', 'Q22', '2.5')
@@ -80,49 +89,95 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         qry.QPD[2] = UUID.randomUUID().toString()
 
         Map<String, Object> map = parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
+        if (!map) throw new InvalidRequestException("No request parameters found")
 
-        Identifier identifier = map.get(Patient.SP_IDENTIFIER)
-        String namespace, oid
-        if (identifier) {
-            namespace = uriMapper.uriToNamespace(identifier.system)
-            oid = uriMapper.uriToOid(identifier.system)
-            if (!(namespace || oid)) {
-                throw Utils.unknownPatientDomain()
-            }
+        // Handle identifiers
+        List<String> requestedDomains
+        String identifierNamespace, identifierOid, identifierValue
+
+        TokenAndListParam identifierParam = map.get(Patient.SP_IDENTIFIER)
+        if (identifierParam) {
+            List<List<String>> identifiers = searchTokenList(identifierParam)
+            // Patient identifier has identifier value
+            (identifierNamespace, identifierOid, identifierValue) = identifiers?.find { it[2] }
+            // Requested domains have no identifier value
+            requestedDomains = identifiers?.findAll { !it[2] }.collect { it[1] }
         }
 
-        // FIXME convert search parameters!
-        def searchParams = [
-                '@PID.3.1'    : identifier?.value,
-                '@PID.3.4.1'  : namespace,
-                '@PID.3.4.2'  : oid,
-                '@PID.3.4.3'  : oid ? 'ISO' : null,
-                '@PID.5.1'    : map.get(Patient.SP_FAMILY) + "*",
-                '@PID.5.2'    : map.get(Patient.SP_GIVEN) + "*",
-                '@PID.6.1'    : map.get(Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) + "*",
-                '@PID.6.2'    : map.get(Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN) + "*",
-                '@PID.7'      : map.get(Patient.SP_BIRTHDATE), // TODO convert
-                '@PID.8'      : map.get(Patient.SP_GENDER), // TODO convert
-                '@PID.11.1'   : map.get(Patient.SP_ADDRESS),
-                '@PID.11.3'   : map.get(Patient.SP_ADDRESSCITY),
-                '@PID.11.4'   : map.get(Patient.SP_ADDRESSSTATE),
-                '@PID.11.5'   : map.get(Patient.SP_ADDRESSPOSTALCODE),
-                '@PID.11.6'   : map.get(Patient.SP_ADDRESSCOUNTRY),
-                '@PID.13'     : map.get(Patient.SP_PHONE),
-                '@PID.25'     : map.get(Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER)
+        // Properly convert birth date.
+        DateParam birthDateParam = map.get(Patient.SP_BIRTHDATE)
+        String birthDateString = birthDateParam ? FastDateFormat.getInstance('yyyyMMdd').format(birthDateParam.getValue()) : null
+
+        // Properly convert gender code
+        TokenParam genderParam = map.get(Patient.SP_GENDER)
+        String genderString = genderParam ?
+                Enumerations.AdministrativeGender.fromCode(genderParam.value).toCode().mapReverse('hl7v2fhir-patient-administrativeGender') :
+                null
+
+        Map<String, Object> searchParams = [
+                // PDQ only allows
+                '@PID.3.1'  : identifierValue,
+                '@PID.3.4.1': identifierNamespace,
+                '@PID.3.4.2': identifierOid,
+                '@PID.3.4.3': identifierOid ? 'ISO' : null,
+                '@PID.5.1'  : firstOrNull(searchStringList(map.get(Patient.SP_FAMILY), false)),
+                '@PID.5.2'  : firstOrNull(searchStringList(map.get(Patient.SP_GIVEN), false)),
+                '@PID.7'    : birthDateString,
+                '@PID.8'    : genderString,
+                '@PID.11.1' : searchString(map.get(Patient.SP_ADDRESS), true),
+                '@PID.11.3' : searchString(map.get(Patient.SP_ADDRESSCITY), true),
+                '@PID.11.4' : searchString(map.get(Patient.SP_ADDRESSSTATE), true),
+                '@PID.11.5' : searchString(map.get(Patient.SP_ADDRESSPOSTALCODE), true),
+                '@PID.11.6' : searchString(map.get(Patient.SP_ADDRESSCOUNTRY), true),
+
+                '@PID.6.1'  : firstOrNull(searchStringList(map.get(Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY), false)),
+                '@PID.6.2'  : firstOrNull(searchStringList(map.get(Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN), false)),
+                '@PID.13.1'   : searchString(map.get(Patient.SP_TELECOM), true),
+                '@PID.25'   : searchNumber(map.get(Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER))
         ]
 
         fillSearchParameters(searchParams, qry.QPD[3])
 
-        UriType requestedDomain = map[Constants.TARGET_SYSTEM_NAME]
-        if (requestedDomain) {
-            if (!Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[8]), uriMapper, requestedDomain.value)) {
-                throw Utils.unknownTargetDomain()
-            }
+        requestedDomains?.each {
+            Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[8]), it)
         }
 
         qry.RCP[1] = 'I'
         return qry
+    }
+
+
+    private String searchString(StringParam param, boolean forceExactSearch) {
+        if (param == null || param.empty) return null;
+        forceExactSearch || param.exact ? param.value : param.value + "*"
+    }
+
+    private List<String> searchStringList(StringAndListParam param, boolean forceExactSearch) {
+        param?.getValuesAsQueryTokens().collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
+    }
+
+    private String searchNumber(NumberParam param) {
+        param?.value.toString()
+    }
+
+    private List<String> searchToken(TokenParam identifierParam) {
+        String namespace, oid
+        if (identifierParam) {
+            namespace = uriMapper.uriToNamespace(identifierParam.system)
+            oid = uriMapper.uriToOid(identifierParam.system)
+            if (!(namespace || oid)) {
+                throw identifierParam.value ? Utils.unknownPatientDomain() : Utils.unknownTargetDomain()
+            }
+        }
+        [namespace, oid, identifierParam?.value]
+    }
+
+    private List<List<String>> searchTokenList(TokenAndListParam param) {
+        param?.getValuesAsQueryTokens().collect { searchToken(it?.valuesAsQueryTokens?.find()) }
+    }
+
+    private def firstOrNull(List<?> list) {
+        list?.empty ? null : list[0]
     }
 
     /**
@@ -133,12 +188,24 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
      * target is <code>msg.QPD[3]</code>.  A call to this function will lead to
      * <code>QPD|...|...|abc^123~cde^456|...</code>.
      */
-    static void fillSearchParameters(Map<String, String> parameters, Repeatable target) {
+    static void fillSearchParameters(Map<String, Object> parameters, Repeatable target) {
+        parameters
+                .findAll { it.value }
+                .each {
+                    def field = Utils.nextRepetition(target)
+                    field[1].value = it.key
+                    field[2].value = it.value
+                }
+
+/*
         for (parameter in parameters.findAll { it.value }) {
-            def field = Utils.nextRepetition(target)
-            field[1].value = parameter.key
-            field[2].value = parameter.value
+            parameter.value.each {
+                def field = Utils.nextRepetition(target)
+                field[1].value = parameter.key
+                field[2].value = it
+            }
         }
+*/
     }
 
 }
