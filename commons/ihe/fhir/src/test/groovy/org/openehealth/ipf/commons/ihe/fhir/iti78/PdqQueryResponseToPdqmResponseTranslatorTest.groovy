@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti78
 
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
 import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.io.IOUtils
 import org.easymock.EasyMock
@@ -32,6 +31,8 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_K21
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
@@ -41,17 +42,18 @@ import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
  */
 class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
 
-    private static final HapiContext PIX_QUERY_CONTEXT = HapiContextFactory.createHapiContext(
+    private static final HapiContext PDQ_QUERY_CONTEXT = HapiContextFactory.createHapiContext(
             CustomModelClassUtils.createFactory("pdq", "2.5"),
             PixPdqTransactions.ITI21)
 
-    private PixQueryResponseToPixmResponseTranslator translator
+    private PdqResponseToPdqmResponseTranslator translator
     MappingService mappingService
 
     @Before
     public void setup() {
         mappingService = new BidiMappingService()
         mappingService.addMappingScript(getClass().getClassLoader().getResource('mapping.map'))
+        mappingService.addMappingScript(getClass().getResource('/META-INF/map/fhir-hl7v2-translation.map'))
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
         translator = new PdqResponseToPdqmResponseTranslator(mapper)
 
@@ -62,7 +64,16 @@ class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
     }
 
     @Test
-    public void test() {
-        // TODO
+    public void testTranslateRegularResponse() {
+        RSP_K21 message = loadMessage('ok-1_Response')
+        List<PdqPatient> patients = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        assertEquals(9, patients.size())
+    }
+
+    RSP_K21 loadMessage(String name) {
+        String resourceName = "pdqquery/v2/${name}.hl7"
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName)
+        String content = IOUtils.toString(inputStream)
+        return (RSP_K21)PDQ_QUERY_CONTEXT.getPipeParser().parse(content)
     }
 }

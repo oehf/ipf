@@ -19,6 +19,7 @@ import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
 import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.model.v25.segment.PID
 import org.apache.commons.lang3.Validate
 import org.hl7.fhir.instance.model.*
 import org.hl7.fhir.instance.model.ContactPoint.ContactPointUse
@@ -50,10 +51,10 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
     }
 
     @Override
-    Parameters translateHL7v2ToFhir(Message message, Map<String, Object> parameters) {
+    List<PdqPatient> translateHL7v2ToFhir(Message message, Map<String, Object> parameters) {
         String ackCode = message.QAK[2].value
         switch (ackCode) {
-            case 'OK': return handleRegularResponse(message.QUERY_RESPONSE.PID()) // Case 1
+            case 'OK': return handleRegularResponse(message.QUERY_RESPONSE()) // Case 1
             case 'NF': return handleRegularResponse(null)  // Case 2
             case 'AE': throw handleErrorResponse(message) // Cases 3-5
             default: throw new InternalErrorException("Unexpected ack code " + ackCode)
@@ -61,11 +62,12 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
     }
 
     // Handle a regular response
-    protected List<PdqPatient> handleRegularResponse(pidCollection) {
+    protected List<PdqPatient> handleRegularResponse(responseCollection) {
         List<PdqPatient> resultList = new ArrayList<>();
-        if (pidCollection) {
-            for (pid in pidCollection) {
+        if (responseCollection) {
+            for (response in responseCollection) {
                 PdqPatient patient = new PdqPatient()
+                PID pid = response.PID
 
                 if (!pid[3].empty) {
                     convertIdentifiers(pid[3](), patient.getIdentifier())
@@ -78,7 +80,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                 if (!pid[6].empty) {
                     patient.setMothersMaidenName(convertName(pid[6]))
                 }
-                if (pid[7]?.value) patient.setBirthDateElement(DateTimeType.parseV3(pid[7].value))
+                if (pid[7]?.value) patient.setBirthDateElement(DateType.parseV3(pid[7].value))
                 if (pid[8]?.value) patient.setGender(
                         Enumerations.AdministrativeGender.fromCode(pid[8].value.map('hl7v2fhir-patient-administrativeGender')))
 
@@ -207,7 +209,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
      */
     protected HumanName convertName(xpn) {
         HumanName name = new HumanName()
-                .setUse(Address.AddressUse.fromCode((xpn[7]?.value ?: '').map('hl7v2fhir-name-use')))
+                .setUse(HumanName.NameUse.fromCode((xpn[7]?.value ?: '').map('hl7v2fhir-name-use')))
         if (xpn[1]?.value) name.getFamily().add(new StringType(xpn[1].value))
         if (xpn[2]?.value) name.getGiven().add(new StringType(xpn[2].value))
         if (xpn[3]?.value) name.getGiven().add(new StringType(xpn[3].value))

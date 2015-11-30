@@ -119,6 +119,7 @@
         <opensaml-version>3.1.1</opensaml-version>
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.1</quartz-version>
+        <quickcheck-version>0.6</quickcheck-version>
         <saxon-he-version>9.6.0-4</saxon-he-version>
         <slf4j-version>1.7.12</slf4j-version>
         <spring-version>4.1.8.RELEASE</spring-version>
@@ -391,6 +392,7 @@
                                     commons/core/generated-stubs:
                                     commons/flow/generated-stubs:
                                     commons/ihe/core/generated-stubs:
+                                    commons/ihe/fhir/generated-stubs:
                                     commons/ihe/hl7v2/generated-stubs:
                                     commons/ihe/hl7v3/generated-stubs:
                                     commons/ihe/ws/generated-stubs:
@@ -400,6 +402,7 @@
                                     modules/cda/core/generated-stubs:
                                     modules/cda/mdht/generated-stubs:
                                     modules/hl7/generated-stubs:
+                                    modules/fhir/generated-stubs:
                                     platform-camel/cda/generated-stubs:
                                     platform-camel/core/generated-stubs:
                                     platform-camel/core-legacy/generated-stubs:
@@ -407,6 +410,8 @@
                                     platform-camel/hl7/generated-stubs:
                                     platform-camel/ihe/atna/generated-stubs:
                                     platform-camel/ihe/continua/generated-stubs:
+                                    platform-camel/ihe/core/generated-stubs:
+                                    platform-camel/ihe/fhir/generated-stubs:
                                     platform-camel/ihe/hl7v2/generated-stubs:
                                     platform-camel/ihe/hl7v2ws/generated-stubs:
                                     platform-camel/ihe/hl7v3/generated-stubs:
@@ -1522,6 +1527,12 @@
             <!-- scope "provided" is used here in the sense
                 "necessary for compilation, not necessary at runtime" -->
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.java.quickcheck</groupId>
+            <artifactId>quickcheck</artifactId>
+            <version>${quickcheck-version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
