@@ -150,6 +150,6 @@ Correspondingly, a more thorough schematron validation looks like this:
 ```
 
 [MDHT]: https://www.projects.openhealthtools.org/sf/projects/mdht/
-[MDHT support]: ../modules-cda-mdht/index.html
+[MDHT support]: ../ipf-modules-cda-mdht/index.html
 [CDA-specific]: ../ipf-platform-camel-cda/index.html
 [MDHT-specific]: ../ipf-platform-camel-mdht/index.html
