@@ -17,9 +17,9 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 
 
@@ -27,12 +27,12 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataB
  * Special factory for HL7 v3 Deferred Response senders.
  * @author Dmytro Rud
  */
-public class Hl7v3DeferredResponderFactory extends JaxWsClientFactory {
+public class Hl7v3DeferredResponderFactory extends JaxWsClientFactory<Hl7v3AuditDataset> {
 
     public Hl7v3DeferredResponderFactory(
             Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceUrl,
-            WsAuditStrategy auditStrategy,
+            AuditStrategy<Hl7v3AuditDataset> auditStrategy,
             InterceptorProvider customInterceptors)
     {
         super(wsTransactionConfiguration, serviceUrl, auditStrategy, customInterceptors);
@@ -45,8 +45,8 @@ public class Hl7v3DeferredResponderFactory extends JaxWsClientFactory {
         client.getEndpoint().getService().setDataBinding(new PlainXmlDataBinding());
 
         if (auditStrategy != null) {
-            AuditResponseInterceptor auditInterceptor =
-                new AuditResponseInterceptor(auditStrategy, true, null, false);
+            AuditResponseInterceptor<Hl7v3AuditDataset> auditInterceptor =
+                new AuditResponseInterceptor<>(auditStrategy, true, null, false);
             client.getOutInterceptors().add(auditInterceptor);
             client.getOutFaultInterceptors().add(auditInterceptor);
         }

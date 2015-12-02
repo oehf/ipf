@@ -21,6 +21,9 @@ import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -41,9 +44,10 @@ public class SpringBidiMappingServiceTest {
      */
     @Test
     public void testIgnoreResourceNotFound() {
-        Resource[] resources = {
+        List<? extends Resource> resources = Arrays.asList(
                 new ClassPathResource("example2.map.NONEXISTENT"),
-                new ClassPathResource("example3.map")};
+                new ClassPathResource("example3.map")
+        );
 
         mappingService.setIgnoreResourceNotFound(true);
         mappingService.setMappingScripts(resources);
@@ -59,9 +63,10 @@ public class SpringBidiMappingServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testFailResourceNotFound() {
-        Resource[] resources = {
+        List<? extends Resource> resources = Arrays.asList(
                 new ClassPathResource("example2.map.NONEXISTENT"),
-                new ClassPathResource("example3.map")};
+                new ClassPathResource("example3.map")
+        );
         mappingService.setIgnoreResourceNotFound(false);
         mappingService.setMappingScripts(resources);
     }

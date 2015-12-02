@@ -116,7 +116,7 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
                     auditDataset.setRequestPayload(requestString);
                 }
 
-                auditStrategy.enrichDatasetFromRequest(requestString, auditDataset);
+                auditStrategy.enrichAuditDatasetFromRequest(auditDataset, requestString, null);
             } catch (Exception e) {
                 log.error("Phase 1 of server-side ATNA auditing failed", e);
             }
@@ -132,8 +132,8 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
     {
         if (auditStrategy != null) {
             try {
-                auditStrategy.enrichDatasetFromResponse(response, auditDataset);
-                auditStrategy.audit(auditDataset);
+                auditStrategy.enrichAuditDatasetFromResponse(auditDataset, response);
+                auditStrategy.doAudit(auditDataset);
             } catch (Exception e) {
                 log.error("Phase 2 of server-side ATNA auditing failed", e);
             }

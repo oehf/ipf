@@ -1,0 +1,95 @@
+/*
+ * Mapping definitions
+ *
+ * Always are in the following Groovy syntax:
+ *
+ * <pre>
+ * mappings = {
+ *   mappingKey1(['oid of key code system','oid of value code system'],
+ *      key1  : 'value1',
+ *      key2  : 'value2',
+ *      (ELSE): Closure or Value
+ *   )
+ *   mappingKey2(
+ *      ...
+ *   )
+ *   ...
+ *
+ * }
+ * <pre>
+ *
+ * The list of OIDs is optional. The ELSE element can be either a Closure or a normal Object,
+ * which is converted to a String. The closure takes the key as only parameter, so that
+ * <pre>
+ * ...
+ * (ELSE) : { it }
+ * ...
+ * </pre>
+ * will return that key, and thus an unknown key is mapped to itself.
+ *
+ * Note that most of these mappings are derived directly from the FHIR specification
+ */
+
+
+mappings = {
+
+    'hl7v2fhir-patient-maritalStatus'(['2.16.840.1.113883.5.290', 'http://hl7.org/fhir/ValueSet/marital-status'],
+        'D': 'D',               // divorced
+        'L': 'A',               // legally separated
+        'M': 'M',               // married
+        'S': 'S',               // never married AKA single
+        'W': 'W',               // widowed
+        'I': 'I',               // interlocuraty
+        'A': 'N',               // annulled
+        'T': 'P',               // domestic partner
+        'P': 'O',               // polygamic
+        (ELSE) : 'U'             // unknown stuff
+    )
+
+    'hl7v2fhir-address-use'(['2.16.840.1.113883.5.290', 'http://hl7.org/fhir/ValueSet/address-use'],
+        'H' : 'home',
+        'L' : 'home',
+        'O' : 'work',
+        'B' : 'work',
+        'BA': 'old',
+        (ELSE): ''
+    )
+
+    'hl7v2fhir-name-use'(['2.16.840.1.113883.5.200', 'http://hl7.org/fhir/ValueSet/name-use'],
+        'D'     : 'usual',
+        'L'     : 'official',
+        'TEMP'  : 'temp',
+        'N'     : 'nickname',
+        'S'     : 'anonymous',
+        'BAD'   : 'old',
+        'M'     : 'maiden',
+        (ELSE)  : ''
+    )
+
+    'hl7v2fhir-telecom-use'(['2.16.840.1.113883.5.201', 'http://hl7.org/fhir/ValueSet/contact-point-use'],
+        'PRN'   : 'home',
+        'ORN'   : 'home',
+        'VHN'   : 'home',
+        'WPN'   : 'work',
+        'PRS'   : 'mobile',
+        (ELSE)  : ''
+    )
+
+    'hl7v2fhir-telecom-type'(['2.16.840.1.113883.5.202', 'http://hl7.org/fhir/ValueSet/contact-point-system'],
+        'PH'        : 'phone',
+        'FX'        : 'fax',
+        'Internet'  : 'email',
+        'BP'        : 'pager',
+        'CP'        : 'phone',
+        (ELSE)  : ''
+    )
+
+    'hl7v2fhir-patient-administrativeGender'(['2.16.840.1.113883.5.1', 'http://hl7.org/fhir/ValueSet/administrative-gender'],
+        'M' : 'male',
+        'F' : 'female',
+        'A' : 'other',
+        'O' : 'other',
+        'U' : 'unknown',
+        (ELSE): ''
+    )
+}

@@ -15,27 +15,27 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56.asyncresponse;
 
-import java.util.Map;
-
-import javax.xml.namespace.QName;
-
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.asyncresponse.Iti56AsyncResponsePortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+
+import javax.xml.namespace.QName;
+import java.util.Map;
 
 /**
  * Camel component for the ITI-56 XCPD Initiating Gateway actor
  * (receiver of asynchronous responses).
  */
-public class Iti56AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTransactionConfiguration> {
+public class Iti56AsyncResponseComponent extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
     private final static Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             IpfInteractionId.ITI_56,
@@ -50,14 +50,15 @@ public class Iti56AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTran
             false);
 
 
-    @SuppressWarnings({"rawtypes", "unchecked" }) // Required because of base class
+    @SuppressWarnings("rawtypes") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Hl7v3AsyncResponseEndpoint<>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters),
+                Iti56AsyncResponseService.class);
     }
 
     @Override
@@ -66,25 +67,13 @@ public class Iti56AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTran
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
         return null; 
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
         return new Iti56AuditStrategy(false);
     }
 
-    @Override
-    public Iti56AsyncResponseService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return new Iti56AsyncResponseService();
-    }
-
-    @Override
-    public AbstractWsProducer getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        throw new IllegalStateException("No producer support for asynchronous response endpoints");
-    }
 }

@@ -18,12 +18,15 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti8;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
 /**
@@ -48,9 +51,9 @@ public class Iti8Component extends MllpTransactionComponent<Iti8AuditDataset> {
                         CustomModelClassUtils.createFactory("pix", "2.3.1"),
                         PixPdqTransactions.ITI8));
   
-    private static final MllpAuditStrategy<Iti8AuditDataset> CLIENT_AUDIT_STRATEGY = 
+    private static final AuditStrategy<Iti8AuditDataset> CLIENT_AUDIT_STRATEGY =
         new Iti8ClientAuditStrategy();
-    private static final MllpAuditStrategy<Iti8AuditDataset> SERVER_AUDIT_STRATEGY = 
+    private static final AuditStrategy<Iti8AuditDataset> SERVER_AUDIT_STRATEGY =
         new Iti8ServerAuditStrategy();
     private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
@@ -64,12 +67,12 @@ public class Iti8Component extends MllpTransactionComponent<Iti8AuditDataset> {
     }
     
     @Override
-    public MllpAuditStrategy<Iti8AuditDataset> getClientAuditStrategy() {
+    public AuditStrategy<Iti8AuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
-    public MllpAuditStrategy<Iti8AuditDataset> getServerAuditStrategy() {
+    public AuditStrategy<Iti8AuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
     

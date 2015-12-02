@@ -16,16 +16,18 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti61;
 
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61PortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import javax.xml.namespace.QName;
@@ -34,7 +36,8 @@ import java.util.Map;
 /**
  * The Camel component for the ITI-61 transaction.
  */
-public class Iti61Component extends AbstractWsComponent<WsTransactionConfiguration> {
+public class Iti61Component extends XdsComponent<XdsSubmitAuditDataset> {
+
     protected final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
             Iti61PortType.class,
@@ -47,13 +50,21 @@ public class Iti61Component extends AbstractWsComponent<WsTransactionConfigurati
             false);
 
     @Override
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new XdsEndpoint(uri, remaining, this,
+        return new XdsEndpoint<XdsSubmitAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters),
+                Iti61Service.class) {
+            @Override
+            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
+                                                                                                          JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
+                return new SimpleWsProducer<>(
+                        endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);
+            }
+        };
     }
 
     @Override
@@ -62,26 +73,13 @@ public class Iti61Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<XdsSubmitAuditDataset> getClientAuditStrategy() {
         return new Iti61AuditStrategy(false);
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<XdsSubmitAuditDataset> getServerAuditStrategy() {
         return new Iti61AuditStrategy(true);
     }
 
-    @Override
-    public Iti61Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return new Iti61Service();
-    }
-
-    @Override
-    public SimpleWsProducer<SubmitObjectsRequest, RegistryResponseType> getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        return new SimpleWsProducer<>(
-                endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);
-    }
 }

@@ -23,6 +23,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsReq
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
+import java.util.Map;
+
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
  * in ebXML 3.0-based submission-related XDS transactions.
@@ -43,12 +45,12 @@ abstract public class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
 
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, XdsSubmitAuditDataset auditDataset) {
+    public XdsSubmitAuditDataset enrichAuditDatasetFromRequest(XdsSubmitAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         SubmitObjectsRequest submitObjectsRequest = (SubmitObjectsRequest) pojo;
         EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
         auditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
+        return auditDataset;
     }
-
 
     @Override
     public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
@@ -56,7 +58,6 @@ abstract public class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
         EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response);
         return getEventOutcomeCodeFromRegistryResponse(ebXML);
     }
-
 
     @Override
     public XdsSubmitAuditDataset createAuditDataset() {

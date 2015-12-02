@@ -17,7 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.component.mina2.Mina2Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestAcceptanceInterceptor;
@@ -41,6 +44,7 @@ import java.util.List;
  */
 public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
         extends MllpEndpoint<MllpTransactionEndpointConfiguration, MllpTransactionComponent<AuditDatasetType>>
+        implements AuditableEndpoint<AuditDatasetType>
 {
 
     /**
@@ -62,8 +66,8 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
 
 
     @Override
-    protected List<Hl7v2Interceptor> createInitialConsumerInterceptorChain() {
-        List<Hl7v2Interceptor> initialChain = new ArrayList<>();
+    protected List<Interceptor> createInitialConsumerInterceptorChain() {
+        List<Interceptor> initialChain = new ArrayList<>();
         initialChain.add(new ConsumerStringProcessingInterceptor());
         if (isSupportUnsolicitedFragmentation()) {
             initialChain.add(new ConsumerRequestDefragmenterInterceptor());
@@ -86,8 +90,8 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
 
 
     @Override
-    protected List<Hl7v2Interceptor> createInitialProducerInterceptorChain() {
-        List<Hl7v2Interceptor> initialChain = new ArrayList<>();
+    protected List<Interceptor> createInitialProducerInterceptorChain() {
+        List<Interceptor> initialChain = new ArrayList<>();
         initialChain.add(new ProducerStringProcessingInterceptor());
         if (isSupportUnsolicitedFragmentation()) {
             initialChain.add(new ProducerRequestFragmenterInterceptor());
@@ -108,6 +112,7 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
     /**
      * Returns <tt>true</tt> when ATNA auditing should be performed.
      */
+    @Override
     @ManagedAttribute(description = "Audit Enabled")
     public boolean isAudit() {
         return getConfig().isAudit();
@@ -116,14 +121,16 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
     /**
      * Returns client-side audit strategy instance.
      */
-    public MllpAuditStrategy<AuditDatasetType> getClientAuditStrategy() {
+    @Override
+    public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
         return getMllpComponent().getClientAuditStrategy();
     }
 
     /**
      * Returns server-side audit strategy instance.
      */
-    public MllpAuditStrategy<AuditDatasetType> getServerAuditStrategy() {
+    @Override
+    public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
         return getMllpComponent().getServerAuditStrategy();
     }
 

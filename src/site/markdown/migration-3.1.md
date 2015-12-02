@@ -1,10 +1,10 @@
 ## IPF 3.1 Migration Guide
 
-IPF 3.1 comes with a few backward-incompatible changes, mostly due to reducing mandatory dependencies to
-the Spring framework.
+IPF 3.1 comes with some backward-incompatible changes, mostly due to reducing mandatory dependencies to
+the Spring framework and some internal refactorings in the IHE-related classes. 
 
 
-### New module
+### Spring dependencies
 
 IPF 3.1 encapsulates most Spring dependencies in the new ```ipf-commons-spring``` module.
 When you use IPF with Spring, the required Maven dependency is:
@@ -17,7 +17,9 @@ When you use IPF with Spring, the required Maven dependency is:
     </dependency>
 ```
 
-The only other modules that directly depend on Spring are ```ipf-commons-flow``` and ```ipf-platform-camel-flow```
+The only other modules that directly depend on Spring are ```ipf-commons-flow``` and ```ipf-platform-camel-flow```.
+All other modules do not depend on Spring anymore. If you so far benefitted from transitive Spring dependencies,
+you may need to add these dependencies in your modules.
 
 ### Mapping Service
 
@@ -46,6 +48,17 @@ The new interface `org.openehealth.ipf.commons.core.config.TypeConverter` lets y
 type converter implementation. 
 The only implementation provided by IPF is `org.openehealth.ipf.commons.core.config.SpringTypeConverter`, located
 in the new `ipf-commons-spring` module, which realizes the previous behavior.
+
+### ATNA Auditing and IHE components
+
+All IHE components (MLLP-based, SOAP-based, FHIR-based) have been refactored to use a common source of ATNA
+auditing strategies, which all now all located in the ipf-commons-ihe-XXX modules. During this refactoring,
+most classes have been touched, mostly changing their type parameters and moving back and forth the one or
+other method.
+This change will not be visible for 'normal' users of the IHE components provided by IPF. If you, however,
+created your own components, endpoints, audit strategies, etc. based on the respective abstract IPF classes, 
+you will need to reproduce these refactorings in your own code. Please inspect the standard IHE transaction
+classes in IPF for what needs to be changed.
 
 
 [Mapping Service]: ../ipf-commons-map/index.html

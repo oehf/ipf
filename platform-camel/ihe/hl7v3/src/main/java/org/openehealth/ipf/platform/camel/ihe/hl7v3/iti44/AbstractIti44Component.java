@@ -16,13 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
@@ -31,34 +32,33 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-abstract public class AbstractIti44Component extends AbstractWsComponent<Hl7v3WsTransactionConfiguration> {
-    @SuppressWarnings({ "unchecked", "rawtypes" }) // Required because of base class
+abstract public class AbstractIti44Component extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
+
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Hl7v3Endpoint<>(uri, remaining, this,
+        return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters),
+                Iti44Service.class) {
+            @Override
+            public AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
+                                                                                                                            JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
+                return new Iti44Producer(endpoint, clientFactory);
+            }
+        };
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
         return new Iti44AuditStrategy(false);
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
         return new Iti44AuditStrategy(true);
     }
 
-    @Override
-    public AbstractHl7v3WebService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return new Iti44Service();
-    }
-
-    @Override
-    public AbstractWsProducer getProducer(AbstractWsEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
-        return new Iti44Producer(endpoint, clientFactory);
-    }
 }

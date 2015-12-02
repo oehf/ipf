@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.component.mina2.Mina2Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerStringProcessingInterceptor;
 
@@ -38,8 +38,8 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
     }
 
     @Override
-    protected List<Hl7v2Interceptor> createInitialConsumerInterceptorChain() {
-        List<Hl7v2Interceptor> initialChain = new ArrayList<>();
+    protected List<Interceptor> createInitialConsumerInterceptorChain() {
+        List<Interceptor> initialChain = new ArrayList<>();
         initialChain.add(new ConsumerStringProcessingInterceptor());
 
         ConsumerDispatchingInterceptor dispatcher = getConfig().getDispatcher();
@@ -54,7 +54,7 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
 
 
     @Override
-    protected List<Hl7v2Interceptor> createInitialProducerInterceptorChain() {
+    protected List<Interceptor> createInitialProducerInterceptorChain() {
         throw new IllegalStateException("No producer support for MLLP dispatch endpoints.");
     }
 

@@ -23,6 +23,8 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;
 
+import java.util.Map;
+
 /**
  * A servlet server based on Jetty.
  * <p>
@@ -51,7 +53,12 @@ public class JettyServer extends ServletServer {
 
         context.setContextPath(getContextPath());
         ServletHolder holder = new ServletHolder(getServlet());
+        holder.setName(getServletName());
         context.addServlet(holder, getServletPath());
+
+        for (Map.Entry<String, String> parameters : getInitParameters().entrySet()) {
+            holder.setInitParameter(parameters.getKey(), parameters.getValue());
+        }
         
         server.setHandler(context);
 

@@ -37,7 +37,7 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
     @Getter private final boolean autoCancel;
 
 
-    protected MllpTransactionEndpointConfiguration(MllpComponent component, Map<String, Object> parameters) throws Exception {
+    protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration> component, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
 
         supportUnsolicitedFragmentation = component.getAndRemoveParameter(

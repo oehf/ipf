@@ -49,7 +49,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
      -->
 
     <camel:camelContext id="camelContext">
-        <camel:routeBuilder ref="routeBuilder"/>        
+        <camel:routeBuilder ref="routeBuilder"/>
     </camel:camelContext>
 
     <bean id="routeBuilder"

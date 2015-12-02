@@ -15,24 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21;
 
-import java.util.Collections;
-import java.util.List;
-
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti21.Iti21ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti21.Iti21ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
+import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqTransactionConfiguration;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Camel component for ITI-21 (PDQ).
@@ -57,9 +59,9 @@ public class Iti21Component extends MllpTransactionComponent<QueryAuditDataset> 
                             CustomModelClassUtils.createFactory("pdq", "2.5"),
                             PixPdqTransactions.ITI21));
 
-    private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY =
+    private static final AuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY =
             new Iti21ClientAuditStrategy();
-    private static final MllpAuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY =
+    private static final AuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY =
             new Iti21ServerAuditStrategy();
     private static final NakFactory NAK_FACTORY =
             new QpdAwareNakFactory(CONFIGURATION, "RSP", "K22");
@@ -74,12 +76,12 @@ public class Iti21Component extends MllpTransactionComponent<QueryAuditDataset> 
     }
 
     @Override
-    public MllpAuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
+    public AuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
-    public MllpAuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
+    public AuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
 
@@ -94,7 +96,7 @@ public class Iti21Component extends MllpTransactionComponent<QueryAuditDataset> 
     }
 
     @Override
-    public List<Hl7v2Interceptor> getAdditionalConsumerInterceptors() {
-        return Collections.<Hl7v2Interceptor>singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
+    public List<Interceptor> getAdditionalConsumerInterceptors() {
+        return Collections.<Interceptor>singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
     }
 }

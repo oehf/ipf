@@ -52,7 +52,7 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
     }
 
     @Override
-    protected MllpEndpoint createEndpoint(Mina2Endpoint wrappedEndpoint, MllpDispatchEndpointConfiguration config) {
+    protected MllpEndpoint<?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, MllpDispatchEndpointConfiguration config) {
         return new MllpDispatchEndpoint(this, wrappedEndpoint, config);
     }
 

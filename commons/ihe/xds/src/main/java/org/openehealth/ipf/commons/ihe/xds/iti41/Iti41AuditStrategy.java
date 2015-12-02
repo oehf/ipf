@@ -22,6 +22,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjects
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 
+import java.util.Map;
+
 
 /**
  * Audit strategy for ITI-41.
@@ -39,13 +41,14 @@ abstract class Iti41AuditStrategy extends XdsSubmitAuditStrategy30 {
     }
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, XdsSubmitAuditDataset auditDataset) {
+    public XdsSubmitAuditDataset enrichAuditDatasetFromRequest(XdsSubmitAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType)pojo;
         SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
         if (submitObjectsRequest != null) {
             EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
             auditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
         }
+        return auditDataset;
     }
 
 }

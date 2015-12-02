@@ -15,28 +15,25 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.pcc1;
 
-import java.util.Map;
-
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareProducer;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import javax.xml.namespace.QName;
+import java.util.Map;
 
 /**
  * The Camel component for the PCC-1 transaction (QED).
  */
-public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsTransactionConfiguration> {
+public class Pcc1Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransactionConfiguration> {
 
     private final static String NS_URI = "urn:ihe:pcc:qed:2007";
     public final static Hl7v3ContinuationAwareWsTransactionConfiguration WS_CONFIG = new Hl7v3ContinuationAwareWsTransactionConfiguration(
@@ -53,14 +50,22 @@ public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsT
             "QUPC_IN043100UV01",
             "QUPC_IN043200UV01");
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getProperties(parameters));
+                getProperties(parameters)) {
+            @Override
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
+                Hl7v3ContinuationAwareEndpoint endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
+                return endpoint2.isSupportContinuation() ?
+                        new Pcc1ContinuationAwareService(endpoint2) :
+                        new Pcc1Service();
+            }
+        };
     }
 
     @Override
@@ -69,30 +74,13 @@ public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsT
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
         return new Pcc1AuditStrategy(false);
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
+    public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
         return new Pcc1AuditStrategy(true);
     }
 
-    @Override
-    public AbstractHl7v3WebService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        Hl7v3ContinuationAwareEndpoint endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
-        return endpoint2.isSupportContinuation() ?
-                new Pcc1ContinuationAwareService(endpoint2) :
-                new Pcc1Service();
-    }
-
-    @Override
-    public AbstractWsProducer getProducer(
-            AbstractWsEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        return new Hl7v3ContinuationAwareProducer(
-                (Hl7v3ContinuationAwareEndpoint) endpoint,
-                clientFactory);
-    }
 }

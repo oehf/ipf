@@ -92,13 +92,15 @@
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
         <groovy-version>2.4.5</groovy-version>
         <hapi-version>2.2</hapi-version>
+        <hapi-fhir-version>1.3</hapi-fhir-version>
         <hibernate-version>4.3.8.Final</hibernate-version>
         <hibernate-commons-annotations-version>4.0.5.Final</hibernate-commons-annotations-version>
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
         <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
+        <httpclient4-version>4.4</httpclient4-version>
         <ipf-gazelle-version>1.0.8</ipf-gazelle-version>
-        <ipf-oht-atna-version>3.0.3</ipf-oht-atna-version>
+        <ipf-oht-atna-version>3.1.0</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.2.11</jaxb-version>
         <jasypt-version>1.9.2</jasypt-version>
@@ -117,6 +119,7 @@
         <opensaml-version>3.1.1</opensaml-version>
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.1</quartz-version>
+        <quickcheck-version>0.6</quickcheck-version>
         <saxon-he-version>9.6.0-4</saxon-he-version>
         <slf4j-version>1.7.12</slf4j-version>
         <spring-version>4.1.8.RELEASE</spring-version>
@@ -389,6 +392,7 @@
                                     commons/core/generated-stubs:
                                     commons/flow/generated-stubs:
                                     commons/ihe/core/generated-stubs:
+                                    commons/ihe/fhir/generated-stubs:
                                     commons/ihe/hl7v2/generated-stubs:
                                     commons/ihe/hl7v3/generated-stubs:
                                     commons/ihe/ws/generated-stubs:
@@ -398,6 +402,7 @@
                                     modules/cda/core/generated-stubs:
                                     modules/cda/mdht/generated-stubs:
                                     modules/hl7/generated-stubs:
+                                    modules/fhir/generated-stubs:
                                     platform-camel/cda/generated-stubs:
                                     platform-camel/core/generated-stubs:
                                     platform-camel/core-legacy/generated-stubs:
@@ -405,6 +410,8 @@
                                     platform-camel/hl7/generated-stubs:
                                     platform-camel/ihe/atna/generated-stubs:
                                     platform-camel/ihe/continua/generated-stubs:
+                                    platform-camel/ihe/core/generated-stubs:
+                                    platform-camel/ihe/fhir/generated-stubs:
                                     platform-camel/ihe/hl7v2/generated-stubs:
                                     platform-camel/ihe/hl7v2ws/generated-stubs:
                                     platform-camel/ihe/hl7v3/generated-stubs:
@@ -617,6 +624,11 @@
                 </exclusions>
             </dependency>
             <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient4-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io-version}</version>
@@ -712,6 +724,16 @@
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v26</artifactId>
                 <version>${hapi-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-base</artifactId>
+                <version>${hapi-fhir-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-structures-hl7org-dstu2</artifactId>
+                <version>${hapi-fhir-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.gazelle</groupId>
@@ -1489,6 +1511,12 @@
                 <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>jaxb-runtime</artifactId>
                 <version>${jaxb-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.java.quickcheck</groupId>
+                <artifactId>quickcheck</artifactId>
+                <version>${quickcheck-version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

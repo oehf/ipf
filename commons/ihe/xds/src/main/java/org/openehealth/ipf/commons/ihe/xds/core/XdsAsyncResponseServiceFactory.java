@@ -18,12 +18,14 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 import org.apache.commons.lang3.Validate;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
@@ -31,8 +33,8 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * Service factory for receivers of asynchronous XDS and XCA responses.
  * @author Dmytro Rud
  */
-public class XdsAsyncResponseServiceFactory extends JaxWsServiceFactory {
-    private final AsynchronyCorrelator correlator;
+public class XdsAsyncResponseServiceFactory<AuditDatasetType extends XdsAuditDataset> extends JaxWsServiceFactory<AuditDatasetType> {
+    private final AsynchronyCorrelator<AuditDatasetType> correlator;
 
     /**
      * Constructs the factory.
@@ -50,8 +52,8 @@ public class XdsAsyncResponseServiceFactory extends JaxWsServiceFactory {
     public XdsAsyncResponseServiceFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
-            WsAuditStrategy auditStrategy,
-            AsynchronyCorrelator correlator,
+            AuditStrategy<AuditDatasetType> auditStrategy,
+            AsynchronyCorrelator<AuditDatasetType> correlator,
             InterceptorProvider customInterceptors) 
     {
         super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors, null);
@@ -71,8 +73,8 @@ public class XdsAsyncResponseServiceFactory extends JaxWsServiceFactory {
                 svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(SOAP_BODY));
             }
 
-            AuditResponseInterceptor auditInterceptor =
-                new AuditResponseInterceptor(auditStrategy, false, correlator, true);
+            AuditResponseInterceptor<AuditDatasetType> auditInterceptor =
+                new AuditResponseInterceptor<>(auditStrategy, false, correlator, true);
             svrFactory.getInInterceptors().add(auditInterceptor);
             svrFactory.getInFaultInterceptors().add(auditInterceptor);
         }

@@ -17,9 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.component.mina2.Mina2Constants;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditUtils;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 
 import java.net.InetSocketAddress;
 
@@ -27,7 +28,7 @@ import java.net.InetSocketAddress;
  * Interceptor that handles any {@link MllpAuthenticationFailure} that occurred while
  * processing an exchange.
  */
-public class ConsumerAuthenticationFailureInterceptor extends AbstractMllpInterceptor {
+public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport<MllpTransactionEndpoint> {
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -35,7 +36,7 @@ public class ConsumerAuthenticationFailureInterceptor extends AbstractMllpInterc
             getWrappedProcessor().process(exchange);
         }
         catch (MllpAuthenticationFailure e) {
-            MllpAuditStrategy.auditAuthenticationNodeFailure(getRemoteAddress(exchange));
+            MllpAuditUtils.auditAuthenticationNodeFailure(getRemoteAddress(exchange));
             throw e;
         }
     }

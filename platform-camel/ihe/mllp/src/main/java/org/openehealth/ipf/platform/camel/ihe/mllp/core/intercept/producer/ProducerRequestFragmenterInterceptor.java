@@ -19,8 +19,8 @@ import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,13 +34,13 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * fragmentation as described in paragraph 2.10.2.2 of the HL7 v.2.5 specification.
  * @author Dmytro Rud
  */
-public class ProducerRequestFragmenterInterceptor extends AbstractMllpInterceptor<MllpTransactionEndpoint> {
+public class ProducerRequestFragmenterInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
     private static final transient Logger LOG = LoggerFactory.getLogger(ProducerRequestFragmenterInterceptor.class);
     
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        int threshold = getMllpEndpoint().getUnsolicitedFragmentationThreshold();
+        int threshold = getEndpoint().getUnsolicitedFragmentationThreshold();
         if (threshold < 3) {
             getWrappedProcessor().process(exchange);
             return;
@@ -122,7 +122,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractMllpIntercepto
             // catch and analyse the response, if this was not the last fragment
             if(currentSegmentIndex < segments.size()) {
                 String responseString = Exchanges.resultMessage(exchange).getBody(String.class);
-                Terser responseTerser = new Terser(getHl7v2TransactionConfiguration().getParser().parse(responseString));
+                Terser responseTerser = new Terser(getEndpoint().getHl7v2TransactionConfiguration().getParser().parse(responseString));
                 
                 String messageType = responseTerser.get("MSH-9-1");
                 String acknowledgementCode = responseTerser.get("MSA-1");

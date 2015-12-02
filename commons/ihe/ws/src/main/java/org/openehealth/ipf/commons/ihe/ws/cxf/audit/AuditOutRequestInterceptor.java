@@ -22,6 +22,7 @@ import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.apache.cxf.ws.addressing.Names;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
@@ -33,16 +34,16 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
  *
  * @author Dmytro Rud
  */
-public class AuditOutRequestInterceptor extends AbstractAuditInterceptor {
-    private final AsynchronyCorrelator correlator;
+public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends AbstractAuditInterceptor<T> {
+    private final AsynchronyCorrelator<T> correlator;
     private final WsTransactionConfiguration wsTransactionConfiguration;
 
     /**
      * Constructor.
      */
     public AuditOutRequestInterceptor(
-            WsAuditStrategy auditStrategy,
-            AsynchronyCorrelator correlator,
+            AuditStrategy<T> auditStrategy,
+            AsynchronyCorrelator<T> correlator,
             WsTransactionConfiguration wsTransactionConfiguration)
     {
         super(Phase.WRITE_ENDING, auditStrategy);
@@ -57,7 +58,7 @@ public class AuditOutRequestInterceptor extends AbstractAuditInterceptor {
             return;
         }
 
-        WsAuditDataset auditDataset = getAuditDataset(message);
+        T auditDataset = getAuditDataset(message);
         auditDataset.setServiceEndpointUrl((String) message.get(Message.ENDPOINT_ADDRESS));
         extractXuaUserNameFromSaml2Assertion(message, Header.Direction.DIRECTION_OUT, auditDataset);
 
@@ -74,7 +75,7 @@ public class AuditOutRequestInterceptor extends AbstractAuditInterceptor {
             }
         }
 
-        getAuditStrategy().enrichDatasetFromRequest(request, auditDataset);
+        getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, request, null);
 
         // when the invocation is asynchronous: store audit dataset into the correlator
         AddressingProperties props = (AddressingProperties) message.get(JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND);

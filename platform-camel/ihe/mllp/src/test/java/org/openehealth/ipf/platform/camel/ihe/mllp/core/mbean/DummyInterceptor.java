@@ -16,9 +16,10 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean;
 
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 
-public class DummyInterceptor extends AbstractHl7v2Interceptor {
+public class DummyInterceptor extends InterceptorSupport<HL7v2Endpoint> {
 
     @Override
     public void process(Exchange exchange) throws Exception {

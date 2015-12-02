@@ -29,7 +29,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  * Ehcache-based implementation of asynchronous message correlator.
  * @author Dmytro Rud
  */
-public class EhcacheAsynchronyCorrelator implements AsynchronyCorrelator {
+public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset> implements AsynchronyCorrelator<AuditDatasetType> {
 
     private final String SERVICE_ENDPOINT_URI_SUFFIX = ".serviceEndpoint";
     private final String CORRELATION_KEY_SUFFIX      = ".correlationKey";
@@ -78,7 +78,7 @@ public class EhcacheAsynchronyCorrelator implements AsynchronyCorrelator {
     }
 
     @Override
-    public WsAuditDataset getAuditDataset(String messageId) {
+    public AuditDatasetType getAuditDataset(String messageId) {
         return get(messageId, AUDIT_DATASET_SUFFIX);
     }
 

@@ -17,20 +17,21 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 
 /**
  * Client factory for XDS and XCA transactions.
  * @author Jens Riemschneide
  * @author Dmytro Rud
  */
-public class XdsClientFactory extends JaxWsClientFactory {
-    private final AsynchronyCorrelator correlator;
+public class XdsClientFactory<AuditDatasetType extends XdsAuditDataset> extends JaxWsClientFactory<AuditDatasetType> {
+    private final AsynchronyCorrelator<AuditDatasetType> correlator;
     
     /**
      * Constructs the factory.
@@ -48,8 +49,8 @@ public class XdsClientFactory extends JaxWsClientFactory {
     public XdsClientFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
-            WsAuditStrategy auditStrategy,
-            AsynchronyCorrelator correlator,
+            AuditStrategy<AuditDatasetType> auditStrategy,
+            AsynchronyCorrelator<AuditDatasetType> correlator,
             InterceptorProvider customInterceptors) 
     {
         super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors);
@@ -67,11 +68,11 @@ public class XdsClientFactory extends JaxWsClientFactory {
                 installPayloadInterceptors(client);
             }
 
-            client.getOutInterceptors().add(new AuditOutRequestInterceptor(
+            client.getOutInterceptors().add(new AuditOutRequestInterceptor<>(
                     auditStrategy, correlator, getWsTransactionConfiguration()));
 
-            AuditResponseInterceptor auditInterceptor =
-                new AuditResponseInterceptor(auditStrategy, false, correlator, false);
+            AuditResponseInterceptor<AuditDatasetType> auditInterceptor =
+                new AuditResponseInterceptor<>(auditStrategy, false, correlator, false);
             client.getInInterceptors().add(auditInterceptor);
             client.getInFaultInterceptors().add(auditInterceptor);
         }

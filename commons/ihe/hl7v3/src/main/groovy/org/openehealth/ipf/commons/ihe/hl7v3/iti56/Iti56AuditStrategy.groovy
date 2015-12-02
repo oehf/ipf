@@ -55,9 +55,10 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
 
 
     @Override
-    void enrichDatasetFromRequest(Object request, Hl7v3AuditDataset auditDataset) {
+    Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         GPathResult patientId = slurp(request).RequestedPatientId
         auditDataset.patientIds = [iiToCx(patientId)]
+        auditDataset
     }
 
 

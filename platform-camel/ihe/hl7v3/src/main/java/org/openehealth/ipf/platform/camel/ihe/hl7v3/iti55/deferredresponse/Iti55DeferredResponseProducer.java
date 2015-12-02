@@ -19,6 +19,8 @@ import org.apache.camel.Exchange;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.RelatesToType;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredResponsePortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor;
@@ -31,9 +33,10 @@ import static org.apache.cxf.ws.addressing.JAXWSAConstants.CLIENT_ADDRESSING_PRO
 /**
  * @author Dmytro Rud
  */
-public class Iti55DeferredResponseProducer extends AbstractWsProducer<String, String> {
+public class Iti55DeferredResponseProducer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, String, String> {
 
-    public Iti55DeferredResponseProducer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
+    public Iti55DeferredResponseProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
+                                         JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
         super(endpoint, clientFactory, String.class, String.class);
     }
 

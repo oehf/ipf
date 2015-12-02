@@ -19,26 +19,23 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 import lombok.Getter;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactory;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 
 import javax.net.ssl.SSLContext;
-import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Configuration of an MLLP endpoint.
  * @author Dmytro Rud
  */
-public class MllpEndpointConfiguration implements Serializable {
+public class MllpEndpointConfiguration extends InterceptableEndpointConfiguration {
     private static final long serialVersionUID = -3604219045768985192L;
 
     @Getter private final ProtocolCodecFactory codecFactory;
 
     @Getter private final boolean audit;
     @Getter private final SSLContext sslContext;
-    @Getter private final List<Hl7v2InterceptorFactory> customInterceptorFactories;
     @Getter private final ClientAuthType clientAuthType;
     @Getter private final String[] sslProtocols;
     @Getter private final String[] sslCiphers;
@@ -49,7 +46,8 @@ public class MllpEndpointConfiguration implements Serializable {
     @Getter private ConsumerDispatchingInterceptor dispatcher;
 
 
-    protected MllpEndpointConfiguration(MllpComponent component, Map<String, Object> parameters) throws Exception {
+    protected MllpEndpointConfiguration(MllpComponent<?> component, Map<String, Object> parameters) throws Exception {
+        super(component, parameters);
         codecFactory = component.getCamelContext().getRegistry().lookupByNameAndType(
                 extractBeanName((String) parameters.get("codec")),
                 ProtocolCodecFactory.class);
@@ -75,9 +73,6 @@ public class MllpEndpointConfiguration implements Serializable {
                 parameters, "supportSegmentFragmentation", boolean.class, false);
         segmentFragmentationThreshold = component.getAndRemoveParameter(
                 parameters, "segmentFragmentationThreshold", int.class, -1);                // >= 5 characters
-
-        customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
-                parameters, "interceptorFactories", Hl7v2InterceptorFactory.class);
 
         dispatcher = component.resolveAndRemoveReferenceParameter(parameters, "dispatcher", ConsumerDispatchingInterceptor.class);
 

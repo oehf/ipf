@@ -18,9 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 
 
 /**
@@ -28,15 +29,15 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
  * for the given endpoint, and handles segment fragmentation (\rADD|...).
  * @author Dmytro Rud
  */
-public class ConsumerStringProcessingInterceptor extends AbstractMllpInterceptor {
+public class ConsumerStringProcessingInterceptor extends InterceptorSupport<MllpEndpoint<?,?>> {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        final String charsetName = getMllpEndpoint().getCharsetName();
+        final String charsetName = getEndpoint().getCharsetName();
         exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
 
-        boolean supportSegmentFragmentation = getMllpEndpoint().isSupportSegmentFragmentation();
-        int segmentFragmentationThreshold = getMllpEndpoint().getSegmentFragmentationThreshold();
+        boolean supportSegmentFragmentation = getEndpoint().isSupportSegmentFragmentation();
+        int segmentFragmentationThreshold = getEndpoint().getSegmentFragmentationThreshold();
         
         // read in the request
         Message message = exchange.getIn();

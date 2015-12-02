@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import lombok.Getter;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.svrl.SchematronOutput;
 
@@ -27,10 +26,14 @@ import java.util.List;
 public class SchematronValidationException extends ValidationException {
     private static final long serialVersionUID = 5786460480736649392L;
 
-    @Getter private final SchematronOutput svrl;
+    private final SchematronOutput svrl;
 
     public SchematronValidationException(List<? extends Throwable> causes, SchematronOutput svrl) {
         super(causes);
         this.svrl = svrl;
+    }
+
+    public SchematronOutput getSvrl() {
+        return svrl;
     }
 }

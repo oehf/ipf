@@ -18,13 +18,15 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti10;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti10.Iti10ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti10.Iti10ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.QueryAuditDataset;
 
 /**
  * Camel component for ITI-10 (PIX Update Notification).
@@ -46,9 +48,9 @@ public class Iti10Component extends MllpTransactionComponent<QueryAuditDataset> 
                 new boolean[] {false},
                 HapiContextFactory.createHapiContext(PixPdqTransactions.ITI10));
   
-    private static final MllpAuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY = 
+    private static final AuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY =
         new Iti10ClientAuditStrategy();
-    private static final MllpAuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY = 
+    private static final AuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY =
         new Iti10ServerAuditStrategy();
     private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
@@ -62,12 +64,12 @@ public class Iti10Component extends MllpTransactionComponent<QueryAuditDataset> 
     }
     
     @Override
-    public MllpAuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
+    public AuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
         return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
-    public MllpAuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
+    public AuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
         return SERVER_AUDIT_STRATEGY;
     }
     

@@ -19,6 +19,8 @@ package org.openehealth.ipf.commons.map;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -36,7 +38,7 @@ public class SpringBidiMappingService extends BidiMappingService {
     }
 
     // bean configuration support
-    public void setMappingScripts(Resource[] resources) {
+    public void setMappingScripts(Collection<? extends Resource> resources) {
         for (Resource resource : resources) {
             setMappingScript(resource);
         }
@@ -53,7 +55,7 @@ public class SpringBidiMappingService extends BidiMappingService {
     }
 
     // Read in several mapping definition
-    public synchronized void addMappingScripts(Resource[] resources) {
+    public synchronized void addMappingScripts(Collection<? extends Resource> resources) {
         for (Resource resource : resources) {
             addMappingScript(resource);
         }

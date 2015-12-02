@@ -33,7 +33,7 @@ class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
     
 
     @Override
-    void enrichDatasetFromRequest(Object request, Hl7v3AuditDataset auditDataset) {
+    Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         request = slurp(request)
         GPathResult qbp = request.controlActProcess.queryByParameter
 
@@ -47,6 +47,7 @@ class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
 
         // dump of the "queryByParameter" element
         auditDataset.requestPayload = render(qbp)
+        auditDataset
     }
 
 

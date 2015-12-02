@@ -15,20 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 
-import java.util.Map;
+import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
 import javax.xml.namespace.QName;
+import java.util.Map;
 
-import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
-
-public class SomeItiComponent extends AbstractWsComponent<WsTransactionConfiguration> {
+public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration> {
 
     private static final String NS_URI = "urn:iti:some:mai:2011";
     public static final WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
@@ -48,22 +44,12 @@ public class SomeItiComponent extends AbstractWsComponent<WsTransactionConfigura
     }
 
     @Override
-    public WsAuditStrategy getClientAuditStrategy() {
+    public AuditStrategy<WsAuditDataset> getClientAuditStrategy() {
         return null;   // dummy
     }
 
     @Override
-    public WsAuditStrategy getServerAuditStrategy() {
-        return null;   // dummy
-    }
-
-    @Override
-    public AbstractWebService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
-        return null;   // dummy
-    }
-
-    @Override
-    public AbstractWsProducer getProducer(AbstractWsEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
+    public AuditStrategy<WsAuditDataset> getServerAuditStrategy() {
         return null;   // dummy
     }
 

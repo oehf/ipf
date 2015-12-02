@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 
 
@@ -36,11 +38,11 @@ public class AcceptanceInterceptorUtils {
      * Checks acceptance of the input message and calls the route.
      */
     public static void processRequest(
-            AbstractHl7v2Interceptor interceptor,
+            InterceptorSupport<HL7v2Endpoint> interceptor,
             Exchange exchange) throws Exception
     {
         // check input message
-        Hl7v2TransactionConfiguration config = interceptor.getHl7v2TransactionConfiguration();
+        Hl7v2TransactionConfiguration config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
         config.checkRequestAcceptance(exchange.getIn().getBody(Message.class));
         
         // run the route
@@ -52,14 +54,14 @@ public class AcceptanceInterceptorUtils {
      * Calls the route and checks acceptance of the output message.
      */
     public static void processResponse(
-            AbstractHl7v2Interceptor interceptor,
+            InterceptorSupport<HL7v2Endpoint> interceptor,
             Exchange exchange) throws Exception 
     {
         // run the route
         interceptor.getWrappedProcessor().process(exchange);
 
         // check output message
-        Hl7v2TransactionConfiguration config = interceptor.getHl7v2TransactionConfiguration();
+        Hl7v2TransactionConfiguration config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
         config.checkResponseAcceptance(Exchanges.resultMessage(exchange).getBody(Message.class));
     }
 }

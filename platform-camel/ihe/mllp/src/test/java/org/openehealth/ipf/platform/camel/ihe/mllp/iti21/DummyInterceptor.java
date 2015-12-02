@@ -15,18 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21;
 
+import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorFactorySupport;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactorySupport;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 
-public class DummyInterceptor extends AbstractHl7v2Interceptor {
+public class DummyInterceptor extends InterceptorSupport<Endpoint> {
 
     @Override
     public void process(Exchange exchange) throws Exception {
         getWrappedProcessor().process(exchange);
     }
 
-    public static class Factory extends Hl7v2InterceptorFactorySupport<DummyInterceptor> {
+    public static class Factory extends InterceptorFactorySupport<Endpoint, DummyInterceptor> {
         public Factory() {
             super(DummyInterceptor.class);
         }

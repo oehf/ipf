@@ -15,10 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.namespace.QName;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -29,6 +25,7 @@ import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
@@ -49,11 +46,15 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.namespace.QName;
+import java.util.List;
+
 /**
  * Base class for all ATNA audit-related CXF interceptors.
  * @author Dmytro Rud
  */
-abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
+abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends AbstractSafeInterceptor {
     private static final transient Logger LOG = LoggerFactory.getLogger(AbstractAuditInterceptor.class);
     
     /**
@@ -78,7 +79,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
     /**
      * Audit strategy associated with this interceptor.  
      */
-    private final WsAuditStrategy auditStrategy;
+    private final AuditStrategy<T> auditStrategy;
 
 
     private static final UnmarshallerFactory SAML_UNMARSHALLER_FACTORY;
@@ -103,7 +104,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      *          an audit strategy instance. <p><code>null</code> values are
      *          explicitly prohibited. 
      */
-    protected AbstractAuditInterceptor(String phase, WsAuditStrategy auditStrategy) {
+    protected AbstractAuditInterceptor(String phase, AuditStrategy<T> auditStrategy) {
         super(phase);
         Validate.notNull(auditStrategy);
         this.auditStrategy = auditStrategy;
@@ -114,7 +115,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      * Returns an audit dataset instance which corresponds to the given message.
      * <p>
      * When no such instance is currently associated with the message, a new one 
-     * will be created by means of the corresponding {@link WsAuditStrategy} 
+     * will be created by means of the corresponding {@link AuditStrategy}
      * and registered in the message's exchange.
      * 
      * @param message
@@ -123,8 +124,8 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      *      an audit dataset instance, or <code>null</code> when this instance   
      *      could be neither obtained nor created from scratch.
      */
-    protected WsAuditDataset getAuditDataset(SoapMessage message) {
-        WsAuditDataset auditDataset = InterceptorUtils.findContextualProperty(message, DATASET_CONTEXT_KEY);
+    protected T getAuditDataset(SoapMessage message) {
+        T auditDataset = InterceptorUtils.findContextualProperty(message, DATASET_CONTEXT_KEY);
         if (auditDataset == null) {
             auditDataset = getAuditStrategy().createAuditDataset();
             if (auditDataset == null) {
@@ -143,7 +144,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      * @return
      *      an audit strategy instance or <code>null</code> when none configured.
      */
-    protected WsAuditStrategy getAuditStrategy() {
+    protected AuditStrategy<T> getAuditStrategy() {
         return auditStrategy;
     }
     
@@ -168,7 +169,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
             SoapMessage message, 
             boolean isInbound, 
             boolean inverseWsaDirection,
-            WsAuditDataset auditDataset) 
+            WsAuditDataset auditDataset)
     {
         AddressingProperties wsaProperties = (AddressingProperties) message.get(isInbound ?
                 JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND :
@@ -283,7 +284,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      */
     protected static void extractAddressesFromServletRequest(
             SoapMessage message,
-            WsAuditDataset auditDataset) 
+            WsAuditDataset auditDataset)
     {
         HttpServletRequest request = 
             (HttpServletRequest) message.get(AbstractHTTPDestination.HTTP_REQUEST);

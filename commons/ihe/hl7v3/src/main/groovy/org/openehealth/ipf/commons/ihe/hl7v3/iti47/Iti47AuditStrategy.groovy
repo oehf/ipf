@@ -32,7 +32,7 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
     
 
     @Override
-    void enrichDatasetFromRequest(Object request, Hl7v3AuditDataset auditDataset) {
+    Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         request = slurp(request)
         GPathResult qbp = request.controlActProcess.queryByParameter
 
@@ -43,13 +43,14 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
 
         // dump of the "queryByParameter" element
         auditDataset.requestPayload = render(qbp)
+        auditDataset
     }
 
 
     @Override
-    void enrichDatasetFromResponse(Object response, Hl7v3AuditDataset auditDataset) {
+    boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response) {
         response = slurp(response)
-        super.enrichDatasetFromResponse(response, auditDataset)
+        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response)
         
         // patient IDs from response
         def patientIds = [] as Set<String>
@@ -58,6 +59,7 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
             patientIds.addAll(auditDataset.patientIds)
         }
         auditDataset.patientIds = patientIds.toArray() ?: null
+        result
     }
 
 
