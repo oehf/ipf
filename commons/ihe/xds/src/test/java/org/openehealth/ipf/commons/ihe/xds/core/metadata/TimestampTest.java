@@ -15,9 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FetchQuery;
+import org.openhealthtools.ihe.utils.XMLUtils;
+import org.w3c.dom.Element;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
 
 import static org.junit.Assert.*;
 
@@ -118,7 +125,44 @@ public class TimestampTest {
         ts1.setPrecision(Timestamp.Precision.SECOND);
         assertEquals   (ts1, Timestamp.fromHL7("20150102040405.123+0200"));
         assertNotEquals(ts1, Timestamp.fromHL7("20150102040407.777+0200"));
-
     }
 
+    @Test
+    public void testNullValues2() {
+        Timestamp ts1 = Timestamp.fromHL7("20151201");
+        assertEquals(Timestamp.Precision.DAY, ts1.getPrecision());
+
+        ts1.setPrecision(null);
+        assertEquals(Timestamp.Precision.SECOND, ts1.getPrecision());
+        assertEquals("20151201000000", Timestamp.toHL7(ts1));
+
+        Timestamp ts2 = Timestamp.fromHL7("20151201000000");
+        assertEquals(ts1, ts2);
+
+        assertNotEquals(ts1.hashCode(), ts2.hashCode());
+    }
+
+    @Test
+    public void testXml() throws Exception {
+        QueryRegistry queryRegistry = SampleData.createFetchQuery();
+        FetchQuery query = (FetchQuery) queryRegistry.getQuery();
+        assertEquals(Timestamp.Precision.YEAR, query.getCreationTime().getFrom().getPrecision());
+        query.getCreationTime().getFrom().setPrecision(null);
+
+        Element element = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument().createElement("dummy");
+        JAXBContext jaxbContext = JAXBContext.newInstance(QueryRegistry.class);
+        jaxbContext.createMarshaller().marshal(query, element);
+
+        String s = new String(XMLUtils.serialize(element.getFirstChild()));
+        assertTrue(s.contains("<xds:from dateTime=\"1980-01-01T00:00:00Z\"/>"));
+        assertTrue(s.contains("<xds:to dateTime=\"1981-01-01T00:00:00Z\" precision=\"YEAR\"/>"));
+
+        s = s.replace("precision=\"YEAR\"", "precision=\"some garbage\"");
+
+        ByteArrayInputStream stream = new ByteArrayInputStream(s.getBytes());
+
+        FetchQuery query1 = (FetchQuery) jaxbContext.createUnmarshaller().unmarshal(stream);
+        assertEquals(Timestamp.Precision.SECOND, query1.getCreationTime().getFrom().getPrecision());
+        assertEquals(Timestamp.Precision.SECOND, query1.getCreationTime().getTo().getPrecision());
+    }
 }

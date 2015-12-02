@@ -18,7 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import ca.uhn.hl7v2.model.DataTypeException;
 import ca.uhn.hl7v2.model.primitive.CommonTS;
 import lombok.Getter;
-import org.apache.commons.lang3.Validate;
+import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
@@ -73,7 +74,7 @@ public class Timestamp implements Serializable {
      * Precision of the timestamp (smallest present element, e.g. YEAR for "1980").
      */
     @XmlAttribute
-    @Getter private Precision precision;
+    @Setter private Precision precision;
 
     private Timestamp() {
         // only for JAXB
@@ -96,7 +97,7 @@ public class Timestamp implements Serializable {
      *      a {@link Timestamp} object, or <code>null</code> if the parameter is <code>null</code> or empty.
      */
     public static Timestamp fromHL7(String s) {
-        if ((s == null) || s.isEmpty()) {
+        if (StringUtils.isEmpty(s)) {
             return null;
         }
 
@@ -155,25 +156,15 @@ public class Timestamp implements Serializable {
     }
 
     private String toHL7() {
-        return FORMATTERS.get(precision).print(dateTime.toDateTime(DateTimeZone.UTC));
+        return FORMATTERS.get(getPrecision()).print(getDateTime().toDateTime(DateTimeZone.UTC));
     }
 
-    /**
-     * Sets the datetime.
-     * @param dateTime
-     *      must be not <code>null</code>.
-     */
     public void setDateTime(DateTime dateTime) {
-        this.dateTime = Validate.notNull(dateTime).toDateTime(DateTimeZone.UTC);
+        this.dateTime = (dateTime != null) ? dateTime.toDateTime(DateTimeZone.UTC) : null;
     }
 
-    /**
-     * Sets the precision.
-     * @param precision
-     *      must be not <code>null</code>.
-     */
-    public void setPrecision(Precision precision) {
-        this.precision = Validate.notNull(precision);
+    public Precision getPrecision() {
+        return (precision != null) ? precision : Precision.SECOND;
     }
 
     @Override
@@ -191,13 +182,13 @@ public class Timestamp implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         Timestamp timestamp = (Timestamp) o;
-        return toHL7().equals(timestamp.toHL7());
+        return StringUtils.equals(toHL7(this), toHL7(timestamp));
     }
 
     @Override
     public int hashCode() {
-        int result = dateTime.hashCode();
-        result = 31 * result + precision.hashCode();
+        int result = dateTime != null ? dateTime.hashCode() : 0;
+        result = 31 * result + (precision != null ? precision.hashCode() : 0);
         return result;
     }
 }
