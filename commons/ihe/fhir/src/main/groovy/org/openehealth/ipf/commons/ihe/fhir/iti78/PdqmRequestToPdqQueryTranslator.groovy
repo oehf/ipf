@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.lang3.Validate
 import org.apache.commons.lang3.time.FastDateFormat
 import org.hl7.fhir.instance.model.Enumerations
+import org.hl7.fhir.instance.model.IdType
 import org.hl7.fhir.instance.model.Patient
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
@@ -43,6 +44,9 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
  */
 class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
 
+    static final String SEARCH_TAG = "search"
+    static final String GET_TAG = "get"
+
     /**
      * Predefined fix value of QPD-1 (as String)
      */
@@ -51,6 +55,8 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     String senderFacilityName = 'unknown'
     String receiverDeviceName = 'unknown'
     String receiverFacilityName = 'unknown'
+
+    String pdqSupplierResourceIdentifierUri
 
     private final UriMapper uriMapper;
 
@@ -69,12 +75,44 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     /**
      * Translate PDQm query map into a PDQ QBP^Q22 request message
      *
-     * @param request empty request, ignored
-     * @param parameters query parameters
+     * @param request object, only used for READing a dedicated resource
+     * @param parameters query parameters, only used for SEARCHing patients
      * @return QBP^Q22 request message
      */
     @Override
-    QBP_Q21 translateFhirToHL7v2(IBaseResource request, Map<String, Object> parameters) {
+    QBP_Q21 translateFhirToHL7v2(Object request, Map<String, Object> parameters) {
+        if (request == null && parameters != null && !parameters.isEmpty()) {
+            return translateFhirSearchToHL7v2(SEARCH_TAG, parameters);
+        } else {
+            return translateFhirReadToHL7v2(GET_TAG, (IdType) request);
+        }
+    }
+
+    /**
+     * Translate reading a resource into a PDQ search using the {@link #pdqSupplierResourceIdentifierUri} as
+     * system for the resource identifier.
+     *
+     * @param queryTagPrefix prefix for the query tag to identify the type of query (search vs. get)
+     * @param resourceId
+     * @return QBP^Q22 request message
+     */
+    protected QBP_Q21 translateFhirReadToHL7v2(String queryTagPrefix, IdType resourceId) {
+        Map<String, Object> parameters = [
+                (Constants.FHIR_REQUEST_PARAMETERS): [
+                        (Constants.SP_RESOURCE_IDENTIFIER): new TokenParam(null, resourceId.value)
+                ]
+        ]
+        translateFhirSearchToHL7v2(queryTagPrefix, parameters)
+    }
+
+    /**
+     * Translate PDQm query map into a PDQ QBP^Q22 request message
+     *
+     * @param queryTagPrefix prefix for the query tag to identify the type of query (search vs. get)
+     * @param parameters query parameters
+     * @return QBP^Q22 request message
+     */
+    protected QBP_Q21 translateFhirSearchToHL7v2(String queryTagPrefix, Map<String, Object> parameters) {
         QBP_Q21 qry = MessageUtils.makeMessage(PDQ_QUERY_CONTEXT, 'QBP', 'Q22', '2.5')
 
         qry.MSH[3] = senderDeviceName
@@ -86,7 +124,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         qry.MSH[10] = UUID.randomUUID().toString()
 
         qry.QPD[1] = this.queryName
-        qry.QPD[2] = UUID.randomUUID().toString()
+        qry.QPD[2] = "${queryTagPrefix}_" + UUID.randomUUID().toString()
 
         Map<String, Object> map = parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
         if (!map) throw new InvalidRequestException("No request parameters found")
@@ -94,6 +132,12 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         // Handle identifiers
         List<String> requestedDomains
         String identifierNamespace, identifierOid, identifierValue
+
+        TokenParam resourceIdParam = map.get(Constants.SP_RESOURCE_IDENTIFIER)
+        if (resourceIdParam) {
+            resourceIdParam.system = pdqSupplierResourceIdentifierUri
+            (identifierNamespace, identifierOid, identifierValue) = searchToken(resourceIdParam)
+        }
 
         TokenAndListParam identifierParam = map.get(Patient.SP_IDENTIFIER)
         if (identifierParam) {
@@ -132,7 +176,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
 
                 '@PID.6.1'  : firstOrNull(searchStringList(map.get(Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY), false)),
                 '@PID.6.2'  : firstOrNull(searchStringList(map.get(Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN), false)),
-                '@PID.13.1'   : searchString(map.get(Patient.SP_TELECOM), true),
+                '@PID.13.1' : searchString(map.get(Patient.SP_TELECOM), true),
                 '@PID.25'   : searchNumber(map.get(Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER))
         ]
 
@@ -192,10 +236,10 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         parameters
                 .findAll { it.value }
                 .each {
-                    def field = Utils.nextRepetition(target)
-                    field[1].value = it.key
-                    field[2].value = it.value
-                }
+            def field = Utils.nextRepetition(target)
+            field[1].value = it.key
+            field[2].value = it.value
+        }
 
 /*
         for (parameter in parameters.findAll { it.value }) {

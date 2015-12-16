@@ -32,6 +32,6 @@ public interface TranslatorFhirToHL7v2 {
      * @param fhir FhirObject
      * @return HL7v2 message
      */
-    Message translateFhirToHL7v2(IBaseResource fhir, Map<String, Object> parameters);
+    Message translateFhirToHL7v2(Object fhir, Map<String, Object> parameters);
 
 }

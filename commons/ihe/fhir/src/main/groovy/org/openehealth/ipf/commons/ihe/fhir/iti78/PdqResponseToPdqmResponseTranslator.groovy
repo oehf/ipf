@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78
 
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.v25.segment.PID
 import org.apache.commons.lang3.Validate
@@ -42,6 +41,8 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
 
     private final UriMapper uriMapper
 
+    String pdqSupplierResourceIdentifierUri
+
     /**
      * @param uriMapper mapping for translating FHIR URIs into OIDs
      */
@@ -51,18 +52,35 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
     }
 
     @Override
-    List<PdqPatient> translateHL7v2ToFhir(Message message, Map<String, Object> parameters) {
+    Object translateHL7v2ToFhir(Message message, Map<String, Object> parameters) {
         String ackCode = message.QAK[2].value
+        boolean returnBundle = message.QPD[2].value.startsWith(PdqmRequestToPdqQueryTranslator.SEARCH_TAG)
         switch (ackCode) {
-            case 'OK': return handleRegularResponse(message.QUERY_RESPONSE()) // Case 1
-            case 'NF': return handleRegularResponse(null)  // Case 2
+            case 'OK': return returnBundle ?
+                    handleRegularSearchResponse(message.QUERY_RESPONSE()) :
+                    handleRegularResource(message.QUERY_RESPONSE()) // Case 1
+            case 'NF': return handleRegularSearchResponse(null)  // Case 2
             case 'AE': throw handleErrorResponse(message) // Cases 3-5
             default: throw new InternalErrorException("Unexpected ack code " + ackCode)
         }
     }
 
-    // Handle a regular response
-    protected List<PdqPatient> handleRegularResponse(responseCollection) {
+    /**
+     * Converts a single query response into a Patient
+     * @param responseCollection query response
+     * @return Patient resource or null if responseCollection was empty
+     */
+    protected PdqPatient handleRegularResource(responseCollection) {
+        List<PdqPatient> result = handleRegularSearchResponse(responseCollection)
+        result.empty ? null : result.get(0)
+    }
+
+    /**
+     * Converts a collection of query responses into a Patient resource list
+     * @param responseCollection query responses
+     * @return Patient resource list
+     */
+    protected List<PdqPatient> handleRegularSearchResponse(responseCollection) {
         List<PdqPatient> resultList = new ArrayList<>();
         if (responseCollection) {
             for (response in responseCollection) {

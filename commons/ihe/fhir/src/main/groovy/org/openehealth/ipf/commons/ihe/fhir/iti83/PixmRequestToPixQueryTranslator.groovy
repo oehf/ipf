@@ -62,7 +62,7 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
     }
 
     @Override
-    QBP_Q21 translateFhirToHL7v2(IBaseResource request, Map<String, Object> parameters) {
+    QBP_Q21 translateFhirToHL7v2(Object request, Map<String, Object> parameters) {
         Parameters inParams = (Parameters)request;
         QBP_Q21 qry = MessageUtils.makeMessage(PIX_QUERY_CONTEXT, 'QBP', 'Q23', '2.5')
 

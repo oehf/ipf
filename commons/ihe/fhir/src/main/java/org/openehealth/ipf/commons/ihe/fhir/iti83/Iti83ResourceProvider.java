@@ -44,7 +44,7 @@ public class Iti83ResourceProvider extends AbstractPlainProvider<FhirQueryAuditD
      * @return {@link Parameters} containing found identifiers
      */
     @SuppressWarnings("unused")
-    @Operation(name = PIXM_OPERATION_NAME, type = Patient.class, idempotent = true)
+    @Operation(name = PIXM_OPERATION_NAME, type = Patient.class, idempotent = true, returnParameters = { @OperationParam(name = "return", type = Identifier.class, max = 100)})
     public Parameters pixmQuery(
             @OperationParam(name = SOURCE_IDENTIFIER_NAME) StringType sourceIdentifierString,
             @OperationParam(name = TARGET_SYSTEM_NAME) UriType targetSystem,

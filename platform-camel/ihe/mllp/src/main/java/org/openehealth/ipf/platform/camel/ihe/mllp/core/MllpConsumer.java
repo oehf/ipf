@@ -42,6 +42,16 @@ public class MllpConsumer extends DefaultConsumer {
         this.consumer = consumer;
     }
 
+    @Override
+    protected void handleException(String message, Throwable t) {
+        super.handleException(message, t);
+    }
+
+    @Override
+    protected void handleException(Throwable t) {
+        super.handleException(t);
+    }
+
     /**
      * After stopping the consumer, stop the Mina acceptor, too
      * @throws Exception
