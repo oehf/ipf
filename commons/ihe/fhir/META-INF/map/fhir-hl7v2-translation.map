@@ -33,20 +33,28 @@
 
 mappings = {
 
-    'hl7v2fhir-patient-maritalStatus'(['2.16.840.1.113883.5.290', 'http://hl7.org/fhir/ValueSet/marital-status'],
+    'hl7v2fhir-patient-maritalStatus'(['2.16.840.1.113883.5.2', 'http://hl7.org/fhir/v3/MaritalStatus'],
+        'A': 'N',               // separated
+        'B': 'U',               // unmarried
+        'C': 'P',               // common law
         'D': 'D',               // divorced
-        'L': 'A',               // legally separated
+        'E': 'L',               // legally separated
+        'G': 'T',               // living together
+        'I': 'I',               // interlocutory
         'M': 'M',               // married
+        'N': 'A',               // anulled
+        'L': 'L',               // legally separated
+        'O': 'UNK',             // other
+        'P': 'T',               // domestic partner
+        'R': 'T',               // registered domestic partner
         'S': 'S',               // never married AKA single
+        'T': 'UNK',             // unreported
+        'U': 'UNK',             // unknown
         'W': 'W',               // widowed
-        'I': 'I',               // interlocuraty
-        'A': 'N',               // annulled
-        'T': 'P',               // domestic partner
-        'P': 'O',               // polygamic
-        (ELSE) : 'U'             // unknown stuff
+        (ELSE) : 'UNK'          // unknown stuff
     )
 
-    'hl7v2fhir-address-use'(['2.16.840.1.113883.5.290', 'http://hl7.org/fhir/ValueSet/address-use'],
+    'hl7v2fhir-address-use'(['2.16.840.1.113883.5.290', 'http://hl7.org/fhir/address-use'],
         'H' : 'home',
         'L' : 'home',
         'O' : 'work',
@@ -55,7 +63,7 @@ mappings = {
         (ELSE): ''
     )
 
-    'hl7v2fhir-name-use'(['2.16.840.1.113883.5.200', 'http://hl7.org/fhir/ValueSet/name-use'],
+    'hl7v2fhir-name-use'(['2.16.840.1.113883.5.200', 'http://hl7.org/fhir/name-use'],
         'D'     : 'usual',
         'L'     : 'official',
         'TEMP'  : 'temp',
@@ -66,7 +74,7 @@ mappings = {
         (ELSE)  : ''
     )
 
-    'hl7v2fhir-telecom-use'(['2.16.840.1.113883.5.201', 'http://hl7.org/fhir/ValueSet/contact-point-use'],
+    'hl7v2fhir-telecom-use'(['2.16.840.1.113883.5.201', 'http://hl7.org/fhir/contact-point-use'],
         'PRN'   : 'home',
         'ORN'   : 'home',
         'VHN'   : 'home',
@@ -75,7 +83,7 @@ mappings = {
         (ELSE)  : ''
     )
 
-    'hl7v2fhir-telecom-type'(['2.16.840.1.113883.5.202', 'http://hl7.org/fhir/ValueSet/contact-point-system'],
+    'hl7v2fhir-telecom-type'(['2.16.840.1.113883.5.202', 'http://hl7.org/fhir/contact-point-system'],
         'PH'        : 'phone',
         'FX'        : 'fax',
         'Internet'  : 'email',
@@ -84,7 +92,7 @@ mappings = {
         (ELSE)  : ''
     )
 
-    'hl7v2fhir-patient-administrativeGender'(['2.16.840.1.113883.5.1', 'http://hl7.org/fhir/ValueSet/administrative-gender'],
+    'hl7v2fhir-patient-administrativeGender'(['2.16.840.1.113883.5.1', 'http://hl7.org/fhir/administrative-gender'],
         'M' : 'male',
         'F' : 'female',
         'A' : 'other',

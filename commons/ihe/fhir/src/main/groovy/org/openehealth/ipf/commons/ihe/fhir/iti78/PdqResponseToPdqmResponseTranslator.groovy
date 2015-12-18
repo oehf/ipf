@@ -23,6 +23,7 @@ import org.apache.commons.lang3.Validate
 import org.hl7.fhir.instance.model.*
 import org.hl7.fhir.instance.model.ContactPoint.ContactPointUse
 import org.hl7.fhir.instance.model.valuesets.V3MaritalStatus
+import org.hl7.fhir.instance.model.valuesets.V3NullFlavor
 import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
@@ -87,9 +88,11 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                 PdqPatient patient = new PdqPatient()
                 PID pid = response.PID
 
-                if (!pid[3].empty) {
-                    convertIdentifiers(pid[3](), patient.getIdentifier())
-                }
+                // TODO this assigns the resource ID. This should be extracted into a strategy
+                // that generally assigns resource IDs
+                patient.setId(pid[3](0)[1].value)
+
+                convertIdentifiers(pid[3](), patient.getIdentifier())
 
                 // Convert names
                 if (!pid[5].empty) {
@@ -120,14 +123,26 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                     patient.getCommunication().add(
                             new Patient.PatientCommunicationComponent().setLanguage(language))
                 }
-                if (pid[16]?.value) patient.setMaritalStatus(
-                        V3MaritalStatus.fromCode(pid[16].value.map('hl7v2fhir-patient-maritalStatus')))
+                if (pid[16]?.value) {
+                    CodeableConcept maritalStatus = new CodeableConcept()
+                    String mapped = pid[16].value.map('hl7v2fhir-patient-maritalStatus')
+                    def mappedMaritalStatus = "UNK".equals(mapped) ? V3NullFlavor.UNK : V3MaritalStatus.fromCode(mapped)
+                    maritalStatus.addCoding()
+                            .setCode(mapped)
+                            .setSystem(mappedMaritalStatus.system)
+                            .setDisplay(mappedMaritalStatus.display)
+                    patient.setMaritalStatus(maritalStatus)
+                }
 
                 // No religion in the default FHIR patient resource
 
+                // FIXME: Often, these identifiers come without any namespace information, so they must
+                // be somehow enhanced
                 if (pid[18].value) {
                     patient.getIdentifier().add(convertIdentifier(pid[18]))
                 }
+                // FIXME: Often, these identifiers come without any namespace information, so they must
+                // be enhanced with static information (SSN, AHV, NHS etc.)
                 if (pid[19].value) {
                     patient.getIdentifier().add(convertIdentifier(pid[19]))
                 }

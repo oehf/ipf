@@ -190,7 +190,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         return qry
     }
 
-
+    // FIXME: exact search does not work yet
     private String searchString(StringParam param, boolean forceExactSearch) {
         if (param == null || param.empty) return null;
         forceExactSearch || param.exact ? param.value : param.value + "*"
@@ -201,6 +201,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     }
 
     private String searchNumber(NumberParam param) {
+        if (param == null) return null;
         param?.value.toString()
     }
 
