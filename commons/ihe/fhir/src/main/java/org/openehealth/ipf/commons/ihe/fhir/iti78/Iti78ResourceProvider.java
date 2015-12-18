@@ -108,7 +108,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider<FhirQueryAuditD
      * @return patient resource
      */
     @SuppressWarnings("unused")
-    @Read(version = true)
+    @Read(version = true, type = Patient.class)
     public Patient pdqmRetrieve(
             @IdParam IdType id,
             HttpServletRequest httpServletRequest,

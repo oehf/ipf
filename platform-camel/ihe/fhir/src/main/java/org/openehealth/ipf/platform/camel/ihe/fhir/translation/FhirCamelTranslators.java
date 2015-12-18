@@ -44,7 +44,7 @@ public final class FhirCamelTranslators {
             @Override
             public void process(Exchange exchange) throws Exception {
                 // ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
-                IBaseResource fhir = exchange.getIn().getBody(IBaseResource.class);
+                Object fhir = exchange.getIn().getBody();
                 Map<String, Object> parameters = exchange.getIn().getHeaders();
                 // exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
                 org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);

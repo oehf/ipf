@@ -40,6 +40,9 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
  * the responsibility of the underlying FHIR framework, so that the PDQ v2 message does not contain any
  * paging parameters.
  *
+ * Note that this translator implements search and (v)read requests, where the latter just translates into
+ * a search using the _id parameter.
+ *
  * @since 3.1
  */
 class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
@@ -99,7 +102,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     protected QBP_Q21 translateFhirReadToHL7v2(String queryTagPrefix, IdType resourceId) {
         Map<String, Object> parameters = [
                 (Constants.FHIR_REQUEST_PARAMETERS): [
-                        (Constants.SP_RESOURCE_IDENTIFIER): new TokenParam(null, resourceId.value)
+                        (Constants.SP_RESOURCE_IDENTIFIER): new TokenParam(pdqSupplierResourceIdentifierUri, resourceId.value)
                 ]
         ]
         translateFhirSearchToHL7v2(queryTagPrefix, parameters)
@@ -242,15 +245,6 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
             field[2].value = it.value
         }
 
-/*
-        for (parameter in parameters.findAll { it.value }) {
-            parameter.value.each {
-                def field = Utils.nextRepetition(target)
-                field[1].value = parameter.key
-                field[2].value = it
-            }
-        }
-*/
     }
 
 }

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78
 
 import ca.uhn.fhir.rest.param.*
 import org.easymock.EasyMock
+import org.hl7.fhir.instance.model.IdType
 import org.hl7.fhir.instance.model.Patient
 import org.junit.Assert
 import org.junit.Before
@@ -47,6 +48,7 @@ class PdqmRequestToPdqQueryTranslatorTest extends Assert {
         mappingService.addMappingScript(getClass().getResource('/META-INF/map/fhir-hl7v2-translation.map'))
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
         translator = new PdqmRequestToPdqQueryTranslator(mapper)
+        translator.pdqSupplierResourceIdentifierUri = 'urn:oid:1.3.5.7'
 
         Registry registry = EasyMock.createMock(Registry)
         ContextFacade.setRegistry(registry)
@@ -55,48 +57,56 @@ class PdqmRequestToPdqQueryTranslatorTest extends Assert {
     }
 
     @Test
-    public void testSuccessfulTranslateWithOids() {
+    public void testSuccessfulSearchTranslateWithOids() {
 
         // Ask for as much as possible
         Map<String, Object> query = [
-                (Patient.SP_FAMILY) : new StringAndListParam()
+                (Patient.SP_FAMILY)                       : new StringAndListParam()
                         .addAnd(new StringOrListParam().add(new StringParam("Surname1")))
                         .addAnd(new StringOrListParam().add(new StringParam("Surname2"))),
-                (Patient.SP_GIVEN) : new StringAndListParam()
+                (Patient.SP_GIVEN)                        : new StringAndListParam()
                         .addAnd(new StringOrListParam().add(new StringParam("Givenname1", true)))
                         .addAnd(new StringOrListParam().add(new StringParam("Givenname2"))),
-                (Patient.SP_BIRTHDATE) : new DateParam('1980'),
-                (Patient.SP_ADDRESS) : new StringParam('Address'),
-                (Patient.SP_GENDER) : new TokenParam('http://hl7.org/fhir/ValueSet/administrative-gender','male'),
-                (Patient.SP_TELECOM) :new StringParam('Telecom'),
-                (Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER) : new NumberParam('2'),
-                (Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN) : new StringAndListParam()
+                (Patient.SP_BIRTHDATE)                    : new DateParam('1980'),
+                (Patient.SP_ADDRESS)                      : new StringParam('Address'),
+                (Patient.SP_GENDER)                       : new TokenParam('http://hl7.org/fhir/ValueSet/administrative-gender', 'male'),
+                (Patient.SP_TELECOM)                      : new StringParam('Telecom'),
+                (Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER): new NumberParam('2'),
+                (Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN)  : new StringAndListParam()
                         .addAnd(new StringOrListParam().add(new StringParam("MothersGivenname1", true)))
                         .addAnd(new StringOrListParam().add(new StringParam("MothersGivenname2"))),
                 (Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) : new StringAndListParam()
                         .addAnd(new StringOrListParam().add(new StringParam("MothersSurname1")))
                         .addAnd(new StringOrListParam().add(new StringParam("MothersSurname2"))),
-                (Patient.SP_IDENTIFIER) : new TokenAndListParam()
+                (Patient.SP_IDENTIFIER)                   : new TokenAndListParam()
                         .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4', '4711ABC')))
                         .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4.5.6', '0815ABC')))
                         .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4.5.6', null)))
-                ]
+        ]
 
-        QBP_Q21 translated = translator.translateFhirToHL7v2(null, [(Constants.FHIR_REQUEST_PARAMETERS) : query])
+        QBP_Q21 translated = translator.translateFhirToHL7v2(null, [(Constants.FHIR_REQUEST_PARAMETERS): query])
         String translatedString = translated.encode()
 
-        assert(translatedString.contains('@PID.5.1^Surname1*'))
-        assert(translatedString.contains('@PID.5.2^Givenname1'))
-        assert(translatedString.contains('@PID.7^19800101'))
-        assert(translatedString.contains('@PID.8^M'))
-        assert(translatedString.contains('@PID.11.1^Address'))
-        assert(translatedString.contains('@PID.6.1^MothersSurname1*'))
-        assert(translatedString.contains('@PID.6.2^MothersGivenname1'))
-        assert(translatedString.contains('@PID.13.1^Telecom'))
-        assert(translatedString.contains('@PID.25^2'))
+        assert (translatedString.contains('@PID.5.1^Surname1*'))
+        assert (translatedString.contains('@PID.5.2^Givenname1'))
+        assert (translatedString.contains('@PID.7^19800101'))
+        assert (translatedString.contains('@PID.8^M'))
+        assert (translatedString.contains('@PID.11.1^Address'))
+        assert (translatedString.contains('@PID.6.1^MothersSurname1*'))
+        assert (translatedString.contains('@PID.6.2^MothersGivenname1'))
+        assert (translatedString.contains('@PID.13.1^Telecom'))
+        assert (translatedString.contains('@PID.25^2'))
         assertEquals(URN.create('urn:oid:1.2.3.4.5.6').namespaceSpecificString, translated.QPD[8][4][2].value)
 
     }
 
-
+    @Test
+    public void testSuccessfulGetTranslateWithOids() {
+        IdType resourceId = new IdType().setValue('4711')
+        QBP_Q21 translated = translator.translateFhirToHL7v2(resourceId, null)
+        String translatedString = translated.encode()
+        assert (translatedString.contains('@PID.3.1^4711'))
+        assert (translatedString.contains('@PID.3.4.2^1.3.5.7'))
+        assert (translatedString.contains('@PID.3.4.3^ISO'))
+    }
 }

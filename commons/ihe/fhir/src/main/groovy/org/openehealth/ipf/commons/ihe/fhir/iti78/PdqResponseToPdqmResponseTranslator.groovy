@@ -34,7 +34,9 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_K21
  * that gets converted into a Bundle by the underlying FHIR framework.
  *
  * Also cares about error responses and throws the appropriate Exceptions for the
- * FHIR framework
+ * FHIR framework.
+ * Depending on the prefix query tag in QPD-2 (search or get) the translator decides
+ * about whether to generate a bundle or a single patient resource.
  *
  * @since 3.1
  */

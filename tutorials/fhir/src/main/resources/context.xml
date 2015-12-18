@@ -46,8 +46,14 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <property name="validateIti9Response" value="false" />
     </bean>
 
-    <!-- Route builders for the ITI-78 transaction and translation to ITI-21. DOES NOT WORK YET -->
+    <!-- Route builders for the ITI-78 transaction and translation to ITI-21. -->
     <bean id="iti78RouteBuilder" class="org.openehealth.ipf.tutorials.fhir.Iti78RouteBuilder">
+        <constructor-arg index="0" ref="uriMapper"/>
+        <constructor-arg index="1" value="127.0.0.1" />
+        <constructor-arg index="2" value="13750"/>
+
+        <property name="validateIti21Request" value="false"/>
+        <property name="validateIti21Response" value="false" />
     </bean>
 
 
@@ -62,6 +68,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <property name="mappingScripts">
             <list>
                 <value>classpath:mapping.map</value>
+                <value>classpath:META-INF/map/fhir-hl7v2-translation.map</value>
             </list>
         </property>
     </bean>
