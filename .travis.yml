@@ -1,0 +1,7 @@
+language: java
+
+before_script:
+- export MAVEN_OPTS=-Xmx1024m
+
+jdk:
+- oraclejdk8
