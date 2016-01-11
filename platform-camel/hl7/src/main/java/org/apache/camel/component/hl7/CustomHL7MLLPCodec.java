@@ -25,7 +25,7 @@ import org.apache.mina.filter.codec.ProtocolEncoder;
 import java.nio.charset.Charset;
 
 /**
- * Custom HL7 MLLP codec. Ability to set  the {@link ca.uhn.hl7v2.HapiContext}, e.g. to use some other
+ * Custom HL7 MLLP codec. Ability to set the {@link ca.uhn.hl7v2.HapiContext}, e.g. to use some other
  * {@link ca.uhn.hl7v2.parser.ModelClassFactory}.
  * <p/>
  */
@@ -34,7 +34,7 @@ public class CustomHL7MLLPCodec extends HL7MLLPCodec {
     private HL7MLLPConfig config = new HL7MLLPConfig();
 
     public ProtocolDecoder getDecoder(IoSession session) throws Exception {
-        return new HL7MLLPDecoder(config);
+        return new CustomHL7MLLPDecoder(config);
     }
 
     public ProtocolEncoder getEncoder(IoSession session) throws Exception {
