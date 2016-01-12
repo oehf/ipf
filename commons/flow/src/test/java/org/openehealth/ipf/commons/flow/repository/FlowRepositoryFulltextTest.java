@@ -28,8 +28,10 @@ import java.util.List;
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openehealth.ipf.commons.core.test.ConditionalRule;
 import org.openehealth.ipf.commons.flow.domain.Flow;
 import org.openehealth.ipf.commons.flow.domain.FlowPart;
 import org.openehealth.ipf.commons.flow.domain.FlowStatus;
@@ -52,6 +54,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 @ContextConfiguration(locations = { "/test-tx-explicit.xml" })
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
 public class FlowRepositoryFulltextTest {
+
+    @ClassRule public static ConditionalRule rule = new ConditionalRule().skipOnTravis().negate();
 
     @Autowired
     private TestTransactionManager testTransactionManager;
