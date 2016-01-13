@@ -74,7 +74,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     </bean>
 
     <!-- Codec for creating and accepting MLLP frames for HL7v2 transactions -->
-    <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
+    <bean id="hl7codec" class="org.apache.camel.component.hl7.CustomHL7MLLPCodec">
         <property name="charset" value="UTF-8"/>
     </bean>
 

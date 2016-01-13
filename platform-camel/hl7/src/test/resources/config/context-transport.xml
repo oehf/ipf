@@ -33,6 +33,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         class="org.openehealth.ipf.platform.camel.hl7.transport.TransportRouteBuilder">
     </bean>
 
-    <bean id="hl7Codec" class="org.apache.camel.component.hl7.HL7MLLPCodec" />
+    <bean id="hl7Codec" class="org.apache.camel.component.hl7.CustomHL7MLLPCodec" />
 
 </beans>

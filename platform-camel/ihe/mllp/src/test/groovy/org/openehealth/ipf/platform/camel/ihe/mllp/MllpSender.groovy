@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp
 
 import org.apache.camel.component.mina2.Mina2Configuration
-import org.apache.camel.component.hl7.HL7MLLPCodec
+import org.apache.camel.component.hl7.CustomHL7MLLPCodec
 import org.apache.camel.impl.DefaultCamelContext
 import org.apache.camel.component.mina2.Mina2Component
 
@@ -29,7 +29,7 @@ final String message =
 
 final encoding = 'UTF-8'
 
-def codec = new HL7MLLPCodec()
+def codec = new CustomHL7MLLPCodec()
 codec.setCharset(encoding)
 
 def config = new Mina2Configuration(

@@ -28,7 +28,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         class="org.openehealth.ipf.platform.camel.ihe.mllp.iti10.Iti10TestRouteBuilder">
     </bean>
     
-    <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
+    <bean id="hl7codec" class="org.apache.camel.component.hl7.CustomHL7MLLPCodec">
         <property name="charset" value="iso-8859-1"/>
     </bean>
 </beans>
