@@ -16,14 +16,22 @@
 
 package org.openehealth.ipf.platform.camel.hl7.model;
 
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.model.ProcessorAdapterDefinition;
 import org.openehealth.ipf.platform.camel.hl7.adapter.HapiAdapter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  */
+@Metadata(label = "ipf,hl7,eip,transformation")
+@XmlRootElement(name = "ack")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class HapiAdapterDefinition<T extends HapiAdapter> extends ProcessorAdapterDefinition {
 
     private T adapter;

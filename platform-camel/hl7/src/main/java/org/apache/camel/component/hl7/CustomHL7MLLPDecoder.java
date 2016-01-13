@@ -39,9 +39,9 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
     private static final String DECODER_STATE = CustomHL7MLLPDecoder.class.getName() + ".STATE";
     private static final String CHARSET_DECODER = CustomHL7MLLPDecoder.class.getName() + ".charsetdecoder";
 
-    private HL7MLLPConfig config;
+    private CustomHL7MLLPConfig config;
 
-    CustomHL7MLLPDecoder(HL7MLLPConfig config) {
+    CustomHL7MLLPDecoder(CustomHL7MLLPConfig config) {
         this.config = config;
     }
 
@@ -152,7 +152,9 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
         synchronized (session) {
             CharsetDecoder decoder = (CharsetDecoder) session.getAttribute(CHARSET_DECODER);
             if (decoder == null) {
-                decoder = config.getCharset().newDecoder();
+                decoder = config.getCharset().newDecoder()
+                    .onMalformedInput(config.getMalformedInputErrorAction())
+                    .onUnmappableCharacter(config.getUnmappableCharacterErrorAction());
                 session.setAttribute(CHARSET_DECODER, decoder);
             }
             return decoder;

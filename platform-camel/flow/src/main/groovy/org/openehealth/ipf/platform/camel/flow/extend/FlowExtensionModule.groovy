@@ -19,7 +19,7 @@ import org.apache.camel.model.ProcessorDefinition;
 import org.openehealth.ipf.platform.camel.flow.model.*;
 
 /**
- * Flow DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * Flow DSL extensions for usage in a RouteBuilder using the {@code use} keyword.
  * 
  * @DSL
  * 

@@ -20,12 +20,20 @@ import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.processor.DelegateProcessor;
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.process.Interceptor;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Martin Krasser
  */
+@Metadata(label = "ipf,eip")
+@XmlRootElement(name = "intercept")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class InterceptDefinition extends OutputDefinition<RouteDefinition> {
 
     private DelegateProcessor delegateProcessor;

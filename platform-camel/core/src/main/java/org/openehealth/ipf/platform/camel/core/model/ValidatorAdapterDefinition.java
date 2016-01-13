@@ -18,9 +18,13 @@ package org.openehealth.ipf.platform.camel.core.model;
 import static org.apache.camel.builder.Builder.bodyAs;
 import groovy.lang.Closure;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.camel.Expression;
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
@@ -33,6 +37,9 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
  * @author Martin Krasser
  * @author Christian Ohr
  */
+@Metadata(label = "ipf,eip,transformation")
+@XmlRootElement(name = "verify")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
 
     private Validator validator;

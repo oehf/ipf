@@ -20,14 +20,22 @@ import org.apache.camel.model.FilterDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.model.language.SimpleExpression;
 import org.apache.camel.processor.FilterProcessor;
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.platform.camel.core.util.Contexts;
 import org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Martin Krasser
  */
+@Metadata(label = "ipf,eip,flow")
+@XmlRootElement(name = "dedupeFlow")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DedupeDefinition extends FilterDefinition {
 
     public DedupeDefinition() {

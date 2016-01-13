@@ -25,9 +25,14 @@ import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.processor.aggregate.UseLatestAggregationStrategy;
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingAggregationStrategy;
 import org.openehealth.ipf.platform.camel.flow.process.Splitter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * {@link OutputDefinition} for the {@link Splitter} processor
@@ -40,6 +45,9 @@ import org.openehealth.ipf.platform.camel.flow.process.Splitter;
  * @author Jens Riemschneider
  * @author Martin Krasser
  */
+@Metadata(label = "ipf")
+@XmlRootElement(name = "splitter")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SplitterDefinition extends OutputDefinition<RouteDefinition> {
 
     private AggregationStrategy aggregationStrategy;

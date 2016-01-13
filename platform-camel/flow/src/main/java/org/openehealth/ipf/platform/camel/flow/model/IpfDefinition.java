@@ -19,7 +19,12 @@ import groovy.lang.Closure;
 import org.apache.camel.Expression;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
+import org.apache.camel.spi.Metadata;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Models IPF DSL extensions that conflict with Camel DSL elements. Usage
@@ -33,6 +38,9 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
  *
  * @author Martin Krasser
  */
+@Metadata(label = "ipf,eip,flow")
+@XmlRootElement(name = "ipf")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class IpfDefinition {
 
     private final ProcessorDefinition<RouteDefinition> processorDefinition;

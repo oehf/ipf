@@ -16,15 +16,23 @@
 package org.openehealth.ipf.platform.camel.flow.model;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.platform.camel.core.util.Contexts;
 import org.openehealth.ipf.platform.camel.flow.process.FlowEndProcessor;
 import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Martin Krasser
  */
+@Metadata(label = "ipf,eip,flow")
+@XmlRootElement(name = "ackFlow")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FlowEndProcessorDefinition extends FlowProcessorDefinition {
 
     @Override

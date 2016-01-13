@@ -15,14 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Renderer;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.RendererAdapter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Martin Krasser
  */
+@Metadata(label = "ipf,eip,transformation")
+@XmlRootElement(name = "render")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class RendererAdapterDefinition extends ProcessorAdapterDefinition {
 
     private Renderer renderer;

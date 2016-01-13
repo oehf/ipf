@@ -23,15 +23,18 @@ import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 
 import java.nio.charset.Charset;
+import java.nio.charset.CodingErrorAction;
+import java.util.Locale;
 
 /**
  * Custom HL7 MLLP codec. Ability to set the {@link ca.uhn.hl7v2.HapiContext}, e.g. to use some other
- * {@link ca.uhn.hl7v2.parser.ModelClassFactory}.
+ * {@link ca.uhn.hl7v2.parser.ModelClassFactory}. Also allows to set error handling in case of
+ * malformed input.
  * <p/>
  */
 public class CustomHL7MLLPCodec extends HL7MLLPCodec {
 
-    private HL7MLLPConfig config = new HL7MLLPConfig();
+    private CustomHL7MLLPConfig config = new CustomHL7MLLPConfig();
 
     public ProtocolDecoder getDecoder(IoSession session) throws Exception {
         return new CustomHL7MLLPDecoder(config);
@@ -107,5 +110,30 @@ public class CustomHL7MLLPCodec extends HL7MLLPCodec {
 
     public void setProduceString(boolean apply) {
         config.setProduceString(apply);
+    }
+
+    public void setUnmappableCharacterErrorAction(CodingErrorAction action) {
+        config.setUnmappableCharacterErrorAction(action);
+    }
+
+    public void setMalformedInputErrorAction(CodingErrorAction action) {
+        config.setMalformedInputErrorAction(action);
+    }
+
+    public void setUnmappableCharacterErrorAction(String action) {
+        config.setUnmappableCharacterErrorAction(fromString(action));
+    }
+
+    public void setMalformedInputErrorAction(String action) {
+        config.setMalformedInputErrorAction(fromString(action));
+    }
+
+    private CodingErrorAction fromString(String action) {
+        switch (action.toUpperCase(Locale.ROOT)) {
+            case "IGNORE" : return CodingErrorAction.IGNORE;
+            case "REPLACE" : return CodingErrorAction.REPLACE;
+            case "REPORT" : return CodingErrorAction.REPORT;
+            default: throw new IllegalArgumentException(action + " is not a valid CodingErrorAction (IGNORE, REPLACE, REPORT)");
+        }
     }
 }

@@ -17,12 +17,20 @@ package org.openehealth.ipf.platform.camel.core.model;
 
 import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.process.Validation;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Martin Krasser
  */
+@Metadata(label = "ipf,eip,transformation")
+@XmlRootElement(name = "validation")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ValidationDefinition extends OutputDefinition<ValidationDefinition>{
 
     private final Processor responseGeneratorProcessor;

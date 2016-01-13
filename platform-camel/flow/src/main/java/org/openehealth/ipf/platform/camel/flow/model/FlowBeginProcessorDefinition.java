@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.flow.model;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
@@ -24,9 +25,16 @@ import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry;
 import org.openehealth.ipf.platform.camel.flow.process.FlowBeginProcessor;
 import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Martin Krasser
  */
+@Metadata(label = "ipf,eip,flow")
+@XmlRootElement(name = "initFlow")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FlowBeginProcessorDefinition extends FlowProcessorDefinition {
 
     private final String identifier;

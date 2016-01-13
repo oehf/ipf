@@ -17,8 +17,12 @@ package org.openehealth.ipf.platform.camel.core.model;
 
 import static org.apache.camel.builder.Builder.bodyAs;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 import org.openehealth.ipf.commons.xml.SchematronTransmogrifier;
@@ -30,6 +34,9 @@ import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
 /**
  * @author Martin Krasser
  */
+@Metadata(label = "ipf,eip,transformation")
+@XmlRootElement(name = "transmogrify")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition {
 
     private Transmogrifier transmogrifier;
