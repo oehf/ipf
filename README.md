@@ -1,6 +1,6 @@
 # Open eHealth Integration Platform
 
-[![Build Status](https://buildhive.cloudbees.com/job/oehf/job/ipf/badge/icon)](https://buildhive.cloudbees.com/job/oehf/job/ipf/)
+[![Build Status](https://travis-ci.org/oehf/ipf.svg?branch=ipf-3.0)](https://travis-ci.org/oehf/ipf)
 
 ## IPF Overview
 

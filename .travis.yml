@@ -1,0 +1,20 @@
+language: java
+before_script:
+- export MAVEN_OPTS=-Xmx1024m
+jdk:
+- oraclejdk8
+addons:
+  apt:
+    packages:
+    - wget
+branches:
+  only:
+    - ipf-3.0
+script:
+- mvn clean install -q
+after_success:
+- "./travis_after_success.sh"
+env:
+  global:
+  - secure: eaYsfS5TNVL6U27EFROe7XBab9Qkp3HmInbTIqaoor95+857+FL6X/XXELu1QR9Wia+S1vzK1rZIAV41AFG0f/4rvr883pMiARD+qLtTC5gj3vHiXF+vLjlScMd40F2T3O9rCt6Bd4A9eVO+5x8KS5MzyB1/TPTAoshYqltd+20=
+  - secure: MSKVW69Ld7G5WaaryA4+l0RjGXGuWKcCoMQIPvPH7FINrmvp+2W39ixt8Ua2LGl6CPMpVI8LaxOjH8xD30sqerLE+TN2EkGipezi9EAjTDEG+20JauVBmAZOkgFxrGl12O0c8roRdeharP52bfIbcKCQ1zYcoTNuDSUpBUCh8Gk=
