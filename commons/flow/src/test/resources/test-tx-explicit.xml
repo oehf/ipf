@@ -70,6 +70,7 @@
         <prop key="hibernate.search.autoregister_listeners">true</prop>
         <prop key="hibernate.search.default.directory_provider">filesystem</prop>
         <prop key="hibernate.search.default.indexBase">./target/lucene</prop>
+        <prop key="hibernate.search.default.locking_strategy">simple</prop>
       </props>
     </property>
   </bean>
