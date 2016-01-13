@@ -23,6 +23,10 @@ IPF uses [git](http://git-scm.com/) for source code management. The IPF git repo
 Additionally, there is the `ipf-gazelle` project, which provides conformance profiles for HL7v2 based IHE transactions.
 It may be released independently and is located at [https://github.com/oehf/ipf-gazelle](https://github.com/oehf/ipf-gazelle).
 
+### Continuous Integration
+
+IPF is built on [Travis](https://travis-ci.org/oehf). Snapshot artifacts are uploaded to the 
+[Sonatype](https://oss.sonatype.org/content/repositories/snapshots/org/openehealth/ipf/) snapshot repository.
 
 ### Issue Tracking
 
@@ -32,7 +36,6 @@ Issue tracking is done in github. For current issues check [https://github.com/o
 
 IPF depends on Maven, Groovy and Lombok.
 Dependening on the choice of your IDE, you may need to install the corresponding plugins.
-
 
 ### Module Dependencies
 
