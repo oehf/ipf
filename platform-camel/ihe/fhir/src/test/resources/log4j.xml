@@ -63,6 +63,10 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
         </layout>
     </appender>
 
+    <logger name="org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirMockedSender">
+        <level value="DEBUG"/>
+    </logger>
+
     <root>
         <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>

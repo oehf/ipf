@@ -23,6 +23,7 @@ import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.IOUtils
 import org.junit.After
 import org.junit.AfterClass
+import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditSender
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor
 import org.openehealth.ipf.commons.ihe.core.atna.custom.Hl7v3Auditor
@@ -51,7 +52,6 @@ class StandardTestContainer {
      static ServletServer servletServer
      static ApplicationContext appContext
 
-     static MockedSender auditSender
      static CamelContext camelContext
      
      static int port
@@ -61,7 +61,7 @@ class StandardTestContainer {
       */
      public static int DEMO_APP_PORT = 8999
      
-     static void startServer(servlet, String appContextName, boolean secure, int serverPort, String servletName = null) {
+     static void startServer(servlet, String appContextName, boolean secure, int serverPort, AbstractMockedAuditSender auditSender = new MockedSender(), String servletName = null) {
          URL contextResource = StandardTestContainer.class.getResource(appContextName.startsWith("/") ? appContextName : "/" + appContextName)
          
          port = serverPort
@@ -143,17 +143,20 @@ class StandardTestContainer {
          XCARespondingGatewayAuditor.auditor.config.systemUserId = 'respondingGwUserId'
          XCARespondingGatewayAuditor.auditor.config.systemAltUserId = 'respondingGwAltUserId'
 
-         auditSender = new MockedSender()
          AuditorModuleContext.context.sender = auditSender
      }
 
-     static int startServer(servlet, String appContextName, String servletName = null) {
-         startServer(servlet, appContextName, false, servletName)
+     static AbstractMockedAuditSender getAuditSender() {
+         return (AbstractMockedAuditSender) AuditorModuleContext.context.sender
+     }
+
+     static int startServer(servlet, String appContextName, AbstractMockedAuditSender auditSender = new MockedSender(), String servletName = null) {
+         startServer(servlet, appContextName, false, auditSender, servletName)
      }
      
-     static int startServer(servlet, String appContextName, boolean secure, String servletName = null) {
+     static int startServer(servlet, String appContextName, boolean secure, AbstractMockedAuditSender auditSender = new MockedSender(), String servletName = null) {
          int port = JettyServer.freePort
-         startServer(servlet, appContextName, secure, port, servletName)
+         startServer(servlet, appContextName, secure, port, auditSender, servletName)
          port
      }
 

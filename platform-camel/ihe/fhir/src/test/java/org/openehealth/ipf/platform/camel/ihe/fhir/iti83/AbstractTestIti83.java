@@ -41,7 +41,11 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
 
     public static void startServer(String contextDescriptor) throws ServletException {
         CamelFhirServlet servlet = new CamelFhirServlet();
-        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
+        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, new MockedSender(), "FhirServlet");
+        /*
+        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT,
+                new FhirMockedSender(servlet.getFhirContext(), true), "FhirServlet");
+        */
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 
@@ -78,7 +82,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
         assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
 
         // Check ATNA Audit
-        MockedSender sender = getAuditSender();
+        MockedSender sender = (MockedSender) getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
         assertEquals(RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE.getCode().intValue(),

@@ -1,0 +1,9 @@
+mappings = {
+
+    atnaCodingSystem(
+        'DCM'               : 'http://nema.org/dicom/dicm',
+        'IHE Transactions'  : 'http://ihe.net',
+        (ELSE)              : { it }
+    )
+
+}
