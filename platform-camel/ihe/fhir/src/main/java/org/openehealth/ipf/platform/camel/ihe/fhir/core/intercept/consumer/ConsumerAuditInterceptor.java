@@ -59,7 +59,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
                 failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
             }
         } catch (Exception e) {
-            // In case of an nexpected exception
+            // In case of an unexpected exception
             failed = true;
             throw e;
         } finally {

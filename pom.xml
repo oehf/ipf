@@ -736,6 +736,11 @@
                 <version>${hapi-fhir-version}</version>
             </dependency>
             <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-validation-resources-dstu2</artifactId>
+                <version>${hapi-fhir-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.openehealth.ipf.gazelle</groupId>
                 <artifactId>ipf-gazelle-validation-commons-core</artifactId>
                 <version>${ipf-gazelle-version}</version>
