@@ -60,6 +60,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     String receiverFacilityName = 'unknown'
 
     String pdqSupplierResourceIdentifierUri
+    private String pdqSupplierResourceIdentifierOid
 
     private final UriMapper uriMapper;
 
@@ -81,6 +82,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     void setPdqSupplierResourceIdentifierUri(String pdqSupplierResourceIdentifierUri) {
         Validate.notNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
         this.pdqSupplierResourceIdentifierUri = pdqSupplierResourceIdentifierUri
+        this.pdqSupplierResourceIdentifierOid = uriMapper.uriToOid(pdqSupplierResourceIdentifierUri)
     }
 
     /**
@@ -154,9 +156,13 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         if (identifierParam) {
             List<List<String>> identifiers = searchTokenList(identifierParam)
             // Patient identifier has identifier value
-            (identifierNamespace, identifierOid, identifierValue) = identifiers?.find { it[2] }
-            // Requested domains have no identifier value
-            requestedDomains = identifiers?.findAll { !it[2] }.collect { it[1] }
+            List<String> searchIdentifier = identifiers?.find { it.size() == 3 && !it[2]?.empty}
+            if (searchIdentifier) (identifierNamespace, identifierOid, identifierValue) = searchIdentifier
+            // Requested domains have no identifier value. If the resource identifier system is not included here,
+            // add it because otherwise we don't know the resource ID in the response.
+            requestedDomains = identifiers?.findAll { it.size() == 2 || (!it[2]) }.collect { it[1] }
+            if (pdqSupplierResourceIdentifierOid in requestedDomains)
+                requestedDomains.add(pdqSupplierResourceIdentifierOid)
         }
 
         // Properly convert birth date.
@@ -201,7 +207,6 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         return qry
     }
 
-    // FIXME: exact search does not work yet
     private String searchString(StringParam param, boolean forceExactSearch) {
         if (param == null || param.empty) return null;
         forceExactSearch || param.exact ? param.value : param.value + "*"

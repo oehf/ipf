@@ -28,6 +28,8 @@ import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_K21
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Translates HL7v2 PDQ Query Response message into a list of {@link Patient} resource
@@ -42,9 +44,11 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_K21
  */
 class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PdqResponseToPdqmResponseTranslator)
     private final UriMapper uriMapper
 
     String pdqSupplierResourceIdentifierUri
+    private String pdqSupplierResourceIdentifierOid
 
     /**
      * @param uriMapper mapping for translating FHIR URIs into OIDs
@@ -52,6 +56,15 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
     PdqResponseToPdqmResponseTranslator(UriMapper uriMapper) {
         Validate.notNull(uriMapper, "URI Mapper must not be null")
         this.uriMapper = uriMapper
+    }
+
+    /**
+     * @param pdqSupplierResourceIdentifierUri the URI of the resource identifier system
+     */
+    void setPdqSupplierResourceIdentifierUri(String pdqSupplierResourceIdentifierUri) {
+        Validate.notNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
+        this.pdqSupplierResourceIdentifierUri = pdqSupplierResourceIdentifierUri
+        this.pdqSupplierResourceIdentifierOid = uriMapper.uriToOid(pdqSupplierResourceIdentifierUri)
     }
 
     @Override
@@ -90,9 +103,14 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                 PdqPatient patient = new PdqPatient()
                 PID pid = response.PID
 
-                // TODO this assigns the resource ID. This should be extracted into a strategy
-                // that generally assigns resource IDs
-                patient.setId(pid[3](0)[1].value)
+                // This assigns the resource ID. It is taken from the PID-3 identifier list where the
+                // namespace matches pdqSupplierResourceIdentifierOid
+                def resourcePid = pid[3]().find { pid3 -> pdqSupplierResourceIdentifierOid == pid3[4][2]}
+                if (resourcePid) {
+                    patient.setId(new IdType('Patient', resourcePid[1]))
+                } else {
+                    LOG.warn("No ID found with resource system URI {}", pdqSupplierResourceIdentifierUri)
+                }
 
                 convertIdentifiers(pid[3](), patient.getIdentifier())
 

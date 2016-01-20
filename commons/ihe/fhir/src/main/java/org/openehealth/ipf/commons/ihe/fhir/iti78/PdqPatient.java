@@ -30,7 +30,9 @@ import org.hl7.fhir.instance.model.annotations.ResourceDef;
  *     <li>mothersMaidenName</li>
  * </ul>
  */
-@ResourceDef(name = "Patient")
+@ResourceDef(name = "Patient", id = "pdqm"
+// , profile = "http://www.ihe.net/ITI-78/Profile/pdqm"
+)
 public class PdqPatient extends Patient {
 
     @Child(name = "mothersMaidenName")

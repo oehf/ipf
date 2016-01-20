@@ -52,6 +52,7 @@ class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
         mappingService.addMappingScript(getClass().getResource('/META-INF/map/fhir-hl7v2-translation.map'))
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
         translator = new PdqResponseToPdqmResponseTranslator(mapper)
+        translator.setPdqSupplierResourceIdentifierUri("urn:oid:1.2.3.4")
 
         Registry registry = EasyMock.createMock(Registry)
         ContextFacade.setRegistry(registry)

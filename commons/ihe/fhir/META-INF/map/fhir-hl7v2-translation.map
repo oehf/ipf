@@ -71,6 +71,7 @@ mappings = {
         'S'     : 'anonymous',
         'BAD'   : 'old',
         'M'     : 'maiden',
+        'B'     : 'maiden',
         (ELSE)  : ''
     )
 
