@@ -102,11 +102,12 @@ class PdqmRequestToPdqQueryTranslatorTest extends Assert {
 
     @Test
     public void testSuccessfulGetTranslateWithOids() {
-        IdType resourceId = new IdType().setValue('4711')
+        IdType resourceId = new IdType().setValue('Patient/4711')
         QBP_Q21 translated = translator.translateFhirToHL7v2(resourceId, null)
         String translatedString = translated.encode()
         assert (translatedString.contains('@PID.3.1^4711'))
         assert (translatedString.contains('@PID.3.4.2^1.3.5.7'))
         assert (translatedString.contains('@PID.3.4.3^ISO'))
     }
+
 }

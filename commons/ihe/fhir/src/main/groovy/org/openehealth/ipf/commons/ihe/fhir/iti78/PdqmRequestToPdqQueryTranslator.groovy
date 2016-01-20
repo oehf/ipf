@@ -76,6 +76,14 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     }
 
     /**
+     * @param pdqSupplierResourceIdentifierUri the URI of the resource identifier system
+     */
+    void setPdqSupplierResourceIdentifierUri(String pdqSupplierResourceIdentifierUri) {
+        Validate.notNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
+        this.pdqSupplierResourceIdentifierUri = pdqSupplierResourceIdentifierUri
+    }
+
+    /**
      * Translate PDQm query map into a PDQ QBP^Q22 request message
      *
      * @param request object, only used for READing a dedicated resource
@@ -102,7 +110,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     protected QBP_Q21 translateFhirReadToHL7v2(String queryTagPrefix, IdType resourceId) {
         Map<String, Object> parameters = [
                 (Constants.FHIR_REQUEST_PARAMETERS): [
-                        (Constants.SP_RESOURCE_IDENTIFIER): new TokenParam(pdqSupplierResourceIdentifierUri, resourceId.value)
+                        (Constants.SP_RESOURCE_IDENTIFIER): new TokenParam(pdqSupplierResourceIdentifierUri, resourceId.idPart)
                 ]
         ]
         translateFhirSearchToHL7v2(queryTagPrefix, parameters)
