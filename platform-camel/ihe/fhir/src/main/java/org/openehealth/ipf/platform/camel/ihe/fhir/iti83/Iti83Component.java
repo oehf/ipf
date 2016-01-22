@@ -32,7 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  */
 public class Iti83Component extends FhirComponent<FhirQueryAuditDataset> {
 
-    private static final FhirComponentConfiguration<FhirQueryAuditDataset> DEFAULT_CONFIGURATION = new Iti83Configuration();
+    private static final FhirComponentConfiguration DEFAULT_CONFIGURATION = new Iti83Configuration();
 
     private static final AuditStrategy<FhirQueryAuditDataset> CLIENT_AUDIT_STRATEGY = new Iti83ClientAuditStrategy();
     private static final AuditStrategy<FhirQueryAuditDataset> SERVER_AUDIT_STRATEGY = new Iti83ServerAuditStrategy();
@@ -46,7 +46,7 @@ public class Iti83Component extends FhirComponent<FhirQueryAuditDataset> {
         setFhirComponentConfiguration(DEFAULT_CONFIGURATION);
     }
 
-    public Iti83Component(FhirComponentConfiguration<FhirQueryAuditDataset> configuration) {
+    public Iti83Component(FhirComponentConfiguration configuration) {
         super(configuration);
     }
 

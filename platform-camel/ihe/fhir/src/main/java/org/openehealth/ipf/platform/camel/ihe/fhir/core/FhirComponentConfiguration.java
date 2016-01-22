@@ -16,10 +16,8 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
-import ca.uhn.fhir.rest.server.IPagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 
 /**
  * Static configuration for FHIR components. This configuration cannot be altered in the
@@ -27,19 +25,19 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
  *
  * @since 3.1
  */
-public class FhirComponentConfiguration<AuditDatasetType extends FhirAuditDataset> {
+public class FhirComponentConfiguration {
 
-    private final AbstractPlainProvider<AuditDatasetType> staticResourceProvider;
+    private final AbstractPlainProvider staticResourceProvider;
     private final ClientRequestFactory<?> staticClientRequestFactory;
 
     public FhirComponentConfiguration(
-            AbstractPlainProvider<AuditDatasetType> resourceProvider,
+            AbstractPlainProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory) {
         this.staticResourceProvider = resourceProvider;
         this.staticClientRequestFactory = clientRequestFactory;
     }
 
-    public AbstractPlainProvider<AuditDatasetType> getStaticResourceProvider() {
+    public AbstractPlainProvider getStaticResourceProvider() {
         return staticResourceProvider;
     }
 

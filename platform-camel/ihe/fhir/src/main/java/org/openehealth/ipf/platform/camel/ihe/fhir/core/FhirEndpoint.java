@@ -72,7 +72,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @throws Exception
      */
     public void connect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        AbstractPlainProvider<AuditDatasetType> provider = getResourceProvider();
+        AbstractPlainProvider provider = getResourceProvider();
         // Make consumer known to provider
         provider.setConsumer(consumer);
         // Register provider with CamelFhirServlet
@@ -86,7 +86,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @throws Exception
      */
     public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
-        AbstractPlainProvider<AuditDatasetType> provider = getResourceProvider();
+        AbstractPlainProvider provider = getResourceProvider();
         CamelFhirServlet.unregisterProvider(servletName, provider);
         provider.unsetConsumer(consumer);
     }
@@ -139,7 +139,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return true;
     }
 
-    public FhirComponentConfiguration<AuditDatasetType> getFhirComponentConfiguration() {
+    public FhirComponentConfiguration getFhirComponentConfiguration() {
         return fhirComponent.getFhirComponentConfiguration();
     }
 
@@ -171,8 +171,8 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
 
     // Private stuff
 
-    private AbstractPlainProvider<AuditDatasetType> getResourceProvider() {
-        AbstractPlainProvider<AuditDatasetType> provider = config.getResourceProvider();
+    private AbstractPlainProvider getResourceProvider() {
+        AbstractPlainProvider provider = config.getResourceProvider();
         if (provider == null) {
             provider = getFhirComponentConfiguration().getStaticResourceProvider();
         }

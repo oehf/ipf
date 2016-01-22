@@ -36,7 +36,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  *
  * @since 3.1
  */
-public abstract class AbstractPlainProvider<AuditDatasetType extends FhirAuditDataset> implements Serializable {
+public abstract class AbstractPlainProvider implements Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractPlainProvider.class);
 

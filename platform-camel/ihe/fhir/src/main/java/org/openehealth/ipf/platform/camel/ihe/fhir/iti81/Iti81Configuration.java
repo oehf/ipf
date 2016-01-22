@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti81;
 
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ResourceProvider;
+import org.openehealth.ipf.commons.ihe.fhir.iti81.Iti81ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.iti81.Iti81ResourceProvider;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
 
 /**
- * Standard Configuration for Iti83Component
+ * Standard Configuration for Iti81Component
  *
  * @since 3.1
  */
-public class Iti83Configuration extends FhirComponentConfiguration {
+public class Iti81Configuration extends FhirComponentConfiguration {
 
-    public Iti83Configuration() {
+    public Iti81Configuration() {
         super(
-                new Iti83ResourceProvider(),        // Consumer side. accept $ihe-pix operation
-                new Iti83ClientRequestFactory());   // Formulate queries
+                new Iti81ResourceProvider(),       // Consumer side. accept audit searches
+                new Iti81ClientRequestFactory());  // Formulate queries
     }
 }

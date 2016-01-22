@@ -25,7 +25,6 @@ import org.hl7.fhir.instance.model.IdType;
 import org.hl7.fhir.instance.model.Patient;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +37,7 @@ import java.util.Map;
  *
  * @since 3.1
  */
-public class Iti78ResourceProvider extends AbstractPlainProvider<FhirQueryAuditDataset> {
+public class Iti78ResourceProvider extends AbstractPlainProvider {
 
     /**
      * Handles the PDQm Query request

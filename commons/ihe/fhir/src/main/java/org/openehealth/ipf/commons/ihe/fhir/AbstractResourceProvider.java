@@ -33,6 +33,5 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
  *
  * @since 3.1
  */
-public abstract class AbstractResourceProvider<AuditDatasetType extends FhirAuditDataset>
-        extends AbstractPlainProvider<AuditDatasetType> implements IResourceProvider {
+public abstract class AbstractResourceProvider extends AbstractPlainProvider implements IResourceProvider {
 }

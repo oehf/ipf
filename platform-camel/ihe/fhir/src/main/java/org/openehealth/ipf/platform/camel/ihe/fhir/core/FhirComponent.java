@@ -37,7 +37,7 @@ import java.util.Map;
 public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         extends UriEndpointComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent {
 
-    private FhirComponentConfiguration<AuditDatasetType> fhirComponentConfiguration;
+    private FhirComponentConfiguration fhirComponentConfiguration;
 
     public FhirComponent() {
         super(FhirEndpoint.class);
@@ -47,7 +47,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         super(context, FhirEndpoint.class);
     }
 
-    public FhirComponent(FhirComponentConfiguration<AuditDatasetType> configuration) {
+    public FhirComponent(FhirComponentConfiguration configuration) {
         this();
         this.fhirComponentConfiguration = configuration;
     }
@@ -84,11 +84,11 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     /**
      * @return static component-specific configuration
      */
-    public FhirComponentConfiguration<AuditDatasetType> getFhirComponentConfiguration() {
+    public FhirComponentConfiguration getFhirComponentConfiguration() {
         return fhirComponentConfiguration;
     }
 
-    protected void setFhirComponentConfiguration(FhirComponentConfiguration<AuditDatasetType> fhirComponentConfiguration) {
+    protected void setFhirComponentConfiguration(FhirComponentConfiguration fhirComponentConfiguration) {
         this.fhirComponentConfiguration = fhirComponentConfiguration;
     }
 }

@@ -59,7 +59,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     @Getter
     @UriParam
-    private AbstractPlainProvider<AuditDatasetType> resourceProvider;
+    private AbstractPlainProvider resourceProvider;
 
     // Producer only
 

@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78QueryResourceClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78ResourceProvider;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
@@ -26,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfigurati
  *
  * @since 3.1
  */
-public class Iti78Configuration extends FhirComponentConfiguration<FhirQueryAuditDataset> {
+public class Iti78Configuration extends FhirComponentConfiguration {
 
     public Iti78Configuration() {
         super(

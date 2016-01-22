@@ -32,6 +32,12 @@ public interface Constants {
     String SP_MOTHERS_MAIDEN_NAME_GIVEN = "mothersMaidenName.given";
     String SP_MOTHERS_MAIDEN_NAME_FAMILY = "mothersMaidenName.family";
 
+    // ATNA stuff
+    String SP_PATIENTID = "patientid";
+    String SP_ROLE = "role";
+    String SP_OUTCOME = "outcome";
+
+
     String FHIR_CONTEXT = "FhirContext";
 
     // Request parameter information
