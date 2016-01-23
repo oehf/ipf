@@ -19,7 +19,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 
 import java.util.ArrayList;
@@ -39,11 +38,6 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  */
 public class WsAuditDataset extends AuditDataset {
     private static final long serialVersionUID = 7940196804508126576L;
-
-    /**
-     * Event outcome code as defined in RFC 3881.
-     */
-    @Getter @Setter private RFC3881EventOutcomeCodes eventOutcomeCode;
 
     /**
      * Request SOAP Body (XML) payload.

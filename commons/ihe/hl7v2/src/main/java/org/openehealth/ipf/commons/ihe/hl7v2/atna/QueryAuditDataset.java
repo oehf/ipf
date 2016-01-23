@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2.atna;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 
 /**
  * @author Dmytro Rud

@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 
 /**
@@ -28,13 +27,6 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
  * @since 3.1
  */
 public abstract class FhirAuditDataset extends AuditDataset {
-
-    /**
-     * Event outcome code as defined in RFC 3881.
-     */
-    @Getter
-    @Setter
-    private RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcomeCode;
 
     /**
      * Request payload.

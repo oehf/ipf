@@ -180,11 +180,11 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     }
 
     public ClientRequestFactory<?> getClientRequestFactory() {
-        ClientRequestFactory<?> provider = config.getClientRequestFactory();
-        if (provider == null) {
-            provider = getFhirComponentConfiguration().getStaticClientRequestFactory();
+        ClientRequestFactory<?> factory = config.getClientRequestFactory();
+        if (factory == null) {
+            factory = getFhirComponentConfiguration().getStaticClientRequestFactory();
         }
-        return provider;
+        return factory;
     }
 
 }

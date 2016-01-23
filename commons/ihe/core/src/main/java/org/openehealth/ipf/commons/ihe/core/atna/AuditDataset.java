@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
@@ -30,12 +32,12 @@ public class AuditDataset implements Serializable {
     private static final long serialVersionUID = -2919172035448943710L;
 
     // whether we audit on server (true) or on client (false)
-    private final boolean serverSide;
+    @Getter private final boolean serverSide;
 
     /**
      * Event outcome code as defined in RFC 3881.
      */
-    private RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcomeCode;
+    @Getter @Setter private RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcomeCode;
 
     /**
      * Constructor.
@@ -47,18 +49,6 @@ public class AuditDataset implements Serializable {
      */
     public AuditDataset(boolean serverSide) {
         this.serverSide = serverSide;
-    }
-
-    public boolean isServerSide() {
-        return serverSide;
-    }
-
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode() {
-        return eventOutcomeCode;
-    }
-
-    public void setEventOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcomeCode) {
-        this.eventOutcomeCode = eventOutcomeCode;
     }
 
     @Override

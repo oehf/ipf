@@ -146,8 +146,8 @@ class StandardTestContainer {
          AuditorModuleContext.context.sender = auditSender
      }
 
-     static AbstractMockedAuditSender getAuditSender() {
-         return (AbstractMockedAuditSender) AuditorModuleContext.context.sender
+     static <T extends AbstractMockedAuditSender> T getAuditSender() {
+         return (T) AuditorModuleContext.context.sender
      }
 
      static int startServer(servlet, String appContextName, AbstractMockedAuditSender auditSender = new MockedSender(), String servletName = null) {

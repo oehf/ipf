@@ -68,7 +68,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        MockedSender sender = (MockedSender) getAuditSender();
+        MockedSender sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
 
@@ -108,7 +108,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
 
         // Check ATNA Audit
-        MockedSender sender = (MockedSender) getAuditSender();
+        MockedSender sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
         // FIXME client-side audit message needs ip addresses, target URL and queryString
     }

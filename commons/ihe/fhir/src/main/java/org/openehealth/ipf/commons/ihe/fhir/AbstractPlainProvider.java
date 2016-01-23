@@ -45,7 +45,7 @@ public abstract class AbstractPlainProvider implements Serializable {
     /**
      *
      * @param payload FHIR request resource
-     * @param resultType exepcted result type
+     * @param resultType expected result type
      * @param httpServletRequest servlet request
      * @param httpServletResponse servlet response
      * @param <R> Result type

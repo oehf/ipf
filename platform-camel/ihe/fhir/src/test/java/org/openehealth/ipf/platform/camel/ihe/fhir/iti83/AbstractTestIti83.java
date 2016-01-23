@@ -82,7 +82,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
         assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
 
         // Check ATNA Audit
-        MockedSender sender = (MockedSender) getAuditSender();
+        MockedSender sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
         assertEquals(RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE.getCode().intValue(),

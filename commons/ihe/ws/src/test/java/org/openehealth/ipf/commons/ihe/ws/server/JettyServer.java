@@ -35,7 +35,6 @@ public class JettyServer extends ServletServer {
     private Server server;
 
     @Override
-    @SuppressWarnings("unchecked")  // Required by getInitParams implementation
     public void start() {
         server = new Server();
         ServerConnector connector = isSecure()

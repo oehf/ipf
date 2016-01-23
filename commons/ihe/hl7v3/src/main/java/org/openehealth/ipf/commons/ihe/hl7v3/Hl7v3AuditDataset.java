@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 
@@ -26,22 +28,22 @@ public class Hl7v3AuditDataset extends WsAuditDataset {
     private static final long serialVersionUID = -7303748425104562452L;
 
     /** HL7v3 message ID. */
-    private String messageId;
+    @Getter @Setter private String messageId;
 
     /** HL7v3 query ID. */
-    private String queryId;
+    @Getter @Setter private String queryId;
 
     /** Home ID of the target community. */
-    private String homeCommunityId;
+    @Getter @Setter private String homeCommunityId;
 
     /** Request message type (name of the root element). */
-    private String requestType;
+    @Getter @Setter private String requestType;
 
     /** Patient ID list. */
-    private String[] patientIds;
+    @Getter @Setter private String[] patientIds;
 
     /** Old patient ID. */
-    private String oldPatientId;
+    @Getter @Setter private String oldPatientId;
 
 
     /**
@@ -54,58 +56,8 @@ public class Hl7v3AuditDataset extends WsAuditDataset {
         super(serverSide);
     }
 
-
-    // ============= automatically generated getters and setters =============
-
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
-
-    public String getQueryId() {
-        return queryId;
-    }
-
-    public void setQueryId(String queryId) {
-        this.queryId = queryId;
-    }
-
-    public String getHomeCommunityId() {
-        return homeCommunityId;
-    }
-
-    public void setHomeCommunityId(String homeCommunityId) {
-        this.homeCommunityId = homeCommunityId;
-    }
-
-    public String getRequestType() {
-        return requestType;
-    }
-
-    public void setRequestType(String requestType) {
-        this.requestType = requestType;
-    }
-
-    public String[] getPatientIds() {
-        return patientIds;
-    }
-
-    public void setPatientIds(String[] patientIds) {
-        this.patientIds = patientIds;
-    }
-
     public String getPatientId() {
         return ((patientIds != null) && (patientIds.length > 0)) ? patientIds[0] : null;
     }
 
-    public String getOldPatientId() {
-        return oldPatientId;
-    }
-
-    public void setOldPatientId(String oldPatientId) {
-        this.oldPatientId = oldPatientId;
-    }
 }
