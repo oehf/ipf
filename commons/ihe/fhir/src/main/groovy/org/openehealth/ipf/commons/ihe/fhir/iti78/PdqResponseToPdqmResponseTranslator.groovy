@@ -105,9 +105,9 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
 
                 // This assigns the resource ID. It is taken from the PID-3 identifier list where the
                 // namespace matches pdqSupplierResourceIdentifierOid
-                def resourcePid = pid[3]().find { pid3 -> pdqSupplierResourceIdentifierOid == pid3[4][2]}
+                def resourcePid = pid[3]().find { pid3 -> pdqSupplierResourceIdentifierOid == pid3[4][2].value}
                 if (resourcePid) {
-                    patient.setId(new IdType('Patient', resourcePid[1]))
+                    patient.setId(new IdType('Patient', resourcePid[1].value))
                 } else {
                     LOG.warn("No ID found with resource system URI {}", pdqSupplierResourceIdentifierUri)
                 }
