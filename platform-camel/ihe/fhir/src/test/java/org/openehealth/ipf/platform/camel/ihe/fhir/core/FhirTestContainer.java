@@ -18,7 +18,14 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.IGenericClient;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import org.hl7.fhir.instance.model.OperationOutcome;
+import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -33,5 +40,22 @@ public class FhirTestContainer extends StandardTestContainer {
         context.getRestfulClientFactory().setSocketTimeout(1000000); // for debugging
         client = context.newRestfulGenericClient(base);
         return client;
+    }
+
+    protected void assertAndRethrowException(InvalidRequestException e, OperationOutcome.IssueType expectedIssue) {
+        assertEquals(400, e.getStatusCode());
+        // Hmm, I wonder if this could not be done automatically...
+        OperationOutcome oo = context.newXmlParser().parseResource(OperationOutcome.class, e.getResponseBody());
+        assertEquals(OperationOutcome.IssueSeverity.ERROR, oo.getIssue().get(0).getSeverity());
+        assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
+
+        // Check ATNA Audit
+        MockedSender sender = getAuditSender();
+        assertEquals(1, sender.getMessages().size());
+        AuditMessage event = sender.getMessages().get(0).getAuditMessage();
+        assertEquals(RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE.getCode().intValue(),
+                event.getEventIdentification().getEventOutcomeIndicator());
+
+        throw e;
     }
 }
