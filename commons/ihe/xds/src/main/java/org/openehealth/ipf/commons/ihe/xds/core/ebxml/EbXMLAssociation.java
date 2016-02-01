@@ -61,6 +61,14 @@ public interface EbXMLAssociation extends EbXMLRegistryObject, ExtraMetadataHold
     void setAssociationType(AssociationType associationType);
 
     AvailabilityStatus getStatus();
-
     void setStatus(AvailabilityStatus status);
+
+    AvailabilityStatus getOriginalStatus();
+    void setOriginalStatus(AvailabilityStatus status);
+
+    AvailabilityStatus getNewStatus();
+    void setNewStatus(AvailabilityStatus status);
+
+    String getPreviousVersion();
+    void setPreviousVersion(String version);
 }

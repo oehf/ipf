@@ -18,8 +18,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DocumentAvailabilityAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DocumentEntryTypeAdapter;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +69,10 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     @Getter @Setter private Code typeCode;
     @Getter @Setter private String uri;
     @Getter @Setter private String repositoryUniqueId;
+    @XmlJavaTypeAdapter(DocumentEntryTypeAdapter.class)
     @Getter @Setter private DocumentEntryType type = DocumentEntryType.STABLE;
     @Getter private List<ReferenceId> referenceIdList = new ArrayList<>();
+    @XmlJavaTypeAdapter(DocumentAvailabilityAdapter.class)
     @Getter @Setter private DocumentAvailability documentAvailability;
 
     /**

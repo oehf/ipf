@@ -37,7 +37,8 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <property name="mappingScripts">
             <list>
                  <value>classpath:mapping.map</value>
-                 <value>classpath:atna2fhir.map</value>
+                 <value>classpath:META-INF/map/atna2fhir.map</value>
+                 <value>classpath:META-INF/map/fhir-hl7v2-translation.map</value>
             </list>
         </property>
     </bean>

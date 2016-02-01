@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AssociationLabelFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
@@ -29,6 +30,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.isValid;
 
 /**
  * Validation of an ebXML object container.
@@ -201,7 +203,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         Set<String> logicalIds = new HashSet<>();
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             boolean onDemandExpected = (profile.getInteractionId() == IpfInteractionId.ITI_61);
-            boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
+            boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getEbXML30().equals(docEntry.getObjectType());
             metaDataAssert(profile.isQuery() || (onDemandExpected == onDemandProvided),
                     WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
 
@@ -318,7 +320,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
         for (EbXMLAssociation association : container.getAssociations()) {
             AssociationType type = association.getAssociationType();
-            metaDataAssert(type != null, INVALID_ASSOCIATION_TYPE);
+            metaDataAssert(isValid(type), INVALID_ASSOCIATION_TYPE);
     
             if (type != AssociationType.HAS_MEMBER) {
                 validateIsSnapshotRelationship(container, association);
@@ -346,8 +348,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         if (!slotValues.isEmpty()) {
             metaDataAssert(slotValues.size() == 1, TOO_MANY_SUBMISSION_SET_STATES);
 
-            AssociationLabel status = AssociationLabel.fromOpcode(slotValues.get(0));
-            metaDataAssert(status != null, INVALID_SUBMISSION_SET_STATUS);
+            AssociationLabel status = new AssociationLabelFactory().fromEbXML(slotValues.get(0));
+            metaDataAssert(isValid(status), INVALID_SUBMISSION_SET_STATUS);
 
             if (status == AssociationLabel.ORIGINAL && !profile.isQuery()) {
                 metaDataAssert(docEntryIds.contains(association.getTarget()), MISSING_ORIGINAL);
@@ -365,7 +367,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private void validateIsSnapshotRelationship(EbXMLObjectContainer container, EbXMLAssociation association){
         if (association.getAssociationType() == AssociationType.IS_SNAPSHOT_OF){
             EbXMLExtrinsicObject sourceDocEntry = getExtrinsicObject(
-                    container, association.getSource(), DocumentEntryType.STABLE.getUuid());
+                    container, association.getSource(), DocumentEntryType.STABLE.getEbXML30());
             metaDataAssert(sourceDocEntry != null, MISSING_SNAPSHOT_ASSOCIATION, "sourceObject", association.getSource());
         }
     }
@@ -373,12 +375,10 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private void validateUpdateAvailabilityStatusRelationship(Set<String> submissionSetIds, EbXMLAssociation association){
         if (association.getAssociationType() == AssociationType.UPDATE_AVAILABILITY_STATUS){
             metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
-            metaDataAssert(association.getSingleSlotValue(SLOT_NAME_ORIGINAL_STATUS) != null, MISSING_ORIGINAL_STATUS);
-            metaDataAssert(AvailabilityStatus.valueOfOpcode(association.getSingleSlotValue(SLOT_NAME_ORIGINAL_STATUS)) != null,
-                    INVALID_SUBMISSION_SET_STATUS);
-            metaDataAssert(association.getSingleSlotValue(SLOT_NAME_NEW_STATUS) != null, MISSING_NEW_STATUS);
-            metaDataAssert(AvailabilityStatus.valueOfOpcode(association.getSingleSlotValue(SLOT_NAME_NEW_STATUS)) != null,
-                    INVALID_SUBMISSION_SET_STATUS);
+            metaDataAssert(association.getOriginalStatus() != null, MISSING_ORIGINAL_STATUS);
+            metaDataAssert(isValid(association.getOriginalStatus()), INVALID_SUBMISSION_SET_STATUS);
+            metaDataAssert(association.getNewStatus() != null, MISSING_NEW_STATUS);
+            metaDataAssert(isValid(association.getNewStatus()), INVALID_SUBMISSION_SET_STATUS);
         }
     }
 
@@ -419,8 +419,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                 && association.getTarget().equals(registryObject.getId())
                 && (getRegistryPackage(container, association.getSource(), SUBMISSION_SET_CLASS_NODE) != null)){
 
-                metaDataAssert(association.getSingleSlotValue(SLOT_NAME_PREVIOUS_VERSION) != null,
-                        MISSING_PREVIOUS_VERSION);
+                metaDataAssert(association.getPreviousVersion() != null, MISSING_PREVIOUS_VERSION);
                 foundHasMemberAssociation = true;
             }
         }

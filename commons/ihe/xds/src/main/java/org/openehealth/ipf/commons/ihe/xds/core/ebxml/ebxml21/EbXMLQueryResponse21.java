@@ -24,6 +24,7 @@ import java.util.List;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.StatusFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryResponse;
@@ -80,12 +81,12 @@ public class EbXMLQueryResponse21 extends EbXMLObjectContainer21 implements EbXM
 
     @Override
     public void setStatus(Status status) {
-        regResponse.setStatus(Status.getOpcode21(status));
+        regResponse.setStatus(new StatusFactory21().toEbXML(status));
     }
     
     @Override
     public Status getStatus() {
-        return Status.valueOfOpcode(regResponse.getStatus());
+        return new StatusFactory21().fromEbXML(regResponse.getStatus());
     }
     
     @Override

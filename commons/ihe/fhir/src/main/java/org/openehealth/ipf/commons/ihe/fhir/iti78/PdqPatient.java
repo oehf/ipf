@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
+import ca.uhn.fhir.rest.gclient.StringClientParam;
 import ca.uhn.fhir.util.ElementUtil;
 import org.hl7.fhir.instance.model.HumanName;
 import org.hl7.fhir.instance.model.Patient;
@@ -23,6 +24,7 @@ import org.hl7.fhir.instance.model.annotations.Child;
 import org.hl7.fhir.instance.model.annotations.Description;
 import org.hl7.fhir.instance.model.annotations.Extension;
 import org.hl7.fhir.instance.model.annotations.ResourceDef;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
 /**
  * Patient as defined by the PDQm specification. This extends the default patient resource with the following attributes:
@@ -30,10 +32,22 @@ import org.hl7.fhir.instance.model.annotations.ResourceDef;
  *     <li>mothersMaidenName</li>
  * </ul>
  */
-@ResourceDef(name = "Patient", id = "pdqm"
-// , profile = "http://www.ihe.net/ITI-78/Profile/pdqm"
-)
+@ResourceDef(name = "Patient", id = "pdqm", profile = "http://www.ihe.net/ITI-78/Profile/pdqm")
 public class PdqPatient extends Patient {
+
+    // Search Parameters
+    
+    public static final StringClientParam IDENTIFIER = new StringClientParam(Patient.SP_IDENTIFIER);
+    public static final StringClientParam FAMILY = new StringClientParam(Patient.SP_FAMILY);
+    public static final StringClientParam GIVEN = new StringClientParam(Patient.SP_GIVEN);
+    public static final StringClientParam BIRTHDATE = new StringClientParam(Patient.SP_BIRTHDATE);
+    public static final StringClientParam ADDRESS = new StringClientParam(Patient.SP_ADDRESS);
+    public static final StringClientParam GENDER = new StringClientParam(Patient.SP_GENDER);
+    public static final StringClientParam RESOURCE_IDENTIFIER = new StringClientParam(Constants.SP_RESOURCE_IDENTIFIER);
+    public static final StringClientParam TELECOM = new StringClientParam(Patient.SP_TELECOM);
+    public static final StringClientParam MULTIPLE_BIRTH_ORDER_NUMBER = new StringClientParam(Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER);
+    public static final StringClientParam SP_MOTHERS_MAIDEN_NAME_GIVEN = new StringClientParam(Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN);
+    public static final StringClientParam SP_MOTHERS_MAIDEN_NAME_FAMILY = new StringClientParam(Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY);
 
     @Child(name = "mothersMaidenName")
     @Extension(url = "http://www.ihe.net/ITI-78/Profile/pdqm#mothersMaidenName", isModifier = false, definedLocally = false)
@@ -55,4 +69,6 @@ public class PdqPatient extends Patient {
     public void setMothersMaidenName(HumanName mothersMaidenName) {
         this.mothersMaidenName = mothersMaidenName;
     }
+
+
 }

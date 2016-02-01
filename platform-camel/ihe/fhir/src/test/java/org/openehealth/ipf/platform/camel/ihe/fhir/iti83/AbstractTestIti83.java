@@ -74,20 +74,4 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
         LOG.info(context.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
     }
 
-    protected void assertAndRethrowException(InvalidRequestException e, OperationOutcome.IssueType expectedIssue) {
-        assertEquals(400, e.getStatusCode());
-        // Hmm, I wonder if this could not be done automatically...
-        OperationOutcome oo = context.newXmlParser().parseResource(OperationOutcome.class, e.getResponseBody());
-        assertEquals(OperationOutcome.IssueSeverity.ERROR, oo.getIssue().get(0).getSeverity());
-        assertEquals(expectedIssue, oo.getIssue().get(0).getCode());
-
-        // Check ATNA Audit
-        MockedSender sender = getAuditSender();
-        assertEquals(1, sender.getMessages().size());
-        AuditMessage event = sender.getMessages().get(0).getAuditMessage();
-        assertEquals(RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE.getCode().intValue(),
-                event.getEventIdentification().getEventOutcomeIndicator());
-
-        throw e;
-    }
 }

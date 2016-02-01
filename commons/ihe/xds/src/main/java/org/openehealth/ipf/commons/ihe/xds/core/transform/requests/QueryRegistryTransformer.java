@@ -17,12 +17,12 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.QueryReturnTypeFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.QueryTypeFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 
 /**
  * Transforms between a {@link QueryRegistry} and an {@link EbXMLAdhocQueryRequest}. 
@@ -47,7 +47,7 @@ public class QueryRegistryTransformer {
         EbXMLAdhocQueryRequest ebXML = createAdhocQueryRequest(query);        
         query.accept(new ToEbXMLVisitor(ebXML));        
 
-        ebXML.setReturnType(request.getReturnType().getCode());
+        ebXML.setReturnType(request.getReturnType().getEbXML30());
 
         return ebXML;        
     }
@@ -64,7 +64,7 @@ public class QueryRegistryTransformer {
         }
         
         String id = ebXML.getId();
-        QueryType queryType = id == null ? QueryType.SQL : QueryType.valueOfId(id);
+        QueryType queryType = id == null ? QueryType.SQL : new QueryTypeFactory().fromEbXML(id);
         if (queryType == null) {
             return null;
         }
@@ -73,14 +73,14 @@ public class QueryRegistryTransformer {
         query.accept(new FromEbXMLVisitor(ebXML));
         
         QueryRegistry queryRegistry = new QueryRegistry(query);
-        queryRegistry.setReturnType(QueryReturnType.valueOfCode(ebXML.getReturnType()));
+        queryRegistry.setReturnType(new QueryReturnTypeFactory().fromEbXML(ebXML.getReturnType()));
 
         return queryRegistry;
     }
 
     private Query createQuery(QueryType queryType) {
         try {
-            return queryType.getType().newInstance();
+            return queryType.getImplementingClass().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             throw new IllegalStateException("Invalid query class for type: " + queryType, e);
         }

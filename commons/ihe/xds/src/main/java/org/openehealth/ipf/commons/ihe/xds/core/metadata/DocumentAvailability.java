@@ -15,86 +15,37 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+import lombok.EqualsAndHashCode;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- *
+ * Document availability status code.
  */
 @XmlType(name = "DocumentAvailability")
-@XmlEnum(String.class)
-public enum DocumentAvailability {
+@EqualsAndHashCode(callSuper = true)
+public class DocumentAvailability extends XdsEnum {
+    private static final long serialVersionUID = -1839486987498308778L;
 
     /** Online indicates the Document in the Document Repository is available to be retrieved. */
-    @XmlEnumValue("Offline") OFFLINE("Offline", "urn:ihe:iti:2010:DocumentAvailability:Offline"),
+    public static final DocumentAvailability OFFLINE = new DocumentAvailability(Type.OFFICIAL, "urn:ihe:iti:2010:DocumentAvailability:Offline");
     /** Offline indicates the Document in the Document Repository is not available to be retrieved. */
-    @XmlEnumValue("Online") ONLINE("Online", "urn:ihe:iti:2010:DocumentAvailability:Online");
+    public static final DocumentAvailability ONLINE = new DocumentAvailability(Type.OFFICIAL, "urn:ihe:iti:2010:DocumentAvailability:Online");
 
-    private final String opcode;
-    private final String fullQualified;
+    public static final DocumentAvailability[] OFFICIAL_VALUES = {OFFLINE, ONLINE};
 
-    private DocumentAvailability(String opcode, String fullQualified) {
-        this.opcode = opcode;
-        this.fullQualified = fullQualified;
+    public DocumentAvailability(Type type, String ebXML) {
+        super(type, ebXML);
     }
 
-
-    public String getOpcode() {
-        return opcode;
-    }
-
-    public String getFullQualified() {
-        return fullQualified;
-    }
-
-    /**
-     * Returns the document availability represented by the given opcode.
-     * This method takes standard opcodes and fully qualified opcodes into account.
-     * @param opcode
-     *          the opcode to look up. Can be <code>null</code>.
-     * @return the status. <code>null</code> if the opcode was <code>null</code>
-     *          or could not be found.
-     *          <br>See IHE_ITI_Suppl_XDS_Metadata_Update Table 4.2.3.2-1.
-     */
-    public static DocumentAvailability valueOfOpcode(String opcode) {
-        if (opcode == null) {
-            return null;
+    @Override
+    public String getJaxbValue() {
+        if (getType() == Type.OFFICIAL) {
+            String s = getEbXML30();
+            int pos = s.lastIndexOf(':');
+            return s.substring(pos + 1);
         }
-
-        for (DocumentAvailability documentAvailability : DocumentAvailability.values()) {
-            if (opcode.equals(documentAvailability.getOpcode()) || opcode.equals(documentAvailability.getFullQualified())) {
-                return documentAvailability;
-            }
-        }
-
-        throw new XDSMetaDataException(ValidationMessage.INVALID_DOCUMENT_AVAILABILITY, opcode);
+        return getEbXML30();
     }
 
-    /**
-     * Retrieves the representation of a given document availability.
-     * <p>
-     * This is a <code>null</code>-safe version of {@link #getOpcode()}.
-     * @param documentAvailability
-     *          the documentAvailability. Can be <code>null</code>.
-     * @return the representation or <code>null</code> if the status was <code>null</code>.
-     */
-    public static String toOpcode(DocumentAvailability documentAvailability) {
-        return documentAvailability != null ? documentAvailability.getOpcode() : null;
-    }
-
-    /**
-     * Retrieves the fully qualified representation of a document availability.
-     * <p>
-     * This is a <code>null</code>-safe version of {@link #getFullQualified()}.
-     * @param status
-     *          the status. Can be <code>null</code>.
-     * @return the representation or <code>null</code> if the status was <code>null</code>.
-     */
-    public static String toFullQualifiedOpcode(DocumentAvailability status) {
-        return status != null ? status.getFullQualified() : null;
-    }
 }

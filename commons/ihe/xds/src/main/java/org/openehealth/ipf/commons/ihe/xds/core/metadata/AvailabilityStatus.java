@@ -15,91 +15,67 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
+import lombok.EqualsAndHashCode;
+
 import javax.xml.bind.annotation.XmlType;
+
 /**
  * Describes the availability of an entry.
  * 
  * @author Jens Riemschneider
  */
 @XmlType(name = "AvailabilityStatus")
-@XmlEnum(String.class)
-public enum AvailabilityStatus {
+@EqualsAndHashCode(callSuper = true)
+public class AvailabilityStatus extends XdsVersionedEnum {
+    private static final long serialVersionUID = -4550809703490656065L;
+
     /** The entry is approved. */
-    @XmlEnumValue("Approved") APPROVED("Approved", "urn:oasis:names:tc:ebxml-regrep:StatusType:Approved"),
+    public static final AvailabilityStatus APPROVED = new AvailabilityStatus(Type.OFFICIAL, "Approved", "urn:oasis:names:tc:ebxml-regrep:StatusType:Approved");
     /** The entry is deprecated. */
-    @XmlEnumValue("Deprecated") DEPRECATED("Deprecated", "urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated"),
+    public static final AvailabilityStatus DEPRECATED = new AvailabilityStatus(Type.OFFICIAL, "Deprecated", "urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated");
     /** The entry is submitted. */
-    @XmlEnumValue("Submitted") SUBMITTED("Submitted", "urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted");
-    
-    private final String opcode;
-    private final String queryOpcode;
+    public static final AvailabilityStatus SUBMITTED = new AvailabilityStatus(Type.OFFICIAL, "Submitted", "urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted");
 
-    /**
-     * @return the opcode used as a string representation in non-query transformations.
-     */
-    public String getOpcode() {
-        return opcode;
-    }
-    
-    /**
-     * @return the opcode used as a string representation in transformations for query 
-     *          requests and responses.
-     */
-    public String getQueryOpcode() {
-        return queryOpcode;
+    public static final AvailabilityStatus[] OFFICIAL_VALUES = {APPROVED, DEPRECATED, SUBMITTED};
+
+
+    public AvailabilityStatus(Type type, String ebXML21, String ebXML30) {
+        super(type, ebXML21, ebXML30);
     }
 
-    private AvailabilityStatus(String opcode, String queryOpcode) {        
-        this.opcode = opcode;
-        this.queryOpcode = queryOpcode;
+    /** @return ebXML representation of the availability code suitable for Queries */
+    public String getQueryEbXML() {
+        return getEbXML30();
     }
 
-    /**
-     * Returns the availability status represented by the given opcode.
-     * This method takes standard opcodes and query opcodes into account.
-     * @param opcode
-     *          the opcode to look up. Can be <code>null</code>.
-     * @return the status. <code>null</code> if the opcode was <code>null</code>
-     *          or could not be found.
-     *          <br>See ITI TF v.8.0 Vol. 2a Section 3.18.4.1.2.3.6.
-     */
-    public static AvailabilityStatus valueOfOpcode(String opcode) {
-        if (opcode == null) {
-            return null;
-        }
-        
-        for (AvailabilityStatus status : AvailabilityStatus.values()) {
-            if (opcode.equals(status.getOpcode()) || opcode.equals(status.getQueryOpcode())) {
-                return status;
-            }
-        }
-        
-        return null;
-    }
-
-    /**
-     * Retrieves the representation of a given status.
-     * <p>
-     * This is a <code>null</code>-safe version of {@link #getOpcode()}.
-     * @param status
-     *          the status. Can be <code>null</code>.
-     * @return the representation or <code>null</code> if the status was <code>null</code>.
-     */
-    public static String toOpcode(AvailabilityStatus status) {
-        return status != null ? status.getOpcode() : null;
-    }
-
-    /**
-     * Retrieves the query representation of a given status.
-     * <p>
-     * This is a <code>null</code>-safe version of {@link #getQueryOpcode()}.
-     * @param status
-     *          the status. Can be <code>null</code>.
-     * @return the representation or <code>null</code> if the status was <code>null</code>.
-     */
-    public static String toQueryOpcode(AvailabilityStatus status) {
-        return status != null ? status.getQueryOpcode() : null;
+    @Override
+    public String getJaxbValue() {
+        return getEbXML21();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

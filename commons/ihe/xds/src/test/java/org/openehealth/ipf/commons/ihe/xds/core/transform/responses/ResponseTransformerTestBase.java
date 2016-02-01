@@ -54,13 +54,13 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
 
         EbXMLRegistryError error = errors.get(0);
         assertEquals("context1", error.getCodeContext());
-        assertEquals(ErrorCode.PATIENT_ID_DOES_NOT_MATCH.getOpcode(), error.getErrorCode());
+        assertEquals(ErrorCode.PATIENT_ID_DOES_NOT_MATCH.getEbXML30(), error.getErrorCode());
         assertEquals(Severity.ERROR, error.getSeverity());
         assertEquals("location1", error.getLocation());
 
         error = errors.get(1);
         assertEquals("context2", error.getCodeContext());
-        assertEquals(ErrorCode.SQL_ERROR.getOpcode(), error.getErrorCode());
+        assertEquals(ErrorCode.SQL_ERROR.getEbXML30(), error.getErrorCode());
         assertEquals(Severity.WARNING, error.getSeverity());
         assertEquals(null, error.getLocation());
 

@@ -66,7 +66,7 @@ public class GetFolderAndContentsQueryTransformerTest {
     @Test
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
-        assertEquals(QueryType.GET_FOLDER_AND_CONTENTS.getId(), ebXML.getId());
+        assertEquals(QueryType.GET_FOLDER_AND_CONTENTS.getEbXML30(), ebXML.getId());
         
         assertEquals(Arrays.asList("'uuid1'"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_UUID.getSlotName()));

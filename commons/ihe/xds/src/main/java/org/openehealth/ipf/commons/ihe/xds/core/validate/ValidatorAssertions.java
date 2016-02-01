@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
+
 /**
  * Provides assertions for validators.
  * @author Jens Riemschneider
@@ -39,5 +41,9 @@ public abstract class ValidatorAssertions {
         if (!condition) {
             throw new XDSMetaDataException(errorMessage, details);
         }
+    }
+
+    public static boolean isValid(XdsEnum code) {
+        return (code != null) && (code.getType() != XdsEnum.Type.INVALID);
     }
 }

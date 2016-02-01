@@ -58,8 +58,8 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
      * @return list of identified patients
      */
     @SuppressWarnings("unused")
-    @Search(type = Patient.class)
-    public List<? extends Patient> pdqmSearch(
+    @Search(type = PdqPatient.class)
+    public List<? extends PdqPatient> pdqmSearch(
             @OptionalParam(name = Patient.SP_IDENTIFIER) TokenAndListParam identifiers,
             @OptionalParam(name = Patient.SP_FAMILY) StringAndListParam family,
             @OptionalParam(name = Patient.SP_GIVEN) StringAndListParam given,

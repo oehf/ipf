@@ -18,7 +18,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import ca.uhn.hl7v2.model.v25.datatype.CX;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.ReferenceIdTypeFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.AssigningAuthorityAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ReferenceIdTypeAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -43,12 +45,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class ReferenceId extends Identifiable {
     private static final long serialVersionUID = 6615092850652668283L;
 
-    public static final String ID_TYPE_CODE_UNIQUE_ID = "urn:ihe:iti:xds:2013:uniqueId";
-    public static final String ID_TYPE_CODE_ACCESSION = "urn:ihe:iti:xds:2013:accession";
-    public static final String ID_TYPE_CODE_REFERRAL  = "urn:ihe:iti:xds:2013:referral";
-    public static final String ID_TYPE_CODE_ORDER     = "urn:ihe:iti:xds:2013:order";
-
-
     public ReferenceId() {
         super();
     }
@@ -60,7 +56,7 @@ public class ReferenceId extends Identifiable {
     public ReferenceId(
             String id,
             AssigningAuthority assigningAuthority,
-            String idTypeCode,
+            ReferenceIdType idTypeCode,
             AssigningAuthority homeCommunityId)
     {
         super(id, assigningAuthority);
@@ -71,17 +67,18 @@ public class ReferenceId extends Identifiable {
     /**
      * @return ID type code (CX.5).
      */
-    @XmlAttribute(name = "idTypeCode")
-    public String getIdTypeCode() {
-        return getHapiObject().getCx5_IdentifierTypeCode().getValue();
+    @XmlJavaTypeAdapter(ReferenceIdTypeAdapter.class)
+    public ReferenceIdType getIdTypeCode() {
+        String s = getHapiObject().getCx5_IdentifierTypeCode().getValue();
+        return new ReferenceIdTypeFactory().fromEbXML(s);
     }
 
     /**
      * @param idTypeCode
      *          ID type code (CX.5).
      */
-    public void setIdTypeCode(String idTypeCode) {
-        setValue(getHapiObject().getCx5_IdentifierTypeCode(), idTypeCode);
+    public void setIdTypeCode(ReferenceIdType idTypeCode) {
+        setValue(getHapiObject().getCx5_IdentifierTypeCode(), idTypeCode.getEbXML30());
     }
 
     /**

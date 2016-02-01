@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -28,84 +27,63 @@ import javax.xml.bind.annotation.XmlType;
  * @author Michael Ottati
  */
 @XmlType(name = "QueryType")
-@XmlEnum(String.class)
-public enum QueryType {
+@EqualsAndHashCode(callSuper = true)
+public class QueryType extends XdsEnum {
+    private static final long serialVersionUID = 2812318793269066784L;
+
     /** Runs a SQL query. */
-    @XmlEnumValue("Sql") SQL("sql", SqlQuery.class),
+    public static final QueryType SQL = new QueryType(Type.OFFICIAL, "sql", SqlQuery.class);
     /** Searches for documents. */
-    @XmlEnumValue("FindDocuments") FIND_DOCUMENTS("urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d", FindDocumentsQuery.class),
+    public static final QueryType FIND_DOCUMENTS = new QueryType(Type.OFFICIAL, "urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d", FindDocumentsQuery.class);
     /** Searches for documents (Multi Patient Variety). */
-    @XmlEnumValue("FindDocumentsForMultiplePatients") FIND_DOCUMENTS_MPQ("urn:uuid:3d1bdb10-39a2-11de-89c2-2f44d94eaa9f", FindDocumentsForMultiplePatientsQuery.class),
+    public static final QueryType FIND_DOCUMENTS_MPQ = new QueryType(Type.OFFICIAL, "urn:uuid:3d1bdb10-39a2-11de-89c2-2f44d94eaa9f", FindDocumentsForMultiplePatientsQuery.class);
     /** Searches for submission sets. */
-    @XmlEnumValue("FindSubmissionSets") FIND_SUBMISSION_SETS("urn:uuid:f26abbcb-ac74-4422-8a30-edb644bbc1a9", FindSubmissionSetsQuery.class),
+    public static final QueryType FIND_SUBMISSION_SETS = new QueryType(Type.OFFICIAL, "urn:uuid:f26abbcb-ac74-4422-8a30-edb644bbc1a9", FindSubmissionSetsQuery.class);
     /** Searches for folders. */
-    @XmlEnumValue("FindFolders") FIND_FOLDERS("urn:uuid:958f3006-baad-4929-a4de-ff1114824431", FindFoldersQuery.class),
+    public static final QueryType FIND_FOLDERS = new QueryType(Type.OFFICIAL, "urn:uuid:958f3006-baad-4929-a4de-ff1114824431", FindFoldersQuery.class);
     /** Searches for documents by reference IDs */
-    @XmlEnumValue("FindDocumentsByReferenceId") FIND_DOCUMENTS_BY_REFERENCE_ID("urn:uuid:12941a89-e02e-4be5-967c-ce4bfc8fe492", FindDocumentsByReferenceIdQuery.class),
+    public static final QueryType FIND_DOCUMENTS_BY_REFERENCE_ID = new QueryType(Type.OFFICIAL, "urn:uuid:12941a89-e02e-4be5-967c-ce4bfc8fe492", FindDocumentsByReferenceIdQuery.class);
     /** Searches for folders (Multi Patient Variety). */
-    @XmlEnumValue("FindFoldersForMultiplePatients") FIND_FOLDERS_MPQ("urn:uuid:50d3f5ac-39a2-11de-a1ca-b366239e58df", FindFoldersForMultiplePatientsQuery.class),
+    public static final QueryType FIND_FOLDERS_MPQ = new QueryType(Type.OFFICIAL, "urn:uuid:50d3f5ac-39a2-11de-a1ca-b366239e58df", FindFoldersForMultiplePatientsQuery.class);
     /** Returns everything. */
-    @XmlEnumValue("GetAll") GET_ALL("urn:uuid:10b545ea-725c-446d-9b95-8aeb444eddf3", GetAllQuery.class),
+    public static final QueryType GET_ALL = new QueryType(Type.OFFICIAL, "urn:uuid:10b545ea-725c-446d-9b95-8aeb444eddf3", GetAllQuery.class);
     /** Returns specific documents. */
-    @XmlEnumValue("GetDocuments") GET_DOCUMENTS("urn:uuid:5c4f972b-d56b-40ac-a5fc-c8ca9b40b9d4", GetDocumentsQuery.class),
+    public static final QueryType GET_DOCUMENTS = new QueryType(Type.OFFICIAL, "urn:uuid:5c4f972b-d56b-40ac-a5fc-c8ca9b40b9d4", GetDocumentsQuery.class);
     /** Returns specific folders. */
-    @XmlEnumValue("GetFolders") GET_FOLDERS("urn:uuid:5737b14c-8a1a-4539-b659-e03a34a5e1e4", GetFoldersQuery.class),
+    public static final QueryType GET_FOLDERS = new QueryType(Type.OFFICIAL, "urn:uuid:5737b14c-8a1a-4539-b659-e03a34a5e1e4", GetFoldersQuery.class);
     /** Returns specific associations. */
-    @XmlEnumValue("GetAssociations") GET_ASSOCIATIONS("urn:uuid:a7ae438b-4bc2-4642-93e9-be891f7bb155", GetAssociationsQuery.class),
+    public static final QueryType GET_ASSOCIATIONS = new QueryType(Type.OFFICIAL, "urn:uuid:a7ae438b-4bc2-4642-93e9-be891f7bb155", GetAssociationsQuery.class);
     /** Returns specific documents and their associations. */
-    @XmlEnumValue("GetDocumentsAndAssociations") GET_DOCUMENTS_AND_ASSOCIATIONS("urn:uuid:bab9529a-4a10-40b3-a01f-f68a615d247a", GetDocumentsAndAssociationsQuery.class),
+    public static final QueryType GET_DOCUMENTS_AND_ASSOCIATIONS = new QueryType(Type.OFFICIAL, "urn:uuid:bab9529a-4a10-40b3-a01f-f68a615d247a", GetDocumentsAndAssociationsQuery.class);
     /** Returns specific submission sets. */
-    @XmlEnumValue("GetSubmissionSets") GET_SUBMISSION_SETS("urn:uuid:51224314-5390-4169-9b91-b1980040715a", GetSubmissionSetsQuery.class),
+    public static final QueryType GET_SUBMISSION_SETS = new QueryType(Type.OFFICIAL, "urn:uuid:51224314-5390-4169-9b91-b1980040715a", GetSubmissionSetsQuery.class);
     /** Returns specific submission sets and their contents. */
-    @XmlEnumValue("GetSubmissionSetAndContents") GET_SUBMISSION_SET_AND_CONTENTS("urn:uuid:e8e3cb2c-e39c-46b9-99e4-c12f57260b83", GetSubmissionSetAndContentsQuery.class),
+    public static final QueryType GET_SUBMISSION_SET_AND_CONTENTS = new QueryType(Type.OFFICIAL, "urn:uuid:e8e3cb2c-e39c-46b9-99e4-c12f57260b83", GetSubmissionSetAndContentsQuery.class);
     /** Returns specific folders and their contents. */
-    @XmlEnumValue("GetFolderAndContents") GET_FOLDER_AND_CONTENTS("urn:uuid:b909a503-523d-4517-8acf-8e5834dfc4c7", GetFolderAndContentsQuery.class),
+    public static final QueryType GET_FOLDER_AND_CONTENTS = new QueryType(Type.OFFICIAL, "urn:uuid:b909a503-523d-4517-8acf-8e5834dfc4c7", GetFolderAndContentsQuery.class);
     /** Returns folders for a specific document. */
-    @XmlEnumValue("GetFoldersForDocument") GET_FOLDERS_FOR_DOCUMENT("urn:uuid:10cae35a-c7f9-4cf5-b61e-fc3278ffb578", GetFoldersForDocumentQuery.class),
+    public static final QueryType GET_FOLDERS_FOR_DOCUMENT = new QueryType(Type.OFFICIAL, "urn:uuid:10cae35a-c7f9-4cf5-b61e-fc3278ffb578", GetFoldersForDocumentQuery.class);
     /** Returns all documents with a given relation to a specified entry. */
-    @XmlEnumValue("GetRelatedDocuments") GET_RELATED_DOCUMENTS("urn:uuid:d90e5407-b356-4d91-a89f-873917b4b0e6", GetRelatedDocumentsQuery.class),
+    public static final QueryType GET_RELATED_DOCUMENTS = new QueryType(Type.OFFICIAL, "urn:uuid:d90e5407-b356-4d91-a89f-873917b4b0e6", GetRelatedDocumentsQuery.class);
     /** Cross-Community Fetch query (ITI-63). */
-    @XmlEnumValue("Fetch") FETCH("urn:uuid:f2072993-9478-41df-a603-8f016706efe8", FetchQuery.class);
+    public static final QueryType FETCH = new QueryType(Type.OFFICIAL, "urn:uuid:f2072993-9478-41df-a603-8f016706efe8", FetchQuery.class);
 
-    private final String id;
-    private final Class<? extends Query> type; 
+    public static final QueryType[] OFFICIAL_VALUES = {SQL, FIND_DOCUMENTS, FIND_DOCUMENTS_MPQ,
+        FIND_SUBMISSION_SETS, FIND_FOLDERS, FIND_DOCUMENTS_BY_REFERENCE_ID, FIND_FOLDERS_MPQ,
+        GET_ALL, GET_DOCUMENTS, GET_FOLDERS, GET_ASSOCIATIONS, GET_DOCUMENTS_AND_ASSOCIATIONS,
+        GET_SUBMISSION_SETS, GET_SUBMISSION_SET_AND_CONTENTS, GET_FOLDER_AND_CONTENTS,
+        GET_FOLDERS_FOR_DOCUMENT, GET_RELATED_DOCUMENTS, FETCH};
+
+    /** Class implementing the query. */
+    @Getter private final Class<? extends Query> implementingClass;
     
-    private QueryType(String id, Class<? extends Query> type) {
-        this.id = id;
-        this.type = type;
+    public QueryType(XdsEnum.Type type, String ebXML, Class<? extends Query> implementingClass) {
+        super(type, ebXML);
+        this.implementingClass = implementingClass;
     }
 
-    /**
-     * @return the ID of the query.
-     */
-    public String getId() {
-        return id;
-    }
-    
-    /**
-     * @return the class implementing the query. 
-     */
-    public Class<? extends Query> getType() {
-        return type;
-    }
-
-    /**
-     * Returns a query type by its id.
-     * @param id
-     *          the id. Can be <code>null</code>.
-     * @return the type. <code>null</code> if the id is <code>null</code>.
-     */
-    public static QueryType valueOfId(String id) {
-        if (id == null) {
-            return null;
-        }
-
-        for (QueryType type : values()) {
-            if (id.equals(type.getId())) {
-                return type;
-            }
-        }
-        
-        throw new XDSMetaDataException(ValidationMessage.UNKNOWN_QUERY_TYPE, id);
+    @Override
+    public String getJaxbValue() {
+        return (getType() == Type.OFFICIAL) ? getImplementingClass().getSimpleName() : getEbXML30();
     }
 }

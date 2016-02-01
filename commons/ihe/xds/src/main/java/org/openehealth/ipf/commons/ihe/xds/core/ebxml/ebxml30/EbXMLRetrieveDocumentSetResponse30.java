@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType.DocumentResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.StatusFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
@@ -106,7 +107,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
     @Override
     public void setStatus(Status status) {
         if (response.getRegistryResponse() != null){
-            response.getRegistryResponse().setStatus(Status.getOpcode30(status));
+            response.getRegistryResponse().setStatus(new StatusFactory30().toEbXML(status));
         }
     }
 
@@ -114,7 +115,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
     public Status getStatus() {
         Status status = null;
         if (response.getRegistryResponse() != null){
-            status = Status.valueOfOpcode(response.getRegistryResponse().getStatus());
+            status = new StatusFactory30().fromEbXML(response.getRegistryResponse().getStatus());
         }
         return status;
     }

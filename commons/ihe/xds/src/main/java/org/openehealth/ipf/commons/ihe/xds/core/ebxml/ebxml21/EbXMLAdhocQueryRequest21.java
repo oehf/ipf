@@ -66,7 +66,7 @@ public class EbXMLAdhocQueryRequest21 implements EbXMLAdhocQueryRequest {
     
     @Override
     public String getId() {
-        return QueryType.SQL.getId();
+        return QueryType.SQL.getEbXML30();
     }
     
     @Override

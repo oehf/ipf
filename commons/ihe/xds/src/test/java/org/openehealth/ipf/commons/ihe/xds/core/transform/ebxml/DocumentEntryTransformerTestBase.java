@@ -128,10 +128,10 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
 
         documentEntry.getReferenceIdList().add(new ReferenceId(
                 "ref-id-11", new AssigningAuthority("1.1.2.3"),
-                ReferenceId.ID_TYPE_CODE_ORDER, new AssigningAuthority("1.4.5.6")));
+                ReferenceIdType.ORDER, new AssigningAuthority("1.4.5.6")));
         documentEntry.getReferenceIdList().add(new ReferenceId(
                 "ref-id-12", new AssigningAuthority("2.1.2.3"),
-                ReferenceId.ID_TYPE_CODE_ACCESSION, new AssigningAuthority("2.4.5.6")));
+                ReferenceIdType.ACCESSION, new AssigningAuthority("2.4.5.6")));
 
         if (homeAware) {
             documentEntry.setHomeCommunityId("123.456");
@@ -146,7 +146,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertEquals(AvailabilityStatus.APPROVED, ebXML.getStatus());
         assertEquals("text/plain", ebXML.getMimeType());
         assertEquals("uuid", ebXML.getId());
-        assertEquals(DocumentEntryType.STABLE.getUuid(), ebXML.getObjectType());
+        assertEquals(DocumentEntryType.STABLE.getEbXML30(), ebXML.getObjectType());
         if (homeAware) {
             assertEquals("123.456", ebXML.getHome());
         }

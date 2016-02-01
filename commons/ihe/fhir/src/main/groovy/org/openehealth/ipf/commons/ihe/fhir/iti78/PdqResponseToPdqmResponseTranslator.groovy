@@ -21,7 +21,10 @@ import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.v25.segment.PID
 import org.apache.commons.lang3.Validate
 import org.hl7.fhir.instance.model.*
+import org.hl7.fhir.instance.model.Address.AddressUse
+import org.hl7.fhir.instance.model.ContactPoint.ContactPointSystem
 import org.hl7.fhir.instance.model.ContactPoint.ContactPointUse
+import org.hl7.fhir.instance.model.HumanName.NameUse
 import org.hl7.fhir.instance.model.valuesets.V3MaritalStatus
 import org.hl7.fhir.instance.model.valuesets.V3NullFlavor
 import org.openehealth.ipf.commons.ihe.fhir.Utils
@@ -105,7 +108,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
 
                 // This assigns the resource ID. It is taken from the PID-3 identifier list where the
                 // namespace matches pdqSupplierResourceIdentifierOid
-                def resourcePid = pid[3]().find { pid3 -> pdqSupplierResourceIdentifierOid == pid3[4][2].value}
+                def resourcePid = pid[3]().find { pid3 -> pdqSupplierResourceIdentifierOid == pid3[4][2].value }
                 if (resourcePid) {
                     patient.setId(new IdType('Patient', resourcePid[1].value))
                 } else {
@@ -123,7 +126,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                 }
                 if (pid[7]?.value) patient.setBirthDateElement(DateType.parseV3(pid[7].value))
                 if (pid[8]?.value) patient.setGender(
-                        Enumerations.AdministrativeGender.fromCode(pid[8].value.map('hl7v2fhir-patient-administrativeGender')))
+                        Enumerations.AdministrativeGender.fromCode(pid[8].value?.map('hl7v2fhir-patient-administrativeGender')))
 
                 // No race in the default FHIR patient resource (but in the DAF profile)
 
@@ -131,10 +134,10 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                     convertAddresses(pid[11](), patient.getAddress())
                 }
                 if (!pid[13].empty) {
-                    convertTelecoms(pid[13](), patient.getTelecom(), ContactPointUse.HOME)
+                    convertTelecoms(pid[13](), patient.getTelecom(), ContactPointUse.HOME, ContactPointSystem.PHONE)
                 }
                 if (!pid[14].empty) {
-                    convertTelecoms(pid[14](), patient.getTelecom(), ContactPointUse.WORK)
+                    convertTelecoms(pid[14](), patient.getTelecom(), ContactPointUse.WORK, ContactPointSystem.PHONE)
                 }
                 // TODO may be needs conversion, expectation is something like en-US or de
                 if (pid[15]?.value) {
@@ -146,7 +149,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                 if (pid[16]?.value) {
                     CodeableConcept maritalStatus = new CodeableConcept()
                     String mapped = pid[16].value.map('hl7v2fhir-patient-maritalStatus')
-                    def mappedMaritalStatus = "UNK".equals(mapped) ? V3NullFlavor.UNK : V3MaritalStatus.fromCode(mapped)
+                    V3MaritalStatus mappedMaritalStatus = "UNK".equals(mapped) ? V3NullFlavor.UNK : V3MaritalStatus.fromCode(mapped)
                     maritalStatus.addCoding()
                             .setCode(mapped)
                             .setSystem(mappedMaritalStatus.system)
@@ -184,7 +187,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                 } else if (pid[30].value) {
                     patient.setDeceased(new BooleanType(pid[30].value == 'Y'))
                 }
-                // Convert composite stuff....
+
                 resultList.add(patient)
             }
         }
@@ -243,7 +246,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                 .setPostalCode(xad[5]?.value)
                 .setState(xad[4]?.value)
                 .setDistrict(xad[9]?.value)
-                .setUse(Address.AddressUse.fromCode((xad[7]?.value ?: '').map('hl7v2fhir-address-use')))
+                .setUse(addressUse(xad[7], AddressUse.HOME))
         if (xad[1]?.value) address.getLine().add(new StringType(xad[1]?.value))
         if (xad[2]?.value) address.getLine().add(new StringType(xad[2]?.value))
         address
@@ -261,8 +264,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
      * @return an {@link HumanName} instance
      */
     protected HumanName convertName(xpn) {
-        HumanName name = new HumanName()
-                .setUse(HumanName.NameUse.fromCode((xpn[7]?.value ?: '').map('hl7v2fhir-name-use')))
+        HumanName name = new HumanName().setUse(nameUse(xpn[7], NameUse.OFFICIAL))
         if (xpn[1]?.value) name.getFamily().add(new StringType(xpn[1].value))
         if (xpn[2]?.value) name.getGiven().add(new StringType(xpn[2].value))
         if (xpn[3]?.value) name.getGiven().add(new StringType(xpn[3].value))
@@ -271,9 +273,9 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         name
     }
 
-    protected void convertTelecoms(xtns, List<ContactPoint> telecoms, ContactPoint.ContactPointUse defaultUse) {
+    private void convertTelecoms(xtns, List<ContactPoint> telecoms, ContactPointUse defaultUse, ContactPointSystem defaultSystem) {
         for (def xtn : xtns) {
-            telecoms.add(convertTelecom(xtn, defaultUse))
+            telecoms.add(convertTelecom(xtn, defaultUse, defaultSystem))
         }
     }
 
@@ -282,17 +284,36 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
      * @param xtn XTN composite
      * @return an {@link ContactPoint} instance
      */
-    protected ContactPoint convertTelecom(xtn, ContactPoint.ContactPointUse defaultUse) {
+    protected ContactPoint convertTelecom(xtn, ContactPointUse defaultUse, ContactPointSystem defaultSystem) {
         ContactPoint telecom = new ContactPoint()
-                .setUse(ContactPoint.ContactPointUse.fromCode((xtn[2]?.value ?: '').map('hl7v2fhir-telecom-use')) ?: defaultUse)
-                .setSystem(ContactPoint.ContactPointSystem.fromCode((xtn[3]?.value ?: '').map('hl7v2fhir-telecom-type')))
+                .setUse(telecomUse(xtn[2], defaultUse))
+                .setSystem(telecomSystem(xtn[3], defaultSystem))
                 .setValue(xtn[1]?.value)
         if (xtn[4]?.value) {
-            telecom.setSystem(ContactPoint.ContactPointSystem.EMAIL)
+            telecom.setSystem(ContactPointSystem.EMAIL)
                     .setValue(xtn[4]?.value)
-                    .setUserData(ContactPoint.ContactPointUse.NULL)
+                    .setUse(ContactPointUse.NULL)
         }
         telecom
     }
 
+    protected ContactPointUse telecomUse(field, ContactPointUse defaultUse) {
+        String fhirTelecomUse = (field?.value ?: '').map('hl7v2fhir-telecom-use')
+        return fhirTelecomUse ? ContactPointUse.fromCode(fhirTelecomUse) : defaultUse
+    }
+
+    protected ContactPointSystem telecomSystem(field, ContactPointSystem defaultSystem) {
+        String fhirTelecomSystem = (field?.value ?: '').map('hl7v2fhir-telecom-type')
+        return fhirTelecomSystem ? ContactPointSystem.fromCode(fhirTelecomSystem) : defaultSystem
+    }
+
+    protected NameUse nameUse(field, NameUse defaultUse) {
+        String fhirNameUse = (field?.value ?: '').map('hl7v2fhir-name-use')
+        return fhirNameUse ? NameUse.fromCode(fhirNameUse) : defaultUse
+    }
+
+    protected AddressUse addressUse(field, AddressUse defaultUse) {
+        String addressUse = (field?.value ?: '').map('hl7v2fhir-address-use')
+        return addressUse ? AddressUse.fromCode(addressUse) : defaultUse
+    }
 }
