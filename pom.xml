@@ -69,8 +69,8 @@
         <!-- Dependency version properties -->
         <activemq-version>5.12.1</activemq-version>
         <aspectj-version>1.8.7</aspectj-version>
-        <bouncycastle-version>1.52</bouncycastle-version>
-        <camel-version>2.16.1</camel-version>
+        <bouncycastle-version>1.54</bouncycastle-version>
+        <camel-version>2.16.2</camel-version>
         <cglib-version>3.1</cglib-version>
         <commons-beanutils-version>1.9.2</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
@@ -93,42 +93,42 @@
         <groovy-version>2.4.5</groovy-version>
         <hapi-version>2.2</hapi-version>
         <hapi-fhir-version>1.3</hapi-fhir-version>
-        <hibernate-version>4.3.8.Final</hibernate-version>
+        <hibernate-version>4.3.9.Final</hibernate-version>
         <hibernate-commons-annotations-version>4.0.5.Final</hibernate-commons-annotations-version>
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
-        <hibernate-javassist-version>3.19.0-GA</hibernate-javassist-version>
+        <hibernate-javassist-version>3.20.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
-        <httpclient4-version>4.4</httpclient4-version>
+        <httpclient4-version>4.5.1</httpclient4-version>
         <ipf-gazelle-version>1.0.8</ipf-gazelle-version>
         <ipf-oht-atna-version>3.1.0</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.2.11</jaxb-version>
         <jasypt-version>1.9.2</jasypt-version>
         <jboss-logging-version>3.3.0.Final</jboss-logging-version>
-        <jboss-logging-annotations-version>1.2.0.Final</jboss-logging-annotations-version>
+        <jboss-logging-annotations-version>2.0.1.Final</jboss-logging-annotations-version>
         <jdom-version>2.0.2</jdom-version>
-        <jetty-version>9.2.11.v20150529</jetty-version>
+        <jetty-version>9.3.7.v20160115</jetty-version>
         <joda-time-version>2.9.1</joda-time-version>
         <junit-version>4.12</junit-version>
         <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.17</log4j-version>
         <lombok-version>1.16.6</lombok-version>
         <lucene-version>4.10.4</lucene-version>
-        <mina2-version>2.0.9</mina2-version>
+        <mina2-version>2.0.10</mina2-version>
         <not-yet-commons-ssl-version>0.3.11</not-yet-commons-ssl-version>
         <opensaml-version>3.1.1</opensaml-version>
         <osgi-api-version>1.4.0</osgi-api-version>
-        <quartz-version>2.2.1</quartz-version>
+        <quartz-version>2.2.2</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <saxon-he-version>9.7.0-1</saxon-he-version>
-        <slf4j-version>1.7.12</slf4j-version>
-        <spring-version>4.1.8.RELEASE</spring-version>
+        <slf4j-version>1.7.13</slf4j-version>
+        <spring-version>4.2.4.RELEASE</spring-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.39</tomcat-version>
         <xbean-spring-version>3.18</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
-        <xmlsec-version>2.0.5</xmlsec-version>
+        <xmlsec-version>2.0.6</xmlsec-version>
     </properties>
 
     <url>${site.url}</url>
@@ -591,6 +591,12 @@
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>${commons-beanutils-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>commons-codec</groupId>
@@ -627,6 +633,12 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient4-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
@@ -1043,6 +1055,18 @@
                         <groupId>org.apache.geronimo.specs</groupId>
                         <artifactId>geronimo-servlet_2.5_spec</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-io</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-security</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-continuation</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -1343,6 +1367,21 @@
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-servlets</artifactId>
+                <version>${jetty-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-http</artifactId>
+                <version>${jetty-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-util</artifactId>
+                <version>${jetty-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-continuation</artifactId>
                 <version>${jetty-version}</version>
             </dependency>
             <dependency>
