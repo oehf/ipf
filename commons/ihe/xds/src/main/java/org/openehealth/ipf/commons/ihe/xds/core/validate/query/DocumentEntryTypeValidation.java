@@ -26,6 +26,7 @@ import java.util.List;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_QUERY_PARAMETER_VALUE;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.isValid;
 
 /**
  * Query parameter validation for $XDSDocumentEntryType.
@@ -46,7 +47,7 @@ public class DocumentEntryTypeValidation implements QueryParameterValidation {
 
         if (list != null) {
             for (DocumentEntryType type : list) {
-                metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);
+                metaDataAssert(isValid(type), INVALID_QUERY_PARAMETER_VALUE, param);
             }
         }
     }

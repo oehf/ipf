@@ -135,7 +135,8 @@ public enum ValidationMessage {
     MISSING_TELECOM_PARAM("A required telecom parameter is missing : %s"),
     INCONSISTENT_TELECOM_PARAM("Inconsistent telecom parameters : %s"),
     SUBMISSION_SET_STATUS_MANDATORY("Submission set status is mandatory for each association involving a submission set as a target and document entry as its source"),
-    INVALID_DOCUMENT_AVAILABILITY("Unsupported document availability: %s");
+    INVALID_DOCUMENT_AVAILABILITY("Unsupported document availability: %s"),
+    WRONG_REFERENCE_ID_TYPE("Wrong reference ID type: %s");
 
 
     private final String text;

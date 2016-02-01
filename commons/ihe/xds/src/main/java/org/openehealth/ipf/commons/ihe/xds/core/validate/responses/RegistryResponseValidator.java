@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.isValid;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
@@ -36,11 +37,11 @@ public class RegistryResponseValidator implements Validator<EbXMLRegistryRespons
     public void validate(EbXMLRegistryResponse response, ValidationProfile profile) {
         notNull(response, "response cannot be null");
         
-        metaDataAssert(response.getStatus() != null, INVALID_STATUS_IN_RESPONSE);
+        metaDataAssert(isValid(response.getStatus()), INVALID_STATUS_IN_RESPONSE);
         for (EbXMLRegistryError registryError : response.getErrors()) {
             metaDataAssert(registryError != null, INVALID_ERROR_INFO_IN_RESPONSE);
             metaDataAssert(registryError.getErrorCode() != null, INVALID_ERROR_CODE_IN_RESPONSE);
-            metaDataAssert(registryError.getSeverity() != null, INVALID_SEVERITY_IN_RESPONSE);
+            metaDataAssert(isValid(registryError.getSeverity()), INVALID_SEVERITY_IN_RESPONSE);
 
             if (profile.getProfile() == ValidationProfile.InteractionProfile.XCA) {
                 hcValidator.validate(registryError.getLocation());

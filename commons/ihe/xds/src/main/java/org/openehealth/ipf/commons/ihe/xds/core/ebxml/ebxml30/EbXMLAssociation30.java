@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AssociationTypeFactory30;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AvailabilityStatusFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
@@ -23,6 +25,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AssociationType1
 
 import java.util.List;
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_ORIGINAL_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_NEW_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_PREVIOUS_VERSION;
 
 /**
  * Encapsulation of {@link AssociationType1}.
@@ -62,22 +68,58 @@ public class EbXMLAssociation30 extends EbXMLRegistryObject30<AssociationType1> 
 
     @Override
     public AssociationType getAssociationType() {
-        return AssociationType.valueOfOpcode30(getInternal().getAssociationType());
+        return new AssociationTypeFactory30().fromEbXML(getInternal().getAssociationType());
     }
 
     @Override
     public void setAssociationType(AssociationType associationType) {
-        getInternal().setAssociationType(AssociationType.getOpcode30(associationType));
+        getInternal().setAssociationType(new AssociationTypeFactory30().toEbXML(associationType));
     }
 
     @Override
     public AvailabilityStatus getStatus() {
-        return AvailabilityStatus.valueOfOpcode(getInternal().getStatus());
+        return new AvailabilityStatusFactory30().fromEbXML(getInternal().getStatus());
     }
 
     @Override
     public void setStatus(AvailabilityStatus availabilityStatus) {
-        getInternal().setStatus(AvailabilityStatus.toQueryOpcode(availabilityStatus));
+        getInternal().setStatus(new AvailabilityStatusFactory30().toEbXML(availabilityStatus));
+    }
+
+    @Override
+    public AvailabilityStatus getOriginalStatus() {
+        return new AvailabilityStatusFactory30().fromEbXML(getSingleSlotValue(SLOT_NAME_ORIGINAL_STATUS));
+    }
+
+    @Override
+    public void setOriginalStatus(AvailabilityStatus status) {
+        String s = new AvailabilityStatusFactory30().toEbXML(status);
+        if (s != null) {
+            addSlot(SLOT_NAME_ORIGINAL_STATUS, s);
+        }
+    }
+
+    @Override
+    public AvailabilityStatus getNewStatus() {
+        return new AvailabilityStatusFactory30().fromEbXML(getSingleSlotValue(SLOT_NAME_NEW_STATUS));
+    }
+
+    @Override
+    public void setNewStatus(AvailabilityStatus status) {
+        String s = new AvailabilityStatusFactory30().toEbXML(status);
+        if (s != null) {
+            addSlot(SLOT_NAME_NEW_STATUS, s);
+        }
+    }
+
+    @Override
+    public String getPreviousVersion() {
+        return getSingleSlotValue(SLOT_NAME_PREVIOUS_VERSION);
+    }
+
+    @Override
+    public void setPreviousVersion(String version) {
+        addSlot(SLOT_NAME_PREVIOUS_VERSION, version);
     }
 
     @Override
@@ -89,4 +131,5 @@ public class EbXMLAssociation30 extends EbXMLRegistryObject30<AssociationType1> 
     public void setExtraMetadata(Map<String, List<String>> map) {
         getInternal().setExtraMetadata(map);
     }
+
 }

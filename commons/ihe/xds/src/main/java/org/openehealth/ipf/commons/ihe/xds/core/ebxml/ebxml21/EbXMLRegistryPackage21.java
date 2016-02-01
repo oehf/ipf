@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AvailabilityStatusFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.RegistryPackageType;
 
@@ -38,11 +39,11 @@ public class EbXMLRegistryPackage21 extends EbXMLRegistryObject21<RegistryPackag
 
     @Override
     public AvailabilityStatus getStatus() {
-        return AvailabilityStatus.valueOfOpcode(getInternal().getStatus());
+        return new AvailabilityStatusFactory21().fromEbXML(getInternal().getStatus());
     }
 
     @Override
     public void setStatus(AvailabilityStatus status) {
-        getInternal().setStatus(AvailabilityStatus.toOpcode(status));
+        getInternal().setStatus(new AvailabilityStatusFactory21().toEbXML(status));
     }
 }

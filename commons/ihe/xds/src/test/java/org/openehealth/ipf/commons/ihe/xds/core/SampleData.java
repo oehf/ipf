@@ -16,6 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.ErrorCodeFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.ReferenceIdTypeFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
@@ -93,9 +95,9 @@ public abstract class SampleData {
         Response response = new Response();
         response.setStatus(Status.FAILURE);
         response.getErrors().addAll(Arrays.asList(
-                new ErrorInfo(ErrorCode.PATIENT_ID_DOES_NOT_MATCH, "context1", Severity.ERROR, "location1", null),
-                new ErrorInfo(ErrorCode.SQL_ERROR, "context2", Severity.WARNING, null, null),
-                new ErrorInfo(ErrorCode._USER_DEFINED, "context3", Severity.ERROR, "location3", "MyCustomErrorCode")));
+                new ErrorInfo(ErrorCode.PATIENT_ID_DOES_NOT_MATCH, "context1", Severity.ERROR, "location1"),
+                new ErrorInfo(ErrorCode.SQL_ERROR, "context2", Severity.WARNING, null),
+                new ErrorInfo(new ErrorCodeFactory().fromEbXML("MyCustomErrorCode"), "context3", Severity.ERROR, "location3")));
         return response;
     }    
 
@@ -308,10 +310,10 @@ public abstract class SampleData {
         docEntry.setUri("http://hierunten.com");
         docEntry.getReferenceIdList().add(new ReferenceId(
                 "ref-id-1", new AssigningAuthority("1.1.2.3"),
-                ReferenceId.ID_TYPE_CODE_ORDER, new AssigningAuthority("1.4.5.6")));
+                ReferenceIdType.ORDER, new AssigningAuthority("1.4.5.6")));
         docEntry.getReferenceIdList().add(new ReferenceId(
                 "ref-id-2", new AssigningAuthority("2.1.2.3"),
-                "vendor-defined", new AssigningAuthority("2.4.5.6")));
+                new ReferenceIdTypeFactory().fromEbXML("vendor-defined"), new AssigningAuthority("2.4.5.6")));
         return docEntry;
     }    
 

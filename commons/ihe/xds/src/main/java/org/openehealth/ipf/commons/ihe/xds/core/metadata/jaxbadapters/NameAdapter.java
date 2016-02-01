@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * serialized without change.
  * @author Michael Ottati
  */
-public class NameAdapter extends XmlAdapter<XpnName,Name> {
+public class NameAdapter extends XmlAdapter<XpnName, Name> {
     @Override
     public Name unmarshal(XpnName v) throws Exception {
         return v;

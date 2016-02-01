@@ -104,8 +104,8 @@ class TestIti51 extends StandardTestContainer {
             checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
             checkPatient(message.ParticipantObjectIdentification[0], 'id3^^^&1.3&ISO', 'id4^^^&1.4&ISO')
             checkQuery(message.ParticipantObjectIdentification[1], 'ITI-51',
-                    QueryType.FIND_DOCUMENTS_MPQ.getId(),
-                    QueryType.FIND_DOCUMENTS_MPQ.getId())
+                    QueryType.FIND_DOCUMENTS_MPQ.ebXML30,
+                    QueryType.FIND_DOCUMENTS_MPQ.ebXML30)
         }
     }
     

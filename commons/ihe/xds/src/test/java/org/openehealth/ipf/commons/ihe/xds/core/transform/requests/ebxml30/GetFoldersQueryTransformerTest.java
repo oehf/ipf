@@ -51,7 +51,7 @@ public class GetFoldersQueryTransformerTest {
     @Test
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
-        assertEquals(QueryType.GET_FOLDERS.getId(), ebXML.getId());
+        assertEquals(QueryType.GET_FOLDERS.getEbXML30(), ebXML.getId());
         
         assertEquals(Arrays.asList("('uuid1')", "('uuid2')"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_UUID.getSlotName()));

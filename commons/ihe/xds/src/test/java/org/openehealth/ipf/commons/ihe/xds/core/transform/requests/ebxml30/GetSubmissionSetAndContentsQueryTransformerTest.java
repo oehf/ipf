@@ -66,7 +66,7 @@ public class GetSubmissionSetAndContentsQueryTransformerTest {
     @Test
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
-        assertEquals(QueryType.GET_SUBMISSION_SET_AND_CONTENTS.getId(), ebXML.getId());
+        assertEquals(QueryType.GET_SUBMISSION_SET_AND_CONTENTS.getEbXML30(), ebXML.getId());
         
         assertEquals(Arrays.asList("'uuid1'"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_UUID.getSlotName()));
