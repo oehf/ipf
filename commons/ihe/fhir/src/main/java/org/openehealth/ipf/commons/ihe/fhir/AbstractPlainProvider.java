@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,27 @@ public abstract class AbstractPlainProvider implements Serializable {
     protected final <R extends IBaseResource> List<R> requestBundle(Object payload,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         return requestBundle(payload, null, httpServletRequest, httpServletResponse);
+    }
+
+    protected final MethodOutcome requestAction(
+            Object payload,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse)
+    {
+        return requestAction(payload, null, httpServletRequest, httpServletResponse);
+    }
+
+    protected final MethodOutcome requestAction(
+            Object payload,
+            Map<String, Object> parameters,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse)
+    {
+        if (consumer == null) {
+            throw new IllegalStateException("Consumer is not initialized");
+        }
+        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
+        return consumer.handleAction(payload, headers);
     }
 
     protected final <R extends IBaseResource> List<R> requestBundle(

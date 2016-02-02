@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.List;
@@ -31,6 +32,14 @@ import java.util.Map;
  */
 
 public interface RequestConsumer {
+
+    /**
+     * Handles a Create / Update / Validate / Delete action request.
+     * @param payload request payload
+     * @param headers request parameters, e.g. search parameters
+     * @return result of the action execution
+     */
+    MethodOutcome handleAction(Object payload, Map<String, Object> headers);
 
     /**
      * Handles the request for a resource
