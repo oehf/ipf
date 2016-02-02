@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
 import org.apache.camel.Consumer;
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
@@ -53,6 +54,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         this.fhirComponent = fhirComponent;
         this.config = config;
         this.servletName = config.getServletName();
+        this.setExchangePattern(ExchangePattern.InOut);
     }
 
     @Override
