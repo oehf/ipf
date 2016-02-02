@@ -116,9 +116,10 @@ public abstract class AbstractPlainProvider implements Serializable {
         enriched.put(HTTP_PROTOCOL_VERSION, httpServletRequest.getProtocol());
         enriched.put(HTTP_CLIENT_IP_ADDRESS, httpServletRequest.getRemoteAddr());
 
-        if (parameters != null && !parameters.isEmpty()) {
-            enriched.put(FHIR_REQUEST_PARAMETERS, parameters);
+        if (parameters == null) {
+            parameters = new HashMap<>();
         }
+        enriched.put(FHIR_REQUEST_PARAMETERS, parameters);
         return enriched;
     }
 
