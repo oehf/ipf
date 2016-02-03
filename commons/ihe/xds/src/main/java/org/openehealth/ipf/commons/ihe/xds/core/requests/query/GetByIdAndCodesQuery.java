@@ -20,11 +20,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
 /**
@@ -45,8 +47,11 @@ public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery
 
     @XmlElement(name = "confidentialityCode")
     @Getter @Setter private QueryList<Code> confidentialityCodes;
+
     @XmlElement(name = "formatCode")
     @Getter @Setter private List<Code> formatCodes;
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.DocumentEntryTypeAdapter.class)
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
 

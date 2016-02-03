@@ -22,8 +22,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumJaxbElement;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
 /**
@@ -39,10 +42,18 @@ public class FindDocumentsQuery extends DocumentsQuery implements PatientIdBased
     private static final long serialVersionUID = -5765363916663583605L;
 
     @Getter @Setter private Identifiable patientId;
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.AvailabilityStatusForQueryAdapter.class)
+    @XmlElement(type = XdsEnumJaxbElement.class)
     @Getter @Setter private List<AvailabilityStatus> status;
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.DocumentEntryTypeAdapter.class)
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.DocumentAvailabilityAdapter.class)
     @Getter @Setter private List<DocumentAvailability> documentAvailability;
+
     @Getter @Setter private Integer metadataLevel;
 
     /**

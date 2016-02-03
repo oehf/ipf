@@ -18,8 +18,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
 /**
@@ -32,8 +34,10 @@ import java.util.List;
 public class GetAssociationsQuery extends GetByUuidQuery {
     private static final long serialVersionUID = 5623733746377113397L;
 
+    @XmlJavaTypeAdapter(XdsEnumAdapter.AvailabilityStatusForQueryAdapter.class)
     @XmlElement(name = "associationStatus")
     @Getter @Setter private List<AvailabilityStatus> associationStatuses;
+
     @Getter @Setter private Integer metadataLevel;
 
     /**

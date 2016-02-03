@@ -35,7 +35,7 @@ abstract public class XdsEnumFactory<T extends XdsEnum> {
      * @return a code with the given type ({@link Type#USER_DEFINED} or {@link Type#INVALID})
      *      and the given string as value.
      */
-    abstract protected T createCode(XdsEnum.Type type, String ebXML);
+    public abstract T createCode(Type type, String ebXML);
 
     /**
      * @return <code>true</code> if the given string value can serve
@@ -43,7 +43,7 @@ abstract public class XdsEnumFactory<T extends XdsEnum> {
      *      <p>
      *      <code>false</code> per default, shall be overwritten when necessary.
      */
-    protected boolean canBeUserDefined(String ebXML) {
+    public boolean canBeUserDefined(String ebXML) {
         return false;
     }
 

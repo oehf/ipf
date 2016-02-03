@@ -27,7 +27,7 @@ public class DocumentEntryTypeFactory extends XdsEnumFactory<DocumentEntryType> 
     }
 
     @Override
-    protected DocumentEntryType createCode(XdsEnum.Type type, String ebXML) {
+    public DocumentEntryType createCode(XdsEnum.Type type, String ebXML) {
         return new DocumentEntryType(type, ebXML);
     }
 

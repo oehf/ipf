@@ -15,8 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnumFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.*;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
@@ -37,15 +42,22 @@ abstract public class XdsEnumAdapter<T extends XdsEnum> extends XmlAdapter<XdsEn
             return null;
         }
 
-        if (jaxb.getType() == XdsEnum.Type.OFFICIAL) {
-            for (T xds : factory.getOfficialValues()) {
-                if (xds.getJaxbValue().equals(jaxb.getValue())) {
-                    return xds;
+        switch (jaxb.getType()) {
+            case INVALID:
+                return factory.createCode(XdsEnum.Type.INVALID, jaxb.getValue());
+            case USER_DEFINED:
+                XdsEnum.Type type = factory.canBeUserDefined(jaxb.getValue())
+                        ? XdsEnum.Type.USER_DEFINED
+                        : XdsEnum.Type.INVALID;
+                return factory.createCode(type, jaxb.getValue());
+            default:
+                for (T official : factory.getOfficialValues()) {
+                    if (official.getJaxbValue().equals(jaxb.getValue())) {
+                        return official;
+                    }
                 }
-            }
+                return factory.fromEbXML(jaxb.getValue());
         }
-
-        return factory.fromEbXML(jaxb.getValue());
     }
 
     @Override
@@ -59,4 +71,79 @@ abstract public class XdsEnumAdapter<T extends XdsEnum> extends XmlAdapter<XdsEn
         jaxb.setValue(xds.getJaxbValue());
         return jaxb;
     }
+
+
+
+    public static class AssociationLabelAdapter extends XdsEnumAdapter<AssociationLabel> {
+        public AssociationLabelAdapter() {
+            super(new AssociationLabelFactory());
+        }
+    }
+
+    public static class AssociationTypeAdapter extends XdsEnumAdapter<AssociationType> {
+        public AssociationTypeAdapter() {
+            super(new AssociationTypeFactory30());
+        }
+    }
+
+    public static class AvailabilityStatusAdapter extends XdsEnumAdapter<AvailabilityStatus> {
+        public AvailabilityStatusAdapter() {
+            super(new AvailabilityStatusFactory30());
+        }
+    }
+
+    public static class AvailabilityStatusForQueryAdapter extends XdsEnumAdapter<AvailabilityStatus> {
+        public AvailabilityStatusForQueryAdapter() {
+            super(new AvailabilityStatusForQueryFactory());
+        }
+    }
+
+    public static class DocumentAvailabilityAdapter extends XdsEnumAdapter<DocumentAvailability> {
+        public DocumentAvailabilityAdapter() {
+            super(new DocumentAvailabilityFactory());
+        }
+    }
+
+    public static class DocumentEntryTypeAdapter extends XdsEnumAdapter<DocumentEntryType> {
+        public DocumentEntryTypeAdapter() {
+            super(new DocumentEntryTypeFactory());
+        }
+    }
+
+    public static class ErrorCodeAdapter extends XdsEnumAdapter<ErrorCode> {
+        public ErrorCodeAdapter() {
+            super(new ErrorCodeFactory());
+        }
+    }
+
+    public static class QueryReturnTypeAdapter extends XdsEnumAdapter<QueryReturnType> {
+        public QueryReturnTypeAdapter() {
+            super(new QueryReturnTypeFactory());
+        }
+    }
+
+    public static class QueryTypeAdapter extends XdsEnumAdapter<QueryType> {
+        public QueryTypeAdapter() {
+            super(new QueryTypeFactory());
+        }
+    }
+
+    public static class ReferenceIdTypeAdapter extends XdsEnumAdapter<ReferenceIdType> {
+        public ReferenceIdTypeAdapter() {
+            super(new ReferenceIdTypeFactory());
+        }
+    }
+
+    public static class SeverityAdapter extends XdsEnumAdapter<Severity> {
+        public SeverityAdapter() {
+            super(new SeverityFactory30());
+        }
+    }
+
+    public static class StatusAdapter extends XdsEnumAdapter<Status> {
+        public StatusAdapter() {
+            super(new StatusFactory30());
+        }
+    }
+
 }

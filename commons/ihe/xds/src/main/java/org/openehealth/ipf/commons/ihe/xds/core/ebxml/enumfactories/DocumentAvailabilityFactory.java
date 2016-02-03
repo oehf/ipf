@@ -27,7 +27,7 @@ public class DocumentAvailabilityFactory extends XdsEnumFactory<DocumentAvailabi
     }
 
     @Override
-    protected DocumentAvailability createCode(XdsEnum.Type type, String ebXML) {
+    public DocumentAvailability createCode(XdsEnum.Type type, String ebXML) {
         return new DocumentAvailability(type, ebXML);
     }
 

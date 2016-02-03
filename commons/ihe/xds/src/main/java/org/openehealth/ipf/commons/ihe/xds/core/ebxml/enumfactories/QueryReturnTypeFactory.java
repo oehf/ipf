@@ -27,7 +27,7 @@ public class QueryReturnTypeFactory extends XdsEnumFactory<QueryReturnType> {
     }
 
     @Override
-    protected QueryReturnType createCode(XdsEnum.Type type, String ebXML) {
+    public QueryReturnType createCode(XdsEnum.Type type, String ebXML) {
         return new QueryReturnType(type, ebXML);
     }
 

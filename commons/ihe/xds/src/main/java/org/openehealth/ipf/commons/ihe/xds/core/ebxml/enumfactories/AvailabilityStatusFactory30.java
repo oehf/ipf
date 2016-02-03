@@ -27,7 +27,7 @@ public class AvailabilityStatusFactory30 extends XdsEnumFactory<AvailabilityStat
     }
 
     @Override
-    protected AvailabilityStatus createCode(XdsEnum.Type type, String ebXML) {
+    public AvailabilityStatus createCode(XdsEnum.Type type, String ebXML) {
         return new AvailabilityStatus(type, ebXML, ebXML);
     }
 

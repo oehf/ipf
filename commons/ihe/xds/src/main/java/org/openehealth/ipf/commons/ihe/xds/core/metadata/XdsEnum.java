@@ -20,6 +20,7 @@ import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 
 import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
@@ -31,6 +32,7 @@ import java.io.Serializable;
 abstract public class XdsEnum implements Serializable {
     private static final long serialVersionUID = 6970017039702190232L;
 
+    @XmlType(name = "EnumValueType")
     @XmlEnum(String.class)
     public enum Type {
         /**

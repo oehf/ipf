@@ -18,8 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DocumentAvailabilityAdapter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DocumentEntryTypeAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -48,12 +47,17 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     
     @XmlElement(name = "author")
     @Getter private final List<Author> authors = new ArrayList<>();
+
     @Getter @Setter private Code classCode;
+
     @XmlElement(name = "confidentialityCode")
     @Getter private final List<Code> confidentialityCodes = new ArrayList<>();
+
     @Getter private Timestamp creationTime;
+
     @XmlElement(name = "eventCode")
     @Getter private final List<Code> eventCodeList = new ArrayList<>();
+
     @Getter @Setter private Code formatCode;
     @Getter @Setter private String hash;
     @Getter @Setter private Code healthcareFacilityTypeCode;
@@ -69,10 +73,13 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     @Getter @Setter private Code typeCode;
     @Getter @Setter private String uri;
     @Getter @Setter private String repositoryUniqueId;
-    @XmlJavaTypeAdapter(DocumentEntryTypeAdapter.class)
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.DocumentEntryTypeAdapter.class)
     @Getter @Setter private DocumentEntryType type = DocumentEntryType.STABLE;
+
     @Getter private List<ReferenceId> referenceIdList = new ArrayList<>();
-    @XmlJavaTypeAdapter(DocumentAvailabilityAdapter.class)
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.DocumentAvailabilityAdapter.class)
     @Getter @Setter private DocumentAvailability documentAvailability;
 
     /**

@@ -21,7 +21,9 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.*;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadata;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadataAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -47,19 +49,26 @@ public class Association implements Serializable, ExtraMetadataHolder {
 
     @Getter @Setter private String targetUuid;
     @Getter @Setter private String sourceUuid;
-    @XmlJavaTypeAdapter(AssociationTypeAdapter.class)
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.AssociationTypeAdapter.class)
     @Getter @Setter private AssociationType associationType;
-    @XmlJavaTypeAdapter(AssociationLabelAdapter.class)
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.AssociationLabelAdapter.class)
     @Getter @Setter private AssociationLabel label;
+
     @Getter @Setter private String entryUuid;
     @Getter @Setter private Code docCode;
     @Getter @Setter private String previousVersion;
-    @XmlJavaTypeAdapter(AvailabilityStatusAdapter.class)
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.AvailabilityStatusAdapter.class)
     @Getter @Setter private AvailabilityStatus originalStatus;
-    @XmlJavaTypeAdapter(AvailabilityStatusAdapter.class)
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.AvailabilityStatusAdapter.class)
     @Getter @Setter private AvailabilityStatus newStatus;
+
     @Getter @Setter private Boolean associationPropagation;
-    @XmlJavaTypeAdapter(AvailabilityStatusAdapter.class)
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.AvailabilityStatusAdapter.class)
     @Getter @Setter private AvailabilityStatus availabilityStatus;
 
     @XmlJavaTypeAdapter(ExtraMetadataAdapter.class)

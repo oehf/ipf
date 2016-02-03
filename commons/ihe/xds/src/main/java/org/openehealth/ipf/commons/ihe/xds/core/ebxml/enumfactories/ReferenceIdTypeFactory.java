@@ -28,7 +28,7 @@ public class ReferenceIdTypeFactory extends XdsEnumFactory<ReferenceIdType> {
     }
 
     @Override
-    protected ReferenceIdType createCode(XdsEnum.Type type, String ebXML) {
+    public ReferenceIdType createCode(XdsEnum.Type type, String ebXML) {
         return new ReferenceIdType(type, ebXML);
     }
 
@@ -38,7 +38,7 @@ public class ReferenceIdTypeFactory extends XdsEnumFactory<ReferenceIdType> {
     }
 
     @Override
-    protected boolean canBeUserDefined(String ebXML) {
+    public boolean canBeUserDefined(String ebXML) {
         return StringUtils.isNotBlank(ebXML) && (! ebXML.startsWith("urn:ihe:"));
     }
 }

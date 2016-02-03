@@ -18,13 +18,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.responses;
 import groovy.transform.EqualsAndHashCode;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsVersionedEnum;
 
-import javax.xml.bind.annotation.XmlType;
-
 /**
  * Status information according to the XDS specification.
  * @author Jens Riemschneider
  */
-@XmlType(name = "Status")
 @EqualsAndHashCode(callSuper = true)
 public class Status extends XdsVersionedEnum {
     private static final long serialVersionUID = 2594465927152837635L;

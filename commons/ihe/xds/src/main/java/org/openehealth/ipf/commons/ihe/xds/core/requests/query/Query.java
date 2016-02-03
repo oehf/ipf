@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.QueryTypeAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -35,7 +35,7 @@ import java.io.Serializable;
 public abstract class Query implements Serializable {
     private static final long serialVersionUID = 7597105342752455732L;
 
-    @XmlJavaTypeAdapter(QueryTypeAdapter.class)
+    @XmlJavaTypeAdapter(XdsEnumAdapter.QueryTypeAdapter.class)
     @Getter private QueryType type;
 
     /**

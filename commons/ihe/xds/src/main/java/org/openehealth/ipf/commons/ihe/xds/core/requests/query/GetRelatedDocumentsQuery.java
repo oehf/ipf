@@ -21,8 +21,10 @@ import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
 /**
@@ -39,12 +41,18 @@ public class GetRelatedDocumentsQuery extends GetFromDocumentQuery
 {
     private static final long serialVersionUID = -8768793068458839362L;
 
+    @XmlJavaTypeAdapter(XdsEnumAdapter.AssociationTypeAdapter.class)
     @XmlElement(name = "associationType")
     @Getter @Setter private List<AssociationType> associationTypes;
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.DocumentEntryTypeAdapter.class)
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.AvailabilityStatusForQueryAdapter.class)
     @XmlElement(name = "associationStatus")
     @Getter @Setter private List<AvailabilityStatus> associationStatuses;
+
     @Getter @Setter private Integer metadataLevel;
 
     /**

@@ -17,14 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import lombok.EqualsAndHashCode;
 
-import javax.xml.bind.annotation.XmlType;
-
 /**
  * Describes the availability of an entry.
  * 
  * @author Jens Riemschneider
  */
-@XmlType(name = "AvailabilityStatus")
 @EqualsAndHashCode(callSuper = true)
 public class AvailabilityStatus extends XdsVersionedEnum {
     private static final long serialVersionUID = -4550809703490656065L;
@@ -53,29 +50,3 @@ public class AvailabilityStatus extends XdsVersionedEnum {
         return getEbXML21();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
