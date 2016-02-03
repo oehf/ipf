@@ -17,13 +17,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import lombok.EqualsAndHashCode;
 
-import javax.xml.bind.annotation.XmlType;
-
 /**
  * Type of a document entry.
  * @author Dmytro Rud
  */
-@XmlType(name = "DocumentEntryType")
 @EqualsAndHashCode(callSuper = true)
 public class DocumentEntryType extends XdsEnum {
     private static final long serialVersionUID = -5941669064647018977L;

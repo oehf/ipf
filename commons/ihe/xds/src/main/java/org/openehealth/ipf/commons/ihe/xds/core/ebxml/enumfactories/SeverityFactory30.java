@@ -27,7 +27,7 @@ public class SeverityFactory30 extends XdsEnumFactory<Severity> {
     }
 
     @Override
-    protected Severity createCode(XdsEnum.Type type, String ebXML) {
+    public Severity createCode(XdsEnum.Type type, String ebXML) {
         return new Severity(type, null, ebXML);
     }
 

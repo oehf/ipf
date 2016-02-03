@@ -17,12 +17,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import lombok.EqualsAndHashCode;
 
-import javax.xml.bind.annotation.XmlType;
-
 /**
  * Document availability status code.
  */
-@XmlType(name = "DocumentAvailability")
 @EqualsAndHashCode(callSuper = true)
 public class DocumentAvailability extends XdsEnum {
     private static final long serialVersionUID = -1839486987498308778L;

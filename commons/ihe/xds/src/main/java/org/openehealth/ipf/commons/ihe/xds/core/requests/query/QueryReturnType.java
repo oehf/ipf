@@ -18,13 +18,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
 
-import javax.xml.bind.annotation.XmlType;
-
 /**
  * Return types for XDS queries (ITI-18, ITI-38, ITI-51, ITI-63).
  * @author Dmytro Rud
  */
-@XmlType(name = "QueryReturnType")
 @EqualsAndHashCode(callSuper = true)
 public class QueryReturnType extends XdsEnum {
     private static final long serialVersionUID = 2726087546056654799L;

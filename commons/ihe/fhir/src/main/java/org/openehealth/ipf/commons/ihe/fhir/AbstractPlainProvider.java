@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +73,27 @@ public abstract class AbstractPlainProvider implements Serializable {
         return requestBundle(payload, null, httpServletRequest, httpServletResponse);
     }
 
+    protected final MethodOutcome requestAction(
+            Object payload,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse)
+    {
+        return requestAction(payload, null, httpServletRequest, httpServletResponse);
+    }
+
+    protected final MethodOutcome requestAction(
+            Object payload,
+            Map<String, Object> parameters,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse)
+    {
+        if (consumer == null) {
+            throw new IllegalStateException("Consumer is not initialized");
+        }
+        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
+        return consumer.handleAction(payload, headers);
+    }
+
     protected final <R extends IBaseResource> List<R> requestBundle(
             Object payload, Map<String, Object> parameters,
             HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -94,9 +116,10 @@ public abstract class AbstractPlainProvider implements Serializable {
         enriched.put(HTTP_PROTOCOL_VERSION, httpServletRequest.getProtocol());
         enriched.put(HTTP_CLIENT_IP_ADDRESS, httpServletRequest.getRemoteAddr());
 
-        if (parameters != null && !parameters.isEmpty()) {
-            enriched.put(FHIR_REQUEST_PARAMETERS, parameters);
+        if (parameters == null) {
+            parameters = new HashMap<>();
         }
+        enriched.put(FHIR_REQUEST_PARAMETERS, parameters);
         return enriched;
     }
 

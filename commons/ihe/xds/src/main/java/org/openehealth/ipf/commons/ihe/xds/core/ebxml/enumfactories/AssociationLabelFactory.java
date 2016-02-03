@@ -27,7 +27,7 @@ public class AssociationLabelFactory extends XdsEnumFactory<AssociationLabel> {
     }
 
     @Override
-    protected AssociationLabel createCode(XdsEnum.Type type, String ebXML) {
+    public AssociationLabel createCode(XdsEnum.Type type, String ebXML) {
         return new AssociationLabel(type, ebXML);
     }
 

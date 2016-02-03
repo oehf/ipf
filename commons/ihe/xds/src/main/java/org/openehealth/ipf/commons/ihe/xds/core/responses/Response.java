@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StatusAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 
 /**
  * Basic response information.
@@ -38,8 +38,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StatusAdap
 public class Response implements Serializable {
     private static final long serialVersionUID = -6370795461214680771L;
 
-    @XmlJavaTypeAdapter(StatusAdapter.class)
+    @XmlJavaTypeAdapter(XdsEnumAdapter.StatusAdapter.class)
     private Status status;
+
     @XmlElement(name = "error")
     private List<ErrorInfo> errors = new ArrayList<>();
     

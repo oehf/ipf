@@ -30,8 +30,7 @@ import javax.xml.bind.annotation.*;
 public class GetSubmissionSetsQuery extends GetByUuidQuery {
     private static final long serialVersionUID = 2089514690641582428L;
 
-    @Getter @Setter
-    private Integer metadataLevel;
+    @Getter @Setter private Integer metadataLevel;
 
     /**
      * Constructs the query.

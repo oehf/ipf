@@ -19,14 +19,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
 
-import javax.xml.bind.annotation.XmlType;
-
 /**
  * All possible query types.
  * @author Jens Riemschneider
  * @author Michael Ottati
  */
-@XmlType(name = "QueryType")
 @EqualsAndHashCode(callSuper = true)
 public class QueryType extends XdsEnum {
     private static final long serialVersionUID = 2812318793269066784L;

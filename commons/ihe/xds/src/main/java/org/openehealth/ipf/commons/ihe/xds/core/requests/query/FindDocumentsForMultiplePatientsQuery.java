@@ -21,8 +21,10 @@ import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
 /**
@@ -32,16 +34,22 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FindDocumentsForMultiplePatientsQuery",
-        propOrder = {"patientIds","status", "documentEntryTypes", "metadataLevel"})
+        propOrder = {"patientIds", "status", "documentEntryTypes", "metadataLevel"})
 @XmlRootElement(name = "findDocumentsForMultiplePatientsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class FindDocumentsForMultiplePatientsQuery extends DocumentsQuery implements DocumentEntryTypeAwareStoredQuery {
     private static final long serialVersionUID = -5765363916663583605L;
 
+    @XmlElement(name = "patientId")
     @Getter @Setter private List<Identifiable> patientIds;
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.AvailabilityStatusForQueryAdapter.class)
     @Getter @Setter private List<AvailabilityStatus> status;
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.DocumentEntryTypeAdapter.class)
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
+
     @Getter @Setter private Integer metadataLevel;
 
     /**

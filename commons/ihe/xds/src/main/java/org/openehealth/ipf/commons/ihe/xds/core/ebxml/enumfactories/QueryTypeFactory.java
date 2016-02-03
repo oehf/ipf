@@ -27,7 +27,7 @@ public class QueryTypeFactory extends XdsEnumFactory<QueryType> {
     }
 
     @Override
-    protected QueryType createCode(XdsEnum.Type type, String ebXML) {
+    public QueryType createCode(XdsEnum.Type type, String ebXML) {
         return new QueryType(type, ebXML, null);
     }
 

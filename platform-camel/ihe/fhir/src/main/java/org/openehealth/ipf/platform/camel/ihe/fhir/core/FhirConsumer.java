@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.apache.camel.Exchange;
@@ -83,6 +84,11 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         return (List<R>) handleInRoute(payload, headers, List.class);
     }
 
+    @Override
+    public MethodOutcome handleAction(Object payload, Map<String, Object> headers) {
+        return handleInRoute(payload, headers, MethodOutcome.class);
+    }
+
     /**
      * Forwards the request to be handled into a Camel route
      *
@@ -91,7 +97,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      * @param resultClass expected body type to be returned
      * @return request result, type-converted into the required result class
      */
-    protected Object handleInRoute(Object payload, Map<String, Object> headers, Class<?> resultClass) {
+    protected <T> T handleInRoute(Object payload, Map<String, Object> headers, Class<T> resultClass) {
         Exchange exchange = getEndpoint().createExchange();
         exchange.getIn().setBody(payload);
         if (headers != null) {

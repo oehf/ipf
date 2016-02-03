@@ -31,8 +31,7 @@ import java.util.List;
 public class GetFoldersQuery extends GetByIdQuery {
     private static final long serialVersionUID = 854601731250203237L;
 
-    @Getter @Setter
-    private List<String> logicalUuid;
+    @Getter @Setter private List<String> logicalUuid;
     @Getter @Setter private Integer metadataLevel;
 
     /**

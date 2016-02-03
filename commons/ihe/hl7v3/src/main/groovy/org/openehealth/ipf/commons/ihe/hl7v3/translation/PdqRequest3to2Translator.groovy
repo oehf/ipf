@@ -29,7 +29,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.translation.Utils.*
 
 /**
  * PDQ Query request translator HL7 v3 to v2.
- * @author Marek Václavík, Dmytro Rud
+ * @author Marek Vaclavik, Dmytro Rud
  */
 class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 

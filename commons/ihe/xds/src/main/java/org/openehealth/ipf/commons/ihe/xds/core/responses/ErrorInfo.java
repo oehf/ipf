@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
@@ -27,8 +28,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ErrorCodeAdapter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.SeverityAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
@@ -42,11 +42,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 public class ErrorInfo implements Serializable {
     private static final long serialVersionUID = 7615868122051414551L;
 
-    @XmlJavaTypeAdapter(ErrorCodeAdapter.class)
+    @XmlJavaTypeAdapter(XdsEnumAdapter.ErrorCodeAdapter.class)
     @Getter @Setter private ErrorCode errorCode;
+
     @Getter @Setter private String codeContext;
-    @XmlJavaTypeAdapter(SeverityAdapter.class)
+
+    @XmlJavaTypeAdapter(XdsEnumAdapter.SeverityAdapter.class)
     @Getter @Setter private Severity severity;
+
     @Getter @Setter private String location;
 
 
