@@ -10,8 +10,23 @@ addons:
 script:
 - mvn clean install -q
 after_success:
-- "./travis_after_success.sh"
+- wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_after_success.sh | sh
+before_deploy:
+- wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_before_deploy.sh | sh
+deploy:
+  provider: s3
+  skip_cleanup: true
+  access_key_id: AKIAIG3NJZOJH6AXNTLQ
+  secret_access_key:
+    secure: M4BHOMVQ68f+Bps5x/d82GPnX+GoPCsEN5h3XQYTx8WEccvLRb7AHQSHgSBIT/iTal8MFIXF9tZ0zIksJyEUm3o/+QcBUNfmd+0a0XdZHrUVuY3yUJu8rGbEW5a348x8R8GvclKAiIjwvm9scIkOMB/eb4JdQCOp/N7FJGjp6Ag=
+  bucket: builds.openehealth.org
+  local-dir: $TRAVIS_BUILD_DIR/s3-upload
+  upload-dir: ipf
+  acl: authenticated_read
+  on:
+    repo: oehf/ipf
 env:
   global:
   - secure: eaYsfS5TNVL6U27EFROe7XBab9Qkp3HmInbTIqaoor95+857+FL6X/XXELu1QR9Wia+S1vzK1rZIAV41AFG0f/4rvr883pMiARD+qLtTC5gj3vHiXF+vLjlScMd40F2T3O9rCt6Bd4A9eVO+5x8KS5MzyB1/TPTAoshYqltd+20=
   - secure: MSKVW69Ld7G5WaaryA4+l0RjGXGuWKcCoMQIPvPH7FINrmvp+2W39ixt8Ua2LGl6CPMpVI8LaxOjH8xD30sqerLE+TN2EkGipezi9EAjTDEG+20JauVBmAZOkgFxrGl12O0c8roRdeharP52bfIbcKCQ1zYcoTNuDSUpBUCh8Gk=
+
