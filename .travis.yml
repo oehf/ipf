@@ -15,7 +15,7 @@ script:
 - mvn deploy -q --settings settings.xml
 after_failure:
 # Set environment variable in case tests have failed
-- test $TRAVIS_TEST_RESULT != 0 && export TESTS_FAILED=true
+- export BUILD_FAILED=true
 before_deploy:
 # Zip everything
 - wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_before_deploy.sh | sh
@@ -30,7 +30,7 @@ deploy:
   upload-dir: ipf
   acl: authenticated_read
   on:
-    condition: $TESTS_FAILED = true
+    condition: $BUILD_FAILED = true
     repo: oehf/ipf
 env:
   global:
