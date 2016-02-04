@@ -7,11 +7,17 @@ addons:
   apt:
     packages:
     - wget
+before_script:
+# Download custom settings for snapshot deployment
+- wget -q https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/settings.xml --no-check-certificate
 script:
-- mvn clean install -q
-after_success:
-- wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_after_success.sh | sh
+# Test, Install, Deploy in one step
+- mvn deploy -q --settings settings.xml
+after_failure:
+# Set environment variable in case tests have failed
+- test $TRAVIS_TEST_RESULT != 0 && export TESTS_FAILED=true
 before_deploy:
+# Zip everything
 - wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_before_deploy.sh | sh
 deploy:
   provider: s3
@@ -24,6 +30,7 @@ deploy:
   upload-dir: ipf
   acl: authenticated_read
   on:
+    condition: $TESTS_FAILED = true
     repo: oehf/ipf
 env:
   global:
