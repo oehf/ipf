@@ -12,7 +12,10 @@ before_script:
 - wget -q https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/settings.xml --no-check-certificate
 script:
 # Test, Install, Deploy in one step
-- mvn deploy -q --settings settings.xml
+- mvn install -q --settings settings.xml
+after_success:
+# Deploy
+- wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_after_success.sh | sh
 after_failure:
 # Set environment variable in case tests have failed
 - export BUILD_FAILED=true
