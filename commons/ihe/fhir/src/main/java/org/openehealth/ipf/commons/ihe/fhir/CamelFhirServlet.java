@@ -149,12 +149,6 @@ public class CamelFhirServlet extends RestfulServer {
         //INarrativeGenerator narrativeGen = new DefaultThymeleafNarrativeGenerator();
         //getFhirContext().setNarrativeGenerator(narrativeGen);
 
-		/*
-         * Tells HAPI to use content types which are not technically FHIR compliant when a browser is detected as the
-		 * requesting client. This prevents browsers from trying to download resource responses instead of displaying them
-		 * inline which can be handy for troubleshooting.
-		 */
-        setUseBrowserFriendlyContentTypes(true);
     }
 
     public static void registerProvider(String name, AbstractPlainProvider provider) {

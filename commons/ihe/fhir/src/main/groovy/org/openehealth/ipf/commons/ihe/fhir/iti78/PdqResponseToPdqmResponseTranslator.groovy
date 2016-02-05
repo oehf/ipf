@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti78
 
+import ca.uhn.fhir.model.api.ResourceMetadataKeyEnum
+import ca.uhn.fhir.model.primitive.DecimalDt
+import ca.uhn.fhir.model.valueset.BundleEntrySearchModeEnum
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
@@ -78,7 +81,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
             case 'OK': return returnBundle ?
                     handleRegularSearchResponse(message.QUERY_RESPONSE()) :
                     handleRegularResource(message.QUERY_RESPONSE()) // Case 1
-            case 'NF': return handleRegularSearchResponse(null)  // Case 2
+            case 'NF': return handleRegularSearchResponse(null)  // Case 2 TODO check + handle non-existent resource ID
             case 'AE': throw handleErrorResponse(message) // Cases 3-5
             default: throw new InternalErrorException("Unexpected ack code " + ackCode)
         }
@@ -103,95 +106,112 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         List<PdqPatient> resultList = new ArrayList<>();
         if (responseCollection) {
             for (response in responseCollection) {
-                PdqPatient patient = new PdqPatient()
-                PID pid = response.PID
-
-                // This assigns the resource ID. It is taken from the PID-3 identifier list where the
-                // namespace matches pdqSupplierResourceIdentifierOid
-                def resourcePid = pid[3]().find { pid3 -> pdqSupplierResourceIdentifierOid == pid3[4][2].value }
-                if (resourcePid) {
-                    patient.setId(new IdType('Patient', resourcePid[1].value))
-                } else {
-                    LOG.warn("No ID found with resource system URI {}", pdqSupplierResourceIdentifierUri)
-                }
-
-                convertIdentifiers(pid[3](), patient.getIdentifier())
-
-                // Convert names
-                if (!pid[5].empty) {
-                    convertNames(pid[5](), patient.getName())
-                }
-                if (!pid[6].empty) {
-                    patient.setMothersMaidenName(convertName(pid[6]))
-                }
-                if (pid[7]?.value) patient.setBirthDateElement(DateType.parseV3(pid[7].value))
-                if (pid[8]?.value) patient.setGender(
-                        Enumerations.AdministrativeGender.fromCode(pid[8].value?.map('hl7v2fhir-patient-administrativeGender')))
-
-                // No race in the default FHIR patient resource (but in the DAF profile)
-
-                if (!pid[11].empty) {
-                    convertAddresses(pid[11](), patient.getAddress())
-                }
-                if (!pid[13].empty) {
-                    convertTelecoms(pid[13](), patient.getTelecom(), ContactPointUse.HOME, ContactPointSystem.PHONE)
-                }
-                if (!pid[14].empty) {
-                    convertTelecoms(pid[14](), patient.getTelecom(), ContactPointUse.WORK, ContactPointSystem.PHONE)
-                }
-                // TODO may be needs conversion, expectation is something like en-US or de
-                if (pid[15]?.value) {
-                    CodeableConcept language = new CodeableConcept()
-                    language.addCoding().setCode(pid[15].value)
-                    patient.getCommunication().add(
-                            new Patient.PatientCommunicationComponent().setLanguage(language))
-                }
-                if (pid[16]?.value) {
-                    CodeableConcept maritalStatus = new CodeableConcept()
-                    String mapped = pid[16].value.map('hl7v2fhir-patient-maritalStatus')
-                    V3MaritalStatus mappedMaritalStatus = "UNK".equals(mapped) ? V3NullFlavor.UNK : V3MaritalStatus.fromCode(mapped)
-                    maritalStatus.addCoding()
-                            .setCode(mapped)
-                            .setSystem(mappedMaritalStatus.system)
-                            .setDisplay(mappedMaritalStatus.display)
-                    patient.setMaritalStatus(maritalStatus)
-                }
-
-                // No religion in the default FHIR patient resource
-
-                // FIXME: Often, these identifiers come without any namespace information, so they must
-                // be somehow enhanced
-                if (pid[18].value) {
-                    patient.getIdentifier().add(convertIdentifier(pid[18]))
-                }
-                // FIXME: Often, these identifiers come without any namespace information, so they must
-                // be enhanced with static information (SSN, AHV, NHS etc.)
-                if (pid[19].value) {
-                    patient.getIdentifier().add(convertIdentifier(pid[19]))
-                }
-
-                // No ethnicity in the default FHIR patient resource (but in the DAF profile)
-
-                // No birth place in the default FHIR patient resource
-
-                // Multiple Birth
-                if (pid[25].value) {
-                    patient.setMultipleBirth(new IntegerType(pid[25].value))
-                } else if (pid[24].value) {
-                    patient.setMultipleBirth(new BooleanType(pid[24].value == 'Y'))
-                }
-
-                // Death Indicators
-                if (pid[29].value) {
-                    patient.setDeceased(DateTimeType.parseV3(pid[29].value))
-                } else if (pid[30].value) {
-                    patient.setDeceased(new BooleanType(pid[30].value == 'Y'))
-                }
-
+                PdqPatient patient = pidToPatient(response)
+                // addSearchScore(patient, response)
+                ResourceMetadataKeyEnum.ENTRY_SCORE
                 resultList.add(patient)
             }
         }
         resultList
+    }
+
+    // FIXME type issues
+    protected void addSearchScore(PdqPatient pdqPatient, response) {
+        ResourceMetadataKeyEnum.ENTRY_SEARCH_MODE.put(pdqPatient, BundleEntrySearchModeEnum.MATCH.name())
+        pdqPatient.setUserData()
+        String searchScoreString = response.QRI[1]?.value
+        if (searchScoreString != null) {
+            double searchScore = Integer.valueOf(searchScoreString) / 100
+            ResourceMetadataKeyEnum.ENTRY_SCORE.put(pdqPatient, new DecimalDt(searchScore))
+        }
+    }
+
+    protected PdqPatient pidToPatient(response) {
+        PdqPatient patient = new PdqPatient()
+        PID pid = response.PID
+
+        // This assigns the resource ID. It is taken from the PID-3 identifier list where the
+        // namespace matches pdqSupplierResourceIdentifierOid
+        def resourcePid = pid[3]().find { pid3 -> pdqSupplierResourceIdentifierOid == pid3[4][2].value }
+        if (resourcePid) {
+            patient.setId(new IdType('Patient', resourcePid[1].value))
+        } else {
+            LOG.warn("No ID found with resource system URI {}", pdqSupplierResourceIdentifierUri)
+        }
+
+        convertIdentifiers(pid[3](), patient.getIdentifier())
+
+        // Convert names
+        if (!pid[5].empty) {
+            convertNames(pid[5](), patient.getName())
+        }
+        if (!pid[6].empty) {
+            patient.setMothersMaidenName(convertName(pid[6]))
+        }
+        if (pid[7]?.value) patient.setBirthDateElement(DateType.parseV3(pid[7].value))
+        if (pid[8]?.value) patient.setGender(
+                Enumerations.AdministrativeGender.fromCode(pid[8].value?.map('hl7v2fhir-patient-administrativeGender')))
+
+        // No race in the default FHIR patient resource (but in the DAF profile)
+
+        if (!pid[11].empty) {
+            convertAddresses(pid[11](), patient.getAddress())
+        }
+        if (!pid[13].empty) {
+            convertTelecoms(pid[13](), patient.getTelecom(), ContactPointUse.HOME, ContactPointSystem.PHONE)
+        }
+        if (!pid[14].empty) {
+            convertTelecoms(pid[14](), patient.getTelecom(), ContactPointUse.WORK, ContactPointSystem.PHONE)
+        }
+        // TODO may be needs conversion, expectation is something like en-US or de
+        if (pid[15]?.value) {
+            CodeableConcept language = new CodeableConcept()
+            language.addCoding().setCode(pid[15].value)
+            patient.getCommunication().add(
+                    new Patient.PatientCommunicationComponent().setLanguage(language))
+        }
+        if (pid[16]?.value) {
+            CodeableConcept maritalStatus = new CodeableConcept()
+            String mapped = pid[16].value.map('hl7v2fhir-patient-maritalStatus')
+            V3MaritalStatus mappedMaritalStatus = "UNK".equals(mapped) ? V3NullFlavor.UNK : V3MaritalStatus.fromCode(mapped)
+            maritalStatus.addCoding()
+                    .setCode(mapped)
+                    .setSystem(mappedMaritalStatus.system)
+                    .setDisplay(mappedMaritalStatus.display)
+            patient.setMaritalStatus(maritalStatus)
+        }
+
+        // No religion in the default FHIR patient resource
+
+        // FIXME: Often, these identifiers come without any namespace information, so they must
+        // be somehow enhanced
+        if (pid[18].value) {
+            patient.getIdentifier().add(convertIdentifier(pid[18]))
+        }
+        // FIXME: Often, these identifiers come without any namespace information, so they must
+        // be enhanced with static information (SSN, AHV, NHS etc.)
+        if (pid[19].value) {
+            patient.getIdentifier().add(convertIdentifier(pid[19]))
+        }
+
+        // No ethnicity in the default FHIR patient resource (but in the DAF profile)
+
+        // No birth place in the default FHIR patient resource
+
+        // Multiple Birth
+        if (pid[25].value) {
+            patient.setMultipleBirth(new IntegerType(pid[25].value))
+        } else if (pid[24].value) {
+            patient.setMultipleBirth(new BooleanType(pid[24].value == 'Y'))
+        }
+
+        // Death Indicators
+        if (pid[29].value) {
+            patient.setDeceased(DateTimeType.parseV3(pid[29].value))
+        } else if (pid[30].value) {
+            patient.setDeceased(new BooleanType(pid[30].value == 'Y'))
+        }
+        patient
     }
 
     // Handle an error response from the Cross-reference manager

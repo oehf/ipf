@@ -16,14 +16,14 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
+import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.Description;
+import ca.uhn.fhir.model.api.annotation.Extension;
+import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.rest.gclient.StringClientParam;
 import ca.uhn.fhir.util.ElementUtil;
 import org.hl7.fhir.instance.model.HumanName;
 import org.hl7.fhir.instance.model.Patient;
-import org.hl7.fhir.instance.model.annotations.Child;
-import org.hl7.fhir.instance.model.annotations.Description;
-import org.hl7.fhir.instance.model.annotations.Extension;
-import org.hl7.fhir.instance.model.annotations.ResourceDef;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
 /**
