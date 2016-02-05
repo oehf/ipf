@@ -24,9 +24,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
 
@@ -115,12 +113,41 @@ public abstract class AbstractPlainProvider implements Serializable {
         enriched.put(HTTP_CONTENT_TYPE, httpServletRequest.getContentType());
         enriched.put(HTTP_PROTOCOL_VERSION, httpServletRequest.getProtocol());
         enriched.put(HTTP_CLIENT_IP_ADDRESS, httpServletRequest.getRemoteAddr());
+        enriched.put(HTTP_HEADERS, extractHttpHeaders(httpServletRequest));
 
         if (parameters == null) {
             parameters = new HashMap<>();
         }
         enriched.put(FHIR_REQUEST_PARAMETERS, parameters);
         return enriched;
+    }
+
+    /**
+     * @param httpServletRequest
+     *      HTTP servlet request.
+     * @return
+     *      A map from header name to a list of header values.  This map is never <code>null</code>,
+     *      its values are never <code>null</code> and never empty.
+     */
+    private static Map<String, List<String>> extractHttpHeaders(HttpServletRequest httpServletRequest) {
+        Map<String, List<String>> result = new HashMap<>();
+        Enumeration<String> enumNames = httpServletRequest.getHeaderNames();
+        if (enumNames != null) {
+            while (enumNames.hasMoreElements()) {
+                String name = enumNames.nextElement();
+                Enumeration<String> enumValues = httpServletRequest.getHeaders(name);
+                if (enumValues != null) {
+                    List<String> list = new ArrayList<>();
+                    while (enumValues.hasMoreElements()) {
+                        list.add(enumValues.nextElement());
+                    }
+                    if (! list.isEmpty()) {
+                        result.put(name, list);
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     /**

@@ -53,7 +53,7 @@ public interface Constants {
     String HTTP_CONTENT_TYPE = "FhirHttpContentType";
     String HTTP_PROTOCOL_VERSION = "FhirHttpProtocolVersion";
     String HTTP_CLIENT_IP_ADDRESS = "FhirHttpClientIpAddress";
-
+    String HTTP_HEADERS = "FhirHttpHeaders";
 
 
 }
