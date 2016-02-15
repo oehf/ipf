@@ -28,6 +28,7 @@ import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,6 +75,15 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     @UriParam
     private String authPassword;
 
+    @Getter
+    @UriParam
+    private List<HapiClientInterceptorFactory> hapiClientInterceptorFactories;
+
+    @Getter
+    @UriParam
+    private List<HapiServerInterceptorFactory> hapiServerInterceptorFactories;
+
+
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         this(component, FhirContext.forDstu2Hl7Org(), path, parameters);
     }
@@ -88,7 +98,11 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
                 parameters, "resourceProvider", AbstractPlainProvider.class, null);
         clientRequestFactory = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "clientRequestFactory", ClientRequestFactory.class, null);
-
+        hapiClientInterceptorFactories = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "hapiClientInterceptorFactories", List.class);
+        // TODO: make use of use hapiServerInterceptorFactories
+        hapiServerInterceptorFactories = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "hapiServerInterceptorFactories", List.class);
 
         Integer connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
         if (connectTimeout != null) {

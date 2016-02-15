@@ -76,7 +76,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      */
     @Override
     public final <R extends IBaseResource> R handleResourceRequest(Object payload, Map<String, Object> headers, Class<R> resultClass) {
-        return (R) handleInRoute(payload, headers, resultClass);
+        return handleInRoute(payload, headers, resultClass);
     }
 
     @Override

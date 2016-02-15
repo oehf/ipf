@@ -28,6 +28,7 @@ import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,10 +53,19 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
             path = "http://" + path;
             client = context.newRestfulGenericClient(path);
 
-            if (getEndpoint().getInterceptableConfiguration().getAuthUserName() != null)
-            client.registerInterceptor(new BasicAuthInterceptor(
-                    getEndpoint().getInterceptableConfiguration().getAuthUserName(),
-                    getEndpoint().getInterceptableConfiguration().getAuthPassword()));
+            if (getEndpoint().getInterceptableConfiguration().getAuthUserName() != null) {
+                client.registerInterceptor(new BasicAuthInterceptor(
+                        getEndpoint().getInterceptableConfiguration().getAuthUserName(),
+                        getEndpoint().getInterceptableConfiguration().getAuthPassword()));
+            }
+
+            // deploy user-defined HAPI interceptors
+            List<HapiClientInterceptorFactory> factories = getEndpoint().getInterceptableConfiguration().getHapiClientInterceptorFactories();
+            if (factories != null) {
+                for (HapiClientInterceptorFactory factory : factories) {
+                    client.registerInterceptor(factory.newInstance(getEndpoint()));
+                }
+            }
         }
         return client;
     }
