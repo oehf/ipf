@@ -17,24 +17,18 @@ after_success:
 # Deploy
 - wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_after_success.sh | sh
 after_failure:
-# Set environment variable in case tests have failed
-- export BUILD_FAILED=true
-before_deploy:
-# Zip everything
+# Zip everything. Or use after_failure instead
 - wget -q --no-check-certificate -O - https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/travis_before_deploy.sh | sh
-deploy:
-  provider: s3
-  skip_cleanup: true
-  access_key_id: AKIAIG3NJZOJH6AXNTLQ
-  secret_access_key:
-    secure: M4BHOMVQ68f+Bps5x/d82GPnX+GoPCsEN5h3XQYTx8WEccvLRb7AHQSHgSBIT/iTal8MFIXF9tZ0zIksJyEUm3o/+QcBUNfmd+0a0XdZHrUVuY3yUJu8rGbEW5a348x8R8GvclKAiIjwvm9scIkOMB/eb4JdQCOp/N7FJGjp6Ag=
-  bucket: builds.openehealth.org
-  local-dir: $TRAVIS_BUILD_DIR/s3-upload
-  upload-dir: ipf
-  acl: authenticated_read
-  on:
-    condition: $BUILD_FAILED = true
-    repo: oehf/ipf
+addons:
+  artifacts:
+    s3_region: "us-east-1"
+    bucket: builds.openehealth.org
+    key: AKIAIG3NJZOJH6AXNTLQ
+    secret:
+      secure: iAPFqtfyJAW7nAZ/jAXFH2kran0lKKULlF7fZnfnNPA8uC4QGXerEH340pdfbG4EfiRrY2MFDoEd96JNfUMB+RHuV2Zo5ueFQMFqB2FPMizM8Z2gIWds/bNbelnpiq0VMP80t4+APvu40If+80yUVitOVh+vxmKnJcy1vkYR9Cg=
+    paths:
+    - $(ls s3-upload/*.zip)
+    target_paths: "ipf"
 env:
   global:
   - secure: eaYsfS5TNVL6U27EFROe7XBab9Qkp3HmInbTIqaoor95+857+FL6X/XXELu1QR9Wia+S1vzK1rZIAV41AFG0f/4rvr883pMiARD+qLtTC5gj3vHiXF+vLjlScMd40F2T3O9rCt6Bd4A9eVO+5x8KS5MzyB1/TPTAoshYqltd+20=
