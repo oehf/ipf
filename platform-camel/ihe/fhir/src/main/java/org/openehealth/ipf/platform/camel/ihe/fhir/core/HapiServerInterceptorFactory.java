@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
-import ca.uhn.fhir.rest.client.IClientInterceptor;
+import ca.uhn.fhir.rest.server.interceptor.IServerInterceptor;
 
 /**
  * @author Dmytro Rud
  */
 public interface HapiServerInterceptorFactory {
-    IClientInterceptor newInstance(FhirEndpoint endpoint);
+    IServerInterceptor newInstance(FhirEndpoint endpoint);
 }
