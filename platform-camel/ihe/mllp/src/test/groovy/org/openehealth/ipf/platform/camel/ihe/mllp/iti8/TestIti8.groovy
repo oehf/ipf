@@ -187,6 +187,12 @@ class TestIti8 extends MllpTestContainer {
         doTestException("pix-iti8://localhost:18085?timeout=${TIMEOUT}", body, 'you cry')
         doTestException("pix-iti8://localhost:18086?timeout=${TIMEOUT}", body, 'lazy dog')
     }
+
+    @Test
+    void testWrongEncoding() {
+        String isoMessage = this.getClass().classLoader.getResource('./iti8/iti8-a40-iso-8859-1.hl7')?.getText('iso-8859-1')
+        doTestException("pix-iti8://localhost:18089?timeout=${TIMEOUT}", isoMessage, "java.nio.charset.MalformedInputException")
+    }
     
     def doTestException(String endpointUri, String body, String wantedOutputContent) {
         def msg = send(endpointUri, body)

@@ -72,4 +72,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <property name="password" value="changeit"/>
     </bean>
 
+    <bean id="iti8MllpExceptionHandler"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8MllpExceptionHandler" />
+
 </beans>

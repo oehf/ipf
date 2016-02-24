@@ -131,6 +131,7 @@ public abstract class MllpEndpoint
                 filterChain.addFirst("ssl", filter);
             }
         }
+        consumer.getAcceptor().getFilterChain().addLast("mllp.exception.filter", new MllpExceptionIoFilter(consumer));
         return new MllpConsumer(consumer);
     }
 
