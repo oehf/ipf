@@ -15,14 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
-import ca.uhn.hl7v2.AcknowledgmentCode
-import ca.uhn.hl7v2.HL7Exception
-import org.apache.camel.Exchange
-import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
-
-import static org.openehealth.ipf.modules.hl7.message.MessageUtils.*
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
 
