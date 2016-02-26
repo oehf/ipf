@@ -41,7 +41,7 @@ class BidiMappingService implements MappingService {
     String separator
     boolean ignoreResourceNotFound = false
 
-    List<URL> resources = []
+    List<URL> scripts = []
 
     public BidiMappingService() {
         this(SEPARATOR)
@@ -51,28 +51,47 @@ class BidiMappingService implements MappingService {
         this.separator = separator
     }
 
-    void setMappingScript(URL resource) {
-        this.resources.add(resource)
-        addMappingScript(resource)
+    synchronized void setMappingScript(URL script) {
+        this.scripts.add(script)
+        evaluateMappingScript(script)
     }
 
-    void setMappingScripts(URL[] resources) {
-        this.resources.addAll(resources)
-        addMappingScripts(resources)
+    synchronized void setMappingScripts(URL[] scripts) {
+        this.scripts.addAll(scripts)
+        evaluateMappingScripts(scripts)
     }
 
-    synchronized void addMappingScript(URL resource) {
+    /**
+     * @deprecated use #setMappingScript
+     */
+    void addMappingScript(URL script) {
+        evaluateMappingScript(script)
+    }
+
+    /**
+     * @deprecated use #setMappingScript
+     */
+    void addMappingScripts(URL[] scripts) {
+        evaluateMappingScripts(scripts)
+    }
+
+    void clearMappings() {
+        scripts = []
+        map.clear()
+        reverseMap.clear()
+    }
+
+    private void evaluateMappingScript(URL script) {
         Binding binding = new Binding()
         GroovyShell shell = new GroovyShell(binding);
-        evaluateResource(resource, shell, binding)
+        evaluateResource(script, shell, binding)
     }
 
-    // Read in several mapping definition
-    synchronized void addMappingScripts(URL[] resources) {
+    private void evaluateMappingScripts(URL[] scripts) {
         Binding binding = new Binding()
         GroovyShell shell = new GroovyShell(binding);
-        resources.each { resource ->
-            evaluateResource(resource, shell, binding)
+        scripts.each { script ->
+            evaluateResource(script, shell, binding)
         }
     }
 
@@ -85,45 +104,54 @@ class BidiMappingService implements MappingService {
         updateReverseMap()
     }
 
+    @Override
     public Object get(Object mappingKey, Object key) {
         splitKey(retrieve(map, mappingKey, joinKey(key)))
     }
 
+    @Override
     public Object getKey(Object mappingKey, Object value) {
         splitKey(retrieve(reverseMap, mappingKey, joinKey(value)))
     }
 
+    @Override
     public Object get(Object mappingKey, Object key, Object defaultValue) {
         def v = splitKey(retrieve(map, mappingKey, joinKey(key)))
         v ? v : defaultValue
     }
 
+    @Override
     public Object getKey(Object mappingKey, Object value, Object defaultValue) {
         checkMappingKey(reverseMap, mappingKey)
         def v = splitKey(retrieve(reverseMap, mappingKey, joinKey(value)))
         v ? v : defaultValue
     }
 
+    @Override
     public Object getKeySystem(Object mappingKey) {
         checkMappingKey(map, mappingKey)
         map[mappingKey][KEYSYSTEM]
     }
 
+    @Override
     public Object getValueSystem(Object mappingKey) {
         checkMappingKey(map, mappingKey)
         map[mappingKey][VALUESYSTEM]
     }
 
+    @Override
     public Set<?> mappingKeys() {
         map.keySet()
     }
 
+    @Override
     public Set<?> keys(Object mappingKey) {
         checkMappingKey(map, mappingKey)
         Set<?> result = map[mappingKey].keySet().findAll { !(it.startsWith('_%')) }
         result
     }
 
+    @Override
     public Collection<?> values(Object mappingKey) {
         checkMappingKey(map, mappingKey)
         map[mappingKey].findAll({

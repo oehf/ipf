@@ -20,6 +20,7 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina2.Mina2Component;
 import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
@@ -103,9 +104,14 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
 
         Charset charset = null;
         try {
-            charset = ((HL7MLLPCodec) config.getCodecFactory()).getCharset();
+            HL7MLLPCodec codecFactory = (HL7MLLPCodec) config.getCodecFactory();
+            if (codecFactory == null) {
+                codecFactory = new HL7MLLPCodec();
+                LOG.warn("No HL7 codec factory found, creating new default instance {}", codecFactory);
+            }
+            charset = codecFactory.getCharset();
         } catch (ClassCastException cce) {
-            LOG.error("Unsupported HL7 codec factory type " + config.getCodecFactory().getClass().getName());
+            LOG.warn("Unsupported HL7 codec factory type {}, using default character set", config.getCodecFactory().getClass().getName());
         }
         if (charset == null) {
             charset = Charset.defaultCharset();

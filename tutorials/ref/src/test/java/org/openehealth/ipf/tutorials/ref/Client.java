@@ -15,15 +15,17 @@
  */
 package org.openehealth.ipf.tutorials.ref;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+
 import java.io.InputStream;
 import java.net.URL;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpConnectionManager;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.io.IOUtils;
 
 /**
  * @author Martin Krasser
@@ -32,26 +34,28 @@ public class Client {
 
     private URL serverUrl;
     
-    private String contentType;
+    private ContentType contentType;
     
     private ResponseHandler handler;
     
-    private final HttpClient client;
-    
-    private final HttpConnectionManager mgr; 
+    private final CloseableHttpClient client;
+
+    private final PoolingHttpClientConnectionManager mgr;
     
     public Client() {
-        mgr = new MultiThreadedHttpConnectionManager();
-        client = new HttpClient(mgr);
-        contentType = "text/plain";
+        mgr = new PoolingHttpClientConnectionManager();
+        client = HttpClients.custom()
+                .setConnectionManager(mgr)
+                .build();
+        contentType = ContentType.TEXT_PLAIN;
     }
     
     public void setDefaultMaxConnectionsPerHost(int numConnections) {
-        mgr.getParams().setDefaultMaxConnectionsPerHost(numConnections);
+        mgr.setDefaultMaxPerRoute(numConnections);
     }
     
     public int getDefaultMaxConnectionsPerHost() {
-        return mgr.getParams().getDefaultMaxConnectionsPerHost();
+        return mgr.getDefaultMaxPerRoute();
     }
     
     public URL getServerUrl() {
@@ -62,7 +66,7 @@ public class Client {
     }
 
     public void setContentType(String contentType) {
-        this.contentType = contentType;
+        this.contentType = ContentType.create(contentType);
     }
     
     public void setHandler(ResponseHandler handler) {
@@ -70,13 +74,12 @@ public class Client {
     }
     
     public void execute(InputStream input) throws Exception {
-        PostMethod method = new PostMethod(serverUrl.toString());
-        
-        method.setRequestEntity(new InputStreamRequestEntity(input, contentType));
-        client.executeMethod(method);
+        HttpPost method = new HttpPost(serverUrl.toString());
+        method.setEntity(new InputStreamEntity(input, contentType));
+        CloseableHttpResponse response = client.execute(method);
         
         try {
-            InputStream responseStream = method.getResponseBodyAsStream();
+            InputStream responseStream = response.getEntity().getContent();
             handler.handleResponse(responseStream);
             IOUtils.closeQuietly(responseStream);
         } finally {

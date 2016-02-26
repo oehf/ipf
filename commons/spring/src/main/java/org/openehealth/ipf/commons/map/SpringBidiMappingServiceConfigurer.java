@@ -24,30 +24,30 @@ import org.springframework.core.io.Resource;
 import java.util.List;
 
 /**
- * Adds mapping scripts to a reference BidiMappingService instance. Due
+ * Adds mapping scripts to a reference SpringBidiMappingService instance. Due
  * to introduction of the new IPF's extension framework, this
  * specific configurer is deprecated.
  *
  * @author Martin Krasser
- * @deprecated
+ *
  */
-public class BidiMappingServiceConfigurer implements InitializingBean {
+public class SpringBidiMappingServiceConfigurer implements InitializingBean {
 
     @Getter @Setter
     private SpringBidiMappingService mappingService;
 
     @Getter @Setter
-    private List<? extends Resource> mappingScripts;
+    private List<? extends Resource> mappingResources;
 
     @Getter @Setter
-    private Resource mappingScript;
+    private Resource mappingResource;
 
     public void afterPropertiesSet() {
-        if (mappingScripts != null && !mappingScripts.isEmpty()) {
-            mappingService.addMappingScripts(mappingScripts);
+        if (mappingResources != null && !mappingResources.isEmpty()) {
+            mappingService.setMappingResources(mappingResources);
         }
-        if (mappingScript != null) {
-            mappingService.addMappingScript(mappingScript);
+        if (mappingResource != null) {
+            mappingService.setMappingResource(mappingResource);
         }
     }
 }

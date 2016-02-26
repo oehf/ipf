@@ -48,7 +48,7 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
     @Before
     public void setup() {
         mappingService = new BidiMappingService()
-        mappingService.addMappingScript(getClass().getClassLoader().getResource('mapping.map'))
+        mappingService.setMappingScript(getClass().getClassLoader().getResource('mapping.map'))
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
         translator = new PixQueryResponseToPixmResponseTranslator(mapper)
     }

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.core.config;
 
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -60,7 +61,9 @@ public class SpringRegistry implements Registry, BeanFactoryAware {
     @Override
     public <T> Map<String, T> beans(Class<T> requiredType) {
         return BeanFactoryUtils.beansOfTypeIncludingAncestors(beanFactory,
-                requiredType);
+                ProxyUtils.isJDKDynamicProxy(requiredType) ?
+                        ProxyUtils.<T>getFirstProxiedInterface(requiredType) :
+                        requiredType);
     }
 
     /**
@@ -75,20 +78,15 @@ public class SpringRegistry implements Registry, BeanFactoryAware {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        SpringRegistry other = (SpringRegistry) obj;
-        if (beanFactory == null) {
-            if (other.beanFactory != null)
-                return false;
-        } else if (beanFactory != other.beanFactory)
-            return false;
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SpringRegistry)) return false;
+        SpringRegistry that = (SpringRegistry) o;
+        return Objects.equals(beanFactory, that.beanFactory);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(beanFactory);
+    }
 }

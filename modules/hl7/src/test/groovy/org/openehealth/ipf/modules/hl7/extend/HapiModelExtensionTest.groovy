@@ -51,7 +51,7 @@ public class HapiModelExtensionTest {
     @BeforeClass
     static void setUp() {
         BidiMappingService mappingService = new BidiMappingService()
-        mappingService.addMappingScript(HapiModelExtensionTest.class.getResource("/example2.map"))
+        mappingService.setMappingScript(HapiModelExtensionTest.class.getResource("/example2.map"))
         ModelClassFactory mcf = new CustomModelClassFactory()
         HapiContext context = new DefaultHapiContext(mcf)
         Registry registry = createMock(Registry)

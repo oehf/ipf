@@ -360,7 +360,7 @@ The Spring context definition for these extensions can be found in `conf/extensi
 
   <bean id="genderMapping"
         class="org.openehealth.ipf.commons.map.config.CustomMappings">
-      <property name="mappingScript" value="classpath:config/gender.map" />
+      <property name="mappingResource" value="classpath:config/gender.map" />
   </bean>
 
 ```

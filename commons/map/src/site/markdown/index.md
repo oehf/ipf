@@ -68,7 +68,7 @@ Here is how to configure IPF's [`SpringBidiMappingService`](../apidocs/org/opene
     ...
     <!-- Groovy class that provides the operations on the mappings -->
     <bean id="myMappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
-       <property name="mappingScripts">
+       <property name="mappingResources">
            <list>
               <value>classpath:example.groovy"</value>
               <!-- could add more mapping files -->

@@ -40,7 +40,7 @@ class Testiti47CamelOnly extends StandardTestContainer {
     @BeforeClass
     public static void setUpClass() {
         BidiMappingService mappingService = new BidiMappingService()
-        mappingService.addMappingScript(Testiti47CamelOnly.class.getResource("/example2.map"))
+        mappingService.setMappingScript(Testiti47CamelOnly.class.getResource("/example2.map"))
         ModelClassFactory mcf = new DefaultModelClassFactory()
         Registry registry = createMock(Registry)
         ContextFacade.setRegistry(registry)

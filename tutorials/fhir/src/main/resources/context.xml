@@ -65,7 +65,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
     </bean>
 
     <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
-        <property name="mappingScripts">
+        <property name="mappingResources">
             <list>
                 <value>classpath:mapping.map</value>
                 <value>classpath:META-INF/map/fhir-hl7v2-translation.map</value>

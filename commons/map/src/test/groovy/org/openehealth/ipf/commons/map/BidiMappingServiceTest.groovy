@@ -33,7 +33,7 @@ public class BidiMappingServiceTest {
 
     @Test
 	void testMappingService() {
-		mappingService.addMappingScript(getClass().getResource("/example2.map"))
+		mappingService.setMappingScript(getClass().getResource("/example2.map"))
 		assert mappingService.mappingKeys().contains("encounterType")
 		assert mappingService.get("encounterType", "I") == "IMP"
 		assert mappingService.get("messageType", "ADT^A01") == "PRPA_IN402001"
@@ -52,7 +52,7 @@ public class BidiMappingServiceTest {
 
     @Test
     void testMappingServiceURL() {
-        mappingService.addMappingScript(getClass().getResource("/example2.map"))
+        mappingService.setMappingScript(getClass().getResource("/example2.map"))
         assert mappingService.mappingKeys().contains("encounterType")
         assert mappingService.get("encounterType", "I") == "IMP"
         assert mappingService.get("messageType", "ADT^A01") == "PRPA_IN402001"
@@ -76,7 +76,7 @@ public class BidiMappingServiceTest {
 	void testMappingService2() {
 		def resources = [getClass().getResource("/example2.map"),
                          getClass().getResource("/example3.map")] as URL[]
-		mappingService.addMappingScripts(resources)
+		mappingService.setMappingScripts(resources)
 		assert mappingService.mappingKeys().contains("encounterType")
 		assert mappingService.get("encounterType", "I") == "IMP"
 		assert mappingService.get("messageType", "ADT^A04") == "PRPA_IN401001"
@@ -93,7 +93,7 @@ public class BidiMappingServiceTest {
     void testMappingServiceURL2() {
         def resources = [getClass().getResource("/example2.map"),
                          getClass().getResource("/example3.map")] as URL[]
-        mappingService.addMappingScripts(resources)
+        mappingService.setMappingScripts(resources)
         assert mappingService.mappingKeys().contains("encounterType")
         assert mappingService.get("encounterType", "I") == "IMP"
         assert mappingService.get("messageType", "ADT^A04") == "PRPA_IN401001"

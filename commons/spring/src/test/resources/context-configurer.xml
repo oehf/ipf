@@ -25,15 +25,15 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     </bean>
 
     <bean id="bidiMappingServiceConfigurer1" 
-        class="org.openehealth.ipf.commons.map.BidiMappingServiceConfigurer">
+        class="org.openehealth.ipf.commons.map.SpringBidiMappingServiceConfigurer">
         <property name="mappingService" ref="bidiMappingService" />
-        <property name="mappingScript" value="configurer1.map" />
+        <property name="mappingResource" value="configurer1.map" />
     </bean>
 
     <bean id="bidiMappingServiceConfigurer2" 
-        class="org.openehealth.ipf.commons.map.BidiMappingServiceConfigurer">
+        class="org.openehealth.ipf.commons.map.SpringBidiMappingServiceConfigurer">
         <property name="mappingService" ref="bidiMappingService" />
-        <property name="mappingScripts">
+        <property name="mappingResources">
             <list>
                 <value>configurer2.map</value>
                 <value>configurer3.map</value>

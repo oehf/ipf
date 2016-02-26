@@ -46,7 +46,7 @@ provided by IPF (which can be accessed as a classpath resource). Here is a snipp
 
 ```
 <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
-    <property name="mappingScripts">
+    <property name="mappingResources">
         <list>
             <value>classpath:META-INF/map/hl7-v2-v3-translation.map</value>
             <!-- other custom mappings -->

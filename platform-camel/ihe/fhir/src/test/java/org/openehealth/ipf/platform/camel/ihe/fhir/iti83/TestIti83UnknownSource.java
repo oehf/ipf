@@ -40,7 +40,7 @@ public class TestIti83UnknownSource extends AbstractTestIti83 {
         try {
             sendManually(validQueryParameters());
         } catch (InvalidRequestException e) {
-            assertAndRethrowException(e, OperationOutcome.IssueType.NOTSUPPORTED);
+            assertAndRethrowException(e, OperationOutcome.IssueType.NOTFOUND);
         }
     }
 

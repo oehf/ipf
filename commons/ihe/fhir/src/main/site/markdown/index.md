@@ -45,7 +45,7 @@ file (which can be accessed as a classpath resource). Here is a snippet of Sprin
 
 ```
     <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
-        <property name="mappingScripts">
+        <property name="mappingResources">
             <list>
                 <value>classpath:mapping.map</value>
             </list>

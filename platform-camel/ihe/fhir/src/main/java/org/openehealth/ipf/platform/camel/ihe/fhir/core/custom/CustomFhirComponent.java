@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.custom;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
@@ -28,9 +29,9 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  */
 public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> extends FhirComponent<AuditDatasetType> {
 
-    @Getter
+    @Getter @Setter
     private AuditStrategy<AuditDatasetType> clientAuditStrategy;
-    @Getter
+    @Getter @Setter
     private AuditStrategy<AuditDatasetType> serverAuditStrategy;
 
     @Override

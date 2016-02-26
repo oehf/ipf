@@ -7,7 +7,7 @@ one or more mapping scripts that shall be picked up.
 ```
 <bean id="customMapping1"
       class="org.openehealth.ipf.commons.map.config.CustomMappings">
-    <property name="mappingScripts">
+    <property name="mappingResources">
         <list>
             <value>classpath:config1.map</value>
             <value>classpath:config2.map</value>
@@ -17,7 +17,7 @@ one or more mapping scripts that shall be picked up.
 
 <bean id="customMapping2"
       class="org.openehealth.ipf.commons.map.config.CustomMappings">
-    <property name="mappingScript" value="classpath:config3.map" />
+    <property name="mappingResource" value="classpath:config3.map" />
 </bean>
 
 

@@ -20,6 +20,9 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.PatientRecordEvent;
 
+import java.nio.charset.Charset;
+import java.util.Locale;
+
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
 /**
@@ -75,7 +78,7 @@ public class CustomPixAuditor extends PIXAuditor {
                 documentRegistryUri,
                 pixManagerIpAddress);
 
-        byte[] messageIdBytes = hl7MessageControlId.getBytes();
+        byte[] messageIdBytes = hl7MessageControlId.getBytes(Charset.defaultCharset());
         event.addPatientParticipantObject(sourcePatientId, messageIdBytes, transactionCode);
         event.addPatientParticipantObject(newPatientId, messageIdBytes, transactionCode);
         event.addPatientParticipantObject(oldPatientId, messageIdBytes, transactionCode);

@@ -139,7 +139,7 @@ This file is located under `src/main/resources`. In addition to the default conf
 
         <bean id="mappingService"
             class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
-            <property name="mappingScript" value="classpath:tutorial.map"/>
+            <property name="mappingResource" value="classpath:tutorial.map"/>
         </bean>
 
         <bean id="myCustomRules" class="org.openehealth.ipf.tutorials.hl7.validation.SampleRulesBuilder"/>

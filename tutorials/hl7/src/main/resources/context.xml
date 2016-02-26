@@ -37,7 +37,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
 
     <bean id="mappingService"
         class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
-        <property name="mappingScript" value="classpath:tutorial.map"/>
+        <property name="mappingResource" value="classpath:tutorial.map"/>
     </bean>
 
     <bean id="myCustomRules" class="org.openehealth.ipf.tutorials.hl7.validation.SampleRulesBuilder"/>

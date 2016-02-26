@@ -151,7 +151,7 @@ public class CamelFhirServlet extends RestfulServer {
 
     }
 
-    public static void registerProvider(String name, AbstractPlainProvider provider) {
+    public static synchronized void registerProvider(String name, AbstractPlainProvider provider) {
         if (provider instanceof IResourceProvider) {
             if (!RESOURCE_PROVIDERS.containsKey(name)) {
                 RESOURCE_PROVIDERS.put(name, new ArrayList<IResourceProvider>());
@@ -165,7 +165,7 @@ public class CamelFhirServlet extends RestfulServer {
         }
     }
 
-    public static void unregisterProvider(String name, AbstractPlainProvider provider) throws Exception {
+    public static synchronized void unregisterProvider(String name, AbstractPlainProvider provider) throws Exception {
         if (provider instanceof IResourceProvider) {
             RESOURCE_PROVIDERS.get(name).remove(provider);
         } else {

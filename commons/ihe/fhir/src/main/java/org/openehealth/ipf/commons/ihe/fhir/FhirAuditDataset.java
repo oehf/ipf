@@ -32,6 +32,7 @@ public abstract class FhirAuditDataset extends AuditDataset {
      * Request payload.
      */
     @Getter
+    @Setter
     private String requestPayload;
 
     /**

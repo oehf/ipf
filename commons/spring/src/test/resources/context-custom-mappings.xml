@@ -22,7 +22,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="customMapping3" 
         class="org.openehealth.ipf.commons.map.config.CustomMappings">
-        <property name="mappingScripts">
+        <property name="mappingResources">
             <list>
                 <value>classpath:configurer4.map</value>
                 <value>classpath:configurer5.map</value>
@@ -32,12 +32,12 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="customMapping4" 
         class="org.openehealth.ipf.commons.map.config.CustomMappings">
-        <property name="mappingScript" value="classpath:configurer6.map" />
+        <property name="mappingResource" value="classpath:configurer6.map" />
     </bean>
 
     <bean id="customMapping1" 
         class="org.openehealth.ipf.commons.map.config.CustomMappings">
-        <property name="mappingScripts">
+        <property name="mappingResources">
             <list>
                 <value>classpath:configurer2.map</value>
                 <value>classpath:configurer3.map</value>
@@ -47,6 +47,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="customMapping2" 
         class="org.openehealth.ipf.commons.map.config.CustomMappings">
-        <property name="mappingScript" value="classpath:configurer1.map" />
+        <property name="mappingResource" value="classpath:configurer1.map" />
     </bean>
 </beans>

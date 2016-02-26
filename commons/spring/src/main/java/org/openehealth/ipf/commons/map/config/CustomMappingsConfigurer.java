@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.map.config;
 import org.openehealth.ipf.commons.core.config.Configurer;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
-import org.openehealth.ipf.commons.map.BidiMappingService;
+import org.openehealth.ipf.commons.map.MappingResourceHolder;
 import org.openehealth.ipf.commons.map.SpringBidiMappingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +28,11 @@ import java.util.Collection;
 /**
  * {@link Configurer} used to add all {@link CustomMappings} 
  * bean occurrences from the spring application context
- * to the provided {@link BidiMappingService}.
+ * to the provided {@link SpringBidiMappingService}.
  * 
  * @author Boris Stanojevic
  */
-public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigurer<CustomMappings, R> {
+public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigurer<MappingResourceHolder, R> {
 
     private SpringBidiMappingService mappingService;
     
@@ -45,26 +45,22 @@ public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigu
      * @see OrderedConfigurer
      */
     @Override
-    public Collection<CustomMappings> lookup(Registry registry) {
-        return registry.beans(CustomMappings.class).values();
+    public Collection<MappingResourceHolder> lookup(Registry registry) {
+        return registry.beans(MappingResourceHolder.class).values();
     }
 
     /**
      * configuration logic  
      */
     @Override
-    public void configure(CustomMappings configuration) throws Exception {
-        if (configuration.getMappingScript() != null) {
-            mappingService.addMappingScript(configuration.getMappingScript());
-            LOG.debug("Mapping script added {}", configuration);
-        }
-        if (configuration.getMappingScripts() != null) {
-            mappingService.addMappingScripts(configuration.getMappingScripts());
+    public void configure(MappingResourceHolder configuration) throws Exception {
+        if (configuration.getMappingResources() != null) {
+            mappingService.setMappingResources(configuration.getMappingResources());
             LOG.debug("Mapping scripts added {}", configuration);
-        }        
+        }
     }
     
-    public BidiMappingService getMappingService() {
+    public SpringBidiMappingService getMappingService() {
         return mappingService;
     }
 

@@ -68,6 +68,7 @@ class Utils {
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(OperationOutcome.IssueType.VALUE)
+                .setDiagnostics('sourceIdentifier identity not found')
         return new InvalidRequestException('Unknown Patient ID', oo)
     }
 
@@ -75,7 +76,8 @@ class Utils {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                .setCode(OperationOutcome.IssueType.NOTSUPPORTED) // not-supported
+                .setCode(OperationOutcome.IssueType.NOTFOUND)
+                .setDiagnostics('sourceIdentifier Assigning Authority not found')
         return new InvalidRequestException('Unknown Patient Domain', oo)
     }
 
@@ -83,7 +85,8 @@ class Utils {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                .setCode(OperationOutcome.IssueType.NOTFOUND) // unknown-key-identifier
+                .setCode(OperationOutcome.IssueType.NOTFOUND)
+                .setDiagnostics('targetSystem not found')
         return new InvalidRequestException('Unknown Target Domain', oo)
     }
 

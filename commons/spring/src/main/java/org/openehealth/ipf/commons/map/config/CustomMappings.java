@@ -17,7 +17,9 @@ package org.openehealth.ipf.commons.map.config;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
+import org.openehealth.ipf.commons.map.MappingResourceHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -25,64 +27,56 @@ import org.springframework.core.io.Resource;
 /**
  * This class should be used to define the custom mappings
  * in the spring context definition.
- * 
- * <pre class="code"> 
+ *
+ * <pre class="code">
  *    &lt;!-- either as a list of mapping definitions --&gt;
- *    &lt;bean id="customMapping3" 
+ *    &lt;bean id="customMapping3"
  *        class="org.openehealth.ipf.commons.map.config.CustomMappings"&gt;
- *        &lt;property name="mappingScripts"&gt;
+ *        &lt;property name="mappingResources"&gt;
  *            &lt;list&gt;
  *                &lt;value&gt;classpath:configurer1.map&lt;/value&gt;
  *                &lt;value&gt;classpath:configurer2.map&lt;/value&gt;
  *            &lt;/list&gt;
  *        &lt;/property&gt;
  *    &lt;/bean&gt;
- *    
+ *
  *    &lt;!-- or as a single mapping definition --&gt;
- *    &lt;bean id="customMappingSingle" 
+ *    &lt;bean id="customMappingSingle"
  *        class="org.openehealth.ipf.commons.map.config.CustomMappings"&gt;
- *        &lt;property name="mappingScript" value="classpath:configurer3.map" /&gt;
+ *        &lt;property name="mappingResource" value="classpath:configurer3.map" /&gt;
  *    &lt;/bean&gt;</pre>
- * 
+ *
  * @see CustomMappingsConfigurer
  * @author Christian Ohr
  * @author Boris Stanojevic
- * 
+ *
  */
-public class CustomMappings {
-
-    private Collection<Resource> mappingScripts;
-
-    private Resource mappingScript;
+public class CustomMappings implements MappingResourceHolder {
 
     private static final Logger LOG = LoggerFactory.getLogger(CustomMappings.class);
 
-    public Collection<Resource> getMappingScripts() {
-        return mappingScripts;
+    private Collection<Resource> mappingResources = new ArrayList<>();
+
+    @Override
+    public Collection<? extends Resource> getMappingResources() {
+        return mappingResources;
     }
 
-    public void setMappingScripts(Collection<Resource> mappingScripts) {
-        this.mappingScripts = new ArrayList<>(mappingScripts.size());
-        for (Resource mappingScript : mappingScripts) {
-            if (mappingScript.exists() && mappingScript.isReadable()) {
-                this.mappingScripts.add(mappingScript);
+    @Override
+    public void setMappingResources(Collection<? extends Resource> mappingResources) {
+        this.mappingResources = new ArrayList<>(mappingResources.size());
+        for (Resource mappingResource : mappingResources) {
+            if (mappingResource.exists() && mappingResource.isReadable()) {
+                this.mappingResources.add(mappingResource);
             } else {
-                LOG.warn("Could not read mapping script {}", mappingScript.getFilename());
+                LOG.warn("Could not read mapping script {}", mappingResource.getFilename());
             }
         }
-        this.mappingScripts = mappingScripts;
     }
 
-    public Resource getMappingScript() {
-        return mappingScript;
-    }
-
-    public void setMappingScript(Resource mappingScript) {
-        if (mappingScript.exists() && mappingScript.isReadable()) {
-            this.mappingScript = mappingScript;
-        } else {
-            LOG.warn("Could not read mapping script {}", mappingScript.getFilename());
-        }
+    @Override
+    public void setMappingResource(Resource mappingResource) {
+        setMappingResources(Collections.singleton(mappingResource));
     }
 
 }

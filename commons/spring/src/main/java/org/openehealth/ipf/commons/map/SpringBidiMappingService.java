@@ -16,49 +16,46 @@
 
 package org.openehealth.ipf.commons.map;
 
+import org.openehealth.ipf.commons.map.config.CustomMappings;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
+ * BidiMappingService implementation that can be configured with Spring {@link Resource resources}
+ * and using the {@link org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer}.
  *
+ * @since 3.1
  */
-public class SpringBidiMappingService extends BidiMappingService {
+public class SpringBidiMappingService extends BidiMappingService implements MappingResourceHolder {
 
-    // bean configuration support
-    public void setMappingScript(Resource resource) {
+    private Collection<Resource> resources = new ArrayList<>();
+
+    @Override
+    public Collection<? extends Resource> getMappingResources() {
+        return resources;
+    }
+
+    @Override
+    public void setMappingResource(Resource resource) {
         try {
             setMappingScript(resource.getURL());
+            this.resources.add(resource);
         } catch (IOException e) {
             if (!isIgnoreResourceNotFound())
                 throw new IllegalArgumentException(resource.getFilename() + " could not be read", e);
         }
     }
 
-    // bean configuration support
-    public void setMappingScripts(Collection<? extends Resource> resources) {
+    @Override
+    public void setMappingResources(Collection<? extends Resource> resources) {
         for (Resource resource : resources) {
-            setMappingScript(resource);
+            setMappingResource(resource);
+            this.resources.add(resource);
         }
     }
 
-    // Read in the mapping definition
-    public synchronized void addMappingScript(Resource resource) {
-        try {
-            addMappingScript(resource.getURL());
-        } catch (IOException e) {
-            if (!isIgnoreResourceNotFound())
-                throw new IllegalArgumentException(resource.getFilename() + " could not be read", e);
-        }
-    }
-
-    // Read in several mapping definition
-    public synchronized void addMappingScripts(Collection<? extends Resource> resources) {
-        for (Resource resource : resources) {
-            addMappingScript(resource);
-        }
-    }
 
 }

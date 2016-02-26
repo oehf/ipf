@@ -95,7 +95,7 @@ public class BidiMappingServiceOsgiConfigurer implements BundleListener {
 
         // configure mapping service with mapping resources
         if (resources.length > 0) {
-            service.addMappingScripts(resources);
+            service.setMappingScripts(resources);
             for (URL resource: resources) {
                 LOG.info("Added mapping resource {} to mapping service", resource);
             }

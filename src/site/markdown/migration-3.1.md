@@ -24,8 +24,8 @@ you may need to add these dependencies in your modules.
 ### Mapping Service
 
 The `org.openehealth.ipf.commons.map.BidiMappingService` cannot be configured with Spring's `Resource`
-objects anymore. With Spring, use `org.openehealth.ipf.commons.map.SpringBidiMappingService` instead. the
-new class is located in the `ipf-commons-spring` module.
+objects anymore. With Spring, use `org.openehealth.ipf.commons.map.SpringBidiMappingService` instead and call
+the new `setMappingResource` or `setMappingResources` methods. The new class is located in the `ipf-commons-spring` module.
 See [Mapping Service] for details.
 
 ### MLLP custom interceptors

@@ -48,8 +48,9 @@ class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
     @Before
     public void setup() {
         mappingService = new BidiMappingService()
-        mappingService.addMappingScript(getClass().getClassLoader().getResource('mapping.map'))
-        mappingService.addMappingScript(getClass().getResource('/META-INF/map/fhir-hl7v2-translation.map'))
+        mappingService.setMappingScripts(
+                [ getClass().getClassLoader().getResource('mapping.map'),
+                  getClass().getResource('/META-INF/map/fhir-hl7v2-translation.map') ] as URL[])
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
         translator = new PdqResponseToPdqmResponseTranslator(mapper)
         translator.setPdqSupplierResourceIdentifierUri("urn:oid:1.2.3.4")

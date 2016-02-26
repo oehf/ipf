@@ -21,6 +21,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Boris Stanojevic
@@ -57,5 +58,19 @@ public class OsgiServiceRegistry extends SpringRegistry {
     @Override
     public <T> Map<String, T> beans(Class<T> requiredType) {
         return super.beans(requiredType);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OsgiServiceRegistry)) return false;
+        if (!super.equals(o)) return false;
+        OsgiServiceRegistry that = (OsgiServiceRegistry) o;
+        return Objects.equals(bundleContext, that.bundleContext);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), bundleContext);
     }
 }

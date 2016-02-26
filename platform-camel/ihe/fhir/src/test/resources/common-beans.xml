@@ -34,7 +34,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
 	<ipf:globalContext id="globalContext"/>    
 
     <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
-        <property name="mappingScripts">
+        <property name="mappingResources">
             <list>
                  <value>classpath:mapping.map</value>
                  <value>classpath:META-INF/map/atna2fhir.map</value>

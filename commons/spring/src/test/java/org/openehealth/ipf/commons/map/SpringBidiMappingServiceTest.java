@@ -50,7 +50,7 @@ public class SpringBidiMappingServiceTest {
         );
 
         mappingService.setIgnoreResourceNotFound(true);
-        mappingService.setMappingScripts(resources);
+        mappingService.setMappingResources(resources);
         assertEquals("PRPA_IN401001", mappingService.get("messageType", "ADT^A04"));
 
         try {
@@ -68,6 +68,6 @@ public class SpringBidiMappingServiceTest {
                 new ClassPathResource("example3.map")
         );
         mappingService.setIgnoreResourceNotFound(false);
-        mappingService.setMappingScripts(resources);
+        mappingService.setMappingResources(resources);
     }
 }

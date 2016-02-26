@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.flow.hibernate;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import org.hibernate.event.spi.PostInsertEvent;
@@ -25,6 +26,7 @@ import org.hibernate.event.spi.PostUpdateEvent;
 import org.hibernate.event.spi.PostUpdateEventListener;
 import org.hibernate.persister.entity.EntityPersister;
 import org.jasypt.encryption.StringEncryptor;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.openehealth.ipf.commons.flow.domain.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,7 +48,7 @@ public class RenderedMessageDecryptEventListener implements
     private static final long serialVersionUID = -7516699694816986560L;
 
     @Autowired
-    private StringEncryptor stringEncryptor;
+    private transient StringEncryptor stringEncryptor;
 
     public StringEncryptor getStringEncryptor() {
         return stringEncryptor;

@@ -102,7 +102,7 @@ public interface MappingService {
 	Set<?> mappingKeys();
 
 	/**
-	 * @param mappingKey
+	 * @param mappingKey mapping key
 	 * @return key set of a registered mapping. Changes to the set do not change
 	 *         the registry itself.
 	 * @throws IllegalArgumentException
@@ -111,7 +111,7 @@ public interface MappingService {
 	Set<?> keys(Object mappingKey);
 
 	/**
-	 * @param mappingKey
+	 * @param mappingKey mapping key
 	 * @return value set of a registered mapping. Changes to the set do not
 	 *         change the registry itself.
 	 * @throws IllegalArgumentException
