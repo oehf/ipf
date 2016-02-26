@@ -64,7 +64,7 @@
         <pax-plugin-version>1.5</pax-plugin-version>
         <release-plugin-version>2.5.1</release-plugin-version>
         <resources-plugin-version>2.7</resources-plugin-version>
-        <sources-plugin-version>3.0.0</sources-plugin-version>
+        <sources-plugin-version>2.4</sources-plugin-version>
 
         <!-- Dependency version properties -->
         <activemq-version>5.13.1</activemq-version>
