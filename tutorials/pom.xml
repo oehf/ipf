@@ -38,16 +38,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>junitperf</groupId>
-            <artifactId>junitperf</artifactId>
-            <!-- 
-                This scope is only needed to run load tests
-                (using JUnit test classes) as normal Java
-                programs. Otherwise set scope to 'test'.
-            -->
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <scope>test</scope>

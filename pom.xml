@@ -71,7 +71,7 @@
         <aspectj-version>1.8.8</aspectj-version>
         <bouncycastle-version>1.54</bouncycastle-version>
         <camel-version>2.16.2</camel-version>
-        <cglib-version>3.1</cglib-version>
+        <cglib-version>3.2.0</cglib-version>
         <commons-beanutils-version>1.9.2</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-collections-version>3.2.2</commons-collections-version>
@@ -82,7 +82,7 @@
         <commons-math3-version>3.6</commons-math3-version>
         <cxf-version>3.1.5</cxf-version>
         <derby-version>10.12.1.1</derby-version>
-        <easymock-version>3.3.1</easymock-version>
+        <easymock-version>3.4</easymock-version>
         <ehcache-version>2.10.1</ehcache-version>
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-servlet-api-30-version>1.0</geronimo-spec-servlet-api-30-version>
@@ -109,7 +109,6 @@
         <jetty-version>9.3.7.v20160115</jetty-version>
         <joda-time-version>2.9.2</joda-time-version>
         <junit-version>4.12</junit-version>
-        <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.17</log4j-version>
         <lombok-version>1.16.6</lombok-version>
         <lucene-version>4.10.4</lucene-version>
@@ -121,7 +120,7 @@
         <quickcheck-version>0.6</quickcheck-version>
         <!-- 9.7.0-3 hangs up test in ipf-modules-cda -->
         <saxon-he-version>9.7.0-2</saxon-he-version>
-        <slf4j-version>1.7.16</slf4j-version>
+        <slf4j-version>1.7.18</slf4j-version>
         <spring-version>4.2.4.RELEASE</spring-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
@@ -1510,12 +1509,6 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>junitperf</groupId>
-                <artifactId>junitperf</artifactId>
-                <version>${junitperf-version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
