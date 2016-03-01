@@ -30,9 +30,7 @@ import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingAggregationStrategy;
 import org.openehealth.ipf.platform.camel.flow.process.Splitter;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 /**
  * {@link OutputDefinition} for the {@link Splitter} processor
@@ -47,12 +45,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Metadata(label = "ipf")
 @XmlRootElement(name = "splitter")
+@XmlType(name = "FlowSplitterDefinitionType")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SplitterDefinition extends OutputDefinition<RouteDefinition> {
 
+    @XmlTransient
     private AggregationStrategy aggregationStrategy;
+    @XmlTransient
     private ExpressionDefinition expressionDefinition;
+    @XmlAttribute
     private String expressionBean;
+
+    public SplitterDefinition() {
+    }
 
     /**
      * Creates a split definition, i.e. a builder for {@link Splitter}.

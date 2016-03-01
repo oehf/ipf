@@ -23,21 +23,34 @@ import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.flow.PlatformMessageRenderer;
 import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * @author Martin Krasser
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class FlowProcessorDefinition extends OutputDefinition<RouteDefinition> {
 
-    private PlatformMessageRenderer messageRenderer; 
-    
+    @XmlTransient
+    private PlatformMessageRenderer messageRenderer;
+
+    @XmlAttribute
     private String messageRendererBeanName;
 
+    @XmlTransient
     private DataFormat inFormat;
+    @XmlTransient
     private DataFormat outFormat;
-    
+
+    @XmlAttribute
     private Class<?> inType;
+    @XmlAttribute
     private Class<?> outType;
-    
+
+    @XmlAttribute
     private boolean outConversion = true;
     
     /**

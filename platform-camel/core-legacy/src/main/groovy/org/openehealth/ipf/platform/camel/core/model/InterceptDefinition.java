@@ -24,9 +24,7 @@ import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.process.Interceptor;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 /**
  * @author Martin Krasser
@@ -36,7 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class InterceptDefinition extends OutputDefinition<RouteDefinition> {
 
+    @XmlTransient
     private DelegateProcessor delegateProcessor;
+    @XmlAttribute
     private String interceptorBean;
     
     public InterceptDefinition(DelegateProcessor delegateProcessor) {

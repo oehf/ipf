@@ -25,6 +25,9 @@ import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.processor.Pipeline;
 import org.apache.camel.spi.RouteContext;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 /**
  * An {@link OutputDefinition} that combines the {@link Processor} created by
  * {@link #doCreateDelegate(RouteContext)} and the child processor created by
@@ -36,6 +39,7 @@ import org.apache.camel.spi.RouteContext;
  * 
  * @author Martin Krasser
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class DelegateDefinition extends OutputDefinition<RouteDefinition> {
 
     @Override

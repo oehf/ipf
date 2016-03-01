@@ -17,9 +17,7 @@ package org.openehealth.ipf.platform.camel.core.model;
 
 import static org.apache.camel.builder.Builder.bodyAs;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.camel.spi.Metadata;
@@ -39,10 +37,14 @@ import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition {
 
+    @XmlTransient
     private Transmogrifier transmogrifier;
-    
+    @XmlAttribute
     private String transmogrifierBean;
-    
+
+    public TransmogrifierAdapterDefinition() {
+    }
+
     public TransmogrifierAdapterDefinition(Transmogrifier transmogrifier) {
         this.transmogrifier = transmogrifier;
         params().headers();

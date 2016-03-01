@@ -18,9 +18,7 @@ package org.openehealth.ipf.platform.camel.core.model;
 import static org.apache.camel.builder.Builder.bodyAs;
 import groovy.lang.Closure;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.camel.Expression;
@@ -42,12 +40,13 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
 
+    @XmlTransient
     private Validator validator;
-
+    @XmlAttribute
     private String validatorBean;
-    
+    @XmlTransient
     private Object profile;
-
+    @XmlTransient
     private Expression profileExpression;
     
     public ValidatorAdapterDefinition() {

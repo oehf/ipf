@@ -24,6 +24,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -43,7 +44,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class IpfDefinition {
 
+    @XmlElementRef
     private final ProcessorDefinition<RouteDefinition> processorDefinition;
+
+    public IpfDefinition() {
+        this(null);
+    }
 
     public IpfDefinition(ProcessorDefinition<RouteDefinition> processorDefinition) {
         this.processorDefinition = processorDefinition;

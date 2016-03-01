@@ -21,9 +21,7 @@ import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.process.Validation;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 /**
  * @author Martin Krasser
@@ -33,10 +31,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ValidationDefinition extends OutputDefinition<ValidationDefinition>{
 
+    @XmlTransient
     private final Processor responseGeneratorProcessor;
-    
+    @XmlAttribute
     private final String responseGeneratorUri;
-    
+
+    public ValidationDefinition() {
+        this(null, null);
+    }
+
     public ValidationDefinition(String responseGeneratorUri) {
         this(null, responseGeneratorUri);
     }

@@ -25,6 +25,7 @@ import org.openehealth.ipf.platform.camel.hl7.adapter.HapiAdapter;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -34,7 +35,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class HapiAdapterDefinition<T extends HapiAdapter> extends ProcessorAdapterDefinition {
 
+    @XmlTransient
     private T adapter;
+
+    public HapiAdapterDefinition() {
+    }
 
     public HapiAdapterDefinition(T adapter) {
         this.adapter = adapter;

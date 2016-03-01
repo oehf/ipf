@@ -22,12 +22,19 @@ import org.openehealth.ipf.commons.core.modules.api.Parser;
 import org.openehealth.ipf.commons.core.modules.api.Renderer;
 import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+
 /**
  * @author Martin Krasser
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DataFormatAdapterDefinition extends DataFormatDefinition {
 
+    @XmlAttribute
     private final String parserBeanName;
+    @XmlAttribute
     private final String rendererBeanName;
     
     private DataFormatAdapterDefinition(String parserBeanName, String rendererBeanName) {

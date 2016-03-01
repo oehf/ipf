@@ -21,9 +21,7 @@ import org.openehealth.ipf.commons.core.modules.api.Renderer;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.RendererAdapter;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 /**
  * @author Martin Krasser
@@ -33,10 +31,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RendererAdapterDefinition extends ProcessorAdapterDefinition {
 
+    @XmlTransient
     private Renderer renderer;
-    
+    @XmlAttribute
     private String rendererBean;
-    
+
+    public RendererAdapterDefinition() {
+    }
+
     public RendererAdapterDefinition(Renderer renderer) {
         this.renderer = renderer;
     }

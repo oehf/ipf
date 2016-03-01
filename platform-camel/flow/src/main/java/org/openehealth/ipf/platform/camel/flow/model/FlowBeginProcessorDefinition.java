@@ -27,6 +27,7 @@ import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -37,13 +38,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FlowBeginProcessorDefinition extends FlowProcessorDefinition {
 
+    @XmlAttribute
     private final String identifier;
+    @XmlAttribute
     private String application;
+    @XmlAttribute
     private String replayErrorUri;
-    
+    @XmlAttribute
     private int expectedAckCount = FlowInfo.ACK_COUNT_EXPECTED_UNDEFINED;
     
-    
+    public FlowBeginProcessorDefinition() {
+        this("flow");
+    }
+
     public FlowBeginProcessorDefinition(String identifier) {
         this.identifier = identifier;
     }

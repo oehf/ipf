@@ -21,9 +21,7 @@ import org.openehealth.ipf.commons.core.modules.api.Parser;
 import org.openehealth.ipf.platform.camel.core.adapter.ParserAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 /**
  * @author Martin Krasser
@@ -33,10 +31,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ParserAdapterDefinition extends ProcessorAdapterDefinition {
 
+    @XmlTransient
     private Parser parser;
-    
+    @XmlAttribute
     private String parserBean;
-    
+
+    public ParserAdapterDefinition() {
+    }
+
     public ParserAdapterDefinition(Parser parser) {
         this.parser = parser;
     }

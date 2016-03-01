@@ -24,12 +24,20 @@ import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.StaticParams;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * @author Martin Krasser
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class ProcessorAdapterDefinition extends DelegateDefinition {
 
+    @XmlTransient
     private Expression inputExpression;
+    @XmlTransient
     private Expression paramsExpression;
     
     /**
