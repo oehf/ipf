@@ -18,11 +18,10 @@ package org.openehealth.ipf.commons.ihe.ws.server;
 import org.apache.catalina.Context;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.connector.Connector;
-import org.apache.catalina.loader.VirtualWebappLoader;
 import org.apache.catalina.startup.Tomcat;
+import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;
 
 import java.util.Map;
@@ -69,9 +68,11 @@ public class TomcatServer extends ServletServer {
         context.addChild(wrapper);
         context.addServletMapping(getServletPath(), servletName);
 
+        /*
         VirtualWebappLoader loader = new VirtualWebappLoader(this.getClass().getClassLoader());
         loader.setVirtualClasspath(System.getProperty("java.class.path"));
         context.setLoader(loader);
+        */
 
         Connector connector = embedded.getConnector();
         connector.setPort(getPort());
