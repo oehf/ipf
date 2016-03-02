@@ -50,7 +50,7 @@ public class GroovyFlowTest extends AbstractFlowTest {
     public void testRecipientListSuccess() throws Exception {
         wait.expectedMessageCount(2);
         mock.expectedBodiesReceived("test1", "test2");
-        producerTemplate.sendBodyAndHeader("direct:flow-test-recipient-list", "test1,test2", "recipient", "http://localhost:7799/recipient");
+        producerTemplate.sendBodyAndHeader("direct:flow-test-recipient-list", "test1,test2", "recipient", "http4://localhost:7799/recipient");
         wait.assertIsSatisfied();
         mock.assertIsSatisfied();
         Long flowId1 = mock.getExchanges().get(0).getIn().getHeader(FLOW_ID_KEY, Long.class);
@@ -68,7 +68,7 @@ public class GroovyFlowTest extends AbstractFlowTest {
     @Test
     public void testRecipientListFailure() throws Exception {
         mock.expectedMessageCount(2);
-        producerTemplate.sendBodyAndHeader("direct:flow-test-recipient-list", "test1,test2", "recipient", "http://localhost:7799/bullshit");
+        producerTemplate.sendBodyAndHeader("direct:flow-test-recipient-list", "test1,test2", "recipient", "http4://localhost:7799/bullshit");
         mock.assertIsSatisfied();
         Long flowId1 = mock.getExchanges().get(0).getIn().getHeader(FLOW_ID_KEY, Long.class);
         Long flowId2 = mock.getExchanges().get(1).getIn().getHeader(FLOW_ID_KEY, Long.class);

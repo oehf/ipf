@@ -218,7 +218,7 @@ class TestIti55 extends StandardTestContainer {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = '< some ill-formed XML !'
         Exchanges.resultMessage(producerTemplate.send(
-                "http://localhost:${port}/iti55service",
+                "http4://localhost:${port}/iti55service",
                 requestExchange))
         assert MyRejectionHandlingStrategy.count == 1
     }

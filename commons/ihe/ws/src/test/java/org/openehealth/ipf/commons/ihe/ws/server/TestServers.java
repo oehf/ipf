@@ -15,12 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertEquals;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
 import javax.servlet.ServletException;
@@ -69,13 +75,14 @@ public class TestServers {
     }
 
     private void checkPostRequest(int port) throws Exception {
-        HttpClient client = new HttpClient();
-        PostMethod method = new PostMethod("http://localhost:" + port + "/testContext/testServlet/bla");
-        RequestEntity requestEntity = new StringRequestEntity("hello world", "text/plain", null);
-        method.setRequestEntity(requestEntity);
+        HttpClient client = HttpClients.createDefault();
+        HttpPost method = new HttpPost("http://localhost:" + port + "/testContext/testServlet/bla");
+        HttpEntity requestEntity = new StringEntity("hello world", ContentType.TEXT_PLAIN);
+        method.setEntity(requestEntity);
         try {
-            assertEquals(200, client.executeMethod(method));
-            assertEquals("hello world", method.getResponseBodyAsString());
+            HttpResponse response = client.execute(method);
+            assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
+            assertEquals("hello world", EntityUtils.toString(response.getEntity()));
         }
         finally {
             method.releaseConnection();

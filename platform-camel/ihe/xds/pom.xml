@@ -96,8 +96,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http</artifactId>
-            <scope>test</scope>
+            <artifactId>camel-http4</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
