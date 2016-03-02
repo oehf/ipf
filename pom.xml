@@ -85,7 +85,6 @@
         <easymock-version>3.4</easymock-version>
         <ehcache-version>2.10.1</ehcache-version>
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
-        <geronimo-spec-servlet-api-30-version>1.0</geronimo-spec-servlet-api-30-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
@@ -98,8 +97,8 @@
         <hibernate-javassist-version>3.20.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
         <httpclient4-version>4.5.1</httpclient4-version>
-        <ipf-gazelle-version>1.0.8</ipf-gazelle-version>
-        <ipf-oht-atna-version>3.1.0</ipf-oht-atna-version>
+        <ipf-gazelle-version>1.1-SNAPSHOT</ipf-gazelle-version>
+        <ipf-oht-atna-version>3.1-SNAPSHOT</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.2.11</jaxb-version>
         <jasypt-version>1.9.2</jasypt-version>
@@ -120,6 +119,7 @@
         <quickcheck-version>0.6</quickcheck-version>
         <!-- 9.7.0-3 hangs up test in ipf-modules-cda -->
         <saxon-he-version>9.7.0-2</saxon-he-version>
+        <servlet-api-version>3.1.0</servlet-api-version>
         <slf4j-version>1.7.18</slf4j-version>
         <spring-version>4.2.4.RELEASE</spring-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
@@ -140,7 +140,6 @@
     </organization>
 
     <developers>
-
         <developer>
             <id>boris</id>
             <name>Boris Stanojevic</name>
@@ -851,16 +850,20 @@
                 <version>${camel-version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                    </exclusion>
-                    <exclusion>
                         <groupId>com.sun.xml.bind</groupId>
                         <artifactId>jaxb-impl</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>com.sun.xml.bind</groupId>
                         <artifactId>jaxb-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-codec</groupId>
+                        <artifactId>commons-codec</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -869,34 +872,6 @@
                 <artifactId>camel-jetty</artifactId>
                 <version>${camel-version}</version>
                 <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-server</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-security</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-servlet</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-servlets</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-client</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-jmx</artifactId>
-                    </exclusion>
                     <exclusion>
                         <groupId>commons-codec</groupId>
                         <artifactId>commons-codec</artifactId>
@@ -1038,24 +1013,6 @@
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-transports-http-jetty</artifactId>
                 <version>${cxf-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.geronimo.specs</groupId>
-                        <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-io</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-security</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-continuation</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
@@ -1242,14 +1199,9 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-servlet_3.0_spec</artifactId>
-                <version>${geronimo-spec-servlet-api-30-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-javamail_1.4_spec</artifactId>
                 <version>${geronimo-spec-javamail-14-version}</version>
-            </dependency>			
+            </dependency>
             <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
@@ -1330,12 +1282,6 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
                 <version>${jetty-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>javax.servlet-api</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
@@ -1371,6 +1317,11 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-continuation</artifactId>
                 <version>${jetty-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet-api-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.xbean</groupId>
@@ -1930,6 +1881,20 @@
             </testResource>
         </testResources>
     </build>
+
+    <repositories>
+        <repository>
+            <id>ossrh</id>
+            <name>Sonatype Snapshors</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <reporting>
         <plugins>

@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti17;
 
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+
+import java.io.IOException;
 
 /**
  * The producer implementation for the ITI-17 component.
@@ -49,12 +49,12 @@ public class Iti17Producer extends DefaultProducer {
         String documentSpecifyingPart = exchange.getIn().getBody(String.class);
         String uri = endpoint.getServiceUrl() + documentSpecifyingPart;
 
-        final HttpClient httpClient = new HttpClient();
-        final GetMethod get = new GetMethod(uri);
+        final HttpClient httpClient = new DefaultHttpClient();
+        final HttpGet get = new HttpGet(uri);
         boolean keepConnection = false;
         try {
-            httpClient.executeMethod(get);
-            keepConnection = handleResponse(exchange, get);
+            HttpResponse response = httpClient.execute(get);
+            keepConnection = handleResponse(exchange, response);
         }
         finally {
             if (!keepConnection) {
@@ -77,26 +77,27 @@ public class Iti17Producer extends DefaultProducer {
         }
     }
 
-    private boolean handleResponse(Exchange exchange, final GetMethod get) throws IOException {
+    private boolean handleResponse(Exchange exchange, final HttpResponse response) throws IOException {
         Message out = Exchanges.resultMessage(exchange);
-        if (get.getStatusCode() == 200) {                
-            out.setBody(createWrappedStream(get));
+        if (response.getStatusLine().getStatusCode() == 200) {
+            out.setBody(response.getEntity().getContent());
             return true;
         }
 
-        out.setBody(get.getStatusCode());
+        out.setBody(response.getStatusLine().getStatusCode());
         out.setFault(true);
         
         return false;
     }
 
+    /*
     private InputStream createWrappedStream(final GetMethod get) throws IOException {
         return new FilterInputStream(get.getResponseBodyAsStream()) {
             @Override
             public void close() throws IOException {
                 super.close();
-                get.releaseConnection();
             }
         };
     }
+    */
 }

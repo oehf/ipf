@@ -15,21 +15,23 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.IOUtils;
-import static org.junit.Assert.assertEquals;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.junit.Test;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Jens Riemschneider
@@ -69,13 +71,15 @@ public class TestServers {
     }
 
     private void checkPostRequest(int port) throws Exception {
-        HttpClient client = new HttpClient();
-        PostMethod method = new PostMethod("http://localhost:" + port + "/testContext/testServlet/bla");
-        RequestEntity requestEntity = new StringRequestEntity("hello world", "text/plain", null);
-        method.setRequestEntity(requestEntity);
+        HttpClient client = new DefaultHttpClient();
+        HttpPost method = new HttpPost("http://localhost:" + port + "/testContext/testServlet/bla");
+        method.setEntity(new StringEntity("hello world"));
         try {
-            assertEquals(200, client.executeMethod(method));
-            assertEquals("hello world", method.getResponseBodyAsString());
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            HttpResponse response = client.execute(method);
+            response.getEntity().writeTo(stream);
+            assertEquals(200, response.getStatusLine().getStatusCode());
+            assertEquals("hello world", new String(stream.toByteArray()));
         }
         finally {
             method.releaseConnection();

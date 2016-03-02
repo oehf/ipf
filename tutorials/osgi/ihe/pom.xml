@@ -19,7 +19,6 @@
         <javamail-api-version>1.4.4</javamail-api-version>
         <geronimo-ws-api-version>1.1.2</geronimo-ws-api-version>
         <geronimo-management-spec-version>1.0.1</geronimo-management-spec-version>
-        <geronimo-servlet_3.0_spec_version>1.0</geronimo-servlet_3.0_spec_version>
         <hapi-osgi-version>2.0</hapi-osgi-version>
         <springsource-jdom-version>1.1.0</springsource-jdom-version>
         <jms-version>1.1.0</jms-version>
@@ -36,6 +35,7 @@
         <servicemix-xmlschema-version>1.4.3_1</servicemix-xmlschema-version>
         <servicemix-xmlsec-version>1.4.3_2</servicemix-xmlsec-version>
         <servicemix-woodstox-version>3.2.8_1</servicemix-woodstox-version>
+        <servlet-api-version>3.1.0</servlet-api-version>
         <springsource-activation-version>1.1.1</springsource-activation-version>
         <springsource-annotations-api-version>1.0.0</springsource-annotations-api-version>
         <springsource-antlr-version>2.7.6</springsource-antlr-version>
@@ -167,7 +167,7 @@
             <param>mvn:javax.wsdl/com.springsource.javax.wsdl/${springsource-wsdl-version}@start</param>
             <param>mvn:javax.mail/mail/${javamail-api-version}@start</param>
             <param>mvn:org.apache.geronimo.specs/geronimo-ws-metadata_2.0_spec/${geronimo-ws-api-version}@start</param>
-            <param>mvn:org.apache.geronimo.specs/geronimo-servlet_3.0_spec/${geronimo-servlet_3.0_spec_version}@start</param>
+            <param>mvn:javax.servlet/javax.servlet-api/${servlet-api-version}@start</param>
             <param>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlschema/${servicemix-xmlschema-version}@start</param>
             <param>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlsec/${servicemix-xmlsec-version}@start</param>
             <param>mvn:org.codehaus.woodstox/woodstox-core-asl/${woodstox-core-asl-version}@start</param>
