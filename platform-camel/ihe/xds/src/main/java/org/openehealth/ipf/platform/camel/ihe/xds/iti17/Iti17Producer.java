@@ -15,21 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti17;
 
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+
+import java.io.IOException;
 
 /**
  * The producer implementation for the ITI-17 component.
@@ -52,11 +49,11 @@ public class Iti17Producer extends DefaultProducer {
         String documentSpecifyingPart = exchange.getIn().getBody(String.class);
         String uri = endpoint.getServiceUrl() + documentSpecifyingPart;
 
-        final CloseableHttpClient client = HttpClients.createDefault();
+        final HttpClient httpClient = new DefaultHttpClient();
         final HttpGet get = new HttpGet(uri);
         boolean keepConnection = false;
         try {
-            CloseableHttpResponse response = client.execute(get);
+            HttpResponse response = httpClient.execute(get);
             keepConnection = handleResponse(exchange, response);
         }
         finally {
@@ -80,10 +77,10 @@ public class Iti17Producer extends DefaultProducer {
         }
     }
 
-    private boolean handleResponse(Exchange exchange, final CloseableHttpResponse response) throws IOException {
+    private boolean handleResponse(Exchange exchange, final HttpResponse response) throws IOException {
         Message out = Exchanges.resultMessage(exchange);
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            out.setBody(createWrappedStream(response));
+        if (response.getStatusLine().getStatusCode() == 200) {
+            out.setBody(response.getEntity().getContent());
             return true;
         }
 
@@ -93,13 +90,14 @@ public class Iti17Producer extends DefaultProducer {
         return false;
     }
 
-    private InputStream createWrappedStream(final CloseableHttpResponse response) throws IOException {
-        return new FilterInputStream(response.getEntity().getContent()) {
+    /*
+    private InputStream createWrappedStream(final GetMethod get) throws IOException {
+        return new FilterInputStream(get.getResponseBodyAsStream()) {
             @Override
             public void close() throws IOException {
                 super.close();
-                response.close();
             }
         };
     }
+    */
 }

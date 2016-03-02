@@ -16,7 +16,11 @@
 package org.openehealth.ipf.commons.ihe.ws.server;
 
 import org.apache.commons.io.IOUtils;
-import static org.junit.Assert.assertEquals;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -33,9 +37,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Jens Riemschneider
@@ -75,14 +81,15 @@ public class TestServers {
     }
 
     private void checkPostRequest(int port) throws Exception {
-        HttpClient client = HttpClients.createDefault();
+        HttpClient client = new DefaultHttpClient();
         HttpPost method = new HttpPost("http://localhost:" + port + "/testContext/testServlet/bla");
-        HttpEntity requestEntity = new StringEntity("hello world", ContentType.TEXT_PLAIN);
-        method.setEntity(requestEntity);
+        method.setEntity(new StringEntity("hello world"));
         try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
             HttpResponse response = client.execute(method);
-            assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
-            assertEquals("hello world", EntityUtils.toString(response.getEntity()));
+            response.getEntity().writeTo(stream);
+            assertEquals(200, response.getStatusLine().getStatusCode());
+            assertEquals("hello world", new String(stream.toByteArray()));
         }
         finally {
             method.releaseConnection();
