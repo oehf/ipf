@@ -1,0 +1,34 @@
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.2.1-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.2.1"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='self::cda:subject'>
+     Error: The templateId  1.3.6.1.4.1.19376.1.3.3.1.2.1 is a child element of subject and represents a non-human subject of laboratory testing.
+   </assert> 
+   
+   <assert test='cda:relatedSubject'>
+      Error: In Non-Human Subject (1.3.6.1.4.1.19376.1.3.3.1.2.1) the subject/relatedSubject element shall be present.
+   </assert>
+   
+   <assert test='cda:relatedSubject/cda:code'>
+       Error: In Non-Human Subject (1.3.6.1.4.1.19376.1.3.3.1.2.1) the subject/relatedSubject/code element shall be present.
+   </assert>
+   
+   <assert test='cda:relatedSubject/cda:addr'>
+       Error: In Non-Human Subject (1.3.6.1.4.1.19376.1.3.3.1.2.1) the subject/relatedSubject/addr element shall be present.
+   </assert>
+   
+    
+ </rule>
+</pattern>
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.2.1-warnings'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.2.1"]'>
+      <assert test='(cda:relatedSubject/cda:addr) and (normalize-space(cda:relatedSubject/cda:addr) 
+                 or count(cda:relatedSubject/cda:addr/child::*) &gt; 0)
+                 or (cda:relatedSubject/cda:addr/@nullFlavor)'>
+           Warning: In Non-Human Subject (1.3.6.1.4.1.19376.1.3.3.1.2.1) a subject/relatedSubject/addr should have a non-blank addr element or nullFlavor.</assert> 
+</rule>
+</pattern>

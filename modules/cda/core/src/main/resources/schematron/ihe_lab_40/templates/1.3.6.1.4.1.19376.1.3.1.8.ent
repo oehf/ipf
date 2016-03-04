@@ -1,0 +1,36 @@
+
+<!-- NOTE: This templateId from Lab Revision 2.0 DOES NOT EXIST in Lab Revision 3.0+ -->
+<!-- We've added a rule to IHE Lab TF-3 Revision 3.0 (1.3.6.1.4.1.19376.1.3.3) pointing this out -->
+
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.8-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.8"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='parent::cda:entryRelationship and
+                 self::cda:procedure'>
+     Error: The templateId  (1.3.6.1.4.1.19376.1.3.1.8) is a child element of entryRelationship/procedure and identifies the Specimen Site.
+   </assert> 
+     
+   <assert test='parent::cda:entryRelationship[@typeCode="COMP"]'>Error: In Specimen Site (1.3.6.1.4.1.19376.1.3.1.8) the entry/act/entryRelationship shall have a typeCode of "COMP".</assert> 
+
+   <assert test='@classCode="PROC"'>
+        Error: In Specimen Site (1.3.6.1.4.1.19376.1.3.1.8) the entryRelationship/procedure/@classCode shall be equal to "PROC".
+     </assert>
+          
+    <assert test='@moodCode="EVN"'>
+        Error: In Specimen Site (1.3.6.1.4.1.19376.1.3.1.8) the entryRelationship/prodecure/@moodCode shall be equal to "EVN".
+    </assert>
+           
+    <assert test='cda:targetSiteCode/@code'>
+        Error: In Specimen Site (1.3.6.1.4.1.19376.1.3.1.8) the entryRelationship/procedure/targetSiteCode/@code shall be present.
+    </assert>   
+   
+    <assert test='cda:targetSiteCode/@codeSystem'>
+        Error: In Specimen Site (1.3.6.1.4.1.19376.1.3.1.8) the entryRelationship/procedure/targetSiteCode/@codeSystem shall be present.
+    </assert>   
+  
+ </rule>
+</pattern>
+

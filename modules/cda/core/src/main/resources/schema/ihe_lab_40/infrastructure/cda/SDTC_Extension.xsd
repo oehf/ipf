@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:sdtc"
+    targetNamespace="urn:hl7-org:sdtc" xmlns:pcc="urn:ihe:pcc:hl7v3" xmlns:cda="urn:hl7-org:v3"
+    elementFormDefault="qualified">
+    <xs:import namespace="urn:hl7-org:v3" schemaLocation="IHE_POCD_MT000040.xsd"/>
+
+    <xs:include schemaLocation="../../processable/coreschemas/datatypes.xsd"/>
+    <xs:include schemaLocation="../../processable/coreschemas/voc.xsd"/>
+    
+    <xs:complexType name="SdtcAssignedEntity">
+        <xs:complexContent>
+            <xs:extension base="cda:POCD_MT000040.AssignedEntity">
+                <xs:sequence>
+                    <xs:element name="patient" type="SdtcPatient" minOccurs="0"/>
+                </xs:sequence>
+                
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="SdtcRelatedEntity">
+        <xs:complexContent>
+            <xs:extension base="cda:POCD_MT000040.RelatedEntity">
+                <xs:sequence>
+                    <xs:element name="patient" type="SdtcPatient" minOccurs="0"/>
+                </xs:sequence>
+                
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="SdtcAssociatedEntity">
+        <xs:complexContent>
+            <xs:extension base="cda:POCD_MT000040.AssociatedEntity">
+                <xs:sequence>
+                    <xs:element name="patient" type="SdtcPatient" minOccurs="0"/>
+                </xs:sequence>
+                
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="SdtcPatient">
+        <xs:sequence>
+            <xs:element name="id" type="cda:II" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="id" type="SdtcII" /> 
+
+    <xs:complexType name="SdtcII">        
+        <xs:complexContent>
+            <xs:extension base="ANY">
+                <xs:attribute name="root" type="uid" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            A unique identifier that guarantees the global uniqueness
+                            of the instance identifier. The root alone may be the
+                            entire instance identifier.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="extension" type="st" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            A character string as a unique identifier within the
+                            scope of the identifier root.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="assigningAuthorityName" type="st" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            A human readable name or mnemonic for the assigning
+                            authority. This name may be provided solely for the
+                            convenience of unaided humans interpreting an II value
+                            and can have no computational meaning. Note: no
+                            automated processing must depend on the assigning
+                            authority name to be present in any form.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="displayable" type="bl" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Specifies if the identifier is intended for human
+                            display and data entry (displayable = true) as
+                            opposed to pure machine interoperation (displayable
+                            = false).
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    
+ 
+
+</xs:schema>

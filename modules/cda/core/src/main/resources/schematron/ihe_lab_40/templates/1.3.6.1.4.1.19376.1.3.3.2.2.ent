@@ -1,0 +1,38 @@
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.2.2-errors'>
+
+<!-- TF_Vol3_Ref_2.3.4.2 Laboratory Report Item Section 1.3.6.1.4.1.19376.1.3.3.2.2 -->
+
+   <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.2.2"]'>  
+         
+   <assert test='ancestor::cda:section[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.2.1"]
+             and parent::cda:component
+             and self::cda:section'>
+        Error: The templateId (1.3.6.1.4.1.19376.1.3.3.2.2) identifies a section as a Laboratory Report Item Section under a Laboratory Specialty Section.
+       </assert> 
+        
+   <assert test='count(cda:component/cda:section) = 0'>
+          Error: A Laboratory Report Item Section (1.3.6.1.4.1.19376.1.3.3.2.2) shall be a leaf section.
+    </assert>
+
+   <assert test='cda:code'>Error:In Laboratory Report Item Section (1.3.6.1.4.1.19376.1.3.3.2.2) the code element shall be present.</assert>
+
+   <assert test='cda:code[@code]'>Error: In Laboratory Report Item Section (1.3.6.1.4.1.19376.1.3.3.2.2) the code/@code shall be present.</assert>
+   <assert test='cda:code[@codeSystem]'>Error: In Laboratory Report Item Section (1.3.6.1.4.1.19376.1.3.3.2.2) the code/@codeSystem shall be present.</assert>
+   <assert test='cda:code[@displayName]'>Error: In Laboratory Report Item Section (1.3.6.1.4.1.19376.1.3.3.2.2) the code/@displayName shall be present.</assert>   
+   
+<!-- Checking for the narrative non-blank text box and the entry element for a leaf section -->   
+ 
+   <assert test='normalize-space(cda:text) or count(cda:text/child::*) &gt; 0'>Error: The Laboratory Report Item Section (1.3.6.1.4.1.19376.1.3.3.2.2) shall contain a non-blank text block that presents the human-readable rendering of this section of the lab report.</assert>
+   
+   <assert test='cda:entry[@typeCode="DRIV"]'>Error: In Laboratory Report Item Section (1.3.6.1.4.1.19376.1.3.3.2.2) the entry element shall have a typeCode of "DRIV"</assert>       
+  
+   
+   <assert test='count(cda:entry)=1 and cda:entry/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1"]'>
+           Error: A Laboratory Report Item Section (1.3.6.1.4.1.19376.1.3.3.2.2) shall represent exactly one Report Item, i.e. have exactly one Laboratory Report Data Processing Entry (1.3.6.1.4.1.19376.1.3.1).
+   </assert>      
+   
+   </rule>      
+      
+ </pattern>
+ 
+ 

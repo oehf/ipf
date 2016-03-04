@@ -1,0 +1,43 @@
+
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.1.1-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.1.1"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='ancestor::cda:organizer[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.1"] and
+                 parent::cda:component and 
+                 self::cda:observation'>
+           Error: The templateId  (1.3.6.1.4.1.19376.1.3.1.1.1) identifies an observation as a Notifiable Condition. It shall be recorded under a Notification Organizer (1.3.6.1.4.1.19376.1.3.1.1).
+   </assert>      
+     
+   <assert test='@classCode="COND"'>Error: In Notifiable Condition (1.3.6.1.4.1.19376.1.3.1.1.1) the observation/classCode shall be "COND".</assert>
+  
+   <assert test='@moodCode="EVN"'>Error: In Notifiable Condition (1.3.6.1.4.1.19376.1.3.1.1.1) the observation/moodCode shall be "EVN".</assert>
+   
+   <assert test='cda:code'>
+           Error: In Notifiable Condition (1.3.6.1.4.1.19376.1.3.1.1.1) the observation/code element shall be present.</assert>
+            
+   <assert test='cda:code/cda:qualifier'>
+            Error: In Notifiable Condition (1.3.6.1.4.1.19376.1.3.1.1.1) the observation/code/qualifier element shall be present.
+   </assert>   
+   
+   <assert test='cda:code/cda:qualifier/cda:name'>
+            Error: In Notifiable Condition (1.3.6.1.4.1.19376.1.3.1.1.1) the observation/code/qualifier/name element shall be present.
+   </assert>   
+   
+   <assert test='cda:code/cda:qualifier/cda:value'>
+            Error: In Notifiable Condition (1.3.6.1.4.1.19376.1.3.1.1.1) the observation/code/qualifier/value element shall be present.
+   </assert>   
+      
+   <assert test='cda:statusCode[@code="completed"] or cda:statusCode[@code="aborted"]'>
+           Error: In Notifiable Condition (1.3.6.1.4.1.19376.1.3.1.1.1) the observation/statusCode/@code shall be "completed" or "aborted". Note: The Lab specification defines an aborted notifiable condition to be the same as nullified. There may be a typo in the specification!</assert>
+  
+   <assert test='cda:value'>Error: In Notifiable Condition (1.3.6.1.4.1.19376.1.3.1.1.1) the observation/value element shall be present.</assert>
+  
+   <assert test='cda:value[@xsi:type="CE"]'>Error: In Notifiable Condition (1.3.6.1.4.1.19376.1.3.1.1.1) the observation/value/@xsi:type shall have the value of "CE".</assert>
+ 
+  
+ </rule>
+ 
+</pattern>
+

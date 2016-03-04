@@ -1,0 +1,35 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:ihe:pcc:hl7v3"
+    xmlns:pcc="urn:ihe:pcc:hl7v3" targetNamespace="urn:ihe:pcc:hl7v3" xmlns:cda="urn:hl7-org:v3"
+    elementFormDefault="qualified">
+    <xs:import namespace="urn:hl7-org:v3" schemaLocation="IHE_POCD_MT000040.xsd"/>
+
+    <xs:include schemaLocation="../../processable/coreschemas/datatypes.xsd"/>
+    <xs:include schemaLocation="../../processable/coreschemas/voc.xsd"/>
+
+    <xs:complexType name="PccSection">
+        <xs:complexContent>
+            <xs:extension base="cda:POCD_MT000040.Section">
+                <xs:sequence>
+                    <xs:element name="replacementOf" type="PccReplacementOf" minOccurs="0"/>
+                </xs:sequence>
+
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="PccReplacementOf">
+        <xs:sequence>
+            <xs:element name="externalDocumentSection" type="PccExternalDocumentSection"/>
+        </xs:sequence>
+        <!--   <xs:attribute name="typeCode" use="optional" type="cda:ActRelationshipType" fixed="RPLC"/> -->
+    </xs:complexType>
+
+    <xs:complexType name="PccExternalDocumentSection">
+        <xs:sequence>
+            <xs:element name="id" type="II" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="code" type="CE" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="text" type="ED" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="typeCode" use="optional" type="ActRelationshipType" fixed="DOCSECT"/>
+        <xs:attribute name="moodCode" type="ActMood" use="optional" fixed="EVN"/>
+    </xs:complexType>
+</xs:schema>

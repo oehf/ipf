@@ -1,0 +1,44 @@
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.4-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.4"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='ancestor::cda:entry[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1"]/cda:act and
+                 self::cda:organizer'>
+     Error: The templateId (1.3.6.1.4.1.19376.1.3.1.4) identifies an organizer to be a Laboratory Battery Organizer. If present, this organizer shall be recorded under the Specimen Act of a Laboratory Data Processing Entry (1.3.6.1.4.1.19376.1.3.1). Note that Section 2.3.5.2 for Laboratory Data Processing Entry requires that all CDA level 3 content modules be nested within the Specimen Act under a Laboratory Data Processing Entry. 
+   </assert> 
+     
+   <assert test='@classCode="BATTERY"'>Error: In Laboratory Battery Organizer (1.3.6.1.4.1.19376.1.3.1.4) the @classCode attribute shall be "BATTERY".</assert>
+  
+   <assert test='@moodCode="EVN"'>Error: In Laboratory Battery Organizer (1.3.6.1.4.1.19376.1.3.1.4) the @moodCode attribute shall be "EVN".</assert>
+   
+   <assert test='cda:statusCode[@code="completed"] or cda:statusCode[@code="aborted"]'>
+           Error: In Laboratory Battery Organizer (1.3.6.1.4.1.19376.1.3.1.4) the statusCode/@code attribute shall be "completed" or "aborted".</assert>
+ 
+   <assert test='not(cda:performer) or cda:performer[@typeCode="PRF"]'>Error: In Laboratory Battery Organizer (1.3.6.1.4.1.19376.1.3.1.4) the performer @typeCode attribute shall be "PRF".</assert> 
+
+   <assert test='not(cda:author) or cda:author[@typeCode="AUT"]'>Error: In Laboratory Battery Organizer (1.3.6.1.4.1.19376.1.3.1.4) the author @typeCode attribute shall be "AUT".</assert>  
+  
+   <assert test='not(cda:participant) or cda:participant[@typeCode="AUTHEN"] or cda:participant[@typeCode="RESP"] or cda:participant[@typeCode="DEV"]'>
+        Error: In Laboratory Battery Organizer (1.3.6.1.4.1.19376.1.3.1.4) the participant @typeCode attribute shall be "AUTHEN" (for a validator), "RESP" (for responsible party) or "DEV" (for lab analyzer or other device).</assert>
+
+   <assert test='not(cda:component) or cda:component[@typeCode="COMP"]'>Error: In Laboratory Battery Organizer (1.3.6.1.4.1.19376.1.3.1.4) the component/@typeCode shall be "COMP".</assert>
+
+ </rule>
+
+ </pattern>
+
+
+<!--  Pattern for WARNINGS -->
+
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.4-warnings'>       
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.4"]'>
+   
+   <assert test='not(cda:specimen)'>Warning: This Laboratory Battery Organizer (1.3.6.1.4.1.19376.1.3.1.4) directly contains a specimen element. In Lab Revision 3.0 all specimen information, except when directly contained in an Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5), should be contained in a Specimen Collection procedure (1.3.6.1.4.1.19376.1.3.1.2) as specified in Section 2.3.5.5.</assert> 
+
+ </rule>
+ 
+ </pattern>
+

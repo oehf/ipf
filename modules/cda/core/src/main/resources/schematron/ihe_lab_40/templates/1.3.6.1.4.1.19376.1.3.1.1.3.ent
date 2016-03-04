@@ -1,0 +1,30 @@
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.1.3-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.1.3"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+<assert test='ancestor::cda:organizer[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.1"] and
+                 parent::cda:component and 
+                 self::cda:observation'>
+           Error: The templateId  (1.3.6.1.4.1.19376.1.3.1.1.3) identifies an observation as an Outbrake Identification. It shall be recorded under a Notification Organizer (1.3.6.1.4.1.19376.1.3.1.1).
+   </assert>      
+     
+   <assert test='@classCode="OUTB"'>Error: In Outbreak Identification (1.3.6.1.4.1.19376.1.3.1.1.3) the observation/classCode shall be set to "OUTB".</assert>
+  
+   <assert test='@moodCode="EVN"'>Error: In Outbreak Identification (1.3.6.1.4.1.19376.1.3.1.1.3) the observation/moodCode shall be set to "EVN".</assert>
+   
+   <assert test='cda:code'>
+           Error: In Outbreak Identification (1.3.6.1.4.1.19376.1.3.1.1.3) the observation/code element shall be present.</assert>
+            
+  <assert test='cda:statusCode[@code="completed"] or cda:statusCode[@code="aborted"]'>
+           Error: In Outbreak Identification (1.3.6.1.4.1.19376.1.3.1.1.3) the organizer/statusCode/@code shall be set to "completed" or "aborted". There may be a typo in the Lab specification in that "aborted" is defined in the same way as "nullified".</assert>
+  
+  <assert test='cda:value'>Error: In Outbreak Identification (1.3.6.1.4.1.19376.1.3.1.1.3) the observation/value element shall be present.</assert>
+  
+  <assert test='cda:value[@xsi:type="CE"]'>Error: In Outbreak Identification (1.3.6.1.4.1.19376.1.3.1.1.3) the observation/value/@xsi:type shall have the value of "CE".</assert>
+   
+ </rule>
+ 
+</pattern>
+

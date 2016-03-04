@@ -1,0 +1,89 @@
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.7-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.7"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='(ancestor::cda:ClinicalDocument/cda:documentationOf and
+                  parent::cda:serviceEvent and 
+                  self::cda:performer)
+                 or
+                 (parent::cda:act and 
+                  self::cda:performer)'>
+     Error: The templateId  (1.3.6.1.4.1.19376.1.3.3.1.7) is a child element of ClinicalDocument/documentationOf/serviceEvent/performer or is a child element of some subordinate act/performer. The templateId identifies this performer as a laboratory performer.
+   </assert> 
+
+     <assert test='cda:time'>
+      Error: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7) the time element shall be present.
+   </assert>
+   <assert test='self::cda:performer/cda:assignedEntity/cda:addr'>Error: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7) the performer/assigenedEntity/addr element shall be present.</assert>
+   <assert test='self::cda:performer/cda:assignedEntity/cda:telecom'>Error: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7) the performer/assignedEntity/telecom shall be present.</assert>
+   
+   <assert test='self::cda:performer/cda:assignedEntity/cda:assignedPerson/cda:name'>
+      Error: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7) the performer/assignedPerson/name element shall be present.
+   </assert>
+   
+   <!-- These rules are in accordance with 2.3.3.1 - The general constraints applied to organizations when a representedOrganization is present -->
+  
+   <assert test='not(cda:assignedEntity/cda:representedOrganization) or 
+                 cda:assignedEntity/cda:representedOrganization/cda:name'>
+      Error: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7), if a scoping organization is present, then it shall contain a name element.
+   </assert>
+ 
+   <assert test='not(cda:assignedEntity/cda:representedOrganization) or 
+                 cda:assignedEntity/cda:representedOrganization/cda:telecom'>
+      Error: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7), if a scoping organization is present, then it shall contain a telecom element.
+   </assert>
+ 
+   <assert test='not(cda:assignedEntity/cda:representedOrganization) or 
+                cda:assignedEntity/cda:representedOrganization/cda:addr'>
+      Error: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7), if a scoping organization is present, then it shall contain an addr element.
+   </assert>
+
+ </rule>
+
+</pattern>
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.7-warnings'>
+
+  <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.7"]'>
+
+<!-- checking for addr, telecom or name for values -->
+   
+   <assert test='(self::cda:performer/cda:assignedEntity/cda:addr) and (normalize-space(self::cda:performer/cda:assignedEntity/cda:addr) 
+            or count(self::cda:performer/cda:assignedEntity/cda:addr/child::*) &gt; 0)
+            or (self::cda:performer/cda:assignedEntity/cda:addr/@nullFlavor)'>
+           Warning: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7) the performer/assignedEntity should have a non-blank addr element or nullFlavor.</assert>    
+    
+   <assert test='(self::cda:performer/cda:assignedEntity/cda:telecom/@value) and normalize-space(self::cda:performer/cda:assignedEntity/cda:telecom/@value)
+            or (self::cda:performer/cda:assignedEntity/cda:telecom/@nullFlavor)'>
+           Warning: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7) a performer/assignedEntity/telecom/@value should have a non-blank value or nullFlavor.</assert>      
+   
+   <assert test='(self::cda:performer/cda:assignedEntity/cda:assignedPerson/cda:name) and (normalize-space(self::cda:performer/cda:assignedEntity/cda:assignedPerson/cda:name) 
+           or count(self::cda:performer/cda:assignedEntity/cda:assignedPerson/cda:name/child::*) &gt; 0)
+           or (self::cda:performer/cda:assignedEntity/cda:assignedPerson/cda:name/@nullFlavor)'>
+           Warning: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7) a performer/assignedEntity should have a non-blank name element or nullFlavor.</assert>
+
+  </rule>
+
+     
+<!-- check for  name, addr, telecom  in element representedOrganization, if present -->
+
+  <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.7"]/cda:assignedEntity/cda:representedOrganization'>
+     
+     <assert test='normalize-space(cda:addr) 
+           or count(child::*) &gt; 0
+           or cda:addr/@nullFlavor'>
+           Warning: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7) a performer/assignedEntity/representedOrganization should have a non-blank addr element or nullFlavor.</assert>
+   
+     <assert test='cda:telecom/@value or cda:telecom/@nullFlavor'>
+           Warning: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7) a representedOrganization  should have a telecom value or nullFlavor.</assert>
+   
+     <assert test='normalize-space(cda:name) 
+           or count(child::*) &gt; 0
+           or cda:name/@nullFlavor'>
+           Warning: In Laboratory Performer (1.3.6.1.4.1.19376.1.3.3.1.7) a representedOrganization should have a non-blank name element or nullFlavor.</assert>
+   
+  </rule> 
+  
+ </pattern>  

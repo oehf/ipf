@@ -1,0 +1,96 @@
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.6-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.6"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='ancestor::cda:entry[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1"]/cda:act and
+                 self::cda:observation'>
+     Error: The templateId (1.3.6.1.4.1.19376.1.3.1.6) identifies an observation to be a Laboratory Observation. Such observations shall be recorded under the Specimen Act of a Laboratory Data Processing Entry (1.3.6.1.4.1.19376.1.3.1). It is distinguished from an IHE PCC simple observation and may be standalone as a single observation or may be part of a battery or cluster.
+   </assert>
+
+    <!-- the entryRelationship indicates a standalone observation  --> 
+
+   <assert test='parent::cda:entryRelationship[@typeCode="COMP"] or parent::cda:component[@typeCode="COMP"]'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the observation parent relationship (i.e. from an act, battery or cluster) shall have a typeCode set to "COMP".</assert>
+   
+   <assert test='@classCode="OBS"'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the observation/@classCode shall be "OBS".</assert>
+  
+   <assert test='@moodCode="EVN"'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the observation/@moodCode shall be "EVN".</assert>
+   
+   <assert test='cda:statusCode[@code="completed"] or cda:statusCode[@code="aborted"]'>
+           Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the observation/statusCode/@code shall be "completed" or "aborted".</assert>
+   
+   <assert test='not(statusCode[@code="completed"]) or cda:value'>
+           Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6), if the statusCode@code is "completed" then the value element shall be present.</assert>
+   
+   <assert test='not(cda:specimen) or cda:specimen[@typeCode="SPC"]'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the specimen/@typeCode shall be "SPC".</assert>        
+ 
+   <assert test='not(cda:performer) or cda:performer[@typeCode="PRF"]'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the performer/@typeCode shall be "PRF".</assert> 
+
+   <assert test='not(cda:author) or cda:author[@typeCode="AUT"]'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the author/@typeCode shall be "AUT".</assert>  
+  
+   <assert test='not(cda:participant) or cda:participant[@typeCode="AUTHEN"] or cda:participant[@typeCode="RESP"] or cda:participant[@typeCode="DEV"]'>
+        Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the participant/@typeCode for shall be "AUTHEN", "RESP" or "DEV".</assert>
+
+   <assert test='not(cda:entryRelationship/cda:observation) or cda:entryRelationship/cda:observation[@classCode="OBS"]'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the entryRelationship/observation/@classCode shall be "OBS".</assert>
+
+   <assert test='not(cda:entryRelationship/cda:observation) or cda:entryRelationship/cda:observation[@moodCode="EVN"]'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the entryRelationship/observation/@moodCode shall be "EVN".</assert>
+
+   <assert test='not(cda:entryRelationship[@typeCode="REFR"]) or cda:observation/cda:code/@code = cda:entryRelationship[@typeCode="REFR"]/cda:observation/cda:code/@code'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6), if an observation references a previous observation, then they both shall have the same test code.</assert>
+
+   <assert test='not(cda:entryRelationship[@typeCode="REFR"]) or cda:entryRelationship[@typeCode="REFR"]/cda:observation/cda:statusCode/@code="completed"'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6), if an observation references a previous observation, then the referenced observation shall have statusCode set to "completed".</assert>
+
+   <assert test='not(cda:entryRelationship[@typeCode="REFR"]) or cda:entryRelationship[@typeCode="REFR"]/cda:observation/cda:effectiveTime'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6), if an observation references a previous observation, then the referenced observation shall have an effectiveTime element".</assert>
+
+   <assert test='not(cda:entryRelationship[@typeCode="REFR"]) or cda:entryRelationship[@typeCode="REFR"]/cda:observation/cda:value'>Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6), if an observation references a previous observation, then the referenced observation shall have a value element".</assert>
+
+   <assert test='not(cda:referenceRange) or cda:referenceRange[@typeCode="REFV"]'>
+        Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the referenceRange @typeCode attribute shall be "REFV".</assert>
+
+   <assert test='not(cda:referenceRange) or cda:referenceRange[@typeCode="REFV"]/cda:observationRange[@classCode="OBS" and @moodCode="EVN.CRT"]'>
+        Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the referenceRange, if present, shall contain an observationRange element with classCode = "OBS" and moodCode = "EVN.CRT".</assert>
+
+   <assert test='not(cda:referenceRange) or cda:referenceRange[@typeCode="REFV"]/cda:observationRange/cda:interpretationCode/@code="N"'>
+        Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) the referenceRange, if present, shall contain an observationRange/interpretationCode element with code fixed to "N" (normal).</assert>
+
+ </rule>
+
+
+<!-- INSERT NEW CONTEXT FOR Possibly multiple Pre-conditions on observationRange -->
+<!-- Note that precondition under observationRange is a LAB extension to the CDA schema -->
+
+ <rule context='*[ancestor::cda:observation/cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.6" and
+                  parent::cda:observationRange and
+                  self::lab:precondition]'>
+
+  <assert test='@typeCode="PRCN"'>
+        Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) a lab:precondition on an observationRange shall have the @typeCode attribute set to "PRCN".</assert>
+
+  <assert test='cda:criterion[@classCode="COND"]'>
+        Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) a lab:precondition on an observationRange shall contain a criterion subelement with the classCode attribute set to "COND".</assert>
+
+  <assert test='cda:criterion/cda:code'>
+        Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) a lab:precondition on an observationRange shall contain a criterion/code element.</assert>
+
+  <assert test='cda:criterion/cda:value'>
+        Error: In Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) a lab:precondition on an observationRange shall contain a criterion/value element.</assert>
+
+ </rule>
+ 
+</pattern>
+
+
+<!--  Pattern for WARNINGS -->
+
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.6-warnings'>       
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.6"]'>
+   
+   <assert test='not(cda:specimen)'>Warning: This Laboratory Observation (1.3.6.1.4.1.19376.1.3.1.6) conains a specimen element. In Lab Revision 3.0 all specimen information should be contained in a Specimen Collection procedure (1.3.6.1.4.1.19376.1.3.1.2) as specified in Section 2.3.5.5.</assert> 
+
+ </rule>
+ 
+ </pattern>
+
+
+

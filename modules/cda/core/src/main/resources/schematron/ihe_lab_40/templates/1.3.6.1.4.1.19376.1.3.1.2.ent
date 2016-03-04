@@ -1,0 +1,50 @@
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.2-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.2"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object. -->
+   <!-- Note that Lab Revision 3.0 requires this templateId to be on a procedure 
+        rather than on an act as it was in Revision 2.0 -->
+
+   <assert test='ancestor::cda:entry[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1"]/cda:act and
+                 parent::cda:entryRelationship[@typeCode="COMP"] and
+                 self::cda:procedure'>
+     Error: The templateId (1.3.6.1.4.1.19376.1.3.1.2) identifies a procedure to be a Specimen Collection. If present, this procedure shall be recorded in an entryRelationship of type "COMP" under the Specimen Act of a Laboratory Data Processing Entry (1.3.6.1.4.1.19376.1.3.1). It is used to indicate specimen collection information related to the Specimen Act. Note that Lab Revision 3.0 requires this templateId to be on a procedure rather than on an act as it was in Revision 2.0.
+   </assert> 
+
+   <assert test='@classCode="PROC"'>
+        Error: In a Specimen Collection procedure (1.3.6.1.4.1.19376.1.3.1.2) the @classCode shall be equal to "PROC".
+     </assert>
+          
+    <assert test='@moodCode="EVN"'>
+        Error: In a Specimen Collection procedure (1.3.6.1.4.1.19376.1.3.1.2) the @moodCode shall be equal to "EVN".
+    </assert>
+          
+   <assert test='cda:code[@code="33882-2"]'>
+        Error: In a Specimen Collection procedure (1.3.6.1.4.1.19376.1.3.1.2) the code element shall be present with the @code attribute set to LOINC code "33882-2" to indicate a specimen collection.
+    </assert>    
+   
+   <assert test='cda:effectiveTime'>
+        Error: In a Specimen Collection procedure (1.3.6.1.4.1.19376.1.3.1.2) the effectiveTime element shall be present. This is the date and time when the specimen was collected.
+    </assert>
+    
+   <assert test='cda:participant[@typeCode="PRD"]'>
+        Error: In a Specimen Collection procedure (1.3.6.1.4.1.19376.1.3.1.2) the participant element shall be present with @typeCode set to "PRD" to record required information about the specimen product.
+    </assert> 
+    
+   <assert test='cda:participant/cda:participantRole[@classCode="SPEC"]'>
+        Error: In a Specimen Collection procedure (1.3.6.1.4.1.19376.1.3.1.2) the participant / participantRole element shall be present with @classCode set to "SPEC" to record required information about the specimen entity.
+    </assert> 
+    
+   <assert test='cda:participant/cda:participantRole[@classCode="SPEC"]/cda:id'>
+        Error: In a Specimen Collection procedure (1.3.6.1.4.1.19376.1.3.1.2) the participant / participantRole element shall have an identity element to record an identifier for the specimen.
+    </assert>  
+    
+   <assert test='cda:participant/cda:participantRole[@classCode="SPEC"]/cda:playingEntity/cda:code'>
+        Error: In a Specimen Collection procedure (1.3.6.1.4.1.19376.1.3.1.2) the participant / participantRole element shall include a playingEntity / code element to record the Specimen Type. At present the Lab specification does not define a code system or list of specimen type codes to be used.
+    </assert> 
+    
+ </rule>
+
+</pattern>
+
