@@ -1,0 +1,66 @@
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.6-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.6"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='parent::cda:ClinicalDocument
+   and self::cda:participant'>
+     Error: The templateId  (1.3.6.1.4.1.19376.1.3.3.1.6) identifies a ClinicalDocument/participant element to be an Ordering Provider. It is required when the information is known. Other types of participants may also be present.
+   </assert> 
+
+     <assert test='@typeCode="REF"'>
+      Error: In Ordering Provider (1.3.6.1.4.1.19376.1.3.3.1.6) when the ordering provider templateId "1.3.6.1.4.1.19376.1.3.3.1.6" is indicated in participant, then the particpant 
+           element shall have a typeCode of "REF".
+   </assert>
+
+   <assert test='cda:associatedEntity/cda:addr'>Error: In Ordering Provider (1.3.6.1.4.1.19376.1.3.3.1.6) the associatedEntity/addr element shall be present.</assert>
+   
+   <assert test='cda:associatedEntity/cda:telecom'>Error: In Ordering Provider (1.3.6.1.4.1.19376.1.3.3.1.6) the associatedEntity/telecom element shall be present.</assert>
+   
+   <assert test='cda:associatedEntity/cda:associatedPerson/cda:name'>
+      Error: In Ordering Provider (1.3.6.1.4.1.19376.1.3.3.1.6) the associatedEntity/associatedPerson/name element shall be present.
+   </assert>
+   
+   <!-- These rules are in accordance with 2.3.3.1 - The general constraints applied to organizations when a receivedOrganization is present -->
+
+   <assert test='not(cda:associatedEntity/cda:scopingOrganization) or 
+                 cda:associatedEntity/cda:scopingOrganization/cda:name'>
+      Error: In Ordering Provider (1.3.6.1.4.1.19376.1.3.3.1.6), if a scopingOrganization is present then it shall contain a name element.
+   </assert>
+ 
+   <assert test='not(cda:associatedEntity/cda:scopingOrganization) or 
+                 cda:associatedEntity/cda:scopingOrganization/cda:telecom'>
+      Error: In Ordering Provider (1.3.6.1.4.1.19376.1.3.3.1.6), if a scopingOrganization is present then it shall contain a telecom element. 
+   </assert>
+ 
+   <assert test='not(cda:associatedEntity/cda:scopingOrganization) or 
+                 cda:associatedEntity/cda:scopingOrganization/cda:addr'>
+      Error: In Ordering Provider (1.3.6.1.4.1.19376.1.3.3.1.6), if a scopingOrganization is present then it shall contain an addr element. 
+   </assert>
+
+ </rule>
+</pattern>
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.6-warnings'>
+
+ <rule context='*[parent::cda:participant/cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.6"
+                and self::cda:associatedEntity]'>
+
+      <assert test='(cda:addr) and (normalize-space(cda:addr) 
+                 or count(cda:addr/child::*) &gt; 0)
+                 or (cda:addr/@nullFlavor)'>
+           Warning: In Ordering Provider (1.3.6.1.4.1.19376.1.3.3.1.6) an associatedEntity should have a non-blank addr element or nullFlavor.</assert> 
+
+   <assert test='(cda:telecom/@value) and normalize-space(cda:telecom/@value)
+                 or (cda:telecom/@nullFlavor)'>
+           Warning: In Ordering Provider (1.3.6.1.4.1.19376.1.3.3.1.6) an associatedEntity/telecom/@value should have a non-blank value or nullFlavor.</assert>
+    
+    <assert test='(cda:associatedPerson/cda:name) and (normalize-space(cda:associatedPerson/cda:name)
+                 or count(cda:associatedPerson/cda:name/child::*) &gt; 0)
+                 or (cda:associatedPerson/cda:name/@nullFlavor)'>
+           Warning: In Ordering Provider (1.3.6.1.4.1.19376.1.3.3.1.6) an associatedEntity/associatedPerson entity should have a non-blank name element or nullFlavor.</assert>
+   
+ </rule>
+
+ </pattern>

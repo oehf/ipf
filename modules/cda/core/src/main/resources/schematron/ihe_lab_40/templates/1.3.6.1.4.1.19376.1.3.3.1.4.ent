@@ -1,0 +1,80 @@
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.4-errors'>
+
+  <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.4"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='parent::cda:ClinicalDocument
+             and self::cda:informationRecipient'>
+     Error: The templateId  (1.3.6.1.4.1.19376.1.3.3.1.4) is a child element of ClinicalDocument/informationRecipient.
+   </assert> 
+ 
+   <assert test='cda:intendedRecipient/cda:addr'>Error: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the informationRecipient/intendedRecipient/addr element shall be present.</assert>
+   <assert test='cda:intendedRecipient/cda:telecom'>Error: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the informationRecipient/intendedRecipient/telecom shall be present.</assert>
+   
+   <assert test='descendant::cda:informationRecipient/child::cda:name'>
+      Error: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the indendedRecipient/informationRecipient/name element shall be present.
+   </assert>
+   
+   <!-- These rules are in accordance with 2.3.3.1 - The general constraints applied to organizations when a receivedOrganization is present -->
+  
+   <assert test='not(cda:intendedRecipient/cda:receivedOrganization) or 
+                 cda:intendedRecipient/cda:receivedOrganization/cda:name'>
+      Error: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the indendedRecipient/receivedOrganization/name element shall be present.
+   </assert>
+ 
+   <assert test='not(cda:intendedRecipient/cda:receivedOrganization) or 
+                 cda:intendedRecipient/cda:receivedOrganization/cda:telecom'>
+      Error: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the indendedRecipient/receivedOrganization/telecom element shall be present.
+   </assert>
+ 
+   <assert test='not(cda:intendedRecipient/cda:receivedOrganization) or 
+                 cda:intendedRecipient/cda:receivedOrganization/cda:addr'>
+      Error: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the indendedRecipient/receivedOrganization/addr element shall be present.
+   </assert>
+ 
+  </rule> 
+  
+</pattern>
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.4-warnings'>
+
+  <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.4"]'>
+  
+<!-- checking for addr, telecom or name for values -->
+   
+   <assert test='(cda:intendedRecipient/cda:addr) and (normalize-space(cda:intendedRecipient/cda:addr) 
+            or count(cda:intendedRecipient/cda:addr/child::*) &gt; 0)
+            or (cda:intendedRecipient/cda:addr/@nullFlavor)'>
+           Warning: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the informationRecipient/intendedRecipient should have a non-blank addr element or nullFlavor.</assert>    
+    
+    <assert test='(cda:intendedRecipient/cda:telecom/@value) and normalize-space(cda:intendedRecipient/cda:telecom/@value)
+            or (cda:intendedRecipient/cda:telecom/@nullFlavor)'>
+           Warning: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the informationRecipient/intendedRecipient telecom element should have a value or nullFlavor.</assert>      
+    
+    <assert test='(descendant::cda:informationRecipient/cda:name) and (normalize-space(descendant::cda:informationRecipient/cda:name) 
+           or count(descendant::cda:informationRecipient/cda:name/child::*) &gt; 0)
+           or (descendant::cda:informationRecipient/cda:name/@nullFlavor)'>
+           Warning: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the informationRecipient/intendedRecipient/informationRecipient should have a non-blank name element or nullFlavor.</assert>
+      
+<!-- check for  name  in element receivedOrganization -->
+     
+     <assert test='not(cda:intendedRecipient/cda:receivedOrganization) or 
+           (cda:intendedRecipient/cda:receivedOrganization/cda:addr) and (normalize-space(cda:intendedRecipient/cda:receivedOrganization/cda:addr) 
+           or count(cda:intendedRecipient/cda:receivedOrganization/cda:addr/child::*) &gt; 0)
+           or cda:intendedRecipient/cda:receivedOrganization/cda:addr/@nullFlavor'>
+           Warning: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the informationRecipient/intendedRecipient/receivedOrganization should have a non-blank addr element or nullFlavor.</assert>
+   
+ 
+     <assert test='not(cda:intendedRecipient/cda:receivedOrganization) or 
+           (cda:intendedRecipient/cda:receivedOrganization/cda:telecom) and (normalize-space(cda:intendedRecipient/cda:receivedOrganization/cda:telecom))'>
+           <!-- or cda:intendedRecipient/cda:receivedOrganization/cda:telecom/@nullFlavor' -->
+           Warning: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the informationRecipient/intendedRecipient/receivedOrganization/telecom/@value should have a non-blank value or nullFlavor.</assert>
+   
+     <assert test='not(cda:intendedRecipient/cda:receivedOrganization) or 
+           (cda:intendedRecipient/cda:receivedOrganization/cda:name) and (normalize-space(cda:intendedRecipient/cda:receivedOrganization/cda:name) 
+           or count(cda:intendedRecipient/cda:receivedOrganization/cda:name/child::*) &gt; 0)
+           or cda:intendedRecipient/cda:receivedOrganization/cda:name/@nullFlavor'>
+           Warning: In IntendedRecipient (1.3.6.1.4.1.19376.1.3.3.1.4) the informationRecipient/intendedRecipient/receivedOrganization should have a non-blank name element or nullFlavor.</assert>
+  </rule> 
+    
+</pattern>

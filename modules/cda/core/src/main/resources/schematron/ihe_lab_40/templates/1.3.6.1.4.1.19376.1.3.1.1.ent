@@ -1,0 +1,29 @@
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.1-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.1"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='ancestor::cda:entry[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1"]/cda:act and
+                 parent::cda:entryRelationship and 
+                 self::cda:organizer'>
+     Error: The templateId  (1.3.6.1.4.1.19376.1.3.1.1) identifies an organizer to be a Notification Organizer. If present, this organizer shall be recorded in an entryRelationship uder the Specimen Act of a Laboratory Data Processing Entry (1.3.6.1.4.1.19376.1.3.1). It is used to indicate notification actions related to that entry.
+   </assert>      
+     
+   <assert test='@classCode="CLUSTER"'>Error: In Notifcation Organizer (1.3.6.1.4.1.19376.1.3.1.1) the organizer/classCode shall be "CLUSTER".</assert>
+  
+   <assert test='@moodCode="EVN"'>Error: In Notifcation Organizer (1.3.6.1.4.1.19376.1.3.1.1) the organizer/moodCode shall be "EVN".</assert>
+   
+   <assert test='cda:statusCode[@code="completed"] or cda:statusCode[@code="nullified"]'>
+           Error: In Notifcation Organizer (1.3.6.1.4.1.19376.1.3.1.1) the organizer/statusCode/@code shall be "completed" or "nullified". Note the typo that "nullified" is misspelled in the Lab specification Table 2.3.5.7-1. A status of nullified means that a previous notification was done in error. A status of "completed" means that the patient of this lab report has been associated with the given notification.</assert>
+  
+   <assert test='count(cda:component) &gt;= 1'> 
+       Error: A Notifcation Organizer (1.3.6.1.4.1.19376.1.3.1.1) shall have one or more component elements. A component represents a Notifiable Condition, Case Identification or Outbreak Identification.
+   </assert>
+             
+ </rule>
+
+<!-- The requirement that a Notification Organizer be used whenever certain specific notifications are present will be checked in the requirements for each of those notifications. -->
+ 
+</pattern>
+

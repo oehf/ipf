@@ -1,0 +1,62 @@
+
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.5-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.5"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='ancestor::cda:entry[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1"]/cda:act and
+                 self::cda:organizer'>
+     Error: The templateId (1.3.6.1.4.1.19376.1.3.1.5) identifies an organizer to be a Laboratory Isolate Organizer. If present, this organizer shall be recorded under the Specimen Act of a Laboratory Data Processing Entry (1.3.6.1.4.1.19376.1.3.1). Note that Section 2.3.5.2 for Laboratory Data Processing Entry requires that all CDA level 3 content modules be nested within the Specimen Act under a Laboratory Data Processing Entry.
+   </assert> 
+     
+   <assert test='@classCode="CLUSTER"'>Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the organizer @classCode attribute shall be "CLUSTER".</assert>
+  
+   <assert test='@moodCode="EVN"'>Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the organizer @moodCode attribute shall be "EVN".</assert>
+   
+   <assert test='cda:statusCode[@code="completed"] or 
+                 cda:statusCode[@code="active"] or 
+                 cda:statusCode[@code="aborted"]'>
+           Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the statusCode @code attrinute shall be "completed", "active" or "aborted".</assert> 
+  
+   <assert test='cda:specimen'>Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the organizer/specimen element shall be present. </assert>
+
+   <assert test='cda:specimen[@typeCode="SPC"]'>Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the specimen/@typeCode shall be "SPC".</assert>  
+      
+   <assert test='cda:specimen/cda:specimenRole[@classCode="SPEC"]'>Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the specimen/specimenRole/@classCode shall be "SPEC".</assert>
+
+   <assert test='cda:specimen/cda:specimenRole/cda:specimenPlayingEntity[@classCode="MIC"]'>Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the specimenPlayingEntity shall be present with @classCode set to "MIC".</assert> 
+ 
+   <assert test='cda:specimen/cda:specimenRole/cda:specimenPlayingEntity/cda:code'>Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the specimen /specimenRole /specimenPlayingEntity /code element shall be present.</assert>
+  
+    <assert test='not(cda:performer) or cda:performer[@typeCode="PRF"]'>Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the performer @typeCode attribute shall be "PRF".</assert> 
+
+   <assert test='not(cda:author) or cda:author[@typeCode="AUT"]'>Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the author @typeCode attribute shall be "AUT".</assert>   
+  
+   <assert test='not(cda:participant) or cda:participant[@typeCode="AUTHEN"] or cda:participant[@typeCode="RESP"] or cda:participant[@typeCode="DEV"]'>
+        Error: In Laboratory Battery Organizer (1.3.6.1.4.1.19376.1.3.1.4) the participant @typeCode attribute shall be "AUTHEN" (for a validator), "RESP" (for responsible party) or "DEV" (for lab analyzer or other device).</assert>
+
+  <assert test='cda:component[@typeCode="COMP"]'>Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) the component element is required and its @typeCode attribute shall be "COMP".</assert>
+
+   <assert test='not(ancestor::cda:entry[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1"]/cda:component/cda:act/cda:statusCode/@code="completed") or not(self::cda:organizer[cda:statusCode/@code="active"])'>
+     Error: In Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5), if the parent Specimen Act is completed, then the organizer statusCode / @code attribute shall not be "active".
+   </assert> 
+
+</rule>
+ 
+</pattern>
+
+
+<!--  Pattern for WARNINGS -->
+
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.5-warnings'>       
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.5"]'>
+   
+   <assert test='not(cda:component/cda:procedure[cda:templateId/@id="1.3.6.1.4.1.19376.1.3.1.2"])'>Warning: This Laboratory Isolate Organizer (1.3.6.1.4.1.19376.1.3.1.5) conains a subordinate Specimen Collection (1.3.6.1.4.1.19376.1.3.1.2) element. Isolates should be reported in the specimen element of the organizer. </assert> 
+
+ </rule>
+ 
+ </pattern>
+
+

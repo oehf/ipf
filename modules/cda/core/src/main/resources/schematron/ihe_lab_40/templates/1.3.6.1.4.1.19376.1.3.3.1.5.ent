@@ -1,0 +1,116 @@
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.5-errors'>
+
+
+   <rule context= '/cda:ClinicalDocument'>
+   <assert test='count(cda:authenticator/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.1.5"]) = 1 or
+     count(//cda:participant/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.1.5"]) &gt;= 
+     count(cda:authenticator/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.1.5"])'>
+      Error: When multiple validators exist in the document header, each individual validator is also represented in the derived section of the report as a participant. Other rules ensure that each such participant is also listed as an authenticator in the ClinicalDocument header.
+   </assert>
+  </rule>
+
+
+  <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.5"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   
+   <assert test='(self::cda:authenticator and parent::cda:ClinicalDocument) or
+                 (self::cda:participant and not(parent::cda:ClinicalDocument))'>
+           Error: The templateId (1.3.6.1.4.1.19376.1.3.3.1.5) represents a laboratory results validator and is a child element of ClinicalDocument/authenticator or participant of a lower level act.
+    </assert>
+  </rule>
+  
+  <rule context='*[self::cda:authenticator and cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.5"]'>
+
+   <!-- Verify rules for authenticator. -->
+
+   <assert test='cda:assignedEntity/cda:addr'>Error: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) the authenticator/assignedEntity/addr element shall be present.</assert>
+   <assert test='cda:assignedEntity/cda:telecom'>Error: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) the authenticator/assignedEntity/telecom shall be present.</assert>
+   <assert test='cda:assignedEntity/cda:assignedPerson/cda:name'>Error: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) an authenticator/assignedEntity/assignedPerson/name element shall be present.</assert>
+   <assert test='not(cda:assignedEntity/cda:representedOrganization) or cda:assignedEntity/cda:representedOrganization/cda:addr'>Error: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) the authenticator/assignedEntity/representedOrganization/addr element shall be present.</assert>
+   <assert test='not(cda:assignedEntity/cda:representedOrganization) or cda:assignedEntity/cda:representedOrganization/cda:telecom'>Error: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) the authenticator/assignedEntity/representedOrganization/telecom shall be present.</assert>
+   <assert test='not(cda:assignedEntity/cda:representedOrganization) or cda:assignedEntity/cda:representedOrganization/cda:name'>Error: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) an authenticator/assignedEntity/representedOrganization/name element shall be present.</assert>
+
+  </rule>
+  
+  <rule context='*[self::cda:participant and cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.5"]'>
+
+   <!-- Verify rules for lower level participant. -->
+   
+   <assert test='@typeCode="AUTHEN"'>Error: A participant Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) shall have typeCode equal to "AUTHEN".</assert>
+
+   <assert test='cda:participantRole/cda:id/@root = /cda:ClinicalDocument/cda:authenticator/cda:assignedEntity/cda:id/@root 
+and 
+cda:participantRole/cda:id/@extension = /cda:ClinicalDocument/cda:authenticator/cda:assignedEntity/cda:id/@extension'>Error: All participant laboratory result validators shall appear in the report header as an authenticator element.</assert>
+    
+  </rule>
+
+<!-- Note than we do not require name, addr and telecom elements for particpant validators because that information will always be in the associated document level authenticator validator. -->
+
+  </pattern>
+  
+  
+  <pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.5-warnings'>
+  <!-- checking for addr, telecom and name  values-->
+   <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.5"]'>
+   
+<!-- checking for addr, telecom and name -->
+   
+   <assert test='not(self::cda:authenticator)
+                 or (cda:assignedEntity/cda:addr and normalize-space(cda:assignedEntity/cda:addr)) 
+                 or (count(cda:assignedEntity/cda:addr/child::*) &gt; 0)
+                 or (cda:assignedEntity/cda:addr/@nullFlavor)'>
+           Warning: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) an authenticator/assignedEntity should have a non-blank addr element or nullFlavor.</assert> 
+ 
+   <assert test='not(self::cda:authenticator) 
+                 or (cda:assignedEntity/cda:telecom/@value and normalize-space(cda:assignedEntity/cda:telecom/@value))
+                 or (cda:assignedEntity/cda:telecom/@nullFlavor)'>
+           Warning: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) an authenticator/assignedEntity/telecom/@value should have a non-blank value or nullFlavor.</assert>    
+         
+   <assert test='not(self::cda:authenticator)
+                 or (cda:assignedEntity/cda:assignedPerson/cda:name and normalize-space(cda:assignedEntity/cda:assignedPerson/cda:name)) 
+                 or (count(cda:assignedEntity/cda:assignedPerson/cda:name/child::*) &gt; 0)
+                 or (cda:assignedEntity/cda:assignedPerson/cda:name/@nullFlavor)'>
+           Warning: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) an authenticator/assignedEntity should have a non-blank name element or nullFlavor.</assert>
+   
+   
+    <assert test='not(self::cda:authenticator/cda:assignedEntity/cda:representedOrganization)
+                 or (cda:assignedEntity/cda:representedOrganization/cda:addr and normalize-space(cda:assignedEntity/cda:representedOrganization/cda:addr)) 
+                 or (count(cda:assignedEntity/cda:representedOrganization/cda:addr/child::*) &gt; 0)
+                 or (cda:assignedEntity/cda:representedOrganization/cda:addr/@nullFlavor)'>
+           Warning: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) an authenticator/assignedEntity/representedOrganization should have a non-blank addr element or nullFlavor.</assert> 
+ 
+   <assert test='not(self::cda:authenticator/cda:assignedEntity/cda:representedOrganization) 
+                 or (cda:assignedEntity/cda:representedOrganization/cda:telecom and cda:assignedEntity/cda:representedOrganization/cda:telecom/@value)
+                 or (cda:assignedEntity/cda:representedOrganization/cda:telecom/@nullFlavor)'>
+           Warning: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) an authenticator/assignedEntity/representedOrganization/telecom/@value should have a non-blank value or nullFlavor.</assert>    
+         
+   <assert test='not(self::cda:authenticator/cda:assignedEntity/cda:representedOrganization)
+                 or (cda:assignedEntity/cda:representedOrganization/cda:name and normalize-space(cda:assignedEntity/cda:representedOrganization/cda:name)) 
+                 or (count(cda:assignedEntity/cda:representedOrganization/cda:name/child::*) &gt; 0)
+                 or (cda:assignedEntity/cda:representedOrganization/cda:name/@nullFlavor)'>
+           Warning: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) an authenticator/assignedEntity/representedOrganization should have a non-blank name element or nullFlavor.</assert>
+   
+ 
+<!-- checking for addr, telecom and name values for participant -->
+     
+   <assert test='not(self::cda:participant) 
+                 or (descendant::cda:addr and normalize-space(descendant::cda:addr)) 
+                 or (count(descendant::cda:addr/child::*) &gt; 0)
+                 or (descendant::cda:addr/@nullFlavor)'>
+           Warning: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) a participant entity should have a non-blank addr element or nullFlavor.</assert> 
+
+   <assert test='not(self::cda:participant) 
+                 or (descendant::cda:telecom/@value)
+                 or (descendant::cda:telecom/@nullFlavor)'>
+           Warning: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) a participant/telecom/@value should have a non-blank value or nullFlavor.</assert>  
+  
+    <assert test='not(self::cda:participant)
+                 or (descendant::cda:name and normalize-space(descendant::cda:name))
+                 or (count(descendant::cda:name/child::*) &gt; 0)
+                 or (descendant::cda:name/@nullFlavor)'>
+           Warning: In Laboratory Results Validator (1.3.6.1.4.1.19376.1.3.3.1.5) a participant entity should have a subordinate non-blank name element or nullFlavor.</assert>
+   
+   </rule>   
+   
+</pattern>

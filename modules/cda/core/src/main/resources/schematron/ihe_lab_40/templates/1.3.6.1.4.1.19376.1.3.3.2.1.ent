@@ -1,0 +1,71 @@
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.2.1-errors'>
+
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.2.1"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <assert test='/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section'>
+     Error: The templateId (1.3.6.1.4.1.19376.1.3.3.2.1) identifies a Laboratory Specialty Section of a Clinical Document (cf Section 2.3.4.1). It is a top level section under the structuredBody of ClinicalDocument.
+   </assert> 
+
+   <!-- Verify that an appropriate code is used -->
+   
+   <assert test='(cda:code[@codeSystem="2.16.840.1.113883.6.1"]) and  
+       ((cda:code[@code="18717-9"]) or (cda:code[@code="18718-7"]) 
+     or (cda:code[@code="18719-5"]) or (cda:code[@code="18720-3"]) or (cda:code[@code="18721-1"]) 
+     or (cda:code[@code="18722-9"]) or (cda:code[@code="18723-7"]) or (cda:code[@code="18724-5"]) 
+     or (cda:code[@code="18725-2"]) or (cda:code[@code="18727-8"]) or (cda:code[@code="18728-6"]) 
+     or (cda:code[@code="18729-4"]) or (cda:code[@code="18767-4"]) or (cda:code[@code="18768-2"]) 
+     or (cda:code[@code="18769-0"]) or (cda:code[@code="26435-8"]) or (cda:code[@code="26436-6"]) 
+     or (cda:code[@code="26437-4"]) or (cda:code[@code="26438-2"]))'>
+              Error: In a Laboratory Specialty Section (1.3.6.1.4.1.19376.1.3.3.2.1) the code/@codeSystem shall be 2.16.840.1.113883.6.1 (LOINC) and the @code values shall be one of the following: 
+              "18717-9", "18718-7", "18719-5", 
+              "18720-3", "18721-1", "18722-9", "18723-7",  
+              "18724-5", "18725-2", "18727-8", "18728-6",
+              "18729-4", "18767-4", "18768-2", "18769-0", 
+              "26435-8", "26436-6", "26437-4", "26438-2". 
+   </assert>
+   
+   <assert test='cda:code/@displayName'>
+          Error: In a Laboratory Specialty Section (1.3.6.1.4.1.19376.1.3.3.2.1) the structuredBody/component/section/code/@displayName shall be present.
+   </assert>
+    
+    <assert test='(count(cda:component/cda:section) &gt;= 1 and count(cda:text) = 0 and count(cda:entry) = 0) or 
+           (count(cda:component/cda:section) = 0 and count(cda:text) = 1 and count(cda:entry) = 1)'>
+           Error: A Laboratory Specialty Section (1.3.6.1.4.1.19376.1.3.3.2.1) shall be a leaf section with a single entry and non-empty text derived from that entry, or it shall have no text and one or more component subsections.</assert>
+  
+   <assert test='not(cda:text) or normalize-space(cda:text)'>
+         Error: In the Laboratory Specialty Section (1.3.6.1.4.1.19376.1.3.3.2.1) the structuredBody/component/section/text element shall not be blank.</assert> 
+
+  <assert test='not(cda:entry) or cda:entry/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1"]'>
+           Error: If a Laboratory Specialty Section (1.3.6.1.4.1.19376.1.3.3.2.1) contains an entry, then the entry shall be properly labeled as a Laboratory Report Data Processing Entry (1.3.6.1.4.1.19376.1.3.1).
+   </assert>    
+
+  <assert test='not(cda:component/cda:section/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.2.1"])'>
+           Error: Laboratory Specialty Sections (1.3.6.1.4.1.19376.1.3.3.2.1) shall not be nested. In particular, a Laboratory Studies (LOINC 26436-6) section may not have other specialty sections under it; instead, a Laboratory Studies section may be used to summarize other specialty sections at the same level (cf Note 1 in Section 2.3.4.1.1).
+   </assert>    
+
+<!-- INSERT OTHER GLOBAL ASSERTS HERE -->  
+
+ </rule>
+
+
+  <!-- TF_Vol3_Ref_2.3.4 Content Modules for CDA Sections -->
+      
+    <rule context='//cda:section[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.2.1"]/cda:component/cda:section'> 
+      
+       <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.2.2"]'>
+         Error: Every subsection of a Laboratory Specialty Section (1.3.6.1.4.1.19376.1.3.3.2.1) shall be properly labeled as a Laboratory ReportItem Section (1.3.6.1.4.1.19376.1.3.3.2.2) (cf Section 2.3.4).
+      </assert>  
+    </rule>
+    
+<!-- TF_Vol3_Ref_2.3.4.1 Laboratory Speciality Section 1.3.6.1.4.1.19376.1.3.3.2.1  -->
+
+<!-- TF_Vol3_Ref_2.3.4.1.1 List of Laboratory Specialities -->
+<!-- 2.3.4.1.2 Specification -->
+
+       
+ </pattern>
+ 
+ 
