@@ -112,7 +112,6 @@
         <lombok-version>1.16.6</lombok-version>
         <lucene-version>4.10.4</lucene-version>
         <mina2-version>2.0.13</mina2-version>
-        <not-yet-commons-ssl-version>0.3.11</not-yet-commons-ssl-version>
         <opensaml-version>3.1.1</opensaml-version>
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.2</quartz-version>
@@ -1417,11 +1416,6 @@
                         <artifactId>bcprov-jdk15</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>ca.juliusdavies</groupId>
-                <artifactId>not-yet-commons-ssl</artifactId>
-                <version>${not-yet-commons-ssl-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.bouncycastle</groupId>
