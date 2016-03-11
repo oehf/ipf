@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.translation;
 
 /**
+ * @author Christian Ohr
  * @since 3.1
  */
 public class FhirTranslationException extends RuntimeException {

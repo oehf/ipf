@@ -28,6 +28,10 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
 
 /**
+ *
+ * Some common utilities used by FHIR translators
+ *
+ * @author Christian Ohr
  * @since 3.1
  */
 class Utils {
@@ -72,22 +76,22 @@ class Utils {
         return new InvalidRequestException('Unknown Patient ID', oo)
     }
 
-    static BaseServerResponseException unknownPatientDomain() {
+    static BaseServerResponseException unknownPatientDomain(String domain = null) {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(OperationOutcome.IssueType.NOTFOUND)
-                .setDiagnostics('sourceIdentifier Assigning Authority not found')
-        return new InvalidRequestException('Unknown Patient Domain', oo)
+                .setDiagnostics("sourceIdentifier Assigning Authority ${domain ?: ''} not found")
+        return new InvalidRequestException("Unknown Patient Domain ${domain ?: ''}", oo)
     }
 
-    static BaseServerResponseException unknownTargetDomain() {
+    static BaseServerResponseException unknownTargetDomain(String domain = null) {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(OperationOutcome.IssueType.NOTFOUND)
-                .setDiagnostics('targetSystem not found')
-        return new InvalidRequestException('Unknown Target Domain', oo)
+                .setDiagnostics("targetSystem ${domain ?: ''} not found")
+        return new InvalidRequestException("Unknown Target Domain ${domain ?: ''}", oo)
     }
 
     static BaseServerResponseException unexpectedProblem() {

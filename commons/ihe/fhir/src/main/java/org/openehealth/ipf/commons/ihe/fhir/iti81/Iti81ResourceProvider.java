@@ -36,6 +36,7 @@ import java.util.Map;
  * According to the Restful ATNA specification, this resource provider must handle requests in the form
  * GET [base]/AuditEvent?date=>start-time&date=<stoptime>&<query>{&_format=[mime-type]}
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti81ResourceProvider extends AbstractPlainProvider {

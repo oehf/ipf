@@ -34,6 +34,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
 /**
  * Translates a {@link IBaseResource} into a HL7v2 PIX Query message
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
@@ -88,13 +89,13 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
             throw Utils.unknownPatientId();
         }
         if (!Utils.populateIdentifier(qry.QPD[3], uriMapper, sourceIdentifier.system, sourceIdentifier.value)) {
-            throw Utils.unknownPatientDomain();
+            throw Utils.unknownPatientDomain(sourceIdentifier.system);
         }
 
         UriType requestedDomain = map[Constants.TARGET_SYSTEM_NAME]
         if (requestedDomain) {
             if (!Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[4]), uriMapper, requestedDomain.value)) {
-                throw Utils.unknownTargetDomain();
+                throw Utils.unknownTargetDomain(requestedDomain.value);
             }
         }
 

@@ -31,6 +31,7 @@ import java.util.Map;
  * Request Factory for ITI-81 requests returning a bundle of audit events based on query criteria of type
  * {@link ICriterion} or String in the request data
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti81ClientRequestFactory implements ClientRequestFactory<IQuery<Bundle>> {

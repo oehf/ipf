@@ -24,26 +24,25 @@ import java.util.Objects;
 /**
  * URI mapper base implementation that recognizes and creates OID URNs
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public abstract class AbstractUriMapper implements UriMapper {
 
     @Override
     public String uriToOid(String uri) throws URISyntaxException {
-        if (URN.isURN(uri)) {
-            URN urn = URN.create(uri);
-            if (Objects.equals(urn.getNamespaceId(), URN.OID)) {
-                return urn.getNamespaceSpecificString();
-            } else {
-                throw new FhirTranslationException("Unknown URN scheme ${urn.namespaceId}");
-            }
-        }
-        return mapUriToOid(uri);
+        String oid;
+        if ((oid = translateURN(uri, URN.OID)) != null) return oid;
+        if ((oid = mapUriToOid(uri)) != null) return oid;
+        throw new FhirTranslationException("URI " + uri + " cannot be mapped into an OID");
     }
 
     @Override
     public String uriToNamespace(String uri) throws URISyntaxException {
-        return mapUriToNamespace(uri);
+        String namespace;
+        if ((namespace = translateURN(uri, URN.PIN)) != null) return namespace;
+        if ((namespace = mapUriToNamespace(uri)) != null) return namespace;
+        return null;
     }
 
     @Override
@@ -82,4 +81,14 @@ public abstract class AbstractUriMapper implements UriMapper {
      * @throws Exception if no URI was found
      */
     protected abstract String mapOidToUri(String oid);
+
+    private String translateURN(String uri, String nss) throws URISyntaxException {
+        if (URN.isURN(uri)) {
+            URN urn = URN.create(uri);
+            if (Objects.equals(urn.getNamespaceId(), nss)) {
+                return urn.getNamespaceSpecificString();
+            }
+        }
+        return null;
+    }
 }

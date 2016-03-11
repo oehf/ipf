@@ -18,9 +18,14 @@ package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
 
 import org.openehealth.ipf.commons.ihe.core.atna.NoAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 
+/**
+ * ITI-81 audit strategy: none
+ *
+ * @author Christian Ohr
+ * @since 3.1
+ */
 public class Iti81AuditStrategy extends NoAuditStrategy<FhirQueryAuditDataset> {
 
     public Iti81AuditStrategy(boolean serverSide) {

@@ -30,6 +30,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  * According to the PIXM specification, this resource provider must handle requests in the form
  * GET [base]/Patient/$ihe-pix?sourceIdentifier=[token]]{&targetSystem=[uri]}{&_format=[mime-type]}
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti83ResourceProvider extends AbstractPlainProvider {

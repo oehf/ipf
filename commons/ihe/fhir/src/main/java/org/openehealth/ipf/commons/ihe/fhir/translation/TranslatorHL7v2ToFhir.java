@@ -21,6 +21,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import java.util.Map;
 
 /**
+ * @author Christian Ohr
  * @since 3.1
  */
 public interface TranslatorHL7v2ToFhir {

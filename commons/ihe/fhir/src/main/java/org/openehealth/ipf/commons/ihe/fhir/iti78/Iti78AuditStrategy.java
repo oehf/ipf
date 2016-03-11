@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
 /**
  * Strategy for auditing ITI-78 transactions
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public abstract class Iti78AuditStrategy extends FhirQueryAuditStrategy {

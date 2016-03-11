@@ -29,6 +29,7 @@ import java.util.Map;
 /**
  * Request Factory for Iti-83 requests
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti83ClientRequestFactory implements ClientRequestFactory<IOperationUntypedWithInput<Parameters>> {

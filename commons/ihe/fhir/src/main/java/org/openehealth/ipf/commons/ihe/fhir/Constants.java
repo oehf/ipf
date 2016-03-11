@@ -16,6 +16,9 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import org.hl7.fhir.instance.model.Coding;
+import org.hl7.fhir.instance.model.DocumentManifest;
+
 /**
  * @since 3.1
  */
@@ -31,6 +34,17 @@ public interface Constants {
     String SP_MULTIPLE_BIRTH_ORDER_NUMBER = "multipleBirthInteger";
     String SP_MOTHERS_MAIDEN_NAME_GIVEN = "mothersMaidenName.given";
     String SP_MOTHERS_MAIDEN_NAME_FAMILY = "mothersMaidenName.family";
+
+    // MHD stuff
+    String COMP_DOCUMENT_MANIFEST = "documentManifest";
+    String COMP_DOCUMENT_REFERENCES = "documentReferences";
+    String COMP_LISTS = "lists";
+    String COMP_BINARIES = "binaries";
+
+    String SP_AUTHOR_GIVEN = DocumentManifest.SP_AUTHOR + ".given";
+    String SP_AUTHOR_FAMILY = DocumentManifest.SP_AUTHOR + ".family";
+
+    Coding ITI65_TAG = new Coding().setCode("http://ihe.net/fhir/tag/iti-65");
 
     // ATNA stuff
     String SP_PATIENTID = "patientid";
@@ -54,6 +68,5 @@ public interface Constants {
     String HTTP_PROTOCOL_VERSION = "FhirHttpProtocolVersion";
     String HTTP_CLIENT_IP_ADDRESS = "FhirHttpClientIpAddress";
     String HTTP_HEADERS = "FhirHttpHeaders";
-
 
 }

@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 /**
  * Strategy for auditing ITI-83 transactions on the client side
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti83ClientAuditStrategy extends Iti83AuditStrategy {

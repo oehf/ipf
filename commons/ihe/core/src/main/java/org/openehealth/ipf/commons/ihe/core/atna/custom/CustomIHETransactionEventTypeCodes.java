@@ -32,7 +32,7 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
     public static final class PatientLocationQuery extends IHETransactionEventTypeCodes {
         public PatientLocationQuery() {
             super("ITI-56", "Patient Location Query");
-        }   
+        }
     }
 
     public static final class UpdateDocumentSet extends IHETransactionEventTypeCodes {
@@ -86,6 +86,36 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
     public static final class QueryExistingData extends IHETransactionEventTypeCodes {
         public QueryExistingData() {
             super("PCC-1", "Query Existing Data");
+        }
+    }
+
+    public static final class ProvideDocumentBundle extends IHETransactionEventTypeCodes {
+        public ProvideDocumentBundle() {
+            super("ITI-65", "Provide Document Bundle");
+        }
+    }
+
+    public static final class DocumentManifestQuery extends IHETransactionEventTypeCodes {
+        public DocumentManifestQuery() {
+            super("ITI-66", "Mobile Document Manifest Query");
+        }
+    }
+
+    public static final class DocumentReferenceQuery extends IHETransactionEventTypeCodes {
+        public DocumentReferenceQuery() {
+            super("ITI-67", "Mobile Document Reference Query");
+        }
+    }
+
+    public static final class PDQMQuery extends IHETransactionEventTypeCodes {
+        public PDQMQuery() {
+            super("ITI-78", "Mobile Patient Demographics Query");
+        }
+    }
+
+    public static final class PIXMQuery extends IHETransactionEventTypeCodes {
+        public PIXMQuery() {
+            super("ITI-83", "Mobile Patient Identifier Cross-reference Query");
         }
     }
 }

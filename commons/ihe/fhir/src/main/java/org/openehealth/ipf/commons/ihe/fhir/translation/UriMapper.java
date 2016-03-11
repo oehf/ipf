@@ -25,6 +25,7 @@ import java.net.URISyntaxException;
  * to correctly map a URL to an OID or HD to maintain consistency with other actors which are not implementing the
  * FHIR specification.
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public interface UriMapper {

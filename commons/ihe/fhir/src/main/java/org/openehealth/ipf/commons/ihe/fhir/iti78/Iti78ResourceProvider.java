@@ -33,8 +33,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Resource Provider for PDQm (ITI-78) as if it was written for DSTU2
+ * Resource Provider for PDQm (ITI-78) for DSTU2
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti78ResourceProvider extends AbstractPlainProvider {

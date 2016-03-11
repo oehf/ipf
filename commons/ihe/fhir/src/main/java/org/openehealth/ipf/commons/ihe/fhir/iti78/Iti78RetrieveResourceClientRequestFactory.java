@@ -28,6 +28,7 @@ import java.util.Map;
  * Request Factory for ITI-78 requests, retrieving a single Patient resource based on a resource ID
  * in the request data.
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti78RetrieveResourceClientRequestFactory implements ClientRequestFactory<IReadExecutable<Patient>> {

@@ -26,7 +26,9 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.*
 
 /**
  * Translates ATNA audit records into FHIR AuditEvent resources.
+ *
  * @author Dmytro Rud
+ * @since 3.1
  */
 class AuditRecordTranslator {
 

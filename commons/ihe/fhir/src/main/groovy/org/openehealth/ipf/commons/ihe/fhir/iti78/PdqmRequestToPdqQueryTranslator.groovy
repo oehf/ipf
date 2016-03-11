@@ -43,6 +43,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
  * Note that this translator implements search and (v)read requests, where the latter just translates into
  * a search using the _id parameter.
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
@@ -227,7 +228,9 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
             namespace = uriMapper.uriToNamespace(identifierParam.system)
             oid = uriMapper.uriToOid(identifierParam.system)
             if (!(namespace || oid)) {
-                throw identifierParam.value ? Utils.unknownPatientDomain() : Utils.unknownTargetDomain()
+                throw identifierParam.value ?
+                        Utils.unknownPatientDomain(identifierParam.system) :
+                        Utils.unknownTargetDomain(identifierParam.system)
             }
         }
         [namespace, oid, identifierParam?.value]

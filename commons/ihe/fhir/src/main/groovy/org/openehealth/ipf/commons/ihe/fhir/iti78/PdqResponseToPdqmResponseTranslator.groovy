@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory
  * Depending on the prefix query tag in QPD-2 (search or get) the translator decides
  * about whether to generate a bundle or a single patient resource.
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {

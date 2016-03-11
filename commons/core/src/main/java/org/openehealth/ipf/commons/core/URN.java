@@ -20,6 +20,7 @@ public final class URN implements Comparable<URN>, Serializable {
 
     public static final String UUID = "uuid";
     public static final String OID = "oid";
+    public static final String PIN = "pin";
     private static final String PREFIX = "urn";
     private static final String SEP = ":";
     private static final Pattern REGEX = Pattern.compile("^urn:[A-Za-z0-9][A-Za-z0-9-]{0,31}:[A-Za-z0-9()+,\\-.:=@;$_!*'%/?#]+$");

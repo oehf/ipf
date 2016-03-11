@@ -26,6 +26,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
 /**
  * Strategy for auditing ITI-83 transactions
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public abstract class Iti83AuditStrategy extends FhirQueryAuditStrategy {

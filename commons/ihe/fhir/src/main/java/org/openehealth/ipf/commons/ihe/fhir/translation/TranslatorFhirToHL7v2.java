@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 import java.util.Map;
 
 /**
+ * @author Christian Ohr
  * @since 3.1
  */
 public interface TranslatorFhirToHL7v2 {

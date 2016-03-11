@@ -31,6 +31,9 @@ import org.openehealth.ipf.commons.ihe.fhir.Constants;
  * <ul>
  *     <li>mothersMaidenName</li>
  * </ul>
+ *
+ * @author Christian Ohr
+ * @since 3.1
  */
 @ResourceDef(name = "Patient", id = "pdqm", profile = "http://www.ihe.net/ITI-78/Profile/pdqm")
 public class PdqPatient extends Patient {

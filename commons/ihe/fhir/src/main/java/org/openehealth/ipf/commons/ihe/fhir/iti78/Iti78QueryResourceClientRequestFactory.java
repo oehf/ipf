@@ -30,6 +30,7 @@ import java.util.Map;
  * Request Factory for ITI-78 requests returning a bundle of patients based on query criteria of type
  * {@link ICriterion} or String in the request data
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti78QueryResourceClientRequestFactory implements ClientRequestFactory<IQuery<Bundle>> {
