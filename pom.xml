@@ -62,7 +62,7 @@
         <jaxb-plugin-version>1.6</jaxb-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <pax-plugin-version>1.5</pax-plugin-version>
-        <release-plugin-version>2.5.1</release-plugin-version>
+        <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>2.7</resources-plugin-version>
         <sources-plugin-version>2.4</sources-plugin-version>
 
