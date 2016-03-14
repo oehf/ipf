@@ -97,8 +97,8 @@
         <hibernate-javassist-version>3.20.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
         <httpclient4-version>4.5.1</httpclient4-version>
-        <ipf-gazelle-version>1.1-SNAPSHOT</ipf-gazelle-version>
-        <ipf-oht-atna-version>3.1-SNAPSHOT</ipf-oht-atna-version>
+        <ipf-gazelle-version>1.1.0</ipf-gazelle-version>
+        <ipf-oht-atna-version>3.1.1</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.2.11</jaxb-version>
         <jasypt-version>1.9.2</jasypt-version>
