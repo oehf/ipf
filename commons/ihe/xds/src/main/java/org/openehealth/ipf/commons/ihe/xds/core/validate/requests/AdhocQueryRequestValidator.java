@@ -430,8 +430,11 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             new SlotLengthAndNameUniquenessValidator().validateQuerySlots(
                     request.getSlots(),
                     ALLOWED_MULTIPLE_SLOTS.get(queryType));
-            for (QueryParameterValidation validation : getValidators(queryType, profile)) {
-                validation.validate(request);
+            QueryParameterValidation[] validations = getValidators(queryType, profile);
+            if (validations != null) {
+                for (QueryParameterValidation validation : validations) {
+                    validation.validate(request);
+                }
             }
 
             if (queryType == FIND_DOCUMENTS_MPQ) {

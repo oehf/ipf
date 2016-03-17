@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.translation;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -28,6 +27,7 @@ import java.util.Map;
  * Camel processors for translation of messages between FHIR and HL7v2
  *
  * @author Christian Ohr
+ * @since 3.1
  */
 public final class FhirCamelTranslators {
 

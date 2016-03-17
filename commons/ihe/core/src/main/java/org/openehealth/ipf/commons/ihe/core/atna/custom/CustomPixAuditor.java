@@ -21,7 +21,6 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.PatientRecordEvent;
 
 import java.nio.charset.Charset;
-import java.util.Locale;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 

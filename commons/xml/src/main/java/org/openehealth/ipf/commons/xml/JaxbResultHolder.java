@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import org.openehealth.ipf.commons.xml.svrl.SchematronOutput;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.util.JAXBResult;

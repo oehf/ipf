@@ -19,7 +19,6 @@ package org.openehealth.ipf.platform.camel.ihe.core;
 import org.apache.camel.impl.DefaultComponent;
 import org.apache.camel.spi.UriParam;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +28,7 @@ import java.util.Map;
  *
  * @since 3.1
  */
-public abstract class InterceptableEndpointConfiguration implements Serializable {
+public abstract class InterceptableEndpointConfiguration {
 
     @UriParam
     private List<InterceptorFactory> customInterceptorFactories;

@@ -18,8 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti81;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.core.atna.NoAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti81.Iti81AuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
@@ -29,6 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
 /**
  * Component for RESTful ATNA (ITI-81)
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti81Component extends FhirComponent<FhirQueryAuditDataset> {

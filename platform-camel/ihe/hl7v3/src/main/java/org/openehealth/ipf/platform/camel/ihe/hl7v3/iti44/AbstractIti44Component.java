@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;

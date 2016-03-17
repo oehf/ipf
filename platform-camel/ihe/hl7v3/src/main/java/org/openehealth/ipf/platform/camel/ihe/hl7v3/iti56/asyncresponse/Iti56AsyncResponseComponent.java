@@ -22,11 +22,8 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.asyncresponse.Iti56AsyncResponsePortType;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import javax.xml.namespace.QName;
 import java.util.Map;

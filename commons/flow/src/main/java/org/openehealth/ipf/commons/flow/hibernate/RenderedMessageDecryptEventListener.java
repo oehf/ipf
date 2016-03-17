@@ -15,20 +15,13 @@
  */
 package org.openehealth.ipf.commons.flow.hibernate;
 
-import java.io.IOException;
-import java.io.Serializable;
-
-import org.hibernate.event.spi.PostInsertEvent;
-import org.hibernate.event.spi.PostInsertEventListener;
-import org.hibernate.event.spi.PostLoadEvent;
-import org.hibernate.event.spi.PostLoadEventListener;
-import org.hibernate.event.spi.PostUpdateEvent;
-import org.hibernate.event.spi.PostUpdateEventListener;
+import org.hibernate.event.spi.*;
 import org.hibernate.persister.entity.EntityPersister;
 import org.jasypt.encryption.StringEncryptor;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.openehealth.ipf.commons.flow.domain.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.Serializable;
 
 /**
  * Decrypts flow (part) message text on insert, update and load.

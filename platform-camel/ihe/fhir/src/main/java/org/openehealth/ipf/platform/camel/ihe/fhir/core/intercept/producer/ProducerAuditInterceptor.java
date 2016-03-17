@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer;
 import org.apache.camel.Exchange;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.FhirObject;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.interceptor.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;

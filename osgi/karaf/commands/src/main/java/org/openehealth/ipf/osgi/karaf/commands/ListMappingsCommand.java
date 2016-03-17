@@ -20,7 +20,6 @@ import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.openehealth.ipf.commons.map.BidiMappingService;
 import org.openehealth.ipf.commons.map.MappingService;
 
-import java.util.Iterator;
 import java.util.Map;
 
 /**

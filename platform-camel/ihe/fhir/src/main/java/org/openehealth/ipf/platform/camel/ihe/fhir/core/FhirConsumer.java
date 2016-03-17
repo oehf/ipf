@@ -38,6 +38,7 @@ import java.util.Map;
  * by sending the request data and parameters into a Camel route and returning the result of
  * the route processing.
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends DefaultConsumer

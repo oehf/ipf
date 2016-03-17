@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti38.asyncresponse.Iti38AsyncResponsePortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 

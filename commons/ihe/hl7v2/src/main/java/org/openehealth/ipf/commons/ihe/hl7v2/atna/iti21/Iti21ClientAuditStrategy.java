@@ -15,10 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti21;
 
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.pdqcore.PdqAuditStrategy;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.pdqcore.PdqAuditStrategy;
 
 /**
  * Client (aka Camel producer) audit strategy for ITI-21 (PDQ).

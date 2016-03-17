@@ -59,7 +59,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends MllpAuditDataset>
      */
     private static String addressFromHeader(Message message, String headerName) {
         InetSocketAddress address = (InetSocketAddress) message.getHeader(headerName);
-        return address.getAddress().getHostAddress();
+        return address != null ? address.getAddress().getHostAddress() : "unknown";
     }
     
 }

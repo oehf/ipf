@@ -109,15 +109,18 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
     private boolean addTargets(CamelContext camelContext) throws CamelException {
         for (String routeId : routeIds) {
             try {
-                MllpConsumer consumer = (MllpConsumer) camelContext.getRoute(routeId).getConsumer();
-                Interceptor interceptor = (Interceptor) consumer.getProcessor();
-                while (!(interceptor instanceof ConsumerStringProcessingInterceptor)) {
-                    interceptor = (Interceptor) interceptor.getWrappedProcessor();
+                Route route = camelContext.getRoute(routeId);
+                if (route != null) {
+                    MllpConsumer consumer = (MllpConsumer) route.getConsumer();
+                    Interceptor interceptor = (Interceptor) consumer.getProcessor();
+                    while (!(interceptor instanceof ConsumerStringProcessingInterceptor)) {
+                        interceptor = (Interceptor) interceptor.getWrappedProcessor();
+                    }
+                    LOG.debug("Adding MLLP transaction route {} to dispatcher", routeId);
+                    map.put(routeId, (Interceptor) interceptor.getWrappedProcessor());
+                } else {
+                    throw new CamelException("Route with ID='" + routeId + "' not found or is not an IPF MLLP route");
                 }
-                LOG.debug("Adding MLLP transaction route {} to dispatcher", routeId);
-                map.put(routeId, (Interceptor) interceptor.getWrappedProcessor());
-            } catch (NullPointerException e) {
-                throw new CamelException("Route with ID='" + routeId + "' not found or is not an IPF MLLP route", e);
             } catch (ClassCastException e) {
                 throw new CamelException("Route with ID='" + routeId + "' is not an IPF MLLP route", e);
             }

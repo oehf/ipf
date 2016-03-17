@@ -39,6 +39,7 @@ import java.util.List;
 /**
  * Generic FHIR endpoint
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, ComponentType extends FhirComponent<AuditDatasetType>>

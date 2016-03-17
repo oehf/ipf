@@ -28,6 +28,7 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
@@ -321,7 +322,7 @@ public class Hl7v3Auditor extends IHEAuditor {
         try {
             return payload.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            return payload.getBytes();
+            return payload.getBytes(Charset.defaultCharset());
         }
     }
 

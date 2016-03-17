@@ -15,13 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
-
-import java.util.Map;
-
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
 
 /**
  * Strategy for auditing ITI-83 transactions

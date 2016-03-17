@@ -21,7 +21,7 @@ import org.apache.camel.impl.DefaultProducer;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
@@ -49,7 +49,7 @@ public class Iti17Producer extends DefaultProducer {
         String documentSpecifyingPart = exchange.getIn().getBody(String.class);
         String uri = endpoint.getServiceUrl() + documentSpecifyingPart;
 
-        final HttpClient httpClient = new DefaultHttpClient();
+        final HttpClient httpClient = HttpClients.createDefault();
         final HttpGet get = new HttpGet(uri);
         boolean keepConnection = false;
         try {

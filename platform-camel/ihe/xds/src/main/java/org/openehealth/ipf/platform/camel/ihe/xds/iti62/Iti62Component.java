@@ -25,7 +25,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseT
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62ServerAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;

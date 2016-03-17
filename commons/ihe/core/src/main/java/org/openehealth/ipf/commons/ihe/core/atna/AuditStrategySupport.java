@@ -16,8 +16,6 @@
 
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import java.util.Map;

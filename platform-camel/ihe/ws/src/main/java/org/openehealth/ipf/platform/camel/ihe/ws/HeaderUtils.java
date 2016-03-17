@@ -204,8 +204,10 @@ abstract public class HeaderUtils {
         Map<String, String> userHeaders = new HashMap<>();
         Map<String, List<String>> httpHeaders = getHeaders(
                 messageContext, PROTOCOL_HEADERS, true, false, null);
-        for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {
-            userHeaders.put(entry.getKey(), entry.getValue().get(0));
+        if (httpHeaders != null) {
+            for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {
+                userHeaders.put(entry.getKey(), entry.getValue().get(0));
+            }
         }
         message.setHeader(AbstractWsEndpoint.INCOMING_HTTP_HEADERS, userHeaders);
     }

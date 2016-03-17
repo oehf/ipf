@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
  * Static configuration for FHIR components. This configuration cannot be altered in the
  * endpoint URI.
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class FhirComponentConfiguration {

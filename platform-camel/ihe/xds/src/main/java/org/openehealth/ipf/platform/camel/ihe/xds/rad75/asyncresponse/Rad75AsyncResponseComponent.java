@@ -17,17 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.xds.rad75.asyncresponse;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.asyncresponse.Rad75AsyncResponsePortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
-import org.openehealth.ipf.platform.camel.ihe.xds.rad75.Rad75Service;
 
 import javax.xml.namespace.QName;
 import java.util.Map;

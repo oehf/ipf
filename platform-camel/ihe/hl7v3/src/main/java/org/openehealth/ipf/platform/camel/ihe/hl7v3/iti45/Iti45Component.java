@@ -25,7 +25,6 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti45.Iti45PortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.Iti55Service;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;

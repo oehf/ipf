@@ -324,7 +324,7 @@ public class Hl7v2TransactionConfiguration {
             // the expected structure must be equal to the actual one,
             // but second components may be omitted in acknowledgements
             boolean bothAreEqual = messageStructure.equals(expectedMessageStructure);
-            boolean bothAreAcks = (messageStructure.startsWith("ACK") && expectedMessageStructure.startsWith("ACK"));
+            boolean bothAreAcks = (messageStructure.startsWith("ACK") && expectedMessageStructure != null && expectedMessageStructure.startsWith("ACK"));
             if (!(bothAreEqual || bothAreAcks)) {
                 throw new Hl7v2AcceptanceException("Invalid message structure " + messageStructure + 
                         ", must be " + expectedMessageStructure, ErrorCode.APPLICATION_INTERNAL_ERROR);

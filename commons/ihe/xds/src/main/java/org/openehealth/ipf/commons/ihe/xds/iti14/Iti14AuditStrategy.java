@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.iti14;
 
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;

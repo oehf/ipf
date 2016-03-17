@@ -24,6 +24,7 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class ImagingRetrieveEvent extends GenericIHEAuditEventMessage {
 
     protected void addTypeValuePair(List<TypeValuePairType> pairs, String type, String value) {
         if (! EventUtils.isEmptyOrNull(value)) {
-            pairs.add(getTypeValuePair(type, value.getBytes()));
+            pairs.add(getTypeValuePair(type, value.getBytes(Charset.defaultCharset())));
         }
     }
 

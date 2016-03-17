@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.Conformance;
-import org.hl7.fhir.instance.model.Patient;
 import org.hl7.fhir.instance.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;

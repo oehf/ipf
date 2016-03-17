@@ -96,9 +96,8 @@ public class Document extends ContentMap implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-            + ((getContent(DataHandler.class) == null) ?
-                0 : getContent(DataHandler.class).hashCode());
+        DataHandler handler = getContent(DataHandler.class);
+        result = prime * result + ((handler == null) ? 0 : handler.hashCode());
         result = prime * result + ((documentEntry == null) ? 0 : documentEntry.hashCode());
         return result;
     }

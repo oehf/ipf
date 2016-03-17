@@ -17,8 +17,6 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pam.v25.message;
 
 import ca.uhn.hl7v2.model.Structure;
-import ca.uhn.hl7v2.model.v25.group.ADT_A01_INSURANCE;
-import ca.uhn.hl7v2.model.v25.group.ADT_A01_PROCEDURE;
 import ca.uhn.hl7v2.model.v25.segment.*;
 import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.parser.ModelClassFactory;

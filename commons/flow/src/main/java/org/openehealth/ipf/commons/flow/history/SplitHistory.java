@@ -208,7 +208,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
                 break;
             }
         }
-        if (!tn.isPredecessor(pn)) {
+        if (tn == null || !tn.isPredecessor(pn)) {
             return false;
         }
         if (!isLastUpTo(last)) {
@@ -242,7 +242,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
                 break;
             }
         }
-        if (!tn.isSuccessor(pn)) {
+        if (tn == null || !tn.isSuccessor(pn)) {
             return false;
         }
         if (!isFirstUpTo(last)) {

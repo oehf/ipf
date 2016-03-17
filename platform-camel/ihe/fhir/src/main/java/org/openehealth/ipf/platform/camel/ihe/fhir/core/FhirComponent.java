@@ -32,6 +32,7 @@ import java.util.Map;
 /**
  * Abstract FHIR Camel component
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>

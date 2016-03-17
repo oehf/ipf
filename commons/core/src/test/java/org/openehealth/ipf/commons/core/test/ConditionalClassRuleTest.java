@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.core.test;
 
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;

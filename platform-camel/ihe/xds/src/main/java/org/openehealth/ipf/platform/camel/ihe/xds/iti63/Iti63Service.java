@@ -15,12 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti63;
 
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63PortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAdhocQueryService;
 
 /**

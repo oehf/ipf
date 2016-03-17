@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
