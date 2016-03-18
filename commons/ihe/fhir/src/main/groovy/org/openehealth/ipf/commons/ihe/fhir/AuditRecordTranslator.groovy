@@ -96,7 +96,7 @@ class AuditRecordTranslator {
         def fhir = new AuditEvent.AuditEventObjectComponent()
         fhir.identifier = new Identifier(
                 value: atna.participantObjectID,
-                type: codeableConcept(atna.participantObjectIDTypeCode))
+                /*type: codeableConcept(atna.participantObjectIDTypeCode)*/)
         fhir.type = coding(new ObjectTypeEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCode)))
         fhir.role = coding(new ObjectRoleEnumFactory().fromCode(Short.toString(atna.participantObjectTypeCodeRole)))
         atna.participantObjectDetail.each {
