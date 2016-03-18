@@ -15,17 +15,10 @@ IPF provides highl-level building blocks for implementing IHE profiles such as X
 Other supported standards are HL7v2 and HL7v3 (CDA and CCD) for which IPF provides domain-specific languages (DSLs) for
 creation, parsing, rendering, navigation and modification.
 
-* [Detailed overview](http://repo.openehealth.org/confluence/display/ipf2/IPF+Overview)
-
 ## Documentation
 
-The IPF 3 documentation is located at [github](https://oehf.github.io/ipf)
-
-The old IPF 2 documentation is available at:
-
-* [Single-page view](http://repo.openehealth.org/confluence/display/ipf2/IPF+reference+-+single)
-* [Multi-page view](http://repo.openehealth.org/confluence/display/ipf2/IPF+reference+-+multi)
-* [Introductory article](http://architects.dzone.com/articles/introduction-open-ehealth)
+The IPF 3 documentation is located at [github](https://oehf.github.io/ipf).
+There's also a somewhat outdated [Introductory article](http://architects.dzone.com/articles/introduction-open-ehealth).
 
 ## Mailing Lists
 
