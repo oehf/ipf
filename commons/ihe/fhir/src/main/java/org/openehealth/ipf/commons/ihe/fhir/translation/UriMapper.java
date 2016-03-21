@@ -20,7 +20,7 @@ import java.net.URISyntaxException;
 
 /**
  * The FHIR Identifier type introduces a new mechanism for conveying the originating system of a particular identifier.
- * Whereas HL7 Version 2 and Version 3 messages identify an assigning 1480 organization as a HD or an OID in the “root”
+ * Whereas HL7 Version 2 and Version 3 messages identify an assigning 1480 organization as a HD or an OID in the 'root'
  * attribute respectively, HL7 FHIR permits the use of a URI. This requires some configuration on the part of actors
  * to correctly map a URL to an OID or HD to maintain consistency with other actors which are not implementing the
  * FHIR specification.

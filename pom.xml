@@ -84,11 +84,13 @@
         <derby-version>10.12.1.1</derby-version>
         <easymock-version>3.4</easymock-version>
         <ehcache-version>2.10.1</ehcache-version>
+        <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
         <groovy-version>2.4.6</groovy-version>
+        <guava-version>19.0</guava-version>
         <hapi-version>2.2</hapi-version>
         <hapi-fhir-version>1.4</hapi-fhir-version>
         <hibernate-version>4.3.9.Final</hibernate-version>
@@ -119,7 +121,7 @@
         <!-- 9.7.0-3 hangs up test in ipf-modules-cda -->
         <saxon-he-version>9.7.0-2</saxon-he-version>
         <servlet-api-version>3.1.0</servlet-api-version>
-        <slf4j-version>1.7.18</slf4j-version>
+        <slf4j-version>1.7.19</slf4j-version>
         <spring-version>4.2.4.RELEASE</spring-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
@@ -1023,6 +1025,14 @@
                         <groupId>commons-logging</groupId>
                         <artifactId>commons-logging</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>jsr305</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -1211,6 +1221,12 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-search-engine</artifactId>
                 <version>${hibernate-search-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.lucene</groupId>
+                        <artifactId>lucene-facet</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
@@ -1235,6 +1251,11 @@
             <dependency>
                 <groupId>org.apache.lucene</groupId>
                 <artifactId>lucene-queryparser</artifactId>
+                <version>${lucene-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-facet</artifactId>
                 <version>${lucene-version}</version>
             </dependency>
             <dependency>
@@ -1415,6 +1436,18 @@
                         <groupId>org.bouncycastle</groupId>
                         <artifactId>bcprov-jdk15</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.velocity</groupId>
+                        <artifactId>velocity</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>jsr305</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -1489,6 +1522,16 @@
                 <artifactId>quickcheck</artifactId>
                 <version>${quickcheck-version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${findbugs-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

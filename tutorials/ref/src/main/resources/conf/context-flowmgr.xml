@@ -24,7 +24,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context.xsd
 http://www.springframework.org/schema/tx 
-http://www.springframework.org/schema/tx/spring.xsd">
+http://www.springframework.org/schema/tx/spring-tx.xsd">
 
   <ctx:property-placeholder location="classpath:${cluster.node.dir}/context.properties" />
 
@@ -111,37 +111,6 @@ http://www.springframework.org/schema/tx/spring.xsd">
         
       </props>
     </property>    
-    <!-- 
-         Enables rendered message encryption and full text indexing:
-         * To use rendering without both encryption and full text indexing, 
-           delete the 'eventListeners' property. 
-         * To use rendering with encryption only, delete the                   
-           post-insert, post-update and post-delete entries. 
-         * To use rendering with full text indexing only, delete the bean
-           references to textDecryptorEventListener in the post-insert and 
-           post-update event listeners. Delete the pre-update, pre-insert 
-           and post-load entries as well. 
-     -->
-    <property name="eventListeners">
-      <map>
-        <entry key="pre-update" value-ref="textEncryptorEventListener"/>
-        <entry key="post-update">
-          <list>
-            <ref bean="textDecryptorEventListener"/>
-            <ref bean="textIndexEventListener"/>
-          </list>
-        </entry>
-        <entry key="pre-insert" value-ref="textEncryptorEventListener"/>
-        <entry key="post-insert">
-          <list>
-            <ref bean="textDecryptorEventListener"/>
-            <ref bean="textIndexEventListener"/>
-          </list>
-        </entry>
-        <entry key="post-delete" value-ref="textIndexEventListener"/>
-        <entry key="post-load" value-ref="textDecryptorEventListener"/>
-      </map>
-    </property>
   </bean>
 
   <bean id="hibernateTemplate"
@@ -235,7 +204,7 @@ http://www.springframework.org/schema/tx/spring.xsd">
   <!--  Full text indexing/search setup                                  -->
   <!-- ================================================================= -->
   
-  <bean id="textIndexEventListener" class="org.hibernate.search.event.FullTextIndexEventListener"/>
+  <bean id="textIndexEventListener" class="org.hibernate.search.event.impl.FullTextIndexEventListener"/>
   <bean id="flowSearchCallback" class="org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback" />
    
   <!-- ================================================================== -->
