@@ -28,16 +28,14 @@ import java.util.Collection;
  *
  * @since 3.1
  */
-public class SpringBidiMappingService extends BidiMappingService implements MappingResourceHolder {
+public class SpringBidiMappingService extends BidiMappingService {
 
     private Collection<Resource> resources = new ArrayList<>();
 
-    @Override
     public Collection<? extends Resource> getMappingResources() {
         return resources;
     }
 
-    @Override
     public synchronized void setMappingResource(Resource resource) {
         try {
             setMappingScript(resource.getURL());
@@ -48,12 +46,10 @@ public class SpringBidiMappingService extends BidiMappingService implements Mapp
         }
     }
 
-    @Override
     public void setMappingResources(Collection<? extends Resource> resources) {
         for (Resource resource : resources) {
             setMappingResource(resource);
         }
     }
-
 
 }

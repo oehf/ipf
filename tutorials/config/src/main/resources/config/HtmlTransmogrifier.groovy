@@ -48,7 +48,7 @@ class HtmlTransmogrifier implements Transmogrifier {
                         td('class':'normalCell', "${new Date(System.currentTimeMillis())}")
                         td('class':'normalCell', "${new String(msg)}")
                         td('class':'normalCell'){
-                            a(href:'http://repo.openehealth.org', 'read more about IPF')
+                            a(href:'http://oehf.github.io/ipf/', 'read more about IPF')
                         }
                     }
                 }

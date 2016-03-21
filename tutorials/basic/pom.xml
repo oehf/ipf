@@ -58,6 +58,11 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -16,16 +16,31 @@
 package config
 
 import org.apache.camel.model.ProcessorDefinition
-import org.openehealth.ipf.commons.core.extend.config.Extension
-/** *  * @author Boris Stanojevic */
-class CustomModelExtension implements Extension {
+import org.openehealth.ipf.commons.core.extend.config.DynamicExtension
+/**
+ * 
+ * @author Boris Stanojevic
+ */
+class CustomModelExtension implements DynamicExtension {
     
-    static extensions = {
-            
-		ProcessorDefinition.metaClass.setDestinationHeader = { ->
-			delegate.setHeader('destination') { exchange ->
-				"transmogrified-${System.currentTimeMillis()}.html"
-			}
+	static ProcessorDefinition setDestinationHeader(ProcessorDefinition delegate) {
+		delegate.setHeader('destination') { exchange ->
+			"transmogrified-${System.currentTimeMillis()}.html"
 		}
-    }
+	}
+
+	@Override
+	String getModuleName() {
+		return "ConfigTutorialCustomExtension"
+	}
+
+	@Override
+	String getModuleVersion() {
+		return "1.0.0"
+	}
+
+	@Override
+	boolean isStatic() {
+		return true
+	}
 }
