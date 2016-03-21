@@ -27,7 +27,7 @@ public class StatusFactory21 extends XdsEnumFactory<Status> {
     }
 
     @Override
-    public Status createCode(XdsEnum.Type type, String ebXML) {
+    protected Status createCode(XdsEnum.Type type, String ebXML) {
         return new Status(type, ebXML, ebXML);
     }
 

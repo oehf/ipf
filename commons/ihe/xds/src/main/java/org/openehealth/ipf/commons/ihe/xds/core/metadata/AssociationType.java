@@ -17,11 +17,14 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import lombok.EqualsAndHashCode;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Lists all possible types of associations between two documents.
  *
  * @author Jens Riemschneider
  */
+@XmlType(name = "AssociationType")
 @EqualsAndHashCode(callSuper = true)
 public class AssociationType extends XdsVersionedEnum {
     private static final long serialVersionUID = 3179632406699830867L;

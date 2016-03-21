@@ -18,10 +18,13 @@ package org.openehealth.ipf.commons.ihe.xds.core.responses;
 import lombok.EqualsAndHashCode;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Error codes specified by the XDS specification.
  * @author Jens Riemschneider
  */
+@XmlType(name = "ErrorCode")
 @EqualsAndHashCode(callSuper = true)
 public class ErrorCode extends XdsEnum {
     private static final long serialVersionUID = 5512420009058775338L;

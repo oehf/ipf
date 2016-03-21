@@ -27,7 +27,7 @@ public class AssociationTypeFactory30 extends XdsEnumFactory<AssociationType> {
     }
 
     @Override
-    public AssociationType createCode(XdsEnum.Type type, String ebXML) {
+    protected AssociationType createCode(XdsEnum.Type type, String ebXML) {
         return new AssociationType(type, ebXML, ebXML);
     }
 

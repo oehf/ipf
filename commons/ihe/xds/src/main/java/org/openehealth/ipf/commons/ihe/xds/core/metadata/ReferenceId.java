@@ -20,9 +20,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.ReferenceIdTypeFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.AssigningAuthorityAdapter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ReferenceIdTypeAdapter;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
@@ -64,7 +67,7 @@ public class ReferenceId extends Identifiable {
     /**
      * @return ID type code (CX.5).
      */
-    @XmlJavaTypeAdapter(XdsEnumAdapter.ReferenceIdTypeAdapter.class)
+    @XmlJavaTypeAdapter(ReferenceIdTypeAdapter.class)
     public ReferenceIdType getIdTypeCode() {
         String s = getHapiObject().getCx5_IdentifierTypeCode().getValue();
         return new ReferenceIdTypeFactory().fromEbXML(s);

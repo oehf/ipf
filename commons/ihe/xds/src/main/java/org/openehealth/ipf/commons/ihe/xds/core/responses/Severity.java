@@ -20,10 +20,13 @@ import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.ErrorType;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Severities defined by the XDS specification.
  * @author Jens Riemschneider
  */
+@XmlType(name = "Severity")
 @EqualsAndHashCode(callSuper = true)
 public class Severity extends XdsEnum {
     private static final long serialVersionUID = 8543688612834139650L;

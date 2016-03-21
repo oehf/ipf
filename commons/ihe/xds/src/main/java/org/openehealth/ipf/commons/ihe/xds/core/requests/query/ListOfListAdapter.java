@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
+package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,8 +24,8 @@ import java.util.List;
 
 /**
  * A JAXB {@link XmlAdapter} that helps serialize generic lists of lists. This sort of thing is used by the
- * IPF {@link org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList} class but is not handled
- * naturally by JAXB. It takes a little effort here to get a reasonable serialization.
+ * IPF {@link QueryList} class but is not handled naturally by JAXB. It takes a little effort here to get a
+ * reasonable serialization.
  *
  * @param <T> The type of object contained in the inner list
  */

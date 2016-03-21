@@ -6,34 +6,23 @@
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories;
+package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.DocumentAvailabilityFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnumFactory;
 
-public class DocumentAvailabilityFactory extends XdsEnumFactory<DocumentAvailability> {
-
-    @Override
-    public DocumentAvailability[] getOfficialValues() {
-        return DocumentAvailability.OFFICIAL_VALUES;
+/**
+ * @author Dmytro Rud
+ */
+public class DocumentAvailabilityAdapter extends XdsEnumAdapter<DocumentAvailability> {
+    public DocumentAvailabilityAdapter() {
+        super(new DocumentAvailabilityFactory());
     }
-
-    @Override
-    protected DocumentAvailability createCode(XdsEnum.Type type, String ebXML) {
-        return new DocumentAvailability(type, ebXML);
-    }
-
-    @Override
-    public String getEbXML(DocumentAvailability code) {
-        return code.getEbXML30();
-    }
-
 }

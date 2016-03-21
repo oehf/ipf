@@ -6,34 +6,23 @@
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories;
+package org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters;
 
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AvailabilityStatusFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnumFactory;
 
-public class AvailabilityStatusFactory30 extends XdsEnumFactory<AvailabilityStatus> {
-
-    @Override
-    public AvailabilityStatus[] getOfficialValues() {
-        return AvailabilityStatus.OFFICIAL_VALUES;
+/**
+ * @author Dmytro Rud
+ */
+public class AvailabilityStatusAdapter extends XdsEnumAdapter<AvailabilityStatus> {
+    public AvailabilityStatusAdapter() {
+        super(new AvailabilityStatusFactory30());
     }
-
-    @Override
-    protected AvailabilityStatus createCode(XdsEnum.Type type, String ebXML) {
-        return new AvailabilityStatus(type, ebXML, ebXML);
-    }
-
-    @Override
-    public String getEbXML(AvailabilityStatus code) {
-        return code.getEbXML30();
-    }
-
 }

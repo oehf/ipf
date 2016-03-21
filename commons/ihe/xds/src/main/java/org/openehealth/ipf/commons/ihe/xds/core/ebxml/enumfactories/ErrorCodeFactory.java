@@ -28,7 +28,7 @@ public class ErrorCodeFactory extends XdsEnumFactory<ErrorCode> {
     }
 
     @Override
-    public ErrorCode createCode(XdsEnum.Type type, String ebXML) {
+    protected ErrorCode createCode(XdsEnum.Type type, String ebXML) {
         return new ErrorCode(type, ebXML);
     }
 
@@ -38,7 +38,7 @@ public class ErrorCodeFactory extends XdsEnumFactory<ErrorCode> {
     }
 
     @Override
-    public boolean canBeUserDefined(String ebXML) {
+    protected boolean canBeUserDefined(String ebXML) {
         return StringUtils.isNotBlank(ebXML);
     }
 }

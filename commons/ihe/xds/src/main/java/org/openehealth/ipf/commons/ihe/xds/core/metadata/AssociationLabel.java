@@ -17,10 +17,13 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import lombok.EqualsAndHashCode;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Association labeling values used for the associations of submission sets.
  * @author Jens Riemschneider
  */
+@XmlType(name = "AssociationLabel")
 @EqualsAndHashCode(callSuper = true)
 public class AssociationLabel extends XdsEnum {
     private static final long serialVersionUID = -1023207056531610239L;

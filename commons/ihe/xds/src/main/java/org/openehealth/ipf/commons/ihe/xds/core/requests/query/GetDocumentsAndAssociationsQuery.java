@@ -18,10 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.List;
 
@@ -35,10 +33,8 @@ import java.util.List;
 public class GetDocumentsAndAssociationsQuery extends GetByIdQuery implements Serializable {
     private static final long serialVersionUID = 7120944927521427681L;
 
-    @XmlJavaTypeAdapter(XdsEnumAdapter.AvailabilityStatusForQueryAdapter.class)
     @XmlElement(name = "associationStatus")
     @Getter @Setter private List<AvailabilityStatus> associationStatuses;
-
     @Getter @Setter private Integer metadataLevel;
 
     /**

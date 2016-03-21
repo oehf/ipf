@@ -22,10 +22,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
 /**
@@ -40,12 +38,9 @@ import java.util.List;
 public class FindFoldersForMultiplePatientsQuery extends StoredQuery  {
     private static final long serialVersionUID = 4156643982985304259L;
 
-    @XmlJavaTypeAdapter(XdsEnumAdapter.AvailabilityStatusForQueryAdapter.class)
     @Getter @Setter private List<AvailabilityStatus> status;
-
     @XmlElement(name = "code")
     @Getter @Setter private QueryList<Code> codes;
-
     @Getter @Setter private List<Identifiable> patientIds;
     @Getter @Setter private Integer metadataLevel;
 

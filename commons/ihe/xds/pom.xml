@@ -87,9 +87,7 @@
                 <configuration>
                     <includes>
                         <include>org/openehealth/ipf/commons/ihe/xds/core/requests/*.java</include>
-                        <include>org/openehealth/ipf/commons/ihe/xds/core/responses/QueryResponse.java</include>
-                        <include>org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocument.java</include>
-                        <include>org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocumentSet.java</include>
+                        <include>org/openehealth/ipf/commons/ihe/xds/core/responses/*.java</include>
                     </includes>
                     <outputDirectory>target/jaxb2</outputDirectory>
                 </configuration>

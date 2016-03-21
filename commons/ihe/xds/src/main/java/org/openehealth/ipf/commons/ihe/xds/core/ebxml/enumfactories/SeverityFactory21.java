@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnumFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
@@ -28,7 +29,7 @@ public class SeverityFactory21 extends XdsEnumFactory<Severity> {
     }
 
     @Override
-    public Severity createCode(XdsEnum.Type type, String ebXML) {
+    protected Severity createCode(XdsEnum.Type type, String ebXML) {
         return new Severity(type, null, ebXML);
     }
 

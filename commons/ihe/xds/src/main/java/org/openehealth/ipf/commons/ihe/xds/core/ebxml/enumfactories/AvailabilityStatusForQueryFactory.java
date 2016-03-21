@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories;
 
-import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnumFactory;
@@ -28,8 +27,8 @@ public class AvailabilityStatusForQueryFactory extends XdsEnumFactory<Availabili
     }
 
     @Override
-    public AvailabilityStatus createCode(XdsEnum.Type type, String ebXML) {
-        return new AvailabilityStatus(type, ebXML, ebXML);
+    protected AvailabilityStatus createCode(XdsEnum.Type type, String ebXML) {
+        return new AvailabilityStatus(type, null, ebXML);
     }
 
     @Override
@@ -38,9 +37,9 @@ public class AvailabilityStatusForQueryFactory extends XdsEnumFactory<Availabili
     }
 
     @Override
-    public boolean canBeUserDefined(String ebXML) {
+    protected boolean canBeUserDefined(String ebXML) {
         // unrecognized availability status codes are allowed in queries,
         // but at least one official code must be present as well.
-        return (!StringUtils.isBlank(ebXML)) && (!ebXML.startsWith("urn:oasis:names:tc:ebxml-regrep:StatusType:"));
+        return true;
     }
 }
