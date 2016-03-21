@@ -68,7 +68,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
     @Test
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
-        assertEquals(QueryType.FIND_FOLDERS_MPQ.getEbXML30(), ebXML.getId());
+        assertEquals(QueryType.FIND_FOLDERS_MPQ.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
 
         assertEquals(Arrays.asList("('id1^^^&uni1&uniType1')","('id2^^^&uni2&uniType2')"),

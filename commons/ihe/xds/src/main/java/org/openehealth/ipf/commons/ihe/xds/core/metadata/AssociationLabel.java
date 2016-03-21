@@ -15,8 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import lombok.EqualsAndHashCode;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -24,23 +27,57 @@ import javax.xml.bind.annotation.XmlType;
  * @author Jens Riemschneider
  */
 @XmlType(name = "AssociationLabel")
-@EqualsAndHashCode(callSuper = true)
-public class AssociationLabel extends XdsEnum {
-    private static final long serialVersionUID = -1023207056531610239L;
-
+@XmlEnum(String.class)
+public enum AssociationLabel {
     /** Label for associations to documents that are contained in the request. */
-    public static final AssociationLabel ORIGINAL = new AssociationLabel(Type.OFFICIAL, "Original");
+    @XmlEnumValue("Original") ORIGINAL("Original"),
     /** Label for associations to documents that are only referenced in the request. */
-    public static final AssociationLabel REFERENCE = new AssociationLabel(Type.OFFICIAL, "Reference");
+    @XmlEnumValue("Reference") REFERENCE("Reference");
+    
+    private final String opcode;
 
-    public static final AssociationLabel[] OFFICIAL_VALUES = {ORIGINAL, REFERENCE};
-
-    public AssociationLabel(Type type, String ebXML) {
-        super(type, ebXML);
+    private AssociationLabel(String opcode) {
+        this.opcode = opcode;
     }
 
-    @Override
-    public String getJaxbValue() {
-        return getEbXML30();
+    /**
+     * @return the opcode representing the association in ebXML.
+     */
+    public String getOpcode() {
+        return opcode;
+    }
+    
+    /**
+     * Null-safe version of {@link #getOpcode()}.
+     * @param label
+     *          the label. Cane be <code>null</code>.
+     * @return the opcode of the label. <code>null</code> if the input was <code>null</code>.
+     */
+    public static String toOpcode(AssociationLabel label) {
+        if (label == null) {
+            return null;
+        }
+        
+        return label.getOpcode();
+    }
+    
+    /**
+     * Returns the association label that is represented by the given opcode.
+     * @param opcode
+     *          the opcode to look for. Can be <code>null</code>.
+     * @return the label. <code>null</code> if the input was <code>null</code>.
+     */
+    public static AssociationLabel fromOpcode(String opcode) {
+        if (opcode == null) {
+            return null;
+        }
+
+        for (AssociationLabel label : AssociationLabel.values()) {
+            if (opcode.equals(label.getOpcode())) {
+                return label;
+            }
+        }
+        
+        throw new XDSMetaDataException(ValidationMessage.INVALID_SUBMISSION_SET_STATUS);
     }
 }

@@ -56,7 +56,7 @@ public class GetRelatedDocumentsQueryTransformerTest {
     @Test
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
-        assertEquals(QueryType.GET_RELATED_DOCUMENTS.getEbXML30(), ebXML.getId());
+        assertEquals(QueryType.GET_RELATED_DOCUMENTS.getId(), ebXML.getId());
         
         assertEquals(Arrays.asList("'uuid1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UUID.getSlotName()));

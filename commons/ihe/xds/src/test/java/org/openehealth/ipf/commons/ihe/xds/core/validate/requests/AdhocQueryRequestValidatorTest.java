@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
@@ -136,11 +135,11 @@ public class AdhocQueryRequestValidatorTest {
         valueList.clear();
         valueList.add("('lol')");
         valueList.add("('foo')");
-        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML, iti18Profile);
 
         // at least one code -- should pass
         valueList.set(0, "('bar')");
-        valueList.set(1, "('" + AvailabilityStatus.APPROVED.getEbXML30() + "')");
+        valueList.set(1, "('Approved')");
         validator.validate(ebXML, iti18Profile);
     }
     
@@ -275,7 +274,6 @@ public class AdhocQueryRequestValidatorTest {
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {
-            e.printStackTrace();
             assertEquals(expectedMessage, e.getValidationMessage());
         }
     }

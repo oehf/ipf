@@ -16,14 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StatusAdapter;
 
 /**
  * Basic response information.
@@ -37,8 +35,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StatusAdap
 @XmlRootElement(name = "response")
 public class Response implements Serializable {
     private static final long serialVersionUID = -6370795461214680771L;
-
-    @XmlJavaTypeAdapter(StatusAdapter.class)
+    
     private Status status;
     @XmlElement(name = "error")
     private List<ErrorInfo> errors = new ArrayList<>();

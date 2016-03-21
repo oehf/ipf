@@ -22,11 +22,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.QueryReturnTypeAdapter;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 
 /**
@@ -60,7 +58,7 @@ public class QueryRegistry implements Serializable {
             @XmlElementRef(type = GetSubmissionSetsQuery.class)})
 
     @Getter private Query query;
-    @XmlJavaTypeAdapter(QueryReturnTypeAdapter.class)
+    @XmlAttribute
     @Getter @Setter private QueryReturnType returnType = QueryReturnType.OBJECT_REF;
 
     /**

@@ -21,7 +21,6 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.AvailabilityStatusAdapter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadata;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadataAdapter;
 
@@ -48,8 +47,7 @@ import java.util.Map;
 @EqualsAndHashCode(doNotUseGetters = true)
 abstract public class XDSMetaClass implements Serializable, ExtraMetadataHolder {
     private static final long serialVersionUID = -1193012076778493996L;
-
-    @XmlJavaTypeAdapter(AvailabilityStatusAdapter.class)
+    
     @Getter @Setter private AvailabilityStatus availabilityStatus;
     @Getter @Setter private LocalizedString comments;
     @Getter @Setter private String entryUuid;

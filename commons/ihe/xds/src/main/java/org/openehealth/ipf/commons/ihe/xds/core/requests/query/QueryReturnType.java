@@ -15,9 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import lombok.EqualsAndHashCode;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -25,26 +27,32 @@ import javax.xml.bind.annotation.XmlType;
  * @author Dmytro Rud
  */
 @XmlType(name = "QueryReturnType")
-@EqualsAndHashCode(callSuper = true)
-public class QueryReturnType extends XdsEnum {
-    private static final long serialVersionUID = 2726087546056654799L;
-
+@XmlEnum(String.class)
+public enum QueryReturnType {
     // for ITI-18, ITI-38 and ITI-51
-    public static final QueryReturnType LEAF_CLASS = new QueryReturnType(Type.OFFICIAL, "LeafClass");
-    public static final QueryReturnType OBJECT_REF = new QueryReturnType(Type.OFFICIAL, "ObjectRef");
+    @XmlEnumValue("LeafClass") LEAF_CLASS("LeafClass"),
+    @XmlEnumValue("ObjectRef") OBJECT_REF("ObjectRef"),
 
     // for ITI-63
-    public static final QueryReturnType LEAF_CLASS_WITH_REPOSITORY_ITEM = new QueryReturnType(Type.OFFICIAL, "LeafClassWithRepositoryItem");
+    @XmlEnumValue("LeafClassWithRepositoryItem") LEAF_CLASS_WITH_REPOSITORY_ITEM("LeafClassWithRepositoryItem");
 
-    public static final QueryReturnType[] OFFICIAL_VALUES =
-            {LEAF_CLASS, OBJECT_REF, LEAF_CLASS_WITH_REPOSITORY_ITEM};
+    private final String code;
 
-    public QueryReturnType(Type type, String ebXML) {
-        super(type, ebXML);
+    QueryReturnType(String code) {
+        this.code = code;
     }
 
-    @Override
-    public String getJaxbValue() {
-        return getEbXML30();
+    public String getCode() {
+        return code;
+    }
+
+    public static QueryReturnType valueOfCode(String code) {
+        for (QueryReturnType type : values()) {
+            if (type.getCode().equals(code)) {
+                return type;
+            }
+        }
+
+        throw new XDSMetaDataException(ValidationMessage.WRONG_QUERY_RETURN_TYPE, code);
     }
 }

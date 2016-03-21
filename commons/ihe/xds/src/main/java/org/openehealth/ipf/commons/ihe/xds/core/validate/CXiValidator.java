@@ -25,7 +25,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.HL7ValidationUtils.isEmptyField;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.isValid;
 
 /**
  * Validates a CXi value (special CX used for Reference IDs).
@@ -51,7 +50,7 @@ public class CXiValidator implements ValueValidator {
 
         // required and optional fields
         metaDataAssert(isNotEmpty(cx.getCx1_IDNumber().getValue()), CX_NEEDS_ID, hl7CX);
-        metaDataAssert(isValid(referenceId.getIdTypeCode()), CX_NEEDS_ID_TYPE_CODE, hl7CX);
+        metaDataAssert(isNotEmpty(cx.getCx5_IdentifierTypeCode().getValue()), CX_NEEDS_ID_TYPE_CODE, hl7CX);
 
         HD assigningAuthority = cx.getCx4_AssigningAuthority();
         if (! isEmptyField(assigningAuthority)) {

@@ -19,7 +19,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AvailabilityStatusFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryPackageType;
 
 import java.util.List;
@@ -43,12 +42,12 @@ public class EbXMLRegistryPackage30 extends EbXMLRegistryObject30<RegistryPackag
 
     @Override
     public AvailabilityStatus getStatus() {
-        return new AvailabilityStatusFactory30().fromEbXML(getInternal().getStatus());
+        return AvailabilityStatus.valueOfOpcode(getInternal().getStatus());
     }
 
     @Override
     public void setStatus(AvailabilityStatus status) {
-        getInternal().setStatus(new AvailabilityStatusFactory30().toEbXML(status));
+        getInternal().setStatus(AvailabilityStatus.toQueryOpcode(status));
     }
 
     @Override

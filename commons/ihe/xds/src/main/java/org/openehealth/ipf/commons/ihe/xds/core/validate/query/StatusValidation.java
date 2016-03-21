@@ -18,12 +18,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 import static org.apache.commons.lang3.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XdsEnum;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.isValid;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.List;
@@ -62,14 +60,9 @@ public class StatusValidation implements QueryParameterValidation {
         List<AvailabilityStatus> list = slots.toStatus(param);
         
         metaDataAssert((list != null ) && (! list.isEmpty()), MISSING_REQUIRED_QUERY_PARAMETER, param);
-
-        boolean foundOfficial = false;
+        
         for (AvailabilityStatus status : list) {
-            metaDataAssert(isValid(status), INVALID_QUERY_PARAMETER_VALUE, param);
-            if (status.getType() == XdsEnum.Type.OFFICIAL) {
-                foundOfficial = true;
-            }
+            metaDataAssert(status != null, INVALID_QUERY_PARAMETER_VALUE, param);                
         }
-        metaDataAssert(foundOfficial, INVALID_QUERY_PARAMETER_VALUE, param);
     }
 }

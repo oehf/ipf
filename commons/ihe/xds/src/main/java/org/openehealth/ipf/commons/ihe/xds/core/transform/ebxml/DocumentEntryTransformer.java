@@ -16,10 +16,10 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang3.Validate.notNull;
-
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.DocumentAvailabilityFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.DocumentEntryTypeFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
@@ -75,7 +75,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         super.addAttributesFromEbXML(docEntry, extrinsic);
         docEntry.setAvailabilityStatus(extrinsic.getStatus());        
         docEntry.setMimeType(extrinsic.getMimeType());
-        docEntry.setType(new DocumentEntryTypeFactory().fromEbXML(extrinsic.getObjectType()));
+        docEntry.setType(DocumentEntryType.valueOfUuid(extrinsic.getObjectType()));
         docEntry.setHomeCommunityId(extrinsic.getHome());
     }
 
@@ -84,7 +84,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         super.addAttributes(metaData, ebXML, objectLibrary);
         ebXML.setStatus(metaData.getAvailabilityStatus());                
         ebXML.setMimeType(metaData.getMimeType());
-        ebXML.setObjectType(new DocumentEntryTypeFactory().toEbXML(metaData.getType()));
+        ebXML.setObjectType(DocumentEntryType.toUuid(metaData.getType()));
         ebXML.setHome(metaData.getHomeCommunityId());
     }
 
@@ -99,7 +99,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         docEntry.setServiceStopTime(extrinsic.getSingleSlotValue(SLOT_NAME_SERVICE_STOP_TIME));
         docEntry.setRepositoryUniqueId(extrinsic.getSingleSlotValue(SLOT_NAME_REPOSITORY_UNIQUE_ID));
         docEntry.setUri(uriTransformer.fromEbXML(extrinsic.getSlotValues(SLOT_NAME_URI)));
-        docEntry.setDocumentAvailability(new DocumentAvailabilityFactory().fromEbXML(
+        docEntry.setDocumentAvailability(DocumentAvailability.valueOfOpcode(
                 extrinsic.getSingleSlotValue(SLOT_NAME_DOCUMENT_AVAILABILITY)));
         
         String size = extrinsic.getSingleSlotValue(SLOT_NAME_SIZE);
@@ -131,7 +131,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         extrinsic.addSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, docEntry.getRepositoryUniqueId());
         extrinsic.addSlot(SLOT_NAME_URI, uriTransformer.toEbXML(docEntry.getUri()));
         extrinsic.addSlot(SLOT_NAME_DOCUMENT_AVAILABILITY,
-                new DocumentAvailabilityFactory().toEbXML(docEntry.getDocumentAvailability()));
+                DocumentAvailability.toFullQualifiedOpcode(docEntry.getDocumentAvailability()));
         
         Long size = docEntry.getSize();
         extrinsic.addSlot(SLOT_NAME_SIZE, size != null ? size.toString() : null);

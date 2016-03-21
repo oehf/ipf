@@ -157,7 +157,7 @@ public class CxfEndpointTest {
             Response response = new Response(Status.SUCCESS);
             if (!request.getSubmissionSet().getEntryUuid().equals("submissionSet01")) {
                 response.setStatus(Status.FAILURE);
-                response.setErrors(Arrays.asList(new ErrorInfo(ErrorCode.REGISTRY_ERROR, "unexpected value", Severity.ERROR, null)));
+                response.setErrors(Arrays.asList(new ErrorInfo(ErrorCode.REGISTRY_ERROR, "unexpected value", Severity.ERROR, null, null)));
             }
 
             EbXMLRegistryResponse ebXMLResp = respTransformer.toEbXML(response);

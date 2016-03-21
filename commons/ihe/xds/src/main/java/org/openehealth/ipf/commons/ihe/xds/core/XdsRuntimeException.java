@@ -63,7 +63,7 @@ public class XdsRuntimeException extends RuntimeException {
     public String getMessage() {
         StringBuilder sb = new StringBuilder()
                 .append((severity == Severity.ERROR) ? "Error " : "Warning ")
-                .append(errorCode.getEbXML30())
+                .append(errorCode.getOpcode())
                 .append(": ")
                 .append(codeContext);
         if (location != null) {

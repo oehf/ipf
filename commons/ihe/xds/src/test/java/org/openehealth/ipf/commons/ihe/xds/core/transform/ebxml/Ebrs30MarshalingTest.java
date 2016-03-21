@@ -69,7 +69,7 @@ public class Ebrs30MarshalingTest {
         List<JAXBElement<? extends IdentifiableType>> objList = objListElement.getIdentifiable();
 
         docEntry = factory.createExtrinsic("Document01", objectLibrary);
-        docEntry.setObjectType(DocumentEntryType.STABLE.getEbXML30());
+        docEntry.setObjectType(DocumentEntryType.STABLE.getUuid());
         objList.add(getJaxbElement(EXTRINSIC_OBJECT_QNAME, ((EbXMLExtrinsicObject30)docEntry).getInternal()));
     }
     

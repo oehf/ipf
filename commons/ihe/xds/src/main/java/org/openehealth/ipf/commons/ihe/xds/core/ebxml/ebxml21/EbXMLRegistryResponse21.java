@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.StatusFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryErrorList;
@@ -48,12 +47,12 @@ public class EbXMLRegistryResponse21 implements EbXMLRegistryResponse {
     
     @Override
     public void setStatus(Status status) {
-        regResponse.setStatus(new StatusFactory21().toEbXML(status));
+        regResponse.setStatus(Status.getOpcode21(status));
     }
     
     @Override
     public Status getStatus() {
-        return new StatusFactory21().fromEbXML(regResponse.getStatus());
+        return Status.valueOfOpcode(regResponse.getStatus());
     }
     
     @Override

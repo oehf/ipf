@@ -66,7 +66,7 @@ public class GetAllQueryTransformerTest {
     @Test
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
-        assertEquals(QueryType.GET_ALL.getEbXML30(), ebXML.getId());
+        assertEquals(QueryType.GET_ALL.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
 
         assertEquals(Arrays.asList("'id1^^^&uni1&uniType1'"),

@@ -29,7 +29,7 @@ public abstract class Vocabulary {
      * @deprecated use {@link DocumentEntryType#STABLE}.
      */
     @Deprecated
-    public static final String STABLE_DOC_ENTRY = DocumentEntryType.STABLE.getEbXML30();
+    public static final String STABLE_DOC_ENTRY = DocumentEntryType.STABLE.getUuid();
     /**
      * XDSDocumentEntry classification node.
      * @deprecated by IHE CP-ITI-544.  Please use {@link #STABLE_DOC_ENTRY} instead.
@@ -41,7 +41,7 @@ public abstract class Vocabulary {
      * @deprecated use {@link DocumentEntryType#ON_DEMAND}.
      */
     @Deprecated
-    public static final String ON_DEMAND_DOC_ENTRY = DocumentEntryType.ON_DEMAND.getEbXML30();
+    public static final String ON_DEMAND_DOC_ENTRY = DocumentEntryType.ON_DEMAND.getUuid();
 
 
     public enum DisplayNameUsage {REQUIRED, OPTIONAL}

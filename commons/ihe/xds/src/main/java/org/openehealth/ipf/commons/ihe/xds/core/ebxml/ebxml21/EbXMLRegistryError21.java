@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.SeverityFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryError;
 
@@ -54,15 +53,12 @@ public class EbXMLRegistryError21 implements EbXMLRegistryError {
 
     @Override
     public Severity getSeverity() {
-        if (error.getSeverity() == null) {
-            return null;
-        }
-        return new SeverityFactory21().fromEbXML(error.getSeverity().value());
+        return Severity.valueOfOpcode21(error.getSeverity());
     }
 
     @Override
     public void setSeverity(Severity severity) {
-        error.setSeverity(new SeverityFactory21().getErrorType(severity));
+        error.setSeverity(Severity.getEbXML21(severity));
     }
 
     @Override

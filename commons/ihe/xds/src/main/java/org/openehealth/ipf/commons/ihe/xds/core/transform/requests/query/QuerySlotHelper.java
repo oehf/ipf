@@ -16,11 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AssociationTypeFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AvailabilityStatusForQueryFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.DocumentAvailabilityFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.DocumentEntryTypeFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
@@ -363,7 +360,7 @@ public class QuerySlotHelper {
         
         List<String> opcodes = new ArrayList<>(status.size());
         for (AvailabilityStatus statusValue : status) {
-            opcodes.add(new AvailabilityStatusForQueryFactory().toEbXML(statusValue));
+            opcodes.add(AvailabilityStatus.toQueryOpcode(statusValue));
         }
         fromStringList(param, opcodes);
     }
@@ -382,7 +379,10 @@ public class QuerySlotHelper {
 
         List<AvailabilityStatus> list = new ArrayList<>();
         for (String opcode : opcodes) {
-            list.add(new AvailabilityStatusForQueryFactory().fromEbXML(opcode));
+            AvailabilityStatus status = AvailabilityStatus.valueOfOpcode(opcode);
+            if (status != null) {
+                list.add(status);
+            }
         }
         return list;
     }
@@ -401,7 +401,7 @@ public class QuerySlotHelper {
         
         List<String> opcodes = new ArrayList<>(associationTypes.size());
         for (AssociationType type : associationTypes) {
-            opcodes.add(new AssociationTypeFactory30().toEbXML(type));
+            opcodes.add(AssociationType.getOpcode30(type));
         }
         fromStringList(param, opcodes);
     }
@@ -420,7 +420,7 @@ public class QuerySlotHelper {
 
         List<AssociationType> associationTypes = new ArrayList<>();
         for (String opcode : opcodes) {
-            associationTypes.add(new AssociationTypeFactory30().fromEbXML(opcode));
+            associationTypes.add(AssociationType.valueOfOpcode30(opcode));
         }
         return associationTypes;
     }
@@ -432,7 +432,7 @@ public class QuerySlotHelper {
 
         List<String> uuids = new ArrayList<>(documentEntryTypes.size());
         for (DocumentEntryType type : documentEntryTypes) {
-            uuids.add(new DocumentEntryTypeFactory().toEbXML(type));
+            uuids.add(DocumentEntryType.toUuid(type));
         }
         fromStringList(param, uuids);
     }
@@ -445,7 +445,7 @@ public class QuerySlotHelper {
 
         ArrayList<DocumentEntryType> documentEntryTypes = new ArrayList<>();
         for (String uuid : uuids) {
-            documentEntryTypes.add(new DocumentEntryTypeFactory().fromEbXML(uuid));
+            documentEntryTypes.add(DocumentEntryType.valueOfUuid(uuid));
         }
         return documentEntryTypes;
     }
@@ -483,7 +483,7 @@ public class QuerySlotHelper {
 
         List<String> opcodes = new ArrayList<>(status.size());
         for (DocumentAvailability availabilityValue : status) {
-            opcodes.add(new DocumentAvailabilityFactory().toEbXML(availabilityValue));
+            opcodes.add(DocumentAvailability.toFullQualifiedOpcode(availabilityValue));
         }
         fromStringList(param, opcodes);
     }
@@ -502,7 +502,10 @@ public class QuerySlotHelper {
 
         List<DocumentAvailability> list = new ArrayList<>();
         for (String opcode : opcodes) {
-            list.add(new DocumentAvailabilityFactory().fromEbXML(opcode));
+            DocumentAvailability availability = DocumentAvailability.valueOfOpcode(opcode);
+            if (availability != null) {
+                list.add(availability);
+            }
         }
         return list;
     }

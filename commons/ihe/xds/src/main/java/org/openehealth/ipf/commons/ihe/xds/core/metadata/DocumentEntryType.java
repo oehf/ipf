@@ -15,8 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import lombok.EqualsAndHashCode;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -24,29 +27,37 @@ import javax.xml.bind.annotation.XmlType;
  * @author Dmytro Rud
  */
 @XmlType(name = "DocumentEntryType")
-@EqualsAndHashCode(callSuper = true)
-public class DocumentEntryType extends XdsEnum {
-    private static final long serialVersionUID = -5941669064647018977L;
+@XmlEnum(String.class)
+public enum DocumentEntryType {
+    @XmlEnumValue("stable") STABLE("urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1"),
+    @XmlEnumValue("on-demand") ON_DEMAND("urn:uuid:34268e47-fdf5-41a6-ba33-82133c465248");
 
-    public static final DocumentEntryType STABLE = new DocumentEntryType(Type.OFFICIAL, "urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1");
-    public static final DocumentEntryType ON_DEMAND = new DocumentEntryType(Type.OFFICIAL, "urn:uuid:34268e47-fdf5-41a6-ba33-82133c465248");
+    public static final String[] STABLE_OR_ON_DEMAND = new String[] {
+            STABLE.getUuid(),
+            ON_DEMAND.getUuid(),
+    };
 
-    public static final DocumentEntryType[] OFFICIAL_VALUES = {STABLE, ON_DEMAND};
+    private final String uuid;
 
-    public static final String[] STABLE_OR_ON_DEMAND = {STABLE.getEbXML30(), ON_DEMAND.getEbXML30()};
-
-    public DocumentEntryType(Type type, String ebXML) {
-        super(type, ebXML);
+    private DocumentEntryType(String uuid) {
+        this.uuid = uuid;
     }
 
-    @Override
-    public String getJaxbValue() {
-        if (this == STABLE) {
-            return "stable";
+    public String getUuid() {
+        return uuid;
+    }
+
+    public static String toUuid(DocumentEntryType type) {
+        return (type != null) ? type.uuid : null;
+    }
+
+    public static DocumentEntryType valueOfUuid(String uuid) {
+        for (DocumentEntryType type : DocumentEntryType.values()) {
+            if (type.uuid.equals(uuid)) {
+                return type;
+            }
         }
-        if (this == ON_DEMAND) {
-            return "on-demand";
-        }
-        return getEbXML30();
+
+        throw new XDSMetaDataException(ValidationMessage.WRONG_DOCUMENT_ENTRY_TYPE, uuid);
     }
 }

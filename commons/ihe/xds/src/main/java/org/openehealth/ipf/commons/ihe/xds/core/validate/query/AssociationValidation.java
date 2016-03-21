@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.isValid;
 
 /**
  * Query parameter validation for parameters that are Code-based.
@@ -64,7 +63,7 @@ public class AssociationValidation implements QueryParameterValidation {
 
         if (associationTypes != null) {
             for (AssociationType type : associationTypes) {
-                metaDataAssert(isValid(type), INVALID_QUERY_PARAMETER_VALUE, param);
+                metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);
             }
         } else {
             throw new XDSMetaDataException(INVALID_ASSOCIATION_TYPE);

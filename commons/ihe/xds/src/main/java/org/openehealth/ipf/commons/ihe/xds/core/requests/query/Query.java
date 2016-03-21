@@ -17,12 +17,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.QueryTypeAdapter;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 
 /**
@@ -35,7 +33,7 @@ import java.io.Serializable;
 public abstract class Query implements Serializable {
     private static final long serialVersionUID = 7597105342752455732L;
 
-    @XmlJavaTypeAdapter(QueryTypeAdapter.class)
+    @XmlAttribute
     @Getter private QueryType type;
 
     /**

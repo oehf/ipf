@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.ErrorCodeFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 
 import java.util.ArrayList;
@@ -70,7 +70,11 @@ public class ErrorInfoListTransformer {
         notNull(errorInfo, "error info cannot be null");
 
         EbXMLRegistryError regError = factory.createRegistryError();
-        regError.setErrorCode(new ErrorCodeFactory().toEbXML(errorInfo.getErrorCode()));
+
+        regError.setErrorCode((errorInfo.getErrorCode() == ErrorCode._USER_DEFINED)
+                ? errorInfo.getCustomErrorCode()
+                : ErrorCode.getOpcode(errorInfo.getErrorCode()));
+
         regError.setCodeContext(errorInfo.getCodeContext());
         regError.setSeverity(errorInfo.getSeverity());
         regError.setLocation(errorInfo.getLocation());
@@ -79,10 +83,14 @@ public class ErrorInfoListTransformer {
 
 
     public ErrorInfo fromEbXML(EbXMLRegistryError ebXML) {
-        notNull(ebXML, "registry error cannot be null");
-
         ErrorInfo errorInfo = new ErrorInfo();
-        errorInfo.setErrorCode(new ErrorCodeFactory().fromEbXML(ebXML.getErrorCode()));
+
+        ErrorCode errorCode = ErrorCode.valueOfOpcode(ebXML.getErrorCode());
+        errorInfo.setErrorCode(errorCode);
+        if (errorCode == ErrorCode._USER_DEFINED) {
+            errorInfo.setCustomErrorCode(ebXML.getErrorCode());
+        }
+
         errorInfo.setCodeContext(ebXML.getCodeContext());
         errorInfo.setLocation(ebXML.getLocation());
         errorInfo.setSeverity(ebXML.getSeverity());

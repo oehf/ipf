@@ -17,11 +17,14 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AssociationLabelFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AvailabilityStatusFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AvailabilityStatusForQueryFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationLabel;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 
 /**
  * Transforms an {@link Association} to its ebXML representation.
@@ -63,17 +66,17 @@ public class AssociationTransformer {
         result.setSource(association.getSourceUuid());
         result.setTarget(association.getTargetUuid());
 
-        String label = new AssociationLabelFactory().toEbXML(association.getLabel());
+        String label = AssociationLabel.toOpcode(association.getLabel());
         result.addSlot(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS, label);
 
         String previousVersion = association.getPreviousVersion();
         result.addSlot(Vocabulary.SLOT_NAME_PREVIOUS_VERSION, previousVersion);
 
         AvailabilityStatus originalStatus = association.getOriginalStatus();
-        result.addSlot(Vocabulary.SLOT_NAME_ORIGINAL_STATUS, new AvailabilityStatusFactory30().toEbXML(originalStatus));
+        result.addSlot(Vocabulary.SLOT_NAME_ORIGINAL_STATUS, AvailabilityStatus.toQueryOpcode(originalStatus));
 
         AvailabilityStatus newStatus = association.getNewStatus();
-        result.addSlot(Vocabulary.SLOT_NAME_NEW_STATUS, new AvailabilityStatusForQueryFactory().toEbXML(newStatus));
+        result.addSlot(Vocabulary.SLOT_NAME_NEW_STATUS, AvailabilityStatus.toQueryOpcode(newStatus));
 
         result.addSlot(Vocabulary.SLOT_NAME_ASSOCIATION_PROPAGATION,
                                     stringToBoolTransformer.toEbXML(association.getAssociationPropagation()));
@@ -105,16 +108,16 @@ public class AssociationTransformer {
         result.setEntryUuid(association.getId());
 
         String label = association.getSingleSlotValue(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS);
-        result.setLabel(new AssociationLabelFactory().fromEbXML(label));
+        result.setLabel(AssociationLabel.fromOpcode(label));
 
         String previousVersion = association.getSingleSlotValue(Vocabulary.SLOT_NAME_PREVIOUS_VERSION);
         result.setPreviousVersion(previousVersion);
 
         String originalStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_ORIGINAL_STATUS);
-        result.setOriginalStatus(new AvailabilityStatusFactory30().fromEbXML(originalStatus));
+        result.setOriginalStatus(AvailabilityStatus.valueOfOpcode(originalStatus));
 
         String newStatus = association.getSingleSlotValue(Vocabulary.SLOT_NAME_NEW_STATUS);
-        result.setNewStatus(new AvailabilityStatusFactory30().fromEbXML(newStatus));
+        result.setNewStatus(AvailabilityStatus.valueOfOpcode(newStatus));
 
         String associationPropagation = association.getSingleSlotValue(Vocabulary.SLOT_NAME_ASSOCIATION_PROPAGATION);
         result.setAssociationPropagation(stringToBoolTransformer.fromEbXML(associationPropagation));

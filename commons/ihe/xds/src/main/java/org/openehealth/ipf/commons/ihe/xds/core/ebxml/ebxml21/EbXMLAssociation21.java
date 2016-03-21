@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.AssociationTypeFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.AssociationType1;
@@ -63,12 +62,12 @@ public class EbXMLAssociation21 extends EbXMLRegistryObject21<AssociationType1> 
 
     @Override
     public AssociationType getAssociationType() {
-        return new AssociationTypeFactory21().fromEbXML(getInternal().getAssociationType());
+        return AssociationType.valueOfOpcode21(getInternal().getAssociationType());
     }
 
     @Override
     public void setAssociationType(AssociationType associationType) {
-        getInternal().setAssociationType(new AssociationTypeFactory21().toEbXML(associationType));
+        getInternal().setAssociationType(AssociationType.getOpcode21(associationType));
     }
 
     @Override

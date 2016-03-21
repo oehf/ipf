@@ -44,7 +44,7 @@ abstract class AbstractStoredQueryTransformer<T extends StoredQuery> {
             return;
         }
 
-        ebXML.setId(query.getType().getEbXML30());
+        ebXML.setId(query.getType().getId());
         ebXML.setHome(query.getHomeCommunityId());
 
         QuerySlotHelper slotHelper = new QuerySlotHelper(ebXML);

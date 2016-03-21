@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.enumfactories.QueryTypeFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
@@ -34,7 +33,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.isValid;
 
 /**
  * Validates an {@link EbXMLAdhocQueryRequest}.
@@ -222,8 +220,9 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 (profile.getProfile() == ValidationProfile.InteractionProfile.XCA) ||
                 (profile.getProfile() == ValidationProfile.InteractionProfile.XCF);
 
-        if (queryType == FETCH ) {
-            return new QueryParameterValidation[]{
+        switch (queryType) {
+            case FETCH:
+                return new QueryParameterValidation[] {
                     new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
                     new CodeValidation(DOC_ENTRY_CLASS_CODE, false),
                     new CodeValidation(DOC_ENTRY_TYPE_CODE),
@@ -240,10 +239,11 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                     new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
                     new HomeCommunityIdValidation(true),
-            };
-        }
-        else if ((queryType == FIND_DOCUMENTS) || (queryType == FIND_DOCUMENTS_MPQ)) {
-            return new QueryParameterValidation[]{
+                };
+
+            case FIND_DOCUMENTS:
+            case FIND_DOCUMENTS_MPQ:
+                return new QueryParameterValidation[] {
                     // PatientId MUST BE supplied in  single patient query.
                     // PatientId (list) MAY BE supplied in multi patient query.
                     // The validators for the two cases are otherwise identical.
@@ -266,10 +266,10 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
                     new StatusValidation(DOC_ENTRY_STATUS),
                     new DocumentEntryTypeValidation(),
-            };
-        }
-        else if (queryType == FIND_DOCUMENTS_BY_REFERENCE_ID) {
-            return new QueryParameterValidation[]{
+                };
+
+            case FIND_DOCUMENTS_BY_REFERENCE_ID:
+                return new QueryParameterValidation[] {
                     new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
                     new CodeValidation(DOC_ENTRY_CLASS_CODE),
                     new CodeValidation(DOC_ENTRY_TYPE_CODE),
@@ -288,10 +288,10 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new StatusValidation(DOC_ENTRY_STATUS),
                     new DocumentEntryTypeValidation(),
                     new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator),
-            };
-        }
-        else if (queryType == FIND_SUBMISSION_SETS) {
-            return new QueryParameterValidation[]{
+                };
+
+            case FIND_SUBMISSION_SETS:
+                return new QueryParameterValidation[] {
                     new StringValidation(SUBMISSION_SET_PATIENT_ID, cxValidator, false),
                     // Excluded to avoid validation errors for xdstest requests
                     // new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
@@ -300,10 +300,11 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
                     new CodeValidation(SUBMISSION_SET_CONTENT_TYPE_CODE),
                     new StatusValidation(SUBMISSION_SET_STATUS),
-            };
-        }
-        else if ((queryType == FIND_FOLDERS) || (queryType == FIND_FOLDERS_MPQ)) {
-            return new QueryParameterValidation[]{
+                };
+
+            case FIND_FOLDERS:
+            case FIND_FOLDERS_MPQ:
+                return new QueryParameterValidation[] {
                     // PatientId MUST BE supplied in  single patient query.
                     // PatientId (list) MAY BE supplied in multi patient query.
                     // The validators for the two cases are otherwise identical.
@@ -312,58 +313,59 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new NumberValidation(FOLDER_LAST_UPDATE_TIME_TO, timeValidator),
                     new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME),
                     new StatusValidation(FOLDER_STATUS),
-            };
-        }
-        else if (queryType == GET_ALL) {
-            return new QueryParameterValidation[]{
+                };
+
+            case GET_ALL:
+                return new QueryParameterValidation[] {
                     new StringValidation(PATIENT_ID, cxValidator, false),
                     new StatusValidation(DOC_ENTRY_STATUS),
                     new StatusValidation(SUBMISSION_SET_STATUS),
                     new StatusValidation(FOLDER_STATUS),
                     new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
                     new DocumentEntryTypeValidation(),
-            };
-        }
-        else if (queryType == GET_DOCUMENTS) {
-            return new QueryParameterValidation[]{
+                };
+
+            case GET_DOCUMENTS:
+                return new QueryParameterValidation[] {
                     new HomeCommunityIdValidation(requireHomeCommunityId),
                     new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID, DOC_ENTRY_LOGICAL_ID),
                     new StringListValidation(DOC_ENTRY_UUID, nopValidator),
                     new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
-            };
-        }
-        else if (queryType == GET_DOCUMENTS_AND_ASSOCIATIONS) {
-            return new QueryParameterValidation[]{
+                };
+
+            case GET_DOCUMENTS_AND_ASSOCIATIONS:
+                return new QueryParameterValidation[] {
                     new HomeCommunityIdValidation(requireHomeCommunityId),
                     new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                     new StringListValidation(DOC_ENTRY_UUID, nopValidator),
                     new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
-            };
-        }
-        else if (queryType == GET_FOLDERS_FOR_DOCUMENT) {
-            return new QueryParameterValidation[]{
+                };
+
+            case GET_FOLDERS_FOR_DOCUMENT:
+                return new QueryParameterValidation[] {
                     new HomeCommunityIdValidation(requireHomeCommunityId),
                     new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                     new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                     new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
-            };
-        }
-        else if (queryType == GET_FOLDERS) {
-            return new QueryParameterValidation[]{
+                };
+
+            case GET_FOLDERS:
+                return new QueryParameterValidation[] {
                     new HomeCommunityIdValidation(requireHomeCommunityId),
                     new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID, FOLDER_LOGICAL_ID),
                     new StringListValidation(FOLDER_UUID, nopValidator),
                     new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
-            };
-        }
-        else if ((queryType == GET_ASSOCIATIONS) || (queryType == GET_SUBMISSION_SETS)) {
-            return new QueryParameterValidation[]{
+                };
+
+            case GET_ASSOCIATIONS:
+            case GET_SUBMISSION_SETS:
+                return new QueryParameterValidation[] {
                     new HomeCommunityIdValidation(requireHomeCommunityId),
                     new StringListValidation(UUID, nopValidator),
-            };
-        }
-        else if (queryType == GET_SUBMISSION_SET_AND_CONTENTS) {
-            return new QueryParameterValidation[]{
+                };
+
+            case GET_SUBMISSION_SET_AND_CONTENTS:
+                return new QueryParameterValidation[] {
                     new HomeCommunityIdValidation(requireHomeCommunityId),
                     new ChoiceValidation(SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
                     new StringValidation(SUBMISSION_SET_UUID, nopValidator, true),
@@ -371,10 +373,10 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                     new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
                     new DocumentEntryTypeValidation(),
-            };
-        }
-        else if (queryType == GET_FOLDER_AND_CONTENTS) {
-            return new QueryParameterValidation[]{
+                };
+
+            case GET_FOLDER_AND_CONTENTS:
+                return new QueryParameterValidation[] {
                     new HomeCommunityIdValidation(requireHomeCommunityId),
                     new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID),
                     new StringValidation(FOLDER_UUID, nopValidator, true),
@@ -382,17 +384,17 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                     new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
                     new DocumentEntryTypeValidation(),
-            };
-        }
-        else if (queryType == GET_RELATED_DOCUMENTS) {
-            return new QueryParameterValidation[]{
+                };
+
+            case GET_RELATED_DOCUMENTS:
+                return new QueryParameterValidation[] {
                     new HomeCommunityIdValidation(requireHomeCommunityId),
                     new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                     new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                     new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
                     new AssociationValidation(ASSOCIATION_TYPE),
                     new DocumentEntryTypeValidation(),
-            };
+                };
         }
 
         return null;    // should not occur
@@ -403,16 +405,16 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         notNull(request, "request cannot be null");
 
         if (profile.getInteractionId() == IpfInteractionId.ITI_63) {
-            metaDataAssert(QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM.getEbXML30().equals(request.getReturnType()),
+            metaDataAssert(QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM.getCode().equals(request.getReturnType()),
                     UNKNOWN_RETURN_TYPE, request.getReturnType());
         } else {
-            metaDataAssert(QueryReturnType.LEAF_CLASS.getEbXML30().equals(request.getReturnType())
-                        || QueryReturnType.OBJECT_REF.getEbXML30().equals(request.getReturnType()),
+            metaDataAssert(QueryReturnType.LEAF_CLASS.getCode().equals(request.getReturnType())
+                        || QueryReturnType.OBJECT_REF.getCode().equals(request.getReturnType()),
                 UNKNOWN_RETURN_TYPE, request.getReturnType());
         }
 
-        QueryType queryType = new QueryTypeFactory().fromEbXML(request.getId());
-        metaDataAssert(isValid(queryType), UNKNOWN_QUERY_TYPE, request.getId());
+        QueryType queryType = QueryType.valueOfId(request.getId());
+        metaDataAssert(queryType != null, UNKNOWN_QUERY_TYPE, request.getId());
 
         boolean found = false;
         for(Map.Entry<List<InteractionId>, List<QueryType>> entry : ALLOWED_QUERY_TYPES.entrySet()) {

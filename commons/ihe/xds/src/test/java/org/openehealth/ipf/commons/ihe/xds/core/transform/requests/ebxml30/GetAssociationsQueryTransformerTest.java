@@ -50,7 +50,7 @@ public class GetAssociationsQueryTransformerTest {
     @Test
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
-        assertEquals(QueryType.GET_ASSOCIATIONS.getEbXML30(), ebXML.getId());
+        assertEquals(QueryType.GET_ASSOCIATIONS.getId(), ebXML.getId());
         
         assertEquals(Arrays.asList("('uuid1')", "('uuid2')"),
                 ebXML.getSlotValues(QueryParameter.UUID.getSlotName()));
