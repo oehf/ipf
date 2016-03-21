@@ -17,8 +17,10 @@ package org.openehealth.ipf.platform.camel.cda.converter;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import org.apache.camel.Converter;
+import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 
@@ -28,15 +30,19 @@ public class MdhtTypeConverter {
     private final static CDAR2Renderer renderer = new CDAR2Renderer();
 
     @Converter
-    public static InputStream toInputStream(
-            ClinicalDocument document) {
-        return new ByteArrayInputStream(renderer.render(document,
-                (Object[]) null).getBytes());
+    public static InputStream toInputStream(ClinicalDocument document, Exchange exchange) {
+        Charset charset = Charset.defaultCharset();
+        if (exchange != null) {
+            String charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+            if (charsetName != null) {
+                charset = Charset.forName(charsetName);
+            }
+        }
+        return new ByteArrayInputStream(renderer.render(document, (Object[]) null).getBytes(charset));
     }
 
     @Converter
-    public static String toString(
-            ClinicalDocument document) {
+    public static String toString(ClinicalDocument document, Exchange exchange) {
         return renderer.render(document,(Object[]) null);
     }
 }

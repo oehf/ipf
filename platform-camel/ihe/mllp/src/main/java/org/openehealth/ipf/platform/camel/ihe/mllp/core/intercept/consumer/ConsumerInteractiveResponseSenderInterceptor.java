@@ -140,7 +140,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         if (responseMessage != null) {
             // a prepared response fragment found -- perform some post-processing and send it to the user
             LOG.debug("Use prepared fragment for {}", continuationPointer);
-            synchronized (storage.get(continuationPointer, chainId)) {
+            synchronized (responseMessage) {
                 Terser responseTerser = new Terser(responseMessage);
                 responseTerser.set("MSH-7", MessageUtils.hl7Now());
                 responseTerser.set("MSH-10", uniqueId());

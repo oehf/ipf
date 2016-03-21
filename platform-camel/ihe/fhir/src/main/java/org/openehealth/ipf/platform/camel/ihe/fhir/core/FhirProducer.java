@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @author Christian Ohr
  * @since 3.1
  */
 public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends DefaultProducer {

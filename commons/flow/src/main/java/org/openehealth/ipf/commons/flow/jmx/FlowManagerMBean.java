@@ -289,7 +289,7 @@ public class FlowManagerMBean {
     }
     
     private FlowInfoFinderCriteria finderCriteria(String last, String searchExpression) {
-        Integer mr = maxResults == null ? FlowFinderCriteria.DEFAULT_MAX_RESULTS : maxResults;
+        int mr = maxResults == null ? FlowFinderCriteria.DEFAULT_MAX_RESULTS : maxResults;
         return new FlowInfoFinderCriteria(from(Duration.parse(last),
                 upperTimeLimit), upperTimeLimit, application, mr,
                 formatSearchExpression(searchExpression));

@@ -15,17 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Map;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Service;
-import javax.xml.ws.soap.SOAPFaultException;
-
 import org.apache.cxf.Bus;
 import org.apache.cxf.bus.spring.SpringBusFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.apache.cxf.ws.security.SecurityConstants;
 import org.apache.cxf.ws.security.trust.STSClient;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -35,6 +27,13 @@ import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Service;
+import javax.xml.ws.soap.SOAPFaultException;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Map;
 
 public class CxfFeatureTest extends StandardTestContainer {
 

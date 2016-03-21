@@ -80,8 +80,8 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
             }
             LOG.debug("registered method: {}", metaMethod);
         }
-        for (CachedClass cachedClass : classMap.keySet()) {
-            cachedClass.addNewMopMethods(classMap.get(cachedClass));
+        for (Map.Entry<CachedClass, List<MetaMethod>> cachedClassEntry : classMap.entrySet()) {
+            cachedClassEntry.getKey().addNewMopMethods(cachedClassEntry.getValue());
         }
     }
 

@@ -19,6 +19,7 @@ import ca.uhn.fhir.rest.client.IClientInterceptor;
 
 /**
  * @author Dmytro Rud
+ * @since 3.1
  */
 public interface HapiClientInterceptorFactory {
     IClientInterceptor newInstance(FhirEndpoint endpoint);

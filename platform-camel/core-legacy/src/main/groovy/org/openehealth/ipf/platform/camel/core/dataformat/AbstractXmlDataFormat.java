@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.core.dataformat;
 import groovy.xml.FactorySupport;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
@@ -78,19 +79,19 @@ public abstract class AbstractXmlDataFormat implements DataFormat {
         if (schemaResource != null) {
             Resource r = resourceLoader.getResource(schemaResource);
             if (r != null) {
-                if (r.getURL() != null) {
-                    source = new StreamSource(r.getInputStream(), r.getURL()
-                            .toExternalForm());
-                } else {
-                    source = new StreamSource(r.getInputStream());
+                try (InputStream is = r.getInputStream()) {
+                    if (r.getURL() != null) {
+                        source = new StreamSource(is, r.getURL().toExternalForm());
+                    } else {
+                        source = new StreamSource(is);
+                    }
+                    SchemaFactory factory = SchemaFactory
+                            .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                    factory.setResourceResolver(new LSResourceResolverImpl());
+                    return factory.newSchema(source);
                 }
-                SchemaFactory factory = SchemaFactory
-                        .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                factory.setResourceResolver(new LSResourceResolverImpl());
-                return factory.newSchema(source);
             } else {
-                throw new IllegalArgumentException(
-                        "Schema not specified properly");
+                throw new IllegalArgumentException("Schema not specified properly");
             }
         } else {
             return null;

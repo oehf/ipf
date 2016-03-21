@@ -320,8 +320,7 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
         Message in = exchange.getIn();
         if (bytes == null) {
             in.setBody(null);
-        }
-        if (outFormat != null) {
+        } else if (outFormat != null) {
             in.setBody(unmarshal(bytes, exchange, outFormat));
         } else if (outType != null) {
             in.setBody(bytes, outType);

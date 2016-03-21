@@ -62,8 +62,10 @@ public final class TransactionOptionUtils {
     public static <T extends TransactionOptions> String[] concatAllToString(T... options) {
         String[] events = concatAll(options);
         StringBuilder builder = new StringBuilder();
-        for (String event : events) {
-            builder.append(event).append(" ");
+        if (events != null) {
+            for (String event : events) {
+                builder.append(event).append(" ");
+            }
         }
         return new String[] { builder.toString().trim() };
     }

@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.modules.cda.support;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.xml.SchematronProfile;

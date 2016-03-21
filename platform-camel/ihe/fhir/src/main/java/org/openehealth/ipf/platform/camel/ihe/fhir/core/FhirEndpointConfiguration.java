@@ -34,6 +34,7 @@ import java.util.Map;
 /**
  * Configuration of a FHIR endpoint instance
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 @UriParams

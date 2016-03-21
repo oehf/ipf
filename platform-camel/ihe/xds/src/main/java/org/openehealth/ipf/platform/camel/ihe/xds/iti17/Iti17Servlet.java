@@ -40,11 +40,9 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class Iti17Servlet extends HttpServlet {
     private static final long serialVersionUID = -401129606220792110L;
     
-    private CamelContext context;
-    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	CamelContext camelContext = getContext() != null ? getContext() : getCamelContext();
+    	CamelContext camelContext = getCamelContext();
 
         String requestURI = req.getRequestURI();        
         String endpointName = toEndpointName(requestURI);
@@ -116,11 +114,4 @@ public class Iti17Servlet extends HttpServlet {
                 /*documentUniqueId*/ null);
     }
 
-	public CamelContext getContext() {
-		return context;
-	}
-
-	public void setContext(CamelContext context) {
-		this.context = context;
-	}
 }

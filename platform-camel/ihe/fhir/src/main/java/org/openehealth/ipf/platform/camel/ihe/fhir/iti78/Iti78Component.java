@@ -28,6 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
 /**
  * Component for PDQm (ITI-78)
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti78Component extends FhirComponent<FhirQueryAuditDataset> {

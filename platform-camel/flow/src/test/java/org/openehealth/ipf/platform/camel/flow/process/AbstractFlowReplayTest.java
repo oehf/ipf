@@ -15,13 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.flow.process;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.openehealth.ipf.platform.camel.flow.PlatformMessage.FLOW_ID_KEY;
-
-import java.io.InputStream;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
@@ -29,7 +22,6 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.DefaultExchange;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.flow.FlowManager;
@@ -38,6 +30,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+
+import java.io.InputStream;
+
+import static org.junit.Assert.*;
+import static org.openehealth.ipf.platform.camel.flow.PlatformMessage.FLOW_ID_KEY;
 
 /**
  * @author Martin Krasser

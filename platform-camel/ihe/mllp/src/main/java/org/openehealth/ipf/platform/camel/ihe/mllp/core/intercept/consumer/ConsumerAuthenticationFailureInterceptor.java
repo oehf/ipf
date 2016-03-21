@@ -43,7 +43,7 @@ public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport
 
     private String getRemoteAddress(Exchange exchange) {
         InetSocketAddress address = (InetSocketAddress) exchange.getIn().getHeader(Mina2Constants.MINA_REMOTE_ADDRESS);
-        return address.getAddress().getHostAddress();
+        return address != null ? address.getAddress().getHostAddress() : "unknown";
     }
 
 }

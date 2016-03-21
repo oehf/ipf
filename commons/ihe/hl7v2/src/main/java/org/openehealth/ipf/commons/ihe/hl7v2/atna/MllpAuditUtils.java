@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.atna;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 
 

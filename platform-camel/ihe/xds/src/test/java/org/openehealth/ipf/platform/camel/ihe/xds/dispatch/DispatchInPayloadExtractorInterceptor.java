@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorIntercep
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 
 import javax.xml.namespace.QName;
-import javax.xml.ws.handler.MessageContext;
 import java.util.HashSet;
 import java.util.Set;
 

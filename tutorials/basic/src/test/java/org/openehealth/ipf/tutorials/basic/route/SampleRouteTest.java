@@ -15,11 +15,7 @@
  */
 package org.openehealth.ipf.tutorials.basic.route;
 
-import static org.junit.Assert.*;
-
 import org.apache.camel.ProducerTemplate;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +23,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Martin Krasser

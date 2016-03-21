@@ -23,6 +23,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfigurati
 /**
  * Standard Configuration for Iti78Component
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class Iti78Configuration extends FhirComponentConfiguration {

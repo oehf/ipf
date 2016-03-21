@@ -136,7 +136,10 @@ public enum ValidationMessage {
     INCONSISTENT_TELECOM_PARAM("Inconsistent telecom parameters : %s"),
     SUBMISSION_SET_STATUS_MANDATORY("Submission set status is mandatory for each association involving a submission set as a target and document entry as its source"),
     INVALID_DOCUMENT_AVAILABILITY("Unsupported document availability: %s"),
-    WRONG_REFERENCE_ID_TYPE("Wrong reference ID type: %s");
+    WRONG_REFERENCE_ID_TYPE("Wrong reference ID type: %s"),
+    LIMITED_METADATA_REQUIRED("limitedMetadata classification must be provided in %s"),
+    LIMITED_METADATA_PROHIBITED("limitedMetadata classification is not allowed in %s"),
+    MISSING_FOLDER_NAME("Folder name not provided in %s");
 
 
     private final String text;

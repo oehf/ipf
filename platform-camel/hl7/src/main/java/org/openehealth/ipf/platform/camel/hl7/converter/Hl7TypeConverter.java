@@ -17,8 +17,10 @@ package org.openehealth.ipf.platform.camel.hl7.converter;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import org.apache.camel.Converter;
+import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 
 /**
@@ -28,8 +30,15 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 public class Hl7TypeConverter {
 
     @Converter
-    public static InputStream toInputStream(MessageAdapter<?> messageAdapter) {
-        return new ByteArrayInputStream(messageAdapter.toString().getBytes());
+    public static InputStream toInputStream(MessageAdapter<?> messageAdapter, Exchange exchange) {
+        Charset charset = Charset.defaultCharset();
+        if (exchange != null) {
+            String charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+            if (charsetName != null) {
+                charset = Charset.forName(charsetName);
+            }
+        }
+        return new ByteArrayInputStream(messageAdapter.toString().getBytes(charset));
     }
     
 }

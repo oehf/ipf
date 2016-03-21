@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
  * response.
  * </p>
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public final class FhirResourceValidators {
@@ -75,7 +76,6 @@ public final class FhirResourceValidators {
 
     private static class ValidatingFhirProcessor implements Processor {
 
-        private volatile FhirContext context;
         private volatile FhirValidator validator;
         private final boolean checkSchema;
         private final boolean checkSchematron;
@@ -87,18 +87,7 @@ public final class FhirResourceValidators {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            if (validator == null) {
-                synchronized (this) {
-                    context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
-                    if (context != null) {
-                        context = FhirContext.forDstu2Hl7Org();
-                    }
-                    validator = context.newValidator();
-                    validator.setValidateAgainstStandardSchema(checkSchema);
-                    validator.setValidateAgainstStandardSchematron(checkSchematron);
-                }
-            }
-            ValidationResult result = validator.validateWithResult(exchange.getIn().getBody(IBaseResource.class));
+            ValidationResult result = getValidator(exchange).validateWithResult(exchange.getIn().getBody(IBaseResource.class));
             if (!result.isSuccessful()) {
                 IBaseOperationOutcome outcome = result.toOperationOutcome();
                 LOG.debug("FHIR Validation failed with outcome {}", outcome);
@@ -106,6 +95,23 @@ public final class FhirResourceValidators {
             } else {
                 LOG.debug("FHIR Validation succeeded");
             }
+        }
+
+        // Single-check idiom
+        private FhirValidator getValidator(Exchange exchange) {
+            FhirValidator tmp = validator;
+            if (tmp == null) {
+                FhirContext context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
+                if (context == null) {
+                    // emergency context creation
+                    LOG.warn("No FHIRContext object found in exchange, creating new one. This is time consuming!");
+                    context = FhirContext.forDstu2Hl7Org();
+                }
+                validator = tmp = context.newValidator();
+                validator.setValidateAgainstStandardSchema(checkSchema);
+                validator.setValidateAgainstStandardSchematron(checkSchematron);
+            }
+            return tmp;
         }
     }
 }

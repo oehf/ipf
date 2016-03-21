@@ -15,11 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti14;
 
-import java.net.InetAddress;
-
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 /**
  * Client audit strategy for ITI-14.

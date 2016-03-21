@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti9;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 public class Iti9ServerAuditStrategy extends Iti9AuditStrategy {
 

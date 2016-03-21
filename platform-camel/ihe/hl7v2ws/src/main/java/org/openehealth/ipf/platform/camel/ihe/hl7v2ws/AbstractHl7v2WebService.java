@@ -90,12 +90,15 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
             }
 
             // check response existence and acceptance
-            msg = Hl7v2MarshalUtils.extractHapiMessage(
+            if ((msg = Hl7v2MarshalUtils.extractHapiMessage(
                     resultMessage(exchange),
                     exchange.getProperty(Exchange.CHARSET_NAME, String.class),
-                    config.getParser());
-            config.checkResponseAcceptance(msg);
-            return render(msg);
+                    config.getParser())) != null) {
+                config.checkResponseAcceptance(msg);
+                return render(msg);
+            } else {
+                throw new Exception("Could not extract HAPI message object from exchange");
+            }
 
         } catch (Exception e) {
             LOG.error(formatErrMsg("Message processing failed, response missing or not acceptable"), e);

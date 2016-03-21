@@ -16,21 +16,19 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import org.hl7.fhir.instance.model.*;
+import org.hl7.fhir.instance.model.Parameters;
+import org.hl7.fhir.instance.model.Patient;
+import org.hl7.fhir.instance.model.StringType;
+import org.hl7.fhir.instance.model.UriType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.CamelFhirServlet;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  *

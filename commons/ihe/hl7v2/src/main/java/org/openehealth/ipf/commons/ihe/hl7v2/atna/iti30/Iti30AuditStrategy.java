@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30;
 
 import ca.uhn.hl7v2.model.Message;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 import java.util.Map;
 

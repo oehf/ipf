@@ -184,6 +184,7 @@ abstract public class AbstractCachingXmlProcessor<T> {
                 } catch (MalformedURLException ex) {
                     // No URL -> resolve as resource path.
                     url = getClass().getClassLoader().getResource(location);
+                    if (url == null) throw new IOException("Location not found");
                 }
             }
             return new StreamSource(url.openStream(), url.toExternalForm());

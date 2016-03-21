@@ -26,7 +26,6 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 
 import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorFhirToHL7v2;
 import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorHL7v2ToFhir;
-import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirResourceValidators.validateSchema;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator;
 
 /**

@@ -23,6 +23,7 @@ import org.openhealthtools.ihe.atna.auditor.events.ihe.QueryEvent;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -45,7 +46,7 @@ public class Iti56QueryEvent extends QueryEvent {
         addParticipantObjectIdentification(
                 this.eventType,
                 null,
-                EventUtils.encodeBase64(payload.getBytes()),
+                EventUtils.encodeBase64(payload.getBytes(Charset.defaultCharset())),
                 null,
                 "PatientLocationQueryRequest",
                 RFC3881ParticipantObjectTypeCodes.SYSTEM,

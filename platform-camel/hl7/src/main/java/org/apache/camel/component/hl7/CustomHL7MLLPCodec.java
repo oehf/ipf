@@ -18,7 +18,6 @@ package org.apache.camel.component.hl7;
 
 import ca.uhn.hl7v2.HapiContext;
 import org.apache.mina.core.session.IoSession;
-import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 

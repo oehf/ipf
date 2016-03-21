@@ -15,13 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.io.Serializable;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +23,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.XdsEnumAdapter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 
 /**
  * Contains information about an error.
@@ -94,9 +93,10 @@ public class ErrorInfo implements Serializable {
             String defaultLocation)
     {
         this(defaultError, throwable.getMessage(), Severity.ERROR, defaultLocation);
-        while (throwable != null) {
-            if (throwable instanceof XDSMetaDataException) {
-                XDSMetaDataException metaDataException = (XDSMetaDataException) throwable;
+        Throwable t = throwable;
+        while (t != null) {
+            if (t instanceof XDSMetaDataException) {
+                XDSMetaDataException metaDataException = (XDSMetaDataException) t;
                 this.errorCode = metaDataException.getValidationMessage().getErrorCode();
                 if (this.errorCode == null) {
                     this.errorCode = defaultMetaDataError;
@@ -104,15 +104,15 @@ public class ErrorInfo implements Serializable {
                 this.codeContext = metaDataException.getMessage();
                 return;
             }
-            if (throwable instanceof XdsRuntimeException) {
-                XdsRuntimeException exception = (XdsRuntimeException) throwable;
+            if (t instanceof XdsRuntimeException) {
+                XdsRuntimeException exception = (XdsRuntimeException) t;
                 this.errorCode = exception.getErrorCode();
                 this.codeContext = exception.getCodeContext();
                 this.severity = exception.getSeverity();
                 this.location = exception.getLocation();
                 return;
             }
-            throwable = throwable.getCause();
+            t = t.getCause();
         }
     }
 

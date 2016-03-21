@@ -212,6 +212,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         } else if (pid[30].value) {
             patient.setDeceased(new BooleanType(pid[30].value == 'Y'))
         }
+
         patient
     }
 

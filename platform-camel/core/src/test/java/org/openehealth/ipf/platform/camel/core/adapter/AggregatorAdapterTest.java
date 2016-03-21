@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static org.apache.camel.builder.Builder.outBody;
-import static org.junit.Assert.assertEquals;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
-import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.core.support.transform.min.TestAggregator;
+
+import static org.apache.camel.builder.Builder.outBody;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Martin Krasser

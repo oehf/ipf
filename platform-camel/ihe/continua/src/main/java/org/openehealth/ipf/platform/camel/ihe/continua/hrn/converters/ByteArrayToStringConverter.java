@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
 import org.springframework.core.convert.converter.Converter;
 
+import java.nio.charset.Charset;
+
 /**
  * @author Stefan Ivanov
  */
@@ -24,6 +26,6 @@ public class ByteArrayToStringConverter implements Converter<byte[], String> {
 
     @Override
     public String convert(byte[] source) {
-        return new String(source);
+        return new String(source, Charset.defaultCharset());
     }
 }

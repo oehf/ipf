@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.map;
 
-import org.openehealth.ipf.commons.map.config.CustomMappings;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
@@ -39,10 +38,10 @@ public class SpringBidiMappingService extends BidiMappingService implements Mapp
     }
 
     @Override
-    public void setMappingResource(Resource resource) {
+    public synchronized void setMappingResource(Resource resource) {
         try {
             setMappingScript(resource.getURL());
-            this.resources.add(resource);
+            resources.add(resource);
         } catch (IOException e) {
             if (!isIgnoreResourceNotFound())
                 throw new IllegalArgumentException(resource.getFilename() + " could not be read", e);
@@ -53,7 +52,6 @@ public class SpringBidiMappingService extends BidiMappingService implements Mapp
     public void setMappingResources(Collection<? extends Resource> resources) {
         for (Resource resource : resources) {
             setMappingResource(resource);
-            this.resources.add(resource);
         }
     }
 

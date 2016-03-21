@@ -72,8 +72,7 @@ public class GnodeDataFormat extends AbstractXmlDataFormat {
     }
 
     private XmlNodePrinter printer(OutputStream stream) {
-        XmlNodePrinter xmlNodePrinter = new XmlNodePrinter(new PrintWriter(
-                stream));
+        XmlNodePrinter xmlNodePrinter = new XmlNodePrinter(new PrintWriter(stream));
         xmlNodePrinter.setNamespaceAware(namespaceAware);
         return xmlNodePrinter;
     }

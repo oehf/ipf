@@ -20,7 +20,6 @@ import net.sf.ehcache.Element;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import java.io.Serializable;
-import java.lang.String;
 
 import static org.apache.commons.lang3.Validate.noNullElements;
 import static org.apache.commons.lang3.Validate.notNull;
@@ -31,11 +30,11 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset> implements AsynchronyCorrelator<AuditDatasetType> {
 
-    private final String SERVICE_ENDPOINT_URI_SUFFIX = ".serviceEndpoint";
-    private final String CORRELATION_KEY_SUFFIX      = ".correlationKey";
-    private final String AUDIT_DATASET_SUFFIX        = ".auditDataset";
-    private final String ALTERNATIVE_KEY_SUFFIX      = ".alternativeKey";
-    private final String ALTERNATIVE_KEYS_SUFFIX     = ".alternativeKeys";
+    private static final String SERVICE_ENDPOINT_URI_SUFFIX = ".serviceEndpoint";
+    private static final String CORRELATION_KEY_SUFFIX      = ".correlationKey";
+    private static final String AUDIT_DATASET_SUFFIX        = ".auditDataset";
+    private static final String ALTERNATIVE_KEY_SUFFIX      = ".alternativeKey";
+    private static final String ALTERNATIVE_KEYS_SUFFIX     = ".alternativeKeys";
 
     private final Ehcache ehcache;
 

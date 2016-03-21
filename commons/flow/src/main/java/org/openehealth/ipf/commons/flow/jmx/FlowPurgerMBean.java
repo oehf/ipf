@@ -96,8 +96,11 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
             + "(e.g. \"30d\" will purge flows older than 30 days)")
     public void setPurgeFlowsOlderThan(String purgeFlowsOlderThan) {
         ApplicationConfig applicationConfig = flowManager.getApplicationConfig(application);
-        applicationConfig.setPurgeFlowsOlderThan(formatInput(purgeFlowsOlderThan));
-        flowManager.mergeApplicationConfig(applicationConfig);
+        String s = formatInput(purgeFlowsOlderThan);
+        if (s != null) {
+            applicationConfig.setPurgeFlowsOlderThan(s);
+            flowManager.mergeApplicationConfig(applicationConfig);
+        }
     }
 
     @ManagedAttribute(description="Set to true to exclude ERROR flows from being purged. "

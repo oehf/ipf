@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
 import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
-import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.ImportEvent;
@@ -25,6 +24,7 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Collections;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
@@ -166,7 +166,7 @@ public class FhirAuditor extends IHEAuditor {
         try {
             return payload.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            return payload.getBytes();
+            return payload.getBytes(Charset.defaultCharset());
         }
     }
 

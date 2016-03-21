@@ -16,12 +16,10 @@
 package org.openehealth.ipf.platform.camel.core.closures;
 
 import groovy.lang.Closure;
+import org.openehealth.ipf.commons.core.modules.api.Aggregator;
 
 import java.util.Collection;
-import java.util.List;
-
-import org.openehealth.ipf.commons.core.modules.api.Aggregator;
-import org.openehealth.ipf.platform.camel.core.closures.ClosureAdapter;
+import java.util.Iterator;
 
 /**
  * An aggregator that delegates to a {@link Closure}.
@@ -36,11 +34,13 @@ public class DelegatingAggregator extends ClosureAdapter implements Aggregator<O
 
     @Override
     public Object zap(Collection<Object> input, Object... params) {
-        List<Object> list = (List<Object>)input;
+        Iterator<Object> iter = input.iterator();
+        Object p1 = iter.hasNext() ? iter.next() : null;
+        Object p2 = iter.hasNext() ? iter.next() : null;
         if (getClosure().getParameterTypes().length == 3) {
-            return call(list.get(0), list.get(1), params);
+            return call(p1, p2, params);
         } else {
-            return call(list.get(0), list.get(1));
+            return call(p1, p2);
         }
     }
     

@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.core.model;
 
 import groovy.lang.Closure;
-
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
 import org.apache.camel.spi.RouteContext;
@@ -26,7 +25,6 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
