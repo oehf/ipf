@@ -125,12 +125,38 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
                 return;
             }
             EbXMLProvideAndRegisterDocumentSetRequest30 message =
-                new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));            
+                    new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
             ValidationProfile profile = new ValidationProfile(ITI_41);
             new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
         }
-    };        
-   
+    };
+
+    private static final Processor ITI_41_XDM_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLProvideAndRegisterDocumentSetRequest30 message =
+                    new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
+            ValidationProfile profile = new ValidationProfile(ITI_41_XDM);
+            new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor ITI_41_XDR_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLProvideAndRegisterDocumentSetRequest30 message =
+                    new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
+            ValidationProfile profile = new ValidationProfile(ITI_41_XDR);
+            new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
+        }
+    };
+
     private static final Processor ITI_41_RESPONSE_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
@@ -367,14 +393,28 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
     }
 
     /**
-     * Returns a validating processor for ITI-41 request messages.
+     * Returns a validating processor for ITI-41 request messages used in the profile XDS.b.
      */
     public static Processor iti41RequestValidator() {
         return ITI_41_REQUEST_VALIDATOR;
     }
 
     /**
-     * Returns a validating processor for ITI-41 response messages.
+     * Returns a validating processor for ITI-41 request messages used in the profile XDM.
+     */
+    public static Processor iti41XdmRequestValidator() {
+        return ITI_41_XDM_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-41 request messages used in the profile XDR.
+     */
+    public static Processor iti41XdrRequestValidator() {
+        return ITI_41_XDR_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-41 response messages used in the profiles XDS.b, XDM, XDR.
      */
     public static Processor iti41ResponseValidator() {
         return ITI_41_RESPONSE_VALIDATOR;
