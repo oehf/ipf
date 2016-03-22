@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.iheclient;
+package org.openehealth.ipf.tutorials.iheclient;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelContextAware;
@@ -33,16 +33,12 @@ import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 /**
- * This is a simple IHE client helper class that provides a couple of sneder methods
+ * This is a simple IHE client helper class that provides a couple of sender methods
  */
 public class IHEWebServiceClient implements CamelContextAware {
 
     private CamelContext camelContext;
     private CombinedXmlValidator validator = new CombinedXmlValidator();
-
-    public static final String LOGGER_INTERCEPTOR_PARAMETERS =
-            "inInterceptors=#inLogger&inFaultInterceptors=#inLogger" +
-                    "&outInterceptors=#outLogger&outFaultInterceptors=#outLogger";
 
     @Override
     public void setCamelContext(CamelContext camelContext) {

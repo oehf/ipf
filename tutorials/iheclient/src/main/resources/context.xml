@@ -49,7 +49,7 @@ http://cxf.apache.org/schemas/configuration/security.xsd">
     </camel:camelContext>
 
 
-    <bean id="client" class="org.openehealth.ipf.iheclient.IHEWebServiceClient"/>
+    <bean id="client" class="org.openehealth.ipf.tutorials.iheclient.IHEWebServiceClient"/>
 
 
     <!-- CXF client side conduit for TLS, cf. https://cxf.apache.org/docs/client-http-transport-including-ssl-support.html -->

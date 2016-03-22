@@ -22,7 +22,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
 
-    <bean id="routeBuilder" class="org.openehealth.ipf.tutorials.osgi.atna.route.sender.GroovyRouteBuilder"/>
+    <bean id="routeBuilder" class="org.openehealth.ipf.tutorials.osgi.ihe.atna.route.sender.GroovyRouteBuilder"/>
 
     <bean id="camelEndpointSender"
         class="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender" init-method="init" destroy-method="destroy">
