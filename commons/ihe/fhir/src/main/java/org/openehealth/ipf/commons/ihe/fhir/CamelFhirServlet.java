@@ -43,6 +43,7 @@ import java.util.Map;
  *     <li>pagingProviderSize (integer)</li>: maximum number of concurrent paging requests
  * </ul>
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public class CamelFhirServlet extends RestfulServer {

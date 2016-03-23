@@ -23,9 +23,10 @@ you may need to add these dependencies in your modules.
 
 ### Mapping Service
 
-The `org.openehealth.ipf.commons.map.BidiMappingService` cannot be configured with Spring's `Resource`
-objects anymore. With Spring, use `org.openehealth.ipf.commons.map.SpringBidiMappingService` instead and call
-the new `setMappingResource` or `setMappingResources` methods. The new class is located in the `ipf-commons-spring` module.
+[`org.openehealth.ipf.commons.map.BidiMappingService`](apidocs/org/openehealth/ipf/commons/map/BidiMappingService.html) 
+cannot be configured with Spring's `Resource` objects anymore. With Spring, use 
+[`org.openehealth.ipf.commons.map.SpringBidiMappingService`](apidocs/org/openehealth/ipf/commons/map/SpringBidiMappingService.html)  
+instead and call the new `setMappingResource` or `setMappingResources` methods. The new class is located in the `ipf-commons-spring` module.
 See [Mapping Service] for details.
 
 ### MLLP custom interceptors
@@ -42,12 +43,12 @@ See [MLLP Payload Logging] and [WS Payload Logging] for details.
 
 ### XDS
 
-`org.openehealth.ipf.commons.ihe.xds.core.metadata.Document` offered type conversion by directly depending on 
-Spring's `ConversionService`. 
-The new interface `org.openehealth.ipf.commons.core.config.TypeConverter` lets you now choose the
-type converter implementation. 
-The only implementation provided by IPF is `org.openehealth.ipf.commons.core.config.SpringTypeConverter`, located
-in the new `ipf-commons-spring` module, which realizes the previous behavior.
+[`org.openehealth.ipf.commons.ihe.xds.core.metadata.Document`](apidocs/org/openehealth/ipf/commons/ihe/xds/core/metadata/Document.html) 
+offered type conversion by directly depending on Spring's `ConversionService`. 
+The new interface [`org.openehealth.ipf.commons.core.config.TypeConverter`](apidocs/org/openehealth/ipf/commons/core/config/TypeConverter.html) 
+lets you now choose the type converter implementation. 
+The only implementation provided by IPF is [`org.openehealth.ipf.commons.core.config.SpringTypeConverter`](apidocs/org/openehealth/ipf/commons/core/config/SpringTypeConverter.html), 
+located in the new `ipf-commons-spring` module, which realizes the previous behavior.
 
 ### ATNA Auditing and IHE components
 
@@ -61,7 +62,7 @@ you will need to reproduce these refactorings in your own code. Please inspect t
 classes in IPF for what needs to be changed.
 
 
-[Mapping Service]: ../ipf-commons-map/index.html
-[Custom Interceptors]: ../ipf-platform-camel-ihe-mllp/interceptorChain.html
-[MLLP Payload Logging]: ../ipf-platform-camel-ihe-mllp/payloadLogging.html
-[WS Payload Logging]: ../ipf-platform-camel-ihe-ws/payloadLogging.html
+[Mapping Service]: ipf-commons-map/index.html
+[Custom Interceptors]: ipf-platform-camel-ihe-mllp/interceptorChain.html
+[MLLP Payload Logging]: ipf-platform-camel-ihe-mllp/payloadLogging.html
+[WS Payload Logging]: ipf-platform-camel-ihe-ws/payloadLogging.html

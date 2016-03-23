@@ -21,6 +21,7 @@ import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import org.hl7.fhir.instance.model.Parameters;
 import org.hl7.fhir.instance.model.Patient;
+import org.hl7.fhir.instance.model.StringType;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
@@ -36,10 +37,28 @@ public class Iti83ClientRequestFactory implements ClientRequestFactory<IOperatio
 
     @Override
     public IClientExecutable<IOperationUntypedWithInput<Parameters>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
+
+        if (requestData instanceof Parameters) {
+            return getClientExecutable(client, (Parameters) requestData);
+        } else {
+            Parameters p = new Parameters();
+            for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+                if (Constants.ITI83_PARAMETERS.contains(entry.getKey())) {
+                    p.addParameter()
+                            .setName(entry.getKey())
+                            .setValue(new StringType(entry.getValue().toString()));
+                }
+            }
+            return getClientExecutable(client, p);
+        }
+
+    }
+
+    private IClientExecutable<IOperationUntypedWithInput<Parameters>, ?> getClientExecutable(IGenericClient client, Parameters requestData) {
         return client.operation()
                 .onType(Patient.class)
                 .named(Constants.PIXM_OPERATION_NAME)
-                .withParameters((Parameters)requestData)
+                .withParameters(requestData)
                 .useHttpGet();
     }
 }

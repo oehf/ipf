@@ -117,8 +117,19 @@ public class TestIti78Success extends AbstractTestIti78 {
 
 
     @Test
-    public void testSendEndpointPdqm() {
+    public void testSendEndpointPdqmCriterion() {
         Bundle result = getProducerTemplate().requestBody("direct:input", familyParameters(), Bundle.class);
+        // printAsXML(result);
+
+        // Check ATNA Audit
+        MockedSender sender = getAuditSender();
+        assertEquals(2, sender.getMessages().size());
+        // FIXME client-side audit message needs ip addresses, target URL and queryString
+    }
+
+    @Test
+    public void testSendEndpointPdqmString() {
+        Bundle result = getProducerTemplate().requestBody("direct:input", "Patient?family=Test", Bundle.class);
         // printAsXML(result);
 
         // Check ATNA Audit

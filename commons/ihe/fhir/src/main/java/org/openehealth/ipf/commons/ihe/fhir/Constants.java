@@ -18,8 +18,14 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import org.hl7.fhir.instance.model.Coding;
 import org.hl7.fhir.instance.model.DocumentManifest;
+import org.hl7.fhir.instance.model.Patient;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
+ * @author Christian Ohr
  * @since 3.1
  */
 public interface Constants {
@@ -29,11 +35,29 @@ public interface Constants {
     String SOURCE_IDENTIFIER_NAME = "sourceIdentifier";
     String TARGET_SYSTEM_NAME = "targetSystem";
 
+    Set<String> ITI83_PARAMETERS = new HashSet<>(Arrays.asList(
+            SOURCE_IDENTIFIER_NAME,
+            TARGET_SYSTEM_NAME));
+
     // PDQm stuff
     String SP_RESOURCE_IDENTIFIER = "_id";
     String SP_MULTIPLE_BIRTH_ORDER_NUMBER = "multipleBirthInteger";
     String SP_MOTHERS_MAIDEN_NAME_GIVEN = "mothersMaidenName.given";
     String SP_MOTHERS_MAIDEN_NAME_FAMILY = "mothersMaidenName.family";
+
+    Set<String> ITI78_PARAMETERS = new HashSet<>(Arrays.asList(
+            SP_RESOURCE_IDENTIFIER,
+            SP_MULTIPLE_BIRTH_ORDER_NUMBER,
+            SP_MOTHERS_MAIDEN_NAME_GIVEN,
+            SP_MOTHERS_MAIDEN_NAME_FAMILY,
+            Patient.SP_IDENTIFIER,
+            Patient.SP_FAMILY,
+            Patient.SP_GIVEN,
+            Patient.SP_BIRTHDATE,
+            Patient.SP_ADDRESS,
+            Patient.SP_GENDER,
+            Patient.SP_TELECOM
+            ));
 
     // MHD stuff
     String COMP_DOCUMENT_MANIFEST = "documentManifest";

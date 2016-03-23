@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.api.MethodOutcome;
+import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  * Camel route served by the consumer. Note that this can be subclassed for writing so-called
  * plain providers, while resource-specific providers should extend from {@link AbstractResourceProvider}.
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public abstract class AbstractPlainProvider implements Serializable {
@@ -90,6 +92,19 @@ public abstract class AbstractPlainProvider implements Serializable {
         }
         Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
         return consumer.handleAction(payload, headers);
+    }
+
+    protected final Bundle requestTransaction(
+            Object payload,
+            Map<String, Object> parameters,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse)
+    {
+        if (consumer == null) {
+            throw new IllegalStateException("Consumer is not initialized");
+        }
+        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
+        return consumer.handleTransactionRequest(payload, headers);
     }
 
     protected final <R extends IBaseResource> List<R> requestBundle(

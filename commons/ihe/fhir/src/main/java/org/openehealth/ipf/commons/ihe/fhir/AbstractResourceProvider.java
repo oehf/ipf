@@ -31,6 +31,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
  * endpoints, it is recommended to derive resource providers from AbstractPlainProvider instead.
  * </p>
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public abstract class AbstractResourceProvider extends AbstractPlainProvider implements IResourceProvider {

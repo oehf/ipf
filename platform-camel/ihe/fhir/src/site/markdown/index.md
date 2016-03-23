@@ -1,3 +1,12 @@
+## FHIR
+
+FHIR® – Fast Healthcare Interoperability Resources (hl7.org/fhir) – is a next generation standards framework created by HL7,
+combining the best features of HL7v2, HL7v3, and CDA while leveraging the latest web standards and applying a tight focus on implementability.
+
+IHE has had a set of profiles based on FHIR, but they are were on earlier versions of HL7 FHIR. Now that [DSTU2](http://hl7.org/fhir/index.html) is formally published, 
+IHE updated their profiles to this version. IPF adds support for a subset of them by providing Camel components (hiding the 
+ implementation details on transport level) and translators between the FHIR and HL7 v2 message models.
+
 ## Translation between FHIR and HL7 v2 message models
 
 IPF provides utilities for translation between FHIR and HL7v2, thus giving the possibility to implement FHIR-based [IHE] transactions
@@ -6,7 +15,7 @@ on top ot their HL7 v2 counterparts and to avoid redundancy in that way.
 Currently supported transaction pairs are
 
 * PIX Query ([ITI-9]/[ITI-83])
-
+* PDQ       ([ITI-21]/[ITI-78])
 
 ### Dependencies
 
@@ -55,12 +64,17 @@ file (which can be accessed as a classpath resource). Here is a snippet of Sprin
     <bean id="uriMapper" class="org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper">
         <constructor-arg index="0" ref="mappingService"/>
         <constructor-arg index="1" value="uriToOid"/>
+        <constructor-arg index="2" value="uriToNamespace"/>
     </bean>
     
 ```
 
-The mapping file translates URIs into OIDs. If a URI of the form `urn:oid:1.2.3.4` is provided as URI, the
-`DefaultUriMapper` will extract the OID from the URN. An example for the mapping file is:
+The mapping file translates URIs into OIDs and assigning authority namespaces. 
+
+* If a URI of the form `urn:oid:1.2.3.4` is provided, the `DefaultUriMapper` will extract the OID from the URN.
+* 
+
+An example for the mapping file is:
 
 ```
     mappings = {
@@ -69,14 +83,20 @@ The mapping file translates URIs into OIDs. If a URI of the form `urn:oid:1.2.3.
                     'http://org.openehealth/ipf/commons/ihe/fhir/1' : '1.2.3.4',
                     'http://org.openehealth/ipf/commons/ihe/fhir/2' : '1.2.3.4.5.6'
             )
-    
+
+            uriToNamespace (
+                    'http://org.openehealth/ipf/commons/ihe/fhir/1' : 'fhir1',
+                    'http://org.openehealth/ipf/commons/ihe/fhir/2' : 'fhir2'
+            )
+		    
     }
 ```
 
 Note that the mapping key `uriToOid` must correspond to the second parameter instantiating the `DefaultUriMapper`
-instance.
+instance and the mapping key `uriToNamespace` must correspond to the third parameter.
 
 Of course you are free to include your own implementations of `UriMapper` and/or `MappingService`.
+
 
 ### Translators
 
@@ -87,12 +107,13 @@ From a *Patient identity Cross Reference Manager* 's perspective, there are **in
 
 | FHIR transaction       | FHIR-to-HL7v2 request                   | HL7v2-Transaction   | HL7v2-to-FHIR response
 | -----------------------|-----------------------------------------|---------------------|----------------------------------
+| PDQm [ITI-78]          | `iti78.PdqmRequestToPdqQueryTranslator` | PDQ       [ITI-21]  | `iti78.PdqResponseToPdqmResponseTranslator`
 | PIXm [ITI-83]          | `iti83.PixmRequestToPixQueryTranslator` | PIX Query [ITI-9]   | `iti83.PixQueryResponseToPixmResponseTranslator`
 
 
 
 Each translator has a set of configurable properties. Their descriptions can be taken from javadoc of the
-corresponding classes. 
+corresponding classes. Below there's an example of a Spring application context defining translator beans: 
 
 ```xml
 
@@ -105,6 +126,18 @@ corresponding classes.
 
 <bean name="pixmResposneTranslator"
       class="org.openehealth.ipf.commons.ihe.fhir.translation.iti83.PixQueryResponseToPixmResponseTranslator">
+    <property name="uriMapper" ref="uriMapper" />
+</bean>
+
+<!-- Example for PDQm -->
+
+<bean name="pdqmRequestTranslator"
+      class="org.openehealth.ipf.commons.ihe.fhir.translation.iti78.PdqmRequestToPdqQueryTranslator">
+    <property name="uriMapper" ref="uriMapper" />
+</bean>
+
+<bean name="pdqmResposneTranslator"
+      class="org.openehealth.ipf.commons.ihe.fhir.translation.iti78.PdqResponseToPdqmResponseTranslator">
     <property name="uriMapper" ref="uriMapper" />
 </bean>
 
@@ -168,7 +201,9 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
 ```
 
 [ITI-9]: ../ipf-platform-camel-ihe-mllp/iti9.html
-[ITI-83]: ../ipf-platform-camel-ihe-fhir/iti83.html
+[ITI-21]: ../ipf-platform-camel-ihe-mllp/iti21.html
+[ITI-78]: iti78.html
+[ITI-83]: iti83.html
 
 [Mapping Service]: ../ipf-commons-map/index.html
 

@@ -25,6 +25,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
 /**
  * Generic Audit Strategy for FHIR query transctions
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public abstract class FhirQueryAuditStrategy extends AuditStrategySupport<FhirQueryAuditDataset> {

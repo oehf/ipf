@@ -150,8 +150,8 @@ Corresponding IPF Validation Rule:
 ### Closure rules
 
 You can use rules also to program you own custom constraints on one or more trigger events.
-All there is to do is to write a `checkIf` closure that returns an array of [HAPI]
-[`ValidationException`s](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/validation/ValidationException.html).
+All there is to do is to write a `checkIf` closure that returns an array of
+[`ValidationException`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/validation/ValidationException.html) objects.
 If the array is empty, validation is considered passed.
 
 #### Example

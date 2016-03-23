@@ -24,6 +24,7 @@ import java.util.Map;
 /**
  * Factory for creating a FHIR request using a FHIR client and a sequence of input data
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 public interface ClientRequestFactory<T extends IClientExecutable<?, ?>> {

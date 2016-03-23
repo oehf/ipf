@@ -22,6 +22,7 @@ import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.CamelFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
@@ -105,14 +106,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         hapiServerInterceptorFactories = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "hapiServerInterceptorFactories", List.class);
 
-        Integer connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
-        if (connectTimeout != null) {
-            setConnectTimeout(connectTimeout);
-        }
-        Integer timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
-        if (timeout != null) {
-            setTimeout(timeout);
-        }
+
 
         String parserErrorHandling = component.getAndRemoveParameter(parameters, "validation", String.class, "lenient");
         if (STRICT.equals(parserErrorHandling)) {
@@ -126,9 +120,24 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
             throw new UnsupportedOperationException("secure transport not yet supported");
         }
 
-        authUserName = component.getAndRemoveOrResolveReferenceParameter(
+        HttpClientBuilder clientBuilder = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "httpClientBuilder", HttpClientBuilder.class);
+        if (clientBuilder != null) {
+            setHttpClientBuilder(clientBuilder);
+        }
+
+        Integer connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
+        if (connectTimeout != null) {
+            setConnectTimeout(connectTimeout);
+        }
+        Integer timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
+        if (timeout != null) {
+            setTimeout(timeout);
+        }
+
+        authUserName = component.getAndRemoveParameter(
                 parameters, "authUserName", String.class, null);
-        authPassword = component.getAndRemoveOrResolveReferenceParameter(
+        authPassword = component.getAndRemoveParameter(
                 parameters, "authPassword", String.class, null);
 
     }
@@ -143,5 +152,9 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     public void setTimeout(int timeout) {
         context.getRestfulClientFactory().setSocketTimeout(timeout);
+    }
+
+    public void setHttpClientBuilder(HttpClientBuilder builder) {
+        context.getRestfulClientFactory().setHttpClient(builder.build());
     }
 }

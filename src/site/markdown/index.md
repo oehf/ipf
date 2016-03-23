@@ -26,11 +26,11 @@ HL7v2 [IHE][ihe] transactions:
 <dependency>
   <groupId>org.openehealth.ipf.platform-camel</groupId>
   <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
-  <version>3.0</version>
+  <version>3.1.0</version>
 </dependency>
 ```
 
-Now you can expose or consume IHE-compliant transaction endpoints.
+Now you can expose or consume IHE-compliant MLLP-based transaction endpoints.
 
 
 ## Features
@@ -39,10 +39,11 @@ The following table summarizes the IPF features related to the eHealth domain:
 
 | Feature                                         | Description
 |-------------------------------------------------|-----------------------------------------------
-| [Support for eHealth integration profiles]      | A set of components for creating actor interfaces as specified in IHE and Continua integration profiles. IPF currently supports creation of actor interfaces for the IHE profiles XDS.a, XDS.b, PIX, PDQ, PIXv3, PDQv3, QED, XCPD, XCA, XCA-I, XCF, XPID, PCD, as well as for Continua profiles HRN and WAN.
+| [Support for eHealth integration profiles]      | A set of components for creating actor interfaces as specified in IHE and Continua integration profiles. IPF currently supports creation of actor interfaces for the IHE profiles XDS.a, XDS.b, PIX, PDQ, PIXv3, PDQv3, PIXm, PDQm, QED, XCPD, XCA, XCA-I, XCF, XPID, PCD, as well as for Continua profiles HRN and WAN.
 | [HL7 Message processing]                        | Basis for HL7 message processing is the HL7v2 DSL. These provides the basis for implementing [HL7 Message processing Camel routes].
 | [HL7 Message translation]                       | Translation utilities for translating between HL7v3 and HL7v2 messages for correspdoning IHE transactions
 | [CDA Support]                                   | Wrapping a number of CDA-related libraries, providing the basis for implementing [CDA processing Camel routes].
+| [FHIR Support]                                  | FHIR® – Fast Healthcare Interoperability Resources (hl7.org/fhir) – is a next generation standards framework created by HL7 leveraging the latest web standards and applying a tight focus on implementability. 
 
 
 Other IPF features provide part of the underlying foundation or supporting functionality:
@@ -59,7 +60,6 @@ IPF is prepared to run in OSGi environments as well:
 | Feature                                         | Description
 |-------------------------------------------------|-----------------------------------------------
 | [OSGi Support]                                  | Enables the deployment of IPF modules (bundles) to OSGi platforms. IPF service bundles register platform services at the OSGi service registry for consumption by IPF applications
-
 
 
 ## Tutorials and Examples
@@ -105,6 +105,7 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [HL7 Message processing]: ipf-modules-hl7/index.html
 [HL7 Message processing Camel routes]: ipf-platform-camel-hl7/index.html
 [HL7 Message translation]: ipf-commons-ihe-hl7v3/index.html
+[FHIR support]: ipf-platform-camel-ihe-fhir/index.html
 [CDA Support]: ipf-modules-cda/index.html
 [CDA processing Camel routes]: ipf-platform-camel-cda/index.html
 [Core Features]: ipf-platform-camel-core/index.html

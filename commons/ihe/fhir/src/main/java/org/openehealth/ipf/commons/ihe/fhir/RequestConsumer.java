@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.api.MethodOutcome;
+import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.Map;
  * request reception from request handling, so you can e.g. use the IHE resource providers
  * outside of Apache Camel.
  *
+ * @author Christian Ohr
  * @since 3.1
  */
 
@@ -66,4 +68,12 @@ public interface RequestConsumer {
      * @return list of resources to be returned
      */
     <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> headers);
+
+    /**
+     * Handles transaction requests
+     * @param payload request payload
+     * @param headers request parameters
+     * @return transaction response bundle
+     */
+    Bundle handleTransactionRequest(Object payload, Map<String, Object> headers);
 }

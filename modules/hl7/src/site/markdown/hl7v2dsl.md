@@ -99,7 +99,7 @@ The message header fields are populated with the event type, trigger event, vers
 
 Just as creating a message, segments and fields can be created without actually knowing their respective type.
 
-Details are described [here][hl7v2dslCreation].
+Details are described [here][hl7v2dslcreating].
 
 ### Manipulating HL7 messages
 
@@ -122,5 +122,5 @@ IPF does not change or extend the [HAPI] on how to parse or render HL7 message.
 [hl7v2dslRepetitions]: hl7v2dslRepetitions.html
 [hl7v2dslSmart]: hl7v2dslSmartNavigation.html
 [hl7v2dslIteration]: hl7v2dslIteration.html
-[hl7v2dslCreation]: hl7v2dslCreation.html
+[hl7v2dslcreating]: hl7v2dslCreation.html
 [hl7v2dslManipulation]: hl7v2dslManipulation.html

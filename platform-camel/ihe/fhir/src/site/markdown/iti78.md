@@ -59,7 +59,7 @@ servletPath = /fhir/*
 ```
 
 then the pdqm-iti78 consumer will be available for external clients under the URL
-`http://eHealth.server.org:8888/IHE/fhir/patient`
+`http://eHealth.server.org:8888/IHE/fhir/Patient`
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
 
@@ -79,19 +79,21 @@ This is an example on how to use the component on the consumer side:
 
 * [ATNA auditing]
 
-### Basic MLLP Component Features
+### Basic FHIR Component Features
 
 * [Message types and exception handling]
-* [Secure transport]
-* [File-Based payload logging]
+* [Security]
 
-### Advanced FHIR Component Features
+### Connection-related FHIR Component Features
 
-* [Interceptor chain configuration]
-
+* [Connection parameters]
 
 [ATNA auditing]: ../ipf-platform-camel-ihe/atna.html
 [Message types and exception handling]: messageTypes.html
 [File-Based payload logging]: payloadLogging.html
 [Interceptor chain configuration]: interceptorChain.html
+[Security]: security.html
+[Connection parameters]: connection.html
+
+[deployment container]: deployment.html
 
