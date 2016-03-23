@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
+import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
@@ -73,7 +74,7 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
             buildReceiverAndSender(builder, xml, HL7V3_NSURI)
             createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem, this.ackCodeFirstCharacter)
         }
-
+        postprocess(rsp, builder)
         return output.toString(charset)
    }
 
@@ -93,5 +94,9 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
                 errorText:      errorText, 
                 errorCode:      errorCode, 
                 errorLocations: errorLocations]
+    }
+
+    @Override
+    void postprocess(Message msg, MarkupBuilder builder) {
     }
 }

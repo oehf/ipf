@@ -114,7 +114,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	/**
 	 * Adds patient identifiers from the given GPath source.
 	 */
-	private void addPatientIdentifiers(GPathResult source, Group grp) {
+	protected void addPatientIdentifiers(GPathResult source, Group grp) {
 	    for (id in source.id) {
 	        def root               = id.@root.text()
 	        def extension          = id.@extension.text()
@@ -346,8 +346,12 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             def priorId = xml.controlActProcess.subject.registrationEvent.replacementOf.priorRegistration.subject1.priorRegisteredRole.id
             fillCx(grp.MRG[1](0), priorId)
         }
-        
-        // return filled MessageAdapter
+
+        postprocess(adt, xml)
         return adt
 	}
+
+    @Override
+    void postprocess(Message qry, GPathResult xml) {
+    }
 }

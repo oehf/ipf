@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.model.Message
+import groovy.util.slurpersupport.GPathResult
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 
@@ -52,7 +53,12 @@ class PixAck3to2Translator implements Hl7TranslatorV3toV2 {
         rsp.MSH[10]   = xml.id.@extension.text()
         rsp.MSA[1]    = ackCodeFirstCharacter[0] + xml.acknowledgement.typeCode.@code.text()[1]
         rsp.MSA[2]    = xml.acknowledgement.targetMessage.id.@extension.text()
-        
+
+        postprocess(rsp, xml)
         return rsp
 	}
+
+    @Override
+    void postprocess(Message qry, GPathResult xml) {
+    }
 }

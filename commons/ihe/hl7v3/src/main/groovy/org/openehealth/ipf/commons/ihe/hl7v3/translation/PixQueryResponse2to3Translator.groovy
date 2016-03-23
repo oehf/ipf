@@ -129,7 +129,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, HL7V3_NSURI)
             }
         }
-
+        postprocess(rsp, builder)
         return output.toString(charset)
     }
 
@@ -175,5 +175,9 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 errorCode:      errorCode, 
                 errorLocations: errorLocations]
         
+    }
+
+    @Override
+    void postprocess(Message msg, MarkupBuilder builder) {
     }
 }

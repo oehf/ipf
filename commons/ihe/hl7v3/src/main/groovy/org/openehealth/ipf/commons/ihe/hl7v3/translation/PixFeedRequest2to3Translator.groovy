@@ -112,6 +112,7 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
                 }
             }
         }
+        postprocess(adt, builder)
         return output.toString(charset)
     }
 

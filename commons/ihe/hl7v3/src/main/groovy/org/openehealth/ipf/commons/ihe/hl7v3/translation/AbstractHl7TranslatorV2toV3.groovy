@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
+import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.Segment
 import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
@@ -257,4 +258,7 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
         }
     }
 
+    @Override
+    void postprocess(Message msg, MarkupBuilder builder) {
+    }
 }

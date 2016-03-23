@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.Message
+import groovy.util.slurpersupport.GPathResult;
 
 
 /**
@@ -30,4 +31,11 @@ interface Hl7TranslatorV3toV2 {
      * optionally using the initial HL7v2 message.  
      */
     Message translateV3toV2(String v3, Message initialV2)
+
+    /**
+     * Called after the translation is done
+     * @param xml parsed HL7v3 message
+     * @param result translated HL7v2 message
+     */
+    void postprocess(Message qry, GPathResult xml)
 }

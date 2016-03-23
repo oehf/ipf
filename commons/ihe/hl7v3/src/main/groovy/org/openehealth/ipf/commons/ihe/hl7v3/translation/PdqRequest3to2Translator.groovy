@@ -166,12 +166,9 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
     private String wildcardize(String value, boolean needWildcard) {
         return (value && needWildcard) ? "*${value}*" : value 
     }
- 
 
-    /**
-     * To be customized in derived classes. 
-     */
-    void postprocess(Message v2request, GPathResult v3request) {
-        // empty per default
+    @Override
+    void postprocess(Message qry, GPathResult xml) {
     }
+
 }

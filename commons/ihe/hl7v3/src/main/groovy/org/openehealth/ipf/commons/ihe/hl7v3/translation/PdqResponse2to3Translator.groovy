@@ -169,7 +169,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                 XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, HL7V3_NSURI)
             }
         }
-
+        postprocess(rsp, builder)
         return output.toString(charset)
     }
 

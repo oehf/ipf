@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.Message
+import groovy.xml.MarkupBuilder;
 
 
 /**
@@ -29,4 +30,9 @@ interface Hl7TranslatorV2toV3 {
      * into an HL7v3 XML String, optionally using the initial HL7v3 message.  
      */
     String translateV2toV3(Message messageV2, String initialV3, String charset)
+
+    /**
+     * Postprocesses the transaltion
+     */
+    void postprocess(Message msg, MarkupBuilder builder)
 }

@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
+import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
@@ -93,8 +94,12 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
 
         // Segment RCP
         qry.RCP[1] = 'I'
-        
-        // return filled MessageAdapter
+
+        postprocess(qry, xml)
         return qry
 	}
+
+    @Override
+    void postprocess(Message qry, GPathResult xml) {
+    }
 }

@@ -129,6 +129,12 @@ of IPF's internal machinery, the user has to provide the request manually (as a 
 instance depending on the transaction under consideration) in the property `HL7V3_ORIGINAL_REQUEST_PROPERTY` of the Camel exchange.
 
 
+### Customizing the translators
+
+All translators call a `postprocess` method right before the translation result is returned to the caller. In all
+concrete translator implementations provided by IPF, this method does not do anything. In order to customize the
+translation result, inherit from the translator and override this method.
+
 ### Example
 
 Here is a sample Camel route that impements bridges PIX Feed v3 requests (ITI-44) to an HL7 v2-based Patient Identifier
