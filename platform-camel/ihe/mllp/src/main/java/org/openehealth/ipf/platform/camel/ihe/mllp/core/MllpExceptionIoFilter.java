@@ -18,18 +18,19 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.CamelException;
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.apache.camel.component.mina2.Mina2Consumer;
-import org.apache.camel.component.mina2.Mina2Helper;
 import org.apache.mina.core.filterchain.IoFilterAdapter;
+import org.apache.mina.core.future.WriteFuture;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLException;
+
+import static java.util.concurrent.TimeUnit.*;
 import static org.apache.camel.component.mina2.Mina2Constants.MINA_CLOSE_SESSION_WHEN_COMPLETE;
 import static org.apache.camel.component.mina2.Mina2PayloadHelper.getIn;
 import static org.apache.camel.component.mina2.Mina2PayloadHelper.getOut;
-import static org.apache.camel.util.ExchangeHelper.isOutCapable;
 
 /**
  * This {@link IoFilterAdapter} is used to catch all exceptions occurred inside the {@link MllpConsumer} filterChain,
@@ -52,11 +53,14 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
 
     @Override
     public void exceptionCaught(NextFilter nextFilter, IoSession session, Throwable cause) throws Exception {
-        Exchange exchange = mina2Consumer.getEndpoint().createExchange();
-        CamelException exception = new CamelException(cause.getMessage());
-        exchange.setException(exception);
-        mina2Consumer.getExceptionHandler().handleException("", exchange, exception);
-        sendResponse(session, exchange);
+        if (sendResponse(cause)){
+            Exception exception = new CamelException(cause.getMessage());
+            Exchange exchange = createExchange(exception);
+            mina2Consumer.getExceptionHandler().handleException("", exchange, exception);
+            sendResponse(session, exchange);
+        } else {
+            nextFilter.exceptionCaught(session, cause);
+        }
     }
 
     private void sendResponse(IoSession session, Exchange exchange) throws Exception {
@@ -64,24 +68,34 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
         Object response = exchange.hasOut()? getOut(mina2Consumer.getEndpoint(), exchange):
                                              getIn(mina2Consumer.getEndpoint(), exchange);
         if (response != null) {
-            LOG.debug("Writing body: {}", response);
-            Mina2Helper.writeBody(session, response, exchange);
+            WriteFuture future = session.write(response);
+            LOG.trace("Waiting for write to complete for body: {} using session: {}", response, session);
+            if (!future.awaitUninterruptibly(10, SECONDS)) {
+                LOG.warn("Cannot write body: " + response + " using session: " + session);
+            }
         } else {
             LOG.debug("Writing no response");
             disconnect = Boolean.TRUE;
         }
 
         // should session be closed after complete?
-        Message message = isOutCapable(exchange)? exchange.getOut() : exchange.getIn();
-        Boolean close = message.getHeader(MINA_CLOSE_SESSION_WHEN_COMPLETE, Boolean.class);
-
-        // should we disconnect, the header can override the configuration
+        Boolean close = (Boolean)session.getAttribute(MINA_CLOSE_SESSION_WHEN_COMPLETE);
         if (close != null) {
             disconnect = close;
         }
         if (disconnect) {
             LOG.debug("Closing session when complete at address: {}", mina2Consumer.getAcceptor().getLocalAddress());
-            session.close(true);
+            session.closeNow();
         }
+    }
+
+    private Exchange createExchange(Throwable cause){
+        Exchange exchange = mina2Consumer.getEndpoint().createExchange();
+        exchange.setException(cause);
+        return exchange;
+    }
+
+    private boolean sendResponse(Throwable cause){
+        return !(cause instanceof SSLException);
     }
 }
