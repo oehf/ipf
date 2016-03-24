@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti83
 
-import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
 import org.apache.commons.lang3.Validate
@@ -52,8 +51,8 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
         String ackCode = message.QAK[2].value
         switch (ackCode) {
             case 'OK': return handleRegularResponse(message.QUERY_RESPONSE.PID[3]()) // Case 1
-            case 'NF': return handleRegularResponse(null)  // Case 2
-            case 'AE': throw handleErrorResponse(message) // Cases 3-5
+            case 'NF': return handleEmptyResponse()  // Case 2
+            case 'AE': return handleErrorResponse(message) // Cases 3-5
             default: throw new InternalErrorException("Unexpected ack code " + ackCode)
         }
     }
@@ -67,17 +66,21 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
                         .setSystem(uriMapper.oidToUri(pid3[4][2]?.value))
                         .setValue(pid3[1].value)
                         .setUse(Identifier.IdentifierUse.OFFICIAL)
-                Parameters.ParametersParameterComponent parameter = new Parameters.ParametersParameterComponent()
+                parameters.addParameter()
                         .setName('targetIdentifier')
                         .setValue(identifier)
-                parameters.addParameter(parameter)
             }
         }
         parameters
     }
 
+    // Handle an empty response
+    private Parameters handleEmptyResponse() {
+        return handleRegularResponse(null)
+    }
+
     // Handle an error response from the Cross-reference manager
-    private BaseServerResponseException handleErrorResponse(RSP_K23 message) {
+    private Parameters handleErrorResponse(RSP_K23 message) {
 
         // Check error locations
         OperationOutcome oo = new OperationOutcome()
@@ -85,14 +88,17 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
         int errorComponent = message.ERR[2][5]?.value ? Integer.parseInt(message.ERR[2][5]?.value) : 0
 
         if (errorField == 3 && errorComponent == 1) {
-            // Case 3: Patient ID not found
-            return Utils.unknownPatientId();
+            // Case 3: Patient ID not found, maybe return empty response instead
+            throw Utils.unknownPatientId();
+            // return handleEmptyResponse()
         } else if (errorField == 3 && errorComponent == 4) {
-            return Utils.unknownPatientDomain()
+            // Case 4: Unknown Patient Domain
+            throw Utils.unknownPatientDomain()
         } else if (errorField == 4) {
-            return Utils.unknownTargetDomain()
+            // Case 5: Unknown Target Domain
+            throw Utils.unknownTargetDomain()
         } else {
-            return Utils.unexpectedProblem();
+            throw Utils.unexpectedProblem();
         }
 
     }

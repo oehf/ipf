@@ -86,15 +86,18 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
 
         Identifier sourceIdentifier = map[Constants.SOURCE_IDENTIFIER_NAME]
         if (!sourceIdentifier.value) {
+            // No value provided? Patient cannot be found
             throw Utils.unknownPatientId();
         }
         if (!Utils.populateIdentifier(qry.QPD[3], uriMapper, sourceIdentifier.system, sourceIdentifier.value)) {
+            // UriMapper is not able to derive a PIX OID/Namespace for the patient domain URI
             throw Utils.unknownPatientDomain(sourceIdentifier.system);
         }
 
         UriType requestedDomain = map[Constants.TARGET_SYSTEM_NAME]
         if (requestedDomain) {
             if (!Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[4]), uriMapper, requestedDomain.value)) {
+                // UriMapper is not able to derive a PIX OID/Namespace for the target domain URI
                 throw Utils.unknownTargetDomain(requestedDomain.value);
             }
         }

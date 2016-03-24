@@ -23,6 +23,7 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.*;
 import org.hl7.fhir.instance.model.IdType;
 import org.hl7.fhir.instance.model.Patient;
+import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
@@ -67,7 +68,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = Patient.SP_BIRTHDATE) DateParam birthDate,
             @OptionalParam(name = Patient.SP_ADDRESS) StringParam address,
             @OptionalParam(name = Patient.SP_GENDER) TokenParam gender,
-            @OptionalParam(name = Constants.SP_RESOURCE_IDENTIFIER) TokenParam resourceId,
+            @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             // below only relevant for pediatric option
             @OptionalParam(name = Patient.SP_TELECOM) StringParam telecom,
             @OptionalParam(name = Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER) NumberParam multipleBirthNumber,
@@ -84,7 +85,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
         addParameter(searchParameters, Patient.SP_BIRTHDATE, birthDate);
         addParameter(searchParameters, Patient.SP_ADDRESS, address);
         addParameter(searchParameters, Patient.SP_GENDER, gender);
-        addParameter(searchParameters, Constants.SP_RESOURCE_IDENTIFIER, resourceId);
+        addParameter(searchParameters, IAnyResource.SP_RES_ID, resourceId);
         addParameter(searchParameters, Patient.SP_TELECOM, telecom);
         addParameter(searchParameters, Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER, multipleBirthNumber);
         addParameter(searchParameters, Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN, mothersMaidenNameGiven);

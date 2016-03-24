@@ -23,6 +23,7 @@ import org.apache.commons.lang3.time.FastDateFormat
 import org.hl7.fhir.instance.model.Enumerations
 import org.hl7.fhir.instance.model.IdType
 import org.hl7.fhir.instance.model.Patient
+import org.hl7.fhir.instance.model.api.IAnyResource
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.Utils
@@ -113,7 +114,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     protected QBP_Q21 translateFhirReadToHL7v2(String queryTagPrefix, IdType resourceId) {
         Map<String, Object> parameters = [
                 (Constants.FHIR_REQUEST_PARAMETERS): [
-                        (Constants.SP_RESOURCE_IDENTIFIER): new TokenParam(pdqSupplierResourceIdentifierUri, resourceId.idPart)
+                        (IAnyResource.SP_RES_ID): new TokenParam(pdqSupplierResourceIdentifierUri, resourceId.idPart)
                 ]
         ]
         translateFhirSearchToHL7v2(queryTagPrefix, parameters)
@@ -147,7 +148,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         List<String> requestedDomains
         String identifierNamespace, identifierOid, identifierValue
 
-        TokenParam resourceIdParam = map.get(Constants.SP_RESOURCE_IDENTIFIER)
+        TokenParam resourceIdParam = map.get(IAnyResource.SP_RES_ID)
         if (resourceIdParam) {
             resourceIdParam.system = pdqSupplierResourceIdentifierUri
             (identifierNamespace, identifierOid, identifierValue) = searchToken(resourceIdParam)
@@ -157,7 +158,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         if (identifierParam) {
             List<List<String>> identifiers = searchTokenList(identifierParam)
             // Patient identifier has identifier value
-            List<String> searchIdentifier = identifiers?.find { it.size() == 3 && !it[2]?.empty}
+            List<String> searchIdentifier = identifiers?.find { it.size() == 3 && !it[2]?.empty }
             if (searchIdentifier) (identifierNamespace, identifierOid, identifierValue) = searchIdentifier
             // Requested domains have no identifier value. If the resource identifier system is not included here,
             // add it because otherwise we don't know the resource ID in the response.
