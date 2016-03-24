@@ -82,10 +82,11 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
         assertEquals(0, parameters.parameter.size())
     }
 
-    @Test(expected = InvalidRequestException)
+    @Test
     public void testTranslateErrorResponseCase3() {
         RSP_K23 message = loadMessage('err-1_Response')
-        translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        Parameters parameters = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        assertEquals(0, parameters.parameter.size())
     }
 
     @Test

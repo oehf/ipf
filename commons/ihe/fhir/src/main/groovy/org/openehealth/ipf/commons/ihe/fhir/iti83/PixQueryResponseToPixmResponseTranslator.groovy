@@ -89,8 +89,7 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
 
         if (errorField == 3 && errorComponent == 1) {
             // Case 3: Patient ID not found, maybe return empty response instead
-            throw Utils.unknownPatientId();
-            // return handleEmptyResponse()
+            return handleEmptyResponse()
         } else if (errorField == 3 && errorComponent == 4) {
             // Case 4: Unknown Patient Domain
             throw Utils.unknownPatientDomain()
