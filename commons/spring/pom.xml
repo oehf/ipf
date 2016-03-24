@@ -8,6 +8,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-commons-spring</artifactId>
+    <name>ipf-commons-spring</name>
+    <description>Spring support for IPF</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <dependencies>
         <dependency>
@@ -48,5 +51,12 @@
             <artifactId>spring-test</artifactId>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 
 </project>

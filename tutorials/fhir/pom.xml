@@ -24,6 +24,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-tutorials-fhir</artifactId>
+    <name>ipf-tutorials-fhir</name>
+    <packaging>jar</packaging>
+    <url>${site.url}/${project.artifactId}</url>
 
     <dependencies>
         <dependency>
@@ -101,5 +104,12 @@
             <classifier>tests</classifier>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 
 </project>

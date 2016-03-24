@@ -47,8 +47,8 @@ Data types for the *request* message of the supported transactions on producer (
 | [ITI-78] (get)    | String with the Patient resource identifier             | 
 | [ITI-83]          | `org.hl7.fhir.instance.model.Parameters`                | 
 
-The URL string may be complete (e.g. "http://example.com/base/Patient?name=foo") in which case the client's base URL will be ignored. 
-Or it can be relative (e.g. "Patient?family=smith") in which case the client's base URL will be used.
+The URL string may be complete (e.g. http://example.com/base/Patient?name=foo) in which case the client's base URL will be ignored. 
+Or it can be relative (e.g. Patient?family=smith) in which case the client's base URL will be used.
 
 
 [ITI-78]: iti78.html
