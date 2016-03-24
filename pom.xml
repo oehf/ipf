@@ -68,7 +68,7 @@
 
         <!-- Dependency version properties -->
         <activemq-version>5.13.1</activemq-version>
-        <aspectj-version>1.8.8</aspectj-version>
+        <aspectj-version>1.8.9</aspectj-version>
         <bouncycastle-version>1.54</bouncycastle-version>
         <camel-version>2.16.2</camel-version>
         <cglib-version>3.2.0</cglib-version>
@@ -79,7 +79,7 @@
         <commons-fileupload-version>1.3.1</commons-fileupload-version>
         <commons-io-version>2.4</commons-io-version>
         <commons-lang3-version>3.4</commons-lang3-version>
-        <commons-math3-version>3.6</commons-math3-version>
+        <commons-math3-version>3.6.1</commons-math3-version>
         <cxf-version>3.1.5</cxf-version>
         <derby-version>10.12.1.1</derby-version>
         <easymock-version>3.4</easymock-version>
@@ -98,7 +98,7 @@
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
         <hibernate-javassist-version>3.20.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
-        <httpclient4-version>4.5.1</httpclient4-version>
+        <httpclient4-version>4.5.2</httpclient4-version>
         <ipf-gazelle-version>1.1.0</ipf-gazelle-version>
         <ipf-oht-atna-version>3.1.1</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
@@ -119,10 +119,10 @@
         <quartz-version>2.2.2</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <!-- 9.7.0-3 hangs up test in ipf-modules-cda -->
-        <saxon-he-version>9.7.0-2</saxon-he-version>
+        <saxon-he-version>9.7.0-4</saxon-he-version>
         <servlet-api-version>3.1.0</servlet-api-version>
         <slf4j-version>1.7.19</slf4j-version>
-        <spring-version>4.2.4.RELEASE</spring-version>
+        <spring-version>4.2.5.RELEASE</spring-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>8.0.32</tomcat-version>
