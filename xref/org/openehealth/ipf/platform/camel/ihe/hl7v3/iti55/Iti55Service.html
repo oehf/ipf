@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>                     exchange.getIn().setHeader(<span class="jxr_string">"iti55.deferred.requestMessageId"</span>, requestMessageId);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a>                     exchange.getIn().setHeader(<span class="jxr_string">"iti55.deferred.auditDataset"</span>, auditDataset);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>                     <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/ws/AbstractWsEndpoint.html">AbstractWsEndpoint</a> responseEndpoint = (AbstractWsEndpoint) camelContext.getEndpoint(deferredResponseUri);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>                     AbstractWsEndpoint&lt;?, ?&gt; responseEndpoint = (AbstractWsEndpoint&lt;?, ?&gt;) camelContext.getEndpoint(deferredResponseUri);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a>                     responseEndpoint.setAudit(endpoint.isAudit());
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>                     exchange = producerTemplate.send(responseEndpoint, exchange);
@@ -258,6 +258,6 @@
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2015 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

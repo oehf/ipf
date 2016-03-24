@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a>     @Test
 <a class="jxr_linenumber" name="L213" href="#L213">213</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMissingPatientIdFolder() <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
 <a class="jxr_linenumber" name="L214" href="#L214">214</a>         ((FindFoldersQuery)folderRequest.getQuery()).setPatientId(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>         expectFailure(MISSING_REQUIRED_QUERY_PARAMETER,transformer.toEbXML(folderRequest), iti18Profile );
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>         expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, transformer.toEbXML(folderRequest), iti18Profile);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a>     }
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
 <a class="jxr_linenumber" name="L218" href="#L218">218</a>     @Test
@@ -288,6 +288,6 @@
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2015 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

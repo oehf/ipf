@@ -23,45 +23,45 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.commons.ihe.ws;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.commons.lang3.Validate.notNull;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.net.URL;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> javax.xml.namespace.QName;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> javax.xml.ws.Binding;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> javax.xml.ws.BindingProvider;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> javax.xml.ws.Service;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> javax.xml.ws.soap.SOAPBinding;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.endpoint.Client;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.frontend.ClientProxy;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.interceptor.InterceptorProvider;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.ws.addressing.MAPAggregator;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.ws.addressing.soap.MAPCodec;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.Cxf3791WorkaroundInterceptor;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.FixContentTypeOutInterceptor;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.MustUnderstandDecoratorInterceptor;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterceptor;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterceptor;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.endpoint.Client;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.frontend.ClientProxy;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.interceptor.InterceptorProvider;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.ws.addressing.MAPAggregator;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.ws.addressing.soap.MAPCodec;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.Cxf3791WorkaroundInterceptor;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.FixContentTypeOutInterceptor;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.MustUnderstandDecoratorInterceptor;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterceptor;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterceptor;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> javax.xml.namespace.QName;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> javax.xml.ws.Binding;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> javax.xml.ws.BindingProvider;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> javax.xml.ws.Service;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> javax.xml.ws.soap.SOAPBinding;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> java.net.URL;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.commons.lang3.Validate.notNull;
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * Factory for ITI Web Service stubs.</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/JaxWsClientFactory.html">JaxWsClientFactory</a> {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> JaxWsClientFactory&lt;AuditDatasetType <strong class="jxr_keyword">extends</strong> WsAuditDataset&gt; {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOG = LoggerFactory.getLogger(JaxWsClientFactory.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ThreadLocal&lt;Object&gt; threadLocalPort = <strong class="jxr_keyword">new</strong> ThreadLocal&lt;&gt;();
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/WsTransactionConfiguration.html">WsTransactionConfiguration</a> wsTransactionConfiguration;
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String serviceUrl;
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> InterceptorProvider customInterceptors;
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/audit/WsAuditStrategy.html">WsAuditStrategy</a> auditStrategy;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> AuditStrategy&lt;AuditDatasetType&gt; auditStrategy;
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     * Constructs the factory.</em>
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/JaxWsClientFactory.html">JaxWsClientFactory</a>(
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>              <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/WsTransactionConfiguration.html">WsTransactionConfiguration</a> wsTransactionConfiguration,
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>              String serviceUrl,
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>              <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/audit/WsAuditStrategy.html">WsAuditStrategy</a> auditStrategy,
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>              AuditStrategy&lt;AuditDatasetType&gt; auditStrategy,
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>              InterceptorProvider customInterceptors) 
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          notNull(wsTransactionConfiguration, <span class="jxr_string">"wsTransactionConfiguration"</span>);
@@ -128,58 +128,57 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>             <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/MustUnderstandDecoratorInterceptor.html">MustUnderstandDecoratorInterceptor</a> interceptor = <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/MustUnderstandDecoratorInterceptor.html">MustUnderstandDecoratorInterceptor</a>();
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>             <strong class="jxr_keyword">for</strong> (String nsUri : SoapUtils.WS_ADDRESSING_NS_URIS) {
 <a class="jxr_linenumber" name="L122" href="#L122">122</a>                 interceptor.addHeader(<strong class="jxr_keyword">new</strong> QName(nsUri, <span class="jxr_string">"Action"</span>));
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>                 interceptor.addHeader(<strong class="jxr_keyword">new</strong> QName(nsUri, <span class="jxr_string">"ReplyTo"</span>));
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>             }
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>             client.getOutInterceptors().add(interceptor);
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>             MAPCodec mapCodec = <strong class="jxr_keyword">new</strong> MAPCodec();
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>             MAPAggregator mapAggregator = <strong class="jxr_keyword">new</strong> MAPAggregator();
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>             client.getInInterceptors().add(mapCodec);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>             client.getInInterceptors().add(mapAggregator);
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>             client.getInFaultInterceptors().add(mapCodec);
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>             client.getInFaultInterceptors().add(mapAggregator);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>             client.getOutInterceptors().add(mapCodec);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>             client.getOutInterceptors().add(mapAggregator);
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>             client.getOutFaultInterceptors().add(mapCodec);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>             client.getOutFaultInterceptors().add(mapAggregator);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>         }
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>         
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>         <strong class="jxr_keyword">if</strong> (wsTransactionConfiguration.isSwaOutSupport()) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>             client.getOutInterceptors().add(<strong class="jxr_keyword">new</strong> ProvidedAttachmentOutInterceptor());
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>             client.getOutInterceptors().add(<strong class="jxr_keyword">new</strong> FixContentTypeOutInterceptor());            
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>         }
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>         InterceptorUtils.copyInterceptorsFromProvider(customInterceptors, client);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>     }
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>             }
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>             client.getOutInterceptors().add(interceptor);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>             MAPCodec mapCodec = <strong class="jxr_keyword">new</strong> MAPCodec();
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>             MAPAggregator mapAggregator = <strong class="jxr_keyword">new</strong> MAPAggregator();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>             client.getInInterceptors().add(mapCodec);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>             client.getInInterceptors().add(mapAggregator);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>             client.getInFaultInterceptors().add(mapCodec);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>             client.getInFaultInterceptors().add(mapAggregator);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>             client.getOutInterceptors().add(mapCodec);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>             client.getOutInterceptors().add(mapAggregator);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>             client.getOutFaultInterceptors().add(mapCodec);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>             client.getOutFaultInterceptors().add(mapAggregator);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         }
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>         
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>         <strong class="jxr_keyword">if</strong> (wsTransactionConfiguration.isSwaOutSupport()) {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>             client.getOutInterceptors().add(<strong class="jxr_keyword">new</strong> ProvidedAttachmentOutInterceptor());
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>             client.getOutInterceptors().add(<strong class="jxr_keyword">new</strong> FixContentTypeOutInterceptor());            
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>         }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>         InterceptorUtils.copyInterceptorsFromProvider(customInterceptors, client);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>     }
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">     * Helper method for installing of payload-collecting SOAP interceptors</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">     * for the given Client.</em>
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> installPayloadInterceptors(Client client) {
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>         client.getOutInterceptors().add(<strong class="jxr_keyword">new</strong> OutStreamSubstituteInterceptor());
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>         client.getOutInterceptors().add(<strong class="jxr_keyword">new</strong> OutPayloadExtractorInterceptor());
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>     }
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">     * Helper method for installing of payload-collecting SOAP interceptors</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">     * for the given Client.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> installPayloadInterceptors(Client client) {
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         client.getOutInterceptors().add(<strong class="jxr_keyword">new</strong> OutStreamSubstituteInterceptor());
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         client.getOutInterceptors().add(<strong class="jxr_keyword">new</strong> OutPayloadExtractorInterceptor());
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     }
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">     * Configures SOAP binding of the given SOAP port.</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> configureBinding(Object port) {
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>         BindingProvider bindingProvider = (BindingProvider) port;
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>         Map&lt;String, Object&gt; reqContext = bindingProvider.getRequestContext();
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceUrl);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>         Binding binding = bindingProvider.getBinding();
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>         SOAPBinding soapBinding = (SOAPBinding) binding;
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>         soapBinding.setMTOMEnabled(wsTransactionConfiguration.isMtom());
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>     }
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> }
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">     * Configures SOAP binding of the given SOAP port.</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> configureBinding(Object port) {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>         BindingProvider bindingProvider = (BindingProvider) port;
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>         Map&lt;String, Object&gt; reqContext = bindingProvider.getRequestContext();
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceUrl);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>         Binding binding = bindingProvider.getBinding();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>         SOAPBinding soapBinding = (SOAPBinding) binding;
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>         soapBinding.setMTOMEnabled(wsTransactionConfiguration.isMtom());
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>     }
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2015 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

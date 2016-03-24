@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testRecipientListSuccess() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>          wait.expectedMessageCount(2);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          mock.expectedBodiesReceived(<span class="jxr_string">"test1"</span>, <span class="jxr_string">"test2"</span>);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          producerTemplate.sendBodyAndHeader(<span class="jxr_string">"direct:flow-test-recipient-list"</span>, <span class="jxr_string">"test1,test2"</span>, <span class="jxr_string">"recipient"</span>, <span class="jxr_string">"http://localhost:7799/recipient"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          producerTemplate.sendBodyAndHeader(<span class="jxr_string">"direct:flow-test-recipient-list"</span>, <span class="jxr_string">"test1,test2"</span>, <span class="jxr_string">"recipient"</span>, <span class="jxr_string">"http4://localhost:7799/recipient"</span>);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>          wait.assertIsSatisfied();
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          mock.assertIsSatisfied();
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>          Long flowId1 = mock.getExchanges().get(0).getIn().getHeader(FLOW_ID_KEY, Long.<strong class="jxr_keyword">class</strong>);
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      @Test
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testRecipientListFailure() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          mock.expectedMessageCount(2);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          producerTemplate.sendBodyAndHeader(<span class="jxr_string">"direct:flow-test-recipient-list"</span>, <span class="jxr_string">"test1,test2"</span>, <span class="jxr_string">"recipient"</span>, <span class="jxr_string">"http://localhost:7799/bullshit"</span>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          producerTemplate.sendBodyAndHeader(<span class="jxr_string">"direct:flow-test-recipient-list"</span>, <span class="jxr_string">"test1,test2"</span>, <span class="jxr_string">"recipient"</span>, <span class="jxr_string">"http4://localhost:7799/bullshit"</span>);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          mock.assertIsSatisfied();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          Long flowId1 = mock.getExchanges().get(0).getIn().getHeader(FLOW_ID_KEY, Long.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          Long flowId2 = mock.getExchanges().get(1).getIn().getHeader(FLOW_ID_KEY, Long.<strong class="jxr_keyword">class</strong>);
@@ -104,6 +104,6 @@
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2015 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

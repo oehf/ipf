@@ -30,7 +30,7 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * Web Service-based eHealth transactions.</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/ws/correlation/AsynchronyCorrelator.html">AsynchronyCorrelator</a> {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> AsynchronyCorrelator&lt;AuditDatasetType <strong class="jxr_keyword">extends</strong> WsAuditDataset&gt; {
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">     * When the Web Service context of an outgoing request message contains</em>
@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">     * in the configured asynchrony correlator instance, even when the</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">     * WS-Addressing &lt;tt&gt;&amp;lt;ReplyTo&amp;gt;&lt;/tt&gt; header is not set.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String FORCE_CORRELATION = AsynchronyCorrelator.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">".FORCE"</span>;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      String FORCE_CORRELATION = AsynchronyCorrelator.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">".FORCE"</span>;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     * Stores a service endpoint URI.</em>
@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">     * Returns the audit dataset for the request message with the</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">     * given ID, or &lt;code&gt;null&lt;/code&gt; if the message is unknown.</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <a href="../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/audit/WsAuditDataset.html">WsAuditDataset</a> getAuditDataset(String messageId);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      AuditDatasetType getAuditDataset(String messageId);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">     * Stores a set of alternative keys for the message with the given</em>
@@ -131,6 +131,6 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2015 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

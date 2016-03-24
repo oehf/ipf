@@ -138,23 +138,25 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>         assertEquals(<span class="jxr_string">"abcdef"</span>, patientInfo.getIds().get(0).getId());
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>         assertEquals(<span class="jxr_string">"fedcba"</span>, patientInfo.getIds().get(1).getId());
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>         assertEquals(<span class="jxr_string">"Joman"</span>, patientInfo.getName().getFamilyName());
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>         assertEquals(<strong class="jxr_keyword">new</strong> DateTime(1980, 1, 2, 0, 0, DateTimeZone.UTC), patientInfo.getDateOfBirth());
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>         assertEquals(<span class="jxr_string">"A"</span>, patientInfo.getGender());
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>         assertEquals(<span class="jxr_string">"Jo Str. 3"</span>, patientInfo.getAddress().getStreetAddress());
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>     }
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>     
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>     @Test
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromHL7EmptyList() {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>         assertNull(transformer.fromHL7(Collections.&lt;String&gt;emptyList()));
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>     }
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>     
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>     @Test
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromHL7Null() {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>         assertNull(transformer.fromHL7(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>     }
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> }
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>         assertEquals(
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>                 <strong class="jxr_keyword">new</strong> Timestamp(<strong class="jxr_keyword">new</strong> DateTime(1980, 1, 2, 0, 0, DateTimeZone.UTC), Timestamp.Precision.DAY),
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>                 patientInfo.getDateOfBirth());
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         assertEquals(<span class="jxr_string">"A"</span>, patientInfo.getGender());
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         assertEquals(<span class="jxr_string">"Jo Str. 3"</span>, patientInfo.getAddress().getStreetAddress());
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     }
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>     @Test
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromHL7EmptyList() {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>         assertNull(transformer.fromHL7(Collections.&lt;String&gt;emptyList()));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>     }
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>     @Test
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromHL7Null() {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         assertNull(transformer.fromHL7(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>     }
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2015 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

@@ -27,8 +27,8 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.Exchange;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.modules.hl7.message.MessageUtils;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.core.util.Exchanges;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
@@ -42,13 +42,13 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * fragmentation as described in paragraph 2.10.2.2 of the HL7 v.2.5 specification.</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../../../org/openehealth/ipf/platform/camel/ihe/mllp/core/intercept/producer/ProducerRequestFragmenterInterceptor.html">ProducerRequestFragmenterInterceptor</a> <strong class="jxr_keyword">extends</strong> AbstractMllpInterceptor&lt;MllpTransactionEndpoint&gt; {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../../../org/openehealth/ipf/platform/camel/ihe/mllp/core/intercept/producer/ProducerRequestFragmenterInterceptor.html">ProducerRequestFragmenterInterceptor</a> <strong class="jxr_keyword">extends</strong> InterceptorSupport&lt;MllpTransactionEndpoint&lt;?&gt;&gt; {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">transient</strong> Logger LOG = LoggerFactory.getLogger(ProducerRequestFragmenterInterceptor.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>      
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      @Override
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> process(Exchange exchange) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">int</strong> threshold = getMllpEndpoint().getUnsolicitedFragmentationThreshold();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">int</strong> threshold = getEndpoint().getUnsolicitedFragmentationThreshold();
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>          <strong class="jxr_keyword">if</strong> (threshold &lt; 3) {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>              getWrappedProcessor().process(exchange);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>              <strong class="jxr_keyword">return</strong>;
@@ -130,7 +130,7 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a>             <em class="jxr_comment">// catch and analyse the response, if this was not the last fragment</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>             <strong class="jxr_keyword">if</strong>(currentSegmentIndex &lt; segments.size()) {
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>                 String responseString = Exchanges.resultMessage(exchange).getBody(String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>                 Terser responseTerser = <strong class="jxr_keyword">new</strong> Terser(getHl7v2TransactionConfiguration().getParser().parse(responseString));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>                 Terser responseTerser = <strong class="jxr_keyword">new</strong> Terser(getEndpoint().getHl7v2TransactionConfiguration().getParser().parse(responseString));
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>                 
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>                 String messageType = responseTerser.get(<span class="jxr_string">"MSH-9-1"</span>);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a>                 String acknowledgementCode = responseTerser.get(<span class="jxr_string">"MSA-1"</span>);
@@ -160,6 +160,6 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2015 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

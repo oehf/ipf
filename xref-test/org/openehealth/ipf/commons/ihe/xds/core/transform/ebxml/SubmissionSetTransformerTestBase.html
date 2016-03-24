@@ -67,8 +67,8 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          author1.getAuthorRole().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"role2"</span>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>          author1.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"2.3.3"</span>, <span class="jxr_string">"ISO"</span>)));
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>          author1.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec2"</span>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          author1.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<span class="jxr_string">"5.25 in"</span>, <span class="jxr_string">"Floppynet"</span>));
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          author1.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<span class="jxr_string">"2:465/46.40"</span>, <span class="jxr_string">"Fidonet"</span>));
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          author1.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(41, 76, 73901, 0));
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          author1.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(41, 76, 73901, 1));
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          Author author2 = <strong class="jxr_keyword">new</strong> Author();
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          author2.setAuthorPerson(createPerson(30));
@@ -78,8 +78,8 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          author2.getAuthorRole().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"role4"</span>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          author2.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"2.3.7"</span>, <span class="jxr_string">"ISO"</span>)));
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          author2.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec4"</span>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<span class="jxr_string">"3.5 in"</span>, <span class="jxr_string">"Floppynet"</span>));
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<span class="jxr_string">"2:465/168.8"</span>, <span class="jxr_string">"Fidonet"</span>));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(41, 76, 73901, 2));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(41, 76, 73901, 3));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          Address address = <strong class="jxr_keyword">new</strong> Address();
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          address.setCity(<span class="jxr_string">"city"</span>);
@@ -148,14 +148,14 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), <span class="jxr_string">"inst1"</span>, <span class="jxr_string">"inst2"</span>);
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), <span class="jxr_string">"role1^^^&amp;2.3.1&amp;ISO"</span>, <span class="jxr_string">"role2"</span>);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>         assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), <span class="jxr_string">"spec1^^^&amp;2.3.3&amp;ISO"</span>, <span class="jxr_string">"spec2"</span>);
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>         assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), <span class="jxr_string">"^^Floppynet^5.25 in"</span>, <span class="jxr_string">"^^Fidonet^2:465/46.40"</span>);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>         assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), <span class="jxr_string">"^PRN^PH^^41^76^73901^0"</span>, <span class="jxr_string">"^PRN^PH^^41^76^73901^1"</span>);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>         classification = assertClassification(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 1, <span class="jxr_string">""</span>, -1);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>         assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), <span class="jxr_string">"id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^degree 30^^&amp;uni 30&amp;uniType 30"</span>);
 <a class="jxr_linenumber" name="L147" href="#L147">147</a>         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), <span class="jxr_string">"inst3"</span>, <span class="jxr_string">"inst4"</span>);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a>         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), <span class="jxr_string">"role3^^^&amp;2.3.5&amp;ISO"</span>, <span class="jxr_string">"role4"</span>);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a>         assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), <span class="jxr_string">"spec3^^^&amp;2.3.7&amp;ISO"</span>, <span class="jxr_string">"spec4"</span>);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>         assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), <span class="jxr_string">"^^Floppynet^3.5 in"</span>, <span class="jxr_string">"^^Fidonet^2:465/168.8"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>         assertSlot(SLOT_NAME_AUTHOR_TELECOM, classification.getSlots(), <span class="jxr_string">"^PRN^PH^^41^76^73901^2"</span>, <span class="jxr_string">"^PRN^PH^^41^76^73901^3"</span>);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 
 <a class="jxr_linenumber" name="L152" href="#L152">152</a>         classification = assertClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, ebXML, 0, <span class="jxr_string">"code 6"</span>, 6);
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>         assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), <span class="jxr_string">"scheme 6"</span>);
@@ -222,6 +222,6 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2015 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>
