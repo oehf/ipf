@@ -8,6 +8,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ipf-platform-camel-ihe-fhir</artifactId>
+    <name>ipf-platform-camel-ihe-fhir</name>
+    <description>FHIR Restful IHE components for Apache Camel</description>
+    <url>${site.url}/${project.artifactId}</url>
 
     <dependencies>
         <dependency>
