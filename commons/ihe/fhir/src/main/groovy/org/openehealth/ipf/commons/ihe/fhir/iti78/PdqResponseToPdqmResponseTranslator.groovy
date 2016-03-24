@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78
 import ca.uhn.fhir.model.api.ResourceMetadataKeyEnum
 import ca.uhn.fhir.model.primitive.DecimalDt
 import ca.uhn.fhir.model.valueset.BundleEntrySearchModeEnum
-import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.v25.segment.PID
@@ -83,7 +82,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                     handleRegularSearchResponse(message.QUERY_RESPONSE()) :
                     handleRegularResource(message.QUERY_RESPONSE()) // Case 1
             case 'NF': return handleRegularSearchResponse(null)  // Case 2 TODO check + handle non-existent resource ID
-            case 'AE': throw handleErrorResponse(message) // Cases 3-5
+            case 'AE': return handleErrorResponse(message) // Cases 3-5
             default: throw new InternalErrorException("Unexpected ack code " + ackCode)
         }
     }
@@ -168,8 +167,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         if (pid[15]?.value) {
             CodeableConcept language = new CodeableConcept()
             language.addCoding().setCode(pid[15].value)
-            patient.getCommunication().add(
-                    new Patient.PatientCommunicationComponent().setLanguage(language))
+            patient.addCommunication().setLanguage(language)
         }
         if (pid[16]?.value) {
             CodeableConcept maritalStatus = new CodeableConcept()
@@ -187,12 +185,12 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         // FIXME: Often, these identifiers come without any namespace information, so they must
         // be somehow enhanced
         if (pid[18].value) {
-            patient.getIdentifier().add(convertIdentifier(pid[18]))
+            patient.addIdentifier(convertIdentifier(pid[18]))
         }
         // FIXME: Often, these identifiers come without any namespace information, so they must
         // be enhanced with static information (SSN, AHV, NHS etc.)
         if (pid[19].value) {
-            patient.getIdentifier().add(convertIdentifier(pid[19]))
+            patient.addIdentifier(convertIdentifier(pid[19]))
         }
 
         // No ethnicity in the default FHIR patient resource (but in the DAF profile)
@@ -217,7 +215,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
     }
 
     // Handle an error response from the Cross-reference manager
-    protected BaseServerResponseException handleErrorResponse(RSP_K21 message) {
+    protected List<PdqPatient> handleErrorResponse(RSP_K21 message) {
 
         // Check error locations
         int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0
@@ -269,8 +267,8 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                 .setState(xad[4]?.value)
                 .setDistrict(xad[9]?.value)
                 .setUse(addressUse(xad[7], AddressUse.HOME))
-        if (xad[1]?.value) address.getLine().add(new StringType(xad[1]?.value))
-        if (xad[2]?.value) address.getLine().add(new StringType(xad[2]?.value))
+        if (xad[1]?.value) address.addLine(xad[1]?.value)
+        if (xad[2]?.value) address.addLine(xad[2]?.value)
         address
     }
 
@@ -287,11 +285,11 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
      */
     protected HumanName convertName(xpn) {
         HumanName name = new HumanName().setUse(nameUse(xpn[7], NameUse.OFFICIAL))
-        if (xpn[1]?.value) name.getFamily().add(new StringType(xpn[1].value))
-        if (xpn[2]?.value) name.getGiven().add(new StringType(xpn[2].value))
-        if (xpn[3]?.value) name.getGiven().add(new StringType(xpn[3].value))
-        if (xpn[4]?.value) name.getSuffix().add(new StringType(xpn[4].value))
-        if (xpn[5]?.value) name.getPrefix().add(new StringType(xpn[5].value))
+        if (xpn[1]?.value) name.addFamily(xpn[1].value)
+        if (xpn[2]?.value) name.addGiven(xpn[2].value)
+        if (xpn[3]?.value) name.addGiven(xpn[3].value)
+        if (xpn[4]?.value) name.addSuffix(xpn[4].value)
+        if (xpn[5]?.value) name.addPrefix(xpn[5].value)
         name
     }
 

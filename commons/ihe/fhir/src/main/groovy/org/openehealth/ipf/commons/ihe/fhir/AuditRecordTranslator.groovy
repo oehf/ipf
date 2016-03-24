@@ -50,9 +50,7 @@ class AuditRecordTranslator {
     }
 
     static CodeableConcept codeableConcept(CodedValueType atna) {
-        def fhir = new CodeableConcept()
-        fhir.addCoding(coding(atna))
-        return fhir
+        return new CodeableConcept().addCoding(coding(atna))
     }
 
     static InstantType timestamp(String s) {
@@ -60,7 +58,7 @@ class AuditRecordTranslator {
     }
 
     static AuditEvent.AuditEventEventComponent eventIdentification(EventIdentificationType atna) {
-        def fhir = new AuditEvent.AuditEventEventComponent(coding(atna.eventID), timestamp(atna.eventDateTime))
+        AuditEvent.AuditEventEventComponent fhir = new AuditEvent.AuditEventEventComponent(coding(atna.eventID), timestamp(atna.eventDateTime))
         atna.eventTypeCode.each { fhir.addSubtype(coding(it)) }
         fhir.action = new AuditEvent.AuditEventActionEnumFactory().fromCode(atna.eventActionCode)
         fhir.outcome = new AuditEvent.AuditEventOutcomeEnumFactory().fromCode(Integer.toString(atna.eventOutcomeIndicator))
@@ -69,7 +67,7 @@ class AuditRecordTranslator {
     }
 
     static AuditEventSourceComponent auditSourceIdentification(AuditSourceIdentificationType atna) {
-        def fhir = new AuditEventSourceComponent(
+        AuditEventSourceComponent fhir = new AuditEventSourceComponent(
                 site: atna.auditEnterpriseSiteID,
                 identifier: new Identifier(value: atna.auditSourceID))
         if (atna.auditSourceTypeCode?.code) {
@@ -79,7 +77,7 @@ class AuditRecordTranslator {
     }
 
     static AuditEvent.AuditEventParticipantComponent participant(ActiveParticipantType atna) {
-        def fhir = new AuditEvent.AuditEventParticipantComponent(new BooleanType(atna.userIsRequestor))
+        AuditEvent.AuditEventParticipantComponent fhir = new AuditEvent.AuditEventParticipantComponent(new BooleanType(atna.userIsRequestor))
         atna.roleIDCode.each { fhir.addRole(codeableConcept(it)) }
         fhir.userId = new Identifier(value: atna.userID)
         fhir.altId = atna.alternativeUserID
@@ -93,7 +91,7 @@ class AuditRecordTranslator {
     }
 
     static AuditEvent.AuditEventObjectComponent participantObject(ParticipantObjectIdentificationType atna) {
-        def fhir = new AuditEvent.AuditEventObjectComponent()
+        AuditEvent.AuditEventObjectComponent fhir = new AuditEvent.AuditEventObjectComponent()
         fhir.identifier = new Identifier(
                 value: atna.participantObjectID,
                 /*type: codeableConcept(atna.participantObjectIDTypeCode)*/)

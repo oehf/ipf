@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import org.hl7.fhir.instance.model.Coding;
 import org.hl7.fhir.instance.model.DocumentManifest;
 import org.hl7.fhir.instance.model.Patient;
+import org.hl7.fhir.instance.model.api.IAnyResource;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -40,13 +41,12 @@ public interface Constants {
             TARGET_SYSTEM_NAME));
 
     // PDQm stuff
-    String SP_RESOURCE_IDENTIFIER = "_id";
     String SP_MULTIPLE_BIRTH_ORDER_NUMBER = "multipleBirthInteger";
     String SP_MOTHERS_MAIDEN_NAME_GIVEN = "mothersMaidenName.given";
     String SP_MOTHERS_MAIDEN_NAME_FAMILY = "mothersMaidenName.family";
 
     Set<String> ITI78_PARAMETERS = new HashSet<>(Arrays.asList(
-            SP_RESOURCE_IDENTIFIER,
+            IAnyResource.SP_RES_ID,
             SP_MULTIPLE_BIRTH_ORDER_NUMBER,
             SP_MOTHERS_MAIDEN_NAME_GIVEN,
             SP_MOTHERS_MAIDEN_NAME_FAMILY,
