@@ -16,12 +16,13 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import org.hl7.fhir.instance.model.OperationOutcome;
+import org.hl7.fhir.instance.model.Parameters;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.servlet.ServletException;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -35,13 +36,10 @@ public class TestIti83NoPatient extends AbstractTestIti83 {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = InvalidRequestException.class)
+    @Test
     public void testSendManualPixm() {
-        try {
-            sendManually(validQueryParameters());
-        } catch (InvalidRequestException e) {
-            assertAndRethrowException(e, OperationOutcome.IssueType.VALUE);
-        }
+        Parameters result = sendManually(validQueryParameters());
+        assertTrue(result.getParameter().isEmpty());
     }
 
 }
