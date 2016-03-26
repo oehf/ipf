@@ -19,6 +19,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_E
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.OPTIONAL;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.REQUIRED;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_CODING_SCHEME;
 
 import java.io.ByteArrayOutputStream;
 
@@ -45,7 +46,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndReg
  */
 public class ClassificationDisplayNameValidatorTest {
 
-
     private static final SlotValueValidation[] NO_SLOT_VALUE_VALIDATION = new SlotValueValidation[] {};
 
     private EbXMLExtrinsicObject extrinsicObject;
@@ -54,7 +54,6 @@ public class ClassificationDisplayNameValidatorTest {
     public void setUp() throws Exception {
         EbXMLProvideAndRegisterDocumentSetRequest ebXMLObject = createProvideAndRegisterDocumentSetRequest();
         extrinsicObject = ebXMLObject.getExtrinsicObjects().get(0);
-        //marshalEbXML(ebXMLObject);
     }
 
     @Test
@@ -70,14 +69,12 @@ public class ClassificationDisplayNameValidatorTest {
     @Test
     public void testValidateClassificationNoNameRequiredButNamePresent() throws XDSMetaDataException {
         clearNameInFirstClassification(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME);
-
         doValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, OPTIONAL);
     }
 
     @Test(expected = XDSMetaDataException.class)
     public void testValidateClassificationNameRequiredButNotAvailable() throws XDSMetaDataException {
         clearNameInFirstClassification(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME);
-        
         doValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, REQUIRED);
     }
     
@@ -89,19 +86,9 @@ public class ClassificationDisplayNameValidatorTest {
     }
     
     
-    @Test(expected = XDSMetaDataException.class)
-    public void testEventCodeClassificationNameDoesNotExist() throws XDSMetaDataException {
-        clearNameInFirstClassification(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME);
-
-        ClassificationValidation validator = buildEventListValidator();
-        validator.validate(extrinsicObject);
-    }
-    
-    
     private void doValidation(String classScheme, DisplayNameUsage displayNameUsage){
-        ClassificationValidation validator = new ClassificationValidation(classScheme,
-                                                                          displayNameUsage,
-                                                                          NO_SLOT_VALUE_VALIDATION);
+        ClassificationValidation validator = new ClassificationValidation(
+                classScheme, displayNameUsage, NO_SLOT_VALUE_VALIDATION);
         validator.validate(extrinsicObject);
     }
     
@@ -110,10 +97,9 @@ public class ClassificationDisplayNameValidatorTest {
     }
     
     private ClassificationValidation buildEventListValidator(){
-        SlotValueValidation [] eventCodeListValidator = new SlotValueValidation [] {  new EventCodeListDisplayNameValidator()};
-        return new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME,
-                                                                           OPTIONAL,
-                                                                           eventCodeListValidator);
+        SlotValueValidation [] eventCodeListValidator = new SlotValueValidation [] {
+                new SlotValueValidation(SLOT_NAME_CODING_SCHEME, new NopValidator())};
+        return new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, OPTIONAL, eventCodeListValidator);
     }
     
     

@@ -65,14 +65,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final SlotValueValidation[] codingSchemeValidations = new SlotValueValidation[] {
         new SlotValueValidation(SLOT_NAME_CODING_SCHEME, nopValidator)};
 
-    private final SlotValueValidation[] iheEventCodeListValidations = new SlotValueValidation [] {
-        new EventCodeListDisplayNameValidator()
-    };
-
 
     private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile, boolean onDemandProvided, boolean limitedMetadata) {
         List<RegistryObjectValidator> validators = new ArrayList<>();
         boolean isContinuaHRN = (profile.getInteractionId() == IpfInteractionId.Continua_HRN);
+        DisplayNameUsage requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
+
         boolean isOnDemand    = (profile.getInteractionId() == IpfInteractionId.ITI_61) ||
                                 (profile.isQuery() && onDemandProvided);
 
@@ -92,7 +90,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                     needHashAndSize ? 1 : 0,
                     isOnDemand ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, limitedMetadata ? 0 : 1, 1),
-            new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, isOnDemand ? 0 : 1),
+            new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0,
+                    (isOnDemand || isContinuaHRN) ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SIZE, positiveNumberValidator,
                     needHashAndSize ? 1 : 0,
                     isOnDemand ? 0 : 1),
@@ -104,23 +103,20 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new SlotValidation(SLOT_NAME_URI, uriValidator),
             new AuthorClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, authorValidations),
             new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME,
-                    limitedMetadata ? 0 : 1, 1, REQUIRED, codingSchemeValidations),
+                    limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME,
                     limitedMetadata ? 0 : 1, Integer.MAX_VALUE,
-                    isContinuaHRN ? REQUIRED : OPTIONAL, codingSchemeValidations),
-            //IHE: iheEventCodeListValidations handles the conditionally REQUIRED
-            //     validation of display name of eventCodeListDisplayName in a slotValueValidator
+                    requiredOnlyForContinuaHRN, codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE,
-                                         isContinuaHRN ? REQUIRED : OPTIONAL,
-                                         isContinuaHRN ? codingSchemeValidations : iheEventCodeListValidations),
+                    requiredOnlyForContinuaHRN, codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME,
-                    limitedMetadata ? 0 : 1, 1, isContinuaHRN ? OPTIONAL : REQUIRED, codingSchemeValidations),
+                    limitedMetadata ? 0 : 1, 1, OPTIONAL, codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME,
-                    limitedMetadata ? 0 : 1, 1, REQUIRED, codingSchemeValidations),
+                    limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME,
-                    limitedMetadata ? 0 : 1, 1, REQUIRED, codingSchemeValidations),
+                    limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME,
-                    limitedMetadata ? 0 : 1, 1, REQUIRED, codingSchemeValidations));
+                    limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations));
 
         if (! limitedMetadata) {
             validators.add(new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
@@ -132,14 +128,17 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         return validators;
     }
 
-    private List<RegistryObjectValidator> getSubmissionSetSlotValidations(boolean limitedMetadata) {
+    private List<RegistryObjectValidator> getSubmissionSetSlotValidations(ValidationProfile profile, boolean limitedMetadata) {
+        boolean isContinuaHRN = (profile.getInteractionId() == IpfInteractionId.Continua_HRN);
+        DisplayNameUsage requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
+
         List<RegistryObjectValidator> validators = new ArrayList<>();
         Collections.addAll(validators,
                 new SlotValidation(SLOT_NAME_INTENDED_RECIPIENT, recipientListValidator),
                 new SlotValueValidation(SLOT_NAME_SUBMISSION_TIME, timeValidator),
                 new AuthorClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, authorValidations),
                 new ClassificationValidation(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME,
-                        limitedMetadata ? 0 : 1, 1, REQUIRED, codingSchemeValidations),
+                        limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
                 new ExternalIdentifierValidation(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, oidValidator));
         if (! limitedMetadata) {
             validators.add(new ExternalIdentifierValidation(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
@@ -153,7 +152,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         Collections.addAll(validators,
                 new SlotValueValidation(SLOT_NAME_LAST_UPDATE_TIME, timeValidator, 0, 1),
                 new ClassificationValidation(FOLDER_CODE_LIST_CLASS_SCHEME,
-                        limitedMetadata ? 0 : 1, Integer.MAX_VALUE, REQUIRED, codingSchemeValidations));
+                        limitedMetadata ? 0 : 1, Integer.MAX_VALUE, OPTIONAL, codingSchemeValidations));
         if (! limitedMetadata) {
             validators.add(new ExternalIdentifierValidation(FOLDER_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
         }
@@ -228,7 +227,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     
         for (EbXMLRegistryPackage submissionSet : submissionSets) {
             boolean limitedMetadata = checkLimitedMetadata(submissionSet, profile);
-            runValidations(submissionSet, getSubmissionSetSlotValidations(limitedMetadata));
+            runValidations(submissionSet, getSubmissionSetSlotValidations(profile, limitedMetadata));
 
             AvailabilityStatus status = submissionSet.getStatus();
             if (profile.isQuery() || (status != null)) {
