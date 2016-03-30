@@ -172,7 +172,17 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         if (pid[16]?.value) {
             CodeableConcept maritalStatus = new CodeableConcept()
             String mapped = pid[16].value.map('hl7v2fhir-patient-maritalStatus')
-            V3MaritalStatus mappedMaritalStatus = "UNK".equals(mapped) ? V3NullFlavor.UNK : V3MaritalStatus.fromCode(mapped)
+            def mappedMaritalStatus
+            switch (mapped) {
+                case "UNK" :
+                    mappedMaritalStatus = V3NullFlavor.UNK; break;
+                case "U" :
+                    mappedMaritalStatus = new Coding()
+                            .setSystem('http://hl7.org/fhir/marital-status')
+                            .setCode('U')
+                            .setDisplay('Unmarried'); break;
+                default : mappedMaritalStatus = V3MaritalStatus.fromCode(mapped)
+            }
             maritalStatus.addCoding()
                     .setCode(mapped)
                     .setSystem(mappedMaritalStatus.system)
