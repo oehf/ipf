@@ -34,7 +34,8 @@ public abstract class AbstractUriMapper implements UriMapper {
         String oid;
         if ((oid = translateURN(uri, URN.OID)) != null) return oid;
         if ((oid = mapUriToOid(uri)) != null) return oid;
-        throw new FhirTranslationException("URI " + uri + " cannot be mapped into an OID");
+        return null;
+        // throw new FhirTranslationException("URI " + uri + " cannot be mapped into an OID");
     }
 
     @Override
