@@ -160,12 +160,23 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
             // Patient identifier has identifier value
             List<String> searchIdentifier = identifiers?.find { it.size() == 3 && !it[2]?.empty }
             if (searchIdentifier) (identifierNamespace, identifierOid, identifierValue) = searchIdentifier
+            // The following is not present in the final spec version, but clients may still use this:
             // Requested domains have no identifier value. If the resource identifier system is not included here,
             // add it because otherwise we don't know the resource ID in the response.
             requestedDomains = identifiers?.findAll { it.size() == 2 || (!it[2]) }.collect { it[1] }
-            if (pdqSupplierResourceIdentifierOid in requestedDomains)
-                requestedDomains.add(pdqSupplierResourceIdentifierOid)
         }
+
+        // Last-minute change: use targetSystem parameter to request dedicated domains
+        UriAndListParam targetSystems = map.get(Constants.TARGET_SYSTEM_NAME)
+        if (targetSystems) {
+            List<List<String>> targets = searchUriList(targetSystems)
+            requestedDomains = targets.collect { it[1] }
+        }
+
+        // If requestedDomains is set but the pdqSupplierResourceIdentifierOid is not part of it, add it.
+        // Otherwise no MPI patient ID is returned and we cannot generate a resource ID from it!
+        if (requestedDomains && (!requestedDomains.contains(pdqSupplierResourceIdentifierOid)))
+            requestedDomains.add(pdqSupplierResourceIdentifierOid)
 
         // Properly convert birth date.
         DateParam birthDateParam = map.get(Patient.SP_BIRTHDATE)
@@ -216,6 +227,21 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
 
     private List<String> searchStringList(StringAndListParam param, boolean forceExactSearch) {
         param?.getValuesAsQueryTokens().collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
+    }
+
+    private List<String> searchUri(UriParam param) {
+        String namespace, oid
+        if (param == null || param.empty) return null;
+        namespace = uriMapper.uriToNamespace(param.value)
+        oid = uriMapper.uriToOid(param.value)
+        if (!(namespace || oid)) {
+            throw Utils.unknownPatientDomain(param.value)
+        }
+        [namespace, oid]
+    }
+
+    private List<List<String>> searchUriList(UriAndListParam param) {
+        param?.getValuesAsQueryTokens().collect { searchUri(it.valuesAsQueryTokens.find()) }
     }
 
     private String searchNumber(NumberParam param) {

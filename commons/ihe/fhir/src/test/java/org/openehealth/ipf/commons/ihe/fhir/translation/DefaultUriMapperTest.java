@@ -50,10 +50,10 @@ public class DefaultUriMapperTest {
         assertEquals("1.2.3.4", uriMapper.uriToOid(uri));
     }
 
-    @Test(expected = FhirTranslationException.class)
+    @Test
     public void testTranslateUriToOidFails() throws Exception {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
-        uriMapper.uriToOid(uri);
+        assertNull(uriMapper.uriToOid(uri));
     }
 
     @Test

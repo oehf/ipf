@@ -7,7 +7,9 @@ mappings = {
 
 		uriToNamespace (
 				'http://org.openehealth/ipf/commons/ihe/fhir/1' : 'fhir1',
-				'http://org.openehealth/ipf/commons/ihe/fhir/2' : 'fhir2'
+				'http://org.openehealth/ipf/commons/ihe/fhir/2' : 'fhir2',
+				'urn:oid:1.2.3.4'                               : 'fhir1',
+				'urn:oid:1.2.3.4.5.6'                           : 'fhir2'
 		)
 
 }

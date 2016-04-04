@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti83
 
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
 import org.hl7.fhir.instance.model.Identifier
 import org.hl7.fhir.instance.model.Parameters
 import org.hl7.fhir.instance.model.UriType
@@ -52,7 +53,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
         Identifier systemIdentifier = new Identifier()
                 .setSystem('urn:oid:1.2.3.4')
                 .setValue('4711ABC')
-        UriType domainsReturned = new UriType('urn:oid:1.2.3.5.6')
+        UriType domainsReturned = new UriType('urn:oid:1.2.3.4.5.6')
         Parameters params = new Parameters()
         params.addParameter()
                 .setName(Constants.SOURCE_IDENTIFIER_NAME)
@@ -87,7 +88,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
         assertEquals(mappingService.get('uriToOid', domainsReturned.value), translated.QPD[4][4][2].value)
     }
 
-    @Test(expected = FhirTranslationException)
+    @Test(expected = InvalidRequestException)
     public void testUnknownURNScheme() {
         Identifier systemIdentifier = new Identifier()
                 .setSystem('urn:isbn:1.2.3.4')

@@ -54,10 +54,15 @@ class Utils {
 
     static boolean populateIdentifier(def cx, UriMapper uriMapper, String uri, String identifier = null) {
         cx[1] = identifier ?: ''
-        cx[4][1] = uriMapper.uriToNamespace(uri)
-        cx[4][2] = uriMapper.uriToOid(uri)
-        cx[4][3] = 'ISO'
-        return cx[4][1].value && cx[4][2].value
+        String namespace = uriMapper.uriToNamespace(uri)
+        if (namespace) cx[4][1] = namespace
+        String oid = uriMapper.uriToOid(uri)
+        if (oid) {
+            cx[4][2] = oid
+            cx[4][3] = 'ISO'
+        }
+        // TODO: should really require that both oid and namespace is set
+        return cx[4][1]?.value || cx[4][2]?.value
     }
 
     static boolean populateIdentifier(def cx, String oid, String identifier = null) {
