@@ -122,7 +122,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                     def queryId = xml.controlActProcess.queryByParameter.queryId
                     buildInstanceIdentifier(builder, 'queryId', false, 
                             queryId.@root.text(), queryId.@extension.text())
-
+                    statusCode('code':'deliveredResponse')
                     String responseStatus = (rsp.MSH[9][1].value == 'RSP') ? rsp.QAK[2].value : 'AE'
                     queryResponseCode(code: responseStatus)
                 }
@@ -176,4 +176,5 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 errorLocations: errorLocations]
         
     }
+
 }
