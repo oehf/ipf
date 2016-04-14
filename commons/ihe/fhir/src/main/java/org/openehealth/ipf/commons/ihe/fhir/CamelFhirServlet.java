@@ -142,6 +142,8 @@ public class CamelFhirServlet extends RestfulServer {
         setPagingProvider(getDefaultPagingProvider(pagingProviderSize));
         setDefaultPrettyPrint(prettyPrint);
 
+        setServerAddressStrategy();
+
         /*
          * Use a narrative generator. This is a completely optional step,
 		 * but can be useful as it causes HAPI to generate narratives for

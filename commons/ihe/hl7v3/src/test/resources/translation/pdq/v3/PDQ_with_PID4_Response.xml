@@ -119,6 +119,7 @@
     </subject>
     <queryAck>
       <queryId root="1.2.3.4.5.6.7" extension="5a9e5450-f8c5-4838-b06b-83fd0e10c4c1" />
+      <statusCode code="deliveredResponse"/>
       <queryResponseCode code="OK" />
       <resultTotalQuantity value="2" />
       <resultCurrentQuantity value="2" />

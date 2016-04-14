@@ -70,6 +70,7 @@
         </subject>
         <queryAck>
             <queryId root="1.2.840.114350.1.13.99999.4567.34" extension="33452"/>
+            <statusCode code="deliveredResponse"/>
             <queryResponseCode code="OK"/>
         </queryAck>
         <queryByParameter>
