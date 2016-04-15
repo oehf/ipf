@@ -24,7 +24,7 @@
   <controlActProcess classCode="CACT" moodCode="EVN">
     <code code="PRPA_TE201306UV02" codeSystem="2.16.840.1.113883.1.6" />
     <effectiveTime value="20100324122837" />
-    <subject typeCode="SUBJ">
+    <subject typeCode="SUBJ" contextConductionInd = "false">
       <registrationEvent classCode="REG" moodCode="EVN">
         <statusCode code="active" />
         <subject1 typeCode="SBJ">
@@ -49,6 +49,10 @@
                 <streetAddressLine>Am Domplatz 14</streetAddressLine>
               </addr>
             </patientPerson>
+            <providerOrganization classCode = "ORG" determinerCode="INSTANCE">
+              <id root="1.2.3"/>
+              <contactParty classCode="CON" nullFlavor="UNK"/>
+            </providerOrganization>
             <subjectOf1>
               <queryMatchObservation classCode="COND" moodCode="EVN">
                 <code code="IHE_PDQ" />
@@ -64,7 +68,7 @@
         </custodian>
       </registrationEvent>
     </subject>
-    <subject typeCode="SUBJ">
+    <subject typeCode="SUBJ" contextConductionInd = "false">
       <registrationEvent classCode="REG" moodCode="EVN">
         <statusCode code="active" />
         <subject1 typeCode="SBJ">
@@ -98,6 +102,10 @@
                 </scopingOrganization>
               </asOtherIDs>
             </patientPerson>
+            <providerOrganization classCode = "ORG" determinerCode="INSTANCE">
+              <id root="1.2.3"/>
+              <contactParty classCode="CON" nullFlavor="UNK"/>
+            </providerOrganization>
             <subjectOf1>
               <queryMatchObservation classCode="COND" moodCode="EVN">
                 <code code="IHE_PDQ" />
