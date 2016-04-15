@@ -67,6 +67,8 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
      */
     String mpiSystemIdExtension = ''
 
+    String mpiOrganizationIdRoot = mpiSystemIdRoot
+
     /**
      * Root for values from PID-19.
      */

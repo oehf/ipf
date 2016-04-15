@@ -111,7 +111,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                         def pid3collection = qr.PID[3]()
                         Set<String> remainingDomains = (Set<String>) requestedDomains.clone()
                         if (pid3collection) {
-                            subject(typeCode: 'SUBJ') {
+                            subject(typeCode: 'SUBJ', 'contextConductionInd': false) {
                                 registrationEvent(classCode: 'REG', moodCode: 'EVN') {
                                     statusCode(code: 'active')
                                     subject1(typeCode: 'SBJ') {
@@ -135,6 +135,10 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
                                                 }
                                                 // disallowed in ITI-47
                                                 // createBirthPlaceElement(builder, qr.PID)
+                                            }
+                                            providerOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
+                                                id(root: this.mpiOrganizationIdRoot)
+                                                contactParty(classCode: 'CON', nullFlavor: 'UNK')
                                             }
                                             subjectOf1 {
                                                 createQueryMatchObservation(builder, qr)
