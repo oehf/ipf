@@ -100,7 +100,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 if (rsp.MSH[9][1].value == 'RSP') {
 					def pid3collection = rsp.QUERY_RESPONSE.PID[3]()
                     if (pid3collection) {
-                        subject(typeCode: 'SUBJ') {
+                        subject(typeCode: 'SUBJ', 'contextConductionInd': false) {
                             registrationEvent(classCode: 'REG', moodCode: 'EVN') {
                                 statusCode(code: 'active')
                                 subject1(typeCode: 'SBJ') {

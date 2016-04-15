@@ -108,7 +108,8 @@ public class CamelFhirServlet extends RestfulServer {
      * @see IPagingProvider
      */
     protected IPagingProvider getDefaultPagingProvider(int pagingProviderSize) {
-        return new FifoMemoryPagingProvider(pagingProviderSize);
+        FifoMemoryPagingProvider pagingProvider = new FifoMemoryPagingProvider(pagingProviderSize);
+        return pagingProvider;
     }
 
     /**
