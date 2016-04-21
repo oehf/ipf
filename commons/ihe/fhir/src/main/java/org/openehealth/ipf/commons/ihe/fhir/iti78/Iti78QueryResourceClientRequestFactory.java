@@ -22,7 +22,10 @@ import ca.uhn.fhir.rest.gclient.ICriterion;
 import ca.uhn.fhir.rest.gclient.IQuery;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.Patient;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
 
 import java.util.Map;
 
@@ -33,21 +36,9 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.1
  */
-public class Iti78QueryResourceClientRequestFactory implements ClientRequestFactory<IQuery<Bundle>> {
+public class Iti78QueryResourceClientRequestFactory extends QueryClientRequestFactory {
 
-    @Override
-    public IClientExecutable<IQuery<Bundle>, Bundle> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
-        IClientExecutable<IQuery<Bundle>, Bundle> executable;
-        if (requestData instanceof ICriterion) {
-            executable = client.search()
-                    .forResource(Patient.class)
-                    .where((ICriterion<?>) requestData)
-                    .returnBundle(Bundle.class);
-        } else {
-            executable = client.search()
-                    .byUrl(requestData.toString())
-                    .returnBundle(Bundle.class);
-        }
-        return executable;
+    public Iti78QueryResourceClientRequestFactory() {
+        super(Patient.class);
     }
 }

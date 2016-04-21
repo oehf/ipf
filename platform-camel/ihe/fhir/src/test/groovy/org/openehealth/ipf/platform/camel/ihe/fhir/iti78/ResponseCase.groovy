@@ -50,6 +50,61 @@ public enum ResponseCase {
         }
     },
 
+    OK_MANY(AcknowledgmentCode.AA, "OK") {
+        @Override
+        RSP_K21 doPopulateResponse(RSP_K21 rsp) {
+
+            rsp.QUERY_RESPONSE(0).with {
+                PID[3](0)[1] = "4711"
+                PID[3](0)[4][1] = "namespace"
+                PID[3](0)[4][2] = "1.2.3.4.5.6"
+                PID[3](0)[4][3] = "ISO"
+                PID[3](0)[5] = "PI"
+
+                PID[5][1] = 'Test1'
+                PID[5][2] = 'Patient'
+                PID[5][7] = 'L'
+                PID[6][1] = 'Maiden'
+                PID[6][7] = 'L'
+
+                PID[7] = '19400101'
+                PID[8] = 'M'
+            }
+            rsp.QUERY_RESPONSE(1).with {
+                PID[3](0)[1] = "0815"
+                PID[3](0)[4][1] = "namespace"
+                PID[3](0)[4][2] = "1.2.3.4.5.6"
+                PID[3](0)[4][3] = "ISO"
+                PID[3](0)[5] = "PI"
+
+                PID[5][1] = 'Test2'
+                PID[5][2] = 'Patient'
+                PID[5][7] = 'L'
+                PID[6][1] = 'Maiden'
+                PID[6][7] = 'L'
+
+                PID[7] = '19400101'
+                PID[8] = 'M'
+            }
+            rsp.QUERY_RESPONSE(2).with {
+                PID[3](0)[1] = "9999"
+                PID[3](0)[4][1] = "namespace"
+                PID[3](0)[4][2] = "1.2.3.4.5.6"
+                PID[3](0)[4][3] = "ISO"
+                PID[3](0)[5] = "PI"
+
+                PID[5][1] = 'Test3'
+                PID[5][2] = 'Patient'
+                PID[5][7] = 'L'
+                PID[6][1] = 'Maiden'
+                PID[6][7] = 'L'
+
+                PID[7] = '19400101'
+                PID[8] = 'M'
+            }
+            rsp
+        }
+    },
 
     UNKNOWN_TARGET_AUTHORITY(AcknowledgmentCode.AE, "AE") {
         @Override

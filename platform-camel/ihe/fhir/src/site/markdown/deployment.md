@@ -51,6 +51,18 @@ Here is an example:
 ```
 
 
+The following servlet parameters are supported:
+
+| Parameter name       | Type       | Default value | Short description                                                                    |
+|:---------------------|:-----------|:--------------|:-------------------------------------------------------------------------------------|
+| `logging`            | Boolean    | false         | writes incoming requests into the log
+| `highlight`          | Boolean    | false         | whether responses to requests from browsers are (syntax-)highlighted
+| `pretty`             | Boolean    | false         | whether responses are indented
+| `pagingProviderSize` | Integer    | 50            | amount of [paging requests] being maintained concurrently
+| `defaultPageSize`    | Integer    | 20            | default page size of returned resources
+| `maximumPageSize`    | Integer    | 100           | maximum page size of returned resources
+
+
 ### Embedded Apache Tomcat
 
 TODO
@@ -58,3 +70,6 @@ TODO
 ### Jetty
 
 TODO
+
+
+[paging requests]: cachingAndPaging.html

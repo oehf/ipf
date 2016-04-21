@@ -22,7 +22,9 @@ import ca.uhn.fhir.rest.gclient.ICriterion;
 import ca.uhn.fhir.rest.gclient.IQuery;
 import org.hl7.fhir.instance.model.AuditEvent;
 import org.hl7.fhir.instance.model.Bundle;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
 
 import java.util.Map;
 
@@ -33,21 +35,10 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.1
  */
-public class Iti81ClientRequestFactory implements ClientRequestFactory<IQuery<Bundle>> {
+public class Iti81ClientRequestFactory extends QueryClientRequestFactory {
 
-    @Override
-    public IClientExecutable<IQuery<Bundle>, Bundle> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
-        IClientExecutable<IQuery<Bundle>, Bundle> executable;
-        if (requestData instanceof ICriterion) {
-            executable = client.search()
-                    .forResource(AuditEvent.class)
-                    .where((ICriterion<?>) requestData)
-                    .returnBundle(Bundle.class);
-        } else {
-            executable = client.search()
-                    .byUrl(requestData.toString())
-                    .returnBundle(Bundle.class);
-        }
-        return executable;
+    public Iti81ClientRequestFactory(Class<? extends IBaseResource> type) {
+        super(AuditEvent.class);
     }
+
 }

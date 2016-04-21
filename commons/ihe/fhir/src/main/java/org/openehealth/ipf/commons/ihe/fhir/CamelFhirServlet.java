@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -37,10 +38,10 @@ import java.util.Map;
  * HAPI FHIR {@link RestfulServer} implementation, adding a few configuration bits using servlet
  * init parameters:
  * <ul>
- *     <li>logging (boolean): add global logging interceptor</li>
- *     <li>highlight (boolean)</li>: add response formatting if request was issued from a browser
- *     <li>pretty (boolean)</li>: pretty-print the response
- *     <li>pagingProviderSize (integer)</li>: maximum number of concurrent paging requests
+ * <li>logging (boolean): add global logging interceptor</li>
+ * <li>highlight (boolean)</li>: add response formatting if request was issued from a browser
+ * <li>pretty (boolean)</li>: pretty-print the response
+ * <li>pagingProviderSize (integer)</li>: maximum number of concurrent paging requests
  * </ul>
  *
  * @author Christian Ohr
@@ -57,6 +58,8 @@ public class CamelFhirServlet extends RestfulServer {
     private static final String SERVLET_RESPONSE_HIGHLIGHTING_PARAMETER_NAME = "highlight";
     private static final String SERVLET_PRETTY_PRINT_PARAMETER_NAME = "pretty";
     private static final String SERVLET_PAGING_PROVIDER_SIZE_PARAMETER_NAME = "pagingProviderSize";
+    private static final String SERVLET_DEFAULT_PAGE_SIZE_PARAMETER_NAME = "defaultPageSize";
+    private static final String SERVLET_MAX_PAGE_SIZE_PARAMETER_NAME = "maximumPageSize";
 
     public static final String DEFAULT_SERVLET_NAME = "FhirServlet";
 
@@ -65,7 +68,9 @@ public class CamelFhirServlet extends RestfulServer {
     private boolean logging;
     private boolean responseHighlighting;
     private boolean prettyPrint;
-    private int pagingProviderSize = 100;
+    private int pagingProviderSize = 50;
+    private int defaultPageSize = 20;
+    private int maximumPageSize = 100;
 
     public CamelFhirServlet() {
         super();
@@ -86,30 +91,57 @@ public class CamelFhirServlet extends RestfulServer {
         logging = Boolean.parseBoolean(config.getInitParameter(SERVLET_LOGGING_PARAMETER_NAME));
         responseHighlighting = Boolean.parseBoolean(config.getInitParameter(SERVLET_RESPONSE_HIGHLIGHTING_PARAMETER_NAME));
         prettyPrint = Boolean.parseBoolean(config.getInitParameter(SERVLET_PRETTY_PRINT_PARAMETER_NAME));
-        String pagingProviderSizeParameter = config.getInitParameter(SERVLET_PAGING_PROVIDER_SIZE_PARAMETER_NAME);
 
+        String pagingProviderSizeParameter = config.getInitParameter(SERVLET_PAGING_PROVIDER_SIZE_PARAMETER_NAME);
         if (pagingProviderSizeParameter != null && !pagingProviderSizeParameter.isEmpty()) {
             pagingProviderSize = Integer.parseInt(pagingProviderSizeParameter);
+        }
+        String defaultPageSizeParameter = config.getInitParameter(SERVLET_DEFAULT_PAGE_SIZE_PARAMETER_NAME);
+        if (defaultPageSizeParameter != null && !defaultPageSizeParameter.isEmpty()) {
+            defaultPageSize = Integer.parseInt(defaultPageSizeParameter);
+        }
+        String maximumPageSizeParameter = config.getInitParameter(SERVLET_MAX_PAGE_SIZE_PARAMETER_NAME);
+        if (maximumPageSizeParameter != null && !maximumPageSizeParameter.isEmpty()) {
+            maximumPageSize = Integer.parseInt(maximumPageSizeParameter);
         }
 
         // This must happen after setting all the attributes above, because it calls initialize() that
         // access these attributes.
         super.init(config);
+
     }
 
     /**
      * Returns the instance of {@link IPagingProvider} to be used. This implemention returns {@link FifoMemoryPagingProvider},
-     * you may overwrite this e.g. to add a provider backed by a decent Cache implementation.
+     * you may overwrite this e.g. to add a provider backed by a decent Cache implementation. In this case, not forget to set the
+     * paging parameters accessible via {@link #getPagingProviderSize()}, {@link #getDefaultPageSize()} and {@link #getMaximumPageSize()}.
+     * <p>
+     * You can also return null in order to disable paging.
+     * </p>
+     * <p>
+     * The way how paging is actually implemented depends on the respective FHIR consumer endpoints
+     * </p>
      *
      * @param pagingProviderSize maximum number of parallel paged requests. Note that each request may have an
      *                           aribitrary number of result resources though.
      * @return implementation of {@link IPagingProvider}
-     *
      * @see IPagingProvider
+     * @see #getPagingProviderSize()
+     * @see #getMaximumPageSize()
+     * @see #getDefaultPageSize()
      */
     protected IPagingProvider getDefaultPagingProvider(int pagingProviderSize) {
-        FifoMemoryPagingProvider pagingProvider = new FifoMemoryPagingProvider(pagingProviderSize);
+        FifoMemoryPagingProvider pagingProvider = new FifoMemoryPagingProvider(getPagingProviderSize());
+        pagingProvider.setDefaultPageSize(getDefaultPageSize());
+        pagingProvider.setMaximumPageSize(getMaximumPageSize());
         return pagingProvider;
+    }
+
+    /**
+     * @return the narrative generator, null by default
+     */
+    protected INarrativeGenerator getDefaultNarrativeGenerator() {
+        return null;
     }
 
     /**
@@ -148,8 +180,7 @@ public class CamelFhirServlet extends RestfulServer {
 		 * but can be useful as it causes HAPI to generate narratives for
 		 * resources which don't otherwise have one.
 		 */
-        //INarrativeGenerator narrativeGen = new DefaultThymeleafNarrativeGenerator();
-        //getFhirContext().setNarrativeGenerator(narrativeGen);
+        getFhirContext().setNarrativeGenerator(getDefaultNarrativeGenerator());
 
     }
 
@@ -180,4 +211,25 @@ public class CamelFhirServlet extends RestfulServer {
         return servletName;
     }
 
+
+    /**
+     * @return the maximum page size (even if the client requested more). Default is 100.
+     */
+    protected int getMaximumPageSize() {
+        return maximumPageSize;
+    }
+
+    /**
+     * @return the default page size (if the client did not request anything). Default is 20.
+     */
+    protected int getDefaultPageSize() {
+        return defaultPageSize;
+    }
+
+    /**
+     * @return the number of concurrently maintained page caches. Default is 50.
+     */
+    protected int getPagingProviderSize() {
+        return pagingProviderSize;
+    }
 }
