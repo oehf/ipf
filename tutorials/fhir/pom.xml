@@ -36,14 +36,14 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-ihe-fhir</artifactId>
+            <artifactId>ipf-platform-camel-ihe-fhir-pixpdq</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-ihe-fhir</artifactId>
+            <artifactId>ipf-platform-camel-ihe-fhir-core</artifactId>
             <version>${project.version}</version>
-            <classifier>tests</classifier>
+            <type>test-jar</type>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
