@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.api.MethodOutcome;
+import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
@@ -37,6 +38,7 @@ public interface RequestConsumer {
 
     /**
      * Handles a Create / Update / Validate / Delete action request.
+     *
      * @param payload request payload
      * @param headers request parameters, e.g. search parameters
      * @return result of the action execution
@@ -54,11 +56,6 @@ public interface RequestConsumer {
      */
     <R extends IBaseResource> R handleResourceRequest(Object payload, Map<String, Object> headers, Class<R> resultType);
 
-    // NOTE: instead of returning a List of resources, we could as well return an instance of
-    // IBundleProvider, that can be implemented in way that resources are only loaded once they
-    // are actually requested e.g. thruogh paging. For, now that seems to be over-optimization
-    // at the expense of genericity.
-
     /**
      * Handles the request for a bundle, effectively being a list of resources.
      *
@@ -70,10 +67,30 @@ public interface RequestConsumer {
     <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> headers);
 
     /**
+     * Handles the request for a bundle provider, effectively constructing a list of resources.
+     *
+     * @param payload request payload
+     * @param headers request parameters, e.g. search parameters
+     * @return a bundle provider
+     */
+    IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers, FhirValidator validator);
+
+    /**
      * Handles transaction requests
+     *
      * @param payload request payload
      * @param headers request parameters
      * @return transaction response bundle
      */
     Bundle handleTransactionRequest(Object payload, Map<String, Object> headers);
+
+    /**
+     * Optional method that request the result size of a bundle request. Only used for lazy
+     * bundle providers.
+     *
+     * @param payload request payload
+     * @param headers request parameters
+     * @return transaction response bundle
+     */
+    int handleSizeRequest(Object payload, Map<String, Object> headers);
 }

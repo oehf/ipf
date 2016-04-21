@@ -85,6 +85,21 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     @UriParam
     private List<HapiServerInterceptorFactory> hapiServerInterceptorFactories;
 
+    /**
+     * If this is true, all paging requests are routed into the route (see {@link org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider}
+     * fo details. Otherwise, all results are fetched once and cached in order to serve subsequent paging requests.
+     */
+    @Getter
+    @UriParam
+    private boolean lazyLoadBundles;
+
+    /**
+     * Only considered if {@link #lazyLoadBundles} is true. The (partial) results of paging requests are cached so that subsequent
+     * requests only fetch resources that have not yet been requested.
+     */
+    @Getter
+    @UriParam
+    private boolean cacheBundles;
 
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         this(component, FhirContext.forDstu2Hl7Org(), path, parameters);
@@ -107,25 +122,21 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
                 parameters, "hapiServerInterceptorFactories", List.class);
 
 
-
         String parserErrorHandling = component.getAndRemoveParameter(parameters, "validation", String.class, "lenient");
         if (STRICT.equals(parserErrorHandling)) {
             context.setParserErrorHandler(new StrictErrorHandler());
         } else if (!LENIENT.equals(parserErrorHandling)) {
             throw new IllegalArgumentException("Validation must be either " + LENIENT + " (default) or " + STRICT);
         }
-
         boolean secure = component.getAndRemoveParameter(parameters, "secure", Boolean.class, false);
         if (secure) {
             throw new UnsupportedOperationException("secure transport not yet supported");
         }
-
         HttpClientBuilder clientBuilder = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "httpClientBuilder", HttpClientBuilder.class);
         if (clientBuilder != null) {
             setHttpClientBuilder(clientBuilder);
         }
-
         Integer connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
         if (connectTimeout != null) {
             setConnectTimeout(connectTimeout);
@@ -133,6 +144,14 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         Integer timeout = component.getAndRemoveParameter(parameters, "timeout", Integer.class);
         if (timeout != null) {
             setTimeout(timeout);
+        }
+        Boolean lazyLoadBundles = component.getAndRemoveParameter(parameters, "lazyLoadBundles", Boolean.class);
+        if (lazyLoadBundles != null) {
+            this.lazyLoadBundles = lazyLoadBundles;
+        }
+        Boolean cacheBundles = component.getAndRemoveParameter(parameters, "cacheBundles", Boolean.class);
+        if (cacheBundles != null) {
+            this.cacheBundles = cacheBundles;
         }
 
         authUserName = component.getAndRemoveParameter(

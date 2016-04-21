@@ -40,10 +40,6 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     public static void startServer(String contextDescriptor) throws ServletException {
         CamelFhirServlet servlet = new CamelFhirServlet();
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, new MockedSender(), "FhirServlet");
-        /*
-        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT,
-                new FhirMockedSender(servlet.getFhirContext(), true), "FhirServlet");
-        */
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 
