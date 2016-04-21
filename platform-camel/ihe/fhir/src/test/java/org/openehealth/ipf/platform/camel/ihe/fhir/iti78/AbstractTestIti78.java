@@ -38,10 +38,6 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
     public static void startServer(String contextDescriptor) throws ServletException {
         CamelFhirServlet servlet = new CamelFhirServlet();
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, new MockedSender(), "FhirServlet");
-        /*
-        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT,
-                new FhirMockedSender(servlet.getFhirContext(), true), "FhirServlet");
-        */
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 
@@ -54,6 +50,27 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
                 .forResource(PdqPatient.class)
                 .where(requestData)
                 .returnBundle(Bundle.class)
+                .execute();
+    }
+
+    protected Bundle sendManuallyWithCount(ICriterion<?> requestData, int count) {
+        return client.search()
+                .forResource(PdqPatient.class)
+                .where(requestData)
+                .returnBundle(Bundle.class)
+                .count(count)
+                .execute();
+    }
+
+    protected Bundle nextPage(Bundle bundle) {
+        return client.loadPage()
+                .next(bundle)
+                .execute();
+    }
+
+    protected Bundle previousPage(Bundle bundle) {
+        return client.loadPage()
+                .previous(bundle)
                 .execute();
     }
 

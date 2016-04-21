@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.rest.api.MethodOutcome;
+import ca.uhn.fhir.rest.server.IBundleProvider;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.apache.camel.Exchange;
@@ -26,13 +27,13 @@ import org.apache.camel.SuspendableService;
 import org.apache.camel.impl.DefaultConsumer;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.RequestConsumer;
+import org.openehealth.ipf.commons.ihe.fhir.*;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_SIZE_ONLY;
 
 /**
  * FHIR consumer, which is an implementation of a {@link RequestConsumer} that handles requests
@@ -52,12 +53,12 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     @Override
     protected void doStart() throws Exception {
         super.doStart();
-        this.getEndpoint().connect(this);
+        getEndpoint().connect(this);
     }
 
     @Override
     protected void doStop() throws Exception {
-        this.getEndpoint().disconnect(this);
+        getEndpoint().disconnect(this);
         super.doStop();
     }
 
@@ -81,9 +82,20 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         return handleInRoute(payload, headers, resultClass);
     }
 
+    /**
+     * @param payload request payload
+     * @param headers request parameters, e.g. search parameters
+     * @param <R>
+     * @return
+     */
     @Override
     public <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> headers) {
         return (List<R>) handleInRoute(payload, headers, List.class);
+    }
+
+    @Override
+    public IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers, FhirValidator validator) {
+        return getBundleProvider(payload, headers, validator);
     }
 
     @Override
@@ -96,6 +108,16 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         return handleInRoute(payload, headers, MethodOutcome.class);
     }
 
+    @Override
+    public int handleSizeRequest(Object payload, Map<String, Object> headers) {
+        Exchange exchange = runRoute(payload, headers);
+        Integer size = Exchanges.resultMessage(exchange).getHeader(FHIR_REQUEST_SIZE_ONLY, Integer.class);
+        if (size == null) {
+            throw new InternalErrorException("Server did not obtain result size");
+        }
+        return size;
+    }
+
     /**
      * Forwards the request to be handled into a Camel route
      *
@@ -105,6 +127,13 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      * @return request result, type-converted into the required result class
      */
     protected <T> T handleInRoute(Object payload, Map<String, Object> headers, Class<T> resultClass) {
+
+        Exchange exchange = runRoute(payload, headers);
+        Message resultMessage = Exchanges.resultMessage(exchange);
+        return getEndpoint().getCamelContext().getTypeConverter().convertTo(resultClass, exchange, resultMessage.getBody());
+    }
+
+    protected Exchange runRoute(Object payload, Map<String, Object> headers) {
         Exchange exchange = getEndpoint().createExchange();
         exchange.getIn().setBody(payload);
         if (headers != null) {
@@ -125,9 +154,23 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
             BaseServerResponseException e = exchange.getException(BaseServerResponseException.class);
             throw (e != null) ? e : new InternalErrorException("Unexpected server error", exchange.getException());
         }
+        return exchange;
+    }
 
-        Message resultMessage = Exchanges.resultMessage(exchange);
-        return getEndpoint().getCamelContext().getTypeConverter()
-                .convertTo(resultClass, exchange, resultMessage.getBody());
+
+    /**
+     * Returns the {@link IBundleProvider}, providing the matching bundles.
+     * Depending on {@link FhirEndpointConfiguration#isLazyLoadBundles()}, the bundle provider either eagerly fetches all
+     * matching bundles or fetches the requested subset on request.
+     *
+     * @param payload request payload
+     * @param headers request headers
+     * @return resulting bundle provider
+     */
+    protected IBundleProvider getBundleProvider(Object payload, Map<String, Object> headers, FhirValidator validator) {
+        FhirEndpointConfiguration<?> endpointConfiguration = getEndpoint().getInterceptableConfiguration();
+        return endpointConfiguration.isLazyLoadBundles() ?
+                new LazyBundleProvider(this, endpointConfiguration.isCacheBundles(), payload, headers, validator) :
+                new EagerBundleProvider(this, payload, headers, validator);
     }
 }

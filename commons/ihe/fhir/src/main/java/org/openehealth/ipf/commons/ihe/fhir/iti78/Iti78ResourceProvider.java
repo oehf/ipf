@@ -21,6 +21,7 @@ import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.instance.model.IdType;
 import org.hl7.fhir.instance.model.Patient;
 import org.hl7.fhir.instance.model.api.IAnyResource;
@@ -57,11 +58,11 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
      * @param mothersMaidenNameFamily mothers maiden family name search parameter(s) (pediatric option)
      * @param httpServletRequest      servlet request
      * @param httpServletResponse     servlet response
-     * @return list of identified patients
+     * @return {@link IBundleProvider} instance that manages retrieving patients
      */
     @SuppressWarnings("unused")
     @Search(type = PdqPatient.class)
-    public List<? extends PdqPatient> pdqmSearch(
+    public IBundleProvider pdqmSearch(
             @OptionalParam(name = Patient.SP_IDENTIFIER) TokenAndListParam identifiers,
             @OptionalParam(name = Constants.TARGET_SYSTEM_NAME) UriAndListParam targetSystems,
             @OptionalParam(name = Patient.SP_FAMILY) StringAndListParam family,
@@ -94,7 +95,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
         addParameter(searchParameters, Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY, mothersMaidenNameFamily);
 
         // Run down the route
-        return requestBundle(null, searchParameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
     }
 
     private void addParameter(Map<String, Object> map, String key, Object value) {
