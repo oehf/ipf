@@ -25,7 +25,7 @@ import javax.xml.ws.Action;
 /**
  * ITI-44 port type for XDS.
  */
-@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "DocumentRegistry_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "DocumentRegistry_PortType", portName = "DocumentRegistry_Port_Soap12")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti44XdsPortType extends GenericIti44PortType {
     

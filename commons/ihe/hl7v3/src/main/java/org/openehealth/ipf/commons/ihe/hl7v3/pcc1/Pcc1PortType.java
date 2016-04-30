@@ -29,7 +29,7 @@ import javax.xml.ws.Action;
  * SEI for PCC QED -- Query for Existing Data.
  * @author Dmytro Rud
  */
-@WebService(targetNamespace = "urn:ihe:pcc:qed:2007", name = "ClinicalDataSource_PortType")
+@WebService(targetNamespace = "urn:ihe:pcc:qed:2007", name = "ClinicalDataSource_PortType", portName = "ClinicalDataSource_Port_Soap12")
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Pcc1PortType extends Hl7v3ContinuationsPortType {
     

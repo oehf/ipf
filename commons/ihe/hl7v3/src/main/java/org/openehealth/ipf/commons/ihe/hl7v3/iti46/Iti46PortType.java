@@ -22,7 +22,7 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.Action;
 
-@WebService(targetNamespace = "urn:ihe:iti:pixv3:2007", name = "PIXConsumer_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:pixv3:2007", name = "PIXConsumer_PortType", portName = "PIXConsumer_Port_Soap12")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti46PortType {
 

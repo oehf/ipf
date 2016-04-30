@@ -17,10 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti30
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
-import org.apache.camel.CamelExchangeException
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
-import org.apache.camel.Route
 import org.apache.camel.impl.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Test
@@ -31,8 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import static org.junit.Assert.*
 
 /**
- * Unit tests for the PIX Feed transaction a.k.a. ITI-8.
- * @author Dmytro Rud
+ * Unit tests for the PAM "Patient Identity Management" transaction ITI-30.
  */
 class TestIti30 extends MllpTestContainer {
     

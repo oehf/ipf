@@ -27,7 +27,7 @@ import javax.xml.ws.Action;
  * SEI for XCPD ITI-56 -- Patient Location Query.
  * @author Dmytro Rud
  */
-@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "RespondingGateway_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "RespondingGateway_PortType", portName = "RespondingGateway_Port_Soap12")
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Iti56PortType {
 

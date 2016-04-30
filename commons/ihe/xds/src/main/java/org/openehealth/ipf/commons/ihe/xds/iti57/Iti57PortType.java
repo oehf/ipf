@@ -31,7 +31,7 @@ import javax.xml.ws.Action;
 /**
  * Provides the ITI-57 web-service interface.
  */
-@WebService(targetNamespace = "urn:ihe:iti:xds-b:2010", name = "DocumentRegistry_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xds-b:2010", name = "DocumentRegistry_PortType", portName = "DocumentRegistry_Port_Soap12")
 @XmlSeeAlso({
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory.class,
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory.class,
