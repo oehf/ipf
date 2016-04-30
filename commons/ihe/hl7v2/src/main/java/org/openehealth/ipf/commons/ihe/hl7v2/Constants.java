@@ -30,5 +30,5 @@ public interface Constants {
      * Name of the parameter where a copy of the original request
      * message (as a {@link String} instance) will be saved.
      */
-   String ORIGINAL_MESSAGE_STRING_HEADER_NAME  = "ipf.hl7v2.OriginalMessageString";
+    String ORIGINAL_MESSAGE_STRING_HEADER_NAME  = "ipf.hl7v2.OriginalMessageString";
 }
