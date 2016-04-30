@@ -30,7 +30,7 @@ import javax.xml.ws.Action;
 /**
  * ITI-38 Service Endpoint Interface for Asynchronous Response receiver
  */
-@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "InitiatingGateway_PortType", portName = "InitialGateway_Port")
+@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "InitiatingGateway_PortType", portName = "InitiatingGateway_Port")
 @XmlSeeAlso({
         org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory.class,
         org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory.class,
