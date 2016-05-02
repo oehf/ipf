@@ -61,8 +61,8 @@
 
         <!-- Dependencies for test -->
         <dependency>
-            <artifactId>xmlunit</artifactId>
             <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
             <scope>test</scope>
         </dependency>
 

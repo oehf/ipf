@@ -70,7 +70,7 @@
         <activemq-version>5.13.1</activemq-version>
         <aspectj-version>1.8.9</aspectj-version>
         <bouncycastle-version>1.54</bouncycastle-version>
-        <camel-version>2.16.2</camel-version>
+        <camel-version>2.17.0</camel-version>
         <cglib-version>3.2.0</cglib-version>
         <commons-beanutils-version>1.9.2</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
@@ -107,14 +107,14 @@
         <jboss-logging-version>3.3.0.Final</jboss-logging-version>
         <jboss-logging-annotations-version>2.0.1.Final</jboss-logging-annotations-version>
         <jdom-version>2.0.2</jdom-version>
-        <jetty-version>9.2.11.v20150529</jetty-version>
+        <jetty-version>9.2.15.v20160210</jetty-version>
         <joda-time-version>2.9.2</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>1.2.17</log4j-version>
         <lombok-version>1.16.8</lombok-version>
         <lucene-version>4.10.4</lucene-version>
         <mina2-version>2.0.13</mina2-version>
-        <opensaml-version>3.1.1</opensaml-version>
+        <opensaml-version>3.2.0</opensaml-version>
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.2</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
