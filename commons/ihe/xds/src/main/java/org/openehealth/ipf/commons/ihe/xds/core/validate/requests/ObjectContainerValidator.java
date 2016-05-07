@@ -349,29 +349,51 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         boolean hasSubmitAssociationType = false;
         for (EbXMLAssociation association : container.getAssociations()) {
             associationIds.add(association.getId());
-            if (!hasSubmitAssociationType){
-                hasSubmitAssociationType = association.getAssociationType() != null &&
-                        (association.getAssociationType().equals(AssociationType.SUBMIT_ASSOCIATION) ||
-                         association.getAssociationType().equals(AssociationType.UPDATE_AVAILABILITY_STATUS));
-            }
+
+            AssociationType type = association.getAssociationType();
+            metaDataAssert(type != null, INVALID_ASSOCIATION_TYPE);
+            hasSubmitAssociationType = hasSubmitAssociationType
+                    || (type == AssociationType.SUBMIT_ASSOCIATION)
+                    || (type == AssociationType.UPDATE_AVAILABILITY_STATUS);
+
             metaDataAssert(StringUtils.isBlank(association.getLid()) || logicalIds.add(association.getLid()),
                     LOGICAL_ID_SAME, association.getLid());
         }
 
         for (EbXMLAssociation association : container.getAssociations()) {
-            AssociationType type = association.getAssociationType();
-            metaDataAssert(type != null, INVALID_ASSOCIATION_TYPE);
-    
-            if (type != AssociationType.HAS_MEMBER) {
-                validateIsSnapshotRelationship(container, association);
-                validateDocumentRelationship(association, docEntryIds, profile, hasSubmitAssociationType);
-                validateUpdateAvailabilityStatusRelationship(submissionSetIds, association);
-                validateSubmitAssociationRelationship(submissionSetIds, associationIds, association);
-            }
-            else {
-                boolean isSubmissionSetToDocEntry =
-                    submissionSetIds.contains(association.getSource()) && docEntryIds.contains(association.getTarget());
-                validateAssociation(association, docEntryIds, profile, isSubmissionSetToDocEntry);
+            switch (association.getAssociationType()) {
+                case HAS_MEMBER:
+                    boolean isSubmissionSetToDocEntry =
+                            submissionSetIds.contains(association.getSource()) && docEntryIds.contains(association.getTarget());
+                    validateAssociation(association, docEntryIds, profile, isSubmissionSetToDocEntry);
+                    break;
+
+                case IS_SNAPSHOT_OF:
+                    if (!profile.isQuery()) {
+                        EbXMLExtrinsicObject sourceDocEntry = getExtrinsicObject(
+                                container, association.getSource(), DocumentEntryType.STABLE.getUuid());
+                        metaDataAssert(sourceDocEntry != null, MISSING_SNAPSHOT_ASSOCIATION, "sourceObject", association.getSource());
+                        metaDataAssert(hasSubmitAssociationType || docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
+                    }
+                    break;
+
+                case UPDATE_AVAILABILITY_STATUS:
+                    if (!profile.isQuery()) {
+                        metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
+                        metaDataAssert(association.getOriginalStatus() != null, MISSING_ORIGINAL_STATUS);
+                        metaDataAssert(association.getNewStatus() != null, MISSING_NEW_STATUS);
+                    }
+                    break;
+
+                case SUBMIT_ASSOCIATION:
+                    if (!profile.isQuery()) {
+                        metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
+                        metaDataAssert(associationIds.contains(association.getTarget()), MISSING_ASSOCIATION, association.getTarget());
+                    }
+                    break;
+
+                default:
+                    metaDataAssert(profile.isQuery() || hasSubmitAssociationType || docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
             }
         }
     }
@@ -397,37 +419,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
     }
 
-    private void validateDocumentRelationship(EbXMLAssociation association, Set<String> docEntryIds, ValidationProfile profile,
-                                              boolean hasSubmitAssociationType) throws XDSMetaDataException {
-        if (!profile.isQuery()  && !hasSubmitAssociationType) {
-            metaDataAssert(docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
-        }
-    }
-
-    private void validateIsSnapshotRelationship(EbXMLObjectContainer container, EbXMLAssociation association){
-        if (association.getAssociationType() == AssociationType.IS_SNAPSHOT_OF){
-            EbXMLExtrinsicObject sourceDocEntry = getExtrinsicObject(
-                    container, association.getSource(), DocumentEntryType.STABLE.getUuid());
-            metaDataAssert(sourceDocEntry != null, MISSING_SNAPSHOT_ASSOCIATION, "sourceObject", association.getSource());
-        }
-    }
-
-    private void validateUpdateAvailabilityStatusRelationship(Set<String> submissionSetIds, EbXMLAssociation association){
-        if (association.getAssociationType() == AssociationType.UPDATE_AVAILABILITY_STATUS){
-            metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
-            metaDataAssert(association.getOriginalStatus() != null, MISSING_ORIGINAL_STATUS);
-            metaDataAssert(association.getNewStatus() != null, MISSING_NEW_STATUS);
-        }
-    }
-
-    private void validateSubmitAssociationRelationship(Set<String> submissionSetIds, Set<String> associationIds, EbXMLAssociation association){
-        if (association.getAssociationType() == AssociationType.SUBMIT_ASSOCIATION){
-            metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
-            metaDataAssert(associationIds.contains(association.getTarget()), MISSING_ASSOCIATION, association.getTarget());
-        }
-    }
-
-    private EbXMLExtrinsicObject getExtrinsicObject(EbXMLObjectContainer container, String docEntryId, String... objectTypes){
+    private EbXMLExtrinsicObject getExtrinsicObject(EbXMLObjectContainer container, String docEntryId, String... objectTypes) {
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(objectTypes)) {
             if (docEntry.getId() != null && docEntry.getId().equals(docEntryId)) {
                 return docEntry;
@@ -436,7 +428,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         return null;
     }
 
-    private EbXMLRegistryPackage getRegistryPackage(EbXMLObjectContainer container, String submissionSetId, String classificationNode){
+    private EbXMLRegistryPackage getRegistryPackage(EbXMLObjectContainer container, String submissionSetId, String classificationNode) {
         for (EbXMLRegistryPackage registryPackage : container.getRegistryPackages(classificationNode)) {
             if (registryPackage.getId() != null && registryPackage.getId().equals(submissionSetId)) {
                 return registryPackage;
@@ -445,18 +437,18 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         return null;
     }
 
-    private void validateUpdateObject(EbXMLRegistryObject registryObject, EbXMLObjectContainer container){
+    private void validateUpdateObject(EbXMLRegistryObject registryObject, EbXMLObjectContainer container) {
         metaDataAssert(registryObject.getLid() != null, LOGICAL_ID_MISSING);
         uuidValidator.validate(registryObject.getLid());
         metaDataAssert(!registryObject.getLid().equals(registryObject.getId()), LOGICAL_ID_EQUALS_ENTRY_UUID,
                 registryObject.getLid(), registryObject.getId());
 
         boolean foundHasMemberAssociation = false;
-        for (EbXMLAssociation association : container.getAssociations()){
+        for (EbXMLAssociation association : container.getAssociations()) {
             if (association.getAssociationType() == AssociationType.HAS_MEMBER
                 && association.getTarget().equals(registryObject.getId())
-                && (getRegistryPackage(container, association.getSource(), SUBMISSION_SET_CLASS_NODE) != null)){
-
+                && (getRegistryPackage(container, association.getSource(), SUBMISSION_SET_CLASS_NODE) != null))
+            {
                 metaDataAssert(association.getPreviousVersion() != null, MISSING_PREVIOUS_VERSION);
                 foundHasMemberAssociation = true;
             }
