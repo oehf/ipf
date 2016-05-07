@@ -138,20 +138,25 @@ public enum ErrorCode {
     /* --- When reporting this errors, the codeContext attribute of the RegistryError element shall ---
        --- contain the id attribute of the metadata object causing the error. --- */
 
-    /** General metadata update error. Use only when more specific error code is not available or appropriate */
+    /** General metadata update error. Use only when more specific error code is not available or appropriate. */
     @XmlEnumValue("XDSMetadataUpdateError") META_DATA_UPDATE_ERROR("XDSMetadataUpdateError"),
-    /**  Update encountered error where Patient IDs did not match*/
+    /** Update encountered error where Patient IDs did not match. */
     @XmlEnumValue("XDSPatientIDReconciliationError") PATIENT_ID_RECONCILIATION_ERROR("XDSPatientIDReconciliationError"),
-    /**  Document Registry/Recipient cannot decode the requested metadata update.*/
+    /** Document Registry/Recipient cannot decode the requested metadata update. */
     @XmlEnumValue("XDSMetadataUpdateOperationError") META_DATA_UPDATE_OPERATION_ERROR("XDSMetadataUpdateOperationError"),
-    /**  The version number included in the update request did not match the existing object.
-     *   One cause of this is multiple simultaneous update attempts.*/
+    /** The version number included in the update request did not match the existing object.
+     *  One cause of this is multiple simultaneous update attempts. */
     @XmlEnumValue("XDSMetadataVersionError") META_DATA_VERSION_ERROR("XDSMetadataVersionError"),
-    /**  An entryUUID passed in the Delete Document Set transaction does not exist in the recipient system.*/
+    /** The recipient cannot resolve an entryUUID reference in the transaction. */
     @XmlEnumValue("UnresolvedReferenceException") UNRESOLVED_REFERENCE_EXCEPTION("UnresolvedReferenceException"),
-    /**  An entryUUID passed in the Delete Document Set transaction is referenced by an Association
-     *   sourceObject or targetObject attribute.*/
+    /** An entryUUID passed in the Delete Document Set transaction is referenced by an Association
+     *  sourceObject or targetObject attribute. */
     @XmlEnumValue("ReferencesExistException") REFERENCE_EXISTS_EXCEPTION("ReferencesExistException"),
+    /** Error detected by the Document Registry during a document replacement.
+     * @deprecated this error code is deprecated by IHE
+     */
+    @Deprecated     // error code XDSReplaceFailed is deprecated by IHE
+    @XmlEnumValue("XDSReplaceFailed") REPLACE_FAILED("XDSReplaceFailed"),
 
     /* --- codes for ITI-16 (obsolete XDS.a profile) --- */
     /** An error occurred when executing an SQL query. */
@@ -202,7 +207,7 @@ public enum ErrorCode {
                 return code;
             }
         }
-        
+
         return _USER_DEFINED;
     }
 }
