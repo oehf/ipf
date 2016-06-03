@@ -7,6 +7,6 @@
 #    KIND, either express or implied. See the License for the specific
 #    language governing permissions and limitations under the License.
 
-# Camel registration for the mhd-iti67 component
+# Camel registration for the mhd-iti68 component
  
-class=org.openehealth.ipf.platform.camel.ihe.fhir.iti67.Iti67Component
+class=org.openehealth.ipf.platform.camel.ihe.fhir.iti68.Iti68Component

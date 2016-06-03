@@ -18,8 +18,8 @@
         <project-info-reports-plugin-version>2.8.1</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
 
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <github.global.server>github</github.global.server>
         <site.path>${project.version}</site.path>
@@ -48,7 +48,7 @@
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.6</assembly-plugin-version>
         <build-helper-version>1.9.1</build-helper-version>
-        <bundle-plugin-version>2.0.1</bundle-plugin-version>
+        <bundle-plugin-version>2.5.4</bundle-plugin-version>
         <compiler-plugin-version>3.5.1</compiler-plugin-version>
         <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
@@ -92,7 +92,7 @@
         <groovy-version>2.4.6</groovy-version>
         <guava-version>19.0</guava-version>
         <hapi-version>2.2</hapi-version>
-        <hapi-fhir-version>1.4</hapi-fhir-version>
+        <hapi-fhir-version>1.5</hapi-fhir-version>
         <hibernate-version>4.3.9.Final</hibernate-version>
         <hibernate-commons-annotations-version>4.0.5.Final</hibernate-commons-annotations-version>
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
@@ -438,6 +438,52 @@
                                     <phase>package</phase>
                                 </execution>
                             </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>groovy</id>
+            <activation>
+                <file>
+                    <exists>src/main/groovy</exists>
+                </file>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <version>${maven-compiler.version}</version>
+                            <configuration>
+                                <compilerId>groovy-eclipse-compiler</compilerId>
+                                <source>1.8</source>
+                                <target>1.8</target>
+                                <fork>true</fork>
+                                <verbose>false</verbose>
+                                <compilerArguments>
+                                    <javaAgentClass>lombok.launch.Agent</javaAgentClass>
+                                </compilerArguments>
+                            </configuration>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>org.codehaus.groovy</groupId>
+                                    <artifactId>groovy-eclipse-compiler</artifactId>
+                                    <version>${groovy-eclipse-compiler-version}</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.projectlombok</groupId>
+                                    <artifactId>lombok</artifactId>
+                                    <version>${lombok-version}</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.codehaus.groovy</groupId>
+                                    <artifactId>groovy-eclipse-batch</artifactId>
+                                    <version>${groovy-eclipse-batch-version}</version>
+                                </dependency>
+                            </dependencies>
                         </plugin>
                     </plugins>
                 </pluginManagement>
@@ -933,6 +979,21 @@
                         <groupId>org.springframework</groupId>
                         <artifactId>spring-aop</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-servlet</artifactId>
+                <version>${camel-version}</version>
+                <exclusions>
                     <exclusion>
                         <groupId>com.sun.xml.bind</groupId>
                         <artifactId>jaxb-impl</artifactId>
@@ -1664,32 +1725,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin-version}</version>
                 <configuration>
-                    <compilerId>groovy-eclipse-compiler</compilerId>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <fork>true</fork>
-                    <verbose>false</verbose>
-                    <compilerArguments>
-                        <javaAgentClass>lombok.launch.Agent</javaAgentClass>
-                    </compilerArguments>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-eclipse-compiler</artifactId>
-                        <version>${groovy-eclipse-compiler-version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                        <version>${lombok-version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-eclipse-batch</artifactId>
-                        <version>${groovy-eclipse-batch-version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

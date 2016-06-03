@@ -64,21 +64,21 @@ class PdqmRequestToPdqQueryTranslatorTest extends Assert {
                 (Patient.SP_FAMILY)                       : new StringAndListParam()
                         .addAnd(new StringOrListParam().add(new StringParam("Surname1")))
                         .addAnd(new StringOrListParam().add(new StringParam("Surname2"))),
-                (Patient.SP_GIVEN)                        : new StringAndListParam()
+                (Patient.SP_GIVEN)                             : new StringAndListParam()
                         .addAnd(new StringOrListParam().add(new StringParam("Givenname1", true)))
                         .addAnd(new StringOrListParam().add(new StringParam("Givenname2"))),
-                (Patient.SP_BIRTHDATE)                    : new DateParam('1980'),
-                (Patient.SP_ADDRESS)                      : new StringParam('Address'),
-                (Patient.SP_GENDER)                       : new TokenParam('http://hl7.org/fhir/ValueSet/administrative-gender', 'male'),
-                (Patient.SP_TELECOM)                      : new StringParam('Telecom'),
-                (Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER): new NumberParam('2'),
-                (Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN)  : new StringAndListParam()
+                (Patient.SP_BIRTHDATE)                         : new DateParam('1980'),
+                (Patient.SP_ADDRESS)                           : new StringParam('Address'),
+                (Patient.SP_GENDER)                            : new TokenParam('http://hl7.org/fhir/ValueSet/administrative-gender', 'male'),
+                (Patient.SP_TELECOM)                           : new StringParam('Telecom'),
+                (Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER): new NumberParam('2'),
+                (Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN)  : new StringAndListParam()
                         .addAnd(new StringOrListParam().add(new StringParam("MothersGivenname1", true)))
                         .addAnd(new StringOrListParam().add(new StringParam("MothersGivenname2"))),
-                (Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) : new StringAndListParam()
+                (Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) : new StringAndListParam()
                         .addAnd(new StringOrListParam().add(new StringParam("MothersSurname1")))
                         .addAnd(new StringOrListParam().add(new StringParam("MothersSurname2"))),
-                (Patient.SP_IDENTIFIER)                   : new TokenAndListParam()
+                (Patient.SP_IDENTIFIER)                        : new TokenAndListParam()
                         .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4', '4711ABC')))
                         .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4.5.6', '0815ABC')))
                         .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4.5.6', null)))

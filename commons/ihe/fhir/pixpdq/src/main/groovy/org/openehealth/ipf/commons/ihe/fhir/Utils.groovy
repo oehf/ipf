@@ -17,8 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir
 
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
-import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
 import org.hl7.fhir.instance.model.OperationOutcome
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter
@@ -72,38 +70,38 @@ class Utils {
     }
 
     static BaseServerResponseException unknownPatientId() {
-        OperationOutcome oo = new OperationOutcome()
-        oo.addIssue()
-                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                .setCode(OperationOutcome.IssueType.VALUE)
-                .setDiagnostics('sourceIdentifier identity not found')
-        return new InvalidRequestException('Unknown Patient ID', oo)
+        FhirUtils.invalidRequest(
+                OperationOutcome.IssueSeverity.ERROR,
+                OperationOutcome.IssueType.VALUE,
+                null,
+                'sourceIdentifier identity not found',
+                'Unknown Patient ID')
     }
 
     static BaseServerResponseException unknownPatientDomain(String domain = null) {
-        OperationOutcome oo = new OperationOutcome()
-        oo.addIssue()
-                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                .setCode(OperationOutcome.IssueType.NOTFOUND)
-                .setDiagnostics("sourceIdentifier Assigning Authority ${domain ?: ''} not found")
-        return new InvalidRequestException("Unknown Patient Domain ${domain ?: ''}", oo)
+        FhirUtils.invalidRequest(
+                OperationOutcome.IssueSeverity.ERROR,
+                OperationOutcome.IssueType.NOTFOUND,
+                null,
+                "sourceIdentifier Assigning Authority ${domain ?: ''} not found",
+                "Unknown Patient Domain ${domain ?: ''}");
     }
 
     static BaseServerResponseException unknownTargetDomain(String domain = null) {
-        OperationOutcome oo = new OperationOutcome()
-        oo.addIssue()
-                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                .setCode(OperationOutcome.IssueType.NOTFOUND)
-                .setDiagnostics("targetSystem ${domain ?: ''} not found")
-        return new InvalidRequestException("Unknown Target Domain ${domain ?: ''}", oo)
+        FhirUtils.invalidRequest(
+                OperationOutcome.IssueSeverity.ERROR,
+                OperationOutcome.IssueType.NOTFOUND,
+                null,
+                "sourceIdentifier Assigning Authority ${domain ?: ''} not found",
+                "Unknown Target Domain ${domain ?: ''}");
     }
 
     static BaseServerResponseException unexpectedProblem() {
-        OperationOutcome oo = new OperationOutcome()
-        oo.addIssue()
-                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                .setCode(OperationOutcome.IssueType.EXCEPTION)
-        return new InternalErrorException('Unexpected response from server', oo)
+        FhirUtils.internalError(
+                OperationOutcome.IssueSeverity.ERROR,
+                OperationOutcome.IssueType.EXCEPTION,
+                null, null,
+                'Unexpected response from server');
     }
 
 }

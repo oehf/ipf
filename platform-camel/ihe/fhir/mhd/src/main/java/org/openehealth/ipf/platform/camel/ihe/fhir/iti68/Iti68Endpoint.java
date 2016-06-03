@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.iti67;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
-import org.hl7.fhir.instance.model.DocumentReference;
-import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
+import org.apache.camel.component.servlet.ServletComponent;
+import org.apache.camel.component.servlet.ServletEndpoint;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
- * Request Factory for ITI-67 requests returning a bundle of document references
  *
- * @author Christian Ohr
- * @since 3.2
  */
-public class Iti67ClientRequestFactory extends QueryClientRequestFactory {
+public class Iti68Endpoint extends ServletEndpoint {
 
-    public Iti67ClientRequestFactory() {
-        super(DocumentReference.class);
+    public Iti68Endpoint(String endPointURI, ServletComponent component, URI httpUri) throws URISyntaxException {
+        super(endPointURI, component, httpUri);
     }
 }

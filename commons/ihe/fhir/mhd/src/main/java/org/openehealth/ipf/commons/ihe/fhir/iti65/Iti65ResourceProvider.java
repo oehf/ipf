@@ -30,11 +30,12 @@ import java.util.Map;
  * Resource Provider for MHD (ITI-65)
  *
  * @author Christian Ohr
+ * @since 3.2
  */
 public class Iti65ResourceProvider extends AbstractPlainProvider {
 
     @Transaction
-    public Bundle provideAndRegister(@TransactionParam Bundle bundle,
+    public Bundle provideDocumentBundle(@TransactionParam Bundle bundle,
                                      HttpServletRequest httpServletRequest,
                                      HttpServletResponse httpServletResponse) {
 

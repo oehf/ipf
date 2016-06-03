@@ -16,65 +16,14 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
-import org.hl7.fhir.instance.model.Coding;
-import org.hl7.fhir.instance.model.DocumentManifest;
-import org.hl7.fhir.instance.model.Patient;
-import org.hl7.fhir.instance.model.api.IAnyResource;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @author Christian Ohr
  * @since 3.1
  */
 public interface Constants {
 
-    // PIXm stuff
-    String PIXM_OPERATION_NAME = "$ihe-pix";
     String SOURCE_IDENTIFIER_NAME = "sourceIdentifier";
     String TARGET_SYSTEM_NAME = "targetSystem";
-
-    Set<String> ITI83_PARAMETERS = new HashSet<>(Arrays.asList(
-            SOURCE_IDENTIFIER_NAME,
-            TARGET_SYSTEM_NAME));
-
-    // PDQm stuff
-    String SP_MULTIPLE_BIRTH_ORDER_NUMBER = "multipleBirthInteger";
-    String SP_MOTHERS_MAIDEN_NAME_GIVEN = "mothersMaidenName.given";
-    String SP_MOTHERS_MAIDEN_NAME_FAMILY = "mothersMaidenName.family";
-
-    Set<String> ITI78_PARAMETERS = new HashSet<>(Arrays.asList(
-            IAnyResource.SP_RES_ID,
-            SP_MULTIPLE_BIRTH_ORDER_NUMBER,
-            SP_MOTHERS_MAIDEN_NAME_GIVEN,
-            SP_MOTHERS_MAIDEN_NAME_FAMILY,
-            Patient.SP_IDENTIFIER,
-            Patient.SP_FAMILY,
-            Patient.SP_GIVEN,
-            Patient.SP_BIRTHDATE,
-            Patient.SP_ADDRESS,
-            Patient.SP_GENDER,
-            Patient.SP_TELECOM
-            ));
-
-    // MHD stuff
-    String COMP_DOCUMENT_MANIFEST = "documentManifest";
-    String COMP_DOCUMENT_REFERENCES = "documentReferences";
-    String COMP_LISTS = "lists";
-    String COMP_BINARIES = "binaries";
-
-    String SP_AUTHOR_GIVEN = DocumentManifest.SP_AUTHOR + ".given";
-    String SP_AUTHOR_FAMILY = DocumentManifest.SP_AUTHOR + ".family";
-
-    Coding ITI65_TAG = new Coding().setCode("http://ihe.net/fhir/tag/iti-65");
-
-    // ATNA stuff
-    String SP_PATIENTID = "patientid";
-    String SP_ROLE = "role";
-    String SP_OUTCOME = "outcome";
-
 
     String FHIR_CONTEXT = "FhirContext";
 

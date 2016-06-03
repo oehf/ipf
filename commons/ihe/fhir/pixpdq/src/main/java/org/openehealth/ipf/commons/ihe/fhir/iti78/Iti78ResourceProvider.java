@@ -72,9 +72,9 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             // below only relevant for pediatric option
             @OptionalParam(name = Patient.SP_TELECOM) StringParam telecom,
-            @OptionalParam(name = Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER) NumberParam multipleBirthNumber,
-            @OptionalParam(name = Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN) StringAndListParam mothersMaidenNameGiven,
-            @OptionalParam(name = Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) StringAndListParam mothersMaidenNameFamily,
+            @OptionalParam(name = Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER) NumberParam multipleBirthNumber,
+            @OptionalParam(name = Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN) StringAndListParam mothersMaidenNameGiven,
+            @OptionalParam(name = Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) StringAndListParam mothersMaidenNameFamily,
 
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
@@ -89,19 +89,14 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
         addParameter(searchParameters, Patient.SP_GENDER, gender);
         addParameter(searchParameters, IAnyResource.SP_RES_ID, resourceId);
         addParameter(searchParameters, Patient.SP_TELECOM, telecom);
-        addParameter(searchParameters, Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER, multipleBirthNumber);
-        addParameter(searchParameters, Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN, mothersMaidenNameGiven);
-        addParameter(searchParameters, Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY, mothersMaidenNameFamily);
+        addParameter(searchParameters, Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER, multipleBirthNumber);
+        addParameter(searchParameters, Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN, mothersMaidenNameGiven);
+        addParameter(searchParameters, Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY, mothersMaidenNameFamily);
 
         // Run down the route
         return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
     }
 
-    private void addParameter(Map<String, Object> map, String key, Object value) {
-        if (value != null) {
-            map.put(key, value);
-        }
-    }
 
     /**
      * Handles the PDQm Retrieve

@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.instance.model.Bundle;
@@ -35,6 +36,8 @@ import java.util.Map;
  */
 
 public interface RequestConsumer {
+
+    FhirContext getFhirContext();
 
     /**
      * Handles a Create / Update / Validate / Delete action request.

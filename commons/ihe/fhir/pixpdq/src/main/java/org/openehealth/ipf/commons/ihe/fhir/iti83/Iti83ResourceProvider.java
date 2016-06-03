@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
+import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.UriParam;
 import org.hl7.fhir.instance.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
@@ -38,28 +40,27 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
     /**
      * Handles the PIXm Query
      *
-     * @param sourceIdentifierString Identifier to search for. Should be an {@link Identifier}, but obviously
+     * @param sourceIdentifierParam Identifier to search for. Should be an {@link Identifier}, but obviously
      *                               non-primitive types are forbidden in GET operations
-     * @param targetSystem           target system URI
+     * @param targetSystemParam      target system URI
      * @return {@link Parameters} containing found identifiers
      */
     @SuppressWarnings("unused")
-    @Operation(name = PIXM_OPERATION_NAME, type = Patient.class, idempotent = true, returnParameters = { @OperationParam(name = "return", type = Identifier.class, max = 100)})
+    @Operation(name = Iti83Constants.PIXM_OPERATION_NAME, type = Patient.class, idempotent = true, returnParameters = { @OperationParam(name = "return", type = Identifier.class, max = 100)})
     public Parameters pixmQuery(
-            @OperationParam(name = SOURCE_IDENTIFIER_NAME) StringType sourceIdentifierString,
-            @OperationParam(name = TARGET_SYSTEM_NAME) UriType targetSystem,
+            @OperationParam(name = SOURCE_IDENTIFIER_NAME) TokenParam sourceIdentifierParam,
+            @OperationParam(name = TARGET_SYSTEM_NAME) UriParam targetSystemParam,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        // Split up the primitive String into an {@link Identifier}
-        String[] parts = sourceIdentifierString.getValueAsString().split("\\|");
         Identifier sourceIdentifier = new Identifier()
-                .setSystem(parts.length > 0 ? parts[0] : null)
-                .setValue(parts.length > 1 ? parts[1] : null);
+                .setSystem(sourceIdentifierParam.getSystem())
+                .setValue(sourceIdentifierParam.getValue());
+        UriType targetUri = targetSystemParam == null ? null : new UriType(targetSystemParam.getValue());
 
         Parameters inParams = new Parameters();
         inParams.addParameter().setName(SOURCE_IDENTIFIER_NAME).setValue(sourceIdentifier);
-        inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetSystem);
+        inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetUri);
 
         // Run down the route
         return requestResource(inParams, Parameters.class, httpServletRequest, httpServletResponse);

@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.rest.client.IGenericClient;
+import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.ITransactionTyped;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -29,21 +30,13 @@ import java.util.Map;
  * Request Factory for ITI-65 requests
  *
  * @author Christian Ohr
+ * @since 3.2
  */
-public class Iti65ClientRequestFactory implements ClientRequestFactory<ITransactionTyped<?>> {
+public class Iti65ClientRequestFactory implements ClientRequestFactory<ITransactionTyped<Bundle>> {
 
     @Override
-    public ITransactionTyped<?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
-
-        ITransactionTyped<?> tx;
-        if (requestData instanceof Bundle) {
-            tx = client.transaction().withBundle((Bundle)requestData);
-        } else if (requestData instanceof List) {
-            tx = client.transaction().withResources((List<? extends IBaseResource>) requestData);
-        } else {
-            tx = client.transaction().withBundle(requestData.toString());
-        }
-
-        return tx;
+    public ITransactionTyped<Bundle> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
+        return client.transaction().withBundle((Bundle)requestData);
     }
+
 }

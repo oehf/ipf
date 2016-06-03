@@ -24,6 +24,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     protected Parameters sendManually(Parameters queryParameters) {
         Parameters result = client.operation()
                 .onType(Patient.class)
-                .named(Constants.PIXM_OPERATION_NAME)
+                .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)
                 .useHttpGet()
                 .execute();

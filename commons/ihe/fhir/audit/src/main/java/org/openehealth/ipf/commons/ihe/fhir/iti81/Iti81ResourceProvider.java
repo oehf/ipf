@@ -22,9 +22,9 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.instance.model.AuditEvent;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,43 +43,37 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
 
     @SuppressWarnings("unused")
     @Search(type = AuditEvent.class)
-    public List<? extends AuditEvent> auditSearch(
+    public IBundleProvider auditSearch(
             @RequiredParam(name = AuditEvent.SP_DATE) DateAndListParam interval,
             @OptionalParam(name = AuditEvent.SP_ADDRESS) StringAndListParam address,
-            @OptionalParam(name = Constants.SP_PATIENTID) TokenAndListParam patientId,
+            @OptionalParam(name = Iti81Constants.SP_PATIENTID) TokenAndListParam patientId,
             @OptionalParam(name = AuditEvent.SP_IDENTITY) TokenAndListParam identity,
             @OptionalParam(name = AuditEvent.SP_OBJECTTYPE) TokenAndListParam objectType,
-            @OptionalParam(name = Constants.SP_ROLE) TokenAndListParam role,
+            @OptionalParam(name = Iti81Constants.SP_ROLE) TokenAndListParam role,
             @OptionalParam(name = AuditEvent.SP_SOURCE) StringAndListParam source,
             @OptionalParam(name = AuditEvent.SP_TYPE) TokenAndListParam type,
             @OptionalParam(name = AuditEvent.SP_PARTICIPANT) StringAndListParam participant,
             @OptionalParam(name = AuditEvent.SP_SUBTYPE) TokenAndListParam subtype,
-            @OptionalParam(name = Constants.SP_OUTCOME) TokenAndListParam outcome,
+            @OptionalParam(name = Iti81Constants.SP_OUTCOME) TokenAndListParam outcome,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
         Map<String, Object> searchParameters = new HashMap<>();
         addParameter(searchParameters, AuditEvent.SP_DATE, interval);
         addParameter(searchParameters, AuditEvent.SP_ADDRESS, address);
-        addParameter(searchParameters, Constants.SP_PATIENTID, patientId);
+        addParameter(searchParameters, Iti81Constants.SP_PATIENTID, patientId);
         addParameter(searchParameters, AuditEvent.SP_IDENTITY, identity);
         addParameter(searchParameters, AuditEvent.SP_OBJECTTYPE, objectType);
-        addParameter(searchParameters, Constants.SP_ROLE, role);
+        addParameter(searchParameters, Iti81Constants.SP_ROLE, role);
         addParameter(searchParameters, AuditEvent.SP_SOURCE, source);
         addParameter(searchParameters, AuditEvent.SP_TYPE, type);
         addParameter(searchParameters, AuditEvent.SP_PARTICIPANT, participant);
         addParameter(searchParameters, AuditEvent.SP_SUBTYPE, subtype);
-        addParameter(searchParameters, Constants.SP_OUTCOME, outcome);
-
+        addParameter(searchParameters, Iti81Constants.SP_OUTCOME, outcome);
 
         // Run down the route
-        return requestBundle(null, searchParameters, httpServletRequest, httpServletResponse);
+        return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
 
     }
 
-    private void addParameter(Map<String, Object> map, String key, Object value) {
-        if (value != null) {
-            map.put(key, value);
-        }
-    }
 }

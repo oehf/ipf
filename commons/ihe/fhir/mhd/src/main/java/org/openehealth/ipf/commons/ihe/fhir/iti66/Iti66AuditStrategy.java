@@ -21,7 +21,8 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
 
 /**
- *
+ *  @author Christian Ohr
+ *  @since 3.2
  */
 public abstract class Iti66AuditStrategy extends AuditStrategySupport<FhirQueryAuditDataset> {
 

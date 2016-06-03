@@ -16,118 +16,167 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
+import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import ca.uhn.fhir.validation.ValidationResult;
+import org.hl7.fhir.instance.hapi.validation.FhirInstanceValidator;
+import org.hl7.fhir.instance.hapi.validation.IValidationSupport;
 import org.hl7.fhir.instance.model.*;
+import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.CustomValidationSupport;
+import org.openehealth.ipf.commons.ihe.fhir.FhirUtils;
 import org.openehealth.ipf.commons.ihe.fhir.FhirValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * Validator for ITI-65 transactions. One day we'll provide StructureDefinitions for the purpose of validation,
- * but for now
+ * Validator for ITI-65 transactions.
+ *
+ *  @author Christian Ohr
+ *  @since 3.2
  */
 public class Iti65Validator implements FhirValidator {
 
-    @Override
-    public void validateRequest(Object payload, Map<String, Object> headers) {
-        Bundle transactionBundle = (Bundle) payload;
-        validateTransactionBundle(transactionBundle);
+    private static final IValidationSupport VALIDATION_SUPPORT = new CustomValidationSupport("profiles/MHD");
+
+    // Prepare the required validator instances so that the structure defintions are not reloaded each time
+    private static Map<Class<?>, FhirInstanceValidator> VALIDATORS = new HashMap<>();
+
+    static {
+        VALIDATORS.put(DocumentManifest.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
+        VALIDATORS.put(DocumentReference.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
+        VALIDATORS.put(List_.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
     }
 
     @Override
-    public void validateResponse(Object payload) {
+    public void validateRequest(FhirContext context, Object payload, Map<String, Object> parameters) {
+        Bundle transactionBundle = (Bundle) payload;
+        validateTransactionBundle(transactionBundle);
+        validateBundleConsistency(transactionBundle);
+
+        for (Bundle.BundleEntryComponent entry : transactionBundle.getEntry()) {
+
+            Class<? extends IBaseResource> clazz = entry.getResource().getClass();
+            if (VALIDATORS.containsKey(clazz)) {
+                ca.uhn.fhir.validation.FhirValidator validator = context.newValidator();
+                validator.registerValidatorModule(VALIDATORS.get(clazz));
+                ValidationResult validationResult = validator.validateWithResult(entry.getResource());
+                if (!validationResult.isSuccessful()) {
+                    IBaseOperationOutcome operationOutcome = validationResult.toOperationOutcome();
+                    throw FhirUtils.exception(UnprocessableEntityException::new, operationOutcome, "Validation Failed");
+                }
+            }
+        }
+    }
+
+    @Override
+    public void validateResponse(FhirContext context, Object payload, Map<String, Object> parameters) {
 
     }
 
     /**
-     * Validates bundle type and meta data
+     * Validates bundle type, meta data and consistency of contained resources
      *
-     * @param bundle bundle
+     * @param bundle transaction bundle
      */
     protected void validateTransactionBundle(Bundle bundle) {
         if (!Bundle.BundleType.TRANSACTION.equals(bundle.getType())) {
-            unprocessableEntity(
+            throw FhirUtils.unprocessableEntity(
                     OperationOutcome.IssueSeverity.ERROR,
                     OperationOutcome.IssueType.INVALID,
-                    null,
+                    null, null,
                     "Bundle type must be %s, but was %s",
                     Bundle.BundleType.TRANSACTION.toCode(), bundle.getType().toCode());
         }
         List<UriType> profiles = bundle.getMeta().getProfile();
-        if (profiles.isEmpty() || !Constants.ITI65_TAG.getCode().equals(profiles.get(0).getValue())) {
-            unprocessableEntity(
+        if (profiles.isEmpty() || !Iti65Constants.ITI65_TAG.getCode().equals(profiles.get(0).getValue())) {
+            throw FhirUtils.unprocessableEntity(
                     OperationOutcome.IssueSeverity.ERROR,
                     OperationOutcome.IssueType.INVALID,
-                    null,
+                    null, null,
                     "Request bundle must have profile",
-                    Constants.ITI65_TAG.getCode());
+                    Iti65Constants.ITI65_TAG.getCode());
+        }
+
+    }
+
+    /**
+     * Verifies that bundle has expected content and consistent patient references
+     *
+     * @param bundle transaction bundle
+     */
+    protected void validateBundleConsistency(Bundle bundle) {
+
+        Map<String, List<Bundle.BundleEntryComponent>> entries = FhirUtils.getBundleEntries(bundle);
+
+        // Verify that the bundle has all required resources
+        if (entries.getOrDefault(DocumentManifest.class.getSimpleName(), Collections.emptyList()).size() != 1) {
+            throw FhirUtils.unprocessableEntity(
+                    OperationOutcome.IssueSeverity.ERROR,
+                    OperationOutcome.IssueType.INVALID,
+                    null, null,
+                    "Request bundle must have exactly one DocumentManifest"
+            );
+        }
+        if (entries.getOrDefault(DocumentManifest.class.getSimpleName(), Collections.emptyList()).isEmpty()) {
+            throw FhirUtils.unprocessableEntity(
+                    OperationOutcome.IssueSeverity.ERROR,
+                    OperationOutcome.IssueType.INVALID,
+                    null, null,
+                    "Request bundle must have at least one DocumentReference"
+            );
+        }
+
+        Set<String> references = new HashSet<>();
+        entries.values().stream()
+                .flatMap(list -> list.stream())
+                .map(Bundle.BundleEntryComponent::getResource)
+                .forEach(resource -> {
+                    Reference subject = null;
+                    if (resource instanceof DocumentManifest) {
+                        subject = ((DocumentManifest) resource).getSubject();
+                    } else if (resource instanceof DocumentReference) {
+                        subject = ((DocumentReference) resource).getSubject();
+                    } else if (resource instanceof List_) {
+                        subject = ((List_) resource).getSubject();
+                    } else if (!(resource instanceof Binary)) {
+                        throw FhirUtils.unprocessableEntity(
+                                OperationOutcome.IssueSeverity.ERROR,
+                                OperationOutcome.IssueType.INVALID,
+                                null, null,
+                                "Unexpected bundle component %s",
+                                resource.getClass().getSimpleName()
+                        );
+                    }
+                    if (subject != null) {
+                        references.add(subject.getReference());
+                    } else {
+                        throw FhirUtils.unprocessableEntity(
+                                OperationOutcome.IssueSeverity.ERROR,
+                                OperationOutcome.IssueType.INVALID,
+                                ErrorCode.UNKNOWN_PATIENT_ID.getOpcode(),
+                                null,
+                                "Empty Patient reference in resource %s",
+                                resource
+                        );
+                    }
+
+                });
+
+        if (references.size() != 1) {
+            throw FhirUtils.unprocessableEntity(
+                    OperationOutcome.IssueSeverity.ERROR,
+                    OperationOutcome.IssueType.INVALID,
+                    ErrorCode.PATIENT_ID_DOES_NOT_MATCH.getOpcode(),
+                    null,
+                    "Inconsistent patient references %s",
+                    references
+            );
         }
     }
 
-    protected void validateDocumentReference(Bundle bundle) {
-
-        for (DocumentReference documentReference : getBundleEntries(bundle, DocumentReference.class)) {
 
 
-            if (documentReference.getMasterIdentifier() == null) {
-                unprocessableEntity(
-                        OperationOutcome.IssueSeverity.ERROR,
-                        OperationOutcome.IssueType.REQUIRED,
-                        null,
-                        "MasterIdentifier in DocumentReference must be present"
-                );
-            }
-            if (documentReference.getSubject() == null) {
-                unprocessableEntity(
-                        OperationOutcome.IssueSeverity.ERROR,
-                        OperationOutcome.IssueType.REQUIRED,
-                        ErrorCode.UNKNOWN_PATIENT_ID,
-                        "Subject in DocumentReference must be present"
-                );
-            }
-            if (documentReference.getAuthor().isEmpty()) {
-                unprocessableEntity(
-                        OperationOutcome.IssueSeverity.ERROR,
-                        OperationOutcome.IssueType.REQUIRED,
-                        null,
-                        "Author in DocumentReference must be present"
-                );
-            }
-        }
-    }
-
-
-    private void unprocessableEntity(OperationOutcome.IssueSeverity severity,
-                                     OperationOutcome.IssueType type,
-                                     ErrorCode xdsErrorCode,
-                                     String msg,
-                                     Object... args) {
-        OperationOutcome operationOutcome = new OperationOutcome();
-        CodeableConcept errorCode = null;
-        if (xdsErrorCode != null) {
-            errorCode = new CodeableConcept();
-            errorCode.addCoding().setCode(xdsErrorCode.getOpcode());
-        }
-        operationOutcome.addIssue()
-                .setSeverity(severity)
-                .setCode(type)
-                .setDetails(errorCode);
-        throw new UnprocessableEntityException(String.format(msg, args), operationOutcome);
-    }
-
-
-    private static <T extends IBaseResource> List<T> getBundleEntries(Bundle bundle, Class<T> type) {
-        List<T> entries = new ArrayList<>();
-        for (Bundle.BundleEntryComponent component : bundle.getEntry()) {
-            if (type.isAssignableFrom(component.getResource().getClass())) {
-                entries.add(((T) component.getResource()));
-            }
-        }
-        return entries;
-    }
 }

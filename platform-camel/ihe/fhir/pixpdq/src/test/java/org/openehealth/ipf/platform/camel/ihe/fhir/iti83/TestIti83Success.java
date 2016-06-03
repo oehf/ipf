@@ -22,7 +22,7 @@ import org.hl7.fhir.instance.model.Parameters;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ActiveParticipantType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
@@ -52,7 +52,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(1, conf.getRest().size());
         Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
         Conformance.ConformanceRestOperationComponent operation = component.getOperation().iterator().next();
-        assertEquals(Constants.PIXM_OPERATION_NAME, operation.getName());
+        assertEquals(Iti83Constants.PIXM_OPERATION_NAME, operation.getName());
 
         // printAsXML(conf);
     }

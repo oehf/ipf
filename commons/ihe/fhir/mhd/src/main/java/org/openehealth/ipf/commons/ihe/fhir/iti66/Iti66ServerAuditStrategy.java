@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
  * Strategy for auditing ITI-66 transactions on the server side
  *
  * @author Christian Ohr
+ * @since 3.2
  */
 public class Iti66ServerAuditStrategy extends Iti66AuditStrategy {
 

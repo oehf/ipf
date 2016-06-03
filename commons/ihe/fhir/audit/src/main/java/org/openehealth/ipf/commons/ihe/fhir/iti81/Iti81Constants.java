@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.iti67;
-
-import org.hl7.fhir.instance.model.DocumentReference;
-import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
+package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
 /**
- * Request Factory for ITI-67 requests returning a bundle of document references
- *
  * @author Christian Ohr
  * @since 3.2
  */
-public class Iti67ClientRequestFactory extends QueryClientRequestFactory {
+public interface Iti81Constants {
 
-    public Iti67ClientRequestFactory() {
-        super(DocumentReference.class);
-    }
+
+    String SP_PATIENTID = "patientid";
+    String SP_ROLE = "role";
+    String SP_OUTCOME = "outcome";
+
 }

@@ -224,6 +224,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         patient
     }
 
+
     // Handle an error response from the Cross-reference manager
     protected List<PdqPatient> handleErrorResponse(RSP_K21 message) {
 

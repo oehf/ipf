@@ -22,7 +22,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
     protected Bundle provideAndRegister() throws Exception {
         Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
-        bundle.getMeta().addTag(Constants.ITI65_TAG);
+        bundle.getMeta().addTag(Iti65Constants.ITI65_TAG);
 
         // Manifest
 

@@ -16,6 +16,8 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.context.FhirContext;
+
 import java.util.Map;
 
 /**
@@ -32,27 +34,30 @@ public interface FhirValidator {
      * Validates a FHIR request, throwing an {@link ca.uhn.fhir.rest.server.exceptions.InvalidRequestException}
      * on validation failure
      *
-     * @param payload request payload
-     * @param headers request headers
+     * @param context    FHIR context
+     * @param payload    request payload
+     * @param parameters request parameters
      */
-    void validateRequest(Object payload, Map<String, Object> headers);
+    void validateRequest(FhirContext context, Object payload, Map<String, Object> parameters);
 
     /**
      * Validates a FHIR response, throwing an appropriate subclass of
      * {@link ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException} on
      * validation failure
      *
-     * @param payload resposne payload
+     * @param context    FHIR context
+     * @param payload    response payload
+     * @param parameters response parameters
      */
-    void validateResponse(Object payload);
+    void validateResponse(FhirContext context, Object payload, Map<String, Object> parameters);
 
     class Support implements FhirValidator {
         @Override
-        public void validateRequest(Object payload, Map<String, Object> headers) {
+        public void validateRequest(FhirContext context, Object payload, Map<String, Object> headers) {
         }
 
         @Override
-        public void validateResponse(Object payload) {
+        public void validateResponse(FhirContext context, Object payload, Map<String, Object> parameters) {
         }
     }
 }

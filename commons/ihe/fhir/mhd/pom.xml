@@ -23,6 +23,10 @@
             <artifactId>ipf-commons-ihe-xds</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-validation-resources-dstu2</artifactId>
+        </dependency>
 
         <!-- FIXME get rid of this -->
         <dependency>

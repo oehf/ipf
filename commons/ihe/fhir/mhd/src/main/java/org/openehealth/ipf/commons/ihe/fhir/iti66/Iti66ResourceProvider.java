@@ -37,6 +37,7 @@ import java.util.Map;
  * Resource Provider for MHD (ITI-66)
  *
  * @author Christian Ohr
+ * @since 3.2
  */
 public class Iti66ResourceProvider extends AbstractPlainProvider {
 
@@ -56,7 +57,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
 
         String chain = subject.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {
-            addParameter(searchParameters, DocumentManifest.SP_SUBJECT, subject.toTokenParam());
+            addParameter(searchParameters, DocumentManifest.SP_SUBJECT, subject.toTokenParam(getFhirContext()));
         } else if ("".equals(chain)) {
             addParameter(searchParameters, DocumentManifest.SP_SUBJECT, subject);
         }
@@ -67,12 +68,6 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
 
         // Run down the route
         return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
-    }
-
-    private void addParameter(Map<String, Object> map, String key, Object value) {
-        if (value != null) {
-            map.put(key, value);
-        }
     }
 
 }

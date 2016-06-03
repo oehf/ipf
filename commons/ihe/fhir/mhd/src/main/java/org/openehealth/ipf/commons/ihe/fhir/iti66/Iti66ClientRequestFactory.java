@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
  * Request Factory for ITI-66 requests returning a bundle of document manifests
  *
  * @author Christian Ohr
- * @since 3.1
+ * @since 3.2
  */
 public class Iti66ClientRequestFactory extends QueryClientRequestFactory {
 

@@ -204,10 +204,10 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
                 '@PID.11.5' : searchString(map.get(Patient.SP_ADDRESSPOSTALCODE), true),
                 '@PID.11.6' : searchString(map.get(Patient.SP_ADDRESSCOUNTRY), true),
 
-                '@PID.6.1'  : firstOrNull(searchStringList(map.get(Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY), false)),
-                '@PID.6.2'  : firstOrNull(searchStringList(map.get(Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN), false)),
+                '@PID.6.1'  : firstOrNull(searchStringList(map.get(Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY), false)),
+                '@PID.6.2'  : firstOrNull(searchStringList(map.get(Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN), false)),
                 '@PID.13.1' : searchString(map.get(Patient.SP_TELECOM), true),
-                '@PID.25'   : searchNumber(map.get(Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER))
+                '@PID.25'   : searchNumber(map.get(Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER))
         ]
 
         fillSearchParameters(searchParams, qry.QPD[3])

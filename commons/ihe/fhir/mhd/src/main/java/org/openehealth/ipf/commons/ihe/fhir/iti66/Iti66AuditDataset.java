@@ -16,11 +16,11 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 
 /**
- *
+ *  @author Christian Ohr
+ *  @since 3.2
  */
 public class Iti66AuditDataset extends FhirQueryAuditDataset {
 

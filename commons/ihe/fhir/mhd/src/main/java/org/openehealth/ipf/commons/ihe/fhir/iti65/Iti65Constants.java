@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.iti67;
+package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
-import org.hl7.fhir.instance.model.DocumentReference;
-import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
+import org.hl7.fhir.instance.model.Coding;
 
 /**
- * Request Factory for ITI-67 requests returning a bundle of document references
- *
  * @author Christian Ohr
  * @since 3.2
  */
-public class Iti67ClientRequestFactory extends QueryClientRequestFactory {
+public interface Iti65Constants {
 
-    public Iti67ClientRequestFactory() {
-        super(DocumentReference.class);
-    }
+    Coding ITI65_TAG = new Coding().setCode("http://ihe.net/fhir/tag/iti-65");
+
 }

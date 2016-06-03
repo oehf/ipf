@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.iti67;
+package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
-import org.hl7.fhir.instance.model.DocumentReference;
-import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Request Factory for ITI-67 requests returning a bundle of document references
- *
  * @author Christian Ohr
  * @since 3.2
  */
-public class Iti67ClientRequestFactory extends QueryClientRequestFactory {
+public interface Iti83Constants {
 
-    public Iti67ClientRequestFactory() {
-        super(DocumentReference.class);
-    }
+    Set<String> ITI83_PARAMETERS = new HashSet<>(Arrays.asList(
+            Constants.SOURCE_IDENTIFIER_NAME,
+            Constants.TARGET_SYSTEM_NAME));
+
+    String PIXM_OPERATION_NAME = "$ihe-pix";
 }

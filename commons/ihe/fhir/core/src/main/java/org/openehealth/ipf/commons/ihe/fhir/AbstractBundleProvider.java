@@ -50,9 +50,9 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
         return null;
     }
 
-    protected List<IBaseResource> obtainResources(Object payload, Map<String, Object> headers) {
-        List<IBaseResource> resources = consumer.handleBundleRequest(payload, headers);
-        validator.validateResponse(resources);
+    protected List<IBaseResource> obtainResources(Object payload, Map<String, Object> parameters) {
+        List<IBaseResource> resources = consumer.handleBundleRequest(payload, parameters);
+        validator.validateResponse(consumer.getFhirContext(), resources, parameters);
         return resources;
     }
 

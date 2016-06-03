@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
  * Strategy for auditing ITI-78 transactions on the client side
  *
  * @author Christian Ohr
- * @since 3.1
+ * @since 3.2
  */
 public class Iti65ServerAuditStrategy extends Iti65AuditStrategy {
 

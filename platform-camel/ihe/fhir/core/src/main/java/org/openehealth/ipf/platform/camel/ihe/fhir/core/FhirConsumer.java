@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
+import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.IBundleProvider;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
@@ -46,8 +47,16 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_SIZE_O
 public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends DefaultConsumer
         implements SuspendableService, RequestConsumer {
 
+    private FhirContext fhirContext;
+
     public FhirConsumer(FhirEndpoint<AuditDatasetType, ? extends FhirComponent<AuditDatasetType>> endpoint, Processor processor) {
         super(endpoint, processor);
+        fhirContext = endpoint.getInterceptableConfiguration().getContext();
+    }
+
+    @Override
+    public FhirContext getFhirContext() {
+        return fhirContext;
     }
 
     @Override

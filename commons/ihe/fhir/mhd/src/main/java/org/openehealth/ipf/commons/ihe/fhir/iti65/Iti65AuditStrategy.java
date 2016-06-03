@@ -19,7 +19,8 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 
 /**
- *
+ *  @author Christian Ohr
+ *  @since 3.2
  */
 public abstract class Iti65AuditStrategy extends AuditStrategySupport<Iti65AuditDataset> {
 

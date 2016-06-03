@@ -19,7 +19,8 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 
 /**
- *
+ *  @author Christian Ohr
+ *  @since 3.2
  */
 public class Iti65AuditDataset extends FhirAuditDataset {
 

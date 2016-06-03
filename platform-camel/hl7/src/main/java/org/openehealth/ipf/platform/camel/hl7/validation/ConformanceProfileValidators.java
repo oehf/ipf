@@ -27,6 +27,7 @@ import ca.uhn.hl7v2.Severity;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.GenericParser;
 import ca.uhn.hl7v2.validation.MessageRule;
+import ca.uhn.hl7v2.validation.ValidationContext;
 import ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -58,7 +59,7 @@ public final class ConformanceProfileValidators {
     static {
         FALLBACK_HAPI_CONTEXT = new DefaultHapiContext();
         FALLBACK_HAPI_CONTEXT.setProfileStore(new GazelleProfileStore());
-        FALLBACK_HAPI_CONTEXT.setValidationContext(ValidationContextFactory.noValidation());
+        FALLBACK_HAPI_CONTEXT.setValidationContext((ValidationContext) ValidationContextFactory.noValidation());
     }
 
     private ConformanceProfileValidators() {

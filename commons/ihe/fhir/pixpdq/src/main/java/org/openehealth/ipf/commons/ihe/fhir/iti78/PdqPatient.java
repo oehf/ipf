@@ -28,7 +28,6 @@ import ca.uhn.fhir.util.ElementUtil;
 import org.hl7.fhir.instance.model.HumanName;
 import org.hl7.fhir.instance.model.Patient;
 import org.hl7.fhir.instance.model.api.IAnyResource;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
 /**
  * Patient as defined by the PDQm specification. This extends the default patient resource with the following attributes:
@@ -52,9 +51,9 @@ public class PdqPatient extends Patient {
     public static final TokenClientParam GENDER = new TokenClientParam(Patient.SP_GENDER);
     public static final TokenClientParam RESOURCE_IDENTIFIER = new TokenClientParam(IAnyResource.SP_RES_ID);
     public static final StringClientParam TELECOM = new StringClientParam(Patient.SP_TELECOM);
-    public static final NumberClientParam MULTIPLE_BIRTH_ORDER_NUMBER = new NumberClientParam(Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER);
-    public static final StringClientParam SP_MOTHERS_MAIDEN_NAME_GIVEN = new StringClientParam(Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN);
-    public static final StringClientParam SP_MOTHERS_MAIDEN_NAME_FAMILY = new StringClientParam(Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY);
+    public static final NumberClientParam MULTIPLE_BIRTH_ORDER_NUMBER = new NumberClientParam(Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER);
+    public static final StringClientParam SP_MOTHERS_MAIDEN_NAME_GIVEN = new StringClientParam(Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN);
+    public static final StringClientParam SP_MOTHERS_MAIDEN_NAME_FAMILY = new StringClientParam(Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY);
 
     @Child(name = "mothersMaidenName")
     @Extension(url = "http://www.ihe.net/ITI-78/Profile/pdqm#mothersMaidenName", isModifier = false, definedLocally = false)
