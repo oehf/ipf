@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti83
 
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException
 import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.io.IOUtils
 import org.hl7.fhir.instance.model.Identifier
@@ -82,11 +83,10 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
         assertEquals(0, parameters.parameter.size())
     }
 
-    @Test
+    @Test(expected = ResourceNotFoundException)
     public void testTranslateErrorResponseCase3() {
         RSP_K23 message = loadMessage('err-1_Response')
-        Parameters parameters = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
-        assertEquals(0, parameters.parameter.size())
+        translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
     }
 
     @Test

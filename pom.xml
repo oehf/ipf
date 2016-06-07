@@ -92,7 +92,7 @@
         <groovy-version>2.4.6</groovy-version>
         <guava-version>19.0</guava-version>
         <hapi-version>2.2</hapi-version>
-        <hapi-fhir-version>1.4</hapi-fhir-version>
+        <hapi-fhir-version>1.5</hapi-fhir-version>
         <hibernate-version>4.3.9.Final</hibernate-version>
         <hibernate-commons-annotations-version>4.0.5.Final</hibernate-commons-annotations-version>
         <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>

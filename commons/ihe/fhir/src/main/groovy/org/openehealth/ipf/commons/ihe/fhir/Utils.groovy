@@ -16,14 +16,11 @@
 
 package org.openehealth.ipf.commons.ihe.fhir
 
-import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
-import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
+import ca.uhn.fhir.rest.server.exceptions.*
 import org.hl7.fhir.instance.model.OperationOutcome
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter
 import org.joda.time.format.ISODateTimeFormat
-import org.openehealth.ipf.commons.core.URN
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
 
@@ -72,15 +69,37 @@ class Utils {
 
     }
 
+    // PIXm, Error Case 3
     static BaseServerResponseException unknownPatientId() {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                .setCode(OperationOutcome.IssueType.VALUE)
+                .setCode(OperationOutcome.IssueType.NOTFOUND)
                 .setDiagnostics('sourceIdentifier identity not found')
-        return new InvalidRequestException('Unknown Patient ID', oo)
+        return new ResourceNotFoundException('Unknown Patient ID', oo)
     }
 
+    // PIXm, Error Case 4
+    static BaseServerResponseException unknownSourceDomainCode(String domain = null) {
+        OperationOutcome oo = new OperationOutcome()
+        oo.addIssue()
+                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                .setCode(OperationOutcome.IssueType.CODEINVALID)
+                .setDiagnostics("sourceIdentifier assigning authority ${domain ?: ''} not found")
+        return new InvalidRequestException("Unknown Identifier Domain ${domain ?: ''}", oo)
+    }
+
+    // PIXm, Error Case 5
+    static BaseServerResponseException unknownTargetDomainCode(String domain = null) {
+        OperationOutcome oo = new OperationOutcome()
+        oo.addIssue()
+                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                .setCode(OperationOutcome.IssueType.CODEINVALID)
+                .setDiagnostics("targetSystem ${domain ?: ''} not found")
+        return new ForbiddenOperationException("Unknown Target Domain ${domain ?: ''}", oo)
+    }
+
+    // PDQm, Error Case ?
     static BaseServerResponseException unknownPatientDomain(String domain = null) {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()
@@ -90,13 +109,14 @@ class Utils {
         return new InvalidRequestException("Unknown Patient Domain ${domain ?: ''}", oo)
     }
 
-    static BaseServerResponseException unknownTargetDomain(String domain = null) {
+    // PDQm, Error Case 4
+    static BaseServerResponseException unknownTargetDomainValue(String domain = null) {
         OperationOutcome oo = new OperationOutcome()
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
-                .setCode(OperationOutcome.IssueType.NOTFOUND)
+                .setCode(OperationOutcome.IssueType.VALUE)
                 .setDiagnostics("targetSystem ${domain ?: ''} not found")
-        return new InvalidRequestException("Unknown Target Domain ${domain ?: ''}", oo)
+        return new ResourceNotFoundException("Unknown Target Domain ${domain ?: ''}", oo)
     }
 
     static BaseServerResponseException unexpectedProblem() {

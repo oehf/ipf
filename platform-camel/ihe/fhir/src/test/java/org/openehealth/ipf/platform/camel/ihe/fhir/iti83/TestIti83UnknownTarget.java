@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,12 +35,12 @@ public class TestIti83UnknownTarget extends AbstractTestIti83 {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = InvalidRequestException.class)
+    @Test(expected = ForbiddenOperationException.class)
     public void testSendManualPixm() {
         try {
             sendManually(validQueryParameters());
-        } catch (InvalidRequestException e) {
-            assertAndRethrowException(e, OperationOutcome.IssueType.NOTFOUND);
+        } catch (ForbiddenOperationException e) {
+            assertAndRethrowException(e, OperationOutcome.IssueType.CODEINVALID);
         }
 
     }

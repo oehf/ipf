@@ -64,7 +64,6 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
     @Search(type = PdqPatient.class)
     public IBundleProvider pdqmSearch(
             @OptionalParam(name = Patient.SP_IDENTIFIER) TokenAndListParam identifiers,
-            @OptionalParam(name = Constants.TARGET_SYSTEM_NAME) UriAndListParam targetSystems,
             @OptionalParam(name = Patient.SP_FAMILY) StringAndListParam family,
             @OptionalParam(name = Patient.SP_GIVEN) StringAndListParam given,
             @OptionalParam(name = Patient.SP_BIRTHDATE) DateParam birthDate,
@@ -82,7 +81,6 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
 
         Map<String, Object> searchParameters = new HashMap<>();
         addParameter(searchParameters, Patient.SP_IDENTIFIER, identifiers);
-        addParameter(searchParameters, Constants.TARGET_SYSTEM_NAME, targetSystems);
         addParameter(searchParameters, Patient.SP_FAMILY, family);
         addParameter(searchParameters, Patient.SP_GIVEN, given);
         addParameter(searchParameters, Patient.SP_BIRTHDATE, birthDate);
