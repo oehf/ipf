@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class Iti81ClientRequestFactory extends QueryClientRequestFactory {
 
-    public Iti81ClientRequestFactory(Class<? extends IBaseResource> type) {
+    public Iti81ClientRequestFactory() {
         super(AuditEvent.class);
     }
 

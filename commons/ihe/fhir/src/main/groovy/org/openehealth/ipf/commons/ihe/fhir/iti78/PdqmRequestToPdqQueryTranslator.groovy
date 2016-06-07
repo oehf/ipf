@@ -160,17 +160,9 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
             // Patient identifier has identifier value
             List<String> searchIdentifier = identifiers?.find { it.size() == 3 && !it[2]?.empty }
             if (searchIdentifier) (identifierNamespace, identifierOid, identifierValue) = searchIdentifier
-            // The following is not present in the final spec version, but clients may still use this:
             // Requested domains have no identifier value. If the resource identifier system is not included here,
             // add it because otherwise we don't know the resource ID in the response.
             requestedDomains = identifiers?.findAll { it.size() == 2 || (!it[2]) }.collect { it[1] }
-        }
-
-        // Last-minute change: use targetSystem parameter to request dedicated domains
-        UriAndListParam targetSystems = map.get(Constants.TARGET_SYSTEM_NAME)
-        if (targetSystems) {
-            List<List<String>> targets = searchUriList(targetSystems)
-            requestedDomains = targets.collect { it[1] }
         }
 
         // If requestedDomains is set but the pdqSupplierResourceIdentifierOid is not part of it, add it.
@@ -257,7 +249,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
             if (!(namespace || oid)) {
                 throw identifierParam.value ?
                         Utils.unknownPatientDomain(identifierParam.system) :
-                        Utils.unknownTargetDomain(identifierParam.system)
+                        Utils.unknownTargetDomainValue(identifierParam.system)
             }
         }
         [namespace, oid, identifierParam?.value]

@@ -16,13 +16,12 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
-import org.hl7.fhir.instance.model.Parameters;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import org.hl7.fhir.instance.model.OperationOutcome;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.servlet.ServletException;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -36,10 +35,13 @@ public class TestIti83NoPatient extends AbstractTestIti83 {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test
+    @Test(expected = ResourceNotFoundException.class)
     public void testSendManualPixm() {
-        Parameters result = sendManually(validQueryParameters());
-        assertTrue(result.getParameter().isEmpty());
+        try {
+            sendManually(validQueryParameters());
+        } catch (ResourceNotFoundException e) {
+            assertAndRethrowException(e, OperationOutcome.IssueType.NOTFOUND);
+        }
     }
 
 }

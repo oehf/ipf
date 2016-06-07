@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.IGenericClient;
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
@@ -42,8 +42,7 @@ public class FhirTestContainer extends StandardTestContainer {
         return client;
     }
 
-    protected void assertAndRethrowException(InvalidRequestException e, OperationOutcome.IssueType expectedIssue) {
-        assertEquals(400, e.getStatusCode());
+    protected void assertAndRethrowException(BaseServerResponseException e, OperationOutcome.IssueType expectedIssue) {
         // Hmm, I wonder if this could not be done automatically...
         OperationOutcome oo = context.newXmlParser().parseResource(OperationOutcome.class, e.getResponseBody());
         assertEquals(OperationOutcome.IssueSeverity.ERROR, oo.getIssue().get(0).getSeverity());

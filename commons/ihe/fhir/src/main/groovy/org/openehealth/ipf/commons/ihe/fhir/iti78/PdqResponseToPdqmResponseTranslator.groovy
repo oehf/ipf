@@ -80,9 +80,9 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         switch (ackCode) {
             case 'OK': return returnBundle ?
                     handleRegularSearchResponse(message.QUERY_RESPONSE()) :
-                    handleRegularResource(message.QUERY_RESPONSE()) // Case 1
-            case 'NF': return handleRegularSearchResponse(null)  // Case 2 TODO check + handle non-existent resource ID
-            case 'AE': return handleErrorResponse(message) // Cases 3-5
+                    handleRegularResource(message.QUERY_RESPONSE()) // Case 1,2
+            case 'NF': return handleRegularSearchResponse(null)     // Case 3
+            case 'AE': return handleErrorResponse(message)          // Cases 3-5
             default: throw new InternalErrorException("Unexpected ack code " + ackCode)
         }
     }
@@ -230,7 +230,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         // Check error locations
         int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0
         if (errorField == 8) {
-            throw Utils.unknownTargetDomain()
+            throw Utils.unknownTargetDomainValue()
         } else {
             throw Utils.unexpectedProblem()
         }

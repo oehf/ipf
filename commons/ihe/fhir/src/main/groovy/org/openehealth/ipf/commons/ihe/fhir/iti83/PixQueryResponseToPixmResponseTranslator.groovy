@@ -83,19 +83,18 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
     private Parameters handleErrorResponse(RSP_K23 message) {
 
         // Check error locations
-        OperationOutcome oo = new OperationOutcome()
         int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0
         int errorComponent = message.ERR[2][5]?.value ? Integer.parseInt(message.ERR[2][5]?.value) : 0
 
         if (errorField == 3 && errorComponent == 1) {
-            // Case 3: Patient ID not found, maybe return empty response instead
-            return handleEmptyResponse()
+            // Case 3: Patient ID not found
+            throw Utils.unknownPatientId()
         } else if (errorField == 3 && errorComponent == 4) {
             // Case 4: Unknown Patient Domain
-            throw Utils.unknownPatientDomain()
+            throw Utils.unknownSourceDomainCode()
         } else if (errorField == 4) {
             // Case 5: Unknown Target Domain
-            throw Utils.unknownTargetDomain()
+            throw Utils.unknownTargetDomainCode()
         } else {
             throw Utils.unexpectedProblem();
         }
