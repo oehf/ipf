@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Helper configuration bean that initializes the underlying ATNA facilities when
  * TLS is used as transport protocol.
+ *
+ * @deprecated use org.openhealthtools.ihe.atna.auditor.AuditorTLSConfig
  */
 public class AuditorTLSConfig {
 
