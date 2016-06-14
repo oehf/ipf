@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequ
 /**
  * Provides the ITI-15 web-service interface.
  */
-@WebService(targetNamespace = "urn:ihe:iti:xds:2007", name = "DocumentRepository_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xds:2007", name = "DocumentRepository_PortType", portName = "DocumentRepository_Port_Soap11")
 @XmlSeeAlso({org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.ObjectFactory.class, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.ObjectFactory.class, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ObjectFactory.class})
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti15PortType {

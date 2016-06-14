@@ -28,7 +28,7 @@ import javax.xml.ws.Action;
  * SEI for the ITI-56 XCPD Initiating Gateway actor: receiver of WSA asynchronous responses.
  * @author Dmytro Rud
  */
-@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "InitiatingGateway_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "InitiatingGateway_PortType", portName = "InitiatingGateway_Port")
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Iti56AsyncResponsePortType {
 

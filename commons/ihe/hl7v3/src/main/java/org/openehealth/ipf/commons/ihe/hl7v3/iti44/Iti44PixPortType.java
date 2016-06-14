@@ -25,7 +25,7 @@ import javax.xml.ws.Action;
 /**
  * ITI-44 port type for PIX Feed.
  */
-@WebService(targetNamespace = "urn:ihe:iti:pixv3:2007", name = "PIXManager_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:pixv3:2007", name = "PIXManager_PortType", portName = "PIXManager_Port_Soap12")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti44PixPortType extends GenericIti44PortType {
 

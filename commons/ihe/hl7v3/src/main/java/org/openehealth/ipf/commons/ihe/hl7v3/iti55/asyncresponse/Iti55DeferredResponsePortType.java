@@ -27,7 +27,7 @@ import javax.xml.ws.Action;
  * SEI for the ITI-55 XCPD Initiating Gateway actor: receiver of Deferred responses.
  * @author Dmytro Rud
  */
-@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "InitiatingGatewayDeferredResponse_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "InitiatingGatewayDeferredResponse_PortType", portName = "InitiatingGateway_Response_Port_Soap12")
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Iti55DeferredResponsePortType {
     public static final String DEFERRED_RESPONSE_INPUT_ACTION =

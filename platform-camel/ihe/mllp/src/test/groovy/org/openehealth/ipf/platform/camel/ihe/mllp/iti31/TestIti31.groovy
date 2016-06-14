@@ -29,8 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import static org.junit.Assert.*
 
 /**
- * Unit tests for the PIX Feed transaction a.k.a. ITI-8.
- * @author Dmytro Rud
+ * Unit tests for the PAM "Patient Encounter Management" transaction ITI-31.
  */
 class TestIti31 extends MllpTestContainer {
     

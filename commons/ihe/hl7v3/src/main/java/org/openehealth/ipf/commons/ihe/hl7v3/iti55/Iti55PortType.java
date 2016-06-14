@@ -27,7 +27,7 @@ import javax.xml.ws.Action;
  * SEI for XCPD ITI-55 -- Cross Gateway Patient Discovery.
  * @author Dmytro Rud
  */
-@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "RespondingGateway_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "RespondingGateway_PortType", portName = "RespondingGateway_Port_Soap12")
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Iti55PortType {
     public static final String REGULAR_REQUEST_INPUT_ACTION =

@@ -30,7 +30,7 @@ import javax.xml.ws.Action;
 /**
  * RAD-75 SEI for asynchronous response receiver.
  */
-@WebService(targetNamespace = "urn:ihe:rad:xdsi-b:2009", name = "InitiatingGateway_PortType")
+@WebService(targetNamespace = "urn:ihe:rad:xdsi-b:2009", name = "InitiatingGateway_PortType", portName = "InitiatingGateway_Port")
 @XmlSeeAlso({
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory.class,
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory.class,

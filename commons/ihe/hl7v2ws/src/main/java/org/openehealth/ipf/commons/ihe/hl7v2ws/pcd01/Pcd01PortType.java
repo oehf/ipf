@@ -24,7 +24,7 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.Action;
 
-@WebService(targetNamespace = "urn:ihe:pcd:dec:2010", name = "DeviceObservationConsumer_PortType")
+@WebService(targetNamespace = "urn:ihe:pcd:dec:2010", name = "DeviceObservationConsumer_PortType", portName = "DeviceObservationConsumer_Port_Soap12")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Pcd01PortType extends SimpleHl7v2WsPortType {
 

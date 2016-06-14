@@ -24,7 +24,7 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.Action;
 
-@WebService(targetNamespace = "urn:ihe:iti:pdqv3:2007", name = "PDSupplier_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:pdqv3:2007", name = "PDSupplier_PortType", portName = "PDSupplier_Port_Soap12")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti47PortType extends Hl7v3ContinuationsPortType {
 

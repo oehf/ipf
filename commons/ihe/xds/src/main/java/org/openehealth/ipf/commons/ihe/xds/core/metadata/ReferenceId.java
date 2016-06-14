@@ -43,12 +43,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class ReferenceId extends Identifiable {
     private static final long serialVersionUID = 6615092850652668283L;
 
-    public static final String ID_TYPE_CODE_UNIQUE_ID = "urn:ihe:iti:xds:2013:uniqueId";
-    public static final String ID_TYPE_CODE_ACCESSION = "urn:ihe:iti:xds:2013:accession";
-    public static final String ID_TYPE_CODE_REFERRAL  = "urn:ihe:iti:xds:2013:referral";
-    public static final String ID_TYPE_CODE_ORDER     = "urn:ihe:iti:xds:2013:order";
-    public static final String ID_TYPE_WORKFLOW_ID    = "urn:ihe:iti:xdw:2013:workflowId";
-    public static final String ID_TYPE_ENCOUNTER_ID   = "urn:ihe:iti:xds:2015:encounterId";
+    public static final String ID_TYPE_CODE_UNIQUE_ID       = "urn:ihe:iti:xds:2013:uniqueId";
+    public static final String ID_TYPE_CODE_ACCESSION       = "urn:ihe:iti:xds:2013:accession";
+    public static final String ID_TYPE_CODE_REFERRAL        = "urn:ihe:iti:xds:2013:referral";
+    public static final String ID_TYPE_CODE_ORDER           = "urn:ihe:iti:xds:2013:order";
+    public static final String ID_TYPE_WORKFLOW_INSTANCE_ID = "urn:ihe:iti:xdw:2013:workflowInstanceId";
+    public static final String ID_TYPE_ENCOUNTER_ID         = "urn:ihe:iti:xds:2015:encounterId";
+    public static final String ID_TYPE_STUDY_INSTANCE_ID    = "urn:ihe:iti:xds:2016:studyInstanceUID";
 
     public ReferenceId() {
         super();

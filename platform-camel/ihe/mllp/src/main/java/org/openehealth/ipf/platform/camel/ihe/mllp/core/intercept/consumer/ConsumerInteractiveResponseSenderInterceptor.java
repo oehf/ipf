@@ -215,9 +215,8 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
                 fragmentTerser.set("DSC-2", "I");
             }
             fragmentTerser.set("QAK-4", Integer.toString(recordBoundaries.size() - 1));
-            fragmentTerser.set("QAK-5", Integer.toString(endSegmentIndex - startSegmentIndex));
-            fragmentTerser.set("QAK-6", Integer.toString(
-                    recordBoundaries.get(recordBoundaries.size() - 1) - endSegmentIndex));
+            fragmentTerser.set("QAK-5", Integer.toString(endRecordIndex - startRecordIndex));
+            fragmentTerser.set("QAK-6", Integer.toString(recordBoundaries.size() - 1 - endRecordIndex));
 
             storage.put(continuationPointer, chainId, fragment);
             continuationPointer = nextContinuationPointer;
