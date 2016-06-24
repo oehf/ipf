@@ -22,6 +22,7 @@ import org.hl7.fhir.instance.model.Patient
 import org.hl7.fhir.instance.model.StringType
 import org.hl7.fhir.instance.model.UriType
 import org.openehealth.ipf.commons.ihe.fhir.Constants
+import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants
 
 /**
  * Entry point for command line execution.
@@ -50,7 +51,7 @@ public class Client {
         IGenericClient client = context.newRestfulGenericClient("http://localhost:9091/");
         Parameters result = client.operation()
                 .onType(Patient.class)
-                .named(Constants.PIXM_OPERATION_NAME)
+                .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(inParams)
                 .useHttpGet()
                 .execute();

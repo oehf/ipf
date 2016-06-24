@@ -16,19 +16,12 @@
 
 package org.openehealth.ipf.tutorials.fhir
 
-import org.apache.camel.LoggingLevel
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqResponseToPdqmResponseTranslator
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqmRequestToPdqQueryTranslator
-import org.openehealth.ipf.commons.ihe.fhir.iti83.PixQueryResponseToPixmResponseTranslator
-import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequestToPixQueryTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
-import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter
-import org.openehealth.ipf.platform.camel.hl7.HL7v2
-import org.openehealth.ipf.platform.camel.ihe.fhir.iti83.Iti9Responder
-import org.openehealth.ipf.platform.camel.ihe.fhir.iti83.ResponseCase
 
 import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorFhirToHL7v2
 import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorHL7v2ToFhir

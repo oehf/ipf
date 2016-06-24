@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.tutorials.fhir
 
+import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.commons.ihe.ws.server.TomcatServer
-import org.openehealth.ipf.commons.ihe.fhir.CamelFhirServlet
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.core.io.ClassPathResource
 
@@ -38,7 +38,7 @@ public class Server {
     public static void main(String[] args) {
         ClassPathResource contextResource = new ClassPathResource('context.xml')
         
-        CamelFhirServlet servlet = new CamelFhirServlet()
+        IpfFhirServlet servlet = new IpfFhirServlet()
         
         ServletServer servletServer = new TomcatServer()
         servletServer.contextResource = contextResource.getURI().toString()

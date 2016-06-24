@@ -58,7 +58,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
 
 
     <!-- URI Mapping stuff -->
-    <bean id="uriMapper" class="org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper">
+    <bean id="uriMapper" class="org.openehealth.ipf.commons.fhir.translation.DefaultUriMapper">
         <constructor-arg index="0" ref="mappingService"/>
         <constructor-arg index="1" value="uriToOid"/>
         <constructor-arg index="2" value="uriToNamespace"/>

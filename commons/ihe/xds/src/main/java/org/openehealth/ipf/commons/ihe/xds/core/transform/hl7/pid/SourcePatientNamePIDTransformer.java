@@ -32,7 +32,8 @@ public class SourcePatientNamePIDTransformer implements PIDTransformer {
     @Override
     public void fromHL7(String hl7Data, PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
-        patientInfo.setName(Hl7v2Based.parse(hl7Data, XpnName.class));
+        XpnName name = Hl7v2Based.parse(hl7Data, XpnName.class);
+        patientInfo.setName(name);
     }
 
     @Override
