@@ -41,21 +41,9 @@ abstract public class HeaderUtils {
         T createDefaultValue();
     }
 
-    private static final DefaultValueFactory<Map<String, List<String>>> HTTP_HEADERS_CONTAINER_FACTORY = 
-        new DefaultValueFactory<Map<String, List<String>>>() {
-            @Override
-            public Map<String, List<String>> createDefaultValue() {
-                return new HashMap<>();
-            }
-        };
+    private static final DefaultValueFactory<Map<String, List<String>>> HTTP_HEADERS_CONTAINER_FACTORY = HashMap::new;
 
-    private static final DefaultValueFactory<List<Header>> SOAP_HEADERS_CONTAINER_FACTORY = 
-        new DefaultValueFactory<List<Header>>() {
-            @Override
-            public List<Header> createDefaultValue() {
-                return new ArrayList<>();
-            }
-        };
+    private static final DefaultValueFactory<List<Header>> SOAP_HEADERS_CONTAINER_FACTORY = ArrayList::new;
 
 
     public static void processIncomingHeaders(

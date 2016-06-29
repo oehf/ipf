@@ -20,13 +20,17 @@ import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.param.DateParam;
+import ca.uhn.fhir.rest.param.NumberParam;
+import ca.uhn.fhir.rest.param.StringAndListParam;
+import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.instance.model.IdType;
 import org.hl7.fhir.instance.model.Patient;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,7 +67,6 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
     @Search(type = PdqPatient.class)
     public IBundleProvider pdqmSearch(
             @OptionalParam(name = Patient.SP_IDENTIFIER) TokenAndListParam identifiers,
-            @OptionalParam(name = Constants.TARGET_SYSTEM_NAME) UriAndListParam targetSystems,
             @OptionalParam(name = Patient.SP_FAMILY) StringAndListParam family,
             @OptionalParam(name = Patient.SP_GIVEN) StringAndListParam given,
             @OptionalParam(name = Patient.SP_BIRTHDATE) DateParam birthDate,
@@ -81,7 +84,6 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
 
         Map<String, Object> searchParameters = new HashMap<>();
         addParameter(searchParameters, Patient.SP_IDENTIFIER, identifiers);
-        addParameter(searchParameters, Constants.TARGET_SYSTEM_NAME, targetSystems);
         addParameter(searchParameters, Patient.SP_FAMILY, family);
         addParameter(searchParameters, Patient.SP_GIVEN, given);
         addParameter(searchParameters, Patient.SP_BIRTHDATE, birthDate);

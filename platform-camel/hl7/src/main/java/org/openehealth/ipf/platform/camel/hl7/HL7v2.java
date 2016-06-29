@@ -121,24 +121,20 @@ public final class HL7v2 {
      * @return a validating Camel processor for a message
      */
     public static Processor validatingProcessor(final HapiContext context) {
-        return new Processor() {
+        return exchange -> {
+            if (! ValidatorAdapter.validationEnabled(exchange)) {
+                return;
+            }
 
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                if (! ValidatorAdapter.validationEnabled(exchange)) {
-                    return;
-                }
+            Message msg = bodyMessage(exchange);
+            HapiContext ctx = context == null ? msg.getParser().getHapiContext() : context;
 
-                Message msg = bodyMessage(exchange);
-                HapiContext ctx = context == null ? msg.getParser().getHapiContext() : context;
-
-                // We could also write an exception handler on top of SimpleValidationExceptionHandler that
-                // encapsulates the behavior below, but that may restrict custom validation...
-                SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(ctx);
-                handler.setMinimumSeverityToCollect(Severity.ERROR);
-                if (ctx.<Boolean>getMessageValidator().validate(msg, handler)) {
-                    throw new ValidationException("Message validation failed", handler.getExceptions());
-                }
+            // We could also write an exception handler on top of SimpleValidationExceptionHandler that
+            // encapsulates the behavior below, but that may restrict custom validation...
+            SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(ctx);
+            handler.setMinimumSeverityToCollect(Severity.ERROR);
+            if (ctx.<Boolean>getMessageValidator().validate(msg, handler)) {
+                throw new ValidationException("Message validation failed", handler.getExceptions());
             }
         };
     }

@@ -40,17 +40,14 @@ public final class FhirCamelTranslators {
      * using the given translator instance. 
      */
     public static Processor translatorFhirToHL7v2(final TranslatorFhirToHL7v2 translator) {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                // ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
-                Object fhir = exchange.getIn().getBody();
-                Map<String, Object> parameters = exchange.getIn().getHeaders();
-                // exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
-                org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);
-                resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-                resultMessage.setBody(translator.translateFhirToHL7v2(fhir, parameters));
-            }
+        return exchange -> {
+            // ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
+            Object fhir = exchange.getIn().getBody();
+            Map<String, Object> parameters = exchange.getIn().getHeaders();
+            // exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
+            org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);
+            resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
+            resultMessage.setBody(translator.translateFhirToHL7v2(fhir, parameters));
         };
     }
     
@@ -60,17 +57,14 @@ public final class FhirCamelTranslators {
      * using the given translator instance. 
      */
     public static Processor translatorHL7v2ToFhir(final TranslatorHL7v2ToFhir translator) {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                // String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
-                ca.uhn.hl7v2.model.Message msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.class);
-                Map<String, Object> parameters = exchange.getIn().getHeaders();
-                // exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
-                org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);
-                resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-                resultMessage.setBody(translator.translateHL7v2ToFhir(msg, parameters));
-            }
+        return exchange -> {
+            // String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
+            ca.uhn.hl7v2.model.Message msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.class);
+            Map<String, Object> parameters = exchange.getIn().getHeaders();
+            // exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
+            org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);
+            resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
+            resultMessage.setBody(translator.translateHL7v2ToFhir(msg, parameters));
         };
     }
     

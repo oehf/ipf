@@ -166,12 +166,7 @@ abstract public class PixPdqV3CamelValidators {
             final InteractionId interactionId,
             final boolean request)
     {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                doValidation(exchange, interactionId, request);
-            }
-        };
+        return exchange -> doValidation(exchange, interactionId, request);
     }
 
     private static void doValidation(

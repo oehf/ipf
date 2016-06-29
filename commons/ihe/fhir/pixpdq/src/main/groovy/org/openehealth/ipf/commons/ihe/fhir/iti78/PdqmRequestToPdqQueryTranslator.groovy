@@ -160,17 +160,9 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
             // Patient identifier has identifier value
             List<String> searchIdentifier = identifiers?.find { it.size() == 3 && !it[2]?.empty }
             if (searchIdentifier) (identifierNamespace, identifierOid, identifierValue) = searchIdentifier
-            // The following is not present in the final spec version, but clients may still use this:
             // Requested domains have no identifier value. If the resource identifier system is not included here,
             // add it because otherwise we don't know the resource ID in the response.
             requestedDomains = identifiers?.findAll { it.size() == 2 || (!it[2]) }.collect { it[1] }
-        }
-
-        // Last-minute change: use targetSystem parameter to request dedicated domains
-        UriAndListParam targetSystems = map.get(Constants.TARGET_SYSTEM_NAME)
-        if (targetSystems) {
-            List<List<String>> targets = searchUriList(targetSystems)
-            requestedDomains = targets.collect { it[1] }
         }
 
         // If requestedDomains is set but the pdqSupplierResourceIdentifierOid is not part of it, add it.
@@ -204,10 +196,10 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
                 '@PID.11.5' : searchString(map.get(Patient.SP_ADDRESSPOSTALCODE), true),
                 '@PID.11.6' : searchString(map.get(Patient.SP_ADDRESSCOUNTRY), true),
 
-                '@PID.6.1'  : firstOrNull(searchStringList(map.get(Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY), false)),
-                '@PID.6.2'  : firstOrNull(searchStringList(map.get(Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN), false)),
+                '@PID.6.1'  : firstOrNull(searchStringList(map.get(Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY), false)),
+                '@PID.6.2'  : firstOrNull(searchStringList(map.get(Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN), false)),
                 '@PID.13.1' : searchString(map.get(Patient.SP_TELECOM), true),
-                '@PID.25'   : searchNumber(map.get(Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER))
+                '@PID.25'   : searchNumber(map.get(Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER))
         ]
 
         fillSearchParameters(searchParams, qry.QPD[3])
@@ -257,7 +249,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
             if (!(namespace || oid)) {
                 throw identifierParam.value ?
                         Utils.unknownPatientDomain(identifierParam.system) :
-                        Utils.unknownTargetDomain(identifierParam.system)
+                        Utils.unknownTargetDomainValue(identifierParam.system)
             }
         }
         [namespace, oid, identifierParam?.value]

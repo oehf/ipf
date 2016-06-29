@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,12 +35,12 @@ public class TestIti78UnknownTarget extends AbstractTestIti78 {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = InvalidRequestException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void testSendManualPixm() {
         try {
             sendManually(familyParameters());
-        } catch (InvalidRequestException e) {
-            assertAndRethrowException(e, OperationOutcome.IssueType.NOTFOUND);
+        } catch (ResourceNotFoundException e) {
+            assertAndRethrowException(e, OperationOutcome.IssueType.VALUE);
         }
 
     }

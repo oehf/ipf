@@ -190,12 +190,7 @@ public class Splitter extends DelegateProcessor {
         }
 
         if (splitResult instanceof Iterator) {
-            return new Iterable() {
-                @Override
-                public Iterator iterator() {
-                    return (Iterator) splitResult;
-                }
-            };
+            return () -> (Iterator) splitResult;
         }
 
         if (splitResult.getClass().isArray()) {

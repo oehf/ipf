@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir
 
-import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException
+import ca.uhn.fhir.rest.server.exceptions.*
 import org.hl7.fhir.instance.model.OperationOutcome
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter
@@ -69,39 +69,62 @@ class Utils {
 
     }
 
+    // PIXm, Error Case 3
     static BaseServerResponseException unknownPatientId() {
-        FhirUtils.invalidRequest(
-                OperationOutcome.IssueSeverity.ERROR,
-                OperationOutcome.IssueType.VALUE,
-                null,
-                'sourceIdentifier identity not found',
-                'Unknown Patient ID')
+        OperationOutcome oo = new OperationOutcome()
+        oo.addIssue()
+                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                .setCode(OperationOutcome.IssueType.NOTFOUND)
+                .setDiagnostics('sourceIdentifier identity not found')
+        return new ResourceNotFoundException('Unknown Patient ID', oo)
     }
 
+    // PIXm, Error Case 4
+    static BaseServerResponseException unknownSourceDomainCode(String domain = null) {
+        OperationOutcome oo = new OperationOutcome()
+        oo.addIssue()
+                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                .setCode(OperationOutcome.IssueType.CODEINVALID)
+                .setDiagnostics("sourceIdentifier assigning authority ${domain ?: ''} not found")
+        return new InvalidRequestException("Unknown Identifier Domain ${domain ?: ''}", oo)
+    }
+
+    // PIXm, Error Case 5
+    static BaseServerResponseException unknownTargetDomainCode(String domain = null) {
+        OperationOutcome oo = new OperationOutcome()
+        oo.addIssue()
+                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                .setCode(OperationOutcome.IssueType.CODEINVALID)
+                .setDiagnostics("targetSystem ${domain ?: ''} not found")
+        return new ForbiddenOperationException("Unknown Target Domain ${domain ?: ''}", oo)
+    }
+
+    // PDQm, Error Case ?
     static BaseServerResponseException unknownPatientDomain(String domain = null) {
-        FhirUtils.invalidRequest(
-                OperationOutcome.IssueSeverity.ERROR,
-                OperationOutcome.IssueType.NOTFOUND,
-                null,
-                "sourceIdentifier Assigning Authority ${domain ?: ''} not found",
-                "Unknown Patient Domain ${domain ?: ''}");
+        OperationOutcome oo = new OperationOutcome()
+        oo.addIssue()
+                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                .setCode(OperationOutcome.IssueType.NOTFOUND)
+                .setDiagnostics("sourceIdentifier Assigning Authority ${domain ?: ''} not found")
+        return new InvalidRequestException("Unknown Patient Domain ${domain ?: ''}", oo)
     }
 
-    static BaseServerResponseException unknownTargetDomain(String domain = null) {
-        FhirUtils.invalidRequest(
-                OperationOutcome.IssueSeverity.ERROR,
-                OperationOutcome.IssueType.NOTFOUND,
-                null,
-                "sourceIdentifier Assigning Authority ${domain ?: ''} not found",
-                "Unknown Target Domain ${domain ?: ''}");
+    // PDQm, Error Case 4
+    static BaseServerResponseException unknownTargetDomainValue(String domain = null) {
+        OperationOutcome oo = new OperationOutcome()
+        oo.addIssue()
+                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                .setCode(OperationOutcome.IssueType.VALUE)
+                .setDiagnostics("targetSystem ${domain ?: ''} not found")
+        return new ResourceNotFoundException("Unknown Target Domain ${domain ?: ''}", oo)
     }
 
     static BaseServerResponseException unexpectedProblem() {
-        FhirUtils.internalError(
-                OperationOutcome.IssueSeverity.ERROR,
-                OperationOutcome.IssueType.EXCEPTION,
-                null, null,
-                'Unexpected response from server');
+        OperationOutcome oo = new OperationOutcome()
+        oo.addIssue()
+                .setSeverity(OperationOutcome.IssueSeverity.ERROR)
+                .setCode(OperationOutcome.IssueType.EXCEPTION)
+        return new InternalErrorException('Unexpected response from server', oo)
     }
 
 }

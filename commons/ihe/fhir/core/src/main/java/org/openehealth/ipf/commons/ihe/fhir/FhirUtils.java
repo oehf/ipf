@@ -17,8 +17,10 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
+import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.CodeableConcept;
@@ -93,6 +95,26 @@ public final class FhirUtils {
             String msg,
             Object... args) {
         return exception(InvalidRequestException::new, severity, type, code, diagnostics, msg, args);
+    }
+
+    public static ResourceNotFoundException resourceNotFound(
+            OperationOutcome.IssueSeverity severity,
+            OperationOutcome.IssueType type,
+            String code,
+            String diagnostics,
+            String msg,
+            Object... args) {
+        return exception(ResourceNotFoundException::new, severity, type, code, diagnostics, msg, args);
+    }
+
+    public static ForbiddenOperationException forbiddenOperation(
+            OperationOutcome.IssueSeverity severity,
+            OperationOutcome.IssueType type,
+            String code,
+            String diagnostics,
+            String msg,
+            Object... args) {
+        return exception(ForbiddenOperationException::new, severity, type, code, diagnostics, msg, args);
     }
 
     public static <T extends BaseServerResponseException> T exception(Function<String, T> func,

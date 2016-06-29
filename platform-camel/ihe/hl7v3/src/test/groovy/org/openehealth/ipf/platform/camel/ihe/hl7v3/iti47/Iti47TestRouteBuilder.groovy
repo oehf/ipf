@@ -20,6 +20,7 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Exception
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqRequest3to2Translator
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqResponse2to3Translator
+import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -60,6 +61,8 @@ class Iti47TestRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+
+        int freePort = ServletServer.getFreePort()
 
         from('pdqv3-iti47:pdqv3-iti47-service1')
             .process(PixPdqV3CamelValidators.iti47RequestValidator())
@@ -114,20 +117,20 @@ class Iti47TestRouteBuilder extends RouteBuilder {
             }
 
 
+        from("pdq-iti21://0.0.0.0:${freePort}?supportInteractiveContinuation=true&interactiveContinuationStorage=#hl7v2ContinuationStorage")
+                .process {
+            Exchanges.resultMessage(it).body = V2_RESPONSE
+        }
+
         // routes for v3-v2 continuation interoperability test
         from('pdqv3-iti47:pdqv3-iti47-serviceV2Conti')
             .process(PixPdqV3CamelValidators.iti47RequestValidator())
             .process(translatorHL7v3toHL7v2(REQUEST_TRANSLATOR))
-            .to('pdq-iti21://localhost:8888?supportInteractiveContinuation=true')
+            .to("pdq-iti21://localhost:${freePort}?supportInteractiveContinuation=true")
             .process(translatorHL7v2toHL7v3(RESPONSE_TRANSLATOR))
             .process(PixPdqV3CamelValidators.iti47ResponseValidator())
 
 
-        from('pdq-iti21://localhost:8888?supportInteractiveContinuation=true' +
-             '&interactiveContinuationStorage=#hl7v2ContinuationStorage')
-            .process {
-                Exchanges.resultMessage(it).body = V2_RESPONSE
-            }
 
     }
 }

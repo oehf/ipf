@@ -1,11 +1,11 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2015 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,9 +22,10 @@ import org.hl7.fhir.instance.model.Parameters
 import org.hl7.fhir.instance.model.UriType
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
+import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslationException
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
-import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
+import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
@@ -86,19 +87,19 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
 
         Identifier sourceIdentifier = map[Constants.SOURCE_IDENTIFIER_NAME]
         if (!sourceIdentifier.value) {
-            // No value provided? Patient cannot be found
+            // No value provided? Patient cannot be found, Error Case 3
             throw Utils.unknownPatientId();
         }
         if (!Utils.populateIdentifier(qry.QPD[3], uriMapper, sourceIdentifier.system, sourceIdentifier.value)) {
-            // UriMapper is not able to derive a PIX OID/Namespace for the patient domain URI
-            throw Utils.unknownPatientDomain(sourceIdentifier.system);
+            // UriMapper is not able to derive a PIX OID/Namespace for the patient domain URI, Error Case 4
+            throw Utils.unknownSourceDomainCode(sourceIdentifier.system);
         }
 
         UriType requestedDomain = map[Constants.TARGET_SYSTEM_NAME]
         if (requestedDomain) {
             if (!Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[4]), uriMapper, requestedDomain.value)) {
-                // UriMapper is not able to derive a PIX OID/Namespace for the target domain URI
-                throw Utils.unknownTargetDomain(requestedDomain.value);
+                // UriMapper is not able to derive a PIX OID/Namespace for the target domain URI, Error Case 5
+                throw Utils.unknownTargetDomainCode(requestedDomain.value);
             }
         }
 

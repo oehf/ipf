@@ -40,16 +40,13 @@ abstract public class PixPdqV3CamelTranslators {
      * using the given translator instance. 
      */
     public static Processor translatorHL7v3toHL7v2(final Hl7TranslatorV3toV2 translator) {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
-                String xmlText = exchange.getIn().getMandatoryBody(String.class);
-                exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
-                Message resultMessage = Exchanges.resultMessage(exchange);
-                resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-                resultMessage.setBody(translator.translateV3toV2(xmlText, initial));
-            }
+        return exchange -> {
+            ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
+            String xmlText = exchange.getIn().getMandatoryBody(String.class);
+            exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
+            Message resultMessage = Exchanges.resultMessage(exchange);
+            resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
+            resultMessage.setBody(translator.translateV3toV2(xmlText, initial));
         };
     }
     
@@ -59,17 +56,14 @@ abstract public class PixPdqV3CamelTranslators {
      * using the given translator instance. 
      */
     public static Processor translatorHL7v2toHL7v3(final Hl7TranslatorV2toV3 translator) {
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
-                ca.uhn.hl7v2.model.Message msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.class);
-                exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
-                Message resultMessage = Exchanges.resultMessage(exchange);
-                String charset = exchange.getProperty(Exchange.CHARSET_NAME, "UTF-8", String.class);
-                resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-                resultMessage.setBody(translator.translateV2toV3(msg, initial, charset));
-            }
+        return exchange -> {
+            String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
+            ca.uhn.hl7v2.model.Message msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.class);
+            exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
+            Message resultMessage = Exchanges.resultMessage(exchange);
+            String charset = exchange.getProperty(Exchange.CHARSET_NAME, "UTF-8", String.class);
+            resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
+            resultMessage.setBody(translator.translateV2toV3(msg, initial, charset));
         };
     }
     

@@ -46,38 +46,35 @@ import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.v
  */
 abstract public class ContinuaHrnCamelProcessors {
 
-    private static final Processor HRN_REQUEST_TRANSFORMER_AND_VALIDATOR = new Processor() {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            boolean validationEnabled = validationEnabled(exchange);
+    private static final Processor HRN_REQUEST_TRANSFORMER_AND_VALIDATOR = exchange -> {
+        boolean validationEnabled = validationEnabled(exchange);
 
-            // ebXML validation
-            if (validationEnabled) {
-                EbXMLProvideAndRegisterDocumentSetRequest30 message =
-                    new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
-                ValidationProfile profile = new ValidationProfile(IpfInteractionId.Continua_HRN);
-                new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
+        // ebXML validation
+        if (validationEnabled) {
+            EbXMLProvideAndRegisterDocumentSetRequest30 message =
+                new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
+            ValidationProfile profile = new ValidationProfile(IpfInteractionId.Continua_HRN);
+            new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
+        }
+
+        // transform ebXML into simplified model, extract embedded documents, check document count
+        ProvideAndRegisterDocumentSet request = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class);
+        exchange.getIn().setBody(request);
+
+        if (validationEnabled) {
+            if (request.getDocuments().size() != 1) {
+                throw new ValidationException("exactly one document must be provided in the HRN request");
             }
+        }
 
-            // transform ebXML into simplified model, extract embedded documents, check document count
-            ProvideAndRegisterDocumentSet request = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class);
-            exchange.getIn().setBody(request);
+        // Document content type enrichment: create byte array and String
+        Document document = request.getDocuments().get(0);
+        byte[] documentBytes = document.getContent(byte[].class);
+        String documentString = document.getContent(String.class);
 
-            if (validationEnabled) {
-                if (request.getDocuments().size() != 1) {
-                    throw new ValidationException("exactly one document must be provided in the HRN request");
-                }
-            }
-
-            // Document content type enrichment: create byte array and String
-            Document document = request.getDocuments().get(0);
-            byte[] documentBytes = document.getContent(byte[].class);
-            String documentString = document.getContent(String.class);
-
-            // PHMR-specific validation
-            if (validationEnabled) {
-                new CombinedXmlValidator().validate(documentString, new PhmrValidationProfile());
-            }
+        // PHMR-specific validation
+        if (validationEnabled) {
+            new CombinedXmlValidator().validate(documentString, new PhmrValidationProfile());
         }
     };
 

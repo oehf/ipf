@@ -70,7 +70,7 @@ public class TestIti78Success extends AbstractTestIti78 {
 
         PdqPatient p = (PdqPatient)result.getEntry().get(0).getResource();
         assertEquals("Test", p.getName().get(0).getFamily().get(0).getValue());
-        assertEquals("Patient/4711", p.getId());
+        assertEquals("http://localhost:8999/Patient/4711", p.getId());
 
 
         // Check ATNA Audit

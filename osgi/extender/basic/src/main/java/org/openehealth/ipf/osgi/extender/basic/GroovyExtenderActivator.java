@@ -15,10 +15,13 @@
  */
 package org.openehealth.ipf.osgi.extender.basic;
 
-import org.codehaus.groovy.runtime.m12n.ExtensionModule;
 import org.codehaus.groovy.runtime.m12n.ExtensionModuleScanner;
 import org.openehealth.ipf.commons.core.extend.config.DynamicExtensionConfigurer;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.SynchronousBundleListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.osgi.util.BundleDelegatingClassLoader;
@@ -76,12 +79,9 @@ public class GroovyExtenderActivator implements BundleActivator, SynchronousBund
     private void addExtensionMethods(final Bundle bundle) {
         if (bundle.getResource(ExtensionModuleScanner.MODULE_META_INF_FILE) != null) {
             ClassLoader classLoader = BundleDelegatingClassLoader.createBundleClassLoaderFor(bundle);
-            new ExtensionModuleScanner(new ExtensionModuleScanner.ExtensionModuleListener() {
-                @Override
-                public void onModule(ExtensionModule module) {
-                    DynamicExtensionConfigurer.addExtensionMethods(module);
-                    LOG.info("Added extension methods for bundle {}", bundle);
-                }
+            new ExtensionModuleScanner(module -> {
+                DynamicExtensionConfigurer.addExtensionMethods(module);
+                LOG.info("Added extension methods for bundle {}", bundle);
             }, classLoader).scanClasspathModules();
         }
     }
