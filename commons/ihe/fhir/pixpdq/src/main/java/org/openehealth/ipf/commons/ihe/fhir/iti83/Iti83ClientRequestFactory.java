@@ -41,13 +41,11 @@ public class Iti83ClientRequestFactory implements ClientRequestFactory<IOperatio
             return getClientExecutable(client, (Parameters) requestData);
         } else {
             Parameters p = new Parameters();
-            for (Map.Entry<String, Object> entry : parameters.entrySet()) {
-                if (Iti83Constants.ITI83_PARAMETERS.contains(entry.getKey())) {
-                    p.addParameter()
+            parameters.entrySet().stream()
+                    .filter(entry -> Iti83Constants.ITI83_PARAMETERS.contains(entry.getKey()))
+                    .forEach(entry -> p.addParameter()
                             .setName(entry.getKey())
-                            .setValue(new StringType(entry.getValue().toString()));
-                }
-            }
+                            .setValue(new StringType(entry.getValue().toString())));
             return getClientExecutable(client, p);
         }
 

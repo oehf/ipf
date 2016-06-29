@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
-import org.apache.camel.Processor;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 import org.openehealth.ipf.platform.camel.core.support.domain.Cat;
 import org.openehealth.ipf.platform.camel.core.support.domain.Dog;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -55,12 +54,9 @@ public class TransmogrifierRouteTest extends AbstractRouteTest {
 
     @Test
     public void testTransmogrifier4() throws InterruptedException {
-        Exchange exchange = producerTemplate.request("direct:transmogrifier-test-4", new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setHeader("x", "y");
-                exchange.getIn().setBody(new Dog("Willi"));
-            }
+        Exchange exchange = producerTemplate.request("direct:transmogrifier-test-4", exchange1 -> {
+            exchange1.getIn().setHeader("x", "y");
+            exchange1.getIn().setBody(new Dog("Willi"));
         });
         assertTrue(exchange.hasOut());
         assertEquals("y", exchange.getOut().getHeader("x"));

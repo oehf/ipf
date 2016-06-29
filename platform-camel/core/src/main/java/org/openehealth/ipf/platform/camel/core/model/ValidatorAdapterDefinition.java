@@ -21,6 +21,8 @@ import groovy.lang.Closure;
 import javax.xml.bind.annotation.*;
 import javax.xml.transform.stream.StreamSource;
 
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.SimpleType;
 import org.apache.camel.Expression;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.RouteContext;
@@ -96,7 +98,8 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
      * @param profileExpression
      *          the profile closure
      */
-    public ProcessorAdapterDefinition profile(Closure profileExpression) {
+    public ProcessorAdapterDefinition profile(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
+                                                      Closure profileExpression) {
         this.profileExpression = new DelegatingExpression(profileExpression);
         return this;
     }

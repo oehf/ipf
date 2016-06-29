@@ -16,7 +16,8 @@
 package org.openehealth.ipf.platform.camel.core.closures;
 
 import groovy.lang.Closure;
-
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.SimpleType;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 
@@ -27,7 +28,8 @@ import org.apache.camel.Expression;
  */
 public class DelegatingExpression extends ClosureAdapter implements Expression {
 
-    public DelegatingExpression(Closure closure) {
+    public DelegatingExpression(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
+                                        Closure closure) {
         super(closure);
     }
 

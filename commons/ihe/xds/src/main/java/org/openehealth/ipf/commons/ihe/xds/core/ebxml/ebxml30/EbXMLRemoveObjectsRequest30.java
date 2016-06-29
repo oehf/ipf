@@ -118,7 +118,7 @@ public class EbXMLRemoveObjectsRequest30 implements EbXMLRemoveObjectsRequest {
 
     private EbXMLSlotList30 getSlotList() {
         if (removeObjectsRequest.getAdhocQuery() == null){
-            return new EbXMLSlotList30(new ArrayList<SlotType1>());
+            return new EbXMLSlotList30(new ArrayList<>());
         }
         return new EbXMLSlotList30(removeObjectsRequest.getAdhocQuery().getSlot());
     }

@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
+import ca.uhn.hl7v2.model.v25.datatype.XCN;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
@@ -43,7 +44,7 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         transformer = new AuthorTransformer(factory);
         objectLibrary = factory.createObjectLibrary();
         
-        Name name = new XcnName();
+        Name<XCN> name = new XcnName();
         name.setFamilyName("Adams");
 
         AssigningAuthority assigningAuthority = new AssigningAuthority();

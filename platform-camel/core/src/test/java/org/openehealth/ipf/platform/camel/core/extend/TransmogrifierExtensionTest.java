@@ -15,22 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.xml.transform.dom.DOMResult;
-
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.xml.sax.SAXException;
+
+import javax.xml.transform.dom.DOMResult;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Martin Krasser
@@ -41,12 +39,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testReply() {
-        Exchange exchange = producerTemplate.request("direct:reply",
-                new Processor() {
-                    public void process(Exchange exchange) throws Exception {
-                        exchange.getIn().setBody("abc");
-                    }
-                });
+        Exchange exchange = producerTemplate.request("direct:reply", exchange1 -> exchange1.getIn().setBody("abc"));
         assertEquals("abc", exchange.getIn().getBody());
         assertEquals("abcxyz", exchange.getOut().getBody());
     }

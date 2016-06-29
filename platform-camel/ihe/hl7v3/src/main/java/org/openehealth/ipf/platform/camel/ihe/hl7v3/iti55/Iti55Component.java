@@ -50,9 +50,8 @@ public class Iti55Component extends Hl7v3Component<Hl7v3WsTransactionConfigurati
             true);
 
 
-    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),

@@ -27,6 +27,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Martin Krasser
@@ -48,11 +49,9 @@ public abstract class TestSupport {
     }
     
     protected static List<String> bodies(List<Exchange> exchanges) {
-        ArrayList<String> result = new ArrayList<>();
-        for (Exchange exchange : exchanges) {
-            result.add((String)exchange.getIn().getBody());
-        }
-        return result;
+        return exchanges.stream()
+                .map(exchange -> (String) exchange.getIn().getBody())
+                .collect(Collectors.toCollection(ArrayList::new));
     }
     
 }

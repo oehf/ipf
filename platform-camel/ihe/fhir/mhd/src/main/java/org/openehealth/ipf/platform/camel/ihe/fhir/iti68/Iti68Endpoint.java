@@ -16,6 +16,9 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
+import org.apache.camel.Consumer;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.component.servlet.ServletComponent;
 import org.apache.camel.component.servlet.ServletEndpoint;
 
@@ -23,11 +26,19 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- *
+ * @author Christian Ohr
+ * @since 3.2
  */
 public class Iti68Endpoint extends ServletEndpoint {
 
     public Iti68Endpoint(String endPointURI, ServletComponent component, URI httpUri) throws URISyntaxException {
         super(endPointURI, component, httpUri);
+        // Additional initialization if required
     }
+
+    @Override
+    public Consumer createConsumer(Processor processor) throws Exception {
+        return super.createConsumer(processor);
+    }
+
 }

@@ -130,7 +130,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
         }
     }
 
-    protected AbstractCompositeTypeRule validate(ValidationException e, Location l, Collection<ValidationException> violations) {
+    protected AbstractCompositeTypeRule<T> validate(ValidationException e, Location l, Collection<ValidationException> violations) {
         if (e != null ) {
             e.setLocation(l);
             violations.add(e);

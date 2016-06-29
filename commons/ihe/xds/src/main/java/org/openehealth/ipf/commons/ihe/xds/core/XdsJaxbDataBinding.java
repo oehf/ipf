@@ -45,10 +45,9 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
      * <p>
      * NB: not declared <tt>synchronized</tt>, because no ebXML object
      * is supposed to be marshaled/unmarshaled from multiple threads.
-     * @param ebXml
-     *      key object.
-     * @return
-     *      additional Camel headers as a map.
+     *
+     * @param ebXml key object.
+     * @return additional Camel headers as a map.
      */
     public static Map<String, Object> getCamelHeaders(Object ebXml) {
         Map<String, Object> map = DATA.get(ebXml);
@@ -68,7 +67,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
 
 
     public static boolean isExtraMetadataSlotName(String name) {
-        return ((name != null) && name.startsWith("urn:") && (! name.startsWith("urn:ihe:")));
+        return ((name != null) && name.startsWith("urn:") && (!name.startsWith("urn:ihe:")));
     }
 
 
@@ -80,16 +79,13 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
             if (target instanceof ExtrinsicObjectType) {
                 ExtrinsicObjectType ebXml = (ExtrinsicObjectType) target;
                 findExtraMetadata(ebXml.getSlot(), ebXml);
-            }
-            else if (target instanceof RegistryPackageType) {
+            } else if (target instanceof RegistryPackageType) {
                 RegistryPackageType ebXml = (RegistryPackageType) target;
                 findExtraMetadata(ebXml.getSlot(), ebXml);
-            }
-            else if (target instanceof AssociationType1) {
+            } else if (target instanceof AssociationType1) {
                 AssociationType1 ebXml = (AssociationType1) target;
                 findExtraMetadata(ebXml.getSlot(), ebXml);
-            }
-            else if ((target instanceof SubmitObjectsRequest) && Boolean.TRUE.equals(RESULTS.get())) {
+            } else if ((target instanceof SubmitObjectsRequest) && Boolean.TRUE.equals(RESULTS.get())) {
                 getCamelHeaders(target).put(SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.TRUE);
                 RESULTS.remove();
             }
@@ -120,12 +116,10 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
             if (source instanceof ExtrinsicObjectType) {
                 ExtrinsicObjectType ebXml = (ExtrinsicObjectType) source;
                 injectExtraMetadata(ebXml.getSlot(), ebXml);
-            }
-            else if (source instanceof RegistryPackageType) {
+            } else if (source instanceof RegistryPackageType) {
                 RegistryPackageType ebXml = (RegistryPackageType) source;
                 injectExtraMetadata(ebXml.getSlot(), ebXml);
-            }
-            else if (source instanceof AssociationType1) {
+            } else if (source instanceof AssociationType1) {
                 AssociationType1 ebXml = (AssociationType1) source;
                 injectExtraMetadata(ebXml.getSlot(), ebXml);
             }
@@ -133,16 +127,16 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
 
         private static void injectExtraMetadata(List<SlotType1> slots, ExtraMetadataHolder holder) {
             if (holder.getExtraMetadata() != null) {
-                for (Map.Entry<String, List<String>> entry : holder.getExtraMetadata().entrySet()) {
-                    if (isExtraMetadataSlotName(entry.getKey())) {
-                        SlotType1 slot = new SlotType1();
-                        slot.setName(entry.getKey());
-                        ValueListType valueList = new ValueListType();
-                        valueList.getValue().addAll(entry.getValue());
-                        slot.setValueList(valueList);
-                        slots.add(slot);
-                    }
-                }
+                holder.getExtraMetadata().entrySet().stream()
+                        .filter(entry -> isExtraMetadataSlotName(entry.getKey()))
+                        .forEach(entry -> {
+                            SlotType1 slot = new SlotType1();
+                            slot.setName(entry.getKey());
+                            ValueListType valueList = new ValueListType();
+                            valueList.getValue().addAll(entry.getValue());
+                            slot.setValueList(valueList);
+                            slots.add(slot);
+                        });
             }
         }
     }

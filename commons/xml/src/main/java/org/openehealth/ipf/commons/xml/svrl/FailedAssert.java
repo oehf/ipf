@@ -99,7 +99,7 @@ public class FailedAssert {
      */
     public List<DiagnosticReference> getDiagnosticReference() {
         if (diagnosticReference == null) {
-            diagnosticReference = new ArrayList<DiagnosticReference>();
+            diagnosticReference = new ArrayList<>();
         }
         return this.diagnosticReference;
     }

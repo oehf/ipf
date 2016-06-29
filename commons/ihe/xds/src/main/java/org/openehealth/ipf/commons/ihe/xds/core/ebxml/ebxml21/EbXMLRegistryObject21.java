@@ -15,14 +15,25 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
-import static org.apache.commons.lang3.Validate.notNull;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExternalIdentifier;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.*;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ClassificationType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ExternalIdentifierType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.InternationalStringType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.RegistryEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.RegistryObjectType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Encapsulation of {@link RegistryEntryType}.
@@ -90,9 +101,9 @@ public abstract class EbXMLRegistryObject21<E extends RegistryObjectType> implem
     public List<EbXMLClassification> getClassifications() {
         List<ClassificationType> classifications = registryEntry.getClassification();
         List<EbXMLClassification> results = new ArrayList<>(classifications.size());
-        for (ClassificationType classification : classifications) {
-            results.add(new EbXMLClassification21(classification, objectLibrary));
-        }
+        results.addAll(classifications.stream()
+                .map(classification -> new EbXMLClassification21(classification, objectLibrary))
+                .collect(Collectors.toList()));
         return results;
     }
 
@@ -133,11 +144,9 @@ public abstract class EbXMLRegistryObject21<E extends RegistryObjectType> implem
     @Override
     public List<EbXMLExternalIdentifier> getExternalIdentifiers() {
         List<ExternalIdentifierType> externalIdentifiers = registryEntry.getExternalIdentifier();
-        List<EbXMLExternalIdentifier> results = new ArrayList<>(externalIdentifiers.size());
-        for (ExternalIdentifierType identifier : externalIdentifiers) {
-            results.add(new EbXMLExternalIdentifier21(identifier, objectLibrary));
-        }
-        return results;
+        return externalIdentifiers.stream()
+                .map(identifier -> new EbXMLExternalIdentifier21(identifier, objectLibrary))
+                .collect(Collectors.toList());
     }
 
     @Override

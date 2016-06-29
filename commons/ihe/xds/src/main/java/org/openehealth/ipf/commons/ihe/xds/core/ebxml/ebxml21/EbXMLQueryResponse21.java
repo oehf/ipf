@@ -20,6 +20,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
@@ -94,13 +95,10 @@ public class EbXMLQueryResponse21 extends EbXMLObjectContainer21 implements EbXM
         if (list == null) {
             return Collections.emptyList();
         }
-        
-        List<EbXMLRegistryError> errors = new ArrayList<>();
-        for (RegistryError regError : list.getRegistryError()) {
-            errors.add(new EbXMLRegistryError21(regError));
-        }
-        
-        return errors;
+        return list.getRegistryError().stream()
+                .map(EbXMLRegistryError21::new)
+                .collect(Collectors.toList());
+
     }
 
     @Override
@@ -108,9 +106,9 @@ public class EbXMLQueryResponse21 extends EbXMLObjectContainer21 implements EbXM
         RegistryErrorList value = EbXMLFactory21.RS_FACTORY.createRegistryErrorList();
         regResponse.setRegistryErrorList(value);
         List<RegistryError> list = value.getRegistryError();
-        for (EbXMLRegistryError error : errors) {
-            list.add(((EbXMLRegistryError21) error).getInternal());
-        }
+        list.addAll(errors.stream()
+                .map(error -> ((EbXMLRegistryError21) error).getInternal())
+                .collect(Collectors.toList()));
     }
     
     @Override

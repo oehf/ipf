@@ -23,12 +23,22 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Recipient;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_INTENDED_RECIPIENT;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_TIME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_AUTHOR_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_LOCALIZED_STRING_SOURCE_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_LOCALIZED_STRING_UNIQUE_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID;
 
 /**
  * Transforms between a {@link SubmissionSet} and its ebXML representation.
@@ -88,12 +98,10 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     protected void addSlots(SubmissionSet metaData, EbXMLRegistryPackage ebXML, EbXMLObjectLibrary objectLibrary) {
         super.addSlots(metaData, ebXML, objectLibrary);
         
-        List<String> slotValues = new ArrayList<>();
-        for (Recipient recipient : metaData.getIntendedRecipients()) {
-            slotValues.add(recipientTransformer.toEbXML(recipient));
-        }
-        ebXML.addSlot(SLOT_NAME_INTENDED_RECIPIENT, slotValues.toArray(new String[slotValues.size()]));
-        
+        String[] slotValues = metaData.getIntendedRecipients().stream()
+                .map(recipientTransformer::toEbXML)
+                .toArray(String[]::new);
+        ebXML.addSlot(SLOT_NAME_INTENDED_RECIPIENT, slotValues);
         ebXML.addSlot(SLOT_NAME_SUBMISSION_TIME, toHL7(metaData.getSubmissionTime()));
     }
     
@@ -102,9 +110,9 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
         super.addSlotsFromEbXML(metaData, ebXML);
         
         List<Recipient> recipients = metaData.getIntendedRecipients();
-        for (String slotValue : ebXML.getSlotValues(SLOT_NAME_INTENDED_RECIPIENT)) {
-            recipients.add(recipientTransformer.fromEbXML(slotValue));
-        }
+        recipients.addAll(ebXML.getSlotValues(SLOT_NAME_INTENDED_RECIPIENT).stream()
+                .map(recipientTransformer::fromEbXML)
+                .collect(Collectors.toList()));
 
         metaData.setSubmissionTime(ebXML.getSingleSlotValue(SLOT_NAME_SUBMISSION_TIME));
     }

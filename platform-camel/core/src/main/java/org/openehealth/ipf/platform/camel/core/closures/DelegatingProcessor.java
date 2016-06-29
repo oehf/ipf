@@ -17,17 +17,20 @@ package org.openehealth.ipf.platform.camel.core.closures;
 
 import groovy.lang.Closure;
 
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.SimpleType;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
 /**
  * A processor that delegates to a {@link Closure}
- * 
+ *
  * @author Martin Krasser
  */
 public class DelegatingProcessor extends ClosureAdapter implements Processor {
 
-    public DelegatingProcessor(Closure closure) {
+    public DelegatingProcessor(@ClosureParams(value = SimpleType.class, options = {"org.apache.camel.Exchange"})
+                                       Closure closure) {
         super(closure);
     }
 
@@ -35,5 +38,5 @@ public class DelegatingProcessor extends ClosureAdapter implements Processor {
     public void process(Exchange exchange) throws Exception {
         call(exchange);
     }
-    
+
 }

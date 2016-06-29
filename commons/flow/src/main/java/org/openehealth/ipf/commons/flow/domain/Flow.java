@@ -15,16 +15,13 @@
  */
 package org.openehealth.ipf.commons.flow.domain;
 
-import static org.openehealth.ipf.commons.flow.domain.FlowStatus.CLEAN;
-import static org.openehealth.ipf.commons.flow.domain.FlowStatus.ERROR;
-import static org.openehealth.ipf.commons.flow.transfer.FlowInfo.ACK_COUNT_EXPECTED_UNDEFINED;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Index;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
+import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,14 +32,16 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Index;
-import org.hibernate.search.annotations.DocumentId;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
-import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
+import static org.openehealth.ipf.commons.flow.domain.FlowStatus.CLEAN;
+import static org.openehealth.ipf.commons.flow.domain.FlowStatus.ERROR;
+import static org.openehealth.ipf.commons.flow.transfer.FlowInfo.ACK_COUNT_EXPECTED_UNDEFINED;
 
 /**
  * @author Martin Krasser
@@ -501,11 +500,9 @@ public class Flow {
         setReplayTime(currentTime());
         incrementReplayCount();
         clearErrorStatus();
-        for (FlowPart part: getParts()){
-            if (part.getStatus().equals(FlowStatus.ERROR)){
-                part.setFlowPartMessageText(null);
-            }
-        }
+        getParts().stream()
+                .filter(part -> part.getStatus().equals(FlowStatus.ERROR))
+                .forEach(part -> part.setFlowPartMessageText(null));
         return getPacket();
     }
     
@@ -552,11 +549,9 @@ public class Flow {
     }
     
     public static List<FlowInfo> getInfos(List<Flow> flows) {
-        List<FlowInfo> result = new ArrayList<>(flows.size());
-        for (Flow flow : flows) {
-            result.add(flow.getInfo());
-        }
-        return result;
+        return flows.stream()
+                .map(Flow::getInfo)
+                .collect(Collectors.toList());
     }
     
     private static Date currentTime() {

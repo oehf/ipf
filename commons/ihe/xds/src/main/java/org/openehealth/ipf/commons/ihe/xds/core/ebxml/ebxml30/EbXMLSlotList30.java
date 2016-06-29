@@ -15,15 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import static org.apache.commons.lang3.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotType1;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ValueListType;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Represents a list of slots.
@@ -86,23 +87,17 @@ public class EbXMLSlotList30 implements EbXMLSlotList {
 
     @Override
     public List<EbXMLSlot> getSlots() {
-        List<EbXMLSlot> slots = new ArrayList<>(slotListObj.size());
-        for (SlotType1 slot30 : slotListObj) {
-            slots.add(new EbXMLSlot30(slot30));
-        }
-        return slots;
+        return slotListObj.stream()
+                .map(EbXMLSlot30::new)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<EbXMLSlot> getSlots(String slotName) {
         notNull(slotName, "slotName cannot be null");
-        
-        List<EbXMLSlot> slots = new ArrayList<>(slotListObj.size());
-        for (SlotType1 slot30 : slotListObj) {
-            if (slotName.equals(slot30.getName())) {
-                slots.add(new EbXMLSlot30(slot30));
-            }
-        }
-        return slots;
+        return slotListObj.stream()
+                .filter(slot30 -> slotName.equals(slot30.getName()))
+                .map(EbXMLSlot30::new)
+                .collect(Collectors.toList());
     }
 }

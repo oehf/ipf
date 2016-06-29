@@ -21,8 +21,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -46,23 +46,18 @@ public class ErrorInfoListTransformer {
 
     public List<EbXMLRegistryError> toEbXML(List<ErrorInfo> errorInfoList) {
         notNull(errorInfoList, "error info list cannot be null");
-
-        List<EbXMLRegistryError> result = new ArrayList<>();
-        for (ErrorInfo errorInfo : errorInfoList) {
-            result.add(toEbXML(errorInfo));
-        }
-        return result;
+        return errorInfoList.stream()
+                .map(this::toEbXML)
+                .collect(Collectors.toList());
     }
 
 
     public List<ErrorInfo> fromEbXML(List<EbXMLRegistryError> registryErrorList) {
         notNull(registryErrorList, "registry error list cannot be null");
 
-        List<ErrorInfo> result = new ArrayList<>();
-        for (EbXMLRegistryError registryError : registryErrorList) {
-            result.add(fromEbXML(registryError));
-        }
-        return result;
+        return registryErrorList.stream()
+                .map(this::fromEbXML)
+                .collect(Collectors.toList());
     }
 
 

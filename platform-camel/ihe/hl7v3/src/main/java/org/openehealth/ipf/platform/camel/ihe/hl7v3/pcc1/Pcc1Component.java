@@ -50,9 +50,8 @@ public class Pcc1Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransa
             "QUPC_IN043100UV01",
             "QUPC_IN043200UV01");
 
-    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),

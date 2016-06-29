@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti66;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
@@ -44,8 +45,8 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
     @SuppressWarnings("unused")
     @Search(type = DocumentManifest.class)
     public IBundleProvider documentManifestSearch(
-            @RequiredParam(name = DocumentManifest.SP_SUBJECT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam subject,
-            @OptionalParam(name = DocumentManifest.SP_IDENTIFIER) TokenOrListParam identifiers,
+            @RequiredParam(name = DocumentManifest.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
+            @OptionalParam(name = DocumentManifest.SP_CREATED) DateParam created,
             @OptionalParam(name = DocumentManifest.SP_AUTHOR, chainWhitelist = {Practitioner.SP_FAMILY, Practitioner.SP_GIVEN}) StringAndListParam authorName,
             @OptionalParam(name = DocumentManifest.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentManifest.SP_STATUS) TokenOrListParam status,
@@ -55,13 +56,13 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
 
         Map<String, Object> searchParameters = new HashMap<>();
 
-        String chain = subject.getChain();
+        String chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {
-            addParameter(searchParameters, DocumentManifest.SP_SUBJECT, subject.toTokenParam(getFhirContext()));
+            addParameter(searchParameters, DocumentManifest.SP_SUBJECT, patient.toTokenParam(getFhirContext()));
         } else if ("".equals(chain)) {
-            addParameter(searchParameters, DocumentManifest.SP_SUBJECT, subject);
+            addParameter(searchParameters, DocumentManifest.SP_SUBJECT, patient);
         }
-        addParameter(searchParameters, DocumentManifest.SP_IDENTIFIER, identifiers);
+        addParameter(searchParameters, DocumentManifest.SP_CREATED, created);
         addParameter(searchParameters, DocumentManifest.SP_AUTHOR, authorName);
         addParameter(searchParameters, DocumentManifest.SP_TYPE, type);
         addParameter(searchParameters, DocumentManifest.SP_STATUS, status);

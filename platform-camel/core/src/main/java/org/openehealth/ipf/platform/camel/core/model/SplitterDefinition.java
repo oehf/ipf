@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.core.model;
 import static org.apache.camel.util.ObjectHelper.notNull;
 import groovy.lang.Closure;
 
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.SimpleType;
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
@@ -117,7 +119,8 @@ public class SplitterDefinition extends OutputDefinition<RouteDefinition> {
      * @param aggregationStrategy    
      *          the aggregation strategy
      */
-    public SplitterDefinition aggregationStrategy(Closure aggregationStrategy) {
+    public SplitterDefinition aggregationStrategy(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Exchange", "org.apache.camel.Exchange"})
+                                                          Closure aggregationStrategy) {
         return aggregationStrategy(new DelegatingAggregationStrategy(aggregationStrategy));
     }
     

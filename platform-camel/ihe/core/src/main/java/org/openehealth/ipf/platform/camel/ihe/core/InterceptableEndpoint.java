@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.core.chain.ChainUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Abstract base class for endpoints that use the Interceptor framework defined in this module
@@ -91,9 +92,9 @@ public abstract class InterceptableEndpoint<
     private synchronized List<Interceptor> getCustomInterceptors() {
         List<Interceptor> result = new ArrayList<>();
         List<InterceptorFactory> factories = getInterceptableConfiguration().getCustomInterceptorFactories();
-        for (InterceptorFactory customInterceptorFactory : factories) {
-            result.add(customInterceptorFactory.getNewInstance());
-        }
+        result.addAll(factories.stream()
+                .map(InterceptorFactory::getNewInstance)
+                .collect(Collectors.toList()));
         return result;
     }
 

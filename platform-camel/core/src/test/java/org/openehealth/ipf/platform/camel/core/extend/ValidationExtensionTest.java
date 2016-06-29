@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.core.extend;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -76,22 +75,14 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
     
     public void testSuccess(String endpoint) throws InterruptedException {
         mockOutput.expectedBodiesReceived("blah");
-        Exchange result = producerTemplate.request(endpoint, new Processor() {
-            public void process(Exchange exchange) {
-                exchange.getIn().setBody("blah");
-            }
-        });
+        Exchange result = producerTemplate.request(endpoint, exchange -> exchange.getIn().setBody("blah"));
         assertEquals("result", result.getOut().getBody());
         mockOutput.assertIsSatisfied();
     }
 
     public void testFault(String endpoint) throws InterruptedException {
         mockOutput.expectedMessageCount(0);
-        Exchange result = producerTemplate.request(endpoint, new Processor() {
-            public void process(Exchange exchange) {
-                exchange.getIn().setBody("blah");
-            }
-        });
+        Exchange result = producerTemplate.request(endpoint, exchange -> exchange.getIn().setBody("blah"));
         assertEquals("failed", result.getOut().getBody());
         assertTrue(result.getOut().isFault());
         mockOutput.assertIsSatisfied();
@@ -99,11 +90,7 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
     
     public void testError(String endpoint) throws InterruptedException {
         mockOutput.expectedMessageCount(0);
-        Exchange result = producerTemplate.request(endpoint, new Processor() {
-            public void process(Exchange exchange) {
-                exchange.getIn().setBody("blah");
-            }
-        });
+        Exchange result = producerTemplate.request(endpoint, exchange -> exchange.getIn().setBody("blah"));
         assertEquals("failed", result.getException().getMessage());
         mockOutput.assertIsSatisfied();
     }

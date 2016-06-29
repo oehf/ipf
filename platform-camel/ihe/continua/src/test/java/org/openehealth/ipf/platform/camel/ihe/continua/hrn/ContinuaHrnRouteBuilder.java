@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
@@ -32,30 +31,27 @@ import javax.activation.DataHandler;
  */
 public class ContinuaHrnRouteBuilder extends RouteBuilder {
     
-    private static final Processor CHECK_PROCESSOR = new Processor() {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            Object body = exchange.getIn().getBody();
-            if (! (body instanceof ProvideAndRegisterDocumentSet)) {
-                throw new Exception("wrong body type");
-            }
+    private static final Processor CHECK_PROCESSOR = exchange -> {
+        Object body = exchange.getIn().getBody();
+        if (! (body instanceof ProvideAndRegisterDocumentSet)) {
+            throw new Exception("wrong body type");
+        }
 
-            Class<?>[] expectedContentTypes = new Class<?>[] {
-                    DataHandler.class,
-                    byte[].class,
-                    String.class
-            };
-            Document document = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class).getDocuments().get(0);
-            for (Class<?> contentType : expectedContentTypes) {
-                if (! document.hasContent(contentType)) {
-                    throw new Exception("Missing content type: " + contentType);
-                }
+        Class<?>[] expectedContentTypes = new Class<?>[] {
+                DataHandler.class,
+                byte[].class,
+                String.class
+        };
+        Document document = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class).getDocuments().get(0);
+        for (Class<?> contentType : expectedContentTypes) {
+            if (! document.hasContent(contentType)) {
+                throw new Exception("Missing content type: " + contentType);
             }
+        }
 
-            if (document.getContentsCount() != expectedContentTypes.length) {
-                throw new Exception("Expected " + expectedContentTypes.length +
-                        " content types, found " + document.getContentsCount());
-            }
+        if (document.getContentsCount() != expectedContentTypes.length) {
+            throw new Exception("Expected " + expectedContentTypes.length +
+                    " content types, found " + document.getContentsCount());
         }
     };
 

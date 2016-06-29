@@ -52,7 +52,7 @@ public class BundleHeaderTest {
 
     @Test
     public void testGetEntriesForC() {
-        assertEquals(Collections.EMPTY_LIST, bundleHeader("c").getValues());
+        assertEquals(Collections.emptyList(), bundleHeader("c").getValues());
     }
 
     private BundleHeader bundleHeader(String name) {

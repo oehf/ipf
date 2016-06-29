@@ -15,10 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.DocumentEntryTransformer;
@@ -27,11 +37,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.SubmissionSetTra
 
 import javax.activation.DataHandler;
 
+import static org.apache.commons.lang3.Validate.notNull;
+
 /**
  * Transforms between {@link QueryResponse} and the {@link EbXMLQueryResponse} representation.
+ *
  * @author Jens Riemschneider
  */
-public class QueryResponseTransformer {    
+public class QueryResponseTransformer {
     private final EbXMLFactory factory;
     private final SubmissionSetTransformer submissionSetTransformer;
     private final DocumentEntryTransformer documentEntryTransformer;
@@ -41,13 +54,13 @@ public class QueryResponseTransformer {
 
     /**
      * Constructs the transformer.
-     * @param factory
-     *          the factory for ebXML objects.
+     *
+     * @param factory the factory for ebXML objects.
      */
     public QueryResponseTransformer(EbXMLFactory factory) {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
-    
+
         submissionSetTransformer = new SubmissionSetTransformer(factory);
         documentEntryTransformer = new DocumentEntryTransformer(factory);
         folderTransformer = new FolderTransformer(factory);
@@ -57,23 +70,23 @@ public class QueryResponseTransformer {
 
     /**
      * Transforms a {@link QueryResponse} to a {@link EbXMLQueryResponse}.
-     * @param response
-     *          the response. Can be <code>null</code>.
+     *
+     * @param response the response. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
     public EbXMLQueryResponse toEbXML(QueryResponse response) {
         if (response == null) {
             return null;
         }
-        
-        EbXMLObjectLibrary library = factory.createObjectLibrary();        
+
+        EbXMLObjectLibrary library = factory.createObjectLibrary();
         EbXMLQueryResponse ebXML = factory.createAdhocQueryResponse(library, !response.getReferences().isEmpty());
         ebXML.setStatus(response.getStatus());
 
         if (!response.getErrors().isEmpty()) {
             ebXML.setErrors(errorInfoListTransformer.toEbXML(response.getErrors()));
         }
-        
+
         for (DocumentEntry docEntry : response.getDocumentEntries()) {
             EbXMLExtrinsicObject extrinsic = documentEntryTransformer.toEbXML(docEntry, library);
             for (Document document : response.getDocuments()) {
@@ -84,39 +97,37 @@ public class QueryResponseTransformer {
             }
             ebXML.addExtrinsicObject(extrinsic);
         }
-        
+
         for (Folder folder : response.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
             addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library);
         }
-        
+
         for (SubmissionSet set : response.getSubmissionSets()) {
             ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(set, library));
             addClassification(ebXML, set.getEntryUuid(), Vocabulary.SUBMISSION_SET_CLASS_NODE, library);
         }
-        
+
         for (Association association : response.getAssociations()) {
             ebXML.addAssociation(associationTransformer.toEbXML(association, library));
         }
-        
-        for (ObjectReference ref : response.getReferences()) {
-            ebXML.addReference(ref);
-        }
-        
+
+        response.getReferences().forEach(ebXML::addReference);
+
         return ebXML;
     }
-    
+
     /**
      * Transforms a {@link EbXMLQueryResponse} to a {@link QueryResponse}.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
+     *
+     * @param ebXML the ebXML representation. Can be <code>null</code>.
      * @return the response. <code>null</code> if the input was <code>null</code>.
      */
     public QueryResponse fromEbXML(EbXMLQueryResponse ebXML) {
         if (ebXML == null) {
             return null;
         }
-        
+
         QueryResponse response = new QueryResponse();
         response.setStatus(ebXML.getStatus());
 
@@ -125,7 +136,7 @@ public class QueryResponseTransformer {
         }
 
         boolean foundNonObjRefs = false;
-        
+
         for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             DocumentEntry documentEntry = documentEntryTransformer.fromEbXML(extrinsic);
             response.getDocumentEntries().add(documentEntry);
@@ -144,21 +155,19 @@ public class QueryResponseTransformer {
             response.getSubmissionSets().add(submissionSetTransformer.fromEbXML(regPackage));
             foundNonObjRefs = true;
         }
-        
+
         for (EbXMLAssociation association : ebXML.getAssociations()) {
             response.getAssociations().add(associationTransformer.fromEbXML(association));
             foundNonObjRefs = true;
         }
 
         if (!foundNonObjRefs) {
-            EbXMLObjectLibrary standardLibrary = factory.createObjectLibrary();        
-            for (ObjectReference ref : ebXML.getReferences()) {
-                if (standardLibrary.getById(ref.getId()) == null) {
-                    response.getReferences().add(ref);
-                }
-            }
+            EbXMLObjectLibrary standardLibrary = factory.createObjectLibrary();
+            ebXML.getReferences().stream()
+                    .filter(ref -> standardLibrary.getById(ref.getId()) == null)
+                    .forEach(ref -> response.getReferences().add(ref));
         }
-        
+
         return response;
     }
 
@@ -168,5 +177,5 @@ public class QueryResponseTransformer {
         classification.setClassificationNode(node);
         classification.assignUniqueId();
         ebXML.addClassification(classification);
-    }    
+    }
 }

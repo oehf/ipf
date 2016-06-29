@@ -23,7 +23,10 @@ import org.apache.camel.http.common.HttpMethods;
 import java.net.URI;
 
 /**
+ * Component for MHD Retrieve Document (ITI-68)
  *
+ * @author Christian Ohr
+ * @since 3.2
  */
 public class Iti68Component extends ServletComponent {
 

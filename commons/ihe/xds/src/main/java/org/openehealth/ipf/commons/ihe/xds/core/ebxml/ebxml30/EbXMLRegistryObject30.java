@@ -15,15 +15,25 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import static org.apache.commons.lang3.Validate.notNull;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExternalIdentifier;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExternalIdentifierType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.InternationalStringType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.VersionInfoType;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Encapsulation of {@link RegistryObjectType}.
@@ -94,24 +104,19 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     @Override
     public List<EbXMLClassification> getClassifications() {
         List<ClassificationType> classifications = registryEntry.getClassification();
-        List<EbXMLClassification> results = new ArrayList<>(classifications.size());
-        for (ClassificationType classification : classifications) {
-            results.add(new EbXMLClassification30(classification));
-        }
-        return results;
+        return classifications.stream()
+                .map(EbXMLClassification30::new)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<EbXMLClassification> getClassifications(String scheme) {
         notNull(scheme, "scheme cannot be null");
         
-        List<EbXMLClassification> results = new ArrayList<>();
-        for (ClassificationType classification : registryEntry.getClassification()) {            
-            if (scheme.equals(classification.getClassificationScheme())) {
-                results.add(new EbXMLClassification30(classification));
-            }            
-        }
-        return results;
+        return registryEntry.getClassification().stream()
+                .filter(classification -> scheme.equals(classification.getClassificationScheme()))
+                .map(EbXMLClassification30::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -135,11 +140,9 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     @Override
     public List<EbXMLExternalIdentifier> getExternalIdentifiers() {
         List<ExternalIdentifierType> externalIdentifiers = registryEntry.getExternalIdentifier();
-        List<EbXMLExternalIdentifier> results = new ArrayList<>(externalIdentifiers.size());
-        for (ExternalIdentifierType identifier : externalIdentifiers) {
-            results.add(new EbXMLExternalIdentifier30(identifier));
-        }
-        return results;
+        return externalIdentifiers.stream()
+                .map(EbXMLExternalIdentifier30::new)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -15,16 +15,8 @@
  */
 package org.openehealth.ipf.commons.flow.repository;
 
-import static org.hibernate.criterion.Restrictions.*;
-
-import java.util.Collection;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
-import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
@@ -38,10 +30,22 @@ import org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria.PurgeMode;
 import org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback;
 import org.openehealth.ipf.commons.flow.repository.search.FlowSearchCallback;
 import org.openehealth.ipf.commons.flow.repository.search.FlowSearchCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.HibernateCallback;
 import org.springframework.orm.hibernate4.HibernateObjectRetrievalFailureException;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+
+import java.util.Collection;
+import java.util.List;
+
+import static org.hibernate.criterion.Restrictions.eq;
+import static org.hibernate.criterion.Restrictions.ge;
+import static org.hibernate.criterion.Restrictions.isEmpty;
+import static org.hibernate.criterion.Restrictions.isNull;
+import static org.hibernate.criterion.Restrictions.lt;
+import static org.hibernate.criterion.Restrictions.or;
 
 /**
  * @author Martin Krasser
@@ -114,10 +118,8 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
     @Override
     public int purgeFlows(FlowPurgeCriteria purgeCriteria) {
         final List<Flow> purgeCandidates = findPurgeCandidates(purgeCriteria);
-        getHibernateTemplate().executeWithNativeSession((HibernateCallback) session -> {
-            for (Flow object : purgeCandidates){
-                session.delete(object);
-            }
+        getHibernateTemplate().executeWithNativeSession((HibernateCallback<?>) session -> {
+            purgeCandidates.forEach(session::delete);
             session.flush();
             return null;
         });

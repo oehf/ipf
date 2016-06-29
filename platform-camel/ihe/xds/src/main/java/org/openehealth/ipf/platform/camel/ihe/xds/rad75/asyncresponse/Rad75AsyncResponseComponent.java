@@ -42,9 +42,8 @@ public class Rad75AsyncResponseComponent extends XdsComponent<XdsRetrieveAuditDa
             false,
             false);
 
-    @SuppressWarnings("raw") // Required because of base class
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new XdsAsyncResponseEndpoint<>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),

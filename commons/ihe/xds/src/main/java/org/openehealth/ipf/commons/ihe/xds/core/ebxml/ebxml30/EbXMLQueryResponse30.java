@@ -15,14 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.xml.bind.JAXBElement;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
@@ -34,6 +26,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryErrorList;
+
+import javax.xml.bind.JAXBElement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Encapsulation of {@link AdhocQueryResponse}.
@@ -91,12 +91,9 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
             return Collections.emptyList();
         }
         
-        List<EbXMLRegistryError> errors = new ArrayList<>();
-        for (RegistryError regError : list.getRegistryError()) {
-            errors.add(new EbXMLRegistryError30(regError));
-        }
-        
-        return errors;
+        return list.getRegistryError().stream()
+                .map(EbXMLRegistryError30::new)
+                .collect(Collectors.toList());
     }
 
     @Override

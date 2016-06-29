@@ -66,21 +66,13 @@ public class ConditionalRule implements TestRule {
     }
 
     public ConditionalRule ifSystemProperty(final String property, final Predicate<String> condition) {
-        return runIf(new Predicate<Void>() {
-            @Override
-            public boolean matches(Void source, Object... params) {
-                return condition.matches(System.getProperty(property));
-            }
-        }).reason("condition matches on system property " + property);
+        return runIf((source, params) ->
+                condition.matches(System.getProperty(property))).reason("condition matches on system property " + property);
     }
 
     public ConditionalRule ifSystemPropertyIs(final String property, final String value) {
-        return ifSystemProperty(property, new Predicate<String>() {
-            @Override
-            public boolean matches(String s, Object... params) {
-                return s != null && s.equalsIgnoreCase(value);
-            }
-        }).reason("system property " + property + " equals " + value);
+        return ifSystemProperty(property, (s, params) ->
+                s != null && s.equalsIgnoreCase(value)).reason("system property " + property + " equals " + value);
     }
     public ConditionalRule negate() {
         if (predicate == null)
@@ -91,12 +83,8 @@ public class ConditionalRule implements TestRule {
     }
 
     public ConditionalRule skipOnWindows() {
-        return ifSystemProperty("os.name", new Predicate<String>() {
-            @Override
-            public boolean matches(String s, Object... params) {
-                return s.startsWith("Windows");
-            }
-        }).negate().reason("skipped because running on Windows");
+        return ifSystemProperty("os.name", (s, params) ->
+                s.startsWith("Windows")).negate().reason("skipped because running on Windows");
     }
 
     public ConditionalRule skipOnTravis() {

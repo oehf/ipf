@@ -131,7 +131,7 @@ public class Iti65Validator implements FhirValidator {
 
         Set<String> references = new HashSet<>();
         entries.values().stream()
-                .flatMap(list -> list.stream())
+                .flatMap(Collection::stream)
                 .map(Bundle.BundleEntryComponent::getResource)
                 .forEach(resource -> {
                     Reference subject = null;

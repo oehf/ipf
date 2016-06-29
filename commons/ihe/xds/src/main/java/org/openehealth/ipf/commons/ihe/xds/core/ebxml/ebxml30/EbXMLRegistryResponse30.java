@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryErrorList;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * The ebXML 3.0 version of the {@link EbXMLRegistryResponse}.
@@ -67,12 +67,9 @@ public class EbXMLRegistryResponse30 implements EbXMLRegistryResponse {
             return Collections.emptyList();
         }
 
-        List<EbXMLRegistryError> errors = new ArrayList<>();
-        for (RegistryError regError : list.getRegistryError()) {
-            errors.add(new EbXMLRegistryError30(regError));
-        }
-
-        return errors;
+        return list.getRegistryError().stream()
+                .map(EbXMLRegistryError30::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -80,8 +77,8 @@ public class EbXMLRegistryResponse30 implements EbXMLRegistryResponse {
         RegistryErrorList value = EbXMLFactory30.RS_FACTORY.createRegistryErrorList();
         getInternal().setRegistryErrorList(value);
         List<RegistryError> list = value.getRegistryError();
-        for (EbXMLRegistryError error : errors) {
-            list.add(((EbXMLRegistryError30) error).getInternal());
-        }
+        list.addAll(errors.stream()
+                .map(error -> ((EbXMLRegistryError30) error).getInternal())
+                .collect(Collectors.toList()));
     }
 }

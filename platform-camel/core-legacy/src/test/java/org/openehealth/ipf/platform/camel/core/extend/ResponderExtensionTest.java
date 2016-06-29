@@ -15,15 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.junit.Test;
+import org.springframework.test.context.ContextConfiguration;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Processor;
-import org.junit.Test;
-import org.springframework.test.context.ContextConfiguration;
 
 /**
  * @author Martin Krasser
@@ -53,12 +52,7 @@ public class ResponderExtensionTest extends AbstractExtensionTest {
     
     private void testValidInOnly(String uri) throws InterruptedException {
         mockOutput.expectedBodiesReceived("test");
-        Exchange exchange = producerTemplate.send(uri,
-                new Processor() {
-                    public void process(Exchange exchange) {
-                        exchange.getIn().setBody("test");
-                    }
-                });
+        Exchange exchange = producerTemplate.send(uri, exchange1 -> exchange1.getIn().setBody("test"));
 
         mockOutput.assertIsSatisfied();
         assertEquals("blah", exchange.getIn().getBody());
@@ -69,11 +63,7 @@ public class ResponderExtensionTest extends AbstractExtensionTest {
     public void testValidInOut(String uri) throws InterruptedException {
     	mockOutput.expectedBodiesReceived("test");
         Exchange exchange = producerTemplate.send(uri,
-                ExchangePattern.InOut, new Processor() {
-                    public void process(Exchange exchange) {
-                        exchange.getIn().setBody("test");
-                    }
-                });
+                ExchangePattern.InOut, exchange1 -> exchange1.getIn().setBody("test"));
 
         mockOutput.assertIsSatisfied();
         assertEquals("test", exchange.getIn().getBody());

@@ -32,7 +32,7 @@ import java.util.List;
  * <p>
  * The Validator accepts a {@link Source} as input, and a {@link SchematronProfile}
  * as validation profile parameter.
- * 
+ *
  * @author Christian Ohr
  */
 public class SchematronValidator implements Validator<Source, SchematronProfile> {
@@ -43,13 +43,13 @@ public class SchematronValidator implements Validator<Source, SchematronProfile>
     public void validate(Source message, SchematronProfile profile) {
         SchematronOutput svrl = schematronTransmogrifier.zap(message, profile);
         List<ValidationException> exceptions = new ArrayList<>();
-        for (Object o : svrl.getActivePatternAndFiredRuleAndFailedAssert()) {
-            if (o instanceof FailedAssert) {
-                FailedAssert failedAssert = (FailedAssert) o;
-                exceptions.add(new ValidationException(message(failedAssert)));
-            }
-        }
-        if (! exceptions.isEmpty()) {
+        svrl.getActivePatternAndFiredRuleAndFailedAssert().stream()
+                .filter(o -> o instanceof FailedAssert)
+                .forEach(o -> {
+                    FailedAssert failedAssert = (FailedAssert) o;
+                    exceptions.add(new ValidationException(message(failedAssert)));
+                });
+        if (!exceptions.isEmpty()) {
             throw new SchematronValidationException(exceptions, svrl);
         }
     }
@@ -61,7 +61,7 @@ public class SchematronValidator implements Validator<Source, SchematronProfile>
                 .append(" : ")
                 .append(failedAssert.getText());
 
-        if (! failedAssert.getDiagnosticReference().isEmpty()) {
+        if (!failedAssert.getDiagnosticReference().isEmpty()) {
             sb.append("\nDetail:");
             for (DiagnosticReference diagnosticReference : failedAssert.getDiagnosticReference()) {
                 sb.append('\n').append(diagnosticReference.getText());

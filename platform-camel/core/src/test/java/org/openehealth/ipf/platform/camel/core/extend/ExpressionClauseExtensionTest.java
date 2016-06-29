@@ -32,10 +32,8 @@ public class ExpressionClauseExtensionTest extends AbstractExtensionTest {
     @Test
     public void testExceptionObject() throws InterruptedException {
         mockOutput.expectedMessageCount(1);
-        Exchange result = producerTemplate.request("direct:input1", new Processor() {
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setBody("blah");
-            }
+        Exchange result = producerTemplate.request("direct:input1", exchange -> {
+            exchange.getIn().setBody("blah");
         });
         mockOutput.assertIsSatisfied();
         Exchange received = mockOutput.getExchanges().get(0);
@@ -48,11 +46,7 @@ public class ExpressionClauseExtensionTest extends AbstractExtensionTest {
     @Test
     public void testExceptionMessage() throws InterruptedException {
         mockOutput.expectedMessageCount(1);
-        Exchange result = producerTemplate.request("direct:input2", new Processor() {
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setBody("blah");
-            }
-        });
+        Exchange result = producerTemplate.request("direct:input2", exchange -> exchange.getIn().setBody("blah"));
         mockOutput.assertIsSatisfied();
         Exchange received = mockOutput.getExchanges().get(0);
         assertEquals("message rejected", result.getException().getMessage());

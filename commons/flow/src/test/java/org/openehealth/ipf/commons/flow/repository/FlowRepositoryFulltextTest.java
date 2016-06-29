@@ -15,17 +15,6 @@
  */
 package org.openehealth.ipf.commons.flow.repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.openehealth.ipf.commons.flow.domain.FlowStatus.CLEAN;
-import static org.openehealth.ipf.commons.flow.domain.FlowStatus.ERROR;
-
-import java.util.List;
-
-import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -45,6 +34,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.openehealth.ipf.commons.flow.domain.FlowStatus.CLEAN;
+import static org.openehealth.ipf.commons.flow.domain.FlowStatus.ERROR;
 
 /**
  * @author Martin Krasser
@@ -195,12 +194,8 @@ public class FlowRepositoryFulltextTest {
 
     @SuppressWarnings("unchecked")
     private Flow searchFlow(final String content) {
-        List<Flow> results = (List)hibernateTemplate.executeWithNativeSession(new HibernateCallback() {
-            @Override
-            public Object doInHibernate(Session session) {
-                return searchCallback.findFlowsByMessageQuery(session, content);
-            }
-        });
+        List<Flow> results = (List)hibernateTemplate.executeWithNativeSession((HibernateCallback) session ->
+                searchCallback.findFlowsByMessageQuery(session, content));
         if (results.isEmpty()) {
             return null;
         } else if (results.size() == 1) {
@@ -212,12 +207,8 @@ public class FlowRepositoryFulltextTest {
     
     @SuppressWarnings("unchecked")
     private List<FlowPart> searchFlowParts(final String content) {
-        return (List)hibernateTemplate.executeWithNativeSession(new HibernateCallback() {
-            @Override
-            public Object doInHibernate(Session session) {
-                return searchCallback.findFlowPartsByMessageQuery(session, content);
-            }
-        });
+        return (List)hibernateTemplate.executeWithNativeSession((HibernateCallback) session ->
+                searchCallback.findFlowPartsByMessageQuery(session, content));
     }
     
     private Long persistFlowWithText(String content, FlowStatus... status) throws Exception {

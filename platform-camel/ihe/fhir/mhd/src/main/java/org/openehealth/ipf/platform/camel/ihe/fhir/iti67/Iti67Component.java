@@ -26,10 +26,10 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfigurati
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
 /**
- * Component for MHD Retreive Document Reference (ITI-67)
+ * Component for MHD Retrieve Document Reference (ITI-67)
  *
  * @author Christian Ohr
- * @since 3.1
+ * @since 3.2
  */
 public class Iti67Component extends FhirComponent<FhirQueryAuditDataset> {
 

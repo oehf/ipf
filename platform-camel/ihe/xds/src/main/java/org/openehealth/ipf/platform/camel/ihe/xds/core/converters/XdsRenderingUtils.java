@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.core.converters;
 
 import groovy.lang.Closure;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.SimpleType;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.TypeConverter;
@@ -150,7 +152,8 @@ abstract public class XdsRenderingUtils {
      * @return
      *      XML representation of the XDS object contained in the given Camel exchange.
      */
-    public static String render(Exchange exchange, Closure closure) {
+    public static String render(Exchange exchange, @ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Exchange"})
+            Closure closure) {
         return doRender(exchange, closure.call(exchange));
     }
 

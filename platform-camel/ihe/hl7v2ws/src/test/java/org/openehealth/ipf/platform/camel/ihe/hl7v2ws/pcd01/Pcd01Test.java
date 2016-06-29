@@ -59,7 +59,7 @@ public class Pcd01Test extends StandardTestContainer {
             HapiContextFactory.createHapiContext(PcdTransactions.PCD1),
             "pcd01/pcd01-response.hl7").toString();
     
-    public static void main(String args[]) {
+    public static void main(String... args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
 

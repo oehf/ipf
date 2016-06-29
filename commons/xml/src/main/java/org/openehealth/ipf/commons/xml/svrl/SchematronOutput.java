@@ -109,7 +109,7 @@ public class SchematronOutput {
      */
     public List<String> getText() {
         if (text == null) {
-            text = new ArrayList<String>();
+            text = new ArrayList<>();
         }
         return this.text;
     }
@@ -138,7 +138,7 @@ public class SchematronOutput {
      */
     public List<NsPrefixInAttributeValues> getNsPrefixInAttributeValues() {
         if (nsPrefixInAttributeValues == null) {
-            nsPrefixInAttributeValues = new ArrayList<NsPrefixInAttributeValues>();
+            nsPrefixInAttributeValues = new ArrayList<>();
         }
         return this.nsPrefixInAttributeValues;
     }
@@ -170,7 +170,7 @@ public class SchematronOutput {
      */
     public List<Object> getActivePatternAndFiredRuleAndFailedAssert() {
         if (activePatternAndFiredRuleAndFailedAssert == null) {
-            activePatternAndFiredRuleAndFailedAssert = new ArrayList<Object>();
+            activePatternAndFiredRuleAndFailedAssert = new ArrayList<>();
         }
         return this.activePatternAndFiredRuleAndFailedAssert;
     }

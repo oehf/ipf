@@ -188,7 +188,7 @@ public class IpfFhirServlet extends RestfulServer {
     public static synchronized void registerProvider(String name, AbstractPlainProvider provider) {
         if (provider instanceof IResourceProvider) {
             if (!RESOURCE_PROVIDERS.containsKey(name)) {
-                RESOURCE_PROVIDERS.put(name, new ArrayList<IResourceProvider>());
+                RESOURCE_PROVIDERS.put(name, new ArrayList<>());
             }
             RESOURCE_PROVIDERS.get(name).add((IResourceProvider) provider);
         } else {

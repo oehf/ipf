@@ -340,7 +340,7 @@ public class Hl7v2TransactionConfiguration {
         }
     }
 
-    private String supportedVersions(Version[] hl7versions) {
+    private String supportedVersions(Version... hl7versions) {
         StringBuilder builder = new StringBuilder();
         for (Version v : hl7versions) {
             builder.append(v.getVersion()).append(' ');

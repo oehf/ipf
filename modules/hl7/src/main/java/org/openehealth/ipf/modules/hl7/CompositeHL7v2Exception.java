@@ -45,7 +45,7 @@ public class CompositeHL7v2Exception extends AbstractHL7v2Exception implements
 	private final List<AbstractHL7v2Exception> wrapped;
 
 	public CompositeHL7v2Exception() {
-		this("HL7 Processing Error", new ArrayList<AbstractHL7v2Exception>());
+		this("HL7 Processing Error", new ArrayList<>());
 	}
 
 	public CompositeHL7v2Exception(List<AbstractHL7v2Exception> wrapped) {
@@ -62,7 +62,7 @@ public class CompositeHL7v2Exception extends AbstractHL7v2Exception implements
 	}
 
 	public CompositeHL7v2Exception(String message) {
-		this(message, new ArrayList<AbstractHL7v2Exception>());
+		this(message, new ArrayList<>());
 	}
 
 	public CompositeHL7v2Exception(String message,

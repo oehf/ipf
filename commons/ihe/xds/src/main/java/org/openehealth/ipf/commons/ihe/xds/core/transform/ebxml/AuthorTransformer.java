@@ -151,7 +151,7 @@ public class AuthorTransformer {
      * @param <T>
      *      source class of the HL7-based object model.
      */
-    private static <T extends Hl7v2Based> void transformToHl7Slots(
+    private static <T extends Hl7v2Based<?>> void transformToHl7Slots(
             List<T> sourceCollection,
             EbXMLClassification targetClassification,
             String targetSlotName)

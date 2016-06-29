@@ -111,11 +111,13 @@ public final class ConformanceProfileValidators {
         throwIPFValidationException(validator.apply(message));
     }
 
-    private static void throwIPFValidationException(ca.uhn.hl7v2.validation.ValidationException[] exceptions) {
+    private static void throwIPFValidationException(ca.uhn.hl7v2.validation.ValidationException... exceptions) {
         List<ca.uhn.hl7v2.validation.ValidationException> fatalExceptions = new ArrayList<>();
-        for (ca.uhn.hl7v2.validation.ValidationException exception : exceptions) {
-            if (exception.getSeverity().equals(Severity.ERROR)) {
-                fatalExceptions.add(exception);
+        if (exceptions != null) {
+            for (ca.uhn.hl7v2.validation.ValidationException exception : exceptions) {
+                if (exception.getSeverity().equals(Severity.ERROR)) {
+                    fatalExceptions.add(exception);
+                }
             }
         }
         if (!fatalExceptions.isEmpty()) {

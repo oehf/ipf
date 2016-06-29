@@ -42,13 +42,13 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
     @SuppressWarnings("unused")
     @Search(type = DocumentReference.class)
     public IBundleProvider documentManifestSearch(
-            @RequiredParam(name = DocumentReference.SP_SUBJECT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam subject,
-            @OptionalParam(name = DocumentReference.SP_IDENTIFIER) TokenOrListParam identifiers,
+            @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentReference.SP_INDEXED) DateOrListParam indexed,
             @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = {Practitioner.SP_FAMILY, Practitioner.SP_GIVEN}) StringAndListParam authorName,
-            @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_CLASS) TokenOrListParam class_,
+            @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,
+            @OptionalParam(name = DocumentReference.SP_SETTING) TokenOrListParam setting,
             @OptionalParam(name = DocumentReference.SP_PERIOD) DateOrListParam period,
             @OptionalParam(name = DocumentReference.SP_FACILITY) TokenOrListParam facility,
             @OptionalParam(name = DocumentReference.SP_EVENT) TokenAndListParam event,
@@ -61,18 +61,19 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
 
         Map<String, Object> searchParameters = new HashMap<>();
 
-        String chain = subject.getChain();
+        String chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {
-            addParameter(searchParameters, DocumentReference.SP_SUBJECT + "." + Patient.SP_IDENTIFIER, subject.toTokenParam(getFhirContext()));
+            addParameter(searchParameters, DocumentReference.SP_SUBJECT + "." + Patient.SP_IDENTIFIER, patient.toTokenParam(getFhirContext()));
         } else if ("".equals(chain)) {
-            addParameter(searchParameters, DocumentReference.SP_SUBJECT, subject);
+            addParameter(searchParameters, DocumentReference.SP_SUBJECT, patient);
         }
 
-        addParameter(searchParameters, DocumentReference.SP_IDENTIFIER, identifiers);
+        addParameter(searchParameters, DocumentReference.SP_INDEXED, indexed);
         addParameter(searchParameters, DocumentReference.SP_AUTHOR, authorName);
-        addParameter(searchParameters, DocumentReference.SP_TYPE, type);
         addParameter(searchParameters, DocumentReference.SP_STATUS, status);
         addParameter(searchParameters, DocumentReference.SP_CLASS, class_);
+        addParameter(searchParameters, DocumentReference.SP_TYPE, type);
+        addParameter(searchParameters, DocumentReference.SP_SETTING, setting);
         addParameter(searchParameters, DocumentReference.SP_PERIOD, period);
         addParameter(searchParameters, DocumentReference.SP_FACILITY, facility);
         addParameter(searchParameters, DocumentReference.SP_EVENT, event);

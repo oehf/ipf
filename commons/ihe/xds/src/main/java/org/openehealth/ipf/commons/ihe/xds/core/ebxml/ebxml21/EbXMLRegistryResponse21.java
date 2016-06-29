@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryErrorList;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * The ebXML 2.1 version of the {@link RegistryResponse}.
@@ -62,12 +62,9 @@ public class EbXMLRegistryResponse21 implements EbXMLRegistryResponse {
             return Collections.emptyList();
         }
         
-        List<EbXMLRegistryError> errors = new ArrayList<>();
-        for (RegistryError regError : list.getRegistryError()) {
-            errors.add(new EbXMLRegistryError21(regError));
-        }
-        
-        return errors;
+        return list.getRegistryError().stream()
+                .map(EbXMLRegistryError21::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -75,9 +72,9 @@ public class EbXMLRegistryResponse21 implements EbXMLRegistryResponse {
         RegistryErrorList value = EbXMLFactory21.RS_FACTORY.createRegistryErrorList();
         regResponse.setRegistryErrorList(value);
         List<RegistryError> list = value.getRegistryError();
-        for (EbXMLRegistryError error : errors) {
-            list.add(((EbXMLRegistryError21) error).getInternal());
-        }
+        list.addAll(errors.stream()
+                .map(error -> ((EbXMLRegistryError21) error).getInternal())
+                .collect(Collectors.toList()));
     }
 
     @Override

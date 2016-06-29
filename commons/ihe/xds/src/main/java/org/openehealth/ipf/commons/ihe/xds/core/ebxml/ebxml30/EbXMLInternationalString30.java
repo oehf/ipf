@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.InternationalStringType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.LocalizedStringType;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Encapsulation of {@link InternationalStringType}.
@@ -86,11 +86,9 @@ public class EbXMLInternationalString30 implements EbXMLInternationalString {
         }
         
         List<LocalizedStringType> list = international.getLocalizedString();
-        List<LocalizedString> result = new ArrayList<>(list.size());
-        for (LocalizedStringType localizedEbRS30 : list) {
-            result.add(createLocalizedString(localizedEbRS30));
-        }
-        return result;
+        return list.stream()
+                .map(this::createLocalizedString)
+                .collect(Collectors.toList());
     }
 
     @Override

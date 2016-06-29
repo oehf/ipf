@@ -20,6 +20,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
@@ -97,9 +98,9 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
         super.addClassificationsFromEbXML(folder, regPackage);
         
         List<Code> codes = folder.getCodeList();
-        for (EbXMLClassification code : regPackage.getClassifications(FOLDER_CODE_LIST_CLASS_SCHEME)) {
-            codes.add(codeTransformer.fromEbXML(code));
-        }
+        codes.addAll(regPackage.getClassifications(FOLDER_CODE_LIST_CLASS_SCHEME).stream()
+                .map(codeTransformer::fromEbXML)
+                .collect(Collectors.toList()));
 
         List<EbXMLClassification> limitedMetadata = regPackage.getClassifications(FOLDER_LIMITED_METADATA_CLASS_SCHEME);
         folder.setLimitedMetadata(! limitedMetadata.isEmpty());

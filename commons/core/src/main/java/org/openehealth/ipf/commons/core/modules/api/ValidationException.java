@@ -35,7 +35,7 @@ public class ValidationException extends RuntimeException {
         causes = new Throwable[] { cause };
     }
 
-    public ValidationException(String message, Throwable[] causes) {
+    public ValidationException(String message, Throwable... causes) {
         super(message, ((causes == null) || (causes.length == 0)) ? null : causes[0]);
         this.causes = causes;
     }
@@ -48,7 +48,7 @@ public class ValidationException extends RuntimeException {
         super(message);
     }
 
-    public ValidationException(Throwable[] causes) {
+    public ValidationException(Throwable... causes) {
         this(null, causes);
     }
 

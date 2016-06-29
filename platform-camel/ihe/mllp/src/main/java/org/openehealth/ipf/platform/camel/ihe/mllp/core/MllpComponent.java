@@ -89,7 +89,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
             String remaining,
             Map<String, Object> parameters) throws Exception {
         // explicitly overwrite some standard camel-mina parameters
-        if (parameters == Collections.EMPTY_MAP) {
+        if (parameters.isEmpty()) {
             parameters = new HashMap<>();
         }
         parameters.put("sync", true);

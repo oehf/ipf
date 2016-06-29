@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import ca.uhn.hl7v2.model.v25.datatype.XPN;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExternalIdentifier;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
@@ -172,7 +173,7 @@ public abstract class EbrsTestUtils {
      *          name.
      * @return the new name instance.
      */
-    public static Name createName(int idx) {
+    public static Name<XPN> createName(int idx) {
         return new XpnName("familyName " + idx, "givenName " + idx, "prefix " + idx, "second " + idx, "suffix " + idx, "degree " + idx);
     }
 

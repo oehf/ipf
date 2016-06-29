@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * Component for MHD Retrieve Document Manifest (ITI-66)
  *
  * @author Christian Ohr
- * @since 3.1
+ * @since 3.2
  */
 public class Iti66Component extends FhirComponent<FhirQueryAuditDataset> {
 

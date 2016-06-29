@@ -51,7 +51,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
     private static JAXBContext jaxbContext;
     private ProvideAndRegisterDocumentSetRequestType hrnRequest;
     
-    public static void main(String args[]) {
+    public static void main(String... args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
 

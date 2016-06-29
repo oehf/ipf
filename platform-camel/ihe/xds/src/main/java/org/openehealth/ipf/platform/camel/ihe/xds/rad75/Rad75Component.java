@@ -50,8 +50,7 @@ public class Rad75Component extends XdsComponent<XdsRetrieveAuditDataset> {
             true);
 
     @Override
-    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
-    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new XdsEndpoint<XdsRetrieveAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),

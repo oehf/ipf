@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.flow.model;
 
 import groovy.lang.Closure;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.SimpleType;
 import org.apache.camel.Expression;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
@@ -82,7 +84,8 @@ public class IpfDefinition {
      *
      * @param splitLogic a closure implementing the split logic that returns the collection of sub exchanges
      */
-    public SplitterDefinition split(Closure splitLogic) {
+    public SplitterDefinition split(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
+                                            Closure splitLogic) {
         return split(new DelegatingExpression(splitLogic));
     }
 }

@@ -22,7 +22,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
 
 /**
  * @author Christian Ohr
- * @since 3.1
+ * @since 3.2
  */
 public class Iti67Endpoint extends FhirEndpoint<FhirQueryAuditDataset, Iti67Component> {
 

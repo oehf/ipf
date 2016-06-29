@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.core.model;
 
 import groovy.lang.Closure;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.SimpleType;
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
 import org.apache.camel.spi.RouteContext;
@@ -53,7 +55,8 @@ public abstract class ProcessorAdapterDefinition extends DelegateDefinition {
      * @param inputExpression
      *          a closure implementing the expression logic
      */
-    public ProcessorAdapterDefinition input(Closure inputExpression) {
+    public ProcessorAdapterDefinition input(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
+                                                    Closure inputExpression) {
         this.inputExpression = new DelegatingExpression(inputExpression);
         return this;
     }
@@ -73,7 +76,8 @@ public abstract class ProcessorAdapterDefinition extends DelegateDefinition {
      * @param paramsExpression
      *          a closure implementing the expression logic
      */
-    public ProcessorAdapterDefinition params(Closure paramsExpression) {
+    public ProcessorAdapterDefinition params(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
+                                                     Closure paramsExpression) {
         this.paramsExpression = new DelegatingExpression(paramsExpression);
         return this;
     }

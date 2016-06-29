@@ -51,9 +51,8 @@ public class Iti55DeferredResponseComponent extends Hl7v3Component<Hl7v3WsTransa
             false,
             false);
 
-    @SuppressWarnings("raw") // Required because of base class
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new Hl7v3AsyncResponseEndpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),

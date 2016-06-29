@@ -37,7 +37,7 @@ public class ExtraMetadataAdapter extends XmlAdapter<ExtraMetadata, Map<String, 
         for (Map.Entry<String, List<String>> entry : v.entrySet()) {
             ExtraMetadataEntry extra = new ExtraMetadataEntry();
             extra.setKey(entry.getKey());
-            extra.setValues(new ArrayList<String>());
+            extra.setValues(new ArrayList<>());
             extra.getValues().addAll(entry.getValue());
             result.entries.add(extra);
         }

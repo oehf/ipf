@@ -19,8 +19,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A JAXB {@link XmlAdapter} that helps serialize generic lists of lists. This sort of thing is used by the
@@ -32,19 +32,16 @@ import java.util.List;
 public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfListWrapper<T>, List<List<T>>> {
     @Override
     public List<List<T>> unmarshal(ListOfListWrapper<T> v) throws Exception {
-        List<List<T>> outerList = new ArrayList<>();
-        for (ListWrapper<T> innerList : v.getInnerList())
-            outerList.add(innerList.getValue());
-
-        return outerList;
+        return v.getInnerList().stream()
+                .map(ListWrapper::getValue)
+                .collect(Collectors.toList());
     }
 
     @Override
     public ListOfListWrapper<T> marshal(List<List<T>> v) throws Exception {
-        List<ListWrapper<T>> outerList = new ArrayList<>();
-        for (List<T> innerList : v)
-            outerList.add(new ListWrapper<>(innerList));
-
+        List<ListWrapper<T>> outerList = v.stream()
+                .map(ListWrapper::new)
+                .collect(Collectors.toList());
         return new ListOfListWrapper<>(outerList);
     }
 

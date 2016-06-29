@@ -28,7 +28,7 @@ import java.net.InetSocketAddress;
  * Interceptor that handles any {@link MllpAuthenticationFailure} that occurred while
  * processing an exchange.
  */
-public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport<MllpTransactionEndpoint> {
+public class ConsumerAuthenticationFailureInterceptor extends InterceptorSupport<MllpTransactionEndpoint<?>> {
 
     @Override
     public void process(Exchange exchange) throws Exception {

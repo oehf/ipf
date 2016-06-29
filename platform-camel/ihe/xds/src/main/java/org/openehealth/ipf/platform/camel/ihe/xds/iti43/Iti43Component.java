@@ -51,8 +51,7 @@ public class Iti43Component extends XdsComponent<XdsRetrieveAuditDataset> {
             false);
 
     @Override
-    @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
-    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new XdsEndpoint<XdsRetrieveAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),

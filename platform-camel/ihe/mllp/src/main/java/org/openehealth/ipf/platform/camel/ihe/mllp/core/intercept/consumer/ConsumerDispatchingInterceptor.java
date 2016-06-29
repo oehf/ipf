@@ -18,7 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.preparser.PreParser;
-import org.apache.camel.*;
+import org.apache.camel.CamelContext;
+import org.apache.camel.CamelException;
+import org.apache.camel.Exchange;
+import org.apache.camel.Route;
+import org.apache.camel.RuntimeCamelException;
+import org.apache.camel.StartupListener;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
@@ -30,13 +35,17 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 /**
  * Interceptor which dispatches an incoming request message to another MLLP route.
- *
+ * <p>
  * TODO maybe reference to dispatchingendpoint, start endpoint without route??
  *
  * @author Dmytro Rud
@@ -96,14 +105,14 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
      * @param camelContext camel context
      */
     private void collectTransactionTargets(CamelContext camelContext) {
-        for (Route route : camelContext.getRoutes()) {
-            if (route.getEndpoint() instanceof MllpTransactionEndpoint) {
-                MllpTransactionEndpoint<?> endpoint = (MllpTransactionEndpoint<?>) route.getEndpoint();
-                if (endpoint.getDispatcher() == this) {
-                    addTransactionRoutes(route.getId());
-                }
-            }
-        }
+        camelContext.getRoutes().stream()
+                .filter(route -> route.getEndpoint() instanceof MllpTransactionEndpoint)
+                .forEach(route -> {
+                    MllpTransactionEndpoint<?> endpoint = (MllpTransactionEndpoint<?>) route.getEndpoint();
+                    if (endpoint.getDispatcher() == this) {
+                        addTransactionRoutes(route.getId());
+                    }
+                });
     }
 
     private boolean addTargets(CamelContext camelContext) throws CamelException {

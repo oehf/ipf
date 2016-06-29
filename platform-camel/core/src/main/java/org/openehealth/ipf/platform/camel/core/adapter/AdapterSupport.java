@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.core.adapter;
 
 import groovy.lang.Closure;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.SimpleType;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Message;
@@ -58,7 +60,8 @@ public abstract class AdapterSupport implements Adapter {
      * @see org.openehealth.ipf.platform.camel.core.adapter.Adapter#input(groovy.lang.Closure)
      */
     @Override
-    public Adapter input(Closure inputExpressionLogic) {
+    public Adapter input(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
+                                     Closure inputExpressionLogic) {
         return input(new DelegatingExpression(inputExpressionLogic));
     }
 
@@ -75,7 +78,8 @@ public abstract class AdapterSupport implements Adapter {
      * @see org.openehealth.ipf.platform.camel.core.adapter.Adapter#params(groovy.lang.Closure)
      */
     @Override
-    public Adapter params(Closure paramsExpressionLogic) {
+    public Adapter params(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
+                                      Closure paramsExpressionLogic) {
         return params(new DelegatingExpression(paramsExpressionLogic));
     }
 

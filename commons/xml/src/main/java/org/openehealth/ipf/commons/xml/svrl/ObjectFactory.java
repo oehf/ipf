@@ -102,7 +102,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "http://purl.oclc.org/dsdl/svrl", name = "text")
     public JAXBElement<String> createText(String value) {
-        return new JAXBElement<String>(_Text_QNAME, String.class, null, value);
+        return new JAXBElement<>(_Text_QNAME, String.class, null, value);
     }
 
 }

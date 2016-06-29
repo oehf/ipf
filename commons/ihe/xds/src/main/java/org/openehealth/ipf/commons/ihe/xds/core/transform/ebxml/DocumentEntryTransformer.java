@@ -28,6 +28,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PatientInfoTransformer;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Transforms between a {@link DocumentEntry} and its ebXML representation.
@@ -178,14 +179,14 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         docEntry.setTypeCode(codeTransformer.fromEbXML(typeCode));
         
         List<Code> confidentialityCodes = docEntry.getConfidentialityCodes();
-        for (EbXMLClassification code : extrinsic.getClassifications(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME)) {
-            confidentialityCodes.add(codeTransformer.fromEbXML(code));
-        }
+        confidentialityCodes.addAll(extrinsic.getClassifications(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME).stream()
+                .map(codeTransformer::fromEbXML)
+                .collect(Collectors.toList()));
 
         List<Code> eventCodeList = docEntry.getEventCodeList();
-        for (EbXMLClassification code : extrinsic.getClassifications(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME)) {
-            eventCodeList.add(codeTransformer.fromEbXML(code));
-        }
+        eventCodeList.addAll(extrinsic.getClassifications(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME).stream()
+                .map(codeTransformer::fromEbXML)
+                .collect(Collectors.toList()));
 
         List<EbXMLClassification> limitedMetadata = extrinsic.getClassifications(DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME);
         docEntry.setLimitedMetadata(! limitedMetadata.isEmpty());

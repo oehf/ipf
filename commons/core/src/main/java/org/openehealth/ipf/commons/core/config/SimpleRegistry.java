@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.core.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * A simple registry implementation that can e.g. be used in tests to
@@ -48,11 +49,9 @@ public class SimpleRegistry implements Registry {
     @SuppressWarnings("unchecked")
     @Override
     public <T> Map<String, T> beans(Class<T> requiredType) {
-        Map<String, T> result = new HashMap<>();
-        for (Map.Entry<String, Object> entry : beans.entrySet()) {
-            if (requiredType.isAssignableFrom(entry.getValue().getClass()))
-                result.put(entry.getKey(), (T) entry.getValue());
-        }
+        Map<String, T> result = beans.entrySet().stream()
+                .filter(entry -> requiredType.isAssignableFrom(entry.getValue().getClass()))
+                .collect(Collectors.toMap(Map.Entry::getKey, p -> (T) p.getValue()));
         return result;
     }
 

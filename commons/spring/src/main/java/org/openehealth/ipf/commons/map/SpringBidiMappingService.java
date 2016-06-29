@@ -47,9 +47,7 @@ public class SpringBidiMappingService extends BidiMappingService {
     }
 
     public void setMappingResources(Collection<? extends Resource> resources) {
-        for (Resource resource : resources) {
-            setMappingResource(resource);
-        }
+        resources.forEach(this::setMappingResource);
     }
 
 }

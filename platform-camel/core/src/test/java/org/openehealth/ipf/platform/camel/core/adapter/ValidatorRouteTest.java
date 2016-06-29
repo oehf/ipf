@@ -15,14 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
-import org.apache.camel.Processor;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -30,6 +25,10 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.xml.SchematronValidationException;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Martin Krasser
@@ -56,11 +55,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     public void testValidator2() throws InterruptedException {
         error.expectedMessageCount(1);
         Exchange exchange = producerTemplate.send("direct:validator-test",
-                ExchangePattern.InOut, new Processor() {
-                    public void process(Exchange exchange) {
-                        exchange.getIn().setBody("incorrect");
-                    }
-                });
+                ExchangePattern.InOut, exchange1 -> exchange1.getIn().setBody("incorrect"));
         assertEquals(ValidationException.class, exchange.getException().getClass());
         error.assertIsSatisfied(2000);
     }
@@ -78,11 +73,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
         final String xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/invalidtest.xml"));
         error.expectedMessageCount(1);
         Exchange exchange = producerTemplate.send("direct:validator-xml-test",
-                ExchangePattern.InOut, new Processor() {
-                    public void process(Exchange exchange) {
-                        exchange.getIn().setBody(xml);
-                    }
-                });
+                ExchangePattern.InOut, exchange1 -> exchange1.getIn().setBody(xml));
         assertEquals(ValidationException.class, exchange.getException()
                 .getClass());
         ValidationException e = (ValidationException) exchange.getException();
@@ -103,11 +94,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
         final String xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test-fail.xml"));
         error.expectedMessageCount(1);
         Exchange exchange = producerTemplate.send("direct:validator-schematron-test",
-                ExchangePattern.InOut, new Processor() {
-                    public void process(Exchange exchange) {
-                        exchange.getIn().setBody(xml);
-                    }
-                });
+                ExchangePattern.InOut, exchange1 -> exchange1.getIn().setBody(xml));
         assertEquals(SchematronValidationException.class, exchange.getException().getClass());
         ValidationException e = (ValidationException) exchange.getException();
         assertEquals(3, e.getCauses().length);

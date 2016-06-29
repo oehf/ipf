@@ -15,14 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.RuntimeCamelException;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author Martin Krasser
@@ -33,11 +32,7 @@ public class ValidatorExtensionTest extends AbstractExtensionTest {
     @Test
     public void testBooleanClosureOneParamSuccess() throws InterruptedException {
         mockOutput.expectedBodiesReceived("blah");
-        Exchange result = producerTemplate.request("direct:input1", new Processor() {
-            public void process(Exchange exchange) {
-                exchange.getIn().setBody("blah");
-            }
-        });
+        Exchange result = producerTemplate.request("direct:input1", exchange -> exchange.getIn().setBody("blah"));
         assertNull(result.getException());
         mockOutput.assertIsSatisfied();
     }
@@ -45,11 +40,7 @@ public class ValidatorExtensionTest extends AbstractExtensionTest {
     @Test
     public void testBooleanClosureOneParamInOutFailure() throws InterruptedException {
         mockOutput.expectedMessageCount(0);
-        Exchange result = producerTemplate.request("direct:input1", new Processor() {
-            public void process(Exchange exchange) {
-                exchange.getIn().setBody("blub");
-            }
-        });
+        Exchange result = producerTemplate.request("direct:input1", exchange -> exchange.getIn().setBody("blub"));
         assertEquals("validation closure returned false", result.getException().getMessage());
         mockOutput.assertIsSatisfied();
     }
@@ -57,11 +48,7 @@ public class ValidatorExtensionTest extends AbstractExtensionTest {
     @Test
     public void testExceptionClosureOneParamInOutFailure() throws InterruptedException {
         mockOutput.expectedMessageCount(0);
-        Exchange result = producerTemplate.request("direct:input2", new Processor() {
-            public void process(Exchange exchange) {
-                exchange.getIn().setBody("blub");
-            }
-        });
+        Exchange result = producerTemplate.request("direct:input2", exchange -> exchange.getIn().setBody("blub"));
         assertEquals("juhu", result.getException().getMessage());
         mockOutput.assertIsSatisfied();
     }

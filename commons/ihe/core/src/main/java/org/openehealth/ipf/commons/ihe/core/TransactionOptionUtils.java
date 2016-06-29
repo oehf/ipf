@@ -51,6 +51,7 @@ public final class TransactionOptionUtils {
         return concat(options, events);
     }
 
+    @SafeVarargs
     public static <T extends TransactionOptions> String[] concatAll(T... options) {
         String[] events = null;
         for (T option : options) {
@@ -59,6 +60,7 @@ public final class TransactionOptionUtils {
         return events;
     }
 
+    @SafeVarargs
     public static <T extends TransactionOptions> String[] concatAllToString(T... options) {
         String[] events = concatAll(options);
         StringBuilder builder = new StringBuilder();

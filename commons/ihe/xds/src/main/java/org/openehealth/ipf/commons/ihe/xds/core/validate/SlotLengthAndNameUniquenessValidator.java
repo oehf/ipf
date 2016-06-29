@@ -32,6 +32,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding.isExtr
 
 /**
  * Validates lengths of ebXML slot values and uniqueness of slot names.
+ *
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
@@ -41,10 +42,8 @@ public class SlotLengthAndNameUniquenessValidator {
      * Validates slot lengths and name uniqueness
      * for the given ebXML object container.
      *
-     * @param container
-     *          the container of ebXML objects.
-     * @throws XDSMetaDataException
-     *          if a slot length validation failed.
+     * @param container the container of ebXML objects.
+     * @throws XDSMetaDataException if a slot length validation failed.
      */
     public void validateContainer(EbXMLObjectContainer container) throws XDSMetaDataException {
         validateRegistryObjects(container.getAssociations());
@@ -68,27 +67,22 @@ public class SlotLengthAndNameUniquenessValidator {
 
     public void validateQuerySlots(
             List<? extends EbXMLSlot> slots,
-            Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException
-    {
+            Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException {
         doValidateSlots(slots, true, allowedSlotNamesMultiple);
     }
 
     /**
      * Validates uniqueness of slot names and maximal lengths of slot values in the given collection.
-     * @param slots
-     *      ebXML slot collection.
-     * @param queryMode
-     *      <code>true</code> iff the given slots represent parameters of a stored query.
-     * @param allowedSlotNamesMultiple
-     *      names of slots which are allowed to be present more than once (only for queries).
-     * @throws XDSMetaDataException
-     *      when the validation fails.
+     *
+     * @param slots                    ebXML slot collection.
+     * @param queryMode                <code>true</code> iff the given slots represent parameters of a stored query.
+     * @param allowedSlotNamesMultiple names of slots which are allowed to be present more than once (only for queries).
+     * @throws XDSMetaDataException when the validation fails.
      */
     private void doValidateSlots(
             List<? extends EbXMLSlot> slots,
             boolean queryMode,
-            Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException
-    {
+            Set<String> allowedSlotNamesMultiple) throws XDSMetaDataException {
         HashSet<String> names = new HashSet<>();
         for (EbXMLSlot slot : slots) {
             // validate format and uniqueness of slot names
@@ -98,19 +92,17 @@ public class SlotLengthAndNameUniquenessValidator {
             if (queryMode) {
                 metaDataAssert((name.length() > 1) && (name.charAt(0) == '$'), WRONG_QUERY_SLOT_NAME, name);
                 metaDataAssert(names.add(name)
-                        || allowedSlotNamesMultiple.contains(name)
-                        || isExtraMetadataSlotName(name.substring(1)),
+                                || allowedSlotNamesMultiple.contains(name)
+                                || isExtraMetadataSlotName(name.substring(1)),
                         DUPLICATE_SLOT_NAME, name);
             } else {
                 metaDataAssert(names.add(name), DUPLICATE_SLOT_NAME, name);
             }
 
             // validate lengths of slot values
-            for (String value : slot.getValueList()) {
-                if (value != null) {
-                    metaDataAssert(value.length() <= slot.getValueLengthLimit(), SLOT_VALUE_TOO_LONG, name);
-                }
-            }
+            slot.getValueList().stream()
+                    .filter(value -> value != null)
+                    .forEach(value -> metaDataAssert(value.length() <= slot.getValueLengthLimit(), SLOT_VALUE_TOO_LONG, name));
         }
     }
 

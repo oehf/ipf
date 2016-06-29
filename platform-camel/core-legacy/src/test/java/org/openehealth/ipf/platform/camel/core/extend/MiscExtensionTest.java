@@ -15,12 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Martin Krasser
@@ -37,11 +36,7 @@ public class MiscExtensionTest extends AbstractExtensionTest {
     
     @Test
     public void testSetPropertyClosure() throws InterruptedException {
-        Exchange result = producerTemplate.request("direct:input2", new Processor() {
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setBody("blah");
-            }
-        });
+        Exchange result = producerTemplate.request("direct:input2", exchange -> exchange.getIn().setBody("blah"));
         assertEquals("blah", result.getProperty("test"));
     }
     

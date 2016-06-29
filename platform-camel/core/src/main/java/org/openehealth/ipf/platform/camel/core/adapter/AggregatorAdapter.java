@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.core.adapter;
 
 import groovy.lang.Closure;
+import groovy.transform.stc.ClosureParams;
+import groovy.transform.stc.SimpleType;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
@@ -77,7 +79,8 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
      * 
      * @see #aggregate(Exchange, Exchange)
      */
-    public AggregatorAdapter aggregationInput(Closure aggregationInputExpressionLogic) {
+    public AggregatorAdapter aggregationInput(@ClosureParams(value = SimpleType.class, options = { "org.apache.camel.Expression"})
+                                                      Closure aggregationInputExpressionLogic) {
         return aggregationInput(new DelegatingExpression(aggregationInputExpressionLogic));
     }
 

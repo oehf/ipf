@@ -52,7 +52,7 @@ public abstract class AbstractMessage extends
     private void init() {
         try {
             for (Map.Entry<Class<? extends Structure>, Cardinality> structure : structures(
-                    new LinkedHashMap<Class<? extends Structure>, Cardinality>())
+                    new LinkedHashMap<>())
                     .entrySet()) {
                 switch (structure.getValue()) {
                 case REQUIRED:

@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfigurati
  * Standard Configuration for Iti66Component
  *
  * @author Christian Ohr
- * @since 3.1
+ * @since 3.2
  */
 public class Iti66Configuration extends FhirComponentConfiguration {
 

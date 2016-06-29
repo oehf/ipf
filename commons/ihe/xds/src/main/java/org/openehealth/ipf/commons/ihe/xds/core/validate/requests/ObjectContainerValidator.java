@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
@@ -335,16 +336,13 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     private void validateAssociations(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> logicalIds = new HashSet<>();
-        Set<String> docEntryIds = new HashSet<>();
-        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
-            if (docEntry.getId() != null) {
-                docEntryIds.add(docEntry.getId());
-            }
-        }
-        Set<String> submissionSetIds = new HashSet<>();
-        for (EbXMLRegistryPackage submissionSet : container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE)) {
-            submissionSetIds.add(submissionSet.getId());
-        }
+        Set<String> docEntryIds = container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND).stream()
+                .filter(docEntry -> docEntry.getId() != null)
+                .map(EbXMLRegistryObject::getId)
+                .collect(Collectors.toSet());
+        Set<String> submissionSetIds = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE).stream()
+                .map(EbXMLRegistryObject::getId)
+                .collect(Collectors.toSet());
         Set<String> associationIds = new HashSet<>();
         boolean hasSubmitAssociationType = false;
         for (EbXMLAssociation association : container.getAssociations()) {

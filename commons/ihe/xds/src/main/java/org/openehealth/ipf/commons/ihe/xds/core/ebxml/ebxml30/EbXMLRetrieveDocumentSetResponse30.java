@@ -20,6 +20,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
@@ -126,12 +127,9 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
             return Collections.emptyList();
         }
 
-        List<EbXMLRegistryError> errors = new ArrayList<>();
-        for (RegistryError regError : list.getRegistryError()) {
-            errors.add(new EbXMLRegistryError30(regError));
-        }
-
-        return errors;
+        return list.getRegistryError().stream()
+                .map(EbXMLRegistryError30::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -139,8 +137,8 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
         RegistryErrorList value = EbXMLFactory30.RS_FACTORY.createRegistryErrorList();
         response.getRegistryResponse().setRegistryErrorList(value);
         List<RegistryError> list = value.getRegistryError();
-        for (EbXMLRegistryError error : errors) {
-            list.add(((EbXMLRegistryError30) error).getInternal());
-        }
+        list.addAll(errors.stream()
+                .map(error -> ((EbXMLRegistryError30) error).getInternal())
+                .collect(Collectors.toList()));
     }
 }

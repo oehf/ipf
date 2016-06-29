@@ -63,7 +63,7 @@ public class ExchangeCopy {
      * @see SplitHistory#SplitHistory(int)
      */
     @AfterReturning(pointcut="exchangeCopy(exchange)", returning="pairs")
-    public void afterCopy(Exchange exchange, Iterable pairs) {
+    public void afterCopy(Exchange exchange, Iterable<?> pairs) {
         ExchangeCopyHelper.afterCopy(exchange, pairs);
     }
     

@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -192,11 +193,10 @@ public class QuerySlotHelper {
             return;
         }
         
-        List<String> slotValues = new ArrayList<>();
-        for (String value : values) {
-            slotValues.add(encodeAsStringList(value));
-        }
-        ebXML.addSlot(slotName, slotValues.toArray(new String[slotValues.size()]));
+        String[] slotValues = values.stream()
+                .map(QuerySlotHelper::encodeAsStringList)
+                .toArray(String[]::new);
+        ebXML.addSlot(slotName, slotValues);
     }
 
     /**
@@ -260,11 +260,10 @@ public class QuerySlotHelper {
             return;
         }
 
-        List<String> slotValues = new ArrayList<>();
-        for (Identifiable value : values) {
-            slotValues.add(encodeAsStringList(Hl7v2Based.render(value)));
-        }
-        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[slotValues.size()]));
+        String[] slotValues = values.stream()
+                .map(value -> encodeAsStringList(Hl7v2Based.render(value)))
+                .toArray(String[]::new);
+        ebXML.addSlot(param.getSlotName(), slotValues);
     }
 
     /**
@@ -357,11 +356,9 @@ public class QuerySlotHelper {
         if (status == null) {
             return;
         }
-        
-        List<String> opcodes = new ArrayList<>(status.size());
-        for (AvailabilityStatus statusValue : status) {
-            opcodes.add(AvailabilityStatus.toQueryOpcode(statusValue));
-        }
+        List<String> opcodes = status.stream()
+                .map(AvailabilityStatus::toQueryOpcode)
+                .collect(Collectors.toList());
         fromStringList(param, opcodes);
     }
 
@@ -399,10 +396,9 @@ public class QuerySlotHelper {
             return;
         }
         
-        List<String> opcodes = new ArrayList<>(associationTypes.size());
-        for (AssociationType type : associationTypes) {
-            opcodes.add(AssociationType.getOpcode30(type));
-        }
+        List<String> opcodes = associationTypes.stream()
+                .map(type -> AssociationType.getOpcode30(type))
+                .collect(Collectors.toList());
         fromStringList(param, opcodes);
     }
     
@@ -418,11 +414,9 @@ public class QuerySlotHelper {
             return null;
         }
 
-        List<AssociationType> associationTypes = new ArrayList<>();
-        for (String opcode : opcodes) {
-            associationTypes.add(AssociationType.valueOfOpcode30(opcode));
-        }
-        return associationTypes;
+        return opcodes.stream()
+                .map(AssociationType::valueOfOpcode30)
+                .collect(Collectors.toList());
     }
 
     public void fromDocumentEntryType(QueryParameter param, List<DocumentEntryType> documentEntryTypes) {
@@ -430,10 +424,9 @@ public class QuerySlotHelper {
             return;
         }
 
-        List<String> uuids = new ArrayList<>(documentEntryTypes.size());
-        for (DocumentEntryType type : documentEntryTypes) {
-            uuids.add(DocumentEntryType.toUuid(type));
-        }
+        List<String> uuids = documentEntryTypes.stream()
+                .map(DocumentEntryType::toUuid)
+                .collect(Collectors.toList());
         fromStringList(param, uuids);
     }
 
@@ -443,11 +436,9 @@ public class QuerySlotHelper {
             return null;
         }
 
-        ArrayList<DocumentEntryType> documentEntryTypes = new ArrayList<>();
-        for (String uuid : uuids) {
-            documentEntryTypes.add(DocumentEntryType.valueOfUuid(uuid));
-        }
-        return documentEntryTypes;
+       return uuids.stream()
+               .map(DocumentEntryType::valueOfUuid)
+               .collect(Collectors.toList());
     }
 
     public static List<Code> toCode(List<String> slotValues) {
@@ -481,10 +472,9 @@ public class QuerySlotHelper {
             return;
         }
 
-        List<String> opcodes = new ArrayList<>(status.size());
-        for (DocumentAvailability availabilityValue : status) {
-            opcodes.add(DocumentAvailability.toFullQualifiedOpcode(availabilityValue));
-        }
+        List<String> opcodes = status.stream()
+                .map(DocumentAvailability::toFullQualifiedOpcode)
+                .collect(Collectors.toList());
         fromStringList(param, opcodes);
     }
 
