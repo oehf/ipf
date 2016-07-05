@@ -34,8 +34,6 @@ import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Resource Provider for PDQm (ITI-78) for DSTU2
@@ -71,6 +69,10 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = Patient.SP_GIVEN) StringAndListParam given,
             @OptionalParam(name = Patient.SP_BIRTHDATE) DateParam birthDate,
             @OptionalParam(name = Patient.SP_ADDRESS) StringParam address,
+            @OptionalParam(name = Patient.SP_ADDRESSCITY) StringParam city,
+            @OptionalParam(name = Patient.SP_ADDRESSCOUNTRY) StringParam country,
+            @OptionalParam(name = Patient.SP_ADDRESSSTATE) StringParam state,
+            @OptionalParam(name = Patient.SP_ADDRESSPOSTALCODE) StringParam postalCode,
             @OptionalParam(name = Patient.SP_GENDER) TokenParam gender,
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             // below only relevant for pediatric option
@@ -82,18 +84,22 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        Map<String, Object> searchParameters = new HashMap<>();
-        addParameter(searchParameters, Patient.SP_IDENTIFIER, identifiers);
-        addParameter(searchParameters, Patient.SP_FAMILY, family);
-        addParameter(searchParameters, Patient.SP_GIVEN, given);
-        addParameter(searchParameters, Patient.SP_BIRTHDATE, birthDate);
-        addParameter(searchParameters, Patient.SP_ADDRESS, address);
-        addParameter(searchParameters, Patient.SP_GENDER, gender);
-        addParameter(searchParameters, IAnyResource.SP_RES_ID, resourceId);
-        addParameter(searchParameters, Patient.SP_TELECOM, telecom);
-        addParameter(searchParameters, Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER, multipleBirthNumber);
-        addParameter(searchParameters, Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN, mothersMaidenNameGiven);
-        addParameter(searchParameters, Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY, mothersMaidenNameFamily);
+        Iti78SearchParameters searchParameters = Iti78SearchParameters.builder()
+                .identifiers(identifiers)
+                .family(family)
+                .given(given)
+                .birthDate(birthDate)
+                .address(address)
+                .city(city)
+                .country(country)
+                .state(state)
+                .postalCode(postalCode)
+                .gender(gender)
+                .resourceId(resourceId)
+                .telecom(telecom)
+                .multipleBirthNumber(multipleBirthNumber)
+                .mothersMaidenNameFamily(mothersMaidenNameFamily)
+                .mothersMaidenNameGiven(mothersMaidenNameGiven).build();
 
         // Run down the route
         return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);

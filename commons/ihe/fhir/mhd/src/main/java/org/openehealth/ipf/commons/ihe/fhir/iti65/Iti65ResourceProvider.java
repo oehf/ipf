@@ -39,7 +39,6 @@ public class Iti65ResourceProvider extends AbstractPlainProvider {
                                      HttpServletRequest httpServletRequest,
                                      HttpServletResponse httpServletResponse) {
 
-        Map<String, Object> parameters = new HashMap<>();
-        return requestTransaction(bundle, parameters, httpServletRequest, httpServletResponse);
+        return requestTransaction(bundle, null, httpServletRequest, httpServletResponse);
     }
 }

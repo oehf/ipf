@@ -48,7 +48,7 @@
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.6</assembly-plugin-version>
         <build-helper-version>1.9.1</build-helper-version>
-        <bundle-plugin-version>2.5.4</bundle-plugin-version>
+        <bundle-plugin-version>2.5.0</bundle-plugin-version>
         <compiler-plugin-version>3.5.1</compiler-plugin-version>
         <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>

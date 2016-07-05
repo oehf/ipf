@@ -42,7 +42,6 @@ public class FhirTestContainer extends StandardTestContainer {
     }
 
     protected void assertAndRethrowException(BaseServerResponseException e, OperationOutcome.IssueType expectedIssue) {
-        Assert.assertEquals(400, e.getStatusCode());
         // Hmm, I wonder if this could not be done automatically...
         OperationOutcome oo = context.newXmlParser().parseResource(OperationOutcome.class, e.getResponseBody());
         Assert.assertEquals(OperationOutcome.IssueSeverity.ERROR, oo.getIssue().get(0).getSeverity());

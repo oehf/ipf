@@ -107,18 +107,15 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         if (responseCollection) {
             for (response in responseCollection) {
                 PdqPatient patient = pidToPatient(response)
-                // addSearchScore(patient, response)
-                ResourceMetadataKeyEnum.ENTRY_SCORE
+                addSearchScore(patient, response)
                 resultList.add(patient)
             }
         }
         resultList
     }
 
-    // FIXME type issues
     protected void addSearchScore(PdqPatient pdqPatient, response) {
         ResourceMetadataKeyEnum.ENTRY_SEARCH_MODE.put(pdqPatient, BundleEntrySearchModeEnum.MATCH.name())
-        pdqPatient.setUserData()
         String searchScoreString = response.QRI[1]?.value
         if (searchScoreString != null) {
             double searchScore = Integer.valueOf(searchScoreString) / 100

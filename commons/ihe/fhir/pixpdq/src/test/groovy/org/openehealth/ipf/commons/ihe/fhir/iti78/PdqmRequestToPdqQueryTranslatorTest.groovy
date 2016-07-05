@@ -60,29 +60,28 @@ class PdqmRequestToPdqQueryTranslatorTest extends Assert {
     public void testSuccessfulSearchTranslateWithOids() {
 
         // Ask for as much as possible
-        Map<String, Object> query = [
-                (Patient.SP_FAMILY)                       : new StringAndListParam()
-                        .addAnd(new StringOrListParam().add(new StringParam("Surname1")))
-                        .addAnd(new StringOrListParam().add(new StringParam("Surname2"))),
-                (Patient.SP_GIVEN)                             : new StringAndListParam()
-                        .addAnd(new StringOrListParam().add(new StringParam("Givenname1", true)))
-                        .addAnd(new StringOrListParam().add(new StringParam("Givenname2"))),
-                (Patient.SP_BIRTHDATE)                         : new DateParam('1980'),
-                (Patient.SP_ADDRESS)                           : new StringParam('Address'),
-                (Patient.SP_GENDER)                            : new TokenParam('http://hl7.org/fhir/ValueSet/administrative-gender', 'male'),
-                (Patient.SP_TELECOM)                           : new StringParam('Telecom'),
-                (Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER): new NumberParam('2'),
-                (Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN)  : new StringAndListParam()
-                        .addAnd(new StringOrListParam().add(new StringParam("MothersGivenname1", true)))
-                        .addAnd(new StringOrListParam().add(new StringParam("MothersGivenname2"))),
-                (Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) : new StringAndListParam()
-                        .addAnd(new StringOrListParam().add(new StringParam("MothersSurname1")))
-                        .addAnd(new StringOrListParam().add(new StringParam("MothersSurname2"))),
-                (Patient.SP_IDENTIFIER)                        : new TokenAndListParam()
-                        .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4', '4711ABC')))
-                        .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4.5.6', '0815ABC')))
-                        .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4.5.6', null)))
-        ]
+        Iti78SearchParameters query = Iti78SearchParameters.builder()
+            .family(new StringAndListParam()
+                .addAnd(new StringOrListParam().add(new StringParam("Surname1")))
+                .addAnd(new StringOrListParam().add(new StringParam("Surname2"))))
+            .given(new StringAndListParam()
+                .addAnd(new StringOrListParam().add(new StringParam("Givenname1", true)))
+                .addAnd(new StringOrListParam().add(new StringParam("Givenname2"))))
+            .birthDate(new DateParam('1980'))
+            .address(new StringParam('Address'))
+            .gender(new TokenParam('http://hl7.org/fhir/ValueSet/administrative-gender', 'male'))
+            .telecom(new StringParam('Telecom'))
+            .multipleBirthNumber(new NumberParam('2'))
+            .mothersMaidenNameGiven(new StringAndListParam()
+                .addAnd(new StringOrListParam().add(new StringParam("MothersGivenname1", true)))
+                .addAnd(new StringOrListParam().add(new StringParam("MothersGivenname2"))))
+            .mothersMaidenNameFamily(new StringAndListParam()
+                .addAnd(new StringOrListParam().add(new StringParam("MothersSurname1")))
+                .addAnd(new StringOrListParam().add(new StringParam("MothersSurname2"))))
+            .identifiers(new TokenAndListParam()
+                .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4', '4711ABC')))
+                .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4.5.6', '0815ABC')))
+                .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4.5.6', null)))).build()
 
         QBP_Q21 translated = translator.translateFhirToHL7v2(null, [(Constants.FHIR_REQUEST_PARAMETERS): query])
         String translatedString = translated.encode()

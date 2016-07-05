@@ -16,14 +16,11 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti78
 
 import ca.uhn.fhir.rest.param.*
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
 import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.lang3.Validate
 import org.apache.commons.lang3.time.FastDateFormat
 import org.hl7.fhir.instance.model.Enumerations
 import org.hl7.fhir.instance.model.IdType
-import org.hl7.fhir.instance.model.Patient
-import org.hl7.fhir.instance.model.api.IAnyResource
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.Utils
@@ -96,8 +93,8 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
      */
     @Override
     QBP_Q21 translateFhirToHL7v2(Object request, Map<String, Object> parameters) {
-        if (request == null && parameters != null && !parameters.isEmpty()) {
-            return translateFhirSearchToHL7v2(SEARCH_TAG, parameters);
+        if (request == null && parameters != null && parameters.containsKey(Constants.FHIR_REQUEST_PARAMETERS)) {
+            return translateFhirSearchToHL7v2(SEARCH_TAG, parameters.get(Constants.FHIR_REQUEST_PARAMETERS));
         } else {
             return translateFhirReadToHL7v2(GET_TAG, (IdType) request);
         }
@@ -112,11 +109,9 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
      * @return QBP^Q22 request message
      */
     protected QBP_Q21 translateFhirReadToHL7v2(String queryTagPrefix, IdType resourceId) {
-        Map<String, Object> parameters = [
-                (Constants.FHIR_REQUEST_PARAMETERS): [
-                        (IAnyResource.SP_RES_ID): new TokenParam(pdqSupplierResourceIdentifierUri, resourceId.idPart)
-                ]
-        ]
+        Iti78SearchParameters parameters = Iti78SearchParameters.builder()
+                ._id(new TokenParam(pdqSupplierResourceIdentifierUri, resourceId.idPart))
+                .build();
         translateFhirSearchToHL7v2(queryTagPrefix, parameters)
     }
 
@@ -127,7 +122,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
      * @param parameters query parameters
      * @return QBP^Q22 request message
      */
-    protected QBP_Q21 translateFhirSearchToHL7v2(String queryTagPrefix, Map<String, Object> parameters) {
+    protected QBP_Q21 translateFhirSearchToHL7v2(String queryTagPrefix, Iti78SearchParameters searchParameters) {
         QBP_Q21 qry = MessageUtils.makeMessage(PDQ_QUERY_CONTEXT, 'QBP', 'Q22', '2.5')
 
         qry.MSH[3] = senderDeviceName
@@ -141,20 +136,18 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         qry.QPD[1] = this.queryName
         qry.QPD[2] = "${queryTagPrefix}_" + UUID.randomUUID().toString()
 
-        Map<String, Object> map = parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
-        if (!map) throw new InvalidRequestException("No request parameters found")
 
         // Handle identifiers
         List<String> requestedDomains
         String identifierNamespace, identifierOid, identifierValue
 
-        TokenParam resourceIdParam = map.get(IAnyResource.SP_RES_ID)
+        TokenParam resourceIdParam = searchParameters._id;
         if (resourceIdParam) {
             resourceIdParam.system = pdqSupplierResourceIdentifierUri
             (identifierNamespace, identifierOid, identifierValue) = searchToken(resourceIdParam)
         }
 
-        TokenAndListParam identifierParam = map.get(Patient.SP_IDENTIFIER)
+        TokenAndListParam identifierParam = searchParameters.identifiers
         if (identifierParam) {
             List<List<String>> identifiers = searchTokenList(identifierParam)
             // Patient identifier has identifier value
@@ -171,11 +164,11 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
             requestedDomains.add(pdqSupplierResourceIdentifierOid)
 
         // Properly convert birth date.
-        DateParam birthDateParam = map.get(Patient.SP_BIRTHDATE)
+        DateParam birthDateParam = searchParameters.birthDate
         String birthDateString = birthDateParam ? FastDateFormat.getInstance('yyyyMMdd').format(birthDateParam.getValue()) : null
 
         // Properly convert gender code
-        TokenParam genderParam = map.get(Patient.SP_GENDER)
+        TokenParam genderParam = searchParameters.gender
         String genderString = genderParam ?
                 Enumerations.AdministrativeGender.fromCode(genderParam.value).toCode().mapReverse('hl7v2fhir-patient-administrativeGender') :
                 null
@@ -186,20 +179,20 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
                 '@PID.3.4.1': identifierNamespace,
                 '@PID.3.4.2': identifierOid,
                 '@PID.3.4.3': identifierOid ? 'ISO' : null,
-                '@PID.5.1'  : firstOrNull(searchStringList(map.get(Patient.SP_FAMILY), false)),
-                '@PID.5.2'  : firstOrNull(searchStringList(map.get(Patient.SP_GIVEN), false)),
+                '@PID.5.1'  : firstOrNull(searchStringList(searchParameters.family, false)),
+                '@PID.5.2'  : firstOrNull(searchStringList(searchParameters.given, false)),
                 '@PID.7'    : birthDateString,
                 '@PID.8'    : genderString,
-                '@PID.11.1' : searchString(map.get(Patient.SP_ADDRESS), true),
-                '@PID.11.3' : searchString(map.get(Patient.SP_ADDRESSCITY), true),
-                '@PID.11.4' : searchString(map.get(Patient.SP_ADDRESSSTATE), true),
-                '@PID.11.5' : searchString(map.get(Patient.SP_ADDRESSPOSTALCODE), true),
-                '@PID.11.6' : searchString(map.get(Patient.SP_ADDRESSCOUNTRY), true),
+                '@PID.11.1' : searchString(searchParameters.address, true),
+                '@PID.11.3' : searchString(searchParameters.city, true),
+                '@PID.11.4' : searchString(searchParameters.state, true),
+                '@PID.11.5' : searchString(searchParameters.postalCode, true),
+                '@PID.11.6' : searchString(searchParameters.country, true),
 
-                '@PID.6.1'  : firstOrNull(searchStringList(map.get(Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY), false)),
-                '@PID.6.2'  : firstOrNull(searchStringList(map.get(Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN), false)),
-                '@PID.13.1' : searchString(map.get(Patient.SP_TELECOM), true),
-                '@PID.25'   : searchNumber(map.get(Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER))
+                '@PID.6.1'  : firstOrNull(searchStringList(searchParameters.mothersMaidenNameFamily, false)),
+                '@PID.6.2'  : firstOrNull(searchStringList(searchParameters.mothersMaidenNameGiven, false)),
+                '@PID.13.1' : searchString(searchParameters.telecom, true),
+                '@PID.25'   : searchNumber(searchParameters.multipleBirthNumber)
         ]
 
         fillSearchParameters(searchParams, qry.QPD[3])

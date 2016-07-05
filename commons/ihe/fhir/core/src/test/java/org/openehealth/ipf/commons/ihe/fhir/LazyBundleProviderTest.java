@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.context.FhirContext;
 import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 import org.hl7.fhir.instance.model.Patient;
@@ -56,6 +57,7 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetSize() {
+        EasyMock.expect(requestConsumer.getFhirContext()).andReturn(FhirContext.forDstu2Hl7Org()).anyTimes();
         EasyMock.expect(requestConsumer.handleSizeRequest(eq(bundleProvider.getPayload()), hasRequestSizeParameter())).andReturn(MAX_SIZE);
         EasyMock.replay(requestConsumer);
         assertEquals(response.size(), bundleProvider.size());
@@ -64,6 +66,7 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetResources() {
+        EasyMock.expect(requestConsumer.getFhirContext()).andReturn(FhirContext.forDstu2Hl7Org());
         EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30)))
                 .andReturn(response.subList(10, 30));
         EasyMock.replay(requestConsumer);
@@ -75,6 +78,7 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetResourcesAlreadyCached() {
+        EasyMock.expect(requestConsumer.getFhirContext()).andReturn(FhirContext.forDstu2Hl7Org());
         EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30)))
                 .andReturn(response.subList(10, 30));
         EasyMock.replay(requestConsumer);
@@ -90,6 +94,7 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetResourcesPartlyCached1() {
+        EasyMock.expect(requestConsumer.getFhirContext()).andReturn(FhirContext.forDstu2Hl7Org()).anyTimes();
         EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30)))
                 .andReturn(response.subList(10, 30));
         EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(30, 40)))
@@ -108,6 +113,7 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetResourcesPartlyCached2() {
+        EasyMock.expect(requestConsumer.getFhirContext()).andReturn(FhirContext.forDstu2Hl7Org()).anyTimes();
         EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30)))
                 .andReturn(response.subList(10, 30));
         EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(5, 10)))
@@ -128,6 +134,7 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetResourcesPartlyCached3() {
+        EasyMock.expect(requestConsumer.getFhirContext()).andReturn(FhirContext.forDstu2Hl7Org()).anyTimes();
         EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 20)))
                 .andReturn(response.subList(10, 20));
         EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(30, 40)))

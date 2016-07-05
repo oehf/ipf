@@ -19,7 +19,10 @@ package org.openehealth.ipf.commons.ihe.fhir.iti67;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.instance.model.DocumentReference;
 import org.hl7.fhir.instance.model.Patient;
@@ -28,8 +31,6 @@ import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Resource Provider for MHD (ITI-67)
@@ -43,43 +44,45 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
     @Search(type = DocumentReference.class)
     public IBundleProvider documentManifestSearch(
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
-            @OptionalParam(name = DocumentReference.SP_INDEXED) DateOrListParam indexed,
-            @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = {Practitioner.SP_FAMILY, Practitioner.SP_GIVEN}) StringAndListParam authorName,
+            @OptionalParam(name = DocumentReference.SP_INDEXED) DateRangeParam indexed,
+            @OptionalParam(name = DocumentReference.SP_AUTHOR + "." +Practitioner.SP_FAMILY) StringParam authorFamilyName,
+            @OptionalParam(name = DocumentReference.SP_AUTHOR + "." +Practitioner.SP_GIVEN) StringParam authorGivenName,
             @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_CLASS) TokenOrListParam class_,
             @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentReference.SP_SETTING) TokenOrListParam setting,
-            @OptionalParam(name = DocumentReference.SP_PERIOD) DateOrListParam period,
+            @OptionalParam(name = DocumentReference.SP_PERIOD) DateRangeParam period,
             @OptionalParam(name = DocumentReference.SP_FACILITY) TokenOrListParam facility,
-            @OptionalParam(name = DocumentReference.SP_EVENT) TokenAndListParam event,
-            @OptionalParam(name = DocumentReference.SP_SECURITYLABEL) TokenAndListParam securityLabel,
-            @OptionalParam(name = DocumentReference.SP_FORMAT) TokenAndListParam format,
-            @OptionalParam(name = DocumentReference.SP_RELATEDID) TokenAndListParam relatedId,
+            @OptionalParam(name = DocumentReference.SP_EVENT) TokenOrListParam event,
+            @OptionalParam(name = DocumentReference.SP_SECURITYLABEL) TokenOrListParam securityLabel,
+            @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
+            @OptionalParam(name = DocumentReference.SP_RELATEDID) TokenOrListParam relatedId,
 
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        Map<String, Object> searchParameters = new HashMap<>();
+        Iti67SearchParameters searchParameters = Iti67SearchParameters.builder()
+                .indexed(indexed)
+                .authorFamilyName(authorFamilyName)
+                .authorGivenName(authorGivenName)
+                .status(status)
+                .class_(class_)
+                .type(type)
+                .setting(setting)
+                .period(period)
+                .facility(facility)
+                .event(event)
+                .securityLabel(securityLabel)
+                .format(format)
+                .relatedId(relatedId).build();
 
         String chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {
-            addParameter(searchParameters, DocumentReference.SP_SUBJECT + "." + Patient.SP_IDENTIFIER, patient.toTokenParam(getFhirContext()));
+            searchParameters.setPatientIdentifier(patient.toTokenParam(getFhirContext()));
         } else if ("".equals(chain)) {
-            addParameter(searchParameters, DocumentReference.SP_SUBJECT, patient);
+            searchParameters.setPatientReference(patient);
         }
 
-        addParameter(searchParameters, DocumentReference.SP_INDEXED, indexed);
-        addParameter(searchParameters, DocumentReference.SP_AUTHOR, authorName);
-        addParameter(searchParameters, DocumentReference.SP_STATUS, status);
-        addParameter(searchParameters, DocumentReference.SP_CLASS, class_);
-        addParameter(searchParameters, DocumentReference.SP_TYPE, type);
-        addParameter(searchParameters, DocumentReference.SP_SETTING, setting);
-        addParameter(searchParameters, DocumentReference.SP_PERIOD, period);
-        addParameter(searchParameters, DocumentReference.SP_FACILITY, facility);
-        addParameter(searchParameters, DocumentReference.SP_EVENT, event);
-        addParameter(searchParameters, DocumentReference.SP_SECURITYLABEL, securityLabel);
-        addParameter(searchParameters, DocumentReference.SP_FORMAT, format);
-        addParameter(searchParameters, DocumentReference.SP_RELATEDID, relatedId);
         // Run down the route
         return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
     }

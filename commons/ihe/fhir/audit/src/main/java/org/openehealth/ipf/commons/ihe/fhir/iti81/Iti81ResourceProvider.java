@@ -28,9 +28,6 @@ import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * According to the Restful ATNA specification, this resource provider must handle requests in the form
@@ -58,18 +55,18 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        Map<String, Object> searchParameters = new HashMap<>();
-        addParameter(searchParameters, AuditEvent.SP_DATE, interval);
-        addParameter(searchParameters, AuditEvent.SP_ADDRESS, address);
-        addParameter(searchParameters, Iti81Constants.SP_PATIENTID, patientId);
-        addParameter(searchParameters, AuditEvent.SP_IDENTITY, identity);
-        addParameter(searchParameters, AuditEvent.SP_OBJECTTYPE, objectType);
-        addParameter(searchParameters, Iti81Constants.SP_ROLE, role);
-        addParameter(searchParameters, AuditEvent.SP_SOURCE, source);
-        addParameter(searchParameters, AuditEvent.SP_TYPE, type);
-        addParameter(searchParameters, AuditEvent.SP_PARTICIPANT, participant);
-        addParameter(searchParameters, AuditEvent.SP_SUBTYPE, subtype);
-        addParameter(searchParameters, Iti81Constants.SP_OUTCOME, outcome);
+        Iti81SearchParameters searchParameters = Iti81SearchParameters.builder()
+                .interval(interval)
+                .address(address)
+                .patientId(patientId)
+                .identity(identity)
+                .objectType(objectType)
+                .role(role)
+                .source(source)
+                .type(type)
+                .participant(participant)
+                .subtype(subtype)
+                .outcome(outcome).build();
 
         // Run down the route
         return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
