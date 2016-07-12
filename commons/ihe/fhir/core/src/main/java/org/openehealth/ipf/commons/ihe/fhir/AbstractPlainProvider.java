@@ -222,7 +222,7 @@ public abstract class AbstractPlainProvider implements Serializable {
         // Populate some headers.
         Map<String, Object> enriched = new HashMap<>();
         enriched.put(Constants.HTTP_URI, httpServletRequest.getRequestURI());
-        enriched.put(Constants.HTTP_URL, httpServletRequest.getRequestURL());
+        enriched.put(Constants.HTTP_URL, httpServletRequest.getRequestURL().toString());
         enriched.put(Constants.HTTP_METHOD, httpServletRequest.getMethod());
         enriched.put(Constants.HTTP_QUERY, httpServletRequest.getQueryString());
         enriched.put(Constants.HTTP_CHARACTER_ENCODING, httpServletRequest.getCharacterEncoding());

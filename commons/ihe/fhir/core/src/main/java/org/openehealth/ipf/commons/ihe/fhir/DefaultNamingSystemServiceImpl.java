@@ -38,20 +38,23 @@ public class DefaultNamingSystemServiceImpl extends AbstractNamingSystemServiceI
         this.fhirContext = fhirContext;
     }
 
-    public void setNamingSystemsFromXml(Reader reader) {
-        setNamingSystems(fhirContext.newXmlParser().parseResource(Bundle.class, reader));
+    public DefaultNamingSystemServiceImpl addNamingSystemsFromXml(Reader reader) {
+        addNamingSystems(fhirContext.newXmlParser().parseResource(Bundle.class, reader));
+        return this;
     }
 
-    public void setNamingSystemsFromJson(Reader reader) {
-        setNamingSystems(fhirContext.newJsonParser().parseResource(Bundle.class, reader));
+    public DefaultNamingSystemServiceImpl addNamingSystemsFromJson(Reader reader) {
+        addNamingSystems(fhirContext.newJsonParser().parseResource(Bundle.class, reader));
+        return this;
     }
 
-    public void setNamingSystemsFromFhirServer(String url) {
-        setNamingSystems(fhirContext.newRestfulGenericClient(url)
+    public DefaultNamingSystemServiceImpl addNamingSystemsFromFhirServer(String url) {
+        addNamingSystems(fhirContext.newRestfulGenericClient(url)
                 .search()
                 .forResource(NamingSystem.class)
                 .returnBundle(Bundle.class)
                 .execute());
+        return this;
     }
 
 }

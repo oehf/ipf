@@ -16,24 +16,27 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
+import lombok.Getter;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
-import org.apache.camel.Producer;
 import org.apache.camel.component.servlet.ServletComponent;
 import org.apache.camel.component.servlet.ServletEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 /**
- * @author Christian Ohr
- * @since 3.2
+ *
  */
 public class Iti68Endpoint extends ServletEndpoint {
 
+    @Getter
+    private boolean audit;
+
     public Iti68Endpoint(String endPointURI, ServletComponent component, URI httpUri) throws URISyntaxException {
         super(endPointURI, component, httpUri);
-        // Additional initialization if required
     }
 
     @Override
@@ -41,4 +44,14 @@ public class Iti68Endpoint extends ServletEndpoint {
         return super.createConsumer(processor);
     }
 
+    @Override
+    protected void configureConsumer(Consumer consumer) throws Exception {
+        // Take off IPF-specific parameters
+        Map<String, Object> parameters = getConsumerProperties();
+        this.audit = getComponent().getAndRemoveParameter(
+                parameters, "audit", Boolean.class);
+
+        // Configure the Servlet Consumer
+        super.configureConsumer(consumer);
+    }
 }

@@ -39,6 +39,24 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                    <excludes>
+                        <!-- Do not include the .groovy files, that are declared as resources, in the binaries -->
+                        <exclude>**/*.groovy</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <distributionManagement>
         <site>
             <id>${site.deploy.id}</id>

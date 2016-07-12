@@ -24,12 +24,13 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
 /**
  *
  */
-@Builder
+@Builder @ToString
 public class Iti67SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private ReferenceParam patientReference;

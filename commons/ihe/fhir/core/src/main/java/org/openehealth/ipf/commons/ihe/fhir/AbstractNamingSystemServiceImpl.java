@@ -19,12 +19,17 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.NamingSystem;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Abstract Implementation that holds naming systems in memory as a FHIR bundle. Before an
- * instance can be used, one of the setter methods of implementations must be called to initialize the
+ * Abstract Implementation that holds naming systems in memory as a map of {@link NamingSystem} sets. Before an
+ * instance can be used, one of the adder methods of implementations must be called to initialize the
  * bundle.
  *
  * @author Christian Ohr
@@ -32,21 +37,28 @@ import java.util.stream.Stream;
  */
 public class AbstractNamingSystemServiceImpl implements NamingSystemService {
 
-    protected transient Bundle namingSystems;
+    protected transient Map<String, Set<NamingSystem>> namingSystems = new HashMap<>();
 
-    public void setNamingSystems(Bundle namingSystems) {
-        this.namingSystems = namingSystems;
+    public void addNamingSystems(Bundle bundle) {
+        this.namingSystems.merge(bundle.getId(), setOfNamingSystems(bundle), (set1, set2) -> {
+            Set<NamingSystem> result = new HashSet<>(set1);
+            result.addAll(set2);
+            return result;
+        });
     }
 
     @Override
-    public Stream<NamingSystem> findNamingSystems(Predicate<? super NamingSystem> predicate) {
-        if (namingSystems == null) {
-            throw new IllegalStateException("No naming systems loaded");
+    public Stream<NamingSystem> findNamingSystems(String id, Predicate<? super NamingSystem> predicate) {
+        if (!namingSystems.containsKey(id)) {
+            throw new IllegalArgumentException("No NamingSystem known with ID " + id);
         }
-        return namingSystems.getEntry().stream()
-                .map(bec -> (NamingSystem) bec.getResource())
-                .filter(predicate);
+        return namingSystems.get(id).stream().filter(predicate);
     }
 
+    private Set<NamingSystem> setOfNamingSystems(Bundle bundle) {
+        return bundle.getEntry().stream()
+                .map(bec -> (NamingSystem) bec.getResource())
+                .collect(Collectors.toSet());
+    }
 
 }

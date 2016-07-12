@@ -20,7 +20,6 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.ImportEvent;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.QueryEvent;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -84,7 +83,7 @@ public class FhirAuditor extends IHEAuditor {
                 true,
                 eventOutcome,
                 new CustomIHETransactionEventTypeCodes.DocumentManifestQuery(),
-                Collections.<CodedValueType>emptyList());
+                Collections.emptyList());
 
         configureEvent(this, serverSide, event, null, null, documentResponderUri, documentResponderUri, clientIpAddress);
         event.addQueryParticipantObject("MobileDocumentManifestQuery", null, payloadBytes(queryString), null,
@@ -106,7 +105,7 @@ public class FhirAuditor extends IHEAuditor {
                 true,
                 eventOutcome,
                 new CustomIHETransactionEventTypeCodes.DocumentReferenceQuery(),
-                Collections.<CodedValueType>emptyList());
+                Collections.emptyList());
 
         configureEvent(this, serverSide, event, null, null, documentResponderUri, documentResponderUri, clientIpAddress);
         event.addQueryParticipantObject("MobileDocumentReferenceQuery", null, payloadBytes(queryString), null,
@@ -128,7 +127,7 @@ public class FhirAuditor extends IHEAuditor {
                 true,
                 eventOutcome,
                 new CustomIHETransactionEventTypeCodes.PDQMQuery(),
-                Collections.<CodedValueType>emptyList());
+                Collections.emptyList());
 
         configureEvent(this, serverSide, event, null, null, pdqSupplierUri, pdqSupplierUri, clientIpAddress);
         event.addQueryParticipantObject("MobilePatientDemographicsQuery", null, payloadBytes(queryString), null,
@@ -150,7 +149,7 @@ public class FhirAuditor extends IHEAuditor {
                 true,
                 eventOutcome,
                 new CustomIHETransactionEventTypeCodes.PIXMQuery(),
-                Collections.<CodedValueType>emptyList());
+                Collections.emptyList());
 
         configureEvent(this, serverSide, event, null, null, pixManagerUri, pixManagerUri, clientIpAddress);
         event.addQueryParticipantObject("PIXmQuery", null, payloadBytes(queryString), null,

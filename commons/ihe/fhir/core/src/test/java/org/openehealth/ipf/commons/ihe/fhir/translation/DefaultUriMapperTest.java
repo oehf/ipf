@@ -29,7 +29,7 @@ import static org.junit.Assert.assertNull;
 public class DefaultUriMapperTest {
 
     private BidiMappingService mappingService;
-    private UriMapper uriMapper;
+    private DefaultUriMapper uriMapper;
 
     @Before
     public void setup() {
@@ -64,9 +64,15 @@ public class DefaultUriMapperTest {
 
     @Test
     public void testTranslateUriToNamespace() throws Exception {
-        String namespace = "http://org.openehealth/ipf/commons/ihe/fhir/1";
-        assertEquals("fhir1", uriMapper.uriToNamespace(namespace));
-        namespace = "http://org.openehealth/ipf/commons/ihe/fhir/9";
-        assertNull(uriMapper.uriToNamespace(namespace));
+        String uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
+        assertEquals("fhir1", uriMapper.uriToNamespace(uri));
+        uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
+        assertNull(uriMapper.uriToNamespace(uri));
+    }
+
+    @Test
+    public void testTranslateNamespaceToUri() throws Exception {
+        String namespace = "fhir1";
+        assertEquals("http://org.openehealth/ipf/commons/ihe/fhir/1", uriMapper.namespaceToUri(namespace));
     }
 }

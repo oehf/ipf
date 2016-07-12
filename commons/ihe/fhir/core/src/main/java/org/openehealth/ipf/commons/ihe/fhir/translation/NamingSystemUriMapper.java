@@ -39,23 +39,30 @@ public class NamingSystemUriMapper extends AbstractUriMapper {
     }
 
     @Override
-    protected String mapOidToUri(String oid) {
-        return namingSystemService.findActiveNamingSystemByTypeAndValue(OID, oid)
+    protected String mapOidToUri(String id, String oid) {
+        return namingSystemService.findActiveNamingSystemByTypeAndValue(id, OID, oid)
                 .map(NamingSystemService.getValueOfType(URI))
                 .orElse(null);
     }
 
     @Override
-    protected String mapUriToOid(String uri) {
-        return namingSystemService.findActiveNamingSystemByTypeAndValue(URI, uri)
+    protected String mapUriToOid(String id, String uri) {
+        return namingSystemService.findActiveNamingSystemByTypeAndValue(id, URI, uri)
                 .map(NamingSystemService.getValueOfType(OID))
                 .orElse(null);
     }
 
     @Override
-    protected String mapUriToNamespace(String uri) {
-        return namingSystemService.findActiveNamingSystemByTypeAndValue(URI, uri)
+    protected String mapUriToNamespace(String id, String uri) {
+        return namingSystemService.findActiveNamingSystemByTypeAndValue(id, URI, uri)
                 .map(NamingSystemService.getValueOfType(OTHER))
+                .orElse(null);
+    }
+
+    @Override
+    protected String mapNamespaceToUri(String id, String namespace) {
+        return namingSystemService.findActiveNamingSystemByTypeAndValue(id, OTHER, namespace)
+                .map(NamingSystemService.getValueOfType(URI))
                 .orElse(null);
     }
 }

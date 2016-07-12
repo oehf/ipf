@@ -59,7 +59,8 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
                 failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
             }
         } catch (Exception e) {
-            // In case of an unexpected exception
+            // In case of an exception thrown from the route, the FHIRServlet will generate an
+            // appropriate error response
             failed = true;
             throw e;
         } finally {

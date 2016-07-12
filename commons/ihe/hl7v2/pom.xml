@@ -12,6 +12,13 @@
         <version>3.2-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <osgi.export.pkg>
+            org.openehealth.ipf.commons.ihe.hl7v2*,
+            ca.uhn.hl7v2.parser.eventmap;-split-package:=merge-first
+        </osgi.export.pkg>
+    </properties>
+
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>

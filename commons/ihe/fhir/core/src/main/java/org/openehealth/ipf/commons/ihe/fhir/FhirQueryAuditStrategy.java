@@ -16,14 +16,16 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
 
 /**
- * Generic Audit Strategy for FHIR query transctions
+ * Generic Audit Strategy for FHIR query transactions
  *
  * @author Christian Ohr
  * @since 3.1
@@ -36,12 +38,36 @@ public abstract class FhirQueryAuditStrategy extends AuditStrategySupport<FhirQu
 
     @Override
     public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        auditDataset.setUserId((String)parameters.get(HTTP_URI));
+        auditDataset.setUserId((String) parameters.get(HTTP_URI));
         if (parameters.get(HTTP_URL) != null) {
             auditDataset.setServiceEndpointUrl(parameters.get(HTTP_URL).toString());
         }
-        auditDataset.setClientIpAddress((String)parameters.get(HTTP_CLIENT_IP_ADDRESS));
-        auditDataset.setQueryString((String)parameters.get(HTTP_QUERY));
+        auditDataset.setClientIpAddress((String) parameters.get(HTTP_CLIENT_IP_ADDRESS));
+        auditDataset.setQueryString((String) parameters.get(HTTP_QUERY));
         return auditDataset;
     }
+
+    @Override
+    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response) {
+        RFC3881EventCodes.RFC3881EventOutcomeCodes outcomeCodes = getEventOutcomeCode(response);
+        auditDataset.setEventOutcomeCode(outcomeCodes);
+        return outcomeCodes == RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
+    }
+
+    @Override
+    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
+        return getEventOutcomeCodeFromResource((IBaseResource) pojo);
+    }
+
+    /**
+     * A resource is returned from the business logic. In general this
+     * means success, but this can be overridden here.
+     *
+     * @param resource FHIR resource
+     * @return event outcome code
+     */
+    protected RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCodeFromResource(IBaseResource resource) {
+        return RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
+    }
+
 }

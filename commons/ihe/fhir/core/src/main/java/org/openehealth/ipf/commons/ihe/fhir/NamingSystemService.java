@@ -40,30 +40,33 @@ public interface NamingSystemService {
      * Finds all {@link NamingSystem} instances that match the provided {@link Predicate} and returns
      * a stream of these matches.
      *
-     * @param predicate
+     * @param id ID of a NamingSystem bundle
+     * @param predicate predicate selecting a naming system
      * @return a stream of {@link NamingSystem} instances that match the provided {@link Predicate}
      */
-    Stream<NamingSystem> findNamingSystems(Predicate<? super NamingSystem> predicate);
+    Stream<NamingSystem> findNamingSystems(String id, Predicate<? super NamingSystem> predicate);
 
     /**
      * Returns the first {@link NamingSystem} instances that match the provided {@link Predicate}
      *
-     * @param predicate
+     * @param id ID of a NamingSystem bundle
+     * @param predicate predicate selecting a naming system
      * @return {@link NamingSystem} instance that match the provided {@link Predicate}
      */
-    default Optional<NamingSystem> findFirstNamingSystem(Predicate<? super NamingSystem> predicate) {
-        return findNamingSystems(predicate).findFirst();
+    default Optional<NamingSystem> findFirstNamingSystem(String id, Predicate<? super NamingSystem> predicate) {
+        return findNamingSystems(id, predicate).findFirst();
     }
 
     /**
      * Returns the first active {@link NamingSystem} instances that match the provided type and value
      *
+     * @param id ID of a NamingSystem bundle
      * @param type  NamingSystem identifier type (oid, uuid, ...)
      * @param value value
      * @return {@link NamingSystem} instance that match the provided type and value
      */
-    default Optional<NamingSystem> findActiveNamingSystemByTypeAndValue(NamingSystem.NamingSystemIdentifierType type, String value) {
-        return findFirstNamingSystem(allOf(
+    default Optional<NamingSystem> findActiveNamingSystemByTypeAndValue(String id, NamingSystem.NamingSystemIdentifierType type, String value) {
+        return findFirstNamingSystem(id, allOf(
                 byTypeAndValue(type, value),
                 byStatus(Enumerations.ConformanceResourceStatus.ACTIVE)));
     }
@@ -88,6 +91,10 @@ public interface NamingSystemService {
         return namingSystem -> namingSystem.getUniqueId().stream()
                 .anyMatch(uniqueId -> uniqueId.getType() == type
                         && value.equals(uniqueId.getValue()));
+    }
+
+    static Predicate<NamingSystem> byId(String id) {
+        return namingSystem -> Objects.equals(id, namingSystem.getId());
     }
 
     static Predicate<NamingSystem> byName(String name) {

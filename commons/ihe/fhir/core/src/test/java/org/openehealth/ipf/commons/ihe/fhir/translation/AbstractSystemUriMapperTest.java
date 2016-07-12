@@ -41,32 +41,38 @@ abstract class AbstractSystemUriMapperTest {
     @Test
     public void testTranslateOidUrn() throws Exception {
         String oid = "1.2.3.4.5.6.7.8.9";
-        assertEquals(oid, uriMapper.uriToOid("urn:oid:" + oid));
+        assertEquals(oid, uriMapper.uriToOid("identifiers", "urn:oid:" + oid));
     }
 
     @Test
     public void testTranslateUriToOid() throws Exception {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
-        assertEquals("1.2.3.4", uriMapper.uriToOid(uri));
+        assertEquals("1.2.3.4", uriMapper.uriToOid("identifiers", uri));
     }
 
     @Test
     public void testTranslateUriToOidFails() throws Exception {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
-        assertNull(uriMapper.uriToOid(uri));
+        assertNull(uriMapper.uriToOid("identifiers", uri));
     }
 
     @Test
     public void testTranslatePinUrn() throws Exception {
         String namespace = "namespace";
-        assertEquals(namespace, uriMapper.uriToNamespace("urn:pin:" + namespace));
+        assertEquals(namespace, uriMapper.uriToNamespace("identifiers", "urn:pin:" + namespace));
     }
 
     @Test
     public void testTranslateUriToNamespace() throws Exception {
-        String namespace = "http://org.openehealth/ipf/commons/ihe/fhir/1";
-        assertEquals("fhir1", uriMapper.uriToNamespace(namespace));
-        namespace = "http://org.openehealth/ipf/commons/ihe/fhir/9";
-        assertNull(uriMapper.uriToNamespace(namespace));
+        String uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
+        assertEquals("fhir1", uriMapper.uriToNamespace("identifiers", uri));
+        uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
+        assertNull(uriMapper.uriToNamespace("identifiers", uri));
+    }
+
+    @Test
+    public void testTranslateNamespaceToUri() throws Exception {
+        String namespace = "fhir1";
+        assertEquals("http://org.openehealth/ipf/commons/ihe/fhir/1", uriMapper.namespaceToUri("identifiers", namespace));
     }
 }

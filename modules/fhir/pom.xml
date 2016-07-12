@@ -12,6 +12,10 @@
     <description>Generic FHIR support</description>
     <url>${site.url}/${project.artifactId}</url>
 
+    <properties>
+        <osgi.export.pkg>org.openehealth.ipf.modules.fhir.*</osgi.export.pkg>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>

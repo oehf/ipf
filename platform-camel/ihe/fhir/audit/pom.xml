@@ -12,6 +12,10 @@
     <description>FHIR Restful IHE components for Apache Camel</description>
     <url>${site.url}/${project.artifactId}</url>
 
+    <properties>
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.fhir.iti81*</osgi.export.pkg>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>

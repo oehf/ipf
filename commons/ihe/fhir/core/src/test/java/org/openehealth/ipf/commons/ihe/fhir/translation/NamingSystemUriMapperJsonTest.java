@@ -27,7 +27,7 @@ public class NamingSystemUriMapperJsonTest extends AbstractSystemUriMapperTest {
 
     @Override
     protected UriMapper initMapper(DefaultNamingSystemServiceImpl namingSystemService) {
-        namingSystemService.setNamingSystemsFromJson(
+        namingSystemService.addNamingSystemsFromJson(
                 new InputStreamReader(getClass().getResourceAsStream("/namingsystems.json")));
         return new NamingSystemUriMapper(namingSystemService);
     }

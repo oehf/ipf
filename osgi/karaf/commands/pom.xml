@@ -14,6 +14,10 @@
     <properties>
         <karaf-version>2.3.1</karaf-version>
         <!-- osgi:install -s mvn:org.openehealth.ipf.osgi/ipf-osgi-karaf-commands/2.5-SNAPSHOT -->
+        <osgi.export.pkg>
+            org.openehealth.ipf.osgi.karaf.commands.*,
+            OSGI-INF.blueprint*;-split-package:=merge-first
+        </osgi.export.pkg>
         <osgi.import.pkg>
             !org.apache.cxf.karaf.commands,
             org.apache.felix.gogo.commands,

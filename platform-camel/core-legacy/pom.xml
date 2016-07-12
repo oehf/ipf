@@ -18,7 +18,7 @@
     </parent>
     
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.core.*</osgi.export.pkg>
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.core.*;-split-package:=merge-first</osgi.export.pkg>
         <ipf.extension.classes>org.openehealth.ipf.platform.camel.core.extend.LegacyCoreModelExtension</ipf.extension.classes>
     </properties>
     

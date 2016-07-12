@@ -9,7 +9,7 @@
     <properties>
         <osgi.export.pkg>
             '=schematron',
-            *
+            org.openehealth.ipf.commons.xml*
         </osgi.export.pkg>
         <!--
             Needed to load any class via

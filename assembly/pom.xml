@@ -36,7 +36,22 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-ihe-fhir</artifactId>
+            <artifactId>ipf-commons-ihe-fhir-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-fhir-audit</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-fhir-pixpdq</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-fhir-mhd</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -191,7 +206,22 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-ihe-fhir</artifactId>
+            <artifactId>ipf-platform-camel-ihe-fhir-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>ipf-platform-camel-ihe-fhir-audit</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>ipf-platform-camel-ihe-fhir-pixpdq</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>ipf-platform-camel-ihe-fhir-mhd</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

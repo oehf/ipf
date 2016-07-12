@@ -13,6 +13,9 @@
     </parent>
 
     <properties>
+        <osgi.export.pkg>
+            org.openehealth.ipf.platform.camel.ihe.hl7v3*
+        </osgi.export.pkg>
         <osgi.import.pkg>
             org.openehealth.ipf.commons.ihe.hl7v3,
             org.openehealth.ipf.platform.camel.core.process,

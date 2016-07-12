@@ -18,12 +18,13 @@ package org.openehealth.ipf.commons.ihe.fhir.iti67;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
 
 /**
  *  @author Christian Ohr
  *  @since 3.2
  */
-public abstract class Iti67AuditStrategy extends AuditStrategySupport<FhirQueryAuditDataset> {
+public abstract class Iti67AuditStrategy extends FhirQueryAuditStrategy {
 
     public Iti67AuditStrategy(boolean serverSide) {
         super(serverSide);
