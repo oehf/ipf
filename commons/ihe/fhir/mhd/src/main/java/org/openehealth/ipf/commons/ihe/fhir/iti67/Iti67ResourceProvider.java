@@ -33,7 +33,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Resource Provider for MHD (ITI-67)
+ * Resource Provider for MHD (ITI-67).
+ *
+ * Note (CP by Rick Riemer):
+ * When searching for XDS documents with specific referenceIdList values, MHD specifies to use the related-id query parameter.
+ * This parameter is of type token (https://www.hl7.org/fhir/search.html#token). The token type does not allow searching for
+ * the Identifier.type attribute, which would be a primary use case.
+ *
+ * IHE should provide a mechanism to search for referenceIdList values by type, in addition to system and value.
+ * Suggestion: don’t use token, but use composite, (https://www.hl7.org/fhir/search.html#composite) and define how
+ * to use it for searching against referenceIdList values. A composite parameter could look like:
+ * related id=urn:oid:1.2.3.4.5.6|2013001$urn:ihe:iti:xds:2013:accession.
+
  *
  * @author Christian Ohr
  * @since 3.2

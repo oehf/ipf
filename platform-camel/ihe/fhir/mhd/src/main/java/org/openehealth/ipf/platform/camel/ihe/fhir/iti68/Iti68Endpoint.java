@@ -39,19 +39,4 @@ public class Iti68Endpoint extends ServletEndpoint {
         super(endPointURI, component, httpUri);
     }
 
-    @Override
-    public Consumer createConsumer(Processor processor) throws Exception {
-        return super.createConsumer(processor);
-    }
-
-    @Override
-    protected void configureConsumer(Consumer consumer) throws Exception {
-        // Take off IPF-specific parameters
-        Map<String, Object> parameters = getConsumerProperties();
-        this.audit = getComponent().getAndRemoveParameter(
-                parameters, "audit", Boolean.class);
-
-        // Configure the Servlet Consumer
-        super.configureConsumer(consumer);
-    }
 }
