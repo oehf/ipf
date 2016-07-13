@@ -7,6 +7,10 @@ addons:
   apt:
     packages:
     - wget
+cache:
+  timeout: 600
+  directories:
+  - $HOME/.m2
 before_script:
 - wget -q https://raw.githubusercontent.com/oehf/ipf-labs/master/maven/settings.xml --no-check-certificate
 - echo "MAVEN_OPTS=-Xmx2g" > ~/.mavenrc
