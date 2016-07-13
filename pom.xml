@@ -281,220 +281,6 @@
 
     <profiles>
         <profile>
-            <id>jdk8</id>
-            <activation>
-                <jdk>1.8</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>${surefire-report-plugin-version}</version>
-                            <configuration>
-                                <argLine>-Xms64m -Xmx512m</argLine>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>${javadoc-plugin-version}</version>
-                            <inherited>false</inherited>
-                            <configuration>
-                                <links>
-                                    <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                                    <link>http://hl7api.sourceforge.net/apidocs/</link>
-                                    <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
-                                    <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
-                                    <link>http://docs.spring.io/spring/docs/4.1.x/javadoc-api/</link>
-                                </links>
-                                <source>1.7</source>
-                                <linksource>false</linksource>
-                                <excludePackageNames>*.tutorials,*.test</excludePackageNames>
-                                <additionalJOption>-J-Xmx512m</additionalJOption>
-                                <additionalparam>-Xdoclint:none</additionalparam>
-                                <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
-                                <sourcepath>
-                                    commons/core/generated-stubs:
-                                    commons/flow/generated-stubs:
-                                    commons/ihe/core/generated-stubs:
-                                    commons/ihe/fhir/generated-stubs:
-                                    commons/ihe/hl7v2/generated-stubs:
-                                    commons/ihe/hl7v3/generated-stubs:
-                                    commons/ihe/ws/generated-stubs:
-                                    commons/ihe/xds/generated-stubs:
-                                    commons/map/generated-stubs:
-                                    commons/xml/generated-stubs:
-                                    modules/cda/core/generated-stubs:
-                                    modules/cda/mdht/generated-stubs:
-                                    modules/hl7/generated-stubs:
-                                    platform-camel/cda/generated-stubs:
-                                    platform-camel/core/generated-stubs:
-                                    platform-camel/core-legacy/generated-stubs:
-                                    platform-camel/flow/generated-stubs:
-                                    platform-camel/hl7/generated-stubs:
-                                    platform-camel/ihe/atna/generated-stubs:
-                                    platform-camel/ihe/continua/generated-stubs:
-                                    platform-camel/ihe/fhir/generated-stubs:
-                                    platform-camel/ihe/hl7v2/generated-stubs:
-                                    platform-camel/ihe/hl7v2ws/generated-stubs:
-                                    platform-camel/ihe/hl7v3/generated-stubs:
-                                    platform-camel/ihe/mllp/generated-stubs:
-                                    platform-camel/ihe/ws/generated-stubs:
-                                    platform-camel/ihe/xds/generated-stubs:
-                                    platform-camel/mdht/generated-stubs
-                                </sourcepath>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>aggregate</id>
-                                    <goals>
-                                        <goal>aggregate</goal>
-                                    </goals>
-                                    <phase>site</phase>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
-            <id>jdk7</id>
-            <activation>
-                <jdk>1.7</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>${surefire-report-plugin-version}</version>
-                            <configuration>
-                                <argLine>-Xms64m -Xmx512m -XX:MaxPermSize=256m</argLine>
-                            </configuration>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>${javadoc-plugin-version}</version>
-                            <inherited>false</inherited>
-                            <configuration>
-                                <links>
-                                    <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                                    <link>http://hl7api.sourceforge.net/apidocs/</link>
-                                    <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
-                                    <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
-                                    <link>http://docs.spring.io/spring/docs/4.1.x/javadoc-api/</link>
-                                </links>
-                                <source>1.7</source>
-                                <linksource>false</linksource>
-                                <excludePackageNames>*.tutorials,*.test</excludePackageNames>
-                                <additionalJOption>-J-Xmx512m</additionalJOption>
-                                <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
-                                <sourcepath>
-                                    commons/core/generated-stubs:
-                                    commons/flow/generated-stubs:
-                                    commons/ihe/core/generated-stubs:
-                                    commons/ihe/fhir/generated-stubs:
-                                    commons/ihe/hl7v2/generated-stubs:
-                                    commons/ihe/hl7v3/generated-stubs:
-                                    commons/ihe/ws/generated-stubs:
-                                    commons/ihe/xds/generated-stubs:
-                                    commons/map/generated-stubs:
-                                    commons/xml/generated-stubs:
-                                    modules/cda/core/generated-stubs:
-                                    modules/cda/mdht/generated-stubs:
-                                    modules/hl7/generated-stubs:
-                                    modules/fhir/generated-stubs:
-                                    platform-camel/cda/generated-stubs:
-                                    platform-camel/core/generated-stubs:
-                                    platform-camel/core-legacy/generated-stubs:
-                                    platform-camel/flow/generated-stubs:
-                                    platform-camel/hl7/generated-stubs:
-                                    platform-camel/ihe/atna/generated-stubs:
-                                    platform-camel/ihe/continua/generated-stubs:
-                                    platform-camel/ihe/core/generated-stubs:
-                                    platform-camel/ihe/fhir/generated-stubs:
-                                    platform-camel/ihe/hl7v2/generated-stubs:
-                                    platform-camel/ihe/hl7v2ws/generated-stubs:
-                                    platform-camel/ihe/hl7v3/generated-stubs:
-                                    platform-camel/ihe/mllp/generated-stubs:
-                                    platform-camel/ihe/ws/generated-stubs:
-                                    platform-camel/ihe/xds/generated-stubs:
-                                    platform-camel/mdht/generated-stubs
-                                </sourcepath>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>aggregate</id>
-                                    <goals>
-                                        <goal>aggregate</goal>
-                                    </goals>
-                                    <phase>site</phase>
-                                </execution>
-                                <execution>
-                                    <id>attach-javadocs</id>
-                                    <goals>
-                                        <goal>jar</goal>
-                                    </goals>
-                                    <phase>package</phase>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
-            <id>groovy</id>
-            <activation>
-                <file>
-                    <exists>src/main/groovy</exists>
-                </file>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <version>${maven-compiler.version}</version>
-                            <configuration>
-                                <compilerId>groovy-eclipse-compiler</compilerId>
-                                <source>1.8</source>
-                                <target>1.8</target>
-                                <fork>true</fork>
-                                <verbose>false</verbose>
-                                <compilerArguments>
-                                    <javaAgentClass>lombok.launch.Agent</javaAgentClass>
-                                </compilerArguments>
-                            </configuration>
-                            <dependencies>
-                                <dependency>
-                                    <groupId>org.codehaus.groovy</groupId>
-                                    <artifactId>groovy-eclipse-compiler</artifactId>
-                                    <version>${groovy-eclipse-compiler-version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>org.projectlombok</groupId>
-                                    <artifactId>lombok</artifactId>
-                                    <version>${lombok-version}</version>
-                                </dependency>
-                                <dependency>
-                                    <groupId>org.codehaus.groovy</groupId>
-                                    <artifactId>groovy-eclipse-batch</artifactId>
-                                    <version>${groovy-eclipse-batch-version}</version>
-                                </dependency>
-                            </dependencies>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
             <!-- This profile generates groovystubs and delomboked sources with last gmaven plugin        -->
             <!-- which still respects the javadocs annotations on stub generation. -->
             <!-- It also generates delomboked java sources required for decent javadoc generation. -->
@@ -551,7 +337,7 @@
                             <dependency>
                                 <groupId>sun.jdk</groupId>
                                 <artifactId>tools</artifactId>
-                                <version>1.7</version>
+                                <version>1.8</version>
                                 <scope>system</scope>
                                 <systemPath>${java.home}/../lib/tools.jar</systemPath>
                             </dependency>
@@ -1656,6 +1442,81 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire-report-plugin-version}</version>
+                    <configuration>
+                        <argLine>-Xms64m -Xmx512m</argLine>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${javadoc-plugin-version}</version>
+                    <inherited>false</inherited>
+                    <configuration>
+                        <links>
+                            <link>http://docs.oracle.com/javase/8/docs/api/</link>
+                            <link>http://hl7api.sourceforge.net/apidocs/</link>
+                            <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
+                            <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
+                            <link>http://docs.spring.io/spring/docs/4.2.x/javadoc-api/</link>
+                        </links>
+                        <source>1.8</source>
+                        <linksource>false</linksource>
+                        <excludePackageNames>*.tutorials,*.test</excludePackageNames>
+                        <additionalJOption>-J-Xmx512m</additionalJOption>
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                        <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
+                        <sourcepath>
+                            commons/core/generated-stubs:
+                            commons/flow/generated-stubs:
+                            commons/ihe/core/generated-stubs:
+                            commons/ihe/fhir/audit/generated-stubs:
+                            commons/ihe/fhir/core/generated-stubs:
+                            commons/ihe/fhir/mhd/generated-stubs:
+                            commons/ihe/fhir/pixpdq/generated-stubs:
+                            commons/ihe/hl7v2/generated-stubs:
+                            commons/ihe/hl7v3/generated-stubs:
+                            commons/ihe/ws/generated-stubs:
+                            commons/ihe/xds/generated-stubs:
+                            commons/map/generated-stubs:
+                            commons/xml/generated-stubs:
+                            modules/cda/core/generated-stubs:
+                            modules/cda/mdht/generated-stubs:
+                            modules/hl7/generated-stubs:
+                            modules/fhir/generated-stubs:
+                            platform-camel/cda/generated-stubs:
+                            platform-camel/core/generated-stubs:
+                            platform-camel/core-legacy/generated-stubs:
+                            platform-camel/flow/generated-stubs:
+                            platform-camel/hl7/generated-stubs:
+                            platform-camel/ihe/atna/generated-stubs:
+                            platform-camel/ihe/continua/generated-stubs:
+                            platform-camel/ihe/fhir/audit/generated-stubs:
+                            platform-camel/ihe/fhir/core/generated-stubs:
+                            platform-camel/ihe/fhir/mhd/generated-stubs:
+                            platform-camel/ihe/fhir/pixpdq/generated-stubs:
+                            platform-camel/ihe/hl7v2/generated-stubs:
+                            platform-camel/ihe/hl7v2ws/generated-stubs:
+                            platform-camel/ihe/hl7v3/generated-stubs:
+                            platform-camel/ihe/mllp/generated-stubs:
+                            platform-camel/ihe/ws/generated-stubs:
+                            platform-camel/ihe/xds/generated-stubs:
+                            platform-camel/mdht/generated-stubs
+                        </sourcepath>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>aggregate</id>
+                            <goals>
+                                <goal>aggregate</goal>
+                            </goals>
+                            <phase>site</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jxr-plugin</artifactId>
                     <version>${jxr-plugin-version}</version>
                 </plugin>
@@ -1674,7 +1535,7 @@
                     <version>${maven-dsldoc-plugin-version}</version>
                     <configuration>
                         <links>
-                            <java>http://docs.oracle.com/javase/7/docs/api/</java>
+                            <java>http://docs.oracle.com/javase/8/docs/api/</java>
                             <groovy>http://docs.groovy-lang.org/latest/html/api/</groovy>
                             <org.openehealth.ipf>apidocs/org/openehealth/ipf</org.openehealth.ipf>
                             <org.apache.camel>http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel</org.apache.camel>
@@ -1682,7 +1543,6 @@
                         <descriptorFileExtensions>ExtensionModule.groovy</descriptorFileExtensions>
                     </configuration>
                 </plugin>
-                <!-- regular plugins -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
@@ -1735,9 +1595,32 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin-version}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <fork>true</fork>
+                    <verbose>false</verbose>
+                    <compilerArguments>
+                        <javaAgentClass>lombok.launch.Agent</javaAgentClass>
+                    </compilerArguments>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>${groovy-eclipse-compiler-version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                        <version>${lombok-version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>${groovy-eclipse-batch-version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -14,9 +14,8 @@
 
     <properties>
         <osgi.export.pkg>
-            org.openehealth.ipf.commons.core.config*,
-            org.openehealth.ipf.commons.map*;
-            -split-package:=merge-first
+            org.openehealth.ipf.commons.core.config*;-split-package:=merge-first,
+            org.openehealth.ipf.commons.map*;-split-package:=merge-first
         </osgi.export.pkg>
         <!--
             Needed to load any class via
