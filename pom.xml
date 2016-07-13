@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
@@ -25,24 +26,27 @@
         <site.path>${project.version}</site.path>
         <site.url>http://oehf.github.io/ipf</site.url>
         <site.deploy.id>gh-pages</site.deploy.id>
-        <site.deploy.url />
+        <site.deploy.url/>
 
         <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
         <osgi.import.pkg>org.slf4j.*;version="[1.6,2)",*</osgi.import.pkg>
-        <osgi.dynamic.import.pkg />
-        <osgi.private.pkg />
-        <osgi.bundle.activator />
-        <osgi.bundle.classpath />
-        <osgi.embed.dependency />
-        <osgi.fragment.host />
-        <osgi.require.bundle />
-        <osgi.spring.context />
-        <ipf.extension.classes />
-        <ipf.extension.beans />
-        <eclipse.supplement.bundle />
+        <osgi.dynamic.import.pkg/>
+        <osgi.private.pkg/>
+        <osgi.bundle.activator/>
+        <osgi.bundle.classpath/>
+        <osgi.embed.dependency/>
+        <osgi.fragment.host/>
+        <osgi.require.bundle/>
+        <osgi.spring.context/>
+        <ipf.extension.classes/>
+        <ipf.extension.beans/>
+        <eclipse.supplement.bundle/>
         <osgi.bundle.vendor>Open eHealth Foundation</osgi.bundle.vendor>
-        <osgi.bundle.license>Apache License, Version 2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache foundation</osgi.bundle.license>
+        <osgi.bundle.license>Apache License, Version
+            2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache
+            foundation
+        </osgi.bundle.license>
         <osgi.bundle.category>healthcare</osgi.bundle.category>
 
         <!-- Plugin version properties -->
@@ -265,8 +269,8 @@
         <connection>scm:git:git@github.com:oehf/ipf.git</connection>
         <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
         <url>scm:git:git@github.com:oehf/ipf.git</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <modules>
         <module>archetypes</module>
@@ -410,6 +414,51 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>groovy</id>
+            <activation>
+                <file>
+                    <exists>src/main/groovy</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${compiler-plugin-version}</version>
+                        <configuration>
+                            <compilerId>groovy-eclipse-compiler</compilerId>
+                            <source>${maven.compiler.source}</source>
+                            <target>${maven.compiler.target}</target>
+                            <fork>true</fork>
+                            <verbose>false</verbose>
+                            <compilerArguments>
+                                <javaAgentClass>lombok.launch.Agent</javaAgentClass>
+                            </compilerArguments>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.codehaus.groovy</groupId>
+                                <artifactId>groovy-eclipse-compiler</artifactId>
+                                <version>${groovy-eclipse-compiler-version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok-version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.codehaus.groovy</groupId>
+                                <artifactId>groovy-eclipse-batch</artifactId>
+                                <version>${groovy-eclipse-batch-version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
 
     <dependencyManagement>
@@ -1224,7 +1273,7 @@
                 <artifactId>Saxon-HE</artifactId>
                 <classifier>xqj</classifier>
                 <version>${saxon-he-version}</version>
-            </dependency> 
+            </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.oht.atna</groupId>
                 <artifactId>ipf-oht-atna-auditor</artifactId>
@@ -1538,7 +1587,9 @@
                             <java>http://docs.oracle.com/javase/8/docs/api/</java>
                             <groovy>http://docs.groovy-lang.org/latest/html/api/</groovy>
                             <org.openehealth.ipf>apidocs/org/openehealth/ipf</org.openehealth.ipf>
-                            <org.apache.camel>http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel</org.apache.camel>
+                            <org.apache.camel>
+                                http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel
+                            </org.apache.camel>
                         </links>
                         <descriptorFileExtensions>ExtensionModule.groovy</descriptorFileExtensions>
                     </configuration>
@@ -1595,32 +1646,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin-version}</version>
                 <configuration>
-                    <compilerId>groovy-eclipse-compiler</compilerId>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <fork>true</fork>
-                    <verbose>false</verbose>
-                    <compilerArguments>
-                        <javaAgentClass>lombok.launch.Agent</javaAgentClass>
-                    </compilerArguments>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-eclipse-compiler</artifactId>
-                        <version>${groovy-eclipse-compiler-version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                        <version>${lombok-version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-eclipse-batch</artifactId>
-                        <version>${groovy-eclipse-batch-version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
