@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +30,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetDocumentsQuery", propOrder = {"logicalUuid", "metadataLevel"})
 @XmlRootElement(name = "getDocumentsQuery")
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class GetDocumentsQuery extends GetByIdQuery implements Serializable {
     private static final long serialVersionUID = 3610389657970005956L;
 

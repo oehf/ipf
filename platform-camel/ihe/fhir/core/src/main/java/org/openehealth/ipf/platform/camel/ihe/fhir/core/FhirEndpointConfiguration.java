@@ -41,8 +41,10 @@ import java.util.Map;
 @UriParams
 public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> extends InterceptableEndpointConfiguration {
 
-    private static final String STRICT = "strict";
-    private static final String LENIENT = "lenient";
+    static final String STRICT = "strict";
+    static final String LENIENT = "lenient";
+    static final String LAZY_LOAD_BUNDLES = "lazyLoadBundles";
+    static final String CACHE_BUNDLES = "cacheBundles";
 
     @Getter
     private final String path;
@@ -145,11 +147,11 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         if (timeout != null) {
             setTimeout(timeout);
         }
-        Boolean lazyLoadBundles = component.getAndRemoveParameter(parameters, "lazyLoadBundles", Boolean.class);
+        Boolean lazyLoadBundles = component.getAndRemoveParameter(parameters, LAZY_LOAD_BUNDLES, Boolean.class);
         if (lazyLoadBundles != null) {
             this.lazyLoadBundles = lazyLoadBundles;
         }
-        Boolean cacheBundles = component.getAndRemoveParameter(parameters, "cacheBundles", Boolean.class);
+        Boolean cacheBundles = component.getAndRemoveParameter(parameters, CACHE_BUNDLES, Boolean.class);
         if (cacheBundles != null) {
             this.cacheBundles = cacheBundles;
         }

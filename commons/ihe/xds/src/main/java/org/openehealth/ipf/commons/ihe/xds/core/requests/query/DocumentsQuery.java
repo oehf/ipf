@@ -35,7 +35,7 @@ import java.util.List;
         "healthcareFacilityTypeCodes", "practiceSettingCodes", "typeCodes"})
 @XmlRootElement(name = "abstractDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
-abstract public class DocumentsQuery extends StoredQuery  {
+public abstract class DocumentsQuery extends StoredQuery  {
     private static final long serialVersionUID = 1162423827844317922L;
 
     @XmlElement(name = "typeCode")

@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ResourceProvider;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
 
 /**
- * Standard Configuration for Iti83Component
+ * Standard Configuration for Iti83Component. Lazy-loading of results is by default not supported.
  *
  * @author Christian Ohr
  * @since 3.1
@@ -32,5 +32,7 @@ public class Iti83Configuration extends FhirComponentConfiguration {
         super(
                 new Iti83ResourceProvider(),        // Consumer side. accept $ihe-pix operation
                 new Iti83ClientRequestFactory());   // Formulate queries
+        setSupportsLazyLoading(false);
     }
+
 }

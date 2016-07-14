@@ -30,6 +30,7 @@ public class FhirComponentConfiguration {
 
     private final AbstractPlainProvider staticResourceProvider;
     private final ClientRequestFactory<?> staticClientRequestFactory;
+    private boolean supportsLazyLoading;
 
     public FhirComponentConfiguration(
             AbstractPlainProvider resourceProvider,
@@ -46,5 +47,18 @@ public class FhirComponentConfiguration {
         return staticClientRequestFactory;
     }
 
+    /**
+     * Determines if the component and backend implementation does support lazy-loading of search result sets.
+     * Even if true, the endpoint URI, however, must be explicitly configured to use lazy-loading.
+     *
+     * @param supportsLazyLoading true if this component support lazy-loading
+     */
+    public void setSupportsLazyLoading(boolean supportsLazyLoading) {
+        this.supportsLazyLoading = supportsLazyLoading;
+    }
+
+    public boolean supportsLazyLoading() {
+        return supportsLazyLoading;
+    }
 
 }

@@ -16,17 +16,22 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
+import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
+import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.instance.model.DocumentManifest;
+import org.hl7.fhir.instance.model.IdType;
 import org.hl7.fhir.instance.model.Patient;
 import org.hl7.fhir.instance.model.Practitioner;
+import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +54,8 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentManifest.SP_AUTHOR + "." + Practitioner.SP_GIVEN) StringParam authorGivenName,
             @OptionalParam(name = DocumentManifest.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentManifest.SP_STATUS) TokenOrListParam status,
-
+            // Extension to ITI-66
+            @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -59,7 +65,8 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
                 .authorFamilyName(authorFamilyName)
                 .authorGivenName(authorGivenName)
                 .type(type)
-                .status(status).build();
+                .status(status)
+                ._id(resourceId).build();
 
         String chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {
@@ -70,6 +77,27 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
 
         // Run down the route
         return requestBundleProvider(null, parameters, httpServletRequest, httpServletResponse);
+    }
+
+    /**
+     * Handles DocumentManifest Retrieve. This is not an actual part of the ITI-66 specification, but in the
+     * context of restful FHIR IHE transaction it makes sense to be able to retrieve a DocumentManifest by
+     * its resource ID.
+     *
+     * @param id resource ID
+     * @param httpServletRequest servlet request
+     * @param httpServletResponse servlet response
+     * @return {@link DocumentManifest} resource
+     */
+    @SuppressWarnings("unused")
+    @Read(version = true, type = DocumentManifest.class)
+    public DocumentManifest documentManifestRetrieve(
+            @IdParam IdType id,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) {
+
+        // Run down the route
+        return requestResource(id, DocumentManifest.class, httpServletRequest, httpServletResponse);
     }
 
 }

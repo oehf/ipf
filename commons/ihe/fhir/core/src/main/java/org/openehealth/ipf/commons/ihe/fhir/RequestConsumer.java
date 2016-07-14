@@ -30,6 +30,19 @@ import java.util.Map;
  * request data received to an instance of this interface to be processed. This decouples
  * request reception from request handling, so you can e.g. use the IHE resource providers
  * outside of Apache Camel.
+ * <p>
+ * The request parameters may contain the following parameters entries indicating a "lazy-loading" mode
+ * on searches.
+ * <ul>
+ * <li>{@link Constants#FHIR_REQUEST_SIZE_ONLY}: if this entry is present, the requester expects only
+ * the result size to be returned in an parameter entry with the same name and calls {@link #handleSizeRequest(Object, Map)}
+ * to do so. If possible, implementations should only request the result size from the backend rather than
+ * a complete result set.</li>
+ * <li>{@link Constants#FHIR_FROM_INDEX} and {@link Constants#FHIR_TO_INDEX}: if these entries are present,
+ * the requester expects only the specified subset of the result. If possible, implementations
+ * should only request this result set from the backend rather than a complete result set.</li>
+ * </ul>
+ * </p>
  *
  * @author Christian Ohr
  * @since 3.1
@@ -60,21 +73,28 @@ public interface RequestConsumer {
     <R extends IBaseResource> R handleResourceRequest(Object payload, Map<String, Object> headers, Class<R> resultType);
 
     /**
-     * Handles the request for a bundle, effectively being a list of resources.
+     * Handles the (search) request for a bundle, effectively being a list of resources.
+     * <p>
+     * If {@link #supportsLazyLoading()}
+     * returns true, the headers may contain {@link Constants#FHIR_FROM_INDEX} and {@link Constants#FHIR_TO_INDEX} entries,
+     * indicating that only a part of the result is requested. Implementations must return only the requested entries.
+     * </p>
      *
      * @param payload request payload
-     * @param headers request parameters, e.g. search parameters
+     * @param headers request parameters, e.g. search parameters or
      * @param <R>     type of the returned resources contained in the bundle
      * @return list of resources to be returned
      */
     <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> headers);
 
     /**
-     * Handles the request for a bundle provider, effectively constructing a list of resources.
+     * Handles the request for a bundle provider, effectively constructing a list of resources. The returned
      *
      * @param payload request payload
      * @param headers request parameters, e.g. search parameters
      * @return a bundle provider
+     * @{link IBundleProvider} takes over the responsibility to fetch the required subset of the result, usually
+     * by indirectly calling {@link #handleBundleRequest(Object, Map)} as required.
      */
     IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers, FhirValidator validator);
 
@@ -89,11 +109,17 @@ public interface RequestConsumer {
 
     /**
      * Optional method that request the result size of a bundle request. Only used for lazy
-     * bundle providers.
+     * bundle providers. The headers contain a {@link Constants#FHIR_REQUEST_SIZE_ONLY} entry flag.
+     * This method only needs to be implemented is {@link #supportsLazyLoading()} returns true.
      *
      * @param payload request payload
      * @param headers request parameters
      * @return transaction response bundle
      */
     int handleSizeRequest(Object payload, Map<String, Object> headers);
+
+    /**
+     * @return returns true indicating that lazy loading of search results is supported, false otherwise.
+     */
+    boolean supportsLazyLoading();
 }

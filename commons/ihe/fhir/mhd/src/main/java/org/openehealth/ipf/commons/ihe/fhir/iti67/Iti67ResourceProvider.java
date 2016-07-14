@@ -16,17 +16,22 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti67;
 
+import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
+import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.instance.model.DocumentReference;
+import org.hl7.fhir.instance.model.IdType;
 import org.hl7.fhir.instance.model.Patient;
 import org.hl7.fhir.instance.model.Practitioner;
+import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,17 +39,16 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Resource Provider for MHD (ITI-67).
- *
+ * <p>
  * Note (CP by Rick Riemer):
  * When searching for XDS documents with specific referenceIdList values, MHD specifies to use the related-id query parameter.
  * This parameter is of type token (https://www.hl7.org/fhir/search.html#token). The token type does not allow searching for
  * the Identifier.type attribute, which would be a primary use case.
- *
+ * <p>
  * IHE should provide a mechanism to search for referenceIdList values by type, in addition to system and value.
  * Suggestion: don’t use token, but use composite, (https://www.hl7.org/fhir/search.html#composite) and define how
  * to use it for searching against referenceIdList values. A composite parameter could look like:
  * related id=urn:oid:1.2.3.4.5.6|2013001$urn:ihe:iti:xds:2013:accession.
-
  *
  * @author Christian Ohr
  * @since 3.2
@@ -56,8 +60,8 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
     public IBundleProvider documentManifestSearch(
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentReference.SP_INDEXED) DateRangeParam indexed,
-            @OptionalParam(name = DocumentReference.SP_AUTHOR + "." +Practitioner.SP_FAMILY) StringParam authorFamilyName,
-            @OptionalParam(name = DocumentReference.SP_AUTHOR + "." +Practitioner.SP_GIVEN) StringParam authorGivenName,
+            @OptionalParam(name = DocumentReference.SP_AUTHOR + "." + Practitioner.SP_FAMILY) StringParam authorFamilyName,
+            @OptionalParam(name = DocumentReference.SP_AUTHOR + "." + Practitioner.SP_GIVEN) StringParam authorGivenName,
             @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_CLASS) TokenOrListParam class_,
             @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,
@@ -68,7 +72,8 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentReference.SP_SECURITYLABEL) TokenOrListParam securityLabel,
             @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
             @OptionalParam(name = DocumentReference.SP_RELATEDID) TokenOrListParam relatedId,
-
+            // Extension to ITI-66
+            @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -85,7 +90,8 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                 .event(event)
                 .securityLabel(securityLabel)
                 .format(format)
-                .relatedId(relatedId).build();
+                .relatedId(relatedId)
+                ._id(resourceId).build();
 
         String chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {
@@ -98,4 +104,24 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
         return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);
     }
 
+    /**
+     * Handles DocumentReference Retrieve. This is not an actual part of the ITI-67 specification, but in the
+     * context of restful FHIR IHE transaction it makes sense to be able to retrieve a DocumentReference by
+     * its resource ID.
+     *
+     * @param id                  resource ID
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @return {@link DocumentReference} resource
+     */
+    @SuppressWarnings("unused")
+    @Read(version = true, type = DocumentReference.class)
+    public DocumentReference documentReferenceRetrieve(
+            @IdParam IdType id,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) {
+
+        // Run down the route
+        return requestResource(id, DocumentReference.class, httpServletRequest, httpServletResponse);
+    }
 }

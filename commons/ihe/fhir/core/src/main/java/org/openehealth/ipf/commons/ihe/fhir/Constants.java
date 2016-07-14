@@ -53,4 +53,6 @@ public interface Constants {
     String FHIR_FROM_INDEX = "FhirFromIndex";
     String FHIR_TO_INDEX = "FhirToIndex";
     String FHIR_REQUEST_SIZE_ONLY = "FhirRequestSizeOnly";
+
+    String URN_IETF_RFC_3986 = "urn:ietf:rfc:3986";
 }

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +29,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetFoldersQuery", propOrder = {"logicalUuid", "metadataLevel"})
 @XmlRootElement(name = "getFoldersQuery")
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class GetFoldersQuery extends GetByIdQuery {
     private static final long serialVersionUID = 854601731250203237L;
 

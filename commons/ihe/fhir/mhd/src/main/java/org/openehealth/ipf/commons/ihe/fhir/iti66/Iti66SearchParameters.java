@@ -40,4 +40,5 @@ public class Iti66SearchParameters implements FhirSearchParameters {
     @Getter @Setter private TokenOrListParam status;
     @Getter @Setter private ReferenceParam patientReference;
     @Getter @Setter private TokenParam patientIdentifier;
+    @Getter @Setter private TokenParam _id;
 }

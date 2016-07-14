@@ -33,6 +33,8 @@ import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
+import java.nio.charset.StandardCharsets
+
 /**
  *
  */
@@ -64,20 +66,21 @@ class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
     @Test
     public void testTranslateRegularSearchResponse() {
         RSP_K21 message = loadMessage('ok-1_Response')
-        def patients = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        List<PdqPatient> patients = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
         assertEquals(9, patients.size())
     }
 
     @Test
     public void testTranslateRegularGetResponse() {
         RSP_K21 message = loadMessage('ok-2_Response')
-        PdqPatient patient = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        List<PdqPatient> patients = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        assertEquals(1, patients.size())
     }
 
     RSP_K21 loadMessage(String name) {
         String resourceName = "pdqquery/v2/${name}.hl7"
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName)
-        String content = IOUtils.toString(inputStream)
+        String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8)
         return (RSP_K21)PDQ_QUERY_CONTEXT.getPipeParser().parse(content)
     }
 }

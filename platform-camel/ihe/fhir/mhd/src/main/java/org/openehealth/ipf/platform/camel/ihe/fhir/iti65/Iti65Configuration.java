@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65ResourceProvider;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
 
 /**
- * Standard Configuration for Iti65Component
+ * Standard Configuration for Iti65Component.
  *
  * @author Christian Ohr
  * @since 3.1
@@ -32,5 +32,11 @@ public class Iti65Configuration extends FhirComponentConfiguration {
         super(
                 new Iti65ResourceProvider(),                    // Consumer side. accept registrations
                 new Iti65ClientRequestFactory());               // Formulate requests
+    }
+
+    @Override
+    public void setSupportsLazyLoading(boolean supportsLazyLoading) {
+        if (supportsLazyLoading)
+            throw new IllegalArgumentException("Lazy loading is not applicable for ITI-65");
     }
 }

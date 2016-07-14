@@ -59,6 +59,14 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+        // Component configuration determines if lazy loading is allowed or not. Otherwise the endpoint has
+        // the choice to do so.
+        if (!fhirComponentConfiguration.supportsLazyLoading() &&
+                parameters.containsKey(FhirEndpointConfiguration.LAZY_LOAD_BUNDLES) &&
+                Boolean.parseBoolean((String)parameters.get(FhirEndpointConfiguration.LAZY_LOAD_BUNDLES))) {
+            throw new IllegalArgumentException("The FHIR component " + getClass().getSimpleName() +
+                    " is configured to not support lazy-loading of bundles, but the endpoint requested to do so.");
+        }
         FhirEndpointConfiguration<AuditDatasetType> config = createConfig(remaining, parameters);
         return doCreateEndpoint(uri, config);
     }

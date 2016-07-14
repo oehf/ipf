@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78ResourceProvider;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
 
 /**
- * Standard Configuration for Iti78Component
+ * Standard Configuration for Iti78Component. Supports lazy-loading by default.
  *
  * @author Christian Ohr
  * @since 3.1
@@ -32,5 +32,6 @@ public class Iti78Configuration extends FhirComponentConfiguration {
         super(
                 new Iti78ResourceProvider(),                    // Consumer side. accept patient searches
                 new Iti78QueryResourceClientRequestFactory());  // Formulate queries
+        setSupportsLazyLoading(true);
     }
 }

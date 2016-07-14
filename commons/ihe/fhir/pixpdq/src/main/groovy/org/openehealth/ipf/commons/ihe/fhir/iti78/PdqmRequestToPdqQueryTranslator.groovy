@@ -24,6 +24,7 @@ import org.hl7.fhir.instance.model.IdType
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.Utils
+import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslationException
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
@@ -45,9 +46,6 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
  * @since 3.1
  */
 class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
-
-    static final String SEARCH_TAG = "search"
-    static final String GET_TAG = "get"
 
     /**
      * Predefined fix value of QPD-1 (as String)
@@ -94,9 +92,11 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     @Override
     QBP_Q21 translateFhirToHL7v2(Object request, Map<String, Object> parameters) {
         if (request == null && parameters != null && parameters.containsKey(Constants.FHIR_REQUEST_PARAMETERS)) {
-            return translateFhirSearchToHL7v2(SEARCH_TAG, parameters.get(Constants.FHIR_REQUEST_PARAMETERS));
+            return translateFhirSearchToHL7v2(parameters.get(Constants.FHIR_REQUEST_PARAMETERS));
+        } else if (request != null && request instanceof IdType) {
+            return translateFhirReadToHL7v2((IdType) request);
         } else {
-            return translateFhirReadToHL7v2(GET_TAG, (IdType) request);
+            throw new FhirTranslationException("Expected either PDQ parameters or an Patient ID");
         }
     }
 
@@ -108,11 +108,11 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
      * @param resourceId
      * @return QBP^Q22 request message
      */
-    protected QBP_Q21 translateFhirReadToHL7v2(String queryTagPrefix, IdType resourceId) {
+    protected QBP_Q21 translateFhirReadToHL7v2(IdType resourceId) {
         Iti78SearchParameters parameters = Iti78SearchParameters.builder()
                 ._id(new TokenParam(pdqSupplierResourceIdentifierUri, resourceId.idPart))
                 .build();
-        translateFhirSearchToHL7v2(queryTagPrefix, parameters)
+        translateFhirSearchToHL7v2(parameters)
     }
 
     /**
@@ -122,7 +122,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
      * @param parameters query parameters
      * @return QBP^Q22 request message
      */
-    protected QBP_Q21 translateFhirSearchToHL7v2(String queryTagPrefix, Iti78SearchParameters searchParameters) {
+    protected QBP_Q21 translateFhirSearchToHL7v2(Iti78SearchParameters searchParameters) {
         QBP_Q21 qry = MessageUtils.makeMessage(PDQ_QUERY_CONTEXT, 'QBP', 'Q22', '2.5')
 
         qry.MSH[3] = senderDeviceName
@@ -134,7 +134,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         qry.MSH[10] = UUID.randomUUID().toString()
 
         qry.QPD[1] = this.queryName
-        qry.QPD[2] = "${queryTagPrefix}_" + UUID.randomUUID().toString()
+        qry.QPD[2] = UUID.randomUUID().toString()
 
 
         // Handle identifiers

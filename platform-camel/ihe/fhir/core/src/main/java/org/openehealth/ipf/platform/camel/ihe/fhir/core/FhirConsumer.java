@@ -31,6 +31,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.*;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +49,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         implements SuspendableService, RequestConsumer {
 
     private FhirContext fhirContext;
+    private boolean supportsLazyLoading;
 
     public FhirConsumer(FhirEndpoint<AuditDatasetType, ? extends FhirComponent<AuditDatasetType>> endpoint, Processor processor) {
         super(endpoint, processor);
@@ -88,7 +90,16 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      */
     @Override
     public final <R extends IBaseResource> R handleResourceRequest(Object payload, Map<String, Object> headers, Class<R> resultClass) {
-        return handleInRoute(payload, headers, resultClass);
+        Object result = handleInRoute(payload, headers, resultClass);
+        if (resultClass.isAssignableFrom(result.getClass())) {
+            return resultClass.cast(result);
+        } else if (result instanceof List) {
+            List<R> singleton = (List<R>)result;
+            return singleton.isEmpty() ? null : singleton.get(0);
+        } else {
+            throw new IllegalArgumentException("Expected a resource of type " + resultClass.getName() +
+                    " or a list thereof, but was " + result.getClass());
+        }
     }
 
     /**
@@ -125,6 +136,11 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
             throw new InternalErrorException("Server did not obtain result size");
         }
         return size;
+    }
+
+    @Override
+    public boolean supportsLazyLoading() {
+        return supportsLazyLoading();
     }
 
     /**
@@ -178,7 +194,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      */
     protected IBundleProvider getBundleProvider(Object payload, Map<String, Object> headers, FhirValidator validator) {
         FhirEndpointConfiguration<?> endpointConfiguration = getEndpoint().getInterceptableConfiguration();
-        return endpointConfiguration.isLazyLoadBundles() ?
+        return endpointConfiguration.isLazyLoadBundles() && supportsLazyLoading() ?
                 new LazyBundleProvider(this, endpointConfiguration.isCacheBundles(), payload, headers, validator) :
                 new EagerBundleProvider(this, payload, headers, validator);
     }

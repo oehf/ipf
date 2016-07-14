@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
@@ -29,6 +30,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetFolderAndContentsQuery", propOrder = {"associationStatuses", "metadataLevel"})
 @XmlRootElement(name = "getFolderAndContentsQuery")
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class GetFolderAndContentsQuery extends GetByIdAndCodesQuery {
     private static final long serialVersionUID = -5400326849236563094L;
 

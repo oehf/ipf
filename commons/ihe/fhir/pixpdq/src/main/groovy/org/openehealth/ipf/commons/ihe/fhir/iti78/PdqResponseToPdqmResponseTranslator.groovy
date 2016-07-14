@@ -74,27 +74,14 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
     }
 
     @Override
-    Object translateHL7v2ToFhir(Message message, Map<String, Object> parameters) {
+    List<PdqPatient> translateHL7v2ToFhir(Message message, Map<String, Object> parameters) {
         String ackCode = message.QAK[2].value
-        boolean returnBundle = message.QPD[2].value.startsWith(PdqmRequestToPdqQueryTranslator.SEARCH_TAG)
         switch (ackCode) {
-            case 'OK': return returnBundle ?
-                    handleRegularSearchResponse(message.QUERY_RESPONSE()) :
-                    handleRegularResource(message.QUERY_RESPONSE()) // Case 1,2
+            case 'OK': return handleRegularSearchResponse(message.QUERY_RESPONSE()) // Case 1,2
             case 'NF': return handleRegularSearchResponse(null)     // Case 3
             case 'AE': return handleErrorResponse(message)          // Cases 4-5
             default: throw new InternalErrorException("Unexpected ack code " + ackCode)
         }
-    }
-
-    /**
-     * Converts a single query response into a Patient
-     * @param responseCollection query response
-     * @return Patient resource or null if responseCollection was empty
-     */
-    protected PdqPatient handleRegularResource(responseCollection) {
-        List<PdqPatient> result = handleRegularSearchResponse(responseCollection)
-        result.empty ? null : result.get(0)
     }
 
     /**
