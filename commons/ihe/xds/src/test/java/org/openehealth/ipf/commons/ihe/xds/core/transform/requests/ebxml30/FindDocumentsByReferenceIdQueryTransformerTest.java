@@ -57,8 +57,15 @@ public class FindDocumentsByReferenceIdQueryTransformerTest {
 
         List<EbXMLSlot> referenceIdSlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_REFERENCE_IDS.getSlotName());
         assertEquals(2, referenceIdSlots.size());
-        assertEquals(Arrays.asList("('ref-id-11')", "('ref-id-12')", "('ref-id-13')"), referenceIdSlots.get(0).getValueList());
-        assertEquals(Arrays.asList("('ref-id-21')", "('ref-id-22')"), referenceIdSlots.get(1).getValueList());
+        assertEquals(Arrays.asList(
+                "('ref-id-11^^^&1.1.1.1&ISO^urn:ihe:iti:xds:2013:uniqueId^&3.4.5.6&ISO')",
+                "('ref-id-12^^^^urn:ihe:iti:xdw:2013:workflowInstanceId')",
+                "('ref-id-13^^^^urn:ihe:iti:xds:2013:referral')"),
+                referenceIdSlots.get(0).getValueList());
+        assertEquals(Arrays.asList(
+                "('ref-id-21^^^&1.1.1.2&ISO^urn:ihe:iti:xds:2013:accession')",
+                "('ref-id-22^^^^urn:ihe:iti:xds:2013:order')"),
+                referenceIdSlots.get(1).getValueList());
     }
 
     @Test

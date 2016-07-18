@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.ReferenceId;
 
 import javax.xml.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class FindDocumentsByReferenceIdQuery extends FindDocumentsQuery {
     private static final long serialVersionUID = 8898792914033157098L;
 
     @XmlElement(name = "referenceId")
-    @Getter @Setter private QueryList<String> referenceIds;
+    @Getter @Setter private QueryList<ReferenceId> referenceIds;
 
 
     /**

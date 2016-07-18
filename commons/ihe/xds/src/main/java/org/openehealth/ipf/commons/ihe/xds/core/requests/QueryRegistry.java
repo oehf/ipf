@@ -39,11 +39,12 @@ public class QueryRegistry implements Serializable {
     private static final long serialVersionUID = -7089029668323133489L;
 
     @XmlElementRefs({
-            @XmlElementRef(type = FindDocumentsQuery.class),
-            @XmlElementRef(type = FindDocumentsForMultiplePatientsQuery.class),
             @XmlElementRef(type = FetchQuery.class),
-            @XmlElementRef(type = FindFoldersQuery.class),
+            @XmlElementRef(type = FindDocumentsByReferenceIdQuery.class),
+            @XmlElementRef(type = FindDocumentsForMultiplePatientsQuery.class),
+            @XmlElementRef(type = FindDocumentsQuery.class),
             @XmlElementRef(type = FindFoldersForMultiplePatientsQuery.class),
+            @XmlElementRef(type = FindFoldersQuery.class),
             @XmlElementRef(type = FindSubmissionSetsQuery.class),
             @XmlElementRef(type = GetAllQuery.class),
             @XmlElementRef(type = GetAssociationsQuery.class),
@@ -52,7 +53,6 @@ public class QueryRegistry implements Serializable {
             @XmlElementRef(type = GetFolderAndContentsQuery.class),
             @XmlElementRef(type = GetFoldersForDocumentQuery.class),
             @XmlElementRef(type = GetFoldersQuery.class),
-            @XmlElementRef(type = GetFromDocumentQuery.class),
             @XmlElementRef(type = GetRelatedDocumentsQuery.class),
             @XmlElementRef(type = GetSubmissionSetAndContentsQuery.class),
             @XmlElementRef(type = GetSubmissionSetsQuery.class)})
