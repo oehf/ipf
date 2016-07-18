@@ -130,7 +130,76 @@ public class QuerySlotHelper {
         }
         return queryList;
     }
-    
+
+    public static List<ReferenceId> toReferenceIdList(List<String> slotValues) {
+        if (slotValues.isEmpty()) {
+            return null;
+        }
+
+        List<ReferenceId> codes = new ArrayList<>();
+        for (String slotValue : slotValues) {
+            for (String hl7CX : decodeStringList(slotValue)) {
+                ReferenceId referenceId = Hl7v2Based.parse(hl7CX, ReferenceId.class);
+                if (referenceId == null || StringUtils.isEmpty(referenceId.getId()) || StringUtils.isEmpty(referenceId.getIdTypeCode())) {
+                    throw new XDSMetaDataException(ValidationMessage.INVALID_QUERY_PARAMETER_VALUE, hl7CX);
+                }
+                codes.add(referenceId);
+            }
+        }
+        return codes;
+    }
+
+    /**
+     * Stores a list of reference IDs into a slot.
+     * @param param
+     *          the parameter.
+     * @param referenceIds
+     *          the list of reference IDs.
+     */
+    public void fromReferenceIdList(QueryParameter param, List<ReferenceId> referenceIds) {
+        if (referenceIds == null) {
+            return;
+        }
+
+        List<String> slotValues = new ArrayList<>();
+        for (ReferenceId referenceId : referenceIds) {
+            String hl7CX = Hl7v2Based.render(referenceId);
+            slotValues.add(encodeAsStringList(hl7CX));
+        }
+        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[slotValues.size()]));
+    }
+
+    /**
+     * Stores a reference ID list with AND/OR semantics into a set of slots with the same name.
+     * @param param
+     *          standard query parameter (implies the name of the slots).
+     * @param queryList
+     *          the list of reference IDs.
+     */
+    public void fromReferenceIdQueryList(QueryParameter param, QueryList<ReferenceId> queryList) {
+        if (queryList == null) {
+            return;
+        }
+
+        for (List<ReferenceId> referenceIds : queryList.getOuterList()) {
+            fromReferenceIdList(param, referenceIds);
+        }
+    }
+
+    public QueryList<ReferenceId> toReferenceIdQueryList(QueryParameter param) {
+        List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
+        if (slots.isEmpty()) {
+            return null;
+        }
+
+        QueryList<ReferenceId> queryList = new QueryList<>();
+        for (EbXMLSlot slot : slots) {
+            List<ReferenceId> innerList = toReferenceIdList(slot.getValueList());
+            queryList.getOuterList().add(innerList);
+        }
+        return queryList;
+    }
+
     /**
      * Retrieves a string list with AND/OR semantics from a set of slots with the same name.
      * @param param
@@ -249,11 +318,11 @@ public class QuerySlotHelper {
 
 
     /**
-     * Stores a list of patientIds into a slot.
+     * Stores a list of patient IDs into a slot.
      * @param param
      *          the parameter.
      * @param values
-     *          the patientId list.
+     *          the patient ID list.
      */
     public void fromPatientIdList(QueryParameter param, List<Identifiable> values) {
         if (values == null) {
@@ -267,10 +336,10 @@ public class QuerySlotHelper {
     }
 
     /**
-     * Retrieves a list of strings from a slot.
+     * Retrieves a list of patient IDs from a slot.
      * @param param
      *          the parameter.
-     * @return the string list.
+     * @return the patient ID list.
      */
     public List<Identifiable> toPatientIdList(QueryParameter param) {
         List<String> values = toStringList(param);

@@ -424,9 +424,16 @@ public abstract class SampleData {
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
 
-        QueryList<String> referenceIds = new QueryList<>();
-        referenceIds.getOuterList().add(Arrays.asList("ref-id-11", "ref-id-12", "ref-id-13"));
-        referenceIds.getOuterList().add(Arrays.asList("ref-id-21", "ref-id-22"));
+        QueryList<ReferenceId> referenceIds = new QueryList<>();
+        referenceIds.getOuterList().add(Arrays.asList(
+                new ReferenceId("ref-id-11", new AssigningAuthority("1.1.1.1", "ISO"),
+                        ReferenceId.ID_TYPE_CODE_UNIQUE_ID, new AssigningAuthority("3.4.5.6", "ISO")),
+                new ReferenceId("ref-id-12", null, ReferenceId.ID_TYPE_WORKFLOW_INSTANCE_ID, null),
+                new ReferenceId("ref-id-13", null, ReferenceId.ID_TYPE_CODE_REFERRAL, null)));
+        referenceIds.getOuterList().add(Arrays.asList(
+                new ReferenceId("ref-id-21", new AssigningAuthority("1.1.1.2", "ISO"),
+                        ReferenceId.ID_TYPE_CODE_ACCESSION, null),
+                new ReferenceId("ref-id-22", null, ReferenceId.ID_TYPE_CODE_ORDER, null)));
         query.setReferenceIds(referenceIds);
 
         return new QueryRegistry(query);
