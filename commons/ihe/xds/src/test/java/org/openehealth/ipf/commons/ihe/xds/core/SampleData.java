@@ -434,7 +434,7 @@ public abstract class SampleData {
                 new ReferenceId("ref-id-21", new AssigningAuthority("1.1.1.2", "ISO"),
                         ReferenceId.ID_TYPE_CODE_ACCESSION, null),
                 new ReferenceId("ref-id-22", null, ReferenceId.ID_TYPE_CODE_ORDER, null)));
-        query.setReferenceIds(referenceIds);
+        query.setTypedReferenceIds(referenceIds);
 
         return new QueryRegistry(query);
     }

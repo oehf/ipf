@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ReferenceId;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
 import javax.xml.bind.annotation.*;
 
@@ -34,7 +35,7 @@ public class FindDocumentsByReferenceIdQuery extends FindDocumentsQuery {
     private static final long serialVersionUID = 8898792914033157098L;
 
     @XmlElement(name = "referenceId")
-    @Getter @Setter private QueryList<ReferenceId> referenceIds;
+    @Getter @Setter private QueryList<String> referenceIds;
 
 
     /**
@@ -48,4 +49,26 @@ public class FindDocumentsByReferenceIdQuery extends FindDocumentsQuery {
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
+
+    /**
+     * Allows to use a collection of {@link ReferenceId} instead of a collection of {@link String}
+     * for specifying the query parameter "$XDSDocumentEntryReferenceIdList".
+     *
+     * @param referenceIds a collection of {@link ReferenceId} objects with AND/OR semantics.
+     */
+    public void setTypedReferenceIds(QueryList<ReferenceId> referenceIds) {
+        this.referenceIds = QuerySlotHelper.render(referenceIds);
+    }
+
+    /**
+     * Tries to return the query parameter "$XDSDocumentEntryReferenceIdList"
+     * as a collection of {@link ReferenceId} instead of a collection of {@link String}.
+     * This may fail if SQL LIKE wildcards ("%", "_", etc.) are used in one or more elements.
+     *
+     * @return a collection of {@link ReferenceId} objects with AND/OR semantics.
+     */
+    public QueryList<ReferenceId> getTypedReferenceIds() {
+        return QuerySlotHelper.parse(this.referenceIds, ReferenceId.class);
+    }
+
 }

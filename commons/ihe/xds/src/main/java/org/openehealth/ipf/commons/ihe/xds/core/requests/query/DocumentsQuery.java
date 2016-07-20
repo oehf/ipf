@@ -19,7 +19,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
@@ -69,4 +71,26 @@ public abstract class DocumentsQuery extends StoredQuery  {
     protected DocumentsQuery(QueryType type) {
         super(type);
     }
+
+    /**
+     * Allows to use a collection of {@link Person} instead of a collection of {@link String}
+     * for specifying the query parameter "$XDSDocumentEntryAuthorPerson".
+     *
+     * @param authorPersons a collection of {@link Person} objects.
+     */
+    public void setTypedAuthorPersons(List<Person> authorPersons) {
+        this.authorPersons = QuerySlotHelper.render(authorPersons);
+    }
+
+    /**
+     * Tries to return the query parameter "$XDSDocumentEntryAuthorPerson"
+     * as a collection of {@link Person} instead of a collection of {@link String}.
+     * This may fail if SQL LIKE wildcards ("%", "_", etc.) are used in one or more elements.
+     *
+     * @return a collection of {@link Person} objects.
+     */
+    public List<Person> getTypedAuthorPersons() {
+        return QuerySlotHelper.parse(this.authorPersons, Person.class);
+    }
+
 }

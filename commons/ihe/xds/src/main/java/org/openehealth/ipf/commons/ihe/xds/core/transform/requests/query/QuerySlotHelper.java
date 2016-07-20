@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
+import ca.uhn.hl7v2.model.Composite;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notNull;
+import static org.apache.commons.lang3.Validate.noNullElements;
 
 /**
  * Wrapper class for ebXML query request to simplify access to slots.
@@ -126,75 +128,6 @@ public class QuerySlotHelper {
         QueryList<Code> queryList = new QueryList<>();
         for (EbXMLSlot slot : slots) {
             List<Code> innerList = toCode(slot.getValueList());
-            queryList.getOuterList().add(innerList);
-        }
-        return queryList;
-    }
-
-    public static List<ReferenceId> toReferenceIdList(List<String> slotValues) {
-        if (slotValues.isEmpty()) {
-            return null;
-        }
-
-        List<ReferenceId> codes = new ArrayList<>();
-        for (String slotValue : slotValues) {
-            for (String hl7CX : decodeStringList(slotValue)) {
-                ReferenceId referenceId = Hl7v2Based.parse(hl7CX, ReferenceId.class);
-                if (referenceId == null || StringUtils.isEmpty(referenceId.getId()) || StringUtils.isEmpty(referenceId.getIdTypeCode())) {
-                    throw new XDSMetaDataException(ValidationMessage.INVALID_QUERY_PARAMETER_VALUE, hl7CX);
-                }
-                codes.add(referenceId);
-            }
-        }
-        return codes;
-    }
-
-    /**
-     * Stores a list of reference IDs into a slot.
-     * @param param
-     *          the parameter.
-     * @param referenceIds
-     *          the list of reference IDs.
-     */
-    public void fromReferenceIdList(QueryParameter param, List<ReferenceId> referenceIds) {
-        if (referenceIds == null) {
-            return;
-        }
-
-        List<String> slotValues = new ArrayList<>();
-        for (ReferenceId referenceId : referenceIds) {
-            String hl7CX = Hl7v2Based.render(referenceId);
-            slotValues.add(encodeAsStringList(hl7CX));
-        }
-        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[slotValues.size()]));
-    }
-
-    /**
-     * Stores a reference ID list with AND/OR semantics into a set of slots with the same name.
-     * @param param
-     *          standard query parameter (implies the name of the slots).
-     * @param queryList
-     *          the list of reference IDs.
-     */
-    public void fromReferenceIdQueryList(QueryParameter param, QueryList<ReferenceId> queryList) {
-        if (queryList == null) {
-            return;
-        }
-
-        for (List<ReferenceId> referenceIds : queryList.getOuterList()) {
-            fromReferenceIdList(param, referenceIds);
-        }
-    }
-
-    public QueryList<ReferenceId> toReferenceIdQueryList(QueryParameter param) {
-        List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
-        if (slots.isEmpty()) {
-            return null;
-        }
-
-        QueryList<ReferenceId> queryList = new QueryList<>();
-        for (EbXMLSlot slot : slots) {
-            List<ReferenceId> innerList = toReferenceIdList(slot.getValueList());
             queryList.getOuterList().add(innerList);
         }
         return queryList;
@@ -647,4 +580,51 @@ public class QuerySlotHelper {
         }
         return values;
     }
+
+    public static <T extends Hl7v2Based> QueryList<String> render(QueryList<T> source) {
+        if (source == null) {
+            return null;
+        }
+        noNullElements(source.getOuterList(), "outer list cannot contain NULL elements");
+        QueryList<String> target = new QueryList<>();
+        source.getOuterList().forEach(list -> target.getOuterList().add(render(list)));
+        return target;
+    }
+
+    public static <T extends Hl7v2Based> List<String> render(List<T> source) {
+        if (source == null) {
+            return null;
+        }
+        noNullElements(source, "list cannot contain NULL elements");
+        return source.stream()
+                .map(Hl7v2Based::render)
+                .collect(Collectors.toList());
+    }
+
+    public static <C extends Composite, T extends Hl7v2Based<C>> QueryList<T> parse(
+            QueryList<String> source,
+            Class<T> targetClass)
+    {
+        if (source == null) {
+            return null;
+        }
+        noNullElements(source.getOuterList(), "outer list cannot contain NULL elements");
+        QueryList<T> target = new QueryList<>();
+        source.getOuterList().forEach(list -> target.getOuterList().add(parse(list, targetClass)));
+        return target;
+    }
+
+    public static <C extends Composite, T extends Hl7v2Based<C>> List<T> parse(
+            List<String> source,
+            Class<T> targetClass)
+    {
+        if (source == null) {
+            return null;
+        }
+        noNullElements(source, "list cannot contain NULL elements");
+        return source.stream()
+                .map(value -> Hl7v2Based.parse(value, targetClass))
+                .collect(Collectors.toList());
+    }
+
 }

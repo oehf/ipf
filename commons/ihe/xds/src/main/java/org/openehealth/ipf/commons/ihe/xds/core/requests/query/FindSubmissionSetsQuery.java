@@ -18,10 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
@@ -59,4 +56,26 @@ public class FindSubmissionSetsQuery extends StoredQuery implements PatientIdBas
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
+
+    /**
+     * Allows to use a {@link Person} instead of a {@link String}
+     * for specifying the query parameter "$XDSSubmissionSetAuthorPerson".
+     *
+     * @param authorPerson a {@link Person} object.
+     */
+    public void setTypedAuthorPerson(Person authorPerson) {
+        this.authorPerson = Hl7v2Based.render(authorPerson);
+    }
+
+    /**
+     * Tries to return the query parameter "$XDSSubmissionSetAuthorPerson"
+     * as a {@link Person} instead of a {@link String}.
+     * This may fail if SQL LIKE wildcards ("%", "_", etc.) are used.
+     *
+     * @return a {@link Person} object.
+     */
+    public Person getTypedAuthorPerson() {
+        return Hl7v2Based.parse(this.authorPerson, Person.class);
+    }
+
 }
