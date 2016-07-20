@@ -16,11 +16,10 @@
 
 package org.openehealth.ipf.platform.camel.ihe.core;
 
-import org.apache.camel.Component;
 import org.apache.camel.Consumer;
+import org.apache.camel.Endpoint;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.camel.impl.DefaultEndpoint;
 import org.openehealth.ipf.commons.ihe.core.chain.ChainUtils;
 
 import java.util.ArrayList;
@@ -28,35 +27,66 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Abstract base class for endpoints that use the Interceptor framework defined in this module
+ * Interface for endpoints that use the Interceptor framework defined in this module.
+ *
+ * This has been changed to an interface with default methods as of IPF 3.2 so that it
+ * can also be used when extending other endpoint types than DefaultEndpoint.
  *
  * @since 3.1
  */
-public abstract class InterceptableEndpoint<
+public interface InterceptableEndpoint<
         ConfigType extends InterceptableEndpointConfiguration,
-        ComponentType extends InterceptableComponent> extends DefaultEndpoint {
+        ComponentType extends InterceptableComponent> extends Endpoint {
 
-    public InterceptableEndpoint(String endpointUri, Component component) {
-        super(endpointUri, component);
-    }
 
+    /**
+     * Default implementation that creates a producer by calling {@link #doCreateProducer()}
+     * and weaves in configured interceptor processors to be executed before reaching out
+     * for the target
+     *
+     * @return intercepted producer
+     * @throws Exception
+     */
     @Override
-    public final Producer createProducer() throws Exception {
+    default Producer createProducer() throws Exception {
         Producer producer = doCreateProducer();
+
+        List<Interceptor> initialChain = createInitialProducerInterceptorChain();
+        List<Interceptor> additionalInterceptors = new ArrayList<>();
+        additionalInterceptors.addAll(getInterceptableComponent().getAdditionalProducerInterceptors());
+        // add interceptors provided by the user
+        additionalInterceptors.addAll(getCustomInterceptors());
+        List<Interceptor> producerInterceptorChain = ChainUtils.createChain(initialChain, additionalInterceptors);
+
         return InterceptorUtils.adaptProducerChain(
-                getProducerInterceptorChain(),
+                producerInterceptorChain,
                 this,
                 producer);
     }
 
+    /**
+     * Default implementation that creates a consumer by calling {@link #doCreateConsumer(Processor)}
+     * and weaves in configured interceptor processors to be executed before calling the first
+     * processor in the consumer route.
+     *
+     * @param originalProcessor processor for handling the consumed request
+     * @return intercepted consumer
+     * @throws Exception
+     */
     @Override
-    public final Consumer createConsumer(Processor originalProcessor) throws Exception {
-
+    default Consumer createConsumer(Processor originalProcessor) throws Exception {
         // Configure interceptor chain
-        List<Interceptor> chain = getConsumerInterceptorChain();
+        List<Interceptor> initialChain = createInitialConsumerInterceptorChain();
+
+        List<Interceptor> additionalInterceptors = new ArrayList<>();
+        additionalInterceptors.addAll(getInterceptableComponent().getAdditionalConsumerInterceptors());
+        // add interceptors provided by the user
+        additionalInterceptors.addAll(getCustomInterceptors());
+        List<Interceptor> consumerInterceptorChain = ChainUtils.createChain(initialChain, additionalInterceptors);
+
         Processor processor = originalProcessor;
-        for (int i = chain.size() - 1; i >= 0; --i) {
-            Interceptor interceptor = chain.get(i);
+        for (int i = consumerInterceptorChain.size() - 1; i >= 0; --i) {
+            Interceptor interceptor = consumerInterceptorChain.get(i);
             interceptor.setWrappedProcessor(processor);
             interceptor.setEndpoint(this);
             processor = interceptor;
@@ -65,31 +95,12 @@ public abstract class InterceptableEndpoint<
         return doCreateConsumer(processor);
     }
 
-    private List<Interceptor> getProducerInterceptorChain() {
-        List<Interceptor> initialChain = createInitialProducerInterceptorChain();
-        List<Interceptor> additionalInterceptors = new ArrayList<>();
-        additionalInterceptors.addAll(getInterceptableComponent().getAdditionalProducerInterceptors());
-        // add interceptors provided by the user
-        additionalInterceptors.addAll(getCustomInterceptors());
-
-        return ChainUtils.createChain(initialChain, additionalInterceptors);
-    }
-
-    private List<Interceptor> getConsumerInterceptorChain() {
-        // set up initial interceptor chain
-        List<Interceptor> initialChain = createInitialConsumerInterceptorChain();
-
-        List<Interceptor> additionalInterceptors = new ArrayList<>();
-        additionalInterceptors.addAll(getInterceptableComponent().getAdditionalConsumerInterceptors());
-        // add interceptors provided by the user
-        additionalInterceptors.addAll(getCustomInterceptors());
-        return ChainUtils.createChain(initialChain, additionalInterceptors);
-    }
-
     /**
-     * @return a list of endpoint-specific interceptors
+     * Returns a list of endpoint-specific custom interceptors from {@link #getInterceptableConfiguration()}
+     *
+     * @return a list of endpoint-specific custom interceptors
      */
-    private synchronized List<Interceptor> getCustomInterceptors() {
+    default List<Interceptor> getCustomInterceptors() {
         List<Interceptor> result = new ArrayList<>();
         List<InterceptorFactory> factories = getInterceptableConfiguration().getCustomInterceptorFactories();
         result.addAll(factories.stream()
@@ -102,31 +113,31 @@ public abstract class InterceptableEndpoint<
      * @return the actual producer without any interceptors configured
      * @throws Exception
      */
-    protected abstract Producer doCreateProducer() throws Exception;
+    Producer doCreateProducer() throws Exception;
 
     /**
      * @return the actual consumer without any interceptors configured
      * @throws Exception
      */
-    protected abstract Consumer doCreateConsumer(Processor processor) throws Exception;
+    Consumer doCreateConsumer(Processor processor) throws Exception;
 
     /**
      * @return the component for this endpoint
      */
-    protected abstract ComponentType getInterceptableComponent();
+    ComponentType getInterceptableComponent();
 
     /**
      * @return the configuration for this endpoint
      */
-    protected abstract ConfigType getInterceptableConfiguration();
+    ConfigType getInterceptableConfiguration();
 
     /**
      * @return the initial chain of consumer interceptors for this endpoint
      */
-    protected abstract List<Interceptor> createInitialConsumerInterceptorChain();
+    List<Interceptor> createInitialConsumerInterceptorChain();
 
     /**
      * @return the initial chain of producer interceptors for this endpoint
      */
-    protected abstract List<Interceptor> createInitialProducerInterceptorChain();
+    List<Interceptor> createInitialProducerInterceptorChain();
 }

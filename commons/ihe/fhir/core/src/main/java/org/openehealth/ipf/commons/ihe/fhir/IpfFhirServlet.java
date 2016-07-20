@@ -20,7 +20,6 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
 import ca.uhn.fhir.rest.server.IPagingProvider;
-import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.LoggingInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
@@ -29,10 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * HAPI FHIR {@link RestfulServer} implementation, adding a few configuration bits using servlet
@@ -46,14 +41,10 @@ import java.util.Map;
  *
  * @author Christian Ohr
  * @since 3.2
- *
  */
 public class IpfFhirServlet extends RestfulServer {
 
     private static final Logger LOG = LoggerFactory.getLogger(IpfFhirServlet.class);
-    private static final Map<String, Collection<IResourceProvider>> RESOURCE_PROVIDERS = new HashMap<>();
-    private static final Map<String, Collection<Object>> PLAIN_PROVIDERS = new HashMap<>();
-    private static final Map<String, IpfFhirServlet> SERVLETS = new HashMap<>();
 
     private static final String SERVLET_LOGGING_PARAMETER_NAME = "logging";
     private static final String SERVLET_RESPONSE_HIGHLIGHTING_PARAMETER_NAME = "highlight";
@@ -86,7 +77,18 @@ public class IpfFhirServlet extends RestfulServer {
     @Override
     public void init(ServletConfig config) throws ServletException {
         this.servletName = config.getServletName();
-        SERVLETS.put(servletName, this);
+
+        FhirRegistry fhirRegistry = DefaultFhirRegistry.getFhirRegistry(servletName);
+        if (fhirRegistry.hasIpfFhirServlet(servletName)) {
+            throw new ServletException(String.format("Duplicate FHIR Servlet name %s. Use unique names per Camel application", servletName));
+        }
+
+        try {
+            fhirRegistry.register(this);
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
+
         LOG.debug("Initializing CamelFhirServlet " + servletName);
 
         logging = Boolean.parseBoolean(config.getInitParameter(SERVLET_LOGGING_PARAMETER_NAME));
@@ -110,6 +112,20 @@ public class IpfFhirServlet extends RestfulServer {
         // access these attributes.
         super.init(config);
 
+    }
+
+    @Override
+    public void destroy() {
+        FhirRegistry registry = DefaultFhirRegistry.removeFhirRegistry(getServletName());
+        if (registry != null) {
+            try {
+                registry.unregister(this);
+            } catch (Exception e) {
+                LOG.warn("Problem while unregistering servlet {}", getServletName(), e);
+            }
+        }
+        super.destroy();
+        LOG.info("Destroyed IpfFhirServlet [{}]", getServletName());
     }
 
     /**
@@ -154,8 +170,8 @@ public class IpfFhirServlet extends RestfulServer {
     @Override
     protected void initialize() throws ServletException {
         setFhirContext(FhirContext.forDstu2Hl7Org());
-        setResourceProviders(RESOURCE_PROVIDERS.get(getServletName()));
-        setPlainProviders(PLAIN_PROVIDERS.get(getServletName()));
+        //setResourceProviders(RESOURCE_PROVIDERS.get(getServletName()));
+        //setPlainProviders(PLAIN_PROVIDERS.get(getServletName()));
 
         if (logging) {
             LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
@@ -185,6 +201,7 @@ public class IpfFhirServlet extends RestfulServer {
 
     }
 
+    /*
     public static synchronized void registerProvider(String name, AbstractPlainProvider provider) {
         if (provider instanceof IResourceProvider) {
             if (!RESOURCE_PROVIDERS.containsKey(name)) {
@@ -201,12 +218,26 @@ public class IpfFhirServlet extends RestfulServer {
 
     public static synchronized void unregisterProvider(String name, AbstractPlainProvider provider) throws Exception {
         if (provider instanceof IResourceProvider) {
-            RESOURCE_PROVIDERS.get(name).remove(provider);
+            if (RESOURCE_PROVIDERS.containsKey(name)) {
+                RESOURCE_PROVIDERS.get(name).remove(provider);
+            } else {
+                LOG.warn("Non-existing FHIR resource provider {}, deregistration impossible", name);
+            }
         } else {
-            PLAIN_PROVIDERS.get(name).remove(provider);
+            if (PLAIN_PROVIDERS.containsKey(name)) {
+                PLAIN_PROVIDERS.get(name).remove(provider);
+            } else {
+                LOG.warn("Non-existing FHIR plain provider {},  deregistration impossible", name);
+            }
+
         }
-        SERVLETS.get(name).unregisterProvider(provider);
+        if (SERVLETS.containsKey(name)) {
+            SERVLETS.get(name).unregisterProvider(provider);
+        } else {
+            LOG.warn("Non-existing Servlet {}, deregistration impossible", name);
+        }
     }
+    */
 
     public String getServletName() {
         return servletName;

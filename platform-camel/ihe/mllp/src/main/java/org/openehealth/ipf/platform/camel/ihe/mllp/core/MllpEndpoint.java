@@ -17,13 +17,21 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.apache.camel.*;
+import org.apache.camel.CamelContext;
+import org.apache.camel.Component;
+import org.apache.camel.Consumer;
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.PollingConsumer;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.component.mina2.Mina2Configuration;
 import org.apache.camel.component.mina2.Mina2Consumer;
 import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.apache.camel.component.mina2.Mina2Producer;
+import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.commons.lang3.Validate;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.filterchain.IoFilter;
@@ -53,7 +61,8 @@ public abstract class MllpEndpoint
             ConfigType extends MllpEndpointConfiguration,
             ComponentType extends MllpComponent<ConfigType>
         >
-        extends InterceptableEndpoint<ConfigType, ComponentType> implements HL7v2Endpoint
+    extends DefaultEndpoint
+        implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint
 {
 
     @Getter(AccessLevel.PROTECTED) private final ConfigType config;
@@ -81,12 +90,12 @@ public abstract class MllpEndpoint
     }
 
     @Override
-    protected ComponentType getInterceptableComponent() {
+    public ComponentType getInterceptableComponent() {
         return mllpComponent;
     }
 
     @Override
-    protected ConfigType getInterceptableConfiguration() {
+    public ConfigType getInterceptableConfiguration() {
         return config;
     }
 
@@ -95,7 +104,7 @@ public abstract class MllpEndpoint
      * into a set of PIX/PDQ-specific ones.
      */
     @Override
-    protected Producer doCreateProducer() throws Exception {
+    public Producer doCreateProducer() throws Exception {
         Mina2Producer producer = (Mina2Producer)wrappedEndpoint.createProducer();
         if (config.getSslContext() != null) {
             DefaultIoFilterChainBuilder filterChain = producer.getFilterChain();
@@ -117,7 +126,7 @@ public abstract class MllpEndpoint
      * @param processor The original consumer processor.
      */
     @Override
-    protected Consumer doCreateConsumer(Processor processor) throws Exception {
+    public Consumer doCreateConsumer(Processor processor) throws Exception {
         Mina2Consumer consumer = (Mina2Consumer) wrappedEndpoint.createConsumer(processor);
         if (config.getSslContext() != null) {
             DefaultIoFilterChainBuilder filterChain = consumer.getAcceptor().getFilterChain();

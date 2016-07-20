@@ -22,9 +22,9 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
+import org.apache.camel.impl.DefaultEndpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
-import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
@@ -43,28 +43,26 @@ import java.util.List;
  * @since 3.1
  */
 public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, ComponentType extends FhirComponent<AuditDatasetType>>
-        extends InterceptableEndpoint<FhirEndpointConfiguration<AuditDatasetType>, ComponentType>
-        implements AuditableEndpoint<AuditDatasetType> {
+        extends DefaultEndpoint
+        implements InterceptableEndpoint<FhirEndpointConfiguration<AuditDatasetType>, ComponentType>, AuditableEndpoint<AuditDatasetType> {
 
     private final FhirEndpointConfiguration<AuditDatasetType> config;
-    private String servletName;
     private final ComponentType fhirComponent;
 
     public FhirEndpoint(String uri, ComponentType fhirComponent, FhirEndpointConfiguration<AuditDatasetType> config) {
         super(uri, fhirComponent);
         this.fhirComponent = fhirComponent;
         this.config = config;
-        this.servletName = config.getServletName();
         this.setExchangePattern(ExchangePattern.InOut);
     }
 
     @Override
-    protected ComponentType getInterceptableComponent() {
+    public ComponentType getInterceptableComponent() {
         return fhirComponent;
     }
 
     @Override
-    protected Producer doCreateProducer() throws Exception {
+    public Producer doCreateProducer() throws Exception {
         return new FhirProducer<AuditDatasetType>(this);
     }
 
@@ -78,8 +76,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         AbstractPlainProvider provider = getResourceProvider();
         // Make consumer known to provider
         provider.setConsumer(consumer);
-        // Register provider with CamelFhirServlet
-        IpfFhirServlet.registerProvider(servletName, provider);
+        fhirComponent.connect(consumer, provider);
     }
 
     /**
@@ -90,8 +87,8 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      */
     public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
         AbstractPlainProvider provider = getResourceProvider();
-        IpfFhirServlet.unregisterProvider(servletName, provider);
         provider.unsetConsumer(consumer);
+        fhirComponent.disconnect(consumer, provider);
     }
 
     public FhirContext getContext() {
@@ -105,7 +102,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @return list of default interceptors
      */
     @Override
-    protected List<Interceptor> createInitialConsumerInterceptorChain() {
+    public List<Interceptor> createInitialConsumerInterceptorChain() {
         List<Interceptor> initialChain = new ArrayList<>();
         if (isAudit()) {
             initialChain.add(new ConsumerAuditInterceptor<>());
@@ -120,7 +117,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * @return list of default interceptors
      */
     @Override
-    protected List<Interceptor> createInitialProducerInterceptorChain() {
+    public List<Interceptor> createInitialProducerInterceptorChain() {
         List<Interceptor> initialChain = new ArrayList<>();
         if (isAudit()) {
             initialChain.add(new ProducerAuditInterceptor<>());
@@ -147,7 +144,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     }
 
     @Override
-    protected FhirEndpointConfiguration<AuditDatasetType> getInterceptableConfiguration() {
+    public FhirEndpointConfiguration<AuditDatasetType> getInterceptableConfiguration() {
         return config;
     }
 

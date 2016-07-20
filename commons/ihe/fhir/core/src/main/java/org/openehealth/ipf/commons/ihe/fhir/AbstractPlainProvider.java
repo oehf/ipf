@@ -228,6 +228,7 @@ public abstract class AbstractPlainProvider implements Serializable {
         enriched.put(Constants.HTTP_CHARACTER_ENCODING, httpServletRequest.getCharacterEncoding());
         enriched.put(Constants.HTTP_CONTENT_TYPE, httpServletRequest.getContentType());
         enriched.put(Constants.HTTP_PROTOCOL_VERSION, httpServletRequest.getProtocol());
+        enriched.put(Constants.HTTP_SCHEME, httpServletRequest.getScheme());
         enriched.put(Constants.HTTP_CLIENT_IP_ADDRESS, httpServletRequest.getRemoteAddr());
         enriched.put(Constants.HTTP_HEADERS, extractHttpHeaders(httpServletRequest));
         enriched.put(Constants.FHIR_REQUEST_PARAMETERS, parameters);

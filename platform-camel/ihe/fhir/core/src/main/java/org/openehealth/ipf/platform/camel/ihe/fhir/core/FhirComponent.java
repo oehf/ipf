@@ -20,6 +20,8 @@ import ca.uhn.fhir.context.FhirContext;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
+import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
+import org.openehealth.ipf.commons.ihe.fhir.DefaultFhirRegistry;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
@@ -53,6 +55,29 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         this.fhirComponentConfiguration = configuration;
     }
 
+    /**
+     * Connects the URL specified on the endpoint to the specified processor.
+     *
+     * @param consumer         the consumer
+     * @param resourceProvider the resource provider
+     * @throws Exception can be thrown
+     */
+    public void connect(FhirConsumer<AuditDatasetType> consumer, AbstractPlainProvider resourceProvider) throws Exception {
+        String name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
+        DefaultFhirRegistry.getFhirRegistry(name).register(resourceProvider);
+    }
+
+    /**
+     * Disconnects the URL specified on the endpoint from the specified processor.
+     *
+     * @param consumer the consumer
+     * @throws Exception can be thrown
+     */
+    public void disconnect(FhirConsumer<AuditDatasetType> consumer, AbstractPlainProvider resourceProvider) throws Exception {
+        String name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
+        DefaultFhirRegistry.getFhirRegistry(name).unregister(resourceProvider);
+    }
+
     protected FhirEndpointConfiguration<AuditDatasetType> createConfig(String remaining, Map<String, Object> parameters) throws Exception {
         return new FhirEndpointConfiguration<>(this, FhirContext.forDstu2Hl7Org(), remaining, parameters);
     }
@@ -63,7 +88,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         // the choice to do so.
         if (!fhirComponentConfiguration.supportsLazyLoading() &&
                 parameters.containsKey(FhirEndpointConfiguration.LAZY_LOAD_BUNDLES) &&
-                Boolean.parseBoolean((String)parameters.get(FhirEndpointConfiguration.LAZY_LOAD_BUNDLES))) {
+                Boolean.parseBoolean((String) parameters.get(FhirEndpointConfiguration.LAZY_LOAD_BUNDLES))) {
             throw new IllegalArgumentException("The FHIR component " + getClass().getSimpleName() +
                     " is configured to not support lazy-loading of bundles, but the endpoint requested to do so.");
         }

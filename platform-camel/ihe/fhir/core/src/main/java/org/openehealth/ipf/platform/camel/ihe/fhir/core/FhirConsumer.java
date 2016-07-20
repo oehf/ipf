@@ -49,11 +49,15 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         implements SuspendableService, RequestConsumer {
 
     private FhirContext fhirContext;
-    private boolean supportsLazyLoading;
 
     public FhirConsumer(FhirEndpoint<AuditDatasetType, ? extends FhirComponent<AuditDatasetType>> endpoint, Processor processor) {
         super(endpoint, processor);
         fhirContext = endpoint.getInterceptableConfiguration().getContext();
+    }
+
+    @Override
+    public String getName() {
+        return getEndpoint().getId();
     }
 
     @Override
@@ -93,9 +97,6 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         Object result = handleInRoute(payload, headers, resultClass);
         if (resultClass.isAssignableFrom(result.getClass())) {
             return resultClass.cast(result);
-        } else if (result instanceof List) {
-            List<R> singleton = (List<R>)result;
-            return singleton.isEmpty() ? null : singleton.get(0);
         } else {
             throw new IllegalArgumentException("Expected a resource of type " + resultClass.getName() +
                     " or a list thereof, but was " + result.getClass());
@@ -152,9 +153,12 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      * @return request result, type-converted into the required result class
      */
     protected <T> T handleInRoute(Object payload, Map<String, Object> headers, Class<T> resultClass) {
-
         Exchange exchange = runRoute(payload, headers);
         Message resultMessage = Exchanges.resultMessage(exchange);
+        if (resultMessage.getBody() instanceof List && IBaseResource.class.isAssignableFrom(resultClass)) {
+            List<T> singleton = (List<T>)resultMessage.getBody();
+            resultMessage.setBody(singleton.isEmpty() ? null : singleton.get(0));
+        }
         return getEndpoint().getCamelContext().getTypeConverter().convertTo(resultClass, exchange, resultMessage.getBody());
     }
 

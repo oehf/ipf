@@ -27,6 +27,8 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 
@@ -55,8 +57,17 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             getWrappedProcessor().process(exchange);
             failed = exchange.isFailed();
             if (!failed) {
-                IBaseResource result = resultMessage(exchange).getBody(IBaseResource.class);
-                failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, result);
+                IBaseResource resource;
+                Object result = resultMessage(exchange).getBody();
+                if (result instanceof IBaseResource) {
+                    resource = (IBaseResource) result;
+                } else if (result instanceof List) {
+                    List<IBaseResource> singleton = (List<IBaseResource>)result;
+                    resource = singleton.isEmpty() ? null : singleton.get(0);
+                } else {
+                    throw new IllegalArgumentException("Expected a FHRI resource or a list, but was " + result.getClass());
+                }
+                failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, resource);
             }
         } catch (Exception e) {
             // In case of an exception thrown from the route, the FHIRServlet will generate an

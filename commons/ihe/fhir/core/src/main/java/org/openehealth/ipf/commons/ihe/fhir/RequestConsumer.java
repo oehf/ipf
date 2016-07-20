@@ -122,4 +122,8 @@ public interface RequestConsumer {
      * @return returns true indicating that lazy loading of search results is supported, false otherwise.
      */
     boolean supportsLazyLoading();
+
+    default String getName() {
+        return getClass().getName();
+    }
 }

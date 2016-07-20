@@ -38,7 +38,7 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
     }
 
     @Override
-    protected List<Interceptor> createInitialConsumerInterceptorChain() {
+    public List<Interceptor> createInitialConsumerInterceptorChain() {
         List<Interceptor> initialChain = new ArrayList<>();
         initialChain.add(new ConsumerStringProcessingInterceptor());
 
@@ -54,7 +54,7 @@ public class MllpDispatchEndpoint extends MllpEndpoint<MllpDispatchEndpointConfi
 
 
     @Override
-    protected List<Interceptor> createInitialProducerInterceptorChain() {
+    public List<Interceptor> createInitialProducerInterceptorChain() {
         throw new IllegalStateException("No producer support for MLLP dispatch endpoints.");
     }
 
