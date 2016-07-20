@@ -50,6 +50,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     /**
      * Predefined fix value of QPD-1 (as String)
      */
+
     String queryName = 'IHE PDQ Query'
     String senderDeviceName = 'unknown'
     String senderFacilityName = 'unknown'

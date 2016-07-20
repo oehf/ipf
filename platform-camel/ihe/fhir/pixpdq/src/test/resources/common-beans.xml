@@ -31,15 +31,27 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <camel:routeBuilder ref="routeBuilder"/>
     </camel:camelContext>
     
-	<ipf:globalContext id="globalContext"/>    
+	<ipf:globalContext id="globalContext"/>
+
+    <bean id="fhirContext" class="ca.uhn.fhir.context.FhirContext" factory-method="forDstu2Hl7Org"/>
 
     <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
         <property name="mappingResources">
             <list>
-                 <value>classpath:mapping.map</value>
                  <value>classpath:META-INF/map/fhir-hl7v2-translation.map</value>
             </list>
         </property>
+    </bean>
+
+    <!-- Use NamingSystemService for the URI Mapper -->
+
+    <bean id="namingSystemService" class="org.openehealth.ipf.commons.ihe.fhir.DefaultNamingSystemServiceImpl">
+        <constructor-arg ref="fhirContext"/>
+        <property name="namingSystemsFromXml" value="classpath:identifiers.xml"/>
+    </bean>
+
+    <bean id="uriMapper" class="org.openehealth.ipf.commons.ihe.fhir.translation.NamingSystemUriMapper">
+        <constructor-arg ref="namingSystemService"/>
     </bean>
 
 </beans>

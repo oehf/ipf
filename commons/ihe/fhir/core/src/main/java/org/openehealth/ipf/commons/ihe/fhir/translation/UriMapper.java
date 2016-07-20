@@ -30,10 +30,13 @@ import java.net.URISyntaxException;
  */
 public interface UriMapper {
 
+    String IDENTIFIERS = "identifiers";
+
     /**
      * Translates an URI into an OID. If the URI is an (OID) URN, the namespace-specific part should,
      * be used as the OID.
      *
+     * @param id ID of mapping
      * @param uri the URI
      * @return the mapped OID or null if no OID could be identified
      * @throws URISyntaxException if the uri string is no valid URI
@@ -43,6 +46,7 @@ public interface UriMapper {
     /**
      * Translates an URI into a Namespace.
      *
+     * @param id ID of mapping
      * @param uri the URI
      * @return the mapped namespace or null if no namespace could be identified
      * @throws URISyntaxException if the uri string is no valid URI
@@ -65,9 +69,59 @@ public interface UriMapper {
      * (i.e. urn:pin:namespace), but in general the inverse mapping to {@link #uriToNamespace(String, String)} (String)} should
      * be applied.
      *
+     * @param id ID of mapping
      * @param namespace the namespace
      * @return the mapped URI
      * @throws URISyntaxException
      */
     String namespaceToUri(String id, String namespace) throws URISyntaxException;
+
+    /**
+     * Translates an URI into an OID. If the URI is an (OID) URN, the namespace-specific part should,
+     * be used as the OID.
+     *
+     * @param uri the URI
+     * @return the mapped OID or null if no OID could be identified
+     * @throws URISyntaxException if the uri string is no valid URI
+     */
+    default String uriToOid(String uri) throws URISyntaxException {
+        return uriToOid(IDENTIFIERS, uri);
+    }
+
+    /**
+     * Translates an URI into a Namespace.
+     *
+     * @param uri the URI
+     * @return the mapped namespace or null if no namespace could be identified
+     * @throws URISyntaxException if the uri string is no valid URI
+     */
+    default String uriToNamespace(String uri) throws URISyntaxException {
+        return uriToNamespace(IDENTIFIERS, uri);
+    }
+
+    /**
+     * Translates an OID into an URI. Instead of a real mapping, an URN can be derived from the OID
+     * (i.e. urn:oid:1.2.3.4), but in general the inverse mapping to {@link #uriToOid(String, String)} should
+     * be applied.
+     *
+     * @param oid the OID
+     * @return the mapped URI
+     * @throws URISyntaxException
+     */
+    default String oidToUri(String oid) throws URISyntaxException {
+        return oidToUri(IDENTIFIERS, oid);
+    }
+
+    /**
+     * Translates an Namespace into an URI. Instead of a real mapping, an URN can be derived from the namespace
+     * (i.e. urn:pin:namespace), but in general the inverse mapping to {@link #uriToNamespace(String, String)} (String)} should
+     * be applied.
+     *
+     * @param namespace the namespace
+     * @return the mapped URI
+     * @throws URISyntaxException
+     */
+    default String namespaceToUri(String namespace) throws URISyntaxException {
+        return namespaceToUri(IDENTIFIERS, namespace);
+    }
 }

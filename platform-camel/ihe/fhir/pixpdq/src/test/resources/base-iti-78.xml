@@ -22,12 +22,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="common-beans.xml" />
 
-    <bean id="uriMapper" class="org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper">
-        <constructor-arg index="0" ref="mappingService"/>
-        <constructor-arg index="1" value="uriToOid"/>
-        <constructor-arg index="2" value="uriToNamespace"/>
-    </bean>
-
     <!-- Set dummy host and port -->
     <bean id="auditModuleConfig" factory-method="getConfig" factory-bean="auditModuleContext">
         <property name="auditRepositoryHost" value="0.0.0.0" />

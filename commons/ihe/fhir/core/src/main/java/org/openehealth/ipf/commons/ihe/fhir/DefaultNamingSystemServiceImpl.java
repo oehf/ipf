@@ -20,7 +20,11 @@ import ca.uhn.fhir.context.FhirContext;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.NamingSystem;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URL;
 
 /**
  * Default Implementation of a NamingSystem that loads and parses a Bundle of NamingSystem
@@ -43,9 +47,21 @@ public class DefaultNamingSystemServiceImpl extends AbstractNamingSystemServiceI
         return this;
     }
 
+    public void setNamingSystemsFromXml(URL... urls) throws IOException {
+        for (URL url : urls) {
+            addNamingSystemsFromXml(new BufferedReader(new InputStreamReader(url.openStream())));
+        }
+    }
+
     public DefaultNamingSystemServiceImpl addNamingSystemsFromJson(Reader reader) {
         addNamingSystems(fhirContext.newJsonParser().parseResource(Bundle.class, reader));
         return this;
+    }
+
+    public void setNamingSystemsFromJson(URL... urls) throws IOException {
+        for (URL url : urls) {
+            addNamingSystemsFromJson(new BufferedReader(new InputStreamReader(url.openStream())));
+        }
     }
 
     public DefaultNamingSystemServiceImpl addNamingSystemsFromFhirServer(String url) {
