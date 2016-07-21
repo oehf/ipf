@@ -16,26 +16,28 @@
         <dependency>
             <groupId>org.openehealth.ipf.boot</groupId>
             <artifactId>ipf-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.boot</groupId>
             <artifactId>ipf-atna-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- Camel Spring Boot Support -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-boot-starter</artifactId>
-            <version>${camel-version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.boot</groupId>
             <artifactId>ipf-hl7-spring-boot-autoconfigure</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
-
 	</dependencies>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 
 </project>

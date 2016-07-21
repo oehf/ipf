@@ -32,7 +32,6 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -41,7 +40,6 @@
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>ipf-modules-cda-mdht</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.oht.mdht</groupId>

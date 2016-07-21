@@ -23,6 +23,8 @@ import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.LoggingInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,13 +58,22 @@ public class IpfFhirServlet extends RestfulServer {
     public static final String DEFAULT_SERVLET_NAME = "FhirServlet";
 
 
+    @Getter @Setter
     private String servletName = DEFAULT_SERVLET_NAME;
+    @Getter @Setter
     private boolean logging;
+    @Getter @Setter
     private boolean responseHighlighting;
+    @Getter @Setter
     private boolean prettyPrint;
+    @Getter @Setter
     private int pagingProviderSize = 50;
-    private int defaultPageSize = 20;
+    @Getter @Setter
+    private int defaultPageSize = 25;
+    @Getter @Setter
     private int maximumPageSize = 100;
+    @Getter @Setter
+    private INarrativeGenerator narrativeGenerator = null;
 
     public IpfFhirServlet() {
         super();
@@ -91,9 +102,15 @@ public class IpfFhirServlet extends RestfulServer {
 
         LOG.debug("Initializing CamelFhirServlet " + servletName);
 
-        logging = Boolean.parseBoolean(config.getInitParameter(SERVLET_LOGGING_PARAMETER_NAME));
-        responseHighlighting = Boolean.parseBoolean(config.getInitParameter(SERVLET_RESPONSE_HIGHLIGHTING_PARAMETER_NAME));
-        prettyPrint = Boolean.parseBoolean(config.getInitParameter(SERVLET_PRETTY_PRINT_PARAMETER_NAME));
+        if (config.getInitParameter(SERVLET_LOGGING_PARAMETER_NAME) != null) {
+            logging = Boolean.parseBoolean(config.getInitParameter(SERVLET_LOGGING_PARAMETER_NAME));
+        }
+        if (config.getInitParameter(SERVLET_RESPONSE_HIGHLIGHTING_PARAMETER_NAME) != null) {
+            responseHighlighting = Boolean.parseBoolean(config.getInitParameter(SERVLET_RESPONSE_HIGHLIGHTING_PARAMETER_NAME));
+        }
+        if (config.getInitParameter(SERVLET_PRETTY_PRINT_PARAMETER_NAME) != null) {
+            prettyPrint = Boolean.parseBoolean(config.getInitParameter(SERVLET_PRETTY_PRINT_PARAMETER_NAME));
+        }
 
         String pagingProviderSizeParameter = config.getInitParameter(SERVLET_PAGING_PROVIDER_SIZE_PARAMETER_NAME);
         if (pagingProviderSizeParameter != null && !pagingProviderSizeParameter.isEmpty()) {
@@ -148,7 +165,7 @@ public class IpfFhirServlet extends RestfulServer {
      * @see #getDefaultPageSize()
      */
     protected IPagingProvider getDefaultPagingProvider(int pagingProviderSize) {
-        FifoMemoryPagingProvider pagingProvider = new FifoMemoryPagingProvider(getPagingProviderSize());
+        FifoMemoryPagingProvider pagingProvider = new FifoMemoryPagingProvider(pagingProviderSize);
         pagingProvider.setDefaultPageSize(getDefaultPageSize());
         pagingProvider.setMaximumPageSize(getMaximumPageSize());
         return pagingProvider;
@@ -158,7 +175,7 @@ public class IpfFhirServlet extends RestfulServer {
      * @return the narrative generator, null by default
      */
     protected INarrativeGenerator getDefaultNarrativeGenerator() {
-        return null;
+        return narrativeGenerator;
     }
 
     /**
@@ -170,8 +187,6 @@ public class IpfFhirServlet extends RestfulServer {
     @Override
     protected void initialize() throws ServletException {
         setFhirContext(FhirContext.forDstu2Hl7Org());
-        //setResourceProviders(RESOURCE_PROVIDERS.get(getServletName()));
-        //setPlainProviders(PLAIN_PROVIDERS.get(getServletName()));
 
         if (logging) {
             LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
@@ -201,67 +216,5 @@ public class IpfFhirServlet extends RestfulServer {
 
     }
 
-    /*
-    public static synchronized void registerProvider(String name, AbstractPlainProvider provider) {
-        if (provider instanceof IResourceProvider) {
-            if (!RESOURCE_PROVIDERS.containsKey(name)) {
-                RESOURCE_PROVIDERS.put(name, new ArrayList<>());
-            }
-            RESOURCE_PROVIDERS.get(name).add((IResourceProvider) provider);
-        } else {
-            if (!PLAIN_PROVIDERS.containsKey(name)) {
-                PLAIN_PROVIDERS.put(name, new ArrayList<>());
-            }
-            PLAIN_PROVIDERS.get(name).add(provider);
-        }
-    }
 
-    public static synchronized void unregisterProvider(String name, AbstractPlainProvider provider) throws Exception {
-        if (provider instanceof IResourceProvider) {
-            if (RESOURCE_PROVIDERS.containsKey(name)) {
-                RESOURCE_PROVIDERS.get(name).remove(provider);
-            } else {
-                LOG.warn("Non-existing FHIR resource provider {}, deregistration impossible", name);
-            }
-        } else {
-            if (PLAIN_PROVIDERS.containsKey(name)) {
-                PLAIN_PROVIDERS.get(name).remove(provider);
-            } else {
-                LOG.warn("Non-existing FHIR plain provider {},  deregistration impossible", name);
-            }
-
-        }
-        if (SERVLETS.containsKey(name)) {
-            SERVLETS.get(name).unregisterProvider(provider);
-        } else {
-            LOG.warn("Non-existing Servlet {}, deregistration impossible", name);
-        }
-    }
-    */
-
-    public String getServletName() {
-        return servletName;
-    }
-
-
-    /**
-     * @return the maximum page size (even if the client requested more). Default is 100.
-     */
-    protected int getMaximumPageSize() {
-        return maximumPageSize;
-    }
-
-    /**
-     * @return the default page size (if the client did not request anything). Default is 20.
-     */
-    protected int getDefaultPageSize() {
-        return defaultPageSize;
-    }
-
-    /**
-     * @return the number of concurrently maintained page caches. Default is 50.
-     */
-    protected int getPagingProviderSize() {
-        return pagingProviderSize;
-    }
 }

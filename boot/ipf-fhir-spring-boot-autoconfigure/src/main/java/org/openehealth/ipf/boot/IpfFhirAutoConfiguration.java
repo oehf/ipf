@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -35,9 +35,9 @@ public class IpfFhirAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(FhirAuditor.class)
-    public FhirAuditor fhirAuditor(AuditorModuleConfig config) {
+    public FhirAuditor fhirAuditor(AuditorModuleConfig auditorModuleConfig) {
         FhirAuditor auditor = FhirAuditor.getAuditor();
-        auditor.setConfig(config);
+        auditor.setConfig(auditorModuleConfig);
         return auditor;
     }
 
@@ -87,7 +87,15 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnMissingBean(IpfFhirServlet.class)
     @ConditionalOnWebApplication
     public IpfFhirServlet fhirServlet() {
-        return new IpfFhirServlet();
+        IpfFhirServlet fhirServlet = new IpfFhirServlet();
+        IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
+        fhirServlet.setDefaultPageSize(servletProperties.getDefaultPageSize());
+        fhirServlet.setMaximumPageSize(servletProperties.getMaxPageSize());
+        fhirServlet.setPagingProviderSize(servletProperties.getPagingProviderSize());
+        fhirServlet.setLogging(servletProperties.isLogging());
+        fhirServlet.setPrettyPrint(servletProperties.isPrettyPrint());
+        fhirServlet.setResponseHighlighting(servletProperties.isResponseHighlighting());
+        return fhirServlet;
     }
 
 }

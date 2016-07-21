@@ -32,17 +32,14 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>ipf-modules-hl7</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
             <artifactId>ipf-gazelle-validation-commons-core</artifactId>
-            <version>${ipf-gazelle-version}</version>
         </dependency>
     </dependencies>
 

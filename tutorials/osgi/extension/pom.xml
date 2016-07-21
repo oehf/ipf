@@ -33,7 +33,6 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

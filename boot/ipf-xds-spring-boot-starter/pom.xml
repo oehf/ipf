@@ -16,24 +16,20 @@
         <dependency>
             <groupId>org.openehealth.ipf.boot</groupId>
             <artifactId>ipf-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- Camel Spring Boot Support -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-boot-starter</artifactId>
-            <version>${camel-version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.boot</groupId>
             <artifactId>ipf-xds-spring-boot-autoconfigure</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.boot</groupId>
             <artifactId>cxf-integration-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
 

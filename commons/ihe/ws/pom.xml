@@ -21,12 +21,10 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

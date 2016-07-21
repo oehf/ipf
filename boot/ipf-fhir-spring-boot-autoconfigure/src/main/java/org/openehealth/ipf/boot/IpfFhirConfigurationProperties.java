@@ -1,5 +1,7 @@
 package org.openehealth.ipf.boot;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
 
@@ -14,6 +16,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "ipf.fhir")
 public class IpfFhirConfigurationProperties {
 
+    @Getter
     private final Servlet servlet = new Servlet();
 
     /**
@@ -58,42 +61,57 @@ public class IpfFhirConfigurationProperties {
     public static class Servlet {
 
         /**
-         * Servlet init parameters to pass to Apache CXF.
+         * Servlet init parameters to pass to the FHIR Servlet.
          */
+        @Getter @Setter
         private Map<String, String> init = new HashMap<>();
 
         /**
          * Load on startup priority of the FHIR servlet.
          */
+        @Getter @Setter
         private int loadOnStartup = 1;
 
         /**
          * Name of the servlet
          */
+        @Getter @Setter
         private String name = "FhirServlet";
 
-        public Map<String, String> getInit() {
-            return this.init;
-        }
+        /**
+         * Number of paging results that can be stored at a given point in time
+         */
+        @Getter @Setter
+        private int pagingProviderSize = 50;
 
-        public void setInit(Map<String, String> init) {
-            this.init = init;
-        }
+        /**
+         * Default number of result entries to be returned if no _count parameter is specified in a search
+         */
+        @Getter @Setter
+        private int defaultPageSize = 50;
 
-        public int getLoadOnStartup() {
-            return this.loadOnStartup;
-        }
+        /**
+         * Maximum number of result entries to be returned even if the _count parameter of a search demands for more
+         */
+        @Getter @Setter
+        private int maxPageSize = 100;
 
-        public void setLoadOnStartup(int loadOnStartup) {
-            this.loadOnStartup = loadOnStartup;
-        }
+        /**
+         * Enable server-side request logging
+         */
+        @Getter @Setter
+        private boolean logging = false;
 
-        public String getName() {
-            return name;
-        }
+        /**
+         * Enable pretty-printing responses
+         */
+        @Getter @Setter
+        private boolean prettyPrint = true;
 
-        public void setName(String name) {
-            this.name = name;
-        }
+        /**
+         * Enable color-coding responses queried from a Web Browser
+         */
+        @Getter @Setter
+        private boolean responseHighlighting = true;
     }
 }

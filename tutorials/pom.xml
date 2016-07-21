@@ -11,8 +11,9 @@
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
-        <artifactId>ipf</artifactId>
+        <artifactId>ipf-parent</artifactId>
         <version>3.2-SNAPSHOT</version>
+        <relativePath>../parent</relativePath>
     </parent>
 
     <modules>
@@ -78,11 +79,6 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

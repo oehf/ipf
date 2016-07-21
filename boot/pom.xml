@@ -5,8 +5,9 @@
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
-        <artifactId>ipf</artifactId>
+        <artifactId>ipf-parent</artifactId>
         <version>3.2-SNAPSHOT</version>
+        <relativePath>../parent</relativePath>
     </parent>
 
     <groupId>org.openehealth.ipf.boot</groupId>
@@ -31,25 +32,6 @@
         <module>cxf-integration-spring-boot-autoconfigure</module>
         <module>cxf-integration-spring-boot-starter</module>
     </modules>
-
-    <dependencyManagement>
-        <dependencies> <!-- The parent should provide all that -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot-version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud-version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
@@ -78,6 +60,13 @@
 
         </plugins>
     </build>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 
 
 </project>

@@ -15,28 +15,31 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>${spring-boot-version}</version>
         </dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
-			<version>${camel-version}</version>
 		</dependency>
 		
         <dependency>
             <groupId>org.openehealth.ipf.boot</groupId>
             <artifactId>ipf-spring-boot-autoconfigure</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- IPF Support -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-spring</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
 	</dependencies>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 
 </project>
