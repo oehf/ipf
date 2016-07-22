@@ -107,7 +107,7 @@
         <jboss-logging-version>3.3.0.Final</jboss-logging-version>
         <jboss-logging-annotations-version>2.0.1.Final</jboss-logging-annotations-version>
         <jdom-version>2.0.2</jdom-version>
-        <jetty-version>9.3.10.v20160621</jetty-version>
+        <jetty-version>9.2.15.v20160210</jetty-version>
         <joda-time-version>2.9.4</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>1.2.17</log4j-version>
