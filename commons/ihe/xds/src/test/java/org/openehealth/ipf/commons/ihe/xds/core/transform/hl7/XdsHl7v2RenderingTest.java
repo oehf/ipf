@@ -16,10 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Telecom;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
 import static org.junit.Assert.*;
 
 /**
@@ -52,4 +50,39 @@ public class XdsHl7v2RenderingTest {
         assertEquals("^2^3^4^5^6^7^8", Hl7v2Based.render(telecom));
         assertEquals("1^2^3^4^5^6^7^8^9^0^a^b^c^d", Hl7v2Based.rawRender(telecom));
     }
+
+    @Test
+    public void testIdentifiableRendering() {
+        String cx = "1^2^3^41&42&43&44&45&46^51&52^6^^&&^^";
+        Identifiable identifiable = Hl7v2Based.parse(cx, Identifiable.class);
+        assertEquals("1^^^&42&43", Hl7v2Based.render(identifiable));
+        assertEquals("1^2^3^41&42&43&44&45&46^51&52^6", Hl7v2Based.rawRender(identifiable));
+    }
+
+    @Test
+    public void testReferenceIdRendering() {
+        String cx = "1^2^3^41&42&43&44&45&46^51&52^6^^&&^^";
+        ReferenceId referenceId = Hl7v2Based.parse(cx, ReferenceId.class);
+        assertEquals("1^^^41&42&43^51", Hl7v2Based.render(referenceId));
+        assertEquals("1^2^3^41&42&43&44&45&46^51&52^6", Hl7v2Based.rawRender(referenceId));
+    }
+
+    @Test
+    public void testEmptyAssignignAuthority() {
+        String cx = "1^^^ABCD^^^^";
+        Identifiable identifiable = Hl7v2Based.parse(cx, Identifiable.class);
+        assertNull(identifiable.getAssigningAuthority());
+        ReferenceId referenceId = Hl7v2Based.parse(cx, ReferenceId.class);
+        assertNotNull(referenceId.getAssigningAuthority());
+    }
+
+    @Test
+    public void testNonEmptyAssignignAuthority() {
+        String cx = "1^^^ABCD&1.2.3&ISO^^^";
+        Identifiable identifiable = Hl7v2Based.parse(cx, Identifiable.class);
+        assertNotNull(identifiable.getAssigningAuthority());
+        ReferenceId referenceId = Hl7v2Based.parse(cx, ReferenceId.class);
+        assertNotNull(referenceId.getAssigningAuthority());
+    }
+
 }

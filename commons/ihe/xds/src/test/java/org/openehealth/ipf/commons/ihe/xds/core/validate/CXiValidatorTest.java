@@ -28,22 +28,21 @@ public class CXiValidatorTest {
 
     @Test
     public void testValidateGoodCases() throws XDSMetaDataException {
-        validator.validate("11379^^^&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId^&1.2.3.4&ISO");
-        validator.validate("11379^^^^urn:ihe:iti:xds:2013:uniqueId^&1.2.3.4&ISO");
+        validator.validate("11379^^^ABCD&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId");
+        validator.validate("11379^^^^urn:ihe:iti:xds:2013:uniqueId");
         validator.validate("11379^^^&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId^");
-        validator.validate("11379^^^^urn:ihe:iti:xds:2013:uniqueId^^^^");
+        validator.validate("11379^^^ABCD^urn:ihe:iti:xds:2013:uniqueId^^^^");
     }
-    
-    @Test 
-    public void testValidateBadCases() throws XDSMetaDataException {
+
+    @Test
+    public void testValidateBadCase() throws XDSMetaDataException {
         assertFails("");
         assertFails("11379^^^");
-        assertFails("11379^^^&notOid&ISO^urn:ihe:iti:xds:2013:uniqueId^&1.2.3.4&ISO");
-        assertFails("11379^^^&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId^&notOid.4&ISO");
         assertFails("11379^^^&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId^&1.2.3.4&KRYSO");
-        assertFails("^^^&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId^&1.2.3.4&ISO");
-        assertFails("11379^^^&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId^&1.2.3.4&ISO^wrong");
-        assertFails("11379^^^&1.3.6367.3.7&ISO^^&1.2.3.4&ISO");
+        assertFails("11379^^^&1.3.6367.3.7&^urn:ihe:iti:xds:2013:uniqueId");
+        assertFails("^^^&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId^^^");
+        assertFails("11379^^^&1.3.6367.3.7&ISO^urn:ihe:iti:xds:2013:uniqueId^wrong");
+        assertFails("11379^^^&1.3.6367.3.7&ISO^^^");
     }
 
     private static void assertFails(String value) {

@@ -307,11 +307,11 @@ public abstract class SampleData {
         docEntry.setUniqueId("32848902348");
         docEntry.setUri("http://hierunten.com");
         docEntry.getReferenceIdList().add(new ReferenceId(
-                "ref-id-1", new AssigningAuthority("1.1.2.3"),
-                ReferenceId.ID_TYPE_CODE_ORDER, new AssigningAuthority("1.4.5.6")));
+                "ref-id-1", new CXiAssigningAuthority("ABCD", "1.1.2.3", "ISO"),
+                ReferenceId.ID_TYPE_CODE_ORDER));
         docEntry.getReferenceIdList().add(new ReferenceId(
-                "ref-id-2", new AssigningAuthority("2.1.2.3"),
-                "vendor-defined", new AssigningAuthority("2.4.5.6")));
+                "ref-id-2", new CXiAssigningAuthority("DEFG", "2.1.2.3", "ISO"),
+                "vendor-defined"));
         return docEntry;
     }    
 
@@ -426,14 +426,14 @@ public abstract class SampleData {
 
         QueryList<ReferenceId> referenceIds = new QueryList<>();
         referenceIds.getOuterList().add(Arrays.asList(
-                new ReferenceId("ref-id-11", new AssigningAuthority("1.1.1.1", "ISO"),
-                        ReferenceId.ID_TYPE_CODE_UNIQUE_ID, new AssigningAuthority("3.4.5.6", "ISO")),
-                new ReferenceId("ref-id-12", null, ReferenceId.ID_TYPE_WORKFLOW_INSTANCE_ID, null),
-                new ReferenceId("ref-id-13", null, ReferenceId.ID_TYPE_CODE_REFERRAL, null)));
+                new ReferenceId("ref-id-11", new CXiAssigningAuthority("", "1.1.1.1", "ISO"),
+                        ReferenceId.ID_TYPE_CODE_UNIQUE_ID),
+                new ReferenceId("ref-id-12", null, ReferenceId.ID_TYPE_WORKFLOW_INSTANCE_ID),
+                new ReferenceId("ref-id-13", null, ReferenceId.ID_TYPE_CODE_REFERRAL)));
         referenceIds.getOuterList().add(Arrays.asList(
-                new ReferenceId("ref-id-21", new AssigningAuthority("1.1.1.2", "ISO"),
-                        ReferenceId.ID_TYPE_CODE_ACCESSION, null),
-                new ReferenceId("ref-id-22", null, ReferenceId.ID_TYPE_CODE_ORDER, null)));
+                new ReferenceId("ref-id-21", new CXiAssigningAuthority("", "1.1.1.2", "ISO"),
+                        ReferenceId.ID_TYPE_CODE_ACCESSION),
+                new ReferenceId("ref-id-22", null, ReferenceId.ID_TYPE_CODE_ORDER)));
         query.setTypedReferenceIds(referenceIds);
 
         return new QueryRegistry(query);

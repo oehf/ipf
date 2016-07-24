@@ -56,9 +56,9 @@ abstract public class XdsHl7v2Renderer {
      */
     private static final Map<String, Collection<Integer>> INCLUSIONS = new HashMap<>();
 
-    private static <C extends Composite, T extends Hl7v2Based<C>> void addInclusion(
-            Class<C> hl7Class,
-            Class<T> xdsClass,
+    private static void addInclusion(
+            Class<? extends Composite> hl7Class,
+            Class<? extends Hl7v2Based> xdsClass,
             int... fieldNumbers)
     {
         Collection<Integer> collection = new HashSet<>(fieldNumbers.length);
@@ -73,12 +73,15 @@ abstract public class XdsHl7v2Renderer {
     }
 
     static {
-        addInclusion(CE.class,  null,               1, 3);
-        addInclusion(CX.class,  Identifiable.class, 1, 4);
-        addInclusion(CX.class,  ReferenceId.class,  1, 4, 5, 6);
-        addInclusion(HD.class,  null,               2, 3);
-        addInclusion(XON.class, null,               1, 6, 10);
-        addInclusion(XTN.class, null,               2, 3, 4, 5, 6, 7, 8);
+        addInclusion(CE.class,  null,                        1, 3);
+        addInclusion(CX.class,  Identifiable.class,          1, 4);
+        addInclusion(CX.class,  ReferenceId.class,           1, 4, 5);
+        addInclusion(HD.class,  AssigningAuthority.class,    2, 3);
+        addInclusion(HD.class,  CXiAssigningAuthority.class, 1, 2, 3);
+        addInclusion(HD.class,  Identifiable.class,          2, 3);
+        addInclusion(HD.class,  ReferenceId.class,           1, 2, 3);
+        addInclusion(XON.class, null,                        1, 6, 10);
+        addInclusion(XTN.class, null,                        2, 3, 4, 5, 6, 7, 8);
     }
 
 

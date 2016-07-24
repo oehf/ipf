@@ -31,7 +31,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * @author Dmytro Rud
  */
 public class CXiValidator implements ValueValidator {
-    private static final HDValidator HD_VALIDATOR = new HDValidator();
 
     @Override
     public void validate(String hl7CX) throws XDSMetaDataException {
@@ -41,25 +40,24 @@ public class CXiValidator implements ValueValidator {
         CX cx = referenceId.getHapiObject();
 
         // prohibited fields
-        metaDataAssert(isEmpty(cx.getCx2_CheckDigit().getValue()), CX_TOO_MANY_COMPONENTS);
-        metaDataAssert(isEmpty(cx.getCx3_CheckDigitScheme().getValue()), CX_TOO_MANY_COMPONENTS);
-        metaDataAssert(isEmpty(cx.getCx7_EffectiveDate().getValue()), CX_TOO_MANY_COMPONENTS);
-        metaDataAssert(isEmpty(cx.getCx8_ExpirationDate().getValue()), CX_TOO_MANY_COMPONENTS);
-        metaDataAssert(isEmptyField(cx.getCx9_AssigningJurisdiction()), CX_TOO_MANY_COMPONENTS);
-        metaDataAssert(isEmptyField(cx.getCx10_AssigningAgencyOrDepartment()), CX_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmpty(cx.getCx2_CheckDigit().getValue()), CXI_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmpty(cx.getCx3_CheckDigitScheme().getValue()), CXI_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmptyField(cx.getCx6_AssigningFacility()), CXI_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmpty(cx.getCx7_EffectiveDate().getValue()), CXI_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmpty(cx.getCx8_ExpirationDate().getValue()), CXI_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmptyField(cx.getCx9_AssigningJurisdiction()), CXI_TOO_MANY_COMPONENTS);
+        metaDataAssert(isEmptyField(cx.getCx10_AssigningAgencyOrDepartment()), CXI_TOO_MANY_COMPONENTS);
 
         // required and optional fields
         metaDataAssert(isNotEmpty(cx.getCx1_IDNumber().getValue()), CX_NEEDS_ID, hl7CX);
-        metaDataAssert(isNotEmpty(cx.getCx5_IdentifierTypeCode().getValue()), CX_NEEDS_ID_TYPE_CODE, hl7CX);
+        metaDataAssert(isNotEmpty(cx.getCx5_IdentifierTypeCode().getValue()), CXI_NEEDS_ID_TYPE_CODE, hl7CX);
 
         HD assigningAuthority = cx.getCx4_AssigningAuthority();
         if (! isEmptyField(assigningAuthority)) {
-            HD_VALIDATOR.validate(assigningAuthority, hl7CX);
-        }
-
-        HD homeCommunityId = cx.getCx6_AssigningFacility();
-        if (! isEmptyField(homeCommunityId)) {
-            HD_VALIDATOR.validate(homeCommunityId, hl7CX);
+            boolean cx41filled = isNotEmpty(assigningAuthority.getHd1_NamespaceID().getValue());
+            boolean cx42filled = isNotEmpty(assigningAuthority.getHd2_UniversalID().getValue());
+            boolean cx43filled = isNotEmpty(assigningAuthority.getHd3_UniversalIDType().getValue());
+            metaDataAssert(cx41filled || (cx42filled && cx43filled), CXI_INCOMPLETE_ASSIGNING_AUTHORITY);
         }
     }
 

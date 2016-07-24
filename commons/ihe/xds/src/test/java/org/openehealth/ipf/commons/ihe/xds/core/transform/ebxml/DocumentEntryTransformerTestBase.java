@@ -127,11 +127,11 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.setLimitedMetadata(true);
 
         documentEntry.getReferenceIdList().add(new ReferenceId(
-                "ref-id-11", new AssigningAuthority("1.1.2.3"),
-                ReferenceId.ID_TYPE_CODE_ORDER, new AssigningAuthority("1.4.5.6")));
+                "ref-id-11", new CXiAssigningAuthority("ABCD", "1.1.2.3", "ISO"),
+                ReferenceId.ID_TYPE_CODE_ORDER));
         documentEntry.getReferenceIdList().add(new ReferenceId(
-                "ref-id-12", new AssigningAuthority("2.1.2.3"),
-                ReferenceId.ID_TYPE_CODE_ACCESSION, new AssigningAuthority("2.4.5.6")));
+                "ref-id-12", new CXiAssigningAuthority("DEFG", "2.1.2.3", "ISO"),
+                ReferenceId.ID_TYPE_CODE_ACCESSION));
 
         if (homeAware) {
             documentEntry.setHomeCommunityId("123.456");
@@ -173,8 +173,8 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
                 "PID-11|streetAddress^otherDesignation^city^stateOrProvince^zipOrPostalCode^country^^^countyParishCode");
 
         assertSlot(SLOT_NAME_REFERENCE_ID_LIST, slots,
-                "ref-id-11^^^&1.1.2.3&ISO^urn:ihe:iti:xds:2013:order^&1.4.5.6&ISO",
-                "ref-id-12^^^&2.1.2.3&ISO^urn:ihe:iti:xds:2013:accession^&2.4.5.6&ISO");
+                "ref-id-11^^^ABCD&1.1.2.3&ISO^urn:ihe:iti:xds:2013:order",
+                "ref-id-12^^^DEFG&2.1.2.3&ISO^urn:ihe:iti:xds:2013:accession");
         assertSlot(SLOT_NAME_DOCUMENT_AVAILABILITY, slots, "urn:ihe:iti:2010:DocumentAvailability:Online");
 
         EbXMLClassification classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);

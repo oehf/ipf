@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import ca.uhn.hl7v2.model.v25.datatype.CX;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.AssigningAuthorityAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,15 +31,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * This class is derived from an HL7v2 CX data type ("CXi" in IHE ITI TF-3).
  * <p>
  * All members of this class are allowed to be <code>null</code>. When transforming
- * to HL7 this indicates that the values are empty. Trailing empty values are 
+ * to HL7 this indicates that the values are empty. Trailing empty values are
  * removed from the HL7 string.
  *
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
-@XmlType(name = "ReferenceId", propOrder = {"idTypeCode", "homeCommunityId"})
-public class ReferenceId extends Identifiable {
+@XmlType(name = "ReferenceId", propOrder = {"id", "assigningAuthority", "idTypeCode"})
+public class ReferenceId extends Hl7v2Based<CX> {
     private static final long serialVersionUID = 6615092850652668283L;
 
     public static final String ID_TYPE_CODE_UNIQUE_ID       = "urn:ihe:iti:xds:2013:uniqueId";
@@ -51,29 +50,74 @@ public class ReferenceId extends Identifiable {
     public static final String ID_TYPE_ENCOUNTER_ID         = "urn:ihe:iti:xds:2015:encounterId";
     public static final String ID_TYPE_STUDY_INSTANCE_ID    = "urn:ihe:iti:xds:2016:studyInstanceUID";
 
+    /**
+     * Constructs a reference ID.
+     */
     public ReferenceId() {
-        super();
+        super(new CX(MESSAGE));
     }
 
+
+    /**
+     * Constructs a reference ID.
+     */
     public ReferenceId(CX cx) {
         super(cx);
     }
 
-    public ReferenceId(
-            String id,
-            AssigningAuthority assigningAuthority,
-            String idTypeCode,
-            AssigningAuthority homeCommunityId)
-    {
-        super(id, assigningAuthority);
+
+    /**
+     * Constructs a reference ID.
+     * @param id
+     *          the value of the id (CX.1).
+     * @param assigningAuthority
+     *          the assigning authority (CX.4).
+     * @param idTypeCode
+     *          the ID type code (CX.5).
+     */
+    public ReferenceId(String id, CXiAssigningAuthority assigningAuthority, String idTypeCode) {
+        this();
+        setId(id);
+        setAssigningAuthority(assigningAuthority);
         setIdTypeCode(idTypeCode);
-        setHomeCommunityId(homeCommunityId);
+    }
+
+    /**
+     * @return the value of the id (CX.1).
+     */
+    @XmlAttribute
+    public String getId() {
+        return getHapiObject().getCx1_IDNumber().getValue();
+    }
+
+    /**
+     * @param id
+     *          the value of the id (CX.1).
+     */
+    public void setId(String id) {
+        setValue(getHapiObject().getCx1_IDNumber(), id);
+    }
+
+    /**
+     * @return the assigning authority (CX.4).
+     */
+    public CXiAssigningAuthority getAssigningAuthority() {
+        CXiAssigningAuthority assigningAuthority = new CXiAssigningAuthority(getHapiObject().getCx4_AssigningAuthority());
+        return assigningAuthority.isEmpty() ? null : assigningAuthority;
+    }
+
+    /**
+     * @param assigningAuthority
+     *          the assigning authority (CX.4).
+     */
+    public void setAssigningAuthority(CXiAssigningAuthority assigningAuthority) {
+        setAssigningAuthority(assigningAuthority, getHapiObject().getCx4_AssigningAuthority());
     }
 
     /**
      * @return ID type code (CX.5).
      */
-    @XmlAttribute(name = "idTypeCode")
+    @XmlAttribute
     public String getIdTypeCode() {
         return getHapiObject().getCx5_IdentifierTypeCode().getValue();
     }
@@ -86,49 +130,26 @@ public class ReferenceId extends Identifiable {
         setValue(getHapiObject().getCx5_IdentifierTypeCode(), idTypeCode);
     }
 
-    /**
-     * @return home community ID (CX.6).
-     */
-    @XmlAttribute(name = "homeCommunityId")
-    @XmlJavaTypeAdapter(value = AssigningAuthorityAdapter.class)
-    public AssigningAuthority getHomeCommunityId() {
-        AssigningAuthority assigningAuthority = new AssigningAuthority(getHapiObject().getCx6_AssigningFacility());
-        return assigningAuthority.isEmpty() ? null : assigningAuthority;
-    }
-
-    /**
-     * @param homeCommunityId
-     *          home community ID (CX.6).
-     */
-    public void setHomeCommunityId(AssigningAuthority homeCommunityId) {
-        setAssigningAuthority(homeCommunityId, getHapiObject().getCx6_AssigningFacility());
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
 
         ReferenceId that = (ReferenceId) o;
 
-        if (getHomeCommunityId() != null ? !getHomeCommunityId().equals(that.getHomeCommunityId()) : that.getHomeCommunityId() != null)
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getAssigningAuthority() != null ? !getAssigningAuthority().equals(that.getAssigningAuthority()) : that.getAssigningAuthority() != null)
             return false;
-        if (getIdTypeCode() != null ? !getIdTypeCode().equals(that.getIdTypeCode()) : that.getIdTypeCode() != null)
-            return false;
-
-        return true;
+        return getIdTypeCode() != null ? getIdTypeCode().equals(that.getIdTypeCode()) : that.getIdTypeCode() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getAssigningAuthority() != null ? getAssigningAuthority().hashCode() : 0);
         result = 31 * result + (getIdTypeCode() != null ? getIdTypeCode().hashCode() : 0);
-        result = 31 * result + (getHomeCommunityId() != null ? getHomeCommunityId().hashCode() : 0);
         return result;
     }
-
 
     @Override
     public String toString() {
@@ -136,7 +157,6 @@ public class ReferenceId extends Identifiable {
                 .append("id", getId())
                 .append("assigningAuthority", getAssigningAuthority())
                 .append("idTypeCode", getIdTypeCode())
-                .append("homeCommunityId", getHomeCommunityId())
                 .toString();
     }
 }
