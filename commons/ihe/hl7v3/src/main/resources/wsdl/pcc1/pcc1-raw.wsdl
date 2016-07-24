@@ -76,6 +76,7 @@
     <binding name="ClinicalDataSource_Binding_Soap12" type="qed:ClinicalDataSource_PortType">
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="ClinicalDataSource_QUPC_IN043100UV01">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -85,6 +86,7 @@
         </operation>
 
         <operation name="ClinicalDataSource_QUQI_IN000003UV01_Continue">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -94,6 +96,7 @@
         </operation>
 
         <operation name="ClinicalDataSource_QUQI_IN000003UV01_Cancel">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -107,10 +110,10 @@
         <wsoap11:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="ClinicalDataSource_QUPC_IN043100UV01">
             <input>
-                <wsoap12:body use="literal"/>
+                <wsoap11:body use="literal"/>
             </input>
             <output>
-                <wsoap12:body use="literal"/>
+                <wsoap11:body use="literal"/>
             </output>
         </operation>
 

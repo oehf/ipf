@@ -49,6 +49,7 @@
     <binding name="InitiatingGateway_Binding" type="ihe:InitiatingGateway_PortType">
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="InitiatingGateway_Async_CrossGatewayFetch">
+            <soap12:operation soapActionRequired="false"/>
             <input>
                 <soap12:body use="literal"/>
             </input>

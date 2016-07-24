@@ -56,6 +56,7 @@
     <binding name="DocumentRegistry_Binding_Soap12" type="ihe:DocumentRegistry_PortType">
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="DocumentRegistry_MultiPatientStoredQuery">
+            <soap12:operation soapActionRequired="false"/>
             <input>
                 <soap12:body use="literal"/>
             </input>

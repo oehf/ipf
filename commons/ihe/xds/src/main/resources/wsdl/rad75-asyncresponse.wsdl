@@ -50,6 +50,7 @@
     <binding name="InitiatingGateway_Binding" type="iherad:InitiatingGateway_PortType">
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="InitiatingGateway_Async_CrossGatewayRetrieveImagingDocumentSet">
+            <soap12:operation soapActionRequired="false"/>
             <input>
                 <soap12:body use="literal"/>
             </input>
