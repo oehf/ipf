@@ -483,7 +483,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="ParticipantObjectSensistity" type="xs:token">
+		<xs:attribute name="ParticipantObjectSensitivity" type="xs:token">
 			<xs:annotation>
 				<xs:documentation>Permanent erasure, physical destruction
 				</xs:documentation>
