@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Composite;
 import ca.uhn.hl7v2.model.Primitive;
 import ca.uhn.hl7v2.model.Type;
@@ -89,6 +90,42 @@ abstract public class XdsHl7v2Renderer {
         throw new IllegalStateException("cannot instantiate helper class");
     }
 
+    public static boolean isEmpty(Hl7v2Based hl7v2based) {
+        try {
+            return isEmpty(hl7v2based.getHapiObject(), "\n" + hl7v2based.getClass().getSimpleName());
+        } catch (HL7Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static boolean isEmpty(Composite composite, String keyModifier) throws HL7Exception {
+        Type[] fields = composite.getComponents();
+
+        String key = composite.getClass().getSimpleName();
+        Collection<Integer> inclusions = INCLUSIONS.get(key);
+        if (inclusions == null) {
+            inclusions = INCLUSIONS.get(key + keyModifier);
+        }
+
+        for (int i = 0; i < fields.length; ++i) {
+            if ((inclusions == null) || inclusions.contains(i)) {
+                if (fields[i] instanceof Composite) {
+                    if (!isEmpty((Composite) fields[i], keyModifier)) {
+                        return false;
+                    }
+                } else if (fields[i] instanceof Primitive) {
+                    if (!fields[i].isEmpty()) {
+                        return false;
+                    }
+                } else {
+                    // actually, this line should be unreachable
+                    throw new IllegalStateException("Don't know how to handle " + fields[i]);
+                }
+            }
+        }
+
+        return true;
+    }
 
     /**
      * Encodes the given HL7-based XDS model object using specific
