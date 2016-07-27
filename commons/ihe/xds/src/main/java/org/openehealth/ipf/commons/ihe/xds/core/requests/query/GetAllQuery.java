@@ -21,6 +21,7 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 /**
@@ -33,6 +34,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
         "documentEntryTypes", "patientId", "associationStatuses", "metadataLevel"})
 @XmlRootElement(name = "getAllQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class GetAllQuery extends StoredQuery
         implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery
 {

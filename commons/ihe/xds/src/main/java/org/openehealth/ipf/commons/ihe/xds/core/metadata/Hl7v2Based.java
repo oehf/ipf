@@ -17,7 +17,13 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.Location;
-import ca.uhn.hl7v2.model.*;
+import ca.uhn.hl7v2.model.AbstractType;
+import ca.uhn.hl7v2.model.Composite;
+import ca.uhn.hl7v2.model.DataTypeException;
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.MessageVisitor;
+import ca.uhn.hl7v2.model.Primitive;
+import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.v25.datatype.HD;
 import ca.uhn.hl7v2.model.v25.message.ACK;
 import ca.uhn.hl7v2.parser.PipeParser;
@@ -144,7 +150,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
 
     /**
      * @return
-     *      <code>true</code> iff this XDS model object does not contain any usable data.
+     *      <code>true</code> if this XDS model object does not contain any usable data.
      */
     public boolean isEmpty() {
         return XdsHl7v2Renderer.isEmpty(this);

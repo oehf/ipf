@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
@@ -37,6 +38,7 @@ import java.util.List;
         "sourceId", "submissionTime", "authors", "intendedRecipients", "contentTypeCode"})
 @XmlRootElement(name = "submissionSet")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class SubmissionSet extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = 5961980266312684583L;
     

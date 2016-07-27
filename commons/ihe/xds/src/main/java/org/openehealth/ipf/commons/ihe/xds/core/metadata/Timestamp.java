@@ -20,8 +20,6 @@ import ca.uhn.hl7v2.model.primitive.CommonTS;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -38,6 +36,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * HL7 timestamps (data type DTM) with particular precision, normalized to UTC.
@@ -49,7 +48,7 @@ import java.util.Map;
 public class Timestamp implements Serializable {
     private static final long serialVersionUID = 4324651691599629794L;
 
-    public static enum Precision {
+    public enum Precision {
         YEAR, MONTH, DAY, HOUR, MINUTE, SECOND
     }
 
@@ -76,7 +75,7 @@ public class Timestamp implements Serializable {
     @XmlAttribute
     @Setter private Precision precision;
 
-    private Timestamp() {
+    public Timestamp() {
         // only for JAXB
     }
 
@@ -167,10 +166,6 @@ public class Timestamp implements Serializable {
         return (precision != null) ? precision : Precision.SECOND;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 
     /**
      * Two HL7 timestamps are equal when they have the same values in the relevant fields
@@ -187,8 +182,14 @@ public class Timestamp implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = dateTime != null ? dateTime.hashCode() : 0;
-        result = 31 * result + (precision != null ? precision.hashCode() : 0);
-        return result;
+        return Objects.hash(dateTime, precision);
+    }
+
+    @Override
+    public String toString() {
+        return "Timestamp(" +
+                "dateTime=" + dateTime +
+                ", precision=" + precision +
+                ')';
     }
 }

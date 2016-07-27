@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import javax.xml.bind.annotation.*;
@@ -32,6 +33,7 @@ import java.util.List;
         "status", "sourceIds", "authorPerson", "submissionTime", "contentTypeCodes", "patientId"})
 @XmlRootElement(name = "findSubmissionSetsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class FindSubmissionSetsQuery extends StoredQuery implements PatientIdBasedStoredQuery {
     private static final long serialVersionUID = 1712346604151312305L;
 

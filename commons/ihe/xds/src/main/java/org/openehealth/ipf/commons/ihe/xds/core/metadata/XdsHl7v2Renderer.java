@@ -32,7 +32,7 @@ import java.util.*;
  *
  * @author Dmytro Rud
  */
-abstract public class XdsHl7v2Renderer {
+public abstract class XdsHl7v2Renderer {
 
     /**
      * Encoding characters for HL7 v2 messages.

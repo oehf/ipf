@@ -28,10 +28,14 @@ import org.apache.camel.SuspendableService;
 import org.apache.camel.impl.DefaultConsumer;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.openehealth.ipf.commons.ihe.fhir.*;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.EagerBundleProvider;
+import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.FhirValidator;
+import org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider;
+import org.openehealth.ipf.commons.ihe.fhir.RequestConsumer;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -132,7 +136,8 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     @Override
     public int handleSizeRequest(Object payload, Map<String, Object> headers) {
         Exchange exchange = runRoute(payload, headers);
-        Integer size = Exchanges.resultMessage(exchange).getHeader(FHIR_REQUEST_SIZE_ONLY, Integer.class);
+        Message resultMessage = Exchanges.resultMessage(exchange);
+        Integer size = resultMessage.getHeader(FHIR_REQUEST_SIZE_ONLY, Integer.class);
         if (size == null) {
             throw new InternalErrorException("Server did not obtain result size");
         }
@@ -141,7 +146,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
 
     @Override
     public boolean supportsLazyLoading() {
-        return supportsLazyLoading();
+        return getEndpoint().getInterceptableConfiguration().isLazyLoadBundles();
     }
 
     /**
@@ -172,10 +177,14 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         // Add the FHIR context as header
         exchange.getIn().getHeaders().put(Constants.FHIR_CONTEXT, getEndpoint().getInterceptableConfiguration().getContext());
 
+
         try {
+            createUoW(exchange);
             getProcessor().process(exchange);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             getExceptionHandler().handleException(e);
+        } finally {
+            doneUoW(exchange);
         }
 
         // If the exchange has failed, throw the exception back into the servlet
@@ -198,7 +207,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      */
     protected IBundleProvider getBundleProvider(Object payload, Map<String, Object> headers, FhirValidator validator) {
         FhirEndpointConfiguration<?> endpointConfiguration = getEndpoint().getInterceptableConfiguration();
-        return endpointConfiguration.isLazyLoadBundles() && supportsLazyLoading() ?
+        return supportsLazyLoading() ?
                 new LazyBundleProvider(this, endpointConfiguration.isCacheBundles(), payload, headers, validator) :
                 new EagerBundleProvider(this, payload, headers, validator);
     }

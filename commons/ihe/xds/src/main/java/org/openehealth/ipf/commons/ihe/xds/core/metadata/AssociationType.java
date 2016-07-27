@@ -51,7 +51,7 @@ public enum AssociationType {
     private final String opcode21;
     private final String opcode30;
 
-    private AssociationType(String opcode21, String opcode30) {
+    AssociationType(String opcode21, String opcode30) {
         this.opcode21 = opcode21;
         this.opcode30 = opcode30;
     }

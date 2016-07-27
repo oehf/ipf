@@ -16,14 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.CX;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Objects;
 
 /**
  * Represents a reference ID.
@@ -134,29 +132,23 @@ public class ReferenceId extends Hl7v2Based<CX> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         ReferenceId that = (ReferenceId) o;
-
-        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
-        if (getAssigningAuthority() != null ? !getAssigningAuthority().equals(that.getAssigningAuthority()) : that.getAssigningAuthority() != null)
-            return false;
-        return getIdTypeCode() != null ? getIdTypeCode().equals(that.getIdTypeCode()) : that.getIdTypeCode() == null;
+        return Objects.equals(getAssigningAuthority(), that.getAssigningAuthority()) &&
+                Objects.equals(getId(), that.getId()) &&
+                Objects.equals(getIdTypeCode(), that.getIdTypeCode());
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getAssigningAuthority() != null ? getAssigningAuthority().hashCode() : 0);
-        result = 31 * result + (getIdTypeCode() != null ? getIdTypeCode().hashCode() : 0);
-        return result;
+        return Objects.hash(getId(), getIdTypeCode(), getAssigningAuthority());
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", getId())
-                .append("assigningAuthority", getAssigningAuthority())
-                .append("idTypeCode", getIdTypeCode())
-                .toString();
+        return "ReferenceId(" +
+                "id=" + getId() +
+                ", assigningAuthority=" + getAssigningAuthority() +
+                ", idTypeCode=" + getIdTypeCode() +
+                ')';
     }
 }

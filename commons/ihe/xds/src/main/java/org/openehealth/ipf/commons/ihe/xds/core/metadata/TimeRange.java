@@ -15,13 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import javax.xml.bind.annotation.*;
-import java.io.Serializable;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.ToString;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 /**
  * Represents a date and time range used in queries.
@@ -29,7 +30,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TimeRange", propOrder = {"from", "to"})
-@EqualsAndHashCode(callSuper = false, doNotUseGetters = true)
+@EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class TimeRange implements Serializable {
     private static final long serialVersionUID = -5468726370729209318L;
     
@@ -52,8 +54,4 @@ public class TimeRange implements Serializable {
         this.to = Timestamp.fromHL7(to);
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

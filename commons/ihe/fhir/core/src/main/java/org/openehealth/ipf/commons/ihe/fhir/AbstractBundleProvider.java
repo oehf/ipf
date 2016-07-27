@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,8 +61,11 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
         return consumer;
     }
 
+    /**
+     * @return a copy of the original query parameters
+     */
     protected Map<String, Object> getHeaders() {
-        return headers;
+        return new HashMap<>(headers);
     }
 
     protected Object getPayload() {

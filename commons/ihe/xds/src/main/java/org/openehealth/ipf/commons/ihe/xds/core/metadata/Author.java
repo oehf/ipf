@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Represents the human or machine that created an entry.
@@ -37,6 +36,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Author", propOrder = {"authorPerson", "authorInstitution",
         "authorSpecialty", "authorRole", "authorTelecom"})
+@EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class Author implements Serializable {
     private static final long serialVersionUID = 6731221295927724760L;
     
@@ -93,57 +94,4 @@ public class Author implements Serializable {
         return authorTelecom;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((authorInstitution == null) ? 0 : authorInstitution.hashCode());
-        result = prime * result + ((authorPerson == null) ? 0 : authorPerson.hashCode());
-        result = prime * result + ((authorRole == null) ? 0 : authorRole.hashCode());
-        result = prime * result + ((authorSpecialty == null) ? 0 : authorSpecialty.hashCode());
-        result = prime * result + ((authorTelecom == null) ? 0 : authorTelecom.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Author other = (Author) obj;
-        if (authorInstitution == null) {
-            if (other.authorInstitution != null)
-                return false;
-        } else if (!authorInstitution.equals(other.authorInstitution))
-            return false;
-        if (authorPerson == null) {
-            if (other.authorPerson != null)
-                return false;
-        } else if (!authorPerson.equals(other.authorPerson))
-            return false;
-        if (authorRole == null) {
-            if (other.authorRole != null)
-                return false;
-        } else if (!authorRole.equals(other.authorRole))
-            return false;
-        if (authorSpecialty == null) {
-            if (other.authorSpecialty != null)
-                return false;
-        } else if (!authorSpecialty.equals(other.authorSpecialty))
-            return false;
-        if (authorTelecom == null) {
-            if (other.authorTelecom != null)
-                return false;
-        } else if (!authorTelecom.equals(other.authorTelecom))
-            return false;
-        return true;
-    }
-    
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -33,6 +34,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetByUuidQuery", propOrder = {"uuids"})
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public abstract class GetByUuidQuery extends StoredQuery implements Serializable {
     private static final long serialVersionUID = -7962722576557371093L;
 

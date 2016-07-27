@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 
@@ -38,6 +39,7 @@ import java.util.List;
 @XmlType(name = "GetByIdAndCodesQuery", propOrder = {
         "confidentialityCodes", "formatCodes", "documentEntryTypes"})
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery
         implements DocumentEntryTypeAwareStoredQuery
 {

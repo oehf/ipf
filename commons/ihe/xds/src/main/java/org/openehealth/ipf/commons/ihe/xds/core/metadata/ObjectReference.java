@@ -15,11 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import javax.xml.bind.annotation.*;
-import java.io.Serializable;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 /**
  * Represents an object reference.
@@ -27,6 +30,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ObjectReference", propOrder = {"home", "id"})
+@EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class ObjectReference implements Serializable {
     private static final long serialVersionUID = 5442558815484966722L;
 
@@ -91,40 +96,4 @@ public class ObjectReference implements Serializable {
         this.home = home;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((home == null) ? 0 : home.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        ObjectReference other = (ObjectReference) obj;
-        if (home == null) {
-            if (other.home != null)
-                return false;
-        } else if (!home.equals(other.home))
-            return false;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
-    }
-    
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

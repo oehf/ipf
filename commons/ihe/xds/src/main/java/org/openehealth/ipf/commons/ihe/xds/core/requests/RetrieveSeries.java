@@ -15,13 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.*;
 
 
 /**
@@ -34,6 +38,8 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RetrieveSeries", propOrder = {"seriesInstanceUID", "documents"})
 @XmlRootElement(name = "retrieveSeries")
+@EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class RetrieveSeries implements Serializable
 {
     private static final long serialVersionUID = 8999352499981099421L;
@@ -83,42 +89,4 @@ public class RetrieveSeries implements Serializable
         return documents;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((seriesInstanceUID == null) ? 0 : seriesInstanceUID.hashCode());
-        result = prime * result + ((documents == null) ? 0 : documents.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        RetrieveSeries other = (RetrieveSeries) obj;
-
-        if (seriesInstanceUID == null) {
-            if (other.seriesInstanceUID != null)
-                return false;
-        } else if (!seriesInstanceUID.equals(other.seriesInstanceUID))
-            return false;
-
-        if (documents == null) {
-            if (other.documents != null)
-                return false;
-        } else if (!documents.equals(other.documents))
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

@@ -47,7 +47,7 @@ public class TimeRangeTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(TimeRange.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(jaxbElement, System.out);
+        // marshaller.marshal(jaxbElement, System.out);
 
         DOMResult domResult = new DOMResult();
         marshaller.marshal(jaxbElement, domResult);

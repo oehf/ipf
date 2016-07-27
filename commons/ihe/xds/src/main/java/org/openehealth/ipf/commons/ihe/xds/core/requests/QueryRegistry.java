@@ -20,6 +20,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
@@ -34,7 +35,8 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QueryRegistry")
 @XmlRootElement(name = "queryRegistry")
-@EqualsAndHashCode(callSuper = false, doNotUseGetters = true)
+@EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class QueryRegistry implements Serializable {
     private static final long serialVersionUID = -7089029668323133489L;
 
@@ -77,8 +79,4 @@ public class QueryRegistry implements Serializable {
         this.query = query;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

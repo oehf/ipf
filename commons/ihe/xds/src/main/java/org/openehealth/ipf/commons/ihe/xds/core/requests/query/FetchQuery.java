@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "FetchQuery", propOrder = {"patientId"})
 @XmlRootElement(name = "fetchQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class FetchQuery extends DocumentsQuery implements PatientIdBasedStoredQuery {
     private static final long serialVersionUID = 7171404956090539393L;
 

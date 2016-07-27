@@ -16,10 +16,13 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.XTN;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 /**
  * Represents a telecommunication address.
@@ -33,7 +36,7 @@ import javax.xml.bind.annotation.*;
  * @author Dmytro Rud
  */
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
-@XmlType(name = "Telecom", propOrder = {"use", "type", "email", "countryCode", 
+@XmlType(name = "Telecom", propOrder = {"use", "type", "email", "countryCode",
         "areaCityCode", "localNumber", "extension"})
 public class Telecom extends Hl7v2Based<XTN> {
     private static final long serialVersionUID = 526836203236101658L;
@@ -55,8 +58,8 @@ public class Telecom extends Hl7v2Based<XTN> {
 
     /**
      * Creates a telecom object containing an E-mail address.
-     * @param email
-     *      E-mail address (XTN-4).
+     *
+     * @param email E-mail address (XTN-4).
      */
     public Telecom(String email) {
         this();
@@ -67,14 +70,11 @@ public class Telecom extends Hl7v2Based<XTN> {
 
     /**
      * Creates a telecom object containing a phone number.
-     * @param countryCode
-     *      country code of phone number (XTN-5), can be <code>null</code>.
-     * @param areaCityCode
-     *      area/city code of phone number (XTN-6), can be <code>null</code>.
-     * @param localNumber
-     *      local part of the phone number (XTN-7).
-     * @param extension
-     *      extension of the phone number (XTN-8), can be <code>null</code>.
+     *
+     * @param countryCode  country code of phone number (XTN-5), can be <code>null</code>.
+     * @param areaCityCode area/city code of phone number (XTN-6), can be <code>null</code>.
+     * @param localNumber  local part of the phone number (XTN-7).
+     * @param extension    extension of the phone number (XTN-8), can be <code>null</code>.
      */
     public Telecom(Integer countryCode, Integer areaCityCode, Integer localNumber, Integer extension) {
         this();
@@ -95,8 +95,7 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @param use
-     *      telecom use code (XTN-2) according to HL7 v.2.5 Table 0201.
+     * @param use telecom use code (XTN-2) according to HL7 v.2.5 Table 0201.
      */
     public void setUse(String use) {
         setValue(getHapiObject().getXtn2_TelecommunicationUseCode(), use);
@@ -111,8 +110,7 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @param type
-     *      telecom type (XTN-3) according to HL7 v.2.5 Table 0202.
+     * @param type telecom type (XTN-3) according to HL7 v.2.5 Table 0202.
      */
     public void setType(String type) {
         setValue(getHapiObject().getXtn3_TelecommunicationEquipmentType(), type);
@@ -129,8 +127,7 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @param addressType
-     *      telecommunication equipment type (XTN-3) according to HL7 v.2.5 Table 0202.
+     * @param addressType telecommunication equipment type (XTN-3) according to HL7 v.2.5 Table 0202.
      * @deprecated use {@link #setType(String)} instead.
      */
     @Deprecated
@@ -147,8 +144,7 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @param email
-     *      E-mail address (XTN-4).
+     * @param email E-mail address (XTN-4).
      */
     public void setEmail(String email) {
         setValue(getHapiObject().getXtn4_EmailAddress(), email);
@@ -165,8 +161,7 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @param address
-     *      E-mail address (XTN-4).
+     * @param address E-mail address (XTN-4).
      * @deprecated use {@link #setEmail(String)} instead.
      */
     @Deprecated
@@ -183,8 +178,7 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @param countryCode
-     *      country code of phone number (XTN-5).
+     * @param countryCode country code of phone number (XTN-5).
      */
     public void setCountryCode(Integer countryCode) {
         setValue(getHapiObject().getXtn5_CountryCode(), countryCode);
@@ -199,8 +193,7 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @param areaCityCode
-     *      area/city code of phone number (XTN-6).
+     * @param areaCityCode area/city code of phone number (XTN-6).
      */
     public void setAreaCityCode(Integer areaCityCode) {
         setValue(getHapiObject().getXtn6_AreaCityCode(), areaCityCode);
@@ -215,8 +208,7 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @param localNumber
-     *      local part of the phone number (XTN-7).
+     * @param localNumber local part of the phone number (XTN-7).
      */
     public void setLocalNumber(Integer localNumber) {
         setValue(getHapiObject().getXtn7_LocalNumber(), localNumber);
@@ -231,8 +223,7 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @param extension
-     *      extension of the phone number (XTN-8).
+     * @param extension extension of the phone number (XTN-8).
      */
     public void setExtension(Integer extension) {
         setValue(getHapiObject().getXtn8_Extension(), extension);
@@ -242,47 +233,32 @@ public class Telecom extends Hl7v2Based<XTN> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        Telecom telecom = (Telecom) o;
-
-        if (getAreaCityCode() != null ? !getAreaCityCode().equals(telecom.getAreaCityCode()) : telecom.getAreaCityCode() != null)
-            return false;
-        if (getCountryCode() != null ? !getCountryCode().equals(telecom.getCountryCode()) : telecom.getCountryCode() != null)
-            return false;
-        if (getEmail() != null ? !getEmail().equals(telecom.getEmail()) : telecom.getEmail() != null) return false;
-        if (getExtension() != null ? !getExtension().equals(telecom.getExtension()) : telecom.getExtension() != null)
-            return false;
-        if (getLocalNumber() != null ? !getLocalNumber().equals(telecom.getLocalNumber()) : telecom.getLocalNumber() != null)
-            return false;
-        if (getType() != null ? !getType().equals(telecom.getType()) : telecom.getType() != null) return false;
-        if (getUse() != null ? !getUse().equals(telecom.getUse()) : telecom.getUse() != null) return false;
-
-        return true;
+        Telecom that = (Telecom) o;
+        return Objects.equals(getUse(), that.getUse()) &&
+                Objects.equals(getType(), that.getType()) &&
+                Objects.equals(getEmail(), that.getEmail()) &&
+                Objects.equals(getCountryCode(), that.getCountryCode()) &&
+                Objects.equals(getAreaCityCode(), that.getAreaCityCode()) &&
+                Objects.equals(getLocalNumber(), that.getLocalNumber()) &&
+                Objects.equals(getExtension(), that.getExtension());
     }
 
     @Override
     public int hashCode() {
-        int result = getUse() != null ? getUse().hashCode() : 0;
-        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
-        result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
-        result = 31 * result + (getCountryCode() != null ? getCountryCode().hashCode() : 0);
-        result = 31 * result + (getAreaCityCode() != null ? getAreaCityCode().hashCode() : 0);
-        result = 31 * result + (getLocalNumber() != null ? getLocalNumber().hashCode() : 0);
-        result = 31 * result + (getExtension() != null ? getExtension().hashCode() : 0);
-        return result;
+        return Objects.hash(getUse(), getType(), getEmail(), getCountryCode(),
+                getAreaCityCode(), getLocalNumber(), getExtension());
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("use", getUse())
-                .append("type", getType())
-                .append("email", getEmail())
-                .append("countryCode", getCountryCode())
-                .append("areaCityCode", getAreaCityCode())
-                .append("localNumber", getLocalNumber())
-                .append("extension", getExtension())
-                .toString();
+        return "Telecom(" +
+                "use=" + getUse() +
+                ", type=" + getType() +
+                ", email=" + getEmail() +
+                ", countryCode=" + getCountryCode() +
+                ", areaCityCode=" + getAreaCityCode() +
+                ", localNumber=" + getLocalNumber() +
+                ", extension=" + getExtension() +
+                ')';
     }
-
 }

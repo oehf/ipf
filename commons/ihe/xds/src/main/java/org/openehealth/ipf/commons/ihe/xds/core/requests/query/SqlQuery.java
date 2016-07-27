@@ -15,13 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import javax.xml.bind.annotation.*;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.ToString;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * SQL based query for the Query Registry transaction.
@@ -33,6 +35,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @XmlType(name = "SQLQuery")
 @XmlRootElement(name = "sqlQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class SqlQuery extends Query {
     private static final long serialVersionUID = -4059622155305044092L;
 
@@ -45,10 +48,6 @@ public class SqlQuery extends Query {
         super(QueryType.SQL);
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 
     @Override
     public void accept(Visitor visitor) {

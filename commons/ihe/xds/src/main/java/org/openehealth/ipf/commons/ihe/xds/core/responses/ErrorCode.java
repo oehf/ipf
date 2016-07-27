@@ -168,7 +168,7 @@ public enum ErrorCode {
 
     private final String opcode;
     
-    private ErrorCode(String opcode) {
+    ErrorCode(String opcode) {
         this.opcode = opcode;
     }
 

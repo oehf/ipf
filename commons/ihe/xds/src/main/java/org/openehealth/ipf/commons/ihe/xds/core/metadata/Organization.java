@@ -16,13 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.XON;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 /**
  * Represents an organization.
@@ -130,48 +129,26 @@ public class Organization extends Hl7v2Based<XON> {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getIdNumber() == null) ? 0 : getIdNumber().hashCode());
-        result = prime * result + ((getAssigningAuthority() == null) ? 0 : getAssigningAuthority().hashCode());
-        result = prime * result + ((getOrganizationName() == null) ? 0 : getOrganizationName().hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Organization that = (Organization) o;
+        return Objects.equals(getAssigningAuthority(), that.getAssigningAuthority()) &&
+                Objects.equals(getOrganizationName(), that.getOrganizationName()) &&
+                Objects.equals(getIdNumber(), that.getIdNumber());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Organization other = (Organization) obj;
-        if (getIdNumber() == null) {
-            if (other.getIdNumber() != null)
-                return false;
-        } else if (!getIdNumber().equals(other.getIdNumber()))
-            return false;
-        if (getAssigningAuthority() == null) {
-            if (other.getAssigningAuthority() != null)
-                return false;
-        } else if (!getAssigningAuthority().equals(other.getAssigningAuthority()))
-            return false;
-        if (getOrganizationName() == null) {
-            if (other.getOrganizationName() != null)
-                return false;
-        } else if (!getOrganizationName().equals(other.getOrganizationName()))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(getAssigningAuthority(), getOrganizationName(), getIdNumber());
     }
-        
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("name", getOrganizationName())
-                .append("assigningAuthority", getAssigningAuthority())
-                .append("idNumber", getIdNumber())
-                .toString();
+        return "Organization(" +
+                "assigningAuthority=" + getAssigningAuthority() +
+                ", organizationName=" + getOrganizationName() +
+                ", idNumber=" + getIdNumber() +
+                ')';
     }
 }

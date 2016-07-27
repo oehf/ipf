@@ -16,8 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.CX;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.AssigningAuthorityAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,6 +23,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Objects;
 
 /**
  * Represents an ID.
@@ -107,42 +106,24 @@ public class Identifiable extends Hl7v2Based<CX> {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((getAssigningAuthority() == null) ? 0 : getAssigningAuthority().hashCode());
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Identifiable that = (Identifiable) o;
+        return Objects.equals(getAssigningAuthority(), that.getAssigningAuthority()) &&
+                Objects.equals(getId(), that.getId());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Identifiable other = (Identifiable) obj;
-        if (getAssigningAuthority() == null) {
-            if (other.getAssigningAuthority() != null)
-                return false;
-        } else if (!getAssigningAuthority().equals(other.getAssigningAuthority()))
-            return false;
-        if (getId() == null) {
-            if (other.getId() != null)
-                return false;
-        } else if (!getId().equals(other.getId()))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(getAssigningAuthority(), getId());
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", getId())
-                .append("assigningAuthority", getAssigningAuthority())
-                .toString();
+        return "Identifiable(" +
+                "id=" + getId() +
+                ", assigningAuthority=" + getAssigningAuthority() +
+                ')';
     }
 }

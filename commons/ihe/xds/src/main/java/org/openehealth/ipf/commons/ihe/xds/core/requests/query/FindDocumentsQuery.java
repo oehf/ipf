@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentAvailability;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
@@ -35,6 +36,7 @@ import java.util.List;
         "patientId", "status", "documentEntryTypes", "documentAvailability", "metadataLevel"})
 @XmlRootElement(name = "findDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class FindDocumentsQuery extends DocumentsQuery implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery {
     private static final long serialVersionUID = -5765363916663583605L;
 
