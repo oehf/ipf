@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 
 import org.apache.mina.core.filterchain.IoFilter;
-import org.apache.mina.core.future.CloseFuture;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.ssl.SslFilter;
 import org.slf4j.Logger;
@@ -26,9 +25,6 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
-import java.util.concurrent.TimeUnit;
-
-import static org.apache.camel.component.mina2.Mina2Constants.MINA_CLOSE_SESSION_WHEN_COMPLETE;
 
 /**
  * {@link IoFilter} similar to an {@link SslFilter} that provides a
