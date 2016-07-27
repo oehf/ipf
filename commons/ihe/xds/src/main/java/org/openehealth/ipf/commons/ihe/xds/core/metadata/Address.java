@@ -16,10 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.XAD;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 /**
  * Represents the address of a patient.
@@ -158,76 +160,37 @@ public class Address extends Hl7v2Based<XAD> {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getCity() == null) ? 0 : getCity().hashCode());
-        result = prime * result + ((getCountry() == null) ? 0 : getCountry().hashCode());
-        result = prime * result + ((getCountyParishCode() == null) ? 0 : getCountyParishCode().hashCode());
-        result = prime * result + ((getOtherDesignation() == null) ? 0 : getOtherDesignation().hashCode());
-        result = prime * result + ((getStateOrProvince() == null) ? 0 : getStateOrProvince().hashCode());
-        result = prime * result + ((getStreetAddress() == null) ? 0 : getStreetAddress().hashCode());
-        result = prime * result + ((getZipOrPostalCode() == null) ? 0 : getZipOrPostalCode().hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address that = (Address) o;
+        return Objects.equals(getCity(), that.getCity()) &&
+                Objects.equals(getCountry(), that.getCountry()) &&
+                Objects.equals(getCountyParishCode(), that.getCountyParishCode()) &&
+                Objects.equals(getOtherDesignation(), that.getOtherDesignation()) &&
+                Objects.equals(getStateOrProvince(), that.getStateOrProvince()) &&
+                Objects.equals(getStreetAddress(), that.getStreetAddress()) &&
+                Objects.equals(getZipOrPostalCode(), that.getZipOrPostalCode());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Address other = (Address) obj;
-        if (getCity() == null) {
-            if (other.getCity() != null)
-                return false;
-        } else if (!getCity().equals(other.getCity()))
-            return false;
-        if (getCountry() == null) {
-            if (other.getCountry() != null)
-                return false;
-        } else if (!getCountry().equals(other.getCountry()))
-            return false;
-        if (getCountyParishCode() == null) {
-            if (other.getCountyParishCode() != null)
-                return false;
-        } else if (!getCountyParishCode().equals(other.getCountyParishCode()))
-            return false;
-        if (getOtherDesignation() == null) {
-            if (other.getOtherDesignation() != null)
-                return false;
-        } else if (!getOtherDesignation().equals(other.getOtherDesignation()))
-            return false;
-        if (getStateOrProvince() == null) {
-            if (other.getStateOrProvince() != null)
-                return false;
-        } else if (!getStateOrProvince().equals(other.getStateOrProvince()))
-            return false;
-        if (getStreetAddress() == null) {
-            if (other.getStreetAddress() != null)
-                return false;
-        } else if (!getStreetAddress().equals(other.getStreetAddress()))
-            return false;
-        if (getZipOrPostalCode() == null) {
-            if (other.getZipOrPostalCode() != null)
-                return false;
-        } else if (!getZipOrPostalCode().equals(other.getZipOrPostalCode()))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(
+                getCity(), getCountry(), getCountyParishCode(), getOtherDesignation(),
+                getStateOrProvince(), getStreetAddress(), getZipOrPostalCode());
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("street", getStreetAddress())
-                .append("city", getCity())
-                .append("stateOrProvince", getStateOrProvince())
-                .append("zip", getZipOrPostalCode())
-                .append("country", getCountry())
-                .append("countyParishCode", getCountyParishCode())
-                .append("otherDesignation", getOtherDesignation())
-                .toString();
+        final StringBuilder sb = new StringBuilder("Address{");
+        sb.append("streetAddress='").append(getStreetAddress()).append('\'');
+        sb.append(", otherDesignation='").append(getOtherDesignation()).append('\'');
+        sb.append(", city='").append(getCity()).append('\'');
+        sb.append(", stateOrProvince='").append(getStateOrProvince()).append('\'');
+        sb.append(", zipOrPostalCode='").append(getZipOrPostalCode()).append('\'');
+        sb.append(", country='").append(getCountry()).append('\'');
+        sb.append(", countyParishCode='").append(getCountyParishCode()).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -24,6 +24,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.LocalizedStringAdapter;
 
+import java.util.Objects;
+
 /**
  * Represents a code.
  * <p> 
@@ -136,48 +138,27 @@ public class Code extends Hl7v2Based<CE> {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getCode() == null) ? 0 : getCode().hashCode());
-        result = prime * result + ((getDisplayName() == null) ? 0 : getDisplayName().hashCode());
-        result = prime * result + ((getSchemeName() == null) ? 0 : getSchemeName().hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Code that = (Code) o;
+        return Objects.equals(getCode(), that.getCode()) &&
+                Objects.equals(getDisplayName(), that.getDisplayName()) &&
+                Objects.equals(getSchemeName(), that.getSchemeName());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Code other = (Code) obj;
-        if (getCode() == null) {
-            if (other.getCode() != null)
-                return false;
-        } else if (!getCode().equals(other.getCode()))
-            return false;
-        if (getDisplayName() == null) {
-            if (other.getDisplayName() != null)
-                return false;
-        } else if (!getDisplayName().equals(other.getDisplayName()))
-            return false;
-        if (getSchemeName() == null) {
-            if (other.getSchemeName() != null)
-                return false;
-        } else if (!getSchemeName().equals(other.getSchemeName()))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(getCode(), getDisplayName(), getSchemeName());
     }
-    
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("code", getCode())
-                .append("displayName", getDisplayName())
-                .append("schemeName", getSchemeName())
-                .toString();
+        final StringBuilder sb = new StringBuilder("Code{");
+        sb.append("code='").append(getCode()).append('\'');
+        sb.append(", displayName=").append(getDisplayName());
+        sb.append(", schemeName='").append(getSchemeName()).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

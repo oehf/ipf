@@ -22,6 +22,7 @@ import java.util.List;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Represents an XDS folder according to the IHE XDS specification.
@@ -35,6 +36,7 @@ import lombok.Getter;
 @XmlType(name = "Folder", propOrder = {"lastUpdateTime", "codeList"})
 @XmlRootElement(name = "folder")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class Folder extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = -1923451867453561796L;
     

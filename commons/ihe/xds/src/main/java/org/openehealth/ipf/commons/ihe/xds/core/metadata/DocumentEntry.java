@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
@@ -40,6 +41,7 @@ import java.util.List;
         "mimeType", "size", "hash", "uri", "type", "referenceIdList", "documentAvailability"})
 @XmlRootElement(name = "documentEntry")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class DocumentEntry extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = -4779500440504776909L;
     

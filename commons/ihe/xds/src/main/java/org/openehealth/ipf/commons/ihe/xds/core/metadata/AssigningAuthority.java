@@ -16,11 +16,14 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.HD;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based.Holder;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 /**
  * Represents an authority that assigns IDs.
@@ -113,42 +116,27 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
         setValue(getHapiObject().getInternal().getHd3_UniversalIDType(), universalIdType);
     }
 
+
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getUniversalId() == null) ? 0 : getUniversalId().hashCode());
-        result = prime * result + ((getUniversalIdType() == null) ? 0 : getUniversalIdType().hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AssigningAuthority that = (AssigningAuthority) o;
+        return Objects.equals(getUniversalId(), that.getUniversalId()) &&
+                Objects.equals(getUniversalIdType(), that.getUniversalIdType());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        AssigningAuthority other = (AssigningAuthority) obj;
-        if (getUniversalId() == null) {
-            if (other.getUniversalId() != null)
-                return false;
-        } else if (!getUniversalId().equals(other.getUniversalId()))
-            return false;
-        if (getUniversalIdType() == null) {
-            if (other.getUniversalIdType() != null)
-                return false;
-        } else if (!getUniversalIdType().equals(other.getUniversalIdType()))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(getUniversalId(), getUniversalIdType());
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("universalId", getUniversalId())
-                .append("universalIdType", getUniversalIdType())
-                .toString();
+        final StringBuilder sb = new StringBuilder("AssigningAuthority{");
+        sb.append("universalId='").append(getUniversalId()).append('\'');
+        sb.append(", universalIdType='").append(getUniversalIdType()).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

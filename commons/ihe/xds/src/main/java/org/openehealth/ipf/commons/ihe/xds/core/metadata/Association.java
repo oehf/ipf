@@ -15,19 +15,24 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadata;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadataAdapter;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents an XDS association.
@@ -41,6 +46,8 @@ import java.util.Map;
         "previousVersion", "originalStatus", "newStatus", "associationPropagation", "availabilityStatus",
         "extraMetadata"})
 @XmlRootElement(name = "association")
+@EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class Association implements Serializable, ExtraMetadataHolder {
 
     private static final long serialVersionUID = -4556980177483609469L;
@@ -255,104 +262,4 @@ public class Association implements Serializable, ExtraMetadataHolder {
         this.availabilityStatus = availabilityStatus;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((associationType == null) ? 0 : associationType.hashCode());
-        result = prime * result + ((docCode == null) ? 0 : docCode.hashCode());
-        result = prime * result + ((entryUuid == null) ? 0 : entryUuid.hashCode());
-        result = prime * result + ((label == null) ? 0 : label.hashCode());
-        result = prime * result + ((sourceUuid == null) ? 0 : sourceUuid.hashCode());
-        result = prime * result + ((targetUuid == null) ? 0 : targetUuid.hashCode());
-        result = prime * result + ((previousVersion == null) ? 0 : previousVersion.hashCode());
-        result = prime * result + ((originalStatus == null) ? 0 : originalStatus.hashCode());
-        result = prime * result + ((newStatus == null) ? 0 : newStatus.hashCode());
-        result = prime * result + ((associationPropagation == null) ? 0 : associationPropagation.hashCode());
-        result = prime * result + ((availabilityStatus == null) ? 0 : availabilityStatus.hashCode());
-        result = prime * result + ((extraMetadata == null) ? 0 : extraMetadata.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Association other = (Association) obj;
-        if (associationType == null) {
-            if (other.associationType != null)
-                return false;
-        } else if (!associationType.equals(other.associationType))
-            return false;
-        if (docCode == null) {
-            if (other.docCode != null)
-                return false;
-        } else if (!docCode.equals(other.docCode))
-            return false;
-        if (entryUuid == null) {
-            if (other.entryUuid != null)
-                return false;
-        } else if (!entryUuid.equals(other.entryUuid))
-            return false;
-        if (label == null) {
-            if (other.label != null)
-                return false;
-        } else if (!label.equals(other.label))
-            return false;
-        if (sourceUuid == null) {
-            if (other.sourceUuid != null)
-                return false;
-        } else if (!sourceUuid.equals(other.sourceUuid))
-            return false;
-        if (targetUuid == null) {
-            if (other.targetUuid != null)
-                return false;
-        } else if (!targetUuid.equals(other.targetUuid))
-            return false;
-        if (targetUuid == null) {
-            if (other.targetUuid != null)
-                return false;
-        } else if (!targetUuid.equals(other.targetUuid))
-            return false;
-        if (previousVersion == null) {
-            if (other.previousVersion != null)
-                return false;
-        } else if (!previousVersion.equals(other.previousVersion))
-            return false;
-        if (originalStatus == null) {
-            if (other.originalStatus != null)
-                return false;
-        } else if (!originalStatus.equals(other.originalStatus))
-            return false;
-        if (newStatus == null) {
-            if (other.newStatus != null)
-                return false;
-        } else if (!newStatus.equals(other.newStatus))
-            return false;
-        if (associationPropagation == null) {
-            if (other.associationPropagation != null)
-                return false;
-        } else if (!associationPropagation.equals(other.associationPropagation))
-            return false;
-        if (availabilityStatus == null) {
-            if (other.availabilityStatus != null)
-                return false;
-        } else if (!availabilityStatus.equals(other.availabilityStatus))
-            return false;
-        if (extraMetadata == null) {
-            if (other.extraMetadata != null)
-                return false;
-        } else if (!extraMetadata.equals(other.extraMetadata))
-            return false;
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

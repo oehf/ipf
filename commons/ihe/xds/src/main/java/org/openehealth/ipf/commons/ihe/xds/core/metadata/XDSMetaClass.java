@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
@@ -45,6 +46,7 @@ import java.util.Map;
         "patientId", "availabilityStatus", "title", "comments", "limitedMetadata",
         "extraMetadata"})
 @EqualsAndHashCode(doNotUseGetters = true)
+@ToString
 abstract public class XDSMetaClass implements Serializable, ExtraMetadataHolder {
     private static final long serialVersionUID = -1193012076778493996L;
     
@@ -63,8 +65,4 @@ abstract public class XDSMetaClass implements Serializable, ExtraMetadataHolder 
     @XmlElement(type = ExtraMetadata.class)
     @Getter @Setter private Map<String, List<String>> extraMetadata;
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }
