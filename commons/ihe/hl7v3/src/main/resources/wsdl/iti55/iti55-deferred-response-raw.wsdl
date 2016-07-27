@@ -51,6 +51,7 @@
     <binding name="InitiatingGatewayDeferredResponse_Binding" type="xcpd:InitiatingGatewayDeferredResponse_PortType">
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
         <operation name="InitiatingGateway_Deferred_PRPA_IN201306UV02">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal" />
             </input>

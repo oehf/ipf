@@ -42,7 +42,7 @@ import java.util.Objects;
  * @author Dmytro Rud
  */
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
-@XmlType(name = "AssigningAuthority")
+@XmlType(name = "AssigningAuthority", propOrder = {"universalId", "universalIdType"})
 public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
     private static final long serialVersionUID = 5350057820250191032L;
 

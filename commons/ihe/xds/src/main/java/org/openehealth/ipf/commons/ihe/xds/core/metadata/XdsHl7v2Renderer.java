@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Composite;
 import ca.uhn.hl7v2.model.Primitive;
 import ca.uhn.hl7v2.model.Type;
@@ -56,9 +57,9 @@ abstract public class XdsHl7v2Renderer {
      */
     private static final Map<String, Collection<Integer>> INCLUSIONS = new HashMap<>();
 
-    private static <C extends Composite, T extends Hl7v2Based<C>> void addInclusion(
-            Class<C> hl7Class,
-            Class<T> xdsClass,
+    private static void addInclusion(
+            Class<? extends Composite> hl7Class,
+            Class<? extends Hl7v2Based> xdsClass,
             int... fieldNumbers)
     {
         Collection<Integer> collection = new HashSet<>(fieldNumbers.length);
@@ -73,12 +74,15 @@ abstract public class XdsHl7v2Renderer {
     }
 
     static {
-        addInclusion(CE.class,  null,               1, 3);
-        addInclusion(CX.class,  Identifiable.class, 1, 4);
-        addInclusion(CX.class,  ReferenceId.class,  1, 4, 5, 6);
-        addInclusion(HD.class,  null,               2, 3);
-        addInclusion(XON.class, null,               1, 6, 10);
-        addInclusion(XTN.class, null,               2, 3, 4, 5, 6, 7, 8);
+        addInclusion(CE.class,  null,                        1, 3);
+        addInclusion(CX.class,  Identifiable.class,          1, 4);
+        addInclusion(CX.class,  ReferenceId.class,           1, 4, 5);
+        addInclusion(HD.class,  AssigningAuthority.class,    2, 3);
+        addInclusion(HD.class,  CXiAssigningAuthority.class, 1, 2, 3);
+        addInclusion(HD.class,  Identifiable.class,          2, 3);
+        addInclusion(HD.class,  ReferenceId.class,           1, 2, 3);
+        addInclusion(XON.class, null,                        1, 6, 10);
+        addInclusion(XTN.class, null,                        2, 3, 4, 5, 6, 7, 8);
     }
 
 
@@ -86,6 +90,42 @@ abstract public class XdsHl7v2Renderer {
         throw new IllegalStateException("cannot instantiate helper class");
     }
 
+    public static boolean isEmpty(Hl7v2Based hl7v2based) {
+        try {
+            return isEmpty(hl7v2based.getHapiObject(), "\n" + hl7v2based.getClass().getSimpleName());
+        } catch (HL7Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static boolean isEmpty(Composite composite, String keyModifier) throws HL7Exception {
+        Type[] fields = composite.getComponents();
+
+        String key = composite.getClass().getSimpleName();
+        Collection<Integer> inclusions = INCLUSIONS.get(key);
+        if (inclusions == null) {
+            inclusions = INCLUSIONS.get(key + keyModifier);
+        }
+
+        for (int i = 0; i < fields.length; ++i) {
+            if ((inclusions == null) || inclusions.contains(i)) {
+                if (fields[i] instanceof Composite) {
+                    if (!isEmpty((Composite) fields[i], keyModifier)) {
+                        return false;
+                    }
+                } else if (fields[i] instanceof Primitive) {
+                    if (!fields[i].isEmpty()) {
+                        return false;
+                    }
+                } else {
+                    // actually, this line should be unreachable
+                    throw new IllegalStateException("Don't know how to handle " + fields[i]);
+                }
+            }
+        }
+
+        return true;
+    }
 
     /**
      * Encodes the given HL7-based XDS model object using specific

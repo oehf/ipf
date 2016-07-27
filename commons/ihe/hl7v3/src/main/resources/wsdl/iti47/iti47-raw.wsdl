@@ -77,6 +77,7 @@
     <binding name="PDSupplier_Binding_Soap12" type="ihe:PDSupplier_PortType">
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="PDSupplier_PRPA_IN201305UV02">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -85,6 +86,7 @@
             </output>
         </operation>
         <operation name="PDSupplier_QUQI_IN000003UV01_Continue">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -93,6 +95,7 @@
             </output>
         </operation>
         <operation name="PDSupplier_QUQI_IN000003UV01_Cancel">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>

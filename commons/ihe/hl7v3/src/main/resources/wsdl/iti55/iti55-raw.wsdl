@@ -62,6 +62,7 @@
     <binding name="RespondingGateway_Binding_Soap12" type="xcpd:RespondingGateway_PortType">
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
         <operation name="RespondingGateway_PRPA_IN201305UV02">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal" />
             </input>
@@ -71,6 +72,7 @@
         </operation>
 
         <operation name="RespondingGateway_Deferred_PRPA_IN201305UV02">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal" />
             </input>

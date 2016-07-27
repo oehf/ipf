@@ -45,6 +45,7 @@
     <binding name="InitiatingGateway_Binding" type="xcpd:InitiatingGateway_PortType">
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
         <operation name="InitiatingGateway_Async_PRPA_IN201306UV02">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal" />
             </input>

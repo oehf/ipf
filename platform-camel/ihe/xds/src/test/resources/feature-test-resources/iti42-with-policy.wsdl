@@ -63,6 +63,7 @@
         <wsp:PolicyReference URI="policy.xml#DocumentRegistryPolicy" />
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="DocumentRegistry_RegisterDocumentSet-b">
+            <soap12:operation soapActionRequired="false"/>
             <input>
                 <soap12:body use="literal"/>
             </input>

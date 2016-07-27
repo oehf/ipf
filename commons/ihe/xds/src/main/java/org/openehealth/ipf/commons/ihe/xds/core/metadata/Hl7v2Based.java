@@ -147,7 +147,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
      *      <code>true</code> iff this XDS model object does not contain any usable data.
      */
     public boolean isEmpty() {
-        return render().isEmpty();
+        return XdsHl7v2Renderer.isEmpty(this);
     }
 
 

@@ -78,6 +78,7 @@
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
         <operation name="PIXManager_PRPA_IN201301UV02">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -87,6 +88,7 @@
         </operation>
 
         <operation name="PIXManager_PRPA_IN201302UV02">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -96,6 +98,7 @@
         </operation>
 
         <operation name="PIXManager_PRPA_IN201304UV02">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>

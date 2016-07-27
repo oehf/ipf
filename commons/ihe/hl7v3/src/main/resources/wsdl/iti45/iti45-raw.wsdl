@@ -52,6 +52,7 @@
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
         <operation name="PIXManager_PRPA_IN201309UV02">
+            <wsoap12:operation soapActionRequired="false"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
