@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ReferenceId;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
@@ -31,6 +32,7 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "FindDocumentsByReferenceIdQuery", propOrder = {"referenceIds"})
 @XmlRootElement(name = "findDocumentsByReferenceIdQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class FindDocumentsByReferenceIdQuery extends FindDocumentsQuery {
     private static final long serialVersionUID = 8898792914033157098L;
 

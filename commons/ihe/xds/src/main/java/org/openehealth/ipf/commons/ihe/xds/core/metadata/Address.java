@@ -182,15 +182,15 @@ public class Address extends Hl7v2Based<XAD> {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Address{");
-        sb.append("streetAddress='").append(getStreetAddress()).append('\'');
-        sb.append(", otherDesignation='").append(getOtherDesignation()).append('\'');
-        sb.append(", city='").append(getCity()).append('\'');
-        sb.append(", stateOrProvince='").append(getStateOrProvince()).append('\'');
-        sb.append(", zipOrPostalCode='").append(getZipOrPostalCode()).append('\'');
-        sb.append(", country='").append(getCountry()).append('\'');
-        sb.append(", countyParishCode='").append(getCountyParishCode()).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "Address(" +
+                "super=" + super.toString() +
+                "streetAddress=" + getStreetAddress() +
+                ", otherDesignation=" + getOtherDesignation() +
+                ", city=" + getCity() +
+                ", stateOrProvince=" + getStateOrProvince() +
+                ", zipOrPostalCode=" + getZipOrPostalCode() +
+                ", country=" + getCountry() +
+                ", countyParishCode=" + getCountyParishCode() +
+                ')';
     }
 }

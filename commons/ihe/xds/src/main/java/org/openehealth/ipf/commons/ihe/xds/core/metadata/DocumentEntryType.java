@@ -39,7 +39,7 @@ public enum DocumentEntryType {
 
     private final String uuid;
 
-    private DocumentEntryType(String uuid) {
+    DocumentEntryType(String uuid) {
         this.uuid = uuid;
     }
 

@@ -17,11 +17,14 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +38,12 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RemoveDocumentSet", propOrder = {"references"})
 @XmlRootElement(name = "removeDocumentSet")
-@EqualsAndHashCode(callSuper = false, doNotUseGetters = false)
+@EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class RemoveDocumentSet implements Serializable {
     private static final long serialVersionUID = -737326382128159189L;
 
     @XmlElement(name = "reference")
     @Getter private final List<ObjectReference> references = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

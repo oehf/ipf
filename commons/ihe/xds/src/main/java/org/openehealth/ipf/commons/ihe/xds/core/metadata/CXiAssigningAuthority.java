@@ -16,13 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.HD;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+import java.util.Objects;
 
 /**
  * Assigning Authority for the CXi data type, allowing both the Namespace ID and the
@@ -89,22 +88,19 @@ public class CXiAssigningAuthority extends AssigningAuthority {
 
         CXiAssigningAuthority that = (CXiAssigningAuthority) o;
 
-        return getNamespaceId() != null ? getNamespaceId().equals(that.getNamespaceId()) : that.getNamespaceId() == null;
+        return Objects.equals(getNamespaceId(), that.getNamespaceId());
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getNamespaceId() != null ? getNamespaceId().hashCode() : 0);
-        return result;
+        return Objects.hash(super.hashCode(), getNamespaceId());
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("namespaceId", getUniversalId())
-                .append("universalId", getUniversalId())
-                .append("universalIdType", getUniversalIdType())
-                .toString();
+        return "CXiAssigningAuthority(" +
+                "super=" + super.toString() +
+                "namespaceId=" + getNamespaceId() +
+                ')';
     }
 }

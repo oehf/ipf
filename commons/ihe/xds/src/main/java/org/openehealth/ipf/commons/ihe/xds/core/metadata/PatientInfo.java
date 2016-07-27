@@ -15,16 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import javax.xml.bind.annotation.*;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents additional info about a patient.

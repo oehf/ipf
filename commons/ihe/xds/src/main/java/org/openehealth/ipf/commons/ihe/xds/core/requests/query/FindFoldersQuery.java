@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
@@ -34,6 +35,7 @@ import java.util.List;
 @XmlType(name = "FindFoldersQuery", propOrder = {"status", "lastUpdateTime", "codes", "patientId", "metadataLevel"})
 @XmlRootElement(name = "findFoldersQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class FindFoldersQuery extends StoredQuery implements PatientIdBasedStoredQuery {
     private static final long serialVersionUID = 4156643982985304259L;
 

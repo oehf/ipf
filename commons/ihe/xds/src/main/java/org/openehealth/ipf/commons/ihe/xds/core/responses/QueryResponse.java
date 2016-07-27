@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.responses;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import javax.xml.bind.annotation.*;
@@ -35,6 +36,7 @@ import java.util.List;
         "references", "submissionSets", "folders", "documentEntries", "associations", "documents"})
 @XmlRootElement(name = "queryResponse")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public class QueryResponse extends Response implements Serializable {
     private static final long serialVersionUID = -435462523350768903L;
     

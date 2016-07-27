@@ -126,4 +126,11 @@ public class XcnName extends Name<XCN> {
     public void setDegree(String value) {
         setValue(getHapiObject().getXcn7_DegreeEgMD(), value);
     }
+
+    @Override
+    public String toString() {
+        return "XcnName(" +
+                "super=" + super.toString() +
+                ')';
+    }
 }

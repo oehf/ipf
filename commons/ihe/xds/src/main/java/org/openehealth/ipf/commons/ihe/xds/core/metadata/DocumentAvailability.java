@@ -37,7 +37,7 @@ public enum DocumentAvailability {
     private final String opcode;
     private final String fullQualified;
 
-    private DocumentAvailability(String opcode, String fullQualified) {
+    DocumentAvailability(String opcode, String fullQualified) {
         this.opcode = opcode;
         this.fullQualified = fullQualified;
     }

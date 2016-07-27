@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
@@ -37,6 +38,7 @@ import java.util.List;
         "healthcareFacilityTypeCodes", "practiceSettingCodes", "typeCodes"})
 @XmlRootElement(name = "abstractDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true, doNotUseGetters = true)
 public abstract class DocumentsQuery extends StoredQuery  {
     private static final long serialVersionUID = 1162423827844317922L;
 

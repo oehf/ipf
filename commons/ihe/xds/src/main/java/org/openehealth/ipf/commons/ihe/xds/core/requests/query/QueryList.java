@@ -15,20 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import static org.apache.commons.lang3.Validate.noNullElements;
-import static org.apache.commons.lang3.Validate.notNull;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.ToString;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static org.apache.commons.lang3.Validate.noNullElements;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Represents a list of query parameters.
@@ -46,6 +47,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QueryList")
 @EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class QueryList<T> implements Serializable {
     private static final long serialVersionUID = -2729640243221349924L;
     
@@ -83,8 +85,4 @@ public class QueryList<T> implements Serializable {
         outerList.add(Collections.singletonList(singleElement));
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

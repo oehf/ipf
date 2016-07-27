@@ -126,4 +126,11 @@ public class XpnName extends Name<XPN> {
     public void setDegree(String value) {
         setValue(getHapiObject().getXpn6_DegreeEgMD(), value);
     }
+
+    @Override
+    public String toString() {
+        return "XpnName(" +
+                "super=" + super.toString() +
+                ')';
+    }
 }

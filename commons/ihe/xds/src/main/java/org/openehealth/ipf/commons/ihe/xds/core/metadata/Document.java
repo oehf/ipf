@@ -39,8 +39,8 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Document")
 @XmlRootElement(name = "document")
-@EqualsAndHashCode(doNotUseGetters = true)
-@ToString
+@EqualsAndHashCode(callSuper = false, doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class Document extends ContentMap implements Serializable {
     private static final long serialVersionUID = 5206884085835642756L;
 

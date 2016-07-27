@@ -36,7 +36,7 @@ public enum AssociationLabel {
     
     private final String opcode;
 
-    private AssociationLabel(String opcode) {
+    AssociationLabel(String opcode) {
         this.opcode = opcode;
     }
 

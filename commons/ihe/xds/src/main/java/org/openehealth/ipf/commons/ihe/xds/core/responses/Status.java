@@ -38,7 +38,7 @@ public enum Status {
     private final String opcode21;
     private final String opcode30;
     
-    private Status(String opcode21, String opcode30) {
+    Status(String opcode21, String opcode30) {
         this.opcode21 = opcode21;
         this.opcode30 = opcode30;
     }

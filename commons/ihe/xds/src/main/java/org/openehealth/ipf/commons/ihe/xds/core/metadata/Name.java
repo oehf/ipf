@@ -16,8 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.Composite;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.NameAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,6 +23,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Objects;
 
 /**
  * This class represents a name.
@@ -42,7 +41,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlJavaTypeAdapter(value = NameAdapter.class)
 @XmlType(name = "Name", propOrder = {"prefix", "givenName", "secondAndFurtherGivenNames",
         "familyName", "suffix", "degree"})
-abstract public class Name<T extends Composite> extends Hl7v2Based<T> {
+public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
     private static final long serialVersionUID = -3455779057944896901L;
 
     protected Name() {
@@ -71,71 +70,34 @@ abstract public class Name<T extends Composite> extends Hl7v2Based<T> {
     abstract public void setDegree(String value);                      // XCN.7, XPN.6
 
 
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getFamilyName() == null) ? 0 : getFamilyName().hashCode());
-        result = prime * result + ((getGivenName() == null) ? 0 : getGivenName().hashCode());
-        result = prime * result + ((getPrefix() == null) ? 0 : getPrefix().hashCode());
-        result = prime
-                * result
-                + ((getSecondAndFurtherGivenNames() == null) ? 0 : getSecondAndFurtherGivenNames().hashCode());
-        result = prime * result + ((getSuffix() == null) ? 0 : getSuffix().hashCode());
-        result = prime * result + ((getDegree() == null) ? 0 : getDegree().hashCode());
-        return result;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Name<?> that = (Name<?>) o;
+        return Objects.equals(getFamilyName(), that.getFamilyName()) &&
+                Objects.equals(getGivenName(), that.getGivenName()) &&
+                Objects.equals(getSecondAndFurtherGivenNames(), that.getSecondAndFurtherGivenNames()) &&
+                Objects.equals(getSuffix(), that.getSuffix()) &&
+                Objects.equals(getPrefix(), that.getPrefix()) &&
+                Objects.equals(getDegree(), that.getDegree());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (! (obj instanceof Name))
-           return false;
-        Name other = (Name) obj;
-        if (getFamilyName() == null) {
-            if (other.getFamilyName() != null)
-                return false;
-        } else if (!getFamilyName().equals(other.getFamilyName()))
-            return false;
-        if (getGivenName() == null) {
-            if (other.getGivenName() != null)
-                return false;
-        } else if (!getGivenName().equals(other.getGivenName()))
-            return false;
-        if (getPrefix() == null) {
-            if (other.getPrefix() != null)
-                return false;
-        } else if (!getPrefix().equals(other.getPrefix()))
-            return false;
-        if (getSecondAndFurtherGivenNames() == null) {
-            if (other.getSecondAndFurtherGivenNames() != null)
-                return false;
-        } else if (!getSecondAndFurtherGivenNames().equals(other.getSecondAndFurtherGivenNames()))
-            return false;
-        if (getSuffix() == null) {
-            if (other.getSuffix() != null)
-                return false;
-        } else if (!getSuffix().equals(other.getSuffix()))
-            return false;
-        if (getDegree() == null) {
-            if (other.getDegree() != null)
-                return false;
-        } else if (!getDegree().equals(other.getDegree()))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(getFamilyName(), getGivenName(), getSecondAndFurtherGivenNames(),
+                getSuffix(), getPrefix(), getDegree());
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("family", getFamilyName())
-                .append("given", getGivenName())
-                .append("secondAndFurtherGiven", getSecondAndFurtherGivenNames())
-                .append("suffix", getSuffix())
-                .append("prefix", getPrefix())
-                .append("degree", getDegree())
-                .toString();
+        return "Name(" +
+                "familyName=" + getFamilyName() +
+                ", givenName=" + getGivenName() +
+                ", secondAndFurtherGivenNames=" + getSecondAndFurtherGivenNames() +
+                ", suffix=" + getSuffix() +
+                ", prefix=" + getPrefix() +
+                ", degree=" + getDegree() +
+                ')';
     }
 }

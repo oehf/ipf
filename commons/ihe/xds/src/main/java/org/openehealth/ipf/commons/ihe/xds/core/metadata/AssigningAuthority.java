@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.HD;
-import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based.Holder;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -133,10 +132,9 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("AssigningAuthority{");
-        sb.append("universalId='").append(getUniversalId()).append('\'');
-        sb.append(", universalIdType='").append(getUniversalIdType()).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "AssigningAuthority(" +
+                "universalId=" + getUniversalId() +
+                ", universalIdType=" + getUniversalIdType() +
+                ')';
     }
 }

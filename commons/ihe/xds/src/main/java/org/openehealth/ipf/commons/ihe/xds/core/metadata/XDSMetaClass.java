@@ -46,7 +46,7 @@ import java.util.Map;
         "patientId", "availabilityStatus", "title", "comments", "limitedMetadata",
         "extraMetadata"})
 @EqualsAndHashCode(doNotUseGetters = true)
-@ToString
+@ToString(doNotUseGetters = true)
 abstract public class XDSMetaClass implements Serializable, ExtraMetadataHolder {
     private static final long serialVersionUID = -1193012076778493996L;
     

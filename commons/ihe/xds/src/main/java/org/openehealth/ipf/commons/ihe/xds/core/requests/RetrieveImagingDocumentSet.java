@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -33,6 +35,8 @@ import java.util.List;
 @XmlRootElement(name = "retrieveImagingDocumentSet")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RetrieveImagingDocumentSet", propOrder = {"retrieveStudies", "transferSyntaxIds"})
+@EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class RetrieveImagingDocumentSet implements Serializable {
     private static final long serialVersionUID = -8999352499981099419L;
 
@@ -57,40 +61,4 @@ public class RetrieveImagingDocumentSet implements Serializable {
         return transferSyntaxIds;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((retrieveStudies == null) ? 0 : retrieveStudies.hashCode());
-        result = prime * result + ((transferSyntaxIds == null) ? 0 : transferSyntaxIds.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        RetrieveImagingDocumentSet other = (RetrieveImagingDocumentSet) obj;
-
-        if (retrieveStudies == null) {
-            if (other.retrieveStudies != null)
-                return false;
-        } else if (!retrieveStudies.equals(other.retrieveStudies))
-            return false;
-        if (transferSyntaxIds == null) {
-            if (other.transferSyntaxIds != null)
-                return false;
-        } else if (!transferSyntaxIds.equals(other.transferSyntaxIds))
-            return false;
-        return true;
-    }
-        
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

@@ -15,13 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.*;
 
 /**
  * Request object for a single Study.
@@ -32,6 +36,8 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RetrieveStudy", propOrder = {"studyInstanceUID", "retrieveSerieses"})
 @XmlRootElement(name = "retrieveStudy")
+@EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class RetrieveStudy implements Serializable
 {
     private static final long serialVersionUID = 8999352499981099420L;
@@ -99,42 +105,4 @@ public class RetrieveStudy implements Serializable
         return this.retrieveSerieses;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((studyInstanceUID == null) ? 0 : studyInstanceUID.hashCode());
-        result = prime * result + ((retrieveSerieses == null) ? 0 : retrieveSerieses.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        RetrieveStudy other = (RetrieveStudy) obj;
-
-        if (studyInstanceUID == null) {
-            if (other.studyInstanceUID != null)
-                return false;
-        } else if (!studyInstanceUID.equals(other.studyInstanceUID))
-            return false;
-
-        if (retrieveSerieses == null) {
-            if (other.retrieveSerieses != null)
-                return false;
-        } else if (!retrieveSerieses.equals(other.retrieveSerieses))
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

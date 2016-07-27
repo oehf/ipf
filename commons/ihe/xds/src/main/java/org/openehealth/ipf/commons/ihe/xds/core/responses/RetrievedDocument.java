@@ -15,17 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
-import javax.xml.bind.annotation.*;
-import java.io.Serializable;
-
-import javax.activation.DataHandler;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+
+import javax.activation.DataHandler;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 /**
  * A single document retrieved from the repository.
@@ -38,6 +40,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
         "newDocumentUniqueId"})
 @XmlRootElement(name = "retrievedDocument")
 @EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class RetrievedDocument implements Serializable {
     private static final long serialVersionUID = -3950026651885804263L;
     
@@ -84,9 +87,4 @@ public class RetrievedDocument implements Serializable {
         this.mimeType = mimeType;
     }
 
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

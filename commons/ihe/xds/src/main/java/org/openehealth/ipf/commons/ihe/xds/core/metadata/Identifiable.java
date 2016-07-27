@@ -16,8 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.CX;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.AssigningAuthorityAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -123,10 +121,9 @@ public class Identifiable extends Hl7v2Based<CX> {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Identifiable{");
-        sb.append("id='").append(getId()).append('\'');
-        sb.append(", assigningAuthority=").append(getAssigningAuthority());
-        sb.append('}');
-        return sb.toString();
+        return "Identifiable(" +
+                "id=" + getId() +
+                ", assigningAuthority=" + getAssigningAuthority() +
+                ')';
     }
 }

@@ -15,11 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
-import javax.xml.bind.annotation.*;
-import java.io.Serializable;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 /**
  * Contains a request for a single document.
@@ -31,6 +34,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RetrieveDocument", propOrder = {"homeCommunityId", "repositoryUniqueId", "documentUniqueId" })
 @XmlRootElement(name = "retrieveDocument")
+@EqualsAndHashCode(doNotUseGetters = true)
+@ToString(doNotUseGetters = true)
 public class RetrieveDocument implements Serializable {
     private static final long serialVersionUID = 7147966094676034661L;
     
@@ -103,46 +108,4 @@ public class RetrieveDocument implements Serializable {
         this.homeCommunityId = homeCommunityId;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((documentUniqueId == null) ? 0 : documentUniqueId.hashCode());
-        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
-        result = prime * result
-                + ((repositoryUniqueId == null) ? 0 : repositoryUniqueId.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        RetrieveDocument other = (RetrieveDocument) obj;
-        if (documentUniqueId == null) {
-            if (other.documentUniqueId != null)
-                return false;
-        } else if (!documentUniqueId.equals(other.documentUniqueId))
-            return false;
-        if (homeCommunityId == null) {
-            if (other.homeCommunityId != null)
-                return false;
-        } else if (!homeCommunityId.equals(other.homeCommunityId))
-            return false;
-        if (repositoryUniqueId == null) {
-            if (other.repositoryUniqueId != null)
-                return false;
-        } else if (!repositoryUniqueId.equals(other.repositoryUniqueId))
-            return false;
-        return true;
-    }
-    
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
 }

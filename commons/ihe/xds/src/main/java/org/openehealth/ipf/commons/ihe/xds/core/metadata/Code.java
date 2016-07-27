@@ -16,14 +16,14 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.CE;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.LocalizedStringAdapter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Objects;
 
 /**
@@ -154,11 +154,10 @@ public class Code extends Hl7v2Based<CE> {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Code{");
-        sb.append("code='").append(getCode()).append('\'');
-        sb.append(", displayName=").append(getDisplayName());
-        sb.append(", schemeName='").append(getSchemeName()).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "Code(" +
+                "code=" + getCode() +
+                ", displayName=" + getDisplayName() +
+                ", schemeName=" + getSchemeName() +
+                ')';
     }
 }

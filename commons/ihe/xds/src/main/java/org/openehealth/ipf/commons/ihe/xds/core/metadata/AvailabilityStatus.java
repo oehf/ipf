@@ -51,7 +51,7 @@ public enum AvailabilityStatus {
         return queryOpcode;
     }
 
-    private AvailabilityStatus(String opcode, String queryOpcode) {        
+    AvailabilityStatus(String opcode, String queryOpcode) {
         this.opcode = opcode;
         this.queryOpcode = queryOpcode;
     }
