@@ -7,6 +7,8 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -31,9 +33,6 @@ public class IpfAtnaAutoConfiguration {
     @Autowired(required = false)
     private DiscoveryClient discoveryClient;
 
-    @Value("${spring.application.name}")
-    private String appName;
-
     @Bean
     @ConditionalOnMissingBean
     public AuditorModuleContext atnaAuditorModuleContext(IpfAtnaConfigurationProperties config)
@@ -46,7 +45,8 @@ public class IpfAtnaAutoConfiguration {
     @Bean
     @ConfigurationProperties(prefix = "ipf.atna")
     @NotNull
-    public AuditorModuleConfig atnaAuditorModuleConfig(AuditorModuleContext auditorModuleContext) {
+    public AuditorModuleConfig atnaAuditorModuleConfig(AuditorModuleContext auditorModuleContext,
+                                                       @Value("${spring.application.name}") String appName) {
         AuditorModuleConfig auditorModuleConfig = auditorModuleContext.getConfig();
         // Use app name as auditor source if not configured otherwise
         if (auditorModuleConfig.getAuditSourceId() == null) {
@@ -74,7 +74,7 @@ public class IpfAtnaAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(value = "ipf.atna.auditor.enabled")
-    public IHEAuditor startStopAuditor(AuditorModuleConfig config) {
+    public IHEAuditor basicAuditor(AuditorModuleConfig config) {
         IHEAuditor auditor = IHEAuditor.getAuditor();
         auditor.setConfig(config);
         return auditor;
@@ -83,15 +83,24 @@ public class IpfAtnaAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = "ipf.atna.auditor.enabled")
     @ConditionalOnMissingBean
-    ApplicationStartEventListener applicationStartEventListener(@Qualifier("startStopAuditor") IHEAuditor auditor) {
+    ApplicationStartEventListener applicationStartEventListener(@Qualifier("basicAuditor") IHEAuditor auditor) {
         return new ApplicationStartEventListener(auditor);
     }
 
     @Bean
     @ConditionalOnProperty(value = "ipf.atna.auditor.enabled")
     @ConditionalOnMissingBean
-    ApplicationStopEventListener applicationStopEventListener(@Qualifier("startStopAuditor") IHEAuditor auditor) {
+    ApplicationStopEventListener applicationStopEventListener(@Qualifier("basicAuditor") IHEAuditor auditor) {
         return new ApplicationStopEventListener(auditor);
     }
+
+    @Bean
+    @ConditionalOnProperty(value = "ipf.atna.auditor.enabled")
+    @ConditionalOnClass(name = "org.springframework.security.authentication.event.AbstractAuthenticationEvent")
+    @ConditionalOnMissingBean(AbstractAuthenticationAuditListener.class)
+    AuthenticationListener loginListener(@Qualifier("basicAuditor") IHEAuditor auditor) {
+        return new AuthenticationListener(auditor);
+    }
+
 
 }
