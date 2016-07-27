@@ -17,18 +17,27 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 
 import org.apache.mina.core.filterchain.IoFilter;
+import org.apache.mina.core.future.CloseFuture;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.ssl.SslFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
+import java.util.concurrent.TimeUnit;
+
+import static org.apache.camel.component.mina2.Mina2Constants.MINA_CLOSE_SESSION_WHEN_COMPLETE;
 
 /**
  * {@link IoFilter} similar to an {@link SslFilter} that provides a
  * callbacks to handle a handshake exception.
  */
 public class HandshakeCallbackSSLFilter extends SslFilter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandshakeCallbackSSLFilter.class);
+
     /**
      * Callback interface for dealing with handshake failures.
      */
@@ -64,10 +73,13 @@ public class HandshakeCallbackSSLFilter extends SslFilter {
     public void messageReceived(NextFilter nextFilter, IoSession session, Object message) throws SSLException {
         try {
             super.messageReceived(nextFilter, session, message);
-        }
-        catch (SSLHandshakeException e) {
+        } catch (SSLHandshakeException e) {
             handshakeExceptionCallback.run(session);
-            throw e;
+            try {
+                exceptionCaught(nextFilter, session, e.getCause());
+            } catch (Exception e1) {
+                LOGGER.warn("SSLHandshakeException {} on Session: {}", e, session);
+            }
         }
     }
 }

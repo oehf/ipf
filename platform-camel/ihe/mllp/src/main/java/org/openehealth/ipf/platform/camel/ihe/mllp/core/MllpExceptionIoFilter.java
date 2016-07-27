@@ -53,13 +53,16 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
 
     @Override
     public void exceptionCaught(NextFilter nextFilter, IoSession session, Throwable cause) throws Exception {
-        if (sendResponse(cause)){
-            Exception exception = new CamelException(cause.getMessage());
-            Exchange exchange = createExchange(exception);
-            mina2Consumer.getExceptionHandler().handleException("", exchange, exception);
-            sendResponse(session, exchange);
-        } else {
-            nextFilter.exceptionCaught(session, cause);
+        if (!session.isClosing()) {
+            if (sendResponse(cause)) {
+                Exception exception = new CamelException(cause.getMessage());
+                Exchange exchange = createExchange(exception);
+                mina2Consumer.getExceptionHandler().handleException("", exchange, exception);
+                sendResponse(session, exchange);
+            } else {
+                session.closeNow();
+                nextFilter.sessionClosed(session);
+            }
         }
     }
 
