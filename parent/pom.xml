@@ -69,6 +69,7 @@
         <jar-plugin-version>3.0.2</jar-plugin-version>
         <javadoc-plugin-version>2.10.3</javadoc-plugin-version>
         <jaxb-plugin-version>1.6</jaxb-plugin-version>
+        <lombok-plugin-version>1.16.10.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <pax-plugin-version>1.5</pax-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
@@ -76,9 +77,9 @@
         <sources-plugin-version>3.0.1</sources-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.13.3</activemq-version>
+        <activemq-version>5.13.4</activemq-version>
         <aspectj-version>1.8.9</aspectj-version>
-        <cglib-version>3.2.0</cglib-version>
+        <cglib-version>3.2.4</cglib-version>
         <commons-beanutils-version>1.9.2</commons-beanutils-version>
         <commons-codec-version>1.10</commons-codec-version>
         <commons-collections-version>3.2.2</commons-collections-version>
@@ -93,7 +94,7 @@
         <findbugs-version>3.0.1</findbugs-version>
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
-        <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
+        <geronimo-spec-jta-version>1.1.1</geronimo-spec-jta-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
         <guava-version>19.0</guava-version>
         <hibernate-version>4.3.9.Final</hibernate-version>
@@ -106,12 +107,12 @@
         <jasypt-version>1.9.2</jasypt-version>
         <jboss-logging-version>3.3.0.Final</jboss-logging-version>
         <jboss-logging-annotations-version>2.0.1.Final</jboss-logging-annotations-version>
-        <jdom-version>2.0.2</jdom-version>
+        <jdom-version>2.0.6</jdom-version>
         <jetty-version>9.2.15.v20160210</jetty-version>
         <joda-time-version>2.9.4</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>1.2.17</log4j-version>
-        <lombok-version>1.16.8</lombok-version>
+        <lombok-version>1.16.10</lombok-version>
         <lucene-version>4.10.4</lucene-version>
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.3</quartz-version>
@@ -165,7 +166,7 @@
                     <plugin>
                         <groupId>org.projectlombok</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
-                        <version>${lombok-version}.1</version>
+                        <version>${lombok-plugin-version}</version>
                         <executions>
                             <execution>
                                 <phase>generate-sources</phase>
@@ -619,8 +620,8 @@
                 <version>${geronimo-spec-jms-version}</version>
             </dependency>
             <dependency>
-                <groupId>geronimo-spec</groupId>
-                <artifactId>geronimo-spec-jta</artifactId>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jta_1.1_spec</artifactId>
                 <version>${geronimo-spec-jta-version}</version>
             </dependency>
             <dependency>
@@ -845,7 +846,7 @@
             </dependency>
             <dependency>
                 <groupId>org.jdom</groupId>
-                <artifactId>jdom</artifactId>
+                <artifactId>jdom2</artifactId>
                 <version>${jdom-version}</version>
             </dependency>
             <dependency>
