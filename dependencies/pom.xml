@@ -22,7 +22,7 @@
         <jaxb-version>2.2.11</jaxb-version>
         <mina2-version>2.0.13</mina2-version>
         <opensaml-version>3.2.0</opensaml-version>
-        <saxon-he-version>9.7.0-4</saxon-he-version>
+        <saxon-he-version>9.7.0-7</saxon-he-version>
         <slf4j-version>1.7.21</slf4j-version>
         <spring-version>4.3.1.RELEASE</spring-version>
         <spring-boot-version>1.3.6.RELEASE</spring-boot-version>

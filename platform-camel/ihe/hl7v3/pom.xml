@@ -82,8 +82,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>geronimo-spec</groupId>
-            <artifactId>geronimo-spec-jta</artifactId>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jta_1.1_spec</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
