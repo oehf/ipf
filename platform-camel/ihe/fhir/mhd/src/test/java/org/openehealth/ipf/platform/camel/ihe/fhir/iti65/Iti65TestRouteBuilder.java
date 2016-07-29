@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.support.ExpressionAdapter;
@@ -35,6 +36,12 @@ import java.util.UUID;
  */
 public class Iti65TestRouteBuilder extends RouteBuilder {
 
+    private final boolean returnError;
+
+    public Iti65TestRouteBuilder(boolean returnError) {
+        this.returnError = returnError;
+    }
+
     @Override
     public void configure() throws Exception {
 
@@ -43,14 +50,17 @@ public class Iti65TestRouteBuilder extends RouteBuilder {
 
         from("mhd-iti65:stub?audit=true")
                 .errorHandler(noErrorHandler())
-                .transform(new AcceptExpression());
+                .transform(new Responder());
     }
 
 
-    private class AcceptExpression extends ExpressionAdapter {
+    private class Responder extends ExpressionAdapter {
 
         @Override
         public Object evaluate(Exchange exchange) {
+
+            if (returnError) throw new InternalErrorException("Something went wrong");
+
             Bundle requestBundle = exchange.getIn().getBody(Bundle.class);
 
             Bundle responseBundle = new Bundle()

@@ -52,14 +52,7 @@ public class TestIti78Success extends AbstractTestIti78 {
 
     @Test
     public void testGetConformance() {
-        Conformance conf = client.fetchConformance().ofType(Conformance.class).execute();
-
-        assertEquals(1, conf.getRest().size());
-        Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
-        Conformance.ConformanceRestResourceComponent resource = component.getResource().get(1);
-        assertEquals("Patient", resource.getType());
-
-        // printAsXML(conf);
+        assertConformance("Patient");
     }
 
     @Test

@@ -9,6 +9,8 @@ import org.apache.camel.component.hl7.CustomHL7MLLPCodec;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomPixAuditor;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage;
 import org.openhealthtools.ihe.atna.auditor.PAMSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.PDQConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor;
@@ -17,6 +19,7 @@ import org.openhealthtools.ihe.atna.auditor.PIXSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -67,6 +70,20 @@ public class IpfHl7AutoConfiguration {
         context.setValidationContext((ValidationContext) ValidationContextFactory.noValidation());
         context.setProfileStore(new ClasspathProfileStore("/org/openehealth/ipf/gazelle/validation/profile/v2"));
         return context;
+    }
+
+    // Provide "interactiveContinuationStorage" for HL7v2 paging
+    @Bean
+    @ConditionalOnMissingBean(InteractiveContinuationStorage.class)
+    public InteractiveContinuationStorage interactiveContinuationStorage(CacheManager cacheManager) {
+        return new CachingInteractiveHl7v2ContinuationStorage(cacheManager);
+    }
+
+    // Provide "unsolicitedFragmentationStorage" for HL7v2 fragmentation
+    @Bean
+    @ConditionalOnMissingBean(UnsolicitedFragmentationStorage.class)
+    public UnsolicitedFragmentationStorage unsolicitedFragmentationStorage(CacheManager cacheManager) {
+        return new CachingUnsolicitedFragmentionStorage(cacheManager);
     }
 
     // Some ATNA auditors

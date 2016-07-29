@@ -20,6 +20,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.IGenericClient;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import org.hl7.fhir.instance.model.Conformance;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.Assert;
@@ -29,6 +30,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -43,6 +45,16 @@ public class FhirTestContainer extends StandardTestContainer {
         context.getRestfulClientFactory().setSocketTimeout(1000000); // for debugging
         client = context.newRestfulGenericClient(base);
         return client;
+    }
+
+    public void assertConformance(String type) {
+        Conformance conf = client.fetchConformance().ofType(Conformance.class).execute();
+        printAsXML(conf);
+        assertEquals(1, conf.getRest().size());
+        Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
+        assertTrue(component.getResource().stream()
+                .map(Conformance.ConformanceRestResourceComponent::getType)
+                .anyMatch(type::equals));
     }
 
     protected void assertAndRethrow(BaseServerResponseException e, OperationOutcome.IssueType issueType) {

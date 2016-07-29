@@ -17,8 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti67;
 
 import org.hl7.fhir.instance.model.Bundle;
-import org.hl7.fhir.instance.model.Conformance;
-import org.hl7.fhir.instance.model.DocumentManifest;
 import org.hl7.fhir.instance.model.DocumentReference;
 import org.hl7.fhir.instance.model.ResourceType;
 import org.junit.BeforeClass;
@@ -55,14 +53,7 @@ public class TestIti67Success extends AbstractTestIti67 {
 
     @Test
     public void testGetConformance() {
-        Conformance conf = client.fetchConformance().ofType(Conformance.class).execute();
-
-        assertEquals(1, conf.getRest().size());
-        Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
-        Conformance.ConformanceRestResourceComponent resource = component.getResource().get(0);
-
-        // printAsXML(conf);
-        assertEquals("DocumentReference", resource.getType());
+        assertConformance("DocumentReference");
     }
 
     @Test

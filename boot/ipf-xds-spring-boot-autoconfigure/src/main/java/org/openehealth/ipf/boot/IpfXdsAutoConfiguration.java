@@ -1,6 +1,7 @@
 package org.openehealth.ipf.boot;
 
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor;
+import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openhealthtools.ihe.atna.auditor.XCAInitiatingGatewayAuditor;
 import org.openhealthtools.ihe.atna.auditor.XCARespondingGatewayAuditor;
 import org.openhealthtools.ihe.atna.auditor.XDMAuditor;
@@ -11,6 +12,7 @@ import org.openhealthtools.ihe.atna.auditor.XDSSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -83,6 +85,13 @@ public class IpfXdsAutoConfiguration {
         XDMAuditor auditor = XDMAuditor.getAuditor();
         auditor.setConfig(config);
         return auditor;
+    }
+
+
+    @Bean
+    @ConditionalOnMissingBean(AsynchronyCorrelator.class)
+    public AsynchronyCorrelator cachingAsynchronyCorrelator(CacheManager cacheManager) {
+        return new CachingAsynchronyCorrelator(cacheManager);
     }
 
 }

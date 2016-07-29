@@ -53,13 +53,8 @@ public class TestIti65Success extends AbstractTestIti65 {
     @Test
     public void testGetConformance() {
         Conformance conf = client.fetchConformance().ofType(Conformance.class).execute();
-
-        assertEquals(1, conf.getRest().size());
         Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
-        Conformance.ConformanceRestResourceComponent resource = component.getResource().get(1);
-        // assertEquals("Patient", resource.getType());
-
-        // printAsXML(conf);
+        assertEquals(Conformance.SystemRestfulInteraction.TRANSACTION, component.getInteraction().get(0).getCode());
     }
 
     @Test
@@ -122,8 +117,6 @@ public class TestIti65Success extends AbstractTestIti65 {
         CodedValueType poitTypeCode = poit.getParticipantObjectIDTypeCode();
         assertEquals("urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd", poitTypeCode.getCode());
         assertEquals("IHE XDS Metadata", poitTypeCode.getCodeSystemName());
-        assertEquals("MobilePatientDemographicsQuery", poit.getParticipantObjectID());
-        assertEquals("targetSystem=urn%3Aoid%3A1.2.3.4.6&sourceIdentifier=urn%3Aoid%3A1.2.3.4%7C0815", new String(poit.getParticipantObjectQuery()));
     }
 
     @Test
