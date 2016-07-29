@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -43,7 +44,7 @@ public class TestConverter extends Converter<String, String> {
     }
 
     public String parse(InputStream message, Object... params) throws IOException {
-        return "stream: " + IOUtils.toString(message);
+        return "stream: " + IOUtils.toString(message, Charset.defaultCharset());
     }
 
     public String parse(Source source, Object... params) throws IOException {

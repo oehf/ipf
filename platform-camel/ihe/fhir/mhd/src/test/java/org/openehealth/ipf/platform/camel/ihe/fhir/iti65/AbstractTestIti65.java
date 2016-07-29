@@ -16,7 +16,15 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
-import org.hl7.fhir.instance.model.*;
+import org.hl7.fhir.instance.model.Attachment;
+import org.hl7.fhir.instance.model.Binary;
+import org.hl7.fhir.instance.model.Bundle;
+import org.hl7.fhir.instance.model.DocumentManifest;
+import org.hl7.fhir.instance.model.DocumentReference;
+import org.hl7.fhir.instance.model.Enumerations;
+import org.hl7.fhir.instance.model.Identifier;
+import org.hl7.fhir.instance.model.Narrative;
+import org.hl7.fhir.instance.model.Reference;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -41,10 +49,6 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     public static void startServer(String contextDescriptor) throws ServletException {
         IpfFhirServlet servlet = new IpfFhirServlet();
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, new MockedSender(), "FhirServlet");
-        /*
-        startServer(servlet, contextDescriptor, false, DEMO_APP_PORT,
-                new FhirMockedSender(servlet.getFhirContext(), true), "FhirServlet");
-        */
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 

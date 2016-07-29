@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
+import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
@@ -26,6 +27,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -43,7 +48,6 @@ public class Iti78SearchParameters implements FhirSearchParameters {
     @Getter @Setter private StringParam state;
     @Getter @Setter private StringParam postalCode;
     @Getter @Setter private TokenParam gender;
-    @Getter @Setter private TokenParam resourceId;
     @Getter @Setter private TokenParam _id;
 
     // below only relevant for pediatric option
@@ -52,5 +56,17 @@ public class Iti78SearchParameters implements FhirSearchParameters {
     @Getter @Setter private StringAndListParam mothersMaidenNameGiven;
     @Getter @Setter private StringAndListParam mothersMaidenNameFamily;
 
+    @Getter
+    private FhirContext fhirContext;
 
+    @Override
+    public List<TokenParam> getPatientIdParam() {
+        if (_id != null)
+            return Collections.singletonList(_id);
+        if (identifiers != null)
+            return identifiers.getValuesAsQueryTokens().stream()
+                .flatMap(tol -> tol.getValuesAsQueryTokens().stream())
+                .collect(Collectors.toList());
+        return Collections.emptyList();
+    }
 }

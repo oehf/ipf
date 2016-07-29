@@ -188,6 +188,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         }
 
         // If the exchange has failed, throw the exception back into the servlet
+        // TODO care about auditing?
         if (exchange.isFailed()) {
             BaseServerResponseException e = exchange.getException(BaseServerResponseException.class);
             throw (e != null) ? e : new InternalErrorException("Unexpected server error", exchange.getException());

@@ -19,12 +19,16 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.IGenericClient;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.OperationOutcome;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.Assert;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -41,6 +45,17 @@ public class FhirTestContainer extends StandardTestContainer {
         return client;
     }
 
+    protected void assertAndRethrow(BaseServerResponseException e, OperationOutcome.IssueType issueType) {
+        // Check ATNA Audit
+        MockedSender sender = getAuditSender();
+        assertEquals(1, sender.getMessages().size());
+        AuditMessage event = sender.getMessages().get(0).getAuditMessage();
+        assertEquals(
+                RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE.getCode().intValue(),
+                event.getEventIdentification().getEventOutcomeIndicator());
+        assertAndRethrowException(e, issueType);
+    }
+
     protected void assertAndRethrowException(BaseServerResponseException e, OperationOutcome.IssueType expectedIssue) {
         // Hmm, I wonder if this could not be done automatically...
         OperationOutcome oo = context.newXmlParser().parseResource(OperationOutcome.class, e.getResponseBody());
@@ -55,5 +70,10 @@ public class FhirTestContainer extends StandardTestContainer {
                 event.getEventIdentification().getEventOutcomeIndicator());
 
         throw e;
+    }
+
+    // For quickly checking output
+    protected void printAsXML(IBaseResource resource) {
+        System.out.println(context.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
     }
 }

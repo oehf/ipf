@@ -29,6 +29,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.nio.charset.Charset;
+
 /**
  * @author Boris Stanojevic
  */
@@ -65,7 +67,7 @@ public class SampleRouteBuilderTest {
     @Test
     public void testMap() throws Exception {
         mockFile.expectedMessageCount(1);        
-        String hl7 = IOUtils.toString(this.getClass().getResourceAsStream("/message.hl7"));
+        String hl7 = IOUtils.toString(this.getClass().getResourceAsStream("/message.hl7"), Charset.defaultCharset());
         String response = producerTemplate.requestBody(JETTY_URI + "/map", hl7, String.class);
         assertTrue(response.contains("Nachname||W|||Blahplatz"));
         mockFile.assertIsSatisfied();

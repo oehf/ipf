@@ -16,13 +16,15 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
-import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import ca.uhn.fhir.rest.param.TokenParam;
+import org.hl7.fhir.instance.model.IdType;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_QUERY;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_URL;
 
 /**
  * Generic Audit Strategy for FHIR query transactions
@@ -30,44 +32,40 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
  * @author Christian Ohr
  * @since 3.1
  */
-public abstract class FhirQueryAuditStrategy extends AuditStrategySupport<FhirQueryAuditDataset> {
+public abstract class FhirQueryAuditStrategy<T extends FhirQueryAuditDataset> extends FhirAuditStrategy<T> {
 
     protected FhirQueryAuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
-    @Override
-    public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        auditDataset.setUserId((String) parameters.get(HTTP_URI));
-        if (parameters.get(HTTP_URL) != null) {
-            auditDataset.setServiceEndpointUrl(parameters.get(HTTP_URL).toString());
-        }
-        auditDataset.setClientIpAddress((String) parameters.get(HTTP_CLIENT_IP_ADDRESS));
-        auditDataset.setQueryString((String) parameters.get(HTTP_QUERY));
-        return auditDataset;
-    }
-
-    @Override
-    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response) {
-        RFC3881EventCodes.RFC3881EventOutcomeCodes outcomeCodes = getEventOutcomeCode(response);
-        auditDataset.setEventOutcomeCode(outcomeCodes);
-        return outcomeCodes == RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
-    }
-
-    @Override
-    public RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
-        return getEventOutcomeCodeFromResource((IBaseResource) pojo);
-    }
-
     /**
-     * A resource is returned from the business logic. In general this
-     * means success, but this can be overridden here.
+     * Further enrich the audit dataset: add query string and patient IDs in the search parameter
+     * (if available).
      *
-     * @param resource FHIR resource
-     * @return event outcome code
+     * @param auditDataset audit dataset
+     * @param request      request object
+     * @param parameters   request parameters
+     * @return enriched audit dataset
      */
-    protected RFC3881EventCodes.RFC3881EventOutcomeCodes getEventOutcomeCodeFromResource(IBaseResource resource) {
-        return RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
-    }
+    @Override
+    public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters) {
+        T dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
 
+        String url = (String) parameters.get(HTTP_URL);
+        String query = (String) parameters.get(HTTP_QUERY);
+        dataset.setQueryString(String.format("%s?%s", url, query));
+
+        FhirSearchParameters searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
+        if (searchParameter != null) {
+            List<TokenParam> tokenParams = searchParameter.getPatientIdParam();
+            if (tokenParams != null) {
+                dataset.getPatientIds().addAll(
+                        tokenParams.stream()
+                                .map(t -> t.getValueAsQueryToken(searchParameter.getFhirContext()))
+                                .collect(Collectors.toList()));
+            }
+        }
+
+        return dataset;
+    }
 }

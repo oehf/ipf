@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 
 import javax.xml.transform.stream.StreamSource;
 
@@ -46,7 +47,7 @@ public class ConverterRouteTest extends AbstractRouteTest {
     public void testConverter2() throws Exception {
         InputStream result = (InputStream) producerTemplate.sendBody("direct:converter-test",
                 ExchangePattern.InOut, new ByteArrayInputStream("input".getBytes()));
-        assertEquals("stream: input", IOUtils.toString(result));
+        assertEquals("stream: input", IOUtils.toString(result, Charset.defaultCharset()));
     }
 
     @Test

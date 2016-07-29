@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.xml.SchematronValidationException;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import static org.junit.Assert.assertEquals;
 
@@ -62,7 +63,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
 
     @Test
     public void testValidator3() throws InterruptedException, IOException {
-        final String xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/test.xml"));
+        final String xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/test.xml"), Charset.defaultCharset());
         String response = (String)producerTemplate.sendBody(
         		"direct:validator-xml-test", ExchangePattern.InOut, xml);
         assertEquals("passed", response);
@@ -70,7 +71,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
 
     @Test
     public void testValidator4() throws InterruptedException, IOException {
-        final String xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/invalidtest.xml"));
+        final String xml = IOUtils.toString(getClass().getResourceAsStream("/xsd/invalidtest.xml"), Charset.defaultCharset());
         error.expectedMessageCount(1);
         Exchange exchange = producerTemplate.send("direct:validator-xml-test",
                 ExchangePattern.InOut, exchange1 -> exchange1.getIn().setBody(xml));
@@ -83,7 +84,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
 
     @Test
     public void testValidator5() throws InterruptedException, IOException {
-        final String xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test.xml"));
+        final String xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test.xml"), Charset.defaultCharset());
         String response = (String)producerTemplate.sendBody(
         		"direct:validator-schematron-test", ExchangePattern.InOut, xml);
         assertEquals("passed", response);
@@ -91,7 +92,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
 
     @Test
     public void testValidator6() throws InterruptedException, IOException {
-        final String xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test-fail.xml"));
+        final String xml = IOUtils.toString(getClass().getResourceAsStream("/schematron/schematron-test-fail.xml"), Charset.defaultCharset());
         error.expectedMessageCount(1);
         Exchange exchange = producerTemplate.send("direct:validator-schematron-test",
                 ExchangePattern.InOut, exchange1 -> exchange1.getIn().setBody(xml));

@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
-
 /**
  * Strategy for auditing ITI-66 transactions on the client side
  *
@@ -28,16 +25,6 @@ public class Iti66ClientAuditStrategy extends Iti66AuditStrategy {
 
     public Iti66ClientAuditStrategy() {
         super(false);
-    }
-
-    @Override
-    public void doAudit(FhirQueryAuditDataset auditDataset) {
-        AuditorManager.getFhirAuditor().auditIti66(
-                false,
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getQueryString());
     }
 
 }

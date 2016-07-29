@@ -40,7 +40,7 @@ public class TestIti83UnknownTarget extends AbstractTestIti83 {
         try {
             sendManually(validQueryParameters());
         } catch (ForbiddenOperationException e) {
-            assertAndRethrowException(e, OperationOutcome.IssueType.CODEINVALID);
+            assertAndRethrow(e, OperationOutcome.IssueType.CODEINVALID);
         }
 
     }

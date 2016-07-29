@@ -65,8 +65,5 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
         return result;
     }
 
-    protected void printAsXML(IBaseResource resource) {
-        LOG.info(context.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
-    }
 
 }

@@ -25,6 +25,7 @@ import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Collections;
+import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
@@ -49,8 +50,6 @@ public class FhirAuditor extends IHEAuditor {
     public void auditIti65(
             boolean serverSide,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
-            String sourceUserId,
-            String userName,
             String documentResponderUri,
             String clientIpAddress,
             String patientId,
@@ -59,11 +58,12 @@ public class FhirAuditor extends IHEAuditor {
             return;
         }
         ImportEvent importEvent = new ImportEvent(false, eventOutcome, new CustomIHETransactionEventTypeCodes.ProvideDocumentBundle(), null);
-        configureEvent(this, serverSide, importEvent, sourceUserId, null, documentResponderUri, documentResponderUri, clientIpAddress);
+        configureEvent(this, serverSide, importEvent, null, null, documentResponderUri, documentResponderUri, clientIpAddress);
 
         if (!EventUtils.isEmptyOrNull(patientId)) {
             importEvent.addPatientParticipantObject(patientId);
         }
+
         importEvent.addSubmissionSetParticipantObject(manifestId);
 
         audit(importEvent);
@@ -74,7 +74,8 @@ public class FhirAuditor extends IHEAuditor {
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String documentResponderUri,
             String clientIpAddress,
-            String queryString) {
+            String queryString,
+            List<String> patientIds) {
         if (!isAuditorEnabled()) {
             return;
         }
@@ -86,8 +87,12 @@ public class FhirAuditor extends IHEAuditor {
                 Collections.emptyList());
 
         configureEvent(this, serverSide, event, null, null, documentResponderUri, documentResponderUri, clientIpAddress);
+        if (!EventUtils.isEmptyOrNull(patientIds)) {
+            patientIds.forEach(event::addPatientParticipantObject);
+        }
         event.addQueryParticipantObject("MobileDocumentManifestQuery", null, payloadBytes(queryString), null,
                 new CustomIHETransactionEventTypeCodes.DocumentManifestQuery());
+
         audit(event);
     }
 
@@ -96,7 +101,8 @@ public class FhirAuditor extends IHEAuditor {
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String documentResponderUri,
             String clientIpAddress,
-            String queryString) {
+            String queryString,
+            List<String> patientIds) {
         if (!isAuditorEnabled()) {
             return;
         }
@@ -108,8 +114,12 @@ public class FhirAuditor extends IHEAuditor {
                 Collections.emptyList());
 
         configureEvent(this, serverSide, event, null, null, documentResponderUri, documentResponderUri, clientIpAddress);
+        if (!EventUtils.isEmptyOrNull(patientIds)) {
+            patientIds.forEach(event::addPatientParticipantObject);
+        }
         event.addQueryParticipantObject("MobileDocumentReferenceQuery", null, payloadBytes(queryString), null,
                 new CustomIHETransactionEventTypeCodes.DocumentReferenceQuery());
+
         audit(event);
     }
 
@@ -118,7 +128,8 @@ public class FhirAuditor extends IHEAuditor {
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String pdqSupplierUri,
             String clientIpAddress,
-            String queryString) {
+            String queryString,
+            List<String> patientIds) {
         if (!isAuditorEnabled()) {
             return;
         }
@@ -130,6 +141,9 @@ public class FhirAuditor extends IHEAuditor {
                 Collections.emptyList());
 
         configureEvent(this, serverSide, event, null, null, pdqSupplierUri, pdqSupplierUri, clientIpAddress);
+        if (!EventUtils.isEmptyOrNull(patientIds)) {
+            patientIds.forEach(event::addPatientParticipantObject);
+        }
         event.addQueryParticipantObject("MobilePatientDemographicsQuery", null, payloadBytes(queryString), null,
                 new CustomIHETransactionEventTypeCodes.PDQMQuery());
         audit(event);
@@ -140,7 +154,8 @@ public class FhirAuditor extends IHEAuditor {
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String pixManagerUri,
             String clientIpAddress,
-            String queryString) {
+            String queryString,
+            List<String> patientIds) {
         if (!isAuditorEnabled()) {
             return;
         }
@@ -152,6 +167,9 @@ public class FhirAuditor extends IHEAuditor {
                 Collections.emptyList());
 
         configureEvent(this, serverSide, event, null, null, pixManagerUri, pixManagerUri, clientIpAddress);
+        if (!EventUtils.isEmptyOrNull(patientIds)) {
+            patientIds.forEach(event::addPatientParticipantObject);
+        }
         event.addQueryParticipantObject("PIXmQuery", null, payloadBytes(queryString), null,
                 new CustomIHETransactionEventTypeCodes.PIXMQuery());
         audit(event);

@@ -66,7 +66,9 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
                 .authorGivenName(authorGivenName)
                 .type(type)
                 .status(status)
-                ._id(resourceId).build();
+                ._id(resourceId)
+                .fhirContext(getFhirContext())
+                .build();
 
         String chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {

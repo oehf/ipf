@@ -19,9 +19,16 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.support.ExpressionAdapter;
+import org.hl7.fhir.instance.model.Binary;
 import org.hl7.fhir.instance.model.Bundle;
-import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper;
+import org.hl7.fhir.instance.model.DocumentManifest;
+import org.hl7.fhir.instance.model.DocumentReference;
+import org.hl7.fhir.instance.model.List_;
+import org.hl7.fhir.instance.model.Resource;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
+
+import java.util.Date;
+import java.util.UUID;
 
 /**
  *
@@ -46,15 +53,36 @@ public class Iti65TestRouteBuilder extends RouteBuilder {
         public Object evaluate(Exchange exchange) {
             Bundle requestBundle = exchange.getIn().getBody(Bundle.class);
 
-            Bundle responseBundle = new Bundle().setType(Bundle.BundleType.TRANSACTIONRESPONSE);
+            Bundle responseBundle = new Bundle()
+                    .setType(Bundle.BundleType.TRANSACTIONRESPONSE)
+                    .setTotal(requestBundle.getTotal());
 
             for (Bundle.BundleEntryComponent requestEntry : requestBundle.getEntry()) {
-
+                Bundle.BundleEntryResponseComponent response = new Bundle.BundleEntryResponseComponent()
+                        .setStatus("201 Created")
+                        .setLastModified(new Date())
+                        .setLocation("blabla");
+                responseBundle.addEntry()
+                        .setResponse(response)
+                        .setResource(responseResource(requestEntry.getResource()));
             }
-
             return responseBundle;
         }
 
+    }
+
+    private Resource responseResource(Resource request) {
+        if (request instanceof DocumentManifest) {
+            return new DocumentManifest().setId(UUID.randomUUID().toString());
+        } else if (request instanceof DocumentReference) {
+            return new DocumentReference().setId(UUID.randomUUID().toString());
+        } else if (request instanceof List_) {
+            return new List_().setId(UUID.randomUUID().toString());
+        } else if (request instanceof Binary) {
+            return new Binary().setId(UUID.randomUUID().toString());
+        } else {
+            throw new IllegalArgumentException(request + " is not allowed here");
+        }
     }
 
 

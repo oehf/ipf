@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.core.extend;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class GxmlExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testUnmarshalGnodeWithSchema() throws InterruptedException, IOException {
-        String xml = IOUtils.toString(new ClassPathResource("xsd/test.xml").getInputStream());
+        String xml = IOUtils.toString(new ClassPathResource("xsd/test.xml").getInputStream(), Charset.defaultCharset());
         mockOutput.expectedBodiesReceived("blub");
         producerTemplate.sendBody("direct:input4", xml);
         mockOutput.assertIsSatisfied();
@@ -63,7 +64,7 @@ public class GxmlExtensionTest extends AbstractExtensionTest {
     
     @Test
     public void testUnmarshalGnodeWithNonmatchingSchema() throws InterruptedException, IOException {
-        String xml = IOUtils.toString(new ClassPathResource("xsd/invalidtest.xml").getInputStream());
+        String xml = IOUtils.toString(new ClassPathResource("xsd/invalidtest.xml").getInputStream(), Charset.defaultCharset());
         mockOutput.expectedMessageCount(0);
         mockError.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input4", xml);
@@ -73,7 +74,7 @@ public class GxmlExtensionTest extends AbstractExtensionTest {
     
     @Test
     public void testUnmarshalGpathWithSchema() throws InterruptedException, IOException {
-        String xml = IOUtils.toString(new ClassPathResource("xsd/test.xml").getInputStream());
+        String xml = IOUtils.toString(new ClassPathResource("xsd/test.xml").getInputStream(), Charset.defaultCharset());
         mockOutput.expectedBodiesReceived("blub");
         producerTemplate.sendBody("direct:input5", xml);
         mockOutput.assertIsSatisfied();
@@ -81,7 +82,7 @@ public class GxmlExtensionTest extends AbstractExtensionTest {
     
     @Test
     public void testUnmarshalGpathWithNonmatchingSchema() throws InterruptedException, IOException {
-        String xml = IOUtils.toString(new ClassPathResource("xsd/invalidtest.xml").getInputStream());
+        String xml = IOUtils.toString(new ClassPathResource("xsd/invalidtest.xml").getInputStream(), Charset.defaultCharset());
         mockOutput.expectedMessageCount(0);
         mockError.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input5", xml);

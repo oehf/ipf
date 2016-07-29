@@ -28,6 +28,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.xquery.XQException;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -128,6 +129,6 @@ public class XqjTransmogrifierTest {
     }
 
     private String result(String path) throws IOException{
-        return IOUtils.toString(getClass().getResourceAsStream(path));
+        return IOUtils.toString(getClass().getResourceAsStream(path), Charset.defaultCharset());
     }
 }

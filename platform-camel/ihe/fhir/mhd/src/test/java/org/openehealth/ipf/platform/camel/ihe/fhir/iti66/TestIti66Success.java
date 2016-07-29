@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
+import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.Conformance;
-import org.hl7.fhir.instance.model.Identifier;
-import org.hl7.fhir.instance.model.Parameters;
+import org.hl7.fhir.instance.model.DocumentManifest;
+import org.hl7.fhir.instance.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomIHETransactionEventTypeCodes;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ActiveParticipantCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ActiveParticipantType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditSourceIdentificationType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ParticipantObjectIdentificationType;
 
@@ -42,9 +43,9 @@ import static org.junit.Assert.assertTrue;
 /**
  *
  */
-public class TestIti83Success extends AbstractTestIti83 {
+public class TestIti66Success extends AbstractTestIti66 {
 
-    private static final String CONTEXT_DESCRIPTOR = "iti-83.xml";
+    private static final String CONTEXT_DESCRIPTOR = "iti-66.xml";
 
     @BeforeClass
     public static void setUpClass() throws ServletException {
@@ -57,26 +58,30 @@ public class TestIti83Success extends AbstractTestIti83 {
 
         assertEquals(1, conf.getRest().size());
         Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
-        Conformance.ConformanceRestOperationComponent operation = component.getOperation().iterator().next();
-        assertEquals(Iti83Constants.PIXM_OPERATION_NAME, operation.getName());
+        Conformance.ConformanceRestResourceComponent resource = component.getResource().get(0);
 
         // printAsXML(conf);
+        assertEquals("DocumentManifest", resource.getType());
     }
 
     @Test
-    public void testSendManualPixm() {
+    public void testSendManualIti66() {
+        Bundle result = sendManually(manifestParameters());
 
-        Parameters result = sendManually(validQueryParameters());
+        assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
+        assertEquals(ResourceType.Bundle, result.getResourceType());
+        assertEquals(1, result.getTotal());
 
-        // printAsXML(result);
-
-        Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
-        assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
+        DocumentManifest p = (DocumentManifest)result.getEntry().get(0).getResource();
+        assertEquals("9bc72458-49b0-11e6-8a1c-3c1620524153", p.getIdElement().getIdPart());
 
         // Check ATNA Audit
+
         MockedSender sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
+
+        // Event
         assertEquals(
                 RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS.getCode().intValue(),
                 event.getEventIdentification().getEventOutcomeIndicator());
@@ -89,7 +94,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(expectedEventId.getCodeSystemName(), eventId.getCodeSystemName());
         assertEquals(expectedEventId.getOriginalText(), eventId.getOriginalText());
         CodedValueType eventTypeCode = event.getEventIdentification().getEventTypeCode().get(0);
-        CodedValueType expectedEventTypeCode = new CustomIHETransactionEventTypeCodes.PIXMQuery();
+        CodedValueType expectedEventTypeCode = new CustomIHETransactionEventTypeCodes.DocumentManifestQuery();
         assertEquals(expectedEventTypeCode.getCode(), eventTypeCode.getCode());
         assertEquals(expectedEventTypeCode.getCodeSystemName(), eventTypeCode.getCodeSystemName());
         assertEquals(expectedEventTypeCode.getOriginalText(), eventTypeCode.getOriginalText());
@@ -103,37 +108,40 @@ public class TestIti83Success extends AbstractTestIti83 {
         // ActiveParticipant Destination
         ActiveParticipantType destination = event.getActiveParticipant().get(1);
         assertFalse(destination.isUserIsRequestor());
-        assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient/$ihe-pix", destination.getUserID());
+        assertEquals("http://localhost:" + DEMO_APP_PORT + "/DocumentManifest", destination.getUserID());
         assertEquals("localhost", destination.getNetworkAccessPointID());
+
+        // Audit Source
+        AuditSourceIdentificationType sourceIdentificationType = event.getAuditSourceIdentification().get(0);
+        assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
+        assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
 
         // Patient
         ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentification().get(0);
         assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON.getCode(), patient.getParticipantObjectTypeCode());
         assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT.getCode(), patient.getParticipantObjectTypeCodeRole());
-        assertEquals("urn:oid:1.2.3.4|0815", new String(patient.getParticipantObjectID()));
+        assertEquals("urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1", new String(patient.getParticipantObjectID()));
 
+        // Query Parameters
         ParticipantObjectIdentificationType query = event.getParticipantObjectIdentification().get(1);
         assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM.getCode(), query.getParticipantObjectTypeCode());
         assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.QUERY.getCode(), query.getParticipantObjectTypeCodeRole());
-        assertEquals("http://localhost:8999/Patient/$ihe-pix?sourceIdentifier=urn%3Aoid%3A1.2.3.4%7C0815&targetSystem=urn%3Aoid%3A1.2.3.4.6", new String(query.getParticipantObjectQuery()));
+        assertEquals("http://localhost:8999/DocumentManifest?patient.identifier=urn%3Aoid%3A2.16.840.1.113883.3.37.4.1.1.2.1.1%7C1", new String(query.getParticipantObjectQuery()));
+
         CodedValueType poitTypeCode = query.getParticipantObjectIDTypeCode();
-        assertEquals("ITI-83", poitTypeCode.getCode());
+        assertEquals("ITI-66", poitTypeCode.getCode());
         assertEquals("IHE Transactions", poitTypeCode.getCodeSystemName());
-        assertEquals("Mobile Patient Identifier Cross-reference Query", poitTypeCode.getOriginalText());
-        assertEquals("PIXmQuery", query.getParticipantObjectID());
+        assertEquals("Mobile Document Manifest Query", poitTypeCode.getOriginalText());
+        assertEquals("MobileDocumentManifestQuery", query.getParticipantObjectID());
     }
 
     @Test
-    public void testSendEndpointPixm() {
-        Parameters result = getProducerTemplate().requestBody("direct:input", validQueryParameters(), Parameters.class);
-
-        Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
-        assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
-
-        // Check ATNA Audit
-        MockedSender sender = getAuditSender();
-        assertEquals(2, sender.getMessages().size());
-        // FIXME client-side audit message needs ip addresses, target URL and queryString
+    public void testGetResource() {
+        DocumentManifest p = client.read()
+                .resource(DocumentManifest.class)
+                .withId("9bc72458-49b0-11e6-8a1c-3c1620524153")
+                .execute();
+        assertEquals(String.format("http://localhost:%d/DocumentManifest/9bc72458-49b0-11e6-8a1c-3c1620524153", DEMO_APP_PORT), p.getId());
     }
 
 

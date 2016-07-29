@@ -16,15 +16,29 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.hl7.fhir.instance.model.DocumentManifest;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 
 /**
- *  @author Christian Ohr
- *  @since 3.2
+ *
  */
 public class Iti65AuditDataset extends FhirAuditDataset {
 
+    // Document manifest unique ID
+    @Getter @Setter
+    private String documentManifestUuid;
+
     public Iti65AuditDataset(boolean serverSide) {
         super(serverSide);
+    }
+
+    public void enrichDatasetFromDocumentManifest(DocumentManifest documentManifest) {
+        getPatientIds().add(documentManifest.getSubject().getReference());
+        // If available, use the documentManifest identifier as documentManifestUuid
+        if (!documentManifest.getIdentifier().isEmpty()) {
+            this.documentManifestUuid = documentManifest.getIdentifier().get(0).getValue();
+        }
     }
 }

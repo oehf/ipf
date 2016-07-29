@@ -47,9 +47,7 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        IBaseResource msg = exchange.getIn().getBody(IBaseResource.class);
-
-        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, msg);
+        AuditDatasetType auditDataset = createAndEnrichAuditDatasetFromRequest(getAuditStrategy(), exchange, exchange.getIn().getBody());
         determineParticipantsAddresses(exchange, auditDataset);
 
         boolean failed = false;
@@ -105,10 +103,9 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
      *
      * @return newly created audit dataset or <code>null</code> when creation failed.
      */
-    private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, IBaseResource msg) {
+    private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, Object msg) {
         try {
             AuditDatasetType auditDataset = strategy.createAuditDataset();
-            // AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
             LOG.error("Exception when enriching audit dataset from request", e);

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.transport;
 
+import java.nio.charset.Charset;
 import java.util.Scanner;
 
 import org.apache.camel.EndpointInject;
@@ -52,7 +53,7 @@ public class TransportTest {
     @Test
     public void testMessage02() throws Exception {
         String message = inputMessage("message/msg-02.hl7");
-        String content = IOUtils.toString(getClass().getResourceAsStream("/message/msg-02.content"));
+        String content = IOUtils.toString(getClass().getResourceAsStream("/message/msg-02.content"), Charset.defaultCharset());
         mockOutput.expectedBodiesReceived(content);
         producerTemplate.sendBody("mina2:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec", message);
         mockOutput.assertIsSatisfied();

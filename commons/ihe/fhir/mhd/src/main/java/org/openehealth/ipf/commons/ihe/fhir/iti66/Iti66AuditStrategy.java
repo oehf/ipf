@@ -16,22 +16,35 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
 
+
 /**
- *  @author Christian Ohr
- *  @since 3.2
+ * @author Christian Ohr
+ * @since 3.2
  */
-public abstract class Iti66AuditStrategy extends FhirQueryAuditStrategy {
+public abstract class Iti66AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
 
     public Iti66AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public Iti66AuditDataset createAuditDataset() {
-        return new Iti66AuditDataset(isServerSide());
+    public FhirQueryAuditDataset createAuditDataset() {
+        return new FhirQueryAuditDataset(isServerSide());
     }
+
+    @Override
+    public void doAudit(FhirQueryAuditDataset auditDataset) {
+        AuditorManager.getFhirAuditor().auditIti66(
+                isServerSide(),
+                auditDataset.getEventOutcomeCode(),
+                auditDataset.getServiceEndpointUrl(),
+                auditDataset.getClientIpAddress(),
+                auditDataset.getQueryString(),
+                auditDataset.getPatientIds());
+    }
+
 }

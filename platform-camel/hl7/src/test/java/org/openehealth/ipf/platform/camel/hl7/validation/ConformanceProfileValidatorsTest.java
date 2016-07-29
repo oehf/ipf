@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.hl7.validation;
 
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HL7Exception;
@@ -96,7 +97,7 @@ public class ConformanceProfileValidatorsTest {
     protected String getMessageAsString(String resourcePath){
         String message = null;
         try {
-            message = IOUtils.toString(this.getClass().getClassLoader().getResource(resourcePath));
+            message = IOUtils.toString(this.getClass().getClassLoader().getResource(resourcePath), Charset.defaultCharset());
         } catch (IOException ioe){
             ioe.printStackTrace();
         }

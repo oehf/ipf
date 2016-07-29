@@ -40,7 +40,7 @@ public class TestIti83NoPatient extends AbstractTestIti83 {
         try {
             sendManually(validQueryParameters());
         } catch (ResourceNotFoundException e) {
-            assertAndRethrowException(e, OperationOutcome.IssueType.NOTFOUND);
+            assertAndRethrow(e, OperationOutcome.IssueType.NOTFOUND);
         }
     }
 

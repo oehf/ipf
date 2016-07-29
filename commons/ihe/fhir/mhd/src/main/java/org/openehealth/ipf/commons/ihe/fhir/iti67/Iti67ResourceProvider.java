@@ -91,7 +91,9 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                 .securityLabel(securityLabel)
                 .format(format)
                 .relatedId(relatedId)
-                ._id(resourceId).build();
+                ._id(resourceId)
+                .fhirContext(getFhirContext())
+                .build();
 
         String chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {

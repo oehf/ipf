@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.flow.render;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import org.apache.camel.Message;
 import org.apache.commons.io.IOUtils;
@@ -40,7 +41,7 @@ public class SimpleMessageRenderer implements PlatformMessageRenderer {
     
     private String render(InputStream stream) {
         try {
-            String result = IOUtils.toString(stream);
+            String result = IOUtils.toString(stream, Charset.defaultCharset());
             stream.reset();
             return result;
         } catch (IOException e) {

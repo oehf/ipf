@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-
 /**
  * Strategy for auditing ITI-78 transactions on the client side
  *
@@ -27,14 +25,6 @@ public class Iti65ServerAuditStrategy extends Iti65AuditStrategy {
 
     public Iti65ServerAuditStrategy() {
         super(true);
-    }
-
-    @Override
-    public void doAudit(Iti65AuditDataset auditDataset) {
-        AuditorManager.getFhirAuditor().auditIti65(
-                false,
-                auditDataset.getEventOutcomeCode(),
-                null, null, null, null, null, null);
     }
 
 }

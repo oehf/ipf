@@ -18,6 +18,9 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Generic Audit Dataset for FHIR Query transactions
  *

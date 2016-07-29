@@ -30,14 +30,4 @@ public class Iti83ClientAuditStrategy extends Iti83AuditStrategy {
         super(false);
     }
 
-    @Override
-    public void doAudit(FhirQueryAuditDataset auditDataset) {
-        AuditorManager.getFhirAuditor().auditIti83(
-                false,
-                auditDataset.getEventOutcomeCode(),
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getClientIpAddress(),
-                auditDataset.getQueryString());
-    }
-
 }

@@ -19,6 +19,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Generic audit dataset for FHIR-based IHE transactions.
@@ -56,6 +59,12 @@ public abstract class FhirAuditDataset extends AuditDataset {
     @Setter
     private String serviceEndpointUrl;
 
+    /**
+     * Patient IDs
+     */
+    @Getter
+    private final List<String> patientIds = new ArrayList<>();
+
 
     /**
      * Constructor.
@@ -67,4 +76,11 @@ public abstract class FhirAuditDataset extends AuditDataset {
         super(serverSide);
     }
 
+    /**
+     * @return the first present patient ID
+     * or <code>null</code> when no patient IDs have been collected.
+     */
+    public String getPatientId() {
+        return patientIds.isEmpty() ? null : patientIds.get(0);
+    }
 }

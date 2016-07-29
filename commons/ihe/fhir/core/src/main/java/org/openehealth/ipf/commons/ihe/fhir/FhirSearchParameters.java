@@ -16,6 +16,11 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.param.TokenParam;
+
+import java.util.List;
+
 /**
  * Implementations of this interface encapsulate search parameters for
  * Search transactions.
@@ -24,4 +29,8 @@ package org.openehealth.ipf.commons.ihe.fhir;
  * @since 3.2
  */
 public interface FhirSearchParameters {
+
+    List<TokenParam> getPatientIdParam();
+
+    FhirContext getFhirContext();
 }

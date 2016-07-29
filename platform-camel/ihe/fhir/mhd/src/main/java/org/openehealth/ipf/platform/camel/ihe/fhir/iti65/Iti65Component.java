@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * Component for MHD Register Document (ITI-65)
  *
  * @author Christian Ohr
- * @since 3.1
+ * @since 3.2
  */
 public class Iti65Component extends FhirComponent<Iti65AuditDataset> {
 

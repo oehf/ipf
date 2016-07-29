@@ -24,6 +24,7 @@ import org.xml.sax.SAXException;
 import javax.xml.transform.dom.DOMResult;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -302,7 +303,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
     
     private String xsltInput() throws IOException {
-        return IOUtils.toString(getClass().getResourceAsStream("/xslt/createPatient.xml"));
+        return IOUtils.toString(getClass().getResourceAsStream("/xslt/createPatient.xml"), Charset.defaultCharset());
     }
 
     private void assertXqueryOutput(String resultXml) throws InterruptedException {
@@ -322,7 +323,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     }
 
     private String content(String path) throws IOException {
-        return IOUtils.toString(getClass().getResourceAsStream(path));
+        return IOUtils.toString(getClass().getResourceAsStream(path), Charset.defaultCharset());
     }
 
 }

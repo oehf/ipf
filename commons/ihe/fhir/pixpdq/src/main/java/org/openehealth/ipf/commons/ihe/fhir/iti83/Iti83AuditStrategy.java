@@ -15,8 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.param.TokenParam;
+import org.hl7.fhir.instance.model.Identifier;
+import org.hl7.fhir.instance.model.Parameters;
+import org.hl7.fhir.instance.model.StringType;
+import org.hl7.fhir.instance.model.Type;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
+
+import java.util.Map;
 
 /**
  * Strategy for auditing ITI-83 transactions
@@ -24,7 +34,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
  * @author Christian Ohr
  * @since 3.1
  */
-public abstract class Iti83AuditStrategy extends FhirQueryAuditStrategy {
+public abstract class Iti83AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
 
     protected Iti83AuditStrategy(boolean serverSide) {
         super(serverSide);
@@ -35,5 +45,38 @@ public abstract class Iti83AuditStrategy extends FhirQueryAuditStrategy {
         return new FhirQueryAuditDataset(isServerSide());
     }
 
+    @Override
+    public void doAudit(FhirQueryAuditDataset auditDataset) {
+        AuditorManager.getFhirAuditor().auditIti83(
+                isServerSide(),
+                auditDataset.getEventOutcomeCode(),
+                auditDataset.getServiceEndpointUrl(),
+                auditDataset.getClientIpAddress(),
+                auditDataset.getQueryString(),
+                auditDataset.getPatientIds());
+    }
 
+    @Override
+    public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
+        FhirQueryAuditDataset dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
+
+        Parameters params = (Parameters) request;
+        if (params != null) {
+            Type sourceIdentifier = params.getParameter().stream()
+                    .filter(ppc -> Constants.SOURCE_IDENTIFIER_NAME.equals(ppc.getName()))
+                    .map(Parameters.ParametersParameterComponent::getValue)
+                    .findFirst().orElseThrow(() -> new RuntimeException("No sourceIdentifier in PIX query"));
+
+            if (sourceIdentifier instanceof Identifier) {
+                Identifier identifier = (Identifier) sourceIdentifier;
+                dataset.getPatientIds().add(String.format("%s|%s", identifier.getSystem(), identifier.getValue()));
+            } else if (sourceIdentifier instanceof StringType) {
+                StringType identifier = (StringType) sourceIdentifier;
+                dataset.getPatientIds().add(identifier.getValue());
+            } else {
+                dataset.getPatientIds().add(sourceIdentifier.toString());
+            }
+        }
+        return dataset;
+    }
 }

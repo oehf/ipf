@@ -22,9 +22,15 @@ import org.hl7.fhir.instance.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomIHETransactionEventTypeCodes;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
+import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ActiveParticipantCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ActiveParticipantType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditSourceIdentificationType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ParticipantObjectIdentificationType;
 
@@ -74,35 +80,57 @@ public class TestIti78Success extends AbstractTestIti78 {
 
 
         // Check ATNA Audit
+
         MockedSender sender = getAuditSender();
         assertEquals(1, sender.getMessages().size());
         AuditMessage event = sender.getMessages().get(0).getAuditMessage();
 
-        assertEquals("E", event.getEventIdentification().getEventActionCode());
+        // Event
+        assertEquals(
+                RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS.getCode().intValue(),
+                event.getEventIdentification().getEventOutcomeIndicator());
+        assertEquals(
+                RFC3881EventCodes.RFC3881EventActionCodes.EXECUTE.getCode(),
+                event.getEventIdentification().getEventActionCode());
         CodedValueType eventId = event.getEventIdentification().getEventID();
-        assertEquals("110112", eventId.getCode());
-        assertEquals("DCM", eventId.getCodeSystemName());
-        assertEquals("Query", eventId.getOriginalText());
-
+        CodedValueType expectedEventId = new DICOMEventIdCodes.Query();
+        assertEquals(expectedEventId.getCode(), eventId.getCode());
+        assertEquals(expectedEventId.getCodeSystemName(), eventId.getCodeSystemName());
+        assertEquals(expectedEventId.getOriginalText(), eventId.getOriginalText());
         CodedValueType eventTypeCode = event.getEventIdentification().getEventTypeCode().get(0);
-        assertEquals("ITI-78", eventTypeCode.getCode());
-        assertEquals("IHE Transactions", eventTypeCode.getCodeSystemName());
-        assertEquals("Mobile Patient Demographics Query", eventTypeCode.getOriginalText());
+        CodedValueType expectedEventTypeCode = new CustomIHETransactionEventTypeCodes.PDQMQuery();
+        assertEquals(expectedEventTypeCode.getCode(), eventTypeCode.getCode());
+        assertEquals(expectedEventTypeCode.getCodeSystemName(), eventTypeCode.getCodeSystemName());
+        assertEquals(expectedEventTypeCode.getOriginalText(), eventTypeCode.getOriginalText());
 
+        // ActiveParticipant Source
+        ActiveParticipantType source = event.getActiveParticipant().get(0);
+        assertTrue(source.isUserIsRequestor());
+        assertEquals("127.0.0.1", source.getNetworkAccessPointID());
+        assertEquals(RFC3881ActiveParticipantCodes.RFC3881NetworkAccessPointTypeCodes.IP_ADDRESS.getCode(), source.getNetworkAccessPointTypeCode());
+
+        // ActiveParticipant Destination
         ActiveParticipantType destination = event.getActiveParticipant().get(1);
         assertFalse(destination.isUserIsRequestor());
         assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient", destination.getUserID());
         assertEquals("localhost", destination.getNetworkAccessPointID());
 
+        // Audit Source
+        AuditSourceIdentificationType sourceIdentificationType = event.getAuditSourceIdentification().get(0);
+        assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
+        assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
+
+        // Query Parameters
         ParticipantObjectIdentificationType poit = event.getParticipantObjectIdentification().get(0);
-        assertEquals(2, poit.getParticipantObjectTypeCode().shortValue());
-        assertEquals(24, poit.getParticipantObjectTypeCodeRole().shortValue());
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM.getCode(), poit.getParticipantObjectTypeCode());
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.QUERY.getCode(), poit.getParticipantObjectTypeCodeRole());
+        assertEquals("http://localhost:8999/Patient?family=Test", new String(poit.getParticipantObjectQuery()));
+
         CodedValueType poitTypeCode = poit.getParticipantObjectIDTypeCode();
         assertEquals("ITI-78", poitTypeCode.getCode());
         assertEquals("IHE Transactions", poitTypeCode.getCodeSystemName());
         assertEquals("Mobile Patient Demographics Query", poitTypeCode.getOriginalText());
         assertEquals("MobilePatientDemographicsQuery", poit.getParticipantObjectID());
-        // assertEquals("targetSystem=urn%3Aoid%3A1.2.3.4.6&sourceIdentifier=urn%3Aoid%3A1.2.3.4%7C0815", new String(poit.getParticipantObjectQuery()));
     }
 
     @Test
@@ -113,6 +141,15 @@ public class TestIti78Success extends AbstractTestIti78 {
                 .execute();
         assertEquals("Test", p.getName().get(0).getFamily().get(0).getValue());
         assertEquals(String.format("http://localhost:%d/Patient/4711", DEMO_APP_PORT), p.getId());
+        MockedSender sender = getAuditSender();
+        assertEquals(1, sender.getMessages().size());
+        AuditMessage event = sender.getMessages().get(0).getAuditMessage();
+
+        // Patient
+        ParticipantObjectIdentificationType poit = event.getParticipantObjectIdentification().get(0);
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON.getCode(), poit.getParticipantObjectTypeCode());
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT.getCode(), poit.getParticipantObjectTypeCodeRole());
+        assertEquals("Patient/4711", new String(poit.getParticipantObjectID()));
     }
 
 

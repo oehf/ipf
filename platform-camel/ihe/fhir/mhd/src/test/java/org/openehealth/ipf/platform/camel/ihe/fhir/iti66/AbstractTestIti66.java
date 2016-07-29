@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
 import ca.uhn.fhir.rest.gclient.ICriterion;
+import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import org.hl7.fhir.instance.model.Bundle;
-import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.instance.model.DocumentManifest;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
-import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +31,9 @@ import javax.servlet.ServletException;
 /**
  *
  */
-abstract class AbstractTestIti78 extends FhirTestContainer {
+abstract class AbstractTestIti66 extends FhirTestContainer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti78.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti66.class);
 
     public static void startServer(String contextDescriptor) throws ServletException {
         IpfFhirServlet servlet = new IpfFhirServlet();
@@ -41,23 +41,15 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
         startClient(String.format("http://localhost:%d/", FhirTestContainer.DEMO_APP_PORT));
     }
 
-    protected ICriterion<?> familyParameters() {
-        return PdqPatient.FAMILY.matches().value("Test");
+    protected ICriterion<?> manifestParameters() {
+        return new TokenClientParam("patient.identifier").exactly()
+                .systemAndIdentifier("urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1", "1");
     }
 
     protected Bundle sendManually(ICriterion<?> requestData) {
         return client.search()
-                .forResource(PdqPatient.class)
+                .forResource(DocumentManifest.class)
                 .where(requestData)
-                .returnBundle(Bundle.class)
-                .execute();
-    }
-
-    protected Bundle sendManuallyWithCount(ICriterion<?> requestData, int count) {
-        return client.search()
-                .forResource(PdqPatient.class)
-                .where(requestData)
-                .count(count)
                 .returnBundle(Bundle.class)
                 .execute();
     }

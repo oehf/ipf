@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
-import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,23 +27,23 @@ import javax.servlet.ServletException;
 /**
  *
  */
-public class TestIti83UnknownSource extends AbstractTestIti83 {
+public class TestIti66Error extends AbstractTestIti66 {
 
-    private static final String CONTEXT_DESCRIPTOR = "iti-83-unknown-source.xml";
+    private static final String CONTEXT_DESCRIPTOR = "iti-66-error.xml";
 
     @BeforeClass
     public static void setUpClass() throws ServletException {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
-    @Test(expected = InvalidRequestException.class)
-    public void testSendManualPixm() {
+    @Test(expected = InternalErrorException.class)
+    public void testSendManuallyReturningError() {
         try {
-            sendManually(validQueryParameters());
-        } catch (InvalidRequestException e) {
-            assertAndRethrow(e, OperationOutcome.IssueType.CODEINVALID);
+            sendManually(manifestParameters());
+        } catch (InternalErrorException e) {
+            assertAndRethrow(e, OperationOutcome.IssueType.PROCESSING);
         }
-    }
 
+    }
 
 }

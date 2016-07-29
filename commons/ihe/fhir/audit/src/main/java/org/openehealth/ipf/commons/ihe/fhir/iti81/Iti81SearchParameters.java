@@ -16,13 +16,17 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
+import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
+
+import java.util.List;
 
 /**
  *
@@ -42,4 +46,11 @@ public class Iti81SearchParameters implements FhirSearchParameters {
     @Getter @Setter private TokenAndListParam subtype;
     @Getter @Setter private TokenAndListParam outcome;
 
+    @Getter
+    private FhirContext fhirContext;
+
+    @Override
+    public List<TokenParam> getPatientIdParam() {
+        throw new UnsupportedOperationException();
+    }
 }

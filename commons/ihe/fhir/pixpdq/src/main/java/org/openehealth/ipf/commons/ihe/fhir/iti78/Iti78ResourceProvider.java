@@ -95,7 +95,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
                 .state(state)
                 .postalCode(postalCode)
                 .gender(gender)
-                .resourceId(resourceId)
+                ._id(resourceId)
                 .telecom(telecom)
                 .multipleBirthNumber(multipleBirthNumber)
                 .mothersMaidenNameFamily(mothersMaidenNameFamily)

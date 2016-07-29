@@ -24,6 +24,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 /**
  * @author Martin Krasser
@@ -62,7 +63,7 @@ public class TutorialRouteBuilderIntegrationTest extends Assert {
 
         @Override
         public void handleResponse(InputStream response) throws Exception {
-            String s = IOUtils.toString(response);
+            String s = IOUtils.toString(response, Charset.defaultCharset());
             assertEquals("message valid", s);
         }
         

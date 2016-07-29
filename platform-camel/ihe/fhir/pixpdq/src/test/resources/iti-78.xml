@@ -20,7 +20,7 @@
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="base-iti-78.xml" />
+    <import resource="common-beans.xml" />
 
     <bean id="routeBuilder"
           class="org.openehealth.ipf.platform.camel.ihe.fhir.iti78.Iti78TestRouteBuilder">
