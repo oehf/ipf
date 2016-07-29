@@ -18,10 +18,10 @@
         <!-- project.build.sourceEncoding>UTF-8</project.build.sourceEncoding -->
 
         <!-- Report version properties. Reflow Skin does not work with site-plugin 3.5 -->
-        <site-plugin-version>3.4</site-plugin-version>
+        <site-plugin-version>3.5.1</site-plugin-version>
         <surefire-report-plugin-version>2.19.1</surefire-report-plugin-version>
         <jxr-plugin-version>2.5</jxr-plugin-version>
-        <project-info-reports-plugin-version>2.8.1</project-info-reports-plugin-version>
+        <project-info-reports-plugin-version>2.9</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -56,8 +56,8 @@
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.6</assembly-plugin-version>
-        <build-helper-version>1.10</build-helper-version>
-        <bundle-plugin-version>3.0.1</bundle-plugin-version>
+        <build-helper-version>1.11</build-helper-version>
+        <bundle-plugin-version>3.2.0</bundle-plugin-version>
         <compiler-plugin-version>3.5.1</compiler-plugin-version>
         <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
@@ -67,11 +67,11 @@
         <groovy-eclipse-batch-version>2.4.3-01</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>2.9.2-01</groovy-eclipse-compiler-version>
         <jar-plugin-version>3.0.2</jar-plugin-version>
-        <javadoc-plugin-version>2.10.3</javadoc-plugin-version>
-        <jaxb-plugin-version>1.6</jaxb-plugin-version>
+        <javadoc-plugin-version>2.10.4</javadoc-plugin-version>
+        <jaxb-plugin-version>2.2</jaxb-plugin-version>
         <lombok-plugin-version>1.16.10.0</lombok-plugin-version>
-        <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
-        <pax-plugin-version>1.5</pax-plugin-version>
+        <nexus-staging-plugin-version>1.6.7</nexus-staging-plugin-version>
+        <pax-plugin-version>1.6.0</pax-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.0.1</resources-plugin-version>
         <sources-plugin-version>3.0.1</sources-plugin-version>
@@ -103,12 +103,13 @@
         <hibernate-javassist-version>3.20.0-GA</hibernate-javassist-version>
         <hibernate-search-version>5.0.1.Final</hibernate-search-version>
         <httpclient4-version>4.5.2</httpclient4-version>
+        <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
         <jasypt-version>1.9.2</jasypt-version>
         <jboss-logging-version>3.3.0.Final</jboss-logging-version>
         <jboss-logging-annotations-version>2.0.1.Final</jboss-logging-annotations-version>
         <jdom-version>2.0.6</jdom-version>
-        <jetty-version>9.2.15.v20160210</jetty-version>
+        <jetty-version>9.3.10.v20160621</jetty-version>
         <joda-time-version>2.9.4</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>1.2.17</log4j-version>
@@ -118,7 +119,7 @@
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.0.36</tomcat-version>
+        <tomcat-version>8.5.4</tomcat-version>
         <xbean-spring-version>4.5</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
     </properties>
@@ -166,7 +167,6 @@
                     <plugin>
                         <groupId>org.projectlombok</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
-                        <version>${lombok-plugin-version}</version>
                         <executions>
                             <execution>
                                 <phase>generate-sources</phase>
@@ -181,15 +181,6 @@
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
                             <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>sun.jdk</groupId>
-                                <artifactId>tools</artifactId>
-                                <version>1.8</version>
-                                <scope>system</scope>
-                                <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                            </dependency>
-                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
@@ -782,6 +773,11 @@
                 <version>${jetty-version}</version>
             </dependency>
             <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-io</artifactId>
+                <version>${jetty-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet-api-version}</version>
@@ -819,6 +815,12 @@
                         <artifactId>ecj</artifactId>
                     </exclusion>
                 </exclusions>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.security.auth.message</groupId>
+                <artifactId>javax.security.auth.message-api</artifactId>
+                <version>${jaspic-api-version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -1059,6 +1061,15 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>jaxb2-maven-plugin</artifactId>
                     <version>${jaxb-plugin-version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>sun.jdk</groupId>
+                            <artifactId>tools</artifactId>
+                            <version>1.8</version>
+                            <scope>system</scope>
+                            <systemPath>${java.home}/../lib/tools.jar</systemPath>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.ops4j</groupId>
