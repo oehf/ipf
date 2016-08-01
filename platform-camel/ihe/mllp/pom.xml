@@ -66,6 +66,7 @@
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- dependencies for test -->

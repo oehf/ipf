@@ -28,12 +28,13 @@
             <artifactId>spring-boot-starter-cache</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+        </dependency>
 
         <!-- IPF Support -->
-        <dependency>
-            <groupId>org.openehealth.ipf.boot</groupId>
-            <artifactId>cxf-integration-spring-boot-starter</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.openehealth.ipf.boot</groupId>
             <artifactId>ipf-atna-spring-boot-starter</artifactId>

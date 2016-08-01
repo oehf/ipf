@@ -21,9 +21,6 @@
         <module>ipf-xds-spring-boot-starter</module>
         <module>ipf-fhir-spring-boot-starter</module>
         <module>ipf-atna-spring-boot-starter</module>
-
-        <!-- TODO remove this with CXF 3.2.0 -->
-        <module>cxf-integration-spring-boot-starter</module>
     </modules>
 
     <build>
