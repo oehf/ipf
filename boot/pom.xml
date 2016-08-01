@@ -15,21 +15,14 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>ipf-spring-boot-autoconfigure</module>
         <module>ipf-spring-boot-starter</module>
-        <module>ipf-hl7-spring-boot-autoconfigure</module>
         <module>ipf-hl7-spring-boot-starter</module>
-        <module>ipf-hl7v3-spring-boot-autoconfigure</module>
         <module>ipf-hl7v3-spring-boot-starter</module>
-        <module>ipf-xds-spring-boot-autoconfigure</module>
         <module>ipf-xds-spring-boot-starter</module>
-        <module>ipf-fhir-spring-boot-autoconfigure</module>
         <module>ipf-fhir-spring-boot-starter</module>
-        <module>ipf-atna-spring-boot-autoconfigure</module>
         <module>ipf-atna-spring-boot-starter</module>
 
         <!-- TODO remove this with CXF 3.2.0 -->
-        <module>cxf-integration-spring-boot-autoconfigure</module>
         <module>cxf-integration-spring-boot-starter</module>
     </modules>
 

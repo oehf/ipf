@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,8 +54,8 @@ public class LazyBundleProvider extends AbstractBundleProvider {
 
     private final boolean cacheResults;
     private int size = -1;
-    private List<IBaseResource> cachedResults = new ArrayList<>();
-    private ResultRanges resultRanges = new ResultRanges();
+    private transient List<IBaseResource> cachedResults = new ArrayList<>();
+    private transient ResultRanges resultRanges = new ResultRanges();
 
     /**
      * Initializes a lazy bundle provider

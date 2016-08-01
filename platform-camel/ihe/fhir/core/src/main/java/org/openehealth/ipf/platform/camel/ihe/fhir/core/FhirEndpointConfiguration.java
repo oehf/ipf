@@ -93,7 +93,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      */
     @Getter
     @UriParam
-    private boolean lazyLoadBundles;
+    private boolean lazyLoadBundles = false;
 
     /**
      * Only considered if {@link #lazyLoadBundles} is true. The (partial) results of paging requests are cached so that subsequent
@@ -101,7 +101,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      */
     @Getter
     @UriParam
-    private boolean cacheBundles;
+    private boolean cacheBundles = true;
 
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         this(component, FhirContext.forDstu2Hl7Org(), path, parameters);

@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.openehealth.ipf.boot.hl7v2.IpfHl7v2AutoConfiguration

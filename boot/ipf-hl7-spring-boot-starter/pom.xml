@@ -13,23 +13,37 @@
 
 	<dependencies>
 
+        <!-- Camel Spring Boot Support -->
         <dependency>
-            <groupId>org.openehealth.ipf.boot</groupId>
-            <artifactId>ipf-spring-boot-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-hl7</artifactId>
+        </dependency>
+
+        <!-- IPF Support -->
         <dependency>
             <groupId>org.openehealth.ipf.boot</groupId>
             <artifactId>ipf-atna-spring-boot-starter</artifactId>
         </dependency>
-        <!-- Camel Spring Boot Support -->
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring-boot-starter</artifactId>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.boot</groupId>
-            <artifactId>ipf-hl7-spring-boot-autoconfigure</artifactId>
-        </dependency>
+
 
 	</dependencies>
 
