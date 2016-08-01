@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
-import org.apache.commons.lang3.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.Validate;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
@@ -28,26 +29,10 @@ import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
-import org.opensaml.core.config.ConfigurationService;
-import org.opensaml.core.config.InitializationException;
-import org.opensaml.core.config.InitializationService;
-import org.opensaml.core.xml.XMLObject;
-import org.opensaml.core.xml.config.XMLObjectProviderRegistry;
-import org.opensaml.core.xml.io.Unmarshaller;
-import org.opensaml.core.xml.io.UnmarshallerFactory;
-import org.opensaml.core.xml.io.UnmarshallingException;
-import org.opensaml.saml.common.xml.SAMLConstants;
-import org.opensaml.saml.saml2.core.Assertion;
-import org.opensaml.saml.saml2.core.Attribute;
-import org.opensaml.saml.saml2.core.AttributeStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.namespace.QName;
 import java.util.List;
 
 /**
@@ -56,43 +41,18 @@ import java.util.List;
  */
 abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends AbstractSafeInterceptor {
     private static final transient Logger LOG = LoggerFactory.getLogger(AbstractAuditInterceptor.class);
-    
+
+    @Getter @Setter private static XuaProcessor xuaProcessor = null;
+
     /**
      * Key used to store audit datasets in Web Service contexts.
      */
     public static final String DATASET_CONTEXT_KEY = AbstractAuditInterceptor.class.getName() + ".DATASET";
 
     /**
-     * If a SAML assertion is stored under this key in the Web Service context,
-     * IPF will use it instead of parsing the WS-Security header by itself.
-     * If there are no Web Service context element under this key, or if this element
-     * does not contain a SAML assertion, IPF will parse the WS-Security header
-     * and store the assertion extracted from there (if any) under this key.
-     */
-    public static final String XUA_SAML_ASSERTION = AbstractAuditInterceptor.class.getName() + ".XUA_SAML_ASSERTION";
-
-    /**
-     * XML Namespace URI of WS-Security Extensions 1.1.
-     */
-    public static final String WSSE_NS_URI = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
-
-    /**
      * Audit strategy associated with this interceptor.  
      */
     private final AuditStrategy<T> auditStrategy;
-
-
-    private static final UnmarshallerFactory SAML_UNMARSHALLER_FACTORY;
-
-    static {
-        try {
-            InitializationService.initialize();
-            XMLObjectProviderRegistry registry = ConfigurationService.get(XMLObjectProviderRegistry.class);
-            SAML_UNMARSHALLER_FACTORY = registry.getUnmarshallerFactory();
-        } catch (InitializationException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
     /**
@@ -211,70 +171,8 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
             Header.Direction headerDirection,
             WsAuditDataset auditDataset)
     {
-        Assertion assertion = null;
-
-        // check whether someone has already parsed the SAML2 assertion
-        Object o = message.getContextualProperty(XUA_SAML_ASSERTION);
-        if (o instanceof Assertion) {
-            assertion = (Assertion) o;
-        }
-
-        // extract SAML assertion the from WS-Security SOAP header
-        if (assertion == null) {
-            Header header = message.getHeader(new QName(WSSE_NS_URI, "Security"));
-            if (! ((header != null) &&
-                   headerDirection.equals(header.getDirection()) &&
-                   (header.getObject() instanceof Element)))
-            {
-                return;
-            }
-
-            Element headerElem = (Element) header.getObject();
-            NodeList nodeList = headerElem.getElementsByTagNameNS(SAMLConstants.SAML20_NS, "Assertion");
-            Element assertionElem = (Element) nodeList.item(0);
-            if (assertionElem == null) {
-                return;
-            }
-
-            Unmarshaller unmarshaller = SAML_UNMARSHALLER_FACTORY.getUnmarshaller(assertionElem);
-            try {
-                assertion = (Assertion) unmarshaller.unmarshall(assertionElem);
-            } catch (UnmarshallingException e) {
-                LOG.warn("Cannot extract SAML assertion from the WS-Security SOAP header", e);
-                return;
-            }
-
-            message.getExchange().put(XUA_SAML_ASSERTION, assertion);
-        }
-
-        // set ATNA XUA userName element
-        String userName = ((assertion.getSubject() != null) && (assertion.getSubject().getNameID() != null))
-                ? assertion.getSubject().getNameID().getValue() : null;
-
-        String issuer = (assertion.getIssuer() != null)
-                ? assertion.getIssuer().getValue() : null;
-
-        if (StringUtils.isNotEmpty(issuer) && StringUtils.isNotEmpty(userName)) {
-            auditDataset.setUserName(assertion.getSubject().getNameID().getSPProvidedID() + '<' + userName + '@' + issuer + '>');
-        }
-
-        // collect purposes of use
-        for (AttributeStatement statement : assertion.getAttributeStatements()) {
-            for (Attribute attribute : statement.getAttributes()) {
-                if ("urn:oasis:names:tc:xspa:1.0:subject:purposeofuse".equals(attribute.getName())) {
-                    for (XMLObject value : attribute.getAttributeValues()) {
-                        NodeList purposeElemList = value.getDOM().getElementsByTagNameNS("urn:hl7-org:v3", "PurposeOfUse");
-                        for (int i = 0; i < purposeElemList.getLength(); ++i) {
-                            Element purposeElem = (Element) purposeElemList.item(i);
-                            CodedValueType cvt = new CodedValueType();
-                            cvt.setCode(purposeElem.getAttribute("code"));
-                            cvt.setCodeSystemName(purposeElem.getAttribute("codeSystem"));
-                            cvt.setOriginalText(purposeElem.getAttribute("displayName"));
-                            auditDataset.getPurposesOfUse().add(cvt);
-                        }
-                    }
-                }
-            }
+        if (xuaProcessor != null) {
+            xuaProcessor.extractXuaUserNameFromSaml2Assertion(message, headerDirection, auditDataset);
         }
     }
 

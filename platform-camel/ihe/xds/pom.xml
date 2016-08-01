@@ -28,14 +28,17 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-ws</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-xds</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -75,6 +78,12 @@
             <version>${project.version}</version>
             <scope>test</scope>
             <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-xua</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>

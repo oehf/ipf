@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ipf-commons-ihe-xua</artifactId>
+    <name>ipf-commons-ihe-xua</name>
+    <description>XUA support for IHE Web Services</description>
+    <url>${site.url}/${project.artifactId}</url>
+
+    <properties>
+        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.xua.*</osgi.export.pkg>
+    </properties>
+
+    <parent>
+        <groupId>org.openehealth.ipf.commons</groupId>
+        <artifactId>ipf-commons-ihe</artifactId>
+        <version>3.2-SNAPSHOT</version>
+    </parent>
+        
+    <dependencies>
+        <!-- Dependencies for main -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-ws</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml-saml-impl</artifactId>
+        </dependency>
+    </dependencies>
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
+</project>

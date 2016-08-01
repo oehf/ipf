@@ -20,12 +20,14 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest
+import org.openehealth.ipf.commons.ihe.xua.BasicXuaProcessor
 import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -75,6 +77,8 @@ class TestIti42 extends StandardTestContainer {
         SoapHeader header = new SoapHeader(new QName(assertion.namespaceURI, assertion.localName), assertion)
         //header.mustUnderstand = true
         camelHeaders = [(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS) : [header]]
+
+        AbstractAuditInterceptor.xuaProcessor = new BasicXuaProcessor()
 
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
