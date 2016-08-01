@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.ws.server;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.Wrapper;
+import org.apache.catalina.authenticator.jaspic.AuthConfigFactoryImpl;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
@@ -24,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ContextLoaderListener;
 
+import javax.security.auth.message.config.AuthConfigFactory;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -43,6 +45,7 @@ public class TomcatServer extends ServletServer {
     @Override
     public void start() {
         embedded = new Tomcat();
+        AuthConfigFactory.setFactory(new AuthConfigFactoryImpl());
 
         Context context = embedded.addContext(getContextPath(), "/");
         context.addParameter("contextConfigLocation", getContextResource());
@@ -73,7 +76,6 @@ public class TomcatServer extends ServletServer {
         loader.setVirtualClasspath(System.getProperty("java.class.path"));
         context.setLoader(loader);
         */
-
         Connector connector = embedded.getConnector();
         connector.setPort(getPort());
         if (isSecure()) {

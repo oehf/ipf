@@ -44,6 +44,10 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
         <!-- Dependencies for test -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
@@ -85,11 +89,12 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <configuration>
-                    <includes>
-                        <include>org/openehealth/ipf/commons/ihe/xds/core/requests/*.java</include>
-                        <include>org/openehealth/ipf/commons/ihe/xds/core/responses/*.java</include>
-                    </includes>
-                    <outputDirectory>target/jaxb2</outputDirectory>
+                    <sources>
+                        <source>${project.build.directory}/generated-stubs/org/openehealth/ipf/commons/ihe/xds/core/requests</source>
+                        <source>${project.build.directory}/generated-stubs/org/openehealth/ipf/commons/ihe/xds/core/responses</source>
+                    </sources>
+                    <outputDirectory>${project.build.directory}/jaxb2</outputDirectory>
+                    <createJavaDocAnnotations>false</createJavaDocAnnotations>
                 </configuration>
                 <executions>
                     <execution>
@@ -99,6 +104,24 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <addOutputDirectory>false</addOutputDirectory>
+                    <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/generated-stubs</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
