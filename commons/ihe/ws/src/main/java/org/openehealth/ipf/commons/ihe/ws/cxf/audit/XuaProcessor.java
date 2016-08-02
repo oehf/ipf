@@ -39,4 +39,5 @@ public interface XuaProcessor {
             Header.Direction headerDirection,
             WsAuditDataset auditDataset);
 
+    XuaProcessor NOOP = (message, headerDirection, auditDataset) -> {};
 }

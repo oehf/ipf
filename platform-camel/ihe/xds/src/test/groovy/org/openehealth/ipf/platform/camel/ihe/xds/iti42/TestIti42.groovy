@@ -78,7 +78,8 @@ class TestIti42 extends StandardTestContainer {
         //header.mustUnderstand = true
         camelHeaders = [(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS) : [header]]
 
-        AbstractAuditInterceptor.xuaProcessor = new BasicXuaProcessor()
+        // By default set by ServiceLoader when ipf-commons-ihe-xua is in classpath
+        // AbstractAuditInterceptor.xuaProcessor = new BasicXuaProcessor()
 
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }

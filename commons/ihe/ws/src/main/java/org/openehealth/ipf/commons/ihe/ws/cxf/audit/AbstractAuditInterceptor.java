@@ -26,6 +26,7 @@ import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
+import org.openehealth.ipf.commons.core.config.Lookup;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
@@ -42,7 +43,6 @@ import java.util.List;
 abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends AbstractSafeInterceptor {
     private static final transient Logger LOG = LoggerFactory.getLogger(AbstractAuditInterceptor.class);
 
-    @Getter @Setter private static XuaProcessor xuaProcessor = null;
 
     /**
      * Key used to store audit datasets in Web Service contexts.
@@ -50,10 +50,15 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
     public static final String DATASET_CONTEXT_KEY = AbstractAuditInterceptor.class.getName() + ".DATASET";
 
     /**
+     * Processor for extracting SAML tokens when XUA is used
+     */
+    @Getter @Setter
+    private static XuaProcessor xuaProcessor = Lookup.lookup(XuaProcessor.class).orElse(XuaProcessor.NOOP);
+
+    /**
      * Audit strategy associated with this interceptor.  
      */
     private final AuditStrategy<T> auditStrategy;
-
 
     /**
      * Constructor which sets a strategy.
@@ -171,9 +176,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
             Header.Direction headerDirection,
             WsAuditDataset auditDataset)
     {
-        if (xuaProcessor != null) {
-            xuaProcessor.extractXuaUserNameFromSaml2Assertion(message, headerDirection, auditDataset);
-        }
+        xuaProcessor.extractXuaUserNameFromSaml2Assertion(message, headerDirection, auditDataset);
     }
 
 
