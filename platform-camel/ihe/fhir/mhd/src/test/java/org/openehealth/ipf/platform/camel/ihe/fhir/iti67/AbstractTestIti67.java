@@ -19,7 +19,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti67;
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import org.hl7.fhir.instance.model.Bundle;
-import org.hl7.fhir.instance.model.DocumentManifest;
 import org.hl7.fhir.instance.model.DocumentReference;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;

@@ -31,6 +31,7 @@ import org.hl7.fhir.instance.model.valuesets.V3MaritalStatus
 import org.hl7.fhir.instance.model.valuesets.V3NullFlavor
 import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
+import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_K21
 import org.slf4j.Logger
@@ -71,6 +72,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         Validate.notNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
         this.pdqSupplierResourceIdentifierUri = pdqSupplierResourceIdentifierUri
         this.pdqSupplierResourceIdentifierOid = uriMapper.uriToOid(pdqSupplierResourceIdentifierUri)
+                .orElseThrow({new UnmappableUriException(pdqSupplierResourceIdentifierUri)})
     }
 
     @Override

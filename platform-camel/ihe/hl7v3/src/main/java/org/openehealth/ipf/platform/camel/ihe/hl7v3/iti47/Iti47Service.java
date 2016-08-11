@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47PortType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.PDQV3.Interactions.ITI_47;
+
 /**
  * Service implementation for the IHE ITI-47 transaction (PDQ v3).
  * @author Dmytro Rud
@@ -25,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 public class Iti47Service extends AbstractHl7v3WebService implements Iti47PortType {
 
     public Iti47Service() {
-        super(Iti47Component.WS_CONFIG);
+        super(ITI_47);
     }
 
     @Override

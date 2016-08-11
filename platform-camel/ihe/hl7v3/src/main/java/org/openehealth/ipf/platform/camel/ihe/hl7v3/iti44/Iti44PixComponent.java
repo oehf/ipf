@@ -15,32 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44PixPortType;
-
-import javax.xml.namespace.QName;
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_44_PIX;
 
 /**
  * The Camel component for the ITI-44 transaction (PIX Feed v3).
  */
 public class Iti44PixComponent extends AbstractIti44Component {
 
-    private static final String NS_URI_PIX = "urn:ihe:iti:pixv3:2007";
-    public static final Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
-            IpfInteractionId.ITI_44_PIX,
-            new QName(NS_URI_PIX, "PIXManager_Service", "ihe"),
-            Iti44PixPortType.class,
-            new QName(NS_URI_PIX, "PIXManager_Binding_Soap12", "ihe"),
-            false,
-            "wsdl/iti44/iti44-pix-raw.wsdl",
-            "MCCI_IN000002UV01",
-            null,
-            false,
-            false);
-
-    @Override
-    public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
-        return WS_CONFIG;
+    public Iti44PixComponent() {
+        super(ITI_44_PIX);
     }
 }

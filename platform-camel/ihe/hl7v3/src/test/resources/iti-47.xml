@@ -44,7 +44,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="ehcache-spring.xml"/>
 
     <bean id="hl7v2ContinuationStorage"
-          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage">
+          class="org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage">
         <constructor-arg>
             <bean factory-bean="ehcacheManager" factory-method="getCache">
                 <constructor-arg value="hl7v2ContinuationCache" />

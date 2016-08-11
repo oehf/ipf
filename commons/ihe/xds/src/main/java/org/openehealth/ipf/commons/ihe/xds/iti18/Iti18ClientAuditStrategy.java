@@ -25,7 +25,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditStrategy30;
  */
 public class Iti18ClientAuditStrategy extends XdsQueryAuditStrategy30 {
 
-    public Iti18ClientAuditStrategy() {
+    private static class LazyHolder {
+        private static final Iti18ClientAuditStrategy INSTANCE = new Iti18ClientAuditStrategy();
+    }
+
+    public static Iti18ClientAuditStrategy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
+    protected Iti18ClientAuditStrategy() {
         super(false);
     }
 

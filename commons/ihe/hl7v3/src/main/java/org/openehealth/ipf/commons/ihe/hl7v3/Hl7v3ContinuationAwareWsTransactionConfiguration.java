@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.commons.lang3.Validate;
-import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 
 import javax.xml.namespace.QName;
 
@@ -30,7 +30,6 @@ public class Hl7v3ContinuationAwareWsTransactionConfiguration extends Hl7v3WsTra
 
 
     public Hl7v3ContinuationAwareWsTransactionConfiguration(
-            InteractionId interactionId,
             QName serviceName,
             Class<?> sei,
             QName bindingName,
@@ -40,12 +39,16 @@ public class Hl7v3ContinuationAwareWsTransactionConfiguration extends Hl7v3WsTra
             String controlActProcessCode,
             boolean auditRequestPayload,
             boolean supportAsynchrony,
+            CombinedXmlValidationProfile requestValidationProfile,
+            CombinedXmlValidationProfile responseValidationProfile,
             String mainRequestRootElementName,
-            String mainResponseRootElementName)
+            String mainResponseRootElementName
+)
     {
-        super(interactionId, serviceName, sei, bindingName, mtom, wsdlLocation,
+        super(serviceName, sei, bindingName, mtom, wsdlLocation,
                 nakRootElementName, controlActProcessCode,
-                auditRequestPayload, supportAsynchrony);
+                auditRequestPayload, supportAsynchrony,
+                requestValidationProfile, responseValidationProfile);
 
         Validate.notEmpty(mainRequestRootElementName);
         Validate.notEmpty(mainResponseRootElementName);

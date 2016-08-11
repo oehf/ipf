@@ -16,10 +16,10 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import org.junit.*
+import org.openehealth.ipf.commons.ihe.hl7v2.PIX
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
+import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
-
-import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_44_PIX
 
 /**
  * Test for PIX Feed translator.
@@ -37,17 +37,17 @@ class PixFeedTranslatorTest extends Hl7TranslationTestContainer {
   
     @Test
     void testMaximalMergeRequest() {
-        doTestV3toV2RequestTranslation('PIX_FEED_MERGE_Maximal_Request', 8, ITI_44_PIX)
+        doTestV3toV2RequestTranslation('PIX_FEED_MERGE_Maximal_Request', 8, PIXV3.Interactions.ITI_44_PIX)
     }
   
     @Test
     void testMaximalRegistrationRequest() {
-        doTestV3toV2RequestTranslation('PIX_FEED_REG_Maximal_Request', 8, ITI_44_PIX)
+        doTestV3toV2RequestTranslation('PIX_FEED_REG_Maximal_Request', 8, PIXV3.Interactions.ITI_44_PIX)
     }
   
     @Test
     void testMaximalRevRequest() {
-        doTestV3toV2RequestTranslation('PIX_FEED_REV_Maximal_Request', 8, ITI_44_PIX)
+        doTestV3toV2RequestTranslation('PIX_FEED_REV_Maximal_Request', 8, PIXV3.Interactions.ITI_44_PIX)
     }
   
 }

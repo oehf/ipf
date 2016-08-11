@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
@@ -139,7 +140,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return true;
     }
 
-    public FhirComponentConfiguration getFhirComponentConfiguration() {
+    public FhirTransactionConfiguration getFhirComponentConfiguration() {
         return fhirComponent.getFhirComponentConfiguration();
     }
 

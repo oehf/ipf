@@ -16,32 +16,22 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti39.asyncresponse;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti39.asyncresponse.Iti39AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 
-import javax.xml.namespace.QName;
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_39_ASYNC;
 
 /**
  * The Camel component for the ITI-39 (XCA) async response.
  */
 public class Iti39AsyncResponseComponent extends XdsComponent<XdsRetrieveAuditDataset> {
 
-    private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
-            new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Service", "ihe"),
-            Iti39AsyncResponsePortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Binding", "ihe"),
-            false,
-            "wsdl/iti39-asyncresponse.wsdl",
-            true,
-            false,
-            false,
-            false);
+    public Iti39AsyncResponseComponent() {
+        super(ITI_39_ASYNC);
+    }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
@@ -51,21 +41,6 @@ public class Iti39AsyncResponseComponent extends XdsComponent<XdsRetrieveAuditDa
                 getSchemaLocations(parameters),
                 getProperties(parameters),
                 Iti39AsyncResponseService.class);
-    }
-
-    @Override
-    public WsTransactionConfiguration getWsTransactionConfiguration() {
-        return WS_CONFIG;
-    }
-
-    @Override
-    public AuditStrategy<XdsRetrieveAuditDataset> getClientAuditStrategy() {
-        return null;   // no producer support
-    }
-
-    @Override
-    public AuditStrategy<XdsRetrieveAuditDataset> getServerAuditStrategy() {
-        return new Iti39ClientAuditStrategy();
     }
 
 }

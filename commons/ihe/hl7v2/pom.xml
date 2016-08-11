@@ -41,6 +41,21 @@
             <groupId>org.openehealth.ipf.gazelle</groupId>
             <artifactId>ipf-gazelle-validation-commons-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>ipf-gazelle-validation-profiles-iti-pam</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.gazelle</groupId>
+            <artifactId>ipf-gazelle-validation-profiles-iti-pixpdq</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <distributionManagement>

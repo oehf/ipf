@@ -15,15 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+import org.openehealth.ipf.commons.ihe.xds.CONTINUA_HRN;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLProvideAndRegisterDocumentSetRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
@@ -53,8 +51,7 @@ abstract public class ContinuaHrnCamelProcessors {
         if (validationEnabled) {
             EbXMLProvideAndRegisterDocumentSetRequest30 message =
                 new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
-            ValidationProfile profile = new ValidationProfile(IpfInteractionId.Continua_HRN);
-            new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
+            new ProvideAndRegisterDocumentSetRequestValidator().validate(message, CONTINUA_HRN.Interactions.ITI_41);
         }
 
         // transform ebXML into simplified model, extract embedded documents, check document count

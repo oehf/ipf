@@ -16,8 +16,8 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import lombok.Getter;
-import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 
 import javax.xml.namespace.QName;
 
@@ -26,15 +26,14 @@ import javax.xml.namespace.QName;
  */
 public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration {
 
-    @Getter private final InteractionId interactionId;
     @Getter private final String nakRootElementName;
     @Getter private final String controlActProcessCode;
+    @Getter private final CombinedXmlValidationProfile requestValidationProfile;
+    @Getter private final CombinedXmlValidationProfile responseValidationProfile;
 
     /**
      * Constructs the service info.
      *
-     * @param interactionId
-     *      id of the interaction (transaction) which corresponds to this service info.
      * @param serviceName
      *      the qualified name of the service.
      * @param sei
@@ -56,7 +55,6 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration 
      *      whether producers can request asynchronous responses via WSA.
      */
     public Hl7v3WsTransactionConfiguration(
-            InteractionId interactionId,
             QName serviceName,
             Class<?> sei,
             QName bindingName,
@@ -65,14 +63,17 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration 
             String nakRootElementName,
             String controlActProcessCode,
             boolean auditRequestPayload,
-            boolean supportAsynchrony)
+            boolean supportAsynchrony,
+            CombinedXmlValidationProfile requestValidationProfile,
+            CombinedXmlValidationProfile responseValidationProfile)
     {
         super(serviceName, sei, bindingName, mtom, wsdlLocation,
                 true, false, auditRequestPayload, supportAsynchrony);
 
-        this.interactionId = interactionId;
         this.nakRootElementName = nakRootElementName;
         this.controlActProcessCode = controlActProcessCode;
+        this.requestValidationProfile = requestValidationProfile;
+        this.responseValidationProfile = responseValidationProfile;
     }
 
 }

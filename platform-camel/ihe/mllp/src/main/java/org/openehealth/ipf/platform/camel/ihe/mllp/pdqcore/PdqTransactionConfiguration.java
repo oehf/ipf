@@ -15,48 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore;
 
-import java.util.List;
-
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.Version;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 
 /**
  * A MLLP transaction configuration with PDQ-specific methods for continuation support.
  * @author Dmytro Rud
+ *
+ * @deprecated moved to {@link org.openehealth.ipf.commons.ihe.hl7v2.PdqTransactionConfiguration}
  */
-public class PdqTransactionConfiguration extends Hl7v2TransactionConfiguration {
-   
-    public PdqTransactionConfiguration(
-            Version[] hl7Version,
-            String sendingApplication, 
-            String sendingFacility,
-            ErrorCode requestErrorDefaultErrorCode,
-            ErrorCode responseErrorDefaultErrorCode,
-            String[] allowedRequestMessageTypes,
-            String[] allowedRequestTriggerEvents,
-            String[] allowedResponseMessageTypes,
-            String[] allowedResponseTriggerEvents, 
-            boolean[] auditabilityFlags,
-            boolean[] responseContinuabilityFlags,
-            HapiContext hapiContext)
-    {
-        super(hl7Version, sendingApplication, sendingFacility,
-                requestErrorDefaultErrorCode,
-                responseErrorDefaultErrorCode, allowedRequestMessageTypes,
-                allowedRequestTriggerEvents, allowedResponseMessageTypes,
-                allowedResponseTriggerEvents, auditabilityFlags,
-                responseContinuabilityFlags, hapiContext);
-    }
-    
-    @Override
-    public boolean isDataStartSegment(List<String> segments, int index) {
-        return segments.get(index).startsWith("PID");
-    }
+public class PdqTransactionConfiguration extends org.openehealth.ipf.commons.ihe.hl7v2.PdqTransactionConfiguration {
 
-    @Override
-    public boolean isFooterStartSegment(List<String> segments, int index) {
-        return segments.get(index).startsWith("DSC");
+    public PdqTransactionConfiguration(Version[] hl7Version, String sendingApplication, String sendingFacility,
+                                       ErrorCode requestErrorDefaultErrorCode, ErrorCode responseErrorDefaultErrorCode,
+                                       String[] allowedRequestMessageTypes, String[] allowedRequestTriggerEvents,
+                                       String[] allowedResponseMessageTypes, String[] allowedResponseTriggerEvents,
+                                       boolean[] auditabilityFlags, boolean[] responseContinuabilityFlags,
+                                       HapiContext hapiContext) {
+        super(hl7Version, sendingApplication, sendingFacility, requestErrorDefaultErrorCode, responseErrorDefaultErrorCode,
+                allowedRequestMessageTypes, allowedRequestTriggerEvents, allowedResponseMessageTypes, allowedResponseTriggerEvents,
+                auditabilityFlags, responseContinuabilityFlags, hapiContext);
     }
 }

@@ -16,12 +16,20 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 /**
- * Strategy for auditing ITI-78 transactions on the client side
+ * Strategy for auditing ITI-65 transactions on the client side
  *
  * @author Christian Ohr
  * @since 3.2
  */
 public class Iti65ClientAuditStrategy extends Iti65AuditStrategy {
+
+    private static class LazyHolder {
+        private static final Iti65ClientAuditStrategy INSTANCE = new Iti65ClientAuditStrategy();
+    }
+
+    public static Iti65ClientAuditStrategy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
 
     public Iti65ClientAuditStrategy() {
         super(false);

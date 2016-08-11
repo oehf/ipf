@@ -21,11 +21,12 @@ import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

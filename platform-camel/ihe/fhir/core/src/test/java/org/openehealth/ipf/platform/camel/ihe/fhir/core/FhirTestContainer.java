@@ -19,7 +19,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.IGenericClient;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.Conformance;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -49,7 +48,6 @@ public class FhirTestContainer extends StandardTestContainer {
 
     public void assertConformance(String type) {
         Conformance conf = client.fetchConformance().ofType(Conformance.class).execute();
-        printAsXML(conf);
         assertEquals(1, conf.getRest().size());
         Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
         assertTrue(component.getResource().stream()

@@ -37,12 +37,12 @@ import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.filterchain.IoFilter;
 import org.apache.mina.core.session.IoSession;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 
 import javax.net.ssl.SSLContext;

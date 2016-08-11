@@ -17,10 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 
 
 /**

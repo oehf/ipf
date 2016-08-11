@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
@@ -29,7 +28,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ObjectContaine
 import java.util.List;
 
 import static org.apache.commons.lang3.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_51;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.FOLDER_CLASS_NODE;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.FOLDER_PATIENT_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_CLASS_NODE;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_OBJ_REF;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.RESULT_NOT_SINGLE_PATIENT;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
@@ -54,7 +58,7 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse, Val
             metaDataAssert(objRef.getId() != null, MISSING_OBJ_REF);
         }
 
-        if (profile.getInteractionId() != IpfInteractionId.ITI_51) {
+        if (profile != ITI_51) {
             validatePatientIdsAreIdentical(response);
         }
     }

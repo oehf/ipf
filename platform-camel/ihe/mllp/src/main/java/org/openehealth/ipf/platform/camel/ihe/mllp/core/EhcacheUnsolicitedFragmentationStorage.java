@@ -16,33 +16,17 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
-import org.apache.commons.lang3.Validate;
 
 /**
  * A storage of HL7 v2 unsolicited fragmentation accumulators.
  * @author Dmytro Rud
+ *
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheUnsolicitedFragmentationStorage}
  */
-public class EhcacheUnsolicitedFragmentationStorage implements UnsolicitedFragmentationStorage {
-
-    private final Ehcache ehcache;
+public class EhcacheUnsolicitedFragmentationStorage extends org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheUnsolicitedFragmentationStorage {
 
     public EhcacheUnsolicitedFragmentationStorage(Ehcache ehcache) {
-        Validate.notNull(ehcache);
-        this.ehcache = ehcache;
+        super(ehcache);
     }
 
-    public void put(String key, StringBuilder accumulator) {
-        Element element = new Element(key, accumulator);
-        ehcache.put(element);
-    }
-
-    public StringBuilder getAndRemove(String key) {
-        Element element = ehcache.get(key);
-        if (element != null) {
-            ehcache.remove(key);
-            return (StringBuilder) element.getObjectValue();
-        }
-        return null;
-    }
 }

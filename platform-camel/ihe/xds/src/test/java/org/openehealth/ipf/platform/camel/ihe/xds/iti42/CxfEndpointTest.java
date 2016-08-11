@@ -22,7 +22,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer;
@@ -38,12 +37,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
@@ -51,6 +53,8 @@ import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_42;
 
 public class CxfEndpointTest {
     private final EbXMLFactory factory = new EbXMLFactory30();
@@ -87,7 +91,7 @@ public class CxfEndpointTest {
         runRequestAndExpectFailure();
 
         JaxWsServiceFactory<XdsAuditDataset> serviceFactory = new XdsServiceFactory<>(
-                Iti42Component.WS_CONFIG, "/iti-42", null, null, null);
+                ITI_42.getWsTransactionConfiguration(), "/iti-42", null, null, null);
         ServerFactoryBean factory = serviceFactory.createServerFactory(MyIti42.class);
         Server serviceServer = factory.create();
 
@@ -118,7 +122,7 @@ public class CxfEndpointTest {
 
     private Response runRequest() {
         JaxWsClientFactory clientFactory = new XdsClientFactory(
-                Iti42Component.WS_CONFIG,
+                ITI_42.getWsTransactionConfiguration(),
                 "http://localhost:" + port + "/iti-42",
                 null, null, null);
 
@@ -148,10 +152,9 @@ public class CxfEndpointTest {
 
         @Override
         public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest rawReq) {
-            ValidationProfile profile = new ValidationProfile(IpfInteractionId.ITI_42);
 
             EbXMLSubmitObjectsRequest30 ebXMLReq = new EbXMLSubmitObjectsRequest30(rawReq);
-            reqValidator.validate(ebXMLReq, profile);
+            reqValidator.validate(ebXMLReq, ITI_42);
             RegisterDocumentSet request = reqTransformer.fromEbXML(ebXMLReq);
 
             Response response = new Response(Status.SUCCESS);
@@ -161,7 +164,7 @@ public class CxfEndpointTest {
             }
 
             EbXMLRegistryResponse ebXMLResp = respTransformer.toEbXML(response);
-            respValidator.validate(ebXMLResp, profile);
+            respValidator.validate(ebXMLResp, ITI_42);
             return (RegistryResponseType) ebXMLResp.getInternal();
         }
     }

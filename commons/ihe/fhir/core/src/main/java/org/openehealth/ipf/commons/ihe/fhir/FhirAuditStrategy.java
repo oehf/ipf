@@ -50,9 +50,12 @@ public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends Audi
 
     @Override
     public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
-        RFC3881EventCodes.RFC3881EventOutcomeCodes outcomeCodes = getEventOutcomeCode(response);
-        auditDataset.setEventOutcomeCode(outcomeCodes);
-        return outcomeCodes == RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
+        if (response instanceof IBaseResource) {
+            RFC3881EventCodes.RFC3881EventOutcomeCodes outcomeCodes = getEventOutcomeCode(response);
+            auditDataset.setEventOutcomeCode(outcomeCodes);
+            return outcomeCodes == RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
+        };
+        return true;
     }
 
     @Override

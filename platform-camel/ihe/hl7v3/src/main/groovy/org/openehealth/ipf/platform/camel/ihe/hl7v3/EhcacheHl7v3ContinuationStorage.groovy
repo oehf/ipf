@@ -16,55 +16,15 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
 import net.sf.ehcache.Ehcache
-import org.apache.commons.lang3.Validate
-import net.sf.ehcache.Element
 
 /**
  * @author Dmytro Rud
+ *
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.hl7v3.storage.EhcacheHl7v3ContinuationStorage}
  */
-class EhcacheHl7v3ContinuationStorage implements Hl7v3ContinuationStorage {
-
-    private final Ehcache ehcache
-
-    private static final String MESSAGE_SUFFIX = '.message'
-    private static final String LAST_RESULT_NUMBER_SUFFIX = '.lastIndex'
-    private static final String CONTINUATION_QUANTITY_SUFFIX = '.quantity'
+class EhcacheHl7v3ContinuationStorage extends org.openehealth.ipf.commons.ihe.hl7v3.storage.EhcacheHl7v3ContinuationStorage {
 
     EhcacheHl7v3ContinuationStorage(Ehcache ehcache) {
-        Validate.notNull(ehcache)
-        this.ehcache = ehcache
+        super(ehcache)
     }
-
-    void storeMessage(String key, String message) {
-        ehcache.put(new Element(key + MESSAGE_SUFFIX, message))
-    }
-
-    String getMessage(String key) {
-        return ehcache.get(key + MESSAGE_SUFFIX)?.objectValue
-    }
-
-    void storeLastResultNumber(String key, int lastResultNumber) {
-        ehcache.put(new Element(key + LAST_RESULT_NUMBER_SUFFIX, lastResultNumber))
-    }
-
-    int getLastResultNumber(String key) {
-        Integer i = (Integer) ehcache.get(key + LAST_RESULT_NUMBER_SUFFIX)?.objectValue
-        return (i != null) ? i.intValue() : -1
-    }
-
-    void storeContinuationQuantity(String key, int continuationQuantity) {
-        ehcache.put(new Element(key + CONTINUATION_QUANTITY_SUFFIX, continuationQuantity))
-    }
-
-    int getContinuationQuantity(String key) {
-        Integer i = (Integer) ehcache.get(key + CONTINUATION_QUANTITY_SUFFIX)?.objectValue
-        return (i != null) ? i.intValue() : -1
-    }
-
-    boolean remove(String key) {
-        ehcache.remove(key + LAST_RESULT_NUMBER_SUFFIX)
-        ehcache.remove(key + CONTINUATION_QUANTITY_SUFFIX)
-        return ehcache.remove(key + MESSAGE_SUFFIX)
-    }
-
 }

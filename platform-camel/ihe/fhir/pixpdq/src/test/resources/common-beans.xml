@@ -52,6 +52,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
 
     <bean id="uriMapper" class="org.openehealth.ipf.commons.ihe.fhir.translation.NamingSystemUriMapper">
         <constructor-arg ref="namingSystemService"/>
+        <constructor-arg value="identifiers"/>
     </bean>
 
     <!-- Set dummy host and port -->

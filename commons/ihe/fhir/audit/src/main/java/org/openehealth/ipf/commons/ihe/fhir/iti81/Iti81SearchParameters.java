@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateAndListParam;
+import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -34,7 +35,7 @@ import java.util.List;
 @Builder
 public class Iti81SearchParameters implements FhirSearchParameters {
 
-    @Getter @Setter private DateAndListParam interval;
+    @Getter @Setter private DateRangeParam interval;
     @Getter @Setter private StringAndListParam address;
     @Getter @Setter private TokenAndListParam patientId;
     @Getter @Setter private TokenAndListParam identity;

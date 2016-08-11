@@ -19,8 +19,9 @@ import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 
 /**
@@ -42,7 +43,11 @@ public class SomeMllpItiComponent extends MllpTransactionComponent {
                 new boolean[] { true },
                 new boolean[] { false },
                 new DefaultHapiContext());
-    
+
+    public SomeMllpItiComponent() {
+        super(null);
+    }
+
     private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
     @Override

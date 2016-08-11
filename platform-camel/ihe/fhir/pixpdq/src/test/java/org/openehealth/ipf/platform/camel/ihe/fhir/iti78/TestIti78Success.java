@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
 import org.hl7.fhir.instance.model.Bundle;
-import org.hl7.fhir.instance.model.Conformance;
 import org.hl7.fhir.instance.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -113,17 +112,23 @@ public class TestIti78Success extends AbstractTestIti78 {
         assertEquals("IPF", sourceIdentificationType.getAuditSourceID());
         assertEquals("IPF", sourceIdentificationType.getAuditEnterpriseSiteID());
 
-        // Query Parameters
-        ParticipantObjectIdentificationType poit = event.getParticipantObjectIdentification().get(0);
-        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM.getCode(), poit.getParticipantObjectTypeCode());
-        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.QUERY.getCode(), poit.getParticipantObjectTypeCodeRole());
-        assertEquals("http://localhost:8999/Patient?family=Test", new String(poit.getParticipantObjectQuery()));
+        // Retrieved Patient
+//        ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentification().get(0);
+//        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON.getCode(), patient.getParticipantObjectTypeCode());
+//        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT.getCode(), patient.getParticipantObjectTypeCodeRole());
+//        assertEquals("Patient/4711", patient.getParticipantObjectID());
 
-        CodedValueType poitTypeCode = poit.getParticipantObjectIDTypeCode();
+        // Query Parameters
+        ParticipantObjectIdentificationType query = event.getParticipantObjectIdentification().get(0);
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM.getCode(), query.getParticipantObjectTypeCode());
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.QUERY.getCode(), query.getParticipantObjectTypeCodeRole());
+        assertEquals("http://localhost:8999/Patient?family=Test", new String(query.getParticipantObjectQuery()));
+
+        CodedValueType poitTypeCode = query.getParticipantObjectIDTypeCode();
         assertEquals("ITI-78", poitTypeCode.getCode());
         assertEquals("IHE Transactions", poitTypeCode.getCodeSystemName());
         assertEquals("Mobile Patient Demographics Query", poitTypeCode.getOriginalText());
-        assertEquals("MobilePatientDemographicsQuery", poit.getParticipantObjectID());
+        assertEquals("MobilePatientDemographicsQuery", query.getParticipantObjectID());
     }
 
     @Test

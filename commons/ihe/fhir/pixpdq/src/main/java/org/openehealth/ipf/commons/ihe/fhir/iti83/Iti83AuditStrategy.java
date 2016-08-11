@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.rest.param.TokenParam;
 import org.hl7.fhir.instance.model.Identifier;
 import org.hl7.fhir.instance.model.Parameters;
 import org.hl7.fhir.instance.model.StringType;
@@ -27,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Strategy for auditing ITI-83 transactions
@@ -78,5 +77,25 @@ public abstract class Iti83AuditStrategy extends FhirQueryAuditStrategy<FhirQuer
             }
         }
         return dataset;
+    }
+
+    @Override
+    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response) {
+        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response);
+        /* Pending https://github.com/oehf/ipf/issues/124
+        if (result) {
+            if (response instanceof Parameters) {
+                Parameters parameters = (Parameters) response;
+                auditDataset.getPatientIds().addAll(
+                        parameters.getParameter().stream()
+                                .map(Parameters.ParametersParameterComponent::getValue)
+                                .filter(Identifier.class::isInstance)
+                                .map(Identifier.class::cast)
+                                .map(id -> String.format("%s|%s", id.getSystem(), id.getValue()))
+                                .collect(Collectors.toList()));
+            }
+        }
+        */
+        return result;
     }
 }

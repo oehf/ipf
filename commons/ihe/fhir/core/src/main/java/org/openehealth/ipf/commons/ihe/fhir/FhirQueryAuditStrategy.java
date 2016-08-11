@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.param.TokenParam;
-import org.hl7.fhir.instance.model.IdType;
 
 import java.util.List;
 import java.util.Map;
@@ -68,4 +67,5 @@ public abstract class FhirQueryAuditStrategy<T extends FhirQueryAuditDataset> ex
 
         return dataset;
     }
+
 }

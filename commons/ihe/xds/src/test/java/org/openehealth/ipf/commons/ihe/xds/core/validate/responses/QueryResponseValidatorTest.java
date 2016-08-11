@@ -17,20 +17,35 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ENTRY_INVALID_AVAILABILITY_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_STATUS_IN_RESPONSE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_OBJ_REF;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.ORGANIZATION_NAME_MISSING;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.RESULT_NOT_SINGLE_PATIENT;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_NUMBER_OF_SLOT_VALUES;
 
 /**
  * Test for {@link QueryResponseValidator}.
@@ -41,7 +56,6 @@ public class QueryResponseValidatorTest {
     private QueryResponse response;
     private QueryResponseTransformer transformer;
     private DocumentEntry docEntry;
-    private ValidationProfile profile = new ValidationProfile(IpfInteractionId.ITI_18);
 
     @Before
     public void setUp() {
@@ -56,13 +70,13 @@ public class QueryResponseValidatorTest {
     
     @Test
     public void testValidateGoodCase() {
-        validator.validate(transformer.toEbXML(response), profile);
+        validator.validate(transformer.toEbXML(response), ITI_18);
     }
 
     @Test
     public void testQueryResponseDoesNotHaveSubmissionSetLimitations() {
         response.getSubmissionSets().clear();
-        validator.validate(transformer.toEbXML(response), profile);
+        validator.validate(transformer.toEbXML(response), ITI_18);
     }
     
     @Test
@@ -131,7 +145,7 @@ public class QueryResponseValidatorTest {
 
         docEntry.setCreationTime((Timestamp) null);
         docEntry.setLegalAuthenticator(null);
-        validator.validate(transformer.toEbXML(response), profile);
+        validator.validate(transformer.toEbXML(response), ITI_18);
     }
 
     private void expectFailure(ValidationMessage expectedMessage) {
@@ -140,7 +154,7 @@ public class QueryResponseValidatorTest {
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLQueryResponse ebXMLQueryResponse) {
         try {
-            validator.validate(ebXMLQueryResponse, profile);
+            validator.validate(ebXMLQueryResponse, ITI_18);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {

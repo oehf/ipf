@@ -15,9 +15,42 @@
  */
 package org.openehealth.ipf.commons.ihe.core;
 
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+
 /**
- * Mark for IDs of eHealth interactions.
+ * Interface for eHealth interactions. Implementations of this interface should ensure that instances are singletons.
+ * The recommended way to achieve this is using enums.
+ *
  * @author Dmytro Rud
  */
 public interface InteractionId {
+
+    /**
+     * @return name of the transaction
+     */
+    String getName();
+
+    /**
+     * @return description of the transaction
+     */
+    String getDescription();
+
+    /**
+     * @return true if this transaction described a query, false otherwise
+     */
+    boolean isQuery();
+
+    /**
+     * @param <T> AuditDataset subtype
+     * @return {@link AuditStrategy} to be used on client side to accomplish ATNA audit
+     */
+    <T extends AuditDataset> AuditStrategy<T> getClientAuditStrategy();
+
+    /**
+     * @param <T> AuditDataset subtype
+     * @return {@link AuditStrategy} to be used on server side to accomplish ATNA audit
+     */
+    <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy();
+
 }

@@ -21,8 +21,8 @@ import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.apache.camel.component.mina2.Mina2Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 
 /**
  * MLLP dispatching Camel component.

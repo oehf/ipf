@@ -20,10 +20,8 @@ import ca.uhn.hl7v2.model.Message
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
+import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
-
-import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_46
 
 /**
  * Test for PIX Update Notification translator.
@@ -44,7 +42,7 @@ class PixUpdateNotificationTranslatorTest extends Hl7TranslationTestContainer {
         String v2notification = getFileContent('adt-a31-1', false, true)
         Message msg = context.pipeParser.parse(v2notification)
         String v3notification = v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')
-        V3_VALIDATOR.validate(v3notification, Hl7v3ValidationProfiles.getRequestValidationProfile(ITI_46))
+        V3_VALIDATOR.validate(v3notification, PIXV3.Interactions.ITI_46.requestValidationProfile)
     }
     
 }

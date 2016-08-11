@@ -15,68 +15,25 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti64;
 
-import ca.uhn.hl7v2.ErrorCode;
-import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64AuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
+
+import static org.openehealth.ipf.commons.ihe.hl7v2.XPID.Interactions.ITI_64;
 
 /**
  * Camel component for ITI-64 (XAD-PID Change Management - XPID).
+ *
  * @author Boris Stanojevic
  */
 public class Iti64Component extends MllpTransactionComponent<Iti64AuditDataset> {
-    public static final Hl7v2TransactionConfiguration CONFIGURATION =
-        new Hl7v2TransactionConfiguration(
-                new Version[] {Version.V25},
-                "XPID adapter",
-                "IPF",
-                ErrorCode.APPLICATION_INTERNAL_ERROR,
-                ErrorCode.APPLICATION_INTERNAL_ERROR,
-                new String[] {"ADT"},
-                new String[] {"A43"},
-                new String[] {"ACK"},
-                new String[] {"*"},
-                new boolean[] {true},
-                new boolean[] {false},
-                HapiContextFactory.createHapiContext(PixPdqTransactions.ITI64));
-
-    private static final AuditStrategy<Iti64AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti64AuditStrategy(false);
-    private static final AuditStrategy<Iti64AuditDataset> SERVER_AUDIT_STRATEGY = new Iti64AuditStrategy(true);
-    private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
-
 
     public Iti64Component() {
-        super();
+        super(ITI_64);
     }
 
     public Iti64Component(CamelContext camelContext) {
-        super(camelContext);
-    }
-    
-    @Override
-    public AuditStrategy<Iti64AuditDataset> getClientAuditStrategy() {
-        return CLIENT_AUDIT_STRATEGY;
+        super(camelContext, ITI_64);
     }
 
-    @Override
-    public AuditStrategy<Iti64AuditDataset> getServerAuditStrategy() {
-        return SERVER_AUDIT_STRATEGY;
-    }
-    
-    @Override
-    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
-        return CONFIGURATION;
-    }
-
-    @Override
-    public NakFactory getNakFactory() {
-        return NAK_FACTORY;
-    }
 }

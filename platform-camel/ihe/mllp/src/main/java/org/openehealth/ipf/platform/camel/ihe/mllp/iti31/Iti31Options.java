@@ -16,9 +16,9 @@
 
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti31;
 
-import org.openehealth.ipf.commons.ihe.core.TransactionOptions;
+import org.openehealth.ipf.commons.ihe.hl7v2.TransactionOptions;
 
-import static org.openehealth.ipf.commons.ihe.core.TransactionOptionUtils.concat;
+import static org.openehealth.ipf.commons.ihe.hl7v2.TransactionOptionUtils.concat;
 
 /**
  *

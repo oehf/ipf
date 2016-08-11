@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
@@ -52,7 +51,7 @@ abstract public class Hl7v3ContinuationAwareWebService
     private static final XsltTransmogrifier XSLT_TRANSMOGRIFIER = new XsltTransmogrifier(String.class)
     private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
 
-    private final Hl7v3ContinuationStorage storage
+    private final org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage storage
     private final int defaultThreshold
     private final boolean validation
     private final AuditStrategy<Hl7v3AuditDataset> auditStrategy
@@ -136,8 +135,7 @@ abstract public class Hl7v3ContinuationAwareWebService
         // validate request, if necessary
         if (validation) {
             try {
-                VALIDATOR.validate(requestString,
-                        Hl7v3ValidationProfiles.getRequestValidationProfile(wsTransactionConfiguration.interactionId))
+                VALIDATOR.validate(requestString, wsTransactionConfiguration.requestValidationProfile)
             } catch (ValidationException e) {
                 LOG.info('operation(): invalid request', e)
                 String nak = createNak(requestString, e)
@@ -152,8 +150,7 @@ abstract public class Hl7v3ContinuationAwareWebService
         // validate response, if necessary
         if (validation) {
             try {
-                VALIDATOR.validate(responseString,
-                        Hl7v3ValidationProfiles.getResponseValidationProfile(wsTransactionConfiguration.interactionId))
+                VALIDATOR.validate(responseString, wsTransactionConfiguration.responseValidationProfile)
             } catch (ValidationException e) {
                 LOG.info('operation(): invalid response', e)
                 String nak = createNak(requestString, e)
@@ -208,8 +205,7 @@ abstract public class Hl7v3ContinuationAwareWebService
         // validate
         if (validation) {
             try {
-                VALIDATOR.validate(requestString,
-                        Hl7v3ValidationProfiles.getRequestValidationProfile(wsTransactionConfiguration.interactionId))
+                VALIDATOR.validate(requestString, wsTransactionConfiguration.requestValidationProfile)
             } catch (ValidationException e) {
                 LOG.info('continuation(): invalid request', e)
                 def nak = createNak(requestString, e)
@@ -267,8 +263,7 @@ abstract public class Hl7v3ContinuationAwareWebService
         // validate
         if (validation) {
             try {
-                VALIDATOR.validate(requestString,
-                        Hl7v3ValidationProfiles.getRequestValidationProfile(wsTransactionConfiguration.interactionId))
+                VALIDATOR.validate(requestString, wsTransactionConfiguration.requestValidationProfile)
             } catch (ValidationException e) {
                 LOG.info('cancel(): invalid request', e)
                 return createNak(requestString, e)

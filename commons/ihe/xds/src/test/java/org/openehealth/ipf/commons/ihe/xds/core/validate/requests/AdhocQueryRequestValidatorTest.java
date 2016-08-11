@@ -15,23 +15,42 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersForMultiplePatientsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
-
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_A.Interactions.ITI_16;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_51;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_OID;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_QUERY_PARAMETER_VALUE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_SQL_QUERY_TEXT;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING_LIST;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.TOO_MANY_VALUES_FOR_QUERY_PARAMETER;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNIVERSAL_ID_TYPE_MUST_BE_ISO;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNKNOWN_QUERY_TYPE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNKNOWN_RETURN_TYPE;
 
 /**
  * Tests for {@link AdhocQueryRequestValidator}.
@@ -42,7 +61,6 @@ public class AdhocQueryRequestValidatorTest {
     private AdhocQueryRequestValidator validator;
     private QueryRegistry request, requestMpq, folderRequest, folderRequestMpq;
     private QueryRegistryTransformer transformer;
-    private ValidationProfile iti16Profile, iti18Profile, iti51Profile;
 
     @Before
     public void setUp() {
@@ -52,56 +70,52 @@ public class AdhocQueryRequestValidatorTest {
         requestMpq = SampleData.createFindDocumentsForMultiplePatientsQuery();
         folderRequest = SampleData.createFindFoldersQuery();
         folderRequestMpq = SampleData.createFindFoldersForMultiplePatientsQuery();
-
-        iti16Profile = new ValidationProfile(IpfInteractionId.ITI_16);
-        iti18Profile = new ValidationProfile(IpfInteractionId.ITI_18);
-        iti51Profile = new ValidationProfile(IpfInteractionId.ITI_51);
     }
     
     @Test
     public void testGoodCase() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(request), iti18Profile);
+        validator.validate(transformer.toEbXML(request), ITI_18);
     }
     
     @Test
     public void testUnknownReturnType() {        
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
         ebXML.setReturnType("lol");
-        expectFailure(UNKNOWN_RETURN_TYPE, ebXML, iti18Profile);
+        expectFailure(UNKNOWN_RETURN_TYPE, ebXML, ITI_18);
     }
 
     @Test
     public void testMissingRequiredQueryParameter() {
         ((FindDocumentsQuery)request.getQuery()).setPatientId(null);
-        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, iti18Profile);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ITI_18);
     }
 
     @Test
     public void testTooManyQueryParameterValues() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()).get(0).getValueList().add("'lol'");
-        expectFailure(TOO_MANY_VALUES_FOR_QUERY_PARAMETER, ebXML, iti18Profile);
+        expectFailure(TOO_MANY_VALUES_FOR_QUERY_PARAMETER, ebXML, ITI_18);
     }
 
     @Test
     public void testParameterValueNotString() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()).get(0).getValueList().set(0, "lol");
-        expectFailure(PARAMETER_VALUE_NOT_STRING, ebXML, iti18Profile);
+        expectFailure(PARAMETER_VALUE_NOT_STRING, ebXML, ITI_18);
     }
 
     @Test
     public void testParameterValueNotStringList() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().add("lol");
-        expectFailure(PARAMETER_VALUE_NOT_STRING_LIST, ebXML, iti18Profile);
+        expectFailure(PARAMETER_VALUE_NOT_STRING_LIST, ebXML, ITI_18);
     }
 
     @Test
     public void testCodeListNotEnoughSchemes() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().add("('code^^')");
-        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
     }
 
     @Test
@@ -110,7 +124,7 @@ public class AdhocQueryRequestValidatorTest {
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(0, "('code1')");
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(1, "('code2')");
         ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE_SCHEME.getSlotName(), "('scheme1','scheme2')");
-        validator.validate(transformer.toEbXML(request), iti18Profile);
+        validator.validate(transformer.toEbXML(request), ITI_18);
     }
 
     @Test
@@ -119,7 +133,7 @@ public class AdhocQueryRequestValidatorTest {
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(0, "('code1')");
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(1, "('code2')");
         ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE_SCHEME.getSlotName(), "('scheme1')");
-        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
     }
 
     @Test
@@ -129,18 +143,18 @@ public class AdhocQueryRequestValidatorTest {
 
         // no codes at all -- should fail
         valueList.clear();
-        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML, iti18Profile);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML, ITI_18);
 
         // only unknown codes -- should fail
         valueList.clear();
         valueList.add("('lol')");
         valueList.add("('foo')");
-        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML, iti18Profile);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML, ITI_18);
 
         // at least one code -- should pass
         valueList.set(0, "('bar')");
         valueList.set(1, "('Approved')");
-        validator.validate(ebXML, iti18Profile);
+        validator.validate(ebXML, ITI_18);
     }
     
     @Test public void testUnknownFormatCode() {
@@ -150,17 +164,17 @@ public class AdhocQueryRequestValidatorTest {
         // invalid code without code -- should fail
         valueList.clear();
         valueList.add("('^^gablorg')");
-        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
 
         // invalid code without scheme -- should fail
         valueList.clear();
         valueList.add("('x^')");
-        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
 
         // empty code -- should fail
         valueList.clear();
         valueList.add("('')");
-        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, iti18Profile);
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
 
     }
     
@@ -168,14 +182,14 @@ public class AdhocQueryRequestValidatorTest {
     public void testQueryParametersCannotBeSetTogether() {
         request = SampleData.createGetDocumentsQuery();        
         ((GetDocumentsQuery)request.getQuery()).setUniqueIds(Collections.singletonList("1.2.3"));
-        expectFailure(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, iti18Profile);
+        expectFailure(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, ITI_18);
     }
 
     @Test
     public void testQueryParametersEitherOrChoiceMissing() {
         request = SampleData.createGetDocumentsQuery();
         ((GetDocumentsQuery)request.getQuery()).setUuids(null);
-        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, iti18Profile);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ITI_18);
     }
 
     /*
@@ -187,70 +201,70 @@ public class AdhocQueryRequestValidatorTest {
 
     @Test
     public void testGoodCaseMPQ() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(requestMpq), iti51Profile);
+        validator.validate(transformer.toEbXML(requestMpq), ITI_51);
     }
 
     @Test
     public void testMissingPatientIdsMPQ() {
         ((FindDocumentsForMultiplePatientsQuery) requestMpq.getQuery()).setPatientIds(null);
-        validator.validate(transformer.toEbXML(requestMpq), iti51Profile);
+        validator.validate(transformer.toEbXML(requestMpq), ITI_51);
     }
 
     @Test
     public void testPatientIdMustBeISO_MPQ() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(requestMpq);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()).get(0).getValueList().add("('Invalid ISO Patient ID')");
-        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, iti51Profile);
+        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, ITI_51);
     }
 
     // Folder and FolderMPQ test cases
     @Test
     public void testGoodCaseFolder() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(folderRequest), iti18Profile);
+        validator.validate(transformer.toEbXML(folderRequest), ITI_18);
     }
 
     @Test
     public void testMissingPatientIdFolder() throws XDSMetaDataException {
         ((FindFoldersQuery)folderRequest.getQuery()).setPatientId(null);
-        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, transformer.toEbXML(folderRequest), iti18Profile);
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, transformer.toEbXML(folderRequest), ITI_18);
     }
 
     @Test
     public void testMissingPatientIdFolderMPQ() {
         ((FindFoldersForMultiplePatientsQuery) folderRequestMpq.getQuery()).setPatientIds(null);
-        validator.validate(transformer.toEbXML(folderRequestMpq), iti51Profile);
+        validator.validate(transformer.toEbXML(folderRequestMpq), ITI_51);
 
     }
 
     @Test
     public void testGoodCaseFolderMPQ() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(folderRequestMpq), iti51Profile);
+        validator.validate(transformer.toEbXML(folderRequestMpq), ITI_51);
     }
 
     @Test
     public void testPatientIdMustBeISOFolder_MPQ() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(folderRequestMpq);
         ebXML.getSlots(QueryParameter.FOLDER_PATIENT_ID.getSlotName()).get(0).getValueList().add("('Invalid ISO Patient ID')");
-        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, iti51Profile);
+        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML, ITI_51);
     }
 
     @Test
     public void testGoodCaseSql() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(SampleData.createSqlQuery()), iti16Profile);
+        validator.validate(transformer.toEbXML(SampleData.createSqlQuery()), ITI_16);
     }
     
     @Test
     public void testMissingSqlQuery() {
         request = SampleData.createSqlQuery();
         ((SqlQuery)request.getQuery()).setSql(null);
-        expectFailure(MISSING_SQL_QUERY_TEXT, iti16Profile);
+        expectFailure(MISSING_SQL_QUERY_TEXT, ITI_16);
     }
     
     @Test
     public void testUnknownQueryType() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
         ebXML.setId("lol");
-        expectFailure(UNKNOWN_QUERY_TYPE, ebXML, iti18Profile);
+        expectFailure(UNKNOWN_QUERY_TYPE, ebXML, ITI_18);
     }
 
     @Test
@@ -258,10 +272,10 @@ public class AdhocQueryRequestValidatorTest {
         request = SampleData.createGetDocumentsQuery();
         // without prefix
         ((GetDocumentsQuery)request.getQuery()).setHomeCommunityId("1.2.3");
-        expectFailure(INVALID_OID, iti18Profile);
+        expectFailure(INVALID_OID, ITI_18);
         // wrong suffix
         ((GetDocumentsQuery)request.getQuery()).setHomeCommunityId("urn:oid:foo");
-        expectFailure(INVALID_OID, iti18Profile);
+        expectFailure(INVALID_OID, ITI_18);
     }
 
     private void expectFailure(ValidationMessage expectedMessage, ValidationProfile profile) {

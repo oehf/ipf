@@ -17,15 +17,11 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
 import lombok.Getter;
-import org.apache.camel.Consumer;
-import org.apache.camel.Processor;
 import org.apache.camel.component.servlet.ServletComponent;
 import org.apache.camel.component.servlet.ServletEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 /**
  *

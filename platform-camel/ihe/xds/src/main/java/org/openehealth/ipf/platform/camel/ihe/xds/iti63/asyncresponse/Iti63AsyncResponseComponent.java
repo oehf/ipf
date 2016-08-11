@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti63.asyncresponse;
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.xds.XdsInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti63.asyncresponse.Iti63AsyncResponsePortType;
@@ -27,20 +28,16 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import javax.xml.namespace.QName;
 import java.util.Map;
 
+import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63_ASYNC;
+
 /**
  * The Camel component for the ITI-63 (XCF) async response.
  */
 public class Iti63AsyncResponseComponent extends XdsComponent<XdsQueryAuditDataset> {
-    private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
-            new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Service", "ihe"),
-            Iti63AsyncResponsePortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Binding", "ihe"),
-            false,
-            "wsdl/iti63-asyncresponse.wsdl",
-            true,
-            false,
-            false,
-            false);
+
+    public Iti63AsyncResponseComponent() {
+        super(ITI_63_ASYNC);
+    }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
@@ -52,19 +49,5 @@ public class Iti63AsyncResponseComponent extends XdsComponent<XdsQueryAuditDatas
                 Iti63AsyncResponseService.class);
     }
 
-    @Override
-    public WsTransactionConfiguration getWsTransactionConfiguration() {
-        return WS_CONFIG;
-    }
-
-    @Override
-    public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
-        return null;   // no producer support
-    }
-
-    @Override
-    public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
-        return new Iti63AuditStrategy(false);
-    }
 
 }

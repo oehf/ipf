@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest;
@@ -28,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveSeries;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveStudy;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveImagingDocumentSetRequestTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.ArrayList;
@@ -36,7 +34,11 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_69;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ID_MUST_BE_SPECIFIED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.REPO_ID_MUST_BE_SPECIFIED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SERIES_INSTANCE_UID_MUST_BE_SPECIFIED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.STUDY_INSTANCE_UID_MUST_BE_SPECIFIED;
 
 /**
  * Validates {@link org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RetrieveImagingDocumentSetRequestValidator}.
@@ -47,7 +49,6 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
     private RetrieveImagingDocumentSetRequestValidator validator;
     private RetrieveImagingDocumentSet request;
     private RetrieveImagingDocumentSetRequestTransformer transformer;
-    private ValidationProfile profile;
 
     @Before
     public void setUp() {
@@ -55,12 +56,11 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveImagingDocumentSetRequestTransformer(factory);
         request = SampleData.createRetrieveImagingDocumentSet();
-        profile = new ValidationProfile(IpfInteractionId.RAD_69);
     }
     
     @Test
     public void testGoodCase() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(request), profile);
+        validator.validate(transformer.toEbXML(request), RAD_69);
     }
     
     @Test
@@ -109,7 +109,7 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
         
     private void expectFailure(ValidationMessage expectedMessage, EbXMLRetrieveImagingDocumentSetRequest ebXML) {
         try {
-            validator.validate(ebXML, profile);
+            validator.validate(ebXML, RAD_69);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {

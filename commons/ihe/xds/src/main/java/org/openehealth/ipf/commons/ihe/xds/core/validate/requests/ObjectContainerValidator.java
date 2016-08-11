@@ -17,18 +17,134 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
+import org.openehealth.ipf.commons.ihe.xds.CONTINUA_HRN;
+import org.openehealth.ipf.commons.ihe.xds.XCF;
+import org.openehealth.ipf.commons.ihe.xds.XDM;
+import org.openehealth.ipf.commons.ihe.xds.XDR;
+import org.openehealth.ipf.commons.ihe.xds.XDS_B;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationLabel;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.AuthorClassificationValidation;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.CXValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.CXiValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ClassificationValidation;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ExternalIdentifierValidation;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.HashValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.LanguageCodeValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.NopValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.OIDValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.PidValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.PositiveNumberValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.RecipientListValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.RegistryObjectValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.SlotLengthAndNameUniquenessValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.SlotValidation;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.SlotValueValidation;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.TimeValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.UUIDValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.UriValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XCNValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XONValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XTNValidator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_CLASS_CODE_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_EVENT_CODE_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_TYPE_CODE_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.OPTIONAL;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.REQUIRED;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.FOLDER_CLASS_NODE;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.FOLDER_CODE_LIST_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.FOLDER_PATIENT_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.FOLDER_UNIQUE_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_AUTHOR_INSTITUTION;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_AUTHOR_PERSON;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_AUTHOR_ROLE;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_AUTHOR_SPECIALTY;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_AUTHOR_TELECOM;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_CODING_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_CREATION_TIME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_HASH;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_INTENDED_RECIPIENT;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_LANGUAGE_CODE;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_LAST_UPDATE_TIME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_LEGAL_AUTHENTICATOR;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_REFERENCE_ID_LIST;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_REPOSITORY_UNIQUE_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SERVICE_START_TIME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SERVICE_STOP_TIME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SIZE;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SOURCE_PATIENT_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SOURCE_PATIENT_INFO;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_TIME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_URI;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_AUTHOR_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_CLASS_NODE;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ENTRY_INVALID_AVAILABILITY_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ENTRY_PATIENT_ID_WRONG;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.EXACTLY_ONE_SUBMISSION_SET_MUST_EXIST;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.FOLDER_INVALID_AVAILABILITY_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.FOLDER_PATIENT_ID_WRONG;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_ASSOCIATION_TYPE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_SUBMISSION_SET_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_TITLE_ENCODING;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.LOGICAL_ID_EQUALS_ENTRY_UUID;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.LOGICAL_ID_MISSING;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.LOGICAL_ID_SAME;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_ASSOCIATION;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOCUMENT_FOR_DOC_ENTRY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_FOLDER_NAME;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_HAS_MEMBER_ASSOCIATION;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_NEW_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_ORIGINAL;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_ORIGINAL_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_PREVIOUS_VERSION;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_SNAPSHOT_ASSOCIATION;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_SUBMISSION_SET;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SOURCE_UUID_NOT_FOUND;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SUBMISSION_SET_INVALID_AVAILABILITY_STATUS;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SUBMISSION_SET_STATUS_MANDATORY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.TITLE_TOO_LONG;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.TOO_MANY_SUBMISSION_SET_STATES;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNIQUE_ID_MISSING;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNIQUE_ID_TOO_LONG;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UUID_NOT_UNIQUE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_DOCUMENT_ENTRY_TYPE;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
@@ -69,16 +185,16 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile, boolean onDemandProvided, boolean limitedMetadata) {
         List<RegistryObjectValidator> validators = new ArrayList<>();
-        boolean isContinuaHRN = (profile.getInteractionId() == IpfInteractionId.Continua_HRN);
+        boolean isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
         DisplayNameUsage requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
 
-        boolean isOnDemand    = (profile.getInteractionId() == IpfInteractionId.ITI_61) ||
+        boolean isOnDemand    = (profile == XDS_B.Interactions.ITI_61) ||
                                 (profile.isQuery() && onDemandProvided);
 
         boolean needHashAndSize = (! isOnDemand) &&
                 (isContinuaHRN || profile.isQuery()
-                        || (profile.getInteractionId() == IpfInteractionId.ITI_42)
-                        || (profile.getInteractionId() == IpfInteractionId.ITI_41_XDM)
+                        || (profile == XDS_B.Interactions.ITI_42)
+                        || (profile == XDM.Interactions.ITI_41)
                 );
 
         Collections.addAll(validators,
@@ -123,14 +239,14 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             validators.add(new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
         }
 
-        if ((profile.getInteractionId() == IpfInteractionId.ITI_42) || isOnDemand || profile.isQuery()) {
+        if ((profile.getInteractionId() == XDS_B.Interactions.ITI_42) || isOnDemand || profile.isQuery()) {
             validators.add(new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
         }
         return validators;
     }
 
     private List<RegistryObjectValidator> getSubmissionSetSlotValidations(ValidationProfile profile, boolean limitedMetadata) {
-        boolean isContinuaHRN = (profile.getInteractionId() == IpfInteractionId.Continua_HRN);
+        boolean isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
         DisplayNameUsage requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
 
         List<RegistryObjectValidator> validators = new ArrayList<>();
@@ -163,11 +279,10 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private boolean checkLimitedMetadata(EbXMLRegistryObject object, ValidationProfile profile) {
         boolean limitedMetadata = ! object.getClassifications(DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME).isEmpty();
         if (limitedMetadata) {
-            metaDataAssert((profile.getInteractionId() == IpfInteractionId.ITI_41_XDM) ||
-                            (profile.getInteractionId() == IpfInteractionId.ITI_41_XDR),
+            metaDataAssert((profile == XDM.Interactions.ITI_41) || (profile == XDR.Interactions.ITI_41),
                     ValidationMessage.LIMITED_METADATA_PROHIBITED, object.getId());
         } else {
-            metaDataAssert(profile.getInteractionId() != IpfInteractionId.ITI_41_XDM,
+            metaDataAssert(profile != XDM.Interactions.ITI_41,
                     ValidationMessage.LIMITED_METADATA_REQUIRED, object.getId());
         }
         return limitedMetadata;
@@ -214,7 +329,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(limitedMetadata || ((name != null) && (name.getValue() != null)),
                     MISSING_FOLDER_NAME, folder.getId());
 
-            if (profile.getInteractionId() == IpfInteractionId.ITI_57){
+            if (profile == XDS_B.Interactions.ITI_57){
                 validateUpdateObject(folder, container);
             }
         }
@@ -243,7 +358,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             boolean limitedMetadata = checkLimitedMetadata(docEntry, profile);
 
-            boolean onDemandExpected = (profile.getInteractionId() == IpfInteractionId.ITI_61);
+            boolean onDemandExpected = (profile == XDS_B.Interactions.ITI_61);
             boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
             metaDataAssert(profile.isQuery() || (onDemandExpected == onDemandProvided),
                     WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
@@ -265,7 +380,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                         TITLE_TOO_LONG, name.getValue());
             }
 
-            boolean attachmentExpected = (profile.getInteractionId() == IpfInteractionId.ITI_63);
+            boolean attachmentExpected = (profile.getInteractionId() == XCF.Interactions.ITI_63);
             boolean attachmentProvided = (docEntry.getDataHandler() != null);
             metaDataAssert(attachmentProvided == attachmentExpected,
                     attachmentExpected ? MISSING_DOCUMENT_FOR_DOC_ENTRY : DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY,
@@ -274,7 +389,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(profile.isQuery() || StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
                     LOGICAL_ID_SAME, docEntry.getLid());
 
-            if (profile.getInteractionId() == IpfInteractionId.ITI_57){
+            if (profile.getInteractionId() == XDS_B.Interactions.ITI_57){
                 validateUpdateObject(docEntry, container);
             }
         }

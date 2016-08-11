@@ -23,6 +23,14 @@ package org.openehealth.ipf.commons.ihe.fhir.iti67;
  */
 public class Iti67ClientAuditStrategy extends Iti67AuditStrategy {
 
+    private static class LazyHolder {
+        private static final Iti67ClientAuditStrategy INSTANCE = new Iti67ClientAuditStrategy();
+    }
+
+    public static Iti67ClientAuditStrategy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
     public Iti67ClientAuditStrategy() {
         super(false);
     }

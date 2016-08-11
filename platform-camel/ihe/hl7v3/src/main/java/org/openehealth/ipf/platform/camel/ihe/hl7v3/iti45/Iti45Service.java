@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti45;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti45.Iti45PortType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_45;
+
 /**
  * Service implementation for the IHE ITI-45 transaction (PIX Query v3).
  * @author Dmytro Rud
@@ -25,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 public class Iti45Service extends AbstractHl7v3WebService implements Iti45PortType {
 
     public Iti45Service() {
-        super(Iti45Component.WS_CONFIG);
+        super(ITI_45);
     }
 
     @Override

@@ -21,12 +21,20 @@ import org.openehealth.ipf.commons.ihe.hl7v2.atna.pdqcore.PdqAuditStrategy;
 
 /**
  * Client (aka Camel producer) audit strategy for ITI-22 (PDVQ).
- * 
+ *
  * @author Dmytro Rud
  */
 public class Iti22ClientAuditStrategy extends PdqAuditStrategy {
 
-    public Iti22ClientAuditStrategy() {
+    private static class LazyHolder {
+        private static final Iti22ClientAuditStrategy INSTANCE = new Iti22ClientAuditStrategy();
+    }
+
+    public static Iti22ClientAuditStrategy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
+    private Iti22ClientAuditStrategy() {
         super(false);
     }
 

@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47
 
+import org.openehealth.ipf.commons.ihe.hl7v3.PDQV3
+import org.openehealth.ipf.commons.ihe.hl7v3.storage.EhcacheHl7v3ContinuationStorage
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage
+
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertTrue
 
@@ -22,13 +26,9 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.CustomInterceptor
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.EhcacheHl7v3ContinuationStorage
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId
 
 /**
  * Tests for ITI-47.
@@ -126,8 +126,7 @@ class TestIti47 extends StandardTestContainer {
     @Test
     void testCustomNakGeneration() {
         String responseString = send(SERVICE_NAK_1, REQUEST, String.class)
-        new CombinedXmlValidator().validate(responseString,
-                Hl7v3ValidationProfiles.getResponseValidationProfile(IpfInteractionId.ITI_47))
+        new CombinedXmlValidator().validate(responseString, PDQV3.Interactions.ITI_47.responseValidationProfile)
         def response = Hl7v3Utils.slurp(responseString)
         assert response.interactionId.@root == '2.16.840.1.113883.1.6'
         assert response.interactionId.@extension == 'PRPA_IN201306UV02'
@@ -149,8 +148,7 @@ class TestIti47 extends StandardTestContainer {
     @Test
     void testCustomNakGenerationWithoutIssueManagement() {
         String responseString = send(SERVICE_NAK_2, REQUEST, String.class)
-        new CombinedXmlValidator().validate(responseString,
-                Hl7v3ValidationProfiles.getResponseValidationProfile(IpfInteractionId.ITI_47))
+        new CombinedXmlValidator().validate(responseString, PDQV3.Interactions.ITI_47.responseValidationProfile)
         def response = Hl7v3Utils.slurp(responseString)
         assert response.interactionId.@root == '2.16.840.1.113883.1.6'
         assert response.interactionId.@extension == 'PRPA_IN201306UV02'
@@ -172,8 +170,7 @@ class TestIti47 extends StandardTestContainer {
     @Test
     void testValidationNakGeneration() {
         String responseString = send(SERVICE_NAK_VALIDATE, REQUEST, String.class)
-        new CombinedXmlValidator().validate(responseString,
-                Hl7v3ValidationProfiles.getResponseValidationProfile(IpfInteractionId.ITI_47))
+        new CombinedXmlValidator().validate(responseString, PDQV3.Interactions.ITI_47.responseValidationProfile)
         def response = Hl7v3Utils.slurp(responseString)
         assert response.acknowledgement.typeCode.@code == 'AE'
         assert response.acknowledgement.acknowledgementDetail.code.@code == 'SYN113'
@@ -200,7 +197,7 @@ class TestIti47 extends StandardTestContainer {
         assertEquals('0', response.controlActProcess.queryAck.resultRemainingQuantity.@value.text())
         
         // check whether HL7 v2 continuation has really been used
-        EhcacheInteractiveConfigurationStorage storage = appContext.getBean('hl7v2ContinuationStorage')
+        EhcacheInteractiveContinuationStorage storage = appContext.getBean('hl7v2ContinuationStorage')
         assertTrue(storage.ehcache.size > 0)
     }
 }

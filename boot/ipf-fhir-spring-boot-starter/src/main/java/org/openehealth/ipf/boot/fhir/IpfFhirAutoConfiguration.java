@@ -18,22 +18,20 @@ package org.openehealth.ipf.boot.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.ApacheProxyAddressStrategy;
-import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.IServerAddressStrategy;
 import ca.uhn.fhir.rest.server.IServerConformanceProvider;
 import org.hl7.fhir.instance.conf.ServerConformanceProvider;
+import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.FhirAuditor;
 import org.openehealth.ipf.commons.ihe.fhir.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.NamingSystemService;
-import org.openehealth.ipf.commons.ihe.fhir.translation.NamingSystemUriMapper;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
-import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper;
 import org.openehealth.ipf.commons.map.config.CustomMappings;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -52,8 +50,12 @@ import java.util.Map;
 
 
 @Configuration
+@AutoConfigureAfter(IpfAtnaAutoConfiguration.class)
 @EnableConfigurationProperties(IpfFhirConfigurationProperties.class)
 public class IpfFhirAutoConfiguration {
+
+    public static final String IDENTIFIER_MAPPING = "identifiers";
+    public static final String TERMINOLOGY_MAPPING = "terminologies";
 
     @Autowired
     private IpfFhirConfigurationProperties config;
@@ -78,12 +80,6 @@ public class IpfFhirAutoConfiguration {
         DefaultNamingSystemServiceImpl namingSystemService = new DefaultNamingSystemServiceImpl(fhirContext);
         namingSystemService.addNamingSystemsFromXml(new InputStreamReader(config.getIdentifierNamingSystems().getInputStream(), StandardCharsets.UTF_8));
         return namingSystemService;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(UriMapper.class)
-    public UriMapper uriMapper(NamingSystemService namingSystemService) {
-        return new NamingSystemUriMapper(namingSystemService);
     }
 
     @Bean
@@ -123,6 +119,7 @@ public class IpfFhirAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IPagingProvider.class)
+    @ConditionalOnProperty("ipf.fhir.caching")
     public IPagingProvider pagingProvider(CacheManager cacheManager, FhirContext fhirContext) {
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
         CachingPagingProvider pagingProvider = new CachingPagingProvider(cacheManager, fhirContext);

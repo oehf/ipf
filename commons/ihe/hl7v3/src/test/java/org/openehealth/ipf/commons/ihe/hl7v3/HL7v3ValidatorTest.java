@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 import org.apache.cxf.helpers.IOUtils;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 
 public class HL7v3ValidatorTest {
@@ -28,7 +27,7 @@ public class HL7v3ValidatorTest {
 		String message = IOUtils.readStringFromStream(
                 getClass().getResourceAsStream("/xsd/prpa-valid.xml"));
         CombinedXmlValidator validator = new CombinedXmlValidator();
-        validator.validate(message, Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_44_PIX));
+        validator.validate(message, PIXV3.Interactions.ITI_44_PIX.getRequestValidationProfile());
 	}
 	
 	@Test(expected = ValidationException.class)
@@ -36,7 +35,7 @@ public class HL7v3ValidatorTest {
 		String message = IOUtils.readStringFromStream(
                 getClass().getResourceAsStream("/xsd/prpa-invalid.xml"));
         CombinedXmlValidator validator = new CombinedXmlValidator();
-        validator.validate(message,Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_44_PIX));
+        validator.validate(message,PIXV3.Interactions.ITI_44_PIX.getRequestValidationProfile());
 	}
 
 }

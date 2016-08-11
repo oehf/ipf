@@ -17,6 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 
@@ -30,12 +34,16 @@ import java.util.Map;
 public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAuditDataset>
         extends MllpComponent<MllpTransactionEndpointConfiguration> implements AuditableComponent<AuditDatasetType> {
 
-    protected MllpTransactionComponent() {
+    private final Hl7v2InteractionId interactionId;
+
+    protected MllpTransactionComponent(Hl7v2InteractionId interactionId) {
         super();
+        this.interactionId = interactionId;
     }
 
-    protected MllpTransactionComponent(CamelContext camelContext) {
+    protected MllpTransactionComponent(CamelContext camelContext, Hl7v2InteractionId interactionId) {
         super(camelContext);
+        this.interactionId = interactionId;
     }
 
     @Override
@@ -48,4 +56,27 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
         return new MllpTransactionEndpoint<>(this, wrappedEndpoint, config);
     }
 
+    @Override
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+        return interactionId.getHl7v2TransactionConfiguration();
+    }
+
+    @Override
+    public NakFactory getNakFactory() {
+        return interactionId.getNakFactory();
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
+        return interactionId.getClientAuditStrategy();
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
+        return interactionId.getServerAuditStrategy();
+    }
+
+    public Hl7v2InteractionId getInteractionId() {
+        return interactionId;
+    }
 }

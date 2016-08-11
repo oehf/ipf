@@ -20,9 +20,6 @@ import org.openehealth.ipf.commons.ihe.fhir.DefaultNamingSystemServiceImpl;
 
 import java.io.InputStreamReader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 /**
  *
  */
@@ -32,7 +29,7 @@ public class NamingSystemUriMapperXmlTest extends AbstractSystemUriMapperTest {
     protected UriMapper initMapper(DefaultNamingSystemServiceImpl namingSystemService) {
         namingSystemService.addNamingSystemsFromXml(
                 new InputStreamReader(getClass().getResourceAsStream("/namingsystems.xml")));
-        return new NamingSystemUriMapper(namingSystemService);
+        return new NamingSystemUriMapper(namingSystemService, "identifiers");
     }
 
 }

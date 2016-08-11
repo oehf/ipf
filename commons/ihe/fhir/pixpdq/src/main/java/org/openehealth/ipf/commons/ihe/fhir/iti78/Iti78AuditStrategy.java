@@ -59,4 +59,5 @@ public abstract class Iti78AuditStrategy extends FhirQueryAuditStrategy<FhirQuer
         }
         return dataset;
     }
+
 }

@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 
 /**
  * Static configuration for FHIR components. This configuration cannot be altered in the
@@ -25,40 +26,12 @@ import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
  *
  * @author Christian Ohr
  * @since 3.1
+ *
+ * @deprecated use {@link FhirTransactionConfiguration}
  */
-public class FhirComponentConfiguration {
+public class FhirComponentConfiguration extends FhirTransactionConfiguration {
 
-    private final AbstractPlainProvider staticResourceProvider;
-    private final ClientRequestFactory<?> staticClientRequestFactory;
-    private boolean supportsLazyLoading;
-
-    public FhirComponentConfiguration(
-            AbstractPlainProvider resourceProvider,
-            ClientRequestFactory<?> clientRequestFactory) {
-        this.staticResourceProvider = resourceProvider;
-        this.staticClientRequestFactory = clientRequestFactory;
+    public FhirComponentConfiguration(AbstractPlainProvider resourceProvider, ClientRequestFactory<?> clientRequestFactory) {
+        super(resourceProvider, clientRequestFactory);
     }
-
-    public AbstractPlainProvider getStaticResourceProvider() {
-        return staticResourceProvider;
-    }
-
-    public ClientRequestFactory<?> getStaticClientRequestFactory() {
-        return staticClientRequestFactory;
-    }
-
-    /**
-     * Determines if the component and backend implementation does support lazy-loading of search result sets.
-     * Even if true, the endpoint URI, however, must be explicitly configured to use lazy-loading.
-     *
-     * @param supportsLazyLoading true if this component support lazy-loading
-     */
-    public void setSupportsLazyLoading(boolean supportsLazyLoading) {
-        this.supportsLazyLoading = supportsLazyLoading;
-    }
-
-    public boolean supportsLazyLoading() {
-        return supportsLazyLoading;
-    }
-
 }

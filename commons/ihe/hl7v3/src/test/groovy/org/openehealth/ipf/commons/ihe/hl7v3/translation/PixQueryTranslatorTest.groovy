@@ -20,10 +20,8 @@ import ca.uhn.hl7v2.model.Message
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
+import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
-
-import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_45
 
 /**
  * Test for PIX Query translator.
@@ -57,7 +55,7 @@ class PixQueryTranslatorTest extends Hl7TranslationTestContainer {
 	    String v2response = getFileContent('ok-4', false, false)
         Message abrakadapter = context.pipeParser.parse(v2response)
 		String v3response = v2tov3Translator.translateV2toV3(abrakadapter, v3request, 'UTF-8')
-        V3_VALIDATOR.validate(v3response, Hl7v3ValidationProfiles.getResponseValidationProfile(ITI_45))
+        V3_VALIDATOR.validate(v3response, PIXV3.Interactions.ITI_45.responseValidationProfile)
 	}
     
    

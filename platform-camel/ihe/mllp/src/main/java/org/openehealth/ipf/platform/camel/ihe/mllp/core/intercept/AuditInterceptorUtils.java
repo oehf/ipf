@@ -72,7 +72,7 @@ public final class AuditInterceptorUtils {
         try {
             interceptor.getWrappedProcessor().process(exchange);
             Message result = resultMessage(exchange).getBody(Message.class);
-            // TODO: shouldn't this be result instead of msg??
+            // TODO: Shouldn't this be result instead of msg?? See https://github.com/oehf/ipf/issues/124
             enrichAuditDatasetFromResponse(strategy, auditDataset, msg);
             failed = !AuditUtils.isPositiveAck(result);
         } catch (Exception e) {

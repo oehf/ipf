@@ -15,22 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti30;
 
-import ca.uhn.hl7v2.ErrorCode;
-import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.core.TransactionOptionUtils;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.TransactionOptionUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30AuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti30.Iti30ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.gazelle.validation.profile.pam.PamTransactions;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
 
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.ihe.hl7v2.PAM.Interactions.ITI_30;
 
 /**
  * Camel component for ITI-30 (Patient Identity Management).
@@ -41,31 +34,13 @@ import java.util.Map;
  */
 public class Iti30Component extends MllpTransactionComponent<Iti30AuditDataset> {
 
-    private static final AuditStrategy<Iti30AuditDataset> CLIENT_AUDIT_STRATEGY =
-            new Iti30ClientAuditStrategy();
-    private static final AuditStrategy<Iti30AuditDataset> SERVER_AUDIT_STRATEGY =
-            new Iti30ServerAuditStrategy();
-
-    private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
-    private NakFactory nakFactory;
-
 
     public Iti30Component() {
-        super();
+        super(ITI_30);
     }
 
     public Iti30Component(CamelContext camelContext) {
-        super(camelContext);
-    }
-
-    @Override
-    public AuditStrategy<Iti30AuditDataset> getClientAuditStrategy() {
-        return CLIENT_AUDIT_STRATEGY;
-    }
-
-    @Override
-    public AuditStrategy<Iti30AuditDataset> getServerAuditStrategy() {
-        return SERVER_AUDIT_STRATEGY;
+        super(camelContext, ITI_30);
     }
 
     @Override
@@ -76,34 +51,8 @@ public class Iti30Component extends MllpTransactionComponent<Iti30AuditDataset> 
         if (iti30Options == null) {
             throw new IllegalArgumentException("Options parameter for pam-iti30 is invalid");
         }
-        initConfiguration(iti30Options);
+        getInteractionId().init(iti30Options);
         return config;
     }
 
-    private void initConfiguration(Iti30Options... options) {
-        hl7v2TransactionConfiguration = new Hl7v2TransactionConfiguration(
-                new Version[]{Version.V25},
-                "PIM adapter",
-                "IPF",
-                ErrorCode.APPLICATION_INTERNAL_ERROR,
-                ErrorCode.APPLICATION_INTERNAL_ERROR,
-                new String[]{"ADT"},
-                TransactionOptionUtils.concatAllToString(options),
-                new String[]{"ACK"},
-                new String[]{"*"},
-                new boolean[]{true},
-                new boolean[]{false},
-                HapiContextFactory.createHapiContext(PamTransactions.ITI30));
-        nakFactory = new NakFactory(hl7v2TransactionConfiguration);
-    }
-
-    @Override
-    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
-        return hl7v2TransactionConfiguration;
-    }
-
-    @Override
-    public NakFactory getNakFactory() {
-        return nakFactory;
-    }
 }

@@ -20,7 +20,9 @@ import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -63,7 +65,7 @@ public abstract class FhirAuditDataset extends AuditDataset {
      * Patient IDs
      */
     @Getter
-    private final List<String> patientIds = new ArrayList<>();
+    private final Set<String> patientIds = new LinkedHashSet<>();
 
 
     /**
@@ -81,6 +83,6 @@ public abstract class FhirAuditDataset extends AuditDataset {
      * or <code>null</code> when no patient IDs have been collected.
      */
     public String getPatientId() {
-        return patientIds.isEmpty() ? null : patientIds.get(0);
+        return patientIds.isEmpty() ? null : patientIds.iterator().next();
     }
 }

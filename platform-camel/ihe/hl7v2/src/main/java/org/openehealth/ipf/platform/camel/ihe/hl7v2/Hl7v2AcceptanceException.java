@@ -21,8 +21,10 @@ import ca.uhn.hl7v2.HL7Exception;
 /**
  * An exception class for HL7v2 acceptance checks.
  * @author Dmytro Rud
+ *
+ * @deprecated moved to {@link org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException}
  */
-public class Hl7v2AcceptanceException extends HL7Exception {
+public class Hl7v2AcceptanceException extends org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException {
     private static final long serialVersionUID = 8061724688826230547L;
 
     public Hl7v2AcceptanceException(String message, ErrorCode code) {

@@ -27,12 +27,16 @@ import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ID_MUST_BE_SPECIFIED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.REPO_ID_MUST_BE_SPECIFIED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SERIES_INSTANCE_UID_MUST_BE_SPECIFIED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.STUDY_INSTANCE_UID_MUST_BE_SPECIFIED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.TRANSFER_SYNTAX_UID_LIST_MUST_BE_SPECIFIED;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
  * Validates a {@link EbXMLRetrieveImagingDocumentSetRequest}.
- * 
+ *
  * @author Clay Sebourn
  */
 public class RetrieveImagingDocumentSetRequestValidator implements Validator<EbXMLRetrieveImagingDocumentSetRequest, ValidationProfile> {
@@ -41,7 +45,7 @@ public class RetrieveImagingDocumentSetRequestValidator implements Validator<EbX
     @Override
     public void validate(EbXMLRetrieveImagingDocumentSetRequest request, ValidationProfile profile) {
         notNull(request, "request cannot be null");
-        
+
         for (RetrieveStudy retrieveStudy : request.getRetrieveStudies()) {
             String studyInstanceUID = retrieveStudy.getStudyInstanceUID();
             metaDataAssert(isNotEmpty(studyInstanceUID), STUDY_INSTANCE_UID_MUST_BE_SPECIFIED);
@@ -61,7 +65,7 @@ public class RetrieveImagingDocumentSetRequestValidator implements Validator<EbX
                     String docId = document.getDocumentUniqueId();
                     metaDataAssert(isNotEmpty(docId), DOC_ID_MUST_BE_SPECIFIED);
 
-                    if (profile.getProfile() == ValidationProfile.InteractionProfile.XCA) {
+                    if (profile.getInteractionProfile().requiresHomeCommunityId()) {
                         hcValidator.validate(document.getHomeCommunityId());
                     }
                 }

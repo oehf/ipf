@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.map.BidiMappingService;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 
 /**
  *
@@ -41,33 +41,33 @@ public class DefaultUriMapperTest {
     @Test
     public void testTranslateOidUrn() throws Exception {
         String oid = "1.2.3.4.5.6.7.8.9";
-        assertEquals(oid, uriMapper.uriToOid("urn:oid:" + oid));
+        assertEquals(oid, uriMapper.uriToOid("urn:oid:" + oid).get());
     }
 
     @Test
     public void testTranslateUriToOid() throws Exception {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
-        assertEquals("1.2.3.4", uriMapper.uriToOid(uri));
+        assertEquals("1.2.3.4", uriMapper.uriToOid(uri).get());
     }
 
     @Test
     public void testTranslateUriToOidFails() throws Exception {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
-        assertNull(uriMapper.uriToOid(uri));
+        assertFalse(uriMapper.uriToOid(uri).isPresent());
     }
 
     @Test
     public void testTranslatePinUrn() throws Exception {
         String namespace = "namespace";
-        assertEquals(namespace, uriMapper.uriToNamespace("urn:pin:" + namespace));
+        assertEquals(namespace, uriMapper.uriToNamespace("urn:pin:" + namespace).get());
     }
 
     @Test
     public void testTranslateUriToNamespace() throws Exception {
         String uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
-        assertEquals("fhir1", uriMapper.uriToNamespace(uri));
+        assertEquals("fhir1", uriMapper.uriToNamespace(uri).get());
         uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
-        assertNull(uriMapper.uriToNamespace(uri));
+        assertFalse(uriMapper.uriToNamespace(uri).isPresent());
     }
 
     @Test

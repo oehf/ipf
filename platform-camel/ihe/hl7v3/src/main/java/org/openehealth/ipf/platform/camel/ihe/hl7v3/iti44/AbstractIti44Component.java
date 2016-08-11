@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -32,6 +33,10 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 abstract public class AbstractIti44Component extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
+
+    public AbstractIti44Component(Hl7v3InteractionId interactionId) {
+        super(interactionId);
+    }
 
     @SuppressWarnings({"raw", "unchecked"}) // Required because of base class
     @Override
@@ -50,14 +55,5 @@ abstract public class AbstractIti44Component extends Hl7v3Component<Hl7v3WsTrans
         };
     }
 
-    @Override
-    public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-        return new Iti44AuditStrategy(false);
-    }
-
-    @Override
-    public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-        return new Iti44AuditStrategy(true);
-    }
 
 }

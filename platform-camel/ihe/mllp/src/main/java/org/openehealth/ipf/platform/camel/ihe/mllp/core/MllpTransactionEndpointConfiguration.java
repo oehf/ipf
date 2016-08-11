@@ -19,6 +19,8 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 import lombok.Getter;
 
 import java.util.Map;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 
 /**
  * Camel endpoint configuration for MLLP-based eHealth transactions (like IHE PIX, PDQ, XAD-PID, etc.).

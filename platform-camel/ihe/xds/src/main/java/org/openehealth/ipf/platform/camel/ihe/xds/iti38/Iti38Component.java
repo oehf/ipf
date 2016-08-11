@@ -16,15 +16,11 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti38;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38PortType;
-import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
@@ -32,24 +28,19 @@ import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
-import javax.xml.namespace.QName;
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 
 /**
  * The Camel component for the ITI-38 transaction.
  */
 public class Iti38Component extends XdsComponent<XdsQueryAuditDataset> {
 
-    private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
-            new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Service", "ihe"),
-            Iti38PortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Binding_Soap12", "ihe"),
-            false,
-            "wsdl/iti38.wsdl",
-            true,
-            false,
-            true,
-            true);
+
+    public Iti38Component() {
+        super(ITI_38);
+    }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
@@ -61,7 +52,7 @@ public class Iti38Component extends XdsComponent<XdsQueryAuditDataset> {
                 null) {
             @Override
             public AbstractWsProducer<XdsQueryAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint,
-                                                  JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
+                                                                                                          JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, AdhocQueryRequest.class, AdhocQueryResponse.class);
             }
@@ -73,19 +64,5 @@ public class Iti38Component extends XdsComponent<XdsQueryAuditDataset> {
         };
     }
 
-    @Override
-    public WsTransactionConfiguration getWsTransactionConfiguration() {
-        return WS_CONFIG;
-    }
-
-    @Override
-    public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
-        return new Iti38ClientAuditStrategy();
-    }
-
-    @Override
-    public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
-        return new Iti38ServerAuditStrategy();
-    }
 
 }

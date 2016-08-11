@@ -19,14 +19,17 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44PixPortType;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44XdsPortType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_44_PIX;
+
 /**
  * Generic service class for the IHE ITI-44 transaction.
+ *
  * @author Dmytro Rud
  */
 public class Iti44Service extends AbstractHl7v3WebService implements Iti44XdsPortType, Iti44PixPortType {
 
     public Iti44Service() {
-        super(Iti44PixComponent.WS_CONFIG);
+        super(ITI_44_PIX);
     }
 
     @Override

@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
+package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
-import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65ResourceProvider;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 
 /**
  * Standard Configuration for Iti65Component.
@@ -26,9 +24,9 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfigurati
  * @author Christian Ohr
  * @since 3.1
  */
-public class Iti65Configuration extends FhirComponentConfiguration {
+public class Iti65TransactionConfiguration extends FhirTransactionConfiguration {
 
-    public Iti65Configuration() {
+    public Iti65TransactionConfiguration() {
         super(
                 new Iti65ResourceProvider(),                    // Consumer side. accept registrations
                 new Iti65ClientRequestFactory());               // Formulate requests

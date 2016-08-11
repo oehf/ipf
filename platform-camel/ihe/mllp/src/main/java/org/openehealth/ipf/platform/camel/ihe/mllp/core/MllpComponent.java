@@ -41,6 +41,7 @@ import java.util.Map;
  */
 public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration>
         extends Mina2Component implements InterceptableComponent, Hl7v2ConfigurationHolder {
+
     private static final transient Logger LOG = LoggerFactory.getLogger(MllpComponent.class);
 
     public static final String ACK_TYPE_CODE_HEADER = ConsumerAdaptingInterceptor.ACK_TYPE_CODE_HEADER;

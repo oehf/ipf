@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import org.hl7.fhir.instance.model.Enumerations;
 import org.hl7.fhir.instance.model.NamingSystem;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
@@ -83,7 +82,7 @@ public interface NamingSystemService {
 
     static Predicate<NamingSystem> combine(BinaryOperator<Predicate<NamingSystem>> op, Predicate<NamingSystem>... predicates) {
         return predicates != null ?
-                Arrays.stream(predicates).reduce(op).orElse(namingSystem -> false) :
+                Stream.of(predicates).reduce(op).orElse(namingSystem -> false) :
                 namingSystem -> false;
     }
 

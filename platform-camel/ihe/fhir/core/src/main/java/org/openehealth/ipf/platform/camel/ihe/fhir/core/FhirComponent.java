@@ -20,9 +20,12 @@ import ca.uhn.fhir.context.FhirContext;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.UriEndpointComponent;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.DefaultFhirRegistry;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
@@ -40,19 +43,16 @@ import java.util.Map;
 public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         extends UriEndpointComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent {
 
-    private FhirComponentConfiguration fhirComponentConfiguration;
+    private FhirInteractionId fhirInteractionId;
 
-    public FhirComponent() {
+    public FhirComponent(FhirInteractionId fhirInteractionId) {
         super(FhirEndpoint.class);
+        this.fhirInteractionId = fhirInteractionId;
     }
 
-    public FhirComponent(CamelContext context) {
+    public FhirComponent(CamelContext context, FhirInteractionId fhirInteractionId) {
         super(context, FhirEndpoint.class);
-    }
-
-    public FhirComponent(FhirComponentConfiguration configuration) {
-        this();
-        this.fhirComponentConfiguration = configuration;
+        this.fhirInteractionId = fhirInteractionId;
     }
 
     /**
@@ -86,7 +86,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         // Component configuration determines if lazy loading is allowed or not. Otherwise the endpoint has
         // the choice to do so.
-        if (!fhirComponentConfiguration.supportsLazyLoading() &&
+        if (!fhirInteractionId.getFhirTransactionConfiguration().supportsLazyLoading() &&
                 parameters.containsKey(FhirEndpointConfiguration.LAZY_LOAD_BUNDLES) &&
                 Boolean.parseBoolean((String) parameters.get(FhirEndpointConfiguration.LAZY_LOAD_BUNDLES))) {
             throw new IllegalArgumentException("The FHIR component " + getClass().getSimpleName() +
@@ -118,11 +118,17 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     /**
      * @return static component-specific configuration
      */
-    public FhirComponentConfiguration getFhirComponentConfiguration() {
-        return fhirComponentConfiguration;
+    public FhirTransactionConfiguration getFhirComponentConfiguration() {
+        return fhirInteractionId.getFhirTransactionConfiguration();
     }
 
-    protected void setFhirComponentConfiguration(FhirComponentConfiguration fhirComponentConfiguration) {
-        this.fhirComponentConfiguration = fhirComponentConfiguration;
+    @Override
+    public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
+        return fhirInteractionId.getServerAuditStrategy();
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
+        return fhirInteractionId.getClientAuditStrategy();
     }
 }

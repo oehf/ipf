@@ -43,6 +43,10 @@
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
 
         <!-- Dependencies for test -->
         <dependency>

@@ -23,19 +23,21 @@ import ca.uhn.hl7v2.validation.ValidationContext;
 import ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
 import org.apache.camel.component.hl7.CustomHL7MLLPCodec;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
+import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomPixAuditor;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openhealthtools.ihe.atna.auditor.PAMSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.PDQConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXManagerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -48,6 +50,7 @@ import java.util.Map;
  * Configure a basic IPF setup, mostly configuring HL7v2 and Mapping stuff
  */
 @Configuration
+@AutoConfigureAfter(IpfAtnaAutoConfiguration.class)
 @EnableConfigurationProperties(IpfHl7v2ConfigurationProperties.class)
 public class IpfHl7v2AutoConfiguration {
 
@@ -60,7 +63,7 @@ public class IpfHl7v2AutoConfiguration {
         if (config.getCharset() != null) {
             hl7MLLPCodec.setCharset(config.getCharset());
         }
-        hl7MLLPCodec.setConvertLFtoCR(config.getConvertLFToCR());
+        hl7MLLPCodec.setConvertLFtoCR(config.isConvertLinefeed());
         return hl7MLLPCodec;
     }
 
@@ -92,14 +95,18 @@ public class IpfHl7v2AutoConfiguration {
 
     // Provide "interactiveContinuationStorage" for HL7v2 paging
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(InteractiveContinuationStorage.class)
+    @ConditionalOnSingleCandidate(CacheManager.class)
+    @ConditionalOnProperty("ipf.hl7v2.caching")
     public InteractiveContinuationStorage interactiveContinuationStorage(CacheManager cacheManager) {
         return new CachingInteractiveHl7v2ContinuationStorage(cacheManager);
     }
 
     // Provide "unsolicitedFragmentationStorage" for HL7v2 fragmentation
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(UnsolicitedFragmentationStorage.class)
+    @ConditionalOnSingleCandidate(CacheManager.class)
+    @ConditionalOnProperty("ipf.hl7v2.caching")
     public UnsolicitedFragmentationStorage unsolicitedFragmentationStorage(CacheManager cacheManager) {
         return new CachingUnsolicitedFragmentionStorage(cacheManager);
     }
@@ -107,7 +114,8 @@ public class IpfHl7v2AutoConfiguration {
     // Some ATNA auditors
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(PIXManagerAuditor.class)
+    @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
     @ConditionalOnProperty("ipf.atna.auditor.enabled")
     public PIXManagerAuditor pixManagerAuditor(AuditorModuleConfig config) {
         PIXManagerAuditor auditor = PIXManagerAuditor.getAuditor();
@@ -117,6 +125,7 @@ public class IpfHl7v2AutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(PIXConsumerAuditor.class)
+    @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
     @ConditionalOnProperty("ipf.atna.auditor.enabled")
     public PIXConsumerAuditor pixConsumerAuditor(AuditorModuleConfig config) {
         PIXConsumerAuditor auditor = PIXConsumerAuditor.getAuditor();
@@ -135,6 +144,7 @@ public class IpfHl7v2AutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(PDQConsumerAuditor.class)
+    @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
     @ConditionalOnProperty("ipf.atna.auditor.enabled")
     public PDQConsumerAuditor pdqConsumerAuditor(AuditorModuleConfig config) {
         PDQConsumerAuditor auditor = PDQConsumerAuditor.getAuditor();
@@ -144,6 +154,7 @@ public class IpfHl7v2AutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(PAMSourceAuditor.class)
+    @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
     @ConditionalOnProperty("ipf.atna.auditor.enabled")
     public PAMSourceAuditor pamSourceAuditor(AuditorModuleConfig config) {
         PAMSourceAuditor auditor = PAMSourceAuditor.getAuditor();
@@ -153,6 +164,7 @@ public class IpfHl7v2AutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(CustomPixAuditor.class)
+    @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
     @ConditionalOnProperty("ipf.atna.auditor.enabled")
     public CustomPixAuditor customPixAuditor(AuditorModuleConfig config) {
         CustomPixAuditor auditor = CustomPixAuditor.getAuditor();

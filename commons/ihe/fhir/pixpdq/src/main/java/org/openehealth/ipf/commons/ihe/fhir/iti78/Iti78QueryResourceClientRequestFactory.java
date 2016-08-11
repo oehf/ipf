@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.hl7.fhir.instance.model.Patient;
-import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
 
 /**

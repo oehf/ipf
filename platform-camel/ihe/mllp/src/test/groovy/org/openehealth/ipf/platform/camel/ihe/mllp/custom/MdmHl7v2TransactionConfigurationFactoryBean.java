@@ -21,12 +21,12 @@ import ca.uhn.hl7v2.Version;
 import ca.uhn.hl7v2.conf.store.ProfileStoreFactory;
 import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.validation.builder.support.DefaultValidationWithoutTNBuilder;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
- * Factory bean for a {@link org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration} instance.
+ * Factory bean for a {@link Hl7v2TransactionConfiguration} instance.
  */
 public class MdmHl7v2TransactionConfigurationFactoryBean implements FactoryBean<Hl7v2TransactionConfiguration> {
 

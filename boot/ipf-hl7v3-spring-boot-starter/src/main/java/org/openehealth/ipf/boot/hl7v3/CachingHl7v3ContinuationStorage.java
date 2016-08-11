@@ -16,7 +16,7 @@
 package org.openehealth.ipf.boot.hl7v3;
 
 
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 

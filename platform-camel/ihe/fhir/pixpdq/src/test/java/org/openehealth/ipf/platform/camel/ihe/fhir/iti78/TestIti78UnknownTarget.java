@@ -20,13 +20,8 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
 
 import javax.servlet.ServletException;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  *

@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.hl7.fhir.instance.model.Bundle;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;

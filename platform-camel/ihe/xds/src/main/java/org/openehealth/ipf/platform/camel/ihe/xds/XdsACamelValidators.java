@@ -25,16 +25,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegister
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.AdhocQueryRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.QueryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 
-import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_14;
-import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_15;
-import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_16;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_A.Interactions.ITI_14;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_A.Interactions.ITI_15;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_A.Interactions.ITI_16;
 import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
 
 /**
@@ -53,8 +52,7 @@ abstract public class XdsACamelValidators {
         }
         EbXMLSubmitObjectsRequest21 message =
             new EbXMLSubmitObjectsRequest21(exchange.getIn().getBody(SubmitObjectsRequest.class));
-        ValidationProfile profile = new ValidationProfile(ITI_14);
-        new SubmitObjectsRequestValidator().validate(message, profile);
+        new SubmitObjectsRequestValidator().validate(message, ITI_14);
     };
 
     private static final Processor ITI_14_RESPONSE_VALIDATOR = exchange -> {
@@ -63,8 +61,7 @@ abstract public class XdsACamelValidators {
         }
         EbXMLRegistryResponse21 message =
             new EbXMLRegistryResponse21(exchange.getIn().getBody(RegistryResponse.class));
-        ValidationProfile profile = new ValidationProfile(ITI_14);
-        new RegistryResponseValidator().validate(message, profile);
+        new RegistryResponseValidator().validate(message, ITI_14);
     };
 
 
@@ -75,8 +72,7 @@ abstract public class XdsACamelValidators {
         EbXMLProvideAndRegisterDocumentSetRequest21 message =
             new EbXMLProvideAndRegisterDocumentSetRequest21(
                     exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
-        ValidationProfile profile = new ValidationProfile(ITI_15);
-        new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
+        new ProvideAndRegisterDocumentSetRequestValidator().validate(message, ITI_15);
     };
 
     private static final Processor ITI_15_RESPONSE_VALIDATOR = exchange -> {
@@ -85,8 +81,7 @@ abstract public class XdsACamelValidators {
         }
         EbXMLRegistryResponse21 message =
             new EbXMLRegistryResponse21(exchange.getIn().getBody(RegistryResponse.class));
-        ValidationProfile profile = new ValidationProfile(ITI_15);
-        new RegistryResponseValidator().validate(message, profile);
+        new RegistryResponseValidator().validate(message, ITI_15);
     };
 
     private static final Processor ITI_16_REQUEST_VALIDATOR = exchange -> {
@@ -95,8 +90,7 @@ abstract public class XdsACamelValidators {
         }
         EbXMLAdhocQueryRequest21 message =
             new EbXMLAdhocQueryRequest21(exchange.getIn().getBody(AdhocQueryRequest.class));
-        ValidationProfile profile = new ValidationProfile(ITI_16);
-        new AdhocQueryRequestValidator().validate(message, profile);
+        new AdhocQueryRequestValidator().validate(message, ITI_16);
     };
 
     private static final Processor ITI_16_RESPONSE_VALIDATOR = exchange -> {
@@ -105,8 +99,7 @@ abstract public class XdsACamelValidators {
         }
         EbXMLQueryResponse21 message =
             new EbXMLQueryResponse21(exchange.getIn().getBody(RegistryResponse.class));
-        ValidationProfile profile = new ValidationProfile(ITI_16);
-        new QueryResponseValidator().validate(message, profile);
+        new QueryResponseValidator().validate(message, ITI_16);
     };
 
 

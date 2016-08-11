@@ -17,26 +17,11 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 /**
  * Interface for storages of of HL7 v2 unsolicited fragmentation accumulators.
+ *
  * @author Dmytro Rud
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage}
  */
-public interface UnsolicitedFragmentationStorage {
+public interface UnsolicitedFragmentationStorage extends org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage {
 
-    /**
-     * Puts a fragment accumulator into the storage.
-     * @param key
-     *      Key consisting of MSH-14/DSC-1, MSH-3-1, MSH-3-2, MSH-3-3.
-     * @param accumulator
-     *      Accumulator to be stored.
-     */
-    void put(String key, StringBuilder accumulator);
 
-    /**
-     * Returns the fragment accumulator which corresponds to the given key
-     * and removes it from the storage.
-     * @param key
-     *      Key consisting of MSH-14/DCS-1, MSH-3-1, MSH-3-2, MSH-3-3.
-     * @return
-     *      Accumulator or <code>null</code> when none found.
-     */
-    StringBuilder getAndRemove(String key);
 }

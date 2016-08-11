@@ -15,26 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21;
 
-import ca.uhn.hl7v2.ErrorCode;
-import ca.uhn.hl7v2.Version;
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti21.Iti21ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti21.Iti21ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore.PdqTransactionConfiguration;
 
 import java.util.Collections;
 import java.util.List;
+
+import static org.openehealth.ipf.commons.ihe.hl7v2.PDQ.Interactions.ITI_21;
 
 /**
  * Camel component for ITI-21 (PDQ).
@@ -42,61 +32,17 @@ import java.util.List;
  * @author Dmytro Rud
  */
 public class Iti21Component extends MllpTransactionComponent<QueryAuditDataset> {
-    public static final Hl7v2TransactionConfiguration CONFIGURATION =
-            new PdqTransactionConfiguration(
-                    new Version[] {Version.V25},
-                    "PDQ adapter",
-                    "IPF",
-                    ErrorCode.APPLICATION_INTERNAL_ERROR,
-                    ErrorCode.APPLICATION_INTERNAL_ERROR,
-                    new String[]{"QBP", "QCN"},
-                    new String[]{"Q22", "J01"},
-                    new String[]{"RSP", "ACK"},
-                    new String[]{"K22", "*"},
-                    new boolean[]{true, false},
-                    new boolean[]{true, false},
-                    HapiContextFactory.createHapiContext(
-                            CustomModelClassUtils.createFactory("pdq", "2.5"),
-                            PixPdqTransactions.ITI21));
-
-    private static final AuditStrategy<QueryAuditDataset> CLIENT_AUDIT_STRATEGY =
-            new Iti21ClientAuditStrategy();
-    private static final AuditStrategy<QueryAuditDataset> SERVER_AUDIT_STRATEGY =
-            new Iti21ServerAuditStrategy();
-    private static final NakFactory NAK_FACTORY =
-            new QpdAwareNakFactory(CONFIGURATION, "RSP", "K22");
-
 
     public Iti21Component() {
-        super();
+        super(ITI_21);
     }
 
     public Iti21Component(CamelContext camelContext) {
-        super(camelContext);
-    }
-
-    @Override
-    public AuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
-        return CLIENT_AUDIT_STRATEGY;
-    }
-
-    @Override
-    public AuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
-        return SERVER_AUDIT_STRATEGY;
-    }
-
-    @Override
-    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
-        return CONFIGURATION;
-    }
-
-    @Override
-    public NakFactory getNakFactory() {
-        return NAK_FACTORY;
+        super(camelContext, ITI_21);
     }
 
     @Override
     public List<Interceptor> getAdditionalConsumerInterceptors() {
-        return Collections.<Interceptor>singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
+        return Collections.singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
     }
 }

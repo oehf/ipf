@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
@@ -195,8 +194,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
         while (true) {
             // validate current fragment
             if (validationOnContinuation) {
-                VALIDATOR.validate(fragmentString,
-                        Hl7v3ValidationProfiles.getResponseValidationProfile(wsTransactionConfiguration.interactionId))
+                VALIDATOR.validate(fragmentString, wsTransactionConfiguration.responseValidationProfile)
             }
 
             Document fragment = DOM_BUILDERS.get().parse(new ByteArrayInputStream(fragmentString.getBytes()))
@@ -265,7 +263,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
             if (autoCancel) {
                 // TODO: cancel on errors as well
                 String cancelRequest = createQuqiRequest(request, true, 0, 0)
-                LOG.debug('Sending automatical cancel request\n {}', cancelRequest)
+                LOG.debug('Sending automatic cancel request\n {}', cancelRequest)
                 client.cancel(cancelRequest)
             }
 

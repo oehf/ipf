@@ -15,6 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
+import org.hl7.fhir.instance.model.Patient;
+import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Strategy for auditing ITI-78 transactions on the server side
  *
@@ -23,9 +29,45 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78;
  */
 public class Iti78ServerAuditStrategy extends Iti78AuditStrategy {
 
-    public Iti78ServerAuditStrategy() {
+    private static class LazyHolder {
+        private static final Iti78ServerAuditStrategy INSTANCE = new Iti78ServerAuditStrategy();
+    }
+
+    public static Iti78ServerAuditStrategy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
+    private Iti78ServerAuditStrategy() {
         super(true);
     }
 
-
+    /**
+     * Enrich patients IDs. Response is either a List of Patients or a Patient
+     *
+     * @param auditDataset audit dataset
+     * @param response response resource
+     * @return audit dataset enriched with patient resource IDs
+     */
+    @Override
+    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response) {
+        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response);
+        /* Pending https://github.com/oehf/ipf/issues/124
+        if (result) {
+            if (response instanceof Patient) {
+                Patient patient = (Patient) response;
+                auditDataset.getPatientIds().add(patient.getIdElement().getValue());
+            } else if (response instanceof List) {
+                List<Patient> patients = (List<Patient>) response;
+                auditDataset.getPatientIds().addAll(
+                        patients.stream()
+                                .map(r -> r.getIdElement().getValue())
+                                .collect(Collectors.toList()));
+            } else {
+                // Something else...?
+                return false;
+            }
+        }
+        */
+        return result;
+    }
 }

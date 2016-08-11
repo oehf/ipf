@@ -20,7 +20,6 @@ import org.hl7.fhir.instance.model.Parameters;
 import org.hl7.fhir.instance.model.Patient;
 import org.hl7.fhir.instance.model.StringType;
 import org.hl7.fhir.instance.model.UriType;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;

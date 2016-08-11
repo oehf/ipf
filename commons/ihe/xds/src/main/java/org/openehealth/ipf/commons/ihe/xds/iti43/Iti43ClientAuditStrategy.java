@@ -22,11 +22,21 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditStrategy30
 
 /**
  * Client audit strategy for ITI-43.
+ *
  * @author Dmytro Rud
  */
 public class Iti43ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
 
-    public Iti43ClientAuditStrategy() {
+    private static class LazyHolder {
+        private static final Iti43ClientAuditStrategy INSTANCE = new Iti43ClientAuditStrategy();
+    }
+
+    public static Iti43ClientAuditStrategy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
+
+    private Iti43ClientAuditStrategy() {
         super(false);
     }
 

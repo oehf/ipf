@@ -20,7 +20,15 @@ import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
 
 public class Iti10ServerAuditStrategy extends Iti10AuditStrategy {
 
-    public Iti10ServerAuditStrategy() {
+    private static class LazyHolder {
+        private static final Iti10ServerAuditStrategy INSTANCE = new Iti10ServerAuditStrategy();
+    }
+
+    public static Iti10ServerAuditStrategy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
+    private Iti10ServerAuditStrategy() {
         super(true);
     }
 

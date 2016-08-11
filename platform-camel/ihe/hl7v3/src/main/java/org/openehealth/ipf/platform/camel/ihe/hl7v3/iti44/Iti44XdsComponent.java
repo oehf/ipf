@@ -15,32 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44XdsPortType;
-
-import javax.xml.namespace.QName;
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_44_XDS;
 
 /**
  * The Camel component for the ITI-44 transaction (XDS.b).
  */
 public class Iti44XdsComponent extends AbstractIti44Component {
 
-    private static final String NS_URI_XDS = "urn:ihe:iti:xds-b:2007";
-    public final static Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
-            IpfInteractionId.ITI_44_XDS,
-            new QName(NS_URI_XDS, "DocumentRegistry_Service", "ihe"),
-            Iti44XdsPortType.class,
-            new QName(NS_URI_XDS, "DocumentRegistry_Binding_Soap12", "ihe"),
-            false,
-            "wsdl/iti44/iti44-xds-raw.wsdl",
-            "MCCI_IN000002UV01",
-            null,
-            false,
-            false);
-
-    @Override
-    public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
-        return WS_CONFIG;
+    public Iti44XdsComponent() {
+        super(ITI_44_XDS);
     }
 }

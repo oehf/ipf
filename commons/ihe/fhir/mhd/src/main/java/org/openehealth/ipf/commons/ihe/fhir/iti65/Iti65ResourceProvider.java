@@ -23,8 +23,6 @@ import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Resource Provider for MHD (ITI-65)

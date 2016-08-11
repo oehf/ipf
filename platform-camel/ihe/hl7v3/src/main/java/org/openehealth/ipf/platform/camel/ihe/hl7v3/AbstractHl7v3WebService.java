@@ -26,6 +26,7 @@ import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -42,6 +43,10 @@ import javax.xml.ws.handler.MessageContext;
 abstract public class AbstractHl7v3WebService extends AbstractWebService {
 
     private final Hl7v3WsTransactionConfiguration wsTransactionConfiguration;
+
+    public AbstractHl7v3WebService(Hl7v3InteractionId hl7v3InteractionId) {
+        this((Hl7v3WsTransactionConfiguration)hl7v3InteractionId.getWsTransactionConfiguration());
+    }
 
     public AbstractHl7v3WebService(Hl7v3WsTransactionConfiguration wsTransactionConfiguration) {
         Validate.notNull(wsTransactionConfiguration);

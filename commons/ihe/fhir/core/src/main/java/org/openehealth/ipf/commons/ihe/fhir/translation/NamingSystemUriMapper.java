@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.fhir.translation;
 
 import org.openehealth.ipf.commons.ihe.fhir.NamingSystemService;
 
+import java.util.Optional;
+
 import static org.hl7.fhir.instance.model.NamingSystem.NamingSystemIdentifierType.OID;
 import static org.hl7.fhir.instance.model.NamingSystem.NamingSystemIdentifierType.OTHER;
 import static org.hl7.fhir.instance.model.NamingSystem.NamingSystemIdentifierType.URI;
@@ -33,36 +35,34 @@ import static org.hl7.fhir.instance.model.NamingSystem.NamingSystemIdentifierTyp
 public class NamingSystemUriMapper extends AbstractUriMapper {
 
     private final NamingSystemService namingSystemService;
+    private final String mappingId;
 
-    public NamingSystemUriMapper(NamingSystemService namingSystemService) {
+    public NamingSystemUriMapper(NamingSystemService namingSystemService, String mappingId) {
         this.namingSystemService = namingSystemService;
+        this.mappingId = mappingId;
     }
 
     @Override
-    protected String mapOidToUri(String id, String oid) {
-        return namingSystemService.findActiveNamingSystemByTypeAndValue(id, OID, oid)
-                .map(NamingSystemService.getValueOfType(URI))
-                .orElse(null);
+    protected Optional<String> mapOidToUri(String oid) {
+        return namingSystemService.findActiveNamingSystemByTypeAndValue(mappingId, OID, oid)
+                .map(NamingSystemService.getValueOfType(URI));
     }
 
     @Override
-    protected String mapUriToOid(String id, String uri) {
-        return namingSystemService.findActiveNamingSystemByTypeAndValue(id, URI, uri)
-                .map(NamingSystemService.getValueOfType(OID))
-                .orElse(null);
+    protected Optional<String> mapUriToOid(String uri) {
+        return namingSystemService.findActiveNamingSystemByTypeAndValue(mappingId, URI, uri)
+                .map(NamingSystemService.getValueOfType(OID));
     }
 
     @Override
-    protected String mapUriToNamespace(String id, String uri) {
-        return namingSystemService.findActiveNamingSystemByTypeAndValue(id, URI, uri)
-                .map(NamingSystemService.getValueOfType(OTHER))
-                .orElse(null);
+    protected Optional<String> mapUriToNamespace(String uri) {
+        return namingSystemService.findActiveNamingSystemByTypeAndValue(mappingId, URI, uri)
+                .map(NamingSystemService.getValueOfType(OTHER));
     }
 
     @Override
-    protected String mapNamespaceToUri(String id, String namespace) {
-        return namingSystemService.findActiveNamingSystemByTypeAndValue(id, OTHER, namespace)
-                .map(NamingSystemService.getValueOfType(URI))
-                .orElse(null);
+    protected Optional<String> mapNamespaceToUri(String namespace) {
+        return namingSystemService.findActiveNamingSystemByTypeAndValue(mappingId, OTHER, namespace)
+                .map(NamingSystemService.getValueOfType(URI));
     }
 }

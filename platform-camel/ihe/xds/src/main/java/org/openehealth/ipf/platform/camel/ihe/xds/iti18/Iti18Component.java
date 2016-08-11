@@ -17,39 +17,30 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
-import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
-import javax.xml.namespace.QName;
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
 
 /**
  * The Camel component for the ITI-18 transaction.
  */
 public class Iti18Component extends XdsComponent<XdsQueryAuditDataset> {
 
-    private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
-            Iti18PortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
-            false,
-            "wsdl/iti18.wsdl",
-            true,
-            false,
-            true,
-            false);
+
+    public Iti18Component() {
+        super(ITI_18);
+    }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
@@ -61,26 +52,12 @@ public class Iti18Component extends XdsComponent<XdsQueryAuditDataset> {
                 Iti18Service.class) {
             @Override
             public AbstractWsProducer<XdsQueryAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration> endpoint,
-                                                  JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
+                                                                                                          JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, AdhocQueryRequest.class, AdhocQueryResponse.class);
             }
         };
     }
 
-    @Override
-    public WsTransactionConfiguration getWsTransactionConfiguration() {
-        return WS_CONFIG;
-    }
-
-    @Override
-    public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
-        return new Iti18ClientAuditStrategy();
-    }
-
-    @Override
-    public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
-        return new Iti18ServerAuditStrategy();
-    }
 
 }

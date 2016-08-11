@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
@@ -60,7 +61,7 @@ public class Hl7v3ContinuationAwareEndpoint
     /**
      * Consumer-side only: Storage bean for continuation fragments.
      */
-    private Hl7v3ContinuationStorage continuationStorage = null;
+    private org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage continuationStorage = null;
 
     /**
      * Whether the system should validate messages which are internally handled

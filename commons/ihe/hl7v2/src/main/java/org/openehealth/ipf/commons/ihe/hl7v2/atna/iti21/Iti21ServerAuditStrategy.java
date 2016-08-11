@@ -26,6 +26,14 @@ import org.openehealth.ipf.commons.ihe.hl7v2.atna.pdqcore.PdqAuditStrategy;
  */
 public class Iti21ServerAuditStrategy extends PdqAuditStrategy {
 
+    private static class LazyHolder {
+        private static final Iti21ServerAuditStrategy INSTANCE = new Iti21ServerAuditStrategy();
+    }
+
+    public static Iti21ServerAuditStrategy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
     public Iti21ServerAuditStrategy() {
         super(true);
     }

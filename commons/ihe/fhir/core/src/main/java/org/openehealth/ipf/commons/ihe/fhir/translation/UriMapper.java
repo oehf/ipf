@@ -16,112 +16,76 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.translation;
 
-import java.net.URISyntaxException;
+import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
+ * <p>
  * The FHIR Identifier type introduces a new mechanism for conveying the originating system of a particular identifier.
- * Whereas HL7 Version 2 and Version 3 messages identify an assigning 1480 organization as a HD or an OID in the 'root'
+ * Whereas HL7-based messages identify an assigning organization as a HD or an OID in the 'root'
  * attribute respectively, HL7 FHIR permits the use of a URI. This requires some configuration on the part of actors
- * to correctly map a URL to an OID or HD to maintain consistency with other actors which are not implementing the
+ * to correctly map a URI to an OID or HD to maintain consistency with other actors which are not implementing the
  * FHIR specification.
+ * </p>
+ * <p>
+ * The same is basically true for code system identifications. HL7 FHIR permits the use of a URI, whereas
+ * HL7-based messages and requests use HD or OIDs.
+ * </p>
  *
  * @author Christian Ohr
  * @since 3.1
  */
 public interface UriMapper {
 
-    String IDENTIFIERS = "identifiers";
-
-    /**
-     * Translates an URI into an OID. If the URI is an (OID) URN, the namespace-specific part should,
-     * be used as the OID.
-     *
-     * @param id ID of mapping
-     * @param uri the URI
-     * @return the mapped OID or null if no OID could be identified
-     * @throws URISyntaxException if the uri string is no valid URI
-     */
-    String uriToOid(String id, String uri) throws URISyntaxException;
-
-    /**
-     * Translates an URI into a Namespace.
-     *
-     * @param id ID of mapping
-     * @param uri the URI
-     * @return the mapped namespace or null if no namespace could be identified
-     * @throws URISyntaxException if the uri string is no valid URI
-     */
-    String uriToNamespace(String id, String uri) throws URISyntaxException;
-
-    /**
-     * Translates an OID into an URI. Instead of a real mapping, an URN can be derived from the OID
-     * (i.e. urn:oid:1.2.3.4), but in general the inverse mapping to {@link #uriToOid(String, String)} should
-     * be applied.
-     *
-     * @param oid the OID
-     * @return the mapped URI
-     * @throws URISyntaxException
-     */
-    String oidToUri(String id, String oid) throws URISyntaxException;
-
-    /**
-     * Translates an Namespace into an URI. Instead of a real mapping, an URN can be derived from the namespace
-     * (i.e. urn:pin:namespace), but in general the inverse mapping to {@link #uriToNamespace(String, String)} (String)} should
-     * be applied.
-     *
-     * @param id ID of mapping
-     * @param namespace the namespace
-     * @return the mapped URI
-     * @throws URISyntaxException
-     */
-    String namespaceToUri(String id, String namespace) throws URISyntaxException;
-
     /**
      * Translates an URI into an OID. If the URI is an (OID) URN, the namespace-specific part should,
      * be used as the OID.
      *
      * @param uri the URI
-     * @return the mapped OID or null if no OID could be identified
-     * @throws URISyntaxException if the uri string is no valid URI
+     * @return the mapped OID
+     * @throws InvalidUriSyntaxException if the uri string is no valid URI
      */
-    default String uriToOid(String uri) throws URISyntaxException {
-        return uriToOid(IDENTIFIERS, uri);
-    }
+    Optional<String> uriToOid(String uri);
 
     /**
      * Translates an URI into a Namespace.
      *
      * @param uri the URI
-     * @return the mapped namespace or null if no namespace could be identified
-     * @throws URISyntaxException if the uri string is no valid URI
+     * @return the mapped namespace
+     * @throws InvalidUriSyntaxException if the uri string is no valid URI
      */
-    default String uriToNamespace(String uri) throws URISyntaxException {
-        return uriToNamespace(IDENTIFIERS, uri);
-    }
+    Optional<String> uriToNamespace(String uri);
 
     /**
      * Translates an OID into an URI. Instead of a real mapping, an URN can be derived from the OID
-     * (i.e. urn:oid:1.2.3.4), but in general the inverse mapping to {@link #uriToOid(String, String)} should
+     * (i.e. urn:oid:1.2.3.4), but in general the inverse mapping to {@link #uriToOid(String)} should
      * be applied.
      *
      * @param oid the OID
      * @return the mapped URI
-     * @throws URISyntaxException
+     * @throws InvalidUriSyntaxException
      */
-    default String oidToUri(String oid) throws URISyntaxException {
-        return oidToUri(IDENTIFIERS, oid);
-    }
+    String oidToUri(String oid);
 
     /**
      * Translates an Namespace into an URI. Instead of a real mapping, an URN can be derived from the namespace
-     * (i.e. urn:pin:namespace), but in general the inverse mapping to {@link #uriToNamespace(String, String)} (String)} should
+     * (i.e. urn:pin:namespace), but in general the inverse mapping to {@link #uriToNamespace(String)} (String)} should
      * be applied.
      *
      * @param namespace the namespace
      * @return the mapped URI
-     * @throws URISyntaxException
+     * @throws InvalidUriSyntaxException
      */
-    default String namespaceToUri(String namespace) throws URISyntaxException {
-        return namespaceToUri(IDENTIFIERS, namespace);
+    String namespaceToUri(String namespace);
+
+
+    static <T> Optional<T> findFirst(Supplier<Optional<T>>... suppliers) {
+        return Stream.of(suppliers)
+                .map(Supplier::get)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
     }
+
 }

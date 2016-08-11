@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 
-import java.util.Scanner;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.model.AbstractMessage;
@@ -28,6 +26,8 @@ import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
 import org.junit.Before;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
+
+import java.util.Scanner;
 
 public abstract class AbstractPCD01ValidatorTest {
 
@@ -50,7 +50,7 @@ public abstract class AbstractPCD01ValidatorTest {
     }
 
     protected <T extends AbstractMessage> T maxMsgReplace(String whatToReplace, String replacement) throws HL7Exception {
-        return (T)getParser().parse(maximumMessage.toString().replace(whatToReplace, replacement));
+        return (T) getParser().parse(maximumMessage.toString().replace(whatToReplace, replacement));
     }
 
     protected <T extends AbstractMessage> void validate(Message message) throws HL7Exception {
@@ -60,7 +60,7 @@ public abstract class AbstractPCD01ValidatorTest {
     }
 
     protected static <T extends Message> T load(Parser parser, String fileName) throws HL7Exception {
-        return (T)parser.parse(
+        return (T) parser.parse(
                 new Scanner(AbstractPCD01ValidatorTest.class.getResourceAsStream("/" + fileName)).useDelimiter("\\A").next());
     }
 }

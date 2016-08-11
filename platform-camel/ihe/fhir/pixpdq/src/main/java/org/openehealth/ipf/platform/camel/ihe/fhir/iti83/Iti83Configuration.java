@@ -16,23 +16,16 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83ResourceProvider;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83TransactionConfiguration;
 
 /**
  * Standard Configuration for Iti83Component. Lazy-loading of results is by default not supported.
  *
  * @author Christian Ohr
  * @since 3.1
+ *
+ * @deprecated use {@link Iti83TransactionConfiguration}
  */
-public class Iti83Configuration extends FhirComponentConfiguration {
-
-    public Iti83Configuration() {
-        super(
-                new Iti83ResourceProvider(),        // Consumer side. accept $ihe-pix operation
-                new Iti83ClientRequestFactory());   // Formulate queries
-        setSupportsLazyLoading(false);
-    }
+public class Iti83Configuration extends Iti83TransactionConfiguration {
 
 }

@@ -25,10 +25,18 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditStrategy30;
  */
 public class Iti62ServerAuditStrategy extends XdsRemoveAuditStrategy30 {
 
+    private static class LazyHolder {
+        private static final Iti62ServerAuditStrategy INSTANCE = new Iti62ServerAuditStrategy();
+    }
+
+    public static Iti62ServerAuditStrategy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
     /**
      * Constructs the audit strategy.
      */
-    public Iti62ServerAuditStrategy() {
+    private Iti62ServerAuditStrategy() {
         super(true);
     }
 

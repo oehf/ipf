@@ -17,7 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.junit.BeforeClass;
 import org.junit.Test;

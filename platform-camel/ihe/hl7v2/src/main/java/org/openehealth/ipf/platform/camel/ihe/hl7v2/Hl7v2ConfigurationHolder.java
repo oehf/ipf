@@ -26,11 +26,11 @@ public interface Hl7v2ConfigurationHolder {
     /**
      * Returns component configuration.
      */
-    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration();
+    org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration();
 
     /**
      * Returns transaction-specific NAK factory.
      */
-    public NakFactory getNakFactory();
+    org.openehealth.ipf.commons.ihe.hl7v2.NakFactory getNakFactory();
 
 }

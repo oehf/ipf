@@ -16,40 +16,29 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredResponsePortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
-import javax.xml.namespace.QName;
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_55_DEFERRED;
 
 /**
  * Camel component for the ITI-55 XCPD Initiating Gateway actor
  * (receivers of deferred responses).
  */
 public class Iti55DeferredResponseComponent extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
+
     public static final String THREAD_POOL_NAME = "iti55.deferred.response";
 
-    private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
-    private final static Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
-            IpfInteractionId.ITI_55,
-            new QName(NS_URI, "InitiatingGateway_Service", "xcpd"),
-            Iti55DeferredResponsePortType.class,
-            new QName(NS_URI, "InitiatingGatewayDeferredResponse_Binding", "xcpd"),
-            false,
-            "wsdl/iti55/iti55-deferred-response-raw.wsdl",
-            null,
-            null,
-            false,
-            false);
+    public Iti55DeferredResponseComponent() {
+        super(ITI_55_DEFERRED);
+    }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
@@ -65,21 +54,6 @@ public class Iti55DeferredResponseComponent extends Hl7v3Component<Hl7v3WsTransa
                 return new Iti55DeferredResponseProducer(endpoint, clientFactory);
             }
         };
-    }
-
-    @Override
-    public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
-        return WS_CONFIG;
-    }
-
-    @Override
-    public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-        return null;   // producers send responses, so the server-side strategy must be used
-    }
-
-    @Override
-    public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-        return new Iti55AuditStrategy(false);
     }
 
 }

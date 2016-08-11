@@ -19,6 +19,7 @@ package org.openehealth.ipf.boot.fhir;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.core.io.Resource;
 
 import javax.validation.constraints.NotNull;
@@ -32,6 +33,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "ipf.fhir")
 public class IpfFhirConfigurationProperties {
 
+    @NestedConfigurationProperty
     @Getter
     private final Servlet servlet = new Servlet();
 
@@ -39,6 +41,7 @@ public class IpfFhirConfigurationProperties {
      * Path that serves as the base URI for the FHIR services.
      */
     @NotNull
+    @Getter @Setter
     @Pattern(regexp = "/[^?#]*", message = "Path must start with /")
     private String path = "/fhir";
 
@@ -46,28 +49,14 @@ public class IpfFhirConfigurationProperties {
      * Resource containing mappings from FHIR URIs to OIds and namespaces
      */
     @NotNull(message = "Must provide a NamingSystems resource")
+    @Getter @Setter
     private Resource identifierNamingSystems;
 
-
-    public Resource getIdentifierNamingSystems() {
-        return identifierNamingSystems;
-    }
-
-    public void setIdentifierNamingSystems(Resource identifierNamingSystems) {
-        this.identifierNamingSystems = identifierNamingSystems;
-    }
-
-    public String getPath() {
-        return this.path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public Servlet getServlet() {
-        return this.servlet;
-    }
+    /**
+     * Whether to create a cached PagingProvider
+     */
+    @Getter @Setter
+    private boolean caching;
 
     String getFhirMapping() {
         String path = getPath();

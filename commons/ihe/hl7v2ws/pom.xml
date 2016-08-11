@@ -41,6 +41,10 @@
             <artifactId>ipf-commons-ihe-hl7v2</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-ws</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
             <artifactId>ipf-gazelle-validation-profiles-pcd</artifactId>
         </dependency>

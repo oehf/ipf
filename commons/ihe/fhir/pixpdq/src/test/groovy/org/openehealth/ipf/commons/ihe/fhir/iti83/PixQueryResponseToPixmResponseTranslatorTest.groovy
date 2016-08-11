@@ -26,6 +26,7 @@ import org.junit.Before
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
+import org.openehealth.ipf.commons.ihe.hl7v2.PIX
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23

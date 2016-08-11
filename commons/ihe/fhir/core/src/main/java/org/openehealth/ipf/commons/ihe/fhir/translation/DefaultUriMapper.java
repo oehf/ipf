@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.translation;
 
 import org.openehealth.ipf.commons.map.MappingService;
 
-import java.net.URISyntaxException;
+import java.util.Optional;
 
 /**
  * Default URI Mapper implementation that requires a {@link MappingService}
@@ -43,67 +43,23 @@ public class DefaultUriMapper extends AbstractUriMapper {
         this.uriToNamespaceMappingKey = uriToNamespaceMappingKey;
     }
 
-    /**
-     * Forwards to {@link #uriToOid(String, String)}using {@link #uriToOidMappingKey} as mapping identifiers
-     *
-     * @param uri URI
-     * @return OID
-     * @throws URISyntaxException
-     */
-    public String uriToOid(String uri) throws URISyntaxException {
-        return uriToOid(uriToOidMappingKey, uri);
-    }
-
-    /**
-     * Forwards to {@link #namespaceToUri(String, String)}using {@link #uriToNamespaceMappingKey} as mapping identifiers
-     *
-     * @param namespace namespace
-     * @return URI
-     * @throws URISyntaxException
-     */
-    public String namespaceToUri(String namespace) throws URISyntaxException {
-        return namespaceToUri(uriToNamespaceMappingKey, namespace);
-    }
-
-    /**
-     * Forwards to {@link #oidToUri(String, String)}using {@link #uriToOidMappingKey} as mapping identifiers
-     *
-     * @param oid OID
-     * @return URI
-     * @throws URISyntaxException
-     */
-    public String oidToUri(String oid) throws URISyntaxException {
-        return super.oidToUri(uriToOidMappingKey, oid);
-    }
-
-    /**
-     * Forwards to {@link #uriToNamespace(String, String)}using {@link #uriToNamespaceMappingKey} as mapping identifiers
-     *
-     * @param uri URI
-     * @return namespace
-     * @throws URISyntaxException
-     */
-    public String uriToNamespace(String uri) throws URISyntaxException {
-        return super.uriToNamespace(uriToNamespaceMappingKey, uri);
+    @Override
+    protected Optional<String> mapUriToOid(String uri) {
+        return Optional.ofNullable((String) mappingService.get(uriToOidMappingKey, uri));
     }
 
     @Override
-    protected String mapUriToOid(String id, String uri) {
-        return (String) mappingService.get(id, uri);
+    protected Optional<String> mapOidToUri(String oid) {
+        return Optional.ofNullable((String) mappingService.getKey(uriToOidMappingKey, oid));
     }
 
     @Override
-    protected String mapOidToUri(String id, String oid) {
-        return (String) mappingService.getKey(id, oid);
+    protected Optional<String> mapUriToNamespace(String uri) {
+        return Optional.ofNullable((String) mappingService.get(uriToNamespaceMappingKey, uri));
     }
 
     @Override
-    protected String mapUriToNamespace(String id, String uri) {
-        return (String) mappingService.get(id, uri);
-    }
-
-    @Override
-    protected String mapNamespaceToUri(String id, String namespace) {
-        return (String) mappingService.getKey(id, namespace);
+    protected Optional<String> mapNamespaceToUri(String namespace) {
+        return Optional.ofNullable((String) mappingService.getKey(uriToNamespaceMappingKey, namespace));
     }
 }

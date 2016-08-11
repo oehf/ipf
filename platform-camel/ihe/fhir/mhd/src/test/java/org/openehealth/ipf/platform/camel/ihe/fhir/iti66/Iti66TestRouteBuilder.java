@@ -17,14 +17,11 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.support.ExpressionAdapter;
 import org.hl7.fhir.instance.model.Bundle;
-import org.hl7.fhir.instance.model.OperationOutcome;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 
 import java.io.InputStreamReader;

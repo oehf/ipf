@@ -24,6 +24,7 @@ import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class FhirAuditor extends IHEAuditor {
             String documentResponderUri,
             String clientIpAddress,
             String queryString,
-            List<String> patientIds) {
+            Collection<String> patientIds) {
         if (!isAuditorEnabled()) {
             return;
         }
@@ -102,7 +103,7 @@ public class FhirAuditor extends IHEAuditor {
             String documentResponderUri,
             String clientIpAddress,
             String queryString,
-            List<String> patientIds) {
+            Collection<String> patientIds) {
         if (!isAuditorEnabled()) {
             return;
         }
@@ -129,7 +130,7 @@ public class FhirAuditor extends IHEAuditor {
             String pdqSupplierUri,
             String clientIpAddress,
             String queryString,
-            List<String> patientIds) {
+            Collection<String> patientIds) {
         if (!isAuditorEnabled()) {
             return;
         }
@@ -155,7 +156,7 @@ public class FhirAuditor extends IHEAuditor {
             String pixManagerUri,
             String clientIpAddress,
             String queryString,
-            List<String> patientIds) {
+            Collection<String> patientIds) {
         if (!isAuditorEnabled()) {
             return;
         }

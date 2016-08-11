@@ -16,6 +16,8 @@
 
 package org.openehealth.ipf.boot.hl7v2;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.nio.charset.Charset;
@@ -23,23 +25,20 @@ import java.nio.charset.Charset;
 /**
  *
  */
-@ConfigurationProperties(prefix = "ipf.hl7")
+@ConfigurationProperties(prefix = "ipf.hl7v2")
 public class IpfHl7v2ConfigurationProperties {
 
     /**
      * Charset used for decoding and encoding HL7 messages
      */
+    @Getter
     private String charset = "UTF-8";
 
     /**
      * Whether to convert line feeds to proper segment separators before parising starts
      */
-    private boolean convertLFToCR = false;
-
-
-    public String getCharset() {
-        return charset;
-    }
+    @Getter @Setter
+    private boolean convertLinefeed = false;
 
     public void setCharset(String charset) {
         // Ensure that charset exists
@@ -47,12 +46,10 @@ public class IpfHl7v2ConfigurationProperties {
         this.charset = charset;
     }
 
-
-    public boolean getConvertLFToCR() {
-        return convertLFToCR;
-    }
-
-    public void setConvertLFToCR(boolean convertLFToCR) {
-        this.convertLFToCR = convertLFToCR;
-    }
+    /**
+     * Whether to instantiate a continuation cache
+     */
+    @Getter
+    @Setter
+    private boolean caching;
 }

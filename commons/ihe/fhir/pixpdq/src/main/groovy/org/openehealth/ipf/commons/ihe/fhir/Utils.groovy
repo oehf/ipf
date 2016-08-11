@@ -51,14 +51,11 @@ class Utils {
 
     static boolean populateIdentifier(def cx, UriMapper uriMapper, String uri, String identifier = null) {
         cx[1] = identifier ?: ''
-        String namespace = uriMapper.uriToNamespace(uri)
-        if (namespace) cx[4][1] = namespace
-        String oid = uriMapper.uriToOid(uri)
-        if (oid) {
-            cx[4][2] = oid
+        uriMapper.uriToNamespace(uri).ifPresent { cx[4][1] = it }
+        uriMapper.uriToOid(uri).ifPresent {
+            cx[4][2] = it
             cx[4][3] = 'ISO'
         }
-        // TODO: should really require that both oid and namespace is set
         return cx[4][1]?.value || cx[4][2]?.value
     }
 
@@ -66,7 +63,7 @@ class Utils {
         cx[1] = identifier ?: ''
         cx[4][2] = oid
         cx[4][3] = 'ISO'
-
+        true
     }
 
     // PIXm, Error Case 3

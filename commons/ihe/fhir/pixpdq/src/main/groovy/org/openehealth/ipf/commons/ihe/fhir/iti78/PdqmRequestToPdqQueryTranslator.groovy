@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslationException
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
+import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
@@ -81,6 +82,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         Validate.notNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
         this.pdqSupplierResourceIdentifierUri = pdqSupplierResourceIdentifierUri
         this.pdqSupplierResourceIdentifierOid = uriMapper.uriToOid(pdqSupplierResourceIdentifierUri)
+            .orElseThrow({new UnmappableUriException(pdqSupplierResourceIdentifierUri)})
     }
 
     /**
@@ -139,30 +141,32 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
 
 
         // Handle identifiers
-        List<String> requestedDomains
-        String identifierNamespace, identifierOid, identifierValue
+        List<String> requestedDomainOids
+        Optional<CompositeIdentifier> searchIdentifier = Optional.empty()
 
         TokenParam resourceIdParam = searchParameters._id;
         if (resourceIdParam) {
             resourceIdParam.system = pdqSupplierResourceIdentifierUri
-            (identifierNamespace, identifierOid, identifierValue) = searchToken(resourceIdParam)
+            searchIdentifier = searchToken(resourceIdParam)
         }
 
         TokenAndListParam identifierParam = searchParameters.identifiers
         if (identifierParam) {
-            List<List<String>> identifiers = searchTokenList(identifierParam)
+            List<Optional<CompositeIdentifier>> identifiers = searchTokenList(identifierParam)
             // Patient identifier has identifier value
-            List<String> searchIdentifier = identifiers?.find { it.size() == 3 && !it[2]?.empty }
-            if (searchIdentifier) (identifierNamespace, identifierOid, identifierValue) = searchIdentifier
+            searchIdentifier = identifiers?.find {
+                it.isPresent() && it.get().hasAll() && !it.get().id.empty
+            }
             // Requested domains have no identifier value. If the resource identifier system is not included here,
             // add it because otherwise we don't know the resource ID in the response.
-            requestedDomains = identifiers?.findAll { it.size() == 2 || (!it[2]) }.collect { it[1] }
+            requestedDomainOids = identifiers?.findAll { it.isPresent() && it.get().hasOnlySystem() }
+                    .collect { it.get().oid }
         }
 
         // If requestedDomains is set but the pdqSupplierResourceIdentifierOid is not part of it, add it.
         // Otherwise no MPI patient ID is returned and we cannot generate a resource ID from it!
-        if (requestedDomains && (!requestedDomains.contains(pdqSupplierResourceIdentifierOid)))
-            requestedDomains.add(pdqSupplierResourceIdentifierOid)
+        if (requestedDomainOids && (!requestedDomainOids.contains(pdqSupplierResourceIdentifierOid)))
+            requestedDomainOids.add(pdqSupplierResourceIdentifierOid)
 
         // Properly convert birth date.
         DateParam birthDateParam = searchParameters.birthDate
@@ -176,10 +180,10 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
 
         Map<String, Object> searchParams = [
                 // PDQ only allows
-                '@PID.3.1'  : identifierValue,
-                '@PID.3.4.1': identifierNamespace,
-                '@PID.3.4.2': identifierOid,
-                '@PID.3.4.3': identifierOid ? 'ISO' : null,
+                '@PID.3.1'  : searchIdentifier.map({ it.id }).orElse(null),
+                '@PID.3.4.1': searchIdentifier.map({ it.namespace }).orElse(null),
+                '@PID.3.4.2': searchIdentifier.map({ it.oid }).orElse(null),
+                '@PID.3.4.3': searchIdentifier.map({ it.oid ? 'ISO' : null }).orElse(null),
                 '@PID.5.1'  : firstOrNull(searchStringList(searchParameters.family, false)),
                 '@PID.5.2'  : firstOrNull(searchStringList(searchParameters.given, false)),
                 '@PID.7'    : birthDateString,
@@ -198,7 +202,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
 
         fillSearchParameters(searchParams, qry.QPD[3])
 
-        requestedDomains?.each {
+        requestedDomainOids?.each {
             Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[8]), it)
         }
 
@@ -215,41 +219,28 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         param?.getValuesAsQueryTokens().collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
     }
 
-    private List<String> searchUri(UriParam param) {
-        String namespace, oid
-        if (param == null || param.empty) return null;
-        namespace = uriMapper.uriToNamespace(param.value)
-        oid = uriMapper.uriToOid(param.value)
-        if (!(namespace || oid)) {
-            throw Utils.unknownPatientDomain(param.value)
-        }
-        [namespace, oid]
-    }
-
-    private List<List<String>> searchUriList(UriAndListParam param) {
-        param?.getValuesAsQueryTokens().collect { searchUri(it.valuesAsQueryTokens.find()) }
-    }
-
     private String searchNumber(NumberParam param) {
         if (param == null) return null;
         param?.value.toString()
     }
 
-    private List<String> searchToken(TokenParam identifierParam) {
-        String namespace, oid
+    private Optional<CompositeIdentifier> searchToken(TokenParam identifierParam) {
         if (identifierParam) {
-            namespace = uriMapper.uriToNamespace(identifierParam.system)
-            oid = uriMapper.uriToOid(identifierParam.system)
-            if (!(namespace || oid)) {
+            CompositeIdentifier cx = new CompositeIdentifier(
+                    id : identifierParam.value,
+                    namespace : uriMapper.uriToNamespace(identifierParam.system).orElse(null),
+                    oid : uriMapper.uriToOid(identifierParam.system).orElse(null))
+            if (!cx.hasSystem()) {
                 throw identifierParam.value ?
                         Utils.unknownPatientDomain(identifierParam.system) :
                         Utils.unknownTargetDomainValue(identifierParam.system)
             }
+            return Optional.of(cx)
         }
-        [namespace, oid, identifierParam?.value]
+        return Optional.empty()
     }
 
-    private List<List<String>> searchTokenList(TokenAndListParam param) {
+    private List<Optional<CompositeIdentifier>> searchTokenList(TokenAndListParam param) {
         param?.getValuesAsQueryTokens().collect { searchToken(it?.valuesAsQueryTokens?.find()) }
     }
 
@@ -276,4 +267,21 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
 
     }
 
+    private class CompositeIdentifier {
+        String id;
+        String namespace;
+        String oid;
+
+        boolean hasSystem() {
+            namespace || oid
+        }
+
+        boolean hasOnlySystem() {
+            (namespace || oid) && !id
+        }
+
+        boolean hasAll() {
+            namespace && oid && id
+        }
+    }
 }

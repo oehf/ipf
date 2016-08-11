@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 

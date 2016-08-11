@@ -16,6 +16,7 @@
 package org.openehealth.ipf.tutorials.iheclient;
 
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Ignore;
@@ -46,7 +47,7 @@ public class IHEWebServiceClientTest {
     @Ignore
     public void testIti47() throws Exception {
         InputStream in = getClass().getResourceAsStream("/example-messages/PDQv3.xml");
-        String request = IOUtils.toString(in);
+        String request = IOUtils.toString(in, Charset.defaultCharset());
         String result = iheClient.iti47PatientDemographicsQuery(request, "localhost", 8080, "pix-xref-mgr/ws/iti47Service?secure=true", false);
         System.out.println(result);
     }

@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.core.config;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

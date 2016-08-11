@@ -16,7 +16,9 @@
 
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.xds.XdsInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -28,4 +30,25 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
  */
 public abstract class XdsComponent<AuditDatasetType extends XdsAuditDataset>
         extends AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration> {
+
+    private final XdsInteractionId interactionId;
+
+    public XdsComponent(XdsInteractionId interactionId) {
+        this.interactionId = interactionId;
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
+        return interactionId.getClientAuditStrategy();
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
+        return interactionId.getServerAuditStrategy();
+    }
+
+    @Override
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
+        return interactionId.getWsTransactionConfiguration();
+    }
 }

@@ -17,13 +17,11 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65AuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
+
+import static org.openehealth.ipf.commons.ihe.fhir.MHD.Interactions.ITI_65;
 
 /**
  * Component for MHD Register Document (ITI-65)
@@ -33,22 +31,13 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  */
 public class Iti65Component extends FhirComponent<Iti65AuditDataset> {
 
-    private static final FhirComponentConfiguration DEFAULT_CONFIGURATION = new Iti65Configuration();
-
-    private static final AuditStrategy<Iti65AuditDataset> CLIENT_AUDIT_STRATEGY = new Iti65ClientAuditStrategy();
-    private static final AuditStrategy<Iti65AuditDataset> SERVER_AUDIT_STRATEGY = new Iti65ServerAuditStrategy();
 
     public Iti65Component() {
-        super(DEFAULT_CONFIGURATION);
+        super(ITI_65);
     }
 
     public Iti65Component(CamelContext context) {
-        super(context);
-        setFhirComponentConfiguration(DEFAULT_CONFIGURATION);
-    }
-
-    public Iti65Component(FhirComponentConfiguration configuration) {
-        super(configuration);
+        super(context, ITI_65);
     }
 
     @Override
@@ -56,13 +45,5 @@ public class Iti65Component extends FhirComponent<Iti65AuditDataset> {
         return new Iti65Endpoint(uri, this, config);
     }
 
-    @Override
-    public AuditStrategy<Iti65AuditDataset> getServerAuditStrategy() {
-        return SERVER_AUDIT_STRATEGY;
-    }
 
-    @Override
-    public AuditStrategy<Iti65AuditDataset> getClientAuditStrategy() {
-        return CLIENT_AUDIT_STRATEGY;
-    }
 }

@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 
 /**
@@ -26,7 +25,15 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
  */
 public class Iti83ClientAuditStrategy extends Iti83AuditStrategy {
 
-    public Iti83ClientAuditStrategy() {
+    private static class LazyHolder {
+        private static final Iti83ClientAuditStrategy INSTANCE = new Iti83ClientAuditStrategy();
+    }
+
+    public static Iti83ClientAuditStrategy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+
+    private Iti83ClientAuditStrategy() {
         super(false);
     }
 

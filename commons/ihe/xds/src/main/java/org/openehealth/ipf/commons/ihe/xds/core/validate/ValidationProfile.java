@@ -15,94 +15,49 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-
-import java.util.*;
-
-import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
+import org.openehealth.ipf.commons.ihe.xds.XdsInteractionId;
+import org.openehealth.ipf.commons.ihe.xds.XdsInteractionProfile;
 
 /**
  * Validation profile for XDS-like transactions.
+ * This has become an interface in IPF 3.2 and is implemented by subclasses of
+ * {@link XdsInteractionId XDS interaction IDs}
+ *
+ *
  * @author Jens Riemschneider
  * @author Dmytro Rud
  * @author Michael Ottati
+ *
  */
-public class ValidationProfile {
-
-    public static enum InteractionProfile {
-        XDS_A(ITI_14, ITI_15, ITI_16),
-        XDS_B(ITI_18, ITI_41, ITI_41_XDM, ITI_41_XDR, ITI_42, ITI_43, ITI_51, ITI_57, ITI_61, ITI_62, RAD_69),
-        XCA(ITI_38, ITI_39, RAD_75),
-        XCF(ITI_63),
-        Continua_HRN(IpfInteractionId.Continua_HRN);
-
-        private List<InteractionId> ids;
-
-        InteractionProfile(InteractionId... ids) {
-            this.ids = Arrays.asList(ids);
-        }
-
-        public List<InteractionId> getIds() {
-            return ids;
-        }
-    }
-
-    private InteractionId interactionId;
-
-
-    /**
-     * Constructor.
-     * @param interactionId
-     *          ID of the eHealth transaction.
-     */
-    public ValidationProfile(InteractionId interactionId) {
-        this.interactionId = interactionId;
-    }
-
+public interface ValidationProfile {
 
     /**
      * @return <code>true</code> if checks are done for query transactions.
      */
-    public boolean isQuery() {
-        return ((interactionId == ITI_16) ||
-                (interactionId == ITI_18) ||
-                (interactionId == ITI_38) ||
-                (interactionId == ITI_51) ||
-                (interactionId == ITI_63));
-    }
+    boolean isQuery();
 
 
     /**
      * @return ID of the eHealth transaction.
      */
-    public InteractionId getInteractionId() {
-        return interactionId;
-    }
+    XdsInteractionId getInteractionId();
 
 
     /**
      * @return ID of interaction profile the transaction belongs to.
      */
-    public InteractionProfile getProfile() {
-        for (InteractionProfile profile : InteractionProfile.values()) {
-            if (profile.getIds().contains(getInteractionId())) {
-                return profile;
-            }
-        }
-        throw new IllegalArgumentException("Unknown interaction ID: " + interactionId);
-    }
+    XdsInteractionProfile getInteractionProfile();
 
 
     /**
      * @return <code>true</code> when the transaction uses ebXML 3.0.
      */
-    public boolean isEbXml30Based() {
-        InteractionProfile profile = getProfile();
-        return ((profile == InteractionProfile.XDS_B) ||
-                (profile == InteractionProfile.XCA) ||
-                (profile == InteractionProfile.Continua_HRN) ||
-                (profile == InteractionProfile.XCF));
+    default boolean isEbXml30Based() {
+        return getInteractionProfile().isEbXml30Based();
+    }
+
+    default boolean isPartOf(Class<? extends XdsInteractionProfile> clazz) {
+        return clazz.isAssignableFrom(getInteractionProfile().getClass());
     }
 
 }

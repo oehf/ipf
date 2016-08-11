@@ -37,7 +37,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
 
     <bean id="interactiveContinuationStorage"
-          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage">
+          class="org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage">
         <constructor-arg>
             <bean factory-bean="ehcacheManager" factory-method="getCache">
                 <constructor-arg value="interactiveContinuationCache" />
@@ -46,7 +46,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     </bean>
 
     <bean id="unsolicitedFragmentationStorage"
-          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheUnsolicitedFragmentationStorage">
+          class="org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheUnsolicitedFragmentationStorage">
         <constructor-arg>
             <bean factory-bean="ehcacheManager" factory-method="getCache">
                 <constructor-arg value="unsolicitedFragmentationCache" />

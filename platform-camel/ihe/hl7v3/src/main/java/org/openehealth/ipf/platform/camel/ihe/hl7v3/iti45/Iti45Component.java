@@ -16,12 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti45;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti45.Iti45AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti45.Iti45PortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
@@ -29,26 +25,18 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 
-import javax.xml.namespace.QName;
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_45;
 
 /**
  * The Camel component for the ITI-45 transaction (PIX v3).
  */
 public class Iti45Component extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
 
-    private static final String NS_URI = "urn:ihe:iti:pixv3:2007";
-    public static final Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
-            IpfInteractionId.ITI_45,
-            new QName(NS_URI, "PIXManager_Service", "ihe"),
-            Iti45PortType.class,
-            new QName(NS_URI, "PIXManager_Binding_Soap12", "ihe"),
-            false,
-            "wsdl/iti45/iti45-raw.wsdl",
-            "PRPA_IN201310UV02",
-            "PRPA_TE201310UV02",
-            false,
-            false);
+    public Iti45Component() {
+        super(ITI_45);
+    }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
@@ -60,25 +48,11 @@ public class Iti45Component extends Hl7v3Component<Hl7v3WsTransactionConfigurati
                 Iti45Service.class) {
             @Override
             public AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
-                                                  JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
+                                                                                                            JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, String.class, String.class);
             }
         };
     }
 
-    @Override
-    public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
-        return WS_CONFIG;
-    }
-
-    @Override
-    public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-        return new Iti45AuditStrategy(false);
-    }
-
-    @Override
-    public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-        return new Iti45AuditStrategy(true);
-    }
 
 }

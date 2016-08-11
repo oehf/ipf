@@ -15,11 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
@@ -28,8 +25,17 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_41;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOCUMENT_FOR_DOC_ENTRY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOC_ENTRY_FOR_DOCUMENT;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.ORGANIZATION_NAME_MISSING;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SUBMISSION_SET_STATUS_MANDATORY;
 
 /**
  * Test for {@link ProvideAndRegisterDocumentSetRequestValidator}.
@@ -39,7 +45,6 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     private ProvideAndRegisterDocumentSetRequestValidator validator;
     private ProvideAndRegisterDocumentSet request;
     private ProvideAndRegisterDocumentSetTransformer transformer;
-    private ValidationProfile profile = new ValidationProfile(IpfInteractionId.ITI_41);
 
     private DocumentEntry docEntry;
 
@@ -56,7 +61,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     
     @Test
     public void testValidateGoodCase() {
-        validator.validate(transformer.toEbXML(request), profile);
+        validator.validate(transformer.toEbXML(request), ITI_41);
     }
     
     @Test
@@ -70,20 +75,20 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     public void testValidateMissingDocEntryForDocument() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.addDocument("lol", SampleData.createDataHandler());
-        expectFailure(MISSING_DOC_ENTRY_FOR_DOCUMENT, ebXML, profile);
+        expectFailure(MISSING_DOC_ENTRY_FOR_DOCUMENT, ebXML, ITI_41);
     }
     
     @Test
     public void testValidateMissingDocumentForDocEntry() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.removeDocument("document01");
-        expectFailure(MISSING_DOCUMENT_FOR_DOC_ENTRY, ebXML, profile);
+        expectFailure(MISSING_DOCUMENT_FOR_DOC_ENTRY, ebXML, ITI_41);
     }
     
     @Test
     public void testRepositoryUniqueIdIsNotNecessary() {
         docEntry.setRepositoryUniqueId(null);
-        validator.validate(transformer.toEbXML(request), profile);
+        validator.validate(transformer.toEbXML(request), ITI_41);
     }
 
     @Test
@@ -93,7 +98,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     }
     
     private void expectFailure(ValidationMessage expectedMessage) {
-        expectFailure(expectedMessage, transformer.toEbXML(request), profile);
+        expectFailure(expectedMessage, transformer.toEbXML(request), ITI_41);
     }
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLProvideAndRegisterDocumentSetRequest ebXML, ValidationProfile profile) {

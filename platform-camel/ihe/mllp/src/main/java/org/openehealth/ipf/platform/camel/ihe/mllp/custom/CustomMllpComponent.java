@@ -18,9 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.custom;
 import lombok.Getter;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
 
@@ -43,11 +43,11 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
 
 
     public CustomMllpComponent() {
-        super();
+        super(null);
     }
 
     public CustomMllpComponent(CamelContext camelContext) {
-        super(camelContext);
+        super(camelContext, null);
     }
 
     @Override

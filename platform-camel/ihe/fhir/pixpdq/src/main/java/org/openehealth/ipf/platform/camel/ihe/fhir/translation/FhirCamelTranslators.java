@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.fhir.translation;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir;

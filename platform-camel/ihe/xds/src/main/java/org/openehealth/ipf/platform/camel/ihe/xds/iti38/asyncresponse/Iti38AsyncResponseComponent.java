@@ -16,32 +16,22 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti38.asyncresponse;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti38.asyncresponse.Iti38AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 
-import javax.xml.namespace.QName;
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38_ASYNC;
 
 /**
  * The Camel component for the ITI-38 (XCA) async response.
  */
 public class Iti38AsyncResponseComponent extends XdsComponent<XdsQueryAuditDataset> {
 
-    private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
-            new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Service", "ihe"),
-            Iti38AsyncResponsePortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Binding", "ihe"),
-            false,
-            "wsdl/iti38-asyncresponse.wsdl",
-            true,
-            false,
-            false,
-            false);
+    public Iti38AsyncResponseComponent() {
+        super(ITI_38_ASYNC);
+    }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
@@ -53,19 +43,5 @@ public class Iti38AsyncResponseComponent extends XdsComponent<XdsQueryAuditDatas
                 Iti38AsyncResponseService.class);
     }
 
-    @Override
-    public WsTransactionConfiguration getWsTransactionConfiguration() {
-        return WS_CONFIG;
-    }
-
-    @Override
-    public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
-        return null;   // no producer support
-    }
-
-    @Override
-    public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
-        return new Iti38ClientAuditStrategy();
-    }
 
 }

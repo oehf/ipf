@@ -16,39 +16,25 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.pcc1;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
-import javax.xml.namespace.QName;
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.QED.Interactions.PCC_1;
 
 /**
  * The Camel component for the PCC-1 transaction (QED).
  */
 public class Pcc1Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransactionConfiguration> {
 
-    private final static String NS_URI = "urn:ihe:pcc:qed:2007";
-    public final static Hl7v3ContinuationAwareWsTransactionConfiguration WS_CONFIG = new Hl7v3ContinuationAwareWsTransactionConfiguration(
-            IpfInteractionId.PCC_1,
-            new QName(NS_URI, "ClinicalDataSource_Service", "qed"),
-            Pcc1PortType.class,
-            new QName(NS_URI, "ClinicalDataSource_Binding_Soap12", "qed"),
-            false,
-            "wsdl/pcc1/pcc1-raw.wsdl",
-            "QUPC_IN043200UV01",
-            "QUPC_IN043200UV01",
-            false,
-            false,
-            "QUPC_IN043100UV01",
-            "QUPC_IN043200UV01");
+    public Pcc1Component() {
+        super(PCC_1);
+    }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
@@ -59,27 +45,13 @@ public class Pcc1Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransa
                 getProperties(parameters)) {
             @Override
             protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
-                Hl7v3ContinuationAwareEndpoint endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
-                return endpoint2.isSupportContinuation() ?
-                        new Pcc1ContinuationAwareService(endpoint2) :
+                Hl7v3ContinuationAwareEndpoint continuationAwareEndpoint = (Hl7v3ContinuationAwareEndpoint) endpoint;
+                return continuationAwareEndpoint.isSupportContinuation() ?
+                        new Pcc1ContinuationAwareService(continuationAwareEndpoint) :
                         new Pcc1Service();
             }
         };
     }
 
-    @Override
-    public Hl7v3ContinuationAwareWsTransactionConfiguration getWsTransactionConfiguration() {
-        return WS_CONFIG;
-    }
-
-    @Override
-    public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-        return new Pcc1AuditStrategy(false);
-    }
-
-    @Override
-    public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-        return new Pcc1AuditStrategy(true);
-    }
 
 }

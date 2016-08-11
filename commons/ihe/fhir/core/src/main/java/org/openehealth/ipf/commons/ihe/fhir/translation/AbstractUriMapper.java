@@ -20,6 +20,7 @@ import org.openehealth.ipf.commons.core.URN;
 
 import java.net.URISyntaxException;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * URI mapper base implementation that recognizes and creates OID URNs
@@ -30,42 +31,31 @@ import java.util.Objects;
 public abstract class AbstractUriMapper implements UriMapper {
 
     @Override
-    public String uriToOid(String id, String uri) throws URISyntaxException {
-        String oid;
-        if ((oid = translateURN(uri, URN.OID)) != null) return oid;
-        if ((oid = mapUriToOid(id, uri)) != null) return oid;
-        return null;
-        // throw new FhirTranslationException("URI " + uri + " cannot be mapped into an OID");
+    public Optional<String> uriToOid(String uri) {
+        return UriMapper.findFirst(
+                () -> translateURN(uri, URN.OID),
+                () -> mapUriToOid(uri));
     }
 
     @Override
-    public String uriToNamespace(String id, String uri) throws URISyntaxException {
-        String namespace;
-        if ((namespace = translateURN(uri, URN.PIN)) != null) return namespace;
-        if ((namespace = mapUriToNamespace(id, uri)) != null) return namespace;
-        return null;
+    public Optional<String> uriToNamespace(String uri) {
+        return UriMapper.findFirst(
+                () -> translateURN(uri, URN.PIN),
+                () -> mapUriToNamespace(uri));
     }
 
     @Override
-    public String oidToUri(String id, String oid) throws URISyntaxException {
-        try {
-            String uri = mapOidToUri(id, oid);
-            if (uri != null && !oid.equals(uri)) return uri;
-        } catch (Exception e) {
-            // handled below
-        }
-        return new URN(URN.OID, oid).toString();
+    public String oidToUri(String oid) {
+        return mapOidToUri(oid)
+                .filter(uri -> !oid.equals(uri))
+                .orElse(urn(URN.OID, oid).toString());
     }
 
     @Override
-    public String namespaceToUri(String id, String namespace) throws URISyntaxException {
-        try {
-            String uri = mapNamespaceToUri(id, namespace);
-            if (uri != null && !namespace.equals(uri)) return uri;
-        } catch (Exception e) {
-            // handled below
-        }
-        return new URN(URN.PIN, namespace.replaceAll("\\s+", "_")).toString();
+    public String namespaceToUri(String namespace) {
+        return mapNamespaceToUri(namespace)
+                .filter(uri -> !namespace.equals(uri))
+                .orElse(urn(URN.PIN, namespace.replaceAll("\\s+", "_")).toString());
     }
 
     /**
@@ -74,7 +64,7 @@ public abstract class AbstractUriMapper implements UriMapper {
      * @param uri URI
      * @return OID string
      */
-    protected abstract String mapUriToOid(String id, String uri);
+    protected abstract Optional<String> mapUriToOid(String uri);
 
     /**
      * Translate a non-URN URI (e.g. a URL) into an OID
@@ -82,7 +72,7 @@ public abstract class AbstractUriMapper implements UriMapper {
      * @param uri URI
      * @return OID string
      */
-    protected abstract String mapUriToNamespace(String id, String uri);
+    protected abstract Optional<String> mapUriToNamespace(String uri);
 
     /**
      * Translate a OID into an URI. Can either return null or throw an
@@ -92,7 +82,7 @@ public abstract class AbstractUriMapper implements UriMapper {
      * @return valid URI or null if no URI was found
      * @throws Exception if no URI was found
      */
-    protected abstract String mapOidToUri(String id, String oid);
+    protected abstract Optional<String> mapOidToUri(String oid);
 
     /**
      * Translate a namespace into an URI. Can either return null or throw an
@@ -102,16 +92,40 @@ public abstract class AbstractUriMapper implements UriMapper {
      * @return valid URI or null if no URI was found
      * @throws Exception if no URI was found
      */
-    protected abstract String mapNamespaceToUri(String id, String namespace);
+    protected abstract Optional<String> mapNamespaceToUri(String namespace);
 
-
-    private String translateURN(String uri, String nss) throws URISyntaxException {
+    /**
+     * Returns the NSS of an URI if it is an URN with the given NID, e.g. urn:oid:1.2.3.4
+     * will return 1.2.3.4 if nid = 'oid'
+     *
+     * @param uri URI
+     * @param nid namespace ID
+     * @return namespace-specific string
+     */
+    private Optional<String> translateURN(String uri, String nid) {
         if (URN.isURN(uri)) {
-            URN urn = URN.create(uri);
-            if (Objects.equals(urn.getNamespaceId(), nss)) {
-                return urn.getNamespaceSpecificString();
+            URN urn = urn(uri);
+            if (Objects.equals(urn.getNamespaceId(), nid)) {
+                return Optional.of(urn.getNamespaceSpecificString());
             }
         }
-        return null;
+        return Optional.empty();
     }
+
+    private URN urn(String uri) {
+        try {
+            return URN.create(uri);
+        } catch (URISyntaxException e) {
+            throw new InvalidUriSyntaxException(uri, e);
+        }
+    }
+
+    private URN urn(String nid, String nss) {
+        try {
+            return new URN(nid, nss);
+        } catch (URISyntaxException e) {
+            throw new InvalidUriSyntaxException("uri:urn:" + nss, e);
+        }
+    }
+
 }

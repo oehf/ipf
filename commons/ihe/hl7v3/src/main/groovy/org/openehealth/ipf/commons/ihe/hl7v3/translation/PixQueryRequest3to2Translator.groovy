@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.commons.ihe.hl7v2.PIX
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions

@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti67;
+package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
-import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67ResourceProvider;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 
 /**
- * Standard Configuration for Iti67Component.  Supports lazy-loading by default.
+ * Standard Configuration for Iti66Component. Supports lazy-loading by default.
  *
  * @author Christian Ohr
  * @since 3.2
  */
-public class Iti67Configuration extends FhirComponentConfiguration {
+public class Iti66TransactionConfiguration extends FhirTransactionConfiguration {
 
-    public Iti67Configuration() {
+    public Iti66TransactionConfiguration() {
         super(
-                new Iti67ResourceProvider(),                    // Consumer side. accept registrations
-                new Iti67ClientRequestFactory());               // Formulate requests
+                new Iti66ResourceProvider(),                    // Consumer side. accept registrations
+                new Iti66ClientRequestFactory());               // Formulate requests
         setSupportsLazyLoading(true);
     }
 }

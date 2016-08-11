@@ -16,10 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44
 
 import org.junit.Test
-import org.openehealth.ipf.commons.xml.CombinedXmlValidator
+import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
@@ -35,7 +34,7 @@ class TestIti44Validation {
     void testIti44Validation() {
         CombinedXmlValidator validator = new CombinedXmlValidator()
         CombinedXmlValidationProfile validationProfile =
-            Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_44_PIX)
+            PIXV3.Interactions.ITI_44_PIX.requestValidationProfile
         String message
 
         // 301

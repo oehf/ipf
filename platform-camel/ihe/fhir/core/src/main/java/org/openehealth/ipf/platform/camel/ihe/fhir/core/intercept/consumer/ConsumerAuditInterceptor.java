@@ -55,17 +55,8 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
             getWrappedProcessor().process(exchange);
             failed = exchange.isFailed();
             if (!failed) {
-                IBaseResource resource;
                 Object result = resultMessage(exchange).getBody();
-                if (result instanceof IBaseResource) {
-                    resource = (IBaseResource) result;
-                } else if (result instanceof List) {
-                    List<IBaseResource> singleton = (List<IBaseResource>)result;
-                    resource = singleton.isEmpty() ? null : singleton.get(0);
-                } else {
-                    throw new IllegalArgumentException("Expected a FHRI resource or a list, but was " + result.getClass());
-                }
-                failed = !enrichAuditDatasetFromResponse(getAuditStrategy(), auditDataset, resource);
+                failed = !getAuditStrategy().enrichAuditDatasetFromResponse(auditDataset, result);
             }
         } catch (Exception e) {
             // In case of an exception thrown from the route, the FHIRServlet will generate an
@@ -113,12 +104,5 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
         }
     }
 
-    /**
-     * Enriches the given audit dataset with data from the response message.
-     * All exception are ignored.
-     */
-    private boolean enrichAuditDatasetFromResponse(AuditStrategy<AuditDatasetType> strategy, AuditDatasetType auditDataset, IBaseResource response) {
-        return strategy.enrichAuditDatasetFromResponse(auditDataset, response);
-    }
 
 }

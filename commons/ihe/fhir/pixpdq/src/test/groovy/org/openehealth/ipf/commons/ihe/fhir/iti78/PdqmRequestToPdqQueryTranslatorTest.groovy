@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78
 import ca.uhn.fhir.rest.param.*
 import org.easymock.EasyMock
 import org.hl7.fhir.instance.model.IdType
-import org.hl7.fhir.instance.model.Patient
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

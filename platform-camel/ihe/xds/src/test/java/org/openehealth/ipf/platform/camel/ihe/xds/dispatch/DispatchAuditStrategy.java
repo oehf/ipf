@@ -26,13 +26,13 @@ import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ServerAuditStrategy;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import javax.xml.namespace.QName;
@@ -55,31 +55,31 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
         super(true);
         map = new HashMap<>();
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegistryStoredQuery"),
-                new Iti18ServerAuditStrategy());
+                Iti18ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayQuery"),
-                new Iti38ServerAuditStrategy());
+                Iti38ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayRetrieve"),
-                new Iti39ServerAuditStrategy());
+                Iti39ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_ProvideAndRegisterDocumentSet-b"),
-                new Iti41ServerAuditStrategy());
+                Iti41ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegisterDocumentSet-b"),
-                new Iti42ServerAuditStrategy());
+                Iti42ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_RetrieveDocumentSet"),
-                new Iti43ServerAuditStrategy());
+                Iti43ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_MultiPatientStoredQuery"),
-                new Iti51AuditStrategy(true));
+                Iti51ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_UpdateDocumentSet"),
-                new Iti57ServerAuditStrategy());
+                Iti57ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegisterOnDemandDocumentEntry"),
-                new Iti61AuditStrategy(true));
+                Iti61ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_DeleteDocumentSet"),
-                new Iti62ServerAuditStrategy());
+                Iti62ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayFetch"),
-                new Iti63AuditStrategy(true));
+                Iti63ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:rad:xdsi-b:2009", "DocumentRepository_RetrieveImagingDocumentSet"),
-                new Rad69AuditStrategy(true));
+                Rad69ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:rad:xdsi-b:2009", "RespondingGateway_CrossGatewayRetrieveImagingDocumentSet"),
-                new Rad75AuditStrategy(true));
+                Rad75ServerAuditStrategy.getInstance());
 
         if (additionalMappings != null) {
             map.putAll(additionalMappings);

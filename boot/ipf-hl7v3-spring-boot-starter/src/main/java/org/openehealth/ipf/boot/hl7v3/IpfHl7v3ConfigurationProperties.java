@@ -16,6 +16,8 @@
 
 package org.openehealth.ipf.boot.hl7v3;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -23,4 +25,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "ipf.hl7v3")
 public class IpfHl7v3ConfigurationProperties {
+
+    @Getter
+    @Setter
+    private boolean caching;
+
 }

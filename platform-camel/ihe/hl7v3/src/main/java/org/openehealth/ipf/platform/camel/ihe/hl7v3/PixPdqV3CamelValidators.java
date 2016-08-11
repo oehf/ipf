@@ -17,11 +17,16 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 
-import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
+import static org.openehealth.ipf.commons.ihe.hl7v3.PDQV3.Interactions.ITI_47;
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_44_PIX;
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_45;
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_46;
+import static org.openehealth.ipf.commons.ihe.hl7v3.QED.Interactions.PCC_1;
+import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_55;
+import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_56;
 import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
 
 /**
@@ -163,7 +168,7 @@ abstract public class PixPdqV3CamelValidators {
 
 
     private static Processor validatingProcessor(
-            final InteractionId interactionId,
+            final Hl7v3InteractionId interactionId,
             final boolean request)
     {
         return exchange -> doValidation(exchange, interactionId, request);
@@ -171,7 +176,7 @@ abstract public class PixPdqV3CamelValidators {
 
     private static void doValidation(
             Exchange exchange,
-            InteractionId interactionId,
+            Hl7v3InteractionId interactionId,
             boolean request)
     {
         if (! validationEnabled(exchange)) {
@@ -179,7 +184,7 @@ abstract public class PixPdqV3CamelValidators {
         }
         String message = exchange.getIn().getBody(String.class);
         VALIDATOR.validate(message, request
-                ? Hl7v3ValidationProfiles.getRequestValidationProfile(interactionId)
-                : Hl7v3ValidationProfiles.getResponseValidationProfile(interactionId));
+                ? interactionId.getRequestValidationProfile()
+                : interactionId.getResponseValidationProfile());
     }
 }

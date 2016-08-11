@@ -27,6 +27,7 @@ import ca.uhn.hl7v2.util.idgenerator.IDGenerator;
 import ca.uhn.hl7v2.validation.builder.ValidationRuleBuilder;
 import ca.uhn.hl7v2.validation.builder.support.DefaultValidationWithoutTNBuilder;
 import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
 import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
 

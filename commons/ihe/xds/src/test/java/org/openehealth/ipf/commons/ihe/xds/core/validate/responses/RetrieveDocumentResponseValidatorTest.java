@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
@@ -28,11 +27,17 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocumentSetResponseTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_43;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ID_MUST_BE_SPECIFIED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_STATUS_IN_RESPONSE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MIME_TYPE_MUST_BE_SPECIFIED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOCUMENT_FOR_DOC_ENTRY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.REPO_ID_MUST_BE_SPECIFIED;
 
 /**
  * Tests for {@link RetrieveDocumentSetResponseValidator}.
@@ -42,7 +47,6 @@ public class RetrieveDocumentResponseValidatorTest {
     private RetrieveDocumentSetResponseValidator validator;
     private RetrievedDocumentSet response;
     private RetrieveDocumentSetResponseTransformer transformer;
-    private ValidationProfile profile;
 
     @Before
     public void setUp() {
@@ -50,12 +54,11 @@ public class RetrieveDocumentResponseValidatorTest {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);
         response = SampleData.createRetrievedDocumentSet();
-        profile = new ValidationProfile(IpfInteractionId.ITI_43);
     }
 
     @Test
     public void testGoodCase() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(response), profile);
+        validator.validate(transformer.toEbXML(response), ITI_43);
     }
     
     @Test
@@ -127,7 +130,7 @@ public class RetrieveDocumentResponseValidatorTest {
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLRetrieveDocumentSetResponse ebXMLRegistryResponse) {
         try {
-            validator.validate(ebXMLRegistryResponse, profile);
+            validator.validate(ebXMLRegistryResponse, ITI_43);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {

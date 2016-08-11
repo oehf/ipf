@@ -17,13 +17,11 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponent;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
+
+import static org.openehealth.ipf.commons.ihe.fhir.PDQM.Interactions.ITI_78;
 
 /**
  * Component for PDQm (ITI-78)
@@ -33,22 +31,13 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  */
 public class Iti78Component extends FhirComponent<FhirQueryAuditDataset> {
 
-    private static final FhirComponentConfiguration DEFAULT_CONFIGURATION = new Iti78Configuration();
-
-    private static final AuditStrategy<FhirQueryAuditDataset> CLIENT_AUDIT_STRATEGY = new Iti78ClientAuditStrategy();
-    private static final AuditStrategy<FhirQueryAuditDataset> SERVER_AUDIT_STRATEGY = new Iti78ServerAuditStrategy();
 
     public Iti78Component() {
-        super(DEFAULT_CONFIGURATION);
+        super(ITI_78);
     }
 
     public Iti78Component(CamelContext context) {
-        super(context);
-        setFhirComponentConfiguration(DEFAULT_CONFIGURATION);
-    }
-
-    public Iti78Component(FhirComponentConfiguration configuration) {
-        super(configuration);
+        super(context, ITI_78);
     }
 
     @Override
@@ -56,13 +45,4 @@ public class Iti78Component extends FhirComponent<FhirQueryAuditDataset> {
         return new Iti78Endpoint(uri, this, config);
     }
 
-    @Override
-    public AuditStrategy<FhirQueryAuditDataset> getServerAuditStrategy() {
-        return SERVER_AUDIT_STRATEGY;
-    }
-
-    @Override
-    public AuditStrategy<FhirQueryAuditDataset> getClientAuditStrategy() {
-        return CLIENT_AUDIT_STRATEGY;
-    }
 }

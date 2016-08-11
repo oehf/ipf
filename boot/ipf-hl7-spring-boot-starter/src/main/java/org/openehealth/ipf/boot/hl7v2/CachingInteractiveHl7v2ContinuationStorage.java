@@ -17,7 +17,7 @@
 package org.openehealth.ipf.boot.hl7v2;
 
 import ca.uhn.hl7v2.model.Message;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;

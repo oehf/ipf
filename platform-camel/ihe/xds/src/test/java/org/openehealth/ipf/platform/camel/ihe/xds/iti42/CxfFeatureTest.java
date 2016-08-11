@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_42;
+
 public class CxfFeatureTest extends StandardTestContainer {
 
     static private final String CONTEXT_DESCRIPTOR = "feature-test-resources/server-context.xml";
@@ -51,7 +53,7 @@ public class CxfFeatureTest extends StandardTestContainer {
     @Test
     public void testFeatureEndpointWithoutPolicy() {
         JaxWsClientFactory clientFactory = new XdsClientFactory(
-                Iti42Component.WS_CONFIG,
+                ITI_42.getWsTransactionConfiguration(),
                 "http://localhost:" + getPort() + "/xds-iti42",
                 null, null, null);
         Iti42PortType client = (Iti42PortType) clientFactory.getClient();
@@ -91,8 +93,8 @@ public class CxfFeatureTest extends StandardTestContainer {
 
     private Iti42PortType getClient(String wsdlLocation, String serviceURL) {
         URL wsdlURL = getClass().getClassLoader().getResource(wsdlLocation);
-        Service service = Service.create(wsdlURL, Iti42Component.WS_CONFIG.getServiceName());
-        Iti42PortType client = (Iti42PortType)service.getPort(Iti42Component.WS_CONFIG.getSei());
+        Service service = Service.create(wsdlURL, ITI_42.getWsTransactionConfiguration().getServiceName());
+        Iti42PortType client = (Iti42PortType)service.getPort(ITI_42.getWsTransactionConfiguration().getSei());
 
         BindingProvider bindingProvider = (BindingProvider) client;
         Map<String, Object> reqContext = bindingProvider.getRequestContext();

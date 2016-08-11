@@ -17,16 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 /**
  * @author Dmytro Rud
+ *
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage}
  */
-public interface Hl7v3ContinuationStorage {
-    void storeMessage(String key, String message);
-    String getMessage(String key);
+public interface Hl7v3ContinuationStorage extends org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage {
 
-    void storeLastResultNumber(String key, int lastResultNumber);
-    int getLastResultNumber(String key);
-
-    void storeContinuationQuantity(String key, int continuationQuantity);
-    int getContinuationQuantity(String key);
-
-    boolean remove(String key);
 }

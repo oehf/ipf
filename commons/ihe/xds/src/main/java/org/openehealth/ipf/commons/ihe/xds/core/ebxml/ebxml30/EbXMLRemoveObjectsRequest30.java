@@ -23,12 +23,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsReq
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefListType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotType1;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 
 import static org.apache.commons.lang3.Validate.notNull;
 

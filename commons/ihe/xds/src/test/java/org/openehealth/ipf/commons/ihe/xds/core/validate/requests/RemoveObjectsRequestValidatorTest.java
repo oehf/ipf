@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet;
@@ -28,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_62;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.EMPTY_REFERENCE_LIST;
 
 /**
@@ -38,7 +38,6 @@ public class RemoveObjectsRequestValidatorTest {
     private RemoveObjectsRequestValidator validator;
     private RemoveDocumentSet request;
     private RemoveDocumentSetTransformer transformer;
-    private ValidationProfile profile = new ValidationProfile(IpfInteractionId.ITI_62);
 
     @Before
     public void setUp() {
@@ -49,7 +48,7 @@ public class RemoveObjectsRequestValidatorTest {
     
     @Test
     public void testValidateGoodCase() {
-        validator.validate(transformer.toEbXML(request), profile);
+        validator.validate(transformer.toEbXML(request), ITI_62);
     }
 
     @Test
@@ -63,7 +62,7 @@ public class RemoveObjectsRequestValidatorTest {
     }
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLRemoveObjectsRequest ebXML) {
-        expectFailure(expectedMessage, ebXML, profile);
+        expectFailure(expectedMessage, ebXML, ITI_62);
     }
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLRemoveObjectsRequest ebXML, ValidationProfile profile) {

@@ -19,7 +19,6 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
 import org.apache.commons.lang3.Validate
 import org.hl7.fhir.instance.model.Identifier
-import org.hl7.fhir.instance.model.OperationOutcome
 import org.hl7.fhir.instance.model.Parameters
 import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir

@@ -15,11 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -29,9 +26,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_ERROR_CODE_IN_RESPONSE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_SEVERITY_IN_RESPONSE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_STATUS_IN_RESPONSE;
 
 /**
  * Tests for {@link RegistryResponseValidator}.
@@ -41,7 +44,6 @@ public class RegistryResponseValidatorTest {
     private RegistryResponseValidator validator;
     private Response response;
     private ResponseTransformer transformer;
-    private ValidationProfile profile;
 
     @Before
     public void setUp() {
@@ -49,12 +51,11 @@ public class RegistryResponseValidatorTest {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new ResponseTransformer(factory);
         response = SampleData.createResponse();
-        profile = new ValidationProfile(IpfInteractionId.ITI_18);
     }
 
     @Test
     public void testGoodCase() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(response), profile);
+        validator.validate(transformer.toEbXML(response), ITI_18);
     }
     
     @Test
@@ -82,7 +83,7 @@ public class RegistryResponseValidatorTest {
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLRegistryResponse ebXMLRegistryResponse) {
         try {
-            validator.validate(ebXMLRegistryResponse, profile);
+            validator.validate(ebXMLRegistryResponse, ITI_18);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {

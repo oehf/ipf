@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
-import java.util.Scanner;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.model.Message;
@@ -24,6 +22,8 @@ import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
+
+import java.util.Scanner;
 
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators.pcdValidator;
 
@@ -47,8 +47,8 @@ public class Pcd01RouteBuilder extends RouteBuilder {
 
         from("pcd-pcd01:devicedata?rejectionHandlingStrategy=#rejectionHandlingStrategy")
                 .onException(Exception.class)
-                    .maximumRedeliveries(0)
-                    .end()
+                .maximumRedeliveries(0)
+                .end()
                 .transform(constant(PCD_01_SPEC_RESPONSE));
 
         from("pcd-pcd01:route_throws_exception?rejectionHandlingStrategy=#rejectionHandlingStrategy")
@@ -60,15 +60,15 @@ public class Pcd01RouteBuilder extends RouteBuilder {
 
         from("pcd-pcd01:route_inbound_validation")
                 .onException(ValidationException.class)
-                    .maximumRedeliveries(0)
-                    .end()
+                .maximumRedeliveries(0)
+                .end()
                 .process(pcdValidator())
                 .transform(constant(PCD_01_SPEC_RESPONSE));
 
         from("pcd-pcd01:route_inbound_and_outbound_validation")
                 .onException(ValidationException.class)
-                    .maximumRedeliveries(0)
-                    .end()
+                .maximumRedeliveries(0)
+                .end()
                 .process(pcdValidator())
                 .transform(constant(PCD_01_SPEC_RESPONSE))
                 .process(pcdValidator());

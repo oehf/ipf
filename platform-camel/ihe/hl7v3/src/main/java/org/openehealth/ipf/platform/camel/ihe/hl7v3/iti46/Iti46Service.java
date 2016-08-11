@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti46;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti46.Iti46PortType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_46;
+
 /**
  * Service implementation for the IHE ITI-46 transaction (PIX Update Notification v3).
  * @author Dmytro Rud
@@ -25,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 public class Iti46Service extends AbstractHl7v3WebService implements Iti46PortType {
 
     public Iti46Service() {
-        super(Iti46Component.WS_CONFIG);
+        super(ITI_46);
     }
 
     @Override

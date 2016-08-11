@@ -20,6 +20,7 @@ import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.param.DateAndListParam;
+import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.server.IBundleProvider;
@@ -41,7 +42,7 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
     @SuppressWarnings("unused")
     @Search(type = AuditEvent.class)
     public IBundleProvider auditSearch(
-            @RequiredParam(name = AuditEvent.SP_DATE) DateAndListParam interval,
+            @RequiredParam(name = AuditEvent.SP_DATE) DateRangeParam interval,
             @OptionalParam(name = AuditEvent.SP_ADDRESS) StringAndListParam address,
             @OptionalParam(name = Iti81Constants.SP_PATIENTID) TokenAndListParam patientId,
             @OptionalParam(name = AuditEvent.SP_IDENTITY) TokenAndListParam identity,

@@ -18,9 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 import ca.uhn.hl7v2.model.Message
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.EhcacheInteractiveContinuationStorage
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
 import static java.lang.String.format
 import static java.lang.System.currentTimeMillis
@@ -88,7 +88,7 @@ class TestIti21Continuations extends MllpTestContainer {
         assert '0' == msg.QAK[6].value
         
         // check whether "autoCancel" parameter works
-        EhcacheInteractiveConfigurationStorage storage = appContext.getBean('interactiveContinuationStorage')
+        EhcacheInteractiveContinuationStorage storage = appContext.getBean('interactiveContinuationStorage')
         assert storage.ehcache.size == 0
     }
     

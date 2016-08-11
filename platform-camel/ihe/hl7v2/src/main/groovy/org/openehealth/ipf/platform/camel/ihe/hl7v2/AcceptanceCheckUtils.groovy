@@ -17,10 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2
 
 import ca.uhn.hl7v2.Version
 import org.apache.camel.Message
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2AcceptanceException
 
 /**
  * Groovy subroutines for HL7 message acceptance checks.
  * @author Dmytro Rud
+ *
+ * @deprecated not used anymore
  */
 class AcceptanceCheckUtils {
 

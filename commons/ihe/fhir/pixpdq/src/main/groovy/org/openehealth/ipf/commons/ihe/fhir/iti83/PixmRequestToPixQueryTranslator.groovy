@@ -22,10 +22,9 @@ import org.hl7.fhir.instance.model.Parameters
 import org.hl7.fhir.instance.model.UriType
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
-import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslationException
+import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
-import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21

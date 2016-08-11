@@ -16,9 +16,9 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti81;
 
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti81.Iti81ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.iti81.Iti81ResourceProvider;
-import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfiguration;
 
 /**
  * Standard Configuration for Iti81Component
@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirComponentConfigurati
  * @author Christian Ohr
  * @since 3.1
  */
-public class Iti81Configuration extends FhirComponentConfiguration {
+public class Iti81Configuration extends FhirTransactionConfiguration {
 
     public Iti81Configuration() {
         super(

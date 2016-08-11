@@ -20,8 +20,6 @@ import org.apache.camel.CamelContextAware;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultExchange;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
@@ -31,6 +29,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.PDQV3.Interactions.ITI_47;
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_44_PIX;
+import static org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_45;
 
 /**
  * This is a simple IHE client helper class that provides a couple of sender methods
@@ -80,36 +82,36 @@ public class IHEWebServiceClient implements CamelContextAware {
 
     public String iti44PatientFeed(String message, String host, int port, String pathAndParameters, boolean validate) throws Exception {
         if (validate) {
-            validator.validate(message, Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_44_PIX));
+            validator.validate(message, ITI_44_PIX.getRequestValidationProfile());
         }
         String endpoint = String.format("pixv3-iti44://%s:%d/%s", host, port, pathAndParameters);
         String response = send(endpoint, message, String.class);
         if (validate) {
-            validator.validate(response, Hl7v3ValidationProfiles.getResponseValidationProfile(IpfInteractionId.ITI_44_PIX));
+            validator.validate(response, ITI_44_PIX.getResponseValidationProfile());
         }
         return response;
     }
 
     public String iti45PatientQuery(String message, String host, int port, String pathAndParameters, boolean validate) throws Exception {
         if (validate) {
-            validator.validate(message, Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_45));
+            validator.validate(message, ITI_45.getRequestValidationProfile());
         }
         String endpoint = String.format("pixv3-iti45://%s:%d/%s", host, port, pathAndParameters);
         String response = send(endpoint, message, String.class);
         if (validate) {
-            validator.validate(response, Hl7v3ValidationProfiles.getResponseValidationProfile(IpfInteractionId.ITI_45));
+            validator.validate(response, ITI_45.getResponseValidationProfile());
         }
         return response;
     }
 
     public String iti47PatientDemographicsQuery(String message, String host, int port, String pathAndParameters, boolean validate) throws Exception {
         if (validate) {
-            validator.validate(message, Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_47));
+            validator.validate(message, ITI_47.getRequestValidationProfile());
         }
         String endpoint = String.format("pdqv3-iti47://%s:%d/%s", host, port, pathAndParameters);
         String response = send(endpoint, message, String.class);
         if (validate) {
-            validator.validate(response, Hl7v3ValidationProfiles.getResponseValidationProfile(IpfInteractionId.ITI_47));
+            validator.validate(response, ITI_47.getResponseValidationProfile());
         }
         return response;
     }

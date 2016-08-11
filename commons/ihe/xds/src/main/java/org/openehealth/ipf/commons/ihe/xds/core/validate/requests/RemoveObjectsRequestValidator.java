@@ -16,11 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_62;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.EMPTY_REFERENCE_LIST;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.OBJECT_SHALL_NOT_BE_SPECIFIED;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
@@ -38,7 +39,7 @@ public class RemoveObjectsRequestValidator implements Validator<EbXMLRemoveObjec
      */
     @Override
     public void validate(EbXMLRemoveObjectsRequest request, ValidationProfile profile)  {
-        if (profile.getInteractionId() == IpfInteractionId.ITI_62) {
+        if (profile == ITI_62) {
             metaDataAssert(request.getReferences().size() > 0, EMPTY_REFERENCE_LIST, "RemoveObjectsRequest");
             metaDataAssert(request.getId() == null &&
                            request.getHome() == null &&

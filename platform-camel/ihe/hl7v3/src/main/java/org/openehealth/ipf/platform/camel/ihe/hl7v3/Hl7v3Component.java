@@ -16,7 +16,9 @@
 
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -29,4 +31,25 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 public abstract class Hl7v3Component<ConfigType extends Hl7v3WsTransactionConfiguration>
         extends AbstractWsComponent<Hl7v3AuditDataset, ConfigType> {
 
+    private final Hl7v3InteractionId interactionId;
+
+    public Hl7v3Component(Hl7v3InteractionId interactionId) {
+        super();
+        this.interactionId = interactionId;
+    }
+
+    @Override
+    public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
+        return interactionId.getClientAuditStrategy();
+    }
+
+    @Override
+    public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
+        return interactionId.getServerAuditStrategy();
+    }
+
+    @Override
+    public ConfigType getWsTransactionConfiguration() {
+        return interactionId.getWsTransactionConfiguration();
+    }
 }

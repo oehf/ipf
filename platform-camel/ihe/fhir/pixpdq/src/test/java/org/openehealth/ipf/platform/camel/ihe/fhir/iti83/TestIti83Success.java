@@ -106,11 +106,17 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals("http://localhost:" + DEMO_APP_PORT + "/Patient/$ihe-pix", destination.getUserID());
         assertEquals("localhost", destination.getNetworkAccessPointID());
 
-        // Patient
-        ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentification().get(0);
-        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON.getCode(), patient.getParticipantObjectTypeCode());
-        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT.getCode(), patient.getParticipantObjectTypeCodeRole());
-        assertEquals("urn:oid:1.2.3.4|0815", new String(patient.getParticipantObjectID()));
+        // Patient (going in)
+        ParticipantObjectIdentificationType patientIn = event.getParticipantObjectIdentification().get(0);
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON.getCode(), patientIn.getParticipantObjectTypeCode());
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT.getCode(), patientIn.getParticipantObjectTypeCodeRole());
+        assertEquals("urn:oid:1.2.3.4|0815", new String(patientIn.getParticipantObjectID()));
+
+        // Patient (going out)
+//        ParticipantObjectIdentificationType patientOut = event.getParticipantObjectIdentification().get(1);
+//        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON.getCode(), patientOut.getParticipantObjectTypeCode());
+//        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT.getCode(), patientOut.getParticipantObjectTypeCodeRole());
+//        assertEquals("http://org.openehealth/ipf/commons/ihe/fhir/2|4711", new String(patientOut.getParticipantObjectID()));
 
         ParticipantObjectIdentificationType query = event.getParticipantObjectIdentification().get(1);
         assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM.getCode(), query.getParticipantObjectTypeCode());
