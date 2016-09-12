@@ -62,11 +62,6 @@ public class XCF implements XdsInteractionProfile {
                 true,
                 ITI63_ASYNC_WS_CONFIG) {
             @Override
-            public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
-                return null;
-            }
-
-            @Override
             public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
                 return Iti63ClientAuditStrategy.getInstance(); // really!
             }

@@ -66,11 +66,6 @@ public class XCA implements XdsInteractionProfile {
                 true,
                 ITI38_ASYNC_WS_CONFIG) {
             @Override
-            public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
-                return null;
-            }
-
-            @Override
             public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
                 return Iti38ClientAuditStrategy.getInstance(); // really!
             }
@@ -93,11 +88,6 @@ public class XCA implements XdsInteractionProfile {
                 "Cross Gateway Retrieve",
                 false,
                 ITI39_ASYNC_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsRetrieveAuditDataset> getClientAuditStrategy() {
-                return null;
-            }
-
             @Override
             public AuditStrategy<XdsRetrieveAuditDataset> getServerAuditStrategy() {
                 return Iti39ClientAuditStrategy.getInstance(); // really!
