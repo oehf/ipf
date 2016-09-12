@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.core;
-
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
@@ -26,6 +24,7 @@ import java.io.Serializable;
  *
  */
 public class SerializableEnumInteractionId<E extends Enum<E> & InteractionId> implements Serializable, InteractionId {
+    private static final long serialVersionUID = -2740691943593482233L;
 
     private final String interaction;
     private volatile transient E interactionId;

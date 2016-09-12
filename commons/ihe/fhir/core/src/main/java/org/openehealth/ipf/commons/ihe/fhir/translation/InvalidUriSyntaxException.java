@@ -20,6 +20,7 @@ package org.openehealth.ipf.commons.ihe.fhir.translation;
  *
  */
 public class InvalidUriSyntaxException extends FhirTranslationException {
+    private static final long serialVersionUID = 1336184411958893119L;
 
     public InvalidUriSyntaxException(String uri, Throwable cause) {
         super("URI " + uri + " has invalid syntax", cause);

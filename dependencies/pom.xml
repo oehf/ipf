@@ -10,7 +10,7 @@
 
     <properties>
         <bouncycastle-version>1.54</bouncycastle-version>
-        <camel-version>2.17.2</camel-version>
+        <camel-version>2.17.3</camel-version>
         <cxf-version>3.1.7</cxf-version>
         <groovy-version>2.4.7</groovy-version>
         <hapi-version>2.2</hapi-version>
