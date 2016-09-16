@@ -26,12 +26,36 @@ HL7v2 [IHE][ihe] transactions:
 <dependency>
   <groupId>org.openehealth.ipf.platform-camel</groupId>
   <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
-  <version>3.1.0</version>
+  <version>3.2.0</version>
 </dependency>
 ```
 
-Now you can expose or consume IHE-compliant MLLP-based transaction endpoints.
+Even better, you can import the IPF bom in the dependency management section. Then you don't have to provide
+version numbers for the major dependencies anymore.
 
+```xml
+<dependencyManagement>
+    <dependency>
+        <groupId>org.openehealth.ipf</groupId>
+        <artifactId>ipf-dependencies</artifactId>
+        <version>3.2.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+    </dependency>
+    ...
+<dependencyManagement>
+
+
+<dependencies>
+    <dependency>
+      <groupId>org.openehealth.ipf.platform-camel</groupId>
+      <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
+    </dependency>
+    ...
+</dependencies>
+```
+
+Now you can expose or consume IHE-compliant MLLP-based transaction endpoints.
 
 ## Features
 

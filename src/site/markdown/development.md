@@ -2,16 +2,15 @@
 
 ### Building
 
-IPF currently requires Java SE 7 for both compile time and runtime, but also builds and runs with Java SE 8.
+As of version 3.2, IPF requires Java 8 for both compile time and runtime.
 
-IPF builds using Maven 3.2.5. As of version 3.0, IPF is available over [Maven Central], so no custom repositories need to
+IPF builds using Maven 3.2.5. IPF is available over [Maven Central], so no custom repositories need to
 be added to the `settings.xml` configuration file.
 
 Before building, adjust `MAVEN_OPTS` to assign Maven more heap space.
-``XX:MaxPermSize`` can be omitted for buildung with Java 8.
 
 ```
-    set MAVEN_OPTS=-Xmx1024m -XX:MaxPermSize=128m
+    set MAVEN_OPTS=-Xmx1024m
     mvn clean install
 ```
 

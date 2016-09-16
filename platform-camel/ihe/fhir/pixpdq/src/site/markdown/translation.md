@@ -1,12 +1,3 @@
-## FHIR
-
-FHIR® – Fast Healthcare Interoperability Resources (hl7.org/fhir) – is a next generation standards framework created by HL7,
-combining the best features of HL7v2, HL7v3, and CDA while leveraging the latest web standards and applying a tight focus on implementability.
-
-IHE has had a set of profiles based on FHIR, but they are were on earlier versions of HL7 FHIR. Now that [DSTU2](http://hl7.org/fhir/index.html) is formally published, 
-IHE updated their profiles to this version. IPF adds support for a subset of them by providing Camel components (hiding the 
- implementation details on transport level) and translators between the FHIR and HL7 v2 message models.
-
 ## Translation between FHIR and HL7 v2 message models
 
 IPF provides utilities for translation between FHIR and HL7v2, thus giving the possibility to implement FHIR-based [IHE] transactions
@@ -29,7 +20,7 @@ In a Maven-based environment, the following dependencies should be registered in
 </dependency>
 <dependency>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-ihe-fhir</artifactId>
+    <artifactId>ipf-platform-camel-ihe-fhir-pixpdq</artifactId>
     <version>${ipf-version}</version>
 </dependency>
 ```
@@ -39,7 +30,7 @@ This depends transitively on the required module:
 ```xml
 <dependency>
     <groupId>org.openehealth.ipf.commons</groupId>
-    <artifactId>ipf-commons-ihe-fhir</artifactId>
+    <artifactId>ipf-commons-ihe-fhir-pixpdq</artifactId>
     <version>${ipf-version}</version>
 </dependency>
 ```
@@ -48,55 +39,117 @@ This depends transitively on the required module:
 ### Configuring the URI Mapper
 
 For translation of FHIR messages, an instance of `org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper` is required
-in order to map FHIR URIs into OIDs and vice versa. IPF provides an implementation (`org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper`)
-that uses IPF's [Mapping Service] under the hood. The mapping service must be activated and configured with a mapping
-file (which can be accessed as a classpath resource). Here is a snippet of Spring-based configuration:
+in order to map FHIR URIs into OIDs and vice versa. IPF provides an implementation (`org.openehealth.ipf.commons.ihe.fhir.translation.NamingSystemUriMapper`)
+that uses an instance of `org.openehealth.ipf.commons.ihe.fhir.NamingSystemService` under the hood. 
 
-```
+The default implementation is `org.openehealth.ipf.commons.ihe.fhir.DefaultNamingSystemServiceImpl`, which expects a Bundle of FHIR [NamingSystem resources].
+In addition, for code system mapping, a [Mapping Service] bean must be available.
+Here is a snippet of the required Spring-based configuration:
+
+```xml
+
+    <bean id="fhirContext" class="ca.uhn.fhir.context.FhirContext" factory-method="forDstu2Hl7Org"/>
+
     <bean id="mappingService" class="org.openehealth.ipf.commons.map.SpringBidiMappingService">
         <property name="mappingResources">
             <list>
-                <value>classpath:mapping.map</value>
+                 <value>classpath:META-INF/map/fhir-hl7v2-translation.map</value>
             </list>
         </property>
     </bean>
 
-    <bean id="uriMapper" class="org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper">
-        <constructor-arg index="0" ref="mappingService"/>
-        <constructor-arg index="1" value="uriToOid"/>
-        <constructor-arg index="2" value="uriToNamespace"/>
+    <!-- Use NamingSystemService for the URI Mapper -->
+
+    <bean id="namingSystemService" class="org.openehealth.ipf.commons.ihe.fhir.DefaultNamingSystemServiceImpl">
+        <constructor-arg ref="fhirContext"/>
+        <property name="namingSystemsFromXml" value="classpath:identifiers.xml"/>
+    </bean>
+
+    <bean id="uriMapper" class="org.openehealth.ipf.commons.ihe.fhir.translation.NamingSystemUriMapper">
+        <constructor-arg ref="namingSystemService"/>
+        <constructor-arg value="identifiers"/>
     </bean>
     
 ```
 
-The mapping file translates URIs into OIDs and assigning authority namespaces. 
+Note that Spring Boot applications can depend on `ipf-fhir-spring-boot-starter`, which already auto-configures these beans for you. 
 
-* If a URI of the form `urn:oid:1.2.3.4` is provided, the `DefaultUriMapper` will extract the OID from the URN.
-* 
+An example for a bundle of [NamingSystem resources] (referenced to be contained in the `identifiers.xml` file in the example above)
+looks like this:
 
-An example for the mapping file is:
+```xml
+
+<Bundle xmlns="http://hl7.org/fhir" >
+    <id value="identifiers"/>
+    <type value="collection"/>
+
+    <entry>
+        <resource>
+            <NamingSystem>
+                <id value="fhir1"/>
+                <name value="FHIR1 Patient Identifier Namespace"/>
+                <status value="active"/>
+                <kind value="identifier"/>
+                <date value="2015-07-31"/>
+                <type>
+                    <coding>
+                        <system value="http://hl7.org/fhir/identifier-type"/>
+                        <code value="PI"/>
+                    </coding>
+                </type>
+                <uniqueId>
+                    <type value="oid"/>
+                    <value value="1.2.3.4"/>
+                </uniqueId>
+                <uniqueId>
+                    <type value="other"/>
+                    <value value="fhir1"/>
+                </uniqueId>
+                <uniqueId>
+                    <type value="uri"/>
+                    <value value="http://org.openehealth/ipf/commons/ihe/fhir/1"/>
+                    <preferred value="true"/>
+                </uniqueId>
+            </NamingSystem>
+        </resource>
+    </entry>
+
+    <entry>
+        <resource>
+            <NamingSystem>
+                <id value="fhir2"/>
+                <name value="FHIR2 Patient Identifier Namespace"/>
+                <status value="active"/>
+                <kind value="identifier"/>
+                <date value="2015-07-31"/>
+                <type>
+                    <coding>
+                        <system value="http://hl7.org/fhir/identifier-type"/>
+                        <code value="PI"/>
+                    </coding>
+                </type>
+                <uniqueId>
+                    <type value="oid"/>
+                    <value value="1.2.3.4.5.6"/>
+                </uniqueId>
+                <uniqueId>
+                    <type value="other"/>
+                    <value value="fhir2"/>
+                </uniqueId>
+                <uniqueId>
+                    <type value="uri"/>
+                    <value value="http://org.openehealth/ipf/commons/ihe/fhir/2"/>
+                    <preferred value="true"/>
+                </uniqueId>
+            </NamingSystem>
+        </resource>
+    </entry>
+
+</Bundle>
 
 ```
-    mappings = {
-    
-            uriToOid (
-                    'http://org.openehealth/ipf/commons/ihe/fhir/1' : '1.2.3.4',
-                    'http://org.openehealth/ipf/commons/ihe/fhir/2' : '1.2.3.4.5.6'
-            )
-
-            uriToNamespace (
-                    'http://org.openehealth/ipf/commons/ihe/fhir/1' : 'fhir1',
-                    'http://org.openehealth/ipf/commons/ihe/fhir/2' : 'fhir2'
-            )
-		    
-    }
-```
-
-Note that the mapping key `uriToOid` must correspond to the second parameter instantiating the `DefaultUriMapper`
-instance and the mapping key `uriToNamespace` must correspond to the third parameter.
 
 Of course you are free to include your own implementations of `UriMapper` and/or `MappingService`.
-
 
 ### Translators
 
@@ -109,7 +162,6 @@ From a *Patient identity Cross Reference Manager* 's perspective, there are **in
 | -----------------------|-----------------------------------------|---------------------|----------------------------------
 | PDQm [ITI-78]          | `iti78.PdqmRequestToPdqQueryTranslator` | PDQ       [ITI-21]  | `iti78.PdqResponseToPdqmResponseTranslator`
 | PIXm [ITI-83]          | `iti83.PixmRequestToPixQueryTranslator` | PIX Query [ITI-9]   | `iti83.PixQueryResponseToPixmResponseTranslator`
-
 
 
 Each translator has a set of configurable properties. Their descriptions can be taken from javadoc of the
@@ -136,7 +188,7 @@ corresponding classes. Below there's an example of a Spring application context 
     <property name="uriMapper" ref="uriMapper" />
 </bean>
 
-<bean name="pdqmResposneTranslator"
+<bean name="pdqmResponseTranslator"
       class="org.openehealth.ipf.commons.ihe.fhir.translation.iti78.PdqResponseToPdqmResponseTranslator">
     <property name="uriMapper" ref="uriMapper" />
 </bean>
@@ -150,7 +202,7 @@ A translator instance can be used two ways:
 * directly from a Java or Groovy application (not discussed here)
 * from a Camel route using ´.process()`
 
-The module `ipf-platform-camel-ihe-fhir`, being the basis for the FHIR transactions' implementation,
+The module `ipf-platform-camel-ihe-fhir-pixpdq`, being the basis for the PIXm/PDQm FHIR transactions' implementation,
 provides processors that can be used to embed HL7 translation functionality into a Camel route.
 
 There are two processor implementations, each taking a `translator` instance as parameter for the desired translation:
@@ -206,5 +258,6 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
 [ITI-83]: iti83.html
 
 [Mapping Service]: ../ipf-commons-map/index.html
+[NamingSystem resources]: https://www.hl7.org/fhir/namingsystem.html
 
 [IHE]: http://www.ihe.net

@@ -2,6 +2,11 @@
 
 IPF 3.2 comes with some changes that must be considered when upgrading from IPF 3.1 to IPF 3.2.
 
+### Environment
+
+IPF 3.2 requires Java 8. 
+
+
 ### Dependency POM
 
 IPF declares a dependency POM that manages the versions of the major required 3rd party libraries as well as of all IPF modules.
@@ -25,6 +30,14 @@ In order to align with these versions and minimize conflicts, import the followi
 ```    
 
 
+### FHIR-based IHE transaction modules split up
+
+While adding more FHIR-based IHE transactions, it became necessary to split up both the `ipf-platform-camel-ihe-fhir`
+module and the `ipf-commons-ihe-fhir` module. 
+The Patient-related transactions PIXm and PDQm already existing in IPF 3.1 have been moved into `ipf-platform-camel-ihe-fhir-pixpdq`
+and `ipf-commons-ihe-fhir-pixpdq`.
+
+
 ### EhCache
  
 EhCache is now an optional dependency. The EhCache implementations `org.openehealth.ipf.platform.camel.ihe.hl7v3.EhcacheHl7v3ContinuationStorage`,
@@ -45,6 +58,7 @@ new ```ipf-commons-ihe-xua``` module. When you expect XUA tokens, you need to ad
     </dependency>
 ```
 
+See [issue #122](https://github.com/oehf/ipf/issues/122) for details
 
 ### IHE Profile Updates
 
@@ -65,4 +79,15 @@ In addition, the following Change Proposals have been implemented:
 * [Ballot 32](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2016#Ballot_32): Implemented CP-ITI-884 and CP-ITI-885
     * [CP-ITI-582](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_32/CP-ITI-884-00.doc): PIXm changes for DSTU2 
     * [CP-ITI-880](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_32/CP-ITI-885-00.doc): PDQm changes for DSTU2
+
+
+### Internal Restructuring of IHE components
+
+Issue [#123](https://github.com/oehf/ipf/issues/123) caused a number of internal refactorings, mostly moving Camel-unspecific functionality
+and configuration from the `ipf-platform-camel-*` modules into the corresponding `ipf-commons-*` modules.
+The majority of the configuration related to IHE transactions (like audit strategies, web service specifications) have been moved into
+subclasses of `org.openehealth.ipf.commons.ihe.core.InteractionId`.
+
+For using existing IPF Camel components, this restructuring remains invisible, however, if you wrote your own Camel components and endpoints 
+based on the abstract base classes provided by IPF, you probably will need to restructure your code correspondingly.
 

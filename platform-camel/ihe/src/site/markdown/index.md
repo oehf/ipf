@@ -36,13 +36,13 @@ or extended existing Camel components or by providing [custom components](http:/
 IHE Profiles are grouped by their underlying technical foundation, particularly by their *message format* and
 *transport protocol* into IPF modules that can be included as dependencies in the Maven project descriptor:
 
-| Module                           | Provided IHE transactions
-|----------------------------------|-----------------------------------------
-| ipf-platform-camel-ihe-mllp      | [ITI-8], [ITI-9], [ITI-10], [ITI-21], [ITI-22], [ITI-30], [ITI-31], [ITI-46]
-| ipf-platform-camel-ihe-xds       | [ITI-14], [ITI-15], [ITI-16], [ITI-17], [ITI-18], [ITI-38], [ITI-39], [ITI-41], [ITI-42], [ITI-43], [ITI-51], [ITI-57], [ITI-61], [ITI-62], [ITI-63], [RAD-69], [RAD-75]
-| ipf-platform-camel-ihe-hl7v3     | [ITI-44], [ITI-45], [ITI-46], [ITI-47], [ITI-55], [ITI-56], [PCC-1]
-| ipf-platform-camel-ihe-hl7v2ws   | [PCD-01]
-| ipf-platform-camel-ihe-fhir      | [ITI-78], [ITI-83]
+| Module                               | Provided IHE transactions
+|--------------------------------------|-----------------------------------------
+| ipf-platform-camel-ihe-mllp          | [ITI-8], [ITI-9], [ITI-10], [ITI-21], [ITI-22], [ITI-30], [ITI-31], [ITI-46]
+| ipf-platform-camel-ihe-xds           | [ITI-14], [ITI-15], [ITI-16], [ITI-17], [ITI-18], [ITI-38], [ITI-39], [ITI-41], [ITI-42], [ITI-43], [ITI-51], [ITI-57], [ITI-61], [ITI-62], [ITI-63], [RAD-69], [RAD-75]
+| ipf-platform-camel-ihe-hl7v3         | [ITI-44], [ITI-45], [ITI-46], [ITI-47], [ITI-55], [ITI-56], [PCC-1]
+| ipf-platform-camel-ihe-hl7v2ws       | [PCD-01]
+| ipf-platform-camel-ihe-fhir-pixpdq   | [ITI-78], [ITI-83]
 
 ### Example
 
@@ -131,11 +131,16 @@ A special case is the MLLP dispatcher component which allows to accept requests 
 * [ITI-62] Delete Document Set
 * [ITI-63] Cross-Gateway Fetch
 * [ITI-64] Notify XAD-PID Link Change
+* [ITI-65] Provide Document Bundle
+* [ITI-66] Find Document Manifests
+* [ITI-67] Find Document References
+* [ITI-68] Retrieve Document
 * [ITI-78] Patient Demographics Query for Mobile
+* [ITI-81] Retrieve ATNA Audit Event
 * [ITI-83] Patient Identifier Cross-reference for Mobile
 * [RAD-69] Retrieve Imaging Document Set
 * [RAD-75] Cross-Gateway Retrieve Imaging Document Set
-*  [PCC-1] Query for Existing Data
+* [PCC-1] Query for Existing Data
 * [PCD-01] Communicate Patient Care Device Data
 * [All] MLLP-based Dispatcher
 * [Custom] MLLP-based Custom Transactions
@@ -181,7 +186,12 @@ required dependencies, usage and parameters.
 | [ITI-62]     | XDS.b         | Delete Document Set                  | `xds-iti62`             | SOAP/HTTP(S)  | ebXML
 | [ITI-63]     | XCF           | Cross-Gateway Fetch                  | `xcf-iti63`             | SOAP/HTTP(S)  | ebXML
 | [ITI-64]     | XPID          | Notify XAD-PID Link Change           | `xpid-iti64`            | MLLP(S)       | HL7 v2.5
+| [ITI-65]     | MHD           | Provide Document Bundle              | `mhd-iti65`             | REST/HTTP(S)  | FHIR
+| [ITI-66]     | MHD           | Find Document Manifests              | `mhd-iti66`             | REST/HTTP(S)  | FHIR
+| [ITI-67]     | MHD           | Find Document References             | `mhd-iti67`             | REST/HTTP(S)  | FHIR
+| [ITI-68]     | MHD           | Retrieve Document                    | `mhd-iti68`             | HTTP(S)       | HTTP
 | [ITI-78]     | PDQm          | Patient Demographics Query for Mobile | `pdqm-iti78`           | REST/HTTP(S)  | FHIR
+| [ITI-81]     | ATNA          | Retrieve ATNA Audit Event            | `atna-iti81`            | REST/HTTP(S)  | FHIR
 | [ITI-83]     | PIXm          | Patient Identifier Cross-reference for Mobile | `pixm-iti83`   | REST/HTTP(S)  | FHIR
 | [RAD-69]     | XDS-I.b, XCA-I.b | Retrieve Imaging Document Set     | `xdsi-rad69`            | SOAP/HTTP(S)  | ebXML
 | [RAD-75]     | XCA-I.b       | Cross-Gateway Retrieve Imaging Document Set | `xcai-rad75`     | SOAP/HTTP(S)  | ebXML
@@ -219,8 +229,13 @@ required dependencies, usage and parameters.
 [ITI-62]: ../ipf-platform-camel-ihe-xds/iti62.html
 [ITI-63]: ../ipf-platform-camel-ihe-xds/iti63.html
 [ITI-64]: ../ipf-platform-camel-ihe-mllp/iti64.html
-[ITI-78]: ../ipf-platform-camel-ihe-fhir/iti78.html
-[ITI-83]: ../ipf-platform-camel-ihe-fhir/iti83.html
+[ITI-65]: ../ipf-platform-camel-ihe-fhir-mhd/iti65.html
+[ITI-66]: ../ipf-platform-camel-ihe-fhir-mhd/iti66.html
+[ITI-67]: ../ipf-platform-camel-ihe-fhir-mhd/iti67.html
+[ITI-68]: ../ipf-platform-camel-ihe-fhir-mhd/iti68.html
+[ITI-78]: ../ipf-platform-camel-ihe-fhir-pixpdq/iti78.html
+[ITI-81]: ../ipf-platform-camel-ihe-fhir-atna/iti81.html
+[ITI-83]: ../ipf-platform-camel-ihe-fhir-pixpdq/iti83.html
 [RAD-69]: ../ipf-platform-camel-ihe-xds/rad69.html
 [RAD-75]: ../ipf-platform-camel-ihe-xds/rad75.html
 [PCC-1]: ../ipf-platform-camel-ihe-hl7v3/pcc1.html
