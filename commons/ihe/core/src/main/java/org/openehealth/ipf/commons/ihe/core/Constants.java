@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.core.atna;
+package org.openehealth.ipf.commons.ihe.core;
 
+/**
+ *
+ */
+public interface Constants {
 
-public class NoAuditStrategy<T extends AuditDataset> extends AuditStrategySupport<T> {
-
-    public NoAuditStrategy(boolean serverSide) {
-        super(serverSide);
-    }
-
-    @Override
-    public T createAuditDataset() {
-        return null;
-    }
-
-    @Override
-    public void doAudit(T auditDataset) {
-        // no audit
-    }
+    String INTERACTION_ID_NAME = "ipf.interactionId";
 
 }

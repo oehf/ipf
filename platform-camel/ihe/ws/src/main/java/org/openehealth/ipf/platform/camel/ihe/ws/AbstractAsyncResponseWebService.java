@@ -61,7 +61,7 @@ abstract public class AbstractAsyncResponseWebService extends AbstractWebService
             Map<String, Object> headers,
             ExchangePattern exchangePattern) 
     {
-        final AsynchronyCorrelator correlator = ((AbstractWsEndpoint) getConsumer().getEndpoint()).getCorrelator();
+        final AsynchronyCorrelator correlator = getConsumer().getEndpoint().getCorrelator();
 
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
         AddressingProperties apropos = (AddressingProperties) messageContext.get(JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND);

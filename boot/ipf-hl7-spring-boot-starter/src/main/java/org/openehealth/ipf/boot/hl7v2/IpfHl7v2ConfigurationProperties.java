@@ -35,7 +35,7 @@ public class IpfHl7v2ConfigurationProperties {
     private String charset = "UTF-8";
 
     /**
-     * Whether to convert line feeds to proper segment separators before parising starts
+     * Whether to convert line feeds to proper segment separators before parsing starts
      */
     @Getter @Setter
     private boolean convertLinefeed = false;
@@ -51,5 +51,5 @@ public class IpfHl7v2ConfigurationProperties {
      */
     @Getter
     @Setter
-    private boolean caching;
+    private boolean caching = false;
 }

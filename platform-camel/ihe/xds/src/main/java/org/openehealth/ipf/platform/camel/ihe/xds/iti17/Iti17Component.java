@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti17;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -26,26 +26,15 @@ import java.util.Map;
 /**
  * The Camel component for the ITI-17 transaction.
  */
-public class Iti17Component extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration> {
+public class Iti17Component extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration, WsInteractionId.Null> {
+
+    public Iti17Component() {
+        super(null);
+    }
 
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, @SuppressWarnings("rawtypes") Map parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new Iti17Endpoint(uri, remaining, this);
-    }
-
-    @Override
-    public WsTransactionConfiguration getWsTransactionConfiguration() {
-        return null;
-    }
-
-    @Override
-    public AuditStrategy<WsAuditDataset> getClientAuditStrategy() {
-        return null;   // dummy
-    }
-
-    @Override
-    public  AuditStrategy<WsAuditDataset> getServerAuditStrategy() {
-        return null;   // dummy
     }
 
 }

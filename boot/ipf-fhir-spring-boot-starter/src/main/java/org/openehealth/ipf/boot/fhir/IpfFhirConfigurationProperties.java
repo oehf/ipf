@@ -46,7 +46,7 @@ public class IpfFhirConfigurationProperties {
     private String path = "/fhir";
 
     /**
-     * Resource containing mappings from FHIR URIs to OIds and namespaces
+     * Resource containing mappings from FHIR URIs to OIDs and namespaces
      */
     @NotNull(message = "Must provide a NamingSystems resource")
     @Getter @Setter

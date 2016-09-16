@@ -14,20 +14,18 @@
         <cxf-version>3.1.7</cxf-version>
         <groovy-version>2.4.7</groovy-version>
         <hapi-version>2.2</hapi-version>
-        <hapi-fhir-version>1.6</hapi-fhir-version>
+        <hapi-fhir-version>2.0</hapi-fhir-version>
         <ipf-gazelle-version>1.1.0</ipf-gazelle-version>
         <ipf-oht-atna-version>3.1.2</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <ipf-version>${project.version}</ipf-version>
         <jaxb-version>2.2.11</jaxb-version>
-        <mina2-version>2.0.13</mina2-version>
+        <mina2-version>2.0.14</mina2-version>
         <opensaml-version>3.2.0</opensaml-version>
         <saxon-he-version>9.7.0-7</saxon-he-version>
         <slf4j-version>1.7.21</slf4j-version>
         <spring-version>4.3.2.RELEASE</spring-version>
         <spring-boot-version>1.4.0.RELEASE</spring-boot-version>
-        <spring-cloud-version>Brixton.SR4</spring-cloud-version>
-        <spring-cloud-commons-version>1.1.1.RELEASE</spring-cloud-commons-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <xmlsec-version>2.0.7</xmlsec-version>
@@ -180,13 +178,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot-version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

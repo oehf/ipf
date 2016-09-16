@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.Hl7v2WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
@@ -28,37 +25,11 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
  * @author Dmytro Rud
  */
 abstract public class AbstractHl7v2WsComponent<AuditDatasetType extends WsAuditDataset>
-        extends AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration>
+        extends AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration, Hl7v2WsInteractionId>
         implements Hl7v2ConfigurationHolder {
 
-    private final Hl7v2WsInteractionId interactionId;
-
     public AbstractHl7v2WsComponent(Hl7v2WsInteractionId interactionId) {
-        this.interactionId = interactionId;
+        super(interactionId);
     }
 
-    @Override
-    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
-        return interactionId.getHl7v2TransactionConfiguration();
-    }
-
-    @Override
-    public NakFactory getNakFactory() {
-        return interactionId.getNakFactory();
-    }
-
-    @Override
-    public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
-        return interactionId.getClientAuditStrategy();
-    }
-
-    @Override
-    public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
-        return interactionId.getServerAuditStrategy();
-    }
-
-    @Override
-    public WsTransactionConfiguration getWsTransactionConfiguration() {
-        return interactionId.getWsTransactionConfiguration();
-    }
 }

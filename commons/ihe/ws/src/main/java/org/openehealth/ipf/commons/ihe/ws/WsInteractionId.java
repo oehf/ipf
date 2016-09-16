@@ -26,4 +26,10 @@ public interface WsInteractionId extends InteractionId {
 
     <T extends WsTransactionConfiguration> T getWsTransactionConfiguration();
 
+    class Null extends InteractionId.Null implements WsInteractionId {
+        @Override
+        public <T extends WsTransactionConfiguration> T getWsTransactionConfiguration() {
+            return null;
+        }
+    }
 }

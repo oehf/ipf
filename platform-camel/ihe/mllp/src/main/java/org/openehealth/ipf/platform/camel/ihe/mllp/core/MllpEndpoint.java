@@ -37,6 +37,7 @@ import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.filterchain.IoFilter;
 import org.apache.mina.core.session.IoSession;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditUtils;
@@ -171,6 +172,11 @@ public abstract class MllpEndpoint
     @Override
     public NakFactory getNakFactory() {
         return mllpComponent.getNakFactory();
+    }
+
+    @Override
+    public Hl7v2InteractionId getInteractionId() {
+        return mllpComponent.getInteractionId();
     }
 
     /**

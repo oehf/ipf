@@ -26,6 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestInteractionSetterInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerResponseAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
@@ -74,6 +75,7 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
     @Override
     public List<Interceptor> createInitialConsumerInterceptorChain() {
         List<Interceptor> initialChain = new ArrayList<>();
+        initialChain.add(new ConsumerRequestInteractionSetterInterceptor());
         initialChain.add(new ConsumerStringProcessingInterceptor());
         if (isSupportUnsolicitedFragmentation()) {
             initialChain.add(new ConsumerRequestDefragmenterInterceptor());

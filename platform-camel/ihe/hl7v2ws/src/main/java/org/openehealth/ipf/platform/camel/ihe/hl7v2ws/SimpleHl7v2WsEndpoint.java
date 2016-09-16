@@ -23,6 +23,7 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -75,7 +76,7 @@ public abstract class SimpleHl7v2WsEndpoint<
 
 
     protected List<Interceptor> getProducerInterceptorChain() {
-        return Arrays.<Interceptor>asList(
+        return Arrays.asList(
                 new ProducerMarshalInterceptor(),
                 new ProducerResponseAcceptanceInterceptor(),
                 new ProducerRequestAcceptanceInterceptor(),
@@ -137,5 +138,10 @@ public abstract class SimpleHl7v2WsEndpoint<
     @Override
     public NakFactory getNakFactory() {
         return getComponent().getNakFactory();
+    }
+
+    @Override
+    public Hl7v2InteractionId getInteractionId() {
+        return getComponent().getInteractionId();
     }
 }

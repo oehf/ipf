@@ -174,9 +174,11 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
             exchange.getIn().getHeaders().putAll(headers);
         }
 
-        // Add the FHIR context as header
-        exchange.getIn().getHeaders().put(Constants.FHIR_CONTEXT, getEndpoint().getInterceptableConfiguration().getContext());
-
+        // Add the FHIR context and InteractionID as header
+        exchange.getIn().setHeader(Constants.FHIR_CONTEXT,
+                getEndpoint().getInterceptableConfiguration().getContext());
+        exchange.getIn().setHeader(org.openehealth.ipf.commons.ihe.core.Constants.INTERACTION_ID_NAME,
+                getEndpoint().getInterceptableComponent().getInteractionId());
 
         try {
             createUoW(exchange);

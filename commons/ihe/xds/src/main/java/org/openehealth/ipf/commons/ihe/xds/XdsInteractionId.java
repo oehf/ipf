@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.xds;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
@@ -24,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
  * @author Christian Ohr
  * @since 3.2
  */
-public interface XdsInteractionId extends InteractionId, ValidationProfile {
+public interface XdsInteractionId extends WsInteractionId, ValidationProfile {
 
     @Override
     default XdsInteractionId getInteractionId() {
@@ -33,5 +34,4 @@ public interface XdsInteractionId extends InteractionId, ValidationProfile {
 
     XdsInteractionProfile getInteractionProfile();
 
-    WsTransactionConfiguration getWsTransactionConfiguration();
 }

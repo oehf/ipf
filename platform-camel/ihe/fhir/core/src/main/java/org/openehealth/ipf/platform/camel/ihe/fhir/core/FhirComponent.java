@@ -131,4 +131,8 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
         return fhirInteractionId.getClientAuditStrategy();
     }
+
+    public FhirInteractionId getInteractionId() {
+        return fhirInteractionId;
+    }
 }

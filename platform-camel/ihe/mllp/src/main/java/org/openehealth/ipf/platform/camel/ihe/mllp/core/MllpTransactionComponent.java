@@ -57,16 +57,6 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
     }
 
     @Override
-    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
-        return interactionId.getHl7v2TransactionConfiguration();
-    }
-
-    @Override
-    public NakFactory getNakFactory() {
-        return interactionId.getNakFactory();
-    }
-
-    @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
         return interactionId.getClientAuditStrategy();
     }
@@ -76,6 +66,7 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
         return interactionId.getServerAuditStrategy();
     }
 
+    @Override
     public Hl7v2InteractionId getInteractionId() {
         return interactionId;
     }

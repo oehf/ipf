@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
+import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
+
 /**
  * Interface for Camel components which handle HL7v2 messages,
  * independent of transport protocol.
@@ -26,11 +29,17 @@ public interface Hl7v2ConfigurationHolder {
     /**
      * Returns component configuration.
      */
-    org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration();
+    default org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+        return getInteractionId().getHl7v2TransactionConfiguration();
+    }
 
     /**
      * Returns transaction-specific NAK factory.
      */
-    org.openehealth.ipf.commons.ihe.hl7v2.NakFactory getNakFactory();
+    default org.openehealth.ipf.commons.ihe.hl7v2.NakFactory getNakFactory() {
+        return getInteractionId().getNakFactory();
+    }
+
+    Hl7v2InteractionId getInteractionId();
 
 }

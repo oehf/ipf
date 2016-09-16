@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.custom;
 import lombok.Getter;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
@@ -77,4 +78,5 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
     public NakFactory getNakFactory() {
         return new NakFactory(configuration);
     }
+
 }

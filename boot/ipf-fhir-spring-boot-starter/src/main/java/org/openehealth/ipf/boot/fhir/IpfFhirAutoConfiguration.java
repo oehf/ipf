@@ -54,9 +54,6 @@ import java.util.Map;
 @EnableConfigurationProperties(IpfFhirConfigurationProperties.class)
 public class IpfFhirAutoConfiguration {
 
-    public static final String IDENTIFIER_MAPPING = "identifiers";
-    public static final String TERMINOLOGY_MAPPING = "terminologies";
-
     @Autowired
     private IpfFhirConfigurationProperties config;
 
