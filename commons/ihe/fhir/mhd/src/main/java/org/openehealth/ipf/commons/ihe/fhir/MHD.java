@@ -92,17 +92,7 @@ public class MHD implements InteractionProfile {
         ITI_68("mhd-iti68",
                 "Retrieve Document",
                 false,
-                null) {
-            @Override
-            public <T extends AuditDataset> AuditStrategy<T> getClientAuditStrategy() {
-                return null;
-            }
-
-            @Override
-            public <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy() {
-                return null;
-            }
-        };
+                null);
 
         @Getter private String name;
         @Getter private String description;

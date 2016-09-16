@@ -46,13 +46,17 @@ public interface InteractionId {
      * @param <T> AuditDataset subtype
      * @return {@link AuditStrategy} to be used on client side to accomplish ATNA audit
      */
-    <T extends AuditDataset> AuditStrategy<T> getClientAuditStrategy();
+    default <T extends AuditDataset> AuditStrategy<T> getClientAuditStrategy() {
+        return null;
+    }
 
     /**
      * @param <T> AuditDataset subtype
      * @return {@link AuditStrategy} to be used on server side to accomplish ATNA audit
      */
-    <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy();
+    default <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy() {
+        return null;
+    }
 
 
     class Null implements InteractionId {

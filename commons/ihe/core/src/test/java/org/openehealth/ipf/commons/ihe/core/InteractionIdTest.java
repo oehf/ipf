@@ -92,16 +92,6 @@ public class InteractionIdTest {
             public boolean isQuery() {
                 return false;
             }
-
-            @Override
-            public <T extends AuditDataset> AuditStrategy<T> getClientAuditStrategy() {
-                return null;
-            }
-
-            @Override
-            public <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy() {
-                return null;
-            }
         }
 
         @Override
@@ -129,16 +119,6 @@ public class InteractionIdTest {
             @Override
             public boolean isQuery() {
                 return false;
-            }
-
-            @Override
-            public <T extends AuditDataset> AuditStrategy<T> getClientAuditStrategy() {
-                return null;
-            }
-
-            @Override
-            public <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy() {
-                return null;
             }
         }
 

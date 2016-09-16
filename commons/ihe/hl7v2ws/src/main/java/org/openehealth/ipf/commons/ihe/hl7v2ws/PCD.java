@@ -52,17 +52,7 @@ public class PCD implements InteractionProfile {
                 false,
                 PCD01_CONFIG,
                 PCD01_NAK_FACTORY,
-                PCD01_WS_CONFIG) {
-            @Override
-            public <T extends AuditDataset> AuditStrategy<T> getClientAuditStrategy() {
-                return null;
-            }
-
-            @Override
-            public <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy() {
-                return null;
-            }
-        };
+                PCD01_WS_CONFIG);
 
         @Getter private String name;
         @Getter private String description;

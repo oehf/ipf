@@ -95,17 +95,7 @@ public class XDS_A implements XdsInteractionProfile {
         ITI_17("xds-iti17",
                 "Retrieve Documents",
                 false,
-                null) {
-            @Override
-            public <T extends AuditDataset> AuditStrategy<T> getClientAuditStrategy() {
-                return null;
-            }
-
-            @Override
-            public <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy() {
-                return null;
-            }
-        };
+                null);
 
         @Getter private String name;
         @Getter private String description;
