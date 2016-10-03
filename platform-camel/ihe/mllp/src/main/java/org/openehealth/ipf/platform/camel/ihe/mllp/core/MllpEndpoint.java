@@ -100,8 +100,8 @@ public abstract class MllpEndpoint
     }
 
     /**
-     * Wraps the original camel-mina producer
-     * into a set of PIX/PDQ-specific ones.
+     * Returns the original camel-mina2 producer which will be wrapped
+     * into a set of PIX/PDQ-specific interceptors in {@link #createProducer()}.
      */
     @Override
     public Producer doCreateProducer() throws Exception {
@@ -121,8 +121,8 @@ public abstract class MllpEndpoint
     }
 
     /**
-     * Wraps the original starting point of the consumer route
-     * into a set of PIX/PDQ-specific interceptors.
+     * Returns the original starting point of the camel-mina2 route which will be wrapped
+     * into a set of PIX/PDQ-specific interceptors in {@link #createConsumer(Processor)}.
      * @param processor The original consumer processor.
      */
     @Override
