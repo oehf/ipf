@@ -42,6 +42,7 @@ public class RAD implements XdsInteractionProfile {
 
     private static final RAD Instance = new RAD();
 
+    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements XdsInteractionId {
 

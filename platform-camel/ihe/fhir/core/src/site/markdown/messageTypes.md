@@ -12,9 +12,12 @@ If unmarshalling fails, an FHIR response automatically generated and passed back
 
 | Transaction      | Request Message Type (`org.hl7.fhir.instance.model...`) | Request Message Headers
 |------------------|-------------------------------------------------------- | --------------------------
+| [ITI-65]         | `Bundle` containing `DocumentManifest`, `DocumentReference` and `Binary` resources 
+| [ITI-66] 	       | n/a                                                     | Query Parameters
+| [ITI-67]         | n/a                                                     | Query Parameters
+| [ITI-68] 	       | n/a                                                     | n/a
 | [ITI-78]         | n/a                                                     | Query Parameters
 | [ITI-83] 	       | n/a                                                     | Query Parameters
-
 
 ### Producer-side responses
 
@@ -23,6 +26,12 @@ is transformed into a HAPI FHIR resource. When unmarshalling fails, an exception
 
 | Transaction       | Response Message Type (`org.hl7.fhir.instance.model...`) 
 |-------------------|---------------------------------------------------------
+| [ITI-65]          | `Bundle` 
+| [ITI-66] (search) | `Bundle` containing `DocumentManifest` resources
+| [ITI-66] (get)    | `DocumentManifest` resource
+| [ITI-67] (search) | `Bundle` containing `DocumentReference` resources
+| [ITI-67] (get)    | `DocumentReference` resource
+| [ITI-68] 	        | binary content
 | [ITI-78] (search) | `Bundle` containing matching `Patient` resources 
 | [ITI-78] (get)    | `Patient` resource
 | [ITI-83]          | `Parameters` containing matching identifiers     
@@ -43,9 +52,15 @@ Data types for the *request* message of the supported transactions on producer (
 
 | Transaction       | Request Message Type  |
 |-------------------|-------------------------------------------------------- | 
-| [ITI-78] (search) | `ca.uhn.fhir.rest.gclient.ICriterion` or URL string     | 
-| [ITI-78] (get)    | String with the Patient resource identifier             | 
-| [ITI-83]          | `org.hl7.fhir.instance.model.Parameters`                | 
+| [ITI-65]          | `Bundle` 
+| [ITI-66] (search) | `ca.uhn.fhir.rest.gclient.ICriterion` or URL string
+| [ITI-66] (get)    | String with the DocumentManifest resource identifier
+| [ITI-67] (search) | `ca.uhn.fhir.rest.gclient.ICriterion` or URL string
+| [ITI-67] (get)    | String with the DocumentReference resource identifier
+| [ITI-68] 	        | URL string
+| [ITI-78] (search) | `ca.uhn.fhir.rest.gclient.ICriterion` or URL string 
+| [ITI-78] (get)    | String with the Patient resource identifier 
+| [ITI-83]          | `org.hl7.fhir.instance.model.Parameters` 
 
 The URL string may be complete (e.g. http://example.com/base/Patient?name=foo) in which case the client's base URL will be ignored. 
 Or it can be relative (e.g. Patient?family=smith) in which case the client's base URL will be used.

@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -24,9 +25,10 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import javax.xml.namespace.QName;
 import java.util.Map;
 
-public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration> {
+public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration, WsInteractionId.Null> {
 
     private static final String NS_URI = "urn:iti:some:mai:2011";
+
     public static final WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName(NS_URI, "SomeConsumer_Service", "iti"),
             String.class,
@@ -37,20 +39,14 @@ public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTran
             false,
             false,
             false);
-    
+
+    public SomeItiComponent() {
+        super(null);
+    }
+
     @Override
     public WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
-    }
-
-    @Override
-    public AuditStrategy<WsAuditDataset> getClientAuditStrategy() {
-        return null;   // dummy
-    }
-
-    @Override
-    public AuditStrategy<WsAuditDataset> getServerAuditStrategy() {
-        return null;   // dummy
     }
 
     @SuppressWarnings("unchecked")

@@ -126,5 +126,5 @@ which can be used to configure this content caching.
 [Deploying custom CXF interceptors]: ../ipf-platform-camel-ihe-ws/customInterceptors.html
 [Handling automatically rejected messages]: ../ipf-platform-camel-ihe-ws/handlingRejected.html
 [Using CXF features]: ../ipf-platform-camel-ihe-ws/cxfFeatures.html
-[Asynchronous Web Service exchange option]: ../ipf-platform-camel-ihe-ws/async.md
+[Asynchronous Web Service exchange option]: ../ipf-platform-camel-ihe-ws/async.html
 

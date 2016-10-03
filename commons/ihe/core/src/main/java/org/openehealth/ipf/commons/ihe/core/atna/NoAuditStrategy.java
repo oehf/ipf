@@ -17,12 +17,16 @@
 package org.openehealth.ipf.commons.ihe.core.atna;
 
 
-public abstract class NoAuditStrategy<T extends AuditDataset> extends AuditStrategySupport<T> {
+public class NoAuditStrategy<T extends AuditDataset> extends AuditStrategySupport<T> {
 
     public NoAuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
+    @Override
+    public T createAuditDataset() {
+        return null;
+    }
 
     @Override
     public void doAudit(T auditDataset) {

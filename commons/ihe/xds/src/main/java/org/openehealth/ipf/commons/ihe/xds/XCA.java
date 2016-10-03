@@ -44,6 +44,7 @@ public class XCA implements XdsInteractionProfile {
 
     private static final XCA Instance = new XCA();
 
+    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements XdsInteractionId {
 

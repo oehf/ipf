@@ -15,10 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 import org.apache.cxf.endpoint.Server;
+import org.openehealth.ipf.commons.ihe.core.Constants;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
@@ -54,6 +56,11 @@ public class DefaultWsConsumer<
         this.server = server;
     }
 
+    @Override
+    public AbstractWsEndpoint<AuditDatasetType, ConfigType> getEndpoint() {
+        return (AbstractWsEndpoint<AuditDatasetType, ConfigType>)super.getEndpoint();
+    }
+
     /**
      * Processes an exchange with the processor configured in the constructor.
      *
@@ -62,6 +69,7 @@ public class DefaultWsConsumer<
      */
     public void process(Exchange exchange) {
         try {
+            exchange.getIn().setHeader(Constants.INTERACTION_ID_NAME, getEndpoint().getComponent().getInteractionId());
             getProcessor().process(exchange);
         } catch (Exception e) {
             throw new RuntimeException(e);

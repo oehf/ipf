@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.apache.camel.component.mina2.Mina2Endpoint;
+import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 
@@ -29,6 +30,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
  * @author Dmytro Rud
  */
 public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointConfiguration> {
+
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
             new Hl7v2TransactionConfiguration(
                     new Version[] {Version.V25}, // not relevant for acceptance checking
@@ -54,6 +56,11 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
     @Override
     protected MllpEndpoint<?, ?> createEndpoint(Mina2Endpoint wrappedEndpoint, MllpDispatchEndpointConfiguration config) {
         return new MllpDispatchEndpoint(this, wrappedEndpoint, config);
+    }
+
+    @Override
+    public Hl7v2InteractionId getInteractionId() {
+        return null;
     }
 
     @Override

@@ -21,6 +21,8 @@ import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.message.Message;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
@@ -36,8 +38,18 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDataset, ConfigType extends WsTransactionConfiguration>
+abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDataset, ConfigType extends WsTransactionConfiguration, InteractionIdType extends WsInteractionId>
         extends DefaultComponent implements AuditableComponent<AuditDatasetType> {
+
+    private final InteractionIdType interactionId;
+
+    public AbstractWsComponent(InteractionIdType interactionId) {
+        this.interactionId = interactionId;
+    }
+
+    public InteractionIdType getInteractionId() {
+        return interactionId;
+    }
 
     protected InterceptorProvider getCustomInterceptors(Map<String, Object> parameters) {
         AbstractBasicInterceptorProvider provider = new AbstractBasicInterceptorProvider() {};
@@ -59,14 +71,6 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
 		return (List<Interceptor<? extends Message>>) (List<?>) param;
 	}
 
-    /**
-     * @return
-     *      static configuration parameters of the Web Service which
-     *      server endpoints of this transaction.
-     */
-    public abstract ConfigType getWsTransactionConfiguration();
-
-
     protected List<AbstractFeature> getFeatures(Map<String, Object> parameters) {
         return resolveAndRemoveReferenceListParameter(parameters, "features", AbstractFeature.class);
     }
@@ -78,5 +82,24 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
     protected Map<String, Object> getProperties(Map<String, Object> parameters) {
         List<Map> mapList = resolveAndRemoveReferenceListParameter(parameters, "properties", Map.class);
         return (mapList != null && mapList.size() == 1)? mapList.get(0) : null;
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
+        return interactionId.getClientAuditStrategy();
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
+        return interactionId.getServerAuditStrategy();
+    }
+
+    /**
+     * @return
+     *      static configuration parameters of the Web Service which
+     *      server endpoints of this transaction.
+     */
+    public ConfigType getWsTransactionConfiguration() {
+        return interactionId.getWsTransactionConfiguration();
     }
 }

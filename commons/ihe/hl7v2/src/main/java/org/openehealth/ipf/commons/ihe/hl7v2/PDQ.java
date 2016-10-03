@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.hl7v2;
 
 import ca.uhn.hl7v2.ErrorCode;
-import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,14 +30,10 @@ import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti22.Iti22ClientAuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti22.Iti22ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static org.openehealth.ipf.commons.ihe.hl7v2.PDQ.Interactions.ITI_21;
-import static org.openehealth.ipf.commons.ihe.hl7v2.PDQ.Interactions.ITI_22;
 
 /**
  * @author Christian Ohr

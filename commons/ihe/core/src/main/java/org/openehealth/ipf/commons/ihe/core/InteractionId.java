@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.core;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.core.atna.NoAuditStrategy;
 
 /**
  * Interface for eHealth interactions. Implementations of this interface should ensure that instances are singletons.
@@ -57,4 +58,32 @@ public interface InteractionId {
         return null;
     }
 
+
+    class Null implements InteractionId {
+
+        @Override
+        public String getName() {
+            return "unknown";
+        }
+
+        @Override
+        public String getDescription() {
+            return "unknown";
+        }
+
+        @Override
+        public boolean isQuery() {
+            return false;
+        }
+
+        @Override
+        public <T extends AuditDataset> AuditStrategy<T> getClientAuditStrategy() {
+            return new NoAuditStrategy<>(false);
+        }
+
+        @Override
+        public <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy() {
+            return new NoAuditStrategy<>(true);
+        }
+    }
 }

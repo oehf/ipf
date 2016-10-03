@@ -21,13 +21,15 @@ import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.conf.store.ClasspathProfileStore;
 import ca.uhn.hl7v2.validation.ValidationContext;
 import ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
+import org.apache.camel.CamelContext;
 import org.apache.camel.component.hl7.CustomHL7MLLPCodec;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomPixAuditor;
-import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
+import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 import org.openhealthtools.ihe.atna.auditor.PAMSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.PDQConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor;
@@ -55,6 +57,7 @@ import java.util.Map;
 public class IpfHl7v2AutoConfiguration {
 
     private static final String IPF_HL7_DEFINITIONS_PREFIX = "org.openehealth.ipf.commons.ihe.hl7v2.definitions";
+
 
     @Bean
     @ConditionalOnMissingBean(HL7MLLPCodec.class)
@@ -93,6 +96,13 @@ public class IpfHl7v2AutoConfiguration {
         return context;
     }
 
+    // Provide bean for MLLP endpoint dispatching
+    @Bean
+    @ConditionalOnMissingBean(ConsumerDispatchingInterceptor.class)
+    public ConsumerDispatchingInterceptor mllpDispatcher(CamelContext camelContext) {
+        return new ConsumerDispatchingInterceptor(camelContext);
+    }
+
     // Provide "interactiveContinuationStorage" for HL7v2 paging
     @Bean
     @ConditionalOnMissingBean(InteractiveContinuationStorage.class)
@@ -110,6 +120,7 @@ public class IpfHl7v2AutoConfiguration {
     public UnsolicitedFragmentationStorage unsolicitedFragmentationStorage(CacheManager cacheManager) {
         return new CachingUnsolicitedFragmentionStorage(cacheManager);
     }
+
 
     // Some ATNA auditors
 

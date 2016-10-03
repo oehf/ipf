@@ -20,6 +20,7 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.xds.XdsInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
@@ -42,7 +43,7 @@ public abstract class XdsEndpoint<AuditDatasetType extends XdsAuditDataset>
     public XdsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration> component,
+            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration, ? extends XdsInteractionId> component,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,

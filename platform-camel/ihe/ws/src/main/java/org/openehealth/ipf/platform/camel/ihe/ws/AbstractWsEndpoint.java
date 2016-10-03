@@ -31,6 +31,7 @@ import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
@@ -125,7 +126,7 @@ public abstract class AbstractWsEndpoint<
     protected AbstractWsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<AuditDatasetType, ConfigType> component,
+            AbstractWsComponent<AuditDatasetType, ConfigType, ? extends WsInteractionId> component,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
@@ -337,8 +338,8 @@ public abstract class AbstractWsEndpoint<
 
     @SuppressWarnings("unchecked")
     @Override
-    public AbstractWsComponent<AuditDatasetType, ConfigType> getComponent() {
-        return (AbstractWsComponent<AuditDatasetType, ConfigType>) super.getComponent();
+    public AbstractWsComponent<AuditDatasetType, ConfigType, ? extends WsInteractionId> getComponent() {
+        return (AbstractWsComponent<AuditDatasetType, ConfigType, WsInteractionId>) super.getComponent();
     }
 
     /**
