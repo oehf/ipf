@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
     <artifactId>ipf-dependencies</artifactId>
-    <version>3.2-SNAPSHOT</version>
+    <version>3.2-20161005</version>
     <name>ipf-dependencies</name>
     <packaging>pom</packaging>
 
@@ -160,7 +159,7 @@
         <connection>scm:git:git@github.com:oehf/ipf.git</connection>
         <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
         <url>scm:git:git@github.com:oehf/ipf.git</url>
-        <tag>HEAD</tag>
+        <tag>ipf-3.2-20161005</tag>
     </scm>
 
     <dependencyManagement>

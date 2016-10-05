@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf-parent</artifactId>
@@ -9,7 +8,7 @@
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>3.2-SNAPSHOT</version>
+        <version>3.2-20161005</version>
         <relativePath>../dependencies</relativePath>
     </parent>
 
@@ -31,22 +30,22 @@
         <site.path>${project.version}</site.path>
         <site.url>http://oehf.github.io/ipf</site.url>
         <site.deploy.id>gh-pages</site.deploy.id>
-        <site.deploy.url/>
+        <site.deploy.url />
 
         <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
         <osgi.import.pkg>org.slf4j.*;version="[1.6,2)",*</osgi.import.pkg>
-        <osgi.dynamic.import.pkg/>
-        <osgi.private.pkg/>
-        <osgi.bundle.activator/>
-        <osgi.bundle.classpath/>
-        <osgi.embed.dependency/>
-        <osgi.fragment.host/>
-        <osgi.require.bundle/>
-        <osgi.spring.context/>
-        <ipf.extension.classes/>
-        <ipf.extension.beans/>
-        <eclipse.supplement.bundle/>
+        <osgi.dynamic.import.pkg />
+        <osgi.private.pkg />
+        <osgi.bundle.activator />
+        <osgi.bundle.classpath />
+        <osgi.embed.dependency />
+        <osgi.fragment.host />
+        <osgi.require.bundle />
+        <osgi.spring.context />
+        <ipf.extension.classes />
+        <ipf.extension.beans />
+        <eclipse.supplement.bundle />
         <osgi.bundle.vendor>Open eHealth Foundation</osgi.bundle.vendor>
         <osgi.bundle.license>Apache License, Version
             2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache
