@@ -1044,6 +1044,11 @@
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>${build-helper-version}</version>
                 </plugin>
+                <plugin>
+                    <artifactId>lombok-maven-plugin</artifactId>
+                    <groupId>org.projectlombok</groupId>
+                    <version>${lombok-plugin-version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
