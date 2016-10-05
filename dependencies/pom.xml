@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
@@ -18,7 +17,6 @@
         <ipf-gazelle-version>1.1.0</ipf-gazelle-version>
         <ipf-oht-atna-version>3.1.2</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
-        <ipf-version>${project.version}</ipf-version>
         <jaxb-version>2.2.11</jaxb-version>
         <mina2-version>2.0.14</mina2-version>
         <opensaml-version>3.2.0</opensaml-version>
@@ -705,239 +703,239 @@
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-core</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-flow</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-core</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-fhir-audit</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-fhir-core</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-fhir-mhd</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-fhir-pixpdq</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-hl7v2</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-hl7v2ws</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-hl7v3</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-ws</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-xds</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-xua</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-map</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-spring</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-xml</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.modules</groupId>
                 <artifactId>ipf-modules-cda-core</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.modules</groupId>
                 <artifactId>ipf-modules-cda-mdht</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.modules</groupId>
                 <artifactId>ipf-modules-cda-oht</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.modules</groupId>
                 <artifactId>ipf-modules-fhir</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.modules</groupId>
                 <artifactId>ipf-modules-hl7</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.modules</groupId>
                 <artifactId>ipf-modules-hl7dsl</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-cda</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-core</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-flow</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-hl7</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-mdht</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-atna</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-core</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-fhir-audit</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-fhir-core</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-fhir-mhd</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-fhir-pixpdq</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-continua</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-hl7v2</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-hl7v2ws</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-hl7v3</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-ws</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-xds</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
                 <artifactId>ipf-atna-spring-boot-starter</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
                 <artifactId>ipf-fhir-spring-boot-starter</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
                 <artifactId>ipf-hl7-spring-boot-starter</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
                 <artifactId>ipf-hl7v3-spring-boot-starter</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
                 <artifactId>ipf-spring-boot-starter</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
                 <artifactId>ipf-xds-spring-boot-starter</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- Goes away with CXF 3.1.7 -->
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
                 <artifactId>cxf-integration-spring-boot-starter</artifactId>
-                <version>${ipf-version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
