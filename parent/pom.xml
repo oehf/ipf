@@ -75,6 +75,7 @@
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.0.1</resources-plugin-version>
         <sources-plugin-version>3.0.1</sources-plugin-version>
+        <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
         <activemq-version>5.13.4</activemq-version>
@@ -869,7 +870,7 @@
                         <dependency>
                             <groupId>lt.velykis.maven.skins</groupId>
                             <artifactId>reflow-velocity-tools</artifactId>
-                            <version>1.1.2-SNAPSHOT</version>
+                            <version>1.1.1</version>
                         </dependency>
                         <dependency>
                             <!-- Reflow skin requires velocity 1.7 -->
@@ -1083,6 +1084,10 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>

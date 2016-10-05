@@ -29,6 +29,14 @@
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <xmlsec-version>2.0.7</xmlsec-version>
+
+		<maven.site.skip>true</maven.site.skip>
+        <github.global.server>github</github.global.server>
+
+        <site.path>${project.version}</site.path>
+        <site.url>http://oehf.github.io/ipf</site.url>
+        <site.deploy.id>gh-pages</site.deploy.id>
+        <site.deploy.url/>
     </properties>
 
     <url>${site.url}</url>

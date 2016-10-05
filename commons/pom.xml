@@ -15,6 +15,10 @@
         <relativePath>../parent</relativePath>
     </parent>
 
+    <properties>
+        <maven.site.skip>false</maven.site.skip>
+    </properties>
+
     <modules>
         <!-- <module>test</module> -->
         <module>core</module>

@@ -2,15 +2,97 @@
          xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.openehealth.ipf</groupId>
     <artifactId>ipf</artifactId>
     <version>3.2-SNAPSHOT</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
+    <parent>
+        <groupId>org.openehealth.ipf</groupId>
+        <artifactId>ipf-parent</artifactId>
+        <version>3.2-SNAPSHOT</version>
+        <relativePath>parent</relativePath>
+    </parent>
+
     <url>${site.url}</url>
 
     <description>IPF - eHealth Integration on steroids</description>
+
+    <modules>
+        <module>dependencies</module>
+        <module>parent</module>
+        <module>archetypes</module>
+        <module>assembly</module>
+        <module>commons</module>
+        <module>modules</module>
+        <module>boot</module>
+        <module>osgi</module>
+        <module>platform-camel</module>
+        <module>tutorials</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${release-plugin-version}</version>
+                <configuration>
+                    <preparationGoals>clean verify install</preparationGoals>
+                    <goals>deploy site site-deploy</goals>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>${eclipse-plugin-version}</version>
+                <configuration>
+                    <projectnatures>
+                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
+                        <projectnature>org.eclipse.jdt.groovy.core.groovyNature</projectnature>
+                    </projectnatures>
+                    <downloadSources>true</downloadSources>
+                    <ajdtVersion>none</ajdtVersion>
+                    <classpathContainers>
+                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+                    </classpathContainers>
+                </configuration>
+            </plugin>
+            <!--
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>${github-site-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>site-deploy</phase>
+                        <configuration>
+                            <server>github</server>
+                            <message>Updating site for ${project.artifactId}, ${project.version}</message>
+                            <path>${project.distributionManagement.site.url}</path>
+                            <merge>true</merge>
+                            <dryRun>true</dryRun>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus-staging-plugin-version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <organization>
         <name>Open eHealth Foundation</name>
@@ -141,202 +223,10 @@
         <tag>HEAD</tag>
     </scm>
 
-    <modules>
-        <module>dependencies</module>
-        <module>parent</module>
-
-        <module>archetypes</module>
-        <module>assembly</module>
-        <module>commons</module>
-        <module>modules</module>
-        <module>boot</module>
-        <module>osgi</module>
-        <module>platform-camel</module>
-        <module>tutorials</module>
-    </modules>
-
-    <properties>
-        <build-helper-version>1.10</build-helper-version>
-        <bundle-plugin-version>3.0.1</bundle-plugin-version>
-        <compiler-plugin-version>3.5.1</compiler-plugin-version>
-        <eclipse-plugin-version>2.10</eclipse-plugin-version>
-        <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
-        <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
-        <github-site-version>0.12</github-site-version>
-        <gmavenplus-plugin-version>1.5</gmavenplus-plugin-version>
-        <gpg-plugin-version>1.6</gpg-plugin-version>
-        <release-plugin-version>2.5.3</release-plugin-version>
-        <site-plugin-version>3.4</site-plugin-version>
-    </properties>
-
-    <profiles>
-        <!-- Use the staging profile to a local staging or mock directory.
-             It can be used to test that links between module sites in a multi-module build work. -->
-        <profile>
-            <id>staging</id>
-            <properties>
-                <site.deploy.url>http://github.com/oehf/ipf/tree/gh-pages/</site.deploy.url>
-            </properties>
-
-            <build>
-                <plugins>
-                    <!-- Configure Maven site plugin to perform stage -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-site-plugin</artifactId>
-                        <version>${site-plugin-version}</version>
-                        <executions>
-                            <execution>
-                                <id>stage</id>
-                                <goals>
-                                    <goal>stage</goal>
-                                </goals>
-                                <phase>site</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-
-        </profile>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${gpg-plugin-version}</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <!-- reporting plugins -->
-                <!-- Configure Maven site plugin for Reflow skin and Markdown support -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>${site-plugin-version}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>lt.velykis.maven.skins</groupId>
-                            <artifactId>reflow-velocity-tools</artifactId>
-                            <version>1.1.2-SNAPSHOT</version>
-                        </dependency>
-                        <dependency>
-                            <!-- Reflow skin requires velocity 1.7 -->
-                            <groupId>org.apache.velocity</groupId>
-                            <artifactId>velocity</artifactId>
-                            <version>1.7</version>
-                        </dependency>
-                    </dependencies>
-                    <configuration>
-                        <generateReports>true</generateReports>
-                        <inputEncoding>UTF-8</inputEncoding>
-                        <outputEncoding>UTF-8</outputEncoding>
-                        <!-- Site deployment done using GitHub site plugin -->
-                        <skipDeploy>true</skipDeploy>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>${release-plugin-version}</version>
-                <configuration>
-                    <preparationGoals>clean verify install</preparationGoals>
-                    <goals>deploy site site-deploy</goals>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>${eclipse-plugin-version}</version>
-                <configuration>
-                    <projectnatures>
-                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
-                        <projectnature>org.eclipse.jdt.groovy.core.groovyNature</projectnature>
-                    </projectnatures>
-                    <downloadSources>true</downloadSources>
-                    <ajdtVersion>none</ajdtVersion>
-                    <classpathContainers>
-                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
-                    </classpathContainers>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>${site-plugin-version}</version>
-            </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>${github-site-version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>site-deploy</phase>
-                        <configuration>
-                            <server>github</server>
-                            <message>Updating site for ${project.artifactId}, ${project.version}</message>
-                            <path>${project.distributionManagement.site.url}</path>
-                            <merge>true</merge>
-                            <dryRun>true</dryRun>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${nexus-staging-plugin-version}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
     <repositories>
         <repository>
             <id>ossrh</id>
-            <name>Sonatype Snapshors</name>
+            <name>Sonatype Snapshots</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <releases>
                 <enabled>false</enabled>
