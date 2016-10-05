@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
     <artifactId>ipf</artifactId>
-    <version>3.2-20161005</version>
+    <version>3.2-SNAPSHOT</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
@@ -137,7 +137,7 @@
         <connection>scm:git:git@github.com:oehf/ipf.git</connection>
         <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
         <url>scm:git:git@github.com:oehf/ipf.git</url>
-        <tag>ipf-3.2-20161005</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <modules>
