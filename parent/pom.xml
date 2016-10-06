@@ -69,7 +69,7 @@
         <javadoc-plugin-version>2.10.4</javadoc-plugin-version>
         <jaxb-plugin-version>2.2</jaxb-plugin-version>
         <lombok-plugin-version>1.16.10.0</lombok-plugin-version>
-        <nexus-staging-plugin-version>1.6.7</nexus-staging-plugin-version>
+        <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <pax-plugin-version>1.6.0</pax-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.0.1</resources-plugin-version>
