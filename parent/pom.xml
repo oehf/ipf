@@ -62,14 +62,13 @@
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
         <github-site-version>0.12</github-site-version>
         <gmavenplus-plugin-version>1.5</gmavenplus-plugin-version>
-        <gpg-plugin-version>1.6</gpg-plugin-version>
         <groovy-eclipse-batch-version>2.4.3-01</groovy-eclipse-batch-version>
         <groovy-eclipse-compiler-version>2.9.2-01</groovy-eclipse-compiler-version>
         <jar-plugin-version>3.0.2</jar-plugin-version>
         <javadoc-plugin-version>2.10.4</javadoc-plugin-version>
         <jaxb-plugin-version>2.2</jaxb-plugin-version>
         <lombok-plugin-version>1.16.10.0</lombok-plugin-version>
-        <nexus-staging-plugin-version>1.6.7</nexus-staging-plugin-version>
+        <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <pax-plugin-version>1.6.0</pax-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
         <resources-plugin-version>3.0.1</resources-plugin-version>
@@ -214,40 +213,6 @@
                 </plugins>
             </build>
 
-        </profile>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${gpg-plugin-version}</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
         <profile>
             <id>groovy</id>
