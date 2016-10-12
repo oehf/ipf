@@ -9,7 +9,7 @@
 
     <properties>
         <bouncycastle-version>1.54</bouncycastle-version>
-        <camel-version>2.17.3</camel-version>
+        <camel-version>2.18.0</camel-version>
         <cxf-version>3.1.7</cxf-version>
         <groovy-version>2.4.7</groovy-version>
         <hapi-version>2.2</hapi-version>
@@ -18,7 +18,7 @@
         <ipf-oht-atna-version>3.1.2</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.2.11</jaxb-version>
-        <mina2-version>2.0.14</mina2-version>
+        <mina2-version>2.0.15</mina2-version>
         <opensaml-version>3.2.0</opensaml-version>
         <saxon-he-version>9.7.0-7</saxon-he-version>
         <slf4j-version>1.7.21</slf4j-version>
@@ -331,6 +331,21 @@
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-hl7</artifactId>
+                <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.xml.bind</groupId>
+                        <artifactId>jaxb-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-http-common</artifactId>
                 <version>${camel-version}</version>
                 <exclusions>
                     <exclusion>
