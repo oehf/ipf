@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.model.v25.segment.*;
 import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pam.v25.segment.ZBE;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pam.v25.segment.ZZI;
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 import java.util.Map;
@@ -51,6 +52,7 @@ public class ADT_A12 extends AbstractMessage {
         s.put(DB1.class, Cardinality.OPTIONAL_REPEATING);
         s.put(OBX.class, Cardinality.OPTIONAL_REPEATING);
         s.put(DG1.class, Cardinality.OPTIONAL);
+        s.put(ZZI.class, Cardinality.OPTIONAL);
         return s;
     }
 

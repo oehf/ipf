@@ -23,4 +23,11 @@ public interface Constants {
 
     String INTERACTION_ID_NAME = "ipf.interactionId";
 
+    String ZZI = "ZZI";
+    String SPAN_ID = "X-B3-SpanId";
+    String TRACE_ID = "X-B3-TraceId";
+    String PARENT_SPAN_ID = "X-B3-ParentSpanId";
+    String SAMPLED = "X-B3-Sampled";
+    String FLAGS = "X-B3-Flags";
+
 }

@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.openehealth.ipf.commons.ihe.core.Constants.*;
 /**
  * Abstract plain provider that allows subclasses to forward the received payload into the
  * Camel route served by the consumer. Note that this can be subclassed for writing so-called
@@ -230,7 +231,16 @@ public abstract class AbstractPlainProvider implements Serializable {
         enriched.put(Constants.HTTP_PROTOCOL_VERSION, httpServletRequest.getProtocol());
         enriched.put(Constants.HTTP_SCHEME, httpServletRequest.getScheme());
         enriched.put(Constants.HTTP_CLIENT_IP_ADDRESS, httpServletRequest.getRemoteAddr());
-        enriched.put(Constants.HTTP_HEADERS, extractHttpHeaders(httpServletRequest));
+
+        Map<String, List<String>> headers = extractHttpHeaders(httpServletRequest);
+        enriched.put(Constants.HTTP_HEADERS, headers);
+
+        enriched.put(TRACE_ID, headers.get(TRACE_ID));
+        enriched.put(SPAN_ID, headers.get(SPAN_ID));
+        enriched.put(PARENT_SPAN_ID, headers.get(PARENT_SPAN_ID));
+        enriched.put(SAMPLED, headers.get(SAMPLED));
+        enriched.put(FLAGS, headers.get(FLAGS));
+
         enriched.put(Constants.FHIR_REQUEST_PARAMETERS, parameters);
         return enriched;
     }

@@ -24,6 +24,7 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
+import org.apache.camel.spi.HeaderFilterStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -38,12 +39,13 @@ import java.util.Map;
 public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends DefaultProducer {
 
     private IGenericClient client;
+    private HeaderFilterStrategy headerFilterStrategy;
 
     public FhirProducer(Endpoint endpoint) {
         super(endpoint);
     }
 
-    protected synchronized IGenericClient getClient() throws Exception {
+    protected synchronized IGenericClient getClient(Exchange exchange) throws Exception {
         if (client == null) {
             FhirContext context = getEndpoint().getContext();
 
@@ -64,7 +66,7 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
             List<HapiClientInterceptorFactory> factories = getEndpoint().getInterceptableConfiguration().getHapiClientInterceptorFactories();
             if (factories != null) {
                 for (HapiClientInterceptorFactory factory : factories) {
-                    client.registerInterceptor(factory.newInstance(getEndpoint()));
+                    client.registerInterceptor(factory.newInstance(getEndpoint(), exchange));
                 }
             }
         }
@@ -88,7 +90,7 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
     public void process(Exchange exchange) throws Exception {
         ClientRequestFactory<?> requestFactory = getEndpoint().getClientRequestFactory();
         IClientExecutable<?, ?> executableClient = requestFactory.getClientExecutable(
-                getClient(),
+                getClient(exchange),
                 exchange.getIn().getBody(),
                 exchange.getIn().getHeaders());
         Object result = executableClient.execute();

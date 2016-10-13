@@ -20,6 +20,7 @@ import ca.uhn.fhir.rest.api.MethodOutcome;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.Conformance;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomIHETransactionEventTypeCodes;
@@ -119,7 +120,7 @@ public class TestIti65Success extends AbstractTestIti65 {
         assertEquals("IHE XDS Metadata", poitTypeCode.getCodeSystemName());
     }
 
-    @Test
+    @Ignore
     public void testSendEndpointMhd() throws Exception {
         MethodOutcome result = getProducerTemplate().requestBody("direct:input", provideAndRegister(), MethodOutcome.class);
         // printAsXML(result);

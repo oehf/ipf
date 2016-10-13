@@ -16,11 +16,31 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.rest.client.IClientInterceptor;
+import org.apache.camel.Exchange;
 
 /**
  * @author Dmytro Rud
  * @since 3.1
  */
 public interface HapiClientInterceptorFactory {
-    IClientInterceptor newInstance(FhirEndpoint endpoint);
+
+    /**
+     * Returns a new client interceptor
+     *
+     * @param endpoint fhir endpoint
+     * @param exchange Camel exchange
+     * @return client interceptor
+     */
+    IClientInterceptor newInstance(FhirEndpoint endpoint, Exchange exchange);
+
+    /**
+     * For backwards-compatibility only
+     *
+     * @param endpoint endpoint
+     * @return client interceptor
+     * @deprecated use {@link #newInstance(FhirEndpoint, Exchange)}
+     */
+    default IClientInterceptor newInstance(FhirEndpoint endpoint) {
+        return newInstance(endpoint, null);
+    }
 }
