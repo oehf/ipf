@@ -16,21 +16,35 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.FhirVersionEnum;
+import ca.uhn.fhir.context.PerformanceOptionsEnum;
+
 /**
- * Static configuration for FHIR transactions.
+ * Static configuration for FHIR transaction components
  *
  * @author Christian Ohr
  * @since 3.2
  */
 public class FhirTransactionConfiguration {
 
+    private final FhirVersionEnum fhirVersion;
     private final AbstractPlainProvider staticResourceProvider;
     private final ClientRequestFactory<?> staticClientRequestFactory;
     private boolean supportsLazyLoading;
+    private boolean deferModelScanning;
 
     public FhirTransactionConfiguration(
             AbstractPlainProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory) {
+        this(FhirVersionEnum.DSTU2_HL7ORG, resourceProvider, clientRequestFactory);
+    }
+
+    public FhirTransactionConfiguration(
+            FhirVersionEnum fhirVersion,
+            AbstractPlainProvider resourceProvider,
+            ClientRequestFactory<?> clientRequestFactory) {
+        this.fhirVersion = fhirVersion;
         this.staticResourceProvider = resourceProvider;
         this.staticClientRequestFactory = clientRequestFactory;
     }
@@ -41,6 +55,15 @@ public class FhirTransactionConfiguration {
 
     public ClientRequestFactory<?> getStaticClientRequestFactory() {
         return staticClientRequestFactory;
+    }
+
+    public FhirContext createFhirContext() {
+        FhirContext context = new FhirContext(fhirVersion);
+        context.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(context));
+        if (deferModelScanning) {
+            context.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
+        }
+        return context;
     }
 
     /**
@@ -57,4 +80,18 @@ public class FhirTransactionConfiguration {
         return supportsLazyLoading;
     }
 
+    public boolean isDeferModelScanning() {
+        return deferModelScanning;
+    }
+
+    /**
+     * By default, HAPI will scan each model type it encounters as soon as it encounters it. This scan includes a check
+     * for all fields within the type, and makes use of reflection to do this. While this process is not particularly significant
+     * on reasonably performant machines, on some devices it may be desirable to defer this scan. When the scan is deferred,
+     * objects will only be scanned when they are actually accessed, meaning that only types that are actually used in an
+     * application get scanned.
+     */
+    public void setDeferModelScanning(boolean deferModelScanning) {
+        this.deferModelScanning = deferModelScanning;
+    }
 }

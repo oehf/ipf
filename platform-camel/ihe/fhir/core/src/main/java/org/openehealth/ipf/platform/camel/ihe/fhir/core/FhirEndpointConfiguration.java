@@ -18,17 +18,22 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.StrictErrorHandler;
+import ca.uhn.fhir.rest.client.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.camel.util.jsse.SSLContextParameters;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
-import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
+import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
+import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
 import java.util.List;
 import java.util.Map;
 
@@ -71,13 +76,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     @UriParam
     private ClientRequestFactory<? extends IClientExecutable<?, ?>> clientRequestFactory;
 
-    @Getter
-    @UriParam
-    private String authUserName;
-
-    @Getter
-    @UriParam
-    private String authPassword;
 
     @Getter
     @UriParam
@@ -95,6 +93,10 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     @UriParam
     private boolean lazyLoadBundles = false;
 
+    @Getter
+    private FhirSecurityInformation securityInformation;
+
+
     /**
      * Only considered if {@link #lazyLoadBundles} is true. The (partial) results of paging requests are cached so that subsequent
      * requests only fetch resources that have not yet been requested.
@@ -104,13 +106,9 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     private boolean cacheBundles = true;
 
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
-        this(component, FhirContext.forDstu2Hl7Org(), path, parameters);
-    }
-
-    protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, FhirContext context, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
         this.path = path;
-        this.context = context;
+        this.context = component.createFhirContext();
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(
@@ -130,15 +128,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         } else if (!LENIENT.equals(parserErrorHandling)) {
             throw new IllegalArgumentException("Validation must be either " + LENIENT + " (default) or " + STRICT);
         }
-        boolean secure = component.getAndRemoveParameter(parameters, "secure", Boolean.class, false);
-        if (secure) {
-            throw new UnsupportedOperationException("secure transport not yet supported");
-        }
-        HttpClientBuilder clientBuilder = component.getAndRemoveOrResolveReferenceParameter(
-                parameters, "httpClientBuilder", HttpClientBuilder.class);
-        if (clientBuilder != null) {
-            setHttpClientBuilder(clientBuilder);
-        }
         Integer connectTimeout = component.getAndRemoveParameter(parameters, "connectionTimeout", Integer.class);
         if (connectTimeout != null) {
             setConnectTimeout(connectTimeout);
@@ -147,20 +136,36 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         if (timeout != null) {
             setTimeout(timeout);
         }
-        Boolean lazyLoadBundles = component.getAndRemoveParameter(parameters, LAZY_LOAD_BUNDLES, Boolean.class);
-        if (lazyLoadBundles != null) {
-            this.lazyLoadBundles = lazyLoadBundles;
-        }
-        Boolean cacheBundles = component.getAndRemoveParameter(parameters, CACHE_BUNDLES, Boolean.class);
-        if (cacheBundles != null) {
-            this.cacheBundles = cacheBundles;
-        }
 
-        authUserName = component.getAndRemoveParameter(
-                parameters, "authUserName", String.class, null);
-        authPassword = component.getAndRemoveParameter(
-                parameters, "authPassword", String.class, null);
+        setDisableServerValidation(component.getAndRemoveParameter(parameters, "disableServerValidation", Boolean.class, false));
+        lazyLoadBundles = component.getAndRemoveParameter(parameters, LAZY_LOAD_BUNDLES, Boolean.class, false);
+        cacheBundles = component.getAndRemoveParameter(parameters, CACHE_BUNDLES, Boolean.class, true);
 
+        // Security stuff
+        SSLContextParameters sslContextParameters = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "sslContextParameters", SSLContextParameters.class);
+        HostnameVerifier hostnameVerifier = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "hostnameVerifier", HostnameVerifier.class);
+        boolean secure = component.getAndRemoveParameter(parameters, "secure", Boolean.class, false);
+        String username = component.getAndRemoveParameter(parameters, "username", String.class);
+        String password = component.getAndRemoveParameter(parameters, "password", String.class);
+
+        if (sslContextParameters == null) {
+            Map<String, SSLContextParameters> sslContextParameterMap = component.getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
+            if (sslContextParameterMap.size() == 1) {
+                Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
+                sslContextParameters = entry.getValue();
+            } else if (sslContextParameterMap.size() > 1) {
+                throw new AmbiguousBeanException(SSLContextParameters.class);
+            }
+        }
+        this.securityInformation = new FhirSecurityInformation(
+                sslContextParameters != null ?
+                        sslContextParameters.createSSLContext(component.getCamelContext()) :
+                        (secure ? SSLContext.getDefault() : null),
+                hostnameVerifier,
+                username,
+                password);
     }
 
     public <T extends IClientExecutable<?, ?>> ClientRequestFactory<T> getClientRequestFactory() {
@@ -175,7 +180,18 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
         context.getRestfulClientFactory().setSocketTimeout(timeout);
     }
 
-    public void setHttpClientBuilder(HttpClientBuilder builder) {
-        context.getRestfulClientFactory().setHttpClient(builder.build());
+    /**
+     * By default, the client will query the server before the very first operation to download the server's conformance/metadata
+     * statement and verify that the server is appropriate for the given client.
+     * This check is only done once per server endpoint for a given FhirContext and is useful to prevent bugs or unexpected behaviour
+     * when talking to servers.
+     * <p>
+     * It may introduce unneccesary overhead however in circumstances where the client and server are known to be compatible.
+     * Setting this to true disables this check.
+     */
+    public void setDisableServerValidation(boolean disableServerValidation) {
+        context.getRestfulClientFactory().setServerValidationMode(disableServerValidation ?
+                ServerValidationModeEnum.NEVER :
+                ServerValidationModeEnum.ONCE);
     }
 }

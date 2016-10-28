@@ -34,9 +34,13 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti78.class);
 
-    public static void startServer(String contextDescriptor) throws ServletException {
+    public static void startServer(String contextDescriptor, boolean secure) throws ServletException {
         IpfFhirServlet servlet = new IpfFhirServlet();
-        startServer(servlet, contextDescriptor, false, FhirTestContainer.DEMO_APP_PORT, new MockedSender(), "FhirServlet");
+        startServer(servlet, contextDescriptor, secure, FhirTestContainer.DEMO_APP_PORT, new MockedSender(), "FhirServlet");
+
+    }
+
+    public static void startClient() {
         startClient(String.format("http://localhost:%d/", FhirTestContainer.DEMO_APP_PORT));
     }
 

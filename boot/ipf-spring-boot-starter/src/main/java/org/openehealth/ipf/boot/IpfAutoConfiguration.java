@@ -1,17 +1,31 @@
 package org.openehealth.ipf.boot;
 
+import org.apache.camel.util.jsse.CipherSuitesParameters;
+import org.apache.camel.util.jsse.ClientAuthentication;
+import org.apache.camel.util.jsse.KeyManagersParameters;
+import org.apache.camel.util.jsse.KeyStoreParameters;
+import org.apache.camel.util.jsse.SSLContextClientParameters;
+import org.apache.camel.util.jsse.SSLContextParameters;
+import org.apache.camel.util.jsse.SSLContextServerParameters;
+import org.apache.camel.util.jsse.SecureSocketProtocolsParameters;
+import org.apache.camel.util.jsse.TrustManagersParameters;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.commons.core.config.SpringConfigurationPostProcessor;
 import org.openehealth.ipf.commons.core.config.SpringRegistry;
 import org.openehealth.ipf.commons.map.SpringBidiMappingService;
 import org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,6 +34,9 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(IpfConfigurationProperties.class)
 public class IpfAutoConfiguration {
+
+    @Autowired
+    private IpfConfigurationProperties ipfConfigurationProperties;
 
     @Bean
     @ConditionalOnMissingBean(Registry.class)
@@ -53,4 +70,60 @@ public class IpfAutoConfiguration {
         return new SpringBidiMappingService();
     }
 
+
+    // Set up sslContextParameters bean from the Spring Boot server config. Can be used for e.g.
+    // serving MLLP endpoints or as producer configuration.
+
+    @Bean(name = "bootSslContextParameters")
+    @ConditionalOnExpression("${server.ssl.enabled} and ${ipf.commons.reuse-ssl-config}")
+    public SSLContextParameters sslContextParameters(ServerProperties serverProperties) {
+        Ssl sslConfig = serverProperties.getSsl();
+
+        // Keystore
+        KeyStoreParameters ksp = new KeyStoreParameters();
+        ksp.setResource(sslConfig.getKeyStore());
+        ksp.setPassword(sslConfig.getKeyStorePassword());
+        ksp.setProvider(sslConfig.getKeyStoreProvider());
+        ksp.setType(sslConfig.getKeyStoreType());
+        KeyManagersParameters kmp = new KeyManagersParameters();
+        kmp.setKeyStore(ksp);
+        kmp.setKeyPassword(sslConfig.getKeyPassword());
+
+        // Truststore
+        KeyStoreParameters tsp = new KeyStoreParameters();
+        tsp.setResource(sslConfig.getTrustStore());
+        tsp.setPassword(sslConfig.getTrustStorePassword());
+        tsp.setProvider(sslConfig.getTrustStoreProvider());
+        tsp.setType(sslConfig.getTrustStoreType());
+        TrustManagersParameters tmp = new TrustManagersParameters();
+        tmp.setKeyStore(tsp);
+
+        // Server-side TLS parameters
+        SSLContextServerParameters scsp = new SSLContextServerParameters();
+        if (sslConfig.getClientAuth() == Ssl.ClientAuth.WANT) {
+            scsp.setClientAuthentication(ClientAuthentication.WANT.name());
+        } else if (sslConfig.getClientAuth() == Ssl.ClientAuth.NEED) {
+            scsp.setClientAuthentication(ClientAuthentication.REQUIRE.name());
+        }
+        SecureSocketProtocolsParameters sspp = new SecureSocketProtocolsParameters();
+        sspp.setSecureSocketProtocol(Arrays.asList(sslConfig.getEnabledProtocols()));
+        scsp.setSecureSocketProtocols(sspp);
+        CipherSuitesParameters csp = new CipherSuitesParameters();
+        csp.setCipherSuite(Arrays.asList(sslConfig.getCiphers()));
+        scsp.setCipherSuites(csp);
+
+        // Client-side TLS parameters - assume the same configuration as server-side
+        SSLContextClientParameters sccp = new SSLContextClientParameters();
+        sccp.setSecureSocketProtocols(sspp);
+        sccp.setCipherSuites(csp);
+
+        SSLContextParameters scp = new SSLContextParameters();
+        scp.setCertAlias(sslConfig.getKeyAlias());
+        scp.setKeyManagers(kmp);
+        scp.setTrustManagers(tmp);
+        scp.setServerParameters(scsp);
+        scp.setClientParameters(sccp);
+
+        return scp;
+    }
 }

@@ -45,6 +45,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
 
     private FhirInteractionId fhirInteractionId;
 
+
     public FhirComponent(FhirInteractionId fhirInteractionId) {
         super(FhirEndpoint.class);
         this.fhirInteractionId = fhirInteractionId;
@@ -78,8 +79,12 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         DefaultFhirRegistry.getFhirRegistry(name).unregister(resourceProvider);
     }
 
+    public FhirContext createFhirContext() {
+        return getFhirComponentConfiguration().createFhirContext();
+    }
+
     protected FhirEndpointConfiguration<AuditDatasetType> createConfig(String remaining, Map<String, Object> parameters) throws Exception {
-        return new FhirEndpointConfiguration<>(this, FhirContext.forDstu2Hl7Org(), remaining, parameters);
+        return new FhirEndpointConfiguration<>(this, remaining, parameters);
     }
 
     @Override
@@ -134,5 +139,13 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
 
     public FhirInteractionId getInteractionId() {
         return fhirInteractionId;
+    }
+
+    /**
+     * Sets the FHIR interactionID. Prefer setting the interactionId
+     * @param fhirInteractionId
+     */
+    public void setFhirInteractionId(FhirInteractionId fhirInteractionId) {
+        this.fhirInteractionId = fhirInteractionId;
     }
 }

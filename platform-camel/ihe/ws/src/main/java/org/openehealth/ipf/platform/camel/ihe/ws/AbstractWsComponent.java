@@ -32,10 +32,9 @@ import java.util.Map;
 
 /**
  * Base component class for Web Service-based IHE components.
-
- * @param <AuditDatasetType> audit type
- * @param <ConfigType> configuration type
  *
+ * @param <AuditDatasetType> audit type
+ * @param <ConfigType>       configuration type
  * @author Dmytro Rud
  */
 abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDataset, ConfigType extends WsTransactionConfiguration, InteractionIdType extends WsInteractionId>
@@ -52,7 +51,8 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
     }
 
     protected InterceptorProvider getCustomInterceptors(Map<String, Object> parameters) {
-        AbstractBasicInterceptorProvider provider = new AbstractBasicInterceptorProvider() {};
+        AbstractBasicInterceptorProvider provider = new AbstractBasicInterceptorProvider() {
+        };
         provider.setInInterceptors(castList(resolveAndRemoveReferenceListParameter(
                 parameters, "inInterceptors", Interceptor.class)));
         provider.setInFaultInterceptors(castList(resolveAndRemoveReferenceListParameter(
@@ -61,15 +61,15 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
                 parameters, "outInterceptors", Interceptor.class)));
         provider.setOutFaultInterceptors(castList(resolveAndRemoveReferenceListParameter(
                 parameters, "outFaultInterceptors", Interceptor.class)));
-        
+
         return provider;
     }
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private List<Interceptor<? extends Message>> castList(
-			List<Interceptor> param) {
-		return (List<Interceptor<? extends Message>>) (List<?>) param;
-	}
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private List<Interceptor<? extends Message>> castList(
+            List<Interceptor> param) {
+        return (List<Interceptor<? extends Message>>) (List<?>) param;
+    }
 
     protected List<AbstractFeature> getFeatures(Map<String, Object> parameters) {
         return resolveAndRemoveReferenceListParameter(parameters, "features", AbstractFeature.class);
@@ -81,7 +81,7 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
 
     protected Map<String, Object> getProperties(Map<String, Object> parameters) {
         List<Map> mapList = resolveAndRemoveReferenceListParameter(parameters, "properties", Map.class);
-        return (mapList != null && mapList.size() == 1)? mapList.get(0) : null;
+        return (mapList != null && mapList.size() == 1) ? mapList.get(0) : null;
     }
 
     @Override
@@ -95,9 +95,8 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
     }
 
     /**
-     * @return
-     *      static configuration parameters of the Web Service which
-     *      server endpoints of this transaction.
+     * @return static configuration parameters of the Web Service which
+     * server endpoints of this transaction.
      */
     public ConfigType getWsTransactionConfiguration() {
         return interactionId.getWsTransactionConfiguration();

@@ -65,11 +65,22 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
     /**
      * Creates a configuration object.
      *
+     * @param uri endpoint URI
      * @param parameters URL parameters.
      * @return configuration object filled with values from the provided parameter map.
      */
-    protected abstract ConfigType createConfig(Map<String, Object> parameters) throws Exception;
+    protected abstract ConfigType createConfig(String uri, Map<String, Object> parameters) throws Exception;
 
+    /**
+     * Creates a configuration object.
+     *
+     * @param parameters URL parameters.
+     * @return configuration object filled with values from the provided parameter map
+     * @deprecated use {@link #createConfig(String, Map)}
+     */
+    protected ConfigType createConfig(Map<String, Object> parameters) throws Exception {
+        return createConfig(MllpEndpointConfiguration.UNKNOWN_URI, parameters);
+    }
 
     /**
      * Creates an endpoint object.
@@ -100,7 +111,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
             parameters.put("codec", DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME);
         }
 
-        ConfigType config = createConfig(parameters);
+        ConfigType config = createConfig(uri, parameters);
 
         Charset charset = null;
         try {

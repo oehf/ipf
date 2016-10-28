@@ -17,58 +17,119 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.Getter;
+import org.apache.camel.CamelException;
+import org.apache.camel.NoSuchBeanException;
+import org.apache.camel.RuntimeCamelException;
+import org.apache.camel.util.jsse.ClientAuthentication;
+import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
+import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpointConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Configuration of an MLLP endpoint.
+ *
  * @author Dmytro Rud
  */
 public class MllpEndpointConfiguration extends InterceptableEndpointConfiguration {
+
     private static final long serialVersionUID = -3604219045768985192L;
+    private static final Logger LOG = LoggerFactory.getLogger(MllpEndpointConfiguration.class);
+    protected static final String UNKNOWN_URI = "unknown";
 
-    @Getter private final ProtocolCodecFactory codecFactory;
+    @Getter
+    private final ProtocolCodecFactory codecFactory;
+    @Getter
+    private final boolean audit;
+    @Getter
+    private final SSLContext sslContext;
+    @Getter
+    private final ClientAuthType clientAuthType;
+    @Getter
+    private final String[] sslProtocols;
+    @Getter
+    private final String[] sslCiphers;
 
-    @Getter private final boolean audit;
-    @Getter private final SSLContext sslContext;
-    @Getter private final ClientAuthType clientAuthType;
-    @Getter private final String[] sslProtocols;
-    @Getter private final String[] sslCiphers;
+    @Getter
+    private final boolean supportSegmentFragmentation;
+    @Getter
+    private final int segmentFragmentationThreshold;
 
-    @Getter private final boolean supportSegmentFragmentation;
-    @Getter private final int segmentFragmentationThreshold;
+    @Getter
+    private ConsumerDispatchingInterceptor dispatcher;
 
-    @Getter private ConsumerDispatchingInterceptor dispatcher;
-
-
+    /**
+     * @deprecated
+     */
     protected MllpEndpointConfiguration(MllpComponent<?> component, Map<String, Object> parameters) throws Exception {
-        super(component, parameters);
-        codecFactory = component.getCamelContext().getRegistry().lookupByNameAndType(
-                extractBeanName((String) parameters.get("codec")),
-                ProtocolCodecFactory.class);
+        this(component, UNKNOWN_URI, parameters);
+    }
 
+    protected MllpEndpointConfiguration(MllpComponent<?> component, String uri, Map<String, Object> parameters) throws Exception {
+        super(component, parameters);
+        codecFactory = component.resolveAndRemoveReferenceParameter(parameters, "codec", ProtocolCodecFactory.class);
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
 
-        clientAuthType = component.getAndRemoveParameter(parameters, "clientAuth",
-                ClientAuthType.class, ClientAuthType.NONE);
-
+        // Will only be effective if sslContext is set and overrides
         String sslProtocolsString = component.getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
         String sslCiphersString = component.getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
-        sslProtocols = sslProtocolsString != null ? sslProtocolsString.split(",") : null;
-        sslCiphers = sslCiphersString != null ? sslCiphersString.split(",") : null;
+        this.sslProtocols = sslProtocolsString != null ? sslProtocolsString.split("\\s*,\\s*") : null;
+        this.sslCiphers = sslCiphersString != null ? sslCiphersString.split("\\s*,\\s*") : null;
 
+        ClientAuthType configuredClientAuthType = component.getAndRemoveParameter(parameters, "clientAuth", ClientAuthType.class, ClientAuthType.NONE);
         boolean secure = component.getAndRemoveParameter(parameters, "secure", boolean.class, false);
-        sslContext = secure ? component.resolveAndRemoveReferenceParameter(
-                parameters,
-                "sslContext",
-                SSLContext.class,
-                SSLContext.getDefault()) : null;
+        SSLContextParameters configuredSslContextParameters = component.resolveAndRemoveReferenceParameter(parameters, "sslContextParameters", SSLContextParameters.class);
+        SSLContext configuredSslContext = component.resolveAndRemoveReferenceParameter(parameters, "sslContext", SSLContext.class);
 
+        if (secure || configuredSslContextParameters != null || configuredSslContext != null) {
+            LOG.debug("Setting up TLS security for MLLP endpoint {}", uri);
+            if (configuredSslContext == null) {
+                if (configuredSslContextParameters == null) {
+                    Map<String, SSLContextParameters> sslContextParameterMap = component.getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
+                    if (sslContextParameterMap.size() == 1) {
+                        Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
+                        configuredSslContextParameters = entry.getValue();
+                        LOG.debug("Setting up SSLContext from SSLContextParameters bean with name {}", entry.getKey());
+                    } else if (sslContextParameterMap.size() > 1) {
+                        throw new AmbiguousBeanException(SSLContextParameters.class);
+                    }
+                } else {
+                    LOG.debug("Setting up SSLContext from SSLContextParameters provided in endpoint URI");
+                }
+                if (configuredSslContextParameters == null) {
+                    LOG.debug("Setting up default SSLContext");
+                    configuredSslContext = SSLContext.getDefault();
+                } else {
+                    configuredSslContext = configuredSslContextParameters.createSSLContext(component.getCamelContext());
+                    // If not already specified, extract client authentication
+                    if (configuredClientAuthType == null) {
+                        String clientAuthenticationString = configuredSslContextParameters.getServerParameters().getClientAuthentication();
+                        if (clientAuthenticationString != null) {
+                            ClientAuthentication clientAuthentication = ClientAuthentication.valueOf(clientAuthenticationString.toUpperCase());
+                            switch (clientAuthentication) {
+                                case WANT: configuredClientAuthType = ClientAuthType.WANT; break;
+                                case REQUIRE: configuredClientAuthType = ClientAuthType.MUST; break;
+                                case NONE: configuredClientAuthType = ClientAuthType.NONE;
+                            }
+                        }
+                    }
+
+                }
+            }
+            this.sslContext = configuredSslContext;
+        } else {
+            this.sslContext = null;
+        }
+
+        clientAuthType = configuredClientAuthType;
         supportSegmentFragmentation = component.getAndRemoveParameter(
                 parameters, "supportSegmentFragmentation", boolean.class, false);
         segmentFragmentationThreshold = component.getAndRemoveParameter(
@@ -76,11 +137,6 @@ public class MllpEndpointConfiguration extends InterceptableEndpointConfiguratio
 
         dispatcher = component.resolveAndRemoveReferenceParameter(parameters, "dispatcher", ConsumerDispatchingInterceptor.class);
 
-    }
-
-
-    private static String extractBeanName(String originalBeanName) {
-        return originalBeanName.startsWith("#") ? originalBeanName.substring(1) : originalBeanName;
     }
 
 }

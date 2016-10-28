@@ -32,7 +32,8 @@ public class TestIti78UnknownTarget extends AbstractTestIti78 {
 
     @BeforeClass
     public static void setUpClass() throws ServletException {
-        startServer(CONTEXT_DESCRIPTOR);
+        startServer(CONTEXT_DESCRIPTOR, false);
+        startClient();
     }
 
     @Test(expected = ResourceNotFoundException.class)

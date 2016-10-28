@@ -16,9 +16,13 @@
 
 package org.openehealth.ipf.boot.hl7v2;
 
+import ca.uhn.hl7v2.parser.ParserConfiguration;
+import ca.uhn.hl7v2.util.Home;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
 
@@ -49,7 +53,53 @@ public class IpfHl7v2ConfigurationProperties {
     /**
      * Whether to instantiate a continuation cache
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private boolean caching = false;
+
+    /**
+     * Whether ID generator to use. One of "file" (default), "uuid", "nano". Alternatively, you can
+     * provide your own bean of type {@link ca.uhn.hl7v2.util.idgenerator.IDGenerator}.
+     */
+    @Getter @Setter
+    private String generator = "file";
+
+    @Getter
+    @NestedConfigurationProperty
+    private final FileIdGeneratorProperties idGenerator = new FileIdGeneratorProperties();
+
+    public static class FileIdGeneratorProperties  {
+
+        /**
+         * How many IDs to be generated internally before incrementing the file value
+         */
+        @Getter @Setter private int lo = 100;
+
+        /**
+         * Directory of the ID file
+         */
+        @Getter @Setter private String directory = Home.getHomeDirectory().getAbsolutePath();
+
+        /**
+         * Name of the ID file
+         */
+        @Getter @Setter private String fileMame = "id_file";
+
+        /**
+         * If set to <code>false</code> (default is <code>true</code>),
+         * retrieving a new ID may fail if the ID file in the home
+         * directory can not be written/read. If set to true, failures
+         * will be ignored, which means that IDs may be repeated after
+         * a JVM restart.
+         */
+        @Getter @Setter private boolean neverFail = true;
+
+        /**
+         * If set to <code>true</code> (default is <code>false</code>) the generator
+         * minimizes the number of disk reads by caching the last read value. This means
+         * one less disk read per X number of IDs generated, but also means that multiple
+         * instances of this generator may clobber each other's values.
+         */
+        @Getter @Setter private boolean minimizeReads = false;
+    }
+
 }

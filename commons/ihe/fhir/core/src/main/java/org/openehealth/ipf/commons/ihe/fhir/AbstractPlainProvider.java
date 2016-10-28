@@ -33,7 +33,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.core.Constants.*;
+import static org.openehealth.ipf.commons.ihe.core.Constants.FLAGS;
+import static org.openehealth.ipf.commons.ihe.core.Constants.PARENT_SPAN_ID;
+import static org.openehealth.ipf.commons.ihe.core.Constants.SAMPLED;
+import static org.openehealth.ipf.commons.ihe.core.Constants.SPAN_ID;
+import static org.openehealth.ipf.commons.ihe.core.Constants.TRACE_ID;
+
 /**
  * Abstract plain provider that allows subclasses to forward the received payload into the
  * Camel route served by the consumer. Note that this can be subclassed for writing so-called
@@ -247,20 +252,19 @@ public abstract class AbstractPlainProvider implements Serializable {
 
     /**
      * @param httpServletRequest HTTP servlet request.
-     * @return A map from header name to a list of header values.  This map is never <code>null</code>,
-     * its values are never <code>null</code> and never empty.
+     * @return A map mapping header names to list of header values.
      */
     private static Map<String, List<String>> extractHttpHeaders(HttpServletRequest httpServletRequest) {
         Map<String, List<String>> result = new HashMap<>();
-        Enumeration<String> enumNames = httpServletRequest.getHeaderNames();
-        if (enumNames != null) {
-            while (enumNames.hasMoreElements()) {
-                String name = enumNames.nextElement();
-                Enumeration<String> enumValues = httpServletRequest.getHeaders(name);
-                if (enumValues != null) {
+        Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
+        if (headerNames != null) {
+            while (headerNames.hasMoreElements()) {
+                String name = headerNames.nextElement();
+                Enumeration<String> headers = httpServletRequest.getHeaders(name);
+                if (headers != null) {
                     List<String> list = new ArrayList<>();
-                    while (enumValues.hasMoreElements()) {
-                        list.add(enumValues.nextElement());
+                    while (headers.hasMoreElements()) {
+                        list.add(headers.nextElement());
                     }
                     if (!list.isEmpty()) {
                         result.put(name, list);

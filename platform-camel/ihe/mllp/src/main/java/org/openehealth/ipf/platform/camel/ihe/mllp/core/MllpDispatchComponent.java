@@ -49,8 +49,8 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
     private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
     @Override
-    protected MllpDispatchEndpointConfiguration createConfig(Map<String, Object> parameters) throws Exception {
-        return new MllpDispatchEndpointConfiguration(this, parameters);
+    protected MllpDispatchEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
+        return new MllpDispatchEndpointConfiguration(this, uri, parameters);
     }
 
     @Override

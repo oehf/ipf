@@ -21,6 +21,7 @@ import org.apache.camel.Producer;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.cxf.common.i18n.Exception;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.feature.AbstractFeature;
@@ -38,6 +39,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +105,7 @@ public abstract class AbstractWsEndpoint<
 
     private String serviceAddress;
     private String serviceUrl;
-    private boolean secure;
+
     private boolean audit = true;
     private AsynchronyCorrelator<AuditDatasetType> correlator = null;
     private InterceptorProvider customInterceptors = null;
@@ -113,6 +115,13 @@ public abstract class AbstractWsEndpoint<
     private List<String> schemaLocations;
     private Class<? extends AbstractWebService> serviceClass;
     private Map<String, Object> properties;
+
+    private boolean secure;
+    private SSLContextParameters sslContextParameters;
+    private HostnameVerifier hostnameVerifier;
+    private String username;
+    private String password;
+
 
     /**
      * Constructs the endpoint.
@@ -143,7 +152,7 @@ public abstract class AbstractWsEndpoint<
     }
 
     private void configure() {
-        serviceUrl = (secure ? ENDPOINT_PROTOCOL_SECURE : ENDPOINT_PROTOCOL) + address;
+        serviceUrl = (isSecure() ? ENDPOINT_PROTOCOL_SECURE : ENDPOINT_PROTOCOL) + address;
         serviceAddress = "/" + address;
     }
 
@@ -252,6 +261,41 @@ public abstract class AbstractWsEndpoint<
     public void setSecure(boolean secure) {
         this.secure = secure;
         configure();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    @ManagedAttribute(description = "Basic Authentication Username")
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @ManagedAttribute(description = "Basic Authentication Password")
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public SSLContextParameters getSslContextParameters() {
+        return sslContextParameters;
+    }
+
+    public void setSslContextParameters(SSLContextParameters sslContextParameters) {
+        this.sslContextParameters = sslContextParameters;
+        setSecure(true);
+    }
+
+    public HostnameVerifier getHostnameVerifier() {
+        return hostnameVerifier;
+    }
+
+    public void setHostnameVerifier(HostnameVerifier hostnameVerifier) {
+        this.hostnameVerifier = hostnameVerifier;
     }
 
     /**
@@ -390,7 +434,6 @@ public abstract class AbstractWsEndpoint<
      *
      * @param clientFactory JAX-WS client factory instance.
      * @return Camel producer instance.
-     *
      * @since 3.1
      */
     public abstract AbstractWsProducer<AuditDatasetType, ConfigType, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint, JaxWsClientFactory<AuditDatasetType> clientFactory);

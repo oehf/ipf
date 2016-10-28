@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core.custom;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
@@ -30,22 +31,36 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * @author Christian Ohr
  * @since 3.1
  */
-public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> extends FhirComponent<AuditDatasetType> {
+public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> extends FhirComponent<AuditDatasetType>
+        implements FhirInteractionId {
 
     @Getter @Setter
     private AuditStrategy<AuditDatasetType> clientAuditStrategy;
     @Getter @Setter
     private AuditStrategy<AuditDatasetType> serverAuditStrategy;
     @Getter @Setter
+    private String name;
+    @Getter @Setter
+    private String description;
+    @Getter @Setter
+    private boolean query;
+    @Getter @Setter
     private FhirTransactionConfiguration fhirComponentConfiguration;
+
+    @Override
+    public FhirTransactionConfiguration getFhirTransactionConfiguration() {
+        return fhirComponentConfiguration;
+    }
 
     public CustomFhirComponent() {
         super(null);
+        setFhirInteractionId(this);
     }
 
     @Override
     protected FhirEndpoint<?, ?> doCreateEndpoint(String uri, FhirEndpointConfiguration<AuditDatasetType> config) {
         return new CustomFhirEndpoint(uri, this, config);
     }
+
 
 }

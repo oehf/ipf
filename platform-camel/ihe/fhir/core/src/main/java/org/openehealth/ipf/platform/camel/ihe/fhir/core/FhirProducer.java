@@ -17,7 +17,10 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import ca.uhn.fhir.rest.client.IGenericClient;
+import ca.uhn.fhir.rest.client.IRestfulClientFactory;
+import ca.uhn.fhir.rest.client.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import org.apache.camel.Endpoint;
@@ -25,8 +28,11 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.camel.spi.HeaderFilterStrategy;
+import org.openehealth.ipf.commons.ihe.core.SecurityInformation;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
+import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.List;
@@ -48,27 +54,29 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
     protected synchronized IGenericClient getClient(Exchange exchange) throws Exception {
         if (client == null) {
             FhirContext context = getEndpoint().getContext();
+            SslAwareApacheRestfulClientFactory clientFactory = (SslAwareApacheRestfulClientFactory)context.getRestfulClientFactory();
+            FhirEndpointConfiguration<AuditDatasetType> config = getEndpoint().getInterceptableConfiguration();
+            FhirSecurityInformation securityInformation = config.getSecurityInformation();
+            clientFactory.setSecurityInformation(securityInformation);
 
             // For the producer, the path is supposed to be the server URL
-            String path = getEndpoint().getInterceptableConfiguration().getPath();
+            String path = config.getPath();
 
-            // For now, assume http as only protocol
-            path = "http://" + path;
-            client = context.newRestfulGenericClient(path);
+            path = (config.getSecurityInformation().isSecure() ? "https://" : "http://") + path;
+            client = clientFactory.newGenericClient(path);
 
-            if (getEndpoint().getInterceptableConfiguration().getAuthUserName() != null) {
-                client.registerInterceptor(new BasicAuthInterceptor(
-                        getEndpoint().getInterceptableConfiguration().getAuthUserName(),
-                        getEndpoint().getInterceptableConfiguration().getAuthPassword()));
+            if (securityInformation != null && securityInformation.getUsername() != null) {
+                client.registerInterceptor(new BasicAuthInterceptor(securityInformation.getUsername(), securityInformation.getPassword()));
             }
 
             // deploy user-defined HAPI interceptors
-            List<HapiClientInterceptorFactory> factories = getEndpoint().getInterceptableConfiguration().getHapiClientInterceptorFactories();
+            List<HapiClientInterceptorFactory> factories = config.getHapiClientInterceptorFactories();
             if (factories != null) {
                 for (HapiClientInterceptorFactory factory : factories) {
                     client.registerInterceptor(factory.newInstance(getEndpoint(), exchange));
                 }
             }
+
         }
         return client;
     }

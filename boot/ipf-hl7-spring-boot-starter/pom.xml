@@ -30,7 +30,7 @@
 
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-hl7</artifactId>
+            <artifactId>camel-hl7-starter</artifactId>
         </dependency>
 
         <!-- IPF Support -->

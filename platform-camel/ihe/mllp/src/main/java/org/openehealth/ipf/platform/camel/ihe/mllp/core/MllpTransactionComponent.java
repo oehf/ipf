@@ -47,8 +47,8 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
     }
 
     @Override
-    protected MllpTransactionEndpointConfiguration createConfig(Map<String, Object> parameters) throws Exception {
-        return new MllpTransactionEndpointConfiguration(this, parameters);
+    protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
+        return new MllpTransactionEndpointConfiguration(this, uri, parameters);
     }
 
     @Override

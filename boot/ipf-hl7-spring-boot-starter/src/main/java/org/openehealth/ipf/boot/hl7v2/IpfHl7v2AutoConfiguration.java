@@ -19,6 +19,13 @@ package org.openehealth.ipf.boot.hl7v2;
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.conf.store.ClasspathProfileStore;
+import ca.uhn.hl7v2.conf.store.ProfileStore;
+import ca.uhn.hl7v2.parser.ParserConfiguration;
+import ca.uhn.hl7v2.util.idgenerator.FileBasedGenerator;
+import ca.uhn.hl7v2.util.idgenerator.IDGenerator;
+import ca.uhn.hl7v2.util.idgenerator.IpfHiLoIdGenerator;
+import ca.uhn.hl7v2.util.idgenerator.NanoTimeGenerator;
+import ca.uhn.hl7v2.util.idgenerator.UUIDGenerator;
 import ca.uhn.hl7v2.validation.ValidationContext;
 import ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
 import org.apache.camel.CamelContext;
@@ -36,14 +43,18 @@ import org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXManagerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +69,8 @@ public class IpfHl7v2AutoConfiguration {
 
     private static final String IPF_HL7_DEFINITIONS_PREFIX = "org.openehealth.ipf.commons.ihe.hl7v2.definitions";
 
+    @Autowired
+    private IpfHl7v2ConfigurationProperties properties;
 
     @Bean
     @ConditionalOnMissingBean(HL7MLLPCodec.class)
@@ -87,12 +100,55 @@ public class IpfHl7v2AutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(CustomModelClassFactory.class)
+    public ProfileStore profileStore() {
+        return new ClasspathProfileStore("/org/openehealth/ipf/gazelle/validation/profile/v2");
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ValidationContext.class)
+    public ValidationContext validationContext() {
+        return ValidationContextFactory.noValidation();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(IDGenerator.class)
+    @ConditionalOnProperty(prefix = "ipf.hl7v2", name = "generator", havingValue = "file", matchIfMissing = true)
+    public IDGenerator fileGenerator() {
+        return new IpfHiLoIdGenerator(properties.getIdGenerator());
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(IDGenerator.class)
+    @ConditionalOnProperty(prefix = "ipf.hl7v2", name = "generator", havingValue = "uuid")
+    public IDGenerator uuidGenerator() {
+        return new UUIDGenerator();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(IDGenerator.class)
+    @ConditionalOnProperty(prefix = "ipf.hl7v2", name = "generator", havingValue = "nano")
+    public IDGenerator nanoGenerator() {
+        return new NanoTimeGenerator();
+    }
+
+    @ConfigurationProperties(prefix = "ipf.hl7v2.parser")
+    @Bean
+    public ParserConfiguration parserConfiguration() {
+        return new ParserConfiguration();
+    }
+
+    @Bean
     @ConditionalOnMissingBean(HapiContext.class)
-    public HapiContext hapiContext(CustomModelClassFactory modelClassFactory) {
+    public HapiContext hapiContext(CustomModelClassFactory modelClassFactory, ProfileStore profileStore,
+                                   ValidationContext validationContext, ParserConfiguration parserConfiguration,
+                                   IDGenerator idGenerator) {
         HapiContext context = new DefaultHapiContext();
         context.setModelClassFactory(modelClassFactory);
-        context.setValidationContext((ValidationContext) ValidationContextFactory.noValidation());
-        context.setProfileStore(new ClasspathProfileStore("/org/openehealth/ipf/gazelle/validation/profile/v2"));
+        context.setValidationContext(validationContext);
+        context.setProfileStore(profileStore);
+        context.setParserConfiguration(parserConfiguration);
+        context.getParserConfiguration().setIdGenerator(idGenerator);
         return context;
     }
 

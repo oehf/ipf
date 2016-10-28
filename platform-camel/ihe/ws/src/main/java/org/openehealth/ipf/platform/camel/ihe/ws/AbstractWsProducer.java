@@ -15,15 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
-import java.util.UUID;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.soap.SOAPFaultException;
-
 import com.ctc.wstx.exc.WstxEOFException;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
+import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.endpoint.ClientImpl;
 import org.apache.cxf.frontend.ClientProxy;
@@ -34,12 +31,20 @@ import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsSecurityInformation;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.net.ssl.SSLContext;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.soap.SOAPFaultException;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
@@ -48,11 +53,8 @@ import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserD
 /**
  * Camel producer used to make calls to a Web Service.
  *
- * @param <InType>
- *     type of input data (i.e. of the data got from the route).
- * @param <OutType>
- *     type of output data (i.e. of the data returned to the route).
- *
+ * @param <InType>  type of input data (i.e. of the data got from the route).
+ * @param <OutType> type of output data (i.e. of the data returned to the route).
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
@@ -65,25 +67,20 @@ public abstract class AbstractWsProducer<
     private final Class<InType> requestClass;
     private final Class<OutType> responseClass;
 
-   
 
     /**
      * Constructs the producer.
-     * 
-     * @param endpoint
-     *          the endpoint that creates this producer.
-     * @param clientFactory
-     *          the factory for clients to produce messages for the service.
-     * @param requestClass
-     *          type of request messages.
+     *
+     * @param endpoint      the endpoint that creates this producer.
+     * @param clientFactory the factory for clients to produce messages for the service.
+     * @param requestClass  type of request messages.
      */
     @SuppressWarnings("unchecked")
     public AbstractWsProducer(
             AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint,
             JaxWsClientFactory<AuditDatasetType> clientFactory,
-            Class<InType> requestClass, 
-            Class<OutType> responseClass)
-    {
+            Class<InType> requestClass,
+            Class<OutType> responseClass) {
         super(endpoint);
         notNull(clientFactory, "client factory cannot be null");
         notNull(requestClass, "request class cannot be null");
@@ -93,11 +90,11 @@ public abstract class AbstractWsProducer<
         this.responseClass = responseClass;
     }
 
-    
+
     @Override
     public void process(Exchange exchange) throws Exception {
         // prepare
-        InType body = exchange.getIn().getMandatoryBody(requestClass); 
+        InType body = exchange.getIn().getMandatoryBody(requestClass);
         Object client = getClient();
         configureClient(client);
         BindingProvider bindingProvider = (BindingProvider) client;
@@ -116,19 +113,18 @@ public abstract class AbstractWsProducer<
         // get and analyse WS-Addressing asynchrony configuration
         String replyToUri =
                 getWsTransactionConfiguration().isAllowAsynchrony()
-                    ? StringUtils.trimToNull(exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class))
-                    : null; 
+                        ? StringUtils.trimToNull(exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class))
+                        : null;
 
         // for asynchronous interaction: configure WSA headers and store correlation data
         if ((replyToUri != null) ||
-            Boolean.TRUE.equals(requestContext.get(AsynchronyCorrelator.FORCE_CORRELATION)))
-        {
+                Boolean.TRUE.equals(requestContext.get(AsynchronyCorrelator.FORCE_CORRELATION))) {
             String messageId = "urn:uuid:" + UUID.randomUUID().toString();
             configureWSAHeaders(messageId, replyToUri, requestContext);
 
             AsynchronyCorrelator<AuditDatasetType> correlator = getEndpoint().getCorrelator();
             correlator.storeServiceEndpointUri(messageId, getEndpoint().getEndpointUri());
-            
+
             String correlationKey = exchange.getIn().getHeader(
                     AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME,
                     String.class);
@@ -141,7 +137,7 @@ public abstract class AbstractWsProducer<
                 correlator.storeAlternativeKeys(messageId, alternativeKeys);
             }
         }
-        
+
         // invoke
         exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
         OutType result = null;
@@ -152,9 +148,8 @@ public abstract class AbstractWsProducer<
             // handle http://www.w3.org/TR/2006/NOTE-soap11-ror-httpbinding-20060321/
             // see also: https://issues.apache.org/jira/browse/CXF-3768
             if ((replyToUri == null) ||
-                (fault.getCause() == null) ||
-                ! (fault.getCause() instanceof WstxEOFException))
-            {
+                    (fault.getCause() == null) ||
+                    !(fault.getCause() instanceof WstxEOFException)) {
                 throw fault;
             }
         }
@@ -173,7 +168,7 @@ public abstract class AbstractWsProducer<
             exchange.setProperty(Exchange.CHARSET_NAME,
                     responseContext.get(org.apache.cxf.message.Message.ENCODING));
             responseMessage.setBody(result, responseClass);
-        } 
+        }
     }
 
 
@@ -182,7 +177,7 @@ public abstract class AbstractWsProducer<
      */
     protected abstract OutType callService(Object client, InType body) throws Exception;
 
-    
+
     /**
      * Enriches the given Web Service request context
      * on the basis of the given Camel exchange, and vice versa.
@@ -199,11 +194,9 @@ public abstract class AbstractWsProducer<
      * <p>
      * Per default, this method returns <code>null</code>.
      *
-     * @param exchange
-     *      Camel exchange containing a request message.
-     * @return
-     *      A non-empty collection of non-<code>null</code> alternative keys,
-     *      or <code>null</code>, when no keys could have been extracted.
+     * @param exchange Camel exchange containing a request message.
+     * @return A non-empty collection of non-<code>null</code> alternative keys,
+     * or <code>null</code>, when no keys could have been extracted.
      */
     protected String[] getAlternativeRequestKeys(Exchange exchange) {
         return null;
@@ -225,9 +218,9 @@ public abstract class AbstractWsProducer<
 
 
     /**
-     * Sets thread safety & timeout options of the given CXF client.  
+     * Sets thread safety & timeout options of the given CXF client.
      */
-    protected void configureClient(Object o) {
+    protected void configureClient(Object o) throws Exception {
         ClientImpl client = (ClientImpl) ClientProxy.getClient(o);
         client.setThreadLocalRequestContext(true);
         client.setSynchronousTimeout(Integer.MAX_VALUE);
@@ -238,8 +231,7 @@ public abstract class AbstractWsProducer<
             client.getEndpoint().putAll(getEndpoint().getProperties());
         }
     }
-    
-    
+
     /**
      * Request context is shared among subsequent requests, so we have to clean it.
      */
@@ -248,10 +240,10 @@ public abstract class AbstractWsProducer<
         requestContext.remove(org.apache.cxf.message.Message.PROTOCOL_HEADERS);
         requestContext.remove(Header.HEADER_LIST);
     }
-    
-    
+
+
     /**
-     * Initializes WS-Addressing headers MessageID and ReplyTo, 
+     * Initializes WS-Addressing headers MessageID and ReplyTo,
      * and stores them into the given message context.
      */
     private static void configureWSAHeaders(String messageId, String replyToUri, WrappedMessageContext context) {
@@ -277,18 +269,32 @@ public abstract class AbstractWsProducer<
             apropos.setReplyTo(endpointReference);
         }
     }
-    
-    
+
     /**
      * Retrieves the client stub for the Web Service.
      * <p>
      * This method caches the client stub instance and therefore requires thread
      * synchronization.
-     * 
+     *
      * @return the client stub.
      */
-    protected Object getClient() {
-        return clientFactory.getClient();
+    protected Object getClient() throws Exception {
+        SSLContextParameters sslContextParameters = getEndpoint().getSslContextParameters();
+        if (sslContextParameters == null) {
+            Map<String, SSLContextParameters> sslContextParameterMap = getEndpoint().getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
+            if (sslContextParameterMap.size() == 1) {
+                Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
+                sslContextParameters = entry.getValue();
+            } else if (sslContextParameterMap.size() > 1) {
+                throw new AmbiguousBeanException(SSLContextParameters.class);
+            }
+        }
+        SSLContext sslContext = sslContextParameters != null ?
+                sslContextParameters.createSSLContext(getEndpoint().getCamelContext()) :
+                null;
+        return clientFactory.getClient(
+                new WsSecurityInformation(sslContext, getEndpoint().getHostnameVerifier(),
+                        getEndpoint().getUsername(), getEndpoint().getPassword()));
     }
 
 
@@ -298,8 +304,8 @@ public abstract class AbstractWsProducer<
     public WsTransactionConfiguration getWsTransactionConfiguration() {
         return clientFactory.getWsTransactionConfiguration();
     }
-    
-    
+
+
     public Class<InType> getRequestClass() {
         return requestClass;
     }

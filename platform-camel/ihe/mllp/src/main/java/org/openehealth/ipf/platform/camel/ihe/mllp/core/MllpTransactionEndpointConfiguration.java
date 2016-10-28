@@ -38,9 +38,15 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
     @Getter private final InteractiveContinuationStorage interactiveContinuationStorage;
     @Getter private final boolean autoCancel;
 
-
+    /**
+     * @deprecated
+     */
     protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration> component, Map<String, Object> parameters) throws Exception {
-        super(component, parameters);
+        this(component, UNKNOWN_URI, parameters);
+    }
+
+    protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration> component, String uri, Map<String, Object> parameters) throws Exception {
+        super(component, uri, parameters);
 
         supportUnsolicitedFragmentation = component.getAndRemoveParameter(
                 parameters, "supportUnsolicitedFragmentation", boolean.class, false);

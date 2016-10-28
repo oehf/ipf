@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.ws;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.ws.addressing.MAPAggregator;
 import org.apache.cxf.ws.addressing.soap.MAPCodec;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
@@ -81,11 +82,11 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
 
     /**
      * Returns a client stub for the web-service.
-     * <p>
-     * This method reuses the last stub created by the current thread. 
-     * @return the client stub.
+     *
+     * @param securityInformation Conduit-related security information or null if no security shall be set
+     * @return the client stub
      */
-    public synchronized Object getClient() {
+    public synchronized Object getClient(WsSecurityInformation securityInformation) {
         if (threadLocalPort.get() == null) {
             URL wsdlURL = getClass().getClassLoader().getResource(wsTransactionConfiguration.getWsdlLocation());
             Service service = Service.create(wsdlURL, wsTransactionConfiguration.getServiceName());
@@ -93,14 +94,19 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
             Client client = ClientProxy.getClient(port);
             configureBinding(port);
             configureInterceptors(client);
-
+            if (securityInformation != null) {
+                securityInformation.configureHttpConduit((HTTPConduit)client.getConduit());
+            }
             threadLocalPort.set(port);
             LOG.debug("Created client adapter for: {}", wsTransactionConfiguration.getServiceName());
         }        
         return threadLocalPort.get();
     }
 
-    
+    public synchronized Object getClient() {
+        return getClient(null);
+    }
+
     /**
      * @return the service info of this factory.
      */

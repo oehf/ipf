@@ -29,6 +29,7 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
 import java.util.concurrent.Future
+import java.util.concurrent.TimeUnit
 
 import static org.junit.Assert.*
 
@@ -44,7 +45,7 @@ class MllpTestContainer {
     static MockedSender auditSender
     static ClassPathXmlApplicationContext appContext
 
-    static String TIMEOUT = '300000'
+    static String TIMEOUT = '15000'
     
     /**
      * Initializes a test on the basis of a Spring descriptor.
@@ -53,6 +54,9 @@ class MllpTestContainer {
         appContext = new ClassPathXmlApplicationContext(descriptorFile)
         producerTemplate = appContext.getBean('template', ProducerTemplate.class)
         camelContext = appContext.getBean('camelContext', CamelContext.class)
+        // shorten timeout on shutdown
+        camelContext.shutdownStrategy.timeout = 20L
+        camelContext.shutdownStrategy.timeUnit = TimeUnit.SECONDS
         
         auditSender = new MockedSender()
         AuditorModuleContext.context.sender = auditSender

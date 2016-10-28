@@ -46,7 +46,8 @@ public class TestIti78Success extends AbstractTestIti78 {
 
     @BeforeClass
     public static void setUpClass() throws ServletException {
-        startServer(CONTEXT_DESCRIPTOR);
+        startServer(CONTEXT_DESCRIPTOR, false);
+        startClient();
     }
 
     @Test

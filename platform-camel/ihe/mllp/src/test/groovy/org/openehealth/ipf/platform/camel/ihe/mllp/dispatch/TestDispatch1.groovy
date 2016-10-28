@@ -15,13 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.dispatch
 
-import org.apache.camel.impl.DefaultExchange
 import org.junit.BeforeClass
-import org.junit.Test
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-
-import static org.junit.Assert.assertEquals
-import static org.openehealth.ipf.platform.camel.hl7.HL7v2.validatingProcessor
 
 /**
  * @author Dmytro Rud

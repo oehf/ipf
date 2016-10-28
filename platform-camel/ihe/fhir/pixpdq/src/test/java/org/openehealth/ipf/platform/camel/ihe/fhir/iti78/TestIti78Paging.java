@@ -35,7 +35,8 @@ public class TestIti78Paging extends AbstractTestIti78 {
 
     @BeforeClass
     public static void setUpClass() throws ServletException {
-        startServer(CONTEXT_DESCRIPTOR);
+        startServer(CONTEXT_DESCRIPTOR, false);
+        startClient();
     }
 
 

@@ -44,8 +44,8 @@ public class Iti31Component extends MllpTransactionComponent<Iti31AuditDataset> 
     }
 
     @Override
-    protected MllpTransactionEndpointConfiguration createConfig(Map<String, Object> parameters) throws Exception {
-        MllpTransactionEndpointConfiguration config = super.createConfig(parameters);
+    protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
+        MllpTransactionEndpointConfiguration config = super.createConfig(uri, parameters);
         String options = getAndRemoveParameter(parameters, "options", String.class, Iti31Options.BASIC.name());
         Iti31Options[] iti31Options = TransactionOptionUtils.split(options, Iti31Options.class);
         if (iti31Options == null) {

@@ -50,18 +50,18 @@ public class Interceptor2ProducerAdapter implements Producer, DelegateProcessor,
 
     @Override
     public Exchange createExchange() {
-        return originalProducer.createExchange();
+        return originalProducer.getEndpoint().createExchange();
     }
 
     @Override
     public Exchange createExchange(ExchangePattern pattern) {
-        return originalProducer.createExchange(pattern);
+        return originalProducer.getEndpoint().createExchange(pattern);
     }
 
     @Override
     @Deprecated
     public Exchange createExchange(Exchange exchange) {
-        return originalProducer.createExchange(exchange);
+        return originalProducer.getEndpoint().createExchange(exchange);
     }
 
     @Override
