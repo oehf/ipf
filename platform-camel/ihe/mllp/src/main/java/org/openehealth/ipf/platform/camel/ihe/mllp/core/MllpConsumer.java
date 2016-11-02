@@ -18,13 +18,19 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 import lombok.experimental.Delegate;
 import org.apache.camel.component.mina2.Mina2Consumer;
 import org.apache.camel.impl.DefaultConsumer;
+import org.apache.mina.core.future.CloseFuture;
 import org.apache.mina.core.service.IoAcceptor;
+import org.apache.mina.core.session.IoSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * MllpConsumer wraps a Mina2Consumer for having a hook to shutdown some Mina
  * resources when the consumer is closing
  */
 public class MllpConsumer extends DefaultConsumer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MllpConsumer.class);
 
     // The reason for this interface is to convince the Delegate annotation to *not* delegate
     // the stop method. Weird API, really.
@@ -52,17 +58,25 @@ public class MllpConsumer extends DefaultConsumer {
         super.handleException(t);
     }
 
-    /**
-     * After stopping the consumer, stop the Mina acceptor, too
-     * @throws Exception
-     */
     @Override
     public void stop() throws Exception {
         super.stop();
-        // Delegates call to Mina2Consumer
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+        super.doStop();
         IoAcceptor ioAcceptor = getAcceptor();
         if (ioAcceptor != null) {
-            ioAcceptor.dispose(true);
+            for (IoSession ss : ioAcceptor.getManagedSessions().values()) {
+                CloseFuture future = ss.closeNow();
+                if (!future.awaitUninterruptibly(1000)) {
+                    LOG.warn("Could not close IoSession, consumer may hang");
+                }
+            }
+            ioAcceptor.unbind();
+            ioAcceptor.dispose(false);
         }
     }
+
 }

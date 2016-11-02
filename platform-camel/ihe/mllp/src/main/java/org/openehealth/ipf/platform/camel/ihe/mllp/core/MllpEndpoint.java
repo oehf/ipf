@@ -118,7 +118,7 @@ public abstract class MllpEndpoint
                 filterChain.addFirst("ssl", filter);
             }
         }
-        return producer;
+        return new MllpProducer(producer);
     }
 
     /**

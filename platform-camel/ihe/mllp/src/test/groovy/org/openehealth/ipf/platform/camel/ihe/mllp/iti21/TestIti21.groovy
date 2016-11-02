@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
+
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.CamelExchangeException
@@ -34,11 +35,11 @@ import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
 import java.util.concurrent.TimeUnit
 
 import static org.junit.Assert.*
+
 /**
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
-@Ignore
 class TestIti21 extends MllpTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti21/iti-21.xml'
 
@@ -48,31 +49,32 @@ class TestIti21 extends MllpTestContainer {
 
     @Rule
     public Timeout timeout = new Timeout(5L, TimeUnit.MINUTES);
-    
+
     @BeforeClass
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR, false)
     }
 
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
-        def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|'+
+        def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
                 "20081031112704||${msh9}|324406609|P|${msh12}|||ER|||||\n"
-        if(needQpd) {
+        if (needQpd) {
             s += 'QPD|IHE PDQ Query|1402274727|@PID.3.1^12345678~@PID.3.2.1^BLABLA~@PID.3.4.2^1.2.3.4~@PID.3.4.3^KRYSO|||||\n'
         }
         s += 'RCP|I|10^RD|||||\n'
         return s
     }
-    
+
     @Test
     void testHappyCaseAndAudit1() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18210?timeout=${TIMEOUT}", 2)
     }
+
     @Test
     void testHappyCaseAndAudit2() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18887?audit=false&timeout=${TIMEOUT}", 0)
     }
-    
+
     @Test
     void testHappyCaseAndAuditSecure() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18211?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
@@ -95,21 +97,22 @@ class TestIti21 extends MllpTestContainer {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore&timeout=${TIMEOUT}", 2)
     }
 
-    @Ignore @Test(timeout = 300000L)
+    @Ignore
+    @Test(timeout = 300000L)
     void testHappyCaseWithSSLv3() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3&timeout=${TIMEOUT}", 2)
     }
-    
+
     @Test
     void testHappyCaseWithSSLv3AndTLSv1() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1&timeout=${TIMEOUT}", 2)
     }
-    
+
     @Test
     void testHappyCaseWithCiphers() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA&timeout=${TIMEOUT}", 2)
     }
-    
+
     @Test
     void testSSLFailureWithIncompatibleProtocols() {
         try {
@@ -121,7 +124,7 @@ class TestIti21 extends MllpTestContainer {
             // 2.) CamelExchangeException (expected)
         }
     }
-    
+
     @Test
     void testSSLFailureWithIncompatibleCiphers() {
         try {
@@ -132,13 +135,13 @@ class TestIti21 extends MllpTestContainer {
             // 1.) RuntimeIOException: Failed to get the session
             // 2.) CamelExchangeException (expected)
         }
-        
+
         def messages = auditSender.messages
         assertEquals(3, messages.size())
         assertTrue(messages[0] instanceof SecurityAlertEvent)
         assertTrue(messages[1] instanceof SecurityAlertEvent)
     }
-    
+
     @Test
     void testSSLFailureWithIncompatibleKeystores() {
         try {
@@ -150,7 +153,7 @@ class TestIti21 extends MllpTestContainer {
             // 2.) CamelExchangeException (expected)
         }
     }
-    
+
     @Test
     void testSSLFailureDueToNonSSLClient() {
         try {
@@ -161,19 +164,19 @@ class TestIti21 extends MllpTestContainer {
             // 1.) RuntimeIOException: Failed to get the session
             // 2.) CamelExchangeException (expected)
         }
-        
+
         def messages = auditSender.messages
         assertEquals(2, messages.size())
         assertTrue(messages[0] instanceof SecurityAlertEvent)
     }
-    
+
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('QBP^Q22', '2.5')
         def msg = send(endpointUri, body)
         assertRSP(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
-    
+
     @Test
     void testCustomInterceptorCanThrowAuthenticationException() {
         send("pdq-iti21://localhost:18214?timeout=${TIMEOUT}", getMessageString('QBP^Q22', '2.5'))
@@ -181,12 +184,12 @@ class TestIti21 extends MllpTestContainer {
         assertEquals(3, messages.size())
         assertTrue(messages[0] instanceof SecurityAlertEvent)
     }
-    
+
     @Test
     void testServerDoesNotNeedToAcceptCertificate() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
     }
-    
+
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version),
      * on consumer side, audit enabled.
@@ -200,43 +203,46 @@ class TestIti21 extends MllpTestContainer {
     public void testInacceptanceOnConsumer1() {
         doTestInacceptanceOnConsumer('MDM^T01', '2.5')
     }
+
     @Test
     public void testInacceptanceOnConsumer2() {
         doTestInacceptanceOnConsumer('QBP^Q21', '2.5')
     }
+
     @Test
     public void testInacceptanceOnConsumer3() {
         doTestInacceptanceOnConsumer('QBP^Q22', '2.3.1')
     }
+
     @Test
     public void testInacceptanceOnConsumer4() {
         doTestInacceptanceOnConsumer('QBP^Q22', '3.1415926')
     }
+
     @Test
     public void testInacceptanceOnConsumer5() {
         doTestInacceptanceOnConsumer('QBP^Q22^QBP_Q26', '2.5')
     }
-    
+
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
         def endpointUri = "pdq-iti21://localhost:18210?timeout=${TIMEOUT}"
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
-                [process : { Exchange e -> /* nop */ }] as Processor
-                )
+                [process: { Exchange e -> /* nop */ }] as Processor
+        )
         def processor = consumer.processor
-        
+
         def body = getMessageString(msh9, msh12);
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
-        
+
         processor.process(exchange)
         def response = Exchanges.resultMessage(exchange).body
         def msg = new PipeParser().parse(response)
         assertNAK(msg)
         assertEquals(0, auditSender.messages.size())
     }
-    
-    
+
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version),
      * on producer side, audit enabled.
@@ -246,42 +252,45 @@ class TestIti21 extends MllpTestContainer {
     void testInacceptanceOnProducer1() {
         doTestInacceptanceOnProducer('MDM^T01', '2.5')
     }
+
     @Test
     void testInacceptanceOnProducer2() {
         doTestInacceptanceOnProducer('QBP^K22', '2.5')
     }
+
     @Test
     void testInacceptanceOnProducer3() {
         doTestInacceptanceOnProducer('QBP^Q22', '2.3.1')
     }
+
     @Test
     void testInacceptanceOnProducer4() {
         doTestInacceptanceOnProducer('QBP^Q22', '3.1415926')
     }
+
     @Test
     void testInacceptanceOnProducer5() {
         doTestInacceptanceOnProducer('QBP^Q22^QBP_Q28', '2.5')
     }
-    
+
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
         def endpointUri = "pdq-iti21://localhost:18210?timeout=${TIMEOUT}"
         def body = getMessageString(msh9, msh12)
         def failed = true;
-        
+
         try {
             send(endpointUri, body)
         } catch (Exception e) {
             def cause = e.getCause()
-            if((e instanceof HL7Exception) || (cause instanceof HL7Exception) ||
-            (e instanceof AbstractHL7v2Exception) || (cause instanceof AbstractHL7v2Exception)) {
+            if ((e instanceof HL7Exception) || (cause instanceof HL7Exception) ||
+                    (e instanceof AbstractHL7v2Exception) || (cause instanceof AbstractHL7v2Exception)) {
                 failed = false
             }
         }
         assertFalse(failed)
         assertEquals(0, auditSender.messages.size())
     }
-    
-    
+
     /**
      * Auditing in case of automatically generated NAK.
      */
@@ -293,7 +302,7 @@ class TestIti21 extends MllpTestContainer {
         assertEquals(2, auditSender.messages.size())
         assertNAKwithQPD(msg, 'RSP', 'K22')
     }
-    
+
     /**
      * Auditing in case of automatically generated NAK with magic header.
      */
@@ -305,14 +314,14 @@ class TestIti21 extends MllpTestContainer {
         assertEquals(2, auditSender.messages.size())
         assertNAKwithQPD(msg, 'RSP', 'K22')
     }
-    
-    
+
+
     @Test
     void testCancel() {
         def body =
                 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
-                '20081031112704||QCN^J01|324406609|P|2.5|||ER|||||\n' +
-                'QID|dummy|gummy||\n'
+                        '20081031112704||QCN^J01|324406609|P|2.5|||ER|||||\n' +
+                        'QID|dummy|gummy||\n'
         def endpointUri = "pdq-iti21://localhost:18212?timeout=${TIMEOUT}"
         def msg = send(endpointUri, body)
         assertEquals(0, auditSender.messages.size())
