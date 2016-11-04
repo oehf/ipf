@@ -18,6 +18,7 @@ import org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -75,13 +76,13 @@ public class IpfAutoConfiguration {
     // serving MLLP endpoints or as producer configuration.
 
     @Bean(name = "bootSslContextParameters")
-    @ConditionalOnExpression("${server.ssl.enabled} and ${ipf.commons.reuse-ssl-config}")
+    @ConditionalOnProperty(prefix = "ipf.commons", name = "reuse-ssl-config")
     public SSLContextParameters sslContextParameters(ServerProperties serverProperties) {
         Ssl sslConfig = serverProperties.getSsl();
 
         // Keystore
         KeyStoreParameters ksp = new KeyStoreParameters();
-        ksp.setResource(sslConfig.getKeyStore());
+        ksp.setResource(resourceName(sslConfig.getKeyStore()));
         ksp.setPassword(sslConfig.getKeyStorePassword());
         ksp.setProvider(sslConfig.getKeyStoreProvider());
         ksp.setType(sslConfig.getKeyStoreType());
@@ -91,7 +92,7 @@ public class IpfAutoConfiguration {
 
         // Truststore
         KeyStoreParameters tsp = new KeyStoreParameters();
-        tsp.setResource(sslConfig.getTrustStore());
+        tsp.setResource(resourceName(sslConfig.getTrustStore()));
         tsp.setPassword(sslConfig.getTrustStorePassword());
         tsp.setProvider(sslConfig.getTrustStoreProvider());
         tsp.setType(sslConfig.getTrustStoreType());
@@ -125,5 +126,12 @@ public class IpfAutoConfiguration {
         scp.setClientParameters(sccp);
 
         return scp;
+    }
+
+    // Spring Boot Keystore names are prepended with file: or classpath:, while
+    // Camel takes the plain resource name and tries all possibilities
+    private String resourceName(String resource) {
+        int i = resource.indexOf(":");
+        return i >= 0 ? resource.substring(i + 1) : resource;
     }
 }

@@ -18,7 +18,8 @@ Each of the currently supported IHE actor types has a corresponding singleton au
 * `PIXSourceAuditor`
 * `PIXConsumerAuditor`
 * `PDQConsumerAuditor`
-* `Hl7v3Auditor` (for all actors of PIXv3, PDQv3, XCPD and PCC (QED) profiles)
+* `Hl7v3Auditor` (for all actors of PIXv3, PDQv3, XCPD and PCC (QED) transactions)
+* `FhirAuditor` (for all actors of MHD, PDQm, PIXm transactions)
 * `CustomPixAuditor` (for ITI-64)
 * `CustomXdsAuditor` (for ITI-51,ITI-57,ITI-61,ITI-62,ITI-63,RAD-69,RAD-75)
 
@@ -232,7 +233,8 @@ First of all, all ATNA-related parameters are concentrated in a separate propert
     https.protocols                  = TLSv1
 ```
 
-These parameters are used to configure the beans defined in the separate Spring context file:
+These parameters are used to configure the beans defined in the separate Spring context file. The `AuditorTLSConfig` encapsulates some  
+initialization logic that is hard to express in XML:
 
 ```xml
     <beans xmlns="http://www.springframework.org/schema/beans"
@@ -250,66 +252,15 @@ These parameters are used to configure the beans defined in the separate Spring 
             <property name="location" value="classpath:/atna-audit.properties"/>
         </bean>
 
-        <bean id="atnaAuditAuditorModuleContext"
+        <bean id="auditorModuleContext"
               class="org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext"
               factory-method="getContext">
-
-            <property name="sender">
-                <bean class="${auditor.class}" />
-            </property>
-            <property name="queue">
-                <bean class="${audit.queue.class}" />
-            </property>
         </bean>
-
-        <bean id="atnaAuditAuditorConfig"
-              factory-bean="atnaAuditAuditorModuleContext"
-              factory-method="getConfig">
-            <property name="auditRepositoryHost" value="${audit.repository.host}" />
-            <property name="auditRepositoryPort" value="${audit.repository.port}" />
-        </bean>
-
-        <bean id="atnaAuditSecurityDomainName" class="java.lang.String">
-            <constructor-arg value="ipf-atna-tls" />
-        </bean>
-
-        <bean id="atnaAuditSecurityDomain"
-              class="org.openhealthtools.ihe.atna.nodeauth.SecurityDomain">
-            <constructor-arg index="0" ref="atnaAuditSecurityDomainName" />
-            <constructor-arg index="1" ref="atnaAuditProperties" />
-        </bean>
-
-        <bean id="atnaAuditNodeAuthModuleContext"
-              class="org.openhealthtools.ihe.atna.nodeauth.context.NodeAuthModuleContext"
-              factory-method="getContext" />
-
-        <bean id="atnaAuditSecurityDomainManager"
-              class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-            <property name="targetObject" ref="atnaAuditNodeAuthModuleContext" />
-            <property name="targetMethod" value="getSecurityDomainManager" />
-        </bean>
-
-        <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-            <property name="targetObject" ref="atnaAuditSecurityDomainManager" />
-            <property name="targetMethod" value="registerSecurityDomain" />
-            <property name="arguments">
-                <list>
-                    <ref local="atnaAuditSecurityDomain" />
-                </list>
-            </property>
-        </bean>
-
-        <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-            <property name="targetObject" ref="atnaAuditSecurityDomainManager" />
-            <property name="targetMethod" value="registerURItoSecurityDomain" />
-            <property name="arguments">
-                <list>
-                    <bean class="java.net.URI">
-                        <constructor-arg value="atna://${audit.repository.host}:${audit.repository.port}" />
-                    </bean>
-                    <ref local="atnaAuditSecurityDomainName" />
-                </list>
-            </property>
+        
+        <bean id="auditorTLSConfig" class="com.icw.ehf.integration.atna.AuditorTLSConfig" init-method="init">
+            <constructor-arg ref="auditorModuleConfig"/>
+            <constructor-arg ref="atnaAuditProperties"/> <!-- skip, and System.getProperties will be used -->
+            <property name="securityDomainName" value="mpi-atna-tls"/>
         </bean>
 
     </beans>

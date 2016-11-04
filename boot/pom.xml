@@ -4,9 +4,8 @@
 
     <parent>
         <groupId>org.openehealth.ipf</groupId>
-        <artifactId>ipf-parent</artifactId>
+        <artifactId>ipf</artifactId>
         <version>3.2-SNAPSHOT</version>
-        <relativePath>../parent</relativePath>
     </parent>
 
     <groupId>org.openehealth.ipf.boot</groupId>

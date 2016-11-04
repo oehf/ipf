@@ -46,10 +46,31 @@ EhCache is now an optional dependency. The EhCache implementations `org.openehea
 `org.openehealth.ipf.commons.ihe.ws.correlation.EhcacheAsynchonyCorrelator` can only be used if you add a Maven dependency to EhCache to your project.
 
 
+### Security/Encryption
+
+The `ipf-oht-atna` dependency uses more secure default values as before:
+
+* The TLS protocol used for Secure Audit Trail is determined by the `jdk.tls.client.protocols` system environment variable that has been
+introduced with Java 8 (see [here](https://docs.oracle.com/javase/8/docs/technotes/guides/security/enhancements-8.html) for details). If not present, the default value is `"TLSv1.2,TLSv1.1,TLSv1"`.
+* As before, the Cipher Suites used for Secure Audit Trail are determined by the `https.ciphersuites` system environment variable, 
+but the default valuer is now `"TLS_RSA_WITH_AES_128_CBC_SHA"` (i.e. `"SSL_RSA_WITH_NULL_SHA"` has been removed).
+* The properties set for Secure Audit Trail (see [here](../ipf-platform-camel-ihe-mllp/atna.html) for details) will *not* affect the global 
+system properties anymore, *unless* the system property `org.openhealthtools.ihe.atna.nodeauth.SetDomainEnvironment` is set to any value. 
+This also means that the TLS parameters for any outgoing TLS connection as well as incoming MLLPS connections need to be considered separately, see below.
+
+All outgoing TLS connections as well as incoming MLLPS connections can now be configured uniformly:
+
+* by customizing the system properties listed in the [JSSE documentation](https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#InstallationAndCustomization)
+* by providing a [Camel](http://camel.apache.org/camel-configuration-utilities.html) `sslContextParameters` reference in the endpoint URL
+* by directly providing an `sslContext` reference in the endpoint URL
+* by stating `secure=true` in the endpoint URL. In this case, the Camel registry is looked up for a unique bean of type `org.apache.camel.util.jsse.SSLContextParameters`. 
+If none is found, a default SSL Context (controlled by the system properties) is instantiated. If more than one is found, an exception is thrown.
+
+
 ### XUA Token Parsing
 
 The dependencies for parsing the IHE XUA SAML Token from web service requests (for the sake of ATNA auditing) have been isolated in the new
-new ```ipf-commons-ihe-xua``` module. When you expect XUA tokens, you need to add the following Maven dependency:
+new `ipf-commons-ihe-xua` module. When you expect XUA tokens, you need to add the following Maven dependency:
 
 ```xml
     <dependency>
@@ -60,16 +81,21 @@ new ```ipf-commons-ihe-xua``` module. When you expect XUA tokens, you need to ad
 
 See [issue #122](https://github.com/oehf/ipf/issues/122) for details
 
+
 ### IHE Profile Updates
 
-IPF 3.2 is compatible with IHE ITI Revision 12 (published Apr 22, 2016). 
-In addition, the following Change Proposals have been implemented:
+IPF 3.2 is compatible with IHE ITI Revision 13 (published Sep 9, 2016), including the following Change Proposals:
+
+* [Ballot 36](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2017#Ballot_36): Implemented CP-ITI-955
+    * [CP-ITI-955](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_36/CP-ITI-955-00.doc): Add DocumentEntry type to FindDocumentsByReferenceId
+
+* [Ballot 35](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2016#Ballot_35): no changes required
 
 * [Ballot 34](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2016#Ballot_34): Implemented CP-ITI-767 and CP-ITI-914
     * [CP-ITI-767](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_34/CP-ITI-767-02.doc): Fix errors in CXi datatype and referenceIdList attribute examples 
     * [CP-ITI-914](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_34/CP-ITI-914-04.doc): Value of Content-Type HTTP header action parameter 
 
-* [Ballot 33](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2016#Ballot_34): Implemented CP-ITI-582, CP-ITI-880, CP-ITI-889, CP-ITI-906 and CP-ITI-918
+* [Ballot 33](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2016#Ballot_33): Implemented CP-ITI-582, CP-ITI-880, CP-ITI-889, CP-ITI-906 and CP-ITI-918
     * [CP-ITI-582](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_33/CP-ITI-582-06.doc): Metadata Update correction for associations in GetAllQuery 
     * [CP-ITI-880](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_33/CP-ITI-880-03.doc): Add new value for Study Instance UID in CXi.5 (Identifier Type Codes) 
     * [CP-ITI-889](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_33/CP-ITI-889-08.doc): Clarify Error Code used for ‘RPLC’ or ‘XFRM_RPLC’ Association Validation 
@@ -81,6 +107,12 @@ In addition, the following Change Proposals have been implemented:
     * [CP-ITI-880](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_32/CP-ITI-885-00.doc): PDQm changes for DSTU2
 
 
+In addition, the following Change Proposals have been implemented since the release of Revision 13:
+
+* [Ballot 37](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2017#Ballot_37): 
+   TODO
+   
+
 ### Internal Restructuring of IHE components
 
 Issue [#123](https://github.com/oehf/ipf/issues/123) caused a number of internal refactorings, mostly moving Camel-unspecific functionality
@@ -91,3 +123,4 @@ subclasses of `org.openehealth.ipf.commons.ihe.core.InteractionId`.
 For using existing IPF Camel components, this restructuring remains invisible, however, if you wrote your own Camel components and endpoints 
 based on the abstract base classes provided by IPF, you probably will need to restructure your code correspondingly.
 
+[3.2]:images/3.2.png

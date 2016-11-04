@@ -36,10 +36,18 @@ depend on this module.
 
 `ipf-spring-boot-starter` auto-configures `org.openehealth.ipf.commons.map.SpringBidiMappingService` and provides
 Spring beans for picking up any `org.openehealth.ipf.commons.map.config.CustomMappings`. See [here](../dynamic.html) for details.
-
 If further sets up a `org.openehealth.ipf.commons.core.config.SpringRegistry`.
 
-`ipf-spring-boot-starter` provides no application properties. 
+In addition, if the properties `server.ssl.enabled` and `ipf.commons.reuse-ssl-config` are set to  `true`, a bean
+of type `org.apache.camel.util.jsse.SslContextParameters` named `bootSslContextParameters` is provided so you can
+reuse the Spring Boot security configuration for [FHIR](../ipf-platform-camel-ihe-fhir-core/security.html), 
+[MLLP](../ipf-platform-camel-ihe-mllp/secureTransport.html) and [Web Service](../ipf-platform-camel-ihe-ws/secureTransport.html) IHE transaction endpoints supported by IPF.
+
+`ipf-spring-boot-starter` provides the following application properties:
+
+| Property (`ipf.commons.`)  | Default        | Description                                         |
+|----------------------------|----------------|-----------------------------------------------------|
+| `reuse-ssl-config`         | false          | Whether to set up a `bootSslContextParameters` bean derived from Spring Boot SSL settings
 
 [Spring Boot]: http://projects.spring.io/spring-boot/
 [Camel Spring Boot]: http://camel.apache.org/spring-boot.html
