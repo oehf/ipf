@@ -15,6 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
+import org.openehealth.ipf.commons.core.URN;
+
+import java.net.URI;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.Validate.notNull;
@@ -34,5 +39,49 @@ public class UUIDValidator implements ValueValidator {
     public void validate(String uuid) throws XDSMetaDataException {
         notNull(uuid, "uuid cannot be null");
         metaDataAssert(UUID_PATTERN.matcher(uuid).matches(), INVALID_UUID, uuid);
+    }
+
+    /**
+     * @param id identifier
+     * @return identifier if the id is not an UUID, Optional.empty otherwise
+     */
+    public Optional<String> getSymbolicId(String id) {
+        return !isUUID(id) ? Optional.of(id) : Optional.empty();
+    }
+
+    /**
+     * @param id identifier
+     * @return true if identifier is a valid UUID
+     */
+    public boolean isUUID(String id) {
+        return getAsUUID(id).isPresent();
+    }
+
+    /**
+     * @param urn urn
+     * @return UUID if uri is a valid UUID, Optional.empty otherwise
+     */
+    public Optional<UUID> getAsUUID(String urn) {
+        try {
+            return Optional.of(UUID.fromString(urn.substring("urn:uuid:".length())));
+        } catch (RuntimeException e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * @param uri uri
+     * @return UUID if uri is a valid UUID, Optional.empty otherwise
+     */
+    public Optional<UUID> getAsUUID(URI uri) {
+        return getAsUUID(uri.toString());
+    }
+
+    /**
+     * @param urn urn
+     * @return UUID if uri is a valid UUID, Optional.empty otherwise
+     */
+    public Optional<UUID> getAsUUID(URN urn) {
+        return getAsUUID(urn.toString());
     }
 }

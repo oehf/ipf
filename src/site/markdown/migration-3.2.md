@@ -84,7 +84,7 @@ See [issue #122](https://github.com/oehf/ipf/issues/122) for details
 
 ### IHE Profile Updates
 
-IPF 3.2 is compatible with IHE ITI Revision 13 (published Sep 9, 2016), including the following Change Proposals:
+IPF 3.2 is compatible with IHE ITI Revision 13 (published Sep 9, 2016), including changes due to the following Change Proposals:
 
 * [Ballot 36](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2017#Ballot_36): Implemented CP-ITI-955
     * [CP-ITI-955](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_36/CP-ITI-955-00.doc): Add DocumentEntry type to FindDocumentsByReferenceId
@@ -107,7 +107,7 @@ IPF 3.2 is compatible with IHE ITI Revision 13 (published Sep 9, 2016), includin
     * [CP-ITI-880](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_32/CP-ITI-885-00.doc): PDQm changes for DSTU2
 
 
-In addition, the following Change Proposals have been implemented since the release of Revision 13:
+In addition, the following Change Proposals have been implemented after the release of Revision 13:
 
 * [Ballot 37](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2017#Ballot_37): 
    TODO
@@ -122,5 +122,3 @@ subclasses of `org.openehealth.ipf.commons.ihe.core.InteractionId`.
 
 For using existing IPF Camel components, this restructuring remains invisible, however, if you wrote your own Camel components and endpoints 
 based on the abstract base classes provided by IPF, you probably will need to restructure your code correspondingly.
-
-[3.2]:images/3.2.png

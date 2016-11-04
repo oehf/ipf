@@ -100,7 +100,7 @@ public class IpfHl7v2AutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(CustomModelClassFactory.class)
+    @ConditionalOnMissingBean(ProfileStore.class)
     public ProfileStore profileStore() {
         return new ClasspathProfileStore("/org/openehealth/ipf/gazelle/validation/profile/v2");
     }

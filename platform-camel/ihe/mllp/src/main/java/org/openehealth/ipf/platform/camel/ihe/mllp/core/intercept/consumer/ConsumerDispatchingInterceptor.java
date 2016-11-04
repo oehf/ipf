@@ -46,7 +46,6 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
 /**
  * Interceptor which dispatches an incoming request message to another MLLP route.
  * <p>
- * TODO maybe reference to dispatchingendpoint, start endpoint without route??
  *
  * @author Dmytro Rud
  */
@@ -93,8 +92,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport<Mll
     public void onCamelContextStarted(CamelContext camelContext, boolean alreadyStarted) throws Exception {
         collectTransactionTargets(camelContext);
         if (!addTargets(camelContext)) {
-            LOG.warn("Mllp Dispatcher endpoint exposed without transaction targets. " +
-                    "This is probably an error");
+            LOG.info("Mllp Dispatcher endpoint exposed without transaction targets.");
         }
     }
 
