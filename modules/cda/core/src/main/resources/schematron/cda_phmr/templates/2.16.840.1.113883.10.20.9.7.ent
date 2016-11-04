@@ -44,6 +44,7 @@
 
   <!-- notes -->
 
+  <!-- nothing to assert
   <pattern id="p-2.16.840.1.113883.10.20.9.7-notes">
 
     <title>HL7 PHMR Event Observation - notes validation phase</title>
@@ -51,4 +52,4 @@
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.7"]'>
     </rule>
   </pattern>
-
+  -->
