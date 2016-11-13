@@ -168,7 +168,7 @@ public abstract class Vocabulary {
 
     
     
-    /** docCode External Classification Scheme of the Association */
+    /** Documentation External Classification Scheme of the Association */
     public static final String ASSOCIATION_DOC_CODE_CLASS_SCHEME = 
         "urn:uuid:abd807a3-4432-4053-87b4-fd82c643d1f3";    
     

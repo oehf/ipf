@@ -71,8 +71,7 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(QueryType.FIND_DOCUMENTS_MPQ.getId(), ebXML.getId());
         assertEquals(Arrays.asList("('id3^^^&1.3&ISO')", "('id4^^^&1.4&ISO')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
-        assertEquals("42", ebXML.getSingleSlotValue(QueryParameter.METADATA_LEVEL.getSlotName()));
-        checkEbXML(ebXML, 20);
+        checkEbXML(ebXML, 19);
     }
 
     private static void checkEbXML(EbXMLAdhocQueryRequest ebXML, int expectedSlots) {

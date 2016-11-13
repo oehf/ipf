@@ -480,7 +480,6 @@ public abstract class SampleData {
                 new Identifiable("id4", new AssigningAuthority("1.4"))));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
-        query.setMetadataLevel(42);
         return new QueryRegistry(query);
     }
 
@@ -524,7 +523,6 @@ public abstract class SampleData {
                 Arrays.asList(new Code("code9", null, "scheme9")));
         query.setCodes(codes);
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-        query.setMetadataLevel(42);
 
         return new QueryRegistry(query);
     }
