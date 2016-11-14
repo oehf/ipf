@@ -1266,6 +1266,34 @@
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changes-plugin</artifactId>
+                <version>${maven-changes-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <id>check-changes</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>changes-check</goal>
+                        </goals>
+                        <configuration>
+                            <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>validate-changes</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>changes-validate</goal>
+                        </goals>
+                        <configuration>
+                            <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                            <failOnError>true</failOnError>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!--
             <plugin>
                 <groupId>com.github.github</groupId>
@@ -1288,16 +1316,6 @@
                 </executions>
             </plugin>
             -->
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-changes-plugin</artifactId>
-                <version>${maven-changes-plugin-version}</version>
-                <configuration>
-                    <includeOpenIssues>false</includeOpenIssues>
-                    <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-                </configuration>
-            </plugin>
 
         </plugins>
         <resources>
@@ -1391,13 +1409,13 @@
                 <artifactId>maven-changes-plugin</artifactId>
                 <version>${maven-changes-plugin-version}</version>
                 <configuration>
-                    <includeOpenIssues>false</includeOpenIssues>
                     <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                    <xmlPath>${basedir}/src/site/changes.xml</xmlPath>
                 </configuration>
                 <reportSets>
                     <reportSet>
                         <reports>
-                            <report>github-report</report>
+                            <report>changes-report</report>
                         </reports>
                     </reportSet>
                 </reportSets>
@@ -1412,7 +1430,7 @@
 
     <developers>
         <developer>
-            <id>boris</id>
+            <id>stanojevic-boris</id>
             <name>Boris Stanojevic</name>
             <email>boris.stanojevic@icw.de</email>
             <organization>InterComponentWare AG</organization>
@@ -1434,7 +1452,7 @@
             <timezone>+1</timezone>
         </developer>
         <developer>
-            <id>rnd</id>
+            <id>unixoid</id>
             <name>Dmytro Rud</name>
             <email>dmytro.rud@gmail.com</email>
             <organization>Open eHealth Foundation</organization>
@@ -1487,7 +1505,7 @@
 
     <issueManagement>
         <system>GitHub</system>
-        <url>http://github.com/oehf/ipf/issues</url>
+        <url>http://github.com/oehf/ipf/issues/</url>
     </issueManagement>
 
     <licenses>

@@ -24,8 +24,8 @@
         <opensaml-version>3.2.0</opensaml-version>
         <saxon-he-version>9.7.0-7</saxon-he-version>
         <slf4j-version>1.7.21</slf4j-version>
-        <spring-version>4.3.2.RELEASE</spring-version>
-        <spring-boot-version>1.4.1.RELEASE</spring-boot-version>
+        <spring-version>4.3.4.RELEASE</spring-version>
+        <spring-boot-version>1.4.2.RELEASE</spring-boot-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <xmlsec-version>2.0.7</xmlsec-version>

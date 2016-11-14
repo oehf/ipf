@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
+    <properties>
+        <title>Release Notes</title>
+        <author email="christian.ohr@gmail.com">Christian Ohr</author>
+    </properties>
+    <body>
+        <release version="3.2.0" date="TBD" description="IPF 3.2.0">
+            <action dev="ohr" issue="130" type="add" >
+                Allow using Camel SSLContextParameters in IPF endpoint URIs to configure TLS
+            </action>
+            <action dev="ohr" issue="129" type="fix" due-to="Jens Kristian Villadsen">
+                Disabled PHMR rule without assertion.
+            </action>
+            <action dev="ohr" issue="128" type="update" due-to="Tastelezz">
+                Added some convenience methods for validating UUIDs
+            </action>
+            <action dev="ohr" issue="123" type="update">
+                Refactored IHE business logic to outside the ipf-platform-camel modules
+            </action>
+            <action dev="unixoid" issue="122" type="update">
+                Moved OpenSAML dependencies to the new module ipf-commons-ihe-xua.
+            </action>
+            <action dev="unixoid" issue="121" type="update" due-to="Thomas Papke">
+                Improved performance issue on simplified XDS model
+            </action>
+            <action dev="ohr" issue="120" type="add">
+                Added importable POM in ipf-dependency module containing dependency management for all major libraries including IPF itself
+            </action>
+            <action dev="unixoid" issue="119" type="update">
+                IHE ITI Ballot 34: implemented CP-ITI-767 and CP-ITI-914.
+            </action>
+            <action dev="unixoid" issue="117" type="update" due-to="Thomas Papke">
+                Added possibility to use ReferenceId domain objects for FindDocumentsByReferenceIdQuery.
+            </action>
+            <action dev="ohr" issue="115" type="add">
+                Added support for Spring Boot
+            </action>
+            <action dev="stanojevic-boris" issue="114" type="fix">
+                Fix usage of QAK-5 and QAK-6 on interactive continuations.
+            </action>
+            <action dev="unixoid" issue="113" type="fix" due-to="Thomas Papke">
+                Fix typo in DICOM ATNA schema (ParticipantObjectSensistity, changed to ParticipantObjectSensitivity).
+            </action>
+            <action dev="unixoid" issue="112" type="update">
+                IHE ITI Ballot 34: implemented CP-ITI-582 and CP-ITI-889.
+            </action>
+            <action dev="unixoid" issue="110" type="fix" due-to="Thomas Papke">
+                Specify port name in each @WebService annotation, avoiding warnings like "Could not find endpoint/port for ..."
+            </action>
+            <action dev="ohr" issue="109" type="add">
+                Added support for IHE MHD transactions (ITI-65 through ITI-68)
+            </action>
+            <action dev="ohr" issue="108" type="add">
+                Added paging support to FHIR transactions by providing IBundleProviders that retrieve resources either eagerly or lazily.
+            </action>
+        </release>
+    </body>
+</document>

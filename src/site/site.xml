@@ -169,7 +169,7 @@
         <menu name="Main" inherit="top">
             <item name="Home" href="./" />
             <item name="GitHub project" href="http://github.com/oehf/ipf/" />
-            <item name="Release notes" href="release-notes.html" />
+            <item name="Release notes" href="changes-report.html" />
         </menu>
         <menu name="Download" inherit="top">
             <item name="Download" href="http://github.com/oehf/ipf" />
