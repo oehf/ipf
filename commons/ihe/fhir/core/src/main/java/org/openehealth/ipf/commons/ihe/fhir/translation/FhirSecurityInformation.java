@@ -33,18 +33,20 @@ public class FhirSecurityInformation extends SecurityInformation {
     }
 
     public void configureHttpClientBuilder(HttpClientBuilder builder)  {
-        if (isSecure() && getSslContext() == null) {
-            try {
-                builder.setSSLContext(SSLContext.getDefault());
-            } catch (NoSuchAlgorithmException e) {
-                // Should never happen
-                throw new RuntimeException("Could not create SSL Context", e);
+        if (isSecure()) {
+            if (getSslContext() == null) {
+                try {
+                    builder.setSSLContext(SSLContext.getDefault());
+                } catch (NoSuchAlgorithmException e) {
+                    // Should never happen
+                    throw new RuntimeException("Could not create SSL Context", e);
+                }
+            } else {
+                builder.setSSLContext(getSslContext());
             }
-        } else {
-            builder.setSSLContext(getSslContext());
-        }
-        if (getHostnameVerifier() != null) {
-            builder.setSSLHostnameVerifier(getHostnameVerifier());
+            if (getHostnameVerifier() != null) {
+                builder.setSSLHostnameVerifier(getHostnameVerifier());
+            }
         }
 
         // This is currently done by the FhirProducer#getClient by attaching a ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor
