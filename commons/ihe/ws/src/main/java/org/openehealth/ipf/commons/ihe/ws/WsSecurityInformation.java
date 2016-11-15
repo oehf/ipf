@@ -29,14 +29,22 @@ import javax.net.ssl.SSLContext;
  */
 public class WsSecurityInformation extends SecurityInformation {
 
-    public WsSecurityInformation(SSLContext sslContext, HostnameVerifier hostnameVerifier, String username, String password) {
-        super(sslContext, hostnameVerifier, username, password);
+    public WsSecurityInformation(boolean secure, SSLContext sslContext, HostnameVerifier hostnameVerifier, String username, String password) {
+        super(secure, sslContext, hostnameVerifier, username, password);
     }
 
     protected void configureHttpConduit(HTTPConduit httpConduit) {
-        if (getSslContext() != null) {
-            TLSClientParameters tlsClientParameters = initializeTLSClientParameters(httpConduit);
-            tlsClientParameters.setSSLSocketFactory(getSslContext().getSocketFactory());
+        if (isSecure()) {
+            TLSClientParameters tlsClientParameters = httpConduit.getTlsClientParameters();
+
+            // If no TLSClientParameters are configured and no custom SslContext is configured, we use the system default
+            // otherwise we overwrite TLSClientParameters if a custom SslContext is configured
+            if (tlsClientParameters == null) {
+                tlsClientParameters = new TLSClientParameters();
+                maybeUpdateSslContext(tlsClientParameters, true);
+            } else {
+                maybeUpdateSslContext(tlsClientParameters, false);
+            }
             if (getHostnameVerifier() != null) {
                 tlsClientParameters.setHostnameVerifier(getHostnameVerifier());
             }
@@ -50,8 +58,13 @@ public class WsSecurityInformation extends SecurityInformation {
         }
     }
 
-    private TLSClientParameters initializeTLSClientParameters(HTTPConduit httpConduit) {
-        TLSClientParameters tlsClientParameters = httpConduit.getTlsClientParameters();
-        return tlsClientParameters != null ? tlsClientParameters : new TLSClientParameters();
+    private void maybeUpdateSslContext(TLSClientParameters tlsClientParameters, boolean useDefaultSocketFactory) {
+        if (getSslContext() == null) {
+            if (useDefaultSocketFactory) {
+                tlsClientParameters.setUseHttpsURLConnectionDefaultSslSocketFactory(true);
+            }
+        } else {
+            tlsClientParameters.setSSLSocketFactory(getSslContext().getSocketFactory());
+        }
     }
 }

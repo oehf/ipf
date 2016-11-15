@@ -27,12 +27,13 @@ import javax.net.ssl.SSLContext;
 @Data
 public class SecurityInformation {
 
+    private final boolean secure;
     private final SSLContext sslContext;
     private final HostnameVerifier hostnameVerifier;
     private final String username;
     private final String password;
 
     public boolean isSecure() {
-        return sslContext != null;
+        return secure || sslContext != null;
     }
 }

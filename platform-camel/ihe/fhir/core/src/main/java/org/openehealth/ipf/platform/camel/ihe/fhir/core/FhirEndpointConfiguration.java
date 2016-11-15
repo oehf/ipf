@@ -160,9 +160,10 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
             }
         }
         this.securityInformation = new FhirSecurityInformation(
+                secure,
                 sslContextParameters != null ?
                         sslContextParameters.createSSLContext(component.getCamelContext()) :
-                        (secure ? SSLContext.getDefault() : null),
+                        null,
                 hostnameVerifier,
                 username,
                 password);

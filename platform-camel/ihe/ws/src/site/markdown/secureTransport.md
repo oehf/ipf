@@ -26,8 +26,8 @@ TLS-related aspects of Web Service-based transactions are controlled by the foll
 | `hostnameVerifier`     | [HostnameVerifier]     | n/a    | strategy for host name verification
 
 If `secure` is set to true but no `sslContextParameters` are provided, the Camel registry is looked up for 
-a unique `sslContextParameters` bean instance to be used. If none is found, a default SSL Context (optionally controlled by the system environment) 
-is instantiated. If more than one is found, an exception is thrown.
+a unique `sslContextParameters` bean instance to be used. If none is found, the matching CXF HttpConduit (see below, optionally controlled by the system environment) 
+is instantiated. If more than one `sslContextParameters` bean instance is found, an exception is thrown.
 
 [SslContextParameters] can be configured as shown in the example below. In this case, the WS producer URI requires 
 the parameter `sslContextParameters=#myContext`.
@@ -64,7 +64,7 @@ the parameter `sslContextParameters=#myContext`.
      
  ```
 
-If [sslContextParameters][SslContextParameters] are not provided, [CXF](http://cxf.apache.org)'s HTTP client must be configured accordingly.
+If [sslContextParameters][SslContextParameters] are not provided, [CXF](http://cxf.apache.org)'s HTTP client can be configured accordingly.
 This is done within the String context as detailed in the
 [CXF documentation](http://cxf.apache.org/docs/client-http-transport-including-ssl-support.html).
 
@@ -124,6 +124,38 @@ Example:
         ...
 
 ```
+
+You can also just reuse the TLS information as indicated by the system environment (i.e. by setting `-Djavax.net.ssl.*` properties):
+
+```xml
+
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/spring"
+           xmlns:http="http://cxf.apache.org/transports/http/configuration"
+           xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://camel.apache.org/schema/spring
+    http://camel.apache.org/schema/spring/camel-spring.xsd
+    http://cxf.apache.org/transports/http/configuration
+    http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+
+        <import resource="classpath:META-INF/cxf/cxf.xml" />
+        <import resource="classpath:META-INF/cxf/cxf-extension-jaxws.xml" />
+        <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+        <http:conduit name="*.http-conduit">
+            <!-- TLS default configuration -->
+            <http:tlsClientParameters useHttpsURLConnectionDefaultSslSocketFactory="true"/>
+        </http:conduit>
+        ...
+
+```
+
+This is also the default, if no `HttpConduit` was configured or the `HttpConduit` does not 
+contain TLS Client Parameters although `secure` was set to `true`.
+
 
 [SSLContextParameters]: http://camel.apache.org/camel-configuration-utilities.html
 [HostnameVerifier]: http://docs.oracle.com/javase/8/docs/api/javax/net/ssl/HostnameVerifier.html

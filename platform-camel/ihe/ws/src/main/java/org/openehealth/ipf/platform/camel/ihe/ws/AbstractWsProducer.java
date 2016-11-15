@@ -293,7 +293,7 @@ public abstract class AbstractWsProducer<
                 sslContextParameters.createSSLContext(getEndpoint().getCamelContext()) :
                 null;
         return clientFactory.getClient(
-                new WsSecurityInformation(sslContext, getEndpoint().getHostnameVerifier(),
+                new WsSecurityInformation(getEndpoint().isSecure(), sslContext, getEndpoint().getHostnameVerifier(),
                         getEndpoint().getUsername(), getEndpoint().getPassword()));
     }
 
