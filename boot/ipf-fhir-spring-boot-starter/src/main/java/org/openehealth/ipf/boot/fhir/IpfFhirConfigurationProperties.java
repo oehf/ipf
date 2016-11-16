@@ -25,6 +25,7 @@ import org.springframework.core.io.Resource;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,11 +47,11 @@ public class IpfFhirConfigurationProperties {
     private String path = "/fhir";
 
     /**
-     * Resource containing mappings from FHIR URIs to OIDs and namespaces
+     * Resource containing NamingSystems used for mapping between namespaces
      */
-    @NotNull(message = "Must provide a NamingSystems resource")
+    @NotNull(message = "Must provide a NamingSystems resource(s)")
     @Getter @Setter
-    private Resource identifierNamingSystems;
+    private List<Resource> namingSystems;
 
     /**
      * Whether to create a cached PagingProvider

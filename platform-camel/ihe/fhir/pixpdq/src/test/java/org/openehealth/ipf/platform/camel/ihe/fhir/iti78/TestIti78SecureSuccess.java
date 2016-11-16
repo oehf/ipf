@@ -17,27 +17,13 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
 import org.hl7.fhir.instance.model.Bundle;
-import org.hl7.fhir.instance.model.ResourceType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
-import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomIHETransactionEventTypeCodes;
-import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
-import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ActiveParticipantCodes;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ActiveParticipantType;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditSourceIdentificationType;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ParticipantObjectIdentificationType;
 
 import javax.servlet.ServletException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  *
