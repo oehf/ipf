@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -26,6 +27,9 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataB
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
@@ -54,9 +58,11 @@ public class Hl7v3ClientFactory extends JaxWsClientFactory<Hl7v3AuditDataset> {
             String serviceUrl,
             AuditStrategy<Hl7v3AuditDataset> auditStrategy,
             AsynchronyCorrelator<Hl7v3AuditDataset> correlator,
-            InterceptorProvider customInterceptors)
+            InterceptorProvider customInterceptors,
+            List<AbstractFeature> features,
+            Map<String, Object> properties)
     {
-        super(wsTransactionConfiguration, serviceUrl, auditStrategy, customInterceptors);
+        super(wsTransactionConfiguration, serviceUrl, auditStrategy, customInterceptors, features, properties);
         this.correlator = correlator;
     }
 

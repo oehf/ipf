@@ -42,7 +42,7 @@ class TestIti18 extends StandardTestContainer {
     
     def SERVICE1 = "xds-iti18://localhost:${port}/xds-iti18-service1"
     def SERVICE2 = "xds-iti18://localhost:${port}/xds-iti18-service2"
-    def SAMPLE_SERVICE = "xds-iti18://localhost:${port}/myIti18Service"
+    def SAMPLE_SERVICE = "xds-iti18://localhost:${port}/myIti18Service?features=#loggingFeature"
 
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti18-service2"
     

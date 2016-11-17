@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.2.0" date="TBD" description="IPF 3.2.0">
+            <action dev="ohr" issue="132" type="fix">
+                CXF features have not been initialized for Web Service clients
+            </action>
             <action dev="ohr" issue="130" type="add" >
                 Allow using Camel SSLContextParameters in IPF endpoint URIs to configure TLS
             </action>

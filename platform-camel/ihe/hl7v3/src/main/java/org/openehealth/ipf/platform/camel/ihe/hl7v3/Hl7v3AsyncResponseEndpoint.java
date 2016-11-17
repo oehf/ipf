@@ -60,7 +60,9 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getFeatures(),
+                getProperties());
     }
 
 

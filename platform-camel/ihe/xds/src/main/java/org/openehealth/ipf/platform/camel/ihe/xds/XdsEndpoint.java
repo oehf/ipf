@@ -60,7 +60,9 @@ public abstract class XdsEndpoint<AuditDatasetType extends XdsAuditDataset>
                 getServiceUrl(),
                 isAudit() ? getClientAuditStrategy() : null,
                 getCorrelator(),
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getFeatures(),
+                getProperties());
     }
 
 

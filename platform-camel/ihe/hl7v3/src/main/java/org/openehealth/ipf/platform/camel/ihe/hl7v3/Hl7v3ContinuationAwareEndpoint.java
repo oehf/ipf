@@ -171,7 +171,9 @@ public class Hl7v3ContinuationAwareEndpoint
                 getServiceUrl(),
                 isManualAudit() ? null : getComponent().getClientAuditStrategy(),
                 null,
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getFeatures(),
+                getProperties());
     }
 
 

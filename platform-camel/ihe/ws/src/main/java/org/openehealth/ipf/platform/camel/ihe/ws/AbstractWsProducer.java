@@ -19,6 +19,7 @@ import com.ctc.wstx.exc.WstxEOFException;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
+import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.commons.lang3.StringUtils;
@@ -224,12 +225,6 @@ public abstract class AbstractWsProducer<
         ClientImpl client = (ClientImpl) ClientProxy.getClient(o);
         client.setThreadLocalRequestContext(true);
         client.setSynchronousTimeout(Integer.MAX_VALUE);
-        if (getEndpoint().getFeatures() != null) {
-            client.getEndpoint().getActiveFeatures().addAll(getEndpoint().getFeatures());
-        }
-        if (getEndpoint().getProperties() != null) {
-            client.getEndpoint().putAll(getEndpoint().getProperties());
-        }
     }
 
     /**
@@ -278,23 +273,29 @@ public abstract class AbstractWsProducer<
      *
      * @return the client stub.
      */
-    protected Object getClient() throws Exception {
-        SSLContextParameters sslContextParameters = getEndpoint().getSslContextParameters();
-        if (sslContextParameters == null) {
-            Map<String, SSLContextParameters> sslContextParameterMap = getEndpoint().getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
-            if (sslContextParameterMap.size() == 1) {
-                Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
-                sslContextParameters = entry.getValue();
-            } else if (sslContextParameterMap.size() > 1) {
-                throw new AmbiguousBeanException(SSLContextParameters.class);
+    protected Object getClient() {
+        return clientFactory.getClient(() -> {
+            // Only supply SSLContext if client has not been configured yet
+            SSLContextParameters sslContextParameters = getEndpoint().getSslContextParameters();
+            if (sslContextParameters == null) {
+                Map<String, SSLContextParameters> sslContextParameterMap = getEndpoint().getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
+                if (sslContextParameterMap.size() == 1) {
+                    Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();
+                    sslContextParameters = entry.getValue();
+                } else if (sslContextParameterMap.size() > 1) {
+                    throw new AmbiguousBeanException(SSLContextParameters.class);
+                }
             }
-        }
-        SSLContext sslContext = sslContextParameters != null ?
-                sslContextParameters.createSSLContext(getEndpoint().getCamelContext()) :
-                null;
-        return clientFactory.getClient(
-                new WsSecurityInformation(getEndpoint().isSecure(), sslContext, getEndpoint().getHostnameVerifier(),
-                        getEndpoint().getUsername(), getEndpoint().getPassword()));
+            try {
+                SSLContext sslContext = sslContextParameters != null ?
+                        sslContextParameters.createSSLContext(getEndpoint().getCamelContext()) :
+                        null;
+                return new WsSecurityInformation(getEndpoint().isSecure(), sslContext, getEndpoint().getHostnameVerifier(),
+                        getEndpoint().getUsername(), getEndpoint().getPassword());
+            } catch (Exception e) {
+                throw new RuntimeCamelException(e);
+            }
+        });
     }
 
 

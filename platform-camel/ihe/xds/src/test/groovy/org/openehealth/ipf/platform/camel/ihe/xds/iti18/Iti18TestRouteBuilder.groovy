@@ -54,7 +54,7 @@ class Iti18TestRouteBuilder extends SpringRouteBuilder {
             .process { checkValue(it, 'SOAP 1.1') }
            
             
-        from('xds-iti18:myIti18Service')
+        from('xds-iti18:myIti18Service?features=#loggingFeature')
             .convertBodyTo(QueryRegistry.class)
             .choice()
                 // Return an object reference for a find documents query

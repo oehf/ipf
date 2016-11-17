@@ -111,7 +111,9 @@ public abstract class SimpleHl7v2WsEndpoint<
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 null,
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getFeatures(),
+                getProperties());
     }
 
 

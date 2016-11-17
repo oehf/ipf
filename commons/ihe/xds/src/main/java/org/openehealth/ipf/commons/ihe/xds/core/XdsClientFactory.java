@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -24,6 +25,9 @@ import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Client factory for XDS and XCA transactions.
@@ -51,9 +55,11 @@ public class XdsClientFactory<AuditDatasetType extends XdsAuditDataset> extends 
             String serviceAddress,
             AuditStrategy<AuditDatasetType> auditStrategy,
             AsynchronyCorrelator<AuditDatasetType> correlator,
-            InterceptorProvider customInterceptors) 
+            InterceptorProvider customInterceptors,
+            List<AbstractFeature> features,
+            Map<String, Object> properties)
     {
-        super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors);
+        super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors, features, properties);
         this.correlator = correlator;
     }
 

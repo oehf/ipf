@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.ws;
 
 import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.transport.http.HTTPConduit;
@@ -39,12 +40,15 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Factory for ITI Web Service stubs.
+ *
  * @author Jens Riemschneider
  */
 public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
@@ -54,39 +58,41 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
     protected final WsTransactionConfiguration wsTransactionConfiguration;
     protected final String serviceUrl;
     protected final InterceptorProvider customInterceptors;
+    protected final List<AbstractFeature> features;
+    protected final Map<String, Object> properties;
     protected final AuditStrategy<AuditDatasetType> auditStrategy;
 
     /**
      * Constructs the factory.
-     * @param wsTransactionConfiguration
-     *          the info about the Web Service.
-     * @param serviceUrl
-     *          the URL of the Web Service.
-     * @param auditStrategy
-     *          client-side ATNA audit strategy.
-     * @param customInterceptors
-     *          user-defined custom CXF interceptors.          
+     *
+     * @param wsTransactionConfiguration the info about the Web Service.
+     * @param serviceUrl                 the URL of the Web Service.
+     * @param auditStrategy              client-side ATNA audit strategy.
+     * @param customInterceptors         user-defined custom CXF interceptors.
      */
     public JaxWsClientFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
             String serviceUrl,
             AuditStrategy<AuditDatasetType> auditStrategy,
-            InterceptorProvider customInterceptors) 
-    {
+            InterceptorProvider customInterceptors,
+            List<AbstractFeature> features,
+            Map<String, Object> properties) {
         notNull(wsTransactionConfiguration, "wsTransactionConfiguration");
         this.wsTransactionConfiguration = wsTransactionConfiguration;
         this.serviceUrl = serviceUrl;
         this.auditStrategy = auditStrategy;
         this.customInterceptors = customInterceptors;
+        this.features = features;
+        this.properties = properties;
     }
 
     /**
      * Returns a client stub for the web-service.
      *
-     * @param securityInformation Conduit-related security information or null if no security shall be set
+     * @param securityInformationSupplier Conduit-related security information or null if no security shall be set
      * @return the client stub
      */
-    public synchronized Object getClient(WsSecurityInformation securityInformation) {
+    public synchronized Object getClient(Supplier<WsSecurityInformation> securityInformationSupplier) {
         if (threadLocalPort.get() == null) {
             URL wsdlURL = getClass().getClassLoader().getResource(wsTransactionConfiguration.getWsdlLocation());
             Service service = Service.create(wsdlURL, wsTransactionConfiguration.getServiceName());
@@ -94,17 +100,19 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
             Client client = ClientProxy.getClient(port);
             configureBinding(port);
             configureInterceptors(client);
+            configureProperties(client);
+            WsSecurityInformation securityInformation = securityInformationSupplier.get();
             if (securityInformation != null) {
-                securityInformation.configureHttpConduit((HTTPConduit)client.getConduit());
+                securityInformation.configureHttpConduit((HTTPConduit) client.getConduit());
             }
             threadLocalPort.set(port);
             LOG.debug("Created client adapter for: {}", wsTransactionConfiguration.getServiceName());
-        }        
+        }
         return threadLocalPort.get();
     }
 
     public synchronized Object getClient() {
-        return getClient(null);
+        return getClient(() -> null);
     }
 
     /**
@@ -116,7 +124,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
 
 
     /**
-     * Configures SOAP interceptors for the given client. 
+     * Configures SOAP interceptors for the given client.
      */
     protected void configureInterceptors(Client client) {
         client.getInInterceptors().add(new Cxf3791WorkaroundInterceptor());
@@ -141,15 +149,28 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
             client.getOutFaultInterceptors().add(mapCodec);
             client.getOutFaultInterceptors().add(mapAggregator);
         }
-        
+
         if (wsTransactionConfiguration.isSwaOutSupport()) {
             client.getOutInterceptors().add(new ProvidedAttachmentOutInterceptor());
-            client.getOutInterceptors().add(new FixContentTypeOutInterceptor());            
+            client.getOutInterceptors().add(new FixContentTypeOutInterceptor());
+        }
+
+        if (features != null) {
+            for (AbstractFeature feature : features) {
+                client.getEndpoint().getActiveFeatures().add(feature);
+                feature.initialize(client, client.getBus());
+            }
         }
 
         InterceptorUtils.copyInterceptorsFromProvider(customInterceptors, client);
+
     }
 
+    protected void configureProperties(Client client) {
+        if (properties != null) {
+            client.getEndpoint().putAll(properties);
+        }
+    }
 
     /**
      * Helper method for installing of payload-collecting SOAP interceptors
