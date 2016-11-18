@@ -28,10 +28,10 @@ public enum ResponseCase {
 
     OK(AcknowledgmentCode.AA, "OK") {
         @Override
-        RSP_K23 doPopulateResponse(RSP_K23 rsp) {
+        RSP_K23 doPopulateResponse(RSP_K23 rsp, String namespace, String oid) {
             rsp.QUERY_RESPONSE.PID[3](0)[1] = RESULT_VALUE
-            rsp.QUERY_RESPONSE.PID[3](0)[4][1] = "namespace"
-            rsp.QUERY_RESPONSE.PID[3](0)[4][2] = REQUESTED_OID
+            rsp.QUERY_RESPONSE.PID[3](0)[4][1] = namespace
+            rsp.QUERY_RESPONSE.PID[3](0)[4][2] = oid
             rsp.QUERY_RESPONSE.PID[3](0)[4][3] = "ISO"
             rsp.QUERY_RESPONSE.PID[3](0)[5] = "PI"
 
@@ -44,14 +44,14 @@ public enum ResponseCase {
 
     NO_IDENTIFIER(AcknowledgmentCode.AA, "NF") {
         @Override
-        RSP_K23 doPopulateResponse(RSP_K23 rsp) {
+        RSP_K23 doPopulateResponse(RSP_K23 rsp, String namespace, String oid) {
             rsp
         }
     },
 
     NO_PATIENT(AcknowledgmentCode.AE, "AE") {
         @Override
-        RSP_K23 doPopulateResponse(RSP_K23 rsp) {
+        RSP_K23 doPopulateResponse(RSP_K23 rsp, String namespace, String oid) {
             rsp.ERR[2][1] = "QPD"
             rsp.ERR[2][2] = "1"
             rsp.ERR[2][3] = "3"
@@ -66,7 +66,7 @@ public enum ResponseCase {
 
     UNKNOWN_SOURCE_AUTHORITY(AcknowledgmentCode.AE, "AE") {
         @Override
-        RSP_K23 doPopulateResponse(RSP_K23 rsp) {
+        RSP_K23 doPopulateResponse(RSP_K23 rsp, String namespace, String oid) {
             rsp.ERR[2][1] = "QPD"
             rsp.ERR[2][2] = "1"
             rsp.ERR[2][3] = "3"
@@ -81,7 +81,7 @@ public enum ResponseCase {
 
     UNKNOWN_TARGET_AUTHORITY(AcknowledgmentCode.AE, "AE") {
         @Override
-        RSP_K23 doPopulateResponse(RSP_K23 rsp) {
+        RSP_K23 doPopulateResponse(RSP_K23 rsp, String namespace, String oid) {
             rsp.ERR[2][1] = "QPD"
             rsp.ERR[2][2] = "1"
             rsp.ERR[2][3] = "4"
@@ -95,6 +95,7 @@ public enum ResponseCase {
 
     static final String RESULT_VALUE = "4711";
     static final String REQUESTED_OID = "1.2.3.4.5.6";
+    static final String REQUESTED_NAMESPACE = "namespace";
 
     private AcknowledgmentCode ackCode;
     private String responseCode;
@@ -105,14 +106,18 @@ public enum ResponseCase {
     }
 
     RSP_K23 populateResponse(Message request) {
+        populateResponse(request, REQUESTED_NAMESPACE, REQUESTED_OID)
+    }
+
+    RSP_K23 populateResponse(Message request, String namespace, String oid) {
         RSP_K23 rsp = MessageUtils.response(request, "RSP", "K23");
         rsp.MSA[1] = ackCode.name();
         rsp.QAK[1] = request.QPD[2].value ?: ''
         rsp.QAK[2] = responseCode
         rsp.QPD = request.QPD
-        doPopulateResponse(rsp)
+        doPopulateResponse(rsp, namespace, oid)
     }
 
-    abstract RSP_K23 doPopulateResponse(RSP_K23 rsp);
+    abstract RSP_K23 doPopulateResponse(RSP_K23 rsp, String namespace, String oid);
 
 }
