@@ -99,6 +99,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     @Override
     public final <R extends IBaseResource> R handleResourceRequest(Object payload, Map<String, Object> headers, Class<R> resultClass) {
         Object result = handleInRoute(payload, headers, resultClass);
+        if (result == null) return null;
         if (resultClass.isAssignableFrom(result.getClass())) {
             return resultClass.cast(result);
         } else {
@@ -110,8 +111,8 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     /**
      * @param payload request payload
      * @param headers request parameters, e.g. search parameters
-     * @param <R>
-     * @return
+     * @param <R> resource type
+     * @return list of resources to be packaged into a bundle
      */
     @Override
     public <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> headers) {
