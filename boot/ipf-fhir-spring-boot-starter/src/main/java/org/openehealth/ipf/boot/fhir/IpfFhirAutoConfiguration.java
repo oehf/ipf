@@ -83,14 +83,6 @@ public class IpfFhirAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnClass(TranslatorFhirToHL7v2.class)
-    public CustomMappings translationFhirHl7v2Mappings() {
-        CustomMappings mappings = new CustomMappings();
-        mappings.setMappingResource(new ClassPathResource("META-INF/map/fhir-hl7v2-translation.map"));
-        return mappings;
-    }
-
-    @Bean
     @ConditionalOnMissingBean(name = "fhirServletRegistration")
     @ConditionalOnWebApplication
     public ServletRegistrationBean fhirServletRegistration(IpfFhirServlet camelFhirServlet) {
