@@ -100,9 +100,11 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
     <bean id="authenticationInterceptor"
           class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.AuthenticationInterceptor$Factory"/>
 
+    <!--
     <bean id="sendTracingData"
           class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerTracingInterceptor$Factory"/>
 
     <bean id="receiveTracingData"
           class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerTracingInterceptor$Factory"/>
+    -->
 </beans>

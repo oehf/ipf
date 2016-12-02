@@ -19,11 +19,7 @@ import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
-import org.apache.camel.CamelExchangeException
-import org.apache.camel.Exchange
-import org.apache.camel.Predicate
-import org.apache.camel.Processor
-import org.apache.camel.RuntimeCamelException
+import org.apache.camel.*
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.impl.DefaultExchange
 import org.junit.BeforeClass
@@ -40,7 +36,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import java.util.concurrent.TimeUnit
-import java.util.function.Consumer
 
 import static org.junit.Assert.*
 
@@ -201,7 +196,7 @@ class TestIti21 extends MllpTestContainer {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
     }
 
-    @Test
+    @Ignore
     void testSendAndReceiveTracingInformation() {
         String msg = getMessageString('QBP^Q22', '2.5')
         HapiContext hapiContext = appContext.getBean(HapiContext.class)

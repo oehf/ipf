@@ -64,7 +64,9 @@ public class MllpProducer extends DefaultProducer {
     @Override
     protected void doStop() throws Exception {
         IoSession session = getField(producer, IoSession.class, "session");
-        invoke(producer, "closeSessionIfNeededAndAwaitCloseInHandler", IoSession.class, session);
+        if (session != null) {
+            invoke(producer, "closeSessionIfNeededAndAwaitCloseInHandler", IoSession.class, session);
+        }
         IoConnector connector = getField(producer, IoConnector.class, "connector");
         // Do NOT wait indefinitely
         connector.dispose(false);
