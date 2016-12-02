@@ -20,6 +20,7 @@ import lombok.Getter;
 import org.apache.camel.CamelException;
 import org.apache.camel.NoSuchBeanException;
 import org.apache.camel.RuntimeCamelException;
+import org.apache.camel.util.EndpointHelper;
 import org.apache.camel.util.jsse.ClientAuthentication;
 import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
@@ -75,7 +76,7 @@ public class MllpEndpointConfiguration extends InterceptableEndpointConfiguratio
 
     protected MllpEndpointConfiguration(MllpComponent<?> component, String uri, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
-        codecFactory = component.resolveAndRemoveReferenceParameter(parameters, "codec", ProtocolCodecFactory.class);
+        codecFactory = EndpointHelper.resolveReferenceParameter(component.getCamelContext(), (String)parameters.get("codec"), ProtocolCodecFactory.class);
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
 
         // Will only be effective if sslContext is set and overrides
