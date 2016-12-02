@@ -85,7 +85,7 @@ class MllpTestContainer {
      * Checks whether the message represents a (positive) ACK.
      */
     static void assertACK(Message msg) {
-        assertTrue(msg.MSH[9][1].value == 'ACK')
+        assertEquals('ACK', msg.MSH[9][1].value)
         assertFalse(msg.MSA[1].value[1] in ['R', 'E'])
     }
     
@@ -94,7 +94,7 @@ class MllpTestContainer {
      * Checks whether the message represents a positive ReSPonse.
      */
     static void assertRSP(Message msg) {
-        assertTrue(msg.MSH[9][1].value == 'RSP')
+        assertEquals('RSP', msg.MSH[9][1].value)
         assertFalse(msg.MSA[1].value[1] in ['R', 'E'])
     }
 
@@ -103,7 +103,7 @@ class MllpTestContainer {
      * Checks whether the message represents a NAK.
      */
     static void assertNAK(Message msg) {
-        assertTrue(msg.MSH[9][1].value == 'ACK')
+        assertEquals('ACK', msg.MSH[9][1].value)
         assertTrue(msg.MSA[1].value[1] in ['R', 'E'])
         assertFalse(msg.ERR.empty)
     }
@@ -112,8 +112,8 @@ class MllpTestContainer {
      * Checks whether the message represents a NAK with segments QPD and QAK.
      */
     static void assertNAKwithQPD(Message msg, String messageType, String triggerEvent) {
-        assertTrue(msg.MSH[9][1].value == messageType)
-        assertTrue(msg.MSH[9][2].value == triggerEvent)
+        assertEquals(messageType, msg.MSH[9][1].value)
+        assertEquals(triggerEvent, msg.MSH[9][2].value)
         assertTrue(msg.MSA[1].value[1] in ['R', 'E'])
         assertFalse("ERR segment must be present", msg.ERR.empty)
         assertFalse("QAK segment must be present", msg.QAK.empty)
@@ -123,22 +123,10 @@ class MllpTestContainer {
     /**
      * Sends a request into the route.
      */
-    static Message send(String endpoint, Object body) {
+    static Message send(String endpoint, Object body, Map<String, Object> headers = null) {
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
-
-        // Because during test shutdown there is a race condition between shutting down
-        // the consumer and closing the sessions, we close the session right after use
-        // to avoid ugly exceptions in the log.
-        /*
-        if (!endpoint.contains('disconnect')) {
-            if (endpoint.contains('?')) {
-                endpoint += '&disconnect=true'
-            } else {
-                endpoint += '?disconnect=true'
-            }
-        }
-        */
+        if (headers) exchange.in.headers.putAll(headers)
 
         Exchange result = producerTemplate.send(endpoint, exchange)
         if (result.exception) {

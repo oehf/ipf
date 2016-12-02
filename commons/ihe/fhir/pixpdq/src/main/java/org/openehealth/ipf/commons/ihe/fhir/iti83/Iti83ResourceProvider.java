@@ -16,17 +16,23 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
+import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import org.hl7.fhir.instance.model.*;
+import org.hl7.fhir.instance.model.IdType;
+import org.hl7.fhir.instance.model.Identifier;
+import org.hl7.fhir.instance.model.Parameters;
+import org.hl7.fhir.instance.model.Patient;
+import org.hl7.fhir.instance.model.UriType;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.*;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.SOURCE_IDENTIFIER_NAME;
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.TARGET_SYSTEM_NAME;
 
 /**
  * According to the PIXM specification, this resource provider must handle requests in the form
@@ -41,12 +47,12 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
      * Handles the PIXm Query
      *
      * @param sourceIdentifierParam Identifier to search for. Should be an {@link Identifier}, but obviously
-     *                               non-primitive types are forbidden in GET operations
-     * @param targetSystemParam      target system URI
+     *                              non-primitive types are forbidden in GET operations
+     * @param targetSystemParam     target system URI
      * @return {@link Parameters} containing found identifiers
      */
     @SuppressWarnings("unused")
-    @Operation(name = Iti83Constants.PIXM_OPERATION_NAME, type = Patient.class, idempotent = true, returnParameters = { @OperationParam(name = "return", type = Identifier.class, max = 100)})
+    @Operation(name = Iti83Constants.PIXM_OPERATION_NAME, type = Patient.class, idempotent = true, returnParameters = {@OperationParam(name = "return", type = Identifier.class, max = 100)})
     public Parameters pixmQuery(
             @OperationParam(name = SOURCE_IDENTIFIER_NAME) TokenParam sourceIdentifierParam,
             @OperationParam(name = TARGET_SYSTEM_NAME) UriParam targetSystemParam,
@@ -66,4 +72,30 @@ public class Iti83ResourceProvider extends AbstractPlainProvider {
         return requestResource(inParams, Parameters.class, httpServletRequest, httpServletResponse);
     }
 
+    /**
+     * Handles the PIXm Retrieve. Note that this is not part of the specification, but a useful variant that allows to use resource IDs
+     * in requests such as .../Patient/4711/$ihe-pix would be equivalent with .../Patient/$ihe-pix?sourceIdentifier=URI|4711 where URI
+     * identifies the NamingSystem used for resource IDs
+     *
+     * @param resourceId          resource ID
+     * @param targetSystemParam   target system URI
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @return {@link Parameters} containing found identifiers
+     */
+    @Operation(name = Iti83Constants.PIXM_OPERATION_NAME, type = Patient.class, idempotent = true, returnParameters = {@OperationParam(name = "return", type = Identifier.class, max = 100)})
+    public Parameters pixmRetrieve(
+            @IdParam IdType resourceId,
+            @OperationParam(name = TARGET_SYSTEM_NAME) UriParam targetSystemParam,
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) {
+        UriType targetUri = targetSystemParam == null ? null : new UriType(targetSystemParam.getValue());
+
+        Parameters inParams = new Parameters();
+        inParams.addParameter().setName(SOURCE_IDENTIFIER_NAME).setValue(new Identifier().setValue(resourceId.getIdPart()));
+        inParams.addParameter().setName(TARGET_SYSTEM_NAME).setValue(targetUri);
+
+        // Run down the route
+        return requestResource(inParams, Parameters.class, httpServletRequest, httpServletResponse);
+    }
 }

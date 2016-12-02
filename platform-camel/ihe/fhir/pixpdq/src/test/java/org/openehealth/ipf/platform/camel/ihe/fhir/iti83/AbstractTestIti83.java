@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
+import org.hl7.fhir.instance.model.IdType;
 import org.hl7.fhir.instance.model.Parameters;
 import org.hl7.fhir.instance.model.Patient;
 import org.hl7.fhir.instance.model.StringType;
@@ -54,7 +55,26 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
         return inParams;
     }
 
-    protected Parameters sendManually(Parameters queryParameters) {
+    protected Parameters validReadParameters() {
+        Parameters inParams = new Parameters();
+        inParams.addParameter()
+                .setName(Constants.SOURCE_IDENTIFIER_NAME)
+                .setValue(new StringType("|0815"));
+        inParams.addParameter()
+                .setName(Constants.TARGET_SYSTEM_NAME)
+                .setValue(new UriType("urn:oid:1.2.3.4.6"));
+        return inParams;
+    }
+
+    protected Parameters validTargetSystemParameters() {
+        Parameters inParams = new Parameters();
+        inParams.addParameter()
+                .setName(Constants.TARGET_SYSTEM_NAME)
+                .setValue(new UriType("urn:oid:1.2.3.4.6"));
+        return inParams;
+    }
+
+    protected Parameters sendManuallyOnType(Parameters queryParameters) {
         Parameters result = client.operation()
                 .onType(Patient.class)
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
@@ -64,5 +84,14 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
         return result;
     }
 
+    protected Parameters sendManuallyOnInstance(String resourceId, Parameters queryParameters) {
+        Parameters result = client.operation()
+                .onInstance(new IdType("Patient", resourceId))
+                .named(Iti83Constants.PIXM_OPERATION_NAME)
+                .withParameters(queryParameters)
+                .useHttpGet()
+                .execute();
+        return result;
+    }
 
 }

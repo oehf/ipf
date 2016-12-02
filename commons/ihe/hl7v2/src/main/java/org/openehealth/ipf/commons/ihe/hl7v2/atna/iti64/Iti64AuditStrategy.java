@@ -16,16 +16,17 @@
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64;
 
 import ca.uhn.hl7v2.model.v25.group.ADT_A43_PATIENT;
-import ca.uhn.hl7v2.model.v25.message.ADT_A43;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.PipeParser;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.xpid.v25.message.ADT_A43;
 
 import java.util.Map;
 
 /**
  * Generic audit strategy for ITI-64 (Notify XAD-PID Link Change).
+ *
  * @author Christian Ohr
  * @author Boris Stanojevic
  * @author Dmytro Rud
@@ -42,8 +43,7 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
 
 
     @Override
-    public Iti64AuditDataset enrichAuditDatasetFromRequest(Iti64AuditDataset auditDataset, Object msg, Map<String, Object> parameters)
-    {
+    public Iti64AuditDataset enrichAuditDatasetFromRequest(Iti64AuditDataset auditDataset, Object msg, Map<String, Object> parameters) {
         ADT_A43 message = (ADT_A43) msg;
         ADT_A43_PATIENT patient = message.getPATIENT(0);
 

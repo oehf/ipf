@@ -16,23 +16,31 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.HapiContext
+import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.CamelExchangeException
 import org.apache.camel.Exchange
+import org.apache.camel.Predicate
 import org.apache.camel.Processor
 import org.apache.camel.RuntimeCamelException
+import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.impl.DefaultExchange
 import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.Timeout
+import org.openehealth.ipf.commons.ihe.core.Constants
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.util.concurrent.TimeUnit
+import java.util.function.Consumer
 
 import static org.junit.Assert.*
 
@@ -41,6 +49,9 @@ import static org.junit.Assert.*
  * @author Dmytro Rud
  */
 class TestIti21 extends MllpTestContainer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TestIti21)
+
     def static CONTEXT_DESCRIPTOR = 'iti21/iti-21.xml'
 
     static void main(args) {
@@ -188,6 +199,37 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testServerDoesNotNeedToAcceptCertificate() {
         doTestHappyCaseAndAudit("pdq-iti21://localhost:18215?secure=true&sslContext=#sslContext&timeout=${TIMEOUT}", 2)
+    }
+
+    @Test
+    void testSendAndReceiveTracingInformation() {
+        String msg = getMessageString('QBP^Q22', '2.5')
+        HapiContext hapiContext = appContext.getBean(HapiContext.class)
+        Message qbp = hapiContext.getPipeParser().parse(msg)
+        Map<String, Object> headers = [
+                (Constants.TRACE_ID) : 'trace_id',
+                (Constants.SPAN_ID) : 'span_id',
+                (Constants.PARENT_SPAN_ID) : 'parent_span_id',
+                (Constants.SAMPLED) : '1',
+                (Constants.FLAGS) : '1'
+        ]
+
+        // Expect that the headers being sent arrive at the mock endpoint
+        MockEndpoint mockEndpoint = MockEndpoint.resolve(camelContext, "mock:trace");
+        mockEndpoint.expectedMessageCount(1)
+        mockEndpoint.expectedMessagesMatches(new Predicate() {
+            @Override
+            boolean matches(final Exchange exchange) {
+                for (Map.Entry<String, Object> entry : headers.entrySet()) {
+                    if (!entry.value.equals(exchange.in.getHeader(entry.key))) {
+                        return false
+                    }
+                }
+                return true
+            }
+        })
+        Message response = send("pdq-iti21://localhost:18225?timeout=${TIMEOUT}&interceptorFactories=#sendTracingData", qbp, headers)
+        mockEndpoint.assertIsSatisfied(2000)
     }
 
     /**

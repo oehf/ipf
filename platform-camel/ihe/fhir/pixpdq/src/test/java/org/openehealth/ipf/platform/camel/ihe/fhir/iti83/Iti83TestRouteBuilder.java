@@ -33,14 +33,15 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.
  */
 public class Iti83TestRouteBuilder extends RouteBuilder {
 
-    private final TranslatorFhirToHL7v2 requestTranslator;
-    private final TranslatorHL7v2ToFhir responseTranslator;
+    private final PixmRequestToPixQueryTranslator requestTranslator;
+    private final PixQueryResponseToPixmResponseTranslator responseTranslator;
 
     private ResponseCase responseCase = ResponseCase.OK;
 
     public Iti83TestRouteBuilder(UriMapper uriMapper) {
         super();
         this.requestTranslator = new PixmRequestToPixQueryTranslator(uriMapper);
+        requestTranslator.setPixSupplierResourceIdentifierUri("urn:oid:1.2.3.4.5.6");
         this.responseTranslator = new PixQueryResponseToPixmResponseTranslator(uriMapper);
     }
 

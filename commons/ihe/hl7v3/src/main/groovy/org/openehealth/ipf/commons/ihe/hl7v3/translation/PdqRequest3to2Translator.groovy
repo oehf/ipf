@@ -15,13 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v2.PDQ
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
-import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
@@ -74,10 +70,6 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
      */
 	boolean translateInitialQuantity = false
 
-	private static final HapiContext PDQ_CONTEXT = HapiContextFactory.createHapiContext(
-            CustomModelClassUtils.createFactory("pdq", "2.5"),
-            PixPdqTransactions.ITI21)
-
 
 	/**
 	 * Translates HL7 v3 request message <tt>PRPA_IN201305UV01</tt>
@@ -89,7 +81,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	 */
     Message translateV3toV2(String v3requestString, Message dummy = null) {
 	    def v3request = slurp(v3requestString)
-        def v2request = MessageUtils.makeMessage(PDQ_CONTEXT, 'QBP', 'Q22', '2.5')
+        def v2request = PDQ.Interactions.ITI_21.request()
         
         // Segment MSH
         fillMshFromSlurper(v3request, v2request, useSenderDeviceName, useReceiverDeviceName)

@@ -45,6 +45,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
         mappingService.setMappingScript(getClass().getResource('/mapping.map'))
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
         translator = new PixmRequestToPixQueryTranslator(mapper)
+        translator.pixSupplierResourceIdentifierUri = 'http://org.openehealth/ipf/commons/ihe/fhir/1'
     }
 
     @Test
@@ -84,6 +85,26 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
 
         assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
         assertEquals(mappingService.get('uriToOid', systemIdentifier.system), translated.QPD[3][4][2].value)
+        assertEquals(mappingService.get('uriToOid', domainsReturned.value), translated.QPD[4][4][2].value)
+    }
+
+    @Test
+    public void testSuccessfulTranslateWithInstanceOperation() {
+        // System is taken from pixSupplierResourceIdentifierUri
+        Identifier systemIdentifier = new Identifier().setValue('4711ABC')
+
+        UriType domainsReturned = new UriType('http://org.openehealth/ipf/commons/ihe/fhir/2')
+        Parameters params = new Parameters()
+        params.addParameter()
+                .setName(Constants.SOURCE_IDENTIFIER_NAME)
+                .setValue(systemIdentifier)
+        params.addParameter()
+                .setName(Constants.TARGET_SYSTEM_NAME)
+                .setValue(domainsReturned)
+        QBP_Q21 translated = translator.translateFhirToHL7v2(params, null)
+
+        assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
+        assertEquals(mappingService.get('uriToOid', translator.pixSupplierResourceIdentifierUri), translated.QPD[3][4][2].value)
         assertEquals(mappingService.get('uriToOid', domainsReturned.value), translated.QPD[4][4][2].value)
     }
 

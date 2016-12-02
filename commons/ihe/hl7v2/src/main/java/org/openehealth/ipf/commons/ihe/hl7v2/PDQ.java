@@ -30,6 +30,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti22.Iti22ClientAuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti22.Iti22ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 
 import java.util.Arrays;
@@ -59,6 +60,7 @@ public class PDQ implements InteractionProfile {
             public AuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
                 return Iti21ServerAuditStrategy.getInstance();
             }
+
         },
         ITI_22("pdq-iti22",
                 "Patient Demographics And Visit Query",
@@ -74,6 +76,7 @@ public class PDQ implements InteractionProfile {
             public AuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
                 return Iti22ServerAuditStrategy.getInstance();
             }
+
         };
 
         @Getter private String name;
@@ -81,6 +84,13 @@ public class PDQ implements InteractionProfile {
         @Getter private boolean query;
         @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
         @Getter private NakFactory nakFactory;
+
+        public QBP_Q21 request() {
+            Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
+            return (QBP_Q21) request(
+                    config.getAllowedRequestMessageTypes()[0],
+                    config.getAllowedRequestTriggerEvents()[0]);
+        }
     }
 
     @Override

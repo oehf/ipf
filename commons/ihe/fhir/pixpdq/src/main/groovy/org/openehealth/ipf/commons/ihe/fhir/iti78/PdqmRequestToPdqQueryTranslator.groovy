@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti78
 
 import ca.uhn.fhir.rest.param.*
-import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.lang3.Validate
 import org.apache.commons.lang3.time.FastDateFormat
 import org.hl7.fhir.instance.model.Enumerations
@@ -28,12 +27,9 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslationException
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
 import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
+import org.openehealth.ipf.commons.ihe.hl7v2.PDQ
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21
-import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 import org.openehealth.ipf.modules.hl7.dsl.Repeatable
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 /**
  * Translates a {@link IBaseResource} into a HL7v2 PDQ Query message. For the time being, paging is left in
@@ -62,10 +58,6 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
     private String pdqSupplierResourceIdentifierOid
 
     private final UriMapper uriMapper;
-
-    private static final HapiContext PDQ_QUERY_CONTEXT = HapiContextFactory.createHapiContext(
-            CustomModelClassUtils.createFactory("pdq", "2.5"),
-            PixPdqTransactions.ITI21)
 
     /**
      * @param uriMapper mapping for translating FHIR URIs into OIDs
@@ -126,7 +118,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
      * @return QBP^Q22 request message
      */
     protected QBP_Q21 translateFhirSearchToHL7v2(Iti78SearchParameters searchParameters) {
-        QBP_Q21 qry = MessageUtils.makeMessage(PDQ_QUERY_CONTEXT, 'QBP', 'Q22', '2.5')
+        QBP_Q21 qry = PDQ.Interactions.ITI_21.request()
 
         qry.MSH[3] = senderDeviceName
         qry.MSH[4] = senderFacilityName

@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.hl7v2;
 
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.v25.message.ADT_A05;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
@@ -32,7 +34,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti9.Iti9ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti9.Iti9ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 
 import java.util.Arrays;
@@ -63,6 +65,14 @@ public class PIX implements InteractionProfile {
             public AuditStrategy<Iti8AuditDataset> getServerAuditStrategy() {
                 return Iti8ServerAuditStrategy.getInstance();
             }
+
+            public Message request(String trigger) {
+                Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
+                return request(
+                        config.getAllowedRequestMessageTypes()[0],
+                        trigger);
+            }
+
         },
         ITI_8_XDS("xds-iti8",
                 "Patient Identity Feed",
@@ -78,6 +88,7 @@ public class PIX implements InteractionProfile {
             public AuditStrategy<Iti8AuditDataset> getServerAuditStrategy() {
                 return ITI_8_PIX.getServerAuditStrategy();
             }
+
 
         },
         ITI_9("pix-iti9",
@@ -118,6 +129,13 @@ public class PIX implements InteractionProfile {
         @Getter private boolean query;
         @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
         @Getter private NakFactory nakFactory;
+
+        public Message request(String trigger) {
+            Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
+            return request(
+                    config.getAllowedRequestMessageTypes()[0],
+                    trigger);
+        }
 
     }
 

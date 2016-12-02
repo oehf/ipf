@@ -71,6 +71,10 @@ public class Hl7v2TransactionConfiguration {
     @Getter private final ErrorCode responseErrorDefaultErrorCode;
 
     @Getter private final HapiContext hapiContext;
+    @Getter private final String[] allowedRequestMessageTypes;
+    @Getter private final String[] allowedRequestTriggerEvents;
+    @Getter private final String[] allowedResponseMessageTypes;
+    @Getter private final String[] allowedResponseTriggerEvents;
     @Getter private final Version[] hl7Versions;
 
     // true = request, false = response
@@ -139,6 +143,10 @@ public class Hl7v2TransactionConfiguration {
         // QC passed ;)
 
         this.hl7Versions = hl7Versions;
+        this.allowedRequestMessageTypes = allowedRequestMessageTypes;
+        this.allowedRequestTriggerEvents = allowedRequestTriggerEvents;
+        this.allowedResponseMessageTypes = allowedResponseMessageTypes;
+        this.allowedResponseTriggerEvents = allowedResponseTriggerEvents;
         this.sendingApplication = sendingApplication;
         this.sendingFacility = sendingFacility;
 

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v2;
 
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
+import ca.uhn.hl7v2.model.Message;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -65,6 +66,9 @@ public class PAM implements InteractionProfile {
             public void init(TransactionOptions... options) {
                 init(PamTransactions.ITI30, options);
             }
+
+
+
         },
         ITI_31("pam-iti31",
                 "Patient Encounter Management",
@@ -85,13 +89,21 @@ public class PAM implements InteractionProfile {
             public void init(TransactionOptions... options) {
                 init(PamTransactions.ITI31, options);
             }
+
         };
 
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
-        @Getter @Setter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
-        @Getter @Setter private NakFactory nakFactory;
+        @Getter
+        private String name;
+        @Getter
+        private String description;
+        @Getter
+        private boolean query;
+        @Getter
+        @Setter
+        private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
+        @Getter
+        @Setter
+        private NakFactory nakFactory;
 
         protected void init(PamTransactions pamTransactions, TransactionOptions... options) {
             setHl7v2TransactionConfiguration(new Hl7v2TransactionConfiguration(
@@ -108,6 +120,13 @@ public class PAM implements InteractionProfile {
                     new boolean[]{false},
                     HapiContextFactory.createHapiContext(PamTransactions.ITI31)));
             setNakFactory(new NakFactory(getHl7v2TransactionConfiguration()));
+        }
+
+        public Message request(String trigger) {
+            Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
+            return request(
+                    config.getAllowedRequestMessageTypes()[0],
+                    trigger);
         }
     }
 

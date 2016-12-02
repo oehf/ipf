@@ -38,7 +38,7 @@ public class TestIti83NoPatient extends AbstractTestIti83 {
     @Test(expected = ResourceNotFoundException.class)
     public void testSendManualPixm() {
         try {
-            sendManually(validQueryParameters());
+            sendManuallyOnType(validQueryParameters());
         } catch (ResourceNotFoundException e) {
             assertAndRethrow(e, OperationOutcome.IssueType.NOTFOUND);
         }

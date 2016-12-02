@@ -38,7 +38,7 @@ public class TestIti83UnknownTarget extends AbstractTestIti83 {
     @Test(expected = ForbiddenOperationException.class)
     public void testSendManualPixm() {
         try {
-            sendManually(validQueryParameters());
+            sendManuallyOnType(validQueryParameters());
         } catch (ForbiddenOperationException e) {
             assertAndRethrow(e, OperationOutcome.IssueType.CODEINVALID);
         }

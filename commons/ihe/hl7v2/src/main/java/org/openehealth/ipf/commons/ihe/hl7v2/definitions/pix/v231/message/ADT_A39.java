@@ -15,16 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.message;
 
-import java.util.List;
-import java.util.Map;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Structure;
 import ca.uhn.hl7v2.model.v231.segment.EVN;
 import ca.uhn.hl7v2.model.v231.segment.MSH;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.group.ADT_A39_PATIENT;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v231.segment.ZZI;
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Custom ADT_A39 structure that renames the PATIENT group
@@ -44,7 +45,7 @@ public class ADT_A39 extends AbstractMessage {
         s.put(MSH.class, Cardinality.REQUIRED);
         s.put(EVN.class, Cardinality.REQUIRED);
         s.put(ADT_A39_PATIENT.class, Cardinality.REQUIRED_REPEATING);
-
+        s.put(ZZI.class, Cardinality.OPTIONAL);
         return s;
     }
 

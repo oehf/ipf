@@ -18,25 +18,21 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws;
 
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
+import ca.uhn.hl7v2.model.v26.message.ORU_R01;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.InteractionProfile;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
 import org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.openehealth.ipf.commons.ihe.hl7v2ws.PCD.Interactions.PCD_01;
 
 /**
  * @author Christian Ohr
@@ -60,6 +56,13 @@ public class PCD implements InteractionProfile {
         @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
         @Getter private NakFactory nakFactory;
         @Getter private WsTransactionConfiguration wsTransactionConfiguration;
+
+        public ORU_R01 request() {
+            Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
+            return (ORU_R01) request(
+                    config.getAllowedRequestMessageTypes()[0],
+                    config.getAllowedRequestTriggerEvents()[0]);
+        }
 
     }
 

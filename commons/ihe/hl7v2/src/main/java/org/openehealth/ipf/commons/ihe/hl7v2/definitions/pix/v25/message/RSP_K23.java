@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.model.v25.group.RSP_K23_QUERY_RESPONSE;
 import ca.uhn.hl7v2.model.v25.segment.*;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.segment.QPD;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.segment.ZZI;
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 import java.util.Map;
@@ -60,6 +61,7 @@ public class RSP_K23 extends AbstractMessage {
         s.put(QPD.class, Cardinality.REQUIRED);
         s.put(RSP_K23_QUERY_RESPONSE.class, Cardinality.OPTIONAL);
         s.put(DSC.class, Cardinality.OPTIONAL);
+        s.put(ZZI.class, Cardinality.OPTIONAL);
         return s;
     }
 

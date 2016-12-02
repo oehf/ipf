@@ -7,6 +7,6 @@
 #    KIND, either express or implied. See the License for the specific
 #    language governing permissions and limitations under the License.
 
-# Camel registration for the pix-iti10 component
+# Camel registration for the some-mllp-iti component
  
 class=org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.SomeMllpItiComponent

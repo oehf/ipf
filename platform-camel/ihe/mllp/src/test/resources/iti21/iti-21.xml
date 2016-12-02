@@ -11,10 +11,13 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:camel="http://camel.apache.org/schema/spring"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util.xsd
 http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd">
 
@@ -25,6 +28,18 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <bean id="routeBuilder"
           class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.Iti21TestRouteBuilder">
+    </bean>
+
+    <bean id="hapiContext" class="ca.uhn.hl7v2.DefaultHapiContext">
+        <property name="modelClassFactory" ref="modelClassFactory"/>
+    </bean>
+
+    <bean id="modelClassFactory" class="org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory">
+        <constructor-arg>
+            <util:map>
+                <entry key="2.5" value="org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25"/>
+            </util:map>
+        </constructor-arg>
     </bean>
 
     <bean id="hl7codec" class="org.apache.camel.component.hl7.CustomHL7MLLPCodec">
@@ -84,4 +99,10 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <bean id="authenticationInterceptor"
           class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.AuthenticationInterceptor$Factory"/>
+
+    <bean id="sendTracingData"
+          class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerTracingInterceptor$Factory"/>
+
+    <bean id="receiveTracingData"
+          class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerTracingInterceptor$Factory"/>
 </beans>

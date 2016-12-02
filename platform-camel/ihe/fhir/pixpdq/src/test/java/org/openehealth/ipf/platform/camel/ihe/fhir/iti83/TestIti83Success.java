@@ -66,7 +66,7 @@ public class TestIti83Success extends AbstractTestIti83 {
     @Test
     public void testSendManualPixm() {
 
-        Parameters result = sendManually(validQueryParameters());
+        Parameters result = sendManuallyOnType(validQueryParameters());
 
         // printAsXML(result);
 
@@ -130,6 +130,13 @@ public class TestIti83Success extends AbstractTestIti83 {
     }
 
     @Test
+    public void testSendManualRead() {
+        Parameters result = sendManuallyOnInstance("0815", validTargetSystemParameters());
+        Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
+        assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
+    }
+
+    @Test
     public void testSendEndpointPixm() {
         Parameters result = getProducerTemplate().requestBody("direct:input", validQueryParameters(), Parameters.class);
 
@@ -139,8 +146,18 @@ public class TestIti83Success extends AbstractTestIti83 {
         // Check ATNA Audit
         MockedSender sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
-        // FIXME client-side audit message needs ip addresses, target URL and queryString
     }
 
+    @Test
+    public void testSendEndpointPixmRead() {
+        Parameters result = getProducerTemplate().requestBody("direct:input", validReadParameters(), Parameters.class);
+
+        Parameters.ParametersParameterComponent parameter = result.getParameter().iterator().next();
+        assertEquals(ResponseCase.getRESULT_VALUE(), ((Identifier)parameter.getValue()).getValue());
+
+        // Check ATNA Audit
+        MockedSender sender = getAuditSender();
+        assertEquals(2, sender.getMessages().size());
+    }
 
 }

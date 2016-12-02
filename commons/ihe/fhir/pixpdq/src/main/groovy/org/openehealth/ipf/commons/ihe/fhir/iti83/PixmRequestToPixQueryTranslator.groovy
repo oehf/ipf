@@ -24,7 +24,9 @@ import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
+import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
+import org.openehealth.ipf.commons.ihe.hl7v2.PIX
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
@@ -48,11 +50,9 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
     String receiverDeviceName = 'unknown'
     String receiverFacilityName = 'unknown'
 
-    private final UriMapper uriMapper;
+    String pixSupplierResourceIdentifierUri
 
-    private static final HapiContext PIX_QUERY_CONTEXT = HapiContextFactory.createHapiContext(
-            CustomModelClassUtils.createFactory("pix", "2.5"),
-            PixPdqTransactions.ITI9)
+    private final UriMapper uriMapper;
 
     /**
      * @param uriMapper mapping for translating FHIR URIs into OIDs
@@ -62,10 +62,18 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
         this.uriMapper = uriMapper
     }
 
+    /**
+     * @param pdqSupplierResourceIdentifierUri the URI of the resource identifier system
+     */
+    void setPixSupplierResourceIdentifierUri(String pixSupplierResourceIdentifierUri) {
+        Validate.notNull(pixSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
+        this.pixSupplierResourceIdentifierUri = pixSupplierResourceIdentifierUri
+    }
+
     @Override
     QBP_Q21 translateFhirToHL7v2(Object request, Map<String, Object> parameters) {
         Parameters inParams = (Parameters) request;
-        QBP_Q21 qry = MessageUtils.makeMessage(PIX_QUERY_CONTEXT, 'QBP', 'Q23', '2.5')
+        QBP_Q21 qry = PIX.Interactions.ITI_9.request('Q23')
 
         qry.MSH[3] = senderDeviceName
         qry.MSH[4] = senderFacilityName
@@ -84,15 +92,7 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
             map.put(part.name, part.value)
         }
 
-        Identifier sourceIdentifier = map[Constants.SOURCE_IDENTIFIER_NAME]
-        if (!sourceIdentifier.value) {
-            // No value provided? Patient cannot be found, Error Case 3
-            throw Utils.unknownPatientId();
-        }
-        if (!Utils.populateIdentifier(qry.QPD[3], uriMapper, sourceIdentifier.system, sourceIdentifier.value)) {
-            // UriMapper is not able to derive a PIX OID/Namespace for the patient domain URI, Error Case 4
-            throw Utils.unknownSourceDomainCode(sourceIdentifier.system);
-        }
+        handleSourceIdentifier(qry, map[Constants.SOURCE_IDENTIFIER_NAME])
 
         UriType requestedDomain = map[Constants.TARGET_SYSTEM_NAME]
         if (requestedDomain) {
@@ -104,6 +104,25 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
 
         qry.RCP[1] = 'I'
         return qry
+    }
+
+    protected void handleSourceIdentifier(QBP_Q21 qry, Identifier sourceIdentifier) {
+        Identifier id = sourceIdentifier.copy()
+
+        if (!id.system) {
+            // No system provided? Assume that we are looking for PIX Manager identifiers
+            id.system = pixSupplierResourceIdentifierUri
+        }
+        if (!id.value) {
+            // No value provided? Patient cannot be found, Error Case 3
+            throw Utils.unknownPatientId();
+        }
+        if (!Utils.populateIdentifier(qry.QPD[3], uriMapper, id.system, id.value)) {
+            // UriMapper is not able to derive a PIX OID/Namespace for the patient domain URI, Error Case 4
+            throw Utils.unknownSourceDomainCode(id.system);
+        }
+
+        id
     }
 
 }

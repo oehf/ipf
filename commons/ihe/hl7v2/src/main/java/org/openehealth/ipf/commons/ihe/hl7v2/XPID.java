@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.hl7v2;
 
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
+import ca.uhn.hl7v2.model.v25.message.ADT_A43;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
@@ -26,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 
@@ -56,6 +58,7 @@ public class XPID implements InteractionProfile {
             public AuditStrategy<Iti64AuditDataset> getServerAuditStrategy() {
                 return Iti64ServerAuditStrategy.getInstance();
             }
+
         };
 
         @Getter private String name;
@@ -64,6 +67,13 @@ public class XPID implements InteractionProfile {
         @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
         @Getter private NakFactory nakFactory;
 
+
+        public ADT_A43 request() {
+            Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
+            return (ADT_A43) request(
+                    config.getAllowedRequestMessageTypes()[0],
+                    config.getAllowedRequestTriggerEvents()[0]);
+        }
     }
 
     @Override
@@ -84,7 +94,9 @@ public class XPID implements InteractionProfile {
                     new String[] {"*"},
                     new boolean[] {true},
                     new boolean[] {false},
-                    HapiContextFactory.createHapiContext(PixPdqTransactions.ITI64));
+                    HapiContextFactory.createHapiContext(
+                            CustomModelClassUtils.createFactory("xpid", "2.5"),
+                            PixPdqTransactions.ITI64));
 
     private static final NakFactory ITI64_NAK_FACTORY = new NakFactory(ITI64_CONFIGURATION);
 }

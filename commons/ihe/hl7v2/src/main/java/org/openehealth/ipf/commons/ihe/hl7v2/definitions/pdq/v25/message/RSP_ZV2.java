@@ -23,6 +23,7 @@ import ca.uhn.hl7v2.model.v25.segment.*;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.group.RSP_ZV2_QUERY_RESPONSE;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.ZZI;
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 /**
@@ -65,6 +66,7 @@ public class RSP_ZV2 extends AbstractMessage {
         s.put(QPD.class, Cardinality.REQUIRED);
         s.put(RSP_ZV2_QUERY_RESPONSE.class, Cardinality.OPTIONAL_REPEATING);
         s.put(DSC.class, Cardinality.OPTIONAL);
+        s.put(ZZI.class, Cardinality.OPTIONAL);
         return s;
     }
 

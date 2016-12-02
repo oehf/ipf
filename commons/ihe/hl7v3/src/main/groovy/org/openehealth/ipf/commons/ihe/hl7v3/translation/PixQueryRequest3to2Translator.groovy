@@ -15,14 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v2.PIX
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
-import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
@@ -61,10 +56,6 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
      */
     boolean outputMessageStructure = true
 
-    private static final HapiContext PIX_QUERY_CONTEXT = HapiContextFactory.createHapiContext(
-            CustomModelClassUtils.createFactory("pix", "2.5"),
-            PixPdqTransactions.ITI9)
-
 
     /**
      * Translates HL7 v3 request message <tt>PRPA_IN201309UV02</tt> 
@@ -72,7 +63,7 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
      */
     Message translateV3toV2(String xmlText, Message dummy = null) {
         def xml = slurp(xmlText)
-        def qry = MessageUtils.makeMessage(PIX_QUERY_CONTEXT, 'QBP', 'Q23', '2.5')
+        def qry = PIX.Interactions.ITI_9.request('Q23')
 
         // Segment MSH
         fillMshFromSlurper(xml, qry, this.useSenderDeviceName, this.useReceiverDeviceName)                       
