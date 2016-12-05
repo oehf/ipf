@@ -38,6 +38,12 @@ The Patient-related transactions PIXm and PDQm already existing in IPF 3.1 have 
 and `ipf-commons-ihe-fhir-pixpdq`.
 
 
+### HL7v2 Message Classes
+
+XPID transaction endpoints now create and expect a custom message type `org.openehealth.ipf.commons.ihe.hl7v2.definitions.xpid.v25.message.ADT_A43` 
+instead of the standard `ca.uhn.hl7v2.model.v25.message.ADT_A43`.
+
+
 ### EhCache
  
 EhCache is now an optional dependency. The EhCache implementations `org.openehealth.ipf.platform.camel.ihe.hl7v3.EhcacheHl7v3ContinuationStorage`,

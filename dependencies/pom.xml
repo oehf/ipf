@@ -11,8 +11,8 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
         <bouncycastle-version>1.54</bouncycastle-version>
-        <camel-version>2.18.0</camel-version>
-        <cxf-version>3.1.7</cxf-version>
+        <camel-version>2.18.1</camel-version>
+        <cxf-version>3.1.8</cxf-version>
         <groovy-version>2.4.7</groovy-version>
         <hapi-version>2.2</hapi-version>
         <hapi-fhir-version>2.1</hapi-fhir-version>
