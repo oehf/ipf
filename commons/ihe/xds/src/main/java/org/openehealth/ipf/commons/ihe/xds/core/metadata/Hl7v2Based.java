@@ -188,6 +188,11 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
         return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : new Integer(value);
     }
 
+    protected static Long getLongValue(Primitive p) {
+        String value = p.getValue();
+        return (StringUtils.isEmpty(value) || "\"\"".equals(value)) ? null : new Long(value);
+    }
+
     /**
      * Helper method used for copying data elements of an assigning authority.
      * @param assigningAuthority

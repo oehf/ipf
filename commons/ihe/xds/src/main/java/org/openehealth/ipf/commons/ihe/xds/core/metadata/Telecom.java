@@ -76,7 +76,7 @@ public class Telecom extends Hl7v2Based<XTN> {
      * @param localNumber  local part of the phone number (XTN-7).
      * @param extension    extension of the phone number (XTN-8), can be <code>null</code>.
      */
-    public Telecom(Integer countryCode, Integer areaCityCode, Integer localNumber, Integer extension) {
+    public Telecom(Long countryCode, Long areaCityCode, Long localNumber, Long extension) {
         this();
         setUse("PRN");
         setType("PH");
@@ -84,6 +84,21 @@ public class Telecom extends Hl7v2Based<XTN> {
         setAreaCityCode(areaCityCode);
         setLocalNumber(localNumber);
         setExtension(extension);
+    }
+
+    /**
+     * @param countryCode
+     * @param areaCityCode
+     * @param localNumber
+     * @param extension
+     * @deprecated
+     */
+    public Telecom(Integer countryCode, Integer areaCityCode, Integer localNumber, Integer extension) {
+        this(
+                countryCode == null ? null : countryCode.longValue(),
+                areaCityCode == null ? null : areaCityCode.longValue(),
+                localNumber == null ? null : localNumber.longValue(),
+                extension == null ? null : extension.longValue());
     }
 
     /**
@@ -173,60 +188,60 @@ public class Telecom extends Hl7v2Based<XTN> {
      * @return country code of phone number (XTN-5).
      */
     @XmlElement(name = "countryCode")
-    public Integer getCountryCode() {
-        return getIntegerValue(getHapiObject().getXtn5_CountryCode());
+    public Long getCountryCode() {
+        return getLongValue(getHapiObject().getXtn5_CountryCode());
     }
 
     /**
      * @param countryCode country code of phone number (XTN-5).
      */
-    public void setCountryCode(Integer countryCode) {
-        setValue(getHapiObject().getXtn5_CountryCode(), countryCode);
+    public void setCountryCode(Long countryCode) {
+        setValue(getHapiObject().getXtn5_CountryCode(), countryCode == null ? null : countryCode.toString());
     }
 
     /**
      * @return area/city code of phone number (XTN-6).
      */
     @XmlElement(name = "areaCityCode")
-    public Integer getAreaCityCode() {
-        return getIntegerValue(getHapiObject().getXtn6_AreaCityCode());
+    public Long getAreaCityCode() {
+        return getLongValue(getHapiObject().getXtn6_AreaCityCode());
     }
 
     /**
      * @param areaCityCode area/city code of phone number (XTN-6).
      */
-    public void setAreaCityCode(Integer areaCityCode) {
-        setValue(getHapiObject().getXtn6_AreaCityCode(), areaCityCode);
+    public void setAreaCityCode(Long areaCityCode) {
+        setValue(getHapiObject().getXtn6_AreaCityCode(), areaCityCode == null ? null : areaCityCode.toString());
     }
 
     /**
      * @return local part of the phone number (XTN-7).
      */
     @XmlElement(name = "localNumber")
-    public Integer getLocalNumber() {
-        return getIntegerValue(getHapiObject().getXtn7_LocalNumber());
+    public Long getLocalNumber() {
+        return getLongValue(getHapiObject().getXtn7_LocalNumber());
     }
 
     /**
      * @param localNumber local part of the phone number (XTN-7).
      */
-    public void setLocalNumber(Integer localNumber) {
-        setValue(getHapiObject().getXtn7_LocalNumber(), localNumber);
+    public void setLocalNumber(Long localNumber) {
+        setValue(getHapiObject().getXtn7_LocalNumber(), localNumber == null ? null : localNumber.toString() );
     }
 
     /**
      * @return extension of the phone number (XTN-8).
      */
     @XmlElement(name = "extension")
-    public Integer getExtension() {
-        return getIntegerValue(getHapiObject().getXtn8_Extension());
+    public Long getExtension() {
+        return getLongValue(getHapiObject().getXtn8_Extension());
     }
 
     /**
      * @param extension extension of the phone number (XTN-8).
      */
-    public void setExtension(Integer extension) {
-        setValue(getHapiObject().getXtn8_Extension(), extension);
+    public void setExtension(Long extension) {
+        setValue(getHapiObject().getXtn8_Extension(), extension == null ? null : extension.toString());
     }
 
     @Override
