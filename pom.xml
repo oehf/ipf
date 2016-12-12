@@ -85,7 +85,7 @@
         <jar-plugin-version>3.0.2</jar-plugin-version>
         <javadoc-plugin-version>2.10.4</javadoc-plugin-version>
         <jaxb-plugin-version>2.2</jaxb-plugin-version>
-        <lombok-plugin-version>1.16.10.0</lombok-plugin-version>
+        <lombok-plugin-version>1.16.12.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <pax-plugin-version>1.6.0</pax-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
@@ -130,7 +130,7 @@
         <joda-time-version>2.9.4</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>1.2.17</log4j-version>
-        <lombok-version>1.16.10</lombok-version>
+        <lombok-version>1.16.12</lombok-version>
         <lucene-version>4.10.4</lucene-version>
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.3</quartz-version>
