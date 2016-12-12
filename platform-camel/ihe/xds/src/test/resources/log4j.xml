@@ -70,7 +70,11 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
     <logger name="org.openehealth.ipf.platform.camel.ihe">
          <level value="WARN"/>
     </logger>
-        
+
+    <logger name="org.openehealth.ipf.commons.ihe.core.atna.MockedSender">
+        <level value="WARN"/>
+    </logger>
+
     <root>
         <level value="WARN"/>
         <appender-ref ref="CONSOLE"/>

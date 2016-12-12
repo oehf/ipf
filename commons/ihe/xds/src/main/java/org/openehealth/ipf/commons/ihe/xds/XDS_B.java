@@ -46,9 +46,8 @@ import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
-import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62ServerAuditStrategy;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
@@ -170,12 +169,12 @@ public class XDS_B implements XdsInteractionProfile {
                 ITI62_WS_CONFIG) {
             @Override
             public AuditStrategy<XdsRemoveAuditDataset> getClientAuditStrategy() {
-                return Iti62ClientAuditStrategy.getInstance();
+                return Iti62AuditStrategy.getClientInstance();
             }
 
             @Override
             public AuditStrategy<XdsRemoveAuditDataset> getServerAuditStrategy() {
-                return Iti62ServerAuditStrategy.getInstance();
+                return Iti62AuditStrategy.getServerInstance();
             }
         };
 

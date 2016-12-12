@@ -40,6 +40,7 @@ public class XdsAuditorTest extends Assert {
     private static final String QUERY_UUID          = "query-uuid";
     private static final String REQUEST_PAYLOAD     = "request-payload";
     private static final String HOME_COMMUNITY_ID   = "home-community-id";
+    private static final String[] OBJECT_UUIDS      = {"objectUuid1", "objectUuid2", "objectUuid3"};
 
     private static final List<CodedValueType> PURPOSES_OF_USE;
     static {
@@ -100,6 +101,18 @@ public class XdsAuditorTest extends Assert {
                 PATIENT_ID,
                 PURPOSES_OF_USE);
 
+        auditor.auditIti62(true,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
+                PATIENT_ID,
+                OBJECT_UUIDS,
+                PURPOSES_OF_USE);
+
+        auditor.auditIti62(false,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
+                PATIENT_ID,
+                OBJECT_UUIDS,
+                PURPOSES_OF_USE);
+
         auditor.auditIti63(true,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
                 QUERY_UUID,
@@ -116,7 +129,7 @@ public class XdsAuditorTest extends Assert {
                 PATIENT_ID,
                 PURPOSES_OF_USE);
 
-        assertEquals(6, sender.getMessages().size());
+        assertEquals(8, sender.getMessages().size());
     }
 
 }

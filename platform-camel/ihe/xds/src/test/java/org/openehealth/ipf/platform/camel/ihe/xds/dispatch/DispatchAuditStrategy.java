@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75ServerAuditStrategy;
@@ -73,7 +73,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegisterOnDemandDocumentEntry"),
                 Iti61ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_DeleteDocumentSet"),
-                Iti62ServerAuditStrategy.getInstance());
+                Iti62AuditStrategy.getServerInstance());
         map.put(new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_CrossGatewayFetch"),
                 Iti63ServerAuditStrategy.getInstance());
         map.put(new QName("urn:ihe:rad:xdsi-b:2009", "DocumentRepository_RetrieveImagingDocumentSet"),

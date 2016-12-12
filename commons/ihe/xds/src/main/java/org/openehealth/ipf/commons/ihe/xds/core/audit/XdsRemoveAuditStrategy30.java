@@ -27,7 +27,7 @@ import java.util.Map;
 
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
- * in ebXML 3.0-based retrieval-related XDS transactions.
+ * in ebXML 3.0-based removing-related XDS transactions.
  *
  * @author Boris Stanojevic
  */
@@ -46,17 +46,12 @@ abstract public class XdsRemoveAuditStrategy30 extends XdsAuditStrategy<XdsRemov
         if (references != null) {
             final int SIZE = references.size();
 
-            String[] documentUniqueIds = new String[SIZE];
-            String[] homeCommunityIds = new String[SIZE];
+            auditDataset.setObjectIds(new String[SIZE]);
 
             for (int i = 0; i < SIZE; ++i) {
                 ObjectRefType reference = references.get(i);
-                documentUniqueIds[i] = reference.getId();
-                homeCommunityIds[i] = reference.getHome();
+                auditDataset.getObjectIds()[i] = reference.getId();
             }
-
-            auditDataset.setObjectIds(documentUniqueIds);
-            auditDataset.setHomeCommunityIds(homeCommunityIds);
         }
         return auditDataset;
     }

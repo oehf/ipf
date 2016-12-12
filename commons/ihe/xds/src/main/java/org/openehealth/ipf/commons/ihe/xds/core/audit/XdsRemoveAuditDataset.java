@@ -26,7 +26,6 @@ public class XdsRemoveAuditDataset extends XdsAuditDataset {
     private static final long serialVersionUID = 3746882739914130719L;
 
     @Getter @Setter private String[] objectIds;
-    @Getter @Setter private String[] homeCommunityIds;
 
     /**
      * @param serverSide

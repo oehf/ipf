@@ -15,40 +15,34 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti62;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditStrategy30;
 
 /**
- * Server audit strategy for ITI-62.
+ * Client audit strategy for ITI-62.
  * @author Boris Stanojevic
  */
-public class Iti62ServerAuditStrategy extends XdsRemoveAuditStrategy30 {
+public class Iti62AuditStrategy extends XdsRemoveAuditStrategy30 {
+    @Getter(lazy = true) private static final Iti62AuditStrategy clientInstance = new Iti62AuditStrategy(false);
+    @Getter(lazy = true) private static final Iti62AuditStrategy serverInstance = new Iti62AuditStrategy(true);
 
-    private static class LazyHolder {
-        private static final Iti62ServerAuditStrategy INSTANCE = new Iti62ServerAuditStrategy();
-    }
-
-    public static Iti62ServerAuditStrategy getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    /**
-     * Constructs the audit strategy.
-     */
-    private Iti62ServerAuditStrategy() {
-        super(true);
+    private Iti62AuditStrategy(boolean serverSide) {
+        super(serverSide);
     }
 
     @Override
     public void doAudit(XdsRemoveAuditDataset auditDataset) {
-        AuditorManager.getCustomXdsAuditor().auditServerIti62(
+        AuditorManager.getCustomXdsAuditor().auditIti62(
+                isServerSide(),
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getUserId(),
-                auditDataset.getClientIpAddress(),
                 auditDataset.getUserName(),
                 auditDataset.getServiceEndpointUrl(),
+                auditDataset.getClientIpAddress(),
                 auditDataset.getPatientId(),
+                auditDataset.getObjectIds(),
                 auditDataset.getPurposesOfUse());
     }
 

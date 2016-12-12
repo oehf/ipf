@@ -351,6 +351,13 @@ class StandardTestContainer {
          assert submissionSet.@ParticipantObjectID == '123'
      }
 
+     def checkRegistryObjectParticipantObjectDetail(detail, String typeCode, String registryObjectUuid) {
+         assert detail.@ParticipantObjectTypeCode == '2'
+         assert detail.@ParticipantObjectTypeCodeRole == '3'
+         checkCode(detail.ParticipantObjectIDTypeCode, typeCode, 'IHE XDS Metadata')
+         assert detail.@ParticipantObjectID == registryObjectUuid
+     }
+
      static String readFile(String fn) {
          InputStream inputStream
          String s = null

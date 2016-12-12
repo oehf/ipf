@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.core.atna.custom;
 import org.openhealthtools.ihe.atna.auditor.XDSAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionParticipantObjectIDTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
@@ -244,7 +245,7 @@ public class CustomXdsAuditor extends XDSAuditor {
         }
 
         GenericIHEAuditEventMessage event = new GenericIHEAuditEventMessage(
-                true,
+                ! serverSide,
                 eventOutcome,
                 serverSide ? RFC3881EventCodes.RFC3881EventActionCodes.CREATE : RFC3881EventCodes.RFC3881EventActionCodes.READ,
                 serverSide ? new DICOMEventIdCodes.Import() : new DICOMEventIdCodes.Export(),
@@ -260,97 +261,73 @@ public class CustomXdsAuditor extends XDSAuditor {
     }
 
     /**
-     * Generically sends audit messages for XDS Document Administrator Delete Document Set events
-     * ("blind" implementation leaned on the ITI-57 since ITI-62 spec still does not define a ATNA requirements)
-     * TODO: the specification of ITI-62 still does not define a ATNA requirements, the work is marked as TBD
+     * Sends an audit message for the XDS Delete Document Set event.
      *
+     * @param serverSide <code>true</code> for XDS Registry, <code>false</code> for Document Administrator
      * @param eventOutcome The event outcome indicator
-     * @param repositoryUserId The Active Participant UserID for the document repository (if using WS-Addressing)
-     * @param registryEndpointUri  The Web service endpoint URI for the document registry
-     * @param patientId The Patient Id that this submission pertains to
-     * @param purposesOfUse
-     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param userId ID of the user at the actor performing audit trail
+     * @param userName name of the user at the actor performing audit trail
+     * @param serviceEndpointUri Web Service endpoint URI of the Document Registry
+     * @param clientIpAddress IP address of the Document Administrator
+     * @param patientId ID of the patient related to the deleted registry objects
+     * @param objectUuids UUIDs of the registry objects being deleted
+     * @param purposesOfUse &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      */
-    public void auditClientIti62(
+    public void auditIti62(
+            boolean serverSide,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
-            String repositoryUserId,
+            String userId,
             String userName,
-            String registryEndpointUri,
+            String serviceEndpointUri,
+            String clientIpAddress,
             String patientId,
+            String[] objectUuids,
             List<CodedValueType> purposesOfUse)
     {
         if (! isAuditorEnabled()) {
             return;
         }
 
-        GenericIHEAuditEventMessage iti62ExportEvent = new GenericIHEAuditEventMessage(
-                true,
+        GenericIHEAuditEventMessage event = new GenericIHEAuditEventMessage(
+                ! serverSide,
                 eventOutcome,
                 RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
                 new DICOMEventIdCodes.Export(),
                 new CustomIHETransactionEventTypeCodes.DeleteDocumentSet(),
                 purposesOfUse);
 
-        iti62ExportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
-        iti62ExportEvent.addSourceActiveParticipant(
-                repositoryUserId, getSystemAltUserId(), null, getSystemNetworkId(), true);
+        event.addSourceActiveParticipant(
+                serverSide ? null : userId,
+                serverSide ? null : getSystemAltUserId(),
+                null,
+                serverSide ? clientIpAddress : getSystemNetworkId(),
+                true);
 
         if (!EventUtils.isEmptyOrNull(userName)) {
-            iti62ExportEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
+            event.addHumanRequestorActiveParticipant(userName, null, userName, null);
         }
 
-        iti62ExportEvent.addDestinationActiveParticipant(
-                registryEndpointUri, null, null, EventUtils.getAddressForUrl(registryEndpointUri, false), false);
+        event.addDestinationActiveParticipant(
+                serviceEndpointUri,
+                serverSide ? getSystemAltUserId() : null,
+                null,
+                serverSide ? getSystemNetworkId() : EventUtils.getAddressForUrl(serviceEndpointUri, false),
+                false);
+
+        event.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
+
         if (!EventUtils.isEmptyOrNull(patientId)) {
-            iti62ExportEvent.addPatientParticipantObject(patientId);
+            event.addPatientParticipantObject(patientId);
         }
-        audit(iti62ExportEvent);
+
+        if (objectUuids != null) {
+            for (String uuid : objectUuids) {
+                event.addDocumentEntryObject(new IHETransactionParticipantObjectIDTypeCodes.StableXdsDocumentEntry(), uuid);
+            }
+        }
+
+        audit(event);
     }
-
-
-    /**
-     * Generically sends audit messages for XDS Delete Document Set events
-     *
-     * @param eventOutcome The event outcome indicator
-     * @param sourceUserId The Active Participant UserID for the document consumer (if using WS-Addressing)
-     * @param sourceIpAddress The IP address of the document source that initiated the transaction
-     * @param repositoryEndpointUri The Web service endpoint URI for this document repository
-     * @param patientId The Patient Id that this submission pertains to
-     * @param purposesOfUse
-     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
-     */
-    public void auditServerIti62 (
-            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
-            String sourceUserId,
-            String sourceIpAddress,
-            String userName,
-            String repositoryEndpointUri,
-            String patientId,
-            List<CodedValueType> purposesOfUse)
-    {
-        GenericIHEAuditEventMessage iti62ImportEvent = new GenericIHEAuditEventMessage(
-                false,
-                eventOutcome,
-                RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
-                new DICOMEventIdCodes.Import(),
-                new CustomIHETransactionEventTypeCodes.DeleteDocumentSet(),
-                purposesOfUse);
-
-        iti62ImportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
-        iti62ImportEvent.addSourceActiveParticipant(sourceUserId, null, null, sourceIpAddress, true);
-        if (!EventUtils.isEmptyOrNull(userName)) {
-            iti62ImportEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
-        }
-
-        iti62ImportEvent.addDestinationActiveParticipant(repositoryEndpointUri, getSystemAltUserId(), null,
-                EventUtils.getAddressForUrl(repositoryEndpointUri, false), false);
-        if (!EventUtils.isEmptyOrNull(patientId)) {
-            iti62ImportEvent.addPatientParticipantObject(patientId);
-        }
-
-        audit(iti62ImportEvent);
-    }
-
 
     /**
      * Audits an ITI-63 XCF Cross-Community Fetch event.
