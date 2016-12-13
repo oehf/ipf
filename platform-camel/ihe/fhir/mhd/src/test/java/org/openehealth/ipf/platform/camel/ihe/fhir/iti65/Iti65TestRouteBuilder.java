@@ -26,6 +26,7 @@ import org.hl7.fhir.instance.model.DocumentManifest;
 import org.hl7.fhir.instance.model.DocumentReference;
 import org.hl7.fhir.instance.model.List_;
 import org.hl7.fhir.instance.model.Resource;
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelValidators;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 
 import java.util.Date;
@@ -50,6 +51,7 @@ public class Iti65TestRouteBuilder extends RouteBuilder {
 
         from("mhd-iti65:stub?audit=true")
                 .errorHandler(noErrorHandler())
+                .process(FhirCamelValidators.requestValidator())
                 .transform(new Responder());
     }
 

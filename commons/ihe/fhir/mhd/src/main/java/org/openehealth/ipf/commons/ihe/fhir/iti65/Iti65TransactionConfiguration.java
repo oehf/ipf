@@ -29,7 +29,8 @@ public class Iti65TransactionConfiguration extends FhirTransactionConfiguration 
     public Iti65TransactionConfiguration() {
         super(
                 new Iti65ResourceProvider(),                    // Consumer side. accept registrations
-                new Iti65ClientRequestFactory());               // Formulate requests
+                new Iti65ClientRequestFactory(),                // Formulate requests
+                new Iti65Validator());
     }
 
     @Override

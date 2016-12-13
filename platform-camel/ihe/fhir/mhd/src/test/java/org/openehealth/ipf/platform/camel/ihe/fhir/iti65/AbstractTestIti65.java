@@ -23,7 +23,6 @@ import org.hl7.fhir.instance.model.DocumentManifest;
 import org.hl7.fhir.instance.model.DocumentReference;
 import org.hl7.fhir.instance.model.Enumerations;
 import org.hl7.fhir.instance.model.Identifier;
-import org.hl7.fhir.instance.model.Narrative;
 import org.hl7.fhir.instance.model.Reference;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.joda.time.DateTime;
@@ -36,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
-import java.nio.charset.Charset;
+import java.security.MessageDigest;
 import java.util.Date;
 
 /**
@@ -46,6 +45,9 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti65.class);
 
+    private static final String BINARY_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bb";
+    private static final String REFERENCE_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bb";
+
     public static void startServer(String contextDescriptor) throws ServletException {
         IpfFhirServlet servlet = new IpfFhirServlet();
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, new MockedSender(), "FhirServlet");
@@ -54,7 +56,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
     protected Bundle provideAndRegister() throws Exception {
         Bundle bundle = new Bundle().setType(Bundle.BundleType.TRANSACTION);
-        bundle.getMeta().addTag(Iti65Constants.ITI65_TAG);
+        bundle.getMeta().addProfile(Iti65Constants.ITI65_PROFILE);
 
         // Manifest
 
@@ -65,6 +67,8 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
                 .setSource("source")
                 .setSubject(new Reference("Patient/a2"))
                 .setId("id");
+        manifest.addContent()
+                .setP(new Reference(REFERENCE_FULL_URL));
         bundle.addEntry()
                 .setRequest(
                         new Bundle.BundleEntryRequestComponent()
@@ -74,15 +78,14 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
         // Reference
 
+        byte[] documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
+
         Date timestamp = new DateTime()
                 .withDate(2013, 7, 1)
                 .withTime(13, 11, 33, 0)
                 .withZone(DateTimeZone.UTC).toDate();
         DocumentReference reference = new DocumentReference();
         reference.getMeta().setLastUpdated(timestamp);
-        Narrative narrative = new Narrative().setStatus(Narrative.NarrativeStatus.GENERATED);
-        narrative.setDivAsString("<a href=\"http://localhost:9556/svc/fhir/Binary/1e404af3-077f-4bee-b7a6-a9be97e1ce32\">Document: urn:oid:129.6.58.92.88336</a>undefined, created 24/12/2005");
-        reference.setText(narrative);
 
         reference.setMasterIdentifier(
                 new Identifier()
@@ -105,13 +108,14 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
                     new Attachment()
                             .setContentType("text/plain")
                             .setLanguage("en/us")
-                            .setSize(4711)
-                            .setHash("sha1hash".getBytes())
-                            .setUrl("??"))
+                            .setSize(documentContent.length)
+                            .setHash(MessageDigest.getInstance("SHA-1").digest(documentContent))
+                            .setUrl(BINARY_FULL_URL))
                 .addFormat()
                     .setCode("urn:ihe:pcc:handp:2008")
                     .setSystem("urn:oid:1.3.6.1.4.1.19376.1.2.3");
         bundle.addEntry()
+                .setFullUrl(REFERENCE_FULL_URL)
                 .setRequest(
                         new Bundle.BundleEntryRequestComponent()
                                 .setMethod(Bundle.HTTPVerb.POST)
@@ -122,10 +126,11 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
 
         Binary binary = new Binary()
                 .setContentType("text/plain")
-                .setContent("YXNkYXNkYXNkYXNkYXNk".getBytes(Charset.defaultCharset()));
+                .setContent(documentContent);
         binary.getMeta().setLastUpdated(timestamp);
 
         bundle.addEntry()
+                .setFullUrl(BINARY_FULL_URL)
                 .setRequest(new Bundle.BundleEntryRequestComponent()
                         .setMethod(Bundle.HTTPVerb.POST)
                         .setUrl("Binary"))

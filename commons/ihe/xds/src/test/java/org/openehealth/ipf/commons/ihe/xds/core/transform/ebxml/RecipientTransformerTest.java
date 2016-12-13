@@ -40,7 +40,7 @@ public class RecipientTransformerTest {
         Identifiable id = new Identifiable("personId", assigningAuthority2);        
         Name name = new XpnName("familyName", "givenName", "second", "suffix", "prefix", "degree");
         Person person = new Person(id, name);
-        Telecom telecom = new Telecom(41, 162, 7773, null);
+        Telecom telecom = new Telecom(41L, 162L, 7773L, null);
 
         recipient = new Recipient();
         recipient.setOrganization(organization);

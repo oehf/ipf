@@ -71,8 +71,8 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         author.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
         author.getAuthorSpecialty().add(new Identifiable("spec2", null));
 
-        author.getAuthorTelecom().add(new Telecom(null, null, 7771, null));
-        author.getAuthorTelecom().add(new Telecom(null, null, 7772, null));
+        author.getAuthorTelecom().add(new Telecom(null, null, 7771L, null));
+        author.getAuthorTelecom().add(new Telecom(null, null, 7772L, null));
     }
     
     @Test

@@ -202,21 +202,21 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         return qry
     }
 
-    private String searchString(StringParam param, boolean forceExactSearch) {
+    protected String searchString(StringParam param, boolean forceExactSearch) {
         if (param == null || param.empty) return null;
         forceExactSearch || param.exact ? param.value : param.value + "*"
     }
 
-    private List<String> searchStringList(StringAndListParam param, boolean forceExactSearch) {
+    protected List<String> searchStringList(StringAndListParam param, boolean forceExactSearch) {
         param?.getValuesAsQueryTokens().collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
     }
 
-    private String searchNumber(NumberParam param) {
+    protected String searchNumber(NumberParam param) {
         if (param == null) return null;
         param?.value.toString()
     }
 
-    private Optional<CompositeIdentifier> searchToken(TokenParam identifierParam) {
+    protected Optional<CompositeIdentifier> searchToken(TokenParam identifierParam) {
         if (identifierParam) {
             CompositeIdentifier cx = new CompositeIdentifier(
                     id : identifierParam.value,
@@ -232,11 +232,11 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         return Optional.empty()
     }
 
-    private List<Optional<CompositeIdentifier>> searchTokenList(TokenAndListParam param) {
+    protected List<Optional<CompositeIdentifier>> searchTokenList(TokenAndListParam param) {
         param?.getValuesAsQueryTokens().collect { searchToken(it?.valuesAsQueryTokens?.find()) }
     }
 
-    private def firstOrNull(List<?> list) {
+    protected def firstOrNull(List<?> list) {
         list?.empty ? null : list[0]
     }
 
@@ -259,7 +259,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
 
     }
 
-    private class CompositeIdentifier {
+    static class CompositeIdentifier {
         String id;
         String namespace;
         String oid;

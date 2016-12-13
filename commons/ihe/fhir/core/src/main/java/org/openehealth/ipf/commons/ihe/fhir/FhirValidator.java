@@ -28,6 +28,15 @@ import java.util.Map;
  */
 public interface FhirValidator {
 
+    String VALIDATION_MODE = "fhir.validation.mode";
+
+    /**
+     * Validation mode. May be used by validator implementations
+     */
+    enum Mode {
+        THOROUGH, BASIC, OFF
+    }
+
     FhirValidator NO_VALIDATION = new Support();
 
     /**
@@ -52,6 +61,7 @@ public interface FhirValidator {
     void validateResponse(FhirContext context, Object payload, Map<String, Object> parameters);
 
     class Support implements FhirValidator {
+
         @Override
         public void validateRequest(FhirContext context, Object payload, Map<String, Object> headers) {
         }

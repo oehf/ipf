@@ -19,6 +19,8 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.IBundleProvider;
+import lombok.Getter;
+import lombok.Setter;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
@@ -52,11 +54,6 @@ public abstract class AbstractPlainProvider implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractPlainProvider.class);
 
     private RequestConsumer consumer;
-    private FhirValidator validator = FhirValidator.NO_VALIDATION;
-
-    public void setValidator(FhirValidator validator) {
-        this.validator = validator;
-    }
 
     protected FhirContext getFhirContext() {
         return consumer.getFhirContext();
@@ -96,9 +93,7 @@ public abstract class AbstractPlainProvider implements Serializable {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
-        validator.validateRequest(consumer.getFhirContext(), payload, headers);
         R response = consumer.handleResourceRequest(payload, headers, resultType);
-        validator.validateResponse(consumer.getFhirContext(), response, headers);
         return response;
     }
 
@@ -133,9 +128,7 @@ public abstract class AbstractPlainProvider implements Serializable {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
-        validator.validateRequest(consumer.getFhirContext(), payload, headers);
         List<R> response = consumer.handleBundleRequest(payload, headers);
-        validator.validateResponse(consumer.getFhirContext(), response, headers);
         return response;
     }
 
@@ -157,8 +150,7 @@ public abstract class AbstractPlainProvider implements Serializable {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(searchParameters, httpServletRequest);
-        validator.validateRequest(consumer.getFhirContext(), payload, headers);
-        return consumer.handleBundleProviderRequest(payload, headers, validator);
+        return consumer.handleBundleProviderRequest(payload, headers);
     }
 
     /**
@@ -194,37 +186,31 @@ public abstract class AbstractPlainProvider implements Serializable {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
-        validator.validateRequest(consumer.getFhirContext(), payload, headers);
         MethodOutcome response = consumer.handleAction(payload, headers);
-        validator.validateResponse(consumer.getFhirContext(), response, headers);
         return response;
     }
 
     /**
-     * Subsmits a transaction request bundle, expecting a corresponding response bundle
+     * Submits a transaction request bundle, expecting a corresponding response bundle
      *
      * @param payload             transaction bundle
-     * @param parameters          parameters
      * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return result of processing
      */
     protected final Bundle requestTransaction(
             Object payload,
-            FhirSearchParameters parameters,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
         if (consumer == null) {
             throw new IllegalStateException("Consumer is not initialized");
         }
-        Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
-        validator.validateRequest(consumer.getFhirContext(), payload, headers);
+        Map<String, Object> headers = enrichParameters(null, httpServletRequest);
         Bundle response = consumer.handleTransactionRequest(payload, headers);
-        validator.validateResponse(consumer.getFhirContext(), response, headers);
         return response;
     }
 
-    private Map<String, Object> enrichParameters(FhirSearchParameters parameters, HttpServletRequest httpServletRequest) {
+    protected Map<String, Object> enrichParameters(FhirSearchParameters parameters, HttpServletRequest httpServletRequest) {
         // Populate some headers.
         Map<String, Object> enriched = new HashMap<>();
         enriched.put(Constants.HTTP_URI, httpServletRequest.getRequestURI());
@@ -240,13 +226,9 @@ public abstract class AbstractPlainProvider implements Serializable {
         Map<String, List<String>> headers = extractHttpHeaders(httpServletRequest);
         enriched.put(Constants.HTTP_HEADERS, headers);
 
-        enriched.put(TRACE_ID, headers.get(TRACE_ID));
-        enriched.put(SPAN_ID, headers.get(SPAN_ID));
-        enriched.put(PARENT_SPAN_ID, headers.get(PARENT_SPAN_ID));
-        enriched.put(SAMPLED, headers.get(SAMPLED));
-        enriched.put(FLAGS, headers.get(FLAGS));
-
-        enriched.put(Constants.FHIR_REQUEST_PARAMETERS, parameters);
+        if (parameters != null) {
+            enriched.put(Constants.FHIR_REQUEST_PARAMETERS, parameters);
+        }
         return enriched;
     }
 

@@ -50,12 +50,11 @@ public class EagerBundleProviderTest {
         }
         Object payload = new Object();
         Map<String, Object> headers = new HashMap<>();
-        bundleProvider = new EagerBundleProvider(requestConsumer, payload, headers, FhirValidator.NO_VALIDATION);
+        bundleProvider = new EagerBundleProvider(requestConsumer, payload, headers);
     }
 
     @Test
     public void testGetSize() {
-        EasyMock.expect(requestConsumer.getFhirContext()).andReturn(FhirContext.forDstu2Hl7Org());
         EasyMock.expect(requestConsumer.handleBundleRequest(bundleProvider.getPayload(), bundleProvider.getHeaders())).andReturn(response);
         EasyMock.replay(requestConsumer);
         assertEquals(response.size(), bundleProvider.size());
@@ -64,7 +63,6 @@ public class EagerBundleProviderTest {
 
     @Test
     public void testGetResources() {
-        EasyMock.expect(requestConsumer.getFhirContext()).andReturn(FhirContext.forDstu2Hl7Org());
         EasyMock.expect(requestConsumer.handleBundleRequest(bundleProvider.getPayload(), bundleProvider.getHeaders())).andReturn(response);
         EasyMock.replay(requestConsumer);
         List<IBaseResource> result = bundleProvider.getResources(10, 30);

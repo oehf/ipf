@@ -59,8 +59,8 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         author1.getAuthorRole().add(new Identifiable("role2", null));
         author1.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
         author1.getAuthorSpecialty().add(new Identifiable("spec2", null));
-        author1.getAuthorTelecom().add(new Telecom(41, 76, 73901, 0));
-        author1.getAuthorTelecom().add(new Telecom(41, 76, 73901, 1));
+        author1.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 0L));
+        author1.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 1L));
 
         Author author2 = new Author();
         author2.setAuthorPerson(createPerson(30));
@@ -70,8 +70,8 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         author2.getAuthorRole().add(new Identifiable("role4", null));
         author2.getAuthorSpecialty().add(new Identifiable("spec3", new AssigningAuthority("2.3.7", "ISO")));
         author2.getAuthorSpecialty().add(new Identifiable("spec4", null));
-        author2.getAuthorTelecom().add(new Telecom(41, 76, 73901, 2));
-        author2.getAuthorTelecom().add(new Telecom(41, 76, 73901, 3));
+        author2.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 2l));
+        author2.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 3L));
 
         Address address = new Address();
         address.setCity("city");

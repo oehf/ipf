@@ -31,7 +31,6 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.EagerBundleProvider;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.FhirValidator;
 import org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider;
 import org.openehealth.ipf.commons.ihe.fhir.RequestConsumer;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -120,8 +119,8 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     }
 
     @Override
-    public IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers, FhirValidator validator) {
-        return getBundleProvider(payload, headers, validator);
+    public IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers) {
+        return getBundleProvider(payload, headers);
     }
 
     @Override
@@ -209,10 +208,10 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      * @param headers request headers
      * @return resulting bundle provider
      */
-    protected IBundleProvider getBundleProvider(Object payload, Map<String, Object> headers, FhirValidator validator) {
+    protected IBundleProvider getBundleProvider(Object payload, Map<String, Object> headers) {
         FhirEndpointConfiguration<?> endpointConfiguration = getEndpoint().getInterceptableConfiguration();
         return supportsLazyLoading() ?
-                new LazyBundleProvider(this, endpointConfiguration.isCacheBundles(), payload, headers, validator) :
-                new EagerBundleProvider(this, payload, headers, validator);
+                new LazyBundleProvider(this, endpointConfiguration.isCacheBundles(), payload, headers) :
+                new EagerBundleProvider(this, payload, headers);
     }
 }

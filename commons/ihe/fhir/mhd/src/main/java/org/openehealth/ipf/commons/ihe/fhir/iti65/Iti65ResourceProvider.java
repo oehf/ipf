@@ -32,11 +32,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class Iti65ResourceProvider extends AbstractPlainProvider {
 
+    public Iti65ResourceProvider() {
+        super();
+    }
+
     @Transaction
     public Bundle provideDocumentBundle(@TransactionParam Bundle bundle,
                                      HttpServletRequest httpServletRequest,
                                      HttpServletResponse httpServletResponse) {
 
-        return requestTransaction(bundle, null, httpServletRequest, httpServletResponse);
+        return requestTransaction(bundle, httpServletRequest, httpServletResponse);
     }
 }

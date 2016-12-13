@@ -32,8 +32,8 @@ public class EagerBundleProvider extends AbstractBundleProvider {
 
     private transient List<IBaseResource> resources;
 
-    public EagerBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers, FhirValidator validator) {
-        super(consumer, payload, headers, validator);
+    public EagerBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers) {
+        super(consumer, payload, headers);
     }
 
     @Override

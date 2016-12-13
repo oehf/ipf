@@ -32,13 +32,11 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
     private final RequestConsumer consumer;
     private Object payload;
     private Map<String, Object> headers;
-    private FhirValidator validator;
 
-    public AbstractBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers, FhirValidator validator) {
+    public AbstractBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers) {
         this.consumer = consumer;
         this.payload = payload;
         this.headers = headers;
-        this.validator = validator;
     }
 
     @Override
@@ -53,7 +51,6 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
 
     protected List<IBaseResource> obtainResources(Object payload, Map<String, Object> parameters) {
         List<IBaseResource> resources = consumer.handleBundleRequest(payload, parameters);
-        validator.validateResponse(consumer.getFhirContext(), resources, parameters);
         return resources;
     }
 

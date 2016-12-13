@@ -96,7 +96,7 @@ public interface RequestConsumer {
      * @{link IBundleProvider} takes over the responsibility to fetch the required subset of the result, usually
      * by indirectly calling {@link #handleBundleRequest(Object, Map)} as required.
      */
-    IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers, FhirValidator validator);
+    IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers);
 
     /**
      * Handles transaction requests

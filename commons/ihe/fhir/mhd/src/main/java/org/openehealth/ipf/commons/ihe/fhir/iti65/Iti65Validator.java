@@ -21,7 +21,16 @@ import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.validation.ValidationResult;
 import org.hl7.fhir.instance.hapi.validation.FhirInstanceValidator;
 import org.hl7.fhir.instance.hapi.validation.IValidationSupport;
-import org.hl7.fhir.instance.model.*;
+import org.hl7.fhir.instance.model.Binary;
+import org.hl7.fhir.instance.model.Bundle;
+import org.hl7.fhir.instance.model.DocumentManifest;
+import org.hl7.fhir.instance.model.DocumentReference;
+import org.hl7.fhir.instance.model.List_;
+import org.hl7.fhir.instance.model.OperationOutcome;
+import org.hl7.fhir.instance.model.Patient;
+import org.hl7.fhir.instance.model.Reference;
+import org.hl7.fhir.instance.model.Resource;
+import org.hl7.fhir.instance.model.UriType;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.CustomValidationSupport;
@@ -29,7 +38,14 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirUtils;
 import org.openehealth.ipf.commons.ihe.fhir.FhirValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Validator for ITI-65 transactions.
@@ -37,11 +53,11 @@ import java.util.*;
  *  @author Christian Ohr
  *  @since 3.2
  */
-public class Iti65Validator implements FhirValidator {
+public class Iti65Validator extends FhirValidator.Support {
 
     private static final IValidationSupport VALIDATION_SUPPORT = new CustomValidationSupport("profiles/MHD");
 
-    // Prepare the required validator instances so that the structure defintions are not reloaded each time
+    // Prepare the required validator instances so that the structure definitions are not reloaded each time
     private static Map<Class<?>, FhirInstanceValidator> VALIDATORS = new HashMap<>();
 
     static {
@@ -56,25 +72,23 @@ public class Iti65Validator implements FhirValidator {
         validateTransactionBundle(transactionBundle);
         validateBundleConsistency(transactionBundle);
 
-        for (Bundle.BundleEntryComponent entry : transactionBundle.getEntry()) {
+        if (Mode.THOROUGH.equals(parameters.get(VALIDATION_MODE))) {
+            for (Bundle.BundleEntryComponent entry : transactionBundle.getEntry()) {
 
-            Class<? extends IBaseResource> clazz = entry.getResource().getClass();
-            if (VALIDATORS.containsKey(clazz)) {
-                ca.uhn.fhir.validation.FhirValidator validator = context.newValidator();
-                validator.registerValidatorModule(VALIDATORS.get(clazz));
-                ValidationResult validationResult = validator.validateWithResult(entry.getResource());
-                if (!validationResult.isSuccessful()) {
-                    IBaseOperationOutcome operationOutcome = validationResult.toOperationOutcome();
-                    throw FhirUtils.exception(UnprocessableEntityException::new, operationOutcome, "Validation Failed");
+                Class<? extends IBaseResource> clazz = entry.getResource().getClass();
+                if (VALIDATORS.containsKey(clazz)) {
+                    ca.uhn.fhir.validation.FhirValidator validator = context.newValidator();
+                    validator.registerValidatorModule(VALIDATORS.get(clazz));
+                    ValidationResult validationResult = validator.validateWithResult(entry.getResource());
+                    if (!validationResult.isSuccessful()) {
+                        IBaseOperationOutcome operationOutcome = validationResult.toOperationOutcome();
+                        throw FhirUtils.exception(UnprocessableEntityException::new, operationOutcome, "Validation Failed");
+                    }
                 }
             }
         }
     }
 
-    @Override
-    public void validateResponse(FhirContext context, Object payload, Map<String, Object> parameters) {
-
-    }
 
     /**
      * Validates bundle type, meta data and consistency of contained resources
@@ -91,13 +105,13 @@ public class Iti65Validator implements FhirValidator {
                     Bundle.BundleType.TRANSACTION.toCode(), bundle.getType().toCode());
         }
         List<UriType> profiles = bundle.getMeta().getProfile();
-        if (profiles.isEmpty() || !Iti65Constants.ITI65_TAG.getCode().equals(profiles.get(0).getValue())) {
+        if (profiles.isEmpty() || !Iti65Constants.ITI65_PROFILE.equals(profiles.get(0).getValue())) {
             throw FhirUtils.unprocessableEntity(
                     OperationOutcome.IssueSeverity.ERROR,
                     OperationOutcome.IssueType.INVALID,
                     null, null,
                     "Request bundle must have profile",
-                    Iti65Constants.ITI65_TAG.getCode());
+                    Iti65Constants.ITI65_PROFILE);
         }
 
     }
@@ -130,17 +144,28 @@ public class Iti65Validator implements FhirValidator {
         }
 
         Set<String> references = new HashSet<>();
+        Set<String> expectedBinaryFullUrls = new HashSet<>();
+        Set<String> expectedReferenceFullUrls = new HashSet<>();
         entries.values().stream()
                 .flatMap(Collection::stream)
                 .map(Bundle.BundleEntryComponent::getResource)
                 .forEach(resource -> {
-                    Reference subject = null;
                     if (resource instanceof DocumentManifest) {
-                        subject = ((DocumentManifest) resource).getSubject();
+                        DocumentManifest dm = (DocumentManifest) resource;
+                        for(DocumentManifest.DocumentManifestContentComponent content : dm.getContent()) {
+                            try {
+                                expectedReferenceFullUrls.add(content.getPReference().getReference());
+                            } catch (Exception ignored) {}
+                        }
+                        references.add(getSubjectReference(resource, r -> dm.getSubject()));
                     } else if (resource instanceof DocumentReference) {
-                        subject = ((DocumentReference) resource).getSubject();
+                        DocumentReference dr = (DocumentReference) resource;
+                        for(DocumentReference.DocumentReferenceContentComponent content : dr.getContent()) {
+                            expectedBinaryFullUrls.add(content.getAttachment().getUrl());
+                        }
+                        references.add(getSubjectReference(resource, r -> ((DocumentReference) r).getSubject()));
                     } else if (resource instanceof List_) {
-                        subject = ((List_) resource).getSubject();
+                        references.add(getSubjectReference(resource, r -> ((List_) r).getSubject()));
                     } else if (!(resource instanceof Binary)) {
                         throw FhirUtils.unprocessableEntity(
                                 OperationOutcome.IssueSeverity.ERROR,
@@ -150,19 +175,6 @@ public class Iti65Validator implements FhirValidator {
                                 resource.getClass().getSimpleName()
                         );
                     }
-                    if (subject != null) {
-                        references.add(subject.getReference());
-                    } else {
-                        throw FhirUtils.unprocessableEntity(
-                                OperationOutcome.IssueSeverity.ERROR,
-                                OperationOutcome.IssueType.INVALID,
-                                ErrorCode.UNKNOWN_PATIENT_ID.getOpcode(),
-                                null,
-                                "Empty Patient reference in resource %s",
-                                resource
-                        );
-                    }
-
                 });
 
         if (references.size() != 1) {
@@ -175,8 +187,75 @@ public class Iti65Validator implements FhirValidator {
                     references
             );
         }
+
+        entries.values().stream()
+                .flatMap(Collection::stream)
+                .forEach(entry -> {
+                    if (entry.getResource() instanceof DocumentReference) {
+                        if (!expectedReferenceFullUrls.remove(entry.getFullUrl())) {
+                            throw FhirUtils.unprocessableEntity(
+                                    OperationOutcome.IssueSeverity.ERROR,
+                                    OperationOutcome.IssueType.INVALID,
+                                    null, null,
+                                    "DocumentReference with URL %s is not referenced by any DocumentManifest",
+                                    entry.getFullUrl()
+                            );
+                        }
+                    } else if (entry.getResource() instanceof Binary) {
+                        if (!expectedBinaryFullUrls.remove(entry.getFullUrl())) {
+                            throw FhirUtils.unprocessableEntity(
+                                    OperationOutcome.IssueSeverity.ERROR,
+                                    OperationOutcome.IssueType.INVALID,
+                                    null, null,
+                                    "Binary with URL %s is not referenced by any DocumentReference",
+                                    entry.getFullUrl()
+                            );
+                        }
+                    }
+                });
+
+        if (!expectedBinaryFullUrls.isEmpty()) {
+            throw FhirUtils.unprocessableEntity(
+                    OperationOutcome.IssueSeverity.ERROR,
+                    OperationOutcome.IssueType.INVALID,
+                    null, null,
+                    "Binary with URLs %s referenced, but not present in this bundle",
+                    expectedBinaryFullUrls
+            );
+        }
+
+        if (!expectedReferenceFullUrls.isEmpty()) {
+            throw FhirUtils.unprocessableEntity(
+                    OperationOutcome.IssueSeverity.ERROR,
+                    OperationOutcome.IssueType.INVALID,
+                    null, null,
+                    "DocumentReference with URLs %s referenced, but not present in this bundle",
+                    expectedBinaryFullUrls
+            );
+        }
+
     }
 
+
+    private String getSubjectReference(Resource resource, Function<Resource, Reference> f) {
+        Reference reference = f.apply(resource);
+        if (reference == null) {
+            throw FhirUtils.unprocessableEntity(
+                    OperationOutcome.IssueSeverity.ERROR,
+                    OperationOutcome.IssueType.INVALID,
+                    ErrorCode.UNKNOWN_PATIENT_ID.getOpcode(),
+                    null,
+                    "Empty Patient reference in resource %s",
+                    resource
+            );
+        }
+        // Could be contained resources
+        if (reference.getResource() != null) {
+            Patient patient = (Patient)reference.getResource();
+            return patient.getIdentifier().get(0).getValue();
+        }
+        return reference.getReference();
+    }
 
 
 }

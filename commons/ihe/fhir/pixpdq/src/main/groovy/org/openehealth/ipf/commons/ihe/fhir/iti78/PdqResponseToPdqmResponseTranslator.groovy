@@ -55,7 +55,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
     private final UriMapper uriMapper
 
     String pdqSupplierResourceIdentifierUri
-    private String pdqSupplierResourceIdentifierOid
+    String pdqSupplierResourceIdentifierOid
 
     /**
      * @param uriMapper mapping for translating FHIR URIs into OIDs
@@ -228,7 +228,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
 
     // More generic HL7v2 to FHIR converting. Should be probably moved out of here....
 
-    private void convertIdentifiers(cxs, List<Identifier> identifiers) {
+    protected void convertIdentifiers(cxs, List<Identifier> identifiers) {
         for (def cx : cxs) {
             identifiers.add(convertIdentifier(cx))
         }

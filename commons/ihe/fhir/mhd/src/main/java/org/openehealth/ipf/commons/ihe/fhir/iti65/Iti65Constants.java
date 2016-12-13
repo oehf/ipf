@@ -16,14 +16,12 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
-import org.hl7.fhir.instance.model.Coding;
-
 /**
  * @author Christian Ohr
  * @since 3.2
  */
 public interface Iti65Constants {
 
-    Coding ITI65_TAG = new Coding().setCode("http://ihe.net/fhir/tag/iti-65");
+    String ITI65_PROFILE = "http://ihe.net/fhir/tag/iti-65";
 
 }

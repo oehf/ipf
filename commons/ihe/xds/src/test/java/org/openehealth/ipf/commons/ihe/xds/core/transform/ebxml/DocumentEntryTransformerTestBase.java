@@ -62,8 +62,8 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         author1.getAuthorRole().add(new Identifiable("role2", null));
         author1.getAuthorSpecialty().add(new Identifiable("spec1", new AssigningAuthority("2.3.3", "ISO")));
         author1.getAuthorSpecialty().add(new Identifiable("spec2", null));
-        author1.getAuthorTelecom().add(new Telecom(null, null, 7771, null));
-        author1.getAuthorTelecom().add(new Telecom(null, null, 7772, null));
+        author1.getAuthorTelecom().add(new Telecom(null, null, 7771L, null));
+        author1.getAuthorTelecom().add(new Telecom(null, null, 7772L, null));
 
         Author author2 = new Author();
         author2.setAuthorPerson(createPerson(30));
@@ -73,8 +73,8 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         author2.getAuthorRole().add(new Identifiable("role4", new AssigningAuthority("2.3.6", "ISO")));
         author2.getAuthorSpecialty().add(new Identifiable("spec3", null));
         author2.getAuthorSpecialty().add(new Identifiable("spec4", new AssigningAuthority("2.3.8", "ISO")));
-        author2.getAuthorTelecom().add(new Telecom(null, null, 7773, null));
-        author2.getAuthorTelecom().add(new Telecom(null, null, 7774, null));
+        author2.getAuthorTelecom().add(new Telecom(null, null, 7773L, null));
+        author2.getAuthorTelecom().add(new Telecom(null, null, 7774L, null));
 
         Address address = new Address();
         address.setCity("city");

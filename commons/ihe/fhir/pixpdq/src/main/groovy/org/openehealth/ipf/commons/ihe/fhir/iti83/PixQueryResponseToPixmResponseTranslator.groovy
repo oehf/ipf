@@ -57,7 +57,7 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
     }
 
     // Handle a regular response
-    private Parameters handleRegularResponse(pid3collection) {
+    protected Parameters handleRegularResponse(pid3collection) {
         Parameters parameters = new Parameters()
         if (pid3collection) {
             for (pid3 in pid3collection) {
@@ -74,12 +74,12 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
     }
 
     // Handle an empty response
-    private Parameters handleEmptyResponse() {
+    protected Parameters handleEmptyResponse() {
         return handleRegularResponse(null)
     }
 
     // Handle an error response from the Cross-reference manager
-    private Parameters handleErrorResponse(RSP_K23 message) {
+    protected Parameters handleErrorResponse(RSP_K23 message) {
 
         // Check error locations
         int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0

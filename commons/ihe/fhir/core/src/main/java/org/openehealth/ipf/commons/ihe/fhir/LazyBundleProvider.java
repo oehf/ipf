@@ -65,8 +65,8 @@ public class LazyBundleProvider extends AbstractBundleProvider {
      * @param payload      incoming payload
      * @param headers      incoming headers
      */
-    public LazyBundleProvider(RequestConsumer consumer, boolean cacheResults, Object payload, Map<String, Object> headers, FhirValidator validator) {
-        super(consumer, payload, headers, validator);
+    public LazyBundleProvider(RequestConsumer consumer, boolean cacheResults, Object payload, Map<String, Object> headers) {
+        super(consumer, payload, headers);
         this.cacheResults = cacheResults;
     }
 
