@@ -94,7 +94,9 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         // check whether requested unit type is supported
         String rcp22 = requestTerser.get("RCP-2-2");
         if (! "RD".equals(rcp22)) {
-            LOG.warn("Unit '{}' in RCP-2-2 is not supported", rcp22);
+            if (rcp22 != null) {
+                LOG.warn("Unit '{}' in RCP-2-2 is not supported", rcp22);
+            }
             getWrappedProcessor().process(exchange);
             return;
         }
