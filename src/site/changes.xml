@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.2.0" date="TBD" description="IPF 3.2.0">
+            <action dev="ohr" issue="134" type="update">
+                XDS Telecom metadata class now accepts Long values as telephone numbers
+            </action>
             <action dev="ohr" issue="133" type="add">
                 Convenience method for create HL7v2-based IHE transaction requests
             </action>

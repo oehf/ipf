@@ -44,6 +44,12 @@ XPID transaction endpoints now create and expect a custom message type `org.open
 instead of the standard `ca.uhn.hl7v2.model.v25.message.ADT_A43`.
 
 
+### XDS metadata classes
+
+`org.openehealth.ipf.commons.ihe.xds.core.metadata.Telecom` now uses Long values for countryCode, areaCityCode, localNumber and extension
+instead of Integer values
+
+
 ### EhCache
  
 EhCache is now an optional dependency. The EhCache implementations `org.openehealth.ipf.platform.camel.ihe.hl7v3.EhcacheHl7v3ContinuationStorage`,

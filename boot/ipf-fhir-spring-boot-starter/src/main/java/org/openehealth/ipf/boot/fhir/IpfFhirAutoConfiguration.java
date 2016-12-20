@@ -17,6 +17,7 @@
 package org.openehealth.ipf.boot.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.rest.server.ApacheProxyAddressStrategy;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.IServerAddressStrategy;
@@ -27,12 +28,9 @@ import org.openehealth.ipf.commons.ihe.core.atna.custom.FhirAuditor;
 import org.openehealth.ipf.commons.ihe.fhir.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.NamingSystemService;
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
-import org.openehealth.ipf.commons.map.config.CustomMappings;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -41,7 +39,6 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
@@ -110,6 +107,12 @@ public class IpfFhirAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(INarrativeGenerator.class)
+    public INarrativeGenerator narrativeGenerator() {
+        return null;
+    }
+
+    @Bean
     @ConditionalOnMissingBean(IPagingProvider.class)
     @ConditionalOnProperty("ipf.fhir.caching")
     public IPagingProvider pagingProvider(CacheManager cacheManager, FhirContext fhirContext) {
@@ -127,7 +130,8 @@ public class IpfFhirAutoConfiguration {
     public IpfFhirServlet fhirServlet(
             IServerConformanceProvider serverConformanceProvider,
             IPagingProvider pagingProvider,
-            IServerAddressStrategy serverAddressStrategy) {
+            IServerAddressStrategy serverAddressStrategy,
+            INarrativeGenerator narrativeGenerator) {
         IpfFhirServlet fhirServlet = new IpfFhirServlet();
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
         fhirServlet.setPagingProvider(pagingProvider);
@@ -136,6 +140,7 @@ public class IpfFhirAutoConfiguration {
         fhirServlet.setResponseHighlighting(servletProperties.isResponseHighlighting());
         fhirServlet.setServerConformanceProvider(serverConformanceProvider);
         fhirServlet.setServerAddressStrategy(serverAddressStrategy);
+        fhirServlet.setNarrativeGenerator(narrativeGenerator);
         return fhirServlet;
     }
 
