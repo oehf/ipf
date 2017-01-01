@@ -38,7 +38,6 @@ import java.util.List;
  */
 public class PDQ implements IntegrationProfile {
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements Hl7v2InteractionId {
         ITI_21(ITI_21_CONFIGURATION, ITI_21_NAK_FACTORY),

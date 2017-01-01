@@ -30,7 +30,6 @@ import java.util.List;
  */
 public class ATNA implements IntegrationProfile {
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements FhirInteractionId {
         ITI_81(ITI_81_CONFIG);

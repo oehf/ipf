@@ -35,7 +35,6 @@ import java.util.List;
  */
 public class XPID implements IntegrationProfile {
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements Hl7v2InteractionId {
         ITI_64(ITI_64_CONFIGURATION, ITI_64_NAK_FACTORY);
