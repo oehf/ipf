@@ -18,22 +18,28 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.pdqcore;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.Version;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 
 /**
  * A MLLP transaction configuration with PDQ-specific methods for continuation support.
- * @author Dmytro Rud
  *
+ * @author Dmytro Rud
  * @deprecated moved to {@link org.openehealth.ipf.commons.ihe.hl7v2.PdqTransactionConfiguration}
  */
 public class PdqTransactionConfiguration extends org.openehealth.ipf.commons.ihe.hl7v2.PdqTransactionConfiguration {
 
-    public PdqTransactionConfiguration(Version[] hl7Version, String sendingApplication, String sendingFacility,
-                                       ErrorCode requestErrorDefaultErrorCode, ErrorCode responseErrorDefaultErrorCode,
-                                       String[] allowedRequestMessageTypes, String[] allowedRequestTriggerEvents,
-                                       String[] allowedResponseMessageTypes, String[] allowedResponseTriggerEvents,
-                                       boolean[] auditabilityFlags, boolean[] responseContinuabilityFlags,
-                                       HapiContext hapiContext) {
-        super(hl7Version, sendingApplication, sendingFacility, requestErrorDefaultErrorCode, responseErrorDefaultErrorCode,
+    public PdqTransactionConfiguration(
+            String name, String description, boolean isQuery,
+            AuditStrategy clientAuditStrategy, AuditStrategy serverAuditStrategy,
+            Version[] hl7Version, String sendingApplication, String sendingFacility,
+            ErrorCode requestErrorDefaultErrorCode, ErrorCode responseErrorDefaultErrorCode,
+            String[] allowedRequestMessageTypes, String[] allowedRequestTriggerEvents,
+            String[] allowedResponseMessageTypes, String[] allowedResponseTriggerEvents,
+            boolean[] auditabilityFlags, boolean[] responseContinuabilityFlags,
+            HapiContext hapiContext)
+    {
+        super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
+                hl7Version, sendingApplication, sendingFacility, requestErrorDefaultErrorCode, responseErrorDefaultErrorCode,
                 allowedRequestMessageTypes, allowedRequestTriggerEvents, allowedResponseMessageTypes, allowedResponseTriggerEvents,
                 auditabilityFlags, responseContinuabilityFlags, hapiContext);
     }

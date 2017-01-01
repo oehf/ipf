@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
@@ -28,6 +27,11 @@ public class Iti83TransactionConfiguration extends FhirTransactionConfiguration 
 
     public Iti83TransactionConfiguration() {
         super(
+                "pixm-iti83",
+                "PIX Query For Mobile",
+                true,
+                new Iti83AuditStrategy(false),
+                new Iti83AuditStrategy(true),
                 new Iti83ResourceProvider(),        // Consumer side. accept $ihe-pix operation
                 new Iti83ClientRequestFactory());   // Formulate queries
         setSupportsLazyLoading(false);

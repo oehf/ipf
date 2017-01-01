@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.hl7v2;
 
 /**
@@ -26,6 +25,7 @@ public interface Constants {
      * message (as a {@link ca.uhn.hl7v2.model.Message} instance) will be saved.
      */
     String ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME = "ipf.hl7v2.OriginalMessageAdapter";
+
     /**
      * Name of the parameter where a copy of the original request
      * message (as a {@link String} instance) will be saved.

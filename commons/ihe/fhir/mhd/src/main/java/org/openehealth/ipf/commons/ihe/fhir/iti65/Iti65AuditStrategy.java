@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import org.hl7.fhir.instance.model.Bundle;
@@ -31,7 +30,7 @@ import java.util.stream.Collectors;
  * @author Christian Ohr
  * @since 3.2
  */
-public abstract class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
+public class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
 
     public Iti65AuditStrategy(boolean serverSide) {
         super(serverSide);

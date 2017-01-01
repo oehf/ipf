@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
@@ -23,14 +22,14 @@ import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
  * @author Christian Ohr
  * @since 3.2
  */
-public interface Hl7v3InteractionId extends WsInteractionId {
+public interface Hl7v3InteractionId<ConfigType extends Hl7v3WsTransactionConfiguration> extends WsInteractionId<ConfigType> {
 
     default CombinedXmlValidationProfile getRequestValidationProfile() {
-        return ((Hl7v3WsTransactionConfiguration)getWsTransactionConfiguration()).getRequestValidationProfile();
+        return getWsTransactionConfiguration().getRequestValidationProfile();
     }
 
     default CombinedXmlValidationProfile getResponseValidationProfile() {
-        return ((Hl7v3WsTransactionConfiguration)getWsTransactionConfiguration()).getResponseValidationProfile();
+        return getWsTransactionConfiguration().getResponseValidationProfile();
     }
 
 }

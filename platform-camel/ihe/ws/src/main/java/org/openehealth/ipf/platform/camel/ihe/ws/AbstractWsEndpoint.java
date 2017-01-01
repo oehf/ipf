@@ -383,7 +383,7 @@ public abstract class AbstractWsEndpoint<
     @SuppressWarnings("unchecked")
     @Override
     public AbstractWsComponent<AuditDatasetType, ConfigType, ? extends WsInteractionId> getComponent() {
-        return (AbstractWsComponent<AuditDatasetType, ConfigType, WsInteractionId>) super.getComponent();
+        return (AbstractWsComponent<AuditDatasetType, ConfigType, WsInteractionId<ConfigType>>) super.getComponent();
     }
 
     /**

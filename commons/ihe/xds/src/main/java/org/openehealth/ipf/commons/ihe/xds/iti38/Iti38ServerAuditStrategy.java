@@ -25,14 +25,6 @@ import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ServerAuditStrategy;
  */
 public class Iti38ServerAuditStrategy extends Iti18ServerAuditStrategy {
 
-    private static class LazyHolder {
-        private static final Iti38ServerAuditStrategy INSTANCE = new Iti38ServerAuditStrategy();
-    }
-
-    public static Iti38ServerAuditStrategy getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
     @Override
     public void doAudit(XdsQueryAuditDataset auditDataset) {
         AuditorManager.getXCARespondingGatewayAuditor().auditCrossGatewayQueryEvent(

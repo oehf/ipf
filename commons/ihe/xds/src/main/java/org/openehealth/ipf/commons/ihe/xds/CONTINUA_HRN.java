@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.xds;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,39 +27,20 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public class CONTINUA_HRN implements XdsInteractionProfile {
+public class CONTINUA_HRN implements XdsIntegrationProfile {
 
     private static final CONTINUA_HRN Instance = new CONTINUA_HRN();
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements XdsInteractionId {
+        ITI_41(XDS_B.Interactions.ITI_41.getWsTransactionConfiguration());
 
-        ITI_41("xds-iti41",
-                "Provide and Register Document Set-b",
-                false,
-                XDS_B.Interactions.ITI_41.getWsTransactionConfiguration()) {
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getClientAuditStrategy() {
-                return XDS_B.Interactions.ITI_41.getClientAuditStrategy();
-            }
-
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getServerAuditStrategy() {
-                return XDS_B.Interactions.ITI_41.getServerAuditStrategy();
-            }
-        };
-
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
         @Getter private WsTransactionConfiguration wsTransactionConfiguration;
 
         @Override
-        public XdsInteractionProfile getInteractionProfile() {
+        public XdsIntegrationProfile getInteractionProfile() {
             return Instance;
         }
-
     }
 
     @Override

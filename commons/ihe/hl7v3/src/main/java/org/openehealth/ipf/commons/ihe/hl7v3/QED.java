@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.InteractionProfile;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.Row;
-import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
-import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1ServerAuditStrategy;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
@@ -34,30 +31,12 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public class QED implements InteractionProfile {
+public class QED implements IntegrationProfile {
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements Hl7v3InteractionId {
+        PCC_1(PCC1_WS_CONFIG);
 
-        PCC_1("qed-pcc1",
-                "Query For Existing Data",
-                true,
-                PCC1_WS_CONFIG) {
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-                return Pcc1ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-                return Pcc1ServerAuditStrategy.getInstance();
-            }
-        };
-
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
         @Getter private Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration;
     }
 
@@ -79,6 +58,11 @@ public class QED implements InteractionProfile {
 
     private final static String NS_URI = "urn:ihe:pcc:qed:2007";
     private final static Hl7v3ContinuationAwareWsTransactionConfiguration PCC1_WS_CONFIG = new Hl7v3ContinuationAwareWsTransactionConfiguration(
+            "qed-pcc1",
+            "Query For Existing Data",
+            true,
+            new Pcc1AuditStrategy(false),
+            new Pcc1AuditStrategy(true),
             new QName(NS_URI, "ClinicalDataSource_Service", "qed"),
             Pcc1PortType.class,
             new QName(NS_URI, "ClinicalDataSource_Binding_Soap12", "qed"),

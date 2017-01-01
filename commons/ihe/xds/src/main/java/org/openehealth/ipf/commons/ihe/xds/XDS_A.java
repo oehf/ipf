@@ -13,17 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.xds;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14ServerAuditStrategy;
@@ -42,71 +37,23 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public class XDS_A implements XdsInteractionProfile {
+public class XDS_A implements XdsIntegrationProfile {
 
     private static final XDS_A Instance = new XDS_A();
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements XdsInteractionId {
+        ITI_14(ITI_14_WS_CONFIG),
+        ITI_15(ITI_15_WS_CONFIG),
+        ITI_16(ITI_16_WS_CONFIG),
+        ITI_17(ITI_17_WS_CONFIG);
 
-        ITI_14("xds-iti14",
-                "Register Document Set",
-                false,
-                ITI14_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getClientAuditStrategy() {
-                return Iti14ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getServerAuditStrategy() {
-                return Iti14ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_15("xds-iti15",
-                "Provide and Register Document Set",
-                false,
-                ITI15_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getClientAuditStrategy() {
-                return Iti15ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getServerAuditStrategy() {
-                return Iti15ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_16("xds-iti16",
-                "Query Registry",
-                true,
-                ITI16_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
-                return Iti16ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
-                return Iti16ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_17("xds-iti17",
-                "Retrieve Documents",
-                false,
-                null);
-
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
         @Getter private WsTransactionConfiguration wsTransactionConfiguration;
 
         @Override
-        public XdsInteractionProfile getInteractionProfile() {
+        public XdsIntegrationProfile getInteractionProfile() {
             return Instance;
         }
-
     }
 
     @Override
@@ -124,7 +71,12 @@ public class XDS_A implements XdsInteractionProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration ITI14_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_14_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti14",
+            "Register Document Set",
+            false,
+            new Iti14ClientAuditStrategy(),
+            new Iti14ServerAuditStrategy(),
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
             Iti14PortType.class,
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Binding_Soap11", "ihe"),
@@ -135,7 +87,12 @@ public class XDS_A implements XdsInteractionProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration ITI15_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_15_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti15",
+            "Provide and Register Document Set",
+            false,
+            new Iti15ClientAuditStrategy(),
+            new Iti15ServerAuditStrategy(),
             new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Service", "ihe"),
             Iti15PortType.class,
             new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Binding_Soap11", "ihe"),
@@ -146,12 +103,33 @@ public class XDS_A implements XdsInteractionProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration ITI16_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_16_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti16",
+            "Query Registry",
+            true,
+            new Iti16ClientAuditStrategy(),
+            new Iti16ServerAuditStrategy(),
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
             Iti16PortType.class,
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Binding_Soap11", "ihe"),
             false,
             "wsdl/iti16.wsdl",
+            false,
+            false,
+            true,
+            false);
+
+    private final static WsTransactionConfiguration ITI_17_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti17",
+            "Retrieve Documents",
+            false,
+            null,
+            null,
+            new QName("dummy", "dummy", "dummy"),
+            Void.class,
+            new QName("dummy", "dummy", "dummy"),
+            false,
+            "dummy",
             false,
             false,
             true,

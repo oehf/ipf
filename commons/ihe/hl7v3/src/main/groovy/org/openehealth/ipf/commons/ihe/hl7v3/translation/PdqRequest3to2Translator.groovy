@@ -81,7 +81,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	 */
     Message translateV3toV2(String v3requestString, Message dummy = null) {
 	    def v3request = slurp(v3requestString)
-        def v2request = PDQ.Interactions.ITI_21.request()
+        def v2request = PDQ.Interactions.ITI_21.hl7v2TransactionConfiguration.request()
         
         // Segment MSH
         fillMshFromSlurper(v3request, v2request, useSenderDeviceName, useReceiverDeviceName)

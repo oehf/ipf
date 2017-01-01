@@ -33,6 +33,11 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
 
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
             new Hl7v2TransactionConfiguration(
+                    "mllp-dispatch",
+                    "MLLP Dispatcher",
+                    false,
+                    null,                        // audit trail (if any) will be delegated
+                    null,                        // audit trail (if any) will be delegated
                     new Version[] {Version.V25}, // not relevant for acceptance checking
                     "MLLP Dispatcher",
                     "IPF",

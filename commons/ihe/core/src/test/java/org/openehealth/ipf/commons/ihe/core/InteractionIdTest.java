@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.core;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.config.SimpleRegistry;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -34,8 +31,8 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.openehealth.ipf.commons.ihe.core.InteractionIdTest.MyInteractionProfile.Interactions.Interaction1;
-import static org.openehealth.ipf.commons.ihe.core.InteractionIdTest.MyInteractionProfile.Interactions.Interaction2;
+import static org.openehealth.ipf.commons.ihe.core.InteractionIdTest.MyIntegrationProfile.Interactions.Interaction1;
+import static org.openehealth.ipf.commons.ihe.core.InteractionIdTest.MyIntegrationProfile.Interactions.Interaction2;
 
 /**
  *
@@ -58,7 +55,7 @@ public class InteractionIdTest {
     @Test
     public void testReconstruct() throws IOException, ClassNotFoundException {
 
-        MyInteractionProfile.Interactions original = Interaction1;
+        MyIntegrationProfile.Interactions original = Interaction1;
         SerializableEnumInteractionId<?> serializableEnumInteractionId = SerializableEnumInteractionId.create(original);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -71,11 +68,11 @@ public class InteractionIdTest {
         assertSame(original, deserialized.getInteractionId());
     }
 
-    private static final MyInteractionProfile MY_INSTANCE = new MyInteractionProfile();
+    private static final MyIntegrationProfile MY_INSTANCE = new MyIntegrationProfile();
     private static final SimpleRegistry SIMPLE_REGISTRY = new SimpleRegistry();
 
 
-    static class MyInteractionProfile implements InteractionProfile {
+    static class MyIntegrationProfile implements IntegrationProfile {
 
         @AllArgsConstructor
         enum Interactions implements InteractionId {
@@ -88,10 +85,6 @@ public class InteractionIdTest {
             @Getter
             private String description;
 
-            @Override
-            public boolean isQuery() {
-                return false;
-            }
         }
 
         @Override
@@ -101,9 +94,9 @@ public class InteractionIdTest {
 
     }
 
-    private static final OtherInteractionProfile OTHER_INSTANCE = new OtherInteractionProfile();
+    private static final OtherIntegrationProfile OTHER_INSTANCE = new OtherIntegrationProfile();
 
-    static class OtherInteractionProfile implements InteractionProfile {
+    static class OtherIntegrationProfile implements IntegrationProfile {
 
         @AllArgsConstructor
         enum Interactions implements InteractionId {
@@ -116,10 +109,6 @@ public class InteractionIdTest {
             @Getter
             private String description;
 
-            @Override
-            public boolean isQuery() {
-                return false;
-            }
         }
 
         @Override

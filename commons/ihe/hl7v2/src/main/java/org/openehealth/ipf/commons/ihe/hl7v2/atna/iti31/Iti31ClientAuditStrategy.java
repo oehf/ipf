@@ -19,15 +19,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 
 public class Iti31ClientAuditStrategy extends Iti31AuditStrategy {
 
-    private static class LazyHolder {
-        private static final Iti31ClientAuditStrategy INSTANCE = new Iti31ClientAuditStrategy();
-    }
-
-    public static Iti31ClientAuditStrategy getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    private Iti31ClientAuditStrategy() {
+    public Iti31ClientAuditStrategy() {
         super(false);
     }
 

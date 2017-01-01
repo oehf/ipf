@@ -26,16 +26,15 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
 /**
  * Implementation of Fhir Auditors to send audit messages for
  * <ul>
- * <li>ITI-83 (PIXM Query)</li>
- * <li>ITI-78 (PDQM Query)</li>
  * <li>ITI-65, ITI-66, ITI67 (MHD)</li>
+ * <li>ITI-78 (PDQM Query)</li>
+ * <li>ITI-83 (PIXM Query)</li>
  * </ul>
  *
  * @author Christian Ohr

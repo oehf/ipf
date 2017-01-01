@@ -19,8 +19,6 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 
@@ -58,12 +56,12 @@ public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAudi
 
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
-        return interactionId.getClientAuditStrategy();
+        return interactionId.getHl7v2TransactionConfiguration().getClientAuditStrategy();
     }
 
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
-        return interactionId.getServerAuditStrategy();
+        return interactionId.getHl7v2TransactionConfiguration().getServerAuditStrategy();
     }
 
     @Override

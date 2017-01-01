@@ -26,26 +26,22 @@ import ca.uhn.hl7v2.util.Terser;
 import lombok.Getter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
+import org.openehealth.ipf.modules.hl7.HL7v2Exception;
+import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import static org.apache.commons.lang3.Validate.isTrue;
-import static org.apache.commons.lang3.Validate.noNullElements;
-import static org.apache.commons.lang3.Validate.notEmpty;
-import static org.apache.commons.lang3.Validate.notNull;
+import static org.apache.commons.lang3.Validate.*;
 
 /**
  * Endpoint-agnostic parameters of an HL7v2-based transaction.
  *
  * @author Dmytro Rud
  */
-public class Hl7v2TransactionConfiguration {
+public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
 
     private static class Definition {
         private final Set<String> triggerEvents;
@@ -106,6 +102,11 @@ public class Hl7v2TransactionConfiguration {
      * @param hapiContext                   transaction-specific HAPI Context
      */
     public Hl7v2TransactionConfiguration(
+            String name,
+            String description,
+            boolean isQuery,
+            AuditStrategy<? extends MllpAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends MllpAuditDataset> serverAuditStrategy,
             Version[] hl7Versions,
             String sendingApplication,
             String sendingFacility,
@@ -119,6 +120,8 @@ public class Hl7v2TransactionConfiguration {
             boolean[] responseContinuabilityFlags,
             HapiContext hapiContext)
     {
+        super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
+
         notNull(hl7Versions);
         notNull(sendingApplication);
         notNull(sendingFacility);
@@ -167,6 +170,11 @@ public class Hl7v2TransactionConfiguration {
     }
 
     public Hl7v2TransactionConfiguration(
+            String name,
+            String description,
+            boolean isQuery,
+            AuditStrategy<? extends MllpAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends MllpAuditDataset> serverAuditStrategy,
             Version hl7Version,
             String sendingApplication,
             String sendingFacility,
@@ -178,14 +186,15 @@ public class Hl7v2TransactionConfiguration {
             String allowedResponseTriggerEvent,
             boolean auditabilityFlag,
             boolean responseContinuabilityFlag,
-            HapiContext hapiContext) {
-        this(new Version[]{hl7Version}, sendingApplication, sendingFacility, requestErrorDefaultErrorCode, responseErrorDefaultErrorCode,
+            HapiContext hapiContext)
+    {
+        this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
+                new Version[]{hl7Version}, sendingApplication, sendingFacility, requestErrorDefaultErrorCode, responseErrorDefaultErrorCode,
                 new String[]{allowedRequestMessageType}, new String[]{allowedRequestTriggerEvent},
                 new String[]{allowedResponseMessageType}, new String[]{allowedResponseTriggerEvent},
                 new boolean[]{auditabilityFlag},
                 new boolean[]{responseContinuabilityFlag},
                 hapiContext);
-
     }
 
     private static Map<String, Definition> createDefinitionsMap(
@@ -395,5 +404,39 @@ public class Hl7v2TransactionConfiguration {
         return StringUtils.join(collection, ' ');
     }
 
+    /**
+     * Makes a valid request for this transaction. Note that the individual transaction types
+     * may overload this method, e.g. using a concrete response type.
+     *
+     * @param messageType message type, e.g. ADT
+     * @param trigger trigger event, e.g. A01
+     * @return HAPI message created using the correct HapiContext
+     * @throws HL7v2Exception if the message type or trigger event is not valid for this transaction
+     */
+    public <T extends Message> T request(String messageType, String trigger) {
+        Message message = MessageUtils.makeMessage(
+                getHapiContext(), messageType, trigger, getHl7Versions()[0].getVersion());
+        try {
+            checkRequestAcceptance(message);
+            return (T) message;
+        } catch (Hl7v2AcceptanceException e) {
+            throw new HL7v2Exception(e);
+        }
+    }
+
+    /**
+     * Like {@link #request(String, String)}, but uses the first configured request message type as default.
+     */
+    public <T extends Message> T request(String trigger) {
+        return request(allowedRequestMessageTypes[0], trigger);
+    }
+
+    /**
+     * Like {@link #request(String, String)}, but uses the first configured request message type
+     * and the first configured trigger event as defaults.
+     */
+    public <T extends Message> T request() {
+        return request(allowedRequestMessageTypes[0], allowedRequestTriggerEvents[0]);
+    }
 }
 

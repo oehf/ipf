@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.InteractionProfile;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.Row;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47PortType;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47ServerAuditStrategy;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
@@ -34,31 +31,12 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public class PDQV3 implements InteractionProfile {
+public class PDQV3 implements IntegrationProfile {
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements Hl7v3InteractionId {
+        ITI_47(ITI_47_WS_CONFIG);
 
-        ITI_47("pdqv3-iti47",
-                "Patient Demographics Query HL7 V3",
-                true,
-                WS_CONFIG) {
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-                return Iti47ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-                return Iti47ServerAuditStrategy.getInstance();
-            }
-
-        };
-
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
         @Getter private Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration;
     }
 
@@ -79,7 +57,12 @@ public class PDQV3 implements InteractionProfile {
     );
 
     private final static String NS_URI = "urn:ihe:iti:pdqv3:2007";
-    private final static Hl7v3ContinuationAwareWsTransactionConfiguration WS_CONFIG = new Hl7v3ContinuationAwareWsTransactionConfiguration(
+    private final static Hl7v3ContinuationAwareWsTransactionConfiguration ITI_47_WS_CONFIG = new Hl7v3ContinuationAwareWsTransactionConfiguration(
+            "pdqv3-iti47",
+            "Patient Demographics Query HL7 V3",
+            true,
+            new Iti47AuditStrategy(false),
+            new Iti47AuditStrategy(true),
             new QName(NS_URI, "PDSupplier_Service", "ihe"),
             Iti47PortType.class,
             new QName(NS_URI, "PDSupplier_Binding_Soap12", "ihe"),

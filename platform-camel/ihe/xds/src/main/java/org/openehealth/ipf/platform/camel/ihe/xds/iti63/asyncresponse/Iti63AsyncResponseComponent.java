@@ -16,19 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti63.asyncresponse;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.XdsInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti63.asyncresponse.Iti63AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 
-import javax.xml.namespace.QName;
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63_ASYNC;
+import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63_ASYNC_RESPONSE;
 
 /**
  * The Camel component for the ITI-63 (XCF) async response.
@@ -36,7 +30,7 @@ import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63_ASYNC;
 public class Iti63AsyncResponseComponent extends XdsComponent<XdsQueryAuditDataset> {
 
     public Iti63AsyncResponseComponent() {
-        super(ITI_63_ASYNC);
+        super(ITI_63_ASYNC_RESPONSE);
     }
 
     @Override

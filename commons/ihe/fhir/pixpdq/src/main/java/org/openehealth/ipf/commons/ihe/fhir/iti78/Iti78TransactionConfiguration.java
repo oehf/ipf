@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
@@ -27,7 +26,11 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 public class Iti78TransactionConfiguration extends FhirTransactionConfiguration {
 
     public Iti78TransactionConfiguration() {
-        super(
+        super("pdqm-iti78",
+                "Patient Demographics Query For Mobile",
+                true,
+                new Iti78ClientAuditStrategy(),
+                new Iti78ServerAuditStrategy(),
                 new Iti78ResourceProvider(),                    // Consumer side. accept patient searches
                 new Iti78QueryResourceClientRequestFactory());  // Formulate queries
         setSupportsLazyLoading(true);

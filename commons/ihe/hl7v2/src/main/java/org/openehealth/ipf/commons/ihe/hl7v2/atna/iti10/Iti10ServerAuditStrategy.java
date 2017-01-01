@@ -20,21 +20,12 @@ import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
 
 public class Iti10ServerAuditStrategy extends Iti10AuditStrategy {
 
-    private static class LazyHolder {
-        private static final Iti10ServerAuditStrategy INSTANCE = new Iti10ServerAuditStrategy();
-    }
-
-    public static Iti10ServerAuditStrategy getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    private Iti10ServerAuditStrategy() {
+    public Iti10ServerAuditStrategy() {
         super(true);
     }
 
     @Override
     public void doAudit(QueryAuditDataset auditDataset) {
-
         AuditorManager.getPIXConsumerAuditor().auditUpdateNotificationEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),

@@ -18,23 +18,28 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.Version;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 
 /**
  * Endpoint-agnostic parameters of an HL7v2-based transaction.
  *
  * @author Dmytro Rud
- *
  * @deprecated moved to {@link org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration}
  */
 public class Hl7v2TransactionConfiguration extends org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration {
 
-    public Hl7v2TransactionConfiguration(Version[] hl7Versions, String sendingApplication,
-                                         String sendingFacility, ErrorCode requestErrorDefaultErrorCode,
-                                         ErrorCode responseErrorDefaultErrorCode, String[] allowedRequestMessageTypes,
-                                         String[] allowedRequestTriggerEvents, String[] allowedResponseMessageTypes,
-                                         String[] allowedResponseTriggerEvents, boolean[] auditabilityFlags,
-                                         boolean[] responseContinuabilityFlags, HapiContext hapiContext) {
-        super(hl7Versions, sendingApplication, sendingFacility, requestErrorDefaultErrorCode, responseErrorDefaultErrorCode, allowedRequestMessageTypes, allowedRequestTriggerEvents, allowedResponseMessageTypes, allowedResponseTriggerEvents, auditabilityFlags, responseContinuabilityFlags, hapiContext);
+    public Hl7v2TransactionConfiguration(
+            String name, String description, boolean isQuery,
+            AuditStrategy clientAuditStrategy, AuditStrategy serverAuditStrategy,
+            Version[] hl7Versions, String sendingApplication,
+            String sendingFacility, ErrorCode requestErrorDefaultErrorCode,
+            ErrorCode responseErrorDefaultErrorCode, String[] allowedRequestMessageTypes,
+            String[] allowedRequestTriggerEvents, String[] allowedResponseMessageTypes,
+            String[] allowedResponseTriggerEvents, boolean[] auditabilityFlags,
+            boolean[] responseContinuabilityFlags, HapiContext hapiContext)
+    {
+        super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
+                hl7Versions, sendingApplication, sendingFacility, requestErrorDefaultErrorCode, responseErrorDefaultErrorCode, allowedRequestMessageTypes, allowedRequestTriggerEvents, allowedResponseMessageTypes, allowedResponseTriggerEvents, auditabilityFlags, responseContinuabilityFlags, hapiContext);
     }
 }
 

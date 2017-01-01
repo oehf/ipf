@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
@@ -28,9 +27,9 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
  * @since 3.1
  */
 public abstract class Hl7v3Component<ConfigType extends Hl7v3WsTransactionConfiguration>
-        extends AbstractWsComponent<Hl7v3AuditDataset, ConfigType, Hl7v3InteractionId> {
+        extends AbstractWsComponent<Hl7v3AuditDataset, ConfigType, Hl7v3InteractionId<ConfigType>> {
 
-    public Hl7v3Component(Hl7v3InteractionId interactionId) {
+    public Hl7v3Component(Hl7v3InteractionId<ConfigType> interactionId) {
         super(interactionId);
     }
 

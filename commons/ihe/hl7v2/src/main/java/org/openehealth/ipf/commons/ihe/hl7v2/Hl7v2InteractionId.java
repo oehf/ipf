@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.hl7v2;
 
-import ca.uhn.hl7v2.model.Message;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
 /**
- * HL7v2 Transaction Definition
+ * HL7v2 Transaction ID
  *
  * @author Christian Ohr
  * @since 3.2
@@ -32,27 +28,6 @@ public interface Hl7v2InteractionId extends InteractionId {
     Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration();
 
     NakFactory getNakFactory();
-
-    /**
-     * Makes a valid request for this transaction. Note that the individual transaction types
-     * may overload this method, e.g. using a concrete response type.
-     *
-     * @param messageType message type, e.g. ADT
-     * @param trigger trigger event, e.g. A01
-     * @return HAPI message created using the correct HapiContext
-     * @throws HL7v2Exception if the message type or trigger event is not valid for this transaction
-     */
-    default Message request(String messageType, String trigger) {
-        Message message = MessageUtils.makeMessage(
-                getHl7v2TransactionConfiguration().getHapiContext(),
-                messageType, trigger, getHl7v2TransactionConfiguration().getHl7Versions()[0].getVersion());
-        try {
-            getHl7v2TransactionConfiguration().checkRequestAcceptance(message);
-            return message;
-        } catch (Hl7v2AcceptanceException e) {
-            throw new HL7v2Exception(e);
-        }
-    }
 
     /**
      * Optional initialization with dynamic TransactionOptions

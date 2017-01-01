@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset.St
  */
 public class Rad69AuditStrategy extends XdsIRetrieveAuditStrategy30 {
 
-    protected Rad69AuditStrategy(boolean serverSide) {
+    public Rad69AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 

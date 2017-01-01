@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.hl7v2;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.Version;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
 
 import java.util.List;
 
@@ -29,6 +31,11 @@ import java.util.List;
 public class PdqTransactionConfiguration extends Hl7v2TransactionConfiguration {
    
     public PdqTransactionConfiguration(
+            String name,
+            String description,
+            boolean isQuery,
+            AuditStrategy<QueryAuditDataset> clientAuditStrategy,
+            AuditStrategy<QueryAuditDataset> serverAuditStrategy,
             Version[] hl7Version,
             String sendingApplication, 
             String sendingFacility,
@@ -42,7 +49,8 @@ public class PdqTransactionConfiguration extends Hl7v2TransactionConfiguration {
             boolean[] responseContinuabilityFlags,
             HapiContext hapiContext)
     {
-        super(hl7Version, sendingApplication, sendingFacility,
+        super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
+                hl7Version, sendingApplication, sendingFacility,
                 requestErrorDefaultErrorCode,
                 responseErrorDefaultErrorCode, allowedRequestMessageTypes,
                 allowedRequestTriggerEvents, allowedResponseMessageTypes,

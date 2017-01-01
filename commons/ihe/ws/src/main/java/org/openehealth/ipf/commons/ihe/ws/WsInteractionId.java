@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.ws;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
@@ -22,14 +21,7 @@ import org.openehealth.ipf.commons.ihe.core.InteractionId;
  * @author Christian Ohr
  * @since 3.2
  */
-public interface WsInteractionId extends InteractionId {
+public interface WsInteractionId<ConfigType extends WsTransactionConfiguration> extends InteractionId {
 
-    <T extends WsTransactionConfiguration> T getWsTransactionConfiguration();
-
-    class Null extends InteractionId.Null implements WsInteractionId {
-        @Override
-        public <T extends WsTransactionConfiguration> T getWsTransactionConfiguration() {
-            return null;
-        }
-    }
+    ConfigType getWsTransactionConfiguration();
 }

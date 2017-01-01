@@ -17,19 +17,10 @@ package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti9;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti8.Iti8ClientAuditStrategy;
 
 public class Iti9ClientAuditStrategy extends Iti9AuditStrategy {
 
-    private static class LazyHolder {
-        private static final Iti9ClientAuditStrategy INSTANCE = new Iti9ClientAuditStrategy();
-    }
-
-    public static Iti9ClientAuditStrategy getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    private Iti9ClientAuditStrategy() {
+    public Iti9ClientAuditStrategy() {
         super(false);
     }
 

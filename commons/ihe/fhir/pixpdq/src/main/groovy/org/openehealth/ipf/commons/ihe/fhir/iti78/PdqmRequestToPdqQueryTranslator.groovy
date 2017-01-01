@@ -118,7 +118,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
      * @return QBP^Q22 request message
      */
     protected QBP_Q21 translateFhirSearchToHL7v2(Iti78SearchParameters searchParameters) {
-        QBP_Q21 qry = PDQ.Interactions.ITI_21.request()
+        QBP_Q21 qry = PDQ.Interactions.ITI_21.hl7v2TransactionConfiguration.request()
 
         qry.MSH[3] = senderDeviceName
         qry.MSH[4] = senderFacilityName

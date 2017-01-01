@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.openehealth.ipf.platform.camel.ihe.fhir.iti81;
+package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.iti81.Iti81ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.iti81.Iti81ResourceProvider;
 
 /**
  * Standard Configuration for Iti81Component
@@ -26,10 +23,14 @@ import org.openehealth.ipf.commons.ihe.fhir.iti81.Iti81ResourceProvider;
  * @author Christian Ohr
  * @since 3.1
  */
-public class Iti81Configuration extends FhirTransactionConfiguration {
+public class Iti81TransactionConfiguration extends FhirTransactionConfiguration {
 
-    public Iti81Configuration() {
-        super(
+    public Iti81TransactionConfiguration() {
+        super("atna-iti81",
+                "Retrieve ATNA Audit Event",
+                true,
+                new Iti81AuditStrategy(false),
+                new Iti81AuditStrategy(true),
                 new Iti81ResourceProvider(),       // Consumer side. accept audit searches
                 new Iti81ClientRequestFactory());  // Formulate queries
     }

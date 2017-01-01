@@ -22,7 +22,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_75_ASYNC;
+import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_75_ASYNC_RESPONSE;
 
 /**
  * The Camel component for the RAD-75 (XCA-I) async response.
@@ -30,7 +30,7 @@ import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_75_ASYNC;
 public class Rad75AsyncResponseComponent extends XdsComponent<XdsRetrieveAuditDataset> {
 
     public Rad75AsyncResponseComponent() {
-        super(RAD_75_ASYNC);
+        super(RAD_75_ASYNC_RESPONSE);
     }
 
     @Override

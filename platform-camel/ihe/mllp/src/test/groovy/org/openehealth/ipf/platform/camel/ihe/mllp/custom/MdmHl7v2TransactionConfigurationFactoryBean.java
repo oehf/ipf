@@ -33,6 +33,11 @@ public class MdmHl7v2TransactionConfigurationFactoryBean implements FactoryBean<
     @Override
     public Hl7v2TransactionConfiguration getObject() throws Exception {
         return new Hl7v2TransactionConfiguration(
+                "mdm",
+                "Medical Document Management",
+                false,
+                null,
+                null,
                 new Version[] {Version.V25, Version.V251},
                 "MDM Adapter",
                 "IPF",

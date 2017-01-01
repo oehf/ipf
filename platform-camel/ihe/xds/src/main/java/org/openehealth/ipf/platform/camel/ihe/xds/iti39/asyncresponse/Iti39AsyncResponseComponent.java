@@ -22,7 +22,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_39_ASYNC;
+import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_39_ASYNC_RESPONSE;
 
 /**
  * The Camel component for the ITI-39 (XCA) async response.
@@ -30,7 +30,7 @@ import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_39_ASYNC;
 public class Iti39AsyncResponseComponent extends XdsComponent<XdsRetrieveAuditDataset> {
 
     public Iti39AsyncResponseComponent() {
-        super(ITI_39_ASYNC);
+        super(ITI_39_ASYNC_RESPONSE);
     }
 
     @Override

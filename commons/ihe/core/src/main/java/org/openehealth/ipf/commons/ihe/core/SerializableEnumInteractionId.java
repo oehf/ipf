@@ -67,6 +67,7 @@ public class SerializableEnumInteractionId<E extends Enum<E> & InteractionId> im
         return interactionId;
     }
 
+    /*
     @Override
     public String getName() {
         return getInteractionId().getName();
@@ -91,4 +92,5 @@ public class SerializableEnumInteractionId<E extends Enum<E> & InteractionId> im
     public <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy() {
         return getInteractionId().getServerAuditStrategy();
     }
+    */
 }

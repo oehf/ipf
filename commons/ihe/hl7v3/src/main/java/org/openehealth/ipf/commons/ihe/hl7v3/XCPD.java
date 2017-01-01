@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.InteractionProfile;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.Row;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55PortType;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55AsyncResponsePortType;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredResponsePortType;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56PortType;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.asyncresponse.Iti56AsyncResponsePortType;
 
 import javax.xml.namespace.QName;
@@ -40,88 +36,16 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public class XCPD implements InteractionProfile {
+public class XCPD implements IntegrationProfile {
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements Hl7v3InteractionId {
+        ITI_55                  (ITI_55_WS_CONFIG),
+        ITI_55_ASYNC_RESPONSE   (ITI_55_ASYNC_RESPONSE_WS_CONFIG),
+        ITI_55_DEFERRED_RESPONSE(ITI_55_DEFERRED_RESPONSE_WS_CONFIG),
+        ITI_56                  (ITI56_WS_CONFIG),
+        ITI_56_ASYNC_RESPONSE   (ITI_56_ASYNC_RESPONSE_WS_CONFIG);
 
-        ITI_55("xcpd-iti55",
-                "Cross Gateway Patient Discovery",
-                true,
-                ITI55_WS_CONFIG) {
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-                return Iti55ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-                return Iti55ServerAuditStrategy.getInstance();
-            }
-        },
-
-        ITI_55_ASYNC("xcpd-iti55-async-response",
-                "Cross Gateway Patient Discovery",
-                true,
-                ITI55_ASYNC_WS_CONFIG) {
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-                return null;
-            }
-
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-                return Iti55ClientAuditStrategy.getInstance();  // really!
-            }
-        },
-
-        ITI_55_DEFERRED("xcpd-iti55-deferred-response",
-                "Cross Gateway Patient Discovery",
-                true,
-                ITI55_DEFERRED_WS_CONFIG) {
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-                return null;
-            }
-
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-                return Iti55ClientAuditStrategy.getInstance();  // really!
-            }
-        },
-
-        ITI_56("xcpd-iti56",
-                "Cross Gateway Patient Location Query",
-                true,
-                ITI56_WS_CONFIG) {
-            public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-                return Iti56ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-                return Iti56ServerAuditStrategy.getInstance();
-            }
-        },
-
-        ITI_56_ASYNC("xcpd-iti56-async-response",
-                "Cross Gateway Patient Location Query",
-                true,
-                ITI56_ASYNC_WS_CONFIG) {
-            public AuditStrategy<Hl7v3AuditDataset> getClientAuditStrategy() {
-                return null;
-            }
-
-            @Override
-            public AuditStrategy<Hl7v3AuditDataset> getServerAuditStrategy() {
-                return Iti56ClientAuditStrategy.getInstance(); // really!
-            }
-        };
-
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
         @Getter private Hl7v3WsTransactionConfiguration wsTransactionConfiguration;
 
     }
@@ -149,7 +73,12 @@ public class XCPD implements InteractionProfile {
     );
 
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
-    private final static Hl7v3WsTransactionConfiguration ITI55_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
+    private final static Hl7v3WsTransactionConfiguration ITI_55_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
+            "xcpd-iti55",
+            "Cross Gateway Patient Discovery",
+            true,
+            new Iti55AuditStrategy(false),
+            new Iti55AuditStrategy(true),
             new QName(NS_URI, "RespondingGateway_Service", "xcpd"),
             Iti55PortType.class,
             new QName(NS_URI, "RespondingGateway_Binding_Soap12", "xcpd"),
@@ -162,7 +91,12 @@ public class XCPD implements InteractionProfile {
             iti55RequestValidationProfile,
             iti55ResponseValidationProfile);
 
-    private final static Hl7v3WsTransactionConfiguration ITI55_ASYNC_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
+    private final static Hl7v3WsTransactionConfiguration ITI_55_ASYNC_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
+            "xcpd-iti55-async-response",
+            "Cross Gateway Patient Discovery",
+            true,
+            null,
+            new Iti55AuditStrategy(false),      // really!
             new QName(NS_URI, "InitiatingGateway_Service", "xcpd"),
             Iti55AsyncResponsePortType.class,
             new QName(NS_URI, "InitiatingGateway_Binding", "xcpd"),
@@ -175,7 +109,12 @@ public class XCPD implements InteractionProfile {
             iti55RequestValidationProfile,
             iti55ResponseValidationProfile);
 
-    private final static Hl7v3WsTransactionConfiguration ITI55_DEFERRED_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
+    private final static Hl7v3WsTransactionConfiguration ITI_55_DEFERRED_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
+            "xcpd-iti55-deferred-response",
+            "Cross Gateway Patient Discovery",
+            true,
+            null,
+            new Iti55AuditStrategy(false),      // really!
             new QName(NS_URI, "InitiatingGateway_Service", "xcpd"),
             Iti55DeferredResponsePortType.class,
             new QName(NS_URI, "InitiatingGatewayDeferredResponse_Binding", "xcpd"),
@@ -189,6 +128,11 @@ public class XCPD implements InteractionProfile {
             iti55ResponseValidationProfile);
 
     private final static Hl7v3WsTransactionConfiguration ITI56_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
+            "xcpd-iti56",
+            "Cross Gateway Patient Location Query",
+            true,
+            new Iti56AuditStrategy(false),
+            new Iti56AuditStrategy(true),
             new QName(NS_URI, "RespondingGateway_Service", "xcpd"),
             Iti56PortType.class,
             new QName(NS_URI, "RespondingGateway_Binding_Soap12", "xcpd"),
@@ -201,7 +145,12 @@ public class XCPD implements InteractionProfile {
             iti56RequestValidationProfile,
             iti56ResponseValidationProfile);
 
-    private final static Hl7v3WsTransactionConfiguration ITI56_ASYNC_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
+    private final static Hl7v3WsTransactionConfiguration ITI_56_ASYNC_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
+            "xcpd-iti56-async-response",
+            "Cross Gateway Patient Location Query",
+            true,
+            null,
+            new Iti56AuditStrategy(false),      // really!
             new QName(NS_URI, "InitiatingGateway_Service", "xcpd"),
             Iti56AsyncResponsePortType.class,
             new QName(NS_URI, "InitiatingGateway_Binding", "xcpd"),

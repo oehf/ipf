@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.hl7v2;
 
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
-import ca.uhn.hl7v2.model.v25.message.ADT_A43;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.InteractionProfile;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64AuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64.Iti64AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
@@ -38,42 +33,15 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public class XPID implements InteractionProfile {
+public class XPID implements IntegrationProfile {
 
     @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements Hl7v2InteractionId {
+        ITI_64(ITI_64_CONFIGURATION, ITI_64_NAK_FACTORY);
 
-        ITI_64("xpid-iti64",
-                "XAD-PID Change Management",
-                false,
-                ITI64_CONFIGURATION,
-                ITI64_NAK_FACTORY) {
-            @Override
-            public AuditStrategy<Iti64AuditDataset> getClientAuditStrategy() {
-                return Iti64ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<Iti64AuditDataset> getServerAuditStrategy() {
-                return Iti64ServerAuditStrategy.getInstance();
-            }
-
-        };
-
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
         @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
         @Getter private NakFactory nakFactory;
-
-
-        public ADT_A43 request() {
-            Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
-            return (ADT_A43) request(
-                    config.getAllowedRequestMessageTypes()[0],
-                    config.getAllowedRequestTriggerEvents()[0]);
-        }
     }
 
     @Override
@@ -81,8 +49,13 @@ public class XPID implements InteractionProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private static final Hl7v2TransactionConfiguration ITI64_CONFIGURATION =
+    private static final Hl7v2TransactionConfiguration ITI_64_CONFIGURATION =
             new Hl7v2TransactionConfiguration(
+                    "xpid-iti64",
+                    "XAD-PID Change Management",
+                    false,
+                    new Iti64AuditStrategy(false),
+                    new Iti64AuditStrategy(true),
                     new Version[] {Version.V25},
                     "XPID adapter",
                     "IPF",
@@ -98,5 +71,5 @@ public class XPID implements InteractionProfile {
                             CustomModelClassUtils.createFactory("xpid", "2.5"),
                             PixPdqTransactions.ITI64));
 
-    private static final NakFactory ITI64_NAK_FACTORY = new NakFactory(ITI64_CONFIGURATION);
+    private static final NakFactory ITI_64_NAK_FACTORY = new NakFactory(ITI_64_CONFIGURATION);
 }

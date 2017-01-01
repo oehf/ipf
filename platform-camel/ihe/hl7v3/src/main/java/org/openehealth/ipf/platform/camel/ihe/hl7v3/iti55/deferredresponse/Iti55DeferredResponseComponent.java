@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_55_DEFERRED;
+import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_55_DEFERRED_RESPONSE;
 
 /**
  * Camel component for the ITI-55 XCPD Initiating Gateway actor
@@ -37,7 +37,7 @@ public class Iti55DeferredResponseComponent extends Hl7v3Component<Hl7v3WsTransa
     public static final String THREAD_POOL_NAME = "iti55.deferred.response";
 
     public Iti55DeferredResponseComponent() {
-        super(ITI_55_DEFERRED);
+        super(ITI_55_DEFERRED_RESPONSE);
     }
 
     @Override
