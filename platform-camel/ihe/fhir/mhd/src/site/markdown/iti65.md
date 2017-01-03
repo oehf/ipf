@@ -77,6 +77,7 @@ This is an example on how to use the component on the consumer side:
 ### Basic Common Component Features
 
 * [ATNA auditing]
+* [Resource validation]
 
 ### Basic FHIR Component Features
 
@@ -91,6 +92,7 @@ This is an example on how to use the component on the consumer side:
 [Message types and exception handling]: ../ipf-platform-camel-ihe-fhir-core/messageTypes.html
 [Security]: ../ipf-platform-camel-ihe-fhir-core/security.html
 [Connection parameters]: ../ipf-platform-camel-ihe-fhir-core/connection.html
+[Resource validation]: ../ipf-platform-camel-ihe/messageValidation.html
 
 [deployment container]: ../ipf-platform-camel-ihe-fhir-core/deployment.html
 

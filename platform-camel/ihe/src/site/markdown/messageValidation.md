@@ -19,8 +19,9 @@ DSL element, can be obtained from the corresponding factories, depending on the 
 | IHE PIXv3, PDQv3, XCPD, QED         | ITI-44, 45, 46, 47, 55, 56, PCC-1    | `org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators`
 | IHE PCD, Continua WAN               | PCD-01, WAN                          | `org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators`
 | Continua HRN                        | HRN                                  | `org.openehealth.ipf.platform.camel.ihe.continua.hrn.ContinuaHrnCamelProcessors`
+| IHE FHIR                            | ITI-65                               | `org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelValidators`
 
-Factory methods of these classes (excluding Continua HRN) obey the following naming convention: 
+Factory methods of these classes (excluding Continua HRN and FHIR) obey the following naming convention:
 
 ```java
     public static Processor iti<transaction number><direction>Validator();
@@ -33,6 +34,8 @@ where
 
 * `<transaction>` number is the number/id of IHE transaction from the profile supported by the given factory
 * `<direction>` is either "Request" or "Response"
+
+For FHIR transaction, only the self-detecting message validation is defined (see below)
 
 ### Example
 
@@ -87,6 +90,33 @@ As a result, no explicit validation processor must be provided anymore:
         }
     }
 ```
+
+
+### Self-detecting message validation in FHIR consumer routes
+
+The consumer side of IPF FHIR transaction endpoints receiving FHIR resources from clients is aware of the
+IHE transaction context. The consumer endpoint can therefore initialize an [`FhirContext`](http://hapifhir.io/apidocs/ca/uhn/fhir/context/FhirContext.html)
+that is passed into the route.
+As a result, no explicit validation processor must be provided anymore:
+
+```java
+    import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelValidators.*;
+
+    public class MyRouteBuilder extends RouteBuilder {
+        @Override
+        public void configure() throws Exception {
+            from("mhd-iti65:stub?audit=true")
+                .errorHandler(noErrorHandler())
+                .setHeader(VALIDATION_MODE, constant(SCHEMA | MODEL))
+                .process(itiRequestValidator())       // validate received FHIR resource
+                ...                                   // prepare response
+        }
+    }
+```
+
+The depth of validation is determined by the integer constant contained in the `FhirCamelValidators.VALIDATION_MODE` header. In the
+example above, schema and model validation are executed.
+
 
 ### Disabling message validation
 

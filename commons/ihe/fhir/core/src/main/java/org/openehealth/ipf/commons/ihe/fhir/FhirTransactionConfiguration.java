@@ -31,20 +31,20 @@ public class FhirTransactionConfiguration {
     private final FhirVersionEnum fhirVersion;
     private final AbstractPlainProvider staticResourceProvider;
     private final ClientRequestFactory<?> staticClientRequestFactory;
-    private final FhirValidator fhirValidator;
+    private final FhirTransactionValidator fhirValidator;
     private boolean supportsLazyLoading;
     private boolean deferModelScanning;
 
     public FhirTransactionConfiguration(
             AbstractPlainProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory) {
-        this(resourceProvider, clientRequestFactory, FhirValidator.NO_VALIDATION);
+        this(resourceProvider, clientRequestFactory, FhirTransactionValidator.NO_VALIDATION);
     }
 
     public FhirTransactionConfiguration(
             AbstractPlainProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirValidator fhirValidator) {
+            FhirTransactionValidator fhirValidator) {
         this(FhirVersionEnum.DSTU2_HL7ORG, resourceProvider, clientRequestFactory, fhirValidator);
     }
 
@@ -52,7 +52,7 @@ public class FhirTransactionConfiguration {
             FhirVersionEnum fhirVersion,
             AbstractPlainProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
-            FhirValidator fhirValidator) {
+            FhirTransactionValidator fhirValidator) {
         this.fhirVersion = fhirVersion;
         this.staticResourceProvider = resourceProvider;
         this.staticClientRequestFactory = clientRequestFactory;
@@ -76,7 +76,7 @@ public class FhirTransactionConfiguration {
         return context;
     }
 
-    public FhirValidator getFhirValidator() {
+    public FhirTransactionValidator getFhirValidator() {
         return fhirValidator;
     }
 

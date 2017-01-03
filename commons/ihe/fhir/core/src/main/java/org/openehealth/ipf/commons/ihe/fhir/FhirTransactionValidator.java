@@ -21,26 +21,16 @@ import ca.uhn.fhir.context.FhirContext;
 import java.util.Map;
 
 /**
- * Instances of {@link FhirValidator} can be associated with a {@link AbstractPlainProvider}
- * in order to have FHIR request and response validated.
+ * Instances of {@link FhirTransactionValidator} are used in order to have FHIR request and response validated.
  *
  * @author Christian Ohr
  */
-public interface FhirValidator {
+public interface FhirTransactionValidator {
 
-    String VALIDATION_MODE = "fhir.validation.mode";
-
-    /**
-     * Validation mode. May be used by validator implementations
-     */
-    enum Mode {
-        THOROUGH, BASIC, OFF
-    }
-
-    FhirValidator NO_VALIDATION = new Support();
+    FhirTransactionValidator NO_VALIDATION = new Support();
 
     /**
-     * Validates a FHIR request, throwing an {@link ca.uhn.fhir.rest.server.exceptions.InvalidRequestException}
+     * Validates a FHIR request, throwing an {@link ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException}
      * on validation failure
      *
      * @param context    FHIR context
@@ -60,7 +50,7 @@ public interface FhirValidator {
      */
     void validateResponse(FhirContext context, Object payload, Map<String, Object> parameters);
 
-    class Support implements FhirValidator {
+    class Support implements FhirTransactionValidator {
 
         @Override
         public void validateRequest(FhirContext context, Object payload, Map<String, Object> headers) {

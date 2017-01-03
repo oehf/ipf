@@ -34,8 +34,8 @@ import org.hl7.fhir.instance.model.UriType;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.CustomValidationSupport;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.FhirUtils;
-import org.openehealth.ipf.commons.ihe.fhir.FhirValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 
 import java.util.Collection;
@@ -50,10 +50,10 @@ import java.util.function.Function;
 /**
  * Validator for ITI-65 transactions.
  *
- *  @author Christian Ohr
- *  @since 3.2
+ * @author Christian Ohr
+ * @since 3.2
  */
-public class Iti65Validator extends FhirValidator.Support {
+public class Iti65Validator extends FhirTransactionValidator.Support {
 
     private static final IValidationSupport VALIDATION_SUPPORT = new CustomValidationSupport("profiles/MHD");
 
@@ -72,18 +72,15 @@ public class Iti65Validator extends FhirValidator.Support {
         validateTransactionBundle(transactionBundle);
         validateBundleConsistency(transactionBundle);
 
-        if (Mode.THOROUGH.equals(parameters.get(VALIDATION_MODE))) {
-            for (Bundle.BundleEntryComponent entry : transactionBundle.getEntry()) {
-
-                Class<? extends IBaseResource> clazz = entry.getResource().getClass();
-                if (VALIDATORS.containsKey(clazz)) {
-                    ca.uhn.fhir.validation.FhirValidator validator = context.newValidator();
-                    validator.registerValidatorModule(VALIDATORS.get(clazz));
-                    ValidationResult validationResult = validator.validateWithResult(entry.getResource());
-                    if (!validationResult.isSuccessful()) {
-                        IBaseOperationOutcome operationOutcome = validationResult.toOperationOutcome();
-                        throw FhirUtils.exception(UnprocessableEntityException::new, operationOutcome, "Validation Failed");
-                    }
+        for (Bundle.BundleEntryComponent entry : transactionBundle.getEntry()) {
+            Class<? extends IBaseResource> clazz = entry.getResource().getClass();
+            if (VALIDATORS.containsKey(clazz)) {
+                ca.uhn.fhir.validation.FhirValidator validator = context.newValidator();
+                validator.registerValidatorModule(VALIDATORS.get(clazz));
+                ValidationResult validationResult = validator.validateWithResult(entry.getResource());
+                if (!validationResult.isSuccessful()) {
+                    IBaseOperationOutcome operationOutcome = validationResult.toOperationOutcome();
+                    throw FhirUtils.exception(UnprocessableEntityException::new, operationOutcome, "Validation Failed");
                 }
             }
         }
@@ -152,15 +149,16 @@ public class Iti65Validator extends FhirValidator.Support {
                 .forEach(resource -> {
                     if (resource instanceof DocumentManifest) {
                         DocumentManifest dm = (DocumentManifest) resource;
-                        for(DocumentManifest.DocumentManifestContentComponent content : dm.getContent()) {
+                        for (DocumentManifest.DocumentManifestContentComponent content : dm.getContent()) {
                             try {
                                 expectedReferenceFullUrls.add(content.getPReference().getReference());
-                            } catch (Exception ignored) {}
+                            } catch (Exception ignored) {
+                            }
                         }
                         references.add(getSubjectReference(resource, r -> dm.getSubject()));
                     } else if (resource instanceof DocumentReference) {
                         DocumentReference dr = (DocumentReference) resource;
-                        for(DocumentReference.DocumentReferenceContentComponent content : dr.getContent()) {
+                        for (DocumentReference.DocumentReferenceContentComponent content : dr.getContent()) {
                             expectedBinaryFullUrls.add(content.getAttachment().getUrl());
                         }
                         references.add(getSubjectReference(resource, r -> ((DocumentReference) r).getSubject()));
@@ -251,7 +249,7 @@ public class Iti65Validator extends FhirValidator.Support {
         }
         // Could be contained resources
         if (reference.getResource() != null) {
-            Patient patient = (Patient)reference.getResource();
+            Patient patient = (Patient) reference.getResource();
             return patient.getIdentifier().get(0).getValue();
         }
         return reference.getReference();

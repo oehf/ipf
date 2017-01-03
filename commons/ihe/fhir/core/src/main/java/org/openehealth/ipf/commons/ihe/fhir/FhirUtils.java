@@ -57,7 +57,7 @@ public final class FhirUtils {
                                         OperationOutcome.IssueType.INVALID,
                                         null, null,
                                         "Invalid bundle entry request element %s",
-                                        request);
+                                        entry);
                             }
                             return request.getUrl();
                         }
