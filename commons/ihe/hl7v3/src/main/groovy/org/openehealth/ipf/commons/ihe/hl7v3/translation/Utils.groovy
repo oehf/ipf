@@ -212,11 +212,13 @@ class Utils {
      * target is <code>msg.QPD[3]</code>.  A call to this function will lead to
      * <code>QPD|...|...|abc^123~cde^456|...</code>.  
      */
-    static void fillFacets(Map<String, String> source, Repeatable target) {
-        for (facet in source.findAll { it.value }) { 
-            def field = nextRepetition(target)
-            field[1].value = facet.key
-            field[2].value = facet.value
+    static void fillFacets(List<Map<String, String>> sources, Repeatable target) {
+        for (source in sources) {
+            for (facet in source.findAll { it.value }) {
+                def field = nextRepetition(target)
+                field[1].value = facet.key
+                field[2].value = facet.value
+            }
         }
     }
 

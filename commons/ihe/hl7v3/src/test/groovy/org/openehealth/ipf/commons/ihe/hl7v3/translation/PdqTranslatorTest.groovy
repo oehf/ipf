@@ -40,11 +40,12 @@ class PdqTranslatorTest extends Hl7TranslationTestContainer {
     @Test
     void testPdqQuery() {
         doTestV3toV2RequestTranslation('PDQ_Maximal_Query', 21, PDQV3.Interactions.ITI_47)
+        doTestV3toV2RequestTranslation('PDQ_ID_Query', 21, PDQV3.Interactions.ITI_47)
         doTestV2toV3ResponseTranslation('PDQ_Maximal_Query', 21, PDQV3.Interactions.ITI_47)
         doTestV2toV3ResponseTranslation('PDQ', 21, PDQV3.Interactions.ITI_47)
     }
      
-    @Test @Ignore // WHYY?????
+    @Test @Ignore
     void testResponseWithPid4() {
         doTestV2toV3ResponseTranslation('PDQ_with_PID4', 21, PDQV3.Interactions.ITI_47)
     }

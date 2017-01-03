@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v2.PDQ
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
@@ -81,7 +80,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	 */
     Message translateV3toV2(String v3requestString, Message dummy = null) {
 	    def v3request = slurp(v3requestString)
-        def v2request = PDQ.Interactions.ITI_21.hl7v2TransactionConfiguration.request()
+        Message v2request = PDQ.Interactions.ITI_21.hl7v2TransactionConfiguration.request()
         
         // Segment MSH
         fillMshFromSlurper(v3request, v2request, useSenderDeviceName, useReceiverDeviceName)
@@ -92,39 +91,14 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
         // determine data containers
         def queryByParameter  = v3request.controlActProcess.queryByParameter
         def parameterList     = queryByParameter.parameterList
-	    def livingSubjectName = parameterList.livingSubjectName[0].value[0]
-        def livingSubjectIds  = parameterList.livingSubjectId.value
-        def patientAddress    = parameterList.patientAddress[0].value[0]
-	    
-        // find the first id with a root NOT identical to this.accountNumberRoot
-	    def patientId = livingSubjectIds?.find { it.@root != accountNumberRoot }
 
-        // find the first id with a root identical to this.accountNumberRoot   
-        def accountNumber = livingSubjectIds?.find { it.@root == accountNumberRoot }
-        
-        // fill query facets
-        boolean needWildcard = (livingSubjectName.@use == 'SRCH')
-        def usableGivenNames = livingSubjectName.given.findAll { it.@qualifier.text() in ['', 'CL', 'IN'] }
-        // TODO: regarding (livingSubjectName.@use == 'SRCH'): consider CP-308
-        def queryParams = [
-            '@PID.3.1'    : patientId.@extension.text(),
-            '@PID.3.4.1'  : patientId.@assigningAuthorityName.text(),
-            '@PID.3.4.2'  : patientId.@root.text(), 
-            '@PID.3.4.3'  : getIso(patientId),
-            '@PID.5.1'    : wildcardize(livingSubjectName.family.find { ! it.@qualifier.text() }.text(), needWildcard),
-            '@PID.5.2'    : wildcardize(usableGivenNames[0].text(), needWildcard),
-            '@PID.5.3'    : wildcardize(usableGivenNames[1].text(), needWildcard),
-            '@PID.7'      : parameterList.livingSubjectBirthTime.value.@value.text(),
-            '@PID.8'      : parameterList.livingSubjectAdministrativeGender.value.@code.text(),   
-            '@PID.11.1'   : patientAddress.streetAddressLine.text(),
-            '@PID.11.3'   : patientAddress.city.text(),
-            '@PID.11.4'   : patientAddress.state.text(),
-            '@PID.11.5'   : patientAddress.postalCode.text(),
-            '@PID.11.6'   : patientAddress.country.text(),
-            '@PID.18.1'   : accountNumber.@extension.text(),
-            '@PID.18.4.2' : accountNumber.@root.text(), 
-            '@PID.18.4.3' : getIso(accountNumber),
-        ] 
+        def queryParams = []
+
+        addIdentifierParameters(parameterList.livingSubjectId*.value, queryParams)
+        addNameParameters(parameterList.livingSubjectName*.value, queryParams)
+        addOtherParameters(parameterList, queryParams)
+        addAddressParameters(parameterList.patientAddress*.value, queryParams)
+
         
         // Segment QPD
         v2request.QPD[1] = queryName
@@ -155,6 +129,55 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	    return v2request
 	}
 
+
+    protected void addIdentifierParameters(identifierValues, queryParams) {
+        identifierValues.findAll{ it.@root != accountNumberRoot }.each {
+            queryParams.add([
+                    '@PID.3.1'  : it.@extension.text(),
+                    '@PID.3.4.1': it.@assigningAuthorityName.text(),
+                    '@PID.3.4.2': it.@root.text(),
+                    '@PID.3.4.3': getIso(it),
+            ])
+        }
+        identifierValues.findAll{ it.@root == accountNumberRoot }.each {
+            queryParams.add([
+                    '@PID.18.1'  : it.@extension.text(),
+                    '@PID.18.4.2': it.@root.text(),
+                    '@PID.18.4.3': getIso(it)
+            ])
+        }
+    }
+
+    protected void addNameParameters(nameValues, queryParams) {
+        nameValues.each {
+            boolean needWildcard = (it.@use == 'SRCH')
+            def usableGivenNames = it.given.findAll { it.@qualifier.text() in ['', 'CL', 'IN'] }
+            queryParams.add([
+                    '@PID.5.1': wildcardize(it.family.find { !it.@qualifier.text() }.text(), needWildcard),
+                    '@PID.5.2': wildcardize(usableGivenNames[0].text(), needWildcard),
+                    '@PID.5.3': wildcardize(usableGivenNames[1].text(), needWildcard),
+            ])
+        }
+    }
+
+    protected void addOtherParameters(parameterList, queryParams) {
+        queryParams.add([
+                '@PID.7': parameterList.livingSubjectBirthTime.value.@value.text(),
+                '@PID.8': parameterList.livingSubjectAdministrativeGender.value.@code.text(),
+        ])
+    }
+
+    protected void addAddressParameters(addressValues, queryParams) {
+        addressValues.each {
+            queryParams.add([
+                    '@PID.11.1': it.streetAddressLine.text(),
+                    '@PID.11.3': it.city.text(),
+                    '@PID.11.4': it.state.text(),
+                    '@PID.11.5': it.postalCode.text(),
+                    '@PID.11.6': it.country.text(),
+            ])
+        }
+    }
 
     private String wildcardize(String value, boolean needWildcard) {
         return (value && needWildcard) ? "*${value}*" : value 

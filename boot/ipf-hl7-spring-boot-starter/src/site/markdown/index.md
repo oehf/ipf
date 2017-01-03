@@ -14,9 +14,9 @@ The dependency on the IPF [Spring Boot] IHE HL7 starter module is:
 
 `ipf-hl7-spring-boot-starter` auto-configures 
 
-* `org.apache.camel.component.hl7.HL7MLLPCodec`, 
+* `org.apache.camel.component.hl7.HL7MLLPCodec`
 * a correctly configured `ca.uhn.hl7v2.HapiContext` 
-* ATNA auditor beans for all HL7v2-based IHE transactions.
+* ATNA auditor beans for all HL7v2-based IHE transactions
 
 Furthermore, if a single `org.springframework.cache.CacheManager` bean is available and the application
 property `ipf.hl7v2.caching` is set to true, the following caching storage beans are set up:

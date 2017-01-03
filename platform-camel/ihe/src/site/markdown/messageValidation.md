@@ -72,11 +72,11 @@ profile matching the transaction.
 As a result, no explicit validation processor must be provided anymore:
 
 ```java
-    import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators;
+    import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*;
     import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-    import org.apache.camel.spring.SpringRouteBuilder;
+    import org.apache.camel.builder.RouteBuilder;
 
-    public class MyRouteBuilder extends SpringRouteBuilder {
+    public class MyRouteBuilder extends RouteBuilder {
         @Override
         public void configure() throws Exception {
             from("pix-iti8:0.0.0.0:3700")

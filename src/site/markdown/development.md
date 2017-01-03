@@ -4,7 +4,7 @@
 
 As of version 3.2, IPF requires Java 8 for both compile time and runtime.
 
-IPF builds using Maven 3.2.5. IPF is available over [Maven Central], so no custom repositories need to
+IPF builds using Maven 3.3.9. IPF is available over [Maven Central], so no custom repositories need to
 be added to the `settings.xml` configuration file.
 
 Before building, adjust `MAVEN_OPTS` to assign Maven more heap space.
@@ -19,8 +19,12 @@ Before building, adjust `MAVEN_OPTS` to assign Maven more heap space.
 IPF uses [git](http://git-scm.com/) for source code management. The IPF git repository is located at
 [https://github.com/oehf/ipf](https://github.com/oehf/ipf).
 
-Additionally, there is the `ipf-gazelle` project, which provides conformance profiles for HL7v2 based IHE transactions.
+Additionally, there are the following support projects:
+
+* `ipf-gazelle`, which provides conformance profiles for HL7v2 based IHE transactions.
 It may be released independently and is located at [https://github.com/oehf/ipf-gazelle](https://github.com/oehf/ipf-gazelle).
+* `ipf-oht-atna`, which provides infrastructure for IHE audit trails and node authentication via TLS.
+It may be released independently and is located at [https://github.com/oehf/ipf-oht-atna](https://github.com/oehf/ipf-oht-atna).
 
 ### Continuous Integration
 
@@ -33,8 +37,8 @@ Issue tracking is done in github. For current issues check [https://github.com/o
 
 ### IDE
 
-IPF depends on Maven, Groovy and Lombok.
-Dependening on the choice of your IDE, you may need to install the corresponding plugins.
+IPF depends on Maven, [Groovy](http://www.groovy-lang.org/) and [Lombok](https://projectlombok.org/).
+Depending on the choice of your IDE, you may need to install corresponding plugins.
 
 ### Module Dependencies
 

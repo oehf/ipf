@@ -5,13 +5,14 @@ very easily thanks to its convention over configuration mechanism that allows Sp
 applications in an opinionated way whenever possible.
 All of this auto-configuration is driven by the concept of _starters_ and _conditional annotations_ that Spring Boot provides. 
 
-A starter is basically a dependency descriptor that you can use in your application in order add all the related dependencies 
+A starter is basically a dependency descriptor that you can use in your application in order to add all the related dependencies
 involved in a technology with a minimal specification. Additionally a starter typically contain auto-configuration classes that 
 instantiate a default set of Spring beans that implement the functionality of the starter module depending on corresponding configuration properties
 found e.g. on the classpath. All beans can be overridden in case the default is not sufficient.
  
 IPF provide Spring Boot starter modules for bootstrapping basic IPF infrastructure such as mapping as well as for
-HL7- or IHE-related components. The IPF starter modules also depend on [Camel Spring Boot], which sets up a configurable Camel infrastructure for your project.
+HL7- or IHE-related components. The IPF starter modules also depend on [Camel Spring Boot], which sets up a configurable Camel infrastructure
+for your project.
 Dependencies on the IPF starter modules are established through regular Maven dependencies, e.g. for the IHE XDS starter:
 
 ```xml
@@ -38,8 +39,8 @@ depend on this module.
 Spring beans for picking up any `org.openehealth.ipf.commons.map.config.CustomMappings`. See [here](../dynamic.html) for details.
 If further sets up a `org.openehealth.ipf.commons.core.config.SpringRegistry`.
 
-In addition, if the properties `server.ssl.enabled` and `ipf.commons.reuse-ssl-config` are set to  `true`, a bean
-of type `org.apache.camel.util.jsse.SslContextParameters` named `bootSslContextParameters` is provided so you can
+In addition, if the properties `server.ssl.enabled` and `ipf.commons.reuse-ssl-config` are set to `true`, a bean
+of type `org.apache.camel.util.jsse.SslContextParameters` with name `bootSslContextParameters` is provided so you can
 reuse the Spring Boot security configuration for [FHIR](../ipf-platform-camel-ihe-fhir-core/security.html), 
 [MLLP](../ipf-platform-camel-ihe-mllp/secureTransport.html) and [Web Service](../ipf-platform-camel-ihe-ws/secureTransport.html) IHE transaction endpoints supported by IPF.
 

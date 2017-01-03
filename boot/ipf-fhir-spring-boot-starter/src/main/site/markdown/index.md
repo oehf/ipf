@@ -12,12 +12,12 @@ The dependency on the IPF [Spring Boot] IHE FHIR starter module is:
 ```
 
 
-`ipf-fhir-spring-boot-starter` auto-configures
+`ipf-fhir-spring-boot-starter` auto-configures:
  
-* ATNA auditor beans for all FHIR-based IHE transactions, 
-* the FHIR Servlet, 
+* ATNA auditor beans for all FHIR-based IHE transactions
+* the FHIR Servlet
 * a `org.openehealth.ipf.commons.ihe.fhir.NamingSystemService` instance
-* mappings for translating FHIR requests into PIX Query or PDQ requests and vice versa.
+* mappings for translating FHIR requests into PIX Query or PDQ requests and vice versa
 
 Furthermore, if a single `org.springframework.cache.CacheManager` bean is available and the application
 property `ipf.fhir.caching` is set to true, the following caching storage beans are set up:
@@ -26,7 +26,7 @@ property `ipf.fhir.caching` is set to true, the following caching storage beans 
 
 `ipf-fhir-spring-boot-starter` does *not*  transitively depend on the respective Camel-dependent IHE FHIR
 modules as these have been split into support for MHD, PIXm/PDQm and RESTful ATNA. So, e.g. in order to
-provide MHD endpoints, you have to at least include
+provide MHD endpoints, you have to include
 
 ```xml
         <dependency>
