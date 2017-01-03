@@ -19,21 +19,12 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 
 public class Iti8ClientAuditStrategy extends Iti8AuditStrategy {
 
-    private static class LazyHolder {
-        private static final Iti8ClientAuditStrategy INSTANCE = new Iti8ClientAuditStrategy();
-    }
-
-    public static Iti8ClientAuditStrategy getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    private Iti8ClientAuditStrategy() {
+    public Iti8ClientAuditStrategy() {
         super(false);
     }
 
     @Override
-    protected void callCreateAuditRoutine(
-            Iti8AuditDataset auditDataset, boolean newPatientId) {
+    protected void callCreateAuditRoutine(Iti8AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXSourceAuditor().auditCreatePatientRecordEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
@@ -47,8 +38,7 @@ public class Iti8ClientAuditStrategy extends Iti8AuditStrategy {
     }
 
     @Override
-    protected void callUpdateAuditRoutine(
-            Iti8AuditDataset auditDataset, boolean newPatientId) {
+    protected void callUpdateAuditRoutine(Iti8AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXSourceAuditor().auditUpdatePatientRecordEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),
@@ -62,8 +52,7 @@ public class Iti8ClientAuditStrategy extends Iti8AuditStrategy {
     }
 
     @Override
-    protected void callDeleteAuditRoutine(
-            Iti8AuditDataset auditDataset, boolean newPatientId) {
+    protected void callDeleteAuditRoutine(Iti8AuditDataset auditDataset, boolean newPatientId) {
         AuditorManager.getPIXSourceAuditor().auditDeletePatientRecordEvent(
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getRemoteAddress(),

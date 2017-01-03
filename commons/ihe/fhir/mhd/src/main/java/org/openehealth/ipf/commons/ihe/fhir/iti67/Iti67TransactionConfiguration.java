@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.fhir.iti67;
 
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
@@ -27,7 +26,11 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 public class Iti67TransactionConfiguration extends FhirTransactionConfiguration {
 
     public Iti67TransactionConfiguration() {
-        super(
+        super("mhd-iti67",
+                "Find Document References",
+                true,
+                new Iti67AuditStrategy(false),
+                new Iti67AuditStrategy(true),
                 new Iti67ResourceProvider(),                    // Consumer side. accept registrations
                 new Iti67ClientRequestFactory());               // Formulate requests
         setSupportsLazyLoading(true);

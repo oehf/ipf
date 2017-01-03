@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.hl7v2ws;
 
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
-import ca.uhn.hl7v2.model.v26.message.ORU_R01;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.InteractionProfile;
+import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
@@ -38,32 +36,15 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public class PCD implements InteractionProfile {
+public class PCD implements IntegrationProfile {
 
     @AllArgsConstructor
     public enum Interactions implements Hl7v2WsInteractionId {
+        PCD_01(PCD_01_HL7V2_CONFIG, PCD_01_NAK_FACTORY, PCD_01_WS_CONFIG);
 
-        PCD_01("pcd-pcd01",
-                "Communicate PCD Data",
-                false,
-                PCD01_CONFIG,
-                PCD01_NAK_FACTORY,
-                PCD01_WS_CONFIG);
-
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
         @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
         @Getter private NakFactory nakFactory;
         @Getter private WsTransactionConfiguration wsTransactionConfiguration;
-
-        public ORU_R01 request() {
-            Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
-            return (ORU_R01) request(
-                    config.getAllowedRequestMessageTypes()[0],
-                    config.getAllowedRequestTriggerEvents()[0]);
-        }
-
     }
 
     @Override
@@ -72,7 +53,12 @@ public class PCD implements InteractionProfile {
     }
 
     private static final String NS_URI = "urn:ihe:pcd:dec:2010";
-    private static final WsTransactionConfiguration PCD01_WS_CONFIG = new WsTransactionConfiguration(
+    private static final WsTransactionConfiguration PCD_01_WS_CONFIG = new WsTransactionConfiguration(
+            "pcd-pcd01",
+            "Communicate PCD Data",
+            false,
+            null,
+            null,
             new QName(NS_URI, "DeviceObservationConsumer_Service", "ihe"),
             Pcd01PortType.class,
             new QName(NS_URI, "DeviceObservationConsumer_Binding_Soap12", "ihe"),
@@ -83,7 +69,12 @@ public class PCD implements InteractionProfile {
             false,
             false);
 
-    private static final Hl7v2TransactionConfiguration PCD01_CONFIG = new Hl7v2TransactionConfiguration(
+    private static final Hl7v2TransactionConfiguration PCD_01_HL7V2_CONFIG = new Hl7v2TransactionConfiguration(
+            "pcd-pcd01",
+            "Communicate PCD Data",
+            false,
+            null,
+            null,
             new Version[] {Version.V26},
             "PCD01",
             "IPF",
@@ -97,5 +88,5 @@ public class PCD implements InteractionProfile {
             null,
             HapiContextFactory.createHapiContext(PcdTransactions.PCD1));
 
-    private static final NakFactory PCD01_NAK_FACTORY = new NakFactory(PCD01_CONFIG, false, "ACK^R01^ACK");
+    private static final NakFactory PCD_01_NAK_FACTORY = new NakFactory(PCD_01_HL7V2_CONFIG, false, "ACK^R01^ACK");
 }

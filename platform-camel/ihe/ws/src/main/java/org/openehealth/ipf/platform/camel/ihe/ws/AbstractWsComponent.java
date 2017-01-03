@@ -37,7 +37,7 @@ import java.util.Map;
  * @param <ConfigType>       configuration type
  * @author Dmytro Rud
  */
-abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDataset, ConfigType extends WsTransactionConfiguration, InteractionIdType extends WsInteractionId>
+abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDataset, ConfigType extends WsTransactionConfiguration, InteractionIdType extends WsInteractionId<ConfigType>>
         extends DefaultComponent implements AuditableComponent<AuditDatasetType> {
 
     private final InteractionIdType interactionId;
@@ -86,12 +86,12 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
 
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
-        return interactionId.getClientAuditStrategy();
+        return interactionId.getWsTransactionConfiguration().getClientAuditStrategy();
     }
 
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
-        return interactionId.getServerAuditStrategy();
+        return interactionId.getWsTransactionConfiguration().getServerAuditStrategy();
     }
 
     /**

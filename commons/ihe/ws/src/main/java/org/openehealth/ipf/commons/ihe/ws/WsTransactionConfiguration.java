@@ -16,13 +16,17 @@
 package org.openehealth.ipf.commons.ihe.ws;
 
 import org.apache.commons.lang3.Validate;
+import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+
 import javax.xml.namespace.QName;
 
 /**
  * Contains information about a Web Service-based transaction.
  * All parameters are static, i. e. do not depend on the endpoint configuration.
  */
-public class WsTransactionConfiguration {
+public class WsTransactionConfiguration extends TransactionConfiguration {
     private final QName bindingName;
     private final Class<?> sei;
     private final QName serviceName;
@@ -56,16 +60,24 @@ public class WsTransactionConfiguration {
      *      asynchronous responses via WS-Addressing &lt;ReplyTo&gt; header.
      *      (obviously does not make any sense when <code>addressing==false</code>).
      */
-    public WsTransactionConfiguration(QName serviceName,
-                                      Class<?> sei,
-                                      QName bindingName,
-                                      boolean mtom,
-                                      String wsdlLocation,
-                                      boolean addressing,
-                                      boolean swaOutSupport,
-                                      boolean auditRequestPayload,
-                                      boolean allowAsynchrony)
+    public WsTransactionConfiguration(
+            String name,
+            String description,
+            boolean isQuery,
+            AuditStrategy<? extends WsAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends WsAuditDataset> serverAuditStrategy,
+            QName serviceName,
+            Class<?> sei,
+            QName bindingName,
+            boolean mtom,
+            String wsdlLocation,
+            boolean addressing,
+            boolean swaOutSupport,
+            boolean auditRequestPayload,
+            boolean allowAsynchrony)
     {
+        super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
+
         Validate.notNull(serviceName, "serviceName");
         Validate.notNull(sei, "service endpoint interface");
         Validate.notNull(bindingName, "bindingName");

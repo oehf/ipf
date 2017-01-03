@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti62;
 
-import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditStrategy30;
@@ -25,10 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditStrategy30;
  * @author Boris Stanojevic
  */
 public class Iti62AuditStrategy extends XdsRemoveAuditStrategy30 {
-    @Getter(lazy = true) private static final Iti62AuditStrategy clientInstance = new Iti62AuditStrategy(false);
-    @Getter(lazy = true) private static final Iti62AuditStrategy serverInstance = new Iti62AuditStrategy(true);
 
-    private Iti62AuditStrategy(boolean serverSide) {
+    public Iti62AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 

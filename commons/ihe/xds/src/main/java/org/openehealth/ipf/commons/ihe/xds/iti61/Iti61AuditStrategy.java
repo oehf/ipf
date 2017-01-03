@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
  */
 public class Iti61AuditStrategy extends XdsSubmitAuditStrategy30 {
 
-    protected Iti61AuditStrategy(boolean serverSide) {
+    public Iti61AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 

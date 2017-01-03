@@ -28,7 +28,12 @@ import javax.xml.namespace.QName;
 public class DocumentRegistryTransactionConfiguration extends WsTransactionConfiguration {
 
     public DocumentRegistryTransactionConfiguration() {
-        super(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
+        super("dummy",
+                "dummy",
+                false,
+                null,
+                null,
+                new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
                 DocumentRegistryPortType.class,
                 new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
                 true,

@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.xds;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63PortType;
-import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti63.asyncresponse.Iti63AsyncResponsePortType;
 
 import javax.xml.namespace.QName;
@@ -35,48 +31,21 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public class XCF implements XdsInteractionProfile {
+public class XCF implements XdsIntegrationProfile {
 
     private static final XCF Instance = new XCF();
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements XdsInteractionId {
+        ITI_63(ITI_63_WS_CONFIG),
+        ITI_63_ASYNC_RESPONSE(ITI63_ASYNC_RESPONSE_WS_CONFIG);
 
-        ITI_63("xcf-iti63",
-                "Cross Gateway Fetch",
-                true,
-                ITI63_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
-                return Iti63ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
-                return Iti63ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_63_ASYNC("xcf-iti63-async-response",
-                "Cross Gateway Fetch",
-                true,
-                ITI63_ASYNC_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
-                return Iti63ClientAuditStrategy.getInstance(); // really!
-            }
-        };
-
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
         @Getter private WsTransactionConfiguration wsTransactionConfiguration;
 
         @Override
-        public XdsInteractionProfile getInteractionProfile() {
+        public XdsIntegrationProfile getInteractionProfile() {
             return Instance;
         }
-
     }
 
     @Override
@@ -94,7 +63,12 @@ public class XCF implements XdsInteractionProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration ITI63_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_63_WS_CONFIG = new WsTransactionConfiguration(
+            "xcf-iti63",
+            "Cross Gateway Fetch",
+            true,
+            new Iti63AuditStrategy(false),
+            new Iti63AuditStrategy(true),
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Service", "ihe"),
             Iti63PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Binding_Soap12", "ihe"),
@@ -105,7 +79,12 @@ public class XCF implements XdsInteractionProfile {
             true,
             true);
 
-    private final static WsTransactionConfiguration ITI63_ASYNC_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI63_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration(
+            "xcf-iti63-async-response",
+            "Cross Gateway Fetch",
+            true,
+            null,
+            new Iti63AuditStrategy(false),      // really!
             new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Service", "ihe"),
             Iti63AsyncResponsePortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Binding", "ihe"),

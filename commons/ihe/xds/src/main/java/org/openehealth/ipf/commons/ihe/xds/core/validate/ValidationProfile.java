@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
 import org.openehealth.ipf.commons.ihe.xds.XdsInteractionId;
-import org.openehealth.ipf.commons.ihe.xds.XdsInteractionProfile;
+import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 
 /**
  * Validation profile for XDS-like transactions.
@@ -46,7 +46,7 @@ public interface ValidationProfile {
     /**
      * @return ID of interaction profile the transaction belongs to.
      */
-    XdsInteractionProfile getInteractionProfile();
+    XdsIntegrationProfile getInteractionProfile();
 
 
     /**
@@ -56,7 +56,7 @@ public interface ValidationProfile {
         return getInteractionProfile().isEbXml30Based();
     }
 
-    default boolean isPartOf(Class<? extends XdsInteractionProfile> clazz) {
+    default boolean isPartOf(Class<? extends XdsIntegrationProfile> clazz) {
         return clazz.isAssignableFrom(getInteractionProfile().getClass());
     }
 

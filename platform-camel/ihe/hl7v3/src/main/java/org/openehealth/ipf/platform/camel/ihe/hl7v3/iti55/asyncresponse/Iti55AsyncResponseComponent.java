@@ -22,7 +22,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_55_ASYNC;
+import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_55_ASYNC_RESPONSE;
 
 /**
  * Camel component for the ITI-55 XCPD Initiating Gateway actor
@@ -31,7 +31,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_55_ASY
 public class Iti55AsyncResponseComponent extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
 
     public Iti55AsyncResponseComponent() {
-        super(ITI_55_ASYNC);
+        super(ITI_55_ASYNC_RESPONSE);
     }
 
     @Override

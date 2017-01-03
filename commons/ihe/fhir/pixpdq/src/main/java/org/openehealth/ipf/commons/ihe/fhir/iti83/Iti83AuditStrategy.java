@@ -25,7 +25,6 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Strategy for auditing ITI-83 transactions
@@ -33,9 +32,9 @@ import java.util.stream.Collectors;
  * @author Christian Ohr
  * @since 3.1
  */
-public abstract class Iti83AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
+public class Iti83AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
 
-    protected Iti83AuditStrategy(boolean serverSide) {
+    public Iti83AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 

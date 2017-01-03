@@ -129,12 +129,12 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
 
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
-        return fhirInteractionId.getServerAuditStrategy();
+        return fhirInteractionId.getFhirTransactionConfiguration().getServerAuditStrategy();
     }
 
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
-        return fhirInteractionId.getClientAuditStrategy();
+        return fhirInteractionId.getFhirTransactionConfiguration().getClientAuditStrategy();
     }
 
     public FhirInteractionId getInteractionId() {

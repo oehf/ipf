@@ -13,26 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.fhir.iti66;
+package org.openehealth.ipf.commons.ihe.core;
+
+import java.util.List;
 
 /**
- * Strategy for auditing ITI-66 transactions on the server side
- *
- * @author Christian Ohr
- * @since 3.2
+ * Interface for collections of {@link InteractionId}s
  */
-public class Iti66ServerAuditStrategy extends Iti66AuditStrategy {
+public interface IntegrationProfile {
 
-    private static class LazyHolder {
-        private static final Iti66ServerAuditStrategy INSTANCE = new Iti66ServerAuditStrategy();
-    }
+    List<InteractionId> getInteractionIds();
 
-    public static Iti66ServerAuditStrategy getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    public Iti66ServerAuditStrategy() {
-        super(true);
+    default boolean isProfileFor(InteractionId interactionId) {
+        return getInteractionIds().contains(interactionId);
     }
 
 }

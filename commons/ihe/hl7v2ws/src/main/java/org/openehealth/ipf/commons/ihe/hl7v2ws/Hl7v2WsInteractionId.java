@@ -18,10 +18,11 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws;
 
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 
 /**
  * @author Christian Ohr
  * @since 3.2
  */
-public interface Hl7v2WsInteractionId extends Hl7v2InteractionId, WsInteractionId {
+public interface Hl7v2WsInteractionId extends Hl7v2InteractionId, WsInteractionId<WsTransactionConfiguration> {
 }

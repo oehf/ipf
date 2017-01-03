@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
@@ -25,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditStrategy;
  * @author Christian Ohr
  * @since 3.2
  */
-public abstract class Iti66AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
+public class Iti66AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDataset> {
 
     public Iti66AuditStrategy(boolean serverSide) {
         super(serverSide);

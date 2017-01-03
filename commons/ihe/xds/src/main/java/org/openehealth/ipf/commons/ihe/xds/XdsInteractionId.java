@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.xds;
 
-import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
@@ -25,13 +23,18 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
  * @author Christian Ohr
  * @since 3.2
  */
-public interface XdsInteractionId extends WsInteractionId, ValidationProfile {
+public interface XdsInteractionId<ConfigType extends WsTransactionConfiguration> extends WsInteractionId<ConfigType>, ValidationProfile {
 
     @Override
     default XdsInteractionId getInteractionId() {
         return this;
     }
 
-    XdsInteractionProfile getInteractionProfile();
+    @Override
+    default boolean isQuery() {
+        return getWsTransactionConfiguration().isQuery();
+    };
+
+    XdsIntegrationProfile getInteractionProfile();
 
 }

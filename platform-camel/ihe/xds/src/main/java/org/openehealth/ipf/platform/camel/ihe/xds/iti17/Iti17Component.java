@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * The Camel component for the ITI-17 transaction.
  */
-public class Iti17Component extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration, WsInteractionId.Null> {
+public class Iti17Component extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration, WsInteractionId<WsTransactionConfiguration>> {
 
     public Iti17Component() {
         super(null);

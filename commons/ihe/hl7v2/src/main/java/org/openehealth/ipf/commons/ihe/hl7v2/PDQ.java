@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.hl7v2;
 
 import ca.uhn.hl7v2.ErrorCode;
@@ -21,16 +20,13 @@ import ca.uhn.hl7v2.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.InteractionProfile;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.atna.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti21.Iti21ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti21.Iti21ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti22.Iti22ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.iti22.Iti22ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21;
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions;
 
 import java.util.Arrays;
@@ -40,57 +36,15 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public class PDQ implements InteractionProfile {
+public class PDQ implements IntegrationProfile {
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements Hl7v2InteractionId {
+        ITI_21(ITI_21_CONFIGURATION, ITI_21_NAK_FACTORY),
+        ITI_22(ITI_22_CONFIGURATION, ITI_22_NAK_FACTORY);
 
-        ITI_21("pdq-iti21",
-                "Patient Demographics Query",
-                true,
-                ITI21_CONFIGURATION,
-                ITI21_NAK_FACTORY) {
-            @Override
-            public  AuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
-                return Iti21ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
-                return Iti21ServerAuditStrategy.getInstance();
-            }
-
-        },
-        ITI_22("pdq-iti22",
-                "Patient Demographics And Visit Query",
-                true,
-                ITI22_CONFIGURATION,
-                ITI22_NAK_FACTORY) {
-            @Override
-            public  AuditStrategy<QueryAuditDataset> getClientAuditStrategy() {
-                return Iti22ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<QueryAuditDataset> getServerAuditStrategy() {
-                return Iti22ServerAuditStrategy.getInstance();
-            }
-
-        };
-
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
         @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
         @Getter private NakFactory nakFactory;
-
-        public QBP_Q21 request() {
-            Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
-            return (QBP_Q21) request(
-                    config.getAllowedRequestMessageTypes()[0],
-                    config.getAllowedRequestTriggerEvents()[0]);
-        }
     }
 
     @Override
@@ -98,9 +52,13 @@ public class PDQ implements InteractionProfile {
         return Arrays.asList(Interactions.values());
     }
 
-
-    private static final Hl7v2TransactionConfiguration ITI21_CONFIGURATION =
+    private static final Hl7v2TransactionConfiguration ITI_21_CONFIGURATION =
             new PdqTransactionConfiguration(
+                    "pdq-iti21",
+                    "Patient Demographics Query",
+                    true,
+                    new Iti21ClientAuditStrategy(),
+                    new Iti21ServerAuditStrategy(),
                     new Version[] {Version.V25},
                     "PDQ adapter",
                     "IPF",
@@ -116,10 +74,16 @@ public class PDQ implements InteractionProfile {
                             CustomModelClassUtils.createFactory("pdq", "2.5"),
                             PixPdqTransactions.ITI21));
 
-    private static final NakFactory ITI21_NAK_FACTORY = new QpdAwareNakFactory(ITI21_CONFIGURATION, "RSP", "K22");
+    private static final NakFactory ITI_21_NAK_FACTORY =
+            new QpdAwareNakFactory(ITI_21_CONFIGURATION, "RSP", "K22");
 
-    private static final Hl7v2TransactionConfiguration ITI22_CONFIGURATION =
+    private static final Hl7v2TransactionConfiguration ITI_22_CONFIGURATION =
             new PdqTransactionConfiguration(
+                    "pdq-iti22",
+                    "Patient Demographics And Visit Query",
+                    true,
+                    new Iti22ClientAuditStrategy(),
+                    new Iti22ServerAuditStrategy(),
                     new Version[] {Version.V25},
                     "PDQ adapter",
                     "IPF",
@@ -135,6 +99,6 @@ public class PDQ implements InteractionProfile {
                             CustomModelClassUtils.createFactory("pdq", "2.5"),
                             PixPdqTransactions.ITI22));
 
-    private static final NakFactory ITI22_NAK_FACTORY =
-            new QpdAwareNakFactory(ITI22_CONFIGURATION, "RSP", "ZV2");
+    private static final NakFactory ITI_22_NAK_FACTORY =
+            new QpdAwareNakFactory(ITI_22_CONFIGURATION, "RSP", "ZV2");
 }

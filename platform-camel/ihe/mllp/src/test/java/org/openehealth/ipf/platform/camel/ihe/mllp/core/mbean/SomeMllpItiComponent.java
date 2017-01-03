@@ -19,7 +19,6 @@ import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
@@ -31,6 +30,11 @@ public class SomeMllpItiComponent extends MllpTransactionComponent {
     
     public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new Hl7v2TransactionConfiguration(
+                "foo",
+                "Some MLLP Component",
+                false,
+                null,
+                null,
                 new Version[] {Version.V25},
                 "Some MLLP adapter",
                 "IPF-Test",
@@ -53,16 +57,6 @@ public class SomeMllpItiComponent extends MllpTransactionComponent {
     @Override
     public NakFactory getNakFactory() {
         return NAK_FACTORY;
-    }
-    
-    @Override
-    public AuditStrategy getClientAuditStrategy() {
-        return null;
-    }
-
-    @Override
-    public AuditStrategy getServerAuditStrategy() {
-        return null;
     }
     
     @Override

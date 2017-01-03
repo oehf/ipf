@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.hl7v3.iti44
+package org.openehealth.ipf.commons.ihe.xds;
+
+import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
+
 /**
  *
  */
-class Iti44ServerAuditStrategy extends Iti44AuditStrategy{
+public interface XdsIntegrationProfile extends IntegrationProfile {
 
-    private static class LazyHolder {
-        private static final Iti44ServerAuditStrategy INSTANCE = new Iti44ServerAuditStrategy();
-    }
+    boolean isEbXml30Based();
 
-    public static Iti44ServerAuditStrategy getInstance() {
-        return LazyHolder.INSTANCE;
-    }
+    boolean requiresHomeCommunityId();
 
-    private Iti44ServerAuditStrategy() {
-        super(true)
-    }
 }

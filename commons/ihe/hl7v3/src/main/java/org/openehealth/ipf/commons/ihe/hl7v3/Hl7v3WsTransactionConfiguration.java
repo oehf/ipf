@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import lombok.Getter;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 
@@ -55,6 +56,11 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration 
      *      whether producers can request asynchronous responses via WSA.
      */
     public Hl7v3WsTransactionConfiguration(
+            String name,
+            String description,
+            boolean isQuery,
+            AuditStrategy<? extends Hl7v3AuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends Hl7v3AuditDataset> serverAuditStrategy,
             QName serviceName,
             Class<?> sei,
             QName bindingName,
@@ -67,7 +73,8 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration 
             CombinedXmlValidationProfile requestValidationProfile,
             CombinedXmlValidationProfile responseValidationProfile)
     {
-        super(serviceName, sei, bindingName, mtom, wsdlLocation,
+        super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
+                serviceName, sei, bindingName, mtom, wsdlLocation,
                 true, false, auditRequestPayload, supportAsynchrony);
 
         this.nakRootElementName = nakRootElementName;

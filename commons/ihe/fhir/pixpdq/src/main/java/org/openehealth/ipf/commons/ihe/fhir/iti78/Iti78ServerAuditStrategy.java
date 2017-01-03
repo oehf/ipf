@@ -15,11 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
-import org.hl7.fhir.instance.model.Patient;
 import org.openehealth.ipf.commons.ihe.fhir.FhirQueryAuditDataset;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Strategy for auditing ITI-78 transactions on the server side
@@ -29,15 +25,7 @@ import java.util.stream.Collectors;
  */
 public class Iti78ServerAuditStrategy extends Iti78AuditStrategy {
 
-    private static class LazyHolder {
-        private static final Iti78ServerAuditStrategy INSTANCE = new Iti78ServerAuditStrategy();
-    }
-
-    public static Iti78ServerAuditStrategy getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    private Iti78ServerAuditStrategy() {
+    public Iti78ServerAuditStrategy() {
         super(true);
     }
 

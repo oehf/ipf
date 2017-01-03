@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.xds;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ServerAuditStrategy;
@@ -37,15 +31,13 @@ import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51PortType;
-import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61PortType;
-import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
 
@@ -57,137 +49,27 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public class XDS_B implements XdsInteractionProfile {
+public class XDS_B implements XdsIntegrationProfile {
 
     private static final XDS_B Instance = new XDS_B();
 
-    @SuppressWarnings("unchecked")
     @AllArgsConstructor
     public enum Interactions implements XdsInteractionId {
+        ITI_18(ITI_18_WS_CONFIG),
+        ITI_41(ITI_41_WS_CONFIG),
+        ITI_42(ITI_42_WS_CONFIG),
+        ITI_43(ITI_43_WS_CONFIG),
+        ITI_51(ITI_51_WS_CONFIG),
+        ITI_57(ITI_57_WS_CONFIG),
+        ITI_61(ITI_61_WS_CONFIG),
+        ITI_62(ITI_62_WS_CONFIG);
 
-        ITI_18("xds-iti18",
-                "Registry Stored Query",
-                true,
-                ITI18_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
-                return Iti18ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
-                return Iti18ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_41("xds-iti41",
-                "Provide and Register Document Set-b",
-                false,
-                ITI41_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getClientAuditStrategy() {
-                return Iti41ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getServerAuditStrategy() {
-                return Iti41ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_42("xds-iti42",
-                "Register Document Set-b",
-                false,
-                ITI42_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getClientAuditStrategy() {
-                return Iti42ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getServerAuditStrategy() {
-                return Iti42ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_43("xds-iti43",
-                "Retrieve Document Set",
-                false,
-                ITI43_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsRetrieveAuditDataset> getClientAuditStrategy() {
-                return Iti43ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsRetrieveAuditDataset> getServerAuditStrategy() {
-                return Iti43ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_51("xds-iti51",
-                "Multi-Patient Stored Query",
-                true,
-                ITI51_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsQueryAuditDataset> getClientAuditStrategy() {
-                return Iti51ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsQueryAuditDataset> getServerAuditStrategy() {
-                return Iti51ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_57("xds-iti57",
-                "XDS Metadata Update",
-                false,
-                ITI57_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getClientAuditStrategy() {
-                return Iti57ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getServerAuditStrategy() {
-                return Iti57ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_61("xds-iti61",
-                "Register On-Demand Document Entry",
-                false,
-                ITI61_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getClientAuditStrategy() {
-                return Iti61ClientAuditStrategy.getInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsSubmitAuditDataset> getServerAuditStrategy() {
-                return Iti61ServerAuditStrategy.getInstance();
-            }
-        },
-        ITI_62("xds-iti62",
-                "Delete Document Set",
-                false,
-                ITI62_WS_CONFIG) {
-            @Override
-            public AuditStrategy<XdsRemoveAuditDataset> getClientAuditStrategy() {
-                return Iti62AuditStrategy.getClientInstance();
-            }
-
-            @Override
-            public AuditStrategy<XdsRemoveAuditDataset> getServerAuditStrategy() {
-                return Iti62AuditStrategy.getServerInstance();
-            }
-        };
-
-        @Getter private String name;
-        @Getter private String description;
-        @Getter private boolean query;
         @Getter private WsTransactionConfiguration wsTransactionConfiguration;
 
         @Override
-        public XdsInteractionProfile getInteractionProfile() {
+        public XdsIntegrationProfile getInteractionProfile() {
             return Instance;
         }
-
     }
 
     @Override
@@ -205,7 +87,12 @@ public class XDS_B implements XdsInteractionProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration ITI18_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_18_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti18",
+            "Registry Stored Query",
+            true,
+            new Iti18ClientAuditStrategy(),
+            new Iti18ServerAuditStrategy(),
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
             Iti18PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
@@ -216,7 +103,12 @@ public class XDS_B implements XdsInteractionProfile {
             true,
             false);
 
-    private static WsTransactionConfiguration ITI41_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_41_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti41",
+            "Provide and Register Document Set-b",
+            false,
+            new Iti41ClientAuditStrategy(),
+            new Iti41ServerAuditStrategy(),
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Service", "ihe"),
             Iti41PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Binding_Soap12", "ihe"),
@@ -227,7 +119,12 @@ public class XDS_B implements XdsInteractionProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration ITI42_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_42_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti42",
+            "Register Document Set-b",
+            false,
+            new Iti42ClientAuditStrategy(),
+            new Iti42ServerAuditStrategy(),
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
             Iti42PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
@@ -238,7 +135,12 @@ public class XDS_B implements XdsInteractionProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration ITI43_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_43_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti43",
+            "Retrieve Document Set",
+            false,
+            new Iti43ClientAuditStrategy(),
+            new Iti43ServerAuditStrategy(),
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Service", "ihe"),
             Iti43PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Binding_Soap12", "ihe"),
@@ -249,7 +151,12 @@ public class XDS_B implements XdsInteractionProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration ITI51_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_51_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti51",
+            "Multi-Patient Stored Query",
+            true,
+            new Iti51AuditStrategy(false),
+            new Iti51AuditStrategy(true),
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
             Iti51PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
@@ -260,7 +167,12 @@ public class XDS_B implements XdsInteractionProfile {
             true,
             false);
 
-    private final static WsTransactionConfiguration ITI57_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_57_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti57",
+            "XDS Metadata Update",
+            false,
+            new Iti57ClientAuditStrategy(),
+            new Iti57ServerAuditStrategy(),
             new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_Service", "ihe"),
             Iti57PortType.class,
             new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_Binding_Soap12", "ihe"),
@@ -272,7 +184,12 @@ public class XDS_B implements XdsInteractionProfile {
             false);
 
 
-    private final static WsTransactionConfiguration ITI61_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_61_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti61",
+            "Register On-Demand Document Entry",
+            false,
+            new Iti61AuditStrategy(false),
+            new Iti61AuditStrategy(true),
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
             Iti61PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
@@ -283,7 +200,12 @@ public class XDS_B implements XdsInteractionProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration ITI62_WS_CONFIG = new WsTransactionConfiguration(
+    private final static WsTransactionConfiguration ITI_62_WS_CONFIG = new WsTransactionConfiguration(
+            "xds-iti62",
+            "Delete Document Set",
+            false,
+            new Iti62AuditStrategy(false),
+            new Iti62AuditStrategy(true),
             new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_Service", "ihe"),
             Iti62PortType.class,
             new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_Binding_Soap12", "ihe"),
