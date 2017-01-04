@@ -52,7 +52,7 @@ Here is an example:
 ### Embedded in Spring Boot
 
 Container deployments embedded in [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-embedded-servlet-containers.html)
-can be easily achieved by depending on [ipf-xds-spring-boot-starter](../ipf-xds-spring-boot-starter/index.html).
+can be easily achieved by depending on [ipf-xds-spring-boot-starter](../ipf-xds-spring-boot-starter/index.html) or [ipf-hl7v3-spring-boot-starter](../ipf-hl7v3-spring-boot-starter/index.html).
 This starter module sets up the necessary servlets and the servlet init parameters are mapped to application properties.
 
 Note that Spring Boot supports Tomcat, Jetty and Undertow as servlet implementations.

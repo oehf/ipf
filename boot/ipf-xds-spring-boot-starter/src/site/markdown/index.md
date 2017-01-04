@@ -28,6 +28,8 @@ being used is the one that Spring Boot finds on the classpath.
 |----------------------------|-----------------------|-----------------------------------------------------|
 | `caching`                  | false                 | Whether to set up a cache for Asynchronous Web Service exchange
 
+See [ipf-spring-boot-starter](../ipf-spring-boot-starter/index.html) and [ipf-atna-spring-boot-starter](../ipf-atna-spring-boot-starter/index.html) for
+additional properties.
 
 This starter module also transitively depends on [cxf-spring-boot-starter-jaxws](http://cxf.apache.org/docs/springboot.html) that sets up the CXF
 web service stack including the Camel CXF servlet, so you don't have to care about this anymore.

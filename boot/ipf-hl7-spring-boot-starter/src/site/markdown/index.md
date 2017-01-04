@@ -35,5 +35,7 @@ being used is the one that Spring Boot finds on the classpath.
 | `convert-line-feed`        | false                 | Whether to convert line feeds to proper segment separators before parsing starts
 | `caching`                  | false                 | Whether to set up caches for paging and unsolicited fragmentation
 
+See [ipf-spring-boot-starter](../ipf-spring-boot-starter/index.html) and [ipf-atna-spring-boot-starter](../ipf-atna-spring-boot-starter/index.html) for
+additional properties.
 
 [Spring Boot]: http://projects.spring.io/spring-boot/

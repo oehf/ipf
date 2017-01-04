@@ -55,6 +55,8 @@ into your project descriptor.
 | `servlet.pretty-print`     | true            | Whether pretty-printing responses is enabled
 | `servlet.response-highlighting`  | true      | Whether color-coding responses queried from a Web Browser is enabled
 
+See [ipf-spring-boot-starter](../ipf-spring-boot-starter/index.html) and [ipf-atna-spring-boot-starter](../ipf-atna-spring-boot-starter/index.html) for
+additional properties.
 
 The starter module does *not* set up a Camel servlet for serving MHD ITI-68 (Retrieve Document) transactions.
 Camel provides a Spring boot starter module for this:
