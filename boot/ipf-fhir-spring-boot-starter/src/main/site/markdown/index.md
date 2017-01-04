@@ -1,4 +1,4 @@
-## Spring Boot ATNA support
+## Spring Boot FHIR support
 
 `ipf-fhir-spring-boot-starter` sets up the infrastructure for FHIR-based IHE transactions
  
@@ -54,5 +54,25 @@ into your project descriptor.
 | `servlet.logging`          | false           | Whether server-side request logging is enabled
 | `servlet.pretty-print`     | true            | Whether pretty-printing responses is enabled
 | `servlet.response-highlighting`  | true      | Whether color-coding responses queried from a Web Browser is enabled
+
+
+The starter module does *not* set up a Camel servlet for serving MHD ITI-68 (Retrieve Document) transactions.
+Camel provides a Spring boot starter module for this:
+
+```xml
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-servlet-starter</artifactId>
+        </dependency>
+```
+
+`camel-servlet-starter` provides the following application properties:
+
+| Property (`camel.component.servlet.mapping.`) | Default                | Description                                        |
+|-----------------------------------------------|------------------------|----------------------------------------------------|
+| `enabled`                                     | true                   | Enables the automatic mapping of the servlet component into the Spring web context
+| `contextPath`                                 | /camel/*               | Context path used by the servlet component for automatic mapping
+| `servletName`                                 | CamelServlet           | The name of the Camel servlet
+
 
 [Spring Boot]: http://projects.spring.io/spring-boot/

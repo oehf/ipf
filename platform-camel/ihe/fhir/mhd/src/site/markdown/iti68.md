@@ -54,11 +54,11 @@ For example, when a Tomcat container on the host `eHealth.server.org` is configu
 ```
 port = 8888
 contextPath = /IHE
-servletPath = /fhir/*
+servletPath = /binary/*
 ```
 
 then the mhd-iti68 consumer will be available for external clients under the URL
-`http://eHealth.server.org:8888/IHE/fhir`
+`http://eHealth.server.org:8888/IHE/binary`
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
 

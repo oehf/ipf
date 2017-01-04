@@ -5,8 +5,7 @@ Every project that exposes consumer endpoints of Web Service-based IPF IHE compo
 container for them. Currently the following containers have been tested:
 
 * Standalone Apache Tomcat
-* Embedded Apache Tomcat
-* Jetty
+* Embedded in Spring Boot
 
 Neccessary configuration steps for all these variants will be described in corresponding sections below.
 
@@ -50,10 +49,10 @@ Here is an example:
 ```
 
 
-### Embedded Apache Tomcat
+### Embedded in Spring Boot
 
-TODO
+Container deployments embedded in [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-embedded-servlet-containers.html)
+can be easily achieved by depending on [ipf-xds-spring-boot-starter](../ipf-xds-spring-boot-starter/index.html).
+This starter module sets up the necessary servlets and the servlet init parameters are mapped to application properties.
 
-### Jetty
-
-TODO
+Note that Spring Boot supports Tomcat, Jetty and Undertow as servlet implementations.

@@ -1,4 +1,4 @@
-## Spring Boot ATNA support
+## Spring Boot HL7v3 support
 
 `ipf-hl7v3-spring-boot-starter` sets up the infrastructure for HL7v3-based IHE transactions
  

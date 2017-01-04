@@ -5,8 +5,7 @@ Every project that exposes consumer endpoints of FHIR-based IHE components needs
 container for them. Currently the following containers have been tested:
 
 * Standalone Apache Tomcat
-* Embedded Apache Tomcat
-* Jetty
+* Embedded in Spring Boot
 
 Neccessary configuration steps for all these variants will be described in corresponding sections below.
 
@@ -51,7 +50,7 @@ Here is an example:
 ```
 
 
-The following servlet parameters are supported:
+The following servlet init parameters are supported:
 
 | Parameter name       | Type       | Default value | Short description                                                                    |
 |:---------------------|:-----------|:--------------|:-------------------------------------------------------------------------------------|
@@ -63,13 +62,42 @@ The following servlet parameters are supported:
 | `maximumPageSize`    | Integer    | 100           | maximum page size of returned resources
 
 
-### Embedded Apache Tomcat
+A special case is the [ITI-68](../ipf-platform-camel-ihe-fhir-mhd/iti68.html) transaction. This is no FHIR
+transaction as such but just a HTTP(S) download. Therefore, instead of being routed over the `FhirServlet`
+this transaction is served by a `CamelServlet` as provided by Camel's [Servlet component](http://camel.apache.org/servlet.html):
 
-TODO
+```
 
-### Jetty
+<servlet>
+   <servlet-name>CamelServlet</servlet-name>
+   <display-name>Camel Http Transport Servlet</display-name>
+   <servlet-class>org.apache.camel.component.servlet.CamelHttpTransportServlet</servlet-class>
+   <load-on-startup>1</load-on-startup>
+ </servlet>
 
-TODO
+<servlet-mapping>
+    <servlet-name>CamelServlet</servlet-name>
+    <url-pattern>/binary/*</url-pattern>
+</servlet-mapping>
+
+```
+
+The servlet definition above would match the following consumer endpoint:
+
+```
+   from("mhd-iti68://binary[?options])
+```
+
+
+
+### Embedded in Spring Boot
+
+Container deployments embedded in [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-embedded-servlet-containers.html)
+can be easily achieved by depending on [ipf-fhir-spring-boot-starter](../ipf-fhir-spring-boot-starter/index.html).
+This starter module along with `camel-servlet-starter` sets up the necessary servlets and the servlet init parameters are mapped to
+application properties.
+
+Note that Spring Boot supports Tomcat, Jetty and Undertow as servlet implementations.
 
 
 [paging requests]: cachingAndPaging.html
