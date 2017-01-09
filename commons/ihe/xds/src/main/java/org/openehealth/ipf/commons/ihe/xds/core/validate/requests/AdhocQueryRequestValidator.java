@@ -21,31 +21,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.CXValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.NopValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.SlotLengthAndNameUniquenessValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.TimeValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.AssociationValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.ChoiceValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.CodeValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.DocumentEntryTypeValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.HomeCommunityIdValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.NumberValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.QueryListCodeValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.QueryParameterValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.StatusValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.StringListValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.StringValidation;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
@@ -53,75 +32,9 @@ import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63;
 import static org.openehealth.ipf.commons.ihe.xds.XDS_A.Interactions.ITI_16;
 import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
 import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_51;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.FETCH;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.FIND_DOCUMENTS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.FIND_DOCUMENTS_BY_REFERENCE_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.FIND_DOCUMENTS_MPQ;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.FIND_FOLDERS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.FIND_FOLDERS_MPQ;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.FIND_SUBMISSION_SETS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.GET_ALL;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.GET_ASSOCIATIONS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.GET_DOCUMENTS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.GET_DOCUMENTS_AND_ASSOCIATIONS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.GET_FOLDERS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.GET_FOLDERS_FOR_DOCUMENT;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.GET_FOLDER_AND_CONTENTS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.GET_RELATED_DOCUMENTS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.GET_SUBMISSION_SETS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.GET_SUBMISSION_SET_AND_CONTENTS;
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.SQL;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.ASSOCIATION_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.ASSOCIATION_TYPE;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_AUTHOR_PERSON;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_CLASS_CODE;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_CREATION_TIME_FROM;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_CREATION_TIME_TO;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_DOCUMENT_AVAILABILITY;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_EVENT_CODE;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_EVENT_CODE_SCHEME;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_FORMAT_CODE;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_FORMAT_CODE_SCHEME;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_LOGICAL_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_PATIENT_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_PRACTICE_SETTING_CODE;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_REFERENCE_IDS;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_SERVICE_START_TIME_FROM;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_SERVICE_START_TIME_TO;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_FROM;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_TO;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_TYPE_CODE;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_UNIQUE_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_UUID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.FOLDER_CODES;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.FOLDER_CODES_SCHEME;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.FOLDER_LAST_UPDATE_TIME_FROM;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.FOLDER_LAST_UPDATE_TIME_TO;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.FOLDER_LOGICAL_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.FOLDER_PATIENT_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.FOLDER_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.FOLDER_UNIQUE_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.FOLDER_UUID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.METADATA_LEVEL;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.PATIENT_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.SUBMISSION_SET_AUTHOR_PERSON;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.SUBMISSION_SET_CONTENT_TYPE_CODE;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.SUBMISSION_SET_PATIENT_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.SUBMISSION_SET_SOURCE_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.SUBMISSION_SET_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.SUBMISSION_SET_SUBMISSION_TIME_FROM;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.SUBMISSION_SET_SUBMISSION_TIME_TO;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.SUBMISSION_SET_UNIQUE_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.SUBMISSION_SET_UUID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.UUID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_SQL_QUERY_TEXT;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNKNOWN_QUERY_TYPE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNKNOWN_RETURN_TYPE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNSUPPORTED_QUERY_TYPE;
+import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
@@ -148,124 +61,36 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         ALLOWED_MULTIPLE_SLOTS = new HashMap<>();
 
         addAllowedMultipleSlots(FIND_DOCUMENTS,
-                DOC_ENTRY_CLASS_CODE,
-                DOC_ENTRY_TYPE_CODE,
-                DOC_ENTRY_PRACTICE_SETTING_CODE,
-                DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE,
                 DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE,
-                DOC_ENTRY_AUTHOR_PERSON,
-                DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_STATUS,
-                DOC_ENTRY_DOCUMENT_AVAILABILITY,
-                METADATA_LEVEL);
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
 
         addAllowedMultipleSlots(FIND_DOCUMENTS_BY_REFERENCE_ID,
-                DOC_ENTRY_CLASS_CODE,
-                DOC_ENTRY_TYPE_CODE,
-                DOC_ENTRY_PRACTICE_SETTING_CODE,
-                DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE,
+                DOC_ENTRY_REFERENCE_IDS,
                 DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE,
-                DOC_ENTRY_AUTHOR_PERSON,
-                DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_STATUS,
-                DOC_ENTRY_REFERENCE_IDS);
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
 
         addAllowedMultipleSlots(FIND_DOCUMENTS_MPQ,
-                DOC_ENTRY_PATIENT_ID,
-                DOC_ENTRY_CLASS_CODE,
-                DOC_ENTRY_TYPE_CODE,
-                DOC_ENTRY_PRACTICE_SETTING_CODE,
-                DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE,
                 DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE,
-                DOC_ENTRY_AUTHOR_PERSON,
-                DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_STATUS,
-                METADATA_LEVEL);
-
-        addAllowedMultipleSlots(FIND_SUBMISSION_SETS,
-                SUBMISSION_SET_SOURCE_ID,
-                SUBMISSION_SET_CONTENT_TYPE_CODE,
-                SUBMISSION_SET_STATUS);
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
 
         addAllowedMultipleSlots(FIND_FOLDERS,
-                FOLDER_CODES,
-                FOLDER_STATUS,
-                METADATA_LEVEL);
+                FOLDER_CODES);
 
         addAllowedMultipleSlots(FIND_FOLDERS_MPQ,
-                FOLDER_PATIENT_ID,
-                FOLDER_CODES,
-                FOLDER_STATUS,
-                METADATA_LEVEL);
+                FOLDER_CODES);
 
         addAllowedMultipleSlots(GET_ALL,
-                DOC_ENTRY_STATUS,
-                SUBMISSION_SET_STATUS,
-                FOLDER_STATUS,
-                DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE,
-                ASSOCIATION_STATUS,
-                METADATA_LEVEL);
-
-        addAllowedMultipleSlots(GET_DOCUMENTS,
-                DOC_ENTRY_UUID,
-                DOC_ENTRY_UNIQUE_ID,
-                DOC_ENTRY_LOGICAL_ID,
-                METADATA_LEVEL);
-
-        addAllowedMultipleSlots(GET_FOLDERS,
-                FOLDER_UUID,
-                FOLDER_UNIQUE_ID,
-                FOLDER_LOGICAL_ID,
-                METADATA_LEVEL);
-
-        addAllowedMultipleSlots(GET_ASSOCIATIONS,
-                UUID,
-                ASSOCIATION_STATUS,
-                METADATA_LEVEL);
-
-        addAllowedMultipleSlots(GET_DOCUMENTS_AND_ASSOCIATIONS,
-                DOC_ENTRY_UUID,
-                DOC_ENTRY_UNIQUE_ID,
-                ASSOCIATION_STATUS,
-                METADATA_LEVEL);
-
-        addAllowedMultipleSlots(GET_SUBMISSION_SETS,
-                UUID,
-                METADATA_LEVEL);
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
 
         addAllowedMultipleSlots(GET_SUBMISSION_SET_AND_CONTENTS,
-                DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE,
-                METADATA_LEVEL);
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
 
         addAllowedMultipleSlots(GET_FOLDER_AND_CONTENTS,
-                DOC_ENTRY_FORMAT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE,
-                ASSOCIATION_STATUS,
-                METADATA_LEVEL);
-
-        addAllowedMultipleSlots(GET_FOLDERS_FOR_DOCUMENT,
-                ASSOCIATION_STATUS,
-                METADATA_LEVEL);
-
-        addAllowedMultipleSlots(GET_RELATED_DOCUMENTS,
-                ASSOCIATION_TYPE,
-                ASSOCIATION_STATUS,
-                METADATA_LEVEL);
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
 
         addAllowedMultipleSlots(FETCH,
-                DOC_ENTRY_CLASS_CODE,
-                DOC_ENTRY_TYPE_CODE,
-                DOC_ENTRY_PRACTICE_SETTING_CODE,
-                DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE,
                 DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE,
-                DOC_ENTRY_AUTHOR_PERSON,
-                DOC_ENTRY_FORMAT_CODE);
+                DOC_ENTRY_CONFIDENTIALITY_CODE);
     }
 
 
@@ -519,7 +344,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         } else {
             new SlotLengthAndNameUniquenessValidator().validateQuerySlots(
                     request.getSlots(),
-                    ALLOWED_MULTIPLE_SLOTS.get(queryType));
+                    ALLOWED_MULTIPLE_SLOTS.getOrDefault(queryType, Collections.emptySet()));
             QueryParameterValidation[] validations = getValidators(queryType, profile);
             if (validations != null) {
                 for (QueryParameterValidation validation : validations) {
