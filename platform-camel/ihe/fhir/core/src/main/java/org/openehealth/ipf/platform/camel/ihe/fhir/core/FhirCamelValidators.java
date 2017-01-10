@@ -77,12 +77,12 @@ public final class FhirCamelValidators {
     private FhirCamelValidators() {
     }
 
-    public static String VALIDATION_MODE = "fhir.validation.mode";
+    public static final String VALIDATION_MODE = "fhir.validation.mode";
 
-    public static int MODEL = 4;
-    public static int SCHEMATRON = 2;
-    public static int SCHEMA = 1;
-    public static int OFF = 0;
+    public static final int MODEL = 4;
+    public static final int SCHEMATRON = 2;
+    public static final int SCHEMA = 1;
+    public static final int OFF = 0;
 
     static boolean isValidateSchema(int actualMode) {
         return (actualMode & SCHEMA) == SCHEMA;

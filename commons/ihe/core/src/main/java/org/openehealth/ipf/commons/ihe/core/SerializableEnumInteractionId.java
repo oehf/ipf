@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.core;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-
 import java.io.Serializable;
 
 /**
