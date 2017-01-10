@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
@@ -48,10 +49,9 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
 
     private static void addAllowedMultipleSlots(QueryType queryType, QueryParameter... parameters) {
-        Set<String> slotNames = new HashSet<>();
-        for (QueryParameter parameter : parameters) {
-            slotNames.add(parameter.getSlotName());
-        }
+        Set<String> slotNames = Arrays.stream(parameters)
+                .map(QueryParameter::getSlotName)
+                .collect(Collectors.toSet());
         ALLOWED_MULTIPLE_SLOTS.put(queryType, slotNames);
     }
 
@@ -157,7 +157,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
             case FIND_DOCUMENTS:
             case FIND_DOCUMENTS_MPQ:
                 return new QueryParameterValidation[] {
-                    // PatientId MUST BE supplied in  single patient query.
+                    // PatientId MUST BE supplied in single patient query.
                     // PatientId (list) MAY BE supplied in multi patient query.
                     // The validators for the two cases are otherwise identical.
                     queryType.equals(FIND_DOCUMENTS)

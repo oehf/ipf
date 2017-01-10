@@ -19,6 +19,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
@@ -40,22 +42,13 @@ import static org.junit.Assert.fail;
 import static org.openehealth.ipf.commons.ihe.xds.XDS_A.Interactions.ITI_16;
 import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
 import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_51;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_OID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_QUERY_PARAMETER_VALUE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_SQL_QUERY_TEXT;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING_LIST;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.TOO_MANY_VALUES_FOR_QUERY_PARAMETER;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNIVERSAL_ID_TYPE_MUST_BE_ISO;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNKNOWN_QUERY_TYPE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNKNOWN_RETURN_TYPE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
  * Tests for {@link AdhocQueryRequestValidator}.
  * @author Jens Riemschneider
  * @author Michael Ottati
+ * @author Joerg Rueckert
  */
 public class AdhocQueryRequestValidatorTest {
     private AdhocQueryRequestValidator validator;
@@ -280,6 +273,40 @@ public class AdhocQueryRequestValidatorTest {
 
     private void expectFailure(ValidationMessage expectedMessage, ValidationProfile profile) {
         expectFailure(expectedMessage, transformer.toEbXML(request), profile);
+    }
+
+    @Test
+    public void testDuplicateSlotForFindDocumentsQueryValidationWithFailure() {
+        FindDocumentsQuery query = new FindDocumentsQuery();
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(new QueryRegistry(query));
+        ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName(), "('class-code-1^^class-code-scheme-1')");
+        ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName(), "('class-code-2^^class-code-scheme-2')");
+        expectFailure(DUPLICATE_SLOT_NAME, ebXML, ITI_18);
+    }
+
+    @Test
+    public void testDuplicateSlotForFindDocumentsQueryValidationWithSuccess() {
+        FindDocumentsQuery query = new FindDocumentsQuery();
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        ebXML.addSlot(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName(), "('event-code-1^^event-code-scheme-1')");
+        ebXML.addSlot(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName(), "('event-code-2^^event-code-scheme-2')");
+
+        try {
+            validator.validate(ebXML,  ITI_18);
+        }
+        catch (XDSMetaDataException e) {
+            fail("Test should succeed, but failed with exception: " + XDSMetaDataException.class);
+        }
+    }
+
+    @Test
+    public void testDuplicateSlotForGetDocumentsQueryValidationWithFailure() {
+        GetDocumentsQuery query = new GetDocumentsQuery();
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(new QueryRegistry(query));
+        ebXML.addSlot(QueryParameter.DOC_ENTRY_UUID.getSlotName(), "('urn:uuid:5678-9012-3456-7890-1234-1')");
+        ebXML.addSlot(QueryParameter.DOC_ENTRY_UUID.getSlotName(), "('urn:uuid:6543-2109-8765-4321-0987-2')");
+        expectFailure(DUPLICATE_SLOT_NAME, ebXML, ITI_18);
     }
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLAdhocQueryRequest request, ValidationProfile profile) {
