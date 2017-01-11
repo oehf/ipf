@@ -16,11 +16,8 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.RequiredParam;
-import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
@@ -56,6 +53,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentManifest.SP_STATUS) TokenOrListParam status,
             // Extension to ITI-66
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
+            @Sort SortSpec sortSpec,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -67,6 +65,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
                 .type(type)
                 .status(status)
                 ._id(resourceId)
+                .sortSpec(sortSpec)
                 .fhirContext(getFhirContext())
                 .build();
 

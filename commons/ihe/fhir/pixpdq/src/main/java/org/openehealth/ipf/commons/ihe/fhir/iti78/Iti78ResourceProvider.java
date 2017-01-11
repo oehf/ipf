@@ -16,10 +16,8 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
@@ -80,6 +78,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER) NumberParam multipleBirthNumber,
             @OptionalParam(name = Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN) StringAndListParam mothersMaidenNameGiven,
             @OptionalParam(name = Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) StringAndListParam mothersMaidenNameFamily,
+            @Sort SortSpec sortSpec,
 
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
@@ -99,7 +98,11 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
                 .telecom(telecom)
                 .multipleBirthNumber(multipleBirthNumber)
                 .mothersMaidenNameFamily(mothersMaidenNameFamily)
-                .mothersMaidenNameGiven(mothersMaidenNameGiven).build();
+                .mothersMaidenNameGiven(mothersMaidenNameGiven)
+
+                .sortSpec(sortSpec)
+                .fhirContext(getFhirContext())
+                .build();
 
         // Run down the route
         return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);

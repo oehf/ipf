@@ -19,6 +19,8 @@ package org.openehealth.ipf.commons.ihe.fhir.iti81;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.Sort;
+import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
@@ -53,6 +55,7 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = AuditEvent.SP_PARTICIPANT) StringAndListParam participant,
             @OptionalParam(name = AuditEvent.SP_SUBTYPE) TokenAndListParam subtype,
             @OptionalParam(name = Iti81Constants.SP_OUTCOME) TokenAndListParam outcome,
+            @Sort SortSpec sortSpec,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -67,7 +70,10 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
                 .type(type)
                 .participant(participant)
                 .subtype(subtype)
-                .outcome(outcome).build();
+                .outcome(outcome)
+                .sortSpec(sortSpec)
+                .fhirContext(getFhirContext())
+                .build();
 
         // Run down the route
         return requestBundleProvider(null, searchParameters, httpServletRequest, httpServletResponse);

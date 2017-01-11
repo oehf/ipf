@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti67;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
@@ -54,6 +55,8 @@ public class Iti67SearchParameters implements FhirSearchParameters {
     @Getter @Setter private TokenOrListParam format;
     @Getter @Setter private TokenOrListParam relatedId;
     @Getter @Setter private TokenParam _id;
+
+    @Getter @Setter private SortSpec sortSpec;
 
     @Getter private FhirContext fhirContext;
 

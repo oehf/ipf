@@ -24,6 +24,12 @@
     </properties>
     <body>
         <release version="3.2.0" date="TBD" description="IPF 3.2.0">
+            <action dev="unixoid" issue="137" type="fix">
+                Fix multiplicity validation of XDS Stored Query parameters; some of them (e.g. entryUUID, classCode) are now only allowed once.
+            </action>
+            <action dev="ohr" issue="136" type="update">
+                PDQv3 to v2 translation supports multiple ID and Name search parameters
+            </action>
             <action dev="ohr" issue="134" type="update">
                 XDS Telecom metadata class now accepts Long values as telephone numbers
             </action>

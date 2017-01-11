@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
@@ -55,6 +56,8 @@ public class Iti78SearchParameters implements FhirSearchParameters {
     @Getter @Setter private NumberParam multipleBirthNumber;
     @Getter @Setter private StringAndListParam mothersMaidenNameGiven;
     @Getter @Setter private StringAndListParam mothersMaidenNameFamily;
+
+    @Getter @Setter private SortSpec sortSpec;
 
     @Getter
     private FhirContext fhirContext;
