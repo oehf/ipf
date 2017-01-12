@@ -132,7 +132,6 @@ public class PatientInfoTransformerTest {
         assertEquals("fedcba", patientInfo.getIds().get(1).getId());
         assertEquals("uvwxyz", patientInfo.getIds().get(2).getId());
         assertEquals("zyxwvu", patientInfo.getIds().get(3).getId());
-        assertEquals("fedcba", patientInfo.getIds().get(1).getId());
         assertEquals("Joman", patientInfo.getName().getFamilyName());
         assertEquals(
                 new Timestamp(new DateTime(1980, 1, 2, 0, 0, DateTimeZone.UTC), Timestamp.Precision.DAY),
@@ -149,5 +148,24 @@ public class PatientInfoTransformerTest {
     @Test
     public void testFromHL7Null() {
         assertNull(transformer.fromHL7(null));
+    }
+
+    @Test
+    public void testLongPid3List() {
+        PatientInfo originalPatientInfo = new PatientInfo();
+        for (int i = 0; i < 9; ++i) {
+            // length of each such ID is ~100 characters, therefore only two IDs per value are possible
+            originalPatientInfo.getIds().add(new Identifiable("abcdefghijklmnop_" + i, new AssigningAuthority(
+                    "1.2.3.4.5.6.7.8.9.10.11.12.15.16.17.19.19.20.21.22.23.24.25.26.27.28.29.30.31", "ISO")));
+        }
+
+        List<String> hl7 = transformer.toHL7(originalPatientInfo);
+        assertEquals(1, hl7.size());
+        String pid3 = hl7.get(0);
+        assertTrue(pid3.startsWith("PID-3|"));
+        assertTrue(pid3.length() <= 256);
+
+        PatientInfo recoveredPatientInfo = transformer.fromHL7(hl7);
+        assertEquals(2, recoveredPatientInfo.getIds().size());
     }
 }
