@@ -118,6 +118,7 @@ public class PatientInfoTransformerTest {
     public void testFromHL7() {
         List<String> hl7PID = Arrays.asList(
             "PID-3|abcdef~fedcba",
+            "PID-3|uvwxyz~zyxwvu",
             "PID-5|Joman",
             "PID-7|19800102",
             "PID-8|A",
@@ -126,9 +127,11 @@ public class PatientInfoTransformerTest {
         
         PatientInfo patientInfo = transformer.fromHL7(hl7PID);
         assertNotNull(patientInfo);
-        assertEquals(2, patientInfo.getIds().size());
+        assertEquals(4, patientInfo.getIds().size());
         assertEquals("abcdef", patientInfo.getIds().get(0).getId());
         assertEquals("fedcba", patientInfo.getIds().get(1).getId());
+        assertEquals("uvwxyz", patientInfo.getIds().get(2).getId());
+        assertEquals("zyxwvu", patientInfo.getIds().get(3).getId());
         assertEquals("Joman", patientInfo.getName().getFamilyName());
         assertEquals(
                 new Timestamp(new DateTime(1980, 1, 2, 0, 0, DateTimeZone.UTC), Timestamp.Precision.DAY),
@@ -145,5 +148,24 @@ public class PatientInfoTransformerTest {
     @Test
     public void testFromHL7Null() {
         assertNull(transformer.fromHL7(null));
+    }
+
+    @Test
+    public void testLongPid3List() {
+        PatientInfo originalPatientInfo = new PatientInfo();
+        for (int i = 0; i < 9; ++i) {
+            // length of each such ID is ~100 characters, therefore only two IDs per value are possible
+            originalPatientInfo.getIds().add(new Identifiable("abcdefghijklmnop_" + i, new AssigningAuthority(
+                    "1.2.3.4.5.6.7.8.9.10.11.12.15.16.17.19.19.20.21.22.23.24.25.26.27.28.29.30.31", "ISO")));
+        }
+
+        List<String> hl7 = transformer.toHL7(originalPatientInfo);
+        assertEquals(1, hl7.size());
+        String pid3 = hl7.get(0);
+        assertTrue(pid3.startsWith("PID-3|"));
+        assertTrue(pid3.length() <= 256);
+
+        PatientInfo recoveredPatientInfo = transformer.fromHL7(hl7);
+        assertEquals(2, recoveredPatientInfo.getIds().size());
     }
 }
