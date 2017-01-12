@@ -310,8 +310,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
                 .setValue(xtn[1]?.value)
         if (xtn[4]?.value) {
             telecom.setSystem(ContactPointSystem.EMAIL)
-                    .setValue(xtn[4]?.value)
-                    .setUse(ContactPointUse.NULL)
+                    .setValue(xtn[4].value)
         }
         telecom
     }
