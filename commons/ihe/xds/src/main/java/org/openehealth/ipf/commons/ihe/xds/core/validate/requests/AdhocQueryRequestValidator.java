@@ -94,39 +94,30 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
     }
 
 
-    private static final Map<List<InteractionId>, List<QueryType>> ALLOWED_QUERY_TYPES;
+    private static final Map<InteractionId, Set<QueryType>> ALLOWED_QUERY_TYPES;
     static {
-        ALLOWED_QUERY_TYPES = new HashMap<>(3);
-        ALLOWED_QUERY_TYPES.put(
-                Collections.singletonList(ITI_16),
-                Collections.singletonList(SQL));
-        ALLOWED_QUERY_TYPES.put(
-                Arrays.asList(ITI_18, ITI_38),
-                Arrays.asList(
-                        FIND_DOCUMENTS,
-                        FIND_DOCUMENTS_BY_REFERENCE_ID,
-                        FIND_SUBMISSION_SETS,
-                        FIND_FOLDERS,
-                        GET_ALL,
-                        GET_DOCUMENTS,
-                        GET_FOLDERS,
-                        GET_ASSOCIATIONS,
-                        GET_DOCUMENTS_AND_ASSOCIATIONS,
-                        GET_SUBMISSION_SETS,
-                        GET_SUBMISSION_SET_AND_CONTENTS,
-                        GET_FOLDER_AND_CONTENTS,
-                        GET_FOLDERS_FOR_DOCUMENT,
-                        GET_RELATED_DOCUMENTS
-                ));
-        ALLOWED_QUERY_TYPES.put(
-                Collections.singletonList(ITI_51),
-                Arrays.asList(
-                        FIND_DOCUMENTS_MPQ,
-                        FIND_FOLDERS_MPQ
-                ));
-        ALLOWED_QUERY_TYPES.put(
-                Collections.singletonList(ITI_63),
-                Collections.singletonList(FETCH));
+        Set<QueryType> storedQueryTypes = EnumSet.of(
+                FIND_DOCUMENTS,
+                FIND_DOCUMENTS_BY_REFERENCE_ID,
+                FIND_SUBMISSION_SETS,
+                FIND_FOLDERS,
+                GET_ALL,
+                GET_DOCUMENTS,
+                GET_FOLDERS,
+                GET_ASSOCIATIONS,
+                GET_DOCUMENTS_AND_ASSOCIATIONS,
+                GET_SUBMISSION_SETS,
+                GET_SUBMISSION_SET_AND_CONTENTS,
+                GET_FOLDER_AND_CONTENTS,
+                GET_FOLDERS_FOR_DOCUMENT,
+                GET_RELATED_DOCUMENTS);
+
+        ALLOWED_QUERY_TYPES = new HashMap<>(5);
+        ALLOWED_QUERY_TYPES.put(ITI_16, EnumSet.of(SQL));
+        ALLOWED_QUERY_TYPES.put(ITI_18, storedQueryTypes);
+        ALLOWED_QUERY_TYPES.put(ITI_38, storedQueryTypes);
+        ALLOWED_QUERY_TYPES.put(ITI_51, EnumSet.of(FIND_DOCUMENTS_MPQ, FIND_FOLDERS_MPQ));
+        ALLOWED_QUERY_TYPES.put(ITI_63, EnumSet.of(FETCH));
     }
 
 
@@ -329,15 +320,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         QueryType queryType = QueryType.valueOfId(request.getId());
         metaDataAssert(queryType != null, UNKNOWN_QUERY_TYPE, request.getId());
 
-        boolean found = false;
-        for(Map.Entry<List<InteractionId>, List<QueryType>> entry : ALLOWED_QUERY_TYPES.entrySet()) {
-            if (entry.getKey().contains(profile.getInteractionId())) {
-                metaDataAssert(entry.getValue().contains(queryType), UNSUPPORTED_QUERY_TYPE, queryType);
-                found = true;
-                break;
-            }
-        }
-        metaDataAssert(found, UNKNOWN_QUERY_TYPE, queryType);
+        Set<QueryType> allowedQueryTypes = ALLOWED_QUERY_TYPES.getOrDefault(profile.getInteractionId(), Collections.emptySet());
+        metaDataAssert(allowedQueryTypes.contains(queryType), UNSUPPORTED_QUERY_TYPE, queryType);
 
         if (queryType == QueryType.SQL) {
             metaDataAssert(request.getSql() != null, MISSING_SQL_QUERY_TEXT);
