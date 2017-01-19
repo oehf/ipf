@@ -27,6 +27,7 @@ import org.hl7.fhir.instance.model.CodeableConcept;
 import org.hl7.fhir.instance.model.OperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -61,7 +62,7 @@ public final class FhirUtils {
                             }
                             return request.getUrl();
                         }
-                ));
+                , LinkedHashMap::new, Collectors.toList()));
     }
 
 
