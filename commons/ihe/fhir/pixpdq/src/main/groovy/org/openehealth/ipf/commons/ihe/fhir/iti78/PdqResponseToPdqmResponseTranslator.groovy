@@ -56,6 +56,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
 
     String pdqSupplierResourceIdentifierUri
     String pdqSupplierResourceIdentifierOid
+    String nationalIdentifierUri
 
     /**
      * @param uriMapper mapping for translating FHIR URIs into OIDs
@@ -73,6 +74,10 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         this.pdqSupplierResourceIdentifierUri = pdqSupplierResourceIdentifierUri
         this.pdqSupplierResourceIdentifierOid = uriMapper.uriToOid(pdqSupplierResourceIdentifierUri)
                 .orElseThrow({new UnmappableUriException(pdqSupplierResourceIdentifierUri)})
+    }
+
+    void setNationalIdentifierUri(String nationalIdentifierUri) {
+        this.nationalIdentifierUri = nationalIdentifierUri
     }
 
     @Override
@@ -180,15 +185,14 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
 
         // No religion in the default FHIR patient resource
 
-        // FIXME: Often, these identifiers come without any namespace information, so they must
-        // be somehow enhanced
         if (pid[18].value) {
             patient.addIdentifier(convertIdentifier(pid[18]))
         }
-        // FIXME: Often, these identifiers come without any namespace information, so they must
-        // be enhanced with static information (SSN, AHV, NHS etc.)
+
         if (pid[19].value) {
-            patient.addIdentifier(convertIdentifier(pid[19]))
+            patient.addIdentifier(new Identifier()
+                    .setSystem(nationalIdentifierUri)
+                    .setValue(pid[19].value))
         }
 
         // No ethnicity in the default FHIR patient resource (but in the DAF profile)

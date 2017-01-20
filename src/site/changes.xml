@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.2.0" date="TBD" description="IPF 3.2.0">
+            <action dev="ohr" issue="139" type="fix">
+                PdqResponseToPdqmResponseTranslator now treats PID-19 as ST instead of CX. Thanks to Seunghun Jun for reporting.
+            </action>
             <action dev="unixoid" issue="137" type="fix">
                 Fix multiplicity validation of XDS Stored Query parameters; some of them (e.g. entryUUID, classCode) are now only allowed once.
             </action>
