@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti66;
 
 import ca.uhn.fhir.rest.gclient.ICriterion;
+import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.DocumentManifest;
@@ -41,9 +42,13 @@ abstract class AbstractTestIti66 extends FhirTestContainer {
         startClient(String.format("http://localhost:%d/", FhirTestContainer.DEMO_APP_PORT));
     }
 
-    protected ICriterion<?> manifestParameters() {
+    protected ICriterion<?> manifestPatientIdentifierParameter() {
         return new TokenClientParam("patient.identifier").exactly()
                 .systemAndIdentifier("urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1", "1");
+    }
+
+    protected ICriterion<?> manifestPatientReferenceParameter() {
+        return new ReferenceClientParam("patient").hasId("http://fhirserver.org/Patient/1");
     }
 
     protected Bundle sendManually(ICriterion<?> requestData) {

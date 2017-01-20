@@ -27,17 +27,11 @@ import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ActiveParticipantCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ActiveParticipantType;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditSourceIdentificationType;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ParticipantObjectIdentificationType;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.*;
 
 import javax.servlet.ServletException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -58,13 +52,13 @@ public class TestIti66Success extends AbstractTestIti66 {
 
     @Test
     public void testSendManualIti66() {
-        Bundle result = sendManually(manifestParameters());
+        Bundle result = sendManually(manifestPatientIdentifierParameter());
 
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
         assertEquals(ResourceType.Bundle, result.getResourceType());
         assertEquals(1, result.getTotal());
 
-        DocumentManifest p = (DocumentManifest)result.getEntry().get(0).getResource();
+        DocumentManifest p = (DocumentManifest) result.getEntry().get(0).getResource();
         assertEquals("9bc72458-49b0-11e6-8a1c-3c1620524153", p.getIdElement().getIdPart());
 
         // Check ATNA Audit
@@ -125,6 +119,17 @@ public class TestIti66Success extends AbstractTestIti66 {
         assertEquals("IHE Transactions", poitTypeCode.getCodeSystemName());
         assertEquals("Mobile Document Manifest Query", poitTypeCode.getOriginalText());
         assertEquals("MobileDocumentManifestQuery", query.getParticipantObjectID());
+    }
+
+    @Test
+    public void testSendIti66WithPatientReference() {
+        Bundle result = sendManually(manifestPatientReferenceParameter());
+        assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
+        assertEquals(ResourceType.Bundle, result.getResourceType());
+        assertEquals(1, result.getTotal());
+
+        DocumentManifest p = (DocumentManifest) result.getEntry().get(0).getResource();
+        assertEquals("9bc72458-49b0-11e6-8a1c-3c1620524153", p.getIdElement().getIdPart());
     }
 
     @Test

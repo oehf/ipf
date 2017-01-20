@@ -59,7 +59,7 @@ public class TestIti67Success extends AbstractTestIti67 {
     @Test
     public void testSendManualIti67() {
 
-        Bundle result = sendManually(referenceParameters());
+        Bundle result = sendManually(referencePatientIdentifierParameter());
 
         assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
         assertEquals(ResourceType.Bundle, result.getResourceType());
@@ -126,6 +126,17 @@ public class TestIti67Success extends AbstractTestIti67 {
         assertEquals("IHE Transactions", poitTypeCode.getCodeSystemName());
         assertEquals("Mobile Document Reference Query", poitTypeCode.getOriginalText());
         assertEquals("MobileDocumentReferenceQuery", query.getParticipantObjectID());
+    }
+
+    @Test
+    public void testSendIti66WithPatientReference() {
+        Bundle result = sendManually(referencePatientReferenceParameter());
+        assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
+        assertEquals(ResourceType.Bundle, result.getResourceType());
+        assertEquals(1, result.getTotal());
+
+        DocumentReference p = (DocumentReference) result.getEntry().get(0).getResource();
+        assertEquals("63ab1c29-4225-11e6-9b33-0050569b0094", p.getIdElement().getIdPart());
     }
 
     @Test
