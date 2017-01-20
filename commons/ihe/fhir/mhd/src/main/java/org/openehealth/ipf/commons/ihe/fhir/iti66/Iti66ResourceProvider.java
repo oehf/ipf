@@ -72,7 +72,7 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
         String chain = patient.getChain();
         if (Patient.SP_IDENTIFIER.equals(chain)) {
             parameters.setPatientIdentifier(patient.toTokenParam(getFhirContext()));
-        } else if ("".equals(chain)) {
+        } else if (chain == null || chain.isEmpty()) {
             parameters.setPatientReference(patient);
         }
 
