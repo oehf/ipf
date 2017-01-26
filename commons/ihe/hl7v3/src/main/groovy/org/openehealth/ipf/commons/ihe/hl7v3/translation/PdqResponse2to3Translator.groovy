@@ -178,7 +178,7 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
     }
 
      
-    private Map getStatusInformation(Message rsp, GPathResult xml) {
+    protected Map getStatusInformation(Message rsp, GPathResult xml) {
         def responseStatus = 'OK'
         def errorText      = ''
         def errorCode      = ''

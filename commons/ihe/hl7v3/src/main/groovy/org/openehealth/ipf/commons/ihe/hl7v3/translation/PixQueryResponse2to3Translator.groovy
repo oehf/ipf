@@ -144,7 +144,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
         fakePatientPerson(builder)
     }
      
-    private Map getStatusInformation(Message rsp, GPathResult xml) {
+    protected Map getStatusInformation(Message rsp, GPathResult xml) {
         def ackCode   = rsp.MSA[1].value.endsWith('A') ? 'AA' : 'AE'
         def errorCode = rsp.ERR[3][1].value ?: ''
         def errorText = "PIXv2 Interface Reported [${collectErrorInfo(rsp)}]"

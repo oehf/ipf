@@ -79,7 +79,7 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
    }
 
 
-    private Map getStatusInformation(Message rsp, GPathResult xml) {
+    protected Map getStatusInformation(Message rsp, GPathResult xml) {
         def errorText      = ''
         def errorCode      = ''
         def errorLocations = []

@@ -179,7 +179,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
         }
     }
 
-    private String wildcardize(String value, boolean needWildcard) {
+    protected String wildcardize(String value, boolean needWildcard) {
         return (value && needWildcard) ? "*${value}*" : value 
     }
 
