@@ -36,11 +36,11 @@ These two obligatory URI parts represent the address of the MLLP endpoint which 
 accessed by the given producer.
 
 Additionally, the URI parameter *hl7TransactionConfig* is mandatory and references a bean of type
-[`org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration`](../apidocs/org/openehealth/ipf/platform/camel/ihe/hl7v2/Hl7v2TransactionConfiguration.html)
+[`org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration`](../apidocs/org/openehealth/ipf/commons/ihe/hl7v2/Hl7v2TransactionConfiguration.html)
 that defines the contract of the transaction.
 
-The parameters *clientAuditStrategy* and *serverAuditStrategy* are mandatory unless [ATNA auditing] is disabled in the
-endpoints. The strategy parameters must reference an instance of type
+The *clientAuditStrategy* and *serverAuditStrategy* within that *hl7TransactionConfig* transaction contract are mandatory unless [ATNA auditing]
+is disabled in the endpoints. The audit strategies must reference an instance of type
 [`org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy`](../apidocs/org/openehealth/ipf/commons/ihe/core/atna/MllpAuditStrategy.html).
 
 
@@ -54,7 +54,7 @@ components and requires that an [HL7v2 Codec](codec.html) is available in the Ca
 This is an example on how to use the component on the consumer side:
 
 ```java
-    from("mllp://0.0.0.0:8777?hl7TransactionConfig=#config&clientAuditStrategy=#clientStrategy&serverAuditStrategy=#serverStrategy")
+    from("mllp://0.0.0.0:8777?hl7TransactionConfig=#config")
       .process(myProcessor)
       // process the incoming request and create a response
 ```

@@ -58,11 +58,11 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
         if (configuration == null) {
             throw new IllegalArgumentException("Must provide hl7TransactionConfig attribute with custom MLLP component");
         }
-        clientAuditStrategy = resolveAndRemoveReferenceParameter(parameters, "clientAuditStrategy", AuditStrategy.class);
+        clientAuditStrategy = configuration.getClientAuditStrategy();
         if (transactionConfig.isAudit() && clientAuditStrategy == null) {
             throw new IllegalArgumentException("Consumer or Producer require ATNA audit, but no clientAuditStrategy is defined for custom MLLP component");
         }
-        serverAuditStrategy = resolveAndRemoveReferenceParameter(parameters, "serverAuditStrategy", AuditStrategy.class);
+        serverAuditStrategy = configuration.getServerAuditStrategy();
         if (transactionConfig.isAudit() && serverAuditStrategy == null) {
             throw new IllegalArgumentException("Consumer or Producer require ATNA audit, but no serverAuditStrategy is defined for custom MLLP component");
         }
