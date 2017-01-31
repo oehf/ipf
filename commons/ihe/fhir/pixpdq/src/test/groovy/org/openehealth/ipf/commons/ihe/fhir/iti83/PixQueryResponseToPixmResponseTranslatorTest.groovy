@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti83
 
+import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException
 import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.io.IOUtils
@@ -63,6 +64,7 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
         Identifier identifier = (Identifier) parameter.getValue()
         assertEquals('78912', identifier.value)
         assertEquals('http://org.openehealth/ipf/commons/ihe/fhir/1', identifier.system)
+        System.out.println(FhirContext.forDstu2Hl7Org().newXmlParser().setPrettyPrint(true).encodeResourceToString(parameters));
     }
 
     @Test
