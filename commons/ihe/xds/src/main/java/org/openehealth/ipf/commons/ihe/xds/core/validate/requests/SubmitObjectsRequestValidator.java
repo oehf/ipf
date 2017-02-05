@@ -17,6 +17,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
@@ -25,7 +27,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
  * @author Jens Riemschneider
  */
 public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjectsRequest, ValidationProfile> {
-    private final ObjectContainerValidator objectContainerValidator = new ObjectContainerValidator();
+    private static final ObjectContainerValidator OBJECT_CONTAINER_VALIDATOR = new ObjectContainerValidator();
+    private static final HomeCommunityIdValidator HOME_COMMUNITY_ID_VALIDATOR = new HomeCommunityIdValidator(false);
     
     /**
      * Validates the request.
@@ -36,6 +39,7 @@ public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjec
      */
     @Override
     public void validate(EbXMLSubmitObjectsRequest request, ValidationProfile profile)  {
-        objectContainerValidator.validate(request, profile);
+        OBJECT_CONTAINER_VALIDATOR.validate(request, profile);
+        HOME_COMMUNITY_ID_VALIDATOR.validate(request.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
     }
 }

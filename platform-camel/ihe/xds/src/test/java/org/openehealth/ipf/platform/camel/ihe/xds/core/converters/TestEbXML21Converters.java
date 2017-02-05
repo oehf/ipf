@@ -36,6 +36,7 @@ public class TestEbXML21Converters {
     @Test
     public void testConvertProvideAndRegisterDocumentSet() {
         ProvideAndRegisterDocumentSet org = SampleData.createProvideAndRegisterDocumentSet();
+        org.setTargetHomeCommunityId(null);
         ProvideAndRegisterDocumentSetRequestType converted = EbXML21Converters.convert(org);
         ProvideAndRegisterDocumentSet copy = EbXML21Converters.convert(converted);
         assertEquals(org, copy);

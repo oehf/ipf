@@ -32,10 +32,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_41;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOCUMENT_FOR_DOC_ENTRY;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOC_ENTRY_FOR_DOCUMENT;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.ORGANIZATION_NAME_MISSING;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SUBMISSION_SET_STATUS_MANDATORY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
  * Test for {@link ProvideAndRegisterDocumentSetRequestValidator}.
@@ -96,7 +93,13 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
         request.getAssociations().get(0).setLabel(null);
         expectFailure(SUBMISSION_SET_STATUS_MANDATORY);
     }
-    
+
+    @Test
+    public void testWrongTargetHomeCommunityId() {
+        request.setTargetHomeCommunityId("urn:oid:1.2.3.foobar");
+        expectFailure(INVALID_OID);
+    }
+
     private void expectFailure(ValidationMessage expectedMessage) {
         expectFailure(expectedMessage, transformer.toEbXML(request), ITI_41);
     }

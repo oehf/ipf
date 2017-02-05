@@ -36,6 +36,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.DocumentEntryTra
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FolderTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.SubmissionSetTransformer;
 
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+
 /**
  * Transforms between a {@link ProvideAndRegisterDocumentSet} and its ebXML representation.
  * @author Jens Riemschneider
@@ -86,18 +88,22 @@ public class ProvideAndRegisterDocumentSetTransformer {
         
         for (Folder folder : request.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
-            addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library);
+            addClassification(ebXML, folder.getEntryUuid(), FOLDER_CLASS_NODE, library);
         }
         
         SubmissionSet submissionSet = request.getSubmissionSet();
         ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(submissionSet, library));
         String entryUUID = submissionSet != null ? submissionSet.getEntryUuid() : null;
-        addClassification(ebXML, entryUUID, Vocabulary.SUBMISSION_SET_CLASS_NODE, library);
+        addClassification(ebXML, entryUUID, SUBMISSION_SET_CLASS_NODE, library);
         
         for (Association association : request.getAssociations()) {
             ebXML.addAssociation(associationTransformer.toEbXML(association, library));
         }
-        
+
+        if (request.getTargetHomeCommunityId() != null) {
+            ebXML.addSlot(SLOT_NAME_HOME_COMMUNITY_ID, request.getTargetHomeCommunityId());
+        }
+
         return ebXML;
     }
 
@@ -129,11 +135,11 @@ public class ProvideAndRegisterDocumentSetTransformer {
             }
         }
 
-        for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
+        for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(FOLDER_CLASS_NODE)) {
             request.getFolders().add(folderTransformer.fromEbXML(regPackage));
         }
 
-        List<EbXMLRegistryPackage> regPackages = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+        List<EbXMLRegistryPackage> regPackages = ebXML.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
         if (regPackages.size() > 0) {
             request.setSubmissionSet(submissionSetTransformer.fromEbXML(regPackages.get(0)));
         }
@@ -141,7 +147,9 @@ public class ProvideAndRegisterDocumentSetTransformer {
         for (EbXMLAssociation association : ebXML.getAssociations()) {
             request.getAssociations().add(associationTransformer.fromEbXML(association));
         }
-        
+
+        request.setTargetHomeCommunityId(ebXML.getSingleSlotValue(SLOT_NAME_HOME_COMMUNITY_ID));
+
         return request;
     }
 

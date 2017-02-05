@@ -15,15 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
-import java.util.List;
-import java.util.UUID;
-
+import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
+
+import java.util.UUID;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Encapsulation of {@link ClassificationType}.
@@ -52,31 +51,6 @@ public class EbXMLClassification30 implements EbXMLClassification {
         return classification.getClassifiedObject();
     }
 
-    @Override
-    public List<EbXMLSlot> getSlots() {
-        return getSlotList().getSlots();
-    }
-
-    @Override
-    public List<String> getSlotValues(String slotName) {
-        return getSlotList().getSlotValues(slotName);
-    }
-
-    @Override
-    public void addSlot(String slotName, String... slotValues) {
-        getSlotList().addSlot(slotName, slotValues);
-    }
-
-    @Override
-    public String getSingleSlotValue(String slotName) {
-        return getSlotList().getSingleSlotValue(slotName);
-    }
-
-    @Override
-    public List<EbXMLSlot> getSlots(String slotName) {
-        return getSlotList().getSlots(slotName);
-    }
-    
     @Override
     public void setClassificationScheme(String classificationScheme) {
         classification.setClassificationScheme(classificationScheme);
@@ -129,6 +103,11 @@ public class EbXMLClassification30 implements EbXMLClassification {
         return classification;
     }
 
+    /**
+     * Implements the {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList} interface
+     * by delegating the calls to a "proper" slot list.
+     */
+    @Delegate
     private EbXMLSlotList30 getSlotList() {
         return new EbXMLSlotList30(classification.getSlot());
     }

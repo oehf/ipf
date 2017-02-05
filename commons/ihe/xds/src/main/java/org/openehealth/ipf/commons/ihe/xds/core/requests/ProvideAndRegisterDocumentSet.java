@@ -16,17 +16,15 @@
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,48 +46,14 @@ public class ProvideAndRegisterDocumentSet implements Serializable {
     private static final long serialVersionUID = -746285879968609663L;
     
     @XmlElementRef
-    private SubmissionSet submissionSet;
+    @Getter @Setter private SubmissionSet submissionSet;
     @XmlElementRef
-    private final List<Folder> folders = new ArrayList<>();
+    @Getter private final List<Folder> folders = new ArrayList<>();
     @XmlElementRef
-    private final List<Document> documents = new ArrayList<>();
+    @Getter private final List<Document> documents = new ArrayList<>();
     @XmlElementRef
-    private final List<Association> associations = new ArrayList<>();
-    
-    /**
-     * @return the submission set.
-     */
-    public SubmissionSet getSubmissionSet() {
-        return submissionSet;
-    }
-    
-    /**
-     * @param submissionSet
-     *          the submission set.
-     */
-    public void setSubmissionSet(SubmissionSet submissionSet) {
-        this.submissionSet = submissionSet;
-    }
-    
-    /**
-     * @return the list of folders.
-     */
-    public List<Folder> getFolders() {
-        return folders;
-    }
-
-    /**
-     * @return the list of documents.
-     */
-    public List<Document> getDocuments() {
-        return documents;
-    }
-
-    /**
-     * @return the list of association.
-     */
-    public List<Association> getAssociations() {
-        return associations;
-    }
+    @Getter private final List<Association> associations = new ArrayList<>();
+    @XmlAttribute
+    @Getter @Setter private String targetHomeCommunityId;
 
 }

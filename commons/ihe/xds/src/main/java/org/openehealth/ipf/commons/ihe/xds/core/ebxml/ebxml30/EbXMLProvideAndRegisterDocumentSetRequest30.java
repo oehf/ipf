@@ -25,12 +25,14 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.xml.bind.JAXBElement;
 
+import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotListType;
 
 /**
  * Encapsulation of {@link ProvideAndRegisterDocumentSetRequestType}
@@ -48,7 +50,7 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectCont
      */
     public EbXMLProvideAndRegisterDocumentSetRequest30(ProvideAndRegisterDocumentSetRequestType request, EbXMLObjectLibrary objectLibrary) {
         super(objectLibrary);
-        notNull(request, "request cannot be null");                
+        notNull(request, "request cannot be null");
         this.request = request;
     }
 
@@ -61,10 +63,10 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectCont
         this(request, new EbXMLObjectLibrary());
         fillObjectLibrary();
     }
-    
+
     @Override
     public void addDocument(String id, DataHandler dataHandler) {
-        if (dataHandler != null && id != null) {        
+        if (dataHandler != null && id != null) {
             List<Document> documents = request.getDocument();
             Document document = new Document();
             document.setId(id);
@@ -80,9 +82,9 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectCont
                 request.getDocument().remove(doc);
                 return;
             }
-        }        
+        }
     }
-    
+
     @Override
     public Map<String, DataHandler> getDocuments() {
         Map<String, DataHandler> map = new HashMap<>();
@@ -108,5 +110,18 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectCont
             return Collections.emptyList();
         }
         return list.getIdentifiable();
+    }
+
+    /**
+     * Implements the {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList} interface
+     * by delegating the calls to a "proper" slot list.
+     */
+    @Delegate
+    private EbXMLSlotList30 getSlotList() {
+        SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
+        if (submitObjectsRequest.getRequestSlotList() == null) {
+            submitObjectsRequest.setRequestSlotList(new SlotListType());
+        }
+        return new EbXMLSlotList30(submitObjectsRequest.getRequestSlotList().getSlot());
     }
 }

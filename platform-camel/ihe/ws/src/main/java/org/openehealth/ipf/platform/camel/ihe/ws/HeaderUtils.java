@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 import static org.apache.cxf.message.Message.PROTOCOL_HEADERS;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import javax.xml.namespace.QName;
 
@@ -35,15 +36,6 @@ abstract public class HeaderUtils {
     private HeaderUtils() {
         throw new IllegalStateException("Cannot instantiate utility class");
     }
-
-
-    private static interface DefaultValueFactory<T> {
-        T createDefaultValue();
-    }
-
-    private static final DefaultValueFactory<Map<String, List<String>>> HTTP_HEADERS_CONTAINER_FACTORY = HashMap::new;
-
-    private static final DefaultValueFactory<List<Header>> SOAP_HEADERS_CONTAINER_FACTORY = ArrayList::new;
 
 
     public static void processIncomingHeaders(
@@ -87,12 +79,12 @@ abstract public class HeaderUtils {
      *      when creation of a new map is not allowed. 
      */
     @SuppressWarnings("unchecked")
-    private static <T> T getHeaders(
+    public static <T> T getHeaders(
             Map<String, Object> messageContext,
             String key,
             boolean useInputMessage,
             boolean needCreateWhenNotExist, 
-            DefaultValueFactory<T> defaultValueFactory) 
+            Supplier<T> defaultValueFactory)
     {
         WrappedMessageContext wrappedContext = (WrappedMessageContext) messageContext;
         Map<String, Object> headersContainer = useInputMessage
@@ -101,7 +93,7 @@ abstract public class HeaderUtils {
         
         T headers = (T) headersContainer.get(key);
         if ((headers == null) && needCreateWhenNotExist) {
-            headers = defaultValueFactory.createDefaultValue();
+            headers = defaultValueFactory.get();
             headersContainer.put(key, headers);
         }
         return headers;
@@ -152,6 +144,7 @@ abstract public class HeaderUtils {
      *      is a request one (<code>false</code> on server side, 
      *      <code>true</code> on client side). 
      */
+    @SuppressWarnings("unchecked")
     private static void processUserDefinedOutgoingSoapHeaders(
             Map<String, Object> messageContext, 
             Message message,
@@ -167,7 +160,7 @@ abstract public class HeaderUtils {
 
         if ((userHeaders != null) && ! userHeaders.isEmpty()) {
             List<Header> soapHeaders = getHeaders(
-                    messageContext, Header.HEADER_LIST, isRequest, true, SOAP_HEADERS_CONTAINER_FACTORY);
+                    messageContext, Header.HEADER_LIST, isRequest, true, ArrayList::new);
             soapHeaders.addAll(userHeaders);
        }
     }
@@ -227,10 +220,10 @@ abstract public class HeaderUtils {
         
         if ((headers != null) && ! headers.isEmpty()) {
             Map<String, List<String>> httpHeaders = getHeaders(
-                    messageContext, PROTOCOL_HEADERS, isRequest, true, HTTP_HEADERS_CONTAINER_FACTORY);
+                    messageContext, PROTOCOL_HEADERS, isRequest, true, HashMap::new);
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 httpHeaders.put(entry.getKey(), Collections.singletonList(entry.getValue()));
             }
-       }
+        }
     }
 }

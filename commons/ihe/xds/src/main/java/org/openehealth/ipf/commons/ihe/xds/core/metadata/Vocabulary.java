@@ -170,17 +170,17 @@ public abstract class Vocabulary {
     
     /** Documentation External Classification Scheme of the Association */
     public static final String ASSOCIATION_DOC_CODE_CLASS_SCHEME = 
-        "urn:uuid:abd807a3-4432-4053-87b4-fd82c643d1f3";    
-    
-        
-    
-    
+        "urn:uuid:abd807a3-4432-4053-87b4-fd82c643d1f3";
+
+
+
+
     /** Name of the slot that is used for author persons */
     public static final String SLOT_NAME_AUTHOR_PERSON = "authorPerson";
     
     /** Name of the slot that is used for author institutions */
     public static final String SLOT_NAME_AUTHOR_INSTITUTION = "authorInstitution";
-        
+
     /** Name of the slot that is used for author roles */
     public static final String SLOT_NAME_AUTHOR_ROLE = "authorRole";
 
@@ -195,16 +195,16 @@ public abstract class Vocabulary {
 
     /** Name of the slot that is used for the creation time */
     public static final String SLOT_NAME_CREATION_TIME = "creationTime";
-    
+
     /** Name of the slot that is used for the last update time */
     public static final String SLOT_NAME_LAST_UPDATE_TIME = "lastUpdateTime";
     
     /** Name of the slot that is used for the hash code */
-    public static final String SLOT_NAME_HASH = "hash";    
+    public static final String SLOT_NAME_HASH = "hash";
 
     /** Name of the slot that is used for the language code */
     public static final String SLOT_NAME_LANGUAGE_CODE = "languageCode";
-    
+
     /** Name of the slot that is used for the legal authenticator */
     public static final String SLOT_NAME_LEGAL_AUTHENTICATOR = "legalAuthenticator";
     
@@ -255,6 +255,11 @@ public abstract class Vocabulary {
 
     /** Name of the slot that is used for reference ID list */
     public static final String SLOT_NAME_REFERENCE_ID_LIST = "urn:ihe:iti:xds:2013:referenceIdList";
+
+    /** Name of the slot that is used for reference ID list */
+    public static final String SLOT_NAME_HOME_COMMUNITY_ID = "homeCommunityId";
+
+
 
     /** Universal ID Type to be used for all HD data types used with XDS */
     public static final String UNIVERSAL_ID_TYPE_OID = "ISO";

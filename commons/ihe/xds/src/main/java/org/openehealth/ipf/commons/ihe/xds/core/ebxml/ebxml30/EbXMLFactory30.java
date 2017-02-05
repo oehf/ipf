@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
@@ -84,28 +85,15 @@ public class EbXMLFactory30 implements EbXMLFactory {
     @Override
     public EbXMLSubmitObjectsRequest createSubmitObjectsRequest() {
         SubmitObjectsRequest request = LCM_FACTORY.createSubmitObjectsRequest();
-        RegistryObjectListType list = request.getRegistryObjectList();
-        if (list == null) {
-            list = RIM_FACTORY.createRegistryObjectListType();
-            request.setRegistryObjectList(list);
-        }
+        request.setRegistryObjectList(RIM_FACTORY.createRegistryObjectListType());
+        request.setRequestSlotList(RIM_FACTORY.createSlotListType());
         return new EbXMLSubmitObjectsRequest30(request, createObjectLibrary());
     }
 
     @Override
     public EbXMLProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(EbXMLObjectLibrary objectLibrary) {
         ProvideAndRegisterDocumentSetRequestType request = new ProvideAndRegisterDocumentSetRequestType();
-        SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
-        if (submitObjectsRequest == null) {
-            submitObjectsRequest = LCM_FACTORY.createSubmitObjectsRequest();
-            request.setSubmitObjectsRequest(submitObjectsRequest);
-        }
-        
-        RegistryObjectListType list = submitObjectsRequest.getRegistryObjectList();
-        if (list == null) {
-            list = RIM_FACTORY.createRegistryObjectListType();
-            submitObjectsRequest.setRegistryObjectList(list);
-        }
+        request.setSubmitObjectsRequest((SubmitObjectsRequest) createSubmitObjectsRequest().getInternal());
         return new EbXMLProvideAndRegisterDocumentSetRequest30(request, objectLibrary);
     }
     
@@ -140,11 +128,11 @@ public class EbXMLFactory30 implements EbXMLFactory {
     public EbXMLAdhocQueryRequest createAdhocQueryRequest() {
         AdhocQueryRequest request = QUERY_FACTORY.createAdhocQueryRequest();
         
-        AdhocQueryType query = RIM_FACTORY.createAdhocQueryType();                        
         ResponseOptionType responseOption = QUERY_FACTORY.createResponseOptionType();
         responseOption.setReturnComposedObjects(true);
-        
         request.setResponseOption(responseOption);
+
+        AdhocQueryType query = RIM_FACTORY.createAdhocQueryType();
         request.setAdhocQuery(query);
         
         return new EbXMLAdhocQueryRequest30(request);        
@@ -153,14 +141,8 @@ public class EbXMLFactory30 implements EbXMLFactory {
     @Override
     public EbXMLQueryResponse createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary, boolean returnsObjectRefs) {
         AdhocQueryResponse response = QUERY_FACTORY.createAdhocQueryResponse();
-        
-        RegistryObjectListType list = response.getRegistryObjectList();
-        if (list == null) {
-            list = RIM_FACTORY.createRegistryObjectListType();
-            response.setRegistryObjectList(list);
-        }
-        
-        return new EbXMLQueryResponse30(response, objectLibrary);        
+        response.setRegistryObjectList(RIM_FACTORY.createRegistryObjectListType());
+        return new EbXMLQueryResponse30(response, objectLibrary);
     }
 
     @Override
@@ -171,6 +153,8 @@ public class EbXMLFactory30 implements EbXMLFactory {
 
     @Override
     public EbXMLRemoveObjectsRequest createRemoveObjectsRequest() {
-        return new EbXMLRemoveObjectsRequest30(LCM_FACTORY.createRemoveObjectsRequest());
+        RemoveObjectsRequest removeObjectsRequest = LCM_FACTORY.createRemoveObjectsRequest();
+        removeObjectsRequest.setAdhocQuery(RIM_FACTORY.createAdhocQueryType());
+        return new EbXMLRemoveObjectsRequest30(removeObjectsRequest);
     }
 }

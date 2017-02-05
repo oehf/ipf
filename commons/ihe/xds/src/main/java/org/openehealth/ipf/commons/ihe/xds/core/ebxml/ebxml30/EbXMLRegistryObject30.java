@@ -15,19 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExternalIdentifier;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
+import lombok.experimental.Delegate;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExternalIdentifierType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.InternationalStringType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.VersionInfoType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -209,31 +201,6 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     }
 
     @Override
-    public void addSlot(String slotName, String... slotValues) {
-        getSlotList().addSlot(slotName, slotValues);
-    }
-
-    @Override
-    public List<String> getSlotValues(String slotName) {
-        return getSlotList().getSlotValues(slotName);
-    }
-    
-    @Override
-    public String getSingleSlotValue(String slotName) {
-        return getSlotList().getSingleSlotValue(slotName);
-    }
-    
-    @Override
-    public List<EbXMLSlot> getSlots() {
-        return getSlotList().getSlots();
-    }
-
-    @Override
-    public List<EbXMLSlot> getSlots(String slotName) {
-        return getSlotList().getSlots(slotName);
-    }
-    
-    @Override
     public void setDescription(LocalizedString description) {        
         EbXMLInternationalString30 encapsulated = new EbXMLInternationalString30(description);
         registryEntry.setDescription(encapsulated.getInternal());
@@ -265,6 +232,11 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
         return registryEntry;
     }
 
+    /**
+     * Implements the {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList} interface
+     * by delegating the calls to a "proper" slot list.
+     */
+    @Delegate
     private EbXMLSlotList30 getSlotList() {
         return new EbXMLSlotList30(registryEntry.getSlot());
     }    

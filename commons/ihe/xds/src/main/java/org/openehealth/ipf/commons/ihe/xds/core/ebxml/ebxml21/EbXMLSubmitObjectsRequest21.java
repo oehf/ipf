@@ -17,10 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.LeafRegistryObjectListType;
@@ -32,7 +33,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequ
  */
 public class EbXMLSubmitObjectsRequest21 extends EbXMLObjectContainer21 implements EbXMLSubmitObjectsRequest {
     private final SubmitObjectsRequest submitObjectsRequest;
-    
+
+    /**
+     * Implements the {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList} interface.
+     * In ebXML 2.1, SubmitObjectRequest does not have slots, thus this implementation is a fake
+     * (no information will be taken from ebXML, no information will be put into ebXML).
+     */
+    @Delegate
+    private final EbXMLSlotList21 slotList = new EbXMLSlotList21(new ArrayList<>());
+
     /**
      * Constructs a request by wrapping the given ebXML 2.1 object.
      * @param submitObjectsRequest

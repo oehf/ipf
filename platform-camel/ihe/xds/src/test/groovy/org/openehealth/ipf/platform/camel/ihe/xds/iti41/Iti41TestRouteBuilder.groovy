@@ -16,6 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
 import org.apache.cxf.binding.soap.SoapFault
+import org.apache.cxf.headers.Header
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+
 import javax.xml.namespace.QName
 import javax.activation.DataHandler
 import org.apache.camel.spring.SpringRouteBuilder
@@ -26,6 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocum
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.PARTIAL_SUCCESS
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti41RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti41ResponseValidator
@@ -41,11 +45,11 @@ public class Iti41TestRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('xds-iti41:xds-iti41-service1?rejectionHandlingStrategy=#rejectionHandlingStrategy')
             .process(iti41RequestValidator())
-            .process { checkValue(it, 'service 1') }
+            .process { checkValue(it, 'service 1', 'urn:oid:1.2.1') }
             .process(iti41ResponseValidator())
     
         from('xds-iti41:xds-iti41-service2')
-            .process { checkValue(it, 'service 2') }
+            .process { checkValue(it, 'service 2', 'urn:oid:1.2.2') }
 
         from('xds-iti41:xds-iti41-service3')
             .process {
@@ -69,8 +73,9 @@ public class Iti41TestRouteBuilder extends SpringRouteBuilder {
     }
 
 
-    void checkValue(exchange, expected) {
-        def doc = exchange.in.getBody(ProvideAndRegisterDocumentSet.class).documents[0]
+    void checkValue(exchange, expected, expectedTargetHomeCommunityId) {
+        ProvideAndRegisterDocumentSet request = exchange.in.getBody(ProvideAndRegisterDocumentSet.class)
+        def doc = request.documents[0]
         def value = doc.documentEntry.comments.value        
         def status = FAILURE;
         def dataHandler = doc.getContent(DataHandler)
@@ -92,7 +97,16 @@ public class Iti41TestRouteBuilder extends SpringRouteBuilder {
                 IOUtils.closeQuietly(inputStream)
             }
         }
-        
+
+        if (request.targetHomeCommunityId != expectedTargetHomeCommunityId) {
+            status = PARTIAL_SUCCESS
+        }
+
+        Header header = exchange.in.headers[AbstractWsEndpoint.INCOMING_SOAP_HEADERS][Iti41Component.TARGET_HCID_HEADER_NAME]
+        if (header.object.firstChild.textContent != expectedTargetHomeCommunityId) {
+            status = PARTIAL_SUCCESS
+        }
+
         def response = new Response(status)
         Exchanges.resultMessage(exchange).body = response
     }

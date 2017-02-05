@@ -24,10 +24,13 @@
     </properties>
     <body>
         <release version="3.2.0" date="TBD" description="IPF 3.2.0">
+            <action dev="unixoid" issue="140" type="add">
+                Added support for the XDR/XCDR option "Transmit Home Community Id" (CP-ITI-924/961).
+            </action>
             <action dev="ohr" issue="139" type="fix">
                 PdqResponseToPdqmResponseTranslator now treats PID-19 as ST instead of CX. Thanks to Seunghun Jun for reporting.
             </action>
-            <action dev="unixoid" issue="137" type="fix">
+            <action dev="unixoid" issue="137" type="fix" due-to="Joerg Rueckert">
                 Fix multiplicity validation of XDS Stored Query parameters; some of them (e.g. entryUUID, classCode) are now only allowed once.
             </action>
             <action dev="ohr" issue="136" type="update">

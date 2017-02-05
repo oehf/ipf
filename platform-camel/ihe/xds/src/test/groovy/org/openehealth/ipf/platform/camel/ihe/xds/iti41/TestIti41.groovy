@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
-import org.apache.cxf.binding.soap.SoapFault
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
+import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
+
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Unmarshaller
 import org.apache.camel.impl.DefaultExchange
@@ -30,6 +32,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
+
+import javax.xml.ws.soap.SOAPFaultException
+
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
@@ -49,8 +54,8 @@ class TestIti41 extends StandardTestContainer {
     final String SERVICE_SOAP_FAULT_UNHANDLED = "xds-iti41://localhost:${port}/soap-fault-unhandled"
     final String SERVICE_SOAP_FAULT_HANDLED   = "xds-iti41://localhost:${port}/soap-fault-handled"
 
-    def request
-    def docEntry
+    ProvideAndRegisterDocumentSet request
+    DocumentEntry docEntry
 
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
@@ -71,15 +76,15 @@ class TestIti41 extends StandardTestContainer {
 
     @Test
     void testIti41() {
-        assert SUCCESS == sendIt(SERVICE1, 'service 1').status
-        assert SUCCESS == sendIt(SERVICE2, 'service 2').status
+        assert SUCCESS == sendIt(SERVICE1, 'service 1', 'urn:oid:1.2.1').status
+        assert SUCCESS == sendIt(SERVICE2, 'service 2', 'urn:oid:1.2.2').status
         assert auditSender.messages.size() == 4
         checkAudit('0')
     }
 
     @Test
     void testIti41FailureAudit() {
-        assert FAILURE == sendIt(SERVICE2, 'falsch').status
+        assert FAILURE == sendIt(SERVICE2, 'falsch', 'urn:oid:1.2.2').status
         assert auditSender.messages.size() == 2
         checkAudit('8')
     }
@@ -146,20 +151,21 @@ class TestIti41 extends StandardTestContainer {
         checkSubmissionSet(message.ParticipantObjectIdentification[1])
     }
 
-    def sendIt(String endpoint, String value) {
+    def sendIt(String endpoint, String value, String targetHomeCommunityId) {
         docEntry.comments = new LocalizedString(value)
+        request.targetHomeCommunityId = targetHomeCommunityId
         send(endpoint, request, Response.class)
     }
 
 
-    @Test(expected = SoapFault)
+    @Test(expected = SOAPFaultException)
     void testHandlingOfUnhandledSoapFault() {
-        sendIt(SERVICE_SOAP_FAULT_UNHANDLED, 'fail')
+        sendIt(SERVICE_SOAP_FAULT_UNHANDLED, 'fail', null)
     }
 
     @Test()
     void testHandlingOfHandledSoapFault() {
-        assert SUCCESS == sendIt(SERVICE_SOAP_FAULT_HANDLED, 'ok').status
+        assert SUCCESS == sendIt(SERVICE_SOAP_FAULT_HANDLED, 'ok', null).status
     }
 
 }

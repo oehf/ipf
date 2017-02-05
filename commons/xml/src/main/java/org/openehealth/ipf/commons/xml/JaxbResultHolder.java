@@ -23,7 +23,7 @@ import javax.xml.transform.Result;
 /**
  * @author Dmytro Rud
  */
-abstract public class JaxbResultHolder<T>  implements ResultHolder<T> {
+abstract public class JaxbResultHolder<T> implements ResultHolder<T> {
     private final JAXBContext jaxbContext;
 
     private JAXBResult result;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v3;
+package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,7 +22,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * Thread local for DOM document builders.
  * @author Dmytro Rud
  */
-class DomBuildersThreadLocal extends ThreadLocal<DocumentBuilder> {
+public class DomBuildersThreadLocal extends ThreadLocal<DocumentBuilder> {
 
     public DocumentBuilder initialValue() {
         try {

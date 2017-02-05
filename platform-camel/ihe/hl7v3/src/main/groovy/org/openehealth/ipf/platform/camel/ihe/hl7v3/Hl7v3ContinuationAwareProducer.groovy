@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer
+import org.openehealth.ipf.platform.camel.ihe.ws.DomBuildersThreadLocal
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

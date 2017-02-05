@@ -22,11 +22,13 @@ import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
+import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotListType;
 
 /**
  * Encapsulation of {@link SubmitObjectsRequest}
@@ -70,5 +72,17 @@ public class EbXMLSubmitObjectsRequest30 extends EbXMLObjectContainer30 implemen
     @Override
     public SubmitObjectsRequest getInternal() {
         return submitObjectsRequest;
+    }
+
+    /**
+     * Implements the {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList} interface
+     * by delegating the calls to a "proper" slot list.
+     */
+    @Delegate
+    private EbXMLSlotList30 getSlotList() {
+        if (submitObjectsRequest.getRequestSlotList() == null) {
+            submitObjectsRequest.setRequestSlotList(new SlotListType());
+        }
+        return new EbXMLSlotList30(submitObjectsRequest.getRequestSlotList().getSlot());
     }
 }

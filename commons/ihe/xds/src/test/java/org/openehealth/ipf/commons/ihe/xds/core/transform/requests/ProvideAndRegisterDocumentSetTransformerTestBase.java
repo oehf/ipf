@@ -25,11 +25,7 @@ import javax.activation.DataHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
@@ -87,7 +83,13 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
         List<EbXMLRegistryPackage> submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         assertEquals(1, submissionSets.size());
         assertEquals("Submission Set 01", submissionSets.get(0).getName().getValue());
-        
+
+        List<EbXMLSlot> slots = ebXML.getSlots(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID);
+        assertEquals(1, slots.size());
+        List<String> slotValues = ebXML.getSlotValues(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID);
+        assertEquals(1, slotValues.size());
+        assertEquals("urn:oid:1.2.3.4.5.6.2333.23", slotValues.get(0));
+
         Map<String, DataHandler> documents = ebXML.getDocuments();
         assertEquals(1, documents.size());
         assertSame(dataHandler, documents.get("document01"));
@@ -107,9 +109,6 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
         assertEquals(0, result.getRegistryPackages().size());
         assertEquals(0, result.getDocuments().size());
     }
-    
-
-    
     
     @Test
     public void testFromEbXML() {

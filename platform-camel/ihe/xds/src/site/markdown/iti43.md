@@ -105,7 +105,7 @@ which can be used to configure this content caching.
 
 ### Advanced Web Service Component Features
 
-* [Handling Protocol Handlers]
+* [Handling Protocol Headers]
 * [Deploying custom CXF interceptors]
 * [Handling automatically rejected messages]
 * [Using CXF features]
@@ -125,7 +125,7 @@ which can be used to configure this content caching.
 [Message types]: messageTypes.html
 [Handling extra query parameters and extra metadata elements]: handlingExtra.html
 
-[Handling Protocol Handlers]: ../ipf-platform-camel-ihe-ws/protocolHeaders.html
+[Handling Protocol Headers]: ../ipf-platform-camel-ihe-ws/protocolHeaders.html
 [Deploying custom CXF interceptors]: ../ipf-platform-camel-ihe-ws/customInterceptors.html
 [Handling automatically rejected messages]: ../ipf-platform-camel-ihe-ws/handlingRejected.html
 [Using CXF features]: ../ipf-platform-camel-ihe-ws/cxfFeatures.html

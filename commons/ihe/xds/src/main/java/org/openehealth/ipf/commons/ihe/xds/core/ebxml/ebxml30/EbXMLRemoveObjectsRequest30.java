@@ -15,12 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-
+import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefListType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefType;
 
@@ -89,43 +87,13 @@ public class EbXMLRemoveObjectsRequest30 implements EbXMLRemoveObjectsRequest {
         removeObjectsRequest.setDeletionScope(deletionScope);
     }
 
-    @Override
-    public void addSlot(String slotName, String... slotValues) {
-        getSlotList().addSlot(slotName, slotValues);
-    }
-
-    @Override
-    public List<String> getSlotValues(String slotName) {
-        return getSlotList().getSlotValues(slotName);
-    }
-
-    @Override
-    public String getSingleSlotValue(String slotName) {
-        return getSlotList().getSingleSlotValue(slotName);
-    }
-
-    @Override
-    public List<EbXMLSlot> getSlots() {
-        return getSlotList().getSlots();
-    }
-
-    @Override
-    public List<EbXMLSlot> getSlots(String slotName) {
-        return getSlotList().getSlots(slotName);
-    }
-
+    /**
+     * Implements the {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList} interface
+     * by delegating the calls to a "proper" slot list.
+     */
+    @Delegate
     private EbXMLSlotList30 getSlotList() {
-        if (removeObjectsRequest.getAdhocQuery() == null){
-            return new EbXMLSlotList30(new ArrayList<>());
-        }
         return new EbXMLSlotList30(removeObjectsRequest.getAdhocQuery().getSlot());
-    }
-
-    private AdhocQueryType getAdHocQuery(){
-        if (removeObjectsRequest.getAdhocQuery() == null){
-            removeObjectsRequest.setAdhocQuery(new AdhocQueryType());
-        }
-        return removeObjectsRequest.getAdhocQuery();
     }
 
     @Override
@@ -150,24 +118,23 @@ public class EbXMLRemoveObjectsRequest30 implements EbXMLRemoveObjectsRequest {
 
     @Override
     public void setId(String id) {
-        getAdHocQuery().setId(id);
-
+        removeObjectsRequest.getAdhocQuery().setId(id);
     }
 
     @Override
     public String getId() {
-        return getAdHocQuery().getId();
+        return removeObjectsRequest.getAdhocQuery().getId();
     }
 
     @Override
     public void setHome(String homeCommunityID) {
-        getAdHocQuery().setHome(homeCommunityID);
+        removeObjectsRequest.getAdhocQuery().setHome(homeCommunityID);
     }
 
     @Override
     public String getHome() {
-        return getAdHocQuery().getHome();
-     }
+        return removeObjectsRequest.getAdhocQuery().getHome();
+    }
 
     @Override
     public RemoveObjectsRequest getInternal() {

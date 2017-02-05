@@ -16,12 +16,11 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
 import static org.apache.commons.lang3.Validate.notNull;
+
+import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ResponseOptionType;
-
-import java.util.List;
 
 /**
  * Encapsulation of {@link AdhocQueryRequest}.
@@ -72,31 +71,6 @@ public class EbXMLAdhocQueryRequest30 implements EbXMLAdhocQueryRequest {
     }
 
     @Override
-    public void addSlot(String slotName, String... slotValues) {
-        getSlotList().addSlot(slotName, slotValues);
-    }
-
-    @Override
-    public List<String> getSlotValues(String slotName) {
-        return getSlotList().getSlotValues(slotName);
-    }
-    
-    @Override
-    public String getSingleSlotValue(String slotName) {
-        return getSlotList().getSingleSlotValue(slotName);
-    }
-    
-    @Override
-    public List<EbXMLSlot> getSlots() {
-        return getSlotList().getSlots();
-    }
-
-    @Override
-    public List<EbXMLSlot> getSlots(String slotName) {
-        return getSlotList().getSlots(slotName);
-    }
-
-    @Override
     public String getHome() {
         return request.getAdhocQuery().getHome();
     }
@@ -111,6 +85,11 @@ public class EbXMLAdhocQueryRequest30 implements EbXMLAdhocQueryRequest {
         return request;
     }
 
+    /**
+     * Implements the {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList} interface
+     * by delegating the calls to a "proper" slot list.
+     */
+    @Delegate
     private EbXMLSlotList30 getSlotList() {
         return new EbXMLSlotList30(request.getAdhocQuery().getSlot());
     }

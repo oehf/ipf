@@ -57,13 +57,14 @@ class TestIti41Secure extends StandardTestContainer {
     
     @Test
     void testIti41() {
-        assert SUCCESS == sendIt(SERVICE1, 'service 1').status
-        assert SUCCESS == sendIt(SERVICE2, 'service 2').status
+        assert SUCCESS == sendIt(SERVICE1, 'service 1', 'urn:oid:1.2.1').status
+        assert SUCCESS == sendIt(SERVICE2, 'service 2', 'urn:oid:1.2.2').status
         assert auditSender.messages.size() == 4
     }
     
-    def sendIt(endpoint, value) {
+    def sendIt(endpoint, value, String targetHomeCommunityId) {
         docEntry.comments = new LocalizedString(value)
+        request.targetHomeCommunityId = targetHomeCommunityId
         send(endpoint, request, Response.class)
     }
 }

@@ -19,14 +19,12 @@ import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
-import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
+import javax.xml.namespace.QName;
 import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_41;
@@ -36,6 +34,11 @@ import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_41;
  */
 public class Iti41Component extends XdsComponent<XdsSubmitAuditDataset> {
 
+    public static final String TARGET_HCID_NS = "urn:ihe.net:iti:xdr:2014";
+    public static final String TARGET_HCID_NS_PREFIX = "xcdr";
+    public static final String TARGET_HCID_BLOCK_LOCAL_PART = "homeCommunityBlock";
+    public static final String TARGET_HCID_LOCAL_PART = "homeCommunityId";
+    public static final QName  TARGET_HCID_HEADER_NAME = new QName(TARGET_HCID_NS, TARGET_HCID_BLOCK_LOCAL_PART, TARGET_HCID_NS_PREFIX);
 
     public Iti41Component() {
         super(ITI_41);
@@ -50,13 +53,13 @@ public class Iti41Component extends XdsComponent<XdsSubmitAuditDataset> {
                 getProperties(parameters),
                 Iti41Service.class) {
             @Override
-            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
-                                                                                                           JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
-                return new SimpleWsProducer<>(
-                        endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class, RegistryResponseType.class);
+            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(
+                    AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
+                    JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory)
+            {
+                return new Iti41Producer(endpoint, clientFactory);
             }
         };
     }
-
 
 }
