@@ -42,6 +42,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new SlotLengthAndNameUniquenessValidator();
     private final OIDValidator oidValidator = new OIDValidator();
     private final TimeValidator timeValidator = new TimeValidator();
+    private final TimeValidator timeValidatorSec = new TimeValidator(14);
     private final XCNValidator xcnValidator = new XCNValidator();
     private final XONValidator xonValidator = new XONValidator();
     private final HashValidator hashValidator = new HashValidator();
@@ -152,7 +153,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private List<RegistryObjectValidator> getFolderSlotValidations(boolean limitedMetadata) {
         List<RegistryObjectValidator> validators = new ArrayList<>();
         Collections.addAll(validators,
-                new SlotValueValidation(SLOT_NAME_LAST_UPDATE_TIME, timeValidator, 0, 1),
+                new SlotValueValidation(SLOT_NAME_LAST_UPDATE_TIME, timeValidatorSec, 0, 1),
                 new ClassificationValidation(FOLDER_CODE_LIST_CLASS_SCHEME,
                         limitedMetadata ? 0 : 1, Integer.MAX_VALUE, OPTIONAL, codingSchemeValidations));
         if (! limitedMetadata) {

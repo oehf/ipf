@@ -132,16 +132,17 @@ public enum ValidationMessage {
     MISSING_ASSOCIATION("Association specifies a targetObject: %s association, but it was not provided"),
     OBJECT_SHALL_NOT_BE_SPECIFIED("%s shall not be specified."),
     EMPTY_REFERENCE_LIST("No object references specified for %s"),
-    WRONG_TELECOM_USE("Wrong telecom use code (XTN-2) : %s"),
-    WRONG_TELECOM_TYPE("Wrong telecom type code (XTN-3) : %s"),
-    MISSING_TELECOM_PARAM("A required telecom parameter is missing : %s"),
-    INCONSISTENT_TELECOM_PARAM("Inconsistent telecom parameters : %s"),
+    WRONG_TELECOM_USE("Wrong telecom use code (XTN-2): %s"),
+    WRONG_TELECOM_TYPE("Wrong telecom type code (XTN-3): %s"),
+    MISSING_TELECOM_PARAM("A required telecom parameter is missing: %s"),
+    INCONSISTENT_TELECOM_PARAM("Inconsistent telecom parameters: %s"),
     SUBMISSION_SET_STATUS_MANDATORY("Submission set status is mandatory for each association involving a submission set as a target and document entry as its source"),
     INVALID_DOCUMENT_AVAILABILITY("Unsupported document availability: %s"),
     WRONG_REFERENCE_ID_TYPE("Wrong reference ID type: %s"),
     LIMITED_METADATA_REQUIRED("limitedMetadata classification must be provided in %s"),
     LIMITED_METADATA_PROHIBITED("limitedMetadata classification is not allowed in %s"),
-    MISSING_FOLDER_NAME("Folder name not provided in %s");
+    MISSING_FOLDER_NAME("Folder name not provided in %s"),
+    TIME_PRECISION_TOO_LOW("Precision of the timestamp is too low: %s");
 
 
     private final String text;

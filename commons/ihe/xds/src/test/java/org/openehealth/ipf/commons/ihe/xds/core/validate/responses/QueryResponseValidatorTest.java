@@ -21,31 +21,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ENTRY_INVALID_AVAILABILITY_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_STATUS_IN_RESPONSE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_OBJ_REF;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.ORGANIZATION_NAME_MISSING;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.RESULT_NOT_SINGLE_PATIENT;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_NUMBER_OF_SLOT_VALUES;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
  * Test for {@link QueryResponseValidator}.

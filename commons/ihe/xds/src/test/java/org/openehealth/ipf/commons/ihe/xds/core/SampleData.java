@@ -216,7 +216,7 @@ public abstract class SampleData {
         folder.getCodeList().add(new Code("code7", new LocalizedString("code7"), "scheme7"));
         folder.setComments(new LocalizedString("comments3"));
         folder.setEntryUuid("folder01");
-        folder.setLastUpdateTime("198209");
+        folder.setLastUpdateTime("19820910121315");
         folder.setPatientId(patientID);
         folder.setTitle(new LocalizedString("Folder 01", "en-US", "UTF8"));
         folder.setUniqueId("48574589");

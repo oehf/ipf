@@ -31,14 +31,35 @@ public class TimeValidator implements ValueValidator {
     private static final String DAY = "(0[1-9]|[12][0-9]|3[01])";
     private static final String HOUR = "([01][0-9]|2[0123])";
     private static final String MIN_SEC = "[0-5][0-9]";
-    private static final String REG_EX = 
+    private static final String REG_EX =
         YEAR + "(" + MONTH + "(" + DAY + "(" + HOUR + "(" + MIN_SEC + "(" + MIN_SEC + ")?)?)?)?)?";
 
     private static final Pattern TIME_PATTERN = Pattern.compile(REG_EX);
 
+    private final int minLen;
+
+    /**
+     * Initializes a validator which will check that the timestamp has the right format
+     * and the given minimal length (to check the precision).
+     *
+     * @param minLen minimal length of the timestamp; "-1" means no check.
+     */
+    public TimeValidator(int minLen) {
+        this.minLen = minLen;
+    }
+
+    /**
+     * Initializes a validator which will check that the timestamp has the right format
+     * without minimal length constraint.
+     */
+    public TimeValidator() {
+        this(-1);
+    }
+
     @Override
     public void validate(String time) throws XDSMetaDataException {
-        notNull(time, "time cannot be null");        
+        notNull(time, "time cannot be null");
         metaDataAssert(TIME_PATTERN.matcher(time).matches(), INVALID_TIME, time);
+        metaDataAssert((minLen < 0) || (time.length() >= minLen), TIME_PRECISION_TOO_LOW, time);
     }
 }

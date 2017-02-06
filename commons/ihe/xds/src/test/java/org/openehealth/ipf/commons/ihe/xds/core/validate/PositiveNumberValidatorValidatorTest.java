@@ -18,9 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.HashValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.PositiveNumberValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
  * Tests for {@link HashValidator}.

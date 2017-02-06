@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.OIDValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
  * Tests for {@link OIDValidator}.

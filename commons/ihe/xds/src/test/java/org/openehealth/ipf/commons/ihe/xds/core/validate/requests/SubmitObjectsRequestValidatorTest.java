@@ -18,84 +18,19 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_42;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.CX_NEEDS_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.CX_TOO_MANY_COMPONENTS;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ENTRY_PATIENT_ID_WRONG;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.EMPTY_SLOT_VALUE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.EMPTY_URI;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.EXACTLY_ONE_SUBMISSION_SET_MUST_EXIST;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.FOLDER_INVALID_AVAILABILITY_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.FOLDER_PATIENT_ID_WRONG;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.HD_MUST_NOT_HAVE_NAMESPACE_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.HD_NEEDS_UNIVERSAL_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_ASSOCIATION_TYPE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_HASH_CODE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_LANGUAGE_CODE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_NUMBER_FORMAT;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_OID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_PID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_RECIPIENT;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_SUBMISSION_SET_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_TITLE_ENCODING;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_URI;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_URI_PART;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_ASSOCIATION;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_EXTERNAL_IDENTIFIER;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_ORIGINAL;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_SNAPSHOT_ASSOCIATION;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_URI_PART;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.NO_CLASSIFIED_OBJ;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.NULL_URI;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.NULL_URI_PART;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.OID_TOO_LONG;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.ORGANIZATION_NAME_MISSING;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.ORGANIZATION_TOO_MANY_COMPONENTS;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PERSON_MISSING_NAME_AND_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.RECIPIENT_EMPTY;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SLOT_VALUE_TOO_LONG;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SOURCE_UUID_NOT_FOUND;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SUBMISSION_SET_INVALID_AVAILABILITY_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SUBMISSION_SET_STATUS_MANDATORY;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.TITLE_TOO_LONG;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.TOO_MANY_SUBMISSION_SET_STATES;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNIQUE_ID_MISSING;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNIQUE_ID_TOO_LONG;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNIVERSAL_ID_TYPE_MUST_BE_ISO;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UNSUPPORTED_PID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.UUID_NOT_UNIQUE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_CLASSIFIED_OBJ;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_NODE_REPRESENTATION;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_NUMBER_OF_CLASSIFICATIONS;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_NUMBER_OF_SLOT_VALUES;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
  * Test for {@link SubmitObjectsRequestValidator}.
@@ -525,6 +460,12 @@ public class SubmitObjectsRequestValidatorTest {
     public void testRepositoryUniqueIdIsNecessaryInXDSB() {
         docEntry.setRepositoryUniqueId(null);
         expectFailure(WRONG_NUMBER_OF_SLOT_VALUES);
+    }
+
+    @Test
+    public void testFolderUpdateTimeLowPrecision() {
+        request.getFolders().get(0).setLastUpdateTime("20170207");
+        expectFailure(TIME_PRECISION_TOO_LOW);
     }
 
     @Test

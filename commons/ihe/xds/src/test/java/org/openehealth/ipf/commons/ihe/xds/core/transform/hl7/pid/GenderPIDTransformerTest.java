@@ -20,7 +20,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.GenderPIDTransformer;
 
 /**
  * Tests for {@link GenderPIDTransformer}.

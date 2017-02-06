@@ -21,9 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.HashValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.UriValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
  * Tests for {@link HashValidator}.
