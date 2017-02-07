@@ -51,8 +51,11 @@ public class IpfAtnaAutoConfiguration {
     @ConfigurationProperties(prefix = "ipf.atna")
     @ConditionalOnMissingBean
     public AuditorModuleConfig atnaAuditorModuleConfig(AuditorModuleContext auditorModuleContext,
+                                                       IpfAtnaConfigurationProperties config,
                                                        @Value("${spring.application.name}") String appName) {
         AuditorModuleConfig auditorModuleConfig = auditorModuleContext.getConfig();
+        auditorModuleConfig.setAuditRepositoryHost(config.getRepositoryHost());
+        auditorModuleConfig.setAuditRepositoryPort(config.getRepositoryPort());
         // Use app name as auditor source if not configured otherwise
         if (auditorModuleConfig.getAuditSourceId() == null) {
             auditorModuleConfig.setAuditSourceId(appName);
