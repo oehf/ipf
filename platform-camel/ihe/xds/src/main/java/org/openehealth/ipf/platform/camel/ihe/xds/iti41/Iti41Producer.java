@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseT
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
-import org.openehealth.ipf.platform.camel.ihe.ws.DomBuildersThreadLocal;
+import org.openehealth.ipf.commons.core.DomBuildersThreadLocal;
 import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
