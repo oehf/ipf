@@ -44,6 +44,7 @@ public class IpfAtnaAutoConfiguration {
             throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         AuditorModuleContext auditorModuleContext = AuditorModuleContext.getContext();
         auditorModuleContext.setQueue(config.getAuditQueueClass().newInstance());
+        auditorModuleContext.setSender(config.getAuditSenderClass().newInstance());
         return auditorModuleContext;
     }
 
