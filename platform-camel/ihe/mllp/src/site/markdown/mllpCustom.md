@@ -35,7 +35,7 @@ where *hostname* is either an IP address or a domain name, and *port* is a numbe
 These two obligatory URI parts represent the address of the MLLP endpoint which is to be served by the given consumer or
 accessed by the given producer.
 
-Additionally, the URI parameter *hl7TransactionConfig* is mandatory and references a bean of type
+Additionally, the URI parameter *hl7TransactionConfig* references a bean of type
 [`org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration`](../apidocs/org/openehealth/ipf/commons/ihe/hl7v2/Hl7v2TransactionConfiguration.html)
 that defines the contract of the transaction.
 
@@ -49,6 +49,7 @@ is disabled in the endpoints. The audit strategies must reference an instance of
 All HL7v2-based transactions are realized using the [camel-mina2](http://camel.apache.org/mina2.html) and [camel-hl7](http://camel.apache.org/hl7.html)
 components and requires that an [HL7v2 Codec](codec.html) is available in the Camel registry.
 
+
 ### Example
 
 This is an example on how to use the component on the consumer side:
@@ -58,6 +59,41 @@ This is an example on how to use the component on the consumer side:
       .process(myProcessor)
       // process the incoming request and create a response
 ```
+
+
+### Explicitly configured `mllp` component instances
+
+As the *hl7TransactionConfig* is a property of the component and not of the endpoint, you cannot use two `mllp` endpoints
+with different *hl7TransactionConfig* parameters. Instead, you need to create separate component beans and refer to them by their
+scheme ID.
+
+In the following example, we define two component instances as `mllp1` and `mllp2`, configured with distinct *hl7TransactionConfig* :
+
+```xml
+
+    <bean id="mllp1" class="org.openehealth.ipf.platform.camel.ihe.mllp.custom.CustomMllpComponent">
+        <property name="transactionConfiguration" ref="hl7TransactionConfig1"/>
+    </bean>
+
+    <bean id="mllp2" class="org.openehealth.ipf.platform.camel.ihe.mllp.custom.CustomMllpComponent">
+        <property name="transactionConfiguration" ref="hl7TransactionConfig2"/>
+    </bean>
+
+```
+
+In the route definition, they can be used like this:
+
+```java
+
+    from("mllp1://0.0.0.0:8777")
+      .process(myProcessor)
+      // process the incoming request and create a response
+
+    from("mllp2://0.0.0.0:8778")
+      .process(myProcessor)
+      // process the incoming request and create a response
+```
+
 
 ### Basic Common Component Features
 

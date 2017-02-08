@@ -324,7 +324,7 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
      * Performs acceptance test of the message with the given attributes.
      *
      * @param messageType      value from MSH-9-1, can be empty or <code>null</code>.
-     * @param triggerEvent     value from MSH-9-PAI2, can be empty or <code>null</code>.
+     * @param triggerEvent     value from MSH-9-2, can be empty or <code>null</code>.
      * @param messageStructure value from MSH-9-3, can be empty or <code>null</code>.
      * @param version          value from MSH-12, can be empty or <code>null</code>.
      * @param isRequest        <code>true</code> iff the message under consideration is a request.
@@ -342,8 +342,11 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
         Definition definition = definitions.get(isRequest).get(messageType);
 
         if (definition == null) {
-            throw new Hl7v2AcceptanceException("Invalid message type " + messageType + ", must be one of " +
-                    join(definitions.get(isRequest).keySet()), ErrorCode.UNSUPPORTED_MESSAGE_TYPE);
+            definition = definitions.get(isRequest).get("*");
+            if (definition == null) {
+                throw new Hl7v2AcceptanceException("Invalid message type " + messageType + ", must be one of " +
+                        join(definitions.get(isRequest).keySet()), ErrorCode.UNSUPPORTED_MESSAGE_TYPE);
+            }
         }
 
         if (! definition.isAllowedTriggerEvent(triggerEvent)) {

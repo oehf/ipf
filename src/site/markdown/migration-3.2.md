@@ -96,12 +96,20 @@ See [issue #122](https://github.com/oehf/ipf/issues/122) for details
 
 ### IHE Profile Updates
 
-IPF 3.2 is compatible with IHE ITI Revision 13 (published Sep 9, 2016), including changes due to the following Change Proposals:
+IPF 3.2 is compatible with IHE ITI Revision 13 (published on Sep 9, 2016), including changes from the following Change Proposals:
+
+* [Ballot 38](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2017#Ballot_38): Implemented CP-ITI-949 CP-ITI-961
+    * [CP-ITI-949](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2017/CPs/Ballots/ballot_38/CP-ITI-949-02.doc): Clarify Folder.lastUpdateTime
+    * [CP-ITI-961](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2017/CPs/Ballots/ballot_38/CP-ITI-961-02.doc): XCDR cleanup
+
+* [Ballot 37](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2017#Ballot_37): Implemented CP-ITI-559 and CP-ITI-810
+    * [CP-ITI-559](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance/CPs/Ballots/2017/Ballot_37/CP-ITI-559-04.doc): Parameters is ITI-51 queries
+    * [CP-ITI-810](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance/CPs/Ballots/2017/Ballot_37/CP-ITI-810-05.doc): ATNA Audit for ITI-62
 
 * [Ballot 36](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2017#Ballot_36): Implemented CP-ITI-955
     * [CP-ITI-955](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_36/CP-ITI-955-00.doc): Add DocumentEntry type to FindDocumentsByReferenceId
 
-* [Ballot 35](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2016#Ballot_35): no changes required
+* [Ballot 35](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2016#Ballot_35): No changes were required
 
 * [Ballot 34](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2016#Ballot_34): Implemented CP-ITI-767 and CP-ITI-914
     * [CP-ITI-767](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_34/CP-ITI-767-02.doc): Fix errors in CXi datatype and referenceIdList attribute examples 
@@ -118,12 +126,6 @@ IPF 3.2 is compatible with IHE ITI Revision 13 (published Sep 9, 2016), includin
     * [CP-ITI-582](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_32/CP-ITI-884-00.doc): PIXm changes for DSTU2 
     * [CP-ITI-880](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_32/CP-ITI-885-00.doc): PDQm changes for DSTU2
 
-
-In addition, the following Change Proposals have been implemented after the release of Revision 13:
-
-* [Ballot 37](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2017#Ballot_37): 
-   TODO
-   
 
 ### Internal Restructuring of IHE components
 

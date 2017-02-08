@@ -15,15 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.custom;
 
-import lombok.Getter;
+import lombok.Setter;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -35,13 +36,10 @@ import java.util.Map;
  */
 public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> extends MllpTransactionComponent<AuditDatasetType> {
 
-    private Hl7v2TransactionConfiguration configuration;
+    private static final Logger LOG = LoggerFactory.getLogger(CustomMllpComponent.class);
 
-    @Getter
-    private AuditStrategy<AuditDatasetType> clientAuditStrategy;
-    @Getter
-    private AuditStrategy<AuditDatasetType> serverAuditStrategy;
-
+    @Setter
+    private Hl7v2TransactionConfiguration transactionConfiguration;
 
     public CustomMllpComponent() {
         super(null);
@@ -54,16 +52,22 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
     @Override
     protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
         MllpTransactionEndpointConfiguration transactionConfig = super.createConfig(uri, parameters);
-        configuration = resolveAndRemoveReferenceParameter(parameters, "hl7TransactionConfig", Hl7v2TransactionConfiguration.class);
-        if (configuration == null) {
-            throw new IllegalArgumentException("Must provide hl7TransactionConfig attribute with custom MLLP component");
+        Hl7v2TransactionConfiguration configuration = resolveAndRemoveReferenceParameter(parameters, "hl7TransactionConfig", Hl7v2TransactionConfiguration.class);
+        if (this.transactionConfiguration == null) {
+            if (configuration == null) {
+                throw new IllegalArgumentException("Must provide hl7TransactionConfig attribute with custom MLLP component");
+            } else {
+                this.transactionConfiguration = configuration;
+            }
+        } else {
+            if (configuration != null) {
+                throw new IllegalArgumentException("Must not override preconfigured hl7TransactionConfig in custom MLLP component");
+            }
         }
-        clientAuditStrategy = configuration.getClientAuditStrategy();
-        if (transactionConfig.isAudit() && clientAuditStrategy == null) {
+        if (transactionConfig.isAudit() && getClientAuditStrategy() == null) {
             throw new IllegalArgumentException("Consumer or Producer require ATNA audit, but no clientAuditStrategy is defined for custom MLLP component");
         }
-        serverAuditStrategy = configuration.getServerAuditStrategy();
-        if (transactionConfig.isAudit() && serverAuditStrategy == null) {
+        if (transactionConfig.isAudit() && getServerAuditStrategy() == null) {
             throw new IllegalArgumentException("Consumer or Producer require ATNA audit, but no serverAuditStrategy is defined for custom MLLP component");
         }
         return transactionConfig;
@@ -71,12 +75,22 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
 
     @Override
     public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
-        return configuration;
+        return transactionConfiguration;
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
+        return transactionConfiguration.getClientAuditStrategy();
+    }
+
+    @Override
+    public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
+        return transactionConfiguration.getServerAuditStrategy();
     }
 
     @Override
     public NakFactory getNakFactory() {
-        return new NakFactory(configuration);
+        return new NakFactory(transactionConfiguration);
     }
 
 }
