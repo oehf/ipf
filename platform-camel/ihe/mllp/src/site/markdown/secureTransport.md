@@ -10,9 +10,9 @@ TLS-related aspects of MLLP-based transactions are controlled by the following U
 | `secure`                | boolean    | false           | enables transport-level encryption for the given endpoint
 | `sslContext`            | String     | n/a             | name of a user-defined SSL context, if any, with leading '#'.
 | `sslContextParameters`  | [SSLContextParameters] | n/a | enables transport-level encryption and determines the SSL parameters that shall be applied to the endpoint 
-| `clientAuth`            | one of `NONE`, `WANT`, `MUST` | NONE | whether client authentication for mutual TLS is required (MUST), requested (WANT) or not requested (NONE) on the given endpoint
-| `sslProtocols`          | String     | as defined in SSLContext | comma-separated list of SSL protocols that should be enforced by the given endpoint 
+| `sslProtocols`          | String     | as defined in SSLContext | comma-separated list of SSL protocols that should be enforced by the given endpoint
 | `sslCiphers`            | String     | as defined in SSLContext | comma-separated list of SSL cipher suites that should be enforced by the given endpoint 
+| `clientAuth`            | one of `NONE`, `WANT`, `MUST` | as defined in SSLContext | whether client authentication for mutual TLS is required (MUST), requested (WANT) or not requested (NONE) on the given endpoint
 
 If `secure` is set to true but neither `sslContext` nor `sslContextParameters` are provided,the Camel registry is looked up for 
 a unique `sslContextParameters` bean instance to be used. If none is found, a default SSL Context (optionally controlled by the system environment) 
