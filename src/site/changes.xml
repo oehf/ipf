@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.2.0" date="TBD" description="IPF 3.2.0">
+            <action dev="ohr" issue="141" type="fix">
+                Allow to explicitly set HL7v2TransactionConfigurations for custom MllpComponents
+            </action>
             <action dev="unixoid" issue="140" type="add">
                 Added support for the XDR/XCDR option "Transmit Home Community Id" (CP-ITI-924/961).
             </action>

@@ -43,7 +43,11 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
         <camel:serverParameters clientAuthentication="REQUIRE"/>
     </camel:sslContextParameters>
-    
+
+    <bean id="mdm" class="org.openehealth.ipf.platform.camel.ihe.mllp.custom.CustomMllpComponent">
+        <property name="transactionConfiguration" ref="hl7TransactionConfig"/>
+    </bean>
+
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.mllp.custom.MdmTestRouteBuilder">
     </bean>

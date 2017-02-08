@@ -26,37 +26,37 @@ class MdmTestRouteBuilder extends RouteBuilder {
     void configure() throws Exception {
         
         // normal processing without auditing
-        from('mllp://0.0.0.0:19081?hl7TransactionConfig=#hl7TransactionConfig&audit=false')
+        from('mdm://0.0.0.0:19081?audit=false')
                 .transform(ack())
 
         // fictive route to test producer-side acceptance checking
-        from('mllp://0.0.0.0:19084?hl7TransactionConfig=#hl7TransactionConfig&audit=false')
+        from('mdm://0.0.0.0:19084?audit=false')
                 .process {
             resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
             resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
         }
 
         // route with normal exception
-        from('mllp://0.0.0.0:19085?hl7TransactionConfig=#hl7TransactionConfig&audit=false')
+        from('mdm://0.0.0.0:19085?audit=false')
                 .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
                 .process { throw new Exception('Why do you cry, Willy?') }
 
         // route with runtime exception
-        from('mllp://0.0.0.0:19086?hl7TransactionConfig=#hl7TransactionConfig&audit=false')
+        from('mdm://0.0.0.0:19086?audit=false')
                 .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
                 .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
 
-        from('mllp://0.0.0.0:19087?hl7TransactionConfig=#hl7TransactionConfig&audit=false&'+
+        from('mdm://0.0.0.0:19087?audit=false&'+
                 'secure=true&sslContext=#sslContext&' +
                 'sslProtocols=SSLv3,TLSv1&' +
                 'sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
                 .transform(ack())
 
-        from('mllp://0.0.0.0:19088?hl7TransactionConfig=#hl7TransactionConfig&audit=false&'+
+        from('mdm://0.0.0.0:19088?audit=false&'+
                 'sslContextParameters=#sslContextParameters')
                 .transform(ack())
     }

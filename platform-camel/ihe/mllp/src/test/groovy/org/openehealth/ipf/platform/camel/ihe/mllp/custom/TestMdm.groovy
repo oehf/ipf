@@ -60,7 +60,7 @@ class TestMdm extends MllpTestContainer {
 
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit("mllp://localhost:19081?hl7TransactionConfig=#hl7TransactionConfig&audit=false&timeout=${TIMEOUT}", 0)
+        doTestHappyCaseAndAudit("mdm://localhost:19081?audit=false&timeout=${TIMEOUT}", 0)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -101,7 +101,7 @@ class TestMdm extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
-        def endpointUri = 'mllp://localhost:19081?hl7TransactionConfig=#hl7TransactionConfig&audit=false'
+        def endpointUri = 'mdm://localhost:19081?audit=false'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
                 [process : { Exchange e -> /* nop */ }] as Processor
@@ -147,7 +147,7 @@ class TestMdm extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = 'mllp://localhost:19081?hl7TransactionConfig=#hl7TransactionConfig&audit=false'
+        def endpointUri = 'mdm://localhost:19081?audit=false'
         def body = getMessageString(msh9, msh12)
         def failed = true;
         
@@ -172,8 +172,8 @@ class TestMdm extends MllpTestContainer {
     @Test
     void testExceptions() {
         def body = getMessageString('MDM^T01', '2.5')
-        doTestException('mllp://localhost:19085?hl7TransactionConfig=#hl7TransactionConfig&audit=false', body, 'you cry')
-        doTestException('mllp://localhost:19086?hl7TransactionConfig=#hl7TransactionConfig&audit=false', body, 'lazy dog')
+        doTestException('mdm://localhost:19085?audit=false', body, 'you cry')
+        doTestException('mdm://localhost:19086?audit=false', body, 'lazy dog')
     }
     
     def doTestException(String endpointUri, String body, String wantedOutputContent) {
@@ -188,8 +188,8 @@ class TestMdm extends MllpTestContainer {
      */
     @Test
     void testAlterativeHl7CodecFactory() {
-        def endpointUri1 = 'mllp://fake.address.no.uri:180?codec=#alternativeCodec&hl7TransactionConfig=#hl7TransactionConfig&audit=false'
-        def endpointUri2 = 'mllp://localhost:19085?hl7TransactionConfig=#hl7TransactionConfig&audit=false'
+        def endpointUri1 = 'mdm://fake.address.no.uri:180?codec=#alternativeCodec&audit=false'
+        def endpointUri2 = 'mdm://localhost:19085?audit=false'
         def endpoint1 = camelContext.getEndpoint(endpointUri1)
         def endpoint2 = camelContext.getEndpoint(endpointUri2)
         assertEquals('UTF-8', endpoint1.charsetName)
@@ -199,7 +199,7 @@ class TestMdm extends MllpTestContainer {
     @Test
     void testSecureEndpoint() {
         final String body = getMessageString('MDM^T01', '2.5')
-        def endpointUri = 'mllp://localhost:19087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&hl7TransactionConfig=#hl7TransactionConfig&audit=false'
+        def endpointUri = 'mdm://localhost:19087?secure=true&sslContext=#sslContext&sslProtocols=TLSv1&audit=false'
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
@@ -207,7 +207,7 @@ class TestMdm extends MllpTestContainer {
     @Test(expected=CamelExchangeException.class)
     void testUnsecureProducer() {
         final String body = getMessageString('MDM^T01', '2.5')
-        def endpointUri = 'mllp://localhost:19087?hl7TransactionConfig=#hl7TransactionConfig&audit=false'
+        def endpointUri = 'mdm://localhost:19087?audit=false'
         send(endpointUri, body)
         fail()
     }
@@ -215,7 +215,7 @@ class TestMdm extends MllpTestContainer {
     @Test
     void testSecureEndpointWithCamelJsseConfigOk() {
         final String body = getMessageString('MDM^T01', '2.5')
-        def endpointUri = 'mllp://localhost:19088?sslContextParameters=#sslContextParameters&hl7TransactionConfig=#hl7TransactionConfig&audit=false'
+        def endpointUri = 'mdm://localhost:19088?sslContextParameters=#sslContextParameters&audit=false'
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
@@ -223,7 +223,7 @@ class TestMdm extends MllpTestContainer {
     @Test(expected=CamelExchangeException.class)
     void testSecureEndpointWithCamelJsseConfigClientFails() {
         final String body = getMessageString('MDM^T01', '2.5')
-        def endpointUri = 'mllp://localhost:19088?hl7TransactionConfig=#hl7TransactionConfig&audit=false'
+        def endpointUri = 'mdm://localhost:19088?audit=false'
         send(endpointUri, body)
         fail()
     }

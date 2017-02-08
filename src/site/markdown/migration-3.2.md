@@ -98,6 +98,10 @@ See [issue #122](https://github.com/oehf/ipf/issues/122) for details
 
 IPF 3.2 is compatible with IHE ITI Revision 13 (published Sep 9, 2016), including changes due to the following Change Proposals:
 
+* [Ballot 38](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2017#Ballot_38): Implemented CP-ITI-949 CP-ITI-961
+    * [CP-ITI-949](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2017/CPs/Ballots/ballot_38/CP-ITI-949-02.doc): Clarify Folder.lastUpdateTime
+    * [CP-ITI-961](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2017/CPs/Ballots/ballot_38/CP-ITI-961-02.doc): XCDR cleanup
+
 * [Ballot 36](http://wiki.ihe.net/index.php/ITI_Change_Proposals_2017#Ballot_36): Implemented CP-ITI-955
     * [CP-ITI-955](ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2016/CPs/Ballots/ballot_36/CP-ITI-955-00.doc): Add DocumentEntry type to FindDocumentsByReferenceId
 
