@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
 import java.io.ByteArrayInputStream;
 import javax.xml.parsers.DocumentBuilder;
-import org.openehealth.ipf.platform.camel.ihe.ws.DomBuildersThreadLocal;
+import org.openehealth.ipf.commons.core.DomBuildersThreadLocal;
 import org.springframework.core.convert.converter.Converter;
 import org.w3c.dom.Document;
 

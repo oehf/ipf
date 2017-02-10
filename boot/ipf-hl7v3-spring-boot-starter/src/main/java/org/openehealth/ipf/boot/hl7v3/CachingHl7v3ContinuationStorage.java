@@ -28,7 +28,7 @@ import org.springframework.cache.CacheManager;
  */
 public class CachingHl7v3ContinuationStorage implements Hl7v3ContinuationStorage {
 
-    private static final String INTERACTIVE_CONTINUATION_CACHE = "interactiveHl7v2ContinuationCache";
+    private static final String INTERACTIVE_CONTINUATION_CACHE = "interactiveHl7v3ContinuationCache";
 
     private final Cache cache;
 
