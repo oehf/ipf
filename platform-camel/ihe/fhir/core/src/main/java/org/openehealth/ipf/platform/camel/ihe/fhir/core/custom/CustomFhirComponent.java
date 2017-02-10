@@ -35,22 +35,13 @@ public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> exte
         implements FhirInteractionId {
 
     @Getter @Setter
-    private AuditStrategy<AuditDatasetType> clientAuditStrategy;
-    @Getter @Setter
-    private AuditStrategy<AuditDatasetType> serverAuditStrategy;
-    @Getter @Setter
     private String name;
     @Getter @Setter
     private String description;
     @Getter @Setter
     private boolean query;
-    @Getter @Setter
-    private FhirTransactionConfiguration fhirComponentConfiguration;
 
-    @Override
-    public FhirTransactionConfiguration getFhirTransactionConfiguration() {
-        return fhirComponentConfiguration;
-    }
+    private FhirTransactionConfiguration fhirTransactionConfiguration;
 
     public CustomFhirComponent() {
         super(null);
@@ -62,5 +53,12 @@ public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> exte
         return new CustomFhirEndpoint(uri, this, config);
     }
 
+    @Override
+    public FhirTransactionConfiguration getFhirTransactionConfiguration() {
+        return fhirTransactionConfiguration;
+    }
 
+    public void setFhirTransactionConfiguration(FhirTransactionConfiguration fhirTransactionConfiguration) {
+        this.fhirTransactionConfiguration = fhirTransactionConfiguration;
+    }
 }

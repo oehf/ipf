@@ -80,7 +80,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     }
 
     public FhirContext createFhirContext() {
-        return getFhirComponentConfiguration().createFhirContext();
+        return getFhirTransactionConfiguration().createFhirContext();
     }
 
     protected FhirEndpointConfiguration<AuditDatasetType> createConfig(String remaining, Map<String, Object> parameters) throws Exception {
@@ -123,18 +123,18 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
     /**
      * @return static component-specific configuration
      */
-    public FhirTransactionConfiguration getFhirComponentConfiguration() {
+    public FhirTransactionConfiguration getFhirTransactionConfiguration() {
         return fhirInteractionId.getFhirTransactionConfiguration();
     }
 
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
-        return fhirInteractionId.getFhirTransactionConfiguration().getServerAuditStrategy();
+        return getFhirTransactionConfiguration().getServerAuditStrategy();
     }
 
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
-        return fhirInteractionId.getFhirTransactionConfiguration().getClientAuditStrategy();
+        return getFhirTransactionConfiguration().getClientAuditStrategy();
     }
 
     public FhirInteractionId getInteractionId() {

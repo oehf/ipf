@@ -27,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
@@ -71,7 +70,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * Called when a {@link FhirConsumer} is started. Registers the resource provider
      *
      * @param consumer FhirConsumer
-     * @throws Exception
+     * @throws Exception if resource provider could not be registered
      */
     public void connect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
         AbstractPlainProvider provider = getResourceProvider();
@@ -84,7 +83,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
      * Called when a {@link FhirConsumer} is stopped. Unregisters the resource provider
      *
      * @param consumer FhirConsumer
-     * @throws Exception
+     * @throws Exception if resource provider could not be unregistered
      */
     public void disconnect(FhirConsumer<AuditDatasetType> consumer) throws Exception {
         AbstractPlainProvider provider = getResourceProvider();
@@ -140,10 +139,6 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return true;
     }
 
-    public FhirTransactionConfiguration getFhirComponentConfiguration() {
-        return fhirComponent.getFhirComponentConfiguration();
-    }
-
     @Override
     public FhirEndpointConfiguration<AuditDatasetType> getInterceptableConfiguration() {
         return config;
@@ -175,7 +170,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     private AbstractPlainProvider getResourceProvider() {
         AbstractPlainProvider provider = config.getResourceProvider();
         if (provider == null) {
-            provider = getFhirComponentConfiguration().getStaticResourceProvider();
+            provider = fhirComponent.getFhirTransactionConfiguration().getStaticResourceProvider();
         }
         return provider;
     }
@@ -183,7 +178,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     public ClientRequestFactory<?> getClientRequestFactory() {
         ClientRequestFactory<?> factory = config.getClientRequestFactory();
         if (factory == null) {
-            factory = getFhirComponentConfiguration().getStaticClientRequestFactory();
+            factory = fhirComponent.getFhirTransactionConfiguration().getStaticClientRequestFactory();
         }
         return factory;
     }
