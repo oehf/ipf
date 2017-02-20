@@ -16,6 +16,8 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.rest.server.RestfulServer;
+
 /**
  * Keeps track of {@link RequestConsumer} and {@link IpfFhirServlet} and connects them to each other.
  *
@@ -30,7 +32,7 @@ public interface FhirRegistry {
      * @param resourceProvider resource provider
      * @throws Exception
      */
-    void register(AbstractPlainProvider resourceProvider) throws Exception;
+    void register(Object resourceProvider) throws Exception;
 
     /**
      * Unregisters the FHIR resource provider.
@@ -38,7 +40,7 @@ public interface FhirRegistry {
      * @param resourceProvider resource provider
      * @throws Exception
      */
-    void unregister(AbstractPlainProvider resourceProvider) throws Exception;
+    void unregister(Object resourceProvider) throws Exception;
 
     /**
      * Registers the FHIR servlet, usually during its init phase.
@@ -46,7 +48,7 @@ public interface FhirRegistry {
      * @param servlet FHIR servlet
      * @throws Exception
      */
-    void register(IpfFhirServlet servlet) throws Exception;
+    void register(RestfulServer servlet) throws Exception;
 
     /**
      * Unregisters the FHIR servlet, usually during its destroy phase
@@ -54,12 +56,13 @@ public interface FhirRegistry {
      * @param servlet FHIR servlet
      * @throws Exception
      */
-    void unregister(IpfFhirServlet servlet) throws Exception;
+    void unregister(RestfulServer servlet) throws Exception;
 
     /**
      * Returns true if there is already a registered FHIR servlet with the provided name
+     *
      * @param servletName
      * @return true if there is already a registered FHIR servlet with this name
      */
-    boolean hasIpfFhirServlet(String servletName);
+    boolean hasServlet(String servletName);
 }

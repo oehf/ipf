@@ -90,7 +90,7 @@ public class IpfFhirServlet extends RestfulServer {
         this.servletName = config.getServletName();
 
         FhirRegistry fhirRegistry = DefaultFhirRegistry.getFhirRegistry(servletName);
-        if (fhirRegistry.hasIpfFhirServlet(servletName)) {
+        if (fhirRegistry.hasServlet(servletName)) {
             throw new ServletException(String.format("Duplicate FHIR Servlet name %s. Use unique names per Camel application", servletName));
         }
 

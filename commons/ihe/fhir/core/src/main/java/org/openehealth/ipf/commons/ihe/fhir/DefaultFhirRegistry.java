@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.rest.server.RestfulServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +37,8 @@ public class DefaultFhirRegistry implements FhirRegistry {
 
     private static Map<String, FhirRegistry> registries = new ConcurrentHashMap<>();
 
-    private final Set<AbstractPlainProvider> resourceProviders;
-    private final Set<IpfFhirServlet> servlets;
+    private final Set<Object> resourceProviders;
+    private final Set<RestfulServer> servlets;
 
     private DefaultFhirRegistry() {
         resourceProviders = new HashSet<>();
@@ -59,23 +60,23 @@ public class DefaultFhirRegistry implements FhirRegistry {
     }
 
     @Override
-    public void register(AbstractPlainProvider resourceProvider) throws Exception {
+    public void register(Object resourceProvider) throws Exception {
         resourceProviders.add(resourceProvider);
-        for (IpfFhirServlet servlet : servlets) {
+        for (RestfulServer servlet : servlets) {
             servlet.registerProvider(resourceProvider);
         }
     }
 
     @Override
-    public void unregister(AbstractPlainProvider resourceProvider) throws Exception {
+    public void unregister(Object resourceProvider) throws Exception {
         resourceProviders.remove(resourceProvider);
-        for (IpfFhirServlet provider : servlets) {
+        for (RestfulServer provider : servlets) {
             provider.unregisterProvider(resourceProvider);
         }
     }
 
     @Override
-    public void register(IpfFhirServlet servlet) throws Exception {
+    public void register(RestfulServer servlet) throws Exception {
         LOG.debug("Registering FHIR servlet with name {}. Providers registered so far: {}",
                 servlet.getServletName(), resourceProviders.size());
         servlets.add(servlet);
@@ -83,7 +84,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
     }
 
     @Override
-    public void unregister(IpfFhirServlet servlet) throws Exception {
+    public void unregister(RestfulServer servlet) throws Exception {
         LOG.debug("Unregistering FHIR Servlet with name {} and {} connected providers",
                 servlet.getServletName(), resourceProviders.size());
         servlets.remove(servlet);
@@ -91,7 +92,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
     }
 
     @Override
-    public boolean hasIpfFhirServlet(String servletName) {
+    public boolean hasServlet(String servletName) {
         return servlets.stream().anyMatch(p -> p.getServletName().equals(servletName));
     }
 }
