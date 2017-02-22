@@ -219,11 +219,13 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
      * Returns <code>true</code> when request messages of the given type are auditable.
      */
     public boolean isAuditable(String messageType) {
-        Definition definition = definitions.get(true).get(messageType);
-        if (definition == null) {
-            throw new IllegalArgumentException("Unknown message type " + messageType);
+        try {
+            Definition definition = getDefinitionForMessageType(messageType, true);
+            return definition.auditable;
+        } catch (Hl7v2AcceptanceException e) {
+            throw new IllegalArgumentException(e);
         }
-        return definition.auditable;
+
     }
 
 
@@ -236,11 +238,12 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
      * structure -- segments DSC, QAK.
      */
     public boolean isContinuable(String messageType) {
-        Definition definition = definitions.get(true).get(messageType);
-        if (definition == null) {
-            throw new IllegalArgumentException("Unknown message type " + messageType);
+        try {
+            Definition definition = getDefinitionForMessageType(messageType, true);
+            return definition.responseContinuable;
+        } catch (Hl7v2AcceptanceException e) {
+            throw new IllegalArgumentException(e);
         }
-        return definition.responseContinuable;
     }
 
 
@@ -339,15 +342,7 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
     {
         checkMessageVersion(version);
 
-        Definition definition = definitions.get(isRequest).get(messageType);
-
-        if (definition == null) {
-            definition = definitions.get(isRequest).get("*");
-            if (definition == null) {
-                throw new Hl7v2AcceptanceException("Invalid message type " + messageType + ", must be one of " +
-                        join(definitions.get(isRequest).keySet()), ErrorCode.UNSUPPORTED_MESSAGE_TYPE);
-            }
-        }
+        Definition definition = getDefinitionForMessageType(messageType, isRequest);
 
         if (! definition.isAllowedTriggerEvent(triggerEvent)) {
             throw new Hl7v2AcceptanceException("Invalid trigger event " + triggerEvent + ", must be one of " +
@@ -381,6 +376,18 @@ public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
                         ", must be " + expectedMessageStructure, ErrorCode.APPLICATION_INTERNAL_ERROR);
             }
         }
+    }
+
+    private Definition getDefinitionForMessageType(String messageType, boolean isRequest) throws Hl7v2AcceptanceException {
+        Definition definition = definitions.get(isRequest).get(messageType);
+        if (definition == null) {
+            definition = definitions.get(isRequest).get("*");
+            if (definition == null) {
+                throw new Hl7v2AcceptanceException("Invalid message type " + messageType + ", must be one of " +
+                        join(definitions.get(isRequest).keySet()), ErrorCode.UNSUPPORTED_MESSAGE_TYPE);
+            }
+        }
+        return definition;
     }
 
     private void checkMessageVersion(String version) throws Hl7v2AcceptanceException {
