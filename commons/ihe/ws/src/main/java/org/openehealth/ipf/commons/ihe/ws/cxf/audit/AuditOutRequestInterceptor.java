@@ -25,6 +25,7 @@ import org.apache.cxf.ws.addressing.Names;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 
 /**
@@ -46,7 +47,8 @@ public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends Abstra
             AsynchronyCorrelator<T> correlator,
             WsTransactionConfiguration wsTransactionConfiguration)
     {
-        super(Phase.WRITE_ENDING, auditStrategy);
+        super(Phase.PRE_PROTOCOL_ENDING, auditStrategy);
+        addAfter(OutPayloadExtractorInterceptor.class.getName());
         this.correlator = correlator;
         this.wsTransactionConfiguration = wsTransactionConfiguration;
     }

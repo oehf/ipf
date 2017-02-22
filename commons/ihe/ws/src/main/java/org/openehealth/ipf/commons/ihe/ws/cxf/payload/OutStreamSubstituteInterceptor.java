@@ -15,13 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
-import java.io.OutputStream;
-
-import org.apache.cxf.interceptor.MessageSenderInterceptor;
+import com.ctc.wstx.io.UTF8Writer;
+import com.ctc.wstx.sw.BaseStreamWriter;
+import com.ctc.wstx.sw.BufferingXmlWriter;
+import org.apache.cxf.interceptor.StaxOutInterceptor;
 import org.apache.cxf.io.CacheAndWriteOutputStream;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
+
+import javax.xml.stream.XMLStreamWriter;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
 
 /**
  * CXF interceptor that substitutes message output stream 
@@ -31,16 +36,55 @@ import org.apache.cxf.phase.Phase;
  */
 public class OutStreamSubstituteInterceptor extends AbstractPhaseInterceptor<Message> {
 
+    private static final Field MWRITER_FIELD;
+    private static final Field MOUT_WRITER_FIELD;
+    private static final Field MOUT_STREAM_FIELD;
+    static {
+        try {
+            MWRITER_FIELD = BaseStreamWriter.class.getDeclaredField("mWriter");
+            MWRITER_FIELD.setAccessible(true);
+            MOUT_WRITER_FIELD = BufferingXmlWriter.class.getDeclaredField("mOut");
+            MOUT_WRITER_FIELD.setAccessible(true);
+            MOUT_STREAM_FIELD = UTF8Writer.class.getDeclaredField("mOut");
+            MOUT_STREAM_FIELD.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     public OutStreamSubstituteInterceptor() {
-        super(Phase.PREPARE_SEND);
-        addAfter(MessageSenderInterceptor.class.getName());
+        super(Phase.PRE_STREAM);
+        addAfter(StaxOutInterceptor.class.getName());
     }
     
     @Override
     public void handleMessage(Message message) {
-        OutputStream os = message.getContent(OutputStream.class);
-        WrappedOutputStream wrapper = new WrappedOutputStream(os, (String) message.get(Message.ENCODING));
-        message.setContent(OutputStream.class, wrapper);
+        try {
+            boolean success = false;
+            Object x = message.getContent(XMLStreamWriter.class);
+            if (x instanceof BaseStreamWriter) {
+                x = MWRITER_FIELD.get(x);
+                if (x instanceof BufferingXmlWriter) {
+                    x = MOUT_WRITER_FIELD.get(x);
+                    if (x instanceof UTF8Writer) {
+                        UTF8Writer writer = (UTF8Writer) x;
+                        x = MOUT_STREAM_FIELD.get(writer);
+                        if (x instanceof OutputStream) {
+                            OutputStream os = (OutputStream) x;
+                            WrappedOutputStream wrapper = new WrappedOutputStream(os, (String) message.get(Message.ENCODING));
+                            message.setContent(OutputStream.class, wrapper);
+                            MOUT_STREAM_FIELD.set(writer, wrapper);
+                            success = true;
+                        }
+                    }
+                }
+            }
+            if (!success) {
+                throw new IllegalStateException("Unable to wrap the output stream, check involved classes");
+            }
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
 
