@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.2.0" date="TBD" description="IPF 3.2.0">
+            <action dev="ohr" issue="144" type="fix">
+                Fix invalid HL7v2 DSL in Iti9AuditStrategyUtils. Thanks to Seunghun Jun for reporting.
+            </action>
             <action dev="ohr" issue="141" type="fix">
                 Allow to explicitly set HL7v2TransactionConfigurations for custom MllpComponents
             </action>

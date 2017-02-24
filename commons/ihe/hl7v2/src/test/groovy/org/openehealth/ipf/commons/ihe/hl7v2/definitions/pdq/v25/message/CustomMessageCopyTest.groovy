@@ -21,7 +21,9 @@ import ca.uhn.hl7v2.parser.PipeParser
 import org.junit.Before
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD
+import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertTrue
@@ -33,7 +35,9 @@ import static org.junit.Assert.assertTrue
  */
 public class CustomMessageCopyTest {
 
-    private static final Parser PARSER = CustomModelClassUtils.createParser("pdq", "2.5");
+    private static final Parser PARSER = HapiContextFactory.createHapiContext(
+            CustomModelClassUtils.createFactory("pdq", "2.5"),
+            PixPdqTransactions.ITI21).pipeParser
     private String msg;
 
     @Before

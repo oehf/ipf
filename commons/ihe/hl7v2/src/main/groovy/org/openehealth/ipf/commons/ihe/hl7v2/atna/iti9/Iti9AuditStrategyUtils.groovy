@@ -39,10 +39,7 @@ class Iti9AuditStrategyUtils  {
 
     
     static boolean enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Message msg) {
-        if((msg.MSH[9][1].value == 'RSP') && 
-           (msg.MSH[9][2].value == 'K23') && 
-           (msg.QUERY_RESPONSE?.PID?.value)) 
-        {
+        if (msg.MSH[9][1].value == 'RSP' && msg.MSH[9][2].value == 'K23' && !msg.QUERY_RESPONSE?.PID?.empty) {
             def patientIds = AuditUtils.pidList(msg.QUERY_RESPONSE.PID[3])
             if(( ! auditDataset.patientIds) || patientIds.contains(auditDataset.patientIds[0])) {
                 auditDataset.patientIds = patientIds
