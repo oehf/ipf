@@ -27,6 +27,9 @@
             <action dev="ohr" issue="144" type="fix">
                 Fix invalid HL7v2 DSL in Iti9AuditStrategyUtils. Thanks to Seunghun Jun for reporting.
             </action>
+            <action dev="unixoid" issue="143" type="fix">
+                Made SOAP payload collection compatible with WS-Security. Thanks to Remco Overdevest for reporting (in #142).
+            </action>
             <action dev="ohr" issue="141" type="fix">
                 Allow to explicitly set HL7v2TransactionConfigurations for custom MllpComponents
             </action>

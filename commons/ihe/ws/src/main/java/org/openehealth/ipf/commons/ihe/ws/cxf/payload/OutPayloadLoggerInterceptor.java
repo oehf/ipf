@@ -57,7 +57,7 @@ public class OutPayloadLoggerInterceptor extends AbstractSafeInterceptor {
 
     @Override
     public Collection<PhaseInterceptor<? extends Message>> getAdditionalInterceptors() {
-        return Arrays.<PhaseInterceptor<? extends Message>> asList(
+        return Arrays.asList(
                 new DisablePayloadCollectingDeactivationInterceptor(),
                 new OutStreamSubstituteInterceptor());
     }

@@ -58,7 +58,7 @@ class InPayloadLoggerInterceptor extends AbstractSafeInterceptor {
 
     @Override
     public Collection<PhaseInterceptor<? extends Message>> getAdditionalInterceptors() {
-        return Collections.<PhaseInterceptor<? extends Message>> singletonList(
+        return Collections.singletonList(
                 new InPayloadExtractorInterceptor(StringPayloadHolder.PayloadType.HTTP));
     }
 
