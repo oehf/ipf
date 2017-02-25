@@ -19,6 +19,7 @@
         <module>ipf-xds-spring-boot-starter</module>
         <module>ipf-fhir-spring-boot-starter</module>
         <module>ipf-atna-spring-boot-starter</module>
+        <module>ipf-hpd-spring-boot-starter</module>
     </modules>
 
     <build>
