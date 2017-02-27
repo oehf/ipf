@@ -13,17 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hpd.iti58;
+package org.openehealth.ipf.commons.ihe.hpd.stub;
 
-import org.openehealth.ipf.commons.ihe.hpd.iti58.Iti58PortType;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
-import org.openehealth.ipf.platform.camel.ihe.hpd.HpdService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public class Iti58Service extends HpdService implements Iti58PortType {
+/**
+ * @author Dmytro Rud
+ */
+@AllArgsConstructor
+public enum ErrorType {
+    NOT_ATTEMPTED("notAttempted"),
+    COUND_NOT_CONNECT("couldNotConnect"),
+    CONNECTION_CLOSED("connectionClosed"),
+    MALFORMED_REQUEST("malformedRequest"),
+    GATEWAY_INTERNAL_ERROR("gatewayInternalError"),
+    AUTHENTICATION_FAILED("authenticationFailed"),
+    UNRESOLVABLE_URI("unresolvableURI"),
+    OTHER("other");
 
-    @Override
-    public BatchResponse providerInformationQueryRequest(BatchRequest body) {
-        return doProcess(body);
-    }
+    @Getter private final String code;
 }

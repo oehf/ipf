@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hpd.iti58;
+package org.openehealth.ipf.commons.ihe.hpd;
 
-import org.openehealth.ipf.commons.ihe.hpd.iti58.Iti58PortType;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
-import org.openehealth.ipf.platform.camel.ihe.hpd.HpdService;
+import lombok.Getter;
+import org.apache.commons.lang3.Validate;
+import org.openehealth.ipf.commons.ihe.hpd.stub.ErrorType;
 
-public class Iti58Service extends HpdService implements Iti58PortType {
+/**
+ * @author Dmytro Rud
+ */
+public class HpdException extends RuntimeException {
 
-    @Override
-    public BatchResponse providerInformationQueryRequest(BatchRequest body) {
-        return doProcess(body);
+    @Getter private final ErrorType type;
+
+    public HpdException(String message, ErrorType type) {
+        super(message);
+        this.type = Validate.notNull(type);
     }
 }

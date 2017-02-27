@@ -15,25 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hpd.iti59;
 
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59PortType;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.platform.camel.ihe.hpd.HpdService;
 
-import javax.jws.WebParam;
-
-public class Iti59Service extends AbstractWebService implements Iti59PortType {
+public class Iti59Service extends HpdService implements Iti59PortType {
 
     @Override
-    public BatchResponse providerInformationFeedRequest(@WebParam(partName = "body", name = "batchRequest", targetNamespace = "urn:oasis:names:tc:DSML:2:0:core") BatchRequest body) {
-        Exchange result = process(body);
-        Exception exception = Exchanges.extractException(result);
-        if (exception != null) {
-            // TODO
-        }
-        return Exchanges.resultMessage(result).getBody(BatchResponse.class);
+    public BatchResponse providerInformationFeedRequest(BatchRequest body) {
+        return doProcess(body);
     }
-
 }
