@@ -30,7 +30,7 @@ public class StringPayloadHolder {
      *     <li>SOAP Body.
      * </ul>
      */
-    public static enum PayloadType {
+    public enum PayloadType {
         HTTP, SOAP_BODY
     }
 

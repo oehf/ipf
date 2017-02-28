@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
-import org.apache.cxf.binding.soap.interceptor.SoapOutInterceptor.SoapOutEndingInterceptor;
+import org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
@@ -41,8 +41,8 @@ public class OutPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mes
 
 
     public OutPayloadExtractorInterceptor() {
-        super(Phase.WRITE_ENDING);
-        addAfter(SoapOutEndingInterceptor.class.getName());
+        super(Phase.PRE_PROTOCOL_ENDING);
+        addAfter(SAAJOutInterceptor.SAAJOutEndingInterceptor.class.getName());
     }
 
 

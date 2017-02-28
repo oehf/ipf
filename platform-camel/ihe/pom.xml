@@ -38,6 +38,7 @@
         <module>continua</module>
         <module>fhir</module>
         <module>core</module>
+        <module>hpd</module>
     </modules>
 
     <distributionManagement>

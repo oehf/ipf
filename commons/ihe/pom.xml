@@ -26,6 +26,7 @@
         <module>hl7v3</module>
         <module>fhir</module>
         <module>xua</module>
+        <module>hpd</module>
     </modules>
 
     <distributionManagement>

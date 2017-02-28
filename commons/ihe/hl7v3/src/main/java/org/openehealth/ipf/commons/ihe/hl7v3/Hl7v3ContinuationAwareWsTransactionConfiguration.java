@@ -49,7 +49,7 @@ public class Hl7v3ContinuationAwareWsTransactionConfiguration extends Hl7v3WsTra
             CombinedXmlValidationProfile responseValidationProfile,
             String mainRequestRootElementName,
             String mainResponseRootElementName
-)
+    )
     {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
                 serviceName, sei, bindingName, mtom, wsdlLocation,
