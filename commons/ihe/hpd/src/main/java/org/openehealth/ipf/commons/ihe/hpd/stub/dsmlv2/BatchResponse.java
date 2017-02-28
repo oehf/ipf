@@ -4,12 +4,7 @@ package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementRefs;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -36,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "BatchResponse", propOrder = {
     "batchResponses"
 })
+@XmlRootElement
 public class BatchResponse {
 
     @XmlElementRefs({

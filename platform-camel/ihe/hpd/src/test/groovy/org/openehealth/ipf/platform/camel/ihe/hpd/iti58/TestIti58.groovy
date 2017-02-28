@@ -19,8 +19,11 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.AttributeValueAssertion
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.Filter
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchRequest
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
@@ -51,7 +54,23 @@ class TestIti58 extends StandardTestContainer {
 
     @Test
     void testIti58() {
-        BatchRequest request = new BatchRequest()
+        BatchRequest request = new BatchRequest(
+                batchRequests: [
+                        new SearchRequest(
+                                dn: 'O=HPDTEST1,DC=HPD,C=US',
+                                scope: 'wholeSubtree',
+                                derefAliases: 'neverDerefAliases',
+                                filter: new Filter(
+                                        approxMatch: new AttributeValueAssertion(
+                                                name: 'displayName',
+                                                value: 'Mark Smith',
+                                        ),
+                                ),
+                        ),
+                ],
+        )
+
+
         BatchResponse response = sendIt(SERVICE1, request)
         assert response != null
     }
@@ -62,3 +81,4 @@ class TestIti58 extends StandardTestContainer {
 
 
 }
+

@@ -15,24 +15,27 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd;
 
-import lombok.Getter;
-import org.apache.commons.lang3.Validate;
-import org.openehealth.ipf.commons.ihe.hpd.stub.ErrorType;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Dmytro Rud
  */
-public class HpdException extends RuntimeException {
+@Slf4j
+public class HpdUtils {
 
-    @Getter private final ErrorType type;
-
-    public HpdException(String message, ErrorType type) {
-        super(message);
-        this.type = Validate.notNull(type);
-    }
-
-    public HpdException(Exception exception, ErrorType type) {
-        super(exception.getMessage());
-        this.type = Validate.notNull(type);
+    public static Map<String, String> parseLdapAttribute(String attribute) {
+        Map<String, String> result = new HashMap<>();
+        for (String fragment: attribute.split("[;,]")) {
+            int pos = fragment.indexOf('=');
+            if (pos > 0) {
+                result.put(fragment.substring(0, pos).trim().toUpperCase(), fragment.substring(pos + 1).trim());
+            } else {
+                log.debug("Could not parse {}", fragment);
+            }
+        }
+        return result;
     }
 }

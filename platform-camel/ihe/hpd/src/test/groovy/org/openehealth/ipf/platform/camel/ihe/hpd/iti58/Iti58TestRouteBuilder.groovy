@@ -18,6 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.hpd.iti58
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse
 
+import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.iti58RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.hpd.HpdCamelValidators.iti58ResponseValidator
+
 /**
  * @author Dmytro Rud
  */
@@ -25,8 +28,10 @@ class Iti58TestRouteBuilder extends RouteBuilder {
 
     void configure() throws Exception {
         from('hpd-iti58:hpd-service1')
+            .process(iti58RequestValidator())
             .process {
                 it.out.body = new BatchResponse()
             }
+            .process(iti58ResponseValidator())
     }
 }

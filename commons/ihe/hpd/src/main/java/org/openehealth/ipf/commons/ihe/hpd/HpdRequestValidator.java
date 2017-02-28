@@ -15,14 +15,38 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd;
 
+import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.hpd.stub.ErrorType;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.DsmlMessage;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchRequest;
+import org.openehealth.ipf.commons.xml.XsdValidator;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.util.JAXBSource;
+import javax.xml.transform.Source;
+import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.openehealth.ipf.commons.ihe.hpd.HpdUtils.parseLdapAttribute;
 
 /**
  * @author Dmytro Rud
  */
 public class HpdRequestValidator {
+    private static final String XSD_DOCUMENT = "/wsdl/DSMLv2.xsd";
+    private static final JAXBContext JAXB_CONTEXT;
+    static {
+        try {
+            JAXB_CONTEXT = JAXBContext.newInstance(ObjectFactory.class);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final XsdValidator XSD_VALIDATOR = new XsdValidator();
 
     private void check(boolean condition, String message) {
         if (! condition) {
@@ -30,10 +54,31 @@ public class HpdRequestValidator {
         }
     }
 
+    private static void validateWithXsd(Object object) {
+        try {
+            Source source = new JAXBSource(JAXB_CONTEXT, object);
+            XSD_VALIDATOR.validate(source, XSD_DOCUMENT);
+        } catch (ValidationException e) {
+            throw new HpdException(e, ErrorType.MALFORMED_REQUEST);
+        } catch (Exception e) {
+            throw new HpdException(e, ErrorType.OTHER);
+        }
+    }
+
     public void validateBatchRequest(BatchRequest request) {
-        check(request != null, "Message is null");
+        validateWithXsd(request);
         check(request.getBatchRequests() != null, "Request list is null");
         check(!request.getBatchRequests().isEmpty(), "Request list is empty");
-        check(request.getBatchRequests().stream().allMatch(x -> x instanceof SearchRequest), "Only SearchRequests are supported");
+        for(DsmlMessage dsml : request.getBatchRequests()) {
+            check(dsml instanceof SearchRequest, "Only SearchRequests are supported");
+            validateSearchRequest((SearchRequest) dsml);
+        }
+    }
+
+    private void validateSearchRequest(SearchRequest request) {
+        Map<String, String> dn = parseLdapAttribute(request.getDn());
+        check(isNotBlank(dn.get("C")), "Missing DN.C");
+        check(isNotBlank(dn.get("O")), "Missing DN.O");
+        check("HPD".equals(dn.get("DC")), "DN.DC not equal to 'HPD'");
     }
 }
