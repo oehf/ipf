@@ -14,6 +14,7 @@
 
     <modules>
         <module>ipf-spring-boot-starter</module>
+        <module>ipf-cxf-spring-boot-starter</module>
         <module>ipf-hl7-spring-boot-starter</module>
         <module>ipf-hl7v3-spring-boot-starter</module>
         <module>ipf-xds-spring-boot-starter</module>

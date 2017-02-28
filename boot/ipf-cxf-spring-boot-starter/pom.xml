@@ -9,6 +9,8 @@
     </parent>
 
     <artifactId>ipf-xds-spring-boot-starter</artifactId>
+    <description>Module replacement for cxf-spring-boot-starter-jaxws until support for
+        Spring Boot 1.5.x has been added in CXF 3.1.11</description>
 
     <dependencies>
 
@@ -21,37 +23,19 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <!-- reactivate with CXF 3.1.11
         <dependency>
             <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>org.openehealth.ipf.boot</groupId>
-            <artifactId>ipf-cxf-spring-boot-starter</artifactId>
-        </dependency>
-
-        <!-- IPF Support -->
-
-        <dependency>
-            <groupId>org.openehealth.ipf.boot</groupId>
-            <artifactId>ipf-atna-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-ihe-core</artifactId>
+            <artifactId>cxf-rt-transports-http</artifactId>
+            <version>${cxf-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-ihe-xds</artifactId>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>${cxf-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
         </dependency>
 
     </dependencies>
