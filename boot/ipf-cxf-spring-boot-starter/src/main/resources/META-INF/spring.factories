@@ -1,1 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.apache.cxf.spring.boot.autoconfigure.CxfAutoConfiguration

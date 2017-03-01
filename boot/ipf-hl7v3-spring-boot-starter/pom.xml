@@ -27,15 +27,9 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- reactivate with CXF 3.1.11
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>org.openehealth.ipf.boot</groupId>
-            <artifactId>ipf-cxf-spring-boot-starter</artifactId>
         </dependency>
 
         <!-- IPF Support -->
