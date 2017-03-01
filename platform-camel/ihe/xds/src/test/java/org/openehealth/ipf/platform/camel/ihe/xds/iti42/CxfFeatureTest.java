@@ -23,7 +23,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
@@ -52,7 +52,7 @@ public class CxfFeatureTest extends StandardTestContainer {
 
     @Test
     public void testFeatureEndpointWithoutPolicy() {
-        JaxWsClientFactory clientFactory = new XdsClientFactory(
+        JaxWsClientFactory clientFactory = new JaxWsRequestClientFactory<>(
                 ITI_42.getWsTransactionConfiguration(),
                 "http://localhost:" + getPort() + "/xds-iti42",
                 null, null, null, null, null);

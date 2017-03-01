@@ -17,27 +17,24 @@ package org.openehealth.ipf.platform.camel.ihe.hpd;
 
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59AuditDataset;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.commons.ihe.ws.*;
 import org.openehealth.ipf.platform.camel.ihe.ws.*;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- *  * @author Dmytro Rud
+ * @author Dmytro Rud
  */
-public class HpdEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> {
+public class HpdEndpoint extends AbstractWsEndpoint<Iti59AuditDataset, WsTransactionConfiguration> {
 
     public HpdEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration, ? extends WsInteractionId> component,
+            AbstractWsComponent<Iti59AuditDataset, WsTransactionConfiguration, ? extends WsInteractionId> component,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
@@ -48,19 +45,20 @@ public class HpdEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransactio
     }
 
     @Override
-    public JaxWsClientFactory<WsAuditDataset> getJaxWsClientFactory() {
-        return new JaxWsClientFactory<>(
+    public JaxWsClientFactory<Iti59AuditDataset> getJaxWsClientFactory() {
+        return new JaxWsRequestClientFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isAudit() ? getClientAuditStrategy() : null,
                 getCustomInterceptors(),
                 getFeatures(),
-                getProperties());
+                getProperties(),
+                getCorrelator());
     }
 
     @Override
-    public JaxWsServiceFactory<WsAuditDataset> getJaxWsServiceFactory() {
-        return new JaxWsServiceFactory<>(
+    public JaxWsServiceFactory<Iti59AuditDataset> getJaxWsServiceFactory() {
+        return new JaxWsRequestServiceFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
@@ -69,9 +67,9 @@ public class HpdEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransactio
     }
 
     @Override
-    public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(
-            AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint,
-            JaxWsClientFactory<WsAuditDataset> clientFactory)
+    public AbstractWsProducer<Iti59AuditDataset, WsTransactionConfiguration, ?, ?> getProducer(
+            AbstractWsEndpoint<Iti59AuditDataset, WsTransactionConfiguration> endpoint,
+            JaxWsClientFactory<Iti59AuditDataset> clientFactory)
     {
         return new SimpleWsProducer<>(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);
     }

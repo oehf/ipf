@@ -41,7 +41,7 @@ public class Hl7v3DeferredResponderFactory extends JaxWsClientFactory<Hl7v3Audit
             List<AbstractFeature> features,
             Map<String, Object> properties)
     {
-        super(wsTransactionConfiguration, serviceUrl, auditStrategy, customInterceptors, features, properties);
+        super(wsTransactionConfiguration, serviceUrl, auditStrategy, customInterceptors, features, properties, null);
     }
 
 

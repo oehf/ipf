@@ -152,9 +152,4 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
 
     }
 
-
-    protected WsTransactionConfiguration getWsTransactionConfiguration() {
-        return wsTransactionConfiguration;
-    }
-
 }

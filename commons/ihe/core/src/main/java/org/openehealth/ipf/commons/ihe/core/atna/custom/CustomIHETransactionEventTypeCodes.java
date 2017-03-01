@@ -41,6 +41,12 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
         }
     }
 
+    public static final class ProviderInformationFeed extends IHETransactionEventTypeCodes {
+        public ProviderInformationFeed() {
+            super("ITI-59", "Provider Information Feed");
+        }
+    }
+
     public static final class RegisterOnDemandDocumentEntry extends IHETransactionEventTypeCodes {
         public RegisterOnDemandDocumentEntry() {
             super("ITI-61", "Register On-Demand Document Entry");

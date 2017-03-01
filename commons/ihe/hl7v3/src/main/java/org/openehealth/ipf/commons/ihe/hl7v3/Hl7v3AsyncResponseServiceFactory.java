@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsAsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
@@ -33,8 +31,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * Service factory for receivers of asynchronous XCPD responses.
  * @author Dmytro Rud
  */
-public class Hl7v3AsyncResponseServiceFactory extends JaxWsServiceFactory<Hl7v3AuditDataset> {
-    private final AsynchronyCorrelator<Hl7v3AuditDataset> correlator;
+public class Hl7v3AsyncResponseServiceFactory extends JaxWsAsyncResponseServiceFactory<Hl7v3AuditDataset> {
 
     /**
      * Constructs the factory.
@@ -56,13 +53,9 @@ public class Hl7v3AsyncResponseServiceFactory extends JaxWsServiceFactory<Hl7v3A
             AsynchronyCorrelator<Hl7v3AuditDataset> correlator,
             InterceptorProvider customInterceptors)
     {
-        super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors, null);
-        
-        Validate.notNull(correlator, "Correlator for asynchronous processing must be set.");
-        this.correlator = correlator;
+        super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors, correlator);
     }
 
-    
     @Override
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         super.configureInterceptors(svrFactory);
@@ -70,14 +63,6 @@ public class Hl7v3AsyncResponseServiceFactory extends JaxWsServiceFactory<Hl7v3A
         svrFactory.getInInterceptors().add(new InNamespaceMergeInterceptor());
         svrFactory.getInInterceptors().add(new InPayloadInjectorInterceptor(0));
         svrFactory.setDataBinding(new PlainXmlDataBinding());
-
-        // install auditing-related interceptors if the user has not switched auditing off
-        if (auditStrategy != null) {
-            AuditResponseInterceptor<Hl7v3AuditDataset> auditInterceptor =
-                new AuditResponseInterceptor<>(auditStrategy, false, correlator, true);
-            svrFactory.getInInterceptors().add(auditInterceptor);
-            svrFactory.getInFaultInterceptors().add(auditInterceptor);
-        }
     }
 
 }

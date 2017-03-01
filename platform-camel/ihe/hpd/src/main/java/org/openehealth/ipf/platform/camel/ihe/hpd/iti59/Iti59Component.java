@@ -17,9 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.hpd.iti59;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hpd.HPD;
+import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hpd.HpdEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public class Iti59Component extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration, WsInteractionId<WsTransactionConfiguration>> {
+public class Iti59Component extends AbstractWsComponent<Iti59AuditDataset, WsTransactionConfiguration, WsInteractionId<WsTransactionConfiguration>> {
 
     public Iti59Component() {
         super(HPD.Interactions.ITI_59);

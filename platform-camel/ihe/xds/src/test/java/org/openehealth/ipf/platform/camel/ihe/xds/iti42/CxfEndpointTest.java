@@ -23,12 +23,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer;
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -90,7 +90,7 @@ public class CxfEndpointTest {
     public void test() throws Exception {
         runRequestAndExpectFailure();
 
-        JaxWsServiceFactory<XdsAuditDataset> serviceFactory = new XdsServiceFactory<>(
+        JaxWsServiceFactory<XdsAuditDataset> serviceFactory = new JaxWsRequestServiceFactory<>(
                 ITI_42.getWsTransactionConfiguration(), "/iti-42", null, null, null);
         ServerFactoryBean factory = serviceFactory.createServerFactory(MyIti42.class);
         Server serviceServer = factory.create();
@@ -121,7 +121,7 @@ public class CxfEndpointTest {
     }
 
     private Response runRequest() {
-        JaxWsClientFactory clientFactory = new XdsClientFactory(
+        JaxWsClientFactory clientFactory = new JaxWsRequestClientFactory<>(
                 ITI_42.getWsTransactionConfiguration(),
                 "http://localhost:" + port + "/iti-42",
                 null, null, null, null, null);

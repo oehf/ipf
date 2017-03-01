@@ -57,10 +57,10 @@ public abstract class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfigu
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isAudit() ? getComponent().getClientAuditStrategy() : null,
-                getCorrelator(),
                 getCustomInterceptors(),
                 getFeatures(),
-                getProperties());
+                getProperties(),
+                getCorrelator());
     }
 
 

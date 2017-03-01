@@ -170,10 +170,10 @@ public class Hl7v3ContinuationAwareEndpoint
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isManualAudit() ? null : getComponent().getClientAuditStrategy(),
-                null,
                 getCustomInterceptors(),
                 getFeatures(),
-                getProperties());
+                getProperties(),
+                getCorrelator());
     }
 
 

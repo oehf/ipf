@@ -15,10 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomPixAuditor;
-import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor;
-import org.openehealth.ipf.commons.ihe.core.atna.custom.FhirAuditor;
-import org.openehealth.ipf.commons.ihe.core.atna.custom.Hl7v3Auditor;
+import org.openehealth.ipf.commons.ihe.core.atna.custom.*;
 import org.openhealthtools.ihe.atna.auditor.*;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 
@@ -26,7 +23,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Access synchronizer for OHT XDS ATNA Auditor singletons.
+ * Access synchronizer for OHT ATNA Auditor singletons.
  */
 public abstract class AuditorManager {
     private static final Object sync = new Object();
@@ -133,6 +130,12 @@ public abstract class AuditorManager {
     public static XCARespondingGatewayAuditor getXCARespondingGatewayAuditor() {
         synchronized (sync) {
             return XCARespondingGatewayAuditor.getAuditor();
+        }
+    }
+
+    public static HpdAuditor getHpdAuditor() {
+        synchronized (sync) {
+            return HpdAuditor.getAuditor();
         }
     }
 }

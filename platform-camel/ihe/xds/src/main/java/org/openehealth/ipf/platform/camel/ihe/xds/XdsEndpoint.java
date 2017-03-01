@@ -17,12 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.*;
 import org.openehealth.ipf.commons.ihe.xds.XdsInteractionId;
-import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -55,20 +51,20 @@ public abstract class XdsEndpoint<AuditDatasetType extends XdsAuditDataset>
 
     @Override
     public JaxWsClientFactory<AuditDatasetType> getJaxWsClientFactory() {
-        return new XdsClientFactory<>(
+        return new JaxWsRequestClientFactory<AuditDatasetType>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isAudit() ? getClientAuditStrategy() : null,
-                getCorrelator(),
                 getCustomInterceptors(),
                 getFeatures(),
-                getProperties());
+                getProperties(),
+                getCorrelator());
     }
 
 
     @Override
     public JaxWsServiceFactory<AuditDatasetType> getJaxWsServiceFactory() {
-        return new XdsServiceFactory<>(
+        return new JaxWsRequestServiceFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,

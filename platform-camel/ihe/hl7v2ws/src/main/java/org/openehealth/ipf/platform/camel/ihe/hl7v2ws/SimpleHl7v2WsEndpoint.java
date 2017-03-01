@@ -26,9 +26,7 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.*;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
@@ -107,19 +105,20 @@ public abstract class SimpleHl7v2WsEndpoint<
 
     @Override
     public JaxWsClientFactory<AuditDatasetType> getJaxWsClientFactory() {
-        return new JaxWsClientFactory<>(
+        return new JaxWsRequestClientFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 null,
                 getCustomInterceptors(),
                 getFeatures(),
-                getProperties());
+                getProperties(),
+                null);
     }
 
 
     @Override
     public JaxWsServiceFactory<AuditDatasetType> getJaxWsServiceFactory() {
-        return new JaxWsServiceFactory<>(
+        return new JaxWsRequestServiceFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 null,
@@ -129,7 +128,7 @@ public abstract class SimpleHl7v2WsEndpoint<
 
     @Override
     public ComponentType getComponent() {
-        return (ComponentType)super.getComponent();
+        return (ComponentType) super.getComponent();
     }
 
     @Override

@@ -23,6 +23,7 @@ import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.ws.addressing.MAPAggregator;
 import org.apache.cxf.ws.addressing.soap.MAPCodec;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.Cxf3791WorkaroundInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.FixContentTypeOutInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.MustUnderstandDecoratorInterceptor;
@@ -61,6 +62,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
     protected final List<AbstractFeature> features;
     protected final Map<String, Object> properties;
     protected final AuditStrategy<AuditDatasetType> auditStrategy;
+    protected final AsynchronyCorrelator<AuditDatasetType> correlator;
 
     /**
      * Constructs the factory.
@@ -69,6 +71,8 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
      * @param serviceUrl                 the URL of the Web Service.
      * @param auditStrategy              client-side ATNA audit strategy.
      * @param customInterceptors         user-defined custom CXF interceptors.
+     * @param correlator                 optional asynchrony correlator.
+
      */
     public JaxWsClientFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
@@ -76,7 +80,9 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
             AuditStrategy<AuditDatasetType> auditStrategy,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
-            Map<String, Object> properties) {
+            Map<String, Object> properties,
+            AsynchronyCorrelator<AuditDatasetType> correlator)
+    {
         notNull(wsTransactionConfiguration, "wsTransactionConfiguration");
         this.wsTransactionConfiguration = wsTransactionConfiguration;
         this.serviceUrl = serviceUrl;
@@ -84,6 +90,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
         this.customInterceptors = customInterceptors;
         this.features = features;
         this.properties = properties;
+        this.correlator = correlator;
     }
 
     /**

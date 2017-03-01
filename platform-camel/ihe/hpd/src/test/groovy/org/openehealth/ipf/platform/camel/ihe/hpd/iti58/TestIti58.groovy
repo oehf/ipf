@@ -57,7 +57,7 @@ class TestIti58 extends StandardTestContainer {
         BatchRequest request = new BatchRequest(
                 batchRequests: [
                         new SearchRequest(
-                                dn: 'O=HPDTEST1,DC=HPD,C=US',
+                                dn: 'O=HPDTEST1,DC=HPD',
                                 scope: 'wholeSubtree',
                                 derefAliases: 'neverDerefAliases',
                                 filter: new Filter(

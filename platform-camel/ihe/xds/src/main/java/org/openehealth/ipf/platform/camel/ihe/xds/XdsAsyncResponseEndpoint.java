@@ -17,11 +17,11 @@ package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsAsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.XdsInteractionId;
-import org.openehealth.ipf.commons.ihe.xds.core.XdsAsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -60,12 +60,12 @@ public class XdsAsyncResponseEndpoint<AuditDatasetType extends XdsAuditDataset> 
 
     @Override
     public JaxWsServiceFactory<AuditDatasetType> getJaxWsServiceFactory() {
-        return new XdsAsyncResponseServiceFactory<>(
+        return new JaxWsAsyncResponseServiceFactory<>(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
-                getCorrelator(),
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getCorrelator());
     }
 
     @Override

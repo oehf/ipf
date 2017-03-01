@@ -20,6 +20,7 @@ import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.hpd.iti58.Iti58PortType;
+import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59PortType;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
@@ -50,8 +51,8 @@ public class HPD implements IntegrationProfile {
             "hpd-iti58",
             "Provider Information Query",
             true,
-            null, //new Iti18ClientAuditStrategy(),
-            null, //new Iti18ServerAuditStrategy(),
+            null, // audit trail is not defined for ITI-58
+            null, // audit trail is not defined for ITI-58
             new QName("urn:ihe:iti:hpd:2010", "ProviderInformationDirectory_Service"),
             Iti58PortType.class,
             new QName("urn:ihe:iti:hpd:2010", "ProviderInformationDirectory_Binding"),
@@ -66,8 +67,8 @@ public class HPD implements IntegrationProfile {
             "hpd-iti58",
             "Provider Information Feed",
             true,
-            null, //new Iti18ClientAuditStrategy(),
-            null, //new Iti18ServerAuditStrategy(),
+            new Iti59AuditStrategy(false),
+            new Iti59AuditStrategy(true),
             new QName("urn:ihe:iti:hpd:2010", "ProviderInformationDirectory_Service"),
             Iti59PortType.class,
             new QName("urn:ihe:iti:hpd:2010", "ProviderInformationDirectory_Binding"),

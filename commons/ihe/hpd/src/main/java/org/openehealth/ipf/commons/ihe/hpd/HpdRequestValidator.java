@@ -77,7 +77,6 @@ public class HpdRequestValidator {
 
     private void validateSearchRequest(SearchRequest request) {
         Map<String, String> dn = parseLdapAttribute(request.getDn());
-        check(isNotBlank(dn.get("C")), "Missing DN.C");
         check(isNotBlank(dn.get("O")), "Missing DN.O");
         check("HPD".equals(dn.get("DC")), "DN.DC not equal to 'HPD'");
     }

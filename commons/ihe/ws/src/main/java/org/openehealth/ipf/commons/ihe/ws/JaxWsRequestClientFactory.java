@@ -1,11 +1,11 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,57 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core;
+package org.openehealth.ipf.commons.ihe.ws;
 
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * Client factory for XDS and XCA transactions.
- * @author Jens Riemschneide
- * @author Dmytro Rud
+ * Factory for ITI Web Service stubs.
  */
-public class XdsClientFactory<AuditDatasetType extends XdsAuditDataset> extends JaxWsClientFactory<AuditDatasetType> {
-    private final AsynchronyCorrelator<AuditDatasetType> correlator;
-    
-    /**
-     * Constructs the factory.
-     * @param wsTransactionConfiguration
-     *          the info about the web-service.
-     * @param serviceAddress
-     *          the URL of the web-service.
-     * @param auditStrategy
-     *          the audit strategy to use.
-     * @param correlator
-     *          asynchrony correlator.
-     * @param customInterceptors
-     *          user-defined custom CXF interceptors.
-     */
-    public XdsClientFactory(
+public class JaxWsRequestClientFactory<AuditDatasetType extends WsAuditDataset> extends JaxWsClientFactory<AuditDatasetType> {
+
+    public JaxWsRequestClientFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
-            String serviceAddress,
+            String serviceUrl,
             AuditStrategy<AuditDatasetType> auditStrategy,
-            AsynchronyCorrelator<AuditDatasetType> correlator,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
-            Map<String, Object> properties)
+            Map<String, Object> properties,
+            AsynchronyCorrelator<AuditDatasetType> correlator)
     {
-        super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors, features, properties);
-        this.correlator = correlator;
+        super(wsTransactionConfiguration, serviceUrl, auditStrategy, customInterceptors, features, properties, correlator);
     }
 
-    
     @Override
     protected void configureInterceptors(Client client) {
         super.configureInterceptors(client);
@@ -78,7 +58,7 @@ public class XdsClientFactory<AuditDatasetType extends XdsAuditDataset> extends 
                     auditStrategy, correlator, getWsTransactionConfiguration()));
 
             AuditResponseInterceptor<AuditDatasetType> auditInterceptor =
-                new AuditResponseInterceptor<>(auditStrategy, false, correlator, false);
+                    new AuditResponseInterceptor<>(auditStrategy, false, correlator, false);
             client.getInInterceptors().add(auditInterceptor);
             client.getInFaultInterceptors().add(auditInterceptor);
         }
