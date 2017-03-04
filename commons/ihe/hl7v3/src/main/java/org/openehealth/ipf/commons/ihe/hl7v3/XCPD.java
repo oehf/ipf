@@ -32,6 +32,9 @@ import javax.xml.namespace.QName;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.DEFAULT_XSD;
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.GAZELLE_PIXPDQV3_SCHEMATRON;
+
 /**
  * @author Christian Ohr
  * @since 3.2
@@ -55,20 +58,20 @@ public class XCPD implements IntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private static final Hl7v3ValidationProfile iti55RequestValidationProfile = new Hl7v3ValidationProfile(
-            new Row("PRPA_IN201305UV02", Row.DEFAULT_XSD, "/schematron/iti55/PRPA_IN201305UV02.sch.xml")
+    private static final Hl7v3ValidationProfile ITI_55_REQUEST_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("PRPA_IN201305UV02", DEFAULT_XSD, "/schematron/iti55/PRPA_IN201305UV02.sch.xml")
     );
 
-    private static final Hl7v3ValidationProfile iti56RequestValidationProfile = new Hl7v3ValidationProfile(
+    private static final Hl7v3ValidationProfile ITI_56_REQUEST_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
             new Row("PatientLocationQueryRequest", "/schema/IHE/XCPD_PLQ.xsd", null)
     );
 
-    private static final Hl7v3ValidationProfile iti55ResponseValidationProfile = new Hl7v3ValidationProfile(
-            new Row("PRPA_IN201306UV02", Row.DEFAULT_XSD, "/schematron/iti55/PRPA_IN201306UV02.sch.xml"),
-            new Row("MCCI_IN000002UV01", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+    private static final Hl7v3ValidationProfile ITI_55_RESPONSE_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("PRPA_IN201306UV02", DEFAULT_XSD, "/schematron/iti55/PRPA_IN201306UV02.sch.xml"),
+            new Row("MCCI_IN000002UV01", DEFAULT_XSD, GAZELLE_PIXPDQV3_SCHEMATRON)
     );
 
-    private static final Hl7v3ValidationProfile iti56ResponseValidationProfile = new Hl7v3ValidationProfile(
+    private static final Hl7v3ValidationProfile ITI_56_RESPONSE_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
             new Row("PatientLocationQueryResponse", "/schema/IHE/XCPD_PLQ.xsd", null)
     );
 
@@ -88,8 +91,8 @@ public class XCPD implements IntegrationProfile {
             "PRPA_TE201306UV02",
             false,
             true,
-            iti55RequestValidationProfile,
-            iti55ResponseValidationProfile);
+            ITI_55_REQUEST_VALIDATION_PROFILE,
+            ITI_55_RESPONSE_VALIDATION_PROFILE);
 
     private final static Hl7v3WsTransactionConfiguration ITI_55_ASYNC_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "xcpd-iti55-async-response",
@@ -106,8 +109,8 @@ public class XCPD implements IntegrationProfile {
             null,
             false,
             false,
-            iti55RequestValidationProfile,
-            iti55ResponseValidationProfile);
+            ITI_55_REQUEST_VALIDATION_PROFILE,
+            ITI_55_RESPONSE_VALIDATION_PROFILE);
 
     private final static Hl7v3WsTransactionConfiguration ITI_55_DEFERRED_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "xcpd-iti55-deferred-response",
@@ -124,8 +127,8 @@ public class XCPD implements IntegrationProfile {
             null,
             false,
             false,
-            iti55RequestValidationProfile,
-            iti55ResponseValidationProfile);
+            ITI_55_REQUEST_VALIDATION_PROFILE,
+            ITI_55_RESPONSE_VALIDATION_PROFILE);
 
     private final static Hl7v3WsTransactionConfiguration ITI56_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "xcpd-iti56",
@@ -142,8 +145,8 @@ public class XCPD implements IntegrationProfile {
             null,
             true,
             true,
-            iti56RequestValidationProfile,
-            iti56ResponseValidationProfile);
+            ITI_56_REQUEST_VALIDATION_PROFILE,
+            ITI_56_RESPONSE_VALIDATION_PROFILE);
 
     private final static Hl7v3WsTransactionConfiguration ITI_56_ASYNC_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "xcpd-iti56-async-response",
@@ -160,8 +163,7 @@ public class XCPD implements IntegrationProfile {
             null,
             false,
             false,
-            iti56RequestValidationProfile,
-            iti56ResponseValidationProfile);
-
+            ITI_56_REQUEST_VALIDATION_PROFILE,
+            ITI_56_RESPONSE_VALIDATION_PROFILE);
 
 }

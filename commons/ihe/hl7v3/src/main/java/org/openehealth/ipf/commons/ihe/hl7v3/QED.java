@@ -27,6 +27,8 @@ import javax.xml.namespace.QName;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.DEFAULT_XSD;
+
 /**
  * @author Christian Ohr
  * @since 3.2
@@ -46,14 +48,14 @@ public class QED implements IntegrationProfile {
     }
 
 
-    private static final Hl7v3ValidationProfile pcc1RequestValidationProfile = new Hl7v3ValidationProfile(
-            new Row("QUPC_IN043100UV01",        Row.DEFAULT_XSD, null),
-            new Row("QUQI_IN000003UV01",        Row.DEFAULT_XSD, null),
-            new Row("QUQI_IN000003UV01_Cancel", Row.DEFAULT_XSD, null)
+    private static final Hl7v3ValidationProfile PCC_1_REQUEST_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("QUPC_IN043100UV01",        DEFAULT_XSD, null),
+            new Row("QUQI_IN000003UV01",        DEFAULT_XSD, null),
+            new Row("QUQI_IN000003UV01_Cancel", DEFAULT_XSD, null)
     );
-    private static final Hl7v3ValidationProfile pcc1ResponseValidationProfile = new Hl7v3ValidationProfile(
-            new Row("QUPC_IN043200UV01", Row.DEFAULT_XSD, null),
-            new Row("MCCI_IN000002UV01", Row.DEFAULT_XSD, null)
+    private static final Hl7v3ValidationProfile PCC_1_RESPONSE_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("QUPC_IN043200UV01", DEFAULT_XSD, null),
+            new Row("MCCI_IN000002UV01", DEFAULT_XSD, null)
     );
 
     private final static String NS_URI = "urn:ihe:pcc:qed:2007";
@@ -72,8 +74,8 @@ public class QED implements IntegrationProfile {
             "QUPC_IN043200UV01",
             false,
             false,
-            pcc1RequestValidationProfile,
-            pcc1ResponseValidationProfile,
+            PCC_1_REQUEST_VALIDATION_PROFILE,
+            PCC_1_RESPONSE_VALIDATION_PROFILE,
             "QUPC_IN043100UV01",
             "QUPC_IN043200UV01");
 }

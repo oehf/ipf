@@ -20,7 +20,7 @@
 	<sch:ns uri="urn:hl7-org:v3" prefix="hl7" />
 
     <!-- ========================================================================== 
-                  Rules based on Section 3.47.4.2.2.2 of IHE XCPD supplement
+                  Rules based on Section 3.47.4.2.2.2 of IHE ITI TF Volume 2b
          ========================================================================== -->
     <sch:pattern id="patient-constraints-section_3_47_4_2_2_2">
         <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient">
@@ -36,6 +36,8 @@
             <sch:assert test="hl7:subjectOf1/hl7:queryMatchObservation/hl7:value/@xsi:type = 'INT'">
                 this element is constrained to data type 'INT'
             </sch:assert>
+
+            <sch:assert test="hl7:providerOrganization">providerOrganization must be present</sch:assert>
         </sch:rule>
 
         <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient/hl7:patientPerson">
@@ -68,7 +70,31 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- ========================================================================== 
+
+    <!-- ==========================================================================
+                  Rules based on Section O.2.2 of IHE ITI TF Volume 2x
+         ========================================================================== -->
+    <sch:pattern id="patient-constraints-section_O_2_2">
+        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess">
+            <sch:assert test="not(hl7:text)">text must be omitted</sch:assert>
+            <sch:assert test="not(hl7:priorityCode)">priorityCode must be omitted</sch:assert>
+            <sch:assert test="not(hl7:reasonCode)">reasonCode must be omitted</sch:assert>
+            <!--<sch:assert test="not(hl7:reasonOf)">reasonOf must be omitted</sch:assert>-->
+        </sch:rule>
+
+        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject">
+            <!-- "false" is the default value of "contextConductionInd", thus this attribute can be missing -->
+            <sch:assert test="not(@contextConductionInd = 'true')">contextConductionInd must equal to 'false'</sch:assert>
+        </sch:rule>
+
+        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent">
+            <sch:assert test="not(hl7:inFulfillmentOf)">inFulfillmentOf must be omitted</sch:assert>
+            <sch:assert test="not(hl7:definition)">definition must be omitted</sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+
+    <!-- ==========================================================================
                                       ADDITIONAL RULES  
          ========================================================================== -->
     <sch:pattern id="additional">

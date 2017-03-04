@@ -32,6 +32,9 @@ import javax.xml.namespace.QName;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.DEFAULT_XSD;
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.GAZELLE_PIXPDQV3_SCHEMATRON;
+
 /**
  * @author Christian Ohr
  * @since 3.2
@@ -56,30 +59,30 @@ public class PIXV3 implements IntegrationProfile {
     private static final String NS_URI_PIX = "urn:ihe:iti:pixv3:2007";
     private static final String NS_URI_XDS = "urn:ihe:iti:xds-b:2007";
 
-    private static final Hl7v3ValidationProfile iti44RequestValidationProfile = new Hl7v3ValidationProfile(
-            new Row("PRPA_IN201301UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON),
-            new Row("PRPA_IN201302UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON),
-            new Row("PRPA_IN201304UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+    private static final Hl7v3ValidationProfile ITI_44_REQUEST_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("PRPA_IN201301UV02", DEFAULT_XSD, GAZELLE_PIXPDQV3_SCHEMATRON),
+            new Row("PRPA_IN201302UV02", DEFAULT_XSD, GAZELLE_PIXPDQV3_SCHEMATRON),
+            new Row("PRPA_IN201304UV02", DEFAULT_XSD, GAZELLE_PIXPDQV3_SCHEMATRON)
     );
 
-    private static final Hl7v3ValidationProfile iti44ResponseValidationProfile = new Hl7v3ValidationProfile(
-            new Row("MCCI_IN000002UV01", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+    private static final Hl7v3ValidationProfile ITI_44_RESPONSE_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("MCCI_IN000002UV01", DEFAULT_XSD, GAZELLE_PIXPDQV3_SCHEMATRON)
     );
 
-    private static final Hl7v3ValidationProfile iti45RequestValidationProfile = new Hl7v3ValidationProfile(
-            new Row("PRPA_IN201309UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+    private static final Hl7v3ValidationProfile ITI_45_REQUEST_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("PRPA_IN201309UV02", DEFAULT_XSD, GAZELLE_PIXPDQV3_SCHEMATRON)
     );
 
-    private static final Hl7v3ValidationProfile iti45ResponseValidationProfile = new Hl7v3ValidationProfile(
-            new Row("PRPA_IN201310UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+    private static final Hl7v3ValidationProfile ITI_45_RESPONSE_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("PRPA_IN201310UV02", DEFAULT_XSD, GAZELLE_PIXPDQV3_SCHEMATRON)
     );
 
-    private static final Hl7v3ValidationProfile iti46RequestValidationProfile = new Hl7v3ValidationProfile(
-            new Row("PRPA_IN201302UV02", Row.DEFAULT_XSD, null)
+    private static final Hl7v3ValidationProfile ITI_46_REQUEST_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("PRPA_IN201302UV02", DEFAULT_XSD, null)
     );
 
-    private static final Hl7v3ValidationProfile iti46ResponseValidationProfile = new Hl7v3ValidationProfile(
-            new Row("MCCI_IN000002UV01", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+    private static final Hl7v3ValidationProfile ITI_46_RESPONSE_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("MCCI_IN000002UV01", DEFAULT_XSD, GAZELLE_PIXPDQV3_SCHEMATRON)
     );
 
     private static final Hl7v3WsTransactionConfiguration ITI_44_PIX_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
@@ -97,8 +100,8 @@ public class PIXV3 implements IntegrationProfile {
             null,
             false,
             false,
-            iti44RequestValidationProfile,
-            iti44ResponseValidationProfile);
+            ITI_44_REQUEST_VALIDATION_PROFILE,
+            ITI_44_RESPONSE_VALIDATION_PROFILE);
 
     private final static Hl7v3WsTransactionConfiguration ITI_44_XDS_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "xds-iti44",
@@ -115,8 +118,8 @@ public class PIXV3 implements IntegrationProfile {
             null,
             false,
             false,
-            iti44RequestValidationProfile,
-            iti44ResponseValidationProfile);
+            ITI_44_REQUEST_VALIDATION_PROFILE,
+            ITI_44_RESPONSE_VALIDATION_PROFILE);
 
     private static final Hl7v3WsTransactionConfiguration ITI_45_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "pixv3-iti45",
@@ -133,8 +136,8 @@ public class PIXV3 implements IntegrationProfile {
             "PRPA_TE201310UV02",
             false,
             false,
-            iti45RequestValidationProfile,
-            iti45ResponseValidationProfile);
+            ITI_45_REQUEST_VALIDATION_PROFILE,
+            ITI_45_RESPONSE_VALIDATION_PROFILE);
 
     private final static Hl7v3WsTransactionConfiguration ITI_46_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             "pixv3-iti46",
@@ -151,8 +154,7 @@ public class PIXV3 implements IntegrationProfile {
             null,
             false,
             false,
-            iti46RequestValidationProfile,
-            iti46ResponseValidationProfile);
-
+            ITI_46_REQUEST_VALIDATION_PROFILE,
+            ITI_46_RESPONSE_VALIDATION_PROFILE);
 
 }

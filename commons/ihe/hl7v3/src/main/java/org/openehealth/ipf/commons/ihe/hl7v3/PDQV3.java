@@ -27,6 +27,9 @@ import javax.xml.namespace.QName;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.DEFAULT_XSD;
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile.GAZELLE_PIXPDQV3_SCHEMATRON;
+
 /**
  * @author Christian Ohr
  * @since 3.2
@@ -45,15 +48,15 @@ public class PDQV3 implements IntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private static final Hl7v3ValidationProfile iti47RequestValidationProfile = new Hl7v3ValidationProfile(
-            new Row("PRPA_IN201305UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON),
-            new Row("QUQI_IN000003UV01", Row.DEFAULT_XSD, null),
-            new Row("QUQI_IN000003UV01_Cancel", Row.DEFAULT_XSD, null)
+    private static final Hl7v3ValidationProfile ITI_47_REQUEST_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("PRPA_IN201305UV02", DEFAULT_XSD, "/schematron/iti47/PRPA_IN201305UV02.sch.xml"),
+            new Row("QUQI_IN000003UV01", DEFAULT_XSD, null),
+            new Row("QUQI_IN000003UV01_Cancel", DEFAULT_XSD, null)
     );
 
-    private static final Hl7v3ValidationProfile iti47ResponseValidationProfile = new Hl7v3ValidationProfile(
-            new Row("PRPA_IN201306UV02", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON),
-            new Row("MCCI_IN000002UV01", Row.DEFAULT_XSD, Row.GAZELLE_PIXPDQV3_SCHEMATRON)
+    private static final Hl7v3ValidationProfile ITI_47_RESPONSE_VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            new Row("PRPA_IN201306UV02", DEFAULT_XSD, "/schematron/iti47/PRPA_IN201306UV02.sch.xml"),
+            new Row("MCCI_IN000002UV01", DEFAULT_XSD, GAZELLE_PIXPDQV3_SCHEMATRON)
     );
 
     private final static String NS_URI = "urn:ihe:iti:pdqv3:2007";
@@ -72,11 +75,9 @@ public class PDQV3 implements IntegrationProfile {
             "PRPA_TE201306UV02",
             false,
             false,
-            iti47RequestValidationProfile,
-            iti47ResponseValidationProfile,
+            ITI_47_REQUEST_VALIDATION_PROFILE,
+            ITI_47_RESPONSE_VALIDATION_PROFILE,
             "PRPA_IN201305UV02",
             "PRPA_IN201306UV02");
-
-
 
 }

@@ -27,11 +27,11 @@ import java.util.Map;
  */
 public class Hl7v3ValidationProfile implements CombinedXmlValidationProfile {
 
+    public static final String DEFAULT_XSD = "";
+    public static final String GAZELLE_PIXPDQV3_SCHEMATRON = "/schematron/gazelle-pixpdqv3.sch.xml";
+
     static class Row {
         private static final String HL7V3_SCHEMAS_PATH = "/schema/HL7V3/NE2008/multicacheschemas/";
-
-        public static final String DEFAULT_XSD = "";
-        public static final String GAZELLE_PIXPDQV3_SCHEMATRON = "/schematron/gazelle-pixpdqv3.sch.xml";
 
         @Getter final String rootElementName;
         @Getter final String xsdPath;
@@ -82,7 +82,7 @@ public class Hl7v3ValidationProfile implements CombinedXmlValidationProfile {
     @Override
     public Map<String, Object> getCustomSchematronParameters(String rootElementName) {
         String phase = map.get(rootElementName).getSchematronPhase();
-        return (phase != null) ? Collections.<String, Object>singletonMap("phase", phase) : null;
+        return (phase != null) ? Collections.singletonMap("phase", phase) : null;
     }
 
 }
