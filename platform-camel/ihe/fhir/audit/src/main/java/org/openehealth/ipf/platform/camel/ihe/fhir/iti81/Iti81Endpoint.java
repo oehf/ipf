@@ -32,6 +32,6 @@ public class Iti81Endpoint extends FhirEndpoint<FhirQueryAuditDataset, Iti81Comp
 
     @Override
     protected String createEndpointUri() {
-        return "pdqm-iti81:" + "not-implemented yet";
+        return "atna-iti81:" + "not-implemented yet";
     }
 }

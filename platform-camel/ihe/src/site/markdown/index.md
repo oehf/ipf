@@ -43,6 +43,8 @@ IHE Profiles are grouped by their underlying technical foundation, particularly 
 | ipf-platform-camel-ihe-hl7v3         | [ITI-44], [ITI-45], [ITI-46], [ITI-47], [ITI-55], [ITI-56], [PCC-1]
 | ipf-platform-camel-ihe-hl7v2ws       | [PCD-01]
 | ipf-platform-camel-ihe-fhir-pixpdq   | [ITI-78], [ITI-83]
+| ipf-platform-camel-ihe-fhir-audit    | [ITI-81]
+| ipf-platform-camel-ihe-hpd           | [ITI-58], [ITI-59]
 
 ### Example
 
@@ -127,6 +129,8 @@ A special case is the MLLP dispatcher component which allows to accept requests 
 * [ITI-55] Cross-Gateway Patient Discovery
 * [ITI-56] Cross-Gateway Patient Location Query
 * [ITI-57] Update Document Set
+* [ITI-58] Provider Information Query
+* [ITI-59] Provider Information Feed
 * [ITI-61] Register On-Demand Document Entry
 * [ITI-62] Delete Document Set
 * [ITI-63] Cross-Gateway Fetch
@@ -182,6 +186,8 @@ required dependencies, usage and parameters.
 | [ITI-55]     | XCPD          | Cross-Gateway Patient Discovery      | `xcpd-iti55`            | SOAP/HTTP(S)  | HL7v3
 | [ITI-56]     | XCPD          | Cross-Gateway Patient Location Query | `xcpd-iti56`            | SOAP/HTTP(S)  | HL7v3
 | [ITI-57]     | XDS.b         | Update Document Set                  | `xds-iti57`             | SOAP/HTTP(S)  | ebXML
+| [ITI-58]     | HPD           | Provider Information Query           | `hpd-iti58`             | SOAP/HTTP(S)  | DSMLv2
+| [ITI-59]     | HPD           | Provider Information Feed            | `hpd-iti59`             | SOAP/HTTP(S)  | DSMLv2
 | [ITI-61]     | XDS.b         | Register On-Demand Document Entry    | `xds-iti61`             | SOAP/HTTP(S)  | ebXML
 | [ITI-62]     | XDS.b         | Delete Document Set                  | `xds-iti62`             | SOAP/HTTP(S)  | ebXML
 | [ITI-63]     | XCF           | Cross-Gateway Fetch                  | `xcf-iti63`             | SOAP/HTTP(S)  | ebXML
@@ -197,7 +203,7 @@ required dependencies, usage and parameters.
 | [RAD-75]     | XCA-I.b       | Cross-Gateway Retrieve Imaging Document Set | `xcai-rad75`     | SOAP/HTTP(S)  | ebXML
 | [PCC-1]      | QED           | Query for Existing Data (QED)        | `qed-pcc1`              | SOAP/HTTP(S)  | HL7v3
 | [PCD-01], Continua WAN | PCD, Continua | Communicate Patient Care Device (PCD) Data | `pcd-pcd01` | SOAP/HTTP(S) | HL7v2
-| [All] MLLP-based | n/a         | Accept requests for multiple MLLP-based transactions through a single TCP port | `mllp-dispatch` | MLLP(S) | HL7 v2 |
+| [All] MLLP-based | n/a         | Accept requests for multiple MLLP-based transactions through a single TCP port | `mllp-dispatch` | MLLP(S) | HL7v2 |
 | [Custom] MLLP-based | n/a      | Accept requests for custom MLLP-based transactions | `mllp` | MLLP(S) | HL7v2 |
 
 [ITI-8]: ../ipf-platform-camel-ihe-mllp/iti8.html
@@ -225,6 +231,8 @@ required dependencies, usage and parameters.
 [ITI-55]: ../ipf-platform-camel-ihe-hl7v3/iti55.html
 [ITI-56]: ../ipf-platform-camel-ihe-hl7v3/iti56.html
 [ITI-57]: ../ipf-platform-camel-ihe-xds/iti57.html
+[ITI-58]: ../ipf-platform-camel-ihe-hpd/iti58.html
+[ITI-59]: ../ipf-platform-camel-ihe-hpd/iti59.html
 [ITI-61]: ../ipf-platform-camel-ihe-xds/iti61.html
 [ITI-62]: ../ipf-platform-camel-ihe-xds/iti62.html
 [ITI-63]: ../ipf-platform-camel-ihe-xds/iti63.html

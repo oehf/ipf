@@ -75,7 +75,7 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
                         trimToNull(modifyRequest.getRequestID()),
                         RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
                         modifyRequest.getModification().stream()
-                                .filter(x -> ATTR_NAME.equals(x.getName()))
+                                .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
                                 .flatMap(x -> x.getValue().stream())
                                 .collect(Collectors.toSet()));
 

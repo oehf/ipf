@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.2.0" date="TBD" description="IPF 3.2.0">
+            <action dev="unixoid" issue="45" type="feature">
+                Early support for the IHE HPD profile.
+            </action>
             <action dev="ohr" issue="144" type="fix">
                 Fix invalid HL7v2 DSL in Iti9AuditStrategyUtils. Thanks to Seunghun Jun for reporting.
             </action>
