@@ -2,7 +2,7 @@
 ## `xcpd-iti56` component
 
 The xcpd-iti56 component provides interfaces for actors of the *Cross-Gateway Patient Location Query* IHE transaction (ITI-56),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.56](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.56](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

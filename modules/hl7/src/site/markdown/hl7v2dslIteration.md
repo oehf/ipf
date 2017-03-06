@@ -68,5 +68,5 @@ The `find`/`findAll` methods are particularly useful together with [smart naviga
     patientName = msg.findPID()[5][1].value  // equivalent, shorter, and group-structure-agnostic
 ```
 
-[Groovy]: http://www.groovy-lang.org
+[Groovy]: https://www.groovy-lang.org
 [hl7v2dslSmart]: hl7v2dslSmartNavigation.html

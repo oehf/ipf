@@ -3,8 +3,8 @@
 With the custom route builders it is possible to:
 
 * extend the base application functionality by adding additional route builders to the existing camel context
-* extend the existing route builder functionality by injecting additional [interceptors](http://camel.apache.org/intercept.html) to this route builder
-* extend the existing route builder exception handling by injecting additional [exception handlers](http://camel.apache.org/exception-clause.html) to this route builder
+* extend the existing route builder functionality by injecting additional [interceptors](https://camel.apache.org/intercept.html) to this route builder
+* extend the existing route builder exception handling by injecting additional [exception handlers](https://camel.apache.org/exception-clause.html) to this route builder
 
 The abstract class [`org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilder`](../apidocs/org/openehealth/ipf/platform/camel/core/config/CustomRouteBuilder.html)  must be extended by all your
 custom route builders (also the ones in the base application). If the `intercepted` property is set, it is assumed
@@ -64,7 +64,7 @@ And the corresponding Spring application context shown below. Note that the cust
 
  ```
 
-A custom [interceptor](http://camel.apache.org/intercept.html) is defined in separate `CustomRouteBuilder` and extends
+A custom [interceptor](https://camel.apache.org/intercept.html) is defined in separate `CustomRouteBuilder` and extends
 the functionality of the `BaseRoute` by intercepting the inputs from the `'seda:input'` endpoint:
 
 ```groovy

@@ -2,7 +2,7 @@
 ## `pdqv3-iti47` component
 
 The pdqv3-iti47 component provides interfaces for actors of the *Patient Demographics Query v3* IHE transaction (ITI-47),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.47](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.47](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

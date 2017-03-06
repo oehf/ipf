@@ -2,7 +2,7 @@
 ## `pixv3-iti46` component
 
 The pixv3-iti46 component provides interfaces for actors of the *Patient Identity Update Notification v3* IHE transaction (ITI-46),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.46](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.46](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

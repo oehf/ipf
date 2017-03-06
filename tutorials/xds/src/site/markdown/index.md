@@ -272,7 +272,7 @@ Lets look at some typical use cases that require access to the meta classes.
 
 The next code snippet shows the dispatching of an ITI-18 message based on the stored query type.
 
-This uses [content based routing](http://camel.apache.org/content-based-router.html) via `choice()` to call sub routes
+This uses [content based routing](https://camel.apache.org/content-based-router.html) via `choice()` to call sub routes
 that perform the corresponding query logic. The `queryType` method is a simple shortcut to get the query type property from the request message.
 
 If a non-supported query type is found an exception is thrown using the `fail` processor.

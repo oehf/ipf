@@ -1,11 +1,11 @@
 ## Performance Monitoring
 
-Apache Camel provides performance monitoring out-of-the-box, by their generic [JMX support](http://camel.apache.org/camel-jmx.html)
-and by a dedicated [camel-metrics](http://camel.apache.org/metrics-component.html) component.
+Apache Camel provides performance monitoring out-of-the-box, by their generic [JMX support](https://camel.apache.org/camel-jmx.html)
+and by a dedicated [camel-metrics](https://camel.apache.org/metrics-component.html) component.
 
 The following example briefly describes how to set up performance monitoring for a IPF consumer route.
 
-Simply add a [Route Policy](http://camel.apache.org/routepolicy.html) bean for each route which exposes route utilization statistics.
+Simply add a [Route Policy](https://camel.apache.org/routepolicy.html) bean for each route which exposes route utilization statistics.
 You can also define a `MetricsRoutePolicyFactory` for monitoring *all* routes.
 
 ```xml

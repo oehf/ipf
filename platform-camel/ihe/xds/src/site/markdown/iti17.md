@@ -2,7 +2,7 @@
 ## `xds-iti17` component
 
 The xds-iti17 component provides interfaces for actors of the XDS.a *Retrieve Document* IHE transaction (ITI-17),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.17](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.17]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
 
 As opposed to the other transactions from the XDS profile, ITI-17 uses "pure" HTTP GET communication instead of Web Services.
 

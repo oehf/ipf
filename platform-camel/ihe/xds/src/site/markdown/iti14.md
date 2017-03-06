@@ -2,7 +2,7 @@
 ## `xds-iti14` component
 
 The xds-iti14 component provides interfaces for actors of the *Register Document Set* IHE transaction (ITI-14),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.14](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.14](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
 
 ### Actors
 

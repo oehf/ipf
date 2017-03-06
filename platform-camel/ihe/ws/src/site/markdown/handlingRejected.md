@@ -32,7 +32,7 @@ and a HL7v2-over-WS specific [`AbstractHl7v2WsRejectionHandlingStrategy`](../api
 the given interaction (represented by a CXF exchange) can be considered as failed.
 
 On every message rejection, the provided strategy instance will receive a
-[CXF exchange](http://cxf.apache.org/javadoc/latest/org/apache/cxf/message/Exchange.html) containing the request SOAP message
+[CXF exchange](https://cxf.apache.org/javadoc/latest/org/apache/cxf/message/Exchange.html) containing the request SOAP message
 in various formats, the automatically generated response message (SOAP fault or HL7v2 NAK), and the whole context information:
 
 ![Message Rejection](images/rejection-after.png)

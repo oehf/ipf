@@ -44,4 +44,4 @@ The interceptors can now be referenced in a Web Service-based IHE endpoint:
         "&outInterceptors=#renderingInterceptor, #securityInterceptor");
 ```
 
-[CXF interceptors]: http://cxf.apache.org/docs/interceptors.html
+[CXF interceptors]: https://cxf.apache.org/docs/interceptors.html

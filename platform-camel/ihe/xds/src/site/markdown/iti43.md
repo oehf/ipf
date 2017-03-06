@@ -2,7 +2,7 @@
 ## `xds-iti43` component
 
 The xds-iti43 component provides interfaces for actors of the *Retrieve Document Set.b* IHE transaction (ITI-43),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.43](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.43]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 This component also provides support for the On-Demand XDS Documents option described in the corresponding
 [IHE ITI Supplement](http://www.ihe.net/Technical_Framework/upload/IHE_ITI_Suppl_On_Demand_Documents_Rev1-2_TI_2011-08-19.pdf).
@@ -82,10 +82,10 @@ This is an example on how to use the component on the consumer side:
 
 This transaction sends document content as part of its request or response messages. In practice such messages can become
 quite large. To allow for memory-efficient streaming of the document content, the aforementioned components rely on
-[Apache CXF](http://cxf.apache.org/) support for binary data.
+[Apache CXF](https://cxf.apache.org/) support for binary data.
 
 CXF streams the content on disk and then provides a `DataHandler` to access the file.
-Furthermore, CXF offers some [environment properties](http://cxf.apache.org/docs/security.html#Security-Largedatastreamcaching)
+Furthermore, CXF offers some [environment properties](https://cxf.apache.org/docs/security.html#Security-Largedatastreamcaching)
 which can be used to configure this content caching.
 
 

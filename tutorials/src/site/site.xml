@@ -46,7 +46,7 @@
             <theme>default</theme>
             <highlightJs>true</highlightJs>
             <highlightJsTheme>github</highlightJsTheme>
-            <absoluteResourceURL>http://oehf.github.io/ipf/</absoluteResourceURL>
+            <absoluteResourceURL>/</absoluteResourceURL>
             <brand>
                 <!-- Brand text in top-left part of the site -->
                 <name>
@@ -129,8 +129,8 @@
         </head>
 
         <links>
-            <item name="Download" href="http://github.com/oehf/ipf" />
-            <item name="GitHub project" href="http://github.com/oehf/ipf" />
+            <item name="Download" href="https://github.com/oehf/ipf" />
+            <item name="GitHub project" href="https://github.com/oehf/ipf" />
         </links>
 
         <breadcrumbs>
@@ -139,7 +139,7 @@
 
         <menu name="Main" inherit="top">
             <item name="Home" href="./" />
-            <item name="GitHub project" href="http://github.com/oehf/ipf/" />
+            <item name="GitHub project" href="https://github.com/oehf/ipf/" />
             <item name="Release notes" href="release-notes.html" />
         </menu>
         <menu name="Download" inherit="top">
@@ -161,8 +161,8 @@
         </menu>
         <menu name="Development" inherit="bottom">
             <item name="Development" href="development.html" />
-            <item name="Issues" href="http://github.com/oehf/ipf/issues/" />
-            <item name="Fork on GitHub" href="http://github.com/oehf/ipf/" />
+            <item name="Issues" href="https://github.com/oehf/ipf/issues/" />
+            <item name="Fork on GitHub" href="https://github.com/oehf/ipf/" />
         </menu>
         <menu name="Maven documentation" ref="reports" inherit="bottom"/>
     </body>

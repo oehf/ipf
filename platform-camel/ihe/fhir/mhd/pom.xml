@@ -9,7 +9,7 @@
 
     <artifactId>ipf-platform-camel-ihe-fhir-mhd</artifactId>
     <name>ipf-platform-camel-ihe-fhir-mhd</name>
-    <description>FHIR Restful IHE components for Apache Camel</description>
+    <description>Apache Camel components for MHD transactions</description>
     <url>${site.url}/${project.artifactId}</url>
 
     <properties>

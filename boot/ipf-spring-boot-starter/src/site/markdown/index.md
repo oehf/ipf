@@ -22,7 +22,7 @@ Dependencies on the IPF starter modules are established through regular Maven de
     </dependency>
 ```
 
-Next to `ipf-spring-boot-starter`, there available starter modules are:
+Apart from `ipf-spring-boot-starter`, the available starter modules are:
 
 | Starter module                                                               | Purpose |
 |------------------------------------------------------------------------------|------------------------------
@@ -32,7 +32,7 @@ Next to `ipf-spring-boot-starter`, there available starter modules are:
 | [ipf-xds-spring-boot-starter](../ipf-xds-spring-boot-starter/index.html)     | for XDS/SOAP-based IHE transactions
 | [ipf-fhir-spring-boot-starter](../ipf-fhir-spring-boot-starter/index.html)   | for FHIR/REST-based IHE transactions
 
-All other IPF starter modules transitively depend on `ipf-spring-boot-starter`, so there is no need to explicitly
+These IPF starter modules transitively depend on `ipf-spring-boot-starter`, so there is no need to explicitly
 depend on this module.
 
 `ipf-spring-boot-starter` auto-configures `org.openehealth.ipf.commons.map.SpringBidiMappingService` and provides

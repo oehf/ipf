@@ -114,8 +114,8 @@ IPF does not change or extend the [HAPI] on how to parse or render HL7 message.
 
 
 [HAPI]: http://hl7api.sourceforge.net
-[Groovy]: http://www.groovy-lang.org
-[Groovy extension module]: http://www.groovy-lang.org/metaprogramming.html#_extension_modules
+[Groovy]: https://www.groovy-lang.org
+[Groovy extension module]: https://www.groovy-lang.org/metaprogramming.html#_extension_modules
 [Terser]: http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/util/Terser.html
 [hl7v2dslStructures]: hl7v2dslStructures.html
 [hl7v2dslFields]: hl7v2dslFields.html

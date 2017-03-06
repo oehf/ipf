@@ -2,7 +2,7 @@
 ## `xds-iti18` component
 
 The xds-iti18 component provides interfaces for actors of the *Registry Stored Query* IHE transaction (ITI-18),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.18](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.18]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
 
 ### Actors
 

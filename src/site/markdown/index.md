@@ -7,16 +7,20 @@ in Integrating the Healthcare Enterprise ([IHE][ihe]) profiles.
 
 IPF can be easily embedded into any Java application and additionally supports deployments inside OSGi environments.
 
-IPF is built upon and extends the [Apache Camel](http://camel.apache.org) routing and mediation engine. It has an application programming layer
-based on the [Groovy](http://www.groovy-lang.org) programming language and comes with comprehensive support for message processing and connecting
+IPF is built upon and extends the [Apache Camel](https://camel.apache.org) routing and mediation engine. It has an application programming layer
+based on the [Groovy](https://www.groovy-lang.org) programming language and comes with comprehensive support for message processing and connecting
 systems in the eHealth domain. IPF provides domain-specific languages (DSLs) for implementing
-[Enterprise Integration Patterns](http://www.enterpriseintegrationpatterns.com/)
+[Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/)
 in general-purpose as well as healthcare-specific integration solutions.
 
+## What's new
 
-## Use it
+See [the list of fixed Github issues](https://github.com/oehf/ipf/milestone/6?closed=1) for an overview.
+We also have some more detailed [Release Notes](changes-report.html).
 
-IPF uses [Maven](http://maven.apache.org) as build tool.
+## Usage
+
+IPF uses [Maven](https://maven.apache.org) as build tool.
 Depending on your project needs you might want to define dependencies to various IPF artifacts. For example,
 the following statements will include all dependencies needed to work with IPF interfaces for MLLP-based
 HL7v2 [IHE][ihe] transactions:
@@ -97,6 +101,19 @@ IPF is prepared to run in OSGi environments as well:
 | [OSGi Support]                                  | Enables the deployment of IPF modules (bundles) to OSGi platforms. IPF service bundles register platform services at the OSGi service registry for consumption by IPF applications
 
 
+
+## Deprecations
+
+IPF 3.2 deprecates the modules listed below. They will likely be removed from the main IPF project in the
+ next major release.
+
+ * `ipf-archetypes`
+ * `ipf-assembly`
+ * `ipf-commons-flow` and `ipf-platform-camel-flow`
+ * `ipf-modules-hl7-dsl` (note that the HL7 DSL is part of `ipf-modules-hl7`)
+ * `ipf-platform-camel-core-legacy`
+ * `ipf-osgi` (i.e. all OSGi support)
+
 ## Tutorials and Examples
 
 | Tutorial                                        | Description
@@ -133,10 +150,10 @@ Git repository on [GitHub][ipf-github] and provide some good pull requests!
 IPF code is Open Source and licensed under [Apache license][apache-license].
 
 
-[apache-license]: http://www.apache.org/licenses/LICENSE-2.0
+[apache-license]: https://www.apache.org/licenses/LICENSE-2.0
 [development]: development.html
-[ipf-github]: http://github.com/oehf/ipf
-[ihe]: http://www.ihe.net
+[ipf-github]: https://github.com/oehf/ipf
+[ihe]: https://www.ihe.net
 [Support for eHealth integration profiles]: ipf-platform-camel-ihe/index.html
 [HL7 Message processing]: ipf-modules-hl7/index.html
 [HL7 Message processing Camel routes]: ipf-platform-camel-hl7/index.html
@@ -150,6 +167,7 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [OSGi Support]: osgi/index.html
 [Migration Instructions]: migration.html
 [3.1 Update Instructions]: migration-3.1.html
+[3.2 Update Instructions]: migration-3.2.html
 [Recoverability]: recoverability.html
 [Performance]: performance.html
 [HL7 Support tutorial]: ipf-tutorials-hl7/index.html

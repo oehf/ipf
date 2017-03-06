@@ -2,7 +2,7 @@
 ## `mhd-iti67` component
 
 The mhd-iti67 component provides interfaces for actors of the *Find Document References* IHE transaction (ITI-67),
-which is described in the [MHD Supplement](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_MHD.pdf).
+which is described in the [MHD Supplement](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_MHD.pdf).
 
 ### Actors
 

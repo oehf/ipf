@@ -43,7 +43,7 @@ infrastructure is a plain `CamelContext`:
 ```
 
 The other context files of the example deal with setting up the ATNA details, optional interceptors and
-[CXF conduit](http://cxf.apache.org/docs/client-http-transport-including-ssl-support.html) information to attach security
+[CXF conduit](https://cxf.apache.org/docs/client-http-transport-including-ssl-support.html) information to attach security
 aspects to the web service requests.
 
 

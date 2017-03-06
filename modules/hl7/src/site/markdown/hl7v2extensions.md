@@ -43,8 +43,8 @@ Details are described [here][hl7v2mapping].
 
 
 [HAPI]: http://hl7api.sourceforge.net
-[Groovy]: http://www.groovy-lang.org
-[Groovy extension module]: http://www.groovy-lang.org/metaprogramming.html#_extension_modules
+[Groovy]: https://www.groovy-lang.org
+[Groovy extension module]: https://www.groovy-lang.org/metaprogramming.html#_extension_modules
 [HL7v2 DSL]: hl7v2dsl.html
 [hl7v2cmcf]: hl7v2cmcf.html
 [hl7v2creating]: hl7v2creating.html

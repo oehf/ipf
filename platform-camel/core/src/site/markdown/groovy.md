@@ -30,7 +30,7 @@ To include [camel-groovy], add the following dependency to the `pom.xml` file:
     </dependency>
 ```
 
-Now it is possible to use [Groovy closures](http://www.groovy-lang.org/closures.html) as argument to Camel processors,
+Now it is possible to use [Groovy closures](https://www.groovy-lang.org/closures.html) as argument to Camel processors,
 filters, transformers, etc.
 
 Some examples:
@@ -58,4 +58,4 @@ Some examples:
         }
 ```
 
-[camel-groovy]: http://camel.apache.org/groovy-dsl.html
+[camel-groovy]: https://camel.apache.org/groovy-dsl.html

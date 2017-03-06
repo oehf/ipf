@@ -2,7 +2,7 @@
 ## `pcd-pcd01` component
 
 The pcd-pcd01 component provides interfaces for actors of the *Communicate Patient Care Device Data* IHE transaction (PCD-01),
-which is described in the [IHE Patient Care Device Technical Framework, Volume 2, Section 3](http://www.ihe.net/Technical_Framework/upload/IHE_PCD_TF_Vol2.pdf).
+which is described in the [IHE Patient Care Device Technical Framework, Volume 2, Section 3](https://www.ihe.net/Technical_Framework/upload/IHE_PCD_TF_Vol2.pdf).
 
 ### Actors
 

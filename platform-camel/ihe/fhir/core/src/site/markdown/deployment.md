@@ -64,7 +64,7 @@ The following servlet init parameters are supported:
 
 A special case is the [ITI-68](../ipf-platform-camel-ihe-fhir-mhd/iti68.html) transaction. This is no FHIR
 transaction as such but just a HTTP(S) download. Therefore, instead of being routed over the `FhirServlet`
-this transaction is served by a `CamelServlet` as provided by Camel's [Servlet component](http://camel.apache.org/servlet.html):
+this transaction is served by a `CamelServlet` as provided by Camel's [Servlet component](https://camel.apache.org/servlet.html):
 
 ```
 

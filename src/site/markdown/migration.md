@@ -52,7 +52,7 @@ With IPF 3, the `ipf-modules-hl7dsl` module and all contained classes have been 
 Instead of using the adapter classes around the regular [HAPI] model classes
 (e.g. `org.openehealth.ipf.modules.hl7dsl.MessageAdapter` around `ca.uhn.hl7v2.model.Message` ), the DSL can now be
 applied directly on the HAPI classes. This has been achieved by including the DSML into the Groovy
-[extension module](http://www.groovy-lang.org/metaprogramming.html#_extension_modules) `ipf-modules-hl7`.
+[extension module](https://www.groovy-lang.org/metaprogramming.html#_extension_modules) `ipf-modules-hl7`.
 
 Due to this change, the HL7v2 DSL has undergone some minor changes:
 
@@ -166,4 +166,4 @@ so we strongly recommend to migrate the respective parts of your routes.
 
 
 [HAPI]: http://hl7api.sourceforge.net
-[Gazelle]: http://http//gazelle.ihe.net/
+[Gazelle]: http://gazelle.ihe.net/

@@ -53,4 +53,4 @@ In case you use the IHE MLLP components of IPF, the required HL7 libraries are t
 [HL7v2 DSL]: hl7v2dsl.html
 [HL7v2 API extensions]: hl7v2extensions.html
 [HL7v2 Validation extensions]: hl7v2validation.html
-[camel-hl7]: http://camel.apache.org/hl7.html
+[camel-hl7]: https://camel.apache.org/hl7.html

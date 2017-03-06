@@ -2,7 +2,7 @@
 ## `xds-iti16` component
 
 The xds-iti16 component provides interfaces for actors of the *Query Registry* IHE transaction (ITI-16),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.16](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.16]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
 
 ### Actors
 

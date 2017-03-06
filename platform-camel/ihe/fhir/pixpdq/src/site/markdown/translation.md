@@ -260,4 +260,4 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
 [Mapping Service]: ../ipf-commons-map/index.html
 [NamingSystem resources]: https://www.hl7.org/fhir/namingsystem.html
 
-[IHE]: http://www.ihe.net
+[IHE]: https://www.ihe.net

@@ -35,4 +35,4 @@ explicitly depend on `ipf-atna-spring-boot-starter`.
 | `audit.sender-class`         | usually determined by `ipf.atna.audit.repository-transport` | ATNA sender implementation
 
 
-[Spring Boot]: http://projects.spring.io/spring-boot/
+[Spring Boot]: https://projects.spring.io/spring-boot/

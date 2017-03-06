@@ -45,5 +45,5 @@ The character set name set up for the HL7 codec factory will be automatically
 * used in all data transformation activities
 
 
-[camel-mina2]: http://camel.apache.org/mina2.html
-[camel-hl7]: http://camel.apache.org/hl7.html
+[camel-mina2]: https://camel.apache.org/mina2.html
+[camel-hl7]: https://camel.apache.org/hl7.html

@@ -49,7 +49,7 @@ HL7 v2 messages can be validated in routes with the `verify().hl7()` extension. 
 predicate of Camel in one important aspect:
 
 The Camel predicate can be used for filters or validators, however, by design it just returns `true` or `false`, and the
-resulting [`PredicateValidationException`](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/processor/validation/PredicateValidationException.html)
+resulting [`PredicateValidationException`](https://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/processor/validation/PredicateValidationException.html)
 gives no details whatsoever about the details, i.e. *why* the HL7 validation as
 failed and the location of the failure in the message.
 
@@ -147,4 +147,4 @@ You need to add dependencies to Spring and the JMS API in the `pom.xml` Maven pr
 
 
 [HAPI]: http://hl7api.sourceforge.net
-[camel-hl7]: http://camel.apache.org/hl7.html
+[camel-hl7]: https://camel.apache.org/hl7.html

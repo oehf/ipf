@@ -2,7 +2,7 @@
 ## `xds-iti62` component
 
 The xds-iti62 component provides interfaces for actors of the *Delete Document Set* IHE transaction (ITI-62),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.62](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.62]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

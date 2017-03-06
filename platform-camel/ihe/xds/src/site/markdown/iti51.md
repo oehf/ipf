@@ -2,7 +2,7 @@
 ## `xds-iti51` component
 
 The xds-iti51 component provides interfaces for actors of the *Multi-Patient Stored Query* IHE transaction (ITI-51),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.51](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.51]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

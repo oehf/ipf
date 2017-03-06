@@ -63,5 +63,5 @@ The DSL element therefore requires three parameters:
 ```
 
 
-[splitter]: http://camel.apache.org/splitter.html
-[recipient list]: http://camel.apache.org/recipient-list.html
+[splitter]: https://camel.apache.org/splitter.html
+[recipient list]: https://camel.apache.org/recipient-list.html

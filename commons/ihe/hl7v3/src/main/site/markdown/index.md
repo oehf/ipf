@@ -181,4 +181,4 @@ public class BridgeRouteBuilder extends SpringRouteBuilder {
 
 [Mapping Service]: ../ipf-commons-map/index.html
 
-[IHE]: http://www.ihe.net
+[IHE]: https://www.ihe.net

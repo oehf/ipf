@@ -2,7 +2,7 @@
 ## `xds-iti15` component
 
 The xds-iti15 component provides interfaces for actors of the *Provide and Register Document Set* IHE transaction (ITI-15),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.15](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.15]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
 
 ### Actors
 
@@ -77,7 +77,7 @@ This is an example on how to use the component on the consumer side:
 ### Remarks for this component
 
 * The ITI-15 transaction uses [SOAP with Attachments](http://www.w3.org/TR/SOAP-attachments) (SwA) for uploading binary documents.
-Whether the the implementation of the SwA feature in [Apache CXF](http://cxf.apache.org/) is efficient enough for this purpose
+Whether the the implementation of the SwA feature in [Apache CXF](https://cxf.apache.org/) is efficient enough for this purpose
 is currently an open issue.
 
 

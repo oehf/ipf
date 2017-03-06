@@ -17,10 +17,10 @@ creation, parsing, rendering, navigation and modification.
 
 ## Documentation
 
-The IPF 3 documentation is located at [github](https://oehf.github.io/ipf).
-There's also a somewhat outdated [Introductory article](http://architects.dzone.com/articles/introduction-open-ehealth).
+The IPF 3 documentation is located at [github](http://oehf.github.io/ipf).
+There's also a somewhat outdated [Introductory article](https://architects.dzone.com/articles/introduction-open-ehealth).
 
 ## Mailing Lists
 
-* [ipf-dev](http://groups.google.com/group/ipf-dev)
-* [ipf-user](http://groups.google.com/group/ipf-user)
+* [ipf-dev](https://groups.google.com/group/ipf-dev)
+* [ipf-user](https://groups.google.com/group/ipf-user)

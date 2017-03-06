@@ -2,7 +2,7 @@
 ## `pixv3-iti44 / xds-iti44` component
 
 The pixv3-iti44 / xds-iti44 component provides interfaces for actors of the *Patient Identity Feed v3* IHE transaction (ITI-44),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.44](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.44](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 This transaction is defined in both PIXv3 and XDS IHE profiles, therefore there are two Camel components.
 Their only differences relate to naming conventions and namespaces in WSDL documents.

@@ -46,7 +46,7 @@ is disabled in the endpoints. The audit strategies must reference an instance of
 
 ### HL7v2 Codec
 
-All HL7v2-based transactions are realized using the [camel-mina2](http://camel.apache.org/mina2.html) and [camel-hl7](http://camel.apache.org/hl7.html)
+All HL7v2-based transactions are realized using the [camel-mina2](https://camel.apache.org/mina2.html) and [camel-hl7](https://camel.apache.org/hl7.html)
 components and requires that an [HL7v2 Codec](codec.html) is available in the Camel registry.
 
 

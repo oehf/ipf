@@ -3,7 +3,7 @@
 FHIR® – Fast Healthcare Interoperability Resources (hl7.org/fhir) – is a next generation standards framework created by HL7,
 combining the best features of HL7v2, HL7v3, and CDA while leveraging the latest web standards and applying a tight focus on implementability.
 
-IHE has had a set of profiles based on FHIR, but they are were on earlier versions of HL7 FHIR. Now that [DSTU2](http://hl7.org/fhir/index.html) is formally published, 
+IHE has had a set of profiles based on FHIR, but they are were on earlier versions of HL7 FHIR. Now that [DSTU2](https://hl7.org/fhir/index.html) is formally published,
 IHE updated their profiles to this version. IPF adds support for a subset of them by providing Camel components (hiding the 
  implementation details on transport level) and translators between the FHIR and HL7 v2 message models.
 

@@ -55,4 +55,4 @@ the parameter `sslContextParameters=#myContext`.
  ```
 
 
-[SSLContextParameters]: http://camel.apache.org/camel-configuration-utilities.html
+[SSLContextParameters]: https://camel.apache.org/camel-configuration-utilities.html

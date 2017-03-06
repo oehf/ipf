@@ -2,7 +2,7 @@
 ## `pixv3-iti45` component
 
 The pixv3-iti45 component provides interfaces for actors of the *Patient Identity Query v3* IHE transaction (ITI-45),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.45](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.45](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

@@ -9,7 +9,7 @@
 
     <artifactId>ipf-platform-camel-ihe-fhir-pixpdq</artifactId>
     <name>ipf-platform-camel-ihe-fhir-pixpdq</name>
-    <description>FHIR Restful IHE components for Apache Camel</description>
+    <description>Apache Camel components for PIXm and PDQm transactions</description>
     <url>${site.url}/${project.artifactId}</url>
 
     <properties>

@@ -24,7 +24,7 @@ property `ipf.hl7v2.caching` is set to true, the following caching storage beans
 * `interactiveContinuationStorage` for [interactive continuation](../ipf-platform-camel-ihe-mllp/interactiveContinuation.html)
 * `unsolicitedFragmentationStorage` for [unsolicited fragmentation](../ipf-platform-camel-ihe-mllp/unsolicitedFragmentation.html)
 
-The actual [cache implementation](http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-caching.html) 
+The actual [cache implementation](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-caching.html)
 being used is the one that Spring Boot finds on the classpath.
 
 `ipf-hl7-spring-boot-starter` provides the following application properties:
@@ -38,4 +38,4 @@ being used is the one that Spring Boot finds on the classpath.
 See [ipf-spring-boot-starter](../ipf-spring-boot-starter/index.html) and [ipf-atna-spring-boot-starter](../ipf-atna-spring-boot-starter/index.html) for
 additional properties.
 
-[Spring Boot]: http://projects.spring.io/spring-boot/
+[Spring Boot]: https://projects.spring.io/spring-boot/

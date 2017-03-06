@@ -45,7 +45,7 @@ Consumer-side responses are accepted in a number of data types, depending on the
 the producer-side responses (see above).
 
 Additionally, exceptions are translated into a corresponding HTTP status code and `OperationOutcome` content.
-Please refer to the [HAPI FHIR documentation](http://jamesagnew.github.io/hapi-fhir/doc_rest_server.html#ExceptionError_Handling)
+Please refer to the [HAPI FHIR documentation](http://hapifhir.io/doc_rest_server.html#ExceptionError_Handling)
 for details.
 
 

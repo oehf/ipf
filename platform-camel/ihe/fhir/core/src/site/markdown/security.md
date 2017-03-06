@@ -14,7 +14,7 @@ Client-side FHIR endpoints (i.e. producers) can be configured with Basic Authent
 ### Consumer
 
 SSL support for IPF IHE consumers side must be configured in their [deployment container](deployment.html).
-See e.g. SSL How-To for [Tomcat 7](http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html) or [Tomcat 8](http://tomcat.apache.org/tomcat-8.0-doc/ssl-howto.html).
+See e.g. SSL How-To for [Tomcat 8](https://tomcat.apache.org/tomcat-8.0-doc/ssl-howto.html).
 
 ### Producer
 
@@ -68,5 +68,5 @@ the parameter `sslContextParameters=#myContext`.
  ```
 
 
-[SSLContextParameters]: http://camel.apache.org/camel-configuration-utilities.html
-[HostnameVerifier]: http://docs.oracle.com/javase/8/docs/api/javax/net/ssl/HostnameVerifier.html
+[SSLContextParameters]: https://camel.apache.org/camel-configuration-utilities.html
+[HostnameVerifier]: https://docs.oracle.com/javase/8/docs/api/javax/net/ssl/HostnameVerifier.html

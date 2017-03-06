@@ -2,7 +2,7 @@
 ## IPF components for eHealth integration profiles
 
 IPF provides support for several eHealth profiles, primarily from the [IHE] ITI domain.
-The basic idea is to offer a [Camel component](http://camel.apache.org/components.html) for each profile transaction.
+The basic idea is to offer a [Camel component](https://camel.apache.org/components.html) for each profile transaction.
 These components ensure that the technical requirements of the profile are met by applications built on top of the
 IPF eHealth Integration Profiles support.
 
@@ -23,12 +23,12 @@ The profile defines three actors and two transactions. Transaction 1 is between 
 
 ![Abstract IHE Profile](images/ihe-1.JPG)
 
-With IPF, these IHE concepts are mapped to [Camel components](http://camel.apache.org/component.html), partly by reusing
-or extended existing Camel components or by providing [custom components](http://camel.apache.org/writing-components.html).
+With IPF, these IHE concepts are mapped to [Camel components](https://camel.apache.org/component.html), partly by reusing
+or extended existing Camel components or by providing [custom components](https://camel.apache.org/writing-components.html).
 
 | Concept          | Mapping to the IPF/Camel programming model
 |------------------|----------------------------------------------------------------------
-| Actor            | Producer or Consumer of a [Camel endpoint](http://camel.apache.org/endpoint.html)
+| Actor            | Producer or Consumer of a [Camel endpoint](https://camel.apache.org/endpoint.html)
 | Transaction      | Camel component, e.g. `pix-iti8`
 | Profile          | Group of Camel components, e.g. `pix`, `xds`
 
@@ -50,7 +50,7 @@ IHE Profiles are grouped by their underlying technical foundation, particularly 
 
 An implementation of a *Patient Identity Cross-Reference Manager* actor for the *Patient Identity Feed* (PIX ITI-8) transaction
 shall be created. PIX ITI-8 is a HL7v2-based transaction using MLLP as transport protocol.
-Receiving actors are implemented as a [Camel consumer](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Consumer.html).
+Receiving actors are implemented as a [Camel consumer](https://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Consumer.html).
 
 Thus, the following dependency must be registered in `pom.xml`:
 
@@ -74,7 +74,7 @@ The basic pattern for consumers is to specify the component name in the URI para
 While stepping through the Camel route, a proper response (or an Exception) must be generated that is sent back to the caller.
 
 On the other side of the transaction, sending actors (for ITI-8 the *Patient Identity Source*) are implemented as a
-[Camel producer](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Producer.html).
+[Camel producer](https://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Producer.html).
 The basic pattern for producers is to specify the component name in the URI parameter of a to-clause at the end of a Camel route:
 
 ```java
@@ -250,4 +250,4 @@ required dependencies, usage and parameters.
 [PCD-01]: ../ipf-platform-camel-ihe-hl7v2ws/pcd01.html
 [All]: ../ipf-platform-camel-ihe-mllp/mllpDispatch.html
 [Custom]: ../ipf-platform-camel-ihe-mllp/mllpCustom.html
-[IHE]: http://www.ihe.net
+[IHE]: https://www.ihe.net

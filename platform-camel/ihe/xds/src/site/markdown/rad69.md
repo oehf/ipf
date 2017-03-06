@@ -2,7 +2,7 @@
 ## `xdsi-rad69` component
 
 The xdsi-rad69 component provides interfaces for actors of the *Retrieve Imaging Document Set* IHE transaction (RAD-69),
-which is described in the [IHE Radiology (RAD) Technical Framework, Vol. 3, Section 4.69.](http://ihe.net/uploadedFiles/Documents/Radiology/IHE_RAD_TF_Vol3.pdf).
+which is described in the [IHE Radiology (RAD) Technical Framework, Vol. 3, Section 4.69.]((https://ihe.net/uploadedFiles/Documents/Radiology/IHE_RAD_TF_Vol3.pdf).
 
 ### Actors
 

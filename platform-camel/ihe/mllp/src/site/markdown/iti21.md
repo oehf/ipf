@@ -2,7 +2,7 @@
 ## `pdq-iti21` component
 
 The pdq-iti21 component provides interfaces for actors of the *Patient Demographics Query* IHE transaction (ITI-21),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.21](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.21](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
 
 ### Actors
 
@@ -41,7 +41,7 @@ accessed by the given producer. URI parameters controlling the transaction featu
 
 ### HL7v2 Codec
 
-All HL7v2-based transactions are realized using the [camel-mina2](http://camel.apache.org/mina2.html) and [camel-hl7](http://camel.apache.org/hl7.html)
+All HL7v2-based transactions are realized using the [camel-mina2](https://camel.apache.org/mina2.html) and [camel-hl7](https://camel.apache.org/hl7.html)
 components and requires that an [HL7v2 Codec](codec.html) is available in the Camel registry.
 
 ### Example

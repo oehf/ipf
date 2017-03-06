@@ -2,7 +2,7 @@
 ## `xds-iti41` component
 
 The xds-iti41 component provides interfaces for actors of the *Provide and Register Document Set.b* IHE transaction (ITI-41),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.41](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.41]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 
@@ -79,10 +79,10 @@ This is an example on how to use the component on the consumer side:
 
 This transaction sends document content as part of its request or response messages. In practice such messages can become
 quite large. To allow for memory-efficient streaming of the document content, the aforementioned components rely on
-[Apache CXF](http://cxf.apache.org/) support for binary data.
+[Apache CXF](https://cxf.apache.org/) support for binary data.
 
 CXF streams the content on disk and then provides a `DataHandler` to access the file.
-Furthermore, CXF offers some [environment properties](http://cxf.apache.org/docs/security.html#Security-Largedatastreamcaching)
+Furthermore, CXF offers some [environment properties](https://cxf.apache.org/docs/security.html#Security-Largedatastreamcaching)
 which can be used to configure this content caching.
 
 

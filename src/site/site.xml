@@ -43,10 +43,10 @@
             <!-- Make this to 'false' for local development, i.e. file:// URLs -->
             <protocolRelativeURLs>false</protocolRelativeURLs>
             <smoothScroll>true</smoothScroll>
-            <theme>default</theme>
+            <theme>bootswatch-united</theme>
             <highlightJs>true</highlightJs>
             <highlightJsTheme>github</highlightJsTheme>
-            <absoluteResourceURL>http://oehf.github.io/ipf</absoluteResourceURL>
+            <absoluteResourceURL></absoluteResourceURL>
             <breadcrumbs>false</breadcrumbs>
             <brand>
                 <!-- Brand text in top-left part of the site -->
@@ -158,8 +158,8 @@
         </head>
 
         <links>
-            <item name="Download" href="http://github.com/oehf/ipf" />
-            <item name="GitHub project" href="http://github.com/oehf/ipf" />
+            <item name="Download" href="https://github.com/oehf/ipf" />
+            <item name="GitHub project" href="https://github.com/oehf/ipf" />
         </links>
 
         <breadcrumbs>
@@ -168,11 +168,11 @@
 
         <menu name="Main" inherit="top">
             <item name="Home" href="./" />
-            <item name="GitHub project" href="http://github.com/oehf/ipf/" />
+            <item name="GitHub project" href="https://github.com/oehf/ipf/" />
             <item name="Release notes" href="changes-report.html" />
         </menu>
         <menu name="Download" inherit="top">
-            <item name="Download" href="http://github.com/oehf/ipf" />
+            <item name="Download" href="https://github.com/oehf/ipf" />
             <item name="License" href="license.html" />
         </menu>
         <menu name="Documentation" inherit="bottom">
@@ -190,8 +190,8 @@
         </menu>
         <menu name="Development" inherit="bottom">
             <item name="Development" href="development.html" />
-            <item name="Issues" href="http://github.com/oehf/ipf/issues/" />
-            <item name="Fork on GitHub" href="http://github.com/oehf/ipf/" />
+            <item name="Issues" href="https://github.com/oehf/ipf/issues/" />
+            <item name="Fork on GitHub" href="https://github.com/oehf/ipf/" />
         </menu>
         <menu name="Maven Reports" ref="reports" inherit="bottom"/>
         <menu name="Submodules" ref="modules" inherit="bottom"/>

@@ -8,8 +8,8 @@ to one or more target queues within a single system transaction. Depending on th
 the configuration options can vary significantly. Here we focus on ActiveMQ as message broker and Spring's JMS transaction manager
 for managing local transactions.
 
-For possible alternatives such as [XA transactions](http://activemq.apache.org/should-i-use-xa.html) and
-[advanced configuration options](http://camel.apache.org/jms.html) refer to the Apache Camel documentation.
+For possible alternatives such as [XA transactions](https://activemq.apache.org/should-i-use-xa.html) and
+[advanced configuration options](https://camel.apache.org/jms.html) refer to the Apache Camel documentation.
 
 The following subsections describe different use cases for transactional messaging.
 
@@ -86,7 +86,7 @@ That's a bit redundant but that's needed because the redelivery policy is bound 
 Camel JMS component cannot manage more than one connection factory. However, we configure only a single message broker.
 JMS destinations created by one JMS component can be used by the other JMS component.
 
-Alternatively, you may also [configure redeliveries in your routes](http://camel.apache.org/error-handler.html) but this is
+Alternatively, you may also [configure redeliveries in your routes](https://camel.apache.org/error-handler.html) but this is
 discouraged when doing transactional messaging.
 
 In the next listing you see the configuration of the JMS component (`amqProcess`) we use for internal, transactional message processing.
@@ -276,7 +276,7 @@ To define a transactional message processing route for internal message processi
     ...
 ```
 
-You may also define several output queues e.g. when using [multicast](http://camel.apache.org/multicast.html).
+You may also define several output queues e.g. when using [multicast](https://camel.apache.org/multicast.html).
 In this case, writing the messages to all destination queues must be successful otherwise the transaction is rolled back
 and none of the output queues will make their message available to consumers. For details refer to the
 `org.openehealth.ipf.platform.camel.core.camel.transaction.TransactionalMessagingTest` of the `ipf-platform-camel-core` component.
@@ -296,7 +296,7 @@ After rollback the message is redelivered once.
 ```
 
 For details how the Camel HTTP component reacts on different status codes refer to the documentation of the
-[HTTP component](http://camel.apache.org/http.html). Please note that the destination system does not participate in the
+[HTTP component](https://camel.apache.org/http.html). Please note that the destination system does not participate in the
 transaction that has been started by the transactional queue.
 
 If you want the destination system to participate in the transaction you'll have to use a distributed transaction manager

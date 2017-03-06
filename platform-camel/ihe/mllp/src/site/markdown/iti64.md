@@ -2,7 +2,7 @@
 ## `xpid-iti64` component
 
 The xpid-iti64 component provides interfaces for actors of the *Notify XAD-PID Link Change* IHE transaction (ITI-64),
-which is described in the [XAD-PID Change Management (XPID) Supplement, Section 3.64](http://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_XPID.pdf).
+which is described in the [XAD-PID Change Management (XPID) Supplement, Section 3.64](https://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_XPID.pdf).
 
 ### Actors
 
@@ -41,7 +41,7 @@ accessed by the given producer. URI parameters controlling the transaction featu
 
 ### HL7v2 Codec
 
-All HL7v2-based transactions are realized using the [camel-mina2](http://camel.apache.org/mina2.html) and [camel-hl7](http://camel.apache.org/hl7.html)
+All HL7v2-based transactions are realized using the [camel-mina2](https://camel.apache.org/mina2.html) and [camel-hl7](https://camel.apache.org/hl7.html)
 components and requires that an [HL7v2 Codec](codec.html) is available in the Camel registry.
 
 ### Example

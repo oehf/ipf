@@ -16,7 +16,7 @@ Before building, adjust `MAVEN_OPTS` to assign Maven more heap space.
 
 ### Sources
 
-IPF uses [git](http://git-scm.com/) for source code management. The IPF git repository is located at
+IPF uses [git](https://git-scm.com/) for source code management. The IPF git repository is located at
 [https://github.com/oehf/ipf](https://github.com/oehf/ipf).
 
 Additionally, there are the following support projects:
@@ -37,7 +37,7 @@ Issue tracking is done in github. For current issues check [https://github.com/o
 
 ### IDE
 
-IPF depends on Maven, [Groovy](http://www.groovy-lang.org/) and [Lombok](https://projectlombok.org/).
+IPF depends on Maven, [Groovy](https://www.groovy-lang.org/) and [Lombok](https://projectlombok.org/).
 Depending on the choice of your IDE, you may need to install corresponding plugins.
 
 ### Module Dependencies
@@ -56,5 +56,5 @@ of project-specific ones. For list of currently supported IHE transactions visit
 
 ![IHE Dependencies](images/dependencies-ihe.png)
 
-[Maven Central]: http://search.maven.org
+[Maven Central]: https://search.maven.org
 [eHealth support pages]: ../platform-camel-ihe/index.html

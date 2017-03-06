@@ -1,8 +1,8 @@
 
 ## Interceptors on MLLP endpoints
 
-MLLP components are built on top of [camel-mina2](http://camel.apache.org/mina2.html), and their additional eHealth-specific functionality is implemented 
-in form of interceptors. Each MLLP interceptor is a [Camel processor](http://camel.apache.org/processor.html) that wraps another processor. 
+MLLP components are built on top of [camel-mina2](https://camel.apache.org/mina2.html), and their additional eHealth-specific functionality is implemented
+in form of interceptors. Each MLLP interceptor is a [Camel processor](https://camel.apache.org/processor.html) that wraps another processor.
 The latter can either be one of
 
 * another MLLP interceptor 

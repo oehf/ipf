@@ -1,14 +1,14 @@
 ## Support for the "Asynchronous Web Service Exchange" option in IPF eHealth Components
 
 The *Asynchronous Web Service Exchange* option is provided for cross-community IHE integration profiles.
-It consists in the usage of the `ReplyTo` SOAP header defined in the [WS-Addressing](http://www.w3.org/Submission/ws-addressing/) specification.
+It consists in the usage of the `ReplyTo` SOAP header defined in the [WS-Addressing](https://www.w3.org/Submission/ws-addressing/) specification.
 
 When a request message specifies this header and it contains an URI not equal to the predefined "default" and "none" values,
 the service will send the response to this URL instead of returning the response to the original requestor.
 
 The IPF provides support for this option. User intervention is necessary on the client side only
 (i.e. for sending requests and receiving asynchronous responses), because the whole server-side magic is provided out-of-box
-by the [Apache CXF Framework](http://cxf.apache.org/).
+by the [Apache CXF Framework](https://cxf.apache.org/).
 
 To make an asynchronous call, three additional steps must be performed:
 

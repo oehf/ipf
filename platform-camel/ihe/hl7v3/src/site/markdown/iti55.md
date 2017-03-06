@@ -2,7 +2,7 @@
 ## `xcpd-iti55` component
 
 The xcpd-iti55 component provides interfaces for actors of the *Cross-Gateway Patient Discovery* IHE transaction (ITI-55),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.55](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.55](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

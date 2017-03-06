@@ -98,7 +98,7 @@ and fully interchangeable in all situations.
 ### Transformation between the models
 
 Transformation between the ebXML and the simplified data models can be performed by means of
-[Camel type converters](http://camel.apache.org/type-converter.html) provided by the IPF, as outlined in the following example.
+[Camel type converters](https://camel.apache.org/type-converter.html) provided by the IPF, as outlined in the following example.
 
 Type converters are applied by either using the `convertBodyTo(Class)` processor, or by converting the message body on the fly,
 e.g. using `exchange.getIn().getBody(Class)`.

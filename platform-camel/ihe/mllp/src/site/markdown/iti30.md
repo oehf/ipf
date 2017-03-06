@@ -2,7 +2,7 @@
 ## `pam-iti30` component ![v3.1](../images/3.1.png)
 
 The pam-iti30 component provides interfaces for actors of the *Patient Identity Management* IHE transaction (ITI-30),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.30](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.30](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 
@@ -41,7 +41,7 @@ accessed by the given producer. URI parameters controlling the transaction featu
 
 ### HL7v2 Codec
 
-All HL7v2-based transactions are realized using the [camel-mina2](http://camel.apache.org/mina2.html) and [camel-hl7](http://camel.apache.org/hl7.html)
+All HL7v2-based transactions are realized using the [camel-mina2](https://camel.apache.org/mina2.html) and [camel-hl7](https://camel.apache.org/hl7.html)
 components and requires that an [HL7v2 Codec](codec.html) is available in the Camel registry.
 
 ### Transaction Options

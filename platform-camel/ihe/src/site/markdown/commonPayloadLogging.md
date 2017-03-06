@@ -19,7 +19,7 @@ The following specific values can be used in the expressions:
 |:--------------------|:-----------|:----------------------------------------------------------------
 | `processId`         | String     | Identifier of the current OS process, consisting from the process number and the host name, divided by a dash, e.g. "31415-ipfSuperMainframe"
 | `sequenceId`        | String     | Internally generated sequence number
-| `date('format')`    | String     | Current date and time, formatted using [SimpleDateFormat](http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html) according to the given specification
+| `date('format')`    | String     | Current date and time, formatted using [SimpleDateFormat](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html) according to the given specification
 
 The file name pattern configured for an interceptor can be changed at any time using the corresponding setter method. 
 When the file denoted by the pattern does already exist, the new message payload will be appended at the end of the existing content.

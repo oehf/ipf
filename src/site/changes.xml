@@ -24,7 +24,7 @@
     </properties>
     <body>
         <release version="3.2.0" date="TBD" description="IPF 3.2.0">
-            <action dev="unixoid" issue="45" type="feature">
+            <action dev="unixoid" issue="145" type="add">
                 Early support for the IHE HPD profile.
             </action>
             <action dev="ohr" issue="144" type="fix">

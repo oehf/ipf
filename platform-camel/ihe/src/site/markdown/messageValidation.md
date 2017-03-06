@@ -1,7 +1,7 @@
 
 ## Message Validation in IPF eHealth Components
 
-Message validation in IPF eHealth components are implemented by means of validating [Camel processors](http://camel.apache.org/processor.html), 
+Message validation in IPF eHealth components are implemented by means of validating [Camel processors](https://camel.apache.org/processor.html),
 available for incoming and outgoing messages of all implemented transactions. 
 
 Per convention, each of these validating processors throws an
@@ -9,7 +9,7 @@ Per convention, each of these validating processors throws an
 when the validation fails.
 This exception contains detailed description of detected validation problem(s).
 
-Instances of validating processors, which can be directly used in a route by means of the [.process()](http://camel.apache.org/routes.html#Routes-Usingacustomprocessor) 
+Instances of validating processors, which can be directly used in a route by means of the [.process()](https://camel.apache.org/routes.html#Routes-Usingacustomprocessor)
 DSL element, can be obtained from the corresponding factories, depending on the eHealth integration profile:
 
 | Integration profile                 | Transaction numbers/IDs              | Validating processors factory                                              |

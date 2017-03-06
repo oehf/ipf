@@ -2,7 +2,7 @@
 ## `xcf-iti63` component
 
 The xcf-iti63 component provides interfaces for actors of the *Cross-Gateway Fetch* IHE transaction (ITI-63),
-which is described in the [IHE ITI TF Cross-Community Fetch (XCF) Supplement](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_XCF.pdf).
+which is described in the [IHE ITI TF Cross-Community Fetch (XCF) Supplement]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_XCF.pdf).
 
 ### Actors
 

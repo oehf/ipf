@@ -22,7 +22,7 @@ The dependency on the IPF [Spring Boot] IHE FHIR starter module is:
 Furthermore, if a single `org.springframework.cache.CacheManager` bean is available and the application
 property `ipf.fhir.caching` is set to true, the following caching storage beans are set up:
 
-* `pagingProvider` for [paging results](http://hapifhir.io/doc_rest_server.html#Paging_Providers) 
+* `pagingProvider` for [paging results](http://hapifhir.io/doc_rest_server.html#Paging_Providers)
 
 `ipf-fhir-spring-boot-starter` does *not*  transitively depend on the respective Camel-dependent IHE FHIR
 modules as these have been split into support for MHD, PIXm/PDQm and RESTful ATNA. So, e.g. in order to
@@ -77,4 +77,4 @@ Camel provides a Spring boot starter module for this:
 | `servletName`                                 | CamelServlet           | The name of the Camel servlet
 
 
-[Spring Boot]: http://projects.spring.io/spring-boot/
+[Spring Boot]: https://projects.spring.io/spring-boot/

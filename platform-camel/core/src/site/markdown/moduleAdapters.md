@@ -28,7 +28,7 @@ This section is organized in the following way.
 The easiest way to describe the DSL extensions for IPF module adapters is to start with an example.
 Let's use the [`org.openehealth.ipf.commons.core.modules.api.Transmogrifier`](../apidocs/org/openehealth/ipf/commons/core/modules/api/Transmogrifer.html)
 interface for that purpose.
-Inspired by [Calvin and Hobbes](http://en.wikipedia.org/wiki/Calvin_hobbes),
+Inspired by [Calvin and Hobbes](https://en.wikipedia.org/wiki/Calvin_hobbes),
 a [transmogrifier](images/transmogrifier.png) converts anything into whatever you like.
 
 Transmogrification is accompanied by a loud *zap*:
@@ -163,7 +163,7 @@ IPF provides three Transmogrifier implementations out of the box:
 ##### XSLT and Schematron
 
 The XSLT implementations are "by-products" for Schematron validation, but they can be used independently as well.
-Compared to Camel's [xslt endpoint](http://camel.apache.org/xslt.html), the IPF counterpart
+Compared to Camel's [xslt endpoint](https://camel.apache.org/xslt.html), the IPF counterpart
 
 * can use variable stylesheets
 * caches XSLT templates for better performance
@@ -220,7 +220,7 @@ using a Class parameter to the xslt()/schematron() extensions or with a subseque
 
 ##### XQuery
 
-Additionally, an [XQuery](http://www.w3.org/TR/xquery/) implementation is provided on top of the [XQJ API](http://xqj.net/).
+Additionally, an [XQuery](https://www.w3.org/TR/xquery/) implementation is provided on top of the [XQJ API](http://xqj.net/).
 In the actual state it uses the Saxon's XQJ implementation. The `XqjTransmogrifier` is implemented similar to the `XsltTransmogrifier`
 and can be used to execute xqueries to the Apache Camel's exchange body.
 
@@ -394,7 +394,7 @@ Examples:
         .to('mock:output')
 ```
 
-*Note*: Prefer using Camel's [Data Format](http://camel.apache.org/data-format.html) or [bean integration] for this purpose.
+*Note*: Prefer using Camel's [Data Format](https://camel.apache.org/data-format.html) or [bean integration] for this purpose.
 
 ### Renderer
 
@@ -417,7 +417,7 @@ Examples:
         .to('mock:output')
 ```
 
-*Note*: Prefer using Camel's [Data Format](http://camel.apache.org/data-format.html) or [bean integration] for this purpose.
+*Note*: Prefer using Camel's [Data Format](https://camel.apache.org/data-format.html) or [bean integration] for this purpose.
 
 ### Aggregator
 
@@ -440,4 +440,4 @@ can then be used with e.g. `enrich`, `multicast` or other DSL elements that expe
 
 
 
-[bean integration]: http://camel.apache.org/bean-integration.html
+[bean integration]: https://camel.apache.org/bean-integration.html

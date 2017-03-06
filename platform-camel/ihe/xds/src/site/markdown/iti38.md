@@ -2,7 +2,7 @@
 ## `xca-iti38` component
 
 The xca-iti38 component provides interfaces for actors of the *Cross-Gateway Query* IHE transaction (ITI-38),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.38](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.38]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

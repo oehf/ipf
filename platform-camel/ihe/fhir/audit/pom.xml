@@ -9,7 +9,7 @@
 
     <artifactId>ipf-platform-camel-ihe-fhir-audit</artifactId>
     <name>ipf-platform-camel-ihe-fhir-audit</name>
-    <description>FHIR Restful IHE components for Apache Camel</description>
+    <description>Apache Camel components for ATNA transactions</description>
     <url>${site.url}/${project.artifactId}</url>
 
     <properties>

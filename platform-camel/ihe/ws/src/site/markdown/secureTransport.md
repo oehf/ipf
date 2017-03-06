@@ -13,7 +13,7 @@ Client-side endpoints (i.e. producers) can be configured with Basic Authenticati
 ### Consumer
 
 SSL support for IPF IHE consumers side must be configured in their [deployment container](deployment.html).
-See e.g. SSL How-To for [Tomcat 7](http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html) or [Tomcat 8](http://tomcat.apache.org/tomcat-8.0-doc/ssl-howto.html).
+See e.g. SSL How-To for [Tomcat 8](https://tomcat.apache.org/tomcat-8.0-doc/ssl-howto.html).
 
 ### Producer
 
@@ -64,9 +64,9 @@ the parameter `sslContextParameters=#myContext`.
      
  ```
 
-If [sslContextParameters][SslContextParameters] are not provided, [CXF](http://cxf.apache.org)'s HTTP client can be configured accordingly.
+If [sslContextParameters][SslContextParameters] are not provided, [CXF](https://cxf.apache.org)'s HTTP client can be configured accordingly.
 This is done within the String context as detailed in the
-[CXF documentation](http://cxf.apache.org/docs/client-http-transport-including-ssl-support.html).
+[CXF documentation](https://cxf.apache.org/docs/client-http-transport-including-ssl-support.html).
 
 Example:
 
@@ -157,5 +157,5 @@ This is also the default, if no `HttpConduit` was configured or the `HttpConduit
 contain TLS Client Parameters although `secure` was set to `true`.
 
 
-[SSLContextParameters]: http://camel.apache.org/camel-configuration-utilities.html
-[HostnameVerifier]: http://docs.oracle.com/javase/8/docs/api/javax/net/ssl/HostnameVerifier.html
+[SSLContextParameters]: https://camel.apache.org/camel-configuration-utilities.html
+[HostnameVerifier]: https://docs.oracle.com/javase/8/docs/api/javax/net/ssl/HostnameVerifier.html

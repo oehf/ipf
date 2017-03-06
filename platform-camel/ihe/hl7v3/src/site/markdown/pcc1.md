@@ -2,7 +2,7 @@
 ## `qed-pcc1` component
 
 The qed-pcc1 component provides interfaces for actors of the *Query for Existing Data* IHE transaction (PCC-1),
-which is described in the [IHE QED Supplement, Section 3.1](http://www.ihe.net/Technical_Framework/upload/IHE_PCC_Query_for_Existing_Data_QED_Supplement_TI_2008-08-22.pdf).
+which is described in the [IHE QED Supplement, Section 3.1](https://www.ihe.net/Technical_Framework/upload/IHE_PCC_Query_for_Existing_Data_QED_Supplement_TI_2008-08-22.pdf).
 
 ### Actors
 

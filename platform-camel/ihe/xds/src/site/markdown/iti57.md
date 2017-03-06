@@ -2,7 +2,7 @@
 ## `xds-iti57` component
 
 The xds-iti57 component provides interfaces for actors of the *Update Document Set* IHE transaction (ITI-57),
-which is described in the [IHE XDS Metadata Update Supplement](http://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_XDS_Metadata_Update.pdf).
+which is described in the [IHE XDS Metadata Update Supplement]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_XDS_Metadata_Update.pdf).
 
 ### Actors
 

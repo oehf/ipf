@@ -37,8 +37,8 @@ to be returned to the client:
 * `java.nio.ByteBuffer`
 * `java.io.InputStream`
 * `java.io.File`
-* [`org.apache.camel.component.file.GenericFile<File>`](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/file/GenericFile.html)
-* [`org.apache.camel.WrappedFile<File>`](http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/WrappedFile.html)
+* [`org.apache.camel.component.file.GenericFile<File>`](https://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/file/GenericFile.html)
+* [`org.apache.camel.WrappedFile<File>`](https://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/WrappedFile.html)
 
 In addition, the message body can contain an `Exception` instance, which will be transformed into a NAK response. 
 Any exceptions thrown in the route that are not handled otherwise will lead to NAK responses as well.

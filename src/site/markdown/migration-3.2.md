@@ -63,17 +63,18 @@ EhCache is now an optional dependency. The EhCache implementations `org.openehea
 The `ipf-oht-atna` dependency uses more secure default values as before:
 
 * The TLS protocol used for Secure Audit Trail is determined by the `jdk.tls.client.protocols` system environment variable that has been
-introduced with Java 8 (see [here](https://docs.oracle.com/javase/8/docs/technotes/guides/security/enhancements-8.html) for details). If not present, the default value is `"TLSv1.2,TLSv1.1,TLSv1"`.
+introduced with Java 8 (see [here](https://docs.oracle.com/javase/8/docs/technotes/guides/security/enhancements-8.html) for details).
+If not present, the default value is `"TLSv1.2,TLSv1.1,TLSv1"`.
 * As before, the Cipher Suites used for Secure Audit Trail are determined by the `https.ciphersuites` system environment variable, 
 but the default valuer is now `"TLS_RSA_WITH_AES_128_CBC_SHA"` (i.e. `"SSL_RSA_WITH_NULL_SHA"` has been removed).
 * The properties set for Secure Audit Trail (see [here](../ipf-platform-camel-ihe-mllp/atna.html) for details) will *not* affect the global 
-system properties anymore, *unless* the system property `org.openhealthtools.ihe.atna.nodeauth.SetDomainEnvironment` is set to any value. 
-This also means that the TLS parameters for any outgoing TLS connection as well as incoming MLLPS connections need to be considered separately, see below.
+system properties anymore, *unless* the system property `org.openhealthtools.ihe.atna.nodeauth.SetDomainEnvironment` is present.
 
+This also means that the TLS parameters for any outgoing TLS connection as well as incoming MLLPS connections need to be considered separately.
 All outgoing TLS connections as well as incoming MLLPS connections can now be configured uniformly:
 
 * by customizing the system properties listed in the [JSSE documentation](https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#InstallationAndCustomization)
-* by providing a [Camel](http://camel.apache.org/camel-configuration-utilities.html) `sslContextParameters` reference in the endpoint URL
+* by providing a [Camel](https://camel.apache.org/camel-configuration-utilities.html) `sslContextParameters` reference in the endpoint URL
 * by directly providing an `sslContext` reference in the endpoint URL
 * by stating `secure=true` in the endpoint URL. In this case, the Camel registry is looked up for a unique bean of type `org.apache.camel.util.jsse.SSLContextParameters`. 
 If none is found, a default SSL Context (controlled by the system properties) is instantiated. If more than one is found, an exception is thrown.
@@ -129,7 +130,7 @@ IPF 3.2 is compatible with IHE ITI Revision 13 (published on Sep 9, 2016), inclu
 
 ### Internal Restructuring of IHE components
 
-Issue [#123](https://github.com/oehf/ipf/issues/123) caused a number of internal refactorings, mostly moving Camel-unspecific functionality
+Issue [#123](https://github.com/oehf/ipf/issues/123) caused a number of internal refactorings, mostly moving Camel-independent functionality
 and configuration from the `ipf-platform-camel-*` modules into the corresponding `ipf-commons-*` modules.
 The majority of the configuration related to IHE transactions (like audit strategies, web service specifications) have been moved into
 subclasses of `org.openehealth.ipf.commons.ihe.core.InteractionId`.
