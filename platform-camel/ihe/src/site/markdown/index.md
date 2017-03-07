@@ -41,10 +41,11 @@ IHE Profiles are grouped by their underlying technical foundation, particularly 
 | ipf-platform-camel-ihe-mllp          | [ITI-8], [ITI-9], [ITI-10], [ITI-21], [ITI-22], [ITI-30], [ITI-31], [ITI-46]
 | ipf-platform-camel-ihe-xds           | [ITI-14], [ITI-15], [ITI-16], [ITI-17], [ITI-18], [ITI-38], [ITI-39], [ITI-41], [ITI-42], [ITI-43], [ITI-51], [ITI-57], [ITI-61], [ITI-62], [ITI-63], [RAD-69], [RAD-75]
 | ipf-platform-camel-ihe-hl7v3         | [ITI-44], [ITI-45], [ITI-46], [ITI-47], [ITI-55], [ITI-56], [PCC-1]
-| ipf-platform-camel-ihe-hl7v2ws       | [PCD-01]
+| ipf-platform-camel-ihe-hpd           | [ITI-58], [ITI-59]
+| ipf-platform-camel-ihe-fhir-mhd      | [ITI-65], [ITI-66], [ITI-67], [ITI-68]
 | ipf-platform-camel-ihe-fhir-pixpdq   | [ITI-78], [ITI-83]
 | ipf-platform-camel-ihe-fhir-audit    | [ITI-81]
-| ipf-platform-camel-ihe-hpd           | [ITI-58], [ITI-59]
+| ipf-platform-camel-ihe-hl7v2ws       | [PCD-01]
 
 ### Example
 

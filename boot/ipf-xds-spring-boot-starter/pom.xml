@@ -50,4 +50,11 @@
 
     </dependencies>
 
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
 </project>
