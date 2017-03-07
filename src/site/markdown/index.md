@@ -129,14 +129,16 @@ IPF 3.2 deprecates the modules listed below. They will likely be removed from th
 | Feature                                         | Description
 |-------------------------------------------------|-----------------------------------------------
 | [Recoverability]                                | Recoverability means that a system can recover from crashes or service failures without losing messages or data
-| [Performance] Monitoring                        | Monitor performance and throughput of routes
+| [Performance Monitoring]                        | Monitor performance and throughput of routes
 
 
-## Migration
+## Update Instructions
 
-* IPF 3.0.x is not backwards-compatible with IPF 2.x. Read the [Migration Instructions] for how to migrate a IPF 2.x-based integration solution.
-* IPF 3.1.x introduces a few minor incompatibilities compared to IPF 3.0.x due to having less mandatory dependencies on the Spring framework. Read the [3.1 Update Instructions] for how to update from IPF 3.0.x
+If you are using previous versions of IPF and want to update:
+
 * IPF 3.2.x comes with some changes that must be considered when upgrading from IPF 3.1.x to IPF 3.2.x Read the [3.2 Update Instructions] for how to update from IPF 3.1.x
+* IPF 3.1.x introduces a few minor incompatibilities compared to IPF 3.0.x due to having less mandatory dependencies on the Spring framework. Read the [3.1 Update Instructions] for how to update from IPF 3.0.x
+* IPF 3.0.x is not backwards-compatible with IPF 2.x. Read the [Migration Instructions] for how to migrate a IPF 2.x-based integration solution.
 
 
 ## Development
@@ -169,7 +171,7 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [3.1 Update Instructions]: migration-3.1.html
 [3.2 Update Instructions]: migration-3.2.html
 [Recoverability]: recoverability.html
-[Performance]: performance.html
+[Performance Monitoring]: performance.html
 [HL7 Support tutorial]: ipf-tutorials-hl7/index.html
 [XDS tutorial]: ipf-tutorials-xds/index.html
 [Dynamic extension tutorial]: ipf-tutorials-config/index.html

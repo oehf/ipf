@@ -23,6 +23,7 @@ is instantiated. If more than one is found, an exception is thrown.
 the parameter `sslContextParameters=#myContext`.
 
 ```xml
+
      <beans xmlns="http://www.springframework.org/schema/beans"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:camel="http://camel.apache.org/schema/spring"
@@ -51,7 +52,7 @@ the parameter `sslContextParameters=#myContext`.
             </camel:cipherSuitesFilter>
         </camel:clientParameters>
     </camel:sslContextParameters>    
-     
+
  ```
 
 

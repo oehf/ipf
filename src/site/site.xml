@@ -43,7 +43,7 @@
             <!-- Make this to 'false' for local development, i.e. file:// URLs -->
             <protocolRelativeURLs>false</protocolRelativeURLs>
             <smoothScroll>true</smoothScroll>
-            <theme>bootswatch-united</theme>
+            <theme>default</theme>
             <highlightJs>true</highlightJs>
             <highlightJsTheme>github</highlightJsTheme>
             <absoluteResourceURL></absoluteResourceURL>
