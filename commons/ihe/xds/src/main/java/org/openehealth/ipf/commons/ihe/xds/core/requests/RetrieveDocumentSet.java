@@ -30,11 +30,10 @@ import java.io.Serializable;
  * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RetrieveDocumentSet")
 @XmlRootElement(name = "retrieveDocumentSet")
-@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class RetrieveDocumentSet extends NonconstructiveDocumentSetRequest implements Serializable {
     private static final long serialVersionUID = -3410625944194160618L;

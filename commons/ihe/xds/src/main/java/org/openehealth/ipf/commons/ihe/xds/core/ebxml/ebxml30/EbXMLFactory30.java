@@ -96,12 +96,17 @@ public class EbXMLFactory30 implements EbXMLFactory {
         request.setSubmitObjectsRequest((SubmitObjectsRequest) createSubmitObjectsRequest().getInternal());
         return new EbXMLProvideAndRegisterDocumentSetRequest30(request, objectLibrary);
     }
-    
+
     @Override
-    public EbXMLRetrieveDocumentSetRequest createRetrieveDocumentSetRequest() {
-        return new EbXMLRetrieveDocumentSetRequest30(new RetrieveDocumentSetRequestType());
+    public EbXMLNonconstructiveDocumentSetRequest createRetrieveDocumentSetRequest() {
+        return new EbXMLNonconstructiveDocumentSetRequest30(new RetrieveDocumentSetRequestType());
     }
-    
+
+    @Override
+    public EbXMLNonconstructiveDocumentSetRequest createRemoveDocumentsRequest() {
+        return new EbXMLNonconstructiveDocumentSetRequest30(new RemoveDocumentsRequestType());
+    }
+
     @Override
     public EbXMLRetrieveImagingDocumentSetRequest createRetrieveImagingDocumentSetRequest() {
         return new EbXMLRetrieveImagingDocumentSetRequest30(new RetrieveImagingDocumentSetRequestType());

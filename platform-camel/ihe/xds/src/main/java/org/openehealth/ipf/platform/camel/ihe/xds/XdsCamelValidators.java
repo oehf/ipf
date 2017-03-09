@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseT
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.AdhocQueryRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RemoveObjectsRequestValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RetrieveDocumentSetRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.NonconstructiveDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RetrieveImagingDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.QueryResponseValidator;
@@ -90,9 +90,9 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRetrieveDocumentSetRequest30 message =
-            new EbXMLRetrieveDocumentSetRequest30(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
-        new RetrieveDocumentSetRequestValidator().validate(message, ITI_39);
+        EbXMLNonconstructiveDocumentSetRequest30<RetrieveDocumentSetRequestType> message =
+            new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
+        new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_39);
     };
 
     private static final Processor ITI_39_RESPONSE_VALIDATOR = exchange -> {
@@ -161,9 +161,9 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRetrieveDocumentSetRequest30 message =
-            new EbXMLRetrieveDocumentSetRequest30(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
-        new RetrieveDocumentSetRequestValidator().validate(message, ITI_43);
+        EbXMLNonconstructiveDocumentSetRequest30<RetrieveDocumentSetRequestType> message =
+            new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
+        new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_43);
     };
    
     private static final Processor ITI_43_RESPONSE_VALIDATOR = exchange -> {
@@ -266,9 +266,9 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRetrieveDocumentSetRequest30 message =
-                new EbXMLRetrieveDocumentSetRequest30(exchange.getIn().getBody(RemoveDocumentsRequestType.class));
-        new RetrieveDocumentSetRequestValidator().validate(message, ITI_Y1);
+        EbXMLNonconstructiveDocumentSetRequest30<RemoveDocumentsRequestType> message =
+                new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RemoveDocumentsRequestType.class));
+        new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_Y1);
     };
 
     private static final Processor ITI_Y1_RESPONSE_VALIDATOR = exchange -> {

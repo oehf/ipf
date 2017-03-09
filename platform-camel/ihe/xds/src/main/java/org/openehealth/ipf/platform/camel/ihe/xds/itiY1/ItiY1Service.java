@@ -21,7 +21,6 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.itiY1.ItiY1PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -37,8 +36,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
 @AllArgsConstructor
 public class ItiY1Service extends AbstractWebService implements ItiY1PortType {
 
-    private final String homeCommunityId;
-
     @Override
     public RegistryResponseType documentRepositoryRemoveDocuments(RemoveDocumentsRequestType body) {
         Exchange result = process(body);
@@ -49,13 +46,10 @@ public class ItiY1Service extends AbstractWebService implements ItiY1PortType {
                     exception,
                     ErrorCode.REPOSITORY_METADATA_ERROR,
                     ErrorCode.REPOSITORY_ERROR,
-                    homeCommunityId);
-            if (homeCommunityId != null) {
-                errorResponse.getErrors().get(0).setLocation(homeCommunityId);
-            }
+                    null);
             return EbXML30Converters.convert(errorResponse);
         }
-        return Exchanges.resultMessage(result).getBody(AdhocQueryResponse.class);
+        return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);
     }
 
 }

@@ -81,12 +81,18 @@ public interface EbXMLFactory {
      * @return the created object.
      */
     EbXMLProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(EbXMLObjectLibrary library);
-    
+
     /**
      * Creates a new request to retrieve documents.
      * @return the created object.
      */
-    EbXMLRetrieveDocumentSetRequest createRetrieveDocumentSetRequest();
+    EbXMLNonconstructiveDocumentSetRequest createRetrieveDocumentSetRequest();
+
+    /**
+     * Creates a new request to remove documents.
+     * @return the created object.
+     */
+    EbXMLNonconstructiveDocumentSetRequest createRemoveDocumentsRequest();
 
     /**
      * Creates a new request to retrieve imaging documents.

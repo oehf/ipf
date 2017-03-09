@@ -19,7 +19,7 @@ import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
@@ -56,7 +56,7 @@ public class ItiY1Component extends XdsComponent<XdsNonconstructiveDocumentSetRe
                     AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration> endpoint,
                     JaxWsClientFactory<XdsNonconstructiveDocumentSetRequestAuditDataset> clientFactory)
             {
-                return new SimpleWsProducer<>(endpoint, clientFactory, RemoveDocumentSet.class, RegistryResponseType.class);
+                return new SimpleWsProducer<>(endpoint, clientFactory, RemoveDocumentsRequestType.class, RegistryResponseType.class);
             }
         };
     }

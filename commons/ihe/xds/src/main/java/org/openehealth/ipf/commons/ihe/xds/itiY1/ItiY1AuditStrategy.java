@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.itiY1;
 
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsDocumentRemoveAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
 
 /**
  * @author Dmytro Rud
@@ -31,6 +33,22 @@ public class ItiY1AuditStrategy extends XdsDocumentRemoveAuditStrategy30 {
 
     @Override
     public void doAudit(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
-        // TODO
+        for (Status status : Status.values()) {
+            if (auditDataset.hasDocuments(status)) {
+                AuditorManager.getCustomXdsAuditor().auditItiY1(
+                        isServerSide(),
+                        auditDataset.getEventOutcomeCode(status),
+                        auditDataset.getUserId(),
+                        auditDataset.getUserName(),
+                        auditDataset.getClientIpAddress(),
+                        auditDataset.getServiceEndpointUrl(),
+                        auditDataset.getPatientId(),
+                        auditDataset.getDocumentIds(status),
+                        auditDataset.getRepositoryIds(status),
+                        auditDataset.getHomeCommunityIds(status),
+                        auditDataset.getPurposesOfUse());
+            }
+        }
     }
+
 }

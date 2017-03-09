@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
@@ -26,10 +28,11 @@ import java.io.Serializable;
  * Request object for the Remove Documents transaction.
  * @since 3.3
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RemoveDocuments")
 @XmlRootElement(name = "removeDocuments")
 @EqualsAndHashCode(callSuper = true)
-@ToString
+@ToString(callSuper = true)
 public class RemoveDocuments extends NonconstructiveDocumentSetRequest implements Serializable {
     private static final long serialVersionUID = 8725483535110142072L;
 }

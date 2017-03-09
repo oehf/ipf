@@ -162,7 +162,7 @@ public class EbXMLFactory21 implements EbXMLFactory {
     }
 
     @Override
-    public EbXMLRetrieveDocumentSetRequest createRetrieveDocumentSetRequest() {
+    public EbXMLNonconstructiveDocumentSetRequest createRetrieveDocumentSetRequest() {
         throw new UnsupportedOperationException("Only supported for ebXML 3.0");
     }
 
@@ -211,6 +211,11 @@ public class EbXMLFactory21 implements EbXMLFactory {
 
     @Override
     public EbXMLRemoveObjectsRequest createRemoveObjectsRequest() {
+        throw new UnsupportedOperationException("Only supported for ebXML 3.0");
+    }
+
+    @Override
+    public EbXMLNonconstructiveDocumentSetRequest createRemoveDocumentsRequest() {
         throw new UnsupportedOperationException("Only supported for ebXML 3.0");
     }
 }

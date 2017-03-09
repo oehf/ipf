@@ -186,7 +186,7 @@ public class EbXML30Converters {
     @Converter
     public static RetrieveDocumentSet convert(RetrieveDocumentSetRequestType in) {
         RetrieveDocumentSetRequestTransformer transformer = new RetrieveDocumentSetRequestTransformer(factory);
-        return transformer.fromEbXML(new EbXMLRetrieveDocumentSetRequest30(in));
+        return transformer.fromEbXML(new EbXMLNonconstructiveDocumentSetRequest30<>(in));
     }
 
     /**
@@ -197,7 +197,7 @@ public class EbXML30Converters {
      */
     @Converter
     public static RemoveDocumentsRequestType convert(RemoveDocuments in) {
-        RemoveDocumentsTransformer transformer = new RemoveDocumentsTransformer(factory);
+        RemoveDocumentsRequestTransformer transformer = new RemoveDocumentsRequestTransformer(factory);
         return (RemoveDocumentsRequestType) transformer.toEbXML(in).getInternal();
     }
 
@@ -209,8 +209,8 @@ public class EbXML30Converters {
      */
     @Converter
     public static RemoveDocuments convert(RemoveDocumentsRequestType in) {
-        RemoveDocumentsTransformer transformer = new RemoveDocumentsTransformer(factory);
-        return transformer.fromEbXML(new EbXMLRetrieveDocumentSetRequest30(in));
+        RemoveDocumentsRequestTransformer transformer = new RemoveDocumentsRequestTransformer(factory);
+        return transformer.fromEbXML(new EbXMLNonconstructiveDocumentSetRequest30<>(in));
     }
 
     /**

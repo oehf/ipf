@@ -642,7 +642,7 @@ public class CustomXdsAuditor extends XDSAuditor {
         RemoveDocumentsEvent event = new RemoveDocumentsEvent(!serverSide, eventOutcome, purposesOfUse);
 
         event.addSourceActiveParticipant(
-                serverSide ? null : userId,
+                userId,
                 serverSide ? null : getSystemAltUserId(),
                 null,
                 serverSide ? clientIpAddress : getSystemNetworkId(),

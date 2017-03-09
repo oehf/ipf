@@ -16,16 +16,16 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.NonconstructiveDocumentSetRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLNonconstructiveDocumentSetRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
 /**
- * Transforms between a {@link NonconstructiveDocumentSetRequest} and its ebXML representation.
+ * Transforms between a {@link EbXMLNonconstructiveDocumentSetRequest} and its ebXML representation.
  * @author Jens Riemschneider
  */
-abstract public class AbstractRepositoryDocumentSetRequestTransformer<T extends NonconstructiveDocumentSetRequest> {
+public class RemoveDocumentsRequestTransformer {
     private final EbXMLFactory factory;
 
     /**
@@ -33,42 +33,40 @@ abstract public class AbstractRepositoryDocumentSetRequestTransformer<T extends 
      * @param factory
      *          factory for version independent ebXML objects.
      */
-    protected AbstractRepositoryDocumentSetRequestTransformer(EbXMLFactory factory) {
+    public RemoveDocumentsRequestTransformer(EbXMLFactory factory) {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
     }
-    
+
     /**
      * Transforms the request into its ebXML representation.
      * @param request
      *          the request. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLRetrieveDocumentSetRequest toEbXML(T request) {
+    public EbXMLNonconstructiveDocumentSetRequest toEbXML(RemoveDocuments request) {
         if (request == null) {
             return null;
         }
-        
-        EbXMLRetrieveDocumentSetRequest ebXML = factory.createRetrieveDocumentSetRequest();
-        ebXML.setDocuments(request.getDocuments());        
+
+        EbXMLNonconstructiveDocumentSetRequest ebXML = factory.createRemoveDocumentsRequest();
+        ebXML.setDocuments(request.getDocuments());
         return ebXML;
     }
-    
+
     /**
      * Transforms the ebXML representation into a request.
      * @param ebXML
      *          the ebXML representation. Can be <code>null</code>.
      * @return the request. <code>null</code> if the input was <code>null</code>.
      */
-    public T fromEbXML(EbXMLRetrieveDocumentSetRequest ebXML) {
+    public RemoveDocuments fromEbXML(EbXMLNonconstructiveDocumentSetRequest ebXML) {
         if (ebXML == null) {
             return null;
         }
-            
-        T request = createRequest();
-        request.getDocuments().addAll(ebXML.getDocuments());        
+
+        RemoveDocuments request = new RemoveDocuments();
+        request.getDocuments().addAll(ebXML.getDocuments());
         return request;
     }
-
-    abstract protected T createRequest();
 }

@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLNonconstructiveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
@@ -45,7 +45,7 @@ public class RetrieveDocumentSetRequestTransformerTest {
 
     @Test
     public void testToEbXML() {
-        EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(request);
+        EbXMLNonconstructiveDocumentSetRequest ebXML = transformer.toEbXML(request);
         assertNotNull(ebXML);
         
         assertEquals(2, ebXML.getDocuments().size());
@@ -68,7 +68,7 @@ public class RetrieveDocumentSetRequestTransformerTest {
 
      @Test
      public void testToEbXMLEmpty() {
-         EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(new RetrieveDocumentSet());
+         EbXMLNonconstructiveDocumentSetRequest ebXML = transformer.toEbXML(new RetrieveDocumentSet());
          assertNotNull(ebXML);
          assertEquals(0, ebXML.getDocuments().size());
      }
@@ -77,7 +77,7 @@ public class RetrieveDocumentSetRequestTransformerTest {
      
      @Test
      public void testFromEbXML() {
-         EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(request);
+         EbXMLNonconstructiveDocumentSetRequest ebXML = transformer.toEbXML(request);
          RetrieveDocumentSet result = transformer.fromEbXML(ebXML);
          assertEquals(request, result);
      }
@@ -89,7 +89,7 @@ public class RetrieveDocumentSetRequestTransformerTest {
 
      @Test
      public void testFromEbXMLEmpty() {
-         EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(new RetrieveDocumentSet());
+         EbXMLNonconstructiveDocumentSetRequest ebXML = transformer.toEbXML(new RetrieveDocumentSet());
          RetrieveDocumentSet result = transformer.fromEbXML(ebXML);
          assertEquals(new RetrieveDocumentSet(), result);
      }

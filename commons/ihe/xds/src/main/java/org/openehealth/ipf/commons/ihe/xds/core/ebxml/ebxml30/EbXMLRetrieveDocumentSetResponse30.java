@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLNonconstructiveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType.DocumentResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
@@ -33,7 +33,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryErrorList;
 
 /**
- * The ebXML 3.0 version of the {@link EbXMLRetrieveDocumentSetRequest}.
+ * The ebXML 3.0 version of the {@link EbXMLNonconstructiveDocumentSetRequest}.
  * @author Jens Riemschneider
  */
 public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocumentSetResponse {

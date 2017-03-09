@@ -75,7 +75,7 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
     </logger>
 
     <logger name="org.openehealth.ipf.commons.ihe.core.atna.MockedSender">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
 
     <root>

@@ -357,9 +357,9 @@ public abstract class SampleData {
      */
     public static RemoveDocuments createRemoveDocuments() {
         RemoveDocuments request = new RemoveDocuments();
-        request.getDocuments().add(new DocumentReference("repo1", "doc1", "urn:oid:1.2.3"));
-        request.getDocuments().add(new DocumentReference("repo2", "doc2", "urn:oid:1.2.4"));
-        request.getDocuments().add(new DocumentReference("repo3", "doc3", "urn:oid:1.2.5"));
+        request.getDocuments().add(new DocumentReference("1.1.1", "2.1.1", "urn:oid:1.2.3"));
+        request.getDocuments().add(new DocumentReference("1.1.2", "2.1.2", "urn:oid:1.2.4"));
+        request.getDocuments().add(new DocumentReference("1.1.3", "2.1.3", "urn:oid:1.2.5"));
         return request;
     }
 
