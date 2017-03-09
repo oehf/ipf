@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Document;
 
 import java.util.List;
 import java.util.Map;
@@ -33,9 +34,8 @@ abstract public class XdsIRetrieveAuditStrategy30 extends XdsRetrieveAuditStrate
         super(serverSide);
     }
 
-
     @Override
-    public XdsRetrieveAuditDataset enrichAuditDatasetFromRequest(XdsRetrieveAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
+    public XdsNonconstructiveDocumentSetRequestAuditDataset enrichAuditDatasetFromRequest(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         RetrieveImagingDocumentSetRequestType request = (RetrieveImagingDocumentSetRequestType) pojo;
         List<RetrieveImagingDocumentSetRequestType.StudyRequest> requestedStudies = request.getStudyRequest();
         if (requestedStudies != null) {
@@ -46,12 +46,13 @@ abstract public class XdsIRetrieveAuditStrategy30 extends XdsRetrieveAuditStrate
                         List<RetrieveDocumentSetRequestType.DocumentRequest> requestedDocuments = seriesRequest.getDocumentRequests();
                         if (requestedDocuments != null) {
                             for (RetrieveDocumentSetRequestType.DocumentRequest document : requestedDocuments) {
-                                auditDataset.registerRequestedDocument(
+                                auditDataset.getDocuments().add(new Document(
                                         document.getDocumentUniqueId(),
                                         document.getRepositoryUniqueId(),
                                         document.getHomeCommunityId(),
                                         studyRequest.getStudyInstanceUID(),
-                                        seriesRequest.getSeriesInstanceUID());
+                                        seriesRequest.getSeriesInstanceUID(),
+                                        getDefaultDocumentStatus()));
                             }
                         }
                     }

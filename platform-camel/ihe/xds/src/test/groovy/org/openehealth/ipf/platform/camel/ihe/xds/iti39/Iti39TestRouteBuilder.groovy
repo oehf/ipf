@@ -26,7 +26,7 @@ import javax.activation.DataHandler
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
@@ -133,7 +133,7 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
 
 
     private static RetrievedDocumentSet createRetrievedDocumentSet() {
-        RetrieveDocument requestData1 = new RetrieveDocument();
+        DocumentReference requestData1 = new DocumentReference();
         requestData1.setDocumentUniqueId("doc1");
         requestData1.setHomeCommunityId("urn:oid:1.2.3");
         requestData1.setRepositoryUniqueId("repo1");
@@ -144,7 +144,7 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
         doc1.setDataHandler(dataHandler1);
         doc1.setMimeType("animal/dog");
 
-        RetrieveDocument requestData2 = new RetrieveDocument();
+        DocumentReference requestData2 = new DocumentReference();
         requestData2.setDocumentUniqueId("doc2");
         requestData2.setHomeCommunityId("urn:oid:1.2.4");
         requestData2.setRepositoryUniqueId("repo2");

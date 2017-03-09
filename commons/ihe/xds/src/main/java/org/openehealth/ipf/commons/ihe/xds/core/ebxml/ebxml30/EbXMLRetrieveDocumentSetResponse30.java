@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType.DocumentResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
@@ -58,7 +58,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
     public List<RetrievedDocument> getDocuments() {
         List<RetrievedDocument> docs = new ArrayList<>();
         for (DocumentResponse documentResponse : response.getDocumentResponse()) {
-            RetrieveDocument requestData = new RetrieveDocument();
+            DocumentReference requestData = new DocumentReference();
             requestData.setDocumentUniqueId(documentResponse.getDocumentUniqueId());
             requestData.setHomeCommunityId(documentResponse.getHomeCommunityId());
             requestData.setRepositoryUniqueId(documentResponse.getRepositoryUniqueId());
@@ -93,7 +93,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
                 } else if (doc.getDataHandler() != null) {
                     documentResponse.setMimeType(doc.getDataHandler().getContentType());
                 }
-                RetrieveDocument requestData = doc.getRequestData();
+                DocumentReference requestData = doc.getRequestData();
                 if (requestData != null) {
                     documentResponse.setDocumentUniqueId(requestData.getDocumentUniqueId());
                     documentResponse.setHomeCommunityId(requestData.getHomeCommunityId());

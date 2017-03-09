@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocume
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType.DocumentRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType.StudyRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType.SeriesRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveSeries;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveStudy;
 
@@ -63,11 +63,11 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
                 retrieveSeries.setSeriesInstanceUID(seriesRequest.getSeriesInstanceUID());
                 for (DocumentRequest documentRequest : seriesRequest.getDocumentRequests())
                 {
-                    RetrieveDocument retrieveDocument = new RetrieveDocument();
-                    retrieveDocument.setDocumentUniqueId(documentRequest.getDocumentUniqueId());
-                    retrieveDocument.setHomeCommunityId(documentRequest.getHomeCommunityId());
-                    retrieveDocument.setRepositoryUniqueId(documentRequest.getRepositoryUniqueId());
-                    retrieveSeries.getDocuments().add(retrieveDocument);
+                    DocumentReference documentReference = new DocumentReference();
+                    documentReference.setDocumentUniqueId(documentRequest.getDocumentUniqueId());
+                    documentReference.setHomeCommunityId(documentRequest.getHomeCommunityId());
+                    documentReference.setRepositoryUniqueId(documentRequest.getRepositoryUniqueId());
+                    retrieveSeries.getDocuments().add(documentReference);
                 }
                 retrieveStudy.getRetrieveSerieses().add(retrieveSeries);
             }
@@ -95,12 +95,12 @@ public class EbXMLRetrieveImagingDocumentSetRequest30 implements EbXMLRetrieveIm
                 {
                     SeriesRequest seriesRequest = new SeriesRequest();
                     seriesRequest.setSeriesInstanceUID(retrieveSeries.getSeriesInstanceUID());
-                    for (RetrieveDocument retrieveDocument : retrieveSeries.getDocuments())
+                    for (DocumentReference documentReference : retrieveSeries.getDocuments())
                     {
                         DocumentRequest documentRequest = new DocumentRequest();
-                        documentRequest.setDocumentUniqueId(retrieveDocument.getDocumentUniqueId());
-                        documentRequest.setHomeCommunityId(retrieveDocument.getHomeCommunityId());
-                        documentRequest.setRepositoryUniqueId(retrieveDocument.getRepositoryUniqueId());
+                        documentRequest.setDocumentUniqueId(documentReference.getDocumentUniqueId());
+                        documentRequest.setHomeCommunityId(documentReference.getHomeCommunityId());
+                        documentRequest.setRepositoryUniqueId(documentReference.getRepositoryUniqueId());
                         seriesRequest.getDocumentRequests().add(documentRequest);
                     }
                     studyRequest.getSeriesRequest().add(seriesRequest);

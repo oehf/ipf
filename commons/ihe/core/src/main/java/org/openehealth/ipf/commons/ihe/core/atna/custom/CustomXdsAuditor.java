@@ -621,4 +621,54 @@ public class CustomXdsAuditor extends XDSAuditor {
                 patientId,
                 purposesOfUse);
     }
+
+    public void auditItiY1(
+            boolean serverSide,
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String userId,
+            String userName,
+            String clientIpAddress,
+            String serviceEndpointUri,
+            String patientId,
+            String[] documentUniqueIds,
+            String[] repositoryUniqueIds,
+            String[] homeCommunityIds,
+            List<CodedValueType> purposesOfUse)
+    {
+        if (! isAuditorEnabled()) {
+            return;
+        }
+
+        RemoveDocumentsEvent event = new RemoveDocumentsEvent(!serverSide, eventOutcome, purposesOfUse);
+
+        event.addSourceActiveParticipant(
+                serverSide ? null : userId,
+                serverSide ? null : getSystemAltUserId(),
+                null,
+                serverSide ? clientIpAddress : getSystemNetworkId(),
+                true);
+
+        if (!EventUtils.isEmptyOrNull(userName)) {
+            event.addHumanRequestorActiveParticipant(userName, null, userName, null);
+        }
+
+        event.addDestinationActiveParticipant(
+                serviceEndpointUri,
+                serverSide ? getSystemAltUserId() : null,
+                null,
+                serverSide ? getSystemNetworkId() : EventUtils.getAddressForUrl(serviceEndpointUri, false),
+                false);
+
+        event.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
+
+        if (!EventUtils.isEmptyOrNull(patientId)) {
+            event.addPatientParticipantObject(patientId);
+        }
+
+        for (int i = 0; i < documentUniqueIds.length; ++i) {
+            event.addRemovedDocumentParticipantObject(documentUniqueIds[i], repositoryUniqueIds[i]);
+        }
+
+        audit(event);
+    }
 }

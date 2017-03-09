@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.rad75;
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
@@ -35,7 +35,7 @@ import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_75;
 /**
  * The Camel component for the RAD-75 transaction.
  */
-public class Rad75Component extends XdsComponent<XdsRetrieveAuditDataset> {
+public class Rad75Component extends XdsComponent<XdsNonconstructiveDocumentSetRequestAuditDataset> {
 
 
     public Rad75Component() {
@@ -44,21 +44,21 @@ public class Rad75Component extends XdsComponent<XdsRetrieveAuditDataset> {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new XdsEndpoint<XdsRetrieveAuditDataset>(uri, remaining, this,
+        return new XdsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
                 null) {
             @Override
-            public AbstractWsProducer<XdsRetrieveAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint,
-                                                                                                             JaxWsClientFactory<XdsRetrieveAuditDataset> clientFactory) {
+            public AbstractWsProducer<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration> endpoint,
+                                                                                                                                      JaxWsClientFactory<XdsNonconstructiveDocumentSetRequestAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, RetrieveImagingDocumentSetRequestType.class, RetrieveDocumentSetResponseType.class);
             }
 
             @Override
-            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint) {
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration> endpoint) {
                 return new Rad75Service(endpoint.getHomeCommunityId());
             }
         };

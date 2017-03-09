@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsRegistryRequestService;
 
 /**
- * Service implementation for the IHE ITI-62 transaction (Register Document Set).
+ * Service implementation for the IHE ITI-62 transaction (Delete Document Set).
  * <p>
  * This implementation delegates to a Camel consumer by creating an exchange.
  *

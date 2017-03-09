@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveDocumentSetRequestTransformer;
 
@@ -50,7 +50,7 @@ public class RetrieveDocumentSetRequestTransformerTest {
         
         assertEquals(2, ebXML.getDocuments().size());
         
-        RetrieveDocument doc = ebXML.getDocuments().get(0);        
+        DocumentReference doc = ebXML.getDocuments().get(0);
         assertEquals("doc1", doc.getDocumentUniqueId());
         assertEquals("urn:oid:1.2.3", doc.getHomeCommunityId());
         assertEquals("repo1", doc.getRepositoryUniqueId());

@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 
 import javax.activation.DataHandler;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -46,7 +46,7 @@ public class RetrievedDocument implements Serializable {
     
     @Getter @Setter private transient DataHandler dataHandler;
     @XmlElementRef
-    @Getter @Setter private RetrieveDocument requestData;
+    @Getter @Setter private DocumentReference requestData;
     @Getter @Setter private String mimeType;
     @Getter @Setter private String newRepositoryUniqueId;
     @Getter @Setter private String newDocumentUniqueId;
@@ -75,7 +75,7 @@ public class RetrievedDocument implements Serializable {
      */
     public RetrievedDocument(
             DataHandler dataHandler,
-            RetrieveDocument requestData,
+            DocumentReference requestData,
             String newRepositoryUniqueId,
             String newDocumentUniqueId,
             String mimeType)

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2017 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<definitions
+	xmlns="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xds="urn:ihe:iti:xds-b:2007"
+    xmlns:rmd="urn:ihe:iti:rmd:2017"
+    xmlns:rs="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0"
+	xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:wsam="http://www.w3.org/2006/05/addressing/metadata/"
+	targetNamespace="urn:ihe:iti:rmd:2017"
+	name="DocumentRepository">
+
+	<documentation>IHE XDS.b Document Repository = Transaction ITI-Y1 = Remove Documents</documentation>
+
+	<types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:ihe:iti:rmd:2017">
+            <xsd:import namespace="urn:ihe:iti:xds-b:2007" schemaLocation="schema/IHE/IHEXDSB.xsd"/>
+            <xsd:element name="RemoveDocumentsRequest" type="xds:RetrieveDocumentSetRequestType"/>
+        </xsd:schema>
+	</types>
+
+	<message name="RemoveDocuments_Message">
+		<documentation>Remove Documents Request</documentation>
+		<part name="body" element="rmd:RemoveDocumentsRequest"/>
+	</message>
+
+	<message name="RemoveDocumentsResponse_Message">
+		<documentation>Remove Documents Response</documentation>
+		<part name="body" element="rs:RegistryResponse"/>
+	</message>
+
+	<portType name="DocumentRepository_PortType">
+		<operation name="DocumentRepository_RemoveDocuments">
+			<input message="rmd:RemoveDocuments_Message" wsam:Action="urn:ihe:iti:2017:RemoveDocuments"/>
+			<output message="rmd:RemoveDocumentsResponse_Message" wsam:Action="urn:ihe:iti:2017:RemoveDocumentsResponse"/>
+		</operation>
+	</portType>
+
+	<binding name="DocumentRepository_Binding_Soap12" type="rmd:DocumentRepository_PortType">
+		<wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="DocumentRepository_RemoveDocuments">
+			<wsoap12:operation soapActionRequired="false"/>
+			<input>
+				<wsoap12:body use="literal"/>
+			</input>
+			<output>
+				<wsoap12:body use="literal"/>
+			</output>
+		</operation>
+	</binding>		
+
+	<service name="DocumentRepository_Service">
+		<port name="DocumentRepository_Port_Soap12" binding="rmd:DocumentRepository_Binding_Soap12">
+			<wsoap12:address location="http://servicelocation/DocumentRepository_Service"/>
+		</port>		
+	</service>
+</definitions>

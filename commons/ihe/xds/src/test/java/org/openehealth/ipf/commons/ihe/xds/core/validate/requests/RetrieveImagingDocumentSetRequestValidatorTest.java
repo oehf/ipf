@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveSeries;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveStudy;
@@ -65,11 +65,11 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
     
     @Test
     public void testStudyInstanceIdMustBeSpecified() {
-        List<RetrieveDocument> retrieveDocuments = new ArrayList<>();
-        RetrieveDocument retrieveDocument = new RetrieveDocument("repo1", "doc1", "urn:oid:1.2.5");
-        retrieveDocuments.add(retrieveDocument);
+        List<DocumentReference> documentReferences = new ArrayList<>();
+        DocumentReference documentReference = new DocumentReference("repo1", "doc1", "urn:oid:1.2.5");
+        documentReferences.add(documentReference);
 
-        RetrieveSeries retrieveSeries = new RetrieveSeries("urn:oid:1.2.3", retrieveDocuments);
+        RetrieveSeries retrieveSeries = new RetrieveSeries("urn:oid:1.2.3", documentReferences);
         List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
         retrieveSerieses.add(retrieveSeries);
 
@@ -80,11 +80,11 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
 
     @Test
     public void testSteriesInstanceIdMustBeSpecified() {
-        List<RetrieveDocument> retrieveDocuments = new ArrayList<>();
-        RetrieveDocument retrieveDocument = new RetrieveDocument("repo1", "doc1", "urn:oid:1.2.6");
-        retrieveDocuments.add(retrieveDocument);
+        List<DocumentReference> documentReferences = new ArrayList<>();
+        DocumentReference documentReference = new DocumentReference("repo1", "doc1", "urn:oid:1.2.6");
+        documentReferences.add(documentReference);
 
-        RetrieveSeries retrieveSeries = new RetrieveSeries(null, retrieveDocuments);
+        RetrieveSeries retrieveSeries = new RetrieveSeries(null, documentReferences);
         List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
         retrieveSerieses.add(retrieveSeries);
 
@@ -95,14 +95,14 @@ public class RetrieveImagingDocumentSetRequestValidatorTest
 
     @Test
     public void testRepoIdMustBeSpecified() {
-        request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().add(new RetrieveDocument(null, "doc3", "home3"));
+        request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().add(new DocumentReference(null, "doc3", "home3"));
         EbXMLRetrieveImagingDocumentSetRequest ebXML = transformer.toEbXML(request);
         expectFailure(REPO_ID_MUST_BE_SPECIFIED, ebXML);
     }
 
     @Test
     public void testDocIdMustBeSpecified() {
-        request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().add(new RetrieveDocument("repo3", "", "home3"));
+        request.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments().add(new DocumentReference("repo3", "", "home3"));
         EbXMLRetrieveImagingDocumentSetRequest ebXML = transformer.toEbXML(request);
         expectFailure(DOC_ID_MUST_BE_SPECIFIED, ebXML);
     }

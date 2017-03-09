@@ -103,7 +103,7 @@ public abstract class SampleData {
      * @return a sample response for retrieved documents.
      */
     public static RetrievedDocumentSet createRetrievedDocumentSet() {
-        RetrieveDocument requestData1 = new RetrieveDocument();
+        DocumentReference requestData1 = new DocumentReference();
         requestData1.setDocumentUniqueId("doc1");
         requestData1.setHomeCommunityId("urn:oid:1.2.3");
         requestData1.setRepositoryUniqueId("repo1");
@@ -115,7 +115,7 @@ public abstract class SampleData {
         doc1.setDataHandler(dataHandler1);
         doc1.setMimeType("application/test1");
 
-        RetrieveDocument requestData2 = new RetrieveDocument();
+        DocumentReference requestData2 = new DocumentReference();
         requestData2.setDocumentUniqueId("doc2");
         requestData2.setHomeCommunityId("urn:oid:1.2.4");
         requestData2.setRepositoryUniqueId("repo2");
@@ -347,27 +347,38 @@ public abstract class SampleData {
      */
     public static RetrieveDocumentSet createRetrieveDocumentSet() {
         RetrieveDocumentSet request = new RetrieveDocumentSet();
-        request.getDocuments().add(new RetrieveDocument("repo1", "doc1", "urn:oid:1.2.3"));
-        request.getDocuments().add(new RetrieveDocument("repo2", "doc2", "urn:oid:1.2.4"));
+        request.getDocuments().add(new DocumentReference("repo1", "doc1", "urn:oid:1.2.3"));
+        request.getDocuments().add(new DocumentReference("repo2", "doc2", "urn:oid:1.2.4"));
         return request;
     }
-    
+
+    /**
+     * @return a sample request to remove documents.
+     */
+    public static RemoveDocuments createRemoveDocuments() {
+        RemoveDocuments request = new RemoveDocuments();
+        request.getDocuments().add(new DocumentReference("repo1", "doc1", "urn:oid:1.2.3"));
+        request.getDocuments().add(new DocumentReference("repo2", "doc2", "urn:oid:1.2.4"));
+        request.getDocuments().add(new DocumentReference("repo3", "doc3", "urn:oid:1.2.5"));
+        return request;
+    }
+
     /**
      * @return a sample request to retrieve an imaging document set.
      */
     public static RetrieveImagingDocumentSet createRetrieveImagingDocumentSet() {
         RetrieveImagingDocumentSet request = new RetrieveImagingDocumentSet();
 
-        List<RetrieveDocument> retrieveDocuments = new ArrayList<>();
-        RetrieveDocument retrieveDocument1 = new RetrieveDocument("repo1", "doc1", "urn:oid:1.2.3");
-        retrieveDocuments.add(retrieveDocument1);
-        RetrieveDocument retrieveDocument2 = new RetrieveDocument("repo2", "doc2", "urn:oid:1.2.4");
-        retrieveDocuments.add(retrieveDocument2);
+        List<DocumentReference> documentReferences = new ArrayList<>();
+        DocumentReference documentReference1 = new DocumentReference("repo1", "doc1", "urn:oid:1.2.3");
+        documentReferences.add(documentReference1);
+        DocumentReference documentReference2 = new DocumentReference("repo2", "doc2", "urn:oid:1.2.4");
+        documentReferences.add(documentReference2);
 
         List<RetrieveSeries> retrieveSerieses = new ArrayList<>();
-        RetrieveSeries retrieveSeries1 = new RetrieveSeries("urn:oid:1.2.1", retrieveDocuments);
+        RetrieveSeries retrieveSeries1 = new RetrieveSeries("urn:oid:1.2.1", documentReferences);
         retrieveSerieses.add(retrieveSeries1);
-        RetrieveSeries retrieveSeries2 = new RetrieveSeries("urn:oid:1.2.2", retrieveDocuments);
+        RetrieveSeries retrieveSeries2 = new RetrieveSeries("urn:oid:1.2.2", documentReferences);
         retrieveSerieses.add(retrieveSeries2);
 
         List<RetrieveStudy> retrieveStudies = request.getRetrieveStudies();

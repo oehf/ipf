@@ -46,7 +46,7 @@ public class RetrieveSeries implements Serializable
 
     protected String seriesInstanceUID;
     @XmlElementRef
-    private List<RetrieveDocument> documents = new ArrayList<>();
+    private List<DocumentReference> documents = new ArrayList<>();
 
     /**
      * Constructs the RetrieveSeries.
@@ -59,7 +59,7 @@ public class RetrieveSeries implements Serializable
      * @param seriesInstanceUID    he series instance UID.
      * @param documents            the documents.
      */
-    public RetrieveSeries(String seriesInstanceUID, List<RetrieveDocument> documents) {
+    public RetrieveSeries(String seriesInstanceUID, List<DocumentReference> documents) {
         this.seriesInstanceUID = seriesInstanceUID;
         this.documents = documents;
     }
@@ -85,7 +85,7 @@ public class RetrieveSeries implements Serializable
     /**
      * @return the list of documents to retrieve.
      */
-    public List<RetrieveDocument> getDocuments() {
+    public List<DocumentReference> getDocuments() {
         return documents;
     }
 

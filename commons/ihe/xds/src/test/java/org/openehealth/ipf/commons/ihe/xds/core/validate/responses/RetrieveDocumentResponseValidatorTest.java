@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRe
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveDocumentSetResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocumentSetResponseTransformer;
@@ -78,7 +78,7 @@ public class RetrieveDocumentResponseValidatorTest {
     
     @Test
     public void testRepoIdMustBeSpecified() {
-        RetrieveDocument requestData = new RetrieveDocument(null, "doc3", "home3");
+        DocumentReference requestData = new DocumentReference(null, "doc3", "home3");
         RetrievedDocument doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(SampleData.createDataHandler());
@@ -90,7 +90,7 @@ public class RetrieveDocumentResponseValidatorTest {
     
     @Test
     public void testDocIdMustBeSpecified() {
-        RetrieveDocument requestData = new RetrieveDocument("repo3", "", "home3");
+        DocumentReference requestData = new DocumentReference("repo3", "", "home3");
         RetrievedDocument doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(SampleData.createDataHandler());
@@ -102,7 +102,7 @@ public class RetrieveDocumentResponseValidatorTest {
     
     @Test
     public void testMimeTypeMustBeSpecified() {
-        RetrieveDocument requestData = new RetrieveDocument("repo3", "doc3", "home3");
+        DocumentReference requestData = new DocumentReference("repo3", "doc3", "home3");
         RetrievedDocument doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(SampleData.createDataHandler());
@@ -114,7 +114,7 @@ public class RetrieveDocumentResponseValidatorTest {
 
     @Test
     public void testDocumentMustBeSpecified() {
-        RetrieveDocument requestData = new RetrieveDocument("repo3", "doc3", "urn:oid:1.2.5");
+        DocumentReference requestData = new DocumentReference("repo3", "doc3", "urn:oid:1.2.5");
         RetrievedDocument doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(null);

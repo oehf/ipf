@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
@@ -25,48 +23,19 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
  * Transforms between a {@link EbXMLRetrieveDocumentSetRequest} and its ebXML representation. 
  * @author Jens Riemschneider
  */
-public class RetrieveDocumentSetRequestTransformer {
-    private final EbXMLFactory factory;
-    
+public class RetrieveDocumentSetRequestTransformer extends AbstractRepositoryDocumentSetRequestTransformer<RetrieveDocumentSet> {
+
     /**
      * Constructs the transformer
      * @param factory
      *          factory for version independent ebXML objects. 
      */
     public RetrieveDocumentSetRequestTransformer(EbXMLFactory factory) {
-        notNull(factory, "factory cannot be null");
-        this.factory = factory;
+        super(factory);
     }
-    
-    /**
-     * Transforms the request into its ebXML representation.
-     * @param request
-     *          the request. Can be <code>null</code>.
-     * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
-     */
-    public EbXMLRetrieveDocumentSetRequest toEbXML(RetrieveDocumentSet request) {
-        if (request == null) {
-            return null;
-        }
-        
-        EbXMLRetrieveDocumentSetRequest ebXML = factory.createRetrieveDocumentSetRequest();
-        ebXML.setDocuments(request.getDocuments());        
-        return ebXML;
-    }
-    
-    /**
-     * Transforms the ebXML representation into a request.
-     * @param ebXML
-     *          the ebXML representation. Can be <code>null</code>.
-     * @return the request. <code>null</code> if the input was <code>null</code>.
-     */
-    public RetrieveDocumentSet fromEbXML(EbXMLRetrieveDocumentSetRequest ebXML) {
-        if (ebXML == null) {
-            return null;
-        }
-            
-        RetrieveDocumentSet request = new RetrieveDocumentSet();
-        request.getDocuments().addAll(ebXML.getDocuments());        
-        return request;
+
+    @Override
+    protected RetrieveDocumentSet createRequest() {
+        return new RetrieveDocumentSet();
     }
 }

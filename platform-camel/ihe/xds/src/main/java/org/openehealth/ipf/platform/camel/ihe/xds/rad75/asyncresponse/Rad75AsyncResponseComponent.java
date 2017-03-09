@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.rad75.asyncresponse;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 
@@ -27,7 +27,7 @@ import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_75_ASYNC_
 /**
  * The Camel component for the RAD-75 (XCA-I) async response.
  */
-public class Rad75AsyncResponseComponent extends XdsComponent<XdsRetrieveAuditDataset> {
+public class Rad75AsyncResponseComponent extends XdsComponent<XdsNonconstructiveDocumentSetRequestAuditDataset> {
 
     public Rad75AsyncResponseComponent() {
         super(RAD_75_ASYNC_RESPONSE);

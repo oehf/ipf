@@ -20,12 +20,9 @@ import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Request object for the Retrieve Document Set transaction.
@@ -37,19 +34,8 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RetrieveDocumentSet")
 @XmlRootElement(name = "retrieveDocumentSet")
-@EqualsAndHashCode(doNotUseGetters = true)
-@ToString(doNotUseGetters = true)
-public class RetrieveDocumentSet implements Serializable {
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+@ToString(callSuper = true)
+public class RetrieveDocumentSet extends NonconstructiveDocumentSetRequest implements Serializable {
     private static final long serialVersionUID = -3410625944194160618L;
-    
-    @XmlElementRef
-    private final List<RetrieveDocument> documents = new ArrayList<>();
-
-    /**
-     * @return the list of documents to retrieve.
-     */
-    public List<RetrieveDocument> getDocuments() {
-        return documents;
-    }
-
 }

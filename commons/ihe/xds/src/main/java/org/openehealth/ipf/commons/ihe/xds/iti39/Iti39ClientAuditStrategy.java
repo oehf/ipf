@@ -16,8 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.iti39;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset.Status;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditStrategy30;
 
 /**
@@ -31,7 +31,7 @@ public class Iti39ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
     }
 
     @Override
-    public void doAudit(XdsRetrieveAuditDataset auditDataset) {
+    public void doAudit(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
         for (Status status : Status.values()) {
             if (auditDataset.hasDocuments(status)) {
                 AuditorManager.getXCAInitiatingGatewayAuditor().auditCrossGatewayRetrieveEvent(

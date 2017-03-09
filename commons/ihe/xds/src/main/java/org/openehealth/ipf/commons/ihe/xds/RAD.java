@@ -19,7 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69PortType;
 import org.openehealth.ipf.commons.ihe.xds.rad75.Rad75AuditStrategy;

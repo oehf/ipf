@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveDocumentSetRequestTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
@@ -57,14 +57,14 @@ public class RetrieveDocumentSetRequestValidatorTest {
     
     @Test
     public void testRepoIdMustBeSpecified() {
-        request.getDocuments().add(new RetrieveDocument(null, "doc3", "home3"));
+        request.getDocuments().add(new DocumentReference(null, "doc3", "home3"));
         EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(request);
         expectFailure(REPO_ID_MUST_BE_SPECIFIED, ebXML);
     }
     
     @Test
     public void testDocIdMustBeSpecified() {
-        request.getDocuments().add(new RetrieveDocument("repo3", "", "home3"));
+        request.getDocuments().add(new DocumentReference("repo3", "", "home3"));
         EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(request);
         expectFailure(DOC_ID_MUST_BE_SPECIFIED, ebXML);
     }

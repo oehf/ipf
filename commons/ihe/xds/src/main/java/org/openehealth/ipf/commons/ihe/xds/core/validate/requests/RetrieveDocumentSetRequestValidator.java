@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
@@ -37,7 +37,7 @@ public class RetrieveDocumentSetRequestValidator implements Validator<EbXMLRetri
     public void validate(EbXMLRetrieveDocumentSetRequest request, ValidationProfile profile) {
         notNull(request, "request cannot be null");
         
-        for (RetrieveDocument document : request.getDocuments()) {
+        for (DocumentReference document : request.getDocuments()) {
             String repoId = document.getRepositoryUniqueId();
             metaDataAssert(repoId != null && !repoId.isEmpty(), REPO_ID_MUST_BE_SPECIFIED);
             

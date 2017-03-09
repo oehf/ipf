@@ -22,7 +22,7 @@ import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
@@ -108,7 +108,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         assertEquals(response.toString(), Status.SUCCESS, response.status)
 
         def retrieve = new RetrieveDocumentSet()
-        def doc1 = new RetrieveDocument()
+        def doc1 = new DocumentReference()
         doc1.documentUniqueId = provide.documents[0].documentEntry.uniqueId
         doc1.repositoryUniqueId = 'something'
         retrieve.documents.add(doc1)

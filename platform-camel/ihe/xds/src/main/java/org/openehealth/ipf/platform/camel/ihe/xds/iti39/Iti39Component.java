@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti39;
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
@@ -35,7 +35,7 @@ import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_39;
 /**
  * The Camel component for the ITI-39 transaction.
  */
-public class Iti39Component extends XdsComponent<XdsRetrieveAuditDataset> {
+public class Iti39Component extends XdsComponent<XdsNonconstructiveDocumentSetRequestAuditDataset> {
 
 
     public Iti39Component() {
@@ -44,21 +44,21 @@ public class Iti39Component extends XdsComponent<XdsRetrieveAuditDataset> {
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new XdsEndpoint<XdsRetrieveAuditDataset>(uri, remaining, this,
+        return new XdsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
                 null) {
             @Override
-            public AbstractWsProducer<XdsRetrieveAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint,
-                                                                                                             JaxWsClientFactory<XdsRetrieveAuditDataset> clientFactory) {
+            public AbstractWsProducer<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration> endpoint,
+                                                                                                                                      JaxWsClientFactory<XdsNonconstructiveDocumentSetRequestAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                         endpoint, clientFactory, RetrieveDocumentSetRequestType.class, RetrieveDocumentSetResponseType.class);
             }
 
             @Override
-            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<XdsRetrieveAuditDataset, WsTransactionConfiguration> endpoint) {
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration> endpoint) {
                 return new Iti39Service(endpoint.getHomeCommunityId());
             }
         };

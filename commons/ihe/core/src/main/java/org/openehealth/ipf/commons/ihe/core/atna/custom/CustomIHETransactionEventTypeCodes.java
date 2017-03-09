@@ -77,24 +77,6 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
         }
     }
 
-    public static final class RetrieveImagingDocumentSet extends IHETransactionEventTypeCodes {
-        public RetrieveImagingDocumentSet() {
-            super("RAD-69", "Retrieve Imaging Document Set");
-        }
-    }
-
-    public static final class CrossGatewayRetrieveImagingDocumentSet extends IHETransactionEventTypeCodes {
-        public CrossGatewayRetrieveImagingDocumentSet() {
-            super("RAD-75", "Cross Gateway Retrieve Imaging Document Set");
-        }
-    }
-
-    public static final class QueryExistingData extends IHETransactionEventTypeCodes {
-        public QueryExistingData() {
-            super("PCC-1", "Query Existing Data");
-        }
-    }
-
     public static final class ProvideDocumentBundle extends IHETransactionEventTypeCodes {
         public ProvideDocumentBundle() {
             super("ITI-65", "Provide Document Bundle");
@@ -124,6 +106,31 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
             super("ITI-83", "Mobile Patient Identifier Cross-reference Query");
         }
     }
+
+    public static final class RemoveDocuments extends IHETransactionEventTypeCodes {
+        public RemoveDocuments() {
+            super("ITI-Y1", "Remove Documents");
+        }
+    }
+
+    public static final class RetrieveImagingDocumentSet extends IHETransactionEventTypeCodes {
+        public RetrieveImagingDocumentSet() {
+            super("RAD-69", "Retrieve Imaging Document Set");
+        }
+    }
+
+    public static final class CrossGatewayRetrieveImagingDocumentSet extends IHETransactionEventTypeCodes {
+        public CrossGatewayRetrieveImagingDocumentSet() {
+            super("RAD-75", "Cross Gateway Retrieve Imaging Document Set");
+        }
+    }
+
+    public static final class QueryExistingData extends IHETransactionEventTypeCodes {
+        public QueryExistingData() {
+            super("PCC-1", "Query Existing Data");
+        }
+    }
+
 }
 
 

@@ -19,10 +19,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * XDS audit dataset specific for remove-related transactions.
+ * XDS audit dataset specific for transactions related to XDS Metadata removal.
  * @author Boris Stanojevic
  */
-public class XdsRemoveAuditDataset extends XdsAuditDataset {
+public class XdsMetadataRemoveAuditDataset extends XdsAuditDataset {
     private static final long serialVersionUID = 3746882739914130719L;
 
     @Getter @Setter private String[] objectIds;
@@ -33,7 +33,7 @@ public class XdsRemoveAuditDataset extends XdsAuditDataset {
      *            server side (<code>true</code>) or on the client side (
      *            <code>false</code>)
      */
-    public XdsRemoveAuditDataset(boolean serverSide) {
+    public XdsMetadataRemoveAuditDataset(boolean serverSide) {
         super(serverSide);
     }
 

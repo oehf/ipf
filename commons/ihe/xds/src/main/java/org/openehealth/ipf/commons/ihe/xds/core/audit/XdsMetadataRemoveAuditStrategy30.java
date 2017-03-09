@@ -27,19 +27,19 @@ import java.util.Map;
 
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
- * in ebXML 3.0-based removing-related XDS transactions.
+ * in ebXML 3.0-based transactions related to XDS Metadata removal.
  *
  * @author Boris Stanojevic
  */
-abstract public class XdsRemoveAuditStrategy30 extends XdsAuditStrategy<XdsRemoveAuditDataset> {
+abstract public class XdsMetadataRemoveAuditStrategy30 extends XdsAuditStrategy<XdsMetadataRemoveAuditDataset> {
 
-    public XdsRemoveAuditStrategy30(boolean serverSide) {
+    public XdsMetadataRemoveAuditStrategy30(boolean serverSide) {
         super(serverSide);
     }
 
 
     @Override
-    public XdsRemoveAuditDataset enrichAuditDatasetFromRequest(XdsRemoveAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
+    public XdsMetadataRemoveAuditDataset enrichAuditDatasetFromRequest(XdsMetadataRemoveAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         RemoveObjectsRequest request = (RemoveObjectsRequest) pojo;
 
         List<ObjectRefType> references = request.getObjectRefList().getObjectRef();
@@ -58,8 +58,8 @@ abstract public class XdsRemoveAuditStrategy30 extends XdsAuditStrategy<XdsRemov
 
 
     @Override
-    public XdsRemoveAuditDataset createAuditDataset() {
-        return new XdsRemoveAuditDataset(isServerSide());
+    public XdsMetadataRemoveAuditDataset createAuditDataset() {
+        return new XdsMetadataRemoveAuditDataset(isServerSide());
     }
 
 

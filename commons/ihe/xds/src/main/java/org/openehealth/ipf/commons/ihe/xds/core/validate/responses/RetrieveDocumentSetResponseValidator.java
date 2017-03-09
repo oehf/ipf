@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
@@ -46,7 +46,7 @@ public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetr
         regResponseValidator.validate(response, profile);
 
         for (RetrievedDocument doc : response.getDocuments()) {
-            RetrieveDocument requestData = doc.getRequestData();
+            DocumentReference requestData = doc.getRequestData();
 
             String repoId = requestData.getRepositoryUniqueId();
             metaDataAssert(repoId != null && !repoId.isEmpty(), REPO_ID_MUST_BE_SPECIFIED);

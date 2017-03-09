@@ -188,7 +188,31 @@ public class EbXML30Converters {
         RetrieveDocumentSetRequestTransformer transformer = new RetrieveDocumentSetRequestTransformer(factory);
         return transformer.fromEbXML(new EbXMLRetrieveDocumentSetRequest30(in));
     }
-    
+
+    /**
+     * Standard Camel converter for the Remove Documents request.
+     * @param in
+     *          a version independent request object.
+     * @return an ebXML 3.0 object.
+     */
+    @Converter
+    public static RemoveDocumentsRequestType convert(RemoveDocuments in) {
+        RemoveDocumentsTransformer transformer = new RemoveDocumentsTransformer(factory);
+        return (RemoveDocumentsRequestType) transformer.toEbXML(in).getInternal();
+    }
+
+    /**
+     * Standard Camel converter for the Remove Documents request.
+     * @param in
+     *          an ebXML 3.0 object.
+     * @return a version independent request object.
+     */
+    @Converter
+    public static RemoveDocuments convert(RemoveDocumentsRequestType in) {
+        RemoveDocumentsTransformer transformer = new RemoveDocumentsTransformer(factory);
+        return transformer.fromEbXML(new EbXMLRetrieveDocumentSetRequest30(in));
+    }
+
     /**
      * Standard Camel converter for the Retrieve Document Set response.
      * @param in

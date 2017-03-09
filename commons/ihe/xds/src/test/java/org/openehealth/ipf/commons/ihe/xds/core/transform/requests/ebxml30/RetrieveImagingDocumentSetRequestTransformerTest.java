@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveImagingDocumentSetRequestTransformer;
 
@@ -57,10 +57,10 @@ public class RetrieveImagingDocumentSetRequestTransformerTest
         assertEquals(2, ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().size());
         assertEquals("urn:oid:1.2.1", ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getSeriesInstanceUID());
 
-        List<RetrieveDocument> documents = ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments();
+        List<DocumentReference> documents = ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments();
         assertEquals(2, documents.size());
 
-        RetrieveDocument doc = documents.get(0);
+        DocumentReference doc = documents.get(0);
         assertEquals("doc1", doc.getDocumentUniqueId());
         assertEquals("urn:oid:1.2.3", doc.getHomeCommunityId());
         assertEquals("repo1", doc.getRepositoryUniqueId());

@@ -18,19 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.xds.XDM;
 import org.openehealth.ipf.commons.ihe.xds.XDR;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLProvideAndRegisterDocumentSetRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLQueryResponse30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRemoveObjectsRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveDocumentSetRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveDocumentSetResponse30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveImagingDocumentSetRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.*;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
@@ -51,14 +39,7 @@ import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_75;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_39;
 import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_18;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_41;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_42;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_43;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_51;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_57;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_61;
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_62;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.*;
 import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
 
 /**
@@ -281,7 +262,23 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         new QueryResponseValidator().validate(message, ITI_63);
     };
 
+    private static final Processor ITI_Y1_REQUEST_VALIDATOR = exchange -> {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
+        EbXMLRetrieveDocumentSetRequest30 message =
+                new EbXMLRetrieveDocumentSetRequest30(exchange.getIn().getBody(RemoveDocumentsRequestType.class));
+        new RetrieveDocumentSetRequestValidator().validate(message, ITI_Y1);
+    };
 
+    private static final Processor ITI_Y1_RESPONSE_VALIDATOR = exchange -> {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
+        EbXMLRegistryResponse30 message =
+                new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
+        new RegistryResponseValidator().validate(message, ITI_Y1);
+    };
 
     /**
      * Returns a validating processor for ITI-18 request messages.
@@ -449,6 +446,20 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
      */
     public static Processor iti63ResponseValidator() {
         return ITI_63_RESPONSE_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-Y1 request messages.
+     */
+    public static Processor itiY1RequestValidator() {
+        return ITI_Y1_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-Y1 response messages.
+     */
+    public static Processor itiY1ResponseValidator() {
+        return ITI_Y1_RESPONSE_VALIDATOR;
     }
 
     private static final Processor RAD_69_REQUEST_VALIDATOR = exchange -> {

@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveSeries;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveStudy;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
@@ -57,7 +57,7 @@ public class RetrieveImagingDocumentSetRequestValidator implements Validator<EbX
                 String seriesInstanceUID = retrieveSeries.getSeriesInstanceUID();
                 metaDataAssert(isNotEmpty(seriesInstanceUID), SERIES_INSTANCE_UID_MUST_BE_SPECIFIED);
 
-                for (RetrieveDocument document : retrieveSeries.getDocuments()) {
+                for (DocumentReference document : retrieveSeries.getDocuments()) {
                     //todo: Eliminate this duplicate code from DocumentRequest?
                     String repoId = document.getRepositoryUniqueId();
                     metaDataAssert(isNotEmpty(repoId), REPO_ID_MUST_BE_SPECIFIED);

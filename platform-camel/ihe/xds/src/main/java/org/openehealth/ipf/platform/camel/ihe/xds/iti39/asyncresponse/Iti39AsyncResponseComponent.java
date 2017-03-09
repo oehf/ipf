@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti39.asyncresponse;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRetrieveAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsComponent;
 
@@ -27,7 +27,7 @@ import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_39_ASYNC_
 /**
  * The Camel component for the ITI-39 (XCA) async response.
  */
-public class Iti39AsyncResponseComponent extends XdsComponent<XdsRetrieveAuditDataset> {
+public class Iti39AsyncResponseComponent extends XdsComponent<XdsNonconstructiveDocumentSetRequestAuditDataset> {
 
     public Iti39AsyncResponseComponent() {
         super(ITI_39_ASYNC_RESPONSE);

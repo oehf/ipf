@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType.DocumentRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 
 /**
  * The ebXML 3.0 version of the {@link EbXMLRetrieveDocumentSetRequest}.
@@ -47,10 +47,10 @@ public class EbXMLRetrieveDocumentSetRequest30 implements EbXMLRetrieveDocumentS
     }
 
     @Override
-    public List<RetrieveDocument> getDocuments() {
-        List<RetrieveDocument> docs = new ArrayList<>();
+    public List<DocumentReference> getDocuments() {
+        List<DocumentReference> docs = new ArrayList<>();
         for (DocumentRequest documentRequest : request.getDocumentRequest()) {
-            RetrieveDocument doc = new RetrieveDocument();
+            DocumentReference doc = new DocumentReference();
             doc.setDocumentUniqueId(documentRequest.getDocumentUniqueId());
             doc.setHomeCommunityId(documentRequest.getHomeCommunityId());
             doc.setRepositoryUniqueId(documentRequest.getRepositoryUniqueId());
@@ -60,10 +60,10 @@ public class EbXMLRetrieveDocumentSetRequest30 implements EbXMLRetrieveDocumentS
     }
 
     @Override
-    public void setDocuments(List<RetrieveDocument> documents) {
+    public void setDocuments(List<DocumentReference> documents) {
         request.getDocumentRequest().clear();
         if (documents != null) {
-            for (RetrieveDocument doc : documents) {
+            for (DocumentReference doc : documents) {
                 DocumentRequest documentRequest = new DocumentRequest();
                 documentRequest.setDocumentUniqueId(doc.getDocumentUniqueId());
                 documentRequest.setHomeCommunityId(doc.getHomeCommunityId());
