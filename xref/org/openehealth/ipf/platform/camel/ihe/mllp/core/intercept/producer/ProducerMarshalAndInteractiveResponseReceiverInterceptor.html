@@ -30,10 +30,10 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.parser.Parser;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.util.Terser;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.Exchange;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.modules.hl7.message.MessageUtils;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.core.util.Exchanges;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.modules.hl7.message.MessageUtils;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.core.util.Exchanges;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpoint;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      @Override
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> process(Exchange exchange) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <a href="../../../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Hl7v2TransactionConfiguration</a> config = getEndpoint().getHl7v2TransactionConfiguration();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <a href="../../../../../../../../../../org/openehealth/ipf/commons/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Hl7v2TransactionConfiguration</a> config = getEndpoint().getHl7v2TransactionConfiguration();
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          Message request = exchange.getIn().getBody(Message.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          Terser requestTerser = <strong class="jxr_keyword">null</strong>;
@@ -280,6 +280,6 @@
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

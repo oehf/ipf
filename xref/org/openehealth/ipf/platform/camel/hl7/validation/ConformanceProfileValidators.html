@@ -35,131 +35,134 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.Message;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.parser.GenericParser;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.validation.MessageRule;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.Exchange;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.Processor;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.Validate;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.core.modules.api.ValidationException;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.core.CachingGazelleProfileRule;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.ConformanceProfile;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * Factory for manually triggering a validation of a message depending on a profile or a defined</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * IHETransaction. In general this should not be necessary when the HapiContext of the parsed</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * message contains a ValidationContext that includes the corresponding</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * {@link org.openehealth.ipf.gazelle.validation.core.GazelleProfileRule GazelleProfileRule}</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * instance as one of its message rules. In that case it would be sufficient to use</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * {@link org.openehealth.ipf.platform.camel.hl7.HL7v2#validatingProcessor()} or</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * {@link org.apache.camel.component.hl7.HL7#messageConforms()}.</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * @author Boris Stanojevic</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * @author Christian Ohr</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/openehealth/ipf/platform/camel/hl7/validation/ConformanceProfileValidators.html">ConformanceProfileValidators</a> {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> HapiContext FALLBACK_HAPI_CONTEXT;
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">static</strong> {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          FALLBACK_HAPI_CONTEXT = <strong class="jxr_keyword">new</strong> DefaultHapiContext();
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          FALLBACK_HAPI_CONTEXT.setProfileStore(<strong class="jxr_keyword">new</strong> GazelleProfileStore());
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          FALLBACK_HAPI_CONTEXT.setValidationContext(ValidationContextFactory.noValidation());
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      }
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../../../org/openehealth/ipf/platform/camel/hl7/validation/ConformanceProfileValidators.html">ConformanceProfileValidators</a>() {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      }
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     * Returns a validating Camel processor for a dedicated profile</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     * @param conformanceProfile HL7 conformance profile</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * @return a validating Camel processor for a dedicated profile</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Processor validatingProcessor(<strong class="jxr_keyword">final</strong> ConformanceProfile conformanceProfile) {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Processor() {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>              <strong class="jxr_keyword">private</strong> CachingGazelleProfileRule rule = <strong class="jxr_keyword">new</strong> CachingGazelleProfileRule(conformanceProfile);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              @Override
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>              <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> process(Exchange exchange) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  <strong class="jxr_keyword">if</strong> (ValidatorAdapter.validationEnabled(exchange)) {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                      doValidate(bodyMessage(exchange), rule);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>                  }
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>              }
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>          };
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      }
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">     * Returns a validating Camel processor for a message in a IHE transaction. The actual profile</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">     * to be used is guessed from the message's event type and version</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     * @param iheTransaction IHE transaction</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * @return a validating Camel processor for a message in a IHE transaction</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Processor validatingProcessor(<strong class="jxr_keyword">final</strong> HL7v2Transactions iheTransaction) {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Processor() {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>              <strong class="jxr_keyword">private</strong> CachingGazelleProfileRule rule = <strong class="jxr_keyword">new</strong> CachingGazelleProfileRule(iheTransaction);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>              @Override
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> process(Exchange exchange) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>                 <strong class="jxr_keyword">if</strong> (ValidatorAdapter.validationEnabled(exchange)) {
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>                     doValidate(bodyMessage(exchange), rule);
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>                 }
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>             }
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>         };
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>     }
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> doValidate(Message message, <strong class="jxr_keyword">final</strong> MessageRule validator)
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>             <strong class="jxr_keyword">throws</strong> IOException, JAXBException {
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>         throwIPFValidationException(validator.apply(message));
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>     }
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> throwIPFValidationException(ca.uhn.hl7v2.validation.ValidationException[] exceptions) {
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>         List&lt;ca.uhn.hl7v2.validation.ValidationException&gt; fatalExceptions = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>         <strong class="jxr_keyword">for</strong> (ca.uhn.hl7v2.validation.ValidationException exception : exceptions) {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>             <strong class="jxr_keyword">if</strong> (exception.getSeverity().equals(Severity.ERROR)) {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>                 fatalExceptions.add(exception);
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>             }
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>         }
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>         <strong class="jxr_keyword">if</strong> (!fatalExceptions.isEmpty()) {
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/openehealth/ipf/commons/core/modules/api/ValidationException.html">ValidationException</a>(<span class="jxr_string">"Message validation failed"</span>, fatalExceptions);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.validation.ValidationContext;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.validation.impl.ValidationContextFactory;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.Exchange;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.Processor;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.Validate;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.core.modules.api.ValidationException;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.core.CachingGazelleProfileRule;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.ConformanceProfile;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * Factory for manually triggering a validation of a message depending on a profile or a defined</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * IHETransaction. In general this should not be necessary when the HapiContext of the parsed</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * message contains a ValidationContext that includes the corresponding</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * {@link org.openehealth.ipf.gazelle.validation.core.GazelleProfileRule GazelleProfileRule}</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * instance as one of its message rules. In that case it would be sufficient to use</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * {@link org.openehealth.ipf.platform.camel.hl7.HL7v2#validatingProcessor()} or</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * {@link org.apache.camel.component.hl7.HL7#messageConforms()}.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * @author Boris Stanojevic</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * @author Christian Ohr</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/openehealth/ipf/platform/camel/hl7/validation/ConformanceProfileValidators.html">ConformanceProfileValidators</a> {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> HapiContext FALLBACK_HAPI_CONTEXT;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          FALLBACK_HAPI_CONTEXT = <strong class="jxr_keyword">new</strong> DefaultHapiContext();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          FALLBACK_HAPI_CONTEXT.setProfileStore(<strong class="jxr_keyword">new</strong> GazelleProfileStore());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          FALLBACK_HAPI_CONTEXT.setValidationContext((ValidationContext) ValidationContextFactory.noValidation());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../../../org/openehealth/ipf/platform/camel/hl7/validation/ConformanceProfileValidators.html">ConformanceProfileValidators</a>() {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     * Returns a validating Camel processor for a dedicated profile</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * @param conformanceProfile HL7 conformance profile</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     * @return a validating Camel processor for a dedicated profile</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Processor validatingProcessor(<strong class="jxr_keyword">final</strong> ConformanceProfile conformanceProfile) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Processor() {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>              <strong class="jxr_keyword">private</strong> CachingGazelleProfileRule rule = <strong class="jxr_keyword">new</strong> CachingGazelleProfileRule(conformanceProfile);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>              @Override
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>              <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> process(Exchange exchange) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  <strong class="jxr_keyword">if</strong> (ValidatorAdapter.validationEnabled(exchange)) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>                      doValidate(bodyMessage(exchange), rule);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>              }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          };
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">     * Returns a validating Camel processor for a message in a IHE transaction. The actual profile</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">     * to be used is guessed from the message's event type and version</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * @param iheTransaction IHE transaction</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     * @return a validating Camel processor for a message in a IHE transaction</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Processor validatingProcessor(<strong class="jxr_keyword">final</strong> HL7v2Transactions iheTransaction) {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Processor() {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>              <strong class="jxr_keyword">private</strong> CachingGazelleProfileRule rule = <strong class="jxr_keyword">new</strong> CachingGazelleProfileRule(iheTransaction);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>             @Override
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> process(Exchange exchange) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>                 <strong class="jxr_keyword">if</strong> (ValidatorAdapter.validationEnabled(exchange)) {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>                     doValidate(bodyMessage(exchange), rule);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>                 }
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>             }
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         };
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>     }
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> doValidate(Message message, <strong class="jxr_keyword">final</strong> MessageRule validator)
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>             <strong class="jxr_keyword">throws</strong> IOException, JAXBException {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>         throwIPFValidationException(validator.apply(message));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>     }
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> throwIPFValidationException(ca.uhn.hl7v2.validation.ValidationException... exceptions) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>         List&lt;ca.uhn.hl7v2.validation.ValidationException&gt; fatalExceptions = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>         <strong class="jxr_keyword">if</strong> (exceptions != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>             <strong class="jxr_keyword">for</strong> (ca.uhn.hl7v2.validation.ValidationException exception : exceptions) {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>                 <strong class="jxr_keyword">if</strong> (exception.getSeverity().equals(Severity.ERROR)) {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>                     fatalExceptions.add(exception);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>                 }
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>             }
 <a class="jxr_linenumber" name="L122" href="#L122">122</a>         }
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>     }
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">     * Returns the HAPI Message from the message body. If the body is a string, it is parsed on the fly</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">     * using</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">     * @param exchange</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">     * @return HAPI message</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">     * @throws HL7Exception</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Message bodyMessage(Exchange exchange) <strong class="jxr_keyword">throws</strong> HL7Exception {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>         Object body = exchange.getIn().getBody();
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>         Message message;
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         <strong class="jxr_keyword">if</strong> (body instanceof MessageAdapter) {
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>             message = ((MessageAdapter)body).getHapiMessage();
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (body instanceof Message) {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>             message = (Message)body;
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (body instanceof String) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>             HapiContext context = exchange.getIn().getHeader(<span class="jxr_string">"CamelHL7Context"</span>, HapiContext.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>             context = context != <strong class="jxr_keyword">null</strong> ? context : FALLBACK_HAPI_CONTEXT;
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>             message = <strong class="jxr_keyword">new</strong> GenericParser(context).parse((String)body);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>             <em class="jxr_comment">// try type conversion</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>             message = exchange.getIn().getBody(Message.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>         }
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>         Validate.notNull(message, <span class="jxr_string">"Exchange does not contain or can be converted to the required 'ca.uhn.hl7v2.model.Message' type"</span>);
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>         <strong class="jxr_keyword">return</strong> message;
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>     }
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> }
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>         <strong class="jxr_keyword">if</strong> (!fatalExceptions.isEmpty()) {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/openehealth/ipf/commons/core/modules/api/ValidationException.html">ValidationException</a>(<span class="jxr_string">"Message validation failed"</span>, fatalExceptions);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>         }
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>     }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">     * Returns the HAPI Message from the message body. If the body is a string, it is parsed on the fly</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">     * using</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">     * @param exchange</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">     * @return HAPI message</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">     * @throws HL7Exception</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Message bodyMessage(Exchange exchange) <strong class="jxr_keyword">throws</strong> HL7Exception {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         Object body = exchange.getIn().getBody();
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         Message message;
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>         <strong class="jxr_keyword">if</strong> (body instanceof MessageAdapter) {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>             message = ((MessageAdapter)body).getHapiMessage();
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (body instanceof Message) {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>             message = (Message)body;
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (body instanceof String) {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>             HapiContext context = exchange.getIn().getHeader(<span class="jxr_string">"CamelHL7Context"</span>, HapiContext.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>             context = context != <strong class="jxr_keyword">null</strong> ? context : FALLBACK_HAPI_CONTEXT;
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>             message = <strong class="jxr_keyword">new</strong> GenericParser(context).parse((String)body);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>             <em class="jxr_comment">// try type conversion</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>             message = exchange.getIn().getBody(Message.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>         }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         Validate.notNull(message, <span class="jxr_string">"Exchange does not contain or can be converted to the required 'ca.uhn.hl7v2.model.Message' type"</span>);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>         <strong class="jxr_keyword">return</strong> message;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     }
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

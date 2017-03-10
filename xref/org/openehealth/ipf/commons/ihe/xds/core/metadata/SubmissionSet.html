@@ -26,65 +26,67 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> lombok.EqualsAndHashCode;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> lombok.Getter;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> lombok.Setter;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.Serializable;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Represents an XDS submission set according to the IHE XDS specification.</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * All non-list members of this class are allowed to be &lt;code&gt;null&lt;/code&gt;.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * The lists are pre-created and can therefore never be &lt;code&gt;null&lt;/code&gt;.</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * </em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  @XmlAccessorType(XmlAccessType.FIELD)
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  @XmlType(name = <span class="jxr_string">"SubmissionSet"</span>, propOrder = {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>          <span class="jxr_string">"sourceId"</span>, <span class="jxr_string">"submissionTime"</span>, <span class="jxr_string">"authors"</span>, <span class="jxr_string">"intendedRecipients"</span>, <span class="jxr_string">"contentTypeCode"</span>})
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  @XmlRootElement(name = <span class="jxr_string">"submissionSet"</span>)
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  @EqualsAndHashCode(callSuper = <strong class="jxr_keyword">true</strong>, doNotUseGetters = <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/SubmissionSet.html">SubmissionSet</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/XDSMetaClass.html">XDSMetaClass</a> <strong class="jxr_keyword">implements</strong> Serializable {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 5961980266312684583L;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      @XmlElement(name = <span class="jxr_string">"author"</span>)
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Author&gt; authors = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Code.html">Code</a> contentTypeCode;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      @XmlElement(name = <span class="jxr_string">"intendedRecipient"</span>)
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Recipient&gt; intendedRecipients = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> String sourceId;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      @Getter <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Timestamp.html">Timestamp</a> submissionTime;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">     * @param author</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">     *          the author of the submission.</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAuthor(<a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Author.html">Author</a> author) {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          authors.clear();
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          authors.add(author);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      }
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     * @return the author of the submission. If the submission has multiple authors</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     *          this method returns only the first in the list. If the submission</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     *          has no authors, this method returns {@code null}.</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Author.html">Author</a> getAuthor() {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">return</strong> authors.isEmpty() ? <strong class="jxr_keyword">null</strong> : authors.get(0);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      }
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSubmissionTime(<a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Timestamp.html">Timestamp</a> submissionTime) {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">this</strong>.submissionTime = submissionTime;
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      }
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSubmissionTime(String submissionTime) {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">this</strong>.submissionTime = Timestamp.fromHL7(submissionTime);
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      }
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  }
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> lombok.ToString;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.Serializable;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Represents an XDS submission set according to the IHE XDS specification.</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * All non-list members of this class are allowed to be &lt;code&gt;null&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * The lists are pre-created and can therefore never be &lt;code&gt;null&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  @XmlAccessorType(XmlAccessType.FIELD)
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  @XmlType(name = <span class="jxr_string">"SubmissionSet"</span>, propOrder = {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <span class="jxr_string">"sourceId"</span>, <span class="jxr_string">"submissionTime"</span>, <span class="jxr_string">"authors"</span>, <span class="jxr_string">"intendedRecipients"</span>, <span class="jxr_string">"contentTypeCode"</span>})
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  @XmlRootElement(name = <span class="jxr_string">"submissionSet"</span>)
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  @EqualsAndHashCode(callSuper = <strong class="jxr_keyword">true</strong>, doNotUseGetters = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  @ToString(callSuper = <strong class="jxr_keyword">true</strong>, doNotUseGetters = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/SubmissionSet.html">SubmissionSet</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/XDSMetaClass.html">XDSMetaClass</a> <strong class="jxr_keyword">implements</strong> Serializable {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 5961980266312684583L;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      @XmlElement(name = <span class="jxr_string">"author"</span>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Author&gt; authors = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Code.html">Code</a> contentTypeCode;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      @XmlElement(name = <span class="jxr_string">"intendedRecipient"</span>)
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Recipient&gt; intendedRecipients = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> String sourceId;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      @Getter <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Timestamp.html">Timestamp</a> submissionTime;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">     * @param author</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">     *          the author of the submission.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAuthor(<a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Author.html">Author</a> author) {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          authors.clear();
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          authors.add(author);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     * @return the author of the submission. If the submission has multiple authors</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     *          this method returns only the first in the list. If the submission</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">     *          has no authors, this method returns {@code null}.</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Author.html">Author</a> getAuthor() {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">return</strong> authors.isEmpty() ? <strong class="jxr_keyword">null</strong> : authors.get(0);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSubmissionTime(<a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Timestamp.html">Timestamp</a> submissionTime) {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">this</strong>.submissionTime = submissionTime;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSubmissionTime(String submissionTime) {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">this</strong>.submissionTime = Timestamp.fromHL7(submissionTime);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      }
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

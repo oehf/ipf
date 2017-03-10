@@ -29,7 +29,7 @@
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.map.BidiMappingService;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertEquals;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertNull;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertFalse;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> *</em>
@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/fhir/translation/DefaultUriMapperTest.html">DefaultUriMapperTest</a> {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">private</strong> BidiMappingService mappingService;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">private</strong> UriMapper uriMapper;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      <strong class="jxr_keyword">private</strong> DefaultUriMapper uriMapper;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>      @Before
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setup() {
@@ -49,37 +49,43 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      @Test
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTranslateOidUrn() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>          String oid = <span class="jxr_string">"1.2.3.4.5.6.7.8.9"</span>;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>          assertEquals(oid, uriMapper.uriToOid(<span class="jxr_string">"urn:oid:"</span> + oid));
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          assertEquals(oid, uriMapper.uriToOid(<span class="jxr_string">"urn:oid:"</span> + oid).get());
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      }
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      @Test
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTranslateUriToOid() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>          String uri = <span class="jxr_string">"http://org.openehealth/ipf/commons/ihe/fhir/1"</span>;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          assertEquals(<span class="jxr_string">"1.2.3.4"</span>, uriMapper.uriToOid(uri));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          assertEquals(<span class="jxr_string">"1.2.3.4"</span>, uriMapper.uriToOid(uri).get());
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      @Test(expected = FhirTranslationException.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      @Test
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTranslateUriToOidFails() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          String uri = <span class="jxr_string">"http://org.openehealth/ipf/commons/ihe/fhir/9"</span>;
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          uriMapper.uriToOid(uri);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          assertFalse(uriMapper.uriToOid(uri).isPresent());
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      }
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      @Test
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTranslatePinUrn() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>          String namespace = <span class="jxr_string">"namespace"</span>;
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          assertEquals(namespace, uriMapper.uriToNamespace(<span class="jxr_string">"urn:pin:"</span> + namespace));
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          assertEquals(namespace, uriMapper.uriToNamespace(<span class="jxr_string">"urn:pin:"</span> + namespace).get());
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      @Test
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTranslateUriToNamespace() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          String namespace = <span class="jxr_string">"http://org.openehealth/ipf/commons/ihe/fhir/1"</span>;
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          assertEquals(<span class="jxr_string">"fhir1"</span>, uriMapper.uriToNamespace(namespace));
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          namespace = <span class="jxr_string">"http://org.openehealth/ipf/commons/ihe/fhir/9"</span>;
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          assertNull(uriMapper.uriToNamespace(namespace));
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          String uri = <span class="jxr_string">"http://org.openehealth/ipf/commons/ihe/fhir/1"</span>;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          assertEquals(<span class="jxr_string">"fhir1"</span>, uriMapper.uriToNamespace(uri).get());
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          uri = <span class="jxr_string">"http://org.openehealth/ipf/commons/ihe/fhir/9"</span>;
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          assertFalse(uriMapper.uriToNamespace(uri).isPresent());
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      }
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  }
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      @Test
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTranslateNamespaceToUri() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          String namespace = <span class="jxr_string">"fhir1"</span>;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          assertEquals(<span class="jxr_string">"http://org.openehealth/ipf/commons/ihe/fhir/1"</span>, uriMapper.namespaceToUri(namespace));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      }
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

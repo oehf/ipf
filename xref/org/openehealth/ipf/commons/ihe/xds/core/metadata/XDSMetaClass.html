@@ -26,33 +26,33 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> lombok.EqualsAndHashCode;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> lombok.Getter;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> lombok.Setter;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.builder.ToStringBuilder;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.builder.ToStringStyle;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadata;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadataAdapter;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessType;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessorType;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlElement;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlType;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.io.Serializable;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * Common base class of all XDS meta data classes.</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * All members of this class are allowed to be &lt;code&gt;null&lt;/code&gt;.</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  @XmlAccessorType(XmlAccessType.FIELD)
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  @XmlType(name = <span class="jxr_string">"IdentifiedObject"</span>, propOrder = {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>          <span class="jxr_string">"homeCommunityId"</span>, <span class="jxr_string">"entryUuid"</span>, <span class="jxr_string">"logicalUuid"</span>, <span class="jxr_string">"version"</span>, <span class="jxr_string">"uniqueId"</span>,
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <span class="jxr_string">"patientId"</span>, <span class="jxr_string">"availabilityStatus"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"comments"</span>, <span class="jxr_string">"limitedMetadata"</span>,
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>          <span class="jxr_string">"extraMetadata"</span>})
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  @EqualsAndHashCode(doNotUseGetters = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> lombok.ToString;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadata;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadataAdapter;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessType;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessorType;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlElement;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlType;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.io.Serializable;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * Common base class of all XDS meta data classes.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * All members of this class are allowed to be &lt;code&gt;null&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  @XmlAccessorType(XmlAccessType.FIELD)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  @XmlType(name = <span class="jxr_string">"IdentifiedObject"</span>, propOrder = {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <span class="jxr_string">"homeCommunityId"</span>, <span class="jxr_string">"entryUuid"</span>, <span class="jxr_string">"logicalUuid"</span>, <span class="jxr_string">"version"</span>, <span class="jxr_string">"uniqueId"</span>,
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          <span class="jxr_string">"patientId"</span>, <span class="jxr_string">"availabilityStatus"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"comments"</span>, <span class="jxr_string">"limitedMetadata"</span>,
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <span class="jxr_string">"extraMetadata"</span>})
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  @EqualsAndHashCode(doNotUseGetters = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  @ToString(doNotUseGetters = <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/XDSMetaClass.html">XDSMetaClass</a> <strong class="jxr_keyword">implements</strong> Serializable, <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ExtraMetadataHolder.html">ExtraMetadataHolder</a> {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = -1193012076778493996L;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      
@@ -71,13 +71,9 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      @XmlElement(type = ExtraMetadata.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> Map&lt;String, List&lt;String&gt;&gt; extraMetadata;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      @Override
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">return</strong> ToStringBuilder.reflectionToString(<strong class="jxr_keyword">this</strong>, ToStringStyle.SHORT_PREFIX_STYLE);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  }
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

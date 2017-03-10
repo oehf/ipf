@@ -25,102 +25,103 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.DefaultHapiContext;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.HL7Exception;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.HapiContext;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.Message;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.CamelContext;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.ProducerTemplate;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.impl.DefaultCamelContext;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.impl.DefaultProducerTemplate;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.io.IOUtils;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.After;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.fail;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * @author Boris Stanojevic</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/openehealth/ipf/platform/camel/hl7/validation/ConformanceProfileValidatorsTest.html">ConformanceProfileValidatorsTest</a> {
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      CamelContext camelContext = <strong class="jxr_keyword">new</strong> DefaultCamelContext();
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      ProducerTemplate template;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      @Before
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onBeforeClass() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          camelContext.addRoutes(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/openehealth/ipf/platform/camel/hl7/validation/TestRouteBuilder.html">TestRouteBuilder</a>());
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          camelContext.start();
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>          template = <strong class="jxr_keyword">new</strong> DefaultProducerTemplate(camelContext);
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          template.start();
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      @After
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onAfterClass() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          template.stop();
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          camelContext.stop();
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      }
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      @Test
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIti8() {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>              template.sendBody(<span class="jxr_string">"direct:iti8"</span>, getParsedMessage(<span class="jxr_string">"hl7/iti-8.hl7"</span>));
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>              fail();
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          } <strong class="jxr_keyword">catch</strong> (Exception e){
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>              assert e.getCause().getMessage().contains(<span class="jxr_string">"Message validation failed"</span>);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          }
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      @Test
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIti10() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          template.sendBody(<span class="jxr_string">"direct:iti10"</span>, getParsedMessage(<span class="jxr_string">"hl7/iti-10.hl7"</span>));
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      @Test
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIti10Adapter() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>          template.sendBody(<span class="jxr_string">"direct:iti10"</span>, <strong class="jxr_keyword">new</strong> MessageAdapter(getParsedMessage(<span class="jxr_string">"hl7/iti-10.hl7"</span>)));
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      @Test
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIti21() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          template.sendBody(<span class="jxr_string">"direct:iti21"</span>, getParsedMessage(<span class="jxr_string">"hl7/iti-21.hl7"</span>));
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      @Test
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIti21WrongIHETransaction() {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>              template.sendBody(<span class="jxr_string">"direct:iti8"</span>, getParsedMessage(<span class="jxr_string">"hl7/iti-21.hl7"</span>));
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>              fail();
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>          } <strong class="jxr_keyword">catch</strong> (Exception e){
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>              assert e.getCause().getMessage().contains(<span class="jxr_string">"No matching profile"</span>);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>          }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      }
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">protected</strong> String getMessageAsString(String resourcePath){
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          String message = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>              message = IOUtils.toString(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader().getResource(resourcePath));
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>         } <strong class="jxr_keyword">catch</strong> (IOException ioe){
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>             ioe.printStackTrace();
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>         }
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>         assert message != <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>         <strong class="jxr_keyword">return</strong> message.replaceAll(<span class="jxr_string">"\n"</span>, <span class="jxr_string">"\r"</span>);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     }
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>     <strong class="jxr_keyword">protected</strong> Message getParsedMessage(String path) <strong class="jxr_keyword">throws</strong> HL7Exception {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>         HapiContext context = <strong class="jxr_keyword">new</strong> DefaultHapiContext();
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>         context.setProfileStore(<strong class="jxr_keyword">new</strong> GazelleProfileStore());
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>         context.getParserConfiguration().setValidating(false);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>         <strong class="jxr_keyword">return</strong> context.getPipeParser().parse(getMessageAsString(path));
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>     }
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> }
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.Charset;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.DefaultHapiContext;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.HL7Exception;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.HapiContext;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.Message;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.CamelContext;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.ProducerTemplate;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.impl.DefaultCamelContext;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.impl.DefaultProducerTemplate;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.io.IOUtils;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.After;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.fail;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * @author Boris Stanojevic</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/openehealth/ipf/platform/camel/hl7/validation/ConformanceProfileValidatorsTest.html">ConformanceProfileValidatorsTest</a> {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      CamelContext camelContext = <strong class="jxr_keyword">new</strong> DefaultCamelContext();
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      ProducerTemplate template;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      @Before
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onBeforeClass() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          camelContext.addRoutes(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/openehealth/ipf/platform/camel/hl7/validation/TestRouteBuilder.html">TestRouteBuilder</a>());
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          camelContext.start();
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          template = <strong class="jxr_keyword">new</strong> DefaultProducerTemplate(camelContext);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          template.start();
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      }
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      @After
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onAfterClass() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          template.stop();
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          camelContext.stop();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      @Test
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIti8() {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>              template.sendBody(<span class="jxr_string">"direct:iti8"</span>, getParsedMessage(<span class="jxr_string">"hl7/iti-8.hl7"</span>));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>              fail();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          } <strong class="jxr_keyword">catch</strong> (Exception e){
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>              assert e.getCause().getMessage().contains(<span class="jxr_string">"Message validation failed"</span>);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      @Test
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIti10() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          template.sendBody(<span class="jxr_string">"direct:iti10"</span>, getParsedMessage(<span class="jxr_string">"hl7/iti-10.hl7"</span>));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      }
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      @Test
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIti10Adapter() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>          template.sendBody(<span class="jxr_string">"direct:iti10"</span>, <strong class="jxr_keyword">new</strong> MessageAdapter(getParsedMessage(<span class="jxr_string">"hl7/iti-10.hl7"</span>)));
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      @Test
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIti21() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          template.sendBody(<span class="jxr_string">"direct:iti21"</span>, getParsedMessage(<span class="jxr_string">"hl7/iti-21.hl7"</span>));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      }
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      @Test
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testIti21WrongIHETransaction() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              template.sendBody(<span class="jxr_string">"direct:iti8"</span>, getParsedMessage(<span class="jxr_string">"hl7/iti-21.hl7"</span>));
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>              fail();
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          } <strong class="jxr_keyword">catch</strong> (Exception e){
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>              assert e.getCause().getMessage().contains(<span class="jxr_string">"No matching profile"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>      <strong class="jxr_keyword">protected</strong> String getMessageAsString(String resourcePath){
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          String message = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>             message = IOUtils.toString(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader().getResource(resourcePath), Charset.defaultCharset());
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         } <strong class="jxr_keyword">catch</strong> (IOException ioe){
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>             ioe.printStackTrace();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>         }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>         assert message != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>         <strong class="jxr_keyword">return</strong> message.replaceAll(<span class="jxr_string">"\n"</span>, <span class="jxr_string">"\r"</span>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>     }
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     <strong class="jxr_keyword">protected</strong> Message getParsedMessage(String path) <strong class="jxr_keyword">throws</strong> HL7Exception {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>         HapiContext context = <strong class="jxr_keyword">new</strong> DefaultHapiContext();
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         context.setProfileStore(<strong class="jxr_keyword">new</strong> GazelleProfileStore());
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>         context.getParserConfiguration().setValidating(false);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>         <strong class="jxr_keyword">return</strong> context.getPipeParser().parse(getMessageAsString(path));
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>     }
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

@@ -24,131 +24,93 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.Composite;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.builder.ToStringBuilder;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.builder.ToStringStyle;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.NameAdapter;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessType;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessorType;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlElement;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlType;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * This class represents a name.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * It is derived from the HL7v2 data types XPN and XCN. It only contains</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * naming related fields of these data types.</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * All members of this class are allowed to be &lt;code&gt;null&lt;/code&gt;. When transforming</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * to HL7 this indicates that the values are empty. Trailing empty values are </em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * removed from the HL7 string.</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  @XmlJavaTypeAdapter(value = NameAdapter.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  @XmlType(name = <span class="jxr_string">"Name"</span>, propOrder = {<span class="jxr_string">"prefix"</span>, <span class="jxr_string">"givenName"</span>, <span class="jxr_string">"secondAndFurtherGivenNames"</span>,
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>          <span class="jxr_string">"familyName"</span>, <span class="jxr_string">"suffix"</span>, <span class="jxr_string">"degree"</span>})
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> Name&lt;T <strong class="jxr_keyword">extends</strong> Composite&gt; <strong class="jxr_keyword">extends</strong> Hl7v2Based&lt;T&gt; {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = -3455779057944896901L;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Name.html">Name</a>() {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      }
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Name.html">Name</a>(T hapiObject) {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">super</strong>(hapiObject);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.NameAdapter;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessType;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessorType;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlElement;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlType;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.Objects;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * This class represents a name.</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * It is derived from the HL7v2 data types XPN and XCN. It only contains</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * naming related fields of these data types.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * All members of this class are allowed to be &lt;code&gt;null&lt;/code&gt;. When transforming</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * to HL7 this indicates that the values are empty. Trailing empty values are </em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * removed from the HL7 string.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  @XmlJavaTypeAdapter(value = NameAdapter.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  @XmlType(name = <span class="jxr_string">"Name"</span>, propOrder = {<span class="jxr_string">"prefix"</span>, <span class="jxr_string">"givenName"</span>, <span class="jxr_string">"secondAndFurtherGivenNames"</span>,
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <span class="jxr_string">"familyName"</span>, <span class="jxr_string">"suffix"</span>, <span class="jxr_string">"degree"</span>})
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> Name&lt;T <strong class="jxr_keyword">extends</strong> Composite&gt; <strong class="jxr_keyword">extends</strong> Hl7v2Based&lt;T&gt; {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = -3455779057944896901L;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Name.html">Name</a>() {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Name.html">Name</a>(T hapiObject) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">super</strong>(hapiObject);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      }
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      @XmlElement(name = <span class="jxr_string">"family"</span>)
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getFamilyName();                  <em class="jxr_comment">// XCN.2.1, XPN.1.1</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      @XmlElement(name = <span class="jxr_string">"given"</span>)
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getGivenName();                   <em class="jxr_comment">// XCN.3, XPN.2</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      @XmlElement(name = <span class="jxr_string">"secondAndFurtherGiven"</span>)
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getSecondAndFurtherGivenNames();  <em class="jxr_comment">// XCN.4, XPN.3</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getSuffix();                      <em class="jxr_comment">// XCN.5, XPN.4</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getPrefix();                      <em class="jxr_comment">// XCN.6, XPN.5</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getDegree();                      <em class="jxr_comment">// XCN.7, XPN.6</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setFamilyName(String value);                  <em class="jxr_comment">// XCN.2.1, XPN.1.1</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setGivenName(String value);                   <em class="jxr_comment">// XCN.3, XPN.2</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSecondAndFurtherGivenNames(String value);  <em class="jxr_comment">// XCN.4, XPN.3</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSuffix(String value);                      <em class="jxr_comment">// XCN.5, XPN.4</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setPrefix(String value);                      <em class="jxr_comment">// XCN.6, XPN.5</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDegree(String value);                      <em class="jxr_comment">// XCN.7, XPN.6</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      @XmlElement(name = <span class="jxr_string">"family"</span>)
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getFamilyName();                  <em class="jxr_comment">// XCN.2.1, XPN.1.1</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      @XmlElement(name = <span class="jxr_string">"given"</span>)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getGivenName();                   <em class="jxr_comment">// XCN.3, XPN.2</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      @XmlElement(name = <span class="jxr_string">"secondAndFurtherGiven"</span>)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getSecondAndFurtherGivenNames();  <em class="jxr_comment">// XCN.4, XPN.3</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getSuffix();                      <em class="jxr_comment">// XCN.5, XPN.4</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getPrefix();                      <em class="jxr_comment">// XCN.6, XPN.5</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> String getDegree();                      <em class="jxr_comment">// XCN.7, XPN.6</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setFamilyName(String value);                  <em class="jxr_comment">// XCN.2.1, XPN.1.1</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setGivenName(String value);                   <em class="jxr_comment">// XCN.3, XPN.2</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSecondAndFurtherGivenNames(String value);  <em class="jxr_comment">// XCN.4, XPN.3</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSuffix(String value);                      <em class="jxr_comment">// XCN.5, XPN.4</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setPrefix(String value);                      <em class="jxr_comment">// XCN.6, XPN.5</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDegree(String value);                      <em class="jxr_comment">// XCN.7, XPN.6</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> prime = 31;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">int</strong> result = 1;
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          result = prime * result + ((getFamilyName() == <strong class="jxr_keyword">null</strong>) ? 0 : getFamilyName().hashCode());
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>          result = prime * result + ((getGivenName() == <strong class="jxr_keyword">null</strong>) ? 0 : getGivenName().hashCode());
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>          result = prime * result + ((getPrefix() == <strong class="jxr_keyword">null</strong>) ? 0 : getPrefix().hashCode());
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>          result = prime
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  * result
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>                  + ((getSecondAndFurtherGivenNames() == <strong class="jxr_keyword">null</strong>) ? 0 : getSecondAndFurtherGivenNames().hashCode());
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          result = prime * result + ((getSuffix() == <strong class="jxr_keyword">null</strong>) ? 0 : getSuffix().hashCode());
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>          result = prime * result + ((getDegree() == <strong class="jxr_keyword">null</strong>) ? 0 : getDegree().hashCode());
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      }
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      @Override
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object obj) {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == obj)
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>              <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>          <strong class="jxr_keyword">if</strong> (obj == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>              <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">if</strong> (! (obj instanceof Name))
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>             <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Name.html">Name</a> other = (Name) obj;
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">if</strong> (getFamilyName() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>              <strong class="jxr_keyword">if</strong> (other.getFamilyName() != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>                  <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!getFamilyName().equals(other.getFamilyName()))
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>             <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>         <strong class="jxr_keyword">if</strong> (getGivenName() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>             <strong class="jxr_keyword">if</strong> (other.getGivenName() != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>                 <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!getGivenName().equals(other.getGivenName()))
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>             <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>         <strong class="jxr_keyword">if</strong> (getPrefix() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>             <strong class="jxr_keyword">if</strong> (other.getPrefix() != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>                 <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!getPrefix().equals(other.getPrefix()))
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>         <strong class="jxr_keyword">if</strong> (getSecondAndFurtherGivenNames() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>             <strong class="jxr_keyword">if</strong> (other.getSecondAndFurtherGivenNames() != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>                 <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!getSecondAndFurtherGivenNames().equals(other.getSecondAndFurtherGivenNames()))
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>             <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>         <strong class="jxr_keyword">if</strong> (getSuffix() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>             <strong class="jxr_keyword">if</strong> (other.getSuffix() != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>                 <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!getSuffix().equals(other.getSuffix()))
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>             <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>         <strong class="jxr_keyword">if</strong> (getDegree() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>             <strong class="jxr_keyword">if</strong> (other.getDegree() != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>                 <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!getDegree().equals(other.getDegree()))
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>             <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>     }
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>     @Override
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>     <strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ToStringBuilder(<strong class="jxr_keyword">this</strong>, ToStringStyle.SHORT_PREFIX_STYLE)
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>                 .append(<span class="jxr_string">"family"</span>, getFamilyName())
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>                 .append(<span class="jxr_string">"given"</span>, getGivenName())
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>                 .append(<span class="jxr_string">"secondAndFurtherGiven"</span>, getSecondAndFurtherGivenNames())
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>                 .append(<span class="jxr_string">"suffix"</span>, getSuffix())
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>                 .append(<span class="jxr_string">"prefix"</span>, getPrefix())
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>                 .append(<span class="jxr_string">"degree"</span>, getDegree())
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>                 .toString();
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>     }
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> }
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      @Override
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == o) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong> || getClass() != o.getClass()) <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          Name&lt;?&gt; that = (Name&lt;?&gt;) o;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          <strong class="jxr_keyword">return</strong> Objects.equals(getFamilyName(), that.getFamilyName()) &amp;&amp;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>                  Objects.equals(getGivenName(), that.getGivenName()) &amp;&amp;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  Objects.equals(getSecondAndFurtherGivenNames(), that.getSecondAndFurtherGivenNames()) &amp;&amp;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  Objects.equals(getSuffix(), that.getSuffix()) &amp;&amp;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>                  Objects.equals(getPrefix(), that.getPrefix()) &amp;&amp;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  Objects.equals(getDegree(), that.getDegree());
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      @Override
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <strong class="jxr_keyword">return</strong> Objects.hash(getFamilyName(), getGivenName(), getSecondAndFurtherGivenNames(),
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>                  getSuffix(), getPrefix(), getDegree());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      }
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      @Override
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">return</strong> <span class="jxr_string">"Name("</span> +
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>                  <span class="jxr_string">"familyName="</span> + getFamilyName() +
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>                  <span class="jxr_string">", givenName="</span> + getGivenName() +
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>                  <span class="jxr_string">", secondAndFurtherGivenNames="</span> + getSecondAndFurtherGivenNames() +
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>                  <span class="jxr_string">", suffix="</span> + getSuffix() +
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>                  <span class="jxr_string">", prefix="</span> + getPrefix() +
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>                 <span class="jxr_string">", degree="</span> + getDegree() +
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                 ')';
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     }
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

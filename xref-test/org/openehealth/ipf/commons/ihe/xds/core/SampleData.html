@@ -176,576 +176,583 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a>         request.getAssociations().add(docAssociation);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a>         request.getAssociations().add(folderAssociation);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>         request.getAssociations().add(docFolderAssociation);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>         
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>         <strong class="jxr_keyword">return</strong> request;
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>     }
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Association createAssociationDocEntryToFolder() {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>         Association docFolderAssociation = <strong class="jxr_keyword">new</strong> Association();
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>         docFolderAssociation.setAssociationType(AssociationType.HAS_MEMBER);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>         docFolderAssociation.setSourceUuid(<span class="jxr_string">"folder01"</span>);
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>         docFolderAssociation.setTargetUuid(<span class="jxr_string">"document01"</span>);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>         docFolderAssociation.setEntryUuid(<span class="jxr_string">"docFolderAss"</span>);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>         <strong class="jxr_keyword">return</strong> docFolderAssociation;
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>     }
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Association createAssociationFolderToSubmissionSet() {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>         Association folderAssociation = <strong class="jxr_keyword">new</strong> Association();
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>         folderAssociation.setAssociationType(AssociationType.HAS_MEMBER);
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>         folderAssociation.setSourceUuid(<span class="jxr_string">"submissionSet01"</span>);
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>         folderAssociation.setTargetUuid(<span class="jxr_string">"folder01"</span>);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>         folderAssociation.setEntryUuid(<span class="jxr_string">"folderAss"</span>);
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>         folderAssociation.setPreviousVersion(<span class="jxr_string">"110"</span>);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">return</strong> folderAssociation;
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>     }
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
-<a class="jxr_linenumber" name="L194" href="#L194">194</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Association createAssociationDocEntryToSubmissionSet() {
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>         Association docAssociation = <strong class="jxr_keyword">new</strong> Association();
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>         docAssociation.setAssociationType(AssociationType.HAS_MEMBER);
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>         docAssociation.setSourceUuid(<span class="jxr_string">"submissionSet01"</span>);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>         docAssociation.setTargetUuid(<span class="jxr_string">"document01"</span>);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>         docAssociation.setLabel(AssociationLabel.ORIGINAL);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>         docAssociation.setEntryUuid(<span class="jxr_string">"docAss"</span>);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>         docAssociation.setPreviousVersion(<span class="jxr_string">"111"</span>);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>         <strong class="jxr_keyword">return</strong> docAssociation;
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>     }
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">     * Creates a sample folder.</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">     * @param patientID</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">     *          the patient ID to use.</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">     * @return the folder.                         </em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Folder createFolder(Identifiable patientID) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>         Folder folder = <strong class="jxr_keyword">new</strong> Folder();
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>         folder.setAvailabilityStatus(AvailabilityStatus.APPROVED);
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>         folder.getCodeList().add(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code7"</span>), <span class="jxr_string">"scheme7"</span>));
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>         folder.setComments(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"comments3"</span>));
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>         folder.setEntryUuid(<span class="jxr_string">"folder01"</span>);
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>         folder.setLastUpdateTime(<span class="jxr_string">"198209"</span>);
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>         folder.setPatientId(patientID);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>         folder.setTitle(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"Folder 01"</span>, <span class="jxr_string">"en-US"</span>, <span class="jxr_string">"UTF8"</span>));
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>         folder.setUniqueId(<span class="jxr_string">"48574589"</span>);
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>         <strong class="jxr_keyword">return</strong> folder;
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>     }
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">     * Creates a sample submission set.</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">     * @param patientID</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">     *          the patient ID to use.</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">     * @return the submission set.</em>
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> SubmissionSet createSubmissionSet(Identifiable patientID) {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>         Recipient recipient = <strong class="jxr_keyword">new</strong> Recipient();
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>         recipient.setOrganization(<strong class="jxr_keyword">new</strong> Organization(<span class="jxr_string">"org"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>         
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>         Author author = <strong class="jxr_keyword">new</strong> Author();
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>         author.setAuthorPerson(<strong class="jxr_keyword">new</strong> Person(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.1"</span>)),
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>                 <strong class="jxr_keyword">new</strong> XpnName(<span class="jxr_string">"Otto"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>)));
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>         SubmissionSet submissionSet = <strong class="jxr_keyword">new</strong> SubmissionSet();
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>         submissionSet.getAuthors().add(author);
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>         submissionSet.setAvailabilityStatus(AvailabilityStatus.APPROVED);
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>         submissionSet.setComments(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"comments1"</span>));
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>         submissionSet.setContentTypeCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code1"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code1"</span>), <span class="jxr_string">"scheme1"</span>));
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>         submissionSet.setEntryUuid(<span class="jxr_string">"submissionSet01"</span>);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>         submissionSet.getIntendedRecipients().add(recipient);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>         submissionSet.setPatientId(patientID);
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>         submissionSet.setSourceId(<span class="jxr_string">"1.2.3"</span>);
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>         submissionSet.setSubmissionTime(<span class="jxr_string">"1980"</span>);
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>         submissionSet.setTitle(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"Submission Set 01"</span>, <span class="jxr_string">"en-US"</span>, <span class="jxr_string">"UTF8"</span>));
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>         submissionSet.setUniqueId(<span class="jxr_string">"123"</span>);
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>         <strong class="jxr_keyword">return</strong> submissionSet;
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>     }
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">     * Creates a document entry</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">     * @param patientID</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">     *          patient used for the document entry.</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">     * @return the new entry.</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> DocumentEntry createDocumentEntry(Identifiable patientID) {
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>         Author author = <strong class="jxr_keyword">new</strong> Author();
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>         Name name = <strong class="jxr_keyword">new</strong> XpnName();
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>         name.setFamilyName(<span class="jxr_string">"Norbi"</span>);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>         author.setAuthorPerson(<strong class="jxr_keyword">new</strong> Person(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id2"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>)), name));
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>         author.getAuthorInstitution().add(<strong class="jxr_keyword">new</strong> Organization(<span class="jxr_string">"authorOrg"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>         author.getAuthorRole().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"role1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2.3.1"</span>, <span class="jxr_string">"ISO"</span>)));
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>         author.getAuthorRole().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"role2"</span>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>         author.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2.3.3"</span>, <span class="jxr_string">"ISO"</span>)));
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>         author.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec2"</span>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>         author.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<span class="jxr_string">"author1@acme.org"</span>));
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>         author.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<span class="jxr_string">"author2@acme.org"</span>));
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>         Address address = <strong class="jxr_keyword">new</strong> Address();
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>         address.setStreetAddress(<span class="jxr_string">"hier"</span>);
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>         
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>         PatientInfo patientInfo = <strong class="jxr_keyword">new</strong> PatientInfo();
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>         patientInfo.setAddress(address);
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>         patientInfo.setDateOfBirth(<span class="jxr_string">"1980"</span>);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>         patientInfo.setGender(<span class="jxr_string">"M"</span>);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>         patientInfo.setName(<strong class="jxr_keyword">new</strong> XpnName(<span class="jxr_string">"Susi"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>         
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>         DocumentEntry docEntry = <strong class="jxr_keyword">new</strong> DocumentEntry();
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>         docEntry.getAuthors().add(author);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>         docEntry.setAvailabilityStatus(AvailabilityStatus.APPROVED);
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>         docEntry.setClassCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code2"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code2"</span>), <span class="jxr_string">"scheme2"</span>));
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>         docEntry.setComments(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"comment2"</span>));
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>         docEntry.getConfidentialityCodes().add(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code8"</span>), <span class="jxr_string">"scheme8"</span>));
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>         docEntry.setCreationTime(<span class="jxr_string">"1981"</span>);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>         docEntry.setEntryUuid(<span class="jxr_string">"document01"</span>);
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>         docEntry.getEventCodeList().add(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code9"</span>), <span class="jxr_string">"scheme9"</span>));
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>         docEntry.setFormatCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code3"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code3"</span>), <span class="jxr_string">"scheme3"</span>));
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>         docEntry.setHash(<span class="jxr_string">"1234567890123456789012345678901234567890"</span>);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>         docEntry.setHealthcareFacilityTypeCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code4"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code4"</span>), <span class="jxr_string">"scheme4"</span>));
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>         docEntry.setLanguageCode(<span class="jxr_string">"en-US"</span>);
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>         docEntry.setLegalAuthenticator(<strong class="jxr_keyword">new</strong> Person(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"legal"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.7"</span>)),
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>                 <strong class="jxr_keyword">new</strong> XpnName(<span class="jxr_string">"Gustav"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>)));
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>         docEntry.setMimeType(<span class="jxr_string">"application/octet-stream"</span>);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>         docEntry.setPatientId(patientID);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>         docEntry.setPracticeSettingCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code5"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code5"</span>), <span class="jxr_string">"scheme5"</span>));
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>         docEntry.setRepositoryUniqueId(<span class="jxr_string">"1.2.3.4"</span>);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>         docEntry.setServiceStartTime(<span class="jxr_string">"198012"</span>);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>         docEntry.setServiceStopTime(<span class="jxr_string">"198101"</span>);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a>         docEntry.setSize(123L);
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>         docEntry.setSourcePatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"source"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"4.1"</span>)));
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>         docEntry.setSourcePatientInfo(patientInfo);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>         docEntry.setTitle(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"Document 01"</span>, <span class="jxr_string">"en-US"</span>, <span class="jxr_string">"UTF8"</span>));
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>         docEntry.setTypeCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code6"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code6"</span>), <span class="jxr_string">"scheme6"</span>));
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>         docEntry.setUniqueId(<span class="jxr_string">"32848902348"</span>);
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>         docEntry.setUri(<span class="jxr_string">"http://hierunten.com"</span>);
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>         docEntry.getReferenceIdList().add(<strong class="jxr_keyword">new</strong> ReferenceId(
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>                 <span class="jxr_string">"ref-id-1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.1.2.3"</span>),
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>                 ReferenceId.ID_TYPE_CODE_ORDER, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.4.5.6"</span>)));
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>         docEntry.getReferenceIdList().add(<strong class="jxr_keyword">new</strong> ReferenceId(
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>                 <span class="jxr_string">"ref-id-2"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"2.1.2.3"</span>),
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>                 <span class="jxr_string">"vendor-defined"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"2.4.5.6"</span>)));
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>         <strong class="jxr_keyword">return</strong> docEntry;
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>     }    
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">     * @return a sample request to register a document set.</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RegisterDocumentSet createRegisterDocumentSet() {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>         Identifiable patientID = <strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.3"</span>));
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>         
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>         SubmissionSet submissionSet = createSubmissionSet(patientID);        
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>         DocumentEntry docEntry = createDocumentEntry(patientID);        
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>         Folder folder = createFolder(patientID);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>         
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>         Association docAssociation = createAssociationDocEntryToSubmissionSet();
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>         Association folderAssociation = createAssociationFolderToSubmissionSet();
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>         Association docFolderAssociation = createAssociationDocEntryToFolder();
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>         
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>         RegisterDocumentSet request = <strong class="jxr_keyword">new</strong> RegisterDocumentSet();
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>         request.setSubmissionSet(submissionSet);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>         request.getDocumentEntries().add(docEntry);
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>         request.getFolders().add(folder);
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>         request.getAssociations().add(docAssociation);
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>         request.getAssociations().add(folderAssociation);
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>         request.getAssociations().add(docFolderAssociation);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>         
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>         <strong class="jxr_keyword">return</strong> request;
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>     }
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">     * @return a sample request to retrieve a document set.</em>
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RetrieveDocumentSet createRetrieveDocumentSet() {
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>         RetrieveDocumentSet request = <strong class="jxr_keyword">new</strong> RetrieveDocumentSet();
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>         request.getDocuments().add(<strong class="jxr_keyword">new</strong> RetrieveDocument(<span class="jxr_string">"repo1"</span>, <span class="jxr_string">"doc1"</span>, <span class="jxr_string">"urn:oid:1.2.3"</span>));
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>         request.getDocuments().add(<strong class="jxr_keyword">new</strong> RetrieveDocument(<span class="jxr_string">"repo2"</span>, <span class="jxr_string">"doc2"</span>, <span class="jxr_string">"urn:oid:1.2.4"</span>));
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>         <strong class="jxr_keyword">return</strong> request;
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>     }
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>     
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">     * @return a sample request to retrieve an imaging document set.</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RetrieveImagingDocumentSet createRetrieveImagingDocumentSet() {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>         RetrieveImagingDocumentSet request = <strong class="jxr_keyword">new</strong> RetrieveImagingDocumentSet();
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>         List&lt;RetrieveDocument&gt; retrieveDocuments = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>         RetrieveDocument retrieveDocument1 = <strong class="jxr_keyword">new</strong> RetrieveDocument(<span class="jxr_string">"repo1"</span>, <span class="jxr_string">"doc1"</span>, <span class="jxr_string">"urn:oid:1.2.3"</span>);
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>         retrieveDocuments.add(retrieveDocument1);
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>         RetrieveDocument retrieveDocument2 = <strong class="jxr_keyword">new</strong> RetrieveDocument(<span class="jxr_string">"repo2"</span>, <span class="jxr_string">"doc2"</span>, <span class="jxr_string">"urn:oid:1.2.4"</span>);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>         retrieveDocuments.add(retrieveDocument2);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>         List&lt;RetrieveSeries&gt; retrieveSerieses = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>         RetrieveSeries retrieveSeries1 = <strong class="jxr_keyword">new</strong> RetrieveSeries(<span class="jxr_string">"urn:oid:1.2.1"</span>, retrieveDocuments);
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>         retrieveSerieses.add(retrieveSeries1);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>         RetrieveSeries retrieveSeries2 = <strong class="jxr_keyword">new</strong> RetrieveSeries(<span class="jxr_string">"urn:oid:1.2.2"</span>, retrieveDocuments);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>         retrieveSerieses.add(retrieveSeries2);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>         List&lt;RetrieveStudy&gt; retrieveStudies = request.getRetrieveStudies();
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>         RetrieveStudy retrieveStudy1 = <strong class="jxr_keyword">new</strong> RetrieveStudy(<span class="jxr_string">"urn:oid:1.1.1"</span>, retrieveSerieses);
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>         retrieveStudies.add(retrieveStudy1);
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>         RetrieveStudy retrieveStudy2 = <strong class="jxr_keyword">new</strong> RetrieveStudy(<span class="jxr_string">"urn:oid:1.1.2"</span>, retrieveSerieses);
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>         retrieveStudies.add(retrieveStudy2);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>         request.getTransferSyntaxIds().add(<span class="jxr_string">"1.2.840.10008.1.2.4.64"</span>);
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>         request.getTransferSyntaxIds().add(<span class="jxr_string">"1.2.840.10008.1.2.4.70"</span>);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>         <strong class="jxr_keyword">return</strong> request;
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>     }
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">     * @return a sample sql query.</em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createSqlQuery() {
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>         SqlQuery query = <strong class="jxr_keyword">new</strong> SqlQuery();        
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>         query.setSql(<span class="jxr_string">"SELECT * FROM INTERNET"</span>);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>     }
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>     
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">     * @return a sample stored query for get documents.</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetDocumentsQuery() {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>         GetDocumentsQuery query = <strong class="jxr_keyword">new</strong> GetDocumentsQuery();
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>         query.setHomeCommunityId(<span class="jxr_string">"urn:oid:1.2.3.14.15.926"</span>);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>         query.setUuids(Collections.singletonList(<span class="jxr_string">"document01"</span>));
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>         
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>     }
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find documents.</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindDocumentsQuery() {
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>         FindDocumentsQuery query = <strong class="jxr_keyword">new</strong> FindDocumentsQuery();
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>         populateDocumentsQuery(query);
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.3"</span>)));
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>         query.setDocumentAvailability(Arrays.asList(DocumentAvailability.ONLINE));
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>         query.setMetadataLevel(1);
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>     }
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find documents by reference ID.</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindDocumentsByReferenceIdQuery() {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>         FindDocumentsByReferenceIdQuery query = <strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery();
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>         populateDocumentsQuery(query);
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.3"</span>)));
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>         QueryList&lt;String&gt; referenceIds = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>         referenceIds.getOuterList().add(Arrays.asList(<span class="jxr_string">"ref-id-11"</span>, <span class="jxr_string">"ref-id-12"</span>, <span class="jxr_string">"ref-id-13"</span>));
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>         referenceIds.getOuterList().add(Arrays.asList(<span class="jxr_string">"ref-id-21"</span>, <span class="jxr_string">"ref-id-22"</span>));
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>         query.setReferenceIds(referenceIds);
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>     }
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> populateDocumentsQuery(DocumentsQuery query) {
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>         
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>         query.setClassCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme2"</span>)));
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>         query.setTypeCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"codet1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"schemet1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"codet2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"schemet2"</span>)));
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>         query.setPracticeSettingCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code3"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme3"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code4"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme4"</span>)));
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>         query.getCreationTime().setFrom(<span class="jxr_string">"1980"</span>);
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>         query.getCreationTime().setTo(<span class="jxr_string">"1981"</span>);
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>         query.getServiceStartTime().setFrom(<span class="jxr_string">"1982"</span>);
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>         query.getServiceStartTime().setTo(<span class="jxr_string">"1983"</span>);
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>         query.getServiceStopTime().setFrom(<span class="jxr_string">"1984"</span>);
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>         query.getServiceStopTime().setTo(<span class="jxr_string">"1985"</span>);
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>         query.setHealthcareFacilityTypeCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code5"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme5"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code6"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme6"</span>)));
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>         QueryList&lt;Code&gt; eventCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>         eventCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme7"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme8"</span>)));
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>         eventCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme9"</span>)));
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>         query.setEventCodes(eventCodes);
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>         QueryList&lt;Code&gt; confidentialityCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>         confidentialityCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code10"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme10"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code11"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme11"</span>)));
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>         confidentialityCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code12"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme12"</span>)));
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>         query.setConfidentialityCodes(confidentialityCodes);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>         query.setAuthorPersons(Arrays.asList(<span class="jxr_string">"per'son1"</span>, <span class="jxr_string">"person2"</span>));
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>         query.setFormatCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code13"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme13"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code14"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme14"</span>)));
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>     }
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find documents (Multi Patient).</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindDocumentsForMultiplePatientsQuery() {
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>         FindDocumentsForMultiplePatientsQuery query = <strong class="jxr_keyword">new</strong> FindDocumentsForMultiplePatientsQuery();
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>         populateDocumentsQuery(query);
-<a class="jxr_linenumber" name="L471" href="#L471">471</a>         query.setPatientIds(Arrays.asList(
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>                 <strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.3"</span>)),
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>                 <strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id4"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.4"</span>))));
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-<a class="jxr_linenumber" name="L475" href="#L475">475</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>         query.setMetadataLevel(42);
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>     }
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 
-<a class="jxr_linenumber" name="L481" href="#L481">481</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find folders.</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindFoldersQuery() {
-<a class="jxr_linenumber" name="L485" href="#L485">485</a>         FindFoldersQuery query = <strong class="jxr_keyword">new</strong> FindFoldersQuery();
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>         
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>)));
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>         query.getLastUpdateTime().setFrom(<span class="jxr_string">"1980"</span>);
-<a class="jxr_linenumber" name="L490" href="#L490">490</a>         query.getLastUpdateTime().setTo(<span class="jxr_string">"1981"</span>);
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>         QueryList&lt;Code&gt; codes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L492" href="#L492">492</a>         codes.getOuterList().add(
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme7"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme8"</span>)));
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>         codes.getOuterList().add(
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme9"</span>)));
-<a class="jxr_linenumber" name="L496" href="#L496">496</a>         query.setCodes(codes);
-<a class="jxr_linenumber" name="L497" href="#L497">497</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>         
-<a class="jxr_linenumber" name="L499" href="#L499">499</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L500" href="#L500">500</a>     }
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 
-<a class="jxr_linenumber" name="L503" href="#L503">503</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find folders.</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindFoldersForMultiplePatientsQuery() {
-<a class="jxr_linenumber" name="L507" href="#L507">507</a>         FindFoldersForMultiplePatientsQuery query = <strong class="jxr_keyword">new</strong> FindFoldersForMultiplePatientsQuery();
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 
-<a class="jxr_linenumber" name="L509" href="#L509">509</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L510" href="#L510">510</a>         query.setPatientIds(Arrays.asList(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>)), <strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id2"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>))));
-<a class="jxr_linenumber" name="L511" href="#L511">511</a>         query.getLastUpdateTime().setFrom(<span class="jxr_string">"1980"</span>);
-<a class="jxr_linenumber" name="L512" href="#L512">512</a>         query.getLastUpdateTime().setTo(<span class="jxr_string">"1981"</span>);
-<a class="jxr_linenumber" name="L513" href="#L513">513</a>         QueryList&lt;Code&gt; codes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L514" href="#L514">514</a>         codes.getOuterList().add(
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme7"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme8"</span>)));
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>         codes.getOuterList().add(
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme9"</span>)));
-<a class="jxr_linenumber" name="L518" href="#L518">518</a>         query.setCodes(codes);
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>         query.setMetadataLevel(42);
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 
-<a class="jxr_linenumber" name="L522" href="#L522">522</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>     }
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 
-<a class="jxr_linenumber" name="L525" href="#L525">525</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find submission sets.</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L528" href="#L528">528</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindSubmissionSetsQuery() {
-<a class="jxr_linenumber" name="L529" href="#L529">529</a>         FindSubmissionSetsQuery query = <strong class="jxr_keyword">new</strong> FindSubmissionSetsQuery();
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>         
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L532" href="#L532">532</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>)));
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>         query.getSubmissionTime().setFrom(<span class="jxr_string">"1980"</span>);
-<a class="jxr_linenumber" name="L534" href="#L534">534</a>         query.getSubmissionTime().setTo(<span class="jxr_string">"1981"</span>);
-<a class="jxr_linenumber" name="L535" href="#L535">535</a>         query.setAuthorPerson(<span class="jxr_string">"per'son1"</span>);
-<a class="jxr_linenumber" name="L536" href="#L536">536</a>         query.setSourceIds(Arrays.asList(<span class="jxr_string">"1.2.3"</span>, <span class="jxr_string">"3.2.1"</span>));
-<a class="jxr_linenumber" name="L537" href="#L537">537</a>         query.setContentTypeCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme2"</span>)));
-<a class="jxr_linenumber" name="L538" href="#L538">538</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-<a class="jxr_linenumber" name="L539" href="#L539">539</a>         
-<a class="jxr_linenumber" name="L540" href="#L540">540</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>     }
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 
-<a class="jxr_linenumber" name="L543" href="#L543">543</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting data from all types.</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetAllQuery() {
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>         GetAllQuery query = <strong class="jxr_keyword">new</strong> GetAllQuery();
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>         
-<a class="jxr_linenumber" name="L549" href="#L549">549</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>)));
-<a class="jxr_linenumber" name="L551" href="#L551">551</a>         QueryList&lt;Code&gt; codes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L552" href="#L552">552</a>         codes.getOuterList().add(
-<a class="jxr_linenumber" name="L553" href="#L553">553</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme7"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme8"</span>)));
-<a class="jxr_linenumber" name="L554" href="#L554">554</a>         codes.getOuterList().add(
-<a class="jxr_linenumber" name="L555" href="#L555">555</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme9"</span>)));
-<a class="jxr_linenumber" name="L556" href="#L556">556</a>         query.setConfidentialityCodes(codes);
-<a class="jxr_linenumber" name="L557" href="#L557">557</a>         query.setFormatCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme2"</span>)));
-<a class="jxr_linenumber" name="L558" href="#L558">558</a>         query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-<a class="jxr_linenumber" name="L559" href="#L559">559</a>         query.setStatusFolders(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-<a class="jxr_linenumber" name="L560" href="#L560">560</a>         query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-<a class="jxr_linenumber" name="L561" href="#L561">561</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 
-<a class="jxr_linenumber" name="L563" href="#L563">563</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L564" href="#L564">564</a>     }
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 
-<a class="jxr_linenumber" name="L566" href="#L566">566</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting associations.</em>
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L569" href="#L569">569</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetAssociationsQuery() {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a>         GetAssociationsQuery query = <strong class="jxr_keyword">new</strong> GetAssociationsQuery();
-<a class="jxr_linenumber" name="L571" href="#L571">571</a>         
-<a class="jxr_linenumber" name="L572" href="#L572">572</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L573" href="#L573">573</a>         query.setUuids(Arrays.asList(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>, <span class="jxr_string">"urn:uuid:2.3.4.5"</span>));
-<a class="jxr_linenumber" name="L574" href="#L574">574</a>         
-<a class="jxr_linenumber" name="L575" href="#L575">575</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L576" href="#L576">576</a>     }
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
-<a class="jxr_linenumber" name="L578" href="#L578">578</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting associations and documents.</em>
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L581" href="#L581">581</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetDocumentsAndAssociationsQuery() {
-<a class="jxr_linenumber" name="L582" href="#L582">582</a>         GetDocumentsAndAssociationsQuery query = <strong class="jxr_keyword">new</strong> GetDocumentsAndAssociationsQuery();
-<a class="jxr_linenumber" name="L583" href="#L583">583</a>         
-<a class="jxr_linenumber" name="L584" href="#L584">584</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L585" href="#L585">585</a>         query.setUuids(Arrays.asList(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>, <span class="jxr_string">"urn:uuid:2.3.4.5"</span>));
-<a class="jxr_linenumber" name="L586" href="#L586">586</a>         query.setUniqueIds(Arrays.asList(<span class="jxr_string">"12.21.34"</span>, <span class="jxr_string">"43.56.89"</span>));
-<a class="jxr_linenumber" name="L587" href="#L587">587</a>         
-<a class="jxr_linenumber" name="L588" href="#L588">588</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L589" href="#L589">589</a>     }
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 
-<a class="jxr_linenumber" name="L591" href="#L591">591</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting folders and their content.</em>
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L594" href="#L594">594</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetFolderAndContentsQuery() {
-<a class="jxr_linenumber" name="L595" href="#L595">595</a>         GetFolderAndContentsQuery query = <strong class="jxr_keyword">new</strong> GetFolderAndContentsQuery();
-<a class="jxr_linenumber" name="L596" href="#L596">596</a>         
-<a class="jxr_linenumber" name="L597" href="#L597">597</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L598" href="#L598">598</a>         query.setUuid(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>);
-<a class="jxr_linenumber" name="L599" href="#L599">599</a>         query.setUniqueId(<span class="jxr_string">"12.21.34"</span>);
-<a class="jxr_linenumber" name="L600" href="#L600">600</a>         QueryList&lt;Code&gt; confidentialityCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L601" href="#L601">601</a>         confidentialityCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L602" href="#L602">602</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code10"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme10"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code11"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme11"</span>)));
-<a class="jxr_linenumber" name="L603" href="#L603">603</a>         confidentialityCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L604" href="#L604">604</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code12"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme12"</span>)));
-<a class="jxr_linenumber" name="L605" href="#L605">605</a>         query.setConfidentialityCodes(confidentialityCodes);
-<a class="jxr_linenumber" name="L606" href="#L606">606</a>         query.setFormatCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code13"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme13"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code14"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme14"</span>)));
-<a class="jxr_linenumber" name="L607" href="#L607">607</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
-<a class="jxr_linenumber" name="L608" href="#L608">608</a>         
-<a class="jxr_linenumber" name="L609" href="#L609">609</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L610" href="#L610">610</a>     }
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
-<a class="jxr_linenumber" name="L612" href="#L612">612</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting folders based on their documents.</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L615" href="#L615">615</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetFoldersForDocumentQuery() {
-<a class="jxr_linenumber" name="L616" href="#L616">616</a>         GetFoldersForDocumentQuery query = <strong class="jxr_keyword">new</strong> GetFoldersForDocumentQuery();
-<a class="jxr_linenumber" name="L617" href="#L617">617</a>         
-<a class="jxr_linenumber" name="L618" href="#L618">618</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L619" href="#L619">619</a>         query.setUuid(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>);
-<a class="jxr_linenumber" name="L620" href="#L620">620</a>         query.setUniqueId(<span class="jxr_string">"12.21.34"</span>);
-<a class="jxr_linenumber" name="L621" href="#L621">621</a>         QueryList&lt;Code&gt; confidentialityCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L622" href="#L622">622</a>         confidentialityCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L623" href="#L623">623</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code10"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme10"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code11"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme11"</span>)));
-<a class="jxr_linenumber" name="L624" href="#L624">624</a>         confidentialityCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L625" href="#L625">625</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code12"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme12"</span>)));
-<a class="jxr_linenumber" name="L626" href="#L626">626</a>         
-<a class="jxr_linenumber" name="L627" href="#L627">627</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L628" href="#L628">628</a>     }
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 
-<a class="jxr_linenumber" name="L630" href="#L630">630</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting folders.</em>
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetFoldersQuery() {
-<a class="jxr_linenumber" name="L634" href="#L634">634</a>         GetFoldersQuery query = <strong class="jxr_keyword">new</strong> GetFoldersQuery();
-<a class="jxr_linenumber" name="L635" href="#L635">635</a>         
-<a class="jxr_linenumber" name="L636" href="#L636">636</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L637" href="#L637">637</a>         query.setUuids(Arrays.asList(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>, <span class="jxr_string">"urn:uuid:2.3.4.5"</span>));
-<a class="jxr_linenumber" name="L638" href="#L638">638</a>         query.setUniqueIds(Arrays.asList(<span class="jxr_string">"12.21.34"</span>, <span class="jxr_string">"43.56.89"</span>));
-<a class="jxr_linenumber" name="L639" href="#L639">639</a>         
-<a class="jxr_linenumber" name="L640" href="#L640">640</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L641" href="#L641">641</a>     }
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 
-<a class="jxr_linenumber" name="L643" href="#L643">643</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting documents related to some other object.</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetRelatedDocumentsQuery() {
-<a class="jxr_linenumber" name="L647" href="#L647">647</a>         GetRelatedDocumentsQuery query = <strong class="jxr_keyword">new</strong> GetRelatedDocumentsQuery();
-<a class="jxr_linenumber" name="L648" href="#L648">648</a>         
-<a class="jxr_linenumber" name="L649" href="#L649">649</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L650" href="#L650">650</a>         query.setUuid(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>);
-<a class="jxr_linenumber" name="L651" href="#L651">651</a>         query.setUniqueId(<span class="jxr_string">"12.21.34"</span>);
-<a class="jxr_linenumber" name="L652" href="#L652">652</a>         query.setAssociationTypes(Arrays.asList(AssociationType.APPEND, AssociationType.TRANSFORM));
-<a class="jxr_linenumber" name="L653" href="#L653">653</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
-<a class="jxr_linenumber" name="L654" href="#L654">654</a>                 
-<a class="jxr_linenumber" name="L655" href="#L655">655</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L656" href="#L656">656</a>     }
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 
-<a class="jxr_linenumber" name="L658" href="#L658">658</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting submission sets and their contents.</em>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L661" href="#L661">661</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetSubmissionSetAndContentsQuery() {
-<a class="jxr_linenumber" name="L662" href="#L662">662</a>         GetSubmissionSetAndContentsQuery query = <strong class="jxr_keyword">new</strong> GetSubmissionSetAndContentsQuery();
-<a class="jxr_linenumber" name="L663" href="#L663">663</a>         
-<a class="jxr_linenumber" name="L664" href="#L664">664</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L665" href="#L665">665</a>         query.setUuid(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>);
-<a class="jxr_linenumber" name="L666" href="#L666">666</a>         query.setUniqueId(<span class="jxr_string">"12.21.34"</span>);
-<a class="jxr_linenumber" name="L667" href="#L667">667</a>         QueryList&lt;Code&gt; confidentialityCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L668" href="#L668">668</a>         confidentialityCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L669" href="#L669">669</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code10"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme10"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code11"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme11"</span>)));
-<a class="jxr_linenumber" name="L670" href="#L670">670</a>         confidentialityCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L671" href="#L671">671</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code12"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme12"</span>)));
-<a class="jxr_linenumber" name="L672" href="#L672">672</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 
-<a class="jxr_linenumber" name="L674" href="#L674">674</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L675" href="#L675">675</a>     }
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 
-<a class="jxr_linenumber" name="L677" href="#L677">677</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting submission sets.</em>
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L680" href="#L680">680</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetSubmissionSetsQuery() {
-<a class="jxr_linenumber" name="L681" href="#L681">681</a>         GetSubmissionSetsQuery query = <strong class="jxr_keyword">new</strong> GetSubmissionSetsQuery();
-<a class="jxr_linenumber" name="L682" href="#L682">682</a>         
-<a class="jxr_linenumber" name="L683" href="#L683">683</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
-<a class="jxr_linenumber" name="L684" href="#L684">684</a>         query.setUuids(Arrays.asList(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>, <span class="jxr_string">"urn:uuid:2.3.4.5"</span>));
-<a class="jxr_linenumber" name="L685" href="#L685">685</a>                 
-<a class="jxr_linenumber" name="L686" href="#L686">686</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L687" href="#L687">687</a>     }
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 
-<a class="jxr_linenumber" name="L689" href="#L689">689</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find documents.</em>
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L692" href="#L692">692</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFetchQuery() {
-<a class="jxr_linenumber" name="L693" href="#L693">693</a>         FetchQuery query = <strong class="jxr_keyword">new</strong> FetchQuery();
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 
-<a class="jxr_linenumber" name="L695" href="#L695">695</a>         query.setHomeCommunityId(<span class="jxr_string">"urn:oid:1.2.21.41"</span>);
-<a class="jxr_linenumber" name="L696" href="#L696">696</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.3"</span>)));
-<a class="jxr_linenumber" name="L697" href="#L697">697</a>         query.setClassCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme2"</span>)));
-<a class="jxr_linenumber" name="L698" href="#L698">698</a>         query.setTypeCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"codet1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"schemet1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"codet2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"schemet2"</span>)));
-<a class="jxr_linenumber" name="L699" href="#L699">699</a>         query.setPracticeSettingCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code3"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme3"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code4"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme4"</span>)));
-<a class="jxr_linenumber" name="L700" href="#L700">700</a>         query.getCreationTime().setFrom(<span class="jxr_string">"1980"</span>);
-<a class="jxr_linenumber" name="L701" href="#L701">701</a>         query.getCreationTime().setTo(<span class="jxr_string">"1981"</span>);
-<a class="jxr_linenumber" name="L702" href="#L702">702</a>         query.getServiceStartTime().setFrom(<span class="jxr_string">"1982"</span>);
-<a class="jxr_linenumber" name="L703" href="#L703">703</a>         query.getServiceStartTime().setTo(<span class="jxr_string">"1983"</span>);
-<a class="jxr_linenumber" name="L704" href="#L704">704</a>         query.getServiceStopTime().setFrom(<span class="jxr_string">"1984"</span>);
-<a class="jxr_linenumber" name="L705" href="#L705">705</a>         query.getServiceStopTime().setTo(<span class="jxr_string">"1985"</span>);
-<a class="jxr_linenumber" name="L706" href="#L706">706</a>         query.setHealthcareFacilityTypeCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code5"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme5"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code6"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme6"</span>)));
-<a class="jxr_linenumber" name="L707" href="#L707">707</a>         QueryList&lt;Code&gt; eventCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L708" href="#L708">708</a>         eventCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L709" href="#L709">709</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme7"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme8"</span>)));
-<a class="jxr_linenumber" name="L710" href="#L710">710</a>         eventCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L711" href="#L711">711</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme9"</span>)));
-<a class="jxr_linenumber" name="L712" href="#L712">712</a>         query.setEventCodes(eventCodes);
-<a class="jxr_linenumber" name="L713" href="#L713">713</a>         QueryList&lt;Code&gt; confidentialityCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
-<a class="jxr_linenumber" name="L714" href="#L714">714</a>         confidentialityCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L715" href="#L715">715</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code10"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme10"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code11"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme11"</span>)));
-<a class="jxr_linenumber" name="L716" href="#L716">716</a>         confidentialityCodes.getOuterList().add(
-<a class="jxr_linenumber" name="L717" href="#L717">717</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code12"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme12"</span>)));
-<a class="jxr_linenumber" name="L718" href="#L718">718</a>         query.setConfidentialityCodes(confidentialityCodes);
-<a class="jxr_linenumber" name="L719" href="#L719">719</a>         query.setAuthorPersons(Arrays.asList(<span class="jxr_string">"per'son1"</span>, <span class="jxr_string">"person2"</span>));
-<a class="jxr_linenumber" name="L720" href="#L720">720</a>         query.setFormatCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code13"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme13"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code14"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme14"</span>)));
-<a class="jxr_linenumber" name="L721" href="#L721">721</a>         <em class="jxr_comment">//query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));</em>
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 
-<a class="jxr_linenumber" name="L723" href="#L723">723</a>         QueryRegistry queryRegistry = <strong class="jxr_keyword">new</strong> QueryRegistry(query);
-<a class="jxr_linenumber" name="L724" href="#L724">724</a>         queryRegistry.setReturnType(QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM);
-<a class="jxr_linenumber" name="L725" href="#L725">725</a>         <strong class="jxr_keyword">return</strong> queryRegistry;
-<a class="jxr_linenumber" name="L726" href="#L726">726</a>     }
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 
-<a class="jxr_linenumber" name="L729" href="#L729">729</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RemoveDocumentSet createRemoveDocumentSet(){
-<a class="jxr_linenumber" name="L730" href="#L730">730</a>         RemoveDocumentSet removeDocs = <strong class="jxr_keyword">new</strong> RemoveDocumentSet();
-<a class="jxr_linenumber" name="L731" href="#L731">731</a>         removeDocs.getReferences().add(<strong class="jxr_keyword">new</strong> ObjectReference(<span class="jxr_string">"urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871"</span>, <span class="jxr_string">"1.2.3"</span>));
-<a class="jxr_linenumber" name="L732" href="#L732">732</a>         removeDocs.getReferences().add(<strong class="jxr_keyword">new</strong> ObjectReference(<span class="jxr_string">"urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd"</span>, <span class="jxr_string">"5.6.7"</span>));
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 
-<a class="jxr_linenumber" name="L734" href="#L734">734</a>         <strong class="jxr_keyword">return</strong> removeDocs;
-<a class="jxr_linenumber" name="L735" href="#L735">735</a>     }
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> 
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> }
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> 
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>         request.setTargetHomeCommunityId(<span class="jxr_string">"urn:oid:1.2.3.4.5.6.2333.23"</span>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>         <strong class="jxr_keyword">return</strong> request;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>     }
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Association createAssociationDocEntryToFolder() {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         Association docFolderAssociation = <strong class="jxr_keyword">new</strong> Association();
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>         docFolderAssociation.setAssociationType(AssociationType.HAS_MEMBER);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>         docFolderAssociation.setSourceUuid(<span class="jxr_string">"folder01"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>         docFolderAssociation.setTargetUuid(<span class="jxr_string">"document01"</span>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>         docFolderAssociation.setEntryUuid(<span class="jxr_string">"docFolderAss"</span>);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">return</strong> docFolderAssociation;
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>     }
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Association createAssociationFolderToSubmissionSet() {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>         Association folderAssociation = <strong class="jxr_keyword">new</strong> Association();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>         folderAssociation.setAssociationType(AssociationType.HAS_MEMBER);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>         folderAssociation.setSourceUuid(<span class="jxr_string">"submissionSet01"</span>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>         folderAssociation.setTargetUuid(<span class="jxr_string">"folder01"</span>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>         folderAssociation.setEntryUuid(<span class="jxr_string">"folderAss"</span>);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>         folderAssociation.setPreviousVersion(<span class="jxr_string">"110"</span>);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>         <strong class="jxr_keyword">return</strong> folderAssociation;
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>     }
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Association createAssociationDocEntryToSubmissionSet() {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>         Association docAssociation = <strong class="jxr_keyword">new</strong> Association();
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>         docAssociation.setAssociationType(AssociationType.HAS_MEMBER);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>         docAssociation.setSourceUuid(<span class="jxr_string">"submissionSet01"</span>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>         docAssociation.setTargetUuid(<span class="jxr_string">"document01"</span>);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>         docAssociation.setLabel(AssociationLabel.ORIGINAL);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>         docAssociation.setEntryUuid(<span class="jxr_string">"docAss"</span>);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>         docAssociation.setPreviousVersion(<span class="jxr_string">"111"</span>);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>         <strong class="jxr_keyword">return</strong> docAssociation;
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>     }
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">     * Creates a sample folder.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">     * @param patientID</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">     *          the patient ID to use.</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">     * @return the folder.                         </em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Folder createFolder(Identifiable patientID) {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>         Folder folder = <strong class="jxr_keyword">new</strong> Folder();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>         folder.setAvailabilityStatus(AvailabilityStatus.APPROVED);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>         folder.getCodeList().add(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code7"</span>), <span class="jxr_string">"scheme7"</span>));
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>         folder.setComments(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"comments3"</span>));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>         folder.setEntryUuid(<span class="jxr_string">"folder01"</span>);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>         folder.setLastUpdateTime(<span class="jxr_string">"19820910121315"</span>);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>         folder.setPatientId(patientID);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>         folder.setTitle(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"Folder 01"</span>, <span class="jxr_string">"en-US"</span>, <span class="jxr_string">"UTF8"</span>));
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>         folder.setUniqueId(<span class="jxr_string">"48574589"</span>);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>         <strong class="jxr_keyword">return</strong> folder;
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>     }
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">     * Creates a sample submission set.</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">     * @param patientID</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">     *          the patient ID to use.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">     * @return the submission set.</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> SubmissionSet createSubmissionSet(Identifiable patientID) {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>         Recipient recipient = <strong class="jxr_keyword">new</strong> Recipient();
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>         recipient.setOrganization(<strong class="jxr_keyword">new</strong> Organization(<span class="jxr_string">"org"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>         
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>         Author author = <strong class="jxr_keyword">new</strong> Author();
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>         author.setAuthorPerson(<strong class="jxr_keyword">new</strong> Person(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.1"</span>)),
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>                 <strong class="jxr_keyword">new</strong> XpnName(<span class="jxr_string">"Otto"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>         SubmissionSet submissionSet = <strong class="jxr_keyword">new</strong> SubmissionSet();
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>         submissionSet.getAuthors().add(author);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>         submissionSet.setAvailabilityStatus(AvailabilityStatus.APPROVED);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>         submissionSet.setComments(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"comments1"</span>));
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>         submissionSet.setContentTypeCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code1"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code1"</span>), <span class="jxr_string">"scheme1"</span>));
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>         submissionSet.setEntryUuid(<span class="jxr_string">"submissionSet01"</span>);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>         submissionSet.getIntendedRecipients().add(recipient);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>         submissionSet.setPatientId(patientID);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>         submissionSet.setSourceId(<span class="jxr_string">"1.2.3"</span>);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>         submissionSet.setSubmissionTime(<span class="jxr_string">"1980"</span>);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>         submissionSet.setTitle(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"Submission Set 01"</span>, <span class="jxr_string">"en-US"</span>, <span class="jxr_string">"UTF8"</span>));
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>         submissionSet.setUniqueId(<span class="jxr_string">"123"</span>);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>         <strong class="jxr_keyword">return</strong> submissionSet;
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>     }
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">     * Creates a document entry</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">     * @param patientID</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">     *          patient used for the document entry.</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">     * @return the new entry.</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> DocumentEntry createDocumentEntry(Identifiable patientID) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>         Author author = <strong class="jxr_keyword">new</strong> Author();
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>         Name name = <strong class="jxr_keyword">new</strong> XpnName();
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>         name.setFamilyName(<span class="jxr_string">"Norbi"</span>);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>         author.setAuthorPerson(<strong class="jxr_keyword">new</strong> Person(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id2"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>)), name));
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>         author.getAuthorInstitution().add(<strong class="jxr_keyword">new</strong> Organization(<span class="jxr_string">"authorOrg"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>         author.getAuthorRole().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"role1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2.3.1"</span>, <span class="jxr_string">"ISO"</span>)));
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>         author.getAuthorRole().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"role2"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>         author.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2.3.3"</span>, <span class="jxr_string">"ISO"</span>)));
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>         author.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec2"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>         author.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<span class="jxr_string">"author1@acme.org"</span>));
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>         author.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<span class="jxr_string">"author2@acme.org"</span>));
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>         Address address = <strong class="jxr_keyword">new</strong> Address();
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>         address.setStreetAddress(<span class="jxr_string">"hier"</span>);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>         
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>         PatientInfo patientInfo = <strong class="jxr_keyword">new</strong> PatientInfo();
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>         patientInfo.setAddress(address);
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>         patientInfo.setDateOfBirth(<span class="jxr_string">"1980"</span>);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>         patientInfo.setGender(<span class="jxr_string">"M"</span>);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>         patientInfo.setName(<strong class="jxr_keyword">new</strong> XpnName(<span class="jxr_string">"Susi"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>         
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>         DocumentEntry docEntry = <strong class="jxr_keyword">new</strong> DocumentEntry();
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>         docEntry.getAuthors().add(author);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>         docEntry.setAvailabilityStatus(AvailabilityStatus.APPROVED);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>         docEntry.setClassCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code2"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code2"</span>), <span class="jxr_string">"scheme2"</span>));
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>         docEntry.setComments(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"comment2"</span>));
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>         docEntry.getConfidentialityCodes().add(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code8"</span>), <span class="jxr_string">"scheme8"</span>));
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>         docEntry.setCreationTime(<span class="jxr_string">"1981"</span>);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>         docEntry.setEntryUuid(<span class="jxr_string">"document01"</span>);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>         docEntry.getEventCodeList().add(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code9"</span>), <span class="jxr_string">"scheme9"</span>));
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>         docEntry.setFormatCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code3"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code3"</span>), <span class="jxr_string">"scheme3"</span>));
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>         docEntry.setHash(<span class="jxr_string">"1234567890123456789012345678901234567890"</span>);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>         docEntry.setHealthcareFacilityTypeCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code4"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code4"</span>), <span class="jxr_string">"scheme4"</span>));
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>         docEntry.setLanguageCode(<span class="jxr_string">"en-US"</span>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>         docEntry.setLegalAuthenticator(<strong class="jxr_keyword">new</strong> Person(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"legal"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.7"</span>)),
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>                 <strong class="jxr_keyword">new</strong> XpnName(<span class="jxr_string">"Gustav"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>         docEntry.setMimeType(<span class="jxr_string">"application/octet-stream"</span>);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>         docEntry.setPatientId(patientID);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>         docEntry.setPracticeSettingCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code5"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code5"</span>), <span class="jxr_string">"scheme5"</span>));
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>         docEntry.setRepositoryUniqueId(<span class="jxr_string">"1.2.3.4"</span>);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>         docEntry.setServiceStartTime(<span class="jxr_string">"198012"</span>);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>         docEntry.setServiceStopTime(<span class="jxr_string">"198101"</span>);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>         docEntry.setSize(123L);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>         docEntry.setSourcePatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"source"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"4.1"</span>)));
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>         docEntry.setSourcePatientInfo(patientInfo);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>         docEntry.setTitle(<strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"Document 01"</span>, <span class="jxr_string">"en-US"</span>, <span class="jxr_string">"UTF8"</span>));
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>         docEntry.setTypeCode(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code6"</span>, <strong class="jxr_keyword">new</strong> LocalizedString(<span class="jxr_string">"code6"</span>), <span class="jxr_string">"scheme6"</span>));
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>         docEntry.setUniqueId(<span class="jxr_string">"32848902348"</span>);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>         docEntry.setUri(<span class="jxr_string">"http://hierunten.com"</span>);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>         docEntry.getReferenceIdList().add(<strong class="jxr_keyword">new</strong> ReferenceId(
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>                 <span class="jxr_string">"ref-id-1"</span>, <strong class="jxr_keyword">new</strong> CXiAssigningAuthority(<span class="jxr_string">"ABCD"</span>, <span class="jxr_string">"1.1.2.3"</span>, <span class="jxr_string">"ISO"</span>),
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>                 ReferenceId.ID_TYPE_CODE_ORDER));
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>         docEntry.getReferenceIdList().add(<strong class="jxr_keyword">new</strong> ReferenceId(
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>                 <span class="jxr_string">"ref-id-2"</span>, <strong class="jxr_keyword">new</strong> CXiAssigningAuthority(<span class="jxr_string">"DEFG"</span>, <span class="jxr_string">"2.1.2.3"</span>, <span class="jxr_string">"ISO"</span>),
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>                 <span class="jxr_string">"vendor-defined"</span>));
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>         <strong class="jxr_keyword">return</strong> docEntry;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>     }    
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">     * @return a sample request to register a document set.</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RegisterDocumentSet createRegisterDocumentSet() {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>         Identifiable patientID = <strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.3"</span>));
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>         
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>         SubmissionSet submissionSet = createSubmissionSet(patientID);        
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>         DocumentEntry docEntry = createDocumentEntry(patientID);        
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>         Folder folder = createFolder(patientID);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>         
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>         Association docAssociation = createAssociationDocEntryToSubmissionSet();
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>         Association folderAssociation = createAssociationFolderToSubmissionSet();
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>         Association docFolderAssociation = createAssociationDocEntryToFolder();
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>         
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>         RegisterDocumentSet request = <strong class="jxr_keyword">new</strong> RegisterDocumentSet();
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>         request.setSubmissionSet(submissionSet);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>         request.getDocumentEntries().add(docEntry);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>         request.getFolders().add(folder);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>         request.getAssociations().add(docAssociation);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>         request.getAssociations().add(folderAssociation);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>         request.getAssociations().add(docFolderAssociation);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>         
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>         <strong class="jxr_keyword">return</strong> request;
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>     }
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">     * @return a sample request to retrieve a document set.</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RetrieveDocumentSet createRetrieveDocumentSet() {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>         RetrieveDocumentSet request = <strong class="jxr_keyword">new</strong> RetrieveDocumentSet();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>         request.getDocuments().add(<strong class="jxr_keyword">new</strong> RetrieveDocument(<span class="jxr_string">"repo1"</span>, <span class="jxr_string">"doc1"</span>, <span class="jxr_string">"urn:oid:1.2.3"</span>));
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>         request.getDocuments().add(<strong class="jxr_keyword">new</strong> RetrieveDocument(<span class="jxr_string">"repo2"</span>, <span class="jxr_string">"doc2"</span>, <span class="jxr_string">"urn:oid:1.2.4"</span>));
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>         <strong class="jxr_keyword">return</strong> request;
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>     }
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>     
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">     * @return a sample request to retrieve an imaging document set.</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RetrieveImagingDocumentSet createRetrieveImagingDocumentSet() {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>         RetrieveImagingDocumentSet request = <strong class="jxr_keyword">new</strong> RetrieveImagingDocumentSet();
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>         List&lt;RetrieveDocument&gt; retrieveDocuments = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>         RetrieveDocument retrieveDocument1 = <strong class="jxr_keyword">new</strong> RetrieveDocument(<span class="jxr_string">"repo1"</span>, <span class="jxr_string">"doc1"</span>, <span class="jxr_string">"urn:oid:1.2.3"</span>);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>         retrieveDocuments.add(retrieveDocument1);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>         RetrieveDocument retrieveDocument2 = <strong class="jxr_keyword">new</strong> RetrieveDocument(<span class="jxr_string">"repo2"</span>, <span class="jxr_string">"doc2"</span>, <span class="jxr_string">"urn:oid:1.2.4"</span>);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>         retrieveDocuments.add(retrieveDocument2);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>         List&lt;RetrieveSeries&gt; retrieveSerieses = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>         RetrieveSeries retrieveSeries1 = <strong class="jxr_keyword">new</strong> RetrieveSeries(<span class="jxr_string">"urn:oid:1.2.1"</span>, retrieveDocuments);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>         retrieveSerieses.add(retrieveSeries1);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>         RetrieveSeries retrieveSeries2 = <strong class="jxr_keyword">new</strong> RetrieveSeries(<span class="jxr_string">"urn:oid:1.2.2"</span>, retrieveDocuments);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>         retrieveSerieses.add(retrieveSeries2);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>         List&lt;RetrieveStudy&gt; retrieveStudies = request.getRetrieveStudies();
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>         RetrieveStudy retrieveStudy1 = <strong class="jxr_keyword">new</strong> RetrieveStudy(<span class="jxr_string">"urn:oid:1.1.1"</span>, retrieveSerieses);
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>         retrieveStudies.add(retrieveStudy1);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>         RetrieveStudy retrieveStudy2 = <strong class="jxr_keyword">new</strong> RetrieveStudy(<span class="jxr_string">"urn:oid:1.1.2"</span>, retrieveSerieses);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>         retrieveStudies.add(retrieveStudy2);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>         request.getTransferSyntaxIds().add(<span class="jxr_string">"1.2.840.10008.1.2.4.64"</span>);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>         request.getTransferSyntaxIds().add(<span class="jxr_string">"1.2.840.10008.1.2.4.70"</span>);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>         <strong class="jxr_keyword">return</strong> request;
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>     }
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">     * @return a sample sql query.</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createSqlQuery() {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>         SqlQuery query = <strong class="jxr_keyword">new</strong> SqlQuery();        
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>         query.setSql(<span class="jxr_string">"SELECT * FROM INTERNET"</span>);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>     }
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>     
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">     * @return a sample stored query for get documents.</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetDocumentsQuery() {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>         GetDocumentsQuery query = <strong class="jxr_keyword">new</strong> GetDocumentsQuery();
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>         query.setHomeCommunityId(<span class="jxr_string">"urn:oid:1.2.3.14.15.926"</span>);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>         query.setUuids(Collections.singletonList(<span class="jxr_string">"document01"</span>));
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>         
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>     }
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find documents.</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindDocumentsQuery() {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>         FindDocumentsQuery query = <strong class="jxr_keyword">new</strong> FindDocumentsQuery();
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>         populateDocumentsQuery(query);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.3"</span>)));
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>         query.setDocumentAvailability(Arrays.asList(DocumentAvailability.ONLINE));
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>         query.setMetadataLevel(1);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>     }
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find documents by reference ID.</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindDocumentsByReferenceIdQuery() {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>         FindDocumentsByReferenceIdQuery query = <strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery();
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>         populateDocumentsQuery(query);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.3"</span>)));
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>         QueryList&lt;ReferenceId&gt; referenceIds = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>         referenceIds.getOuterList().add(Arrays.asList(
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>                 <strong class="jxr_keyword">new</strong> ReferenceId(<span class="jxr_string">"ref-id-11"</span>, <strong class="jxr_keyword">new</strong> CXiAssigningAuthority(<span class="jxr_string">""</span>, <span class="jxr_string">"1.1.1.1"</span>, <span class="jxr_string">"ISO"</span>),
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>                         ReferenceId.ID_TYPE_CODE_UNIQUE_ID),
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>                 <strong class="jxr_keyword">new</strong> ReferenceId(<span class="jxr_string">"ref-id-12"</span>, <strong class="jxr_keyword">null</strong>, ReferenceId.ID_TYPE_WORKFLOW_INSTANCE_ID),
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>                 <strong class="jxr_keyword">new</strong> ReferenceId(<span class="jxr_string">"ref-id-13"</span>, <strong class="jxr_keyword">null</strong>, ReferenceId.ID_TYPE_CODE_REFERRAL)));
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>         referenceIds.getOuterList().add(Arrays.asList(
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>                 <strong class="jxr_keyword">new</strong> ReferenceId(<span class="jxr_string">"ref-id-21"</span>, <strong class="jxr_keyword">new</strong> CXiAssigningAuthority(<span class="jxr_string">""</span>, <span class="jxr_string">"1.1.1.2"</span>, <span class="jxr_string">"ISO"</span>),
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>                         ReferenceId.ID_TYPE_CODE_ACCESSION),
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>                 <strong class="jxr_keyword">new</strong> ReferenceId(<span class="jxr_string">"ref-id-22"</span>, <strong class="jxr_keyword">null</strong>, ReferenceId.ID_TYPE_CODE_ORDER)));
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>         query.setTypedReferenceIds(referenceIds);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>     }
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> populateDocumentsQuery(DocumentsQuery query) {
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>         
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>         query.setClassCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme2"</span>)));
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>         query.setTypeCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"codet1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"schemet1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"codet2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"schemet2"</span>)));
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>         query.setPracticeSettingCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code3"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme3"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code4"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme4"</span>)));
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>         query.getCreationTime().setFrom(<span class="jxr_string">"1980"</span>);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>         query.getCreationTime().setTo(<span class="jxr_string">"1981"</span>);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>         query.getServiceStartTime().setFrom(<span class="jxr_string">"1982"</span>);
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>         query.getServiceStartTime().setTo(<span class="jxr_string">"1983"</span>);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>         query.getServiceStopTime().setFrom(<span class="jxr_string">"1984"</span>);
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>         query.getServiceStopTime().setTo(<span class="jxr_string">"1985"</span>);
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>         query.setHealthcareFacilityTypeCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code5"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme5"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code6"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme6"</span>)));
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>         QueryList&lt;Code&gt; eventCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>         eventCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme7"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme8"</span>)));
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>         eventCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme9"</span>)));
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>         query.setEventCodes(eventCodes);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>         QueryList&lt;Code&gt; confidentialityCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>         confidentialityCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code10"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme10"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code11"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme11"</span>)));
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>         confidentialityCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code12"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme12"</span>)));
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>         query.setConfidentialityCodes(confidentialityCodes);
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>         query.setAuthorPersons(Arrays.asList(<span class="jxr_string">"per'son1"</span>, <span class="jxr_string">"person2"</span>));
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>         query.setFormatCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code13"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme13"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code14"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme14"</span>)));
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>     }
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find documents (Multi Patient).</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindDocumentsForMultiplePatientsQuery() {
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>         FindDocumentsForMultiplePatientsQuery query = <strong class="jxr_keyword">new</strong> FindDocumentsForMultiplePatientsQuery();
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>         populateDocumentsQuery(query);
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>         query.setPatientIds(Arrays.asList(
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>                 <strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.3"</span>)),
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>                 <strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id4"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.4"</span>))));
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L486" href="#L486">486</a>     }
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find folders.</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindFoldersQuery() {
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>         FindFoldersQuery query = <strong class="jxr_keyword">new</strong> FindFoldersQuery();
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>         
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>)));
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>         query.getLastUpdateTime().setFrom(<span class="jxr_string">"1980"</span>);
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>         query.getLastUpdateTime().setTo(<span class="jxr_string">"1981"</span>);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>         QueryList&lt;Code&gt; codes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>         codes.getOuterList().add(
+<a class="jxr_linenumber" name="L501" href="#L501">501</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme7"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme8"</span>)));
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>         codes.getOuterList().add(
+<a class="jxr_linenumber" name="L503" href="#L503">503</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme9"</span>)));
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>         query.setCodes(codes);
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>         
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>     }
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find folders.</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindFoldersForMultiplePatientsQuery() {
+<a class="jxr_linenumber" name="L515" href="#L515">515</a>         FindFoldersForMultiplePatientsQuery query = <strong class="jxr_keyword">new</strong> FindFoldersForMultiplePatientsQuery();
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 
+<a class="jxr_linenumber" name="L517" href="#L517">517</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>         query.setPatientIds(Arrays.asList(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>)), <strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id2"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>))));
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>         query.getLastUpdateTime().setFrom(<span class="jxr_string">"1980"</span>);
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>         query.getLastUpdateTime().setTo(<span class="jxr_string">"1981"</span>);
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>         QueryList&lt;Code&gt; codes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>         codes.getOuterList().add(
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme7"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme8"</span>)));
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>         codes.getOuterList().add(
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme9"</span>)));
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>         query.setCodes(codes);
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>     }
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find submission sets.</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFindSubmissionSetsQuery() {
+<a class="jxr_linenumber" name="L536" href="#L536">536</a>         FindSubmissionSetsQuery query = <strong class="jxr_keyword">new</strong> FindSubmissionSetsQuery();
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>         
+<a class="jxr_linenumber" name="L538" href="#L538">538</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L539" href="#L539">539</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>)));
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>         query.getSubmissionTime().setFrom(<span class="jxr_string">"1980"</span>);
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>         query.getSubmissionTime().setTo(<span class="jxr_string">"1981"</span>);
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>         query.setAuthorPerson(<span class="jxr_string">"per'son1"</span>);
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>         query.setSourceIds(Arrays.asList(<span class="jxr_string">"1.2.3"</span>, <span class="jxr_string">"3.2.1"</span>));
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>         query.setContentTypeCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme2"</span>)));
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>         
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L548" href="#L548">548</a>     }
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
+<a class="jxr_linenumber" name="L550" href="#L550">550</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting data from all types.</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetAllQuery() {
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>         GetAllQuery query = <strong class="jxr_keyword">new</strong> GetAllQuery();
+<a class="jxr_linenumber" name="L555" href="#L555">555</a>         
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.2"</span>)));
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>         QueryList&lt;Code&gt; codes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>         codes.getOuterList().add(
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme7"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme8"</span>)));
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>         codes.getOuterList().add(
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme9"</span>)));
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>         query.setConfidentialityCodes(codes);
+<a class="jxr_linenumber" name="L564" href="#L564">564</a>         query.setFormatCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme2"</span>)));
+<a class="jxr_linenumber" name="L565" href="#L565">565</a>         query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+<a class="jxr_linenumber" name="L566" href="#L566">566</a>         query.setStatusFolders(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+<a class="jxr_linenumber" name="L567" href="#L567">567</a>         query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+<a class="jxr_linenumber" name="L568" href="#L568">568</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
+<a class="jxr_linenumber" name="L570" href="#L570">570</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>     }
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
+<a class="jxr_linenumber" name="L573" href="#L573">573</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting associations.</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetAssociationsQuery() {
+<a class="jxr_linenumber" name="L577" href="#L577">577</a>         GetAssociationsQuery query = <strong class="jxr_keyword">new</strong> GetAssociationsQuery();
+<a class="jxr_linenumber" name="L578" href="#L578">578</a>         
+<a class="jxr_linenumber" name="L579" href="#L579">579</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L580" href="#L580">580</a>         query.setUuids(Arrays.asList(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>, <span class="jxr_string">"urn:uuid:2.3.4.5"</span>));
+<a class="jxr_linenumber" name="L581" href="#L581">581</a>         
+<a class="jxr_linenumber" name="L582" href="#L582">582</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L583" href="#L583">583</a>     }
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 
+<a class="jxr_linenumber" name="L585" href="#L585">585</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting associations and documents.</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetDocumentsAndAssociationsQuery() {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a>         GetDocumentsAndAssociationsQuery query = <strong class="jxr_keyword">new</strong> GetDocumentsAndAssociationsQuery();
+<a class="jxr_linenumber" name="L590" href="#L590">590</a>         
+<a class="jxr_linenumber" name="L591" href="#L591">591</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L592" href="#L592">592</a>         query.setUuids(Arrays.asList(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>, <span class="jxr_string">"urn:uuid:2.3.4.5"</span>));
+<a class="jxr_linenumber" name="L593" href="#L593">593</a>         query.setUniqueIds(Arrays.asList(<span class="jxr_string">"12.21.34"</span>, <span class="jxr_string">"43.56.89"</span>));
+<a class="jxr_linenumber" name="L594" href="#L594">594</a>         
+<a class="jxr_linenumber" name="L595" href="#L595">595</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L596" href="#L596">596</a>     }
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 
+<a class="jxr_linenumber" name="L598" href="#L598">598</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting folders and their content.</em>
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L601" href="#L601">601</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetFolderAndContentsQuery() {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a>         GetFolderAndContentsQuery query = <strong class="jxr_keyword">new</strong> GetFolderAndContentsQuery();
+<a class="jxr_linenumber" name="L603" href="#L603">603</a>         
+<a class="jxr_linenumber" name="L604" href="#L604">604</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L605" href="#L605">605</a>         query.setUuid(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>);
+<a class="jxr_linenumber" name="L606" href="#L606">606</a>         query.setUniqueId(<span class="jxr_string">"12.21.34"</span>);
+<a class="jxr_linenumber" name="L607" href="#L607">607</a>         QueryList&lt;Code&gt; confidentialityCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L608" href="#L608">608</a>         confidentialityCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L609" href="#L609">609</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code10"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme10"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code11"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme11"</span>)));
+<a class="jxr_linenumber" name="L610" href="#L610">610</a>         confidentialityCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L611" href="#L611">611</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code12"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme12"</span>)));
+<a class="jxr_linenumber" name="L612" href="#L612">612</a>         query.setConfidentialityCodes(confidentialityCodes);
+<a class="jxr_linenumber" name="L613" href="#L613">613</a>         query.setFormatCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code13"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme13"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code14"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme14"</span>)));
+<a class="jxr_linenumber" name="L614" href="#L614">614</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+<a class="jxr_linenumber" name="L615" href="#L615">615</a>         
+<a class="jxr_linenumber" name="L616" href="#L616">616</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L617" href="#L617">617</a>     }
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
+<a class="jxr_linenumber" name="L619" href="#L619">619</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting folders based on their documents.</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetFoldersForDocumentQuery() {
+<a class="jxr_linenumber" name="L623" href="#L623">623</a>         GetFoldersForDocumentQuery query = <strong class="jxr_keyword">new</strong> GetFoldersForDocumentQuery();
+<a class="jxr_linenumber" name="L624" href="#L624">624</a>         
+<a class="jxr_linenumber" name="L625" href="#L625">625</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L626" href="#L626">626</a>         query.setUuid(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>);
+<a class="jxr_linenumber" name="L627" href="#L627">627</a>         query.setUniqueId(<span class="jxr_string">"12.21.34"</span>);
+<a class="jxr_linenumber" name="L628" href="#L628">628</a>         QueryList&lt;Code&gt; confidentialityCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L629" href="#L629">629</a>         confidentialityCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L630" href="#L630">630</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code10"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme10"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code11"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme11"</span>)));
+<a class="jxr_linenumber" name="L631" href="#L631">631</a>         confidentialityCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L632" href="#L632">632</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code12"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme12"</span>)));
+<a class="jxr_linenumber" name="L633" href="#L633">633</a>         
+<a class="jxr_linenumber" name="L634" href="#L634">634</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L635" href="#L635">635</a>     }
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 
+<a class="jxr_linenumber" name="L637" href="#L637">637</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting folders.</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetFoldersQuery() {
+<a class="jxr_linenumber" name="L641" href="#L641">641</a>         GetFoldersQuery query = <strong class="jxr_keyword">new</strong> GetFoldersQuery();
+<a class="jxr_linenumber" name="L642" href="#L642">642</a>         
+<a class="jxr_linenumber" name="L643" href="#L643">643</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L644" href="#L644">644</a>         query.setUuids(Arrays.asList(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>, <span class="jxr_string">"urn:uuid:2.3.4.5"</span>));
+<a class="jxr_linenumber" name="L645" href="#L645">645</a>         query.setUniqueIds(Arrays.asList(<span class="jxr_string">"12.21.34"</span>, <span class="jxr_string">"43.56.89"</span>));
+<a class="jxr_linenumber" name="L646" href="#L646">646</a>         
+<a class="jxr_linenumber" name="L647" href="#L647">647</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L648" href="#L648">648</a>     }
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 
+<a class="jxr_linenumber" name="L650" href="#L650">650</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting documents related to some other object.</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetRelatedDocumentsQuery() {
+<a class="jxr_linenumber" name="L654" href="#L654">654</a>         GetRelatedDocumentsQuery query = <strong class="jxr_keyword">new</strong> GetRelatedDocumentsQuery();
+<a class="jxr_linenumber" name="L655" href="#L655">655</a>         
+<a class="jxr_linenumber" name="L656" href="#L656">656</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L657" href="#L657">657</a>         query.setUuid(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>);
+<a class="jxr_linenumber" name="L658" href="#L658">658</a>         query.setUniqueId(<span class="jxr_string">"12.21.34"</span>);
+<a class="jxr_linenumber" name="L659" href="#L659">659</a>         query.setAssociationTypes(Arrays.asList(AssociationType.APPEND, AssociationType.TRANSFORM));
+<a class="jxr_linenumber" name="L660" href="#L660">660</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+<a class="jxr_linenumber" name="L661" href="#L661">661</a>                 
+<a class="jxr_linenumber" name="L662" href="#L662">662</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L663" href="#L663">663</a>     }
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 
+<a class="jxr_linenumber" name="L665" href="#L665">665</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting submission sets and their contents.</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L668" href="#L668">668</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetSubmissionSetAndContentsQuery() {
+<a class="jxr_linenumber" name="L669" href="#L669">669</a>         GetSubmissionSetAndContentsQuery query = <strong class="jxr_keyword">new</strong> GetSubmissionSetAndContentsQuery();
+<a class="jxr_linenumber" name="L670" href="#L670">670</a>         
+<a class="jxr_linenumber" name="L671" href="#L671">671</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L672" href="#L672">672</a>         query.setUuid(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>);
+<a class="jxr_linenumber" name="L673" href="#L673">673</a>         query.setUniqueId(<span class="jxr_string">"12.21.34"</span>);
+<a class="jxr_linenumber" name="L674" href="#L674">674</a>         QueryList&lt;Code&gt; confidentialityCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L675" href="#L675">675</a>         confidentialityCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L676" href="#L676">676</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code10"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme10"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code11"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme11"</span>)));
+<a class="jxr_linenumber" name="L677" href="#L677">677</a>         confidentialityCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L678" href="#L678">678</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code12"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme12"</span>)));
+<a class="jxr_linenumber" name="L679" href="#L679">679</a>         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 
+<a class="jxr_linenumber" name="L681" href="#L681">681</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L682" href="#L682">682</a>     }
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 
+<a class="jxr_linenumber" name="L684" href="#L684">684</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">     * @return a sample stored query for getting submission sets.</em>
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L687" href="#L687">687</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createGetSubmissionSetsQuery() {
+<a class="jxr_linenumber" name="L688" href="#L688">688</a>         GetSubmissionSetsQuery query = <strong class="jxr_keyword">new</strong> GetSubmissionSetsQuery();
+<a class="jxr_linenumber" name="L689" href="#L689">689</a>         
+<a class="jxr_linenumber" name="L690" href="#L690">690</a>         query.setHomeCommunityId(<span class="jxr_string">"12.21.41"</span>);
+<a class="jxr_linenumber" name="L691" href="#L691">691</a>         query.setUuids(Arrays.asList(<span class="jxr_string">"urn:uuid:1.2.3.4"</span>, <span class="jxr_string">"urn:uuid:2.3.4.5"</span>));
+<a class="jxr_linenumber" name="L692" href="#L692">692</a>                 
+<a class="jxr_linenumber" name="L693" href="#L693">693</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L694" href="#L694">694</a>     }
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 
+<a class="jxr_linenumber" name="L696" href="#L696">696</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> <em class="jxr_javadoccomment">     * @return a sample stored query for find documents.</em>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L699" href="#L699">699</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> QueryRegistry createFetchQuery() {
+<a class="jxr_linenumber" name="L700" href="#L700">700</a>         FetchQuery query = <strong class="jxr_keyword">new</strong> FetchQuery();
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 
+<a class="jxr_linenumber" name="L702" href="#L702">702</a>         query.setHomeCommunityId(<span class="jxr_string">"urn:oid:1.2.21.41"</span>);
+<a class="jxr_linenumber" name="L703" href="#L703">703</a>         query.setPatientId(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"id3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.3"</span>)));
+<a class="jxr_linenumber" name="L704" href="#L704">704</a>         query.setClassCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme2"</span>)));
+<a class="jxr_linenumber" name="L705" href="#L705">705</a>         query.setTypeCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"codet1"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"schemet1"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"codet2"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"schemet2"</span>)));
+<a class="jxr_linenumber" name="L706" href="#L706">706</a>         query.setPracticeSettingCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code3"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme3"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code4"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme4"</span>)));
+<a class="jxr_linenumber" name="L707" href="#L707">707</a>         query.getCreationTime().setFrom(<span class="jxr_string">"1980"</span>);
+<a class="jxr_linenumber" name="L708" href="#L708">708</a>         query.getCreationTime().setTo(<span class="jxr_string">"1981"</span>);
+<a class="jxr_linenumber" name="L709" href="#L709">709</a>         query.getServiceStartTime().setFrom(<span class="jxr_string">"1982"</span>);
+<a class="jxr_linenumber" name="L710" href="#L710">710</a>         query.getServiceStartTime().setTo(<span class="jxr_string">"1983"</span>);
+<a class="jxr_linenumber" name="L711" href="#L711">711</a>         query.getServiceStopTime().setFrom(<span class="jxr_string">"1984"</span>);
+<a class="jxr_linenumber" name="L712" href="#L712">712</a>         query.getServiceStopTime().setTo(<span class="jxr_string">"1985"</span>);
+<a class="jxr_linenumber" name="L713" href="#L713">713</a>         query.setHealthcareFacilityTypeCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code5"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme5"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code6"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme6"</span>)));
+<a class="jxr_linenumber" name="L714" href="#L714">714</a>         QueryList&lt;Code&gt; eventCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L715" href="#L715">715</a>         eventCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L716" href="#L716">716</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code7"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme7"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code8"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme8"</span>)));
+<a class="jxr_linenumber" name="L717" href="#L717">717</a>         eventCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L718" href="#L718">718</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code9"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme9"</span>)));
+<a class="jxr_linenumber" name="L719" href="#L719">719</a>         query.setEventCodes(eventCodes);
+<a class="jxr_linenumber" name="L720" href="#L720">720</a>         QueryList&lt;Code&gt; confidentialityCodes = <strong class="jxr_keyword">new</strong> QueryList&lt;&gt;();
+<a class="jxr_linenumber" name="L721" href="#L721">721</a>         confidentialityCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L722" href="#L722">722</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code10"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme10"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code11"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme11"</span>)));
+<a class="jxr_linenumber" name="L723" href="#L723">723</a>         confidentialityCodes.getOuterList().add(
+<a class="jxr_linenumber" name="L724" href="#L724">724</a>                 Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code12"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme12"</span>)));
+<a class="jxr_linenumber" name="L725" href="#L725">725</a>         query.setConfidentialityCodes(confidentialityCodes);
+<a class="jxr_linenumber" name="L726" href="#L726">726</a>         query.setAuthorPersons(Arrays.asList(<span class="jxr_string">"per'son1"</span>, <span class="jxr_string">"person2"</span>));
+<a class="jxr_linenumber" name="L727" href="#L727">727</a>         query.setFormatCodes(Arrays.asList(<strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code13"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme13"</span>), <strong class="jxr_keyword">new</strong> Code(<span class="jxr_string">"code14"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"scheme14"</span>)));
+<a class="jxr_linenumber" name="L728" href="#L728">728</a>         <em class="jxr_comment">//query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 
+<a class="jxr_linenumber" name="L730" href="#L730">730</a>         QueryRegistry queryRegistry = <strong class="jxr_keyword">new</strong> QueryRegistry(query);
+<a class="jxr_linenumber" name="L731" href="#L731">731</a>         queryRegistry.setReturnType(QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM);
+<a class="jxr_linenumber" name="L732" href="#L732">732</a>         <strong class="jxr_keyword">return</strong> queryRegistry;
+<a class="jxr_linenumber" name="L733" href="#L733">733</a>     }
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 
+<a class="jxr_linenumber" name="L736" href="#L736">736</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RemoveDocumentSet createRemoveDocumentSet(){
+<a class="jxr_linenumber" name="L737" href="#L737">737</a>         RemoveDocumentSet removeDocs = <strong class="jxr_keyword">new</strong> RemoveDocumentSet();
+<a class="jxr_linenumber" name="L738" href="#L738">738</a>         removeDocs.getReferences().add(<strong class="jxr_keyword">new</strong> ObjectReference(<span class="jxr_string">"urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871"</span>, <span class="jxr_string">"1.2.3"</span>));
+<a class="jxr_linenumber" name="L739" href="#L739">739</a>         removeDocs.getReferences().add(<strong class="jxr_keyword">new</strong> ObjectReference(<span class="jxr_string">"urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd"</span>, <span class="jxr_string">"5.6.7"</span>));
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 
+<a class="jxr_linenumber" name="L741" href="#L741">741</a>         <strong class="jxr_keyword">return</strong> removeDocs;
+<a class="jxr_linenumber" name="L742" href="#L742">742</a>     }
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> }
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

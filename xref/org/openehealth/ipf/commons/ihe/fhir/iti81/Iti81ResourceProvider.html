@@ -27,18 +27,18 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.annotation.OptionalParam;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.annotation.RequiredParam;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.annotation.Search;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.param.DateAndListParam;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.param.StringAndListParam;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.param.TokenAndListParam;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.AuditEvent;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.fhir.Constants;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> javax.servlet.http.HttpServletRequest;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> javax.servlet.http.HttpServletResponse;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.annotation.Sort;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.api.SortSpec;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.param.DateAndListParam;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.param.DateRangeParam;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.param.StringAndListParam;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.param.TokenAndListParam;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.server.IBundleProvider;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.AuditEvent;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> javax.servlet.http.HttpServletRequest;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> javax.servlet.http.HttpServletResponse;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * According to the Restful ATNA specification, this resource provider must handle requests in the form</em>
@@ -51,48 +51,46 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      @SuppressWarnings(<span class="jxr_string">"unused"</span>)
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      @Search(type = AuditEvent.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">public</strong> List&lt;? <strong class="jxr_keyword">extends</strong> AuditEvent&gt; auditSearch(
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>              @RequiredParam(name = AuditEvent.SP_DATE) DateAndListParam interval,
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">public</strong> IBundleProvider auditSearch(
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>              @RequiredParam(name = AuditEvent.SP_DATE) DateRangeParam interval,
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>              @OptionalParam(name = AuditEvent.SP_ADDRESS) StringAndListParam address,
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>              @OptionalParam(name = Constants.SP_PATIENTID) TokenAndListParam patientId,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>              @OptionalParam(name = Iti81Constants.SP_PATIENTID) TokenAndListParam patientId,
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>              @OptionalParam(name = AuditEvent.SP_IDENTITY) TokenAndListParam identity,
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>              @OptionalParam(name = AuditEvent.SP_OBJECTTYPE) TokenAndListParam objectType,
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>              @OptionalParam(name = Constants.SP_ROLE) TokenAndListParam role,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>              @OptionalParam(name = Iti81Constants.SP_ROLE) TokenAndListParam role,
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>              @OptionalParam(name = AuditEvent.SP_SOURCE) StringAndListParam source,
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>              @OptionalParam(name = AuditEvent.SP_TYPE) TokenAndListParam type,
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>              @OptionalParam(name = AuditEvent.SP_PARTICIPANT) StringAndListParam participant,
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>              @OptionalParam(name = AuditEvent.SP_SUBTYPE) TokenAndListParam subtype,
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>              @OptionalParam(name = Constants.SP_OUTCOME) TokenAndListParam outcome,
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>              HttpServletRequest httpServletRequest,
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>              HttpServletResponse httpServletResponse) {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          Map&lt;String, Object&gt; searchParameters = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          addParameter(searchParameters, AuditEvent.SP_DATE, interval);
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          addParameter(searchParameters, AuditEvent.SP_ADDRESS, address);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          addParameter(searchParameters, Constants.SP_PATIENTID, patientId);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          addParameter(searchParameters, AuditEvent.SP_IDENTITY, identity);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          addParameter(searchParameters, AuditEvent.SP_OBJECTTYPE, objectType);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          addParameter(searchParameters, Constants.SP_ROLE, role);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          addParameter(searchParameters, AuditEvent.SP_SOURCE, source);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          addParameter(searchParameters, AuditEvent.SP_TYPE, type);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          addParameter(searchParameters, AuditEvent.SP_PARTICIPANT, participant);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          addParameter(searchParameters, AuditEvent.SP_SUBTYPE, subtype);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>          addParameter(searchParameters, Constants.SP_OUTCOME, outcome);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <em class="jxr_comment">// Run down the route</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">return</strong> requestBundle(<strong class="jxr_keyword">null</strong>, searchParameters, httpServletRequest, httpServletResponse);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>              @OptionalParam(name = Iti81Constants.SP_OUTCOME) TokenAndListParam outcome,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>              @Sort SortSpec sortSpec,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>              HttpServletRequest httpServletRequest,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>              HttpServletResponse httpServletResponse) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <a href="../../../../../../../org/openehealth/ipf/commons/ihe/fhir/iti81/Iti81SearchParameters.html">Iti81SearchParameters</a> searchParameters = Iti81SearchParameters.builder()
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  .interval(interval)
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>                  .address(address)
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  .patientId(patientId)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                  .identity(identity)
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  .objectType(objectType)
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                  .role(role)
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>                  .source(source)
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                  .type(type)
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  .participant(participant)
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>                  .subtype(subtype)
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>                  .outcome(outcome)
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>                  .sortSpec(sortSpec)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>                  .fhirContext(getFhirContext())
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  .build();
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addParameter(Map&lt;String, Object&gt; map, String key, Object value) {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>              map.put(key, value);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          }
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  }
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          <em class="jxr_comment">// Run down the route</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>          <strong class="jxr_keyword">return</strong> requestBundleProvider(<strong class="jxr_keyword">null</strong>, searchParameters, httpServletRequest, httpServletResponse);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

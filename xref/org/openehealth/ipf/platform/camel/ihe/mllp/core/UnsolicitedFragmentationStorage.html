@@ -25,31 +25,16 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * Interface for storages of of HL7 v2 unsolicited fragmentation accumulators.</em>
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/mllp/core/UnsolicitedFragmentationStorage.html">UnsolicitedFragmentationStorage</a> {
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">     * Puts a fragment accumulator into the storage.</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">     * @param key</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">     *      Key consisting of MSH-14/DSC-1, MSH-3-1, MSH-3-2, MSH-3-3.</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">     * @param accumulator</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">     *      Accumulator to be stored.</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">void</strong> put(String key, StringBuilder accumulator);
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">     * Returns the fragment accumulator which corresponds to the given key</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">     * and removes it from the storage.</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">     * @param key</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     *      Key consisting of MSH-14/DCS-1, MSH-3-1, MSH-3-2, MSH-3-3.</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     * @return</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     *      Accumulator or &lt;code&gt;null&lt;/code&gt; when none found.</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      StringBuilder getAndRemove(String key);
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  }
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * @deprecated use {@link org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage}</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/mllp/core/UnsolicitedFragmentationStorage.html">UnsolicitedFragmentationStorage</a> <strong class="jxr_keyword">extends</strong> org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

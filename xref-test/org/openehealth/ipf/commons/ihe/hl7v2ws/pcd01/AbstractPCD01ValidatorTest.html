@@ -23,19 +23,19 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> java.util.Scanner;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.HL7Exception;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.HapiContext;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.AbstractMessage;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.Message;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.v26.message.ORU_R01;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.parser.Parser;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.validation.Validator;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.HL7Exception;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.HapiContext;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.AbstractMessage;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.Message;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.v26.message.ORU_R01;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.parser.Parser;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.validation.Validator;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.Scanner;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/hl7v2ws/pcd01/AbstractPCD01ValidatorTest.html">AbstractPCD01ValidatorTest</a> {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      }
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">protected</strong> &lt;T <strong class="jxr_keyword">extends</strong> AbstractMessage&gt; T maxMsgReplace(String whatToReplace, String replacement) <strong class="jxr_keyword">throws</strong> HL7Exception {
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          <strong class="jxr_keyword">return</strong> (T)getParser().parse(maximumMessage.toString().replace(whatToReplace, replacement));
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          <strong class="jxr_keyword">return</strong> (T) getParser().parse(maximumMessage.toString().replace(whatToReplace, replacement));
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      }
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">protected</strong> &lt;T <strong class="jxr_keyword">extends</strong> AbstractMessage&gt; <strong class="jxr_keyword">void</strong> validate(Message message) <strong class="jxr_keyword">throws</strong> HL7Exception {
@@ -68,12 +68,12 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Message&gt; T load(Parser parser, String fileName) <strong class="jxr_keyword">throws</strong> HL7Exception {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">return</strong> (T)parser.parse(
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">return</strong> (T) parser.parse(
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>                  <strong class="jxr_keyword">new</strong> Scanner(AbstractPCD01ValidatorTest.<strong class="jxr_keyword">class</strong>.getResourceAsStream(<span class="jxr_string">"/"</span> + fileName)).useDelimiter(<span class="jxr_string">"&#92;&#92;A"</span>).next());
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      }
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

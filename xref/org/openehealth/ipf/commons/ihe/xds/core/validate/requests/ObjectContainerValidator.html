@@ -25,456 +25,446 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.core.modules.api.Validator;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.commons.lang3.Validate.notNull;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Validation of an ebXML object container.</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/requests/ObjectContainerValidator.html">ObjectContainerValidator</a> <strong class="jxr_keyword">implements</strong> Validator&lt;EbXMLObjectContainer, ValidationProfile&gt; {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotLengthAndNameUniquenessValidator.html">SlotLengthAndNameUniquenessValidator</a> slotLengthAndNameUniquenessValidator =
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotLengthAndNameUniquenessValidator.html">SlotLengthAndNameUniquenessValidator</a>();
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/OIDValidator.html">OIDValidator</a> oidValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/OIDValidator.html">OIDValidator</a>();
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/TimeValidator.html">TimeValidator</a> timeValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/TimeValidator.html">TimeValidator</a>();
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XCNValidator.html">XCNValidator</a> xcnValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XCNValidator.html">XCNValidator</a>();
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XONValidator.html">XONValidator</a> xonValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XONValidator.html">XONValidator</a>();
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/HashValidator.html">HashValidator</a> hashValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/HashValidator.html">HashValidator</a>();
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/NopValidator.html">NopValidator</a> nopValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/NopValidator.html">NopValidator</a>();
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/LanguageCodeValidator.html">LanguageCodeValidator</a> languageCodeValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/LanguageCodeValidator.html">LanguageCodeValidator</a>();
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/PositiveNumberValidator.html">PositiveNumberValidator</a> positiveNumberValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/PositiveNumberValidator.html">PositiveNumberValidator</a>();
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/PidValidator.html">PidValidator</a> pidValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/PidValidator.html">PidValidator</a>();
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/UriValidator.html">UriValidator</a> uriValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/UriValidator.html">UriValidator</a>();
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/RecipientListValidator.html">RecipientListValidator</a> recipientListValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/RecipientListValidator.html">RecipientListValidator</a>();
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXValidator.html">CXValidator</a> cxValidatorRequiredAA = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXValidator.html">CXValidator</a>(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXValidator.html">CXValidator</a> cxValidatorOptionalAA = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXValidator.html">CXValidator</a>(false);
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XTNValidator.html">XTNValidator</a> xtnValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XTNValidator.html">XTNValidator</a>();
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXiValidator.html">CXiValidator</a> cxiValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXiValidator.html">CXiValidator</a>();
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/UUIDValidator.html">UUIDValidator</a> uuidValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/UUIDValidator.html">UUIDValidator</a>();
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>[] authorValidations = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>[] {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_AUTHOR_PERSON, xcnValidator, 0, 1),
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_AUTHOR_INSTITUTION, xonValidator, 0, Integer.MAX_VALUE),
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_AUTHOR_ROLE, cxValidatorOptionalAA, 0, Integer.MAX_VALUE),
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_AUTHOR_SPECIALTY, cxValidatorOptionalAA, 0, Integer.MAX_VALUE),
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_AUTHOR_TELECOM, xtnValidator, 0, Integer.MAX_VALUE)};
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>[] codingSchemeValidations = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>[] {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_CODING_SCHEME, nopValidator)};
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>[] iheEventCodeListValidations = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a> [] {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/EventCodeListDisplayNameValidator.html">EventCodeListDisplayNameValidator</a>()
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      };
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.commons.lang3.Validate.notNull;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.OPTIONAL;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.REQUIRED;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * Validation of an ebXML object container.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/requests/ObjectContainerValidator.html">ObjectContainerValidator</a> <strong class="jxr_keyword">implements</strong> Validator&lt;EbXMLObjectContainer, ValidationProfile&gt; {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotLengthAndNameUniquenessValidator.html">SlotLengthAndNameUniquenessValidator</a> slotLengthAndNameUniquenessValidator =
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotLengthAndNameUniquenessValidator.html">SlotLengthAndNameUniquenessValidator</a>();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/OIDValidator.html">OIDValidator</a> oidValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/OIDValidator.html">OIDValidator</a>();
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/TimeValidator.html">TimeValidator</a> timeValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/TimeValidator.html">TimeValidator</a>();
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/TimeValidator.html">TimeValidator</a> timeValidatorSec = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/TimeValidator.html">TimeValidator</a>(14);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XCNValidator.html">XCNValidator</a> xcnValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XCNValidator.html">XCNValidator</a>();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XONValidator.html">XONValidator</a> xonValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XONValidator.html">XONValidator</a>();
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/HashValidator.html">HashValidator</a> hashValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/HashValidator.html">HashValidator</a>();
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/NopValidator.html">NopValidator</a> nopValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/NopValidator.html">NopValidator</a>();
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/LanguageCodeValidator.html">LanguageCodeValidator</a> languageCodeValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/LanguageCodeValidator.html">LanguageCodeValidator</a>();
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/PositiveNumberValidator.html">PositiveNumberValidator</a> positiveNumberValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/PositiveNumberValidator.html">PositiveNumberValidator</a>();
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/PidValidator.html">PidValidator</a> pidValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/PidValidator.html">PidValidator</a>();
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/UriValidator.html">UriValidator</a> uriValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/UriValidator.html">UriValidator</a>();
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/RecipientListValidator.html">RecipientListValidator</a> recipientListValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/RecipientListValidator.html">RecipientListValidator</a>();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXValidator.html">CXValidator</a> cxValidatorRequiredAA = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXValidator.html">CXValidator</a>(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXValidator.html">CXValidator</a> cxValidatorOptionalAA = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXValidator.html">CXValidator</a>(false);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XTNValidator.html">XTNValidator</a> xtnValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/XTNValidator.html">XTNValidator</a>();
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXiValidator.html">CXiValidator</a> cxiValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXiValidator.html">CXiValidator</a>();
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/UUIDValidator.html">UUIDValidator</a> uuidValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/UUIDValidator.html">UUIDValidator</a>();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>[] authorValidations = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>[] {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_AUTHOR_PERSON, xcnValidator, 0, 1),
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_AUTHOR_INSTITUTION, xonValidator, 0, Integer.MAX_VALUE),
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_AUTHOR_ROLE, cxValidatorOptionalAA, 0, Integer.MAX_VALUE),
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_AUTHOR_SPECIALTY, cxValidatorOptionalAA, 0, Integer.MAX_VALUE),
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_AUTHOR_TELECOM, xtnValidator, 0, Integer.MAX_VALUE)};
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>[] codingSchemeValidations = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>[] {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_CODING_SCHEME, nopValidator)};
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">private</strong> List&lt;RegistryObjectValidator&gt; documentEntrySlotValidators(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile, <strong class="jxr_keyword">boolean</strong> onDemandProvided, <strong class="jxr_keyword">boolean</strong> limitedMetadata) {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          List&lt;RegistryObjectValidator&gt; validators = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">boolean</strong> isContinuaHRN = (profile.getInteractionId() == IpfInteractionId.Continua_HRN);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">boolean</strong> isOnDemand    = (profile.getInteractionId() == IpfInteractionId.ITI_61) ||
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>                                  (profile.isQuery() &amp;&amp; onDemandProvided);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>          <strong class="jxr_keyword">boolean</strong> needHashAndSize = (! isOnDemand) &amp;&amp;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  (isContinuaHRN || profile.isQuery()
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                          || (profile.getInteractionId() == IpfInteractionId.ITI_42)
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>                          || (profile.getInteractionId() == IpfInteractionId.ITI_41_XDM)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  );
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          Collections.addAll(validators,
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_CREATION_TIME, timeValidator,
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>                      (limitedMetadata || isOnDemand) ? 0 : 1,
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>                      isOnDemand ? 0 : 1),
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_HASH, hashValidator,
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>                      needHashAndSize ? 1 : 0,
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>                      isOnDemand ? 0 : 1),
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, limitedMetadata ? 0 : 1, 1),
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, isOnDemand ? 0 : 1),
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SIZE, positiveNumberValidator,
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>                      needHashAndSize ? 1 : 0,
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>                      isOnDemand ? 0 : 1),
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SOURCE_PATIENT_ID, cxValidatorRequiredAA,
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>                     (profile.isEbXml30Based() &amp;&amp; (! limitedMetadata)) ? 1 : 0, 1),
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>                     isContinuaHRN ? 1 : 0, Integer.MAX_VALUE),
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_REFERENCE_ID_LIST, cxiValidator, 0, Integer.MAX_VALUE),
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValidation.html">SlotValidation</a>(SLOT_NAME_URI, uriValidator),
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/AuthorClassificationValidation.html">AuthorClassificationValidation</a>(DOC_ENTRY_AUTHOR_CLASS_SCHEME, authorValidations),
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME,
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>                     limitedMetadata ? 0 : 1, 1, REQUIRED, codingSchemeValidations),
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME,
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>                     limitedMetadata ? 0 : 1, Integer.MAX_VALUE,
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>                     isContinuaHRN ? REQUIRED : OPTIONAL, codingSchemeValidations),
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <em class="jxr_comment">//IHE: iheEventCodeListValidations handles the conditionally REQUIRED</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>             <em class="jxr_comment">//     validation of display name of eventCodeListDisplayName in a slotValueValidator</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">private</strong> List&lt;RegistryObjectValidator&gt; documentEntrySlotValidators(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile, <strong class="jxr_keyword">boolean</strong> onDemandProvided, <strong class="jxr_keyword">boolean</strong> limitedMetadata) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          List&lt;RegistryObjectValidator&gt; validators = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">boolean</strong> isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Vocabulary.html">DisplayNameUsage</a> requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">boolean</strong> isOnDemand    = (profile == XDS_B.Interactions.ITI_61) ||
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                                  (profile.isQuery() &amp;&amp; onDemandProvided);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">boolean</strong> needHashAndSize = (! isOnDemand) &amp;&amp;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  (isContinuaHRN || profile.isQuery()
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>                          || (profile == XDS_B.Interactions.ITI_42)
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                          || (profile == XDM.Interactions.ITI_41)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>                  );
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          Collections.addAll(validators,
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_CREATION_TIME, timeValidator,
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>                      (limitedMetadata || isOnDemand) ? 0 : 1,
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>                      isOnDemand ? 0 : 1),
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_HASH, hashValidator,
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>                      needHashAndSize ? 1 : 0,
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>                      isOnDemand ? 0 : 1),
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, limitedMetadata ? 0 : 1, 1),
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0,
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>                      (isOnDemand || isContinuaHRN) ? 0 : 1),
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>              <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SIZE, positiveNumberValidator,
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>                      needHashAndSize ? 1 : 0,
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>                     isOnDemand ? 0 : 1),
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SOURCE_PATIENT_ID, cxValidatorRequiredAA,
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>                     (profile.isEbXml30Based() &amp;&amp; (! limitedMetadata)) ? 1 : 0, 1),
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>                     isContinuaHRN ? 1 : 0, Integer.MAX_VALUE),
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_REFERENCE_ID_LIST, cxiValidator, 0, Integer.MAX_VALUE),
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValidation.html">SlotValidation</a>(SLOT_NAME_URI, uriValidator),
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/AuthorClassificationValidation.html">AuthorClassificationValidation</a>(DOC_ENTRY_AUTHOR_CLASS_SCHEME, authorValidations),
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME,
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>                     limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME,
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>                     limitedMetadata ? 0 : 1, Integer.MAX_VALUE,
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>                     requiredOnlyForContinuaHRN, codingSchemeValidations),
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE,
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>                                          isContinuaHRN ? REQUIRED : OPTIONAL,
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>                                          isContinuaHRN ? codingSchemeValidations : iheEventCodeListValidations),
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME,
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>                     limitedMetadata ? 0 : 1, 1, isContinuaHRN ? OPTIONAL : REQUIRED, codingSchemeValidations),
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME,
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>                     limitedMetadata ? 0 : 1, 1, REQUIRED, codingSchemeValidations),
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME,
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>                     limitedMetadata ? 0 : 1, 1, REQUIRED, codingSchemeValidations),
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME,
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>                     limitedMetadata ? 0 : 1, 1, REQUIRED, codingSchemeValidations));
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>         <strong class="jxr_keyword">if</strong> (! limitedMetadata) {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>             validators.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ExternalIdentifierValidation.html">ExternalIdentifierValidation</a>(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>         }
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>         <strong class="jxr_keyword">if</strong> ((profile.getInteractionId() == IpfInteractionId.ITI_42) || isOnDemand || profile.isQuery()) {
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>             validators.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>         }
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>         <strong class="jxr_keyword">return</strong> validators;
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>     }
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>     <strong class="jxr_keyword">private</strong> List&lt;RegistryObjectValidator&gt; getSubmissionSetSlotValidations(<strong class="jxr_keyword">boolean</strong> limitedMetadata) {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         List&lt;RegistryObjectValidator&gt; validators = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>         Collections.addAll(validators,
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValidation.html">SlotValidation</a>(SLOT_NAME_INTENDED_RECIPIENT, recipientListValidator),
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SUBMISSION_TIME, timeValidator),
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/AuthorClassificationValidation.html">AuthorClassificationValidation</a>(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, authorValidations),
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME,
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>                         limitedMetadata ? 0 : 1, 1, REQUIRED, codingSchemeValidations),
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ExternalIdentifierValidation.html">ExternalIdentifierValidation</a>(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, oidValidator));
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>         <strong class="jxr_keyword">if</strong> (! limitedMetadata) {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>             validators.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ExternalIdentifierValidation.html">ExternalIdentifierValidation</a>(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>         }
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>         <strong class="jxr_keyword">return</strong> validators;
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>     }
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>     <strong class="jxr_keyword">private</strong> List&lt;RegistryObjectValidator&gt; getFolderSlotValidations(<strong class="jxr_keyword">boolean</strong> limitedMetadata) {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>         List&lt;RegistryObjectValidator&gt; validators = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>         Collections.addAll(validators,
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_LAST_UPDATE_TIME, timeValidator, 0, 1),
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(FOLDER_CODE_LIST_CLASS_SCHEME,
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>                         limitedMetadata ? 0 : 1, Integer.MAX_VALUE, REQUIRED, codingSchemeValidations));
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>         <strong class="jxr_keyword">if</strong> (! limitedMetadata) {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>             validators.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ExternalIdentifierValidation.html">ExternalIdentifierValidation</a>(FOLDER_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>         }
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>         <strong class="jxr_keyword">return</strong> validators;
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>     }
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> checkLimitedMetadata(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryObject.html">EbXMLRegistryObject</a> object, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>         <strong class="jxr_keyword">boolean</strong> limitedMetadata = ! object.getClassifications(DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME).isEmpty();
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>         <strong class="jxr_keyword">if</strong> (limitedMetadata) {
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>             metaDataAssert((profile.getInteractionId() == IpfInteractionId.ITI_41_XDM) ||
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>                             (profile.getInteractionId() == IpfInteractionId.ITI_41_XDR),
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>                     ValidationMessage.LIMITED_METADATA_PROHIBITED, object.getId());
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>             metaDataAssert(profile.getInteractionId() != IpfInteractionId.ITI_41_XDM,
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>                     ValidationMessage.LIMITED_METADATA_REQUIRED, object.getId());
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>         }
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>         <strong class="jxr_keyword">return</strong> limitedMetadata;
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>     }
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>                     requiredOnlyForContinuaHRN, codingSchemeValidations),
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME,
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>                     limitedMetadata ? 0 : 1, 1, OPTIONAL, codingSchemeValidations),
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME,
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>                     limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME,
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>                     limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>             <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME,
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>                     limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>         <strong class="jxr_keyword">if</strong> (! limitedMetadata) {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>             validators.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ExternalIdentifierValidation.html">ExternalIdentifierValidation</a>(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>         }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>         <strong class="jxr_keyword">if</strong> ((profile.getInteractionId() == XDS_B.Interactions.ITI_42) || isOnDemand || profile.isQuery()) {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>             validators.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>         }
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>         <strong class="jxr_keyword">return</strong> validators;
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     }
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     <strong class="jxr_keyword">private</strong> List&lt;RegistryObjectValidator&gt; getSubmissionSetSlotValidations(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile, <strong class="jxr_keyword">boolean</strong> limitedMetadata) {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>         <strong class="jxr_keyword">boolean</strong> isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/Vocabulary.html">DisplayNameUsage</a> requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>         List&lt;RegistryObjectValidator&gt; validators = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>         Collections.addAll(validators,
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValidation.html">SlotValidation</a>(SLOT_NAME_INTENDED_RECIPIENT, recipientListValidator),
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_SUBMISSION_TIME, timeValidator),
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/AuthorClassificationValidation.html">AuthorClassificationValidation</a>(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, authorValidations),
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME,
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>                         limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ExternalIdentifierValidation.html">ExternalIdentifierValidation</a>(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, oidValidator));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>         <strong class="jxr_keyword">if</strong> (! limitedMetadata) {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>             validators.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ExternalIdentifierValidation.html">ExternalIdentifierValidation</a>(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>         }
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>         <strong class="jxr_keyword">return</strong> validators;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>     }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     <strong class="jxr_keyword">private</strong> List&lt;RegistryObjectValidator&gt; getFolderSlotValidations(<strong class="jxr_keyword">boolean</strong> limitedMetadata) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         List&lt;RegistryObjectValidator&gt; validators = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>         Collections.addAll(validators,
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/SlotValueValidation.html">SlotValueValidation</a>(SLOT_NAME_LAST_UPDATE_TIME, timeValidatorSec, 0, 1),
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ClassificationValidation.html">ClassificationValidation</a>(FOLDER_CODE_LIST_CLASS_SCHEME,
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>                         limitedMetadata ? 0 : 1, Integer.MAX_VALUE, OPTIONAL, codingSchemeValidations));
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>         <strong class="jxr_keyword">if</strong> (! limitedMetadata) {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>             validators.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ExternalIdentifierValidation.html">ExternalIdentifierValidation</a>(FOLDER_PATIENT_ID_EXTERNAL_ID, cxValidatorRequiredAA));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>         }
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>         <strong class="jxr_keyword">return</strong> validators;
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>     }
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> checkLimitedMetadata(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryObject.html">EbXMLRegistryObject</a> object, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>         <strong class="jxr_keyword">boolean</strong> limitedMetadata = ! object.getClassifications(DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME).isEmpty();
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>         <strong class="jxr_keyword">if</strong> (limitedMetadata) {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>             metaDataAssert((profile == XDM.Interactions.ITI_41) || (profile == XDR.Interactions.ITI_41),
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>                     ValidationMessage.LIMITED_METADATA_PROHIBITED, object.getId());
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>             metaDataAssert(profile != XDM.Interactions.ITI_41,
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>                     ValidationMessage.LIMITED_METADATA_REQUIRED, object.getId());
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>         }
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>         <strong class="jxr_keyword">return</strong> limitedMetadata;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>     }
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>     @Override
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>         notNull(container, <span class="jxr_string">"container cannot be null"</span>);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>         notNull(profile, <span class="jxr_string">"profile must be set"</span>);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>         slotLengthAndNameUniquenessValidator.validateContainer(container);
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>     
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>         <em class="jxr_comment">// Note: The order of these checks is important!        </em>
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>         validateSubmissionSet(container, profile);
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>         <strong class="jxr_keyword">if</strong> (!profile.isQuery()) {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>             validateUniquenessOfUUIDs(container);
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>             validateUniqueIds(container);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>         }
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>         validateAssociations(container, profile);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>         validateDocumentEntries(container, profile);
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>         validateFolders(container, profile);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>         <strong class="jxr_keyword">if</strong> (!profile.isQuery()) {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a>             validatePatientIdsAreIdentical(container);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>         }
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>     }
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateFolders(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>         Set&lt;String&gt; logicalIds = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>             <strong class="jxr_keyword">boolean</strong> limitedMetadata = checkLimitedMetadata(folder, profile);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>             runValidations(folder, getFolderSlotValidations(limitedMetadata));
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
-<a class="jxr_linenumber" name="L204" href="#L204">204</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AvailabilityStatus.html">AvailabilityStatus</a> status = folder.getStatus();
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>             <strong class="jxr_keyword">if</strong> (profile.isQuery() || status != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>                 metaDataAssert(status == AvailabilityStatus.APPROVED,
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>                         FOLDER_INVALID_AVAILABILITY_STATUS, status);
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>             }
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>             metaDataAssert(StringUtils.isBlank(folder.getLid()) || logicalIds.add(folder.getLid()),
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>                     LOGICAL_ID_SAME, folder.getLid());
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/LocalizedString.html">LocalizedString</a> name = folder.getName();
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>             metaDataAssert(limitedMetadata || ((name != <strong class="jxr_keyword">null</strong>) &amp;&amp; (name.getValue() != <strong class="jxr_keyword">null</strong>)),
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>                     MISSING_FOLDER_NAME, folder.getId());
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a>             <strong class="jxr_keyword">if</strong> (profile.getInteractionId() == IpfInteractionId.ITI_57){
-<a class="jxr_linenumber" name="L218" href="#L218">218</a>                 validateUpdateObject(folder, container);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>             }
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>         }
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>     }
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateSubmissionSet(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>         List&lt;EbXMLRegistryPackage&gt; submissionSets = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>         <strong class="jxr_keyword">if</strong> (!profile.isQuery()) {
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>             metaDataAssert(submissionSets.size() == 1, EXACTLY_ONE_SUBMISSION_SET_MUST_EXIST);
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>         }
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>     
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryPackage submissionSet : submissionSets) {
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>             <strong class="jxr_keyword">boolean</strong> limitedMetadata = checkLimitedMetadata(submissionSet, profile);
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>             runValidations(submissionSet, getSubmissionSetSlotValidations(limitedMetadata));
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AvailabilityStatus.html">AvailabilityStatus</a> status = submissionSet.getStatus();
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>             <strong class="jxr_keyword">if</strong> (profile.isQuery() || (status != <strong class="jxr_keyword">null</strong>)) {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>                 metaDataAssert(status == AvailabilityStatus.APPROVED,
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>                         SUBMISSION_SET_INVALID_AVAILABILITY_STATUS, status);
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>             }
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>         }
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>     }
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateDocumentEntries(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>         Set&lt;String&gt; logicalIds = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>         <strong class="jxr_keyword">for</strong> (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>             <strong class="jxr_keyword">boolean</strong> limitedMetadata = checkLimitedMetadata(docEntry, profile);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>             <strong class="jxr_keyword">boolean</strong> onDemandExpected = (profile.getInteractionId() == IpfInteractionId.ITI_61);
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>             <strong class="jxr_keyword">boolean</strong> onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>             metaDataAssert(profile.isQuery() || (onDemandExpected == onDemandProvided),
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>                     WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>             runValidations(docEntry, documentEntrySlotValidators(profile, onDemandProvided, limitedMetadata));
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>             <strong class="jxr_keyword">if</strong> (profile.isQuery()) {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>                 <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AvailabilityStatus.html">AvailabilityStatus</a> status = docEntry.getStatus();
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>                 metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.DEPRECATED,
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>                         DOC_ENTRY_INVALID_AVAILABILITY_STATUS, status);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>             }
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/LocalizedString.html">LocalizedString</a> name = docEntry.getName();
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>             <strong class="jxr_keyword">if</strong> (name != <strong class="jxr_keyword">null</strong> &amp;&amp; name.getValue() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>                 metaDataAssert(<span class="jxr_string">"UTF8"</span>.equals(name.getCharset()) || <span class="jxr_string">"UTF-8"</span>.equals(name.getCharset()),
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>                         INVALID_TITLE_ENCODING, name.getCharset());
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>                 
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>                 metaDataAssert(name.getValue().length() &lt;= 128,
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>                         TITLE_TOO_LONG, name.getValue());
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>             }
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>             <strong class="jxr_keyword">boolean</strong> attachmentExpected = (profile.getInteractionId() == IpfInteractionId.ITI_63);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>             <strong class="jxr_keyword">boolean</strong> attachmentProvided = (docEntry.getDataHandler() != <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>             metaDataAssert(attachmentProvided == attachmentExpected,
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>                     attachmentExpected ? MISSING_DOCUMENT_FOR_DOC_ENTRY : DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY,
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>                     docEntry.getId());
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>             metaDataAssert(profile.isQuery() || StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>                     LOGICAL_ID_SAME, docEntry.getLid());
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>             <strong class="jxr_keyword">if</strong> (profile.getInteractionId() == IpfInteractionId.ITI_57){
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>                 validateUpdateObject(docEntry, container);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>             }
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>         }
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>     }
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> runValidations(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryObject.html">EbXMLRegistryObject</a> obj, List&lt;RegistryObjectValidator&gt; validations) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>         <strong class="jxr_keyword">for</strong> (RegistryObjectValidator validation : validations) {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>             validation.validate(obj);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>         }
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>     }
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateUniqueIds(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>         validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>         validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>         validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>     }
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateUniqueIds(List&lt;? <strong class="jxr_keyword">extends</strong> EbXMLRegistryObject&gt; objects, String scheme) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryObject obj : objects) {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a>             String uniqueId = obj.getExternalIdentifierValue(scheme);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a>             metaDataAssert(uniqueId != <strong class="jxr_keyword">null</strong>, UNIQUE_ID_MISSING);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>             metaDataAssert(uniqueId.length() &lt;= 128, UNIQUE_ID_TOO_LONG);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a>         }
-<a class="jxr_linenumber" name="L301" href="#L301">301</a>     }
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
-<a class="jxr_linenumber" name="L303" href="#L303">303</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateUniquenessOfUUIDs(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L304" href="#L304">304</a>         Set&lt;String&gt; uuids = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L305" href="#L305">305</a>         addUUIDs(container.getAssociations(), uuids);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a>         addUUIDs(container.getExtrinsicObjects(), uuids);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a>         addUUIDs(container.getRegistryPackages(), uuids);
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>     }
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addUUIDs(List&lt;? <strong class="jxr_keyword">extends</strong> EbXMLRegistryObject&gt; objects, Set&lt;String&gt; uuids) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryObject obj : objects) {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>             String uuid = obj.getId();
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>             <strong class="jxr_keyword">if</strong> (uuid != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>                 metaDataAssert(!uuids.contains(uuid), UUID_NOT_UNIQUE);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>                 uuids.add(uuid);
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>             }
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>         }
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>     }
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validatePatientIdsAreIdentical(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>         List&lt;EbXMLRegistryPackage&gt; submissionSets = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryPackage.html">EbXMLRegistryPackage</a> submissionSet = submissionSets.get(0);
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>     
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>         String patientId = submissionSet.getExternalIdentifierValue(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>     
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>         <strong class="jxr_keyword">for</strong> (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>             String patientIdDocEntry = docEntry.getExternalIdentifierValue(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>             metaDataAssert(patientId.equals(patientIdDocEntry), DOC_ENTRY_PATIENT_ID_WRONG);
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>         }
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>         
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>             String patientIdFolder = folder.getExternalIdentifierValue(FOLDER_PATIENT_ID_EXTERNAL_ID);
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>             metaDataAssert(patientId.equals(patientIdFolder), FOLDER_PATIENT_ID_WRONG);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>         }
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>     }
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateAssociations(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>         Set&lt;String&gt; logicalIds = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>         Set&lt;String&gt; docEntryIds = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>         <strong class="jxr_keyword">for</strong> (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>             <strong class="jxr_keyword">if</strong> (docEntry.getId() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>                 docEntryIds.add(docEntry.getId());
-<a class="jxr_linenumber" name="L343" href="#L343">343</a>             }
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>         }
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>         Set&lt;String&gt; submissionSetIds = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryPackage submissionSet : container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE)) {
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>             submissionSetIds.add(submissionSet.getId());
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>         }
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>         Set&lt;String&gt; associationIds = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>         <strong class="jxr_keyword">boolean</strong> hasSubmitAssociationType = false;
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>         <strong class="jxr_keyword">for</strong> (EbXMLAssociation association : container.getAssociations()) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>             associationIds.add(association.getId());
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>             <strong class="jxr_keyword">if</strong> (!hasSubmitAssociationType){
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>                 hasSubmitAssociationType = association.getAssociationType() != <strong class="jxr_keyword">null</strong> &amp;&amp;
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>                         (association.getAssociationType().equals(AssociationType.SUBMIT_ASSOCIATION) ||
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>                          association.getAssociationType().equals(AssociationType.UPDATE_AVAILABILITY_STATUS));
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>             }
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>     @Override
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>         notNull(container, <span class="jxr_string">"container cannot be null"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>         notNull(profile, <span class="jxr_string">"profile must be set"</span>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         slotLengthAndNameUniquenessValidator.validateContainer(container);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>     
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>         <em class="jxr_comment">// Note: The order of these checks is important!        </em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>         validateSubmissionSet(container, profile);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>         <strong class="jxr_keyword">if</strong> (!profile.isQuery()) {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>             validateUniquenessOfUUIDs(container);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>             validateUniqueIds(container);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>         }
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>         validateAssociations(container, profile);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>         validateDocumentEntries(container, profile);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>         validateFolders(container, profile);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>         <strong class="jxr_keyword">if</strong> (!profile.isQuery()) {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>             validatePatientIdsAreIdentical(container);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>         }
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     }
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateFolders(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>         Set&lt;String&gt; logicalIds = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>             <strong class="jxr_keyword">boolean</strong> limitedMetadata = checkLimitedMetadata(folder, profile);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>             runValidations(folder, getFolderSlotValidations(limitedMetadata));
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AvailabilityStatus.html">AvailabilityStatus</a> status = folder.getStatus();
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>             <strong class="jxr_keyword">if</strong> (profile.isQuery() || status != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>                 metaDataAssert(status == AvailabilityStatus.APPROVED,
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>                         FOLDER_INVALID_AVAILABILITY_STATUS, status);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>             }
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>             metaDataAssert(StringUtils.isBlank(folder.getLid()) || logicalIds.add(folder.getLid()),
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>                     LOGICAL_ID_SAME, folder.getLid());
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/LocalizedString.html">LocalizedString</a> name = folder.getName();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>             metaDataAssert(limitedMetadata || ((name != <strong class="jxr_keyword">null</strong>) &amp;&amp; (name.getValue() != <strong class="jxr_keyword">null</strong>)),
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>                     MISSING_FOLDER_NAME, folder.getId());
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>             <strong class="jxr_keyword">if</strong> (profile == XDS_B.Interactions.ITI_57){
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>                 validateUpdateObject(folder, container);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>             }
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>         }
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>     }
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateSubmissionSet(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>         List&lt;EbXMLRegistryPackage&gt; submissionSets = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>         <strong class="jxr_keyword">if</strong> (!profile.isQuery()) {
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>             metaDataAssert(submissionSets.size() == 1, EXACTLY_ONE_SUBMISSION_SET_MUST_EXIST);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>         }
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>     
+<a class="jxr_linenumber" name="L230" href="#L230">230</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryPackage submissionSet : submissionSets) {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>             <strong class="jxr_keyword">boolean</strong> limitedMetadata = checkLimitedMetadata(submissionSet, profile);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>             runValidations(submissionSet, getSubmissionSetSlotValidations(profile, limitedMetadata));
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AvailabilityStatus.html">AvailabilityStatus</a> status = submissionSet.getStatus();
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>             <strong class="jxr_keyword">if</strong> (profile.isQuery() || (status != <strong class="jxr_keyword">null</strong>)) {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>                 metaDataAssert(status == AvailabilityStatus.APPROVED,
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>                         SUBMISSION_SET_INVALID_AVAILABILITY_STATUS, status);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>             }
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>         }
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     }
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateDocumentEntries(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>         Set&lt;String&gt; logicalIds = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>         <strong class="jxr_keyword">for</strong> (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>             <strong class="jxr_keyword">boolean</strong> limitedMetadata = checkLimitedMetadata(docEntry, profile);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>             <strong class="jxr_keyword">boolean</strong> onDemandExpected = (profile == XDS_B.Interactions.ITI_61);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>             <strong class="jxr_keyword">boolean</strong> onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>             metaDataAssert(profile.isQuery() || (onDemandExpected == onDemandProvided),
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>                     WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>             runValidations(docEntry, documentEntrySlotValidators(profile, onDemandProvided, limitedMetadata));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>             <strong class="jxr_keyword">if</strong> (profile.isQuery()) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>                 <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AvailabilityStatus.html">AvailabilityStatus</a> status = docEntry.getStatus();
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>                 metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.DEPRECATED,
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>                         DOC_ENTRY_INVALID_AVAILABILITY_STATUS, status);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>             }
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/LocalizedString.html">LocalizedString</a> name = docEntry.getName();
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>             <strong class="jxr_keyword">if</strong> (name != <strong class="jxr_keyword">null</strong> &amp;&amp; name.getValue() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>                 metaDataAssert(<span class="jxr_string">"UTF8"</span>.equals(name.getCharset()) || <span class="jxr_string">"UTF-8"</span>.equals(name.getCharset()),
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>                         INVALID_TITLE_ENCODING, name.getCharset());
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>                 
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>                 metaDataAssert(name.getValue().length() &lt;= 128,
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>                         TITLE_TOO_LONG, name.getValue());
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>             }
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>             <strong class="jxr_keyword">boolean</strong> attachmentExpected = (profile.getInteractionId() == XCF.Interactions.ITI_63);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>             <strong class="jxr_keyword">boolean</strong> attachmentProvided = (docEntry.getDataHandler() != <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>             metaDataAssert(attachmentProvided == attachmentExpected,
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>                     attachmentExpected ? MISSING_DOCUMENT_FOR_DOC_ENTRY : DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY,
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>                     docEntry.getId());
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>             metaDataAssert(profile.isQuery() || StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>                     LOGICAL_ID_SAME, docEntry.getLid());
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>             <strong class="jxr_keyword">if</strong> (profile.getInteractionId() == XDS_B.Interactions.ITI_57){
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>                 validateUpdateObject(docEntry, container);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>             }
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>         }
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>     }
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> runValidations(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryObject.html">EbXMLRegistryObject</a> obj, List&lt;RegistryObjectValidator&gt; validations) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>         <strong class="jxr_keyword">for</strong> (RegistryObjectValidator validation : validations) {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>             validation.validate(obj);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>         }
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>     }
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateUniqueIds(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>         validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>         validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>         validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>     }
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateUniqueIds(List&lt;? <strong class="jxr_keyword">extends</strong> EbXMLRegistryObject&gt; objects, String scheme) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryObject obj : objects) {
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>             String uniqueId = obj.getExternalIdentifierValue(scheme);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>             metaDataAssert(uniqueId != <strong class="jxr_keyword">null</strong>, UNIQUE_ID_MISSING);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>             metaDataAssert(uniqueId.length() &lt;= 128, UNIQUE_ID_TOO_LONG);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>         }
+<a class="jxr_linenumber" name="L302" href="#L302">302</a>     }
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateUniquenessOfUUIDs(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>         Set&lt;String&gt; uuids = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>         addUUIDs(container.getAssociations(), uuids);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>         addUUIDs(container.getExtrinsicObjects(), uuids);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>         addUUIDs(container.getRegistryPackages(), uuids);
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>     }
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addUUIDs(List&lt;? <strong class="jxr_keyword">extends</strong> EbXMLRegistryObject&gt; objects, Set&lt;String&gt; uuids) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryObject obj : objects) {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>             String uuid = obj.getId();
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>             <strong class="jxr_keyword">if</strong> (uuid != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>                 metaDataAssert(!uuids.contains(uuid), UUID_NOT_UNIQUE);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>                 uuids.add(uuid);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>             }
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>         }
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>     }
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validatePatientIdsAreIdentical(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>         List&lt;EbXMLRegistryPackage&gt; submissionSets = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryPackage.html">EbXMLRegistryPackage</a> submissionSet = submissionSets.get(0);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>     
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>         String patientId = submissionSet.getExternalIdentifierValue(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>     
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>         <strong class="jxr_keyword">for</strong> (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>             String patientIdDocEntry = docEntry.getExternalIdentifierValue(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>             metaDataAssert(patientId.equals(patientIdDocEntry), DOC_ENTRY_PATIENT_ID_WRONG);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>         }
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>         
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>             String patientIdFolder = folder.getExternalIdentifierValue(FOLDER_PATIENT_ID_EXTERNAL_ID);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>             metaDataAssert(patientId.equals(patientIdFolder), FOLDER_PATIENT_ID_WRONG);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>         }
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>     }
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateAssociations(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>         Set&lt;String&gt; logicalIds = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>         Set&lt;String&gt; docEntryIds = container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND).stream()
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>                 .filter(docEntry -&gt; docEntry.getId() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>                 .map(EbXMLRegistryObject::getId)
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>                 .collect(Collectors.toSet());
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>         Set&lt;String&gt; submissionSetIds = container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE).stream()
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>                 .map(EbXMLRegistryObject::getId)
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>                 .collect(Collectors.toSet());
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>         Set&lt;String&gt; associationIds = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>         <strong class="jxr_keyword">boolean</strong> hasSubmitAssociationType = false;
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>         <strong class="jxr_keyword">for</strong> (EbXMLAssociation association : container.getAssociations()) {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>             associationIds.add(association.getId());
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AssociationType.html">AssociationType</a> type = association.getAssociationType();
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>             metaDataAssert(type != <strong class="jxr_keyword">null</strong>, INVALID_ASSOCIATION_TYPE);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>             hasSubmitAssociationType = hasSubmitAssociationType
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>                     || (type == AssociationType.SUBMIT_ASSOCIATION)
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>                     || (type == AssociationType.UPDATE_AVAILABILITY_STATUS);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
 <a class="jxr_linenumber" name="L358" href="#L358">358</a>             metaDataAssert(StringUtils.isBlank(association.getLid()) || logicalIds.add(association.getLid()),
 <a class="jxr_linenumber" name="L359" href="#L359">359</a>                     LOGICAL_ID_SAME, association.getLid());
 <a class="jxr_linenumber" name="L360" href="#L360">360</a>         }
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 
 <a class="jxr_linenumber" name="L362" href="#L362">362</a>         <strong class="jxr_keyword">for</strong> (EbXMLAssociation association : container.getAssociations()) {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AssociationType.html">AssociationType</a> type = association.getAssociationType();
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>             metaDataAssert(type != <strong class="jxr_keyword">null</strong>, INVALID_ASSOCIATION_TYPE);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>     
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>             <strong class="jxr_keyword">if</strong> (type != AssociationType.HAS_MEMBER) {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>                 validateIsSnapshotRelationship(container, association);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>                 validateDocumentRelationship(association, docEntryIds, profile, hasSubmitAssociationType);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>                 validateUpdateAvailabilityStatusRelationship(submissionSetIds, association);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>                 validateSubmitAssociationRelationship(submissionSetIds, associationIds, association);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>             }
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>             <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>                 <strong class="jxr_keyword">boolean</strong> isSubmissionSetToDocEntry =
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>                     submissionSetIds.contains(association.getSource()) &amp;&amp; docEntryIds.contains(association.getTarget());
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>                 validateAssociation(association, docEntryIds, profile, isSubmissionSetToDocEntry);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>             }
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>         }
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>     }
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateAssociation(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLAssociation.html">EbXMLAssociation</a> association, Set&lt;String&gt; docEntryIds,
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>                                      <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile, <strong class="jxr_keyword">boolean</strong> isSubmissionSetToDocEntry) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>         metaDataAssert(association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME) == <strong class="jxr_keyword">null</strong>,
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>                 DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER);
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>         List&lt;String&gt; slotValues = association.getSlotValues(SLOT_NAME_SUBMISSION_SET_STATUS);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>         <strong class="jxr_keyword">if</strong> (isSubmissionSetToDocEntry){
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>             metaDataAssert(!slotValues.isEmpty(), SUBMISSION_SET_STATUS_MANDATORY);
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>         }
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>         <strong class="jxr_keyword">if</strong> (!slotValues.isEmpty()) {
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>             metaDataAssert(slotValues.size() == 1, TOO_MANY_SUBMISSION_SET_STATES);
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AssociationLabel.html">AssociationLabel</a> status = AssociationLabel.fromOpcode(slotValues.get(0));
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>             metaDataAssert(status != <strong class="jxr_keyword">null</strong>, INVALID_SUBMISSION_SET_STATUS);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>             <strong class="jxr_keyword">if</strong> (status == AssociationLabel.ORIGINAL &amp;&amp; !profile.isQuery()) {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>                 metaDataAssert(docEntryIds.contains(association.getTarget()), MISSING_ORIGINAL);
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>             }
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>         }
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>     }
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateDocumentRelationship(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLAssociation.html">EbXMLAssociation</a> association, Set&lt;String&gt; docEntryIds, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile,
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>                                               <strong class="jxr_keyword">boolean</strong> hasSubmitAssociationType) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>         <strong class="jxr_keyword">if</strong> (!profile.isQuery()  &amp;&amp; !hasSubmitAssociationType) {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>             metaDataAssert(docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>         }
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>     }
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateIsSnapshotRelationship(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLAssociation.html">EbXMLAssociation</a> association){
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>         <strong class="jxr_keyword">if</strong> (association.getAssociationType() == AssociationType.IS_SNAPSHOT_OF){
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLExtrinsicObject.html">EbXMLExtrinsicObject</a> sourceDocEntry = getExtrinsicObject(
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>                     container, association.getSource(), DocumentEntryType.STABLE.getUuid());
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>             metaDataAssert(sourceDocEntry != <strong class="jxr_keyword">null</strong>, MISSING_SNAPSHOT_ASSOCIATION, <span class="jxr_string">"sourceObject"</span>, association.getSource());
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>         }
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>     }
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateUpdateAvailabilityStatusRelationship(Set&lt;String&gt; submissionSetIds, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLAssociation.html">EbXMLAssociation</a> association){
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>         <strong class="jxr_keyword">if</strong> (association.getAssociationType() == AssociationType.UPDATE_AVAILABILITY_STATUS){
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>             metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>             metaDataAssert(association.getOriginalStatus() != <strong class="jxr_keyword">null</strong>, MISSING_ORIGINAL_STATUS);
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>             metaDataAssert(association.getNewStatus() != <strong class="jxr_keyword">null</strong>, MISSING_NEW_STATUS);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>         }
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>     }
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateSubmitAssociationRelationship(Set&lt;String&gt; submissionSetIds, Set&lt;String&gt; associationIds, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLAssociation.html">EbXMLAssociation</a> association){
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>         <strong class="jxr_keyword">if</strong> (association.getAssociationType() == AssociationType.SUBMIT_ASSOCIATION){
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>             metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>             metaDataAssert(associationIds.contains(association.getTarget()), MISSING_ASSOCIATION, association.getTarget());
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>         }
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>     }
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLExtrinsicObject.html">EbXMLExtrinsicObject</a> getExtrinsicObject(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, String docEntryId, String... objectTypes){
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>         <strong class="jxr_keyword">for</strong> (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(objectTypes)) {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>             <strong class="jxr_keyword">if</strong> (docEntry.getId() != <strong class="jxr_keyword">null</strong> &amp;&amp; docEntry.getId().equals(docEntryId)) {
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>                 <strong class="jxr_keyword">return</strong> docEntry;
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>             }
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>         }
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>     }
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryPackage.html">EbXMLRegistryPackage</a> getRegistryPackage(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, String submissionSetId, String classificationNode){
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryPackage registryPackage : container.getRegistryPackages(classificationNode)) {
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>             <strong class="jxr_keyword">if</strong> (registryPackage.getId() != <strong class="jxr_keyword">null</strong> &amp;&amp; registryPackage.getId().equals(submissionSetId)) {
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>                 <strong class="jxr_keyword">return</strong> registryPackage;
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>             }
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>         }
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>     }
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateUpdateObject(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryObject.html">EbXMLRegistryObject</a> registryObject, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container){
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>         metaDataAssert(registryObject.getLid() != <strong class="jxr_keyword">null</strong>, LOGICAL_ID_MISSING);
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>         uuidValidator.validate(registryObject.getLid());
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>         metaDataAssert(!registryObject.getLid().equals(registryObject.getId()), LOGICAL_ID_EQUALS_ENTRY_UUID,
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>                 registryObject.getLid(), registryObject.getId());
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>         <strong class="jxr_keyword">boolean</strong> foundHasMemberAssociation = false;
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>         <strong class="jxr_keyword">for</strong> (EbXMLAssociation association : container.getAssociations()){
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>             <strong class="jxr_keyword">if</strong> (association.getAssociationType() == AssociationType.HAS_MEMBER
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>                 &amp;&amp; association.getTarget().equals(registryObject.getId())
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>                 &amp;&amp; (getRegistryPackage(container, association.getSource(), SUBMISSION_SET_CLASS_NODE) != <strong class="jxr_keyword">null</strong>)){
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>                 metaDataAssert(association.getPreviousVersion() != <strong class="jxr_keyword">null</strong>, MISSING_PREVIOUS_VERSION);
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>                 foundHasMemberAssociation = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>             }
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>         }
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>         metaDataAssert(foundHasMemberAssociation, MISSING_HAS_MEMBER_ASSOCIATION, registryObject.getId());
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>     }
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> }
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>             <strong class="jxr_keyword">switch</strong> (association.getAssociationType()) {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>                 <strong class="jxr_keyword">case</strong> HAS_MEMBER:
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>                     <strong class="jxr_keyword">boolean</strong> isSubmissionSetToDocEntry =
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>                             submissionSetIds.contains(association.getSource()) &amp;&amp; docEntryIds.contains(association.getTarget());
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>                     validateAssociation(association, docEntryIds, profile, isSubmissionSetToDocEntry);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>                 <strong class="jxr_keyword">case</strong> IS_SNAPSHOT_OF:
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>                     <strong class="jxr_keyword">if</strong> (!profile.isQuery()) {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>                         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLExtrinsicObject.html">EbXMLExtrinsicObject</a> sourceDocEntry = getExtrinsicObject(
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>                                 container, association.getSource(), DocumentEntryType.STABLE.getUuid());
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>                         metaDataAssert(sourceDocEntry != <strong class="jxr_keyword">null</strong>, MISSING_SNAPSHOT_ASSOCIATION, <span class="jxr_string">"sourceObject"</span>, association.getSource());
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>                         metaDataAssert(hasSubmitAssociationType || docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>                     }
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>                 <strong class="jxr_keyword">case</strong> UPDATE_AVAILABILITY_STATUS:
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>                     <strong class="jxr_keyword">if</strong> (!profile.isQuery()) {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>                         metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>                         metaDataAssert(association.getOriginalStatus() != <strong class="jxr_keyword">null</strong>, MISSING_ORIGINAL_STATUS);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>                         metaDataAssert(association.getNewStatus() != <strong class="jxr_keyword">null</strong>, MISSING_NEW_STATUS);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>                     }
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>                 <strong class="jxr_keyword">case</strong> SUBMIT_ASSOCIATION:
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>                     <strong class="jxr_keyword">if</strong> (!profile.isQuery()) {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>                         metaDataAssert(submissionSetIds.contains(association.getSource()), MISSING_SUBMISSION_SET, association.getSource());
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>                         metaDataAssert(associationIds.contains(association.getTarget()), MISSING_ASSOCIATION, association.getTarget());
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>                     }
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>                 <strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>                     metaDataAssert(profile.isQuery() || hasSubmitAssociationType || docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>             }
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>         }
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>     }
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateAssociation(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLAssociation.html">EbXMLAssociation</a> association, Set&lt;String&gt; docEntryIds,
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>                                      <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile, <strong class="jxr_keyword">boolean</strong> isSubmissionSetToDocEntry) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>         metaDataAssert(association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME) == <strong class="jxr_keyword">null</strong>,
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>                 DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>         List&lt;String&gt; slotValues = association.getSlotValues(SLOT_NAME_SUBMISSION_SET_STATUS);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>         <strong class="jxr_keyword">if</strong> (isSubmissionSetToDocEntry){
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>             metaDataAssert(!slotValues.isEmpty(), SUBMISSION_SET_STATUS_MANDATORY);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>         }
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>         <strong class="jxr_keyword">if</strong> (!slotValues.isEmpty()) {
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>             metaDataAssert(slotValues.size() == 1, TOO_MANY_SUBMISSION_SET_STATES);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>             <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AssociationLabel.html">AssociationLabel</a> status = AssociationLabel.fromOpcode(slotValues.get(0));
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>             metaDataAssert(status != <strong class="jxr_keyword">null</strong>, INVALID_SUBMISSION_SET_STATUS);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>             <strong class="jxr_keyword">if</strong> (status == AssociationLabel.ORIGINAL &amp;&amp; !profile.isQuery()) {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>                 metaDataAssert(docEntryIds.contains(association.getTarget()), MISSING_ORIGINAL);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>             }
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>         }
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>     }
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLExtrinsicObject.html">EbXMLExtrinsicObject</a> getExtrinsicObject(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, String docEntryId, String... objectTypes) {
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>         <strong class="jxr_keyword">for</strong> (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(objectTypes)) {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>             <strong class="jxr_keyword">if</strong> (docEntry.getId() != <strong class="jxr_keyword">null</strong> &amp;&amp; docEntry.getId().equals(docEntryId)) {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>                 <strong class="jxr_keyword">return</strong> docEntry;
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>             }
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>         }
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>     }
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryPackage.html">EbXMLRegistryPackage</a> getRegistryPackage(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container, String submissionSetId, String classificationNode) {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>         <strong class="jxr_keyword">for</strong> (EbXMLRegistryPackage registryPackage : container.getRegistryPackages(classificationNode)) {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>             <strong class="jxr_keyword">if</strong> (registryPackage.getId() != <strong class="jxr_keyword">null</strong> &amp;&amp; registryPackage.getId().equals(submissionSetId)) {
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>                 <strong class="jxr_keyword">return</strong> registryPackage;
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>             }
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>         }
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>     }
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateUpdateObject(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRegistryObject.html">EbXMLRegistryObject</a> registryObject, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLObjectContainer.html">EbXMLObjectContainer</a> container) {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>         metaDataAssert(registryObject.getLid() != <strong class="jxr_keyword">null</strong>, LOGICAL_ID_MISSING);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>         uuidValidator.validate(registryObject.getLid());
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>         metaDataAssert(!registryObject.getLid().equals(registryObject.getId()), LOGICAL_ID_EQUALS_ENTRY_UUID,
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>                 registryObject.getLid(), registryObject.getId());
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>         <strong class="jxr_keyword">boolean</strong> foundHasMemberAssociation = false;
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>         <strong class="jxr_keyword">for</strong> (EbXMLAssociation association : container.getAssociations()) {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>             <strong class="jxr_keyword">if</strong> (association.getAssociationType() == AssociationType.HAS_MEMBER
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>                 &amp;&amp; association.getTarget().equals(registryObject.getId())
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>                 &amp;&amp; (getRegistryPackage(container, association.getSource(), SUBMISSION_SET_CLASS_NODE) != <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>             {
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>                 metaDataAssert(association.getPreviousVersion() != <strong class="jxr_keyword">null</strong>, MISSING_PREVIOUS_VERSION);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>                 foundHasMemberAssociation = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>             }
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>         }
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>         metaDataAssert(foundHasMemberAssociation, MISSING_HAS_MEMBER_ASSOCIATION, registryObject.getId());
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>     }
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

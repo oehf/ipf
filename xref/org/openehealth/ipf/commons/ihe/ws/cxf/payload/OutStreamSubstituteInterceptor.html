@@ -23,60 +23,104 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> java.io.OutputStream;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.interceptor.MessageSenderInterceptor;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.io.CacheAndWriteOutputStream;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.message.Message;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.phase.AbstractPhaseInterceptor;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.phase.Phase;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * CXF interceptor that substitutes message output stream </em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * with a special wrapper that collects SOAP payload.</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *   </em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/payload/OutStreamSubstituteInterceptor.html">OutStreamSubstituteInterceptor</a> <strong class="jxr_keyword">extends</strong> AbstractPhaseInterceptor&lt;Message&gt; {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/payload/OutStreamSubstituteInterceptor.html">OutStreamSubstituteInterceptor</a>() {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>          <strong class="jxr_keyword">super</strong>(Phase.PREPARE_SEND);
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>          addAfter(MessageSenderInterceptor.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      }
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>      @Override
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> handleMessage(Message message) {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>          OutputStream os = message.getContent(OutputStream.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/payload/WrappedOutputStream.html">WrappedOutputStream</a> wrapper = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/payload/WrappedOutputStream.html">WrappedOutputStream</a>(os, (String) message.get(Message.ENCODING));
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          message.setContent(OutputStream.<strong class="jxr_keyword">class</strong>, wrapper);
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      }
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">     * Retrieves the instance of stream wrapper installed by this interceptor.</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">     * @param message</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">     *      CXF message which contains output stream as one of content types.</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">     * @return</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">     *      an instance of {@link WrappedOutputStream}.</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">     * @throws IllegalStateException</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">     *      when the stream wrapper instance could not be retrieved.</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/payload/WrappedOutputStream.html">WrappedOutputStream</a> getStreamWrapper(Message message) {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          OutputStream outputStream =  message.getContent(OutputStream.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">if</strong> (outputStream instanceof CacheAndWriteOutputStream) {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>              <em class="jxr_comment">// Extract what we need from the wrapper added by CXF. CXF sometimes adds the wrapper for diagnostics.</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>              outputStream = ((CacheAndWriteOutputStream) outputStream).getFlowThroughStream();
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          }
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">if</strong> (outputStream instanceof WrappedOutputStream) {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>              <strong class="jxr_keyword">return</strong> (WrappedOutputStream) outputStream;
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Message output stream is not of expected type"</span>);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          }
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      }
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  }
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> com.ctc.wstx.io.UTF8Writer;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.ctc.wstx.sw.BaseStreamWriter;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.ctc.wstx.sw.BufferingXmlWriter;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.interceptor.StaxOutInterceptor;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.io.CacheAndWriteOutputStream;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.message.Message;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.phase.AbstractPhaseInterceptor;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.phase.Phase;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> javax.xml.stream.XMLStreamWriter;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.io.OutputStream;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.Field;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * CXF interceptor that substitutes message output stream </em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * with a special wrapper that collects SOAP payload.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *   </em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/payload/OutStreamSubstituteInterceptor.html">OutStreamSubstituteInterceptor</a> <strong class="jxr_keyword">extends</strong> AbstractPhaseInterceptor&lt;Message&gt; {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Field MWRITER_FIELD;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Field MOUT_WRITER_FIELD;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Field MOUT_STREAM_FIELD;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>              MWRITER_FIELD = BaseStreamWriter.<strong class="jxr_keyword">class</strong>.getDeclaredField(<span class="jxr_string">"mWriter"</span>);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>              MWRITER_FIELD.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>              MOUT_WRITER_FIELD = BufferingXmlWriter.<strong class="jxr_keyword">class</strong>.getDeclaredField(<span class="jxr_string">"mOut"</span>);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>              MOUT_WRITER_FIELD.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>              MOUT_STREAM_FIELD = UTF8Writer.<strong class="jxr_keyword">class</strong>.getDeclaredField(<span class="jxr_string">"mOut"</span>);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>              MOUT_STREAM_FIELD.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          } <strong class="jxr_keyword">catch</strong> (NoSuchFieldException e) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(e);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          }
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/payload/OutStreamSubstituteInterceptor.html">OutStreamSubstituteInterceptor</a>() {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">super</strong>(Phase.PRE_STREAM);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>          addAfter(StaxOutInterceptor.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      @Override
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> handleMessage(Message message) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>              <strong class="jxr_keyword">boolean</strong> success = false;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>              Object x = message.getContent(XMLStreamWriter.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>              <strong class="jxr_keyword">if</strong> (x instanceof BaseStreamWriter) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                  x = MWRITER_FIELD.get(x);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  <strong class="jxr_keyword">if</strong> (x instanceof BufferingXmlWriter) {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                      x = MOUT_WRITER_FIELD.get(x);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>                      <strong class="jxr_keyword">if</strong> (x instanceof UTF8Writer) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                          UTF8Writer writer = (UTF8Writer) x;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>                          x = MOUT_STREAM_FIELD.get(writer);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>                          <strong class="jxr_keyword">if</strong> (x instanceof OutputStream) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>                              OutputStream os = (OutputStream) x;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>                              <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/payload/WrappedOutputStream.html">WrappedOutputStream</a> wrapper = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/payload/WrappedOutputStream.html">WrappedOutputStream</a>(os, (String) message.get(Message.ENCODING));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>                              message.setContent(OutputStream.<strong class="jxr_keyword">class</strong>, wrapper);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>                              MOUT_STREAM_FIELD.set(writer, wrapper);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                              success = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                          }
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>                      }
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>              }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>              <strong class="jxr_keyword">if</strong> (!success) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Unable to wrap the output stream, check involved classes"</span>);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>              }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          } <strong class="jxr_keyword">catch</strong> (IllegalAccessException e) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(e);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * Retrieves the instance of stream wrapper installed by this interceptor.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     * @param message</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">     *      CXF message which contains output stream as one of content types.</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">     * @return</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">     *      an instance of {@link WrappedOutputStream}.</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">     * @throws IllegalStateException</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">     *      when the stream wrapper instance could not be retrieved.</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/payload/WrappedOutputStream.html">WrappedOutputStream</a> getStreamWrapper(Message message) {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         OutputStream outputStream =  message.getContent(OutputStream.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>         <strong class="jxr_keyword">if</strong> (outputStream instanceof CacheAndWriteOutputStream) {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>             <em class="jxr_comment">// Extract what we need from the wrapper added by CXF. CXF sometimes adds the wrapper for diagnostics.</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>             outputStream = ((CacheAndWriteOutputStream) outputStream).getFlowThroughStream();
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>         }
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         <strong class="jxr_keyword">if</strong> (outputStream instanceof WrappedOutputStream) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>             <strong class="jxr_keyword">return</strong> (WrappedOutputStream) outputStream;
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Message output stream is not of expected type"</span>);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>     }
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

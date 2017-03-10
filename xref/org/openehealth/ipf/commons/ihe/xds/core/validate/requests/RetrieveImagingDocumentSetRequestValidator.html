@@ -35,50 +35,54 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.commons.lang3.StringUtils.isNotEmpty;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.commons.lang3.Validate.notNull;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Validates a {@link EbXMLRetrieveImagingDocumentSetRequest}.</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * </em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * @author Clay Sebourn</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/requests/RetrieveImagingDocumentSetRequestValidator.html">RetrieveImagingDocumentSetRequestValidator</a> <strong class="jxr_keyword">implements</strong> Validator&lt;EbXMLRetrieveImagingDocumentSetRequest, ValidationProfile&gt; {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/HomeCommunityIdValidator.html">HomeCommunityIdValidator</a> hcValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/HomeCommunityIdValidator.html">HomeCommunityIdValidator</a>(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      @Override
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRetrieveImagingDocumentSetRequest.html">EbXMLRetrieveImagingDocumentSetRequest</a> request, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          notNull(request, <span class="jxr_string">"request cannot be null"</span>);
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>          
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <strong class="jxr_keyword">for</strong> (RetrieveStudy retrieveStudy : request.getRetrieveStudies()) {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>              String studyInstanceUID = retrieveStudy.getStudyInstanceUID();
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>              metaDataAssert(isNotEmpty(studyInstanceUID), STUDY_INSTANCE_UID_MUST_BE_SPECIFIED);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ID_MUST_BE_SPECIFIED;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.REPO_ID_MUST_BE_SPECIFIED;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.SERIES_INSTANCE_UID_MUST_BE_SPECIFIED;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.STUDY_INSTANCE_UID_MUST_BE_SPECIFIED;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.TRANSFER_SYNTAX_UID_LIST_MUST_BE_SPECIFIED;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * Validates a {@link EbXMLRetrieveImagingDocumentSetRequest}.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * @author Clay Sebourn</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/requests/RetrieveImagingDocumentSetRequestValidator.html">RetrieveImagingDocumentSetRequestValidator</a> <strong class="jxr_keyword">implements</strong> Validator&lt;EbXMLRetrieveImagingDocumentSetRequest, ValidationProfile&gt; {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/HomeCommunityIdValidator.html">HomeCommunityIdValidator</a> hcValidator = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/HomeCommunityIdValidator.html">HomeCommunityIdValidator</a>(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      @Override
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/EbXMLRetrieveImagingDocumentSetRequest.html">EbXMLRetrieveImagingDocumentSetRequest</a> request, <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationProfile.html">ValidationProfile</a> profile) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          notNull(request, <span class="jxr_string">"request cannot be null"</span>);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>              List&lt;String&gt; transferSyntaxUIDList = request.getTransferSyntaxUIDList();
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>              metaDataAssert(transferSyntaxUIDList != <strong class="jxr_keyword">null</strong> &amp;&amp; !transferSyntaxUIDList.isEmpty(), TRANSFER_SYNTAX_UID_LIST_MUST_BE_SPECIFIED);
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>              <strong class="jxr_keyword">for</strong> (RetrieveSeries retrieveSeries : retrieveStudy.getRetrieveSerieses()) {
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>                  String seriesInstanceUID = retrieveSeries.getSeriesInstanceUID();
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>                  metaDataAssert(isNotEmpty(seriesInstanceUID), SERIES_INSTANCE_UID_MUST_BE_SPECIFIED);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">for</strong> (RetrieveStudy retrieveStudy : request.getRetrieveStudies()) {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>              String studyInstanceUID = retrieveStudy.getStudyInstanceUID();
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>              metaDataAssert(isNotEmpty(studyInstanceUID), STUDY_INSTANCE_UID_MUST_BE_SPECIFIED);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>              List&lt;String&gt; transferSyntaxUIDList = request.getTransferSyntaxUIDList();
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>              metaDataAssert(transferSyntaxUIDList != <strong class="jxr_keyword">null</strong> &amp;&amp; !transferSyntaxUIDList.isEmpty(), TRANSFER_SYNTAX_UID_LIST_MUST_BE_SPECIFIED);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>                  <strong class="jxr_keyword">for</strong> (RetrieveDocument document : retrieveSeries.getDocuments()) {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>                      <em class="jxr_comment">//todo: Eliminate this duplicate code from DocumentRequest?</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>                      String repoId = document.getRepositoryUniqueId();
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>                      metaDataAssert(isNotEmpty(repoId), REPO_ID_MUST_BE_SPECIFIED);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>                      String docId = document.getDocumentUniqueId();
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>                      metaDataAssert(isNotEmpty(docId), DOC_ID_MUST_BE_SPECIFIED);
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>                      <strong class="jxr_keyword">if</strong> (profile.getProfile() == ValidationProfile.InteractionProfile.XCA) {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>                          hcValidator.validate(document.getHomeCommunityId());
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>                      }
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  }
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>              }
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      }
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>              <strong class="jxr_keyword">for</strong> (RetrieveSeries retrieveSeries : retrieveStudy.getRetrieveSerieses()) {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>                  String seriesInstanceUID = retrieveSeries.getSeriesInstanceUID();
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>                  metaDataAssert(isNotEmpty(seriesInstanceUID), SERIES_INSTANCE_UID_MUST_BE_SPECIFIED);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>                  <strong class="jxr_keyword">for</strong> (RetrieveDocument document : retrieveSeries.getDocuments()) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>                      <em class="jxr_comment">//todo: Eliminate this duplicate code from DocumentRequest?</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>                      String repoId = document.getRepositoryUniqueId();
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>                      metaDataAssert(isNotEmpty(repoId), REPO_ID_MUST_BE_SPECIFIED);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                      String docId = document.getDocumentUniqueId();
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                      metaDataAssert(isNotEmpty(docId), DOC_ID_MUST_BE_SPECIFIED);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                      <strong class="jxr_keyword">if</strong> (profile.getInteractionProfile().requiresHomeCommunityId()) {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>                          hcValidator.validate(document.getHomeCommunityId());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                      }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  }
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>              }
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

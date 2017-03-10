@@ -65,47 +65,54 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>          List&lt;EbXMLSlot&gt; referenceIdSlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_REFERENCE_IDS.getSlotName());
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          assertEquals(2, referenceIdSlots.size());
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          assertEquals(Arrays.asList(<span class="jxr_string">"('ref-id-11')"</span>, <span class="jxr_string">"('ref-id-12')"</span>, <span class="jxr_string">"('ref-id-13')"</span>), referenceIdSlots.get(0).getValueList());
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          assertEquals(Arrays.asList(<span class="jxr_string">"('ref-id-21')"</span>, <span class="jxr_string">"('ref-id-22')"</span>), referenceIdSlots.get(1).getValueList());
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      }
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      @Test
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testToEbXMLNull() {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          transformer.toEbXML(<strong class="jxr_keyword">null</strong>, ebXML);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          assertEquals(0, ebXML.getSlots().size());
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      }
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      @Test
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testToEbXMLEmpty() {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>          transformer.toEbXML(<strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery(), ebXML);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          assertEquals(0, ebXML.getSlots().size());
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      @Test
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromEbXML() {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>          transformer.toEbXML(query, ebXML);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>          FindDocumentsByReferenceIdQuery result = <strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>          transformer.fromEbXML(result, ebXML);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>          assertEquals(query, result);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      }
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      @Test
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromEbXMLNull() {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          assertEquals(Arrays.asList(
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>                  <span class="jxr_string">"('ref-id-11^^^&amp;1.1.1.1&amp;ISO^urn:ihe:iti:xds:2013:uniqueId')"</span>,
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>                  <span class="jxr_string">"('ref-id-12^^^^urn:ihe:iti:xdw:2013:workflowInstanceId')"</span>,
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  <span class="jxr_string">"('ref-id-13^^^^urn:ihe:iti:xds:2013:referral')"</span>),
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>                  referenceIdSlots.get(0).getValueList());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          assertEquals(Arrays.asList(
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                  <span class="jxr_string">"('ref-id-21^^^&amp;1.1.1.2&amp;ISO^urn:ihe:iti:xds:2013:accession')"</span>,
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  <span class="jxr_string">"('ref-id-22^^^^urn:ihe:iti:xds:2013:order')"</span>),
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                  referenceIdSlots.get(1).getValueList());
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      @Test
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testToEbXMLNull() {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          transformer.toEbXML(<strong class="jxr_keyword">null</strong>, ebXML);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          assertEquals(0, ebXML.getSlots().size());
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      }
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      @Test
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testToEbXMLEmpty() {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>          transformer.toEbXML(<strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery(), ebXML);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>          assertEquals(0, ebXML.getSlots().size());
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      @Test
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromEbXML() {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          transformer.toEbXML(query, ebXML);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          FindDocumentsByReferenceIdQuery result = <strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery();
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>          transformer.fromEbXML(result, <strong class="jxr_keyword">null</strong>);        
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>          assertEquals(<strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery(), result);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          transformer.fromEbXML(result, ebXML);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          assertEquals(query, result);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>      }
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>      @Test
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromEbXMLEmpty() {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromEbXMLNull() {
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>          FindDocumentsByReferenceIdQuery result = <strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          transformer.fromEbXML(result, ebXML);        
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          transformer.fromEbXML(result, <strong class="jxr_keyword">null</strong>);        
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>          assertEquals(<strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery(), result);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      }
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      @Test
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromEbXMLEmpty() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         FindDocumentsByReferenceIdQuery result = <strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery();
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         transformer.fromEbXML(result, ebXML);        
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>         assertEquals(<strong class="jxr_keyword">new</strong> FindDocumentsByReferenceIdQuery(), result);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

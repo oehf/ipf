@@ -29,46 +29,43 @@
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.HashValidator;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.UriValidator;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Tests for {@link HashValidator}.</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/UriValidatorTest.html">UriValidatorTest</a> {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> UriValidator validator = <strong class="jxr_keyword">new</strong> UriValidator();
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      @Test
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testValidateGoodCases() <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>          validator.validate(Arrays.asList(<span class="jxr_string">"http://localhost:8080"</span>));
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>          validator.validate(Arrays.asList(<span class="jxr_string">"1|http://localhost:8080"</span>));
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>          validator.validate(Arrays.asList(<span class="jxr_string">"1|http://localhost:8080"</span>, <span class="jxr_string">"2|/a"</span>, <span class="jxr_string">"3|/a"</span>, <span class="jxr_string">"4|/a"</span>, <span class="jxr_string">"5|/a"</span>, <span class="jxr_string">"6|/a"</span>, <span class="jxr_string">"7|/a"</span>, <span class="jxr_string">"8|/a"</span>, <span class="jxr_string">"9|/a"</span>));
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>      }
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      @Test 
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testValidateBadCases() <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>          assertFails(Arrays.asList(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          assertFails(Arrays.asList(<span class="jxr_string">"://localhost:8080"</span>));
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>          assertFails(Arrays.asList(<span class="jxr_string">"0|http://localhost"</span>));
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>          assertFails(Arrays.asList(<span class="jxr_string">"10|http://localhost"</span>));
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>          assertFails(Arrays.asList(<span class="jxr_string">"A|http://localhost"</span>));
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          assertFails(Arrays.asList(<span class="jxr_string">"2|http://localhost"</span>));
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          assertFails(Arrays.asList(<span class="jxr_string">"1|http://localhost"</span>, <span class="jxr_string">"3|/sub"</span>));
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertFails(List&lt;String&gt; value) {
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>              validator.validate(value);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>              fail(<span class="jxr_string">"Expected exception: "</span> + XDSMetaDataException.<strong class="jxr_keyword">class</strong> + <span class="jxr_string">" for "</span> + value);
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          } <strong class="jxr_keyword">catch</strong> (XDSMetaDataException e) {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>              <em class="jxr_comment">// Expected</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          }
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  }
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Tests for {@link HashValidator}.</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/UriValidatorTest.html">UriValidatorTest</a> {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> UriValidator validator = <strong class="jxr_keyword">new</strong> UriValidator();
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      @Test
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testValidateGoodCases() <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>          validator.validate(Arrays.asList(<span class="jxr_string">"http://localhost:8080"</span>));
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>          validator.validate(Arrays.asList(<span class="jxr_string">"1|http://localhost:8080"</span>));
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>          validator.validate(Arrays.asList(<span class="jxr_string">"1|http://localhost:8080"</span>, <span class="jxr_string">"2|/a"</span>, <span class="jxr_string">"3|/a"</span>, <span class="jxr_string">"4|/a"</span>, <span class="jxr_string">"5|/a"</span>, <span class="jxr_string">"6|/a"</span>, <span class="jxr_string">"7|/a"</span>, <span class="jxr_string">"8|/a"</span>, <span class="jxr_string">"9|/a"</span>));
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      }
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      @Test 
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testValidateBadCases() <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>          assertFails(Arrays.asList(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          assertFails(Arrays.asList(<span class="jxr_string">"://localhost:8080"</span>));
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          assertFails(Arrays.asList(<span class="jxr_string">"0|http://localhost"</span>));
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          assertFails(Arrays.asList(<span class="jxr_string">"10|http://localhost"</span>));
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          assertFails(Arrays.asList(<span class="jxr_string">"A|http://localhost"</span>));
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>          assertFails(Arrays.asList(<span class="jxr_string">"2|http://localhost"</span>));
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          assertFails(Arrays.asList(<span class="jxr_string">"1|http://localhost"</span>, <span class="jxr_string">"3|/sub"</span>));
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertFails(List&lt;String&gt; value) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>              validator.validate(value);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>              fail(<span class="jxr_string">"Expected exception: "</span> + XDSMetaDataException.<strong class="jxr_keyword">class</strong> + <span class="jxr_string">" for "</span> + value);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          } <strong class="jxr_keyword">catch</strong> (XDSMetaDataException e) {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>              <em class="jxr_comment">// Expected</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          }
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      }
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

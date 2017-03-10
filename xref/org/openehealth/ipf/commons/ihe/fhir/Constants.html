@@ -7,7 +7,7 @@
 <body>
 <div id="overview"><a href="../../../../../../../apidocs/org/openehealth/ipf/commons/ihe/fhir/Constants.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2015 the original author or authors.</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright 2016 the original author or authors.</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
@@ -24,86 +24,50 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.commons.ihe.fhir;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.Coding;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.DocumentManifest;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.Patient;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.HashSet;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Set;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * @author Christian Ohr</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * @since 3.1</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/fhir/Constants.html">Constants</a> {
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * @author Christian Ohr</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * @since 3.1</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/fhir/Constants.html">Constants</a> {
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      String SOURCE_IDENTIFIER_NAME = <span class="jxr_string">"sourceIdentifier"</span>;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      String TARGET_SYSTEM_NAME = <span class="jxr_string">"targetSystem"</span>;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      String FHIR_CONTEXT = <span class="jxr_string">"FhirContext"</span>;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      <em class="jxr_comment">// Request parameter information</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      String FHIR_REQUEST_PARAMETERS = <span class="jxr_string">"FhirRequestParameters"</span>;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <em class="jxr_comment">// PIXm stuff</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      String PIXM_OPERATION_NAME = <span class="jxr_string">"$ihe-pix"</span>;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      String SOURCE_IDENTIFIER_NAME = <span class="jxr_string">"sourceIdentifier"</span>;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      String TARGET_SYSTEM_NAME = <span class="jxr_string">"targetSystem"</span>;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      Set&lt;String&gt; ITI83_PARAMETERS = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;(Arrays.asList(
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>              SOURCE_IDENTIFIER_NAME,
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>              TARGET_SYSTEM_NAME));
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <em class="jxr_comment">// PDQm stuff</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      String SP_RESOURCE_IDENTIFIER = <span class="jxr_string">"_id"</span>;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      String SP_MULTIPLE_BIRTH_ORDER_NUMBER = <span class="jxr_string">"multipleBirthInteger"</span>;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      String SP_MOTHERS_MAIDEN_NAME_GIVEN = <span class="jxr_string">"mothersMaidenName.given"</span>;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      String SP_MOTHERS_MAIDEN_NAME_FAMILY = <span class="jxr_string">"mothersMaidenName.family"</span>;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      Set&lt;String&gt; ITI78_PARAMETERS = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;(Arrays.asList(
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>              SP_RESOURCE_IDENTIFIER,
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>              SP_MULTIPLE_BIRTH_ORDER_NUMBER,
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>              SP_MOTHERS_MAIDEN_NAME_GIVEN,
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>              SP_MOTHERS_MAIDEN_NAME_FAMILY,
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>              Patient.SP_IDENTIFIER,
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>              Patient.SP_FAMILY,
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>              Patient.SP_GIVEN,
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>              Patient.SP_BIRTHDATE,
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>              Patient.SP_ADDRESS,
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>              Patient.SP_GENDER,
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>              Patient.SP_TELECOM
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>              ));
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <em class="jxr_comment">// MHD stuff</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      String COMP_DOCUMENT_MANIFEST = <span class="jxr_string">"documentManifest"</span>;
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      String COMP_DOCUMENT_REFERENCES = <span class="jxr_string">"documentReferences"</span>;
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      String COMP_LISTS = <span class="jxr_string">"lists"</span>;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      String COMP_BINARIES = <span class="jxr_string">"binaries"</span>;
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      String SP_AUTHOR_GIVEN = DocumentManifest.SP_AUTHOR + <span class="jxr_string">".given"</span>;
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      String SP_AUTHOR_FAMILY = DocumentManifest.SP_AUTHOR + <span class="jxr_string">".family"</span>;
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      Coding ITI65_TAG = <strong class="jxr_keyword">new</strong> Coding().setCode(<span class="jxr_string">"http://ihe.net/fhir/tag/iti-65"</span>);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <em class="jxr_comment">// ATNA stuff</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      String SP_PATIENTID = <span class="jxr_string">"patientid"</span>;
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      String SP_ROLE = <span class="jxr_string">"role"</span>;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      String SP_OUTCOME = <span class="jxr_string">"outcome"</span>;
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      String FHIR_CONTEXT = <span class="jxr_string">"FhirContext"</span>;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <em class="jxr_comment">// Request parameter information</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      String FHIR_REQUEST_PARAMETERS = <span class="jxr_string">"FhirRequestParameters"</span>;
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <em class="jxr_comment">// Parameter information from the HttpServletRequest</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      String HTTP_URI = <span class="jxr_string">"FhirHttpUri"</span>;
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      String HTTP_URL = <span class="jxr_string">"FhirHttpUrl"</span>;
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      String HTTP_METHOD = <span class="jxr_string">"FhirHttpMethod"</span>;
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      String HTTP_QUERY = <span class="jxr_string">"FhirHttpQuery"</span>;
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      String HTTP_CHARACTER_ENCODING = <span class="jxr_string">"FhirHttpCharacterEncoding"</span>;
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>      String HTTP_CONTENT_TYPE = <span class="jxr_string">"FhirHttpContentType"</span>;
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      String HTTP_PROTOCOL_VERSION = <span class="jxr_string">"FhirHttpProtocolVersion"</span>;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      String HTTP_CLIENT_IP_ADDRESS = <span class="jxr_string">"FhirHttpClientIpAddress"</span>;
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      String HTTP_HEADERS = <span class="jxr_string">"FhirHttpHeaders"</span>;
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  }
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <em class="jxr_comment">// Parameter information from the HttpServletRequest</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      String HTTP_URI = <span class="jxr_string">"FhirHttpUri"</span>;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      String HTTP_URL = <span class="jxr_string">"FhirHttpUrl"</span>;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      String HTTP_SCHEME = <span class="jxr_string">"FhirHttpScheme"</span>;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      String HTTP_METHOD = <span class="jxr_string">"FhirHttpMethod"</span>;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      String HTTP_QUERY = <span class="jxr_string">"FhirHttpQuery"</span>;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      String HTTP_CHARACTER_ENCODING = <span class="jxr_string">"FhirHttpCharacterEncoding"</span>;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      String HTTP_CONTENT_TYPE = <span class="jxr_string">"FhirHttpContentType"</span>;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      String HTTP_PROTOCOL_VERSION = <span class="jxr_string">"FhirHttpProtocolVersion"</span>;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      String HTTP_CLIENT_IP_ADDRESS = <span class="jxr_string">"FhirHttpClientIpAddress"</span>;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      String HTTP_HEADERS = <span class="jxr_string">"FhirHttpHeaders"</span>;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <em class="jxr_comment">// Paging stuff</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      String FHIR_COUNT = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.server.Constants.PARAM_COUNT;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      String FHIR_FIRST = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.server.Constants.LINK_FIRST;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      String FHIR_LAST= ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.server.Constants.LINK_LAST;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      String FHIR_PREVIOUS = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.server.Constants.LINK_PREVIOUS;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      String FHIR_NEXT = ca.uhn.fhir.<strong class="jxr_keyword">rest</strong>.server.Constants.LINK_NEXT;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      String FHIR_FROM_INDEX = <span class="jxr_string">"FhirFromIndex"</span>;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      String FHIR_TO_INDEX = <span class="jxr_string">"FhirToIndex"</span>;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      String FHIR_REQUEST_SIZE_ONLY = <span class="jxr_string">"FhirRequestSizeOnly"</span>;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      String FHIR_REQUEST_GET_ONLY = <span class="jxr_string">"FhirRequestGetOnly"</span>;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      String URN_IETF_RFC_3986 = <span class="jxr_string">"urn:ietf:rfc:3986"</span>;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

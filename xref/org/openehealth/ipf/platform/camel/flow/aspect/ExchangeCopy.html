@@ -71,13 +71,13 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     * @see SplitHistory#SplitHistory(int)</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      @AfterReturning(pointcut=<span class="jxr_string">"exchangeCopy(exchange)"</span>, returning=<span class="jxr_string">"pairs"</span>)
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> afterCopy(Exchange exchange, Iterable pairs) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> afterCopy(Exchange exchange, Iterable&lt;?&gt; pairs) {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          ExchangeCopyHelper.afterCopy(exchange, pairs);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      }
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

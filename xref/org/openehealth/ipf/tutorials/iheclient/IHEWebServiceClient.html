@@ -28,128 +28,130 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.Exchange;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.ProducerTemplate;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.impl.DefaultExchange;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.query.StoredQuery;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.xml.CombinedXmlValidator;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.core.util.Exchanges;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * This is a simple IHE client helper class that provides a couple of sender methods</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/openehealth/ipf/tutorials/iheclient/IHEWebServiceClient.html">IHEWebServiceClient</a> <strong class="jxr_keyword">implements</strong> CamelContextAware {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">private</strong> CamelContext camelContext;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../org/openehealth/ipf/commons/xml/CombinedXmlValidator.html">CombinedXmlValidator</a> validator = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/openehealth/ipf/commons/xml/CombinedXmlValidator.html">CombinedXmlValidator</a>();
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      @Override
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCamelContext(CamelContext camelContext) {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <strong class="jxr_keyword">this</strong>.camelContext = camelContext;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      }
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      @Override
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">public</strong> CamelContext getCamelContext() {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          <strong class="jxr_keyword">return</strong> camelContext;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <em class="jxr_comment">// ===================</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <em class="jxr_comment">// XDS-related queries</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.query.StoredQuery;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.xml.CombinedXmlValidator;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.core.util.Exchanges;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.hl7v3.PDQV3.Interactions.ITI_47;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_44_PIX;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.hl7v3.PIXV3.Interactions.ITI_45;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * This is a simple IHE client helper class that provides a couple of sender methods</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/openehealth/ipf/tutorials/iheclient/IHEWebServiceClient.html">IHEWebServiceClient</a> <strong class="jxr_keyword">implements</strong> CamelContextAware {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">private</strong> CamelContext camelContext;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../org/openehealth/ipf/commons/xml/CombinedXmlValidator.html">CombinedXmlValidator</a> validator = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/openehealth/ipf/commons/xml/CombinedXmlValidator.html">CombinedXmlValidator</a>();
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      @Override
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCamelContext(CamelContext camelContext) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          <strong class="jxr_keyword">this</strong>.camelContext = camelContext;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      @Override
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">public</strong> CamelContext getCamelContext() {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">return</strong> camelContext;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      <em class="jxr_comment">// ===================</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/QueryResponse.html">QueryResponse</a> iti18StoredQuery(<a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/StoredQuery.html">StoredQuery</a> query, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          <a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/QueryRegistry.html">QueryRegistry</a> storedQuery = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/QueryRegistry.html">QueryRegistry</a>(query);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          String endpoint = String.format(<span class="jxr_string">"xds-iti18://%s:%d/%s"</span>, host, port, pathAndParameters);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">return</strong> send(endpoint, storedQuery, QueryResponse.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      }
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <em class="jxr_comment">// Use this for RAD-68, too</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/Response.html">Response</a> iti41ProvideAndRegister(<a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/ProvideAndRegisterDocumentSet.html">ProvideAndRegisterDocumentSet</a> documentSet, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          String endpoint = String.format(<span class="jxr_string">"xds-iti41://%s:%d/%s"</span>, host, port, pathAndParameters);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">return</strong> send(endpoint, documentSet, Response.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      }
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocumentSet.html">RetrievedDocumentSet</a> iti43RetrieveDocumentSet(<a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveDocumentSet.html">RetrieveDocumentSet</a> retrieve, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          String endpoint = String.format(<span class="jxr_string">"xds-iti43://%s:%d/%s"</span>, host, port, pathAndParameters);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">return</strong> send(endpoint, retrieve, RetrievedDocumentSet.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      }
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <em class="jxr_comment">// =======================</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <em class="jxr_comment">// PIX/PDQ-related queries</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <em class="jxr_comment">// incl validation option</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <em class="jxr_comment">// =======================</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">public</strong> String iti44PatientFeed(String message, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters, <strong class="jxr_keyword">boolean</strong> validate) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">if</strong> (validate) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>              validator.validate(message, Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_44_PIX));
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>          }
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          String endpoint = String.format(<span class="jxr_string">"pixv3-iti44://%s:%d/%s"</span>, host, port, pathAndParameters);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>          String response = send(endpoint, message, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">if</strong> (validate) {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>              validator.validate(response, Hl7v3ValidationProfiles.getResponseValidationProfile(IpfInteractionId.ITI_44_PIX));
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>          }
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">return</strong> response;
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>      }
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">public</strong> String iti45PatientQuery(String message, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters, <strong class="jxr_keyword">boolean</strong> validate) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">if</strong> (validate) {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>              validator.validate(message, Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_45));
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>          }
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          String endpoint = String.format(<span class="jxr_string">"pixv3-iti45://%s:%d/%s"</span>, host, port, pathAndParameters);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>          String response = send(endpoint, message, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>          <strong class="jxr_keyword">if</strong> (validate) {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>             validator.validate(response, Hl7v3ValidationProfiles.getResponseValidationProfile(IpfInteractionId.ITI_45));
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>         }
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>         <strong class="jxr_keyword">return</strong> response;
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     }
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">public</strong> String iti47PatientDemographicsQuery(String message, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters, <strong class="jxr_keyword">boolean</strong> validate) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>         <strong class="jxr_keyword">if</strong> (validate) {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>             validator.validate(message, Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_47));
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>         }
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>         String endpoint = String.format(<span class="jxr_string">"pdqv3-iti47://%s:%d/%s"</span>, host, port, pathAndParameters);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>         String response = send(endpoint, message, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>         <strong class="jxr_keyword">if</strong> (validate) {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>             validator.validate(response, Hl7v3ValidationProfiles.getResponseValidationProfile(IpfInteractionId.ITI_47));
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>         }
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>         <strong class="jxr_keyword">return</strong> response;
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>     }
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>     <em class="jxr_comment">// =======</em>
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>     <em class="jxr_comment">// Helpers</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <em class="jxr_comment">// XDS-related queries</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <em class="jxr_comment">// ===================</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/QueryResponse.html">QueryResponse</a> iti18StoredQuery(<a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/StoredQuery.html">StoredQuery</a> query, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          <a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/QueryRegistry.html">QueryRegistry</a> storedQuery = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/QueryRegistry.html">QueryRegistry</a>(query);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          String endpoint = String.format(<span class="jxr_string">"xds-iti18://%s:%d/%s"</span>, host, port, pathAndParameters);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">return</strong> send(endpoint, storedQuery, QueryResponse.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <em class="jxr_comment">// Use this for RAD-68, too</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/Response.html">Response</a> iti41ProvideAndRegister(<a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/ProvideAndRegisterDocumentSet.html">ProvideAndRegisterDocumentSet</a> documentSet, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          String endpoint = String.format(<span class="jxr_string">"xds-iti41://%s:%d/%s"</span>, host, port, pathAndParameters);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">return</strong> send(endpoint, documentSet, Response.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocumentSet.html">RetrievedDocumentSet</a> iti43RetrieveDocumentSet(<a href="../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveDocumentSet.html">RetrieveDocumentSet</a> retrieve, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          String endpoint = String.format(<span class="jxr_string">"xds-iti43://%s:%d/%s"</span>, host, port, pathAndParameters);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">return</strong> send(endpoint, retrieve, RetrievedDocumentSet.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      }
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <em class="jxr_comment">// =======================</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <em class="jxr_comment">// PIX/PDQ-related queries</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <em class="jxr_comment">// incl validation option</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <em class="jxr_comment">// =======================</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">public</strong> String iti44PatientFeed(String message, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters, <strong class="jxr_keyword">boolean</strong> validate) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">if</strong> (validate) {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>              validator.validate(message, ITI_44_PIX.getRequestValidationProfile());
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          String endpoint = String.format(<span class="jxr_string">"pixv3-iti44://%s:%d/%s"</span>, host, port, pathAndParameters);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          String response = send(endpoint, message, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">if</strong> (validate) {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              validator.validate(response, ITI_44_PIX.getResponseValidationProfile());
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          }
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          <strong class="jxr_keyword">return</strong> response;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      }
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">public</strong> String iti45PatientQuery(String message, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters, <strong class="jxr_keyword">boolean</strong> validate) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          <strong class="jxr_keyword">if</strong> (validate) {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>              validator.validate(message, ITI_45.getRequestValidationProfile());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          }
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          String endpoint = String.format(<span class="jxr_string">"pixv3-iti45://%s:%d/%s"</span>, host, port, pathAndParameters);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         String response = send(endpoint, message, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         <strong class="jxr_keyword">if</strong> (validate) {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>             validator.validate(response, ITI_45.getResponseValidationProfile());
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>         }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>         <strong class="jxr_keyword">return</strong> response;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     }
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>     <strong class="jxr_keyword">public</strong> String iti47PatientDemographicsQuery(String message, String host, <strong class="jxr_keyword">int</strong> port, String pathAndParameters, <strong class="jxr_keyword">boolean</strong> validate) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>         <strong class="jxr_keyword">if</strong> (validate) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>             validator.validate(message, ITI_47.getRequestValidationProfile());
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>         String endpoint = String.format(<span class="jxr_string">"pdqv3-iti47://%s:%d/%s"</span>, host, port, pathAndParameters);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>         String response = send(endpoint, message, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>         <strong class="jxr_keyword">if</strong> (validate) {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>             validator.validate(response, ITI_47.getResponseValidationProfile());
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>         }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>         <strong class="jxr_keyword">return</strong> response;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>     }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>     <em class="jxr_comment">// =======</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>     <strong class="jxr_keyword">private</strong> &lt;T&gt; T send(String endpoint, Object input, Class&lt;T&gt; outType) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>         Exchange result = send(endpoint, input);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>         <strong class="jxr_keyword">return</strong> Exchanges.resultMessage(result).getBody(outType);
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     }
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     <strong class="jxr_keyword">private</strong> Exchange send(String endpoint, Object body) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>         Exchange exchange = <strong class="jxr_keyword">new</strong> DefaultExchange(getCamelContext());
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>         exchange.getIn().setBody(body);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>         <em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_comment">        if (headers != null &amp;&amp; !headers.isEmpty()) {</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_comment">            exchange.getIn().getHeaders().putAll(headers);</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_comment">        }</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_comment">        */</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>         ProducerTemplate template = camelContext.createProducerTemplate();
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>         Exchange result = template.send(endpoint, exchange);
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         <strong class="jxr_keyword">if</strong> (result.getException() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>             <strong class="jxr_keyword">throw</strong> result.getException();
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>         }
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>         <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>     }
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> }
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     <em class="jxr_comment">// Helpers</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     <em class="jxr_comment">// =======</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     <strong class="jxr_keyword">private</strong> &lt;T&gt; T send(String endpoint, Object input, Class&lt;T&gt; outType) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>         Exchange result = send(endpoint, input);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>         <strong class="jxr_keyword">return</strong> Exchanges.resultMessage(result).getBody(outType);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>     }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     <strong class="jxr_keyword">private</strong> Exchange send(String endpoint, Object body) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>         Exchange exchange = <strong class="jxr_keyword">new</strong> DefaultExchange(getCamelContext());
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>         exchange.getIn().setBody(body);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>         <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_comment">        if (headers != null &amp;&amp; !headers.isEmpty()) {</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_comment">            exchange.getIn().getHeaders().putAll(headers);</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_comment">        }</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_comment">        */</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>         ProducerTemplate template = camelContext.createProducerTemplate();
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>         Exchange result = template.send(endpoint, exchange);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>         <strong class="jxr_keyword">if</strong> (result.getException() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>             <strong class="jxr_keyword">throw</strong> result.getException();
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>         }
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>     }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

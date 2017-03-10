@@ -23,18 +23,18 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.commons.lang3.Validate.notNull;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryError;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryErrorList;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryError;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryErrorList;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.commons.lang3.Validate.notNull;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * The ebXML 2.1 version of the {@link RegistryResponse}.</em>
@@ -70,31 +70,28 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>              <strong class="jxr_keyword">return</strong> Collections.emptyList();
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          }
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          List&lt;EbXMLRegistryError&gt; errors = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">for</strong> (RegistryError regError : list.getRegistryError()) {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>              errors.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml21/EbXMLRegistryError21.html">EbXMLRegistryError21</a>(regError));
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          }
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">return</strong> errors;
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      }
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      @Override
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setErrors(List&lt;EbXMLRegistryError&gt; errors) {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs21/rs/RegistryErrorList.html">RegistryErrorList</a> value = EbXMLFactory21.RS_FACTORY.createRegistryErrorList();
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          regResponse.setRegistryErrorList(value);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          List&lt;RegistryError&gt; list = value.getRegistryError();
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>          <strong class="jxr_keyword">for</strong> (EbXMLRegistryError error : errors) {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>              list.add(((EbXMLRegistryError21) error).getInternal());
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>          }
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      }
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>      @Override
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs21/rs/RegistryResponse.html">RegistryResponse</a> getInternal() {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">return</strong> regResponse;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      }
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">return</strong> list.getRegistryError().stream()
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>                  .map(EbXMLRegistryError21::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  .collect(Collectors.toList());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      @Override
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setErrors(List&lt;EbXMLRegistryError&gt; errors) {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs21/rs/RegistryErrorList.html">RegistryErrorList</a> value = EbXMLFactory21.RS_FACTORY.createRegistryErrorList();
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          regResponse.setRegistryErrorList(value);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          List&lt;RegistryError&gt; list = value.getRegistryError();
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          list.addAll(errors.stream()
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  .map(error -&gt; ((EbXMLRegistryError21) error).getInternal())
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                  .collect(Collectors.toList()));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      @Override
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs21/rs/RegistryResponse.html">RegistryResponse</a> getInternal() {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">return</strong> regResponse;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

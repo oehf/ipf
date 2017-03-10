@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>          causes = <strong class="jxr_keyword">new</strong> Throwable[] { cause };
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      }
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../org/openehealth/ipf/commons/core/modules/api/ValidationException.html">ValidationException</a>(String message, Throwable[] causes) {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../org/openehealth/ipf/commons/core/modules/api/ValidationException.html">ValidationException</a>(String message, Throwable... causes) {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>          <strong class="jxr_keyword">super</strong>(message, ((causes == <strong class="jxr_keyword">null</strong>) || (causes.length == 0)) ? <strong class="jxr_keyword">null</strong> : causes[0]);
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>          <strong class="jxr_keyword">this</strong>.causes = causes;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      }
@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>          <strong class="jxr_keyword">super</strong>(message);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      }
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../org/openehealth/ipf/commons/core/modules/api/ValidationException.html">ValidationException</a>(Throwable[] causes) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../org/openehealth/ipf/commons/core/modules/api/ValidationException.html">ValidationException</a>(Throwable... causes) {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">this</strong>(<strong class="jxr_keyword">null</strong>, causes);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
@@ -93,6 +93,6 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

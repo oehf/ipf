@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> ca.uhn.fhir.util.ElementUtil;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.HumanName;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.Patient;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.fhir.Constants;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.api.IAnyResource;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * Patient as defined by the PDQm specification. This extends the default patient resource with the following attributes:</em>
@@ -57,11 +57,11 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> DateClientParam BIRTHDATE = <strong class="jxr_keyword">new</strong> DateClientParam(Patient.SP_BIRTHDATE);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> StringClientParam ADDRESS = <strong class="jxr_keyword">new</strong> StringClientParam(Patient.SP_ADDRESS);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> TokenClientParam GENDER = <strong class="jxr_keyword">new</strong> TokenClientParam(Patient.SP_GENDER);
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> TokenClientParam RESOURCE_IDENTIFIER = <strong class="jxr_keyword">new</strong> TokenClientParam(Constants.SP_RESOURCE_IDENTIFIER);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> TokenClientParam RESOURCE_IDENTIFIER = <strong class="jxr_keyword">new</strong> TokenClientParam(IAnyResource.SP_RES_ID);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> StringClientParam TELECOM = <strong class="jxr_keyword">new</strong> StringClientParam(Patient.SP_TELECOM);
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> NumberClientParam MULTIPLE_BIRTH_ORDER_NUMBER = <strong class="jxr_keyword">new</strong> NumberClientParam(Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER);
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> StringClientParam SP_MOTHERS_MAIDEN_NAME_GIVEN = <strong class="jxr_keyword">new</strong> StringClientParam(Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> StringClientParam SP_MOTHERS_MAIDEN_NAME_FAMILY = <strong class="jxr_keyword">new</strong> StringClientParam(Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> NumberClientParam MULTIPLE_BIRTH_ORDER_NUMBER = <strong class="jxr_keyword">new</strong> NumberClientParam(Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> StringClientParam SP_MOTHERS_MAIDEN_NAME_GIVEN = <strong class="jxr_keyword">new</strong> StringClientParam(Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> StringClientParam SP_MOTHERS_MAIDEN_NAME_FAMILY = <strong class="jxr_keyword">new</strong> StringClientParam(Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      @Child(name = <span class="jxr_string">"mothersMaidenName"</span>)
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      @Extension(url = <span class="jxr_string">"http://www.ihe.net/ITI-78/Profile/pdqm#mothersMaidenName"</span>, isModifier = false, definedLocally = false)
@@ -88,6 +88,6 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

@@ -25,10 +25,10 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.model.Message;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.Exchange;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.core.util.Exchanges;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.core.util.Exchanges;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.core.InterceptorSupport;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>              Exchange exchange) <strong class="jxr_keyword">throws</strong> Exception
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>      {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>          <em class="jxr_comment">// check input message</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Hl7v2TransactionConfiguration</a> config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Hl7v2TransactionConfiguration</a> config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>          config.checkRequestAcceptance(exchange.getIn().getBody(Message.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>          <em class="jxr_comment">// run the route</em>
@@ -69,12 +69,12 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>          interceptor.getWrappedProcessor().process(exchange);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          <em class="jxr_comment">// check output message</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Hl7v2TransactionConfiguration</a> config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Hl7v2TransactionConfiguration</a> config = interceptor.getEndpoint().getHl7v2TransactionConfiguration();
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          config.checkResponseAcceptance(Exchanges.resultMessage(exchange).getBody(Message.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

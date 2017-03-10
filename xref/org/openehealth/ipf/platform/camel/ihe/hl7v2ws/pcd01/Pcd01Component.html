@@ -23,109 +23,55 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.ErrorCode;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> ca.uhn.hl7v2.Version;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.Endpoint;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.gazelle.validation.profile.pcd.PcdTransactions;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsComponent;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2ws.SimpleHl7v2WsEndpoint;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> javax.xml.namespace.QName;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * Camel component for the IHE PCD-01 transaction.</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2ws/pcd01/Pcd01Component.html">Pcd01Component</a> <strong class="jxr_keyword">extends</strong> AbstractHl7v2WsComponent&lt;WsAuditDataset&gt; {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String NS_URI = <span class="jxr_string">"urn:ihe:pcd:dec:2010"</span>;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/WsTransactionConfiguration.html">WsTransactionConfiguration</a> WS_CONFIG = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/WsTransactionConfiguration.html">WsTransactionConfiguration</a>(
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>              <strong class="jxr_keyword">new</strong> QName(NS_URI, <span class="jxr_string">"DeviceObservationConsumer_Service"</span>, <span class="jxr_string">"ihe"</span>),
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>              Pcd01PortType.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>              <strong class="jxr_keyword">new</strong> QName(NS_URI, <span class="jxr_string">"DeviceObservationConsumer_Binding_Soap12"</span>, <span class="jxr_string">"ihe"</span>),
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>              false,
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>              <span class="jxr_string">"wsdl/pcd01/pcd01.wsdl"</span>,
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>              <strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>              false,
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>              false,
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>              false);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Hl7v2TransactionConfiguration</a> HL7V2_CONFIG = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Hl7v2TransactionConfiguration</a>(
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>              <strong class="jxr_keyword">new</strong> Version[] {Version.V26},
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>              <span class="jxr_string">"PCD01"</span>,
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>              <span class="jxr_string">"IPF"</span>,
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>              ErrorCode.APPLICATION_INTERNAL_ERROR,
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>              ErrorCode.APPLICATION_INTERNAL_ERROR,
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>              <strong class="jxr_keyword">new</strong> String[] {<span class="jxr_string">"ORU"</span>},
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>              <strong class="jxr_keyword">new</strong> String[] {<span class="jxr_string">"R01"</span>},
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>              <strong class="jxr_keyword">new</strong> String[] {<span class="jxr_string">"ACK"</span>},
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>              <strong class="jxr_keyword">new</strong> String[] {<span class="jxr_string">"*"</span>},
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>              <strong class="jxr_keyword">null</strong>,
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>              <strong class="jxr_keyword">null</strong>,
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>              HapiContextFactory.createHapiContext(PcdTransactions.PCD1));
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2/NakFactory.html">NakFactory</a> NAK_FACTORY = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2/NakFactory.html">NakFactory</a>(HL7V2_CONFIG, false, <span class="jxr_string">"ACK^R01^ACK"</span>);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      @Override
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      @SuppressWarnings(<span class="jxr_string">"raw"</span>) <em class="jxr_comment">// Required because of base class</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">protected</strong> Endpoint createEndpoint(String uri, String remaining, @SuppressWarnings(<span class="jxr_string">"rawtypes"</span>) Map parameters) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SimpleHl7v2WsEndpoint&lt;WsAuditDataset, Pcd01Component&gt;(
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>                  uri,
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  remaining,
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>                  <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  getCustomInterceptors(parameters),
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  getFeatures(parameters),
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>                  getSchemaLocations(parameters),
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  getProperties(parameters),
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>                  Pcd01Service.<strong class="jxr_keyword">class</strong>) {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>              @Override
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>              <strong class="jxr_keyword">public</strong> AbstractWsProducer&lt;WsAuditDataset, WsTransactionConfiguration, ?, ?&gt; getProducer(AbstractWsEndpoint&lt;WsAuditDataset, WsTransactionConfiguration&gt; endpoint,
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>                                                    JaxWsClientFactory&lt;WsAuditDataset&gt; clientFactory) {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>                  <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SimpleWsProducer&lt;&gt;(endpoint, clientFactory, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>              }
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>          };
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>      }
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      @Override
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2/Hl7v2TransactionConfiguration.html">Hl7v2TransactionConfiguration</a> getHl7v2TransactionConfiguration() {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">return</strong> HL7V2_CONFIG;
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      }
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      @Override
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2/NakFactory.html">NakFactory</a> getNakFactory() {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>         <strong class="jxr_keyword">return</strong> NAK_FACTORY;
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     }
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     @Override
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/WsTransactionConfiguration.html">WsTransactionConfiguration</a> getWsTransactionConfiguration() {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>         <strong class="jxr_keyword">return</strong> WS_CONFIG;
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>     }
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>     @Override
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">public</strong> AuditStrategy&lt;WsAuditDataset&gt; getClientAuditStrategy() {
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;  <em class="jxr_comment">// not defined for this transaction</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>     }
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>     @Override
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>     <strong class="jxr_keyword">public</strong> AuditStrategy&lt;WsAuditDataset&gt; getServerAuditStrategy() {
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;   <em class="jxr_comment">// not defined for this transaction</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>     }
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> }
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.camel.Endpoint;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsComponent;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.hl7v2ws.SimpleHl7v2WsEndpoint;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.hl7v2ws.PCD.Interactions.PCD_01;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Camel component for the IHE PCD-01 transaction.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2ws/pcd01/Pcd01Component.html">Pcd01Component</a> <strong class="jxr_keyword">extends</strong> AbstractHl7v2WsComponent&lt;WsAuditDataset&gt; {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/platform/camel/ihe/hl7v2ws/pcd01/Pcd01Component.html">Pcd01Component</a>() {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>          <strong class="jxr_keyword">super</strong>(PCD_01);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      }
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      @Override
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      @SuppressWarnings(<span class="jxr_string">"raw"</span>) <em class="jxr_comment">// Required because of base class</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">protected</strong> Endpoint createEndpoint(String uri, String remaining, @SuppressWarnings(<span class="jxr_string">"rawtypes"</span>) Map parameters) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SimpleHl7v2WsEndpoint&lt;WsAuditDataset, Pcd01Component&gt;(
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>                  uri,
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  remaining,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>                  <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  getCustomInterceptors(parameters),
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  getFeatures(parameters),
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  getSchemaLocations(parameters),
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>                  getProperties(parameters),
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                  Pcd01Service.<strong class="jxr_keyword">class</strong>) {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>              @Override
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>              <strong class="jxr_keyword">public</strong> AbstractWsProducer&lt;WsAuditDataset, WsTransactionConfiguration, ?, ?&gt; getProducer(
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>                      AbstractWsEndpoint&lt;WsAuditDataset, WsTransactionConfiguration&gt; endpoint,
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>                      JaxWsClientFactory&lt;WsAuditDataset&gt; clientFactory) {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>                  <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SimpleWsProducer&lt;&gt;(endpoint, clientFactory, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>              }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          };
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      }
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

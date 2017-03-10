@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditStrategy;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ServerAuditStrategy;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti61.Iti61AuditStrategy;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti62.Iti62ServerAuditStrategy;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.rad69.Rad69AuditStrategy;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.rad75.Rad75AuditStrategy;
@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          map.put(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"urn:ihe:iti:xds-b:2007"</span>, <span class="jxr_string">"DocumentRegistry_RegisterOnDemandDocumentEntry"</span>),
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>                  <strong class="jxr_keyword">new</strong> Iti61AuditStrategy(<strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          map.put(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"urn:ihe:iti:xds-b:2010"</span>, <span class="jxr_string">"DocumentRegistry_DeleteDocumentSet"</span>),
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  <strong class="jxr_keyword">new</strong> Iti62ServerAuditStrategy());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  <strong class="jxr_keyword">new</strong> Iti62AuditStrategy(<strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          map.put(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"urn:ihe:iti:xds-b:2007"</span>, <span class="jxr_string">"RespondingGateway_CrossGatewayFetch"</span>),
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>                  <strong class="jxr_keyword">new</strong> Iti63AuditStrategy(<strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          map.put(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"urn:ihe:rad:xdsi-b:2009"</span>, <span class="jxr_string">"DocumentRepository_RetrieveImagingDocumentSet"</span>),
@@ -153,6 +153,6 @@
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

@@ -23,7 +23,7 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String descriptorList = <span class="jxr_string">"base-context.xml;extender-context.xml"</span>;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String[] args) {
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String... args) {
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>          String customContextFiles = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>          <strong class="jxr_keyword">for</strong> (String customContext : args) {
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>              <strong class="jxr_keyword">if</strong> (Base.<strong class="jxr_keyword">class</strong>.getClassLoader().getResource(customContext) != <strong class="jxr_keyword">null</strong>) {
@@ -46,6 +46,6 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>              Map&lt;String, Object&gt; headers,
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>              ExchangePattern exchangePattern) 
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">final</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/ws/correlation/AsynchronyCorrelator.html">AsynchronyCorrelator</a> correlator = ((AbstractWsEndpoint) getConsumer().getEndpoint()).getCorrelator();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">final</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/ws/correlation/AsynchronyCorrelator.html">AsynchronyCorrelator</a> correlator = getConsumer().getEndpoint().getCorrelator();
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          MessageContext messageContext = <strong class="jxr_keyword">new</strong> WebServiceContextImpl().getMessageContext();
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          AddressingProperties apropos = (AddressingProperties) messageContext.get(JAXWSAConstants.ADDRESSING_PROPERTIES_INBOUND);
@@ -134,6 +134,6 @@
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

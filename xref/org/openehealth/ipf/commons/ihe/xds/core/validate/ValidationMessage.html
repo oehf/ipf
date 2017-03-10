@@ -53,132 +53,135 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      NO_CLASSIFICATION_NAME_OBJ(<span class="jxr_string">"Required a display name element for classification scheme %s and classified object %s. The name is used to communicate the meaning of scheme %2$s to a human reader."</span>),
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      WRONG_CLASSIFIED_OBJ(<span class="jxr_string">"Classification does not classify expected object: %1s, Was = %2s"</span>),
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      WRONG_NODE_REPRESENTATION(<span class="jxr_string">"Classification does not specify its node representation. Scheme = %1s"</span>),
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      CX_TOO_MANY_COMPONENTS(<span class="jxr_string">"Only the ID number and the assigning authority can be definied for a CX value"</span>),
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      CX_NEEDS_ID(<span class="jxr_string">"ID number must be specified for a CX value"</span>),
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      CX_NEEDS_ID_TYPE_CODE(<span class="jxr_string">"ID type code must be specified for a CXi value"</span>),
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      HD_MUST_NOT_HAVE_NAMESPACE_ID(<span class="jxr_string">"The namespace ID should not be defined for an assigning authority: %1s"</span>),
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      UNIVERSAL_ID_TYPE_MUST_BE_ISO(<span class="jxr_string">"The universal ID type of an assigning authority must be ISO: %1s"</span>),
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      HD_NEEDS_UNIVERSAL_ID(<span class="jxr_string">"The universal ID must be defined for an assigning authority: %1s"</span>),
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      MISSING_EXTERNAL_IDENTIFIER(<span class="jxr_string">"External identifier value is missing: %1s"</span>),
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      INVALID_HASH_CODE(<span class="jxr_string">"Invalid format of hash code: %1s"</span>),
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      INVALID_LANGUAGE_CODE(<span class="jxr_string">"Invalid format of language code: %1s"</span>),
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      OID_TOO_LONG(<span class="jxr_string">"OID must not be longer than 64 characters: %1s"</span>),
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      INVALID_OID(<span class="jxr_string">"OID contains invalid characters: %1s"</span>),
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      INVALID_PID(<span class="jxr_string">"Invalid PID format: %1s"</span>),
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      INVALID_UUID(<span class="jxr_string">"UUID contains invalid characters: %1s"</span>),
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      UNSUPPORTED_PID(<span class="jxr_string">"PID number not supported in XDS: %1s"</span>),
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      INVALID_NUMBER_FORMAT(<span class="jxr_string">"Invalid number format: %1s"</span>),
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      RECIPIENT_LIST_EMPTY(<span class="jxr_string">"Recipient list should not be empty"</span>),
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      RECIPIENT_EMPTY(<span class="jxr_string">"Recipient list value should not be empty"</span>),
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      INVALID_RECIPIENT(<span class="jxr_string">"Invalid format of recipient list element: %1s"</span>),
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      SLOT_VALUE_TOO_LONG(<span class="jxr_string">"Slot value length exceeds ebXML limit in slot: %1s"</span>),
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      MISSING_SLOT_NAME(<span class="jxr_string">"Missing slot name"</span>),
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      DUPLICATE_SLOT_NAME(<span class="jxr_string">"Duplicate slot name: %1s"</span>),
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      WRONG_QUERY_SLOT_NAME(<span class="jxr_string">"Slot name must be preceded by '$': %s"</span>),
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      WRONG_NUMBER_OF_SLOT_VALUES(<span class="jxr_string">"Slot contains incorrect amount of values. Slot = %1s, allowed = [%2s-%3s], Was = %4s"</span>),
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      EMPTY_SLOT_VALUE(<span class="jxr_string">"Slot value is undefined. Slot = %1s"</span>),
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      INVALID_TIME(<span class="jxr_string">"Invalid time format: %1s"</span>),
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      NULL_URI(<span class="jxr_string">"URI slot did not contain a value"</span>),
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      EMPTY_URI(<span class="jxr_string">"Empty URI although slot is specified"</span>),
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      INVALID_URI(<span class="jxr_string">"Invalid URI: %1s"</span>),
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      NULL_URI_PART(<span class="jxr_string">"A URI part did not contain a value"</span>),
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      INVALID_URI_PART(<span class="jxr_string">"Invalid URI part syntax: %1s"</span>),
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      MISSING_URI_PART(<span class="jxr_string">"Missing URI part with index: %1s"</span>),
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      PERSON_MISSING_NAME_AND_ID(<span class="jxr_string">"Either an id number or a name has to be specified for a person: %1s"</span>),
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      PERSON_HD_MISSING(<span class="jxr_string">"If an id number is specified for a person, the assigning authority has to be specified as well: %1s"</span>),
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      ORGANIZATION_NAME_MISSING(<span class="jxr_string">"An organization name has to be specified for an organization: %1s"</span>),
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      ORGANIZATION_TOO_MANY_COMPONENTS(<span class="jxr_string">"An organization should not specify data other than its ID and name"</span>),
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>      MISSING_DOC_ENTRY_FOR_DOCUMENT(<span class="jxr_string">"A document was provided without a corresponding document entry. UUID=%1s"</span>, ErrorCode.MISSING_DOCUMENT_METADATA),
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      MISSING_DOCUMENT_FOR_DOC_ENTRY(<span class="jxr_string">"A document entry was provided without a corresponding document. UUID=%1s"</span>, ErrorCode.MISSING_DOCUMENT),
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY(<span class="jxr_string">"Document attachment is not allowed in entry with UUID=%1s"</span>),
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      UNKNOWN_QUERY_TYPE(<span class="jxr_string">"Unknown query type: %1s"</span>),
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      UNSUPPORTED_QUERY_TYPE(<span class="jxr_string">"Query type not supported: %s"</span>),
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      MISSING_SQL_QUERY_TEXT(<span class="jxr_string">"Missing SQL query text"</span>),
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      UNKNOWN_RETURN_TYPE(<span class="jxr_string">"Unknown return type: %1s"</span>),
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      MISSING_REQUIRED_QUERY_PARAMETER(<span class="jxr_string">"Missing required query parameter: %1s"</span>),
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>      INVALID_QUERY_PARAMETER_VALUE(<span class="jxr_string">"Invalid value for query parameter: %1s"</span>),
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER(<span class="jxr_string">"Query contains parameters that are mutually exclusive to each other: %1s"</span>),
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      TOO_MANY_VALUES_FOR_QUERY_PARAMETER(<span class="jxr_string">"Too many values for query parameter: %1s"</span>),
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      PARAMETER_VALUE_NOT_STRING(<span class="jxr_string">"Query parameter value is not specified as a string: %1s"</span>),
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      PARAMETER_VALUE_NOT_STRING_LIST(<span class="jxr_string">"Query parameter value is not specified as a list of strings: %1s"</span>),
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      STUDY_INSTANCE_UID_MUST_BE_SPECIFIED(<span class="jxr_string">"The imaging document Study Instance UID is missing"</span>),
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>      TRANSFER_SYNTAX_UID_LIST_MUST_BE_SPECIFIED(<span class="jxr_string">"The transfer syntax UID list is empty"</span>),
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      SERIES_INSTANCE_UID_MUST_BE_SPECIFIED(<span class="jxr_string">"The imaging document Series Instance UID is missing"</span>),
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>      REPO_ID_MUST_BE_SPECIFIED(<span class="jxr_string">"The repository Unique ID is missing"</span>),
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     DOC_ID_MUST_BE_SPECIFIED(<span class="jxr_string">"The document Unique ID is missing"</span>),
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     ON_DEMAND_DOC_ID_MUST_DIFFER(<span class="jxr_string">"New ID of the document should differ from the On-Demand document entry ID"</span>),
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     WRONG_DOCUMENT_ENTRY_TYPE(<span class="jxr_string">"Wrong document entry type (stable/on-demand): %s"</span>),
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     MIME_TYPE_MUST_BE_SPECIFIED(<span class="jxr_string">"The document MIME type is missing"</span>),
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     INVALID_STATUS_IN_RESPONSE(<span class="jxr_string">"Invalid status in response"</span>),
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     INVALID_ERROR_INFO_IN_RESPONSE(<span class="jxr_string">"Invalid error info in response"</span>),
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>     INVALID_ERROR_CODE_IN_RESPONSE(<span class="jxr_string">"Invalid error code in response"</span>),
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>     INVALID_SEVERITY_IN_RESPONSE(<span class="jxr_string">"Invalid severity in response"</span>),
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>     MISSING_OBJ_REF(<span class="jxr_string">"Missing object reference"</span>),
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>     DEPRECATED_OBJ_CANNOT_BE_TRANSFORMED(<span class="jxr_string">"A deprecated entry cannot be transformed or appended"</span>, ErrorCode.REGISTRY_DEPRECATED_DOCUMENT_ERROR),
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>     DIFFERENT_HASH_CODE_IN_RESUBMISSION(<span class="jxr_string">"A document was resubmitted with a different hash code"</span>, ErrorCode.NON_IDENTICAL_HASH),
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>     UNKNOWN_PATIENT_ID(<span class="jxr_string">"Patient Id is unknown"</span>, ErrorCode.UNKNOWN_PATIENT_ID),
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>     INCORRECT_HASH(<span class="jxr_string">"Hash of submitted document does not match value supplied in the meta data"</span>),
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>     INCORRECT_SIZE(<span class="jxr_string">"Size of submitted document does not match value supplied in the meta data"</span>),
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>     DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER(<span class="jxr_string">"HasMember association may not specify a relationship type"</span>),
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>     RESULT_NOT_SINGLE_PATIENT(<span class="jxr_string">"Query result contains entries for multiple patients"</span>, ErrorCode.RESULT_NOT_SINGLE_PATIENT),
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>     HOME_COMMUNITY_ID_MUST_BE_SPECIFIED(<span class="jxr_string">"Home community ID is missing"</span>, ErrorCode.MISSING_HOME_COMMUNITY_ID),
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>     WRONG_QUERY_RETURN_TYPE(<span class="jxr_string">"Wrong query return type: %s"</span>),
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>     AUTHOR_INCOMPLETE(<span class="jxr_string">"At least an authorPerson, authorTelecommunication, or authorInstitution sub-attribute must be present in %s"</span>),
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>     MISSING_SNAPSHOT_ASSOCIATION(<span class="jxr_string">"IsSnapshot Association specifies an %s document entry, but it was not provided: %s"</span>),
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>     WRONG_SNAPSHOT_ASSOCIATION_STATUS(<span class="jxr_string">"The targetObject DocumentEntry has not availabilityStatus of Approved"</span>),
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>     LOGICAL_ID_MISSING(<span class="jxr_string">"Logical ID is missing on Update Document Set request"</span>),
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>     LOGICAL_ID_EQUALS_ENTRY_UUID(<span class="jxr_string">"Logical ID: %s required to have a different value then entryUUID: %s on Update Document Set request"</span>),
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>     LOGICAL_ID_SAME(<span class="jxr_string">"Same logical ID %s appears more than once in a single request"</span>),
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     VERSION_INFO_MISSING(<span class="jxr_string">"Version Info is missing on Update Document Set request"</span>),
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>     MISSING_PREVIOUS_VERSION(<span class="jxr_string">"A previous version must be defined for each association involving a document update"</span>),
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     MISSING_ORIGINAL_STATUS(<span class="jxr_string">"UpdateAvailabilityStatus Association must specify an original document status"</span>),
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>     MISSING_NEW_STATUS(<span class="jxr_string">"UpdateAvailabilityStatus Association must specify an new document status"</span>),
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>     MISSING_HAS_MEMBER_ASSOCIATION(<span class="jxr_string">"No SubmissionSet to DocumentEntry/Folder HasMember Association found for the entry: %s"</span>),
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>     MISSING_SUBMISSION_SET(<span class="jxr_string">"Association specifies a sourceObject: %s submission set, but it was not provided"</span>),
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>     MISSING_ASSOCIATION(<span class="jxr_string">"Association specifies a targetObject: %s association, but it was not provided"</span>),
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>     OBJECT_SHALL_NOT_BE_SPECIFIED(<span class="jxr_string">"%s shall not be specified."</span>),
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>     EMPTY_REFERENCE_LIST(<span class="jxr_string">"No object references specified for %s"</span>),
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>     WRONG_TELECOM_USE(<span class="jxr_string">"Wrong telecom use code (XTN-2) : %s"</span>),
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>     WRONG_TELECOM_TYPE(<span class="jxr_string">"Wrong telecom type code (XTN-3) : %s"</span>),
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>     MISSING_TELECOM_PARAM(<span class="jxr_string">"A required telecom parameter is missing : %s"</span>),
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>     INCONSISTENT_TELECOM_PARAM(<span class="jxr_string">"Inconsistent telecom parameters : %s"</span>),
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>     SUBMISSION_SET_STATUS_MANDATORY(<span class="jxr_string">"Submission set status is mandatory for each association involving a submission set as a target and document entry as its source"</span>),
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>     INVALID_DOCUMENT_AVAILABILITY(<span class="jxr_string">"Unsupported document availability: %s"</span>),
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>     WRONG_REFERENCE_ID_TYPE(<span class="jxr_string">"Wrong reference ID type: %s"</span>),
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>     LIMITED_METADATA_REQUIRED(<span class="jxr_string">"limitedMetadata classification must be provided in %s"</span>),
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>     LIMITED_METADATA_PROHIBITED(<span class="jxr_string">"limitedMetadata classification is not allowed in %s"</span>),
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>     MISSING_FOLDER_NAME(<span class="jxr_string">"Folder name not provided in %s"</span>);
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String text;
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/ErrorCode.html">ErrorCode</a> errorCode;
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>     
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationMessage.html">ValidationMessage</a>(String text, <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/ErrorCode.html">ErrorCode</a> errorCode) {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>         <strong class="jxr_keyword">this</strong>.text = text;
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>         <strong class="jxr_keyword">this</strong>.errorCode = errorCode;
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>     }
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationMessage.html">ValidationMessage</a>(String text) {
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>         <strong class="jxr_keyword">this</strong>.text = text;
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>         errorCode = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>     }
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">     * @return a textual representation of this message.</em>
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>     <strong class="jxr_keyword">public</strong> String getText() {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>         <strong class="jxr_keyword">return</strong> text;
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>     }
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">     * @return the error code associated with this message.</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/ErrorCode.html">ErrorCode</a> getErrorCode() {
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>         <strong class="jxr_keyword">return</strong> errorCode;
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>     }
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> }
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      CX_TOO_MANY_COMPONENTS(<span class="jxr_string">"Only the ID number and the assigning authority can be defined for a CX value"</span>),
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      CX_NEEDS_ID(<span class="jxr_string">"ID number must be specified for a CX/CXi value"</span>),
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      CXI_TOO_MANY_COMPONENTS(<span class="jxr_string">"Only the ID number, assigning authority, and identifier type code can be defined for a CXi value"</span>),
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      CXI_INCOMPLETE_ASSIGNING_AUTHORITY(<span class="jxr_string">"Either namespace ID or universal ID + universal ID type must be present in a CXi assigning authority"</span>),
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      CXI_NEEDS_ID_TYPE_CODE(<span class="jxr_string">"ID type code must be specified for a CXi value"</span>),
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      HD_MUST_NOT_HAVE_NAMESPACE_ID(<span class="jxr_string">"The namespace ID should not be defined for an assigning authority: %1s"</span>),
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      UNIVERSAL_ID_TYPE_MUST_BE_ISO(<span class="jxr_string">"The universal ID type of an assigning authority must be ISO: %1s"</span>),
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      HD_NEEDS_UNIVERSAL_ID(<span class="jxr_string">"The universal ID must be defined for an assigning authority: %1s"</span>),
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      MISSING_EXTERNAL_IDENTIFIER(<span class="jxr_string">"External identifier value is missing: %1s"</span>),
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      INVALID_HASH_CODE(<span class="jxr_string">"Invalid format of hash code: %1s"</span>),
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      INVALID_LANGUAGE_CODE(<span class="jxr_string">"Invalid format of language code: %1s"</span>),
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      OID_TOO_LONG(<span class="jxr_string">"OID must not be longer than 64 characters: %1s"</span>),
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      INVALID_OID(<span class="jxr_string">"OID contains invalid characters: %1s"</span>),
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      INVALID_PID(<span class="jxr_string">"Invalid PID format: %1s"</span>),
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      INVALID_UUID(<span class="jxr_string">"UUID contains invalid characters: %1s"</span>),
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      UNSUPPORTED_PID(<span class="jxr_string">"PID number not supported in XDS: %1s"</span>),
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      INVALID_NUMBER_FORMAT(<span class="jxr_string">"Invalid number format: %1s"</span>),
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      RECIPIENT_LIST_EMPTY(<span class="jxr_string">"Recipient list should not be empty"</span>),
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      RECIPIENT_EMPTY(<span class="jxr_string">"Recipient list value should not be empty"</span>),
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      INVALID_RECIPIENT(<span class="jxr_string">"Invalid format of recipient list element: %1s"</span>),
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      SLOT_VALUE_TOO_LONG(<span class="jxr_string">"Slot value length exceeds ebXML limit in slot: %1s"</span>),
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      MISSING_SLOT_NAME(<span class="jxr_string">"Missing slot name"</span>),
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      DUPLICATE_SLOT_NAME(<span class="jxr_string">"Duplicate slot name: %1s"</span>),
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      WRONG_QUERY_SLOT_NAME(<span class="jxr_string">"Slot name must be preceded by '$': %s"</span>),
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      WRONG_NUMBER_OF_SLOT_VALUES(<span class="jxr_string">"Slot contains incorrect amount of values. Slot = %1s, allowed = [%2s-%3s], Was = %4s"</span>),
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      EMPTY_SLOT_VALUE(<span class="jxr_string">"Slot value is undefined. Slot = %1s"</span>),
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      INVALID_TIME(<span class="jxr_string">"Invalid time format: %1s"</span>),
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      NULL_URI(<span class="jxr_string">"URI slot did not contain a value"</span>),
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      EMPTY_URI(<span class="jxr_string">"Empty URI although slot is specified"</span>),
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      INVALID_URI(<span class="jxr_string">"Invalid URI: %1s"</span>),
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      NULL_URI_PART(<span class="jxr_string">"A URI part did not contain a value"</span>),
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      INVALID_URI_PART(<span class="jxr_string">"Invalid URI part syntax: %1s"</span>),
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      MISSING_URI_PART(<span class="jxr_string">"Missing URI part with index: %1s"</span>),
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      PERSON_MISSING_NAME_AND_ID(<span class="jxr_string">"Either an id number or a name has to be specified for a person: %1s"</span>),
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      PERSON_HD_MISSING(<span class="jxr_string">"If an id number is specified for a person, the assigning authority has to be specified as well: %1s"</span>),
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      ORGANIZATION_NAME_MISSING(<span class="jxr_string">"An organization name has to be specified for an organization: %1s"</span>),
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      ORGANIZATION_TOO_MANY_COMPONENTS(<span class="jxr_string">"An organization should not specify data other than its ID and name"</span>),
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      MISSING_DOC_ENTRY_FOR_DOCUMENT(<span class="jxr_string">"A document was provided without a corresponding document entry. UUID=%1s"</span>, ErrorCode.MISSING_DOCUMENT_METADATA),
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      MISSING_DOCUMENT_FOR_DOC_ENTRY(<span class="jxr_string">"A document entry was provided without a corresponding document. UUID=%1s"</span>, ErrorCode.MISSING_DOCUMENT),
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY(<span class="jxr_string">"Document attachment is not allowed in entry with UUID=%1s"</span>),
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      UNKNOWN_QUERY_TYPE(<span class="jxr_string">"Unknown query type: %1s"</span>),
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      UNSUPPORTED_QUERY_TYPE(<span class="jxr_string">"Query type not supported: %s"</span>),
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      MISSING_SQL_QUERY_TEXT(<span class="jxr_string">"Missing SQL query text"</span>),
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      UNKNOWN_RETURN_TYPE(<span class="jxr_string">"Unknown return type: %1s"</span>),
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      MISSING_REQUIRED_QUERY_PARAMETER(<span class="jxr_string">"Missing required query parameter: %1s"</span>),
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      INVALID_QUERY_PARAMETER_VALUE(<span class="jxr_string">"Invalid value for query parameter: %1s"</span>),
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER(<span class="jxr_string">"Query contains parameters that are mutually exclusive to each other: %1s"</span>),
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      TOO_MANY_VALUES_FOR_QUERY_PARAMETER(<span class="jxr_string">"Too many values for query parameter: %1s"</span>),
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      PARAMETER_VALUE_NOT_STRING(<span class="jxr_string">"Query parameter value is not specified as a string: %1s"</span>),
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>      PARAMETER_VALUE_NOT_STRING_LIST(<span class="jxr_string">"Query parameter value is not specified as a list of strings: %1s"</span>),
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      STUDY_INSTANCE_UID_MUST_BE_SPECIFIED(<span class="jxr_string">"The imaging document Study Instance UID is missing"</span>),
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      TRANSFER_SYNTAX_UID_LIST_MUST_BE_SPECIFIED(<span class="jxr_string">"The transfer syntax UID list is empty"</span>),
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     SERIES_INSTANCE_UID_MUST_BE_SPECIFIED(<span class="jxr_string">"The imaging document Series Instance UID is missing"</span>),
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     REPO_ID_MUST_BE_SPECIFIED(<span class="jxr_string">"The repository Unique ID is missing"</span>),
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     DOC_ID_MUST_BE_SPECIFIED(<span class="jxr_string">"The document Unique ID is missing"</span>),
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     ON_DEMAND_DOC_ID_MUST_DIFFER(<span class="jxr_string">"New ID of the document should differ from the On-Demand document entry ID"</span>),
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     WRONG_DOCUMENT_ENTRY_TYPE(<span class="jxr_string">"Wrong document entry type (stable/on-demand): %s"</span>),
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>     MIME_TYPE_MUST_BE_SPECIFIED(<span class="jxr_string">"The document MIME type is missing"</span>),
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>     INVALID_STATUS_IN_RESPONSE(<span class="jxr_string">"Invalid status in response"</span>),
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>     INVALID_ERROR_INFO_IN_RESPONSE(<span class="jxr_string">"Invalid error info in response"</span>),
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     INVALID_ERROR_CODE_IN_RESPONSE(<span class="jxr_string">"Invalid error code in response"</span>),
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     INVALID_SEVERITY_IN_RESPONSE(<span class="jxr_string">"Invalid severity in response"</span>),
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>     MISSING_OBJ_REF(<span class="jxr_string">"Missing object reference"</span>),
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>     DEPRECATED_OBJ_CANNOT_BE_TRANSFORMED(<span class="jxr_string">"A deprecated entry cannot be transformed or appended"</span>, ErrorCode.REGISTRY_DEPRECATED_DOCUMENT_ERROR),
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>     DIFFERENT_HASH_CODE_IN_RESUBMISSION(<span class="jxr_string">"A document was resubmitted with a different hash code"</span>, ErrorCode.NON_IDENTICAL_HASH),
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>     UNKNOWN_PATIENT_ID(<span class="jxr_string">"Patient Id is unknown"</span>, ErrorCode.UNKNOWN_PATIENT_ID),
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     INCORRECT_HASH(<span class="jxr_string">"Hash of submitted document does not match value supplied in the meta data"</span>),
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>     INCORRECT_SIZE(<span class="jxr_string">"Size of submitted document does not match value supplied in the meta data"</span>),
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER(<span class="jxr_string">"HasMember association may not specify a relationship type"</span>),
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>     RESULT_NOT_SINGLE_PATIENT(<span class="jxr_string">"Query result contains entries for multiple patients"</span>, ErrorCode.RESULT_NOT_SINGLE_PATIENT),
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>     HOME_COMMUNITY_ID_MUST_BE_SPECIFIED(<span class="jxr_string">"Home community ID is missing"</span>, ErrorCode.MISSING_HOME_COMMUNITY_ID),
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>     WRONG_QUERY_RETURN_TYPE(<span class="jxr_string">"Wrong query return type: %s"</span>),
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     AUTHOR_INCOMPLETE(<span class="jxr_string">"At least an authorPerson, authorTelecommunication, or authorInstitution sub-attribute must be present in %s"</span>),
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     MISSING_SNAPSHOT_ASSOCIATION(<span class="jxr_string">"IsSnapshot Association specifies an %s document entry, but it was not provided: %s"</span>),
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     WRONG_SNAPSHOT_ASSOCIATION_STATUS(<span class="jxr_string">"The targetObject DocumentEntry has not availabilityStatus of Approved"</span>),
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>     LOGICAL_ID_MISSING(<span class="jxr_string">"Logical ID is missing on Update Document Set request"</span>),
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>     LOGICAL_ID_EQUALS_ENTRY_UUID(<span class="jxr_string">"Logical ID: %s required to have a different value then entryUUID: %s on Update Document Set request"</span>),
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>     LOGICAL_ID_SAME(<span class="jxr_string">"Same logical ID %s appears more than once in a single request"</span>),
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>     VERSION_INFO_MISSING(<span class="jxr_string">"Version Info is missing on Update Document Set request"</span>),
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     MISSING_PREVIOUS_VERSION(<span class="jxr_string">"A previous version must be defined for each association involving a document update"</span>),
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     MISSING_ORIGINAL_STATUS(<span class="jxr_string">"UpdateAvailabilityStatus Association must specify an original document status"</span>),
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>     MISSING_NEW_STATUS(<span class="jxr_string">"UpdateAvailabilityStatus Association must specify an new document status"</span>),
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>     MISSING_HAS_MEMBER_ASSOCIATION(<span class="jxr_string">"No SubmissionSet to DocumentEntry/Folder HasMember Association found for the entry: %s"</span>),
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>     MISSING_SUBMISSION_SET(<span class="jxr_string">"Association specifies a sourceObject: %s submission set, but it was not provided"</span>),
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     MISSING_ASSOCIATION(<span class="jxr_string">"Association specifies a targetObject: %s association, but it was not provided"</span>),
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>     OBJECT_SHALL_NOT_BE_SPECIFIED(<span class="jxr_string">"%s shall not be specified."</span>),
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     EMPTY_REFERENCE_LIST(<span class="jxr_string">"No object references specified for %s"</span>),
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>     WRONG_TELECOM_USE(<span class="jxr_string">"Wrong telecom use code (XTN-2): %s"</span>),
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     WRONG_TELECOM_TYPE(<span class="jxr_string">"Wrong telecom type code (XTN-3): %s"</span>),
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>     MISSING_TELECOM_PARAM(<span class="jxr_string">"A required telecom parameter is missing: %s"</span>),
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     INCONSISTENT_TELECOM_PARAM(<span class="jxr_string">"Inconsistent telecom parameters: %s"</span>),
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     SUBMISSION_SET_STATUS_MANDATORY(<span class="jxr_string">"Submission set status is mandatory for each association involving a submission set as a target and document entry as its source"</span>),
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>     INVALID_DOCUMENT_AVAILABILITY(<span class="jxr_string">"Unsupported document availability: %s"</span>),
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     WRONG_REFERENCE_ID_TYPE(<span class="jxr_string">"Wrong reference ID type: %s"</span>),
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>     LIMITED_METADATA_REQUIRED(<span class="jxr_string">"limitedMetadata classification must be provided in %s"</span>),
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>     LIMITED_METADATA_PROHIBITED(<span class="jxr_string">"limitedMetadata classification is not allowed in %s"</span>),
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     MISSING_FOLDER_NAME(<span class="jxr_string">"Folder name not provided in %s"</span>),
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>     TIME_PRECISION_TOO_LOW(<span class="jxr_string">"Precision of the timestamp is too low: %s"</span>);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String text;
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/ErrorCode.html">ErrorCode</a> errorCode;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>     
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationMessage.html">ValidationMessage</a>(String text, <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/ErrorCode.html">ErrorCode</a> errorCode) {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>         <strong class="jxr_keyword">this</strong>.text = text;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         <strong class="jxr_keyword">this</strong>.errorCode = errorCode;
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>     }
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValidationMessage.html">ValidationMessage</a>(String text) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>         <strong class="jxr_keyword">this</strong>.text = text;
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>         errorCode = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     }
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">     * @return a textual representation of this message.</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>     <strong class="jxr_keyword">public</strong> String getText() {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>         <strong class="jxr_keyword">return</strong> text;
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>     }
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">     * @return the error code associated with this message.</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/ErrorCode.html">ErrorCode</a> getErrorCode() {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>         <strong class="jxr_keyword">return</strong> errorCode;
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>     }
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

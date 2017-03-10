@@ -39,41 +39,39 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/CXiValidator.html">CXiValidator</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/ValueValidator.html">ValueValidator</a> {
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/HDValidator.html">HDValidator</a> HD_VALIDATOR = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/validate/HDValidator.html">HDValidator</a>();
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      @Override
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate(String hl7CX) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/ReferenceId.html">ReferenceId</a> referenceId = Hl7v2Based.parse(hl7CX, ReferenceId.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>          metaDataAssert(referenceId != <strong class="jxr_keyword">null</strong>, CX_NEEDS_ID);
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>          CX cx = referenceId.getHapiObject();
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <em class="jxr_comment">// prohibited fields</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>          metaDataAssert(isEmpty(cx.getCx2_CheckDigit().getValue()), CX_TOO_MANY_COMPONENTS);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>          metaDataAssert(isEmpty(cx.getCx3_CheckDigitScheme().getValue()), CX_TOO_MANY_COMPONENTS);
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>          metaDataAssert(isEmpty(cx.getCx7_EffectiveDate().getValue()), CX_TOO_MANY_COMPONENTS);
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>          metaDataAssert(isEmpty(cx.getCx8_ExpirationDate().getValue()), CX_TOO_MANY_COMPONENTS);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>          metaDataAssert(isEmptyField(cx.getCx9_AssigningJurisdiction()), CX_TOO_MANY_COMPONENTS);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          metaDataAssert(isEmptyField(cx.getCx10_AssigningAgencyOrDepartment()), CX_TOO_MANY_COMPONENTS);
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      @Override
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate(String hl7CX) <strong class="jxr_keyword">throws</strong> XDSMetaDataException {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>          <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/ReferenceId.html">ReferenceId</a> referenceId = Hl7v2Based.parse(hl7CX, ReferenceId.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>          metaDataAssert(referenceId != <strong class="jxr_keyword">null</strong>, CX_NEEDS_ID);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>          CX cx = referenceId.getHapiObject();
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          <em class="jxr_comment">// prohibited fields</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          metaDataAssert(isEmpty(cx.getCx2_CheckDigit().getValue()), CXI_TOO_MANY_COMPONENTS);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          metaDataAssert(isEmpty(cx.getCx3_CheckDigitScheme().getValue()), CXI_TOO_MANY_COMPONENTS);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          metaDataAssert(isEmptyField(cx.getCx6_AssigningFacility()), CXI_TOO_MANY_COMPONENTS);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>          metaDataAssert(isEmpty(cx.getCx7_EffectiveDate().getValue()), CXI_TOO_MANY_COMPONENTS);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          metaDataAssert(isEmpty(cx.getCx8_ExpirationDate().getValue()), CXI_TOO_MANY_COMPONENTS);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          metaDataAssert(isEmptyField(cx.getCx9_AssigningJurisdiction()), CXI_TOO_MANY_COMPONENTS);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          metaDataAssert(isEmptyField(cx.getCx10_AssigningAgencyOrDepartment()), CXI_TOO_MANY_COMPONENTS);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>          <em class="jxr_comment">// required and optional fields</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          metaDataAssert(isNotEmpty(cx.getCx1_IDNumber().getValue()), CX_NEEDS_ID, hl7CX);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          metaDataAssert(isNotEmpty(cx.getCx5_IdentifierTypeCode().getValue()), CX_NEEDS_ID_TYPE_CODE, hl7CX);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          metaDataAssert(isNotEmpty(cx.getCx5_IdentifierTypeCode().getValue()), CXI_NEEDS_ID_TYPE_CODE, hl7CX);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          HD assigningAuthority = cx.getCx4_AssigningAuthority();
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">if</strong> (! isEmptyField(assigningAuthority)) {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>              HD_VALIDATOR.validate(assigningAuthority, hl7CX);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          }
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          HD homeCommunityId = cx.getCx6_AssigningFacility();
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">if</strong> (! isEmptyField(homeCommunityId)) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>              HD_VALIDATOR.validate(homeCommunityId, hl7CX);
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          }
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  }
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>              <strong class="jxr_keyword">boolean</strong> cx41filled = isNotEmpty(assigningAuthority.getHd1_NamespaceID().getValue());
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>              <strong class="jxr_keyword">boolean</strong> cx42filled = isNotEmpty(assigningAuthority.getHd2_UniversalID().getValue());
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>              <strong class="jxr_keyword">boolean</strong> cx43filled = isNotEmpty(assigningAuthority.getHd3_UniversalIDType().getValue());
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>              metaDataAssert(cx41filled || (cx42filled &amp;&amp; cx43filled), CXI_INCOMPLETE_ASSIGNING_AUTHORITY);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          }
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * The Validator accepts a {@link Source} as input, and a {@link SchematronProfile}</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * as validation profile parameter.</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * @author Christian Ohr</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/openehealth/ipf/commons/xml/SchematronValidator.html">SchematronValidator</a> <strong class="jxr_keyword">implements</strong> Validator&lt;Source, SchematronProfile&gt; {
@@ -51,13 +51,13 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate(Source message, <a href="../../../../../org/openehealth/ipf/commons/xml/SchematronProfile.html">SchematronProfile</a> profile) {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>          <a href="../../../../../org/openehealth/ipf/commons/xml/svrl/SchematronOutput.html">SchematronOutput</a> svrl = schematronTransmogrifier.zap(message, profile);
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>          List&lt;ValidationException&gt; exceptions = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>          <strong class="jxr_keyword">for</strong> (Object o : svrl.getActivePatternAndFiredRuleAndFailedAssert()) {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>              <strong class="jxr_keyword">if</strong> (o instanceof FailedAssert) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>                  <a href="../../../../../org/openehealth/ipf/commons/xml/svrl/FailedAssert.html">FailedAssert</a> failedAssert = (FailedAssert) o;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  exceptions.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../org/openehealth/ipf/commons/core/modules/api/ValidationException.html">ValidationException</a>(message(failedAssert)));
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>              }
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>          }
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">if</strong> (! exceptions.isEmpty()) {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>          svrl.getActivePatternAndFiredRuleAndFailedAssert().stream()
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  .filter(o -&gt; o instanceof <a href="../../../../../org/openehealth/ipf/commons/xml/svrl/FailedAssert.html">FailedAssert</a>)
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>                  .forEach(o -&gt; {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                      <a href="../../../../../org/openehealth/ipf/commons/xml/svrl/FailedAssert.html">FailedAssert</a> failedAssert = (FailedAssert) o;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                      exceptions.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../org/openehealth/ipf/commons/core/modules/api/ValidationException.html">ValidationException</a>(message(failedAssert)));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  });
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">if</strong> (!exceptions.isEmpty()) {
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/openehealth/ipf/commons/xml/SchematronValidationException.html">SchematronValidationException</a>(exceptions, svrl);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>          }
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      }
@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>                  .append(<span class="jxr_string">" : "</span>)
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>                  .append(failedAssert.getText());
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">if</strong> (! failedAssert.getDiagnosticReference().isEmpty()) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">if</strong> (!failedAssert.getDiagnosticReference().isEmpty()) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>              sb.append(<span class="jxr_string">"\nDetail:"</span>);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>              <strong class="jxr_keyword">for</strong> (DiagnosticReference diagnosticReference : failedAssert.getDiagnosticReference()) {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>                  sb.append('\n').append(diagnosticReference.getText());
@@ -82,6 +82,6 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

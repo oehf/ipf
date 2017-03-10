@@ -26,69 +26,57 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.frontend.ServerFactoryBean;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.cxf.interceptor.InterceptorProvider;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.JaxWsRequestServiceFactory;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Factory for HL7 v3 Web Services.</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/Hl7v3ServiceFactory.html">Hl7v3ServiceFactory</a> <strong class="jxr_keyword">extends</strong> JaxWsServiceFactory&lt;Hl7v3AuditDataset&gt; {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     * Constructs the factory.</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     * @param wsTransactionConfiguration</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     *          the info about the service to produce.</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">     * @param serviceAddress</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">     *          the address of the service that it should be published with.</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">     * @param auditStrategy</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">     *          the auditing strategy to use.</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">     * @param customInterceptors</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">     *          user-defined custom CXF interceptors.</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">     * @param rejectionHandlingStrategy</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">     *          user-defined rejection handling strategy.</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/Hl7v3ServiceFactory.html">Hl7v3ServiceFactory</a>(
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>              <a href="../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/Hl7v3WsTransactionConfiguration.html">Hl7v3WsTransactionConfiguration</a> wsTransactionConfiguration,
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>              String serviceAddress,
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>              AuditStrategy&lt;Hl7v3AuditDataset&gt; auditStrategy,
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>              InterceptorProvider customInterceptors,
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>              <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/WsRejectionHandlingStrategy.html">WsRejectionHandlingStrategy</a> rejectionHandlingStrategy)
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">super</strong>(wsTransactionConfiguration, serviceAddress, auditStrategy,
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>                  customInterceptors, rejectionHandlingStrategy);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      @Override
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> configureInterceptors(ServerFactoryBean svrFactory) {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">super</strong>.configureInterceptors(svrFactory);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          svrFactory.getInInterceptors().add(<strong class="jxr_keyword">new</strong> InPayloadExtractorInterceptor(SOAP_BODY));
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          svrFactory.getInInterceptors().add(<strong class="jxr_keyword">new</strong> InNamespaceMergeInterceptor());
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          svrFactory.getInInterceptors().add(<strong class="jxr_keyword">new</strong> InPayloadInjectorInterceptor(0));
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          svrFactory.setDataBinding(<strong class="jxr_keyword">new</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/databinding/plainxml/PlainXmlDataBinding.html">PlainXmlDataBinding</a>());
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <em class="jxr_comment">// install auditing-related interceptors if the user has not switched auditing off</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">if</strong> (auditStrategy != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>              svrFactory.getInInterceptors().add(<strong class="jxr_keyword">new</strong> AuditInRequestInterceptor&lt;&gt;(
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>                      auditStrategy, getWsTransactionConfiguration()));
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>              AuditResponseInterceptor&lt;Hl7v3AuditDataset&gt; auditInterceptor =
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  <strong class="jxr_keyword">new</strong> AuditResponseInterceptor&lt;&gt;(auditStrategy, <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">null</strong>, false);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>              svrFactory.getOutInterceptors().add(auditInterceptor);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              svrFactory.getOutFaultInterceptors().add(auditInterceptor);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>          }
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      }
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  }
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Factory for HL7 v3 Web Services.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * @author Dmytro Rud</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/Hl7v3ServiceFactory.html">Hl7v3ServiceFactory</a> <strong class="jxr_keyword">extends</strong> JaxWsRequestServiceFactory&lt;Hl7v3AuditDataset&gt; {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     * Constructs the factory.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     * @param wsTransactionConfiguration</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     *          the info about the service to produce.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     * @param serviceAddress</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     *          the address of the service that it should be published with.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">     * @param auditStrategy</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">     *          the auditing strategy to use.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">     * @param customInterceptors</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">     *          user-defined custom CXF interceptors.</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">     * @param rejectionHandlingStrategy</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">     *          user-defined rejection handling strategy.</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/Hl7v3ServiceFactory.html">Hl7v3ServiceFactory</a>(
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>              <a href="../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/Hl7v3WsTransactionConfiguration.html">Hl7v3WsTransactionConfiguration</a> wsTransactionConfiguration,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>              String serviceAddress,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>              AuditStrategy&lt;Hl7v3AuditDataset&gt; auditStrategy,
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>              InterceptorProvider customInterceptors,
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>              <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/WsRejectionHandlingStrategy.html">WsRejectionHandlingStrategy</a> rejectionHandlingStrategy)
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">super</strong>(wsTransactionConfiguration, serviceAddress, auditStrategy,
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>                  customInterceptors, rejectionHandlingStrategy);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      @Override
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> configureInterceptors(ServerFactoryBean svrFactory) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          svrFactory.getInInterceptors().add(<strong class="jxr_keyword">new</strong> InPayloadExtractorInterceptor(SOAP_BODY));
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          svrFactory.getInInterceptors().add(<strong class="jxr_keyword">new</strong> InNamespaceMergeInterceptor());
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          svrFactory.getInInterceptors().add(<strong class="jxr_keyword">new</strong> InPayloadInjectorInterceptor(0));
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          svrFactory.setDataBinding(<strong class="jxr_keyword">new</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/ws/cxf/databinding/plainxml/PlainXmlDataBinding.html">PlainXmlDataBinding</a>());
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">super</strong>.configureInterceptors(svrFactory);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

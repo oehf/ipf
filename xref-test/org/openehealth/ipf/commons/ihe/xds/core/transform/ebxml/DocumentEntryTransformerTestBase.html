@@ -70,8 +70,8 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          author1.getAuthorRole().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"role2"</span>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          author1.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"2.3.3"</span>, <span class="jxr_string">"ISO"</span>)));
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          author1.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec2"</span>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          author1.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, 7771, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          author1.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, 7772, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          author1.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, 7771L, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          author1.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, 7772L, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          Author author2 = <strong class="jxr_keyword">new</strong> Author();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          author2.setAuthorPerson(createPerson(30));
@@ -81,8 +81,8 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          author2.getAuthorRole().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"role4"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"2.3.6"</span>, <span class="jxr_string">"ISO"</span>)));
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          author2.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec3"</span>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          author2.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec4"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"2.3.8"</span>, <span class="jxr_string">"ISO"</span>)));
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, 7773, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, 7774, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, 7773L, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, 7774L, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          Address address = <strong class="jxr_keyword">new</strong> Address();
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          address.setCity(<span class="jxr_string">"city"</span>);
@@ -135,11 +135,11 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>         documentEntry.setLimitedMetadata(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>         documentEntry.getReferenceIdList().add(<strong class="jxr_keyword">new</strong> ReferenceId(
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>                 <span class="jxr_string">"ref-id-11"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.1.2.3"</span>),
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>                 ReferenceId.ID_TYPE_CODE_ORDER, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"1.4.5.6"</span>)));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>                 <span class="jxr_string">"ref-id-11"</span>, <strong class="jxr_keyword">new</strong> CXiAssigningAuthority(<span class="jxr_string">"ABCD"</span>, <span class="jxr_string">"1.1.2.3"</span>, <span class="jxr_string">"ISO"</span>),
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>                 ReferenceId.ID_TYPE_CODE_ORDER));
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>         documentEntry.getReferenceIdList().add(<strong class="jxr_keyword">new</strong> ReferenceId(
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>                 <span class="jxr_string">"ref-id-12"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"2.1.2.3"</span>),
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>                 ReferenceId.ID_TYPE_CODE_ACCESSION, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"2.4.5.6"</span>)));
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>                 <span class="jxr_string">"ref-id-12"</span>, <strong class="jxr_keyword">new</strong> CXiAssigningAuthority(<span class="jxr_string">"DEFG"</span>, <span class="jxr_string">"2.1.2.3"</span>, <span class="jxr_string">"ISO"</span>),
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>                 ReferenceId.ID_TYPE_CODE_ACCESSION));
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
 <a class="jxr_linenumber" name="L136" href="#L136">136</a>         <strong class="jxr_keyword">if</strong> (homeAware) {
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>             documentEntry.setHomeCommunityId(<span class="jxr_string">"123.456"</span>);
@@ -181,8 +181,8 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>                 <span class="jxr_string">"PID-11|streetAddress^otherDesignation^city^stateOrProvince^zipOrPostalCode^country^^^countyParishCode"</span>);
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>         assertSlot(SLOT_NAME_REFERENCE_ID_LIST, slots,
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>                 <span class="jxr_string">"ref-id-11^^^&amp;1.1.2.3&amp;ISO^urn:ihe:iti:xds:2013:order^&amp;1.4.5.6&amp;ISO"</span>,
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>                 <span class="jxr_string">"ref-id-12^^^&amp;2.1.2.3&amp;ISO^urn:ihe:iti:xds:2013:accession^&amp;2.4.5.6&amp;ISO"</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>                 <span class="jxr_string">"ref-id-11^^^ABCD&amp;1.1.2.3&amp;ISO^urn:ihe:iti:xds:2013:order"</span>,
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>                 <span class="jxr_string">"ref-id-12^^^DEFG&amp;2.1.2.3&amp;ISO^urn:ihe:iti:xds:2013:accession"</span>);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>         assertSlot(SLOT_NAME_DOCUMENT_AVAILABILITY, slots, <span class="jxr_string">"urn:ihe:iti:2010:DocumentAvailability:Online"</span>);
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>         EbXMLClassification classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, <span class="jxr_string">""</span>, -1);
@@ -287,6 +287,6 @@
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

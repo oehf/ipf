@@ -48,42 +48,36 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     * using the given translator instance. </em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Processor translatorHL7v3toHL7v2(<strong class="jxr_keyword">final</strong> Hl7TranslatorV3toV2 translator) {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Processor() {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>              @Override
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>              <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> process(Exchange exchange) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>                  ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  String xmlText = exchange.getIn().getMandatoryBody(String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>                  exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  Message resultMessage = Exchanges.resultMessage(exchange);
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  resultMessage.setBody(translator.translateV3toV2(xmlText, initial));
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>              }
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          };
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      }
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     * Returns a processor for translating HL7v2 messages to HL7v3 </em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     * using the given translator instance. </em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Processor translatorHL7v2toHL7v3(<strong class="jxr_keyword">final</strong> Hl7TranslatorV2toV3 translator) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Processor() {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>              @Override
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>              <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> process(Exchange exchange) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>                  ca.uhn.hl7v2.model.Message msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>                  Message resultMessage = Exchanges.resultMessage(exchange);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>                  String charset = exchange.getProperty(Exchange.CHARSET_NAME, <span class="jxr_string">"UTF-8"</span>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>                  resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  resultMessage.setBody(translator.translateV2toV3(msg, initial, charset));
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>              }
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          };
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  }
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          <strong class="jxr_keyword">return</strong> exchange -&gt; {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>              ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>              String xmlText = exchange.getIn().getMandatoryBody(String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>              exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>              Message resultMessage = Exchanges.resultMessage(exchange);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>              resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>              resultMessage.setBody(translator.translateV3toV2(xmlText, initial));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          };
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">     * Returns a processor for translating HL7v2 messages to HL7v3 </em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     * using the given translator instance. </em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Processor translatorHL7v2toHL7v3(<strong class="jxr_keyword">final</strong> Hl7TranslatorV2toV3 translator) {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">return</strong> exchange -&gt; {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>              String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>              ca.uhn.hl7v2.model.Message msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>              exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>              Message resultMessage = Exchanges.resultMessage(exchange);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>              String charset = exchange.getProperty(Exchange.CHARSET_NAME, <span class="jxr_string">"UTF-8"</span>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>              resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>              resultMessage.setBody(translator.translateV2toV3(msg, initial, charset));
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          };
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

@@ -26,60 +26,86 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> lombok.EqualsAndHashCode;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> lombok.Getter;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> lombok.Setter;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> lombok.ToString;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Abstract stored query for documents.</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  @XmlAccessorType(XmlAccessType.FIELD)
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  @XmlType(name = <span class="jxr_string">"DocumentsQuery"</span>, propOrder = {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>          <span class="jxr_string">"authorPersons"</span>, <span class="jxr_string">"creationTime"</span>, <span class="jxr_string">"serviceStartTime"</span>, <span class="jxr_string">"serviceStopTime"</span>,
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>          <span class="jxr_string">"classCodes"</span>, <span class="jxr_string">"confidentialityCodes"</span>, <span class="jxr_string">"eventCodes"</span>, <span class="jxr_string">"formatCodes"</span>,
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>          <span class="jxr_string">"healthcareFacilityTypeCodes"</span>, <span class="jxr_string">"practiceSettingCodes"</span>, <span class="jxr_string">"typeCodes"</span>})
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  @XmlRootElement(name = <span class="jxr_string">"abstractDocumentsQuery"</span>)
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  @EqualsAndHashCode(callSuper = <strong class="jxr_keyword">true</strong>, doNotUseGetters = <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/DocumentsQuery.html">DocumentsQuery</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/StoredQuery.html">StoredQuery</a>  {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1162423827844317922L;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      @XmlElement(name = <span class="jxr_string">"typeCode"</span>)
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;Code&gt; typeCodes;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      @XmlElement(name = <span class="jxr_string">"classCode"</span>)
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;Code&gt; classCodes;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      @XmlElement(name = <span class="jxr_string">"practiceSettingCode"</span>)
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;Code&gt; practiceSettingCodes;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      @XmlElement(name = <span class="jxr_string">"healthcareFacilityTypeCode"</span>)
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;Code&gt; healthcareFacilityTypeCodes;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      @XmlElement(name = <span class="jxr_string">"eventCode"</span>)
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> QueryList&lt;Code&gt; eventCodes;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      @XmlElement(name = <span class="jxr_string">"confidentialityCode"</span>)
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> QueryList&lt;Code&gt; confidentialityCodes;
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      @XmlElement(name = <span class="jxr_string">"formatCode"</span>)
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;Code&gt; formatCodes;
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      @XmlElement(name = <span class="jxr_string">"authorPerson"</span>)
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;String&gt; authorPersons;
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a> creationTime = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a>();
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a> serviceStartTime = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a>();
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a> serviceStopTime = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a>();
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Abstract stored query for documents.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  @XmlAccessorType(XmlAccessType.FIELD)
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  @XmlType(name = <span class="jxr_string">"DocumentsQuery"</span>, propOrder = {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>          <span class="jxr_string">"authorPersons"</span>, <span class="jxr_string">"creationTime"</span>, <span class="jxr_string">"serviceStartTime"</span>, <span class="jxr_string">"serviceStopTime"</span>,
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>          <span class="jxr_string">"classCodes"</span>, <span class="jxr_string">"confidentialityCodes"</span>, <span class="jxr_string">"eventCodes"</span>, <span class="jxr_string">"formatCodes"</span>,
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <span class="jxr_string">"healthcareFacilityTypeCodes"</span>, <span class="jxr_string">"practiceSettingCodes"</span>, <span class="jxr_string">"typeCodes"</span>})
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  @XmlRootElement(name = <span class="jxr_string">"abstractDocumentsQuery"</span>)
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  @EqualsAndHashCode(callSuper = <strong class="jxr_keyword">true</strong>, doNotUseGetters = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  @ToString(callSuper = <strong class="jxr_keyword">true</strong>, doNotUseGetters = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/DocumentsQuery.html">DocumentsQuery</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/StoredQuery.html">StoredQuery</a>  {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1162423827844317922L;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      @XmlElement(name = <span class="jxr_string">"typeCode"</span>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;Code&gt; typeCodes;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      @XmlElement(name = <span class="jxr_string">"classCode"</span>)
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;Code&gt; classCodes;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      @XmlElement(name = <span class="jxr_string">"practiceSettingCode"</span>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;Code&gt; practiceSettingCodes;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      @XmlElement(name = <span class="jxr_string">"healthcareFacilityTypeCode"</span>)
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;Code&gt; healthcareFacilityTypeCodes;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      @XmlElement(name = <span class="jxr_string">"eventCode"</span>)
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> QueryList&lt;Code&gt; eventCodes;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      @XmlElement(name = <span class="jxr_string">"confidentialityCode"</span>)
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> QueryList&lt;Code&gt; confidentialityCodes;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      @XmlElement(name = <span class="jxr_string">"formatCode"</span>)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;Code&gt; formatCodes;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      @XmlElement(name = <span class="jxr_string">"authorPerson"</span>)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> List&lt;String&gt; authorPersons;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     * For JAXB only.</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/DocumentsQuery.html">DocumentsQuery</a>() {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/DocumentsQuery.html">DocumentsQuery</a>(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/QueryType.html">QueryType</a> type) {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">super</strong>(type);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      }
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  }
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a> creationTime = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a>();
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a> serviceStartTime = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a>();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a> serviceStopTime = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/TimeRange.html">TimeRange</a>();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">     * For JAXB only.</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/DocumentsQuery.html">DocumentsQuery</a>() {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/DocumentsQuery.html">DocumentsQuery</a>(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/QueryType.html">QueryType</a> type) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">super</strong>(type);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      }
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">     * Allows to use a collection of {@link Person} instead of a collection of {@link String}</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">     * for specifying the query parameter "$XDSDocumentEntryAuthorPerson".</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">     * @param authorPersons a collection of {@link Person} objects.</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTypedAuthorPersons(List&lt;Person&gt; authorPersons) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">this</strong>.authorPersons = QuerySlotHelper.render(authorPersons);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      }
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">     * Tries to return the query parameter "$XDSDocumentEntryAuthorPerson"</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">     * as a collection of {@link Person} instead of a collection of {@link String}.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">     * This may fail if SQL LIKE wildcards ("%", "_", etc.) are used in one or more elements.</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * @return a collection of {@link Person} objects.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">public</strong> List&lt;Person&gt; getTypedAuthorPersons() {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">return</strong> QuerySlotHelper.parse(<strong class="jxr_keyword">this</strong>.authorPersons, Person.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

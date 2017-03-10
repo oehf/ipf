@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/apache/camel/processor/ExchangeCopyHelper.html">ExchangeCopyHelper</a> {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> afterCopy(Exchange exchange, Iterable pairs) {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> afterCopy(Exchange exchange, Iterable&lt;?&gt; pairs) {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>          ArrayList&lt;ManagedMessage&gt; copies = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(countElements(pairs));
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>          <strong class="jxr_keyword">for</strong> (Object p : pairs) {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>              ProcessorExchangePair pair = (ProcessorExchangePair) p;
@@ -73,6 +73,6 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

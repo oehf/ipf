@@ -68,28 +68,30 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>                  getComponent().getWsTransactionConfiguration(),
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>                  getServiceUrl(),
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>                  isAudit() ? getComponent().getServerAuditStrategy() : <strong class="jxr_keyword">null</strong>,
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  getCustomInterceptors());
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      @Override
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">public</strong> JaxWsServiceFactory&lt;Hl7v3AuditDataset&gt; getJaxWsServiceFactory() {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/Hl7v3AsyncResponseServiceFactory.html">Hl7v3AsyncResponseServiceFactory</a>(
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>                  getComponent().getWsTransactionConfiguration(),
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  getServiceAddress(),
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>                  isAudit() ? getComponent().getServerAuditStrategy() : <strong class="jxr_keyword">null</strong>,
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>                  getCorrelator(),
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>                  getCustomInterceptors());
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      }
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      @Override
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">public</strong> AbstractWsProducer&lt;Hl7v3AuditDataset, ConfigType, ?, ?&gt; getProducer(AbstractWsEndpoint&lt;Hl7v3AuditDataset, ConfigType&gt; endpoint,
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>                                            JaxWsClientFactory&lt;Hl7v3AuditDataset&gt; clientFactory) {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"No producer support for asynchronous response endpoints"</span>);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      }
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  getCustomInterceptors(),
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>                  getFeatures(),
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  getProperties());
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      @Override
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">public</strong> JaxWsServiceFactory&lt;Hl7v3AuditDataset&gt; getJaxWsServiceFactory() {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/Hl7v3AsyncResponseServiceFactory.html">Hl7v3AsyncResponseServiceFactory</a>(
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>                  getComponent().getWsTransactionConfiguration(),
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>                  getServiceAddress(),
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>                  isAudit() ? getComponent().getServerAuditStrategy() : <strong class="jxr_keyword">null</strong>,
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>                  getCorrelator(),
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  getCustomInterceptors());
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      }
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      @Override
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <strong class="jxr_keyword">public</strong> AbstractWsProducer&lt;Hl7v3AuditDataset, ConfigType, ?, ?&gt; getProducer(AbstractWsEndpoint&lt;Hl7v3AuditDataset, ConfigType&gt; endpoint,
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                                            JaxWsClientFactory&lt;Hl7v3AuditDataset&gt; clientFactory) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"No producer support for asynchronous response endpoints"</span>);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>

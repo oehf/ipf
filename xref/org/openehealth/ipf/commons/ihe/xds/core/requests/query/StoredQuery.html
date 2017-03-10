@@ -26,22 +26,22 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> lombok.EqualsAndHashCode;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> lombok.Getter;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> lombok.Setter;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.builder.ToStringBuilder;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.builder.ToStringStyle;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessType;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessorType;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlType;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Base class for stored queries.</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  @XmlAccessorType(XmlAccessType.FIELD)
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  @XmlType(name = <span class="jxr_string">"StoredQuery"</span>, propOrder = {<span class="jxr_string">"homeCommunityId"</span>, <span class="jxr_string">"extraParameters"</span>})
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  @EqualsAndHashCode(callSuper = <strong class="jxr_keyword">true</strong>, doNotUseGetters = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> lombok.ToString;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessType;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessorType;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlType;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Base class for stored queries.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * @author Jens Riemschneider</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  @XmlAccessorType(XmlAccessType.FIELD)
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  @XmlType(name = <span class="jxr_string">"StoredQuery"</span>, propOrder = {<span class="jxr_string">"homeCommunityId"</span>, <span class="jxr_string">"extraParameters"</span>})
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  @EqualsAndHashCode(callSuper = <strong class="jxr_keyword">true</strong>, doNotUseGetters = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  @ToString(callSuper = <strong class="jxr_keyword">true</strong>, doNotUseGetters = <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/StoredQuery.html">StoredQuery</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/query/Query.html">Query</a> {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = -8296981156625412818L;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
@@ -63,13 +63,9 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          <strong class="jxr_keyword">super</strong>(type);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      }
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      @Override
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          <strong class="jxr_keyword">return</strong> ToStringBuilder.reflectionToString(<strong class="jxr_keyword">this</strong>, ToStringStyle.SHORT_PREFIX_STYLE);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      }
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  }
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2016 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
 </body>
 </html>
