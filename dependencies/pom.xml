@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
     <artifactId>ipf-dependencies</artifactId>
-    <version>3.2.0</version>
+    <version>3.3-SNAPSHOT</version>
     <name>ipf-dependencies</name>
     <packaging>pom</packaging>
 
