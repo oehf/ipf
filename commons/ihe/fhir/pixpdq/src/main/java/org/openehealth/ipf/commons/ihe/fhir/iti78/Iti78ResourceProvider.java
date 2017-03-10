@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
@@ -65,7 +66,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = Patient.SP_IDENTIFIER) TokenAndListParam identifiers,
             @OptionalParam(name = Patient.SP_FAMILY) StringAndListParam family,
             @OptionalParam(name = Patient.SP_GIVEN) StringAndListParam given,
-            @OptionalParam(name = Patient.SP_BIRTHDATE) DateParam birthDate,
+            @OptionalParam(name = Patient.SP_BIRTHDATE) DateAndListParam birthDate,
             @OptionalParam(name = Patient.SP_ADDRESS) StringParam address,
             @OptionalParam(name = Patient.SP_ADDRESSCITY) StringParam city,
             @OptionalParam(name = Patient.SP_ADDRESSCOUNTRY) StringParam country,

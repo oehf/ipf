@@ -160,9 +160,6 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         if (requestedDomainOids && (!requestedDomainOids.contains(pdqSupplierResourceIdentifierOid)))
             requestedDomainOids.add(pdqSupplierResourceIdentifierOid)
 
-        // Properly convert birth date.
-        DateParam birthDateParam = searchParameters.birthDate
-        String birthDateString = birthDateParam ? FastDateFormat.getInstance('yyyyMMdd').format(birthDateParam.getValue()) : null
 
         // Properly convert gender code
         TokenParam genderParam = searchParameters.gender
@@ -178,7 +175,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
                 '@PID.3.4.3': searchIdentifier.map({ it.oid ? 'ISO' : null }).orElse(null),
                 '@PID.5.1'  : firstOrNull(searchStringList(searchParameters.family, false)),
                 '@PID.5.2'  : firstOrNull(searchStringList(searchParameters.given, false)),
-                '@PID.7'    : birthDateString,
+                '@PID.7'    : convertBirthDate(searchParameters.birthDate),
                 '@PID.8'    : genderString,
                 '@PID.11.1' : searchString(searchParameters.address, true),
                 '@PID.11.3' : searchString(searchParameters.city, true),
@@ -202,6 +199,16 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
         return qry
     }
 
+    protected String convertBirthDate(DateAndListParam birthDateParam) {
+        Date birthDate = firstOrNull(searchDateList(birthDateParam))
+        return birthDate ? FastDateFormat.getInstance('yyyyMMdd').format(birthDate) : null
+    }
+
+    protected Date searchDate(DateParam param) {
+        if (param == null || param.empty) return null;
+        param.value
+    }
+
     protected String searchString(StringParam param, boolean forceExactSearch) {
         if (param == null || param.empty) return null;
         forceExactSearch || param.exact ? param.value : param.value + "*"
@@ -209,6 +216,10 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
 
     protected List<String> searchStringList(StringAndListParam param, boolean forceExactSearch) {
         param?.getValuesAsQueryTokens().collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
+    }
+
+    protected List<String> searchDateList(DateAndListParam param) {
+        param?.getValuesAsQueryTokens().collect { searchDate(it.valuesAsQueryTokens.find()) }
     }
 
     protected String searchNumber(NumberParam param) {

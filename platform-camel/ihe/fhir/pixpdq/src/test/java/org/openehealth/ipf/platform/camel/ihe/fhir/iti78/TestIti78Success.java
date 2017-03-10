@@ -56,6 +56,19 @@ public class TestIti78Success extends AbstractTestIti78 {
     }
 
     @Test
+    public void testSendManualPdqmWithBirthdayRange() {
+        Bundle result = client.search()
+                .forResource(PdqPatient.class)
+                .where(PdqPatient.BIRTHDATE.exactly().day("2011-12-31"))
+                .and(PdqPatient.FAMILY.matches().value("Miller"))
+                .returnBundle(Bundle.class)
+                .execute();
+        assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
+        assertEquals(ResourceType.Bundle, result.getResourceType());
+        assertTrue(result.hasEntry());
+    }
+
+    @Test
     public void testSendManualPdqm() {
 
         Bundle result = sendManually(familyParameters());

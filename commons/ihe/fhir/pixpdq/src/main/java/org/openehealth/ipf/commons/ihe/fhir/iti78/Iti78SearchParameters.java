@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.param.DateAndListParam;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
@@ -42,7 +43,7 @@ public class Iti78SearchParameters implements FhirSearchParameters {
     @Getter @Setter private TokenAndListParam identifiers;
     @Getter @Setter private StringAndListParam family;
     @Getter @Setter private StringAndListParam given;
-    @Getter @Setter private DateParam birthDate;
+    @Getter @Setter private DateAndListParam birthDate;
     @Getter @Setter private StringParam address;
     @Getter @Setter private StringParam city;
     @Getter @Setter private StringParam country;
