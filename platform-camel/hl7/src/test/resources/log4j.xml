@@ -22,12 +22,19 @@
 
     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
         <param name="threshold" value="DEBUG"/>
-        <layout class="org.apache.log4j.SimpleLayout" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%d{yyyy-MM-dd'T'HH:mm:ss,SSS} [%t] %-5p - %c{3} | %m%n"/>
+        </layout>
     </appender>
 
+    <logger name="org.apache.camel.component.hl7" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
     
     <root>
-        <level value="WARN"/>
+        <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
     </root>
 

@@ -27,11 +27,12 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetDecoder;
 
 /**
- * HL7MLLPDecoder that is aware that a HL7 message can span several buffers.
- * In addition, it avoids rescanning packets by keeping state in the IOSession.
+ * MLLPDecoder that is aware that a HL7 message can span several buffers.
+ * In addition, it avoids rescanning TCP frames by keeping state in the IOSession.
  *
- * This decoder addresses a decoding error that might occur when only the end bytes
- * are transferred in a different frame.
+ * This decoder addresses a decoding error that might occur when start and/or end bytes
+ * are transferred in a different frame. It also covers the case that requests are coming
+ * in faster than they can be processed.
  */
 class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
 
@@ -55,28 +56,34 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
         in.position(state.current());
 
         LOG.debug("Received data, checking from position {} to {}", in.position(), in.limit());
+        boolean messageDecoded = false;
 
         while (in.hasRemaining()) {
+
             int previousPosition = in.position();
             byte current = in.get();
 
+            // Check if we are at the start of an HL7 message
             if (current == config.getStartByte()) {
                 state.markStart(previousPosition);
             }
-
-            if (state.previous() == config.getEndByte1() && current == config.getEndByte2()) {
+            // Check if we are at the end of an HL7 message
+            else if (current == config.getEndByte2() && state.previous() == config.getEndByte1()) {
                 if (state.isStarted()) {
+                    // Save the current buffer pointers and reset them to surround the identifier message
                     int currentPosition = in.position();
                     int currentLimit = in.limit();
                     LOG.debug("Message ends at position {} with length {}", currentPosition, currentPosition - state.start());
                     in.position(state.start());
                     in.limit(currentPosition);
                     LOG.debug("Set start to position {} and limit to {}", in.position(), in.limit());
+
+                    // Now create string or byte[] from this part of the buffer and restore the buffer pointers
                     try {
                         out.write(config.isProduceString()
-                                ? parseMessageToString(in, charsetDecoder(session))
-                                : parseMessageToByteArray(in));
-                        return true;
+                                ? parseMessageToString(in.slice(), charsetDecoder(session))
+                                : parseMessageToByteArray(in.slice()));
+                        messageDecoded = true;
                     } finally {
                         in.position(currentPosition);
                         in.limit(currentLimit);
@@ -86,19 +93,24 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
                     LOG.warn("Ignoring message end at position {} until start byte has been seen.", previousPosition);
                 }
 
+            } else {
+                // Remember previous byte in state object because the buffer could
+                // be theoretically exhausted right between the two end bytes
+                state.markPrevious(current);
+                messageDecoded = false;
             }
-            // Remember previous byte in state object because the buffer could
-            // be theoretically exhausted right between the two end bytes
-            state.markPrevious(current);
         }
 
-        // Could not find a complete message in the buffer.
-        // Reset to the initial position (just as nothing had been read yet)
-        // and return false so that this method is called again with more data.
-        LOG.debug("No complete message yet at position {} ", in.position());
-        state.markCurrent(in.position());
-        in.position(0);
-        return false;
+        if (!messageDecoded) {
+
+            // Could not find a complete message in the buffer.
+            // Reset to the initial position (just as nothing had been read yet)
+            // and return false so that this method is called again with more data.
+            LOG.debug("No complete message yet at position {} ", in.position());
+            state.markCurrent(in.position());
+            in.position(0);
+        }
+        return messageDecoded;
     }
 
     // Make a defensive byte copy (the buffer will be reused)
@@ -106,7 +118,7 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
     // returning a byte array
     private Object parseMessageToByteArray(IoBuffer buf) throws CharacterCodingException {
         int len = buf.limit() - 3;
-        LOG.debug("Making {} bytes", len);
+        LOG.debug("Making byte array of length {}", len);
         byte[] dst = new byte[len];
         buf.skip(1); // skip start byte
         buf.get(dst, 0, len);
@@ -131,7 +143,7 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
         int len = buf.limit() - 3;
         LOG.debug("Making string of length {} using charset {}", len, decoder.charset());
         buf.skip(1); // skip start byte
-        String message = buf.getString(buf.limit() - 3, decoder);
+        String message = buf.getString(len, decoder);
         buf.skip(2); // skip end bytes
 
         // Only do this if conversion is enabled
