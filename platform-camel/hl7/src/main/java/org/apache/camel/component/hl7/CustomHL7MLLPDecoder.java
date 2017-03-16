@@ -63,17 +63,13 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
             int previousPosition = in.position();
             byte current = in.get();
 
-            // Check if we are at the start of an HL7 message
-            if (current == config.getStartByte()) {
-                state.markStart(previousPosition);
-            }
             // Check if we are at the end of an HL7 message
-            else if (current == config.getEndByte2() && state.previous() == config.getEndByte1()) {
+            if (current == config.getEndByte2() && state.previous() == config.getEndByte1()) {
                 if (state.isStarted()) {
                     // Save the current buffer pointers and reset them to surround the identifier message
                     int currentPosition = in.position();
                     int currentLimit = in.limit();
-                    LOG.debug("Message ends at position {} with length {}", currentPosition, currentPosition - state.start());
+                    LOG.debug("Message ends at position {} with length {}", previousPosition, previousPosition - state.start() + 1);
                     in.position(state.start());
                     in.limit(currentPosition);
                     LOG.debug("Set start to position {} and limit to {}", in.position(), in.limit());
@@ -85,6 +81,7 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
                                 : parseMessageToByteArray(in.slice()));
                         messageDecoded = true;
                     } finally {
+                        LOG.debug("Resetting to position {} and limit to {}", currentPosition, currentLimit);
                         in.position(currentPosition);
                         in.limit(currentLimit);
                         state.reset();
@@ -92,17 +89,20 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
                 } else {
                     LOG.warn("Ignoring message end at position {} until start byte has been seen.", previousPosition);
                 }
-
             } else {
-                // Remember previous byte in state object because the buffer could
-                // be theoretically exhausted right between the two end bytes
-                state.markPrevious(current);
+                // Check if we are at the start of an HL7 message
+                if (current == config.getStartByte()) {
+                    state.markStart(previousPosition);
+                } else {
+                    // Remember previous byte in state object because the buffer could
+                    // be theoretically exhausted right between the two end bytes
+                    state.markPrevious(current);
+                }
                 messageDecoded = false;
             }
         }
 
         if (!messageDecoded) {
-
             // Could not find a complete message in the buffer.
             // Reset to the initial position (just as nothing had been read yet)
             // and return false so that this method is called again with more data.
