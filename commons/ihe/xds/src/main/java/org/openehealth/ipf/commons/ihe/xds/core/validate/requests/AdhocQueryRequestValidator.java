@@ -58,7 +58,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
     private static final Map<QueryType, Set<String>> ALLOWED_MULTIPLE_SLOTS;
     static {
-        ALLOWED_MULTIPLE_SLOTS = new HashMap<>();
+        ALLOWED_MULTIPLE_SLOTS = new EnumMap<>(QueryType.class);
 
         addAllowedMultipleSlots(FIND_DOCUMENTS,
                 DOC_ENTRY_EVENT_CODE,

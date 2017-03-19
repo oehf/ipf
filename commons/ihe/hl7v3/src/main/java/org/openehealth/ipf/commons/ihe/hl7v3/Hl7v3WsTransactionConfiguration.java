@@ -33,8 +33,18 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration 
     @Getter private final CombinedXmlValidationProfile responseValidationProfile;
 
     /**
-     * Constructs the service info.
+     * Constructs the transaction configuration.
      *
+     * @param name
+     *          name of the transaction.
+     * @param description
+     *          human-readable description of the transaction.
+     * @param isQuery
+     *          <code>true</code> if this transaction describes a query, <code>false</code> otherwise.
+     * @param clientAuditStrategy
+     *          {@link AuditStrategy} to be used on client side to accomplish ATNA audit.
+     * @param serverAuditStrategy
+     *          {@link AuditStrategy} to be used on server side to accomplish ATNA audit.
      * @param serviceName
      *      the qualified name of the service.
      * @param sei

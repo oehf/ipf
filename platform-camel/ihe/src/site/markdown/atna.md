@@ -257,7 +257,7 @@ initialization logic that is hard to express in XML:
               factory-method="getContext">
         </bean>
         
-        <bean id="auditorTLSConfig" class="com.icw.ehf.integration.atna.AuditorTLSConfig" init-method="init">
+        <bean id="auditorTLSConfig" class="org.openhealthtools.ihe.atna.auditor.AuditorTLSConfig" init-method="init">
             <constructor-arg ref="auditorModuleConfig"/>
             <constructor-arg ref="atnaAuditProperties"/> <!-- skip, and System.getProperties will be used -->
             <property name="securityDomainName" value="mpi-atna-tls"/>
