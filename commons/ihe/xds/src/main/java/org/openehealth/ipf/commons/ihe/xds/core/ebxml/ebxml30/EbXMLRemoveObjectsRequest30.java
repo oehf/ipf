@@ -19,6 +19,7 @@ import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefListType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefType;
 
@@ -93,7 +94,7 @@ public class EbXMLRemoveObjectsRequest30 implements EbXMLRemoveObjectsRequest {
      */
     @Delegate
     private EbXMLSlotList30 getSlotList() {
-        return new EbXMLSlotList30(removeObjectsRequest.getAdhocQuery().getSlot());
+        return new EbXMLSlotList30(getAdhocQuery().getSlot());
     }
 
     @Override
@@ -116,24 +117,31 @@ public class EbXMLRemoveObjectsRequest30 implements EbXMLRemoveObjectsRequest {
         return null;
     }
 
+    private AdhocQueryType getAdhocQuery(){
+        if (removeObjectsRequest.getAdhocQuery() == null){
+            removeObjectsRequest.setAdhocQuery(new AdhocQueryType());
+        }
+        return removeObjectsRequest.getAdhocQuery();
+    }
+
     @Override
     public void setId(String id) {
-        removeObjectsRequest.getAdhocQuery().setId(id);
+        getAdhocQuery().setId(id);
     }
 
     @Override
     public String getId() {
-        return removeObjectsRequest.getAdhocQuery().getId();
+        return getAdhocQuery().getId();
     }
 
     @Override
     public void setHome(String homeCommunityID) {
-        removeObjectsRequest.getAdhocQuery().setHome(homeCommunityID);
+        getAdhocQuery().setHome(homeCommunityID);
     }
 
     @Override
     public String getHome() {
-        return removeObjectsRequest.getAdhocQuery().getHome();
+        return getAdhocQuery().getHome();
     }
 
     @Override
