@@ -10,8 +10,8 @@ The transaction defines the following actors:
 
 ![ITI-59 actors](images/iti59.png)
 
-Producer side corresponds to the *Producer Information Source* actor.
-Consumer side corresponds to the *Producer Information Directory* actor.
+Producer side corresponds to the *Provider Information Source* actor.
+Consumer side corresponds to the *Provider Information Directory* actor.
 
 ### Dependencies
 
@@ -66,6 +66,7 @@ Additional URI parameters are optional and control special features as described
 ### Data Types
 
 The ITI-59 component produces and consumes objects of the [DSMLv2](https://www.oasis-open.org/standards#dsmlv2) data model:
+
 * Request message -- [`BatchRequest`](../apidocs/org/openehealth/ipf/commons/ihe/hpd/stub/dsmlv2/BatchRequest.html)
 * Response message -- [`BatchResponse`](../apidocs/org/openehealth/ipf/commons/ihe/hpd/stub/dsmlv2/BatchResponse.html)
 
