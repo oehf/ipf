@@ -31,7 +31,8 @@ import static org.openehealth.ipf.commons.xml.XmlUtils.source;
 @Slf4j
 public class MockedSender extends AbstractMockedAuditSender<AuditEventMessage> {
 
-    private static final String VALIDATION_SCHEMA = "/dicomModified.xsd";
+    private static final String OLD_VALIDATION_SCHEMA = "/dicomModified.xsd";
+    private static final String NEW_VALIDATION_SCHEMA = "/atna.xsd";
     XsdValidator validator = new XsdValidator();
 
     public MockedSender() {
@@ -48,7 +49,7 @@ public class MockedSender extends AbstractMockedAuditSender<AuditEventMessage> {
             String s = message.toString();
             log.debug(s);
             if (needValidation) {
-                validator.validate(source(s), VALIDATION_SCHEMA);
+                validator.validate(source(s), NEW_VALIDATION_SCHEMA);
             }
             messages.add(message);
         }
