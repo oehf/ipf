@@ -8,7 +8,9 @@
         <version>3.3-SNAPSHOT</version>
     </parent>
 
-	<artifactId>ipf-spring-boot-starter</artifactId>
+    <artifactId>ipf-spring-boot-starter</artifactId>
+    <name>ipf-spring-boot-starter</name>
+    <description>Generic Spring Boot support</description>
 
 	<dependencies>
         <dependency>
