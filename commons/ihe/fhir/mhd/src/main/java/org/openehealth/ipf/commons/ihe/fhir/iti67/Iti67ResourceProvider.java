@@ -54,7 +54,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
 
     @SuppressWarnings("unused")
     @Search(type = DocumentReference.class)
-    public IBundleProvider documentManifestSearch(
+    public IBundleProvider documentReferenceSearch(
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentReference.SP_INDEXED) DateRangeParam indexed,
             @OptionalParam(name = DocumentReference.SP_AUTHOR + "." + Practitioner.SP_FAMILY) StringParam authorFamilyName,

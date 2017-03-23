@@ -37,7 +37,7 @@ public class ContextFacade {
 
     public static synchronized void setRegistry(Registry registry) {
         if (instance != null && !registry.equals(instance))
-            LOG.warn("Re-initializing the registry");
+            LOG.info("Re-initializing the registry");
         instance = registry;
     }
 

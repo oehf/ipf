@@ -28,7 +28,6 @@ import java.util.Map;
  */
 public interface AuditStrategy<T extends AuditDataset> {
 
-
     /**
      * Creates a new audit dataset instance.
      */

@@ -63,15 +63,17 @@ abstract class PdqAuditStrategyUtils  {
 
     
     static void enrichAuditDatasetFromResponse(QueryAuditDataset auditDataset, Message msg) {
-        if(msg.MSH[9][1].value == 'RSP') {
-            def patientIds = []
-            for(group in msg.QUERY_RESPONSE()) {
-                patientIds += AuditUtils.pidList(group.PID[3])
-            }
-            if(patientIds) {
-                auditDataset.patientIds = auditDataset.patientIds ? 
-                        patientIds + auditDataset.patientIds[0] :
-                        patientIds
+        if (System.getProperty(QueryAuditDataset.NO_PATIENT_RESULT_IDS) == null) {
+            if (msg.MSH[9][1].value == 'RSP') {
+                def patientIds = []
+                for (group in msg.QUERY_RESPONSE()) {
+                    patientIds += AuditUtils.pidList(group.PID[3])
+                }
+                if (patientIds) {
+                    auditDataset.patientIds = auditDataset.patientIds ?
+                            patientIds + auditDataset.patientIds[0] :
+                            patientIds
+                }
             }
         }
     }
