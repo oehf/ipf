@@ -8,10 +8,11 @@
         <version>3.3-SNAPSHOT</version>
     </parent>
 
-	<artifactId>ipf-fhir-spring-boot-starter</artifactId>
+    <artifactId>ipf-fhir-spring-boot-starter</artifactId>
+    <name>ipf-fhir-spring-boot-starter</name>
+    <description>Spring Boot support for FHIR components</description>
 
 	<dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>

@@ -11,6 +11,8 @@
     <groupId>org.openehealth.ipf.boot</groupId>
     <artifactId>ipf-spring-boot</artifactId>
     <packaging>pom</packaging>
+    <name>ipf-spring-boot</name>
+    <description>Spring Boot support for IPF</description>
 
     <modules>
         <module>ipf-spring-boot-starter</module>

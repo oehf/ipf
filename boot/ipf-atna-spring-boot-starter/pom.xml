@@ -9,6 +9,8 @@
     </parent>
 
 	<artifactId>ipf-atna-spring-boot-starter</artifactId>
+    <name>ipf-atna-spring-boot-starter</name>
+    <description>Spring Boot support for Audit Trail</description>
 
 	<dependencies>
         <dependency>

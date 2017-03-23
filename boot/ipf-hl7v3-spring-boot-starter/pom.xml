@@ -9,9 +9,11 @@
     </parent>
 
     <artifactId>ipf-hl7v3-spring-boot-starter</artifactId>
+    <name>ipf-hl7v3-spring-boot-starter</name>
+    <description>Spring Boot support for HL7 v3 components</description>
 
     <dependencies>
-
+        <!-- Camel Spring Boot Support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
