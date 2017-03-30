@@ -26,13 +26,13 @@ explicitly depend on `ipf-atna-spring-boot-starter`.
 |------------------------------|-----------------------|-----------------------------------------------------|
 | `auditor.enabled`            | false                 | Whether auditinh is enabled
 | `security-domain-name`       | bootSecurityDomain    | ATNA domain name for the application
-| `audit.repository-host`      |                       | Host of the ATNA repository to send the events to
-| `audit.repository-port`      |                       | Port of the ATNA repository to send the events to
-| `audit.repository-transport` | `UDP`               | ATNA transport: UDP, TLS, SYSLOG, BSD
-| `audit.source-id`            | `${spring.application.name}` | Source ID for ATNA events
-| `audit.enterprise-site-id`   |                       | Enterprise Site ID for ATNA events
-| `audit.queue-class`          | `org.openhealthtools.ihe.atna.auditor.queue.SynchronousAuditQueue` | Queue implementation for auditing
-| `audit.sender-class`         | usually determined by `ipf.atna.audit.repository-transport` | ATNA sender implementation
+| `audit-repository-host`      |                       | Host of the ATNA repository to send the events to
+| `audit-repository-port`      |                       | Port of the ATNA repository to send the events to
+| `audit-repository-transport` | `UDP`               | ATNA transport: UDP, TLS, SYSLOG, BSD
+| `audit-source-id`            | `${spring.application.name}` | Source ID for ATNA events
+| `audit-enterprise-site-id`   |                       | Enterprise Site ID for ATNA events
+| `audit-queue-class`          | `org.openhealthtools.ihe.atna.auditor.queue.SynchronousAuditQueue` | Queue implementation for auditing
+| `audit-sender-class`         | usually determined by `ipf.atna.audit.repository-transport` | ATNA sender implementation
 
 
 [Spring Boot]: https://projects.spring.io/spring-boot/
