@@ -24,15 +24,14 @@ explicitly depend on `ipf-atna-spring-boot-starter`.
 
 | Property (`ipf.atna.`)       | Default               | Description                                         |
 |------------------------------|-----------------------|-----------------------------------------------------|
-| `auditor.enabled`            | false                 | Whether auditinh is enabled
+| `auditor.enabled`            | false                 | Whether auditing is enabled
 | `security-domain-name`       | bootSecurityDomain    | ATNA domain name for the application
-| `audit-repository-host`      |                       | Host of the ATNA repository to send the events to
-| `audit-repository-port`      |                       | Port of the ATNA repository to send the events to
-| `audit-repository-transport` | `UDP`               | ATNA transport: UDP, TLS, SYSLOG, BSD
+| `repository-host`            |                       | Host of the ATNA repository to send the events to
+| `repository-port`            |                       | Port of the ATNA repository to send the events to
 | `audit-source-id`            | `${spring.application.name}` | Source ID for ATNA events
 | `audit-enterprise-site-id`   |                       | Enterprise Site ID for ATNA events
 | `audit-queue-class`          | `org.openhealthtools.ihe.atna.auditor.queue.SynchronousAuditQueue` | Queue implementation for auditing
-| `audit-sender-class`         | usually determined by `ipf.atna.audit.repository-transport` | ATNA sender implementation
+| `audit-sender-class`         | `org.openhealthtools.ihe.atna.auditor.sender.UDPSyslogSenderImpl` | ATNA sender implementation
 
 
 [Spring Boot]: https://projects.spring.io/spring-boot/

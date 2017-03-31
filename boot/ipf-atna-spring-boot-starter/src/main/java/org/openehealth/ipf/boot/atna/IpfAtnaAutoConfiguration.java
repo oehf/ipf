@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.boot.atna;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openhealthtools.ihe.atna.auditor.AuditorTLSConfig;
 import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
@@ -30,6 +31,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.event.AbstractAuthenticationEvent;
 
 /**
  *
@@ -57,10 +59,8 @@ public class IpfAtnaAutoConfiguration {
         AuditorModuleConfig auditorModuleConfig = auditorModuleContext.getConfig();
         auditorModuleConfig.setAuditRepositoryHost(config.getRepositoryHost());
         auditorModuleConfig.setAuditRepositoryPort(config.getRepositoryPort());
-        // Use app name as auditor source if not configured otherwise
-        if (auditorModuleConfig.getAuditSourceId() == null) {
-            auditorModuleConfig.setAuditSourceId(appName);
-        }
+        auditorModuleConfig.setAuditSourceId(StringUtils.isEmpty(config.getAuditSourceId()) ? appName : config.getAuditSourceId());
+        auditorModuleConfig.setAuditEnterpriseSiteId(config.getAuditEnterpriseSiteId());
         return auditorModuleConfig;
     }
 

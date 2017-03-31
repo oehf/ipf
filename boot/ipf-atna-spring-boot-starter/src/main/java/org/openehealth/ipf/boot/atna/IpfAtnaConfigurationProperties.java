@@ -60,4 +60,9 @@ public class IpfAtnaConfigurationProperties {
     @Getter @Setter
     private int repositoryPort = 514;
 
+    @Getter @Setter
+    private String auditSourceId;
+
+    @Getter @Setter
+    private String auditEnterpriseSiteId;
 }
