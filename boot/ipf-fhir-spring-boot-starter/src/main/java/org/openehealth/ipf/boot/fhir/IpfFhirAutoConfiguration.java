@@ -57,7 +57,7 @@ public class IpfFhirAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(FhirAuditor.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
+    @ConditionalOnProperty("ipf.atna.auditor-enabled")
     public FhirAuditor fhirAuditor(AuditorModuleConfig auditorModuleConfig) {
         FhirAuditor auditor = FhirAuditor.getAuditor();
         auditor.setConfig(auditorModuleConfig);

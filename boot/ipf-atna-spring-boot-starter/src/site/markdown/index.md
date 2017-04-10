@@ -24,10 +24,10 @@ explicitly depend on `ipf-atna-spring-boot-starter`.
 
 | Property (`ipf.atna.`)       | Default               | Description                                         |
 |------------------------------|-----------------------|-----------------------------------------------------|
-| `auditor.enabled`            | false                 | Whether auditing is enabled
+| `auditor-enabled`            | false                 | Whether auditing is enabled
 | `security-domain-name`       | bootSecurityDomain    | ATNA domain name for the application
-| `repository-host`            |                       | Host of the ATNA repository to send the events to
-| `repository-port`            |                       | Port of the ATNA repository to send the events to
+| `audit-repository-host`      | localhost             | Host of the ATNA repository to send the events to
+| `audit-repository-port`      | 514                   | Port of the ATNA repository to send the events to
 | `audit-source-id`            | `${spring.application.name}` | Source ID for ATNA events
 | `audit-enterprise-site-id`   |                       | Enterprise Site ID for ATNA events
 | `audit-queue-class`          | `org.openhealthtools.ihe.atna.auditor.queue.SynchronousAuditQueue` | Queue implementation for auditing

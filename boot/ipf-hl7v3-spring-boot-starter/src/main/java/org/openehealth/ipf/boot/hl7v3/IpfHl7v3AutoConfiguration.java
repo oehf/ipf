@@ -40,7 +40,7 @@ public class IpfHl7v3AutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(Hl7v3Auditor.class)
     @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
+    @ConditionalOnProperty("ipf.atna.auditor-enabled")
     public Hl7v3Auditor pdqConsumerAuditor(AuditorModuleConfig config) {
         Hl7v3Auditor auditor = Hl7v3Auditor.getAuditor();
         auditor.setConfig(config);

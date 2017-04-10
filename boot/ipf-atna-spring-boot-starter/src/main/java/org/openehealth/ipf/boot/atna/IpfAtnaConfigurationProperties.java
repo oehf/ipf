@@ -49,20 +49,15 @@ public class IpfAtnaConfigurationProperties {
     private Class<? extends AuditMessageSender> auditSenderClass = UDPSyslogSenderImpl.class;
 
     /**
-     * Sets the host of the audit repository
+     * Sets the host of the audit repository. Deprecated, set ipf.atna.audit-repository-host
      */
-    @Getter @Setter
+    @Getter @Setter @Deprecated
     private String repositoryHost = "localhost";
 
     /**
-     * Sets the port of the audit repository
+     * Sets the port of the audit repository. Deprecated, set ipf.atna.audit-repository-port
      */
-    @Getter @Setter
+    @Getter @Setter @Deprecated
     private int repositoryPort = 514;
 
-    @Getter @Setter
-    private String auditSourceId;
-
-    @Getter @Setter
-    private String auditEnterpriseSiteId;
 }

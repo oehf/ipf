@@ -51,7 +51,7 @@ public class IpfXdsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(XDSSourceAuditor.class)
     @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
+    @ConditionalOnProperty("ipf.atna.auditor-enabled")
     public XDSSourceAuditor xdsSourceAuditor(AuditorModuleConfig config) {
         XDSSourceAuditor auditor = XDSSourceAuditor.getAuditor();
         auditor.setConfig(config);
@@ -61,7 +61,7 @@ public class IpfXdsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(XDSConsumerAuditor.class)
     @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
+    @ConditionalOnProperty("ipf.atna.auditor-enabled")
     public XDSConsumerAuditor xdsConsumerAuditor(AuditorModuleConfig config) {
         XDSConsumerAuditor auditor = XDSConsumerAuditor.getAuditor();
         auditor.setConfig(config);
@@ -71,7 +71,7 @@ public class IpfXdsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(XDSConsumerAuditor.class)
     @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
+    @ConditionalOnProperty("ipf.atna.auditor-enabled")
     public XDSRepositoryAuditor xdsRepositoryAuditor(AuditorModuleConfig config) {
         XDSRepositoryAuditor auditor = XDSRepositoryAuditor.getAuditor();
         auditor.setConfig(config);
@@ -81,7 +81,7 @@ public class IpfXdsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(XDSConsumerAuditor.class)
     @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
+    @ConditionalOnProperty("ipf.atna.auditor-enabled")
     public XDSRegistryAuditor xdsRegistryAuditor(AuditorModuleConfig config) {
         XDSRegistryAuditor auditor = XDSRegistryAuditor.getAuditor();
         auditor.setConfig(config);
@@ -91,7 +91,7 @@ public class IpfXdsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(CustomXdsAuditor.class)
     @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
+    @ConditionalOnProperty("ipf.atna.auditor-enabled")
     public CustomXdsAuditor customXdsAuditor(AuditorModuleConfig config) {
         CustomXdsAuditor auditor = CustomXdsAuditor.getAuditor();
         auditor.setConfig(config);
@@ -101,7 +101,7 @@ public class IpfXdsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(XCAInitiatingGatewayAuditor.class)
     @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
+    @ConditionalOnProperty("ipf.atna.auditor-enabled")
     public XCAInitiatingGatewayAuditor xcaInitiatingGatewayAuditor(AuditorModuleConfig config) {
         XCAInitiatingGatewayAuditor auditor = XCAInitiatingGatewayAuditor.getAuditor();
         auditor.setConfig(config);
@@ -111,7 +111,7 @@ public class IpfXdsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(XCARespondingGatewayAuditor.class)
     @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
+    @ConditionalOnProperty("ipf.atna.auditor-enabled")
     public XCARespondingGatewayAuditor xcaRespondingGatewayAuditor(AuditorModuleConfig config) {
         XCARespondingGatewayAuditor auditor = XCARespondingGatewayAuditor.getAuditor();
         auditor.setConfig(config);
@@ -121,7 +121,7 @@ public class IpfXdsAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(XDMAuditor.class)
     @ConditionalOnSingleCandidate(AuditorModuleConfig.class)
-    @ConditionalOnProperty("ipf.atna.auditor.enabled")
+    @ConditionalOnProperty("ipf.atna.auditor-enabled")
     public XDMAuditor xdmAuditor(AuditorModuleConfig config) {
         XDMAuditor auditor = XDMAuditor.getAuditor();
         auditor.setConfig(config);
