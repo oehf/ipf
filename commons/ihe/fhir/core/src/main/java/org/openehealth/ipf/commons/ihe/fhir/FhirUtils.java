@@ -53,7 +53,7 @@ public final class FhirUtils {
         return bundle.getEntry().stream()
                 .collect(Collectors.groupingBy(entry -> {
                             Bundle.BundleEntryRequestComponent request = entry.getRequest();
-                            if (request == null || request.getUrl() == null || !request.getUrl().equals(entry.getResource().getResourceType().toString())) {
+                            if (request == null || request.getUrl() == null) {
                                 throw unprocessableEntity(
                                         OperationOutcome.IssueSeverity.ERROR,
                                         OperationOutcome.IssueType.INVALID,

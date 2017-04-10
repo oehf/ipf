@@ -147,8 +147,10 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
             List<Optional<CompositeIdentifier>> identifiers = searchTokenList(identifierParam)
             // Patient identifier has identifier value
             searchIdentifier = identifiers?.find {
-                it.isPresent() && it.get().hasAll() && !it.get().id.empty
+                it.isPresent() && it.get().hasSystem() && !it.get().id.empty
             }
+            if (searchIdentifier == null) searchIdentifier = Optional.empty()
+
             // Requested domains have no identifier value. If the resource identifier system is not included here,
             // add it because otherwise we don't know the resource ID in the response.
             requestedDomainOids = identifiers?.findAll { it.isPresent() && it.get().hasOnlySystem() }
