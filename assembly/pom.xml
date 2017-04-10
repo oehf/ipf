@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf</artifactId>
-        <version>3.3-SNAPSHOT</version>
+        <version>3.2-SNAPSHOT</version>
     </parent>
 
     <dependencies>
