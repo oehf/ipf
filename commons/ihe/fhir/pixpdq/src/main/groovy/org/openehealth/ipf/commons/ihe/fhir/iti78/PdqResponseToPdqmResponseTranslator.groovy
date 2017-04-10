@@ -224,6 +224,8 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
         int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0
         if (errorField == 8) {
             throw Utils.unknownTargetDomainValue()
+        } else if (errorField == 3) {
+            throw Utils.unknownPatientDomain()
         } else {
             throw Utils.unexpectedProblem()
         }
