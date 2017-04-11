@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2017 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsReq
 
 import java.util.Map;
 
-
 /**
- * Audit strategy for ITI-41.
- * @author Dmytro Rud
+ * Audit strategy for ITI-80.
+ * @author Remco Overdevest
  */
 abstract class Iti80AuditStrategy extends XdsSubmitAuditStrategy30 {
 
