@@ -36,7 +36,7 @@ import java.util.Collections;
  *
  * @author Dmytro Rud
  */
-class InPayloadLoggerInterceptor extends AbstractSafeInterceptor {
+public class InPayloadLoggerInterceptor extends AbstractSafeInterceptor {
     @Delegate private final WsPayloadLoggerBase base = new WsPayloadLoggerBase();
 
     public InPayloadLoggerInterceptor(String fileNamePattern) {
