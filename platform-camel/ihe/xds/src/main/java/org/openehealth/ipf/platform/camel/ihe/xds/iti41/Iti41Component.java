@@ -34,8 +34,8 @@ import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_41;
  */
 public class Iti41Component extends XdsComponent<XdsSubmitAuditDataset> {
 
-    public static final String TARGET_HCID_NS = "urn:ihe.net:iti:xdr:2014";
-    public static final String TARGET_HCID_NS_PREFIX = "xcdr";
+    public static final String TARGET_HCID_NS = "urn:ihe:iti:xdr:2014";
+    public static final String TARGET_HCID_NS_PREFIX = "xdr";
     public static final String TARGET_HCID_BLOCK_LOCAL_PART = "homeCommunityBlock";
     public static final String TARGET_HCID_LOCAL_PART = "homeCommunityId";
     public static final QName  TARGET_HCID_HEADER_NAME = new QName(TARGET_HCID_NS, TARGET_HCID_BLOCK_LOCAL_PART, TARGET_HCID_NS_PREFIX);
