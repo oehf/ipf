@@ -27,6 +27,7 @@ import java.util.Map;
 /**
  * Audit strategy for ITI-80.
  * @author Remco Overdevest
+ * @since 3.3
  */
 abstract class Iti80AuditStrategy extends XdsSubmitAuditStrategy30 {
 

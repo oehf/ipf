@@ -30,6 +30,7 @@ import java.util.List;
 
 /**
  * @author Remco Overdevest
+ * @since 3.3
  */
 public class XCDR implements XdsIntegrationProfile {
 

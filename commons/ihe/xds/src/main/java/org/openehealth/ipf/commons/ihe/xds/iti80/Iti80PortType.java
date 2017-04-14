@@ -30,6 +30,7 @@ import javax.xml.ws.Action;
 
 /**
  * Provides the ITI-80 web-service interface.
+ * @since 3.3
  */
 @WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "CrossGatewayDocumentProvide_PortType", portName = "RespondingGateway_Port_Soap12")
 @XmlSeeAlso({
