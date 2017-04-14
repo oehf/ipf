@@ -36,7 +36,7 @@ public class Iti59Component extends AbstractWsComponent<Iti59AuditDataset, WsTra
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new HpdEndpoint(uri, remaining, this,
+        return new HpdEndpoint<>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),

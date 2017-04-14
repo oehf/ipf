@@ -64,7 +64,7 @@ public class HPD implements IntegrationProfile {
             false);
 
     private final static WsTransactionConfiguration ITI_59_WS_CONFIG = new WsTransactionConfiguration(
-            "hpd-iti58",
+            "hpd-iti59",
             "Provider Information Feed",
             true,
             new Iti59AuditStrategy(false),
