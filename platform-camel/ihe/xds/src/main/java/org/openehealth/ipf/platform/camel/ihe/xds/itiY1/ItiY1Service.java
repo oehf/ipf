@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.itiY1.ItiY1PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -42,7 +42,7 @@ public class ItiY1Service extends AbstractWebService implements ItiY1PortType {
         Exception exception = Exchanges.extractException(result);
         if (exception != null) {
             log.debug(getClass().getSimpleName() + " service failed", exception);
-            QueryResponse errorResponse = new QueryResponse(
+            Response errorResponse = new Response(
                     exception,
                     ErrorCode.REPOSITORY_METADATA_ERROR,
                     ErrorCode.REPOSITORY_ERROR,
