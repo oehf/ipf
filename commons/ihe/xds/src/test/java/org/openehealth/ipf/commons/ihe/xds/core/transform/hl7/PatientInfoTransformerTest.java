@@ -160,12 +160,13 @@ public class PatientInfoTransformerTest {
         }
 
         List<String> hl7 = transformer.toHL7(originalPatientInfo);
-        assertEquals(1, hl7.size());
-        String pid3 = hl7.get(0);
-        assertTrue(pid3.startsWith("PID-3|"));
-        assertTrue(pid3.length() <= 256);
+        assertEquals(5, hl7.size());
+        for (String pid3 : hl7) {
+            assertTrue(pid3.startsWith("PID-3|"));
+            assertTrue(pid3.length() <= 256);
+        }
 
         PatientInfo recoveredPatientInfo = transformer.fromHL7(hl7);
-        assertEquals(2, recoveredPatientInfo.getIds().size());
+        assertEquals(9, recoveredPatientInfo.getIds().size());
     }
 }

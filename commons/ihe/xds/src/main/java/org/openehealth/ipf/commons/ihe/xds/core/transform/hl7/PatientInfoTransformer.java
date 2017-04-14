@@ -90,15 +90,19 @@ public class PatientInfoTransformer {
             List<String> repetitions = entry.getValue().toHL7(patientInfo);
             if (repetitions != null) {
                 if (entry.getKey() == 3) {
-                    String value = "";
+                    StringBuilder sb = new StringBuilder(prefix);
                     for (String repetition : repetitions) {
-                        if (value.length() + 1 + repetition.length() > 251) {
-                            log.warn("Due to a length limitation, sourcePatientInfo will contain only a subset of patient IDs");
-                            break;
+                        if ((repetition.length() > 255 - sb.length()) && (sb.length() > prefix.length())) {
+                            sb.setLength(sb.length() - 1);
+                            hl7Strings.add(sb.toString());
+                            sb.setLength(prefix.length());
                         }
-                        value = value + '~' + repetition;
+                        sb.append(repetition).append('~');
                     }
-                    hl7Strings.add(prefix + value.substring(1));
+                    if (sb.length() > prefix.length()) {
+                        sb.setLength(sb.length() - 1);
+                        hl7Strings.add(sb.toString());
+                    }
                 } else {
                     // multiple list elements are possible for PID-3 only
                     hl7Strings.add(prefix + repetitions.get(0));
