@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
  *
  * @param <T> The type of object contained in the inner list
  */
+@XmlTransient
 public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfListWrapper<T>, List<List<T>>> {
     @Override
     public List<List<T>> unmarshal(ListOfListWrapper<T> v) throws Exception {
@@ -45,15 +47,14 @@ public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfLis
         return new ListOfListWrapper<>(outerList);
     }
 
-    @XmlType
+    @XmlType(name = "ListOfListWrapper", namespace = "http://www.openehealth.org/ipf/xds")
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class ListOfListWrapper<T> {
         private List<ListWrapper<T>> innerList;
 
         // Required for JAXB
-
         @SuppressWarnings({"UnusedDeclaration"})
-        public ListOfListWrapper() {
+        protected ListOfListWrapper() {
         }
 
         public ListOfListWrapper(List<ListWrapper<T>> list) {
@@ -65,15 +66,14 @@ public class ListOfListAdapter<T> extends XmlAdapter<ListOfListAdapter.ListOfLis
         }
     }
 
-    @XmlType
+    @XmlType(name = "ListWrapper", namespace = "http://www.openehealth.org/ipf/xds")
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class ListWrapper<T> {
         private List<T> value;
 
         // Required for JAXB
-
         @SuppressWarnings({"UnusedDeclaration"})
-        public ListWrapper() {
+        protected ListWrapper() {
         }
 
         public ListWrapper(List<T> list) {

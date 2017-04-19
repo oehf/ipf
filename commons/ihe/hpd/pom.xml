@@ -75,26 +75,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxb2-maven-plugin</artifactId>
-                <configuration>
-                    <sources>
-                        <source>${project.build.directory}/generated-stubs/org/openehealth/ipf/commons/ihe/xds/core/requests</source>
-                        <source>${project.build.directory}/generated-stubs/org/openehealth/ipf/commons/ihe/xds/core/responses</source>
-                    </sources>
-                    <outputDirectory>${project.build.directory}/jaxb2</outputDirectory>
-                    <createJavaDocAnnotations>false</createJavaDocAnnotations>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>schemagen</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-maven-plugin</artifactId>
                 <executions>

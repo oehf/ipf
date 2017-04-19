@@ -84,7 +84,7 @@
         <groovy-eclipse-compiler-version>2.9.2-01</groovy-eclipse-compiler-version>
         <jar-plugin-version>3.0.2</jar-plugin-version>
         <javadoc-plugin-version>2.10.4</javadoc-plugin-version>
-        <jaxb-plugin-version>2.2</jaxb-plugin-version>
+        <jaxb-plugin-version>2.3.1</jaxb-plugin-version>
         <lombok-plugin-version>1.16.16.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <pax-plugin-version>1.6.0</pax-plugin-version>

@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
 import ca.uhn.hl7v2.parser.PipeParser;
-import lombok.extern.slf4j.Slf4j;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.*;
 
@@ -29,7 +28,6 @@ import java.util.*;
  * PID string list.
  * @author Jens Riemschneider
  */
-@Slf4j
 public class PatientInfoTransformer {
     private static final String PID_PREFIX = "PID-";
 
