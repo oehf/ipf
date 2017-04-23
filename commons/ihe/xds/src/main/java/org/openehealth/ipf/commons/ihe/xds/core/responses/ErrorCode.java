@@ -152,6 +152,8 @@ public enum ErrorCode {
     /** An entryUUID passed in the Delete Document Set transaction is referenced by an Association
      *  sourceObject or targetObject attribute. */
     @XmlEnumValue("ReferencesExistException") REFERENCE_EXISTS_EXCEPTION("ReferencesExistException"),
+    /** A metadata object is no longer referenced by any Association. */
+    @XmlEnumValue("XDSUnreferencedObjectException") UNREFERENCED_OBJECT_EXCEPTION("XDSUnreferencedObjectException"),
     /** Error detected by the Document Registry during a document replacement.
      * @deprecated this error code is deprecated by IHE
      */
