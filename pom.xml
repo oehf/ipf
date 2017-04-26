@@ -94,7 +94,7 @@
         <site-plugin-version>3.4</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <activemq-version>5.14.3</activemq-version>
+        <activemq-version>5.14.5</activemq-version>
         <aspectj-version>1.8.9</aspectj-version>
         <cglib-version>3.2.4</cglib-version>
         <commons-beanutils-version>1.9.2</commons-beanutils-version>

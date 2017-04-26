@@ -68,4 +68,9 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
     protected Object getPayload() {
         return payload;
     }
+
+    @Override
+    public String getUuid() {
+        return null;
+    }
 }
