@@ -141,7 +141,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
             );
         }
 
-        Set<String> references = new HashSet<>();
+        Set<String> patientReferences = new HashSet<>();
         Set<String> expectedBinaryFullUrls = new HashSet<>();
         Set<String> expectedReferenceFullUrls = new HashSet<>();
         entries.values().stream()
@@ -156,15 +156,15 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                             } catch (Exception ignored) {
                             }
                         }
-                        references.add(getSubjectReference(resource, r -> dm.getSubject()));
+                        patientReferences.add(getSubjectReference(resource, r -> dm.getSubject()));
                     } else if (resource instanceof DocumentReference) {
                         DocumentReference dr = (DocumentReference) resource;
                         for (DocumentReference.DocumentReferenceContentComponent content : dr.getContent()) {
                             expectedBinaryFullUrls.add(content.getAttachment().getUrl());
                         }
-                        references.add(getSubjectReference(resource, r -> ((DocumentReference) r).getSubject()));
+                        patientReferences.add(getSubjectReference(resource, r -> ((DocumentReference) r).getSubject()));
                     } else if (resource instanceof List_) {
-                        references.add(getSubjectReference(resource, r -> ((List_) r).getSubject()));
+                        patientReferences.add(getSubjectReference(resource, r -> ((List_) r).getSubject()));
                     } else if (!(resource instanceof Binary)) {
                         throw FhirUtils.unprocessableEntity(
                                 OperationOutcome.IssueSeverity.ERROR,
@@ -176,14 +176,14 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                     }
                 });
 
-        if (references.size() != 1) {
+        if (patientReferences.size() != 1) {
             throw FhirUtils.unprocessableEntity(
                     OperationOutcome.IssueSeverity.ERROR,
                     OperationOutcome.IssueType.INVALID,
                     ErrorCode.PATIENT_ID_DOES_NOT_MATCH.getOpcode(),
                     null,
                     "Inconsistent patient references %s",
-                    references
+                    patientReferences
             );
         }
 

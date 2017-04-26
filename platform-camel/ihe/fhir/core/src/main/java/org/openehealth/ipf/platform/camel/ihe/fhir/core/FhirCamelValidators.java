@@ -104,8 +104,7 @@ public final class FhirCamelValidators {
         return exchange -> {
             FhirContext context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
             if (context != null) {
-                Boolean executeValidation = exchange.getIn().getHeader(ValidatorAdapter.NEED_VALIDATION_HEADER_NAME, Boolean.class);
-                if (executeValidation == null || executeValidation) {
+                if (ValidatorAdapter.validationEnabled(exchange)) {
                     Integer mode = exchange.getIn().getHeader(VALIDATION_MODE, Integer.class);
                     if (mode == null) mode = SCHEMA;
                     if (isValidateSchema(mode) || isValidateSchematron(mode)) {

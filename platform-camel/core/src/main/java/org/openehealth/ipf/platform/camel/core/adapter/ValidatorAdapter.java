@@ -136,7 +136,7 @@ public class ValidatorAdapter extends ProcessorAdapter {
      */
     public static boolean validationEnabled(Exchange exchange) {
         if (Boolean.FALSE.equals(exchange.getIn().getHeader(NEED_VALIDATION_HEADER_NAME, Boolean.class))) {
-            LOG.warn("Validation disabled");
+            LOG.debug("Validation disabled");
             return false;
         }
         return true;
