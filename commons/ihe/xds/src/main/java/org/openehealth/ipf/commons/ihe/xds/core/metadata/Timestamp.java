@@ -28,10 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateTimeAd
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.EnumMap;
@@ -48,6 +45,8 @@ import java.util.Objects;
 public class Timestamp implements Serializable {
     private static final long serialVersionUID = 4324651691599629794L;
 
+    @XmlEnum
+    @XmlType(name = "Precision", namespace = "http://www.openehealth.org/ipf/xds")
     public enum Precision {
         YEAR, MONTH, DAY, HOUR, MINUTE, SECOND
     }

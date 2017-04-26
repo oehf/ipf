@@ -19,7 +19,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.extractNonEmptyElement;
 import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.extractSoapBody;
 
 public class TestSoapUtils {
@@ -80,20 +79,4 @@ public class TestSoapUtils {
         assertEquals(totallyBad, extractSoapBody(totallyBad));
     }
 
-
-    @Test
-    public void testExtractNamedElement() {
-        final String elementName = "ImportantQuestion";
-        
-        assertEquals(contents, extractNonEmptyElement(envelopeWithNamespacePrefixes, elementName));
-        assertEquals(contents, extractNonEmptyElement(envelopeWithoutNamespacePrefixes, elementName));
-
-        assertEquals(null, extractNonEmptyElement(emptyEnvelopeWithNamespacePrefixes, elementName));
-        assertEquals(null, extractNonEmptyElement(emptyEnvelopeWithoutNamespacePrefixes, elementName));
-        assertEquals(null, extractNonEmptyElement(emptyEnvelopeWithNamespacePrefixesShort, elementName));
-        assertEquals(null, extractNonEmptyElement(emptyEnvelopeWithoutNamespacePrefixesShort, elementName));
-
-        assertNull(extractNonEmptyElement(null, elementName));
-        assertNull(extractNonEmptyElement(totallyBad, elementName));
-    }
 }

@@ -20,7 +20,7 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.HL7V3_NSURI
-import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS
+import static org.openehealth.ipf.commons.xml.XmlUtils.getElementNS
 
 /**
  * @author Dmytro Rud

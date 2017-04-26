@@ -20,6 +20,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 /**
  * Client audit strategy for ITI-80.
  * @author Remco Overdevest
+ * @since 3.3
  */
 public class Iti80ClientAuditStrategy extends Iti80AuditStrategy {
 
