@@ -60,7 +60,15 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
             String payload = payloadHolder.get(SOAP_BODY);
             if (isXmlContent(payload)) {
                 Document document = (Document) message.getContent(Node.class);
-                payloadHolder.put(SOAP_BODY, enrichNamespaces(document, payload));
+                if (document != null) {
+                    // The Node representation of the message is usually produced
+                    // by CXF's ReadHeadersInterceptor, but this does not happen when the message
+                    // does not contain SOAP headers (i.e. when the request is invalid, because
+                    // it does not fulfill the IHE requirement of using WS-Addressing).
+                    // Let us hope that in this unhappy case all relevant XML namespaces
+                    // are defined directly in the SOAP body and not in the SOAP envelope.
+                    payloadHolder.put(SOAP_BODY, enrichNamespaces(document, payload));
+                }
             }
         }
     }
