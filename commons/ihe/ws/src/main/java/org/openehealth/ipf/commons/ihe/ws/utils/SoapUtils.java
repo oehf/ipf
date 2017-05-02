@@ -24,6 +24,8 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.ws.addressing.Names;
 import org.apache.cxf.ws.addressing.VersionTransformer.Names200403;
 import org.apache.cxf.ws.addressing.VersionTransformer.Names200408;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import java.util.HashSet;
 import java.util.List;
@@ -137,4 +139,35 @@ public abstract class SoapUtils {
         }
     }
 
+    /**
+     * Searches for the first sub-element of the given XML element, which has
+     * the given local name and whose namespace belongs to the given set.
+     *
+     * @param root            an XML element whose children will be iterated, null values are allowed
+     * @param nsUris          a set of namespace URIs the wanted element can belong to
+     * @param wantedLocalName local name of the wanted element
+     * @return corresponding child element or <code>null</code> when none found
+     */
+    public static Element getElementNS(
+            Element root,
+            Set<String> nsUris,
+            String wantedLocalName)
+    {
+        if (root == null) {
+            return null;
+        }
+
+        Node node = root.getFirstChild();
+        while (node != null) {
+            if ((node instanceof Element) &&
+                    nsUris.contains(node.getNamespaceURI()) &&
+                    node.getLocalName().equals(wantedLocalName)) {
+                return (Element) node;
+            }
+
+            node = node.getNextSibling();
+        }
+
+        return null;
+    }
 }

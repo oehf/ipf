@@ -38,7 +38,7 @@ import org.w3c.dom.NodeList
 import javax.xml.ws.BindingProvider
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
-import static org.openehealth.ipf.commons.xml.XmlUtils.getElementNS
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS
 import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.*

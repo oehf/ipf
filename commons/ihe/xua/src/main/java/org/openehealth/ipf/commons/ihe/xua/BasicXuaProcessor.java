@@ -35,10 +35,18 @@ import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Attribute;
 import org.opensaml.saml.saml2.core.AttributeStatement;
+import org.opensaml.soap.wssecurity.WSSecurityConstants;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*;
 
 import javax.xml.namespace.QName;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Dmytro Rud
@@ -55,10 +63,9 @@ public class BasicXuaProcessor implements XuaProcessor {
      */
     public static final String XUA_SAML_ASSERTION = AbstractAuditInterceptor.class.getName() + ".XUA_SAML_ASSERTION";
 
-    /**
-     * XML Namespace URI of WS-Security Extensions 1.1.
-     */
-    public static final String WSSE_NS_URI = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
+    public static final Set<String> WSSE_NS_URIS = new HashSet<>(Arrays.asList(
+            WSSecurityConstants.WSSE_NS,
+            WSSecurityConstants.WSSE11_NS));
 
     public static final String PURPOSE_OF_USE_URI = "urn:oasis:names:tc:xspa:1.0:subject:purposeofuse";
 
@@ -72,6 +79,30 @@ public class BasicXuaProcessor implements XuaProcessor {
         } catch (InitializationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Element extractAssertionElementFromCxfMessage(SoapMessage message, Header.Direction headerDirection) {
+        Header header = message.getHeader(new QName(WSSecurityConstants.WSSE_NS, "Security"));
+        if (! ((header != null) &&
+                headerDirection.equals(header.getDirection()) &&
+                (header.getObject() instanceof Element)))
+        {
+            return null;
+        }
+
+        Element headerElem = (Element) header.getObject();
+        NodeList nodeList = headerElem.getElementsByTagNameNS(SAMLConstants.SAML20_NS, "Assertion");
+        return (Element) nodeList.item(0);
+    }
+
+    private static Element extractAssertionElementFromDom(SoapMessage message) {
+        Document document = (Document) message.getContent(Node.class);
+        if (document == null) {
+            return null;
+        }
+        Element element = getElementNS(document.getDocumentElement(), SOAP_NS_URIS, "Header");
+        element = getElementNS(element, WSSE_NS_URIS, "Security");
+        return getElementNS(element, Collections.singleton(SAMLConstants.SAML20_NS), "Assertion");
     }
 
     /**
@@ -100,17 +131,10 @@ public class BasicXuaProcessor implements XuaProcessor {
 
         // extract SAML assertion the from WS-Security SOAP header
         if (assertion == null) {
-            Header header = message.getHeader(new QName(WSSE_NS_URI, "Security"));
-            if (! ((header != null) &&
-                    headerDirection.equals(header.getDirection()) &&
-                    (header.getObject() instanceof Element)))
-            {
-                return;
+            Element assertionElem = extractAssertionElementFromCxfMessage(message, headerDirection);
+            if (assertionElem == null) {
+                assertionElem = extractAssertionElementFromDom(message);
             }
-
-            Element headerElem = (Element) header.getObject();
-            NodeList nodeList = headerElem.getElementsByTagNameNS(SAMLConstants.SAML20_NS, "Assertion");
-            Element assertionElem = (Element) nodeList.item(0);
             if (assertionElem == null) {
                 return;
             }
@@ -134,7 +158,8 @@ public class BasicXuaProcessor implements XuaProcessor {
                 ? assertion.getIssuer().getValue() : null;
 
         if (StringUtils.isNotEmpty(issuer) && StringUtils.isNotEmpty(userName)) {
-            auditDataset.setUserName(assertion.getSubject().getNameID().getSPProvidedID() + '<' + userName + '@' + issuer + '>');
+            String spProvidedId = StringUtils.stripToEmpty(assertion.getSubject().getNameID().getSPProvidedID());
+            auditDataset.setUserName(spProvidedId + '<' + userName + '@' + issuer + '>');
         }
 
         // collect purposes of use
