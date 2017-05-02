@@ -35,7 +35,7 @@ public class Iti86TestRouteBuilder extends SpringRouteBuilder {
 
     @Override
     void configure() throws Exception {
-        from('xds-iti86:xds-iti86-service2')
+        from('rmd-iti86:rmd-iti86-service2')
             .process(iti86RequestValidator())
             .process { checkValue(it) }
             .process(iti86ResponseValidator())

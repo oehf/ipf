@@ -36,8 +36,8 @@ class TestIti86 extends StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-86.xml'
     
-    def SERVICE2 = "xds-iti86://localhost:${port}/xds-iti86-service2"
-    def SERVICE2_ADDR = "http://localhost:${port}/xds-iti86-service2"
+    def SERVICE2 = "rmd-iti86://localhost:${port}/rmd-iti86-service2"
+    def SERVICE2_ADDR = "http://localhost:${port}/rmd-iti86-service2"
 
     RemoveDocuments request
 
