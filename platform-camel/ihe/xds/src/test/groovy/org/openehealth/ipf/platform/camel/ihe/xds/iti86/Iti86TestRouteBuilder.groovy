@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.itiY1
+package org.openehealth.ipf.platform.camel.ihe.xds.iti86
 
 import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
@@ -25,20 +25,20 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.itiY1RequestValidator
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.itiY1ResponseValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti86RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti86ResponseValidator
 
 /**
  * @author Dmytro Rud
  */
-public class ItiY1TestRouteBuilder extends SpringRouteBuilder {
+public class Iti86TestRouteBuilder extends SpringRouteBuilder {
 
     @Override
     void configure() throws Exception {
-        from('xds-itiY1:xds-itiY1-service2')
-            .process(itiY1RequestValidator())
+        from('xds-iti86:xds-iti86-service2')
+            .process(iti86RequestValidator())
             .process { checkValue(it) }
-            .process(itiY1ResponseValidator())
+            .process(iti86ResponseValidator())
     }
 
     void checkValue(Exchange exchange) {

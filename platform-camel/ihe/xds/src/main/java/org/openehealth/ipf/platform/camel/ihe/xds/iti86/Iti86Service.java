@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.itiY1;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti86;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,19 +22,19 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsReq
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openehealth.ipf.commons.ihe.xds.itiY1.ItiY1PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
- * Service implementation for the IHE ITI-Y1 transaction (Remove Documents).
+ * Service implementation for the IHE ITI-86 transaction (Remove Documents).
  *
  * @since 3.3
  */
 @Slf4j
 @AllArgsConstructor
-public class ItiY1Service extends AbstractWebService implements ItiY1PortType {
+public class Iti86Service extends AbstractWebService implements Iti86PortType {
 
     @Override
     public RegistryResponseType documentRepositoryRemoveDocuments(RemoveDocumentsRequestType body) {

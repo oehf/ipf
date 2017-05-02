@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.itiY1
+package org.openehealth.ipf.platform.camel.ihe.xds.iti86
 
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
@@ -29,15 +29,15 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.PARTIAL_
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
- * Tests the ITI-Y1 transaction with a webservice and client adapter defined via URIs.
+ * Tests the ITI-86 transaction with a webservice and client adapter defined via URIs.
  * @author Dmytro Rud
  */
-class TestItiY1 extends StandardTestContainer {
+class TestIti86 extends StandardTestContainer {
     
-    def static CONTEXT_DESCRIPTOR = 'iti-Y1.xml'
+    def static CONTEXT_DESCRIPTOR = 'iti-86.xml'
     
-    def SERVICE2 = "xds-itiY1://localhost:${port}/xds-itiY1-service2"
-    def SERVICE2_ADDR = "http://localhost:${port}/xds-itiY1-service2"
+    def SERVICE2 = "xds-iti86://localhost:${port}/xds-iti86-service2"
+    def SERVICE2_ADDR = "http://localhost:${port}/xds-iti86-service2"
 
     RemoveDocuments request
 
@@ -56,7 +56,7 @@ class TestItiY1 extends StandardTestContainer {
     }
 
     @Test
-    void testItiY1Success() {
+    void testIti86Success() {
         def response = sendIt(SERVICE2, 'success')
         assert SUCCESS == response.status
         assert auditSender.messages.size() == 2
@@ -64,7 +64,7 @@ class TestItiY1 extends StandardTestContainer {
     }
 
     @Test
-    void testItiY1Failure() {
+    void testIti86Failure() {
         def response = sendIt(SERVICE2, 'failure')
         assert FAILURE == response.status
         assert auditSender.messages.size() == 2
@@ -72,7 +72,7 @@ class TestItiY1 extends StandardTestContainer {
     }
 
     @Test
-    void testItiY1Partial() {
+    void testIti86Partial() {
         def response = sendIt(SERVICE2, 'partial')
         assert PARTIAL_SUCCESS == response.status
         assert auditSender.messages.size() == 4
@@ -88,7 +88,7 @@ class TestItiY1 extends StandardTestContainer {
             assert it.ActiveParticipant.size() == 2
             assert it.EventIdentification.@EventActionCode == 'D'
             assert it.ActiveParticipant[1].@UserID.text() == SERVICE2_ADDR
-            checkCode(it.EventIdentification.EventTypeCode, 'ITI-Y1', 'IHE Transactions')
+            checkCode(it.EventIdentification.EventTypeCode, 'ITI-86', 'IHE Transactions')
         }
 
         checkDocumentUids(messages, successfulDocuments, '0')

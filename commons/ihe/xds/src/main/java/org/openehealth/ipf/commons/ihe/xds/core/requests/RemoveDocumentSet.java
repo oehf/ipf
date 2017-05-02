@@ -30,14 +30,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Request object for the Remove Document Set transaction.
+ * Request object for the Remove Metadata transaction.
  * <p>
  * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Boris Stanojevic
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RemoveDocumentSet", propOrder = {"references"})
-@XmlRootElement(name = "removeDocumentSet")
+@XmlType(name = "RemoveMetadata", propOrder = {"references"})
+@XmlRootElement(name = "removeMetadata")
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public class RemoveDocumentSet implements Serializable {

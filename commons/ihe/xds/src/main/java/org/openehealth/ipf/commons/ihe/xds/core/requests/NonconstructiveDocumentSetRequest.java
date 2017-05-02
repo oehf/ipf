@@ -27,7 +27,8 @@ import java.util.List;
 /**
  * Base class for non-constructive operations (Read+Delete as opposed to Create+Update in CRUD)
  * on document sets in an XDS Repository.
- *
+ * <p>
+ * Lists are pre-created and can therefore never be <code>null</code>.
  * @since 3.3
  */
 @EqualsAndHashCode(doNotUseGetters = true)

@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
-import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
@@ -29,7 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * ATNA Audit event for ITI-Y1.
+ * ATNA Audit event for ITI-86.
  * @author Dmytro Rud
  *
  * @since 3.3

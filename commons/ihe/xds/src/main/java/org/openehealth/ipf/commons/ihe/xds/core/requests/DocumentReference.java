@@ -33,7 +33,7 @@ import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DocumentReference", propOrder = {"homeCommunityId", "repositoryUniqueId", "documentUniqueId" })
-@XmlRootElement(name = "retrieveDocument")
+@XmlRootElement(name = "documentReference")
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public class DocumentReference implements Serializable {

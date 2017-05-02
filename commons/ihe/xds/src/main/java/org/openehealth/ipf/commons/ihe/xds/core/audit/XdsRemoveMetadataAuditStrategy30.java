@@ -31,15 +31,15 @@ import java.util.Map;
  *
  * @author Boris Stanojevic
  */
-abstract public class XdsMetadataRemoveAuditStrategy30 extends XdsAuditStrategy<XdsMetadataRemoveAuditDataset> {
+abstract public class XdsRemoveMetadataAuditStrategy30 extends XdsAuditStrategy<XdsRemoveMetadataAuditDataset> {
 
-    public XdsMetadataRemoveAuditStrategy30(boolean serverSide) {
+    public XdsRemoveMetadataAuditStrategy30(boolean serverSide) {
         super(serverSide);
     }
 
 
     @Override
-    public XdsMetadataRemoveAuditDataset enrichAuditDatasetFromRequest(XdsMetadataRemoveAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
+    public XdsRemoveMetadataAuditDataset enrichAuditDatasetFromRequest(XdsRemoveMetadataAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         RemoveObjectsRequest request = (RemoveObjectsRequest) pojo;
 
         List<ObjectRefType> references = request.getObjectRefList().getObjectRef();
@@ -58,8 +58,8 @@ abstract public class XdsMetadataRemoveAuditStrategy30 extends XdsAuditStrategy<
 
 
     @Override
-    public XdsMetadataRemoveAuditDataset createAuditDataset() {
-        return new XdsMetadataRemoveAuditDataset(isServerSide());
+    public XdsRemoveMetadataAuditDataset createAuditDataset() {
+        return new XdsRemoveMetadataAuditDataset(isServerSide());
     }
 
 

@@ -147,6 +147,9 @@ public enum ErrorCode {
     /** The version number included in the update request did not match the existing object.
      *  One cause of this is multiple simultaneous update attempts. */
     @XmlEnumValue("XDSMetadataVersionError") META_DATA_VERSION_ERROR("XDSMetadataVersionError"),
+    /** The Document Repository was not able to remove the document. The codeContext shall indicate
+     * the DocumentUniqueId of the document that caused the error.*/
+    @XmlEnumValue("XDSRemoveDocumentsError") REMOVE_DOCUMENTS_ERROR("XDSRemoveDocumentsError"),
     /** The recipient cannot resolve an entryUUID reference in the transaction. */
     @XmlEnumValue("UnresolvedReferenceException") UNRESOLVED_REFERENCE_EXCEPTION("UnresolvedReferenceException"),
     /** An entryUUID passed in the Delete Document Set transaction is referenced by an Association

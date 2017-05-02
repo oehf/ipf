@@ -40,8 +40,8 @@ import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62PortType;
-import org.openehealth.ipf.commons.ihe.xds.itiY1.ItiY1AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.itiY1.ItiY1PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86AuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti86.Iti86PortType;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
@@ -65,7 +65,7 @@ public class XDS_B implements XdsIntegrationProfile {
         ITI_57(ITI_57_WS_CONFIG),
         ITI_61(ITI_61_WS_CONFIG),
         ITI_62(ITI_62_WS_CONFIG),
-        ITI_Y1(ITI_Y1_WS_CONFIG);
+        ITI_86(ITI_86_WS_CONFIG);
 
         @Getter private WsTransactionConfiguration wsTransactionConfiguration;
 
@@ -219,17 +219,17 @@ public class XDS_B implements XdsIntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration ITI_Y1_WS_CONFIG = new WsTransactionConfiguration(
-            "xds-itiY1",
+    private final static WsTransactionConfiguration ITI_86_WS_CONFIG = new WsTransactionConfiguration(
+            "rmd-iti86",
             "Remove Documents",
             false,
-            new ItiY1AuditStrategy(false),
-            new ItiY1AuditStrategy(true),
+            new Iti86AuditStrategy(false),
+            new Iti86AuditStrategy(true),
             new QName("urn:ihe:iti:rmd:2017", "DocumentRepository_Service", "ihe"),
-            ItiY1PortType.class,
+            Iti86PortType.class,
             new QName("urn:ihe:iti:rmd:2017", "DocumentRepository_Binding_Soap12", "ihe"),
             false,
-            "wsdl/itiY1.wsdl",
+            "wsdl/iti86.wsdl",
             true,
             false,
             false,

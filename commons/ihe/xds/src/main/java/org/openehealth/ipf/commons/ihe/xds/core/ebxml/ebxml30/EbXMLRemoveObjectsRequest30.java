@@ -30,7 +30,7 @@ import java.util.List;
 import static org.apache.commons.lang3.Validate.notNull;
 
 /**
- * Encapsulation of {@link org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest}
+ * Encapsulation of {@link RemoveObjectsRequest}
  * @author Boris Stanojevic
  */
 public class EbXMLRemoveObjectsRequest30 implements EbXMLRemoveObjectsRequest {

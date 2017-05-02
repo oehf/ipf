@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.itiY1;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti86;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -29,17 +29,17 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_Y1;
+import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_86;
 
 /**
- * The Camel component for the ITI-Y1 transaction.
+ * The Camel component for the ITI-86 transaction.
  *
  * @since 3.3
  */
-public class ItiY1Component extends XdsComponent<XdsNonconstructiveDocumentSetRequestAuditDataset> {
+public class Iti86Component extends XdsComponent<XdsNonconstructiveDocumentSetRequestAuditDataset> {
 
-    public ItiY1Component() {
-        super(ITI_Y1);
+    public Iti86Component() {
+        super(ITI_86);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ItiY1Component extends XdsComponent<XdsNonconstructiveDocumentSetRe
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
-                ItiY1Service.class)
+                Iti86Service.class)
         {
             @Override
             public AbstractWsProducer<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(

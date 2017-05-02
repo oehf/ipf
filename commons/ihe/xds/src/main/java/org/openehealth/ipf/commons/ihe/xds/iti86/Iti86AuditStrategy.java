@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.itiY1;
+package org.openehealth.ipf.commons.ihe.xds.iti86;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsDocumentRemoveAuditStrategy30;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveDocumentAuditStrategy30;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
 
@@ -25,9 +25,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocument
  *
  * @since 3.3
  */
-public class ItiY1AuditStrategy extends XdsDocumentRemoveAuditStrategy30 {
+public class Iti86AuditStrategy extends XdsRemoveDocumentAuditStrategy30 {
 
-    public ItiY1AuditStrategy(boolean serverSide) {
+    public Iti86AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
@@ -35,7 +35,7 @@ public class ItiY1AuditStrategy extends XdsDocumentRemoveAuditStrategy30 {
     public void doAudit(XdsNonconstructiveDocumentSetRequestAuditDataset auditDataset) {
         for (Status status : Status.values()) {
             if (auditDataset.hasDocuments(status)) {
-                AuditorManager.getCustomXdsAuditor().auditItiY1(
+                AuditorManager.getCustomXdsAuditor().auditIti86(
                         isServerSide(),
                         auditDataset.getEventOutcomeCode(status),
                         auditDataset.getUserId(),
@@ -50,5 +50,4 @@ public class ItiY1AuditStrategy extends XdsDocumentRemoveAuditStrategy30 {
             }
         }
     }
-
 }

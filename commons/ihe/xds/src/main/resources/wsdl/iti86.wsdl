@@ -25,7 +25,7 @@
 	targetNamespace="urn:ihe:iti:rmd:2017"
 	name="DocumentRepository">
 
-	<documentation>IHE XDS.b Document Repository = Transaction ITI-Y1 = Remove Documents</documentation>
+	<documentation>IHE XDS.b Document Repository = Transaction ITI-86 = Remove Documents</documentation>
 
 	<types>
         <xsd:schema elementFormDefault="qualified" targetNamespace="urn:ihe:iti:rmd:2017">

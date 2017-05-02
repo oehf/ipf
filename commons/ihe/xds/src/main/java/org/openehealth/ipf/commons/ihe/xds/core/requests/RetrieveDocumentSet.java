@@ -26,8 +26,6 @@ import java.io.Serializable;
 
 /**
  * Request object for the Retrieve Document Set transaction.
- * <p>
- * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)

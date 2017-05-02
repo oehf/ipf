@@ -20,7 +20,6 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
@@ -95,12 +94,12 @@ class TestIti62 extends StandardTestContainer {
         assert message.ParticipantObjectIdentification.size() == 2
         assert message.children().size() == 6
 
-        checkEvent(message.EventIdentification, '110106', 'ITI-62', 'D', outcome)
+        checkEvent(message.EventIdentification, '110110', 'ITI-62', 'D', outcome)
         checkSource(message.ActiveParticipant[0], 'true')
         checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
         checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[0], DocumentEntryType.STABLE.uuid, 'urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871')
-        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[1], DocumentEntryType.STABLE.uuid, 'urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd')
+        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[0], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871')
+        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[1], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd')
 
         message = getAudit('D', SERVICE2_ADDR)[1]
 
@@ -110,12 +109,12 @@ class TestIti62 extends StandardTestContainer {
         assert message.ParticipantObjectIdentification.size() == 2
         assert message.children().size() == 6
 
-        checkEvent(message.EventIdentification, '110106', 'ITI-62', 'D', outcome)
+        checkEvent(message.EventIdentification, '110110', 'ITI-62', 'D', outcome)
         checkSource(message.ActiveParticipant[0], 'true')
         checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
         checkAuditSource(message.AuditSourceIdentification, 'customXdsSourceId')
-        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[0], DocumentEntryType.STABLE.uuid, 'urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871')
-        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[1], DocumentEntryType.STABLE.uuid, 'urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd')
+        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[0], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632452-1de7-480d-94b1-c2074d79c871')
+        checkRegistryObjectParticipantObjectDetail(message.ParticipantObjectIdentification[1], 'urn:ihe:iti:2017:ObjectRef', 'urn:uuid:b2632df2-1de7-480d-1045-c2074d79aabd')
     }
 
     def sendIt(endpoint) {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.itiY1;
+package org.openehealth.ipf.commons.ihe.xds.iti86;
 
 import org.apache.cxf.annotations.DataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
         org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory.class })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @DataBinding(XdsJaxbDataBinding.class)
-public interface ItiY1PortType {
+public interface Iti86PortType {
 
     @WebMethod(operationName = "DocumentRepository_RemoveDocuments")
     @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", partName = "body")

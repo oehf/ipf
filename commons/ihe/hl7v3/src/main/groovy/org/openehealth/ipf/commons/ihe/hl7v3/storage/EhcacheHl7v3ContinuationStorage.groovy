@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package org.openehealth.ipf.commons.ihe.hl7v3.storage
 
 import net.sf.ehcache.Ehcache
 import net.sf.ehcache.Element
 import org.apache.commons.lang3.Validate
-import org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage
 
 /**
  * @author Dmytro Rud

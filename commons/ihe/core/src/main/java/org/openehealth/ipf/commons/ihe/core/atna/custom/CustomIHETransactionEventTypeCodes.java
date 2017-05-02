@@ -53,9 +53,9 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
         }
     }
 
-    public static final class DeleteDocumentSet extends IHETransactionEventTypeCodes {
-        public DeleteDocumentSet() {
-            super("ITI-62", "Delete Document Set");
+    public static final class RemoveMetadata extends IHETransactionEventTypeCodes {
+        public RemoveMetadata() {
+            super("ITI-62", "Remove Metadata");
         }
     }
 
@@ -109,7 +109,7 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
 
     public static final class RemoveDocuments extends IHETransactionEventTypeCodes {
         public RemoveDocuments() {
-            super("ITI-Y1", "Remove Documents");
+            super("ITI-86", "Remove Documents");
         }
     }
 

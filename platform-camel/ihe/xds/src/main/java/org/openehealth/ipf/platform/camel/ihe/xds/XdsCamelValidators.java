@@ -262,22 +262,22 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         new QueryResponseValidator().validate(message, ITI_63);
     };
 
-    private static final Processor ITI_Y1_REQUEST_VALIDATOR = exchange -> {
+    private static final Processor ITI_86_REQUEST_VALIDATOR = exchange -> {
         if (! validationEnabled(exchange)) {
             return;
         }
         EbXMLNonconstructiveDocumentSetRequest30<RemoveDocumentsRequestType> message =
                 new EbXMLNonconstructiveDocumentSetRequest30<>(exchange.getIn().getBody(RemoveDocumentsRequestType.class));
-        new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_Y1);
+        new NonconstructiveDocumentSetRequestValidator().validate(message, ITI_86);
     };
 
-    private static final Processor ITI_Y1_RESPONSE_VALIDATOR = exchange -> {
+    private static final Processor ITI_86_RESPONSE_VALIDATOR = exchange -> {
         if (! validationEnabled(exchange)) {
             return;
         }
         EbXMLRegistryResponse30 message =
                 new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
-        new RegistryResponseValidator().validate(message, ITI_Y1);
+        new RegistryResponseValidator().validate(message, ITI_86);
     };
 
     /**
@@ -449,17 +449,17 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
     }
 
     /**
-     * Returns a validating processor for ITI-Y1 request messages.
+     * Returns a validating processor for ITI-86 request messages.
      */
-    public static Processor itiY1RequestValidator() {
-        return ITI_Y1_REQUEST_VALIDATOR;
+    public static Processor iti86RequestValidator() {
+        return ITI_86_REQUEST_VALIDATOR;
     }
 
     /**
-     * Returns a validating processor for ITI-Y1 response messages.
+     * Returns a validating processor for ITI-86 response messages.
      */
-    public static Processor itiY1ResponseValidator() {
-        return ITI_Y1_RESPONSE_VALIDATOR;
+    public static Processor iti86ResponseValidator() {
+        return ITI_86_RESPONSE_VALIDATOR;
     }
 
     private static final Processor RAD_69_REQUEST_VALIDATOR = exchange -> {

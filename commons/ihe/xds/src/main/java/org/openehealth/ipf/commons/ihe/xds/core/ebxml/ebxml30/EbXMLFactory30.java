@@ -99,12 +99,12 @@ public class EbXMLFactory30 implements EbXMLFactory {
 
     @Override
     public EbXMLNonconstructiveDocumentSetRequest createRetrieveDocumentSetRequest() {
-        return new EbXMLNonconstructiveDocumentSetRequest30(new RetrieveDocumentSetRequestType());
+        return new EbXMLNonconstructiveDocumentSetRequest30<>(new RetrieveDocumentSetRequestType());
     }
 
     @Override
     public EbXMLNonconstructiveDocumentSetRequest createRemoveDocumentsRequest() {
-        return new EbXMLNonconstructiveDocumentSetRequest30(new RemoveDocumentsRequestType());
+        return new EbXMLNonconstructiveDocumentSetRequest30<>(new RemoveDocumentsRequestType());
     }
 
     @Override

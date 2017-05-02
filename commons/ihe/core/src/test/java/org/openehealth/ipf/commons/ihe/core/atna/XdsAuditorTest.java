@@ -132,7 +132,7 @@ public class XdsAuditorTest extends Assert {
                 PATIENT_ID,
                 PURPOSES_OF_USE);
 
-        auditor.auditItiY1(true,
+        auditor.auditIti86(true,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
                 PATIENT_ID,
                 DOCUMENT_OIDS,
@@ -140,7 +140,7 @@ public class XdsAuditorTest extends Assert {
                 HOME_COMMUNITY_IDS,
                 PURPOSES_OF_USE);
 
-        auditor.auditItiY1(false,
+        auditor.auditIti86(false,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
                 PATIENT_ID,
                 DOCUMENT_OIDS,

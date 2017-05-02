@@ -292,8 +292,8 @@ public class CustomXdsAuditor extends XDSAuditor {
                 ! serverSide,
                 eventOutcome,
                 RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
-                new DICOMEventIdCodes.Export(),
-                new CustomIHETransactionEventTypeCodes.DeleteDocumentSet(),
+                new DICOMEventIdCodes.PatientRecord(),
+                new CustomIHETransactionEventTypeCodes.RemoveMetadata(),
                 purposesOfUse);
 
         event.addSourceActiveParticipant(
@@ -322,7 +322,7 @@ public class CustomXdsAuditor extends XDSAuditor {
 
         if (objectUuids != null) {
             for (String uuid : objectUuids) {
-                event.addDocumentEntryObject(new IHETransactionParticipantObjectIDTypeCodes.StableXdsDocumentEntry(), uuid);
+                event.addRemovedRegistryObject(new IHETransactionParticipantObjectIDTypeCodes.RegistryObjectReference(), uuid);
             }
         }
 
@@ -622,7 +622,7 @@ public class CustomXdsAuditor extends XDSAuditor {
                 purposesOfUse);
     }
 
-    public void auditItiY1(
+    public void auditIti86(
             boolean serverSide,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String userId,

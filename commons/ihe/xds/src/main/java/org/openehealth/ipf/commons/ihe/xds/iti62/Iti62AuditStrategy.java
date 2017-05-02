@@ -16,21 +16,21 @@
 package org.openehealth.ipf.commons.ihe.xds.iti62;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsMetadataRemoveAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsMetadataRemoveAuditStrategy30;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditStrategy30;
 
 /**
  * Client audit strategy for ITI-62.
  * @author Boris Stanojevic
  */
-public class Iti62AuditStrategy extends XdsMetadataRemoveAuditStrategy30 {
+public class Iti62AuditStrategy extends XdsRemoveMetadataAuditStrategy30 {
 
     public Iti62AuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public void doAudit(XdsMetadataRemoveAuditDataset auditDataset) {
+    public void doAudit(XdsRemoveMetadataAuditDataset auditDataset) {
         AuditorManager.getCustomXdsAuditor().auditIti62(
                 isServerSide(),
                 auditDataset.getEventOutcomeCode(),

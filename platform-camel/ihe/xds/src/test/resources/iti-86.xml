@@ -31,7 +31,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
     </camel:camelContext> 
 
     <bean id="routeBuilder"
-        class="org.openehealth.ipf.platform.camel.ihe.xds.itiY1.ItiY1TestRouteBuilder">
+        class="org.openehealth.ipf.platform.camel.ihe.xds.iti86.Iti86TestRouteBuilder">
     </bean>
 
 </beans>
