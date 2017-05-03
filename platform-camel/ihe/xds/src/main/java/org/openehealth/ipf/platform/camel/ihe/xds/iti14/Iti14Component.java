@@ -48,6 +48,7 @@ public class Iti14Component extends XdsComponent<XdsSubmitAuditDataset> {
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
+                getSslContextParameters(parameters),
                 Iti14Service.class) {
             @Override
             public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,

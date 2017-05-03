@@ -41,6 +41,7 @@ public class Iti58Component extends AbstractWsComponent<WsAuditDataset, WsTransa
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
+                getSslContextParameters(parameters),
                 Iti58Service.class);
     }
 

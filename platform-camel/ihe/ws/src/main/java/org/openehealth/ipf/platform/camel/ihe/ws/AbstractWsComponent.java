@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import org.apache.camel.impl.DefaultComponent;
+import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
@@ -82,6 +83,10 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
     protected Map<String, Object> getProperties(Map<String, Object> parameters) {
         List<Map> mapList = resolveAndRemoveReferenceListParameter(parameters, "properties", Map.class);
         return (mapList != null && mapList.size() == 1) ? mapList.get(0) : null;
+    }
+
+    protected SSLContextParameters getSslContextParameters(Map<String, Object> parameters) {
+        return resolveAndRemoveReferenceParameter(parameters, "sslContextParameters", SSLContextParameters.class);
     }
 
     @Override

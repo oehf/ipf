@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -40,9 +41,10 @@ public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransa
             InterceptorProvider interceptorProvider,
             List<AbstractFeature> features,
             List<String> schemaLocations,
+            SSLContextParameters sslContextParameters,
             Map<String, Object> properties)
     {
-        super(endpointUri, address, someItiComponent, interceptorProvider, features, schemaLocations, properties, null);
+        super(endpointUri, address, someItiComponent, interceptorProvider, features, schemaLocations, properties, sslContextParameters, null);
     }
 
     @Override

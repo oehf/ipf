@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
+import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsAsyncResponseServiceFactory;
@@ -46,9 +47,10 @@ public class XdsAsyncResponseEndpoint<AuditDatasetType extends XdsAuditDataset> 
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
+            SSLContextParameters sslContextParameters,
             Class<? extends AbstractWebService> serviceClass)
     {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, sslContextParameters, serviceClass);
     }
 
 

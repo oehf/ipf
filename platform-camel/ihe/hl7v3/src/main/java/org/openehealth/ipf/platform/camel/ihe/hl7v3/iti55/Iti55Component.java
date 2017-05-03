@@ -46,6 +46,7 @@ public class Iti55Component extends Hl7v3Component<Hl7v3WsTransactionConfigurati
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
+                getSslContextParameters(parameters),
                 null) {
             @Override
             public AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,

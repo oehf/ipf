@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.cxf.common.i18n.Exception;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.feature.AbstractFeature;
@@ -68,8 +69,9 @@ public abstract class SimpleHl7v2WsEndpoint<
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
+            SSLContextParameters sslContextParameters,
             Class<? extends AbstractWebService> serviceClass) {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, sslContextParameters, serviceClass);
     }
 
 

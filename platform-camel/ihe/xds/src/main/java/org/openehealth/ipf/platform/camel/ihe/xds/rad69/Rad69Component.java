@@ -48,6 +48,7 @@ public class Rad69Component extends XdsComponent<XdsNonconstructiveDocumentSetRe
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
+                getSslContextParameters(parameters),
                 Rad69Service.class) {
             @Override
             public AbstractWsProducer<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration> endpoint,

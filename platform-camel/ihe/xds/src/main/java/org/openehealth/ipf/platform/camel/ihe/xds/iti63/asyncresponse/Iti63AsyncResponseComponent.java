@@ -40,6 +40,7 @@ public class Iti63AsyncResponseComponent extends XdsComponent<XdsQueryAuditDatas
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
+                getSslContextParameters(parameters),
                 Iti63AsyncResponseService.class);
     }
 

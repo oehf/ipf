@@ -45,6 +45,7 @@ public class Iti46Component extends Hl7v3Component<Hl7v3WsTransactionConfigurati
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
+                getSslContextParameters(parameters),
                 Iti46Service.class) {
 
             @Override

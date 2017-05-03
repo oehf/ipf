@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
+import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
@@ -77,8 +78,9 @@ public class Hl7v3ContinuationAwareEndpoint
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             List<String> schemaLocations,
+            SSLContextParameters sslContextParameters,
             Map<String, Object> properties) {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, null);
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, sslContextParameters, null);
     }
 
     @Override

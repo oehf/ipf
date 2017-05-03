@@ -41,7 +41,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent<WsAuditDataset> {
 
     @Override
     @SuppressWarnings("raw") // Required because of base class
-    protected Endpoint createEndpoint(String uri, String remaining, @SuppressWarnings("rawtypes") Map parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, @SuppressWarnings("rawtypes") Map<String, Object> parameters) throws Exception {
         return new SimpleHl7v2WsEndpoint<WsAuditDataset, Pcd01Component>(
                 uri,
                 remaining,
@@ -50,6 +50,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent<WsAuditDataset> {
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
+                getSslContextParameters(parameters),
                 Pcd01Service.class) {
             @Override
             public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(

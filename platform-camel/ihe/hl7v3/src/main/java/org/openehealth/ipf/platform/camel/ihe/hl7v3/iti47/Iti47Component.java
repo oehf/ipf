@@ -42,6 +42,7 @@ public class Iti47Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTrans
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
+                getSslContextParameters(parameters),
                 getProperties(parameters)) {
 
             @Override

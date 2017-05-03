@@ -42,7 +42,7 @@ public class Iti17Endpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransact
      *          the component creating this endpoint.
      */
     public Iti17Endpoint(String endpointUri, String address, Iti17Component iti17Component) {
-        super(endpointUri, address, iti17Component, null, null, null, null, null);
+        super(endpointUri, address, iti17Component, null, null, null, null, null, null);
     }
 
     @Override

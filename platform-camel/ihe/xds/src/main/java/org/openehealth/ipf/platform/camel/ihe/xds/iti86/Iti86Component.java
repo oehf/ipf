@@ -49,6 +49,7 @@ public class Iti86Component extends XdsComponent<XdsNonconstructiveDocumentSetRe
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
+                getSslContextParameters(parameters),
                 Iti86Service.class)
         {
             @Override

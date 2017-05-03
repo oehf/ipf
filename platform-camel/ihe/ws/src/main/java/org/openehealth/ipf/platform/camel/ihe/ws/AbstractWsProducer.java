@@ -277,7 +277,7 @@ public abstract class AbstractWsProducer<
         return clientFactory.getClient(() -> {
             // Only supply SSLContext if client has not been configured yet
             SSLContextParameters sslContextParameters = getEndpoint().getSslContextParameters();
-            if (sslContextParameters == null) {
+            if (sslContextParameters == null && getEndpoint().isSecure()) {
                 Map<String, SSLContextParameters> sslContextParameterMap = getEndpoint().getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.class);
                 if (sslContextParameterMap.size() == 1) {
                     Map.Entry<String, SSLContextParameters> entry = sslContextParameterMap.entrySet().iterator().next();

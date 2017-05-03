@@ -40,6 +40,7 @@ public class Iti38AsyncResponseComponent extends XdsComponent<XdsQueryAuditDatas
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
+                getSslContextParameters(parameters),
                 Iti38AsyncResponseService.class);
     }
 

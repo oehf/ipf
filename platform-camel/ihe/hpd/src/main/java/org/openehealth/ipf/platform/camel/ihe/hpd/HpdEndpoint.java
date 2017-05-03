@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hpd;
 
+import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
@@ -39,9 +40,10 @@ public class HpdEndpoint<AuditDatasetType extends WsAuditDataset> extends Abstra
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
+            SSLContextParameters sslContextParameters,
             Class<? extends AbstractWebService> serviceClass)
     {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, sslContextParameters, serviceClass);
     }
 
     @Override

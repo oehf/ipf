@@ -40,6 +40,7 @@ public class Rad75AsyncResponseComponent extends XdsComponent<XdsNonconstructive
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
+                getSslContextParameters(parameters),
                 Rad75AsyncResponseService.class);
     }
 
