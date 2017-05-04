@@ -141,6 +141,11 @@
         <xmlunit-version>1.6</xmlunit-version>
     </properties>
 
+    <scm>
+        <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
+       <tag>HEAD</tag>
+    </scm>
+
     <profiles>
         <profile>
             <!-- This profile generates groovystubs and delomboked sources with last gmaven plugin        -->

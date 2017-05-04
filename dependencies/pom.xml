@@ -1122,9 +1122,7 @@
 
     <scm>
         <connection>scm:git:git@github.com:oehf/ipf.git</connection>
-        <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
         <url>scm:git:git@github.com:oehf/ipf.git</url>
-        <tag>HEAD</tag>
     </scm>
 
     <repositories>
