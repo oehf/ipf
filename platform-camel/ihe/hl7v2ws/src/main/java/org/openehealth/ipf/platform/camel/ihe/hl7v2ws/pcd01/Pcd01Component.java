@@ -40,8 +40,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent<WsAuditDataset> {
     }
 
     @Override
-    @SuppressWarnings("raw") // Required because of base class
-    protected Endpoint createEndpoint(String uri, String remaining, @SuppressWarnings("rawtypes") Map<String, Object> parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         return new SimpleHl7v2WsEndpoint<WsAuditDataset, Pcd01Component>(
                 uri,
                 remaining,

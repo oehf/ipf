@@ -15,12 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openhealthtools.ihe.atna.auditor.PIXAuditor;
+import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionParticipantObjectIDTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.PatientRecordEvent;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
 
-import java.nio.charset.Charset;
+import java.util.Arrays;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
 
@@ -49,9 +53,11 @@ public class CustomPixAuditor extends PIXAuditor {
             String receivingFacility,
             String receivingApp,
             String hl7MessageControlId,
-            String sourcePatientId,
+            String localPatientId,
+            String subsumedLocalPatientId,
             String newPatientId,
-            String oldPatientId)
+            String previousPatientId,
+            String submissionSetUuid)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -77,10 +83,74 @@ public class CustomPixAuditor extends PIXAuditor {
                 documentRegistryUri,
                 pixManagerIpAddress);
 
-        byte[] messageIdBytes = hl7MessageControlId.getBytes(Charset.defaultCharset());
-        event.addPatientParticipantObject(sourcePatientId, messageIdBytes, transactionCode);
-        event.addPatientParticipantObject(newPatientId, messageIdBytes, transactionCode);
-        event.addPatientParticipantObject(oldPatientId, messageIdBytes, transactionCode);
+        TypeValuePairType messageIdVP           = event.getTypeValuePair("MSH-10", hl7MessageControlId);
+        TypeValuePairType localPatientIdVP      = event.getTypeValuePair("urn:ihe:iti:xpid:2017:patientIdentifierType", "localPatientId");
+        TypeValuePairType subsumedPatientIdVP   = event.getTypeValuePair("urn:ihe:iti:xpid:2017:patientIdentifierType", "subsumedPatientId");
+        TypeValuePairType newPatientIdIdVP      = event.getTypeValuePair("urn:ihe:iti:xpid:2017:patientIdentifierType", "newPatientId");
+        TypeValuePairType previousPatientIdIdVP = event.getTypeValuePair("urn:ihe:iti:xpid:2017:patientIdentifierType", "previousPatientId");
+
+        boolean subsumedLocalPatientIdPresent = StringUtils.isNoneBlank(subsumedLocalPatientId);
+        boolean newPatientIdEqualsToPrevious = StringUtils.equals(newPatientId, previousPatientId);
+
+        event.addParticipantObjectIdentification(
+                new RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectIDTypeCodes.PatientNumber(),
+                null,
+                null,
+                Arrays.asList(messageIdVP, localPatientIdVP),
+                localPatientId,
+                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON,
+                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT,
+                subsumedLocalPatientIdPresent ? RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectDataLifeCycleCodes.ORIGINATION : null,
+                null);
+
+        if (subsumedLocalPatientIdPresent) {
+            event.addParticipantObjectIdentification(
+                    new RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectIDTypeCodes.PatientNumber(),
+                    null,
+                    null,
+                    Arrays.asList(messageIdVP, subsumedPatientIdVP),
+                    subsumedLocalPatientId,
+                    RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON,
+                    RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT,
+                    RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectDataLifeCycleCodes.LOGICAL_DELETION,
+                    null);
+        }
+
+        event.addParticipantObjectIdentification(
+                new RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectIDTypeCodes.PatientNumber(),
+                null,
+                null,
+                Arrays.asList(messageIdVP, newPatientIdIdVP),
+                newPatientId,
+                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON,
+                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT,
+                newPatientIdEqualsToPrevious ? null : RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectDataLifeCycleCodes.ORIGINATION,
+                null);
+
+        event.addParticipantObjectIdentification(
+                new RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectIDTypeCodes.PatientNumber(),
+                null,
+                null,
+                Arrays.asList(messageIdVP, previousPatientIdIdVP),
+                previousPatientId,
+                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON,
+                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT,
+                newPatientIdEqualsToPrevious ? null : RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectDataLifeCycleCodes.LOGICAL_DELETION,
+                null);
+
+        if (serverSide && StringUtils.isNotBlank(submissionSetUuid)) {
+            event.addParticipantObjectIdentification(
+                    new IHETransactionParticipantObjectIDTypeCodes.SubmissionSet(),
+                    null,
+                    null,
+                    null,
+                    submissionSetUuid,
+                    RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM,
+                    RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.JOB,
+                    null,
+                    null);
+        }
+
         audit(event);
     }
 
