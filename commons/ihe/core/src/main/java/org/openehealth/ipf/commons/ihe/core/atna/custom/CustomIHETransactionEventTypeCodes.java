@@ -25,7 +25,7 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
 
     public static final class MultiPatientQuery extends IHETransactionEventTypeCodes {
         public MultiPatientQuery() {
-            super("ITI-51", "Multi-Patient Query");
+            super("ITI-51", "Multi-Patient Stored Query");
         }
     }
 
