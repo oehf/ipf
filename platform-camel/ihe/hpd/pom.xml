@@ -13,7 +13,7 @@
     </parent>
     
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.hpd.xds.*</osgi.export.pkg>
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.hpd.*</osgi.export.pkg>
         <!--osgi.import.pkg>
             org.openehealth.ipf.commons.ihe.xds.core.validate.requests,
             org.openehealth.ipf.commons.ihe.xds.core.validate.responses,
