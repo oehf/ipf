@@ -125,7 +125,7 @@ class TestIti51 extends StandardTestContainer {
             boolean found = false
             def message = new XmlSlurper().parseText(auditSender.messages[i].auditMessage.toString())
             for (detail in message.ParticipantObjectIdentification.ParticipantObjectDetail) {
-                if ((detail.@type.text() == 'ihe:homeCommunityID') && detail.@value.text()) {
+                if ((detail.@type.text() == 'urn:ihe:iti:xca:2010:homeCommunityId') && detail.@value.text()) {
                     found = true
                 }
             }

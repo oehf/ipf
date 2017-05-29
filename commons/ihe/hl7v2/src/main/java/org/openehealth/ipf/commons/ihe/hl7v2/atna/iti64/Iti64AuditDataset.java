@@ -25,9 +25,13 @@ import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 @SuppressWarnings("serial")
 public class Iti64AuditDataset extends MllpAuditDataset {
 
-    @Getter @Setter private String sourcePatientId;
+    @Getter @Setter private String localPatientId;
+    @Getter @Setter private String subsumedLocalPatientId;
     @Getter @Setter private String newPatientId;
-    @Getter @Setter private String oldPatientId;
+    @Getter @Setter private String previousPatientId;
+
+    // TODO: mechanism for gaining this value
+    @Getter @Setter private String submissionSetUuid;
 
     public Iti64AuditDataset(boolean serverSide) {
         super(serverSide);

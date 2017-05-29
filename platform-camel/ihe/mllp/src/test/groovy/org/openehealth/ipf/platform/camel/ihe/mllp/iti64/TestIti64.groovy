@@ -49,8 +49,8 @@ class TestIti64 extends MllpTestContainer {
         def s = 'MSH|^~\\&|REPOSITORY|ENT|RSP1P8|GOOD HEALTH HOSPITAL|200701051530|' +
                 "SEC|${msh9}|0000009|P|${msh12}\n" +
                 'EVN|A43|200701051530\n' +
-                'PID|1||new^^^&1.2.3.4&ISO~source^^^&1.2.3.4&ISO||EVERYWOMAN^EVE||\n' +
-                'MRG|old^^^&1.2.3.4&ISO|||\n'
+                'PID|1||new^^^&1.2.3.4&ISO~previous^^^&1.2.3.4&ISO||EVERYWOMAN^EVE||\n' +
+                'MRG|old^^^&1.2.3.4&ISO~subsumed^^^&1.2.3.4&ISO|||\n'
         s
     }
     

@@ -34,9 +34,11 @@ public class PixAuditorTest extends Assert {
     private static final String RECEIVING_APPLICATION   = "receivingApplication";
     private static final String SERVER_URI              = "mllp://document.registry.org";
     private static final String MESSAGE_ID              = "messageId";
-    private static final String SOURCE_PATIENT_ID       = "source^^^&1.2.3&ISO";
+    private static final String LOCAL_PATIENT_ID        = "local^^^&1.2.3&ISO";
+    private static final String SUBSUMED_PATIENT_ID     = "subsumed^^^&1.2.3&ISO";
     private static final String NEW_PATIENT_ID          = "new^^^&1.3.14&ISO";
-    private static final String OLD_PATIENT_ID          = "old^^^&1.8.7&ISO";
+    private static final String PREVIOUS_PATIENT_ID     = "previous^^^&1.8.7&ISO";
+    private static final String SUBMISSION_SET_UUID     = "submisson-set-uuid";
 
 
     private MockedSender sender;
@@ -63,9 +65,11 @@ public class PixAuditorTest extends Assert {
                 RECEIVING_FACILITY,
                 RECEIVING_APPLICATION,
                 MESSAGE_ID,
-                SOURCE_PATIENT_ID,
+                LOCAL_PATIENT_ID,
+                SUBSUMED_PATIENT_ID,
                 NEW_PATIENT_ID,
-                OLD_PATIENT_ID);
+                PREVIOUS_PATIENT_ID,
+                SUBMISSION_SET_UUID);
 
         auditor.auditIti64(
                 false,
@@ -77,9 +81,11 @@ public class PixAuditorTest extends Assert {
                 RECEIVING_FACILITY,
                 RECEIVING_APPLICATION,
                 MESSAGE_ID,
-                SOURCE_PATIENT_ID,
+                LOCAL_PATIENT_ID,
+                SUBSUMED_PATIENT_ID,
                 NEW_PATIENT_ID,
-                OLD_PATIENT_ID);
+                PREVIOUS_PATIENT_ID,
+                SUBMISSION_SET_UUID);
 
         assertEquals(2, sender.getMessages().size());
     }

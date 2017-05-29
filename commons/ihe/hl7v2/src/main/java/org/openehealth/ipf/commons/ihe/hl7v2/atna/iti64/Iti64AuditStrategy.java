@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2.atna.iti64;
 
+import ca.uhn.hl7v2.model.v25.datatype.CX;
 import ca.uhn.hl7v2.model.v25.group.ADT_A43_PATIENT;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.PipeParser;
@@ -47,12 +48,21 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
         ADT_A43 message = (ADT_A43) msg;
         ADT_A43_PATIENT patient = message.getPATIENT(0);
 
-        auditDataset.setNewPatientId(PipeParser.encode(
-                patient.getPID().getPatientIdentifierList(0), ENCODING_CHARACTERS));
-        auditDataset.setSourcePatientId(PipeParser.encode(
-                patient.getPID().getPatientIdentifierList(1), ENCODING_CHARACTERS));
-        auditDataset.setOldPatientId(PipeParser.encode(
-                patient.getMRG().getMrg1_PriorPatientIdentifierList(0), ENCODING_CHARACTERS));
+        CX[] pidPatientIdList = patient.getPID().getPatientIdentifierList();
+        if (pidPatientIdList.length > 0) {
+            auditDataset.setNewPatientId(PipeParser.encode(pidPatientIdList[0], ENCODING_CHARACTERS));
+            if (pidPatientIdList.length > 1) {
+                auditDataset.setLocalPatientId(PipeParser.encode(pidPatientIdList[1], ENCODING_CHARACTERS));
+            }
+        }
+
+        CX[] mrgPatientIdList = patient.getMRG().getMrg1_PriorPatientIdentifierList();
+        if (mrgPatientIdList.length > 0) {
+            auditDataset.setPreviousPatientId(PipeParser.encode(mrgPatientIdList[0], ENCODING_CHARACTERS));
+            if (mrgPatientIdList.length > 1) {
+                auditDataset.setSubsumedLocalPatientId(PipeParser.encode(mrgPatientIdList[1], ENCODING_CHARACTERS));
+            }
+        }
 
         return auditDataset;
     }
@@ -70,9 +80,11 @@ public class Iti64AuditStrategy extends AuditStrategySupport<Iti64AuditDataset> 
                 auditDataset.getReceivingFacility(),
                 auditDataset.getReceivingApplication(),
                 auditDataset.getMessageControlId(),
-                auditDataset.getSourcePatientId(),
+                auditDataset.getLocalPatientId(),
+                auditDataset.getSubsumedLocalPatientId(),
                 auditDataset.getNewPatientId(),
-                auditDataset.getOldPatientId()
+                auditDataset.getPreviousPatientId(),
+                auditDataset.getSubmissionSetUuid()
         );
     }
 
