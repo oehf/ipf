@@ -57,7 +57,7 @@ public class AuditInRequestInterceptor<T extends WsAuditDataset> extends Abstrac
             auditDataset.setRequestPayload(message.getContent(StringPayloadHolder.class));
         }
 
-        getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, extractPojo(message), null);
+        getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, extractPojo(message), message);
     }
 
 }

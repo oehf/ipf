@@ -77,7 +77,7 @@ public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends Abstra
             }
         }
 
-        getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, request, null);
+        getAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, request, message);
 
         // when the invocation is asynchronous: store audit dataset into the correlator
         AddressingProperties props = (AddressingProperties) message.get(JAXWSAConstants.ADDRESSING_PROPERTIES_OUTBOUND);
