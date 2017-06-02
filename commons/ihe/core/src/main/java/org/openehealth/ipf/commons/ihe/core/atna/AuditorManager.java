@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.core.atna;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.*;
 import org.openhealthtools.ihe.atna.auditor.*;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
+import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -27,17 +28,32 @@ import java.net.UnknownHostException;
  */
 public abstract class AuditorManager {
     private static final Object sync = new Object();
-    
+
     private AuditorManager() {
         throw new IllegalStateException("Static helper class cannot be instantiated");
     }
-    
+
+    /**
+     * Generic method which supports third-party auditors as well
+     *
+     * @param auditorClass class of the auditor to retrieve
+     * @param <T>          type of the auditor to retrieve
+     * @return auditor instance
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends IHEAuditor> T getAuditor(Class<T> auditorClass) {
+        synchronized (sync) {
+            AuditorModuleContext ctx = AuditorModuleContext.getContext();
+            return (T) ctx.getAuditor(auditorClass);
+        }
+    }
+
     public static XDSRegistryAuditor getRegistryAuditor() {
         synchronized (sync) {
             return XDSRegistryAuditor.getAuditor();
         }
     }
-    
+
     public static XDSRepositoryAuditor getRepositoryAuditor() {
         synchronized (sync) {
             return XDSRepositoryAuditor.getAuditor();
@@ -47,38 +63,38 @@ public abstract class AuditorManager {
     public static XDSConsumerAuditor getConsumerAuditor() {
         synchronized (sync) {
             XDSConsumerAuditor auditor = XDSConsumerAuditor.getAuditor();
-            
+
             // for ITI-16 and ITI-17
-            AuditorModuleConfig config = auditor.getConfig(); 
-            if(config.getSystemUserId() == null) {
+            AuditorModuleConfig config = auditor.getConfig();
+            if (config.getSystemUserId() == null) {
                 try {
                     config.setSystemUserId(InetAddress.getLocalHost().getHostAddress());
                 } catch (UnknownHostException e) {
                     config.setSystemUserId("unknown");
                 }
             }
-            return auditor; 
+            return auditor;
         }
     }
-    
+
     public static XDSSourceAuditor getSourceAuditor() {
         synchronized (sync) {
             return XDSSourceAuditor.getAuditor();
         }
     }
-    
+
     public static PIXManagerAuditor getPIXManagerAuditor() {
         synchronized (sync) {
             return PIXManagerAuditor.getAuditor();
         }
     }
-    
+
     public static PIXSourceAuditor getPIXSourceAuditor() {
         synchronized (sync) {
             return PIXSourceAuditor.getAuditor();
         }
     }
-    
+
     public static PIXConsumerAuditor getPIXConsumerAuditor() {
         synchronized (sync) {
             return PIXConsumerAuditor.getAuditor();
@@ -96,7 +112,7 @@ public abstract class AuditorManager {
             return PAMSourceAuditor.getAuditor();
         }
     }
-    
+
     public static Hl7v3Auditor getHl7v3Auditor() {
         synchronized (sync) {
             return Hl7v3Auditor.getAuditor();

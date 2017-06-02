@@ -85,7 +85,7 @@ class Hl7v3NakFactory {
         boolean useCAckTypeCodes)
     {
         if (controlActProcessCode && ! throwable) {
-            throw new IllegalArgumentException("canot generate positive ACKs with <controlActProcess>")
+            throw new IllegalArgumentException("Cannot generate positive ACKs with <controlActProcess>")
         }
 
         String typeCode0 = (useCAckTypeCodes ? 'C' : 'A') + (throwable ? 'E' : 'A')
