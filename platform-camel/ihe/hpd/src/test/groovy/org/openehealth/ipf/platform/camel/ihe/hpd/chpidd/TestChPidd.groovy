@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hpd.iti59
+package org.openehealth.ipf.platform.camel.ihe.hpd.chpidd
 
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse
+import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest
+import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * @author Dmytro Rud
  */
-class TestIti59 extends StandardTestContainer {
+class TestChPidd extends StandardTestContainer {
 
-    static final String CONTEXT_DESCRIPTOR = 'iti-59.xml'
+    static final String CONTEXT_DESCRIPTOR = 'ch-pidd.xml'
 
-    final String SERVICE1 = "hpd-iti59://localhost:${port}/hpd-service1"
+    final String SERVICE1 = "ch-pidd://localhost:${port}/ch-pidd-service1"
 
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
@@ -42,15 +42,21 @@ class TestIti59 extends StandardTestContainer {
     }
 
     @Test
-    void testIti59() {
-        BatchRequest request = new BatchRequest()
-        BatchResponse response = sendIt(SERVICE1, request)
+    void testChPidd() {
+        DownloadRequest request = new DownloadRequest(
+                requestID: '123',
+                fromDate: new XMLGregorianCalendarImpl(new GregorianCalendar(2017, 1, 1, 2, 3, 4)),
+                toDate: new XMLGregorianCalendarImpl(new GregorianCalendar(2017, 12, 31, 5, 6, 7)),
+        )
+
+        DownloadResponse response = sendIt(SERVICE1, request)
         assert response != null
+        assert response.requestID == '456'
     }
 
-    BatchResponse sendIt(String endpoint, BatchRequest request) {
-        return send(endpoint, request, BatchResponse.class)
+    DownloadResponse sendIt(String endpoint, DownloadRequest request) {
+        return send(endpoint, request, DownloadResponse.class)
     }
-
 
 }
+

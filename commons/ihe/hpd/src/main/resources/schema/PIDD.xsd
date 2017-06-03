@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+********************************************************
+Provider Information Delta Download schema (PIDD.xsd)
+
+History:
+2017-02-15: First edition
+
+********************************************************
+-->
+<xsd:schema targetNamespace="urn:ehealth-suisse:names:tc:CS:1"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="urn:ehealth-suisse:names:tc:CS:1"
+            xmlns:dsml="urn:oasis:names:tc:DSML:2:0:core"
+            elementFormDefault="qualified">
+
+    <xsd:import namespace="urn:oasis:names:tc:DSML:2:0:core" schemaLocation="DSMLv2.xsd"/>
+
+    <xsd:element name="downloadRequest" type="DownloadRequest"/>
+    <xsd:element name="downloadResponse" type="DownloadResponse"/>
+
+    <!-- **** Download Request **** -->
+    <xsd:complexType name="DownloadRequest">
+        <xsd:sequence>
+            <xsd:element name="authRequest" type="dsml:AuthRequest" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute name="requestID" type="xsd:string" use="optional"/>
+        <xsd:attribute name="fromDate" use="required">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:dateTime"/>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="toDate" use="optional">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:dateTime"/>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="filterMyTransactions" use="optional" default="true">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:boolean"/>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <!-- **** Download Response **** -->
+    <xsd:complexType name="DownloadResponse">
+        <xsd:sequence>
+            <xsd:element ref="dsml:batchRequest" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="requestID" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+</xsd:schema>
+

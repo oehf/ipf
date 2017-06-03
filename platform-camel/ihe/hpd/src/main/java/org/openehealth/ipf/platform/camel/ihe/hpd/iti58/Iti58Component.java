@@ -17,11 +17,17 @@ package org.openehealth.ipf.platform.camel.ihe.hpd.iti58;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hpd.HPD;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hpd.HpdEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 
 import java.util.Map;
 
@@ -36,13 +42,19 @@ public class Iti58Component extends AbstractWsComponent<WsAuditDataset, WsTransa
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new HpdEndpoint<>(uri, remaining, this,
+        return new HpdEndpoint<WsAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
                 getSslContextParameters(parameters),
-                Iti58Service.class);
+                Iti58Service.class)
+        {
+            @Override
+            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
+                return new SimpleWsProducer<>(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);
+            }
+        };
     }
 
 }

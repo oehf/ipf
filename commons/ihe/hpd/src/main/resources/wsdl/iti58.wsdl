@@ -11,8 +11,8 @@
     <documentation>IHE HPD Provider Information Directory</documentation>
 
     <types>
-        <xsd:schema targetNamespace="urn:oasis:names:tc:DSML:2:0:core" xmlns:dsml="urn:oasis:names:tc:DSML:2:0:core">
-            <xsd:include schemaLocation="DSMLv2.xsd"/>
+        <xsd:schema targetNamespace="urn:oasis:names:tc:DSML:2:0:core">
+            <xsd:include schemaLocation="../schema/DSMLv2.xsd"/>
         </xsd:schema>
     </types>
 

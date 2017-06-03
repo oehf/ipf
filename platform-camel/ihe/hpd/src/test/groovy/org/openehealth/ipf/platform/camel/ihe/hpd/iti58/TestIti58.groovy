@@ -36,8 +36,6 @@ class TestIti58 extends StandardTestContainer {
     final String SERVICE1 = "hpd-iti58://localhost:${port}/hpd-service1"
 
 
-    BatchRequest request
-
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
@@ -45,11 +43,6 @@ class TestIti58 extends StandardTestContainer {
     @BeforeClass
     static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
-    }
-
-    @Before
-    void setUp() {
-        request = new BatchRequest()
     }
 
     @Test

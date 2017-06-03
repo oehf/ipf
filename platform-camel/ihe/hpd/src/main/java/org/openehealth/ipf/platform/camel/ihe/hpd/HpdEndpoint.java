@@ -18,8 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.hpd;
 import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 import org.openehealth.ipf.commons.ihe.ws.*;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.*;
@@ -30,7 +28,7 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public class HpdEndpoint<AuditDatasetType extends WsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> {
+abstract public class HpdEndpoint<AuditDatasetType extends WsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> {
 
     public HpdEndpoint(
             String endpointUri,
@@ -66,14 +64,6 @@ public class HpdEndpoint<AuditDatasetType extends WsAuditDataset> extends Abstra
                 isAudit() ? getComponent().getServerAuditStrategy() : null,
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
-    }
-
-    @Override
-    public AbstractWsProducer<AuditDatasetType, WsTransactionConfiguration, ?, ?> getProducer(
-            AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration> endpoint,
-            JaxWsClientFactory<AuditDatasetType> clientFactory)
-    {
-        return new SimpleWsProducer<>(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);
     }
 
 }

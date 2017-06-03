@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hpd.iti59;
+package org.openehealth.ipf.platform.camel.ihe.hpd.chpidd;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hpd.HPD;
-import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59AuditDataset;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
+import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest;
+import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hpd.HpdEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
@@ -34,25 +34,25 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public class Iti59Component extends AbstractWsComponent<Iti59AuditDataset, WsTransactionConfiguration, WsInteractionId<WsTransactionConfiguration>> {
+public class ChPiddComponent extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration, WsInteractionId<WsTransactionConfiguration>> {
 
-    public Iti59Component() {
-        super(HPD.Interactions.ITI_59);
+    public ChPiddComponent() {
+        super(HPD.Interactions.CH_PIDD);
     }
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        return new HpdEndpoint<Iti59AuditDataset>(uri, remaining, this,
+        return new HpdEndpoint<WsAuditDataset>(uri, remaining, this,
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
                 getSslContextParameters(parameters),
-                Iti59Service.class)
+                ChPiddService.class)
         {
             @Override
-            public AbstractWsProducer<Iti59AuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Iti59AuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<Iti59AuditDataset> clientFactory) {
-                return new SimpleWsProducer<>(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);
+            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
+                return new SimpleWsProducer<>(endpoint, clientFactory, DownloadRequest.class, DownloadResponse.class);
             }
         };
     }

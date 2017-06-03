@@ -16,8 +16,11 @@
 package org.openehealth.ipf.platform.camel.ihe.hpd;
 
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.ihe.hpd.HpdRequestValidator;
+import org.openehealth.ipf.commons.ihe.hpd.HpdValidator;
+import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest;
+import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 
 /**
  * @author Dmytro Rud
@@ -26,11 +29,12 @@ public class HpdCamelValidators {
 
     private static final Processor ITI_58_REQUEST_VALIDATOR = exchange -> {
         BatchRequest request = exchange.getIn().getMandatoryBody(BatchRequest.class);
-        new HpdRequestValidator().validateBatchRequest(request);
+        new HpdValidator().validateBatchRequest(request);
     };
 
     private static final Processor ITI_58_RESPONSE_VALIDATOR = exchange -> {
-        // TODO
+        BatchResponse response = exchange.getIn().getMandatoryBody(BatchResponse.class);
+        new HpdValidator().validateBatchResponse(response);
     };
 
     private static final Processor ITI_59_REQUEST_VALIDATOR = exchange -> {
@@ -39,6 +43,16 @@ public class HpdCamelValidators {
 
     private static final Processor ITI_59_RESPONSE_VALIDATOR = exchange -> {
         // TODO
+    };
+
+    private static final Processor CH_PIDD_REQUEST_VALIDATOR = exchange -> {
+        DownloadRequest request = exchange.getIn().getMandatoryBody(DownloadRequest.class);
+        new HpdValidator().validateDownloadRequest(request);
+    };
+
+    private static final Processor CH_PIDD_RESPONSE_VALIDATOR = exchange -> {
+        DownloadResponse response = exchange.getIn().getMandatoryBody(DownloadResponse.class);
+        new HpdValidator().validateDownloadResponse(response);
     };
 
     public static Processor iti58RequestValidator() {
@@ -55,6 +69,14 @@ public class HpdCamelValidators {
 
     public static Processor iti59ResponseValidator() {
         return ITI_59_RESPONSE_VALIDATOR;
+    }
+
+    public static Processor chPiddRequestValidator() {
+        return CH_PIDD_REQUEST_VALIDATOR;
+    }
+
+    public static Processor chPiddResponseValidator() {
+        return CH_PIDD_RESPONSE_VALIDATOR;
     }
 
 }

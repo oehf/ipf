@@ -17,9 +17,11 @@ package org.openehealth.ipf.commons.ihe.hpd;
 
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.hpd.stub.ErrorType;
+import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest;
+import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.DsmlMessage;
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchRequest;
 import org.openehealth.ipf.commons.xml.XsdValidator;
 
@@ -35,12 +37,13 @@ import static org.openehealth.ipf.commons.ihe.hpd.HpdUtils.parseLdapAttribute;
 /**
  * @author Dmytro Rud
  */
-public class HpdRequestValidator {
-    private static final String XSD_DOCUMENT = "/wsdl/DSMLv2.xsd";
+public class HpdValidator {
     private static final JAXBContext JAXB_CONTEXT;
     static {
         try {
-            JAXB_CONTEXT = JAXBContext.newInstance(ObjectFactory.class);
+            JAXB_CONTEXT = JAXBContext.newInstance(
+                    org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory.class,
+                    org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.ObjectFactory.class);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
@@ -54,10 +57,10 @@ public class HpdRequestValidator {
         }
     }
 
-    private static void validateWithXsd(Object object) {
+    private static void validateWithXsd(Object object, String schemaName) {
         try {
             Source source = new JAXBSource(JAXB_CONTEXT, object);
-            XSD_VALIDATOR.validate(source, XSD_DOCUMENT);
+            XSD_VALIDATOR.validate(source, schemaName);
         } catch (ValidationException e) {
             throw new HpdException(e, ErrorType.MALFORMED_REQUEST);
         } catch (Exception e) {
@@ -66,7 +69,7 @@ public class HpdRequestValidator {
     }
 
     public void validateBatchRequest(BatchRequest request) {
-        validateWithXsd(request);
+        validateWithXsd(request, "/schema/DSMLv2.xsd");
         check(request.getBatchRequests() != null, "Request list is null");
         check(!request.getBatchRequests().isEmpty(), "Request list is empty");
         for(DsmlMessage dsml : request.getBatchRequests()) {
@@ -79,5 +82,17 @@ public class HpdRequestValidator {
         Map<String, String> dn = parseLdapAttribute(request.getDn());
         check(isNotBlank(dn.get("O")), "Missing DN.O");
         check("HPD".equals(dn.get("DC")), "DN.DC not equal to 'HPD'");
+    }
+
+    public void validateBatchResponse(BatchResponse response) {
+        validateWithXsd(response, "/schema/DSMLv2.xsd");
+    }
+
+    public void validateDownloadRequest(DownloadRequest request) {
+        validateWithXsd(request, "/schema/PIDD.xsd");
+    }
+
+    public void validateDownloadResponse(DownloadResponse response) {
+        validateWithXsd(response, "/schema/PIDD.xsd");
     }
 }

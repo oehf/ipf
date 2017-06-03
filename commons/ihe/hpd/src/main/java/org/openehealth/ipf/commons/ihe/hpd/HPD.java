@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.hpd.chpidd.ChPiddPortType;
 import org.openehealth.ipf.commons.ihe.hpd.iti58.Iti58PortType;
 import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59PortType;
@@ -37,7 +38,8 @@ public class HPD implements IntegrationProfile {
     @AllArgsConstructor
     public enum Interactions implements WsInteractionId<WsTransactionConfiguration> {
         ITI_58(ITI_58_WS_CONFIG),
-        ITI_59(ITI_59_WS_CONFIG);
+        ITI_59(ITI_59_WS_CONFIG),
+        CH_PIDD(CH_PIDD_WS_CONFIG);
 
         @Getter private WsTransactionConfiguration wsTransactionConfiguration;
     }
@@ -74,6 +76,22 @@ public class HPD implements IntegrationProfile {
             new QName("urn:ihe:iti:hpd:2010", "ProviderInformationDirectory_Binding"),
             false,
             "wsdl/iti59.wsdl",
+            true,
+            false,
+            false,
+            false);
+
+    private final static WsTransactionConfiguration CH_PIDD_WS_CONFIG = new WsTransactionConfiguration(
+            "ch-pidd",
+            "Provider Information Delta Download (Swiss HPD extension)",
+            true,
+            null, // audit trail is not defined for CH-PIDD
+            null, // audit trail is not defined for CH-PIDD
+            new QName("urn:ihe:iti:hpd:2010", "ProviderInformationDirectory_Service"),
+            ChPiddPortType.class,
+            new QName("urn:ihe:iti:hpd:2010", "ProviderInformationDirectory_Binding"),
+            false,
+            "wsdl/ch-pidd.wsdl",
             true,
             false,
             false,
