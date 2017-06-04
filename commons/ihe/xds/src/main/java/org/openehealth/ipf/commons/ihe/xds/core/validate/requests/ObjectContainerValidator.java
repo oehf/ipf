@@ -162,8 +162,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         return validators;
     }
 
-    private boolean checkLimitedMetadata(EbXMLRegistryObject object, ValidationProfile profile) {
-        boolean limitedMetadata = ! object.getClassifications(DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME).isEmpty();
+    private boolean checkLimitedMetadata(EbXMLRegistryObject object, String limitedMetadataClassScheme, ValidationProfile profile) {
+        boolean limitedMetadata = ! object.getClassifications(limitedMetadataClassScheme).isEmpty();
         if (limitedMetadata) {
             metaDataAssert((profile == XDM.Interactions.ITI_41) || (profile == XDR.Interactions.ITI_41),
                     ValidationMessage.LIMITED_METADATA_PROHIBITED, object.getId());
@@ -199,7 +199,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private void validateFolders(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> logicalIds = new HashSet<>();
         for (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
-            boolean limitedMetadata = checkLimitedMetadata(folder, profile);
+            boolean limitedMetadata = checkLimitedMetadata(folder, FOLDER_LIMITED_METADATA_CLASS_SCHEME, profile);
             runValidations(folder, getFolderSlotValidations(limitedMetadata));
 
             AvailabilityStatus status = folder.getStatus();
@@ -228,7 +228,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
     
         for (EbXMLRegistryPackage submissionSet : submissionSets) {
-            boolean limitedMetadata = checkLimitedMetadata(submissionSet, profile);
+            boolean limitedMetadata = checkLimitedMetadata(submissionSet, SUBMISSION_SET_LIMITED_METADATA_CLASS_SCHEME, profile);
             runValidations(submissionSet, getSubmissionSetSlotValidations(profile, limitedMetadata));
 
             AvailabilityStatus status = submissionSet.getStatus();
@@ -242,7 +242,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> logicalIds = new HashSet<>();
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
-            boolean limitedMetadata = checkLimitedMetadata(docEntry, profile);
+            boolean limitedMetadata = checkLimitedMetadata(docEntry, DOC_ENTRY_LIMITED_METADATA_CLASS_SCHEME, profile);
 
             boolean onDemandExpected = (profile == XDS_B.Interactions.ITI_61);
             boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
@@ -326,12 +326,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             String patientIdDocEntry = docEntry.getExternalIdentifierValue(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
-            metaDataAssert(patientId.equals(patientIdDocEntry), DOC_ENTRY_PATIENT_ID_WRONG);
+            metaDataAssert(StringUtils.equals(patientId, patientIdDocEntry), DOC_ENTRY_PATIENT_ID_WRONG);
         }
         
         for (EbXMLRegistryPackage folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
             String patientIdFolder = folder.getExternalIdentifierValue(FOLDER_PATIENT_ID_EXTERNAL_ID);
-            metaDataAssert(patientId.equals(patientIdFolder), FOLDER_PATIENT_ID_WRONG);
+            metaDataAssert(StringUtils.equals(patientId, patientIdFolder), FOLDER_PATIENT_ID_WRONG);
         }
     }
 
