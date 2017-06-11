@@ -47,7 +47,6 @@ public class Iti59Component extends AbstractWsComponent<Iti59AuditDataset, WsTra
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
-                getSslContextParameters(parameters),
                 Iti59Service.class)
         {
             @Override

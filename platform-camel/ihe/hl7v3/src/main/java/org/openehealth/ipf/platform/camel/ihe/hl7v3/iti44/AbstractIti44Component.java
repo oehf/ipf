@@ -16,11 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
@@ -46,7 +44,6 @@ abstract public class AbstractIti44Component extends Hl7v3Component<Hl7v3WsTrans
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
-                getSslContextParameters(parameters),
                 Iti44Service.class) {
             @Override
             public AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,

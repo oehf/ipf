@@ -85,10 +85,6 @@ abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDatase
         return (mapList != null && mapList.size() == 1) ? mapList.get(0) : null;
     }
 
-    protected SSLContextParameters getSslContextParameters(Map<String, Object> parameters) {
-        return resolveAndRemoveReferenceParameter(parameters, "sslContextParameters", SSLContextParameters.class);
-    }
-
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
         return interactionId.getWsTransactionConfiguration().getClientAuditStrategy();

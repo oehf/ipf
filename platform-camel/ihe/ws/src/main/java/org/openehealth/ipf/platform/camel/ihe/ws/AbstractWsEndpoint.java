@@ -140,7 +140,6 @@ public abstract class AbstractWsEndpoint<
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
-            SSLContextParameters sslContextParameters,
             Class<? extends AbstractWebService> serviceClass) {
         super(endpointUri, component);
         this.address = address;
@@ -148,7 +147,6 @@ public abstract class AbstractWsEndpoint<
         this.features = features;
         this.schemaLocations = schemaLocations;
         this.properties = properties;
-        setSslContextParameters(sslContextParameters);
         this.serviceClass = serviceClass;
         configure();
     }
@@ -289,7 +287,7 @@ public abstract class AbstractWsEndpoint<
 
     public void setSslContextParameters(SSLContextParameters sslContextParameters) {
         this.sslContextParameters = sslContextParameters;
-        setSecure(sslContextParameters != null);
+        setSecure(secure || (sslContextParameters != null));
     }
 
     public HostnameVerifier getHostnameVerifier() {

@@ -49,7 +49,6 @@ public class Pcd01Component extends AbstractHl7v2WsComponent<WsAuditDataset> {
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
-                getSslContextParameters(parameters),
                 Pcd01Service.class) {
             @Override
             public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(

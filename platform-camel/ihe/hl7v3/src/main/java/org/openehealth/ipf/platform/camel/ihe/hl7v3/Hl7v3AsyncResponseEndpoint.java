@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
-import org.apache.camel.util.jsse.SSLContextParameters;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AsyncResponseServiceFactory;
@@ -48,10 +47,9 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
             List<AbstractFeature> features,
             List<String> schemaLocations,
             Map<String, Object> properties,
-            SSLContextParameters sslContextParameters,
             Class<? extends AbstractWebService> serviceClass)
     {
-        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, sslContextParameters, serviceClass);
+        super(endpointUri, address, component, customInterceptors, features, schemaLocations, properties, serviceClass);
     }
 
 

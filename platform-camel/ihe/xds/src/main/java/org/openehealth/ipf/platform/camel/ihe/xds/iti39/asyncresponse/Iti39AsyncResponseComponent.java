@@ -40,7 +40,6 @@ public class Iti39AsyncResponseComponent extends XdsComponent<XdsNonconstructive
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
-                getSslContextParameters(parameters),
                 Iti39AsyncResponseService.class);
     }
 

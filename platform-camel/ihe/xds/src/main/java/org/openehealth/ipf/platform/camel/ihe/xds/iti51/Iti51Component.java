@@ -48,7 +48,6 @@ public class Iti51Component extends XdsComponent<XdsQueryAuditDataset> {
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
-                getSslContextParameters(parameters),
                 Iti51Service.class) {
 
             @Override

@@ -42,7 +42,6 @@ public class Iti56AsyncResponseComponent extends Hl7v3Component<Hl7v3WsTransacti
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
-                getSslContextParameters(parameters),
                 Iti56AsyncResponseService.class);
     }
 

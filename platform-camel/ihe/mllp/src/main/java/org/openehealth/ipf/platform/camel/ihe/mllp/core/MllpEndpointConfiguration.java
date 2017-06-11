@@ -17,9 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import lombok.Getter;
-import org.apache.camel.CamelException;
-import org.apache.camel.NoSuchBeanException;
-import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.util.EndpointHelper;
 import org.apache.camel.util.jsse.ClientAuthentication;
 import org.apache.camel.util.jsse.SSLContextParameters;
@@ -33,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Configuration of an MLLP endpoint.

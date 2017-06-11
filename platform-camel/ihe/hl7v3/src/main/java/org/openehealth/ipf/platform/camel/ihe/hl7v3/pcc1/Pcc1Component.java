@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.pcc1;
 
 import org.apache.camel.Endpoint;
-import org.apache.camel.util.jsse.SSLContextParameters;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
@@ -43,7 +42,6 @@ public class Pcc1Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransa
                 getCustomInterceptors(parameters),
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
-                getSslContextParameters(parameters),
                 getProperties(parameters)) {
             @Override
             protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {

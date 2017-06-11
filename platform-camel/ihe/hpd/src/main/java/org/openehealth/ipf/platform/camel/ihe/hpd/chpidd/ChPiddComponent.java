@@ -47,7 +47,6 @@ public class ChPiddComponent extends AbstractWsComponent<WsAuditDataset, WsTrans
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
-                getSslContextParameters(parameters),
                 ChPiddService.class)
         {
             @Override

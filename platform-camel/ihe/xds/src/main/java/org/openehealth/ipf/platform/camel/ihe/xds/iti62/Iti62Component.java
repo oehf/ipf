@@ -47,7 +47,6 @@ public class Iti62Component extends XdsComponent<XdsRemoveMetadataAuditDataset> 
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
-                getSslContextParameters(parameters),
                 Iti62Service.class) {
             @Override
             public AbstractWsProducer<XdsRemoveMetadataAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<XdsRemoveMetadataAuditDataset, WsTransactionConfiguration> endpoint,
