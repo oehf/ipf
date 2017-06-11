@@ -46,13 +46,13 @@ class TestIti21Continuations extends MllpTestContainer {
             "QID|%s|IHE PDQ Query\n"
     
     static void main(args) {
-        PayloadLoggerBase.setGloballyEnabled(false)
+        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         init(CONTEXT_DESCRIPTOR, true)
     }
 
     @BeforeClass
     static void setUpClass() {
-        PayloadLoggerBase.setGloballyEnabled(false)
+        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         init(CONTEXT_DESCRIPTOR, false)
     }
     

@@ -54,13 +54,13 @@ class TestRad75 extends StandardTestContainer {
     static final long AWAIT_DELAY = 20 * 1000L
 
     static void main(args) {
-        PayloadLoggerBase.setGloballyEnabled(false)
+        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
     
     @BeforeClass
     static void setUpClass() {
-        PayloadLoggerBase.setGloballyEnabled(false)
+        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     

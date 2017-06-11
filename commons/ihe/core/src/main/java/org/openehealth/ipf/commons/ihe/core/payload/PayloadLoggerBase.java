@@ -17,16 +17,19 @@ package org.openehealth.ipf.commons.ihe.core.payload;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
  * Base class for interceptors which store incoming and outgoing payload
- * into files with user-defined name patterns.
+ * into files with user-defined name patterns, or to the regular Java log.
  * <p>
  * File name patterns can contain absolute and relative paths and must correspond to
  * <a href="http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/expressions.html">SpEL</a>
@@ -44,6 +47,21 @@ import java.util.concurrent.atomic.AtomicLong;
  * <br>
  * Example of a file name pattern:<br>
  * <tt>C:/IPF-LOGS/[processId]/[date('yyyyMMdd-HH00')]/[sequenceId]-server-output.txt</tt>
+ * <br>
+ * After a pre-configured could of failed trials to create a file, the logger will be switched off.
+ * <p>
+ * As an alternative to SpEL, the user can provide another {@link ExpressionResolver expression resolver}.
+ * <p>
+ * The behavior of this class is further regulated application-wide by the following Boolean
+ * system properties:
+ * <ul>
+ *     <li><tt>org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.CONSOLE</tt>&nbsp;&mdash;
+ *          when set to <code>true</code>, then the message payload will be logged using regular
+ *          Java logging mechanisms  (level DEBUG) instead of being written into files whose names
+ *          are created from the pattern.</li>
+ *     <li><tt>org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.DISABLED</tt>&nbsp;&mdash;
+ *          when set to <code>true</code>, then no logging will be performed at all.</li>
+ * </ul>
  *
  * @author Dmytro Rud
  */
@@ -52,15 +70,18 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
 
     private static final AtomicLong SEQUENCE_ID_GENERATOR = new AtomicLong(0L);
 
+    // CXF message property
     public static final String SEQUENCE_ID_PROPERTY_NAME =
             PayloadLoggerBase.class.getName() + ".sequence.id";
 
-    private static boolean globallyEnabled = true;
+    // Java system properties
+    public static final String PROPERTY_CONSOLE = PayloadLoggerBase.class.getName() + ".CONSOLE";
+    public static final String PROPERTY_DISABLED = PayloadLoggerBase.class.getName() + ".DISABLED";
 
-    private boolean locallyEnabled = true;
+    private boolean enabled = true;
 
     private int errorCountLimit = -1;
-    private int errorCount;
+    private AtomicInteger errorCount = new AtomicInteger(0);
 
     private ExpressionResolver resolver;
 
@@ -73,37 +94,42 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
         if (! canProcess()) {
             return;
         }
-        if ((errorCountLimit >= 0) && (errorCount >= errorCountLimit)) {
+        if ((errorCountLimit >= 0) && (errorCount.get() >= errorCountLimit)) {
             LOG.warn("Error count limit has bean reached, reset the counter to enable further trials");
             return;
         }
 
-        // compute file path
-        String path = resolver.resolveExpression(context);
-
-        // write payload pieces into the file
-        Writer writer = null;
-        try {
-            FileOutputStream outputStream = FileUtils.openOutputStream(new File(path), true);
-            writer = (charsetName != null) ?
-                    new OutputStreamWriter(outputStream, charsetName) :
-                    new OutputStreamWriter(outputStream);
-            for (String payloadPiece : payloadPieces) {
-                writer.write(payloadPiece);
+        if (Boolean.getBoolean(PROPERTY_CONSOLE)) {
+            // use regular Java logging
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(StringUtils.repeat("{}", payloadPieces.length), (Object[]) payloadPieces);
             }
-            errorCount = 0;
-        } catch (IOException e) {
-            ++errorCount;
-            LOG.warn("Cannot write into " + path, e);
-        } finally {
-            IOUtils.closeQuietly(writer);
+        } else {
+            // compute the file path and write payload pieces into this file
+            String path = resolver.resolveExpression(context);
+            Writer writer = null;
+            try {
+                FileOutputStream outputStream = FileUtils.openOutputStream(new File(path), true);
+                writer = (charsetName != null) ?
+                        new OutputStreamWriter(outputStream, charsetName) :
+                        new OutputStreamWriter(outputStream);
+                for (String payloadPiece : payloadPieces) {
+                    writer.write(payloadPiece);
+                }
+                errorCount.set(0);
+            } catch (IOException e) {
+                errorCount.incrementAndGet();
+                LOG.warn("Cannot write into " + path, e);
+            } finally {
+                IOUtils.closeQuietly(writer);
+            }
         }
     }
 
 
     public boolean canProcess() {
-        if (! (globallyEnabled && locallyEnabled)) {
-            LOG.debug("File-based logging is disabled");
+        if ((!enabled) || Boolean.getBoolean(PROPERTY_DISABLED)) {
+            LOG.debug("Message payload logging is disabled");
             return false;
         }
         return true;
@@ -114,45 +140,62 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
      * Resets count of occurred errors, can be used e.g. via JMX.
      */
     public void resetErrorCount() {
-        errorCount = 0;
+        errorCount.set(0);
     }
 
     /**
-     * @return <code>true</code> if this logging interceptor is enabled.
-     * @see #isGloballyEnabled()
+     * @return <code>true</code> if this logging interceptor instance is enabled.
      */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * @param enabled <code>true</code> when this logging interceptor instance should be enabled.
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    /**
+     * @return <code>true</code> if this logging interceptor instance is enabled.
+     * @deprecated use {@link #isEnabled()}
+     */
+    @Deprecated
     public boolean isLocallyEnabled() {
-        return locallyEnabled;
+        return isEnabled();
     }
 
     /**
-     * @param locallyEnabled
-     *          <code>true</code> when this logging interceptor instance should be enabled.
-     * @see #setGloballyEnabled(boolean)
+     * @param locallyEnabled <code>true</code> when this logging interceptor instance should be enabled.
+     * @deprecated use {@link #setEnabled(boolean)}
      */
+    @Deprecated
     public void setLocallyEnabled(boolean locallyEnabled) {
-        this.locallyEnabled = locallyEnabled;
+        setEnabled(locallyEnabled);
     }
 
     /**
      * @return <code>true</code> when logging interceptors are generally enabled.
      * @see #isLocallyEnabled()
+     * @deprecated use environment variable {@link #PROPERTY_DISABLED}
      */
     public static boolean isGloballyEnabled() {
-        return globallyEnabled;
+        return !Boolean.getBoolean(PROPERTY_DISABLED);
     }
 
     /**
-     * @param globallyEnabled
-     *          <code>true</code> when logging interceptor should be generally enabled.
+     * @param globallyEnabled <code>true</code> when logging interceptors shall be generally enabled.
      * @see #setLocallyEnabled(boolean)
+     * @deprecated use environment variable {@link #PROPERTY_DISABLED}
      */
     public static void setGloballyEnabled(boolean globallyEnabled) {
-        PayloadLoggerBase.globallyEnabled = globallyEnabled;
+        System.setProperty(PROPERTY_DISABLED, Boolean.toString(!globallyEnabled));
     }
 
     /**
-     * @return maximal allowed count of file creation errors, negative value means "no limit".
+     * @return maximal allowed count of file creation errors,
+     * negative value (the default) means "no limit".
      */
     public int getErrorCountLimit() {
         return errorCountLimit;
@@ -161,7 +204,8 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
     /**
      * Configures maximal allowed count of file creation errors.
      * @param errorCountLimit
-     *      maximal allowed count of file creation errors, negative value means "no limit".
+     *      maximal allowed count of file creation errors,
+     *      negative value (the default) means "no limit".
      */
     public void setErrorCountLimit(int errorCountLimit) {
         this.errorCountLimit = errorCountLimit;
@@ -172,6 +216,6 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
     }
 
     public void setExpressionResolver(ExpressionResolver resolver) {
-        this.resolver = resolver;
+        this.resolver = Validate.notNull(resolver);
     }
 }

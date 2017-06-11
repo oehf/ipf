@@ -25,13 +25,20 @@ The file name pattern configured for an interceptor can be changed at any time u
 When the file denoted by the pattern does already exist, the new message payload will be appended at the end of the existing content.
 
 The actual logging is delegated to subclasses of `org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase`. This base class provide
-an additional set of properties that can be set via the logging interceptor instances:
+additional fields which can be set via logging interceptor instances:
 
-
-| Property name       | Type            | Default Value   | Description                                                                    |
+| Field name          | Type            | Default Value   | Description                                                                    |
 |:--------------------|:----------------|:----------------|:-------------------------------------------------------------------------------|
-| `globallyEnabled`   | boolean (static)| true            | switch file-based logging on and off in the whole application. 
+| `globallyEnabled`   | boolean (static)| true            | switch file-based logging on and off in the whole application
 | `locallyEnabled`    | boolean         | true            | whether this particular interceptor instance is enabled or disabled 
-| `errorCountLimit`   | int             | -1              | Maximal allowed count of messages this interceptor instance has sequentially failed to handle. When this value has been reached, the interceptor gets deactivated until `resetErrorCount()` is called. Negative values mean "no limit" 
+| `errorCountLimit`   | int             | -1              | Maximal allowed count of messages this interceptor instance has sequentially failed to handle. When this value has been reached, the interceptor gets deactivated until `resetErrorCount()` is called. Negative values (the default) mean "no limit"
 
 Note that even the globally deactivated logging may lead to performance penalties because the corresponding interceptors remain still deployed and perform some non-avoidable activities on each message.
+
+Since **IPF 3.3**, the configuration of payload logging is changed as follows:
+* Field `globallyEnabled` is replaced with Java system property `org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.DISABLED`
+of type Boolean.  Setting this system property to `true` is equivalent to setting `globallyEnabled` to `false`, any other value or unset
+property is is equivalent to setting `globallyEnabled` to `true`.
+* Field `locallyEnabled` is renamed to simply `enabled`.
+* A new Java system property `org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.DISABLED` is introduced.
+When it is set to `true`, message payload will be written down using regular Java logging mechanisms instead of custom files.
