@@ -21,6 +21,7 @@ import groovy.transform.stc.SimpleType;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.TypeConverter;
+import org.openehealth.ipf.commons.ihe.ws.cxf.NonReadingAttachmentMarshaller;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
@@ -35,16 +36,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequ
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
-import javax.activation.DataHandler;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.attachment.AttachmentMarshaller;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * Utility class for rendering of ebXML stub POJOs and simplified
@@ -211,41 +208,6 @@ abstract public class XdsRenderingUtils {
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    /**
-     * An attachment marshaller implementation which does not read any data
-     * from the provided data handlers in order to keep all streams usable.
-     */
-    private static class NonReadingAttachmentMarshaller extends AttachmentMarshaller {
-        @Override
-        public boolean isXOPPackage() {
-            return true;
-        }
-
-        @Override
-        public String addMtomAttachment(DataHandler data, String elementNamespace, String elementLocalName) {
-            return attachmentDescription(data.getName(), null, data.getContentType());
-        }
-
-        @Override
-        public String addMtomAttachment(byte[] data, int offset, int length, String mimeType,
-                                        String elementNamespace, String elementLocalName)
-        {
-            String size = Integer.toString(Math.min(length, data.length - offset));
-            return attachmentDescription(null, size, mimeType);
-        }
-
-        @Override
-        public String addSwaRefAttachment(DataHandler data) {
-            return attachmentDescription(data.getName(), null, data.getContentType());
-        }
-
-        private static String attachmentDescription(String name, String size, String contentType) {
-            return "Attachment: name='" + defaultString(name, "[unknown]") + "', size='" + defaultString(size, "[unknown]") + "', content type='" + defaultString(contentType, "[unknown]") + '\'';
-        }
-
     }
 
 }
