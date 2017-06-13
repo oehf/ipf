@@ -34,5 +34,13 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         class="org.openehealth.ipf.platform.camel.ihe.xds.iti86.Iti86TestRouteBuilder">
     </bean>
 
+    <bean id="inLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
+        <constructor-arg value="dummy" />
+    </bean>
+
+    <bean id="outLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
+        <constructor-arg value="dummy" />
+    </bean>
+
 </beans>
         

@@ -26,6 +26,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.ws.Action;
 
 /**
  * @since 3.3
@@ -41,6 +42,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 public interface Iti86PortType {
 
     @WebMethod(operationName = "DocumentRepository_RemoveDocuments")
+    @Action(input = "urn:ihe:iti:2017:RemoveDocuments", output = "urn:ihe:iti:2017:RemoveDocumentsResponse")
     @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", partName = "body")
     public RegistryResponseType documentRepositoryRemoveDocuments(
         @WebParam(partName = "body", name = "RemoveDocumentsRequest", targetNamespace = "urn:ihe:iti:rmd:2017")

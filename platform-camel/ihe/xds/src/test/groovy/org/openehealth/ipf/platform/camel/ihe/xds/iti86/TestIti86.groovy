@@ -19,6 +19,7 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
@@ -36,7 +37,7 @@ class TestIti86 extends StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-86.xml'
     
-    def SERVICE2 = "rmd-iti86://localhost:${port}/rmd-iti86-service2"
+    def SERVICE2 = "rmd-iti86://localhost:${port}/rmd-iti86-service2?inInterceptors=#inLogger&outInterceptors=#outLogger"
     def SERVICE2_ADDR = "http://localhost:${port}/rmd-iti86-service2"
 
     RemoveDocuments request
@@ -47,6 +48,8 @@ class TestIti86 extends StandardTestContainer {
     
     @BeforeClass
     static void classSetUp() throws Exception {
+        System.setProperty(PayloadLoggerBase.PROPERTY_CONSOLE, 'true')
+        System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     

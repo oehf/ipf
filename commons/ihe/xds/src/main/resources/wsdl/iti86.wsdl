@@ -21,7 +21,7 @@
     xmlns:rmd="urn:ihe:iti:rmd:2017"
     xmlns:rs="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0"
 	xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-	xmlns:wsam="http://www.w3.org/2006/05/addressing/metadata/"
+	xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
 	targetNamespace="urn:ihe:iti:rmd:2017"
 	name="DocumentRepository">
 
