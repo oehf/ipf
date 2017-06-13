@@ -23,7 +23,23 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="3.2.0" date="TBD" description="IPF 3.2.0">
+        <release version="3.3.0" date="TBD" description="IPF 3.3.0">
+            <action dev="unixoid" issue="157" type="update">
+                Changes in SOAP/MLLP payload logging: application-wide behavior is controlled using system
+                properties instead of global variables, and it is possible to use regular Java logging
+                mechanisms instead of custom files.
+            </action>
+            <action dev="unixoid" issue="156" type="update">
+                IHE ITI Ballot 41: implemented CP-ITI-839, CP-ITI-999.
+            </action>
+            <action dev="unixoid" issue="155" type="update">
+                IHE ITI Ballot 40: implemented CP-ITI-997, CP-ITI-1001, CP-ITI-1018.
+            </action>
+            <action dev="unixoid" issue="146" type="add">
+                Early support for the IHE RMD profile.
+            </action>
+        </release>
+        <release version="3.2.0" date="10 Mar 2017" description="IPF 3.2.0">
             <action dev="unixoid" issue="145" type="add">
                 Early support for the IHE HPD profile.
             </action>
@@ -37,7 +53,7 @@
                 Allow to explicitly set HL7v2TransactionConfigurations for custom MllpComponents
             </action>
             <action dev="unixoid" issue="140" type="add">
-                Added support for the XDR/XCDR option "Transmit Home Community Id" (CP-ITI-924/961).
+                IHE ITI Ballot 38: Added support for the XDR/XCDR option "Transmit Home Community Id" (CP-ITI-924/961).
             </action>
             <action dev="ohr" issue="139" type="fix">
                 PdqResponseToPdqmResponseTranslator now treats PID-19 as ST instead of CX. Thanks to Seunghun Jun for reporting.
@@ -65,6 +81,9 @@
             </action>
             <action dev="ohr" issue="128" type="update" due-to="Tastelezz">
                 Added some convenience methods for validating UUIDs
+            </action>
+            <action dev="unixoid" issue="127" type="update">
+                IHE ITI Ballot 37: implemented CP-ITI-559, CP-ITI-810.
             </action>
             <action dev="ohr" issue="123" type="update">
                 Refactored IHE business logic to outside the ipf-platform-camel modules
@@ -94,7 +113,7 @@
                 Fix typo in DICOM ATNA schema (ParticipantObjectSensistity, changed to ParticipantObjectSensitivity).
             </action>
             <action dev="unixoid" issue="112" type="update">
-                IHE ITI Ballot 34: implemented CP-ITI-582 and CP-ITI-889.
+                IHE ITI Ballot 33: implemented CP-ITI-582, CP-ITI-880, CP-ITI-889, CP-ITI-906, and CP-ITI-918.
             </action>
             <action dev="unixoid" issue="110" type="fix" due-to="Thomas Papke">
                 Specify port name in each @WebService annotation, avoiding warnings like "Could not find endpoint/port for ..."
