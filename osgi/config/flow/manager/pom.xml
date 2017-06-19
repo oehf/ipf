@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
         <artifactId>ipf-osgi-config-flow</artifactId>
-        <version>3.3-SNAPSHOT</version>
+        <version>3.3.0</version>
     </parent>
     
     <properties>
