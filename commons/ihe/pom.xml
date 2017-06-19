@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons</artifactId>
-        <version>3.3.0</version>
+        <version>3.4-SNAPSHOT</version>
     </parent>
     
     <properties>
