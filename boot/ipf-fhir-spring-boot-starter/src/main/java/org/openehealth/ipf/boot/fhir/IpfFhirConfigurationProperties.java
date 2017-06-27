@@ -21,6 +21,7 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.core.io.Resource;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -31,6 +32,7 @@ import java.util.Map;
 /**
  *
  */
+@Validated
 @ConfigurationProperties(prefix = "ipf.fhir")
 public class IpfFhirConfigurationProperties {
 
