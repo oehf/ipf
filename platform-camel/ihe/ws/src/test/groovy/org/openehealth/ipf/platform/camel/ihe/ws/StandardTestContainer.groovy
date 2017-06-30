@@ -70,7 +70,7 @@ class StandardTestContainer {
          servletServer = new JettyServer(
                  contextResource: contextResource.toURI().toString(),
                  port: port,
-                 contextPath: '',
+                 contextPath: '/',
                  servletPath: '/*',
                  servlet: servlet,
                  servletName: servletName,
@@ -84,8 +84,8 @@ class StandardTestContainer {
          
          def servletContext = servlet.servletConfig.servletContext
          appContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext)
-         producerTemplate = appContext.getBean('template')  
-         camelContext = appContext.getBean('camelContext')  
+         producerTemplate = appContext.getBean('template', ProducerTemplate.class)
+         camelContext = appContext.getBean('camelContext', CamelContext.class)
 
          def auditPort = 514
          

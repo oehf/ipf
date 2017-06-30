@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
+import org.apache.camel.Expression
 import org.apache.camel.builder.RouteBuilder
 
 import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*
@@ -59,9 +60,9 @@ class Iti18RouteBuilder extends RouteBuilder {
         from('xds-iti18:xds-iti18')
             .log(log) { 'received iti18: ' + it.in.getBody(QueryRegistry.class) }
             .process(iti18RequestValidator())
-            .transform { 
-                [ 'req': it.in.getBody(QueryRegistry.class), 'resp': new QueryResponse(SUCCESS) ] 
-            }
+            .transform ({exchange, type ->
+                [ 'req': exchange.in.getBody(QueryRegistry.class), 'resp': new QueryResponse(SUCCESS) ]
+            } as Expression)
             // Dispatch to the correct query implementation
             .choice()
                 .when { queryType(it) == FIND_DOCUMENTS }.to('direct:findDocs')
@@ -83,7 +84,7 @@ class Iti18RouteBuilder extends RouteBuilder {
                 .when { it.in.body.req.returnType == QueryReturnType.OBJECT_REF }.to('direct:convertToObjRefs')
                 .otherwise()
             .end()
-            .transform { it.in.body.resp }
+            .transform ({exchange, type -> exchange.in.body.resp } as Expression)
             .process(iti18ResponseValidator())     // This includes the check for RESULT_NOT_SINGLE_PATIENT
             .log(log) { 'response iti18: ' + it.in.body }
 

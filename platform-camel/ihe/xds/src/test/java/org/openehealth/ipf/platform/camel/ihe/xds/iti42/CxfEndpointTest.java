@@ -74,7 +74,7 @@ public class CxfEndpointTest {
         server = new JettyServer();
         server.setContextResource(getClass().getResource("/cxf-context.xml").toURI().toString());
         server.setPort(port);
-        server.setContextPath("");
+        server.setContextPath("/");
         server.setServletPath("/*");
         server.setServlet(new CXFServlet());
 

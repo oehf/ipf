@@ -11,9 +11,9 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
         <bouncycastle-version>1.55</bouncycastle-version>
-        <camel-version>2.18.3</camel-version>
+        <camel-version>2.19.1</camel-version>
         <cxf-version>3.1.11</cxf-version>
-        <groovy-version>2.4.10</groovy-version>
+        <groovy-version>2.4.12</groovy-version>
         <hapi-version>2.2</hapi-version>
         <hapi-fhir-version>2.4</hapi-fhir-version>
         <ipf-gazelle-version>1.2.0</ipf-gazelle-version>
@@ -24,7 +24,7 @@
         <opensaml-version>3.2.0</opensaml-version>
         <saxon-he-version>9.7.0-14</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
-        <spring-version>4.3.8.RELEASE</spring-version>
+        <spring-version>4.3.9.RELEASE</spring-version>
         <spring-boot-version>1.5.3.RELEASE</spring-boot-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>

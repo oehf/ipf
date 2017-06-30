@@ -15,23 +15,28 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
+import org.apache.camel.Exchange
+import org.apache.camel.Expression
+import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
-
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.*
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
-import static org.openehealth.ipf.tutorials.xds.SearchResult.*
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association
+import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import javax.activation.DataHandler
 import javax.mail.util.ByteArrayDataSource
 
-import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association
-import org.openehealth.ipf.commons.ihe.xds.core.requests.*
-import org.openehealth.ipf.commons.ihe.xds.core.responses.*
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.APPROVED
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.DEPRECATED
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti41RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti42RequestValidator
+import static org.openehealth.ipf.tutorials.xds.SearchResult.*
 
 /**
  * Route builder for ITI-41 and -42.
@@ -49,9 +54,8 @@ class Iti4142RouteBuilder extends RouteBuilder {
             .log(log) { 'received iti41: ' + it.in.getBody(ProvideAndRegisterDocumentSet.class) }
             // Validate and convert the request
             .process(iti41RequestValidator())
-            .transform { 
-                [ 'req': it.in.getBody(ProvideAndRegisterDocumentSet.class), 'uuidMap': [:] ]
-            }
+            .transform ({exchange, type ->
+                [ 'req': exchange.in.getBody(ProvideAndRegisterDocumentSet.class), 'uuidMap': [:] ]} as Expression)
             // Make the dataHandlers re-readable
             .to('direct:makeDocsReReadable')
             // Further validation based on the registry content
@@ -65,16 +69,16 @@ class Iti4142RouteBuilder extends RouteBuilder {
                 'direct:storeAssociations')
             .end()
             // Create success response
-            .transform { new Response(Status.SUCCESS) }
+            .transform ( constant(new Response(Status.SUCCESS)) )
 
         // Entry point for Register Document Set
         from('xds-iti42:xds-iti42')
             .log(log) { 'received iti42: ' + it.in.getBody(RegisterDocumentSet.class) }
             // Validate and convert the request
             .process(iti42RequestValidator())
-            .transform { 
-                [ 'req': it.in.getBody(RegisterDocumentSet.class), 'uuidMap': [:] ]
-            }
+            .transform ( {exchange, type ->
+                [ 'req': exchange.in.getBody(RegisterDocumentSet.class), 'uuidMap': [:] ]} as Expression
+            )
             // Further validation based on the registry content
             .to('direct:checkForAssociationToDeprecatedObject', 'direct:checkPatientIds', 'direct:checkHash')
             // Store the individual entries contained in the request 
@@ -85,7 +89,7 @@ class Iti4142RouteBuilder extends RouteBuilder {
                 'direct:storeAssociations')
             .end()
             // Create success response
-            .transform { new Response(Status.SUCCESS) }
+            .transform ( constant(new Response(Status.SUCCESS)) )
             
         // Deprecated documents should not be transformed any further
         from('direct:checkForAssociationToDeprecatedObject')

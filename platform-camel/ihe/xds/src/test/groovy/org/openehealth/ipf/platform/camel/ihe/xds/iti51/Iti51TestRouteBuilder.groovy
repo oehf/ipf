@@ -26,6 +26,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti51RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti51ResponseValidator
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsForMultiplePatientsQuery
@@ -51,14 +52,14 @@ class Iti51TestRouteBuilder extends SpringRouteBuilder {
             .choice()
                 // Return an object reference for a find documents query
                 .when { it.in.body.query instanceof FindDocumentsForMultiplePatientsQuery }
-                    .transform {                        
+                    .process {
                         def response = new QueryResponse(SUCCESS)
                         response.references.add(new ObjectReference('document01'))
-                        response
+                        resultMessage(it).body = response
                     }
                 // Any other query else is a failure
                 .otherwise()
-                    .transform { new QueryResponse(FAILURE) }
+                    .process { resultMessage(it).body = QueryResponse(FAILURE) }
    }
 
     def checkValue(exchange, expected) {
@@ -74,6 +75,6 @@ class Iti51TestRouteBuilder extends SpringRouteBuilder {
                     new Identifiable("id4", new AssigningAuthority("1.4")))
         }
 
-        Exchanges.resultMessage(exchange).body = response
+        resultMessage(exchange).body = response
     }
 }

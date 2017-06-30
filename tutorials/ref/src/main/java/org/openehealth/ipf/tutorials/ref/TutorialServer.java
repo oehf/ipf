@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.tutorials.ref;
 
-import org.apache.camel.spring.Main;
+import org.apache.camel.main.Main;
 
 /**
  * @author Martin Krasser

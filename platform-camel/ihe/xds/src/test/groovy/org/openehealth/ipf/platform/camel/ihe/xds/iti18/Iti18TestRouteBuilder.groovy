@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
 import org.apache.camel.spring.SpringRouteBuilder
@@ -59,14 +60,14 @@ class Iti18TestRouteBuilder extends SpringRouteBuilder {
             .choice()
                 // Return an object reference for a find documents query
                 .when { it.in.body.query instanceof FindDocumentsQuery }                    
-                    .transform {                        
+                    .process {
                         def response = new QueryResponse(SUCCESS)
                         response.references.add(new ObjectReference('document01'))
-                        response
+                        resultMessage(it).body = response
                     }
                 // Any other query else is a failure
                 .otherwise()
-                    .transform { new QueryResponse(FAILURE) }
+                    .process { resultMessage(it).body = new QueryResponse(FAILURE) }
 
         from('xds-iti18:featuresTest?features=#policyFeature,#gzipFeature')
             .process(iti18RequestValidator())
@@ -79,6 +80,6 @@ class Iti18TestRouteBuilder extends SpringRouteBuilder {
         def query = exchange.in.getBody(QueryRegistry.class).query
         def value = query.authorPersons[0]        
         def response = new QueryResponse(expected == value ? SUCCESS : FAILURE)
-        Exchanges.resultMessage(exchange).body = response
+        resultMessage(exchange).body = response
     }
 }

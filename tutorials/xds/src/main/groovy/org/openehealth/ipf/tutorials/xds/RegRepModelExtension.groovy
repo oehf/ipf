@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
+import org.apache.camel.Expression
 import org.joda.time.DateTime
 
 import org.apache.camel.model.ProcessorDefinition
@@ -36,14 +37,14 @@ class RegRepModelExtension {
     }
     
     static ProcessorDefinition retrieve(ProcessorDefinition self) {
-        self.transform { 
+        self.transform ({exchange, type ->
             new RetrievedDocument(dataStore().get(
-                it.in.body.documentUniqueId), 
-                it.in.body, 
+                exchange.in.body.documentUniqueId),
+                exchange.in.body,
                 null, 
                 null, 
                 'text/plain')
-        }
+        } as Expression)
     }
     
     static ProcessorDefinition search(ProcessorDefinition self, resultTypes) {
@@ -67,11 +68,11 @@ class RegRepModelExtension {
     }
     
     static ProcessorDefinition splitEntries(ProcessorDefinition self, entriesClosure) {
-        self.split { exchange ->
+        self.split ({ exchange, type ->
             def body = exchange.in.body
             def entries = entriesClosure(body) 
             entries.collect { entry -> body.clone() + [entry: entry] }
-        }    
+        } as Expression)
     }
 
     static ProcessorDefinition assignUuid(ProcessorDefinition self) {
@@ -125,7 +126,9 @@ class RegRepModelExtension {
     }
 
     static ProcessorDefinition log(ProcessorDefinition self, log, closure) {
-        self.process {log.info(closure.call(it)) }
+        self.process {
+            log.info(closure.call(it))
+        }
     }
 
     private static DataStore dataStore() {

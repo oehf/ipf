@@ -15,16 +15,17 @@
  */
 package org.openehealth.ipf.tutorials.config.base.extend;
 
-import org.apache.camel.Exchange;
+import org.apache.camel.Exchange
+import org.apache.camel.Expression;
 import org.apache.camel.model.ProcessorDefinition;
 
 class SampleModelExtensionModule {
 
      static ProcessorDefinition setFileHeaderFrom(ProcessorDefinition delegate, String sourceHeader) {
-         delegate.setHeader(Exchange.FILE_NAME) { exchange ->
+         delegate.setHeader(Exchange.FILE_NAME, {exchange, type ->
              def destination = exchange.in.headers."$sourceHeader"
              destination ? "${destination}" : 'default.txt'
-         }
+         } as Expression)
      }
 
 }
