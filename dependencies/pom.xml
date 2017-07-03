@@ -16,6 +16,7 @@
         <groovy-version>2.4.12</groovy-version>
         <hapi-version>2.2</hapi-version>
         <hapi-fhir-version>2.4</hapi-fhir-version>
+        <ipf-flow-manager-version>3.3.0</ipf-flow-manager-version>
         <ipf-gazelle-version>1.2.0</ipf-gazelle-version>
         <ipf-oht-atna-version>3.5.1</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
@@ -569,6 +570,16 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-flow</artifactId>
+                <version>${ipf-flow-manager-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.platform-camel</groupId>
+                <artifactId>ipf-platform-camel-flow</artifactId>
+                <version>${ipf-flow-manager-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.openehealth.ipf.oht.atna</groupId>
                 <artifactId>ipf-oht-atna-auditor</artifactId>
                 <version>${ipf-oht-atna-version}</version>
@@ -673,11 +684,6 @@
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-flow</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -788,11 +794,6 @@
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-flow</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

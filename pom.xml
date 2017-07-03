@@ -339,16 +339,6 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-flow-manager</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
-                <artifactId>ipf-osgi-config-flow-repository</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.osgi</groupId>
                 <artifactId>ipf-osgi-config-jms</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -388,7 +378,16 @@
                 <version>${project.version}</version>
             </dependency>
 
-
+            <dependency>
+                <groupId>org.openehealth.ipf.osgi</groupId>
+                <artifactId>ipf-osgi-config-flow-manager</artifactId>
+                <version>${ipf-flow-manager-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.osgi</groupId>
+                <artifactId>ipf-osgi-config-flow-repository</artifactId>
+                <version>${ipf-flow-manager-version}</version>
+            </dependency>
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
