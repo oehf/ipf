@@ -45,13 +45,19 @@ public class AuthenticationListener extends AbstractAuthenticationAuditListener 
         RFC3881EventOutcomeCodes outcome = authenticationEvent instanceof AbstractAuthenticationFailureEvent ?
                 RFC3881EventOutcomeCodes.MAJOR_FAILURE :
                 RFC3881EventOutcomeCodes.SUCCESS;
-        WebAuthenticationDetails details = (WebAuthenticationDetails) authenticationEvent.getAuthentication().getDetails();
-        UserDetails ud = (UserDetails) authenticationEvent.getAuthentication().getPrincipal();
-        actorAuditor.auditUserAuthenticationLoginEvent(
-                outcome,
-                false,
-                ud.getUsername(),
-                details.getRemoteAddress(),
-                details.getRemoteAddress());
+        Object details = authenticationEvent.getAuthentication().getDetails();
+        if (details instanceof WebAuthenticationDetails) {
+            WebAuthenticationDetails webAuthenticationDetails = (WebAuthenticationDetails) details;
+            Object principal = authenticationEvent.getAuthentication().getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                actorAuditor.auditUserAuthenticationLoginEvent(
+                        outcome,
+                        false,
+                        userDetails.getUsername(),
+                        webAuthenticationDetails.getRemoteAddress(),
+                        webAuthenticationDetails.getRemoteAddress());
+            }
+        }
     }
 }
