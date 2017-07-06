@@ -17,7 +17,6 @@
     <modules>
         <module>core</module>
         <module>core-legacy</module>
-        <module>flow</module>
         <module>ihe</module>
         <module>hl7</module>
         <module>cda</module>

@@ -17,7 +17,6 @@
     <modules>
         <!-- <module>test</module> -->
         <module>core</module>
-        <module>flow</module>
         <module>ihe</module>
         <module>xml</module>
         <module>map</module>
