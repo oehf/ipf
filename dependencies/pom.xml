@@ -10,7 +10,6 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
-        <bouncycastle-version>1.55</bouncycastle-version>
         <camel-version>2.19.1</camel-version>
         <cxf-version>3.1.11</cxf-version>
         <groovy-version>2.4.12</groovy-version>
@@ -22,7 +21,7 @@
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.2.11</jaxb-version>
         <mina2-version>2.0.16</mina2-version>
-        <opensaml-version>3.2.0</opensaml-version>
+        <opensaml-version>3.3.0</opensaml-version>
         <saxon-he-version>9.7.0-14</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
         <spring-version>4.3.9.RELEASE</spring-version>
@@ -650,6 +649,10 @@
                         <artifactId>bcprov-jdk15</artifactId>
                     </exclusion>
                     <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcprov-jdk15on</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <groupId>org.apache.velocity</groupId>
                         <artifactId>velocity</artifactId>
                     </exclusion>
@@ -662,11 +665,6 @@
                         <artifactId>guava</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcprov-jdk15on</artifactId>
-                <version>${bouncycastle-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.santuario</groupId>
