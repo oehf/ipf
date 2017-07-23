@@ -21,7 +21,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -42,7 +42,7 @@ class TestIti62 extends StandardTestContainer {
 
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti62-service2"
 
-    RemoveDocumentSet request
+    RemoveMetadata request
 
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
@@ -55,7 +55,7 @@ class TestIti62 extends StandardTestContainer {
     
     @Before
     void setUp() {
-        request = SampleData.createRemoveDocumentSet()
+        request = SampleData.createRemoveMetadata()
     }
     
     @Test

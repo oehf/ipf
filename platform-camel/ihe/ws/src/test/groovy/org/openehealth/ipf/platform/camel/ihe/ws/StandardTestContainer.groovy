@@ -33,6 +33,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openhealthtools.ihe.atna.auditor.*
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
@@ -284,10 +285,16 @@ class StandardTestContainer {
          assert auditSource.@AuditSourceID == sourceId 
      }
      
-     def checkHumanRequestor(human, String name) {
+     def checkHumanRequestor(human, String name, List<CodedValueType> roles = []) {
          assert human.@UserIsRequestor == 'true'
          assert human.@UserID == name
          assert human.@UserName == name
+         assert human.RoleIDCode.size() == roles.size()
+         roles.eachWithIndex { CodedValueType cvt, int i ->
+             assert human.RoleIDCode[i].'@csd-code' == cvt.code
+             assert human.RoleIDCode[i].@codeSystemName == cvt.codeSystemName
+             assert human.RoleIDCode[i].@originalText== cvt.originalText
+         }
      }
      
      def checkPatient(patient, String... allowedIds = ['id3^^^&1.3&ISO']) {

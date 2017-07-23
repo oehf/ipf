@@ -63,7 +63,8 @@ class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
                 auditDataset.requestPayload,
                 auditDataset.queryId,
                 auditDataset.patientIds,
-                auditDataset.purposesOfUse)
+                auditDataset.purposesOfUse,
+                auditDataset.userRoles)
     }
 
 }

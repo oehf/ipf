@@ -17,21 +17,21 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 
 /**
- * Transforms between a {@link org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet} and its ebXML representation.
+ * Transforms between a {@link RemoveMetadata} and its ebXML representation.
  * @author Boris Stanojevic
  */
-public class RemoveDocumentSetTransformer {
+public class RemoveMetadataRequestTransformer {
     private final EbXMLFactory factory = new EbXMLFactory30();
 
     /**
      * Constructs the transformer
      */
-    public RemoveDocumentSetTransformer() {
+    public RemoveMetadataRequestTransformer() {
     }
 
     /**
@@ -40,12 +40,12 @@ public class RemoveDocumentSetTransformer {
      *          the request. Can be <code>null</code>.
      * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
-    public EbXMLRemoveObjectsRequest toEbXML(RemoveDocumentSet request) {
+    public EbXMLRemoveMetadataRequest toEbXML(RemoveMetadata request) {
         if (request == null) {
             return null;
         }
 
-        EbXMLRemoveObjectsRequest ebXML = factory.createRemoveObjectsRequest();
+        EbXMLRemoveMetadataRequest ebXML = factory.createRemoveMetadataRequest();
         ebXML.setReferences(request.getReferences());
 
         return ebXML;
@@ -57,12 +57,12 @@ public class RemoveDocumentSetTransformer {
      *          the ebXML representation. Can be <code>null</code>.
      * @return the request. <code>null</code> if the input was <code>null</code>.
      */
-    public RemoveDocumentSet fromEbXML(EbXMLRemoveObjectsRequest ebXML) {
+    public RemoveMetadata fromEbXML(EbXMLRemoveMetadataRequest ebXML) {
         if (ebXML == null) {
             return null;
         }
 
-        RemoveDocumentSet request = new RemoveDocumentSet();
+        RemoveMetadata request = new RemoveMetadata();
         request.getReferences().addAll(ebXML.getReferences());
 
         return request;

@@ -19,28 +19,28 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
 
 import static org.junit.Assert.*;
 
 /**
- * Tests for {@link org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RemoveDocumentSetTransformer}.
+ * Tests for {@link RemoveMetadataRequestTransformer}.
  * @author Boris Stanojevic
  */
-public class RemoveDocumentSetTransformerTest {
-    private RemoveDocumentSetTransformer transformer;
-    private RemoveDocumentSet request;
+public class RemoveMetadataTransformerTest {
+    private RemoveMetadataRequestTransformer transformer;
+    private RemoveMetadata request;
 
     
     @Before
     public void setUp() throws Exception {        
-        transformer = new RemoveDocumentSetTransformer();
-        request = SampleData.createRemoveDocumentSet();
+        transformer = new RemoveMetadataRequestTransformer();
+        request = SampleData.createRemoveMetadata();
     }
 
     @Test
     public void testToEbXML() {
-        EbXMLRemoveObjectsRequest ebXML = transformer.toEbXML(request);
+        EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(request);
         assertNotNull(ebXML);
         assertEquals(2, ebXML.getReferences().size());
         assertEquals("1.2.3", ebXML.getReferences().get(0).getHome());
@@ -56,7 +56,7 @@ public class RemoveDocumentSetTransformerTest {
     
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLRemoveObjectsRequest result = transformer.toEbXML(new RemoveDocumentSet());
+        EbXMLRemoveMetadataRequest result = transformer.toEbXML(new RemoveMetadata());
         assertNotNull(result);
         assertNotNull(result.getReferences());
         assertEquals(0, result.getReferences().size());
@@ -64,8 +64,8 @@ public class RemoveDocumentSetTransformerTest {
     
     @Test
     public void testFromEbXML() {
-        EbXMLRemoveObjectsRequest ebXML = transformer.toEbXML(request);
-        RemoveDocumentSet result = transformer.fromEbXML(ebXML);
+        EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(request);
+        RemoveMetadata result = transformer.fromEbXML(ebXML);
         
         assertEquals(request.toString(), result.toString());
     }
@@ -77,7 +77,7 @@ public class RemoveDocumentSetTransformerTest {
     
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLRemoveObjectsRequest ebXML = transformer.toEbXML(new RemoveDocumentSet());
-        assertEquals(new RemoveDocumentSet(), transformer.fromEbXML(ebXML));
+        EbXMLRemoveMetadataRequest ebXML = transformer.toEbXML(new RemoveMetadata());
+        assertEquals(new RemoveMetadata(), transformer.fromEbXML(ebXML));
     }
 }

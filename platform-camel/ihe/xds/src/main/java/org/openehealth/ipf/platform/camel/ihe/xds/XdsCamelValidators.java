@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResp
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.AdhocQueryRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RemoveObjectsRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RemoveMetadataRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.NonconstructiveDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RetrieveImagingDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
@@ -231,9 +231,9 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         if (! validationEnabled(exchange)) {
             return;
         }
-        EbXMLRemoveObjectsRequest30 message =
-                new EbXMLRemoveObjectsRequest30(exchange.getIn().getBody(RemoveObjectsRequest.class));
-        new RemoveObjectsRequestValidator().validate(message, ITI_62);
+        EbXMLRemoveMetadataRequest30 message =
+                new EbXMLRemoveMetadataRequest30(exchange.getIn().getBody(RemoveObjectsRequest.class));
+        new RemoveMetadataRequestValidator().validate(message, ITI_62);
     };
 
     private static final Processor ITI_62_RESPONSE_VALIDATOR = exchange -> {

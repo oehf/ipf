@@ -140,8 +140,8 @@ public interface EbXMLFactory {
     EbXMLRegistryError createRegistryError();
 
     /**
-     * Creates a new remove object request.
+     * Creates a new remove metadata request.
      * @return the created object.
      */
-    EbXMLRemoveObjectsRequest createRemoveObjectsRequest();
+    EbXMLRemoveMetadataRequest createRemoveMetadataRequest();
 }

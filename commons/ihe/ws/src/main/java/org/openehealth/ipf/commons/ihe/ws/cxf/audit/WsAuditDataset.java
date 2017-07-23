@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
@@ -39,6 +40,15 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
 public class WsAuditDataset extends AuditDataset {
     private static final long serialVersionUID = 7940196804508126576L;
 
+    public static final List<CodedValueType> DEFAULT_USER_ROLES;
+    static {
+        CodedValueType role = new CodedValueType();
+        role.setCode("User");
+        role.setCodeSystemName("99IPF");
+        role.setOriginalText("Default User Role");
+        DEFAULT_USER_ROLES = Collections.singletonList(role);
+    }
+
     /**
      * Request SOAP Body (XML) payload.
      */
@@ -53,6 +63,11 @@ public class WsAuditDataset extends AuditDataset {
      * Client user name (WS-Security &lt;Username&gt; header).
      */
     @Getter @Setter private String userName;
+
+    /**
+     * Access Control role(s) the human user holds that allows this transaction.
+     */
+    @Getter private final List<CodedValueType> userRoles = new ArrayList<>();
 
     /**
      * Client IP address.

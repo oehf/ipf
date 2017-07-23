@@ -48,7 +48,8 @@ public class Rad69AuditStrategy extends XdsIRetrieveAuditStrategy30 {
                         auditDataset.getRepositoryIds(status),
                         auditDataset.getHomeCommunityIds(status),
                         auditDataset.getPatientId(),
-                        auditDataset.getPurposesOfUse());    
+                        auditDataset.getPurposesOfUse(),
+                        auditDataset.getUserRoles());
             }
         }
     }

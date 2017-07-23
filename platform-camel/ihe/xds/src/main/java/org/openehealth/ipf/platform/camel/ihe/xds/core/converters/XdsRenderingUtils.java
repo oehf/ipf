@@ -22,10 +22,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.TypeConverter;
 import org.openehealth.ipf.commons.ihe.ws.cxf.NonReadingAttachmentMarshaller;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveImagingDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
@@ -55,7 +52,7 @@ abstract public class XdsRenderingUtils {
      * Correspondence between relevant XDS data types from
      * ebXML model and IPF simplified model.
      */
-    private static final Map<Class, Class> TYPES_CORRESPONDENCE;
+    private static final Map<Class<?>, Class<?>> TYPES_CORRESPONDENCE;
     private static final JAXBContext JAXB_CONTEXT;
 
     static {
@@ -76,7 +73,10 @@ abstract public class XdsRenderingUtils {
         TYPES_CORRESPONDENCE.put(RetrieveDocumentSet.class, RetrieveDocumentSetRequestType.class);
 
         // ITI-62
-        TYPES_CORRESPONDENCE.put(RemoveDocumentSet.class, RemoveObjectsRequest.class);
+        TYPES_CORRESPONDENCE.put(RemoveMetadata.class, RemoveObjectsRequest.class);
+
+        // ITI-86
+        TYPES_CORRESPONDENCE.put(RemoveDocuments.class, RemoveDocumentsRequestType.class);
 
         // RAD-69, 75
         TYPES_CORRESPONDENCE.put(RetrieveImagingDocumentSet.class, RetrieveImagingDocumentSetRequestType.class);
@@ -86,7 +86,7 @@ abstract public class XdsRenderingUtils {
         // ITI-18, 38, 51, 63
         TYPES_CORRESPONDENCE.put(QueryResponse.class, AdhocQueryResponse.class);
 
-        // ITI-41, 42, 57, 61, 62
+        // ITI-41, 42, 57, 61, 62, 86
         TYPES_CORRESPONDENCE.put(Response.class, RegistryResponseType.class);
 
         // ITI-39, ITI-43, RAD-69, RAD-75
@@ -100,6 +100,7 @@ abstract public class XdsRenderingUtils {
                     SubmitObjectsRequest.class,
                     RetrieveDocumentSetRequestType.class,
                     RemoveObjectsRequest.class,
+                    RemoveDocumentsRequestType.class,
                     RetrieveImagingDocumentSetRequestType.class,
                     AdhocQueryResponse.class,
                     RegistryResponseType.class,

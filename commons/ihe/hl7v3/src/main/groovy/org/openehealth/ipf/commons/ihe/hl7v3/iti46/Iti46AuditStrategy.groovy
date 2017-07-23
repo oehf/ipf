@@ -56,7 +56,8 @@ class Iti46AuditStrategy extends Hl7v3AuditStrategy {
                 auditDataset.clientIpAddress,
                 auditDataset.patientIds,
                 auditDataset.messageId,
-                auditDataset.purposesOfUse)
+                auditDataset.purposesOfUse,
+                auditDataset.userRoles)
     }
 
 }

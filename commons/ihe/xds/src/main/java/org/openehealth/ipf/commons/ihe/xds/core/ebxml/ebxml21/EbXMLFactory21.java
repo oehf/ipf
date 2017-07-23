@@ -210,7 +210,7 @@ public class EbXMLFactory21 implements EbXMLFactory {
     }
 
     @Override
-    public EbXMLRemoveObjectsRequest createRemoveObjectsRequest() {
+    public EbXMLRemoveMetadataRequest createRemoveMetadataRequest() {
         throw new UnsupportedOperationException("Only supported for ebXML 3.0");
     }
 

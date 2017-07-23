@@ -19,6 +19,8 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditStrategy30;
 
+import static org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset.DEFAULT_USER_ROLES;
+
 /**
  * Client audit strategy for ITI-62.
  * @author Boris Stanojevic
@@ -40,7 +42,8 @@ public class Iti62AuditStrategy extends XdsRemoveMetadataAuditStrategy30 {
                 auditDataset.getClientIpAddress(),
                 auditDataset.getPatientId(),
                 auditDataset.getObjectIds(),
-                auditDataset.getPurposesOfUse());
+                auditDataset.getPurposesOfUse(),
+                auditDataset.getUserRoles().isEmpty() ? DEFAULT_USER_ROLES : auditDataset.getUserRoles());
     }
 
 }

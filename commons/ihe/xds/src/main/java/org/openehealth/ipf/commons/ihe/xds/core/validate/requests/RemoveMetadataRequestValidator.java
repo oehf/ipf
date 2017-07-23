@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveMetadataRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_62;
@@ -25,10 +25,10 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
- * Validates a {@link EbXMLRemoveObjectsRequest} request.
+ * Validates a {@link EbXMLRemoveMetadataRequest} request.
  * @author Boris Stanojevic
  */
-public class RemoveObjectsRequestValidator implements Validator<EbXMLRemoveObjectsRequest, ValidationProfile> {
+public class RemoveMetadataRequestValidator implements Validator<EbXMLRemoveMetadataRequest, ValidationProfile> {
 
     /**
      * Validates the request.
@@ -38,13 +38,13 @@ public class RemoveObjectsRequestValidator implements Validator<EbXMLRemoveObjec
      *          if the validation failed.
      */
     @Override
-    public void validate(EbXMLRemoveObjectsRequest request, ValidationProfile profile)  {
+    public void validate(EbXMLRemoveMetadataRequest request, ValidationProfile profile)  {
         if (profile == ITI_62) {
             metaDataAssert(request.getReferences().size() > 0, EMPTY_REFERENCE_LIST, "RemoveObjectsRequest");
             metaDataAssert(request.getId() == null &&
                            request.getHome() == null &&
                            request.getSql() == null &&
-                           request.getSlots().size() == 0, OBJECT_SHALL_NOT_BE_SPECIFIED, "AdhocQuery");
+                           request.getSlots().isEmpty(), OBJECT_SHALL_NOT_BE_SPECIFIED, "AdhocQuery");
         }
     }
 }

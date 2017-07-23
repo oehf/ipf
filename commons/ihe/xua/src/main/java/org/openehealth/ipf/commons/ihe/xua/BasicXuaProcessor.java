@@ -40,13 +40,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*;
 
 import javax.xml.namespace.QName;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Dmytro Rud
@@ -67,7 +65,11 @@ public class BasicXuaProcessor implements XuaProcessor {
             WSSecurityConstants.WSSE_NS,
             WSSecurityConstants.WSSE11_NS));
 
-    public static final String PURPOSE_OF_USE_URI = "urn:oasis:names:tc:xspa:1.0:subject:purposeofuse";
+    public static final String PURPOSE_OF_USE_ATTRIBUTE_NAME = "urn:oasis:names:tc:xspa:1.0:subject:purposeofuse";
+    public static final String SUBJECT_ROLE_ATTRIBUTE_NAME   = "urn:oasis:names:tc:xacml:2.0:subject:role";
+
+    public static final QName PURPOSE_OF_USE_ELEMENT_NAME = new QName("urn:hl7-org:v3", "PurposeOfUse");
+    public static final QName SUBJECT_ROLE_ELEMENT_NAME   = new QName("urn:hl7-org:v3", "Role");
 
     private static final UnmarshallerFactory SAML_UNMARSHALLER_FACTORY;
 
@@ -83,7 +85,7 @@ public class BasicXuaProcessor implements XuaProcessor {
 
     private static Element extractAssertionElementFromCxfMessage(SoapMessage message, Header.Direction headerDirection) {
         Header header = message.getHeader(new QName(WSSecurityConstants.WSSE_NS, "Security"));
-        if (! ((header != null) &&
+        if (!((header != null) &&
                 headerDirection.equals(header.getDirection()) &&
                 (header.getObject() instanceof Element)))
         {
@@ -109,12 +111,9 @@ public class BasicXuaProcessor implements XuaProcessor {
      * Extracts ITI-40 XUA user name from the SAML2 assertion contained
      * in the given CXF message, and stores it in the ATNA audit dataset.
      *
-     * @param message
-     *      source CXF message.
-     * @param headerDirection
-     *      direction of the header containing the SAML2 assertion.
-     * @param auditDataset
-     *      target ATNA audit dataset.
+     * @param message         source CXF message.
+     * @param headerDirection direction of the header containing the SAML2 assertion.
+     * @param auditDataset    target ATNA audit dataset.
      */
     public void extractXuaUserNameFromSaml2Assertion(
             SoapMessage message,
@@ -157,29 +156,38 @@ public class BasicXuaProcessor implements XuaProcessor {
         String issuer = (assertion.getIssuer() != null)
                 ? assertion.getIssuer().getValue() : null;
 
-        if (StringUtils.isNotEmpty(issuer) && StringUtils.isNotEmpty(userName)) {
+        if (StringUtils.isNoneEmpty(issuer, userName)) {
             String spProvidedId = StringUtils.stripToEmpty(assertion.getSubject().getNameID().getSPProvidedID());
             auditDataset.setUserName(spProvidedId + '<' + userName + '@' + issuer + '>');
         }
 
-        // collect purposes of use
+        // collect purposes of use and user role codes
         for (AttributeStatement statement : assertion.getAttributeStatements()) {
             for (Attribute attribute : statement.getAttributes()) {
-                if (PURPOSE_OF_USE_URI.equals(attribute.getName())) {
-                    for (XMLObject value : attribute.getAttributeValues()) {
-                        NodeList purposeElemList = value.getDOM().getElementsByTagNameNS("urn:hl7-org:v3", "PurposeOfUse");
-                        for (int i = 0; i < purposeElemList.getLength(); ++i) {
-                            Element purposeElem = (Element) purposeElemList.item(i);
-                            CodedValueType cvt = new CodedValueType();
-                            cvt.setCode(purposeElem.getAttribute("code"));
-                            cvt.setCodeSystemName(purposeElem.getAttribute("codeSystem"));
-                            cvt.setOriginalText(purposeElem.getAttribute("displayName"));
-                            auditDataset.getPurposesOfUse().add(cvt);
-                        }
-                    }
+                if (PURPOSE_OF_USE_ATTRIBUTE_NAME.equals(attribute.getName())) {
+                    extractCodes(attribute, PURPOSE_OF_USE_ELEMENT_NAME, auditDataset.getPurposesOfUse());
+                } else if (SUBJECT_ROLE_ATTRIBUTE_NAME.equals(attribute.getName())) {
+                    extractCodes(attribute, SUBJECT_ROLE_ELEMENT_NAME, auditDataset.getUserRoles());
                 }
             }
         }
     }
 
+    private static void extractCodes(Attribute attribute, QName valueElementName, List<CodedValueType> targetCollection) {
+        for (XMLObject value : attribute.getAttributeValues()) {
+            NodeList nodeList = value.getDOM().getElementsByTagNameNS(valueElementName.getNamespaceURI(), valueElementName.getLocalPart());
+            for (int i = 0; i < nodeList.getLength(); ++i) {
+                Element elem = (Element) nodeList.item(i);
+                targetCollection.add(elementToCode(elem));
+            }
+        }
+    }
+
+    private static CodedValueType elementToCode(Element element) {
+        CodedValueType cvt = new CodedValueType();
+        cvt.setCode(element.getAttribute("code"));
+        cvt.setCodeSystemName(element.getAttribute("codeSystemName"));
+        cvt.setOriginalText(element.getAttribute("displayName"));
+        return cvt;
+    }
 }

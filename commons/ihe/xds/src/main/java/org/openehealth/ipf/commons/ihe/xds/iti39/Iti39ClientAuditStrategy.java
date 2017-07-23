@@ -42,7 +42,8 @@ public class Iti39ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
                         auditDataset.getDocumentIds(status),
                         auditDataset.getRepositoryIds(status),
                         auditDataset.getHomeCommunityIds(status),
-                        auditDataset.getPurposesOfUse());
+                        auditDataset.getPurposesOfUse(),
+                        auditDataset.getUserRoles());
             }
         }
     }

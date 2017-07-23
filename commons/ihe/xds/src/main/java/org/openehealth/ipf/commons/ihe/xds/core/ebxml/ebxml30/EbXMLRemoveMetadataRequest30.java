@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
 import lombok.experimental.Delegate;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveMetadataRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
@@ -33,7 +33,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  * Encapsulation of {@link RemoveObjectsRequest}
  * @author Boris Stanojevic
  */
-public class EbXMLRemoveObjectsRequest30 implements EbXMLRemoveObjectsRequest {
+public class EbXMLRemoveMetadataRequest30 implements EbXMLRemoveMetadataRequest {
     private final RemoveObjectsRequest removeObjectsRequest;
 
     /**
@@ -41,7 +41,7 @@ public class EbXMLRemoveObjectsRequest30 implements EbXMLRemoveObjectsRequest {
      * @param removeObjectsRequest
      *          the object to wrap.
      */
-    public EbXMLRemoveObjectsRequest30(RemoveObjectsRequest removeObjectsRequest) {
+    public EbXMLRemoveMetadataRequest30(RemoveObjectsRequest removeObjectsRequest) {
         notNull(removeObjectsRequest, "removeObjectsRequest cannot be null");
         this.removeObjectsRequest = removeObjectsRequest;
     }

@@ -190,7 +190,8 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
                     auditDataset.getServiceEndpointUrl(),
                     auditDataset.getClientIpAddress(),
                     requestItem.getProviderIds(),
-                    auditDataset.getPurposesOfUse());
+                    auditDataset.getPurposesOfUse(),
+                    auditDataset.getUserRoles());
         }
     }
 

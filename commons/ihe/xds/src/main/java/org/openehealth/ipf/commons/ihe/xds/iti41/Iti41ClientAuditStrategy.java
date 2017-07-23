@@ -36,7 +36,8 @@ public class Iti41ClientAuditStrategy extends Iti41AuditStrategy {
                 auditDataset.getUserName(),
                 auditDataset.getSubmissionSetUuid(),
                 auditDataset.getPatientId(),
-                auditDataset.getPurposesOfUse());
+                auditDataset.getPurposesOfUse(),
+                auditDataset.getUserRoles());
     }
 
 }

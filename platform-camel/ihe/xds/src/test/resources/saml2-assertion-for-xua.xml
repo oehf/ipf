@@ -77,8 +77,52 @@
                                   displayName="Law Enforcement"/>
                 </saml:AttributeValue>
             </saml:Attribute>
+            <saml:Attribute Name="urn:oasis:names:tc:xacml:2.0:subject:role">
+                <saml:AttributeValue>
+                    <Role xmlns="urn:hl7-org:v3"
+                          xsi:type="CE"
+                          code="ELE"
+                          codeSystem="1.2.3.4.5.6.777.1"
+                          codeSystemName="EPD Codes 1"
+                          displayName="Electrician"/>
+                </saml:AttributeValue>
+                <saml:AttributeValue>
+                    <Garbage xmlns="urn:hl7-org:xxxx"
+                             xsi:type="ABC"
+                             code="13"
+                             codeSystem="1.0.14265.12"
+                             codeSystemName="ISO 14266"
+                             displayName="Law Enforcement"/>
+                </saml:AttributeValue>
+                <saml:AttributeValue>
+                    <PurposeOfUse xmlns="urn:hl7-org:v3"
+                                  xsi:type="CE"
+                                  code="13"
+                                  codeSystem="1.0.14265.13"
+                                  codeSystemName="ISO 14265 Classification of Purposes for processing personal health information"
+                                  displayName="Law Enforcement"/>
+                </saml:AttributeValue>
+            </saml:Attribute>
         </saml:AttributeStatement>
         <saml:AttributeStatement>
+            <saml:Attribute Name="urn:oasis:names:tc:xacml:2.0:subject:role">
+                <saml:AttributeValue>
+                    <PurposeOfUse xmlns="urn:hl7-org:v3"
+                                  xsi:type="CE"
+                                  code="13"
+                                  codeSystem="1.0.14265.13"
+                                  codeSystemName="ISO 14265 Classification of Purposes for processing personal health information"
+                                  displayName="Law Enforcement"/>
+                </saml:AttributeValue>
+                <saml:AttributeValue>
+                    <Role xmlns="urn:hl7-org:v3"
+                          xsi:type="CE"
+                          code="GYN"
+                          codeSystem="1.2.3.4.5.6.777.2"
+                          codeSystemName="EPD Codes 2"
+                          displayName="Gynecologist"/>
+                </saml:AttributeValue>
+            </saml:Attribute>
             <saml:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse">
                 <saml:AttributeValue>
                     <PurposeOfUse xmlns="urn:hl7-org:v3"

@@ -73,7 +73,8 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
                 auditDataset.clientIpAddress,
                 auditDataset.requestPayload,
                 auditDataset.patientIds,
-                auditDataset.purposesOfUse)
+                auditDataset.purposesOfUse,
+                auditDataset.userRoles)
     }
 
 }

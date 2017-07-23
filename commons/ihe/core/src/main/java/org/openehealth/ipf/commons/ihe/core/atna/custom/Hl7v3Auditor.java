@@ -65,7 +65,8 @@ public class Hl7v3Auditor extends IHEAuditor {
             String clientIpAddress,
             String[] patientIds,
             String messageId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -78,7 +79,8 @@ public class Hl7v3Auditor extends IHEAuditor {
                 new IHETransactionEventTypeCodes.PatientIdentityFeedV3(),
                 purposesOfUse);
 
-        configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri, pixManagerUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri,
+                pixManagerUri, clientIpAddress, userRoles);
         addPatientParticipantObjects(event, patientIds, messageId);
         audit(event);
     }
@@ -93,11 +95,12 @@ public class Hl7v3Auditor extends IHEAuditor {
             String clientIpAddress,
             String[] patientIds,
             String messageId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         auditIti44(serverSide, RFC3881EventCodes.RFC3881EventActionCodes.CREATE,
                 eventOutcome, replyToUri, userName, pixManagerUri, clientIpAddress,
-                patientIds, messageId, purposesOfUse);
+                patientIds, messageId, purposesOfUse, userRoles);
     }
 
 
@@ -110,11 +113,12 @@ public class Hl7v3Auditor extends IHEAuditor {
             String clientIpAddress,
             String[] patientIds,
             String messageId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         auditIti44(serverSide, RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
                 eventOutcome, replyToUri, userName, pixManagerUri, clientIpAddress,
-                patientIds, messageId, purposesOfUse);
+                patientIds, messageId, purposesOfUse, userRoles);
     }
 
 
@@ -127,12 +131,13 @@ public class Hl7v3Auditor extends IHEAuditor {
             String clientIpAddress,
             String oldPatientId,
             String messageId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         String[] patientIds = new String[] { oldPatientId };
         auditIti44(serverSide, RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
                 eventOutcome, replyToUri, userName, pixManagerUri, clientIpAddress,
-                patientIds, messageId, purposesOfUse);
+                patientIds, messageId, purposesOfUse, userRoles);
     }
 
 
@@ -145,7 +150,8 @@ public class Hl7v3Auditor extends IHEAuditor {
             String clientIpAddress,
             String queryPayload,
             String[] patientIds,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -157,7 +163,8 @@ public class Hl7v3Auditor extends IHEAuditor {
                 new IHETransactionEventTypeCodes.PIXQueryV3(),
                 purposesOfUse);
 
-        configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri, pixManagerUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri,
+                pixManagerUri, clientIpAddress, userRoles);
         addPatientParticipantObjects(event, patientIds, null);
         event.addQueryParticipantObject(null, null, payloadBytes(queryPayload), null,
                 new IHETransactionEventTypeCodes.PIXQueryV3());
@@ -174,7 +181,8 @@ public class Hl7v3Auditor extends IHEAuditor {
             String clientIpAddress,
             String[] patientIds,
             String messageId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -187,7 +195,8 @@ public class Hl7v3Auditor extends IHEAuditor {
                 new IHETransactionEventTypeCodes.PIXUpdateNotificationV3(),
                 purposesOfUse);
 
-        configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri, pixManagerUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, pixManagerUri,
+                pixManagerUri, clientIpAddress, userRoles);
         addPatientParticipantObjects(event, patientIds, messageId);
         audit(event);
     }
@@ -202,7 +211,8 @@ public class Hl7v3Auditor extends IHEAuditor {
             String clientIpAddress,
             String queryPayload,
             String[] patientIds,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -215,7 +225,8 @@ public class Hl7v3Auditor extends IHEAuditor {
                 new IHETransactionEventTypeCodes.PatientDemographicsQueryV3(),
                 purposesOfUse);
 
-        configureEvent(this, serverSide, event, replyToUri, userName, pdSupplierUri, pdSupplierUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, pdSupplierUri,
+                pdSupplierUri, clientIpAddress, userRoles);
         addPatientParticipantObjects(event, patientIds, null);
         event.addQueryParticipantObject(null, null, payloadBytes(queryPayload), null,
                 new IHETransactionEventTypeCodes.PatientDemographicsQueryV3());
@@ -234,7 +245,8 @@ public class Hl7v3Auditor extends IHEAuditor {
             String queryId,
             String homeCommunityId,
             String[] patientIds,
-            List<CodedValueType> purposesOfUses)
+            List<CodedValueType> purposesOfUses,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -246,7 +258,8 @@ public class Hl7v3Auditor extends IHEAuditor {
                 new IHETransactionEventTypeCodes.CrossGatewayPatientDiscovery(),
                 purposesOfUses);
 
-        configureEvent(this, serverSide, event, replyToUri, userName, respondingGatewayUri, respondingGatewayUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, respondingGatewayUri,
+                respondingGatewayUri, clientIpAddress, userRoles);
         addPatientParticipantObjects(event, patientIds, null);
         event.addQueryParticipantObject(
                 queryId,
@@ -267,7 +280,8 @@ public class Hl7v3Auditor extends IHEAuditor {
             String clientIpAddress,
             String queryPayload,
             String patientId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -279,7 +293,8 @@ public class Hl7v3Auditor extends IHEAuditor {
                 new CustomIHETransactionEventTypeCodes.PatientLocationQuery(),
                 purposesOfUse);
 
-        configureEvent(this, serverSide, event, replyToUri, userName, respondingGatewayUri, respondingGatewayUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, respondingGatewayUri,
+                respondingGatewayUri, clientIpAddress, userRoles);
         event.addPatientParticipantObject(patientId);
         event.addQueryParametersObject(queryPayload);
         audit(event);
@@ -296,7 +311,8 @@ public class Hl7v3Auditor extends IHEAuditor {
             String queryPayload,
             String queryId,
             String[] patientIds,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -308,7 +324,8 @@ public class Hl7v3Auditor extends IHEAuditor {
                 new CustomIHETransactionEventTypeCodes.QueryExistingData(),
                 purposesOfUse);
 
-        configureEvent(this, serverSide, event, replyToUri, userName, clinicalDataSourceUri, clinicalDataSourceUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, clinicalDataSourceUri,
+                clinicalDataSourceUri, clientIpAddress, userRoles);
         addPatientParticipantObjects(event, patientIds, null);
         event.addQedParticipantObject(queryId, payloadBytes(queryPayload));
         audit(event);

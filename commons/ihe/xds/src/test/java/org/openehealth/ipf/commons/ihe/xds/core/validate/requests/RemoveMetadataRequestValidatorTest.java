@@ -18,13 +18,13 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRemoveObjectsRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRemoveMetadataRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRemoveMetadataRequest30;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefListType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefType;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RemoveDocumentSetTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RemoveMetadataRequestTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
@@ -37,19 +37,19 @@ import static org.openehealth.ipf.commons.ihe.xds.XDS_B.Interactions.ITI_62;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.EMPTY_REFERENCE_LIST;
 
 /**
- * Test for {@link org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RemoveObjectsRequestValidator}.
+ * Test for {@link RemoveMetadataRequestValidator}.
  * @author Boris Stanojevic
  */
-public class RemoveObjectsRequestValidatorTest {
-    private RemoveObjectsRequestValidator validator;
-    private RemoveDocumentSet request;
-    private RemoveDocumentSetTransformer transformer;
+public class RemoveMetadataRequestValidatorTest {
+    private RemoveMetadataRequestValidator validator;
+    private RemoveMetadata request;
+    private RemoveMetadataRequestTransformer transformer;
 
     @Before
     public void setUp() {
-        validator = new RemoveObjectsRequestValidator();
-        request = SampleData.createRemoveDocumentSet();
-        transformer = new RemoveDocumentSetTransformer();
+        validator = new RemoveMetadataRequestValidator();
+        request = SampleData.createRemoveMetadata();
+        transformer = new RemoveMetadataRequestTransformer();
     }
     
     @Test
@@ -73,7 +73,7 @@ public class RemoveObjectsRequestValidatorTest {
             reference.setId(uuid);
             request.getObjectRefList().getObjectRef().add(reference);
         }
-        EbXMLRemoveObjectsRequest ebXml = new EbXMLRemoveObjectsRequest30(request);
+        EbXMLRemoveMetadataRequest ebXml = new EbXMLRemoveMetadataRequest30(request);
         validator.validate(ebXml, ITI_62);
     }
 
@@ -81,11 +81,11 @@ public class RemoveObjectsRequestValidatorTest {
         expectFailure(expectedMessage, transformer.toEbXML(request));
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLRemoveObjectsRequest ebXML) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLRemoveMetadataRequest ebXML) {
         expectFailure(expectedMessage, ebXML, ITI_62);
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLRemoveObjectsRequest ebXML, ValidationProfile profile) {
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLRemoveMetadataRequest ebXML, ValidationProfile profile) {
         try {
             validator.validate(ebXML, profile);
             fail("Expected exception: " + XDSMetaDataException.class);

@@ -69,7 +69,8 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
                         auditDataset.clientIpAddress,
                         auditDataset.patientIds,
                         auditDataset.messageId,
-                        auditDataset.purposesOfUse)
+                        auditDataset.purposesOfUse,
+                        auditDataset.userRoles)
                 break
 
             case 'PRPA_IN201302UV02':
@@ -82,7 +83,8 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
                         auditDataset.clientIpAddress,
                         auditDataset.patientIds,
                         auditDataset.messageId,
-                        auditDataset.purposesOfUse)
+                        auditDataset.purposesOfUse,
+                        auditDataset.userRoles)
                 break
 
             case 'PRPA_IN201304UV02':
@@ -95,7 +97,8 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
                         auditDataset.clientIpAddress,
                         auditDataset.oldPatientId,
                         auditDataset.messageId,
-                        auditDataset.purposesOfUse)
+                        auditDataset.purposesOfUse,
+                        auditDataset.userRoles)
 
                 AuditorManager.hl7v3Auditor.auditIti44Revise(
                         serverSide,
@@ -106,7 +109,8 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
                         auditDataset.clientIpAddress,
                         auditDataset.patientIds,
                         auditDataset.messageId,
-                        auditDataset.purposesOfUse)
+                        auditDataset.purposesOfUse,
+                        auditDataset.userRoles)
                 break
 
             default:

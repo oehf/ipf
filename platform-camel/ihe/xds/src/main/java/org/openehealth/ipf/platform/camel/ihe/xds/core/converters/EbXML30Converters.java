@@ -265,8 +265,8 @@ public class EbXML30Converters {
      * @return an ebXML 3.0 object.
      */
     @Converter
-    public static RemoveObjectsRequest convert(RemoveDocumentSet in) {
-        RemoveDocumentSetTransformer transformer = new RemoveDocumentSetTransformer();
+    public static RemoveObjectsRequest convert(RemoveMetadata in) {
+        RemoveMetadataRequestTransformer transformer = new RemoveMetadataRequestTransformer();
         return (RemoveObjectsRequest) transformer.toEbXML(in).getInternal();
     }
 
@@ -276,9 +276,9 @@ public class EbXML30Converters {
      * @return a version independent request object.
      */
     @Converter
-    public static RemoveDocumentSet convert(RemoveObjectsRequest in) {
-        RemoveDocumentSetTransformer transformer = new RemoveDocumentSetTransformer();
-        return transformer.fromEbXML(new EbXMLRemoveObjectsRequest30(in));
+    public static RemoveMetadata convert(RemoveObjectsRequest in) {
+        RemoveMetadataRequestTransformer transformer = new RemoveMetadataRequestTransformer();
+        return transformer.fromEbXML(new EbXMLRemoveMetadataRequest30(in));
     }
 
 }

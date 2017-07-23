@@ -39,7 +39,8 @@ public class Iti57ServerAuditStrategy extends XdsSubmitAuditStrategy30 {
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getSubmissionSetUuid(),
                 auditDataset.getPatientId(),
-                auditDataset.getPurposesOfUse());
+                auditDataset.getPurposesOfUse(),
+                auditDataset.getUserRoles());
     }
 
 }

@@ -20,6 +20,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveDocumentAuditStra
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset.Status;
 
+import static org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset.DEFAULT_USER_ROLES;
+
 /**
  * @author Dmytro Rud
  *
@@ -46,7 +48,8 @@ public class Iti86AuditStrategy extends XdsRemoveDocumentAuditStrategy30 {
                         auditDataset.getDocumentIds(status),
                         auditDataset.getRepositoryIds(status),
                         auditDataset.getHomeCommunityIds(status),
-                        auditDataset.getPurposesOfUse());
+                        auditDataset.getPurposesOfUse(),
+                        auditDataset.getUserRoles().isEmpty() ? DEFAULT_USER_ROLES : auditDataset.getUserRoles());
             }
         }
     }

@@ -15,41 +15,27 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomPixAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Dmytro Rud
  */
-public class PixAuditorTest extends Assert {
+public class PixAuditorTest extends AuditorTestBase {
 
-    private static final String CLIENT_IP               = "141.44.162.126";
     private static final String SENDING_FACILITY        = "sendingFacility";
     private static final String SENDING_APPLICATION     = "sendingApplication";
     private static final String RECEIVING_FACILITY      = "receivingFacility";
     private static final String RECEIVING_APPLICATION   = "receivingApplication";
-    private static final String SERVER_URI              = "mllp://document.registry.org";
-    private static final String MESSAGE_ID              = "messageId";
     private static final String LOCAL_PATIENT_ID        = "local^^^&1.2.3&ISO";
     private static final String SUBSUMED_PATIENT_ID     = "subsumed^^^&1.2.3&ISO";
     private static final String NEW_PATIENT_ID          = "new^^^&1.3.14&ISO";
     private static final String PREVIOUS_PATIENT_ID     = "previous^^^&1.8.7&ISO";
     private static final String SUBMISSION_SET_UUID     = "submisson-set-uuid";
 
-
-    private MockedSender sender;
-
-    @Before
-    public void setUp() throws Exception {
-        sender = new MockedSender();
-        AuditorModuleContext.getContext().setSender(sender);
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
-    }
 
     @Test
     public void testAuditors() {
@@ -58,7 +44,7 @@ public class PixAuditorTest extends Assert {
         auditor.auditIti64(
                 true,
                 RFC3881EventOutcomeCodes.SUCCESS,
-                CLIENT_IP,
+                CLIENT_IP_ADDRESS,
                 SENDING_FACILITY,
                 SENDING_APPLICATION,
                 SERVER_URI,
@@ -74,7 +60,7 @@ public class PixAuditorTest extends Assert {
         auditor.auditIti64(
                 false,
                 RFC3881EventOutcomeCodes.SUCCESS,
-                CLIENT_IP,
+                CLIENT_IP_ADDRESS,
                 SENDING_FACILITY,
                 SENDING_APPLICATION,
                 SERVER_URI,

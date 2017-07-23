@@ -40,7 +40,8 @@ public class Iti61AuditStrategy extends XdsSubmitAuditStrategy30 {
                 auditDataset.getClientIpAddress(),
                 auditDataset.getSubmissionSetUuid(),
                 auditDataset.getPatientId(),
-                auditDataset.getPurposesOfUse());
+                auditDataset.getPurposesOfUse(),
+                auditDataset.getUserRoles());
     }
 
 }

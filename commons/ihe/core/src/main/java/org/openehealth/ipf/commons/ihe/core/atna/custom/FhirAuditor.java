@@ -58,7 +58,7 @@ public class FhirAuditor extends IHEAuditor {
             return;
         }
         ImportEvent importEvent = new ImportEvent(false, eventOutcome, new CustomIHETransactionEventTypeCodes.ProvideDocumentBundle(), null);
-        configureEvent(this, serverSide, importEvent, null, null, documentResponderUri, documentResponderUri, clientIpAddress);
+        configureEvent(this, serverSide, importEvent, null, null, documentResponderUri, documentResponderUri, clientIpAddress, null);
 
         if (!EventUtils.isEmptyOrNull(patientId)) {
             importEvent.addPatientParticipantObject(patientId);
@@ -86,7 +86,7 @@ public class FhirAuditor extends IHEAuditor {
                 new CustomIHETransactionEventTypeCodes.DocumentManifestQuery(),
                 Collections.emptyList());
 
-        configureEvent(this, serverSide, event, null, null, documentResponderUri, documentResponderUri, clientIpAddress);
+        configureEvent(this, serverSide, event, null, null, documentResponderUri, documentResponderUri, clientIpAddress, null);
         if (!EventUtils.isEmptyOrNull(patientIds)) {
             patientIds.forEach(event::addPatientParticipantObject);
         }
@@ -113,7 +113,7 @@ public class FhirAuditor extends IHEAuditor {
                 new CustomIHETransactionEventTypeCodes.DocumentReferenceQuery(),
                 Collections.emptyList());
 
-        configureEvent(this, serverSide, event, null, null, documentResponderUri, documentResponderUri, clientIpAddress);
+        configureEvent(this, serverSide, event, null, null, documentResponderUri, documentResponderUri, clientIpAddress, null);
         if (!EventUtils.isEmptyOrNull(patientIds)) {
             patientIds.forEach(event::addPatientParticipantObject);
         }
@@ -140,7 +140,7 @@ public class FhirAuditor extends IHEAuditor {
                 new CustomIHETransactionEventTypeCodes.PDQMQuery(),
                 Collections.emptyList());
 
-        configureEvent(this, serverSide, event, null, null, pdqSupplierUri, pdqSupplierUri, clientIpAddress);
+        configureEvent(this, serverSide, event, null, null, pdqSupplierUri, pdqSupplierUri, clientIpAddress, null);
         if (!EventUtils.isEmptyOrNull(patientIds)) {
             patientIds.forEach(event::addPatientParticipantObject);
         }
@@ -166,7 +166,7 @@ public class FhirAuditor extends IHEAuditor {
                 new CustomIHETransactionEventTypeCodes.PIXMQuery(),
                 Collections.emptyList());
 
-        configureEvent(this, serverSide, event, null, null, pixManagerUri, pixManagerUri, clientIpAddress);
+        configureEvent(this, serverSide, event, null, null, pixManagerUri, pixManagerUri, clientIpAddress, null);
         if (!EventUtils.isEmptyOrNull(patientIds)) {
             patientIds.forEach(event::addPatientParticipantObject);
         }

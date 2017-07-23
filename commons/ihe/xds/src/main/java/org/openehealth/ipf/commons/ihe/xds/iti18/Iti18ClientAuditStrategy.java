@@ -39,7 +39,8 @@ public class Iti18ClientAuditStrategy extends XdsQueryAuditStrategy30 {
                 auditDataset.getRequestPayload(),
                 auditDataset.getHomeCommunityId(),
                 auditDataset.getPatientId(),
-                auditDataset.getPurposesOfUse());
+                auditDataset.getPurposesOfUse(),
+                auditDataset.getUserRoles());
     }
 
 }

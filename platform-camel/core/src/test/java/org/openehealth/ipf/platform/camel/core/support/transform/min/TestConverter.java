@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -58,7 +59,7 @@ public class TestConverter extends Converter<String, String> {
     }
 
     public OutputStream render(String model, OutputStream result, Object... params) throws IOException {
-        IOUtils.write(model, result);
+        IOUtils.write(model, result, StandardCharsets.UTF_8);
         return result;
     }
 

@@ -17,7 +17,10 @@ package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
 import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
+
+import java.util.List;
 
 /**
  * @author Dmytro Rud
@@ -32,7 +35,8 @@ abstract class CustomAuditorUtils {
             String userName,
             String destinationUserId,
             String destinationUri,
-            String sourceIpAddress) {
+            String sourceIpAddress,
+            List<CodedValueType> userRoles) {
 
         event.setAuditSourceId(
                 auditor.getAuditSourceId(),
@@ -48,7 +52,7 @@ abstract class CustomAuditorUtils {
 
         // Set the human requestor active participant (from XUA)
         if (!EventUtils.isEmptyOrNull(userName)) {
-            event.addHumanRequestorActiveParticipant(userName, null, userName, null);
+            event.addHumanRequestorActiveParticipant(userName, null, userName, userRoles);
         }
 
         // Set the destination active participant

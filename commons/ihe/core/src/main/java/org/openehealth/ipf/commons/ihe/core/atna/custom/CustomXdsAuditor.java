@@ -54,29 +54,19 @@ public class CustomXdsAuditor extends XDSAuditor {
     /**
      * Audits an ITI-51 Multi-Patient Query event.
      *
-     * @param serverSide
-     *      <code>true</code> for the Document Registry actor,
-     *      <code>false</code> for the Document Consumer actor.
-     * @param eventOutcome
-     *      event outcome code.
-     * @param userId
-     *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
-     * @param userName
-     *      user name on the Document Consumer side (for XUA).
-     * @param serviceEndpointUri
-     *      network endpoint URI of the Document Registry actor.
-     * @param clientIpAddress
-     *      IP address of the Document Consumer actor.
-     * @param queryUuid
-     *      UUID of the XDS query.
-     * @param requestPayload
-     *      the whole XDS request as an XML String.
-     * @param homeCommunityId
-     *      home community ID (optional).
-     * @param patientId
-     *      patient ID as an HL7 v2 CX string.
-     * @param purposesOfUse
-     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param serverSide         <code>true</code> for the Document Registry actor,
+     *                           <code>false</code> for the Document Consumer actor.
+     * @param eventOutcome       event outcome code.
+     * @param userId             user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
+     * @param userName           user name on the Document Consumer side (for XUA).
+     * @param serviceEndpointUri network endpoint URI of the Document Registry actor.
+     * @param clientIpAddress    IP address of the Document Consumer actor.
+     * @param queryUuid          UUID of the XDS query.
+     * @param requestPayload     the whole XDS request as an XML String.
+     * @param homeCommunityId    home community ID (optional).
+     * @param patientId          patient ID as an HL7 v2 CX string.
+     * @param purposesOfUse      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param userRoles          user role codes from XUA SAML assertion.
      */
     public void auditIti51(
             boolean serverSide,
@@ -89,7 +79,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String requestPayload,
             String homeCommunityId,
             String patientId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (!isAuditorEnabled()) {
             return;
@@ -107,19 +98,20 @@ public class CustomXdsAuditor extends XDSAuditor {
                 requestPayload,
                 homeCommunityId,
                 patientId,
-                purposesOfUse);
+                purposesOfUse,
+                userRoles);
     }
 
     /**
      * Generically sends audit messages for XDS Document Administrator Update Document Set events
      *
-     * @param eventOutcome The event outcome indicator
-     * @param repositoryUserId The Active Participant UserID for the document repository (if using WS-Addressing)
-     * @param registryEndpointUri  The Web service endpoint URI for the document registry
+     * @param eventOutcome          The event outcome indicator
+     * @param repositoryUserId      The Active Participant UserID for the document repository (if using WS-Addressing)
+     * @param registryEndpointUri   The Web service endpoint URI for the document registry
      * @param submissionSetUniqueId The UniqueID of the Submission Set registered
-     * @param patientId The Patient Id that this submission pertains to
-     * @param purposesOfUse
-     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param patientId             The Patient Id that this submission pertains to
+     * @param purposesOfUse         &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param userRoles             user role codes from XUA SAML assertion.
      */
     public void auditClientIti57(
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
@@ -128,7 +120,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String registryEndpointUri,
             String submissionSetUniqueId,
             String patientId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -147,7 +140,7 @@ public class CustomXdsAuditor extends XDSAuditor {
                 repositoryUserId, getSystemAltUserId(), null, getSystemNetworkId(), true);
 
         if (!EventUtils.isEmptyOrNull(userName)) {
-            iti57ExportEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
+            iti57ExportEvent.addHumanRequestorActiveParticipant(userName, null, userName, userRoles);
         }
 
         iti57ExportEvent.addDestinationActiveParticipant(
@@ -162,14 +155,14 @@ public class CustomXdsAuditor extends XDSAuditor {
     /**
      * Generically sends audit messages for XDS Update Document Set events
      *
-     * @param eventOutcome The event outcome indicator
-     * @param sourceUserId The Active Participant UserID for the document consumer (if using WS-Addressing)
-     * @param sourceIpAddress The IP address of the document source that initiated the transaction
+     * @param eventOutcome          The event outcome indicator
+     * @param sourceUserId          The Active Participant UserID for the document consumer (if using WS-Addressing)
+     * @param sourceIpAddress       The IP address of the document source that initiated the transaction
      * @param repositoryEndpointUri The Web service endpoint URI for this document repository
      * @param submissionSetUniqueId The UniqueID of the Submission Set registered
-     * @param patientId The Patient Id that this submission pertains to
-     * @param purposesOfUse
-     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param patientId             The Patient Id that this submission pertains to
+     * @param purposesOfUse         &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param userRoles             user role codes from XUA SAML assertion.
      */
     public void auditServerIti57 (
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
@@ -179,7 +172,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String repositoryEndpointUri,
             String submissionSetUniqueId,
             String patientId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         GenericIHEAuditEventMessage iti57ImportEvent = new GenericIHEAuditEventMessage(
                 false,
@@ -192,7 +186,7 @@ public class CustomXdsAuditor extends XDSAuditor {
         iti57ImportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
         iti57ImportEvent.addSourceActiveParticipant(sourceUserId, null, null, sourceIpAddress, true);
         if (!EventUtils.isEmptyOrNull(userName)) {
-            iti57ImportEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
+            iti57ImportEvent.addHumanRequestorActiveParticipant(userName, null, userName, userRoles);
         }
 
         iti57ImportEvent.addDestinationActiveParticipant(repositoryEndpointUri, getSystemAltUserId(), null,
@@ -209,25 +203,17 @@ public class CustomXdsAuditor extends XDSAuditor {
     /**
      * Audits an ITI-61 Register On-Demand Document Entry event.
      *
-     * @param serverSide
-     *      <code>true</code> for the Document Registry actor,
-     *      <code>false</code> for the On-Demand Document Source actor.
-     * @param eventOutcome
-     *      event outcome code.
-     * @param userId
-     *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
-     * @param userName
-     *      user name on the Document Consumer side (for XUA).
-     * @param serviceEndpointUri
-     *      network endpoint URI of the Document Registry actor.
-     * @param clientIpAddress
-     *      IP address of the Document On-Demand Document Source actor.
-     * @param submissionSetUniqueId
-     *      unique ID of the XDS submission set.
-     * @param patientId
-     *      patient ID as an HL7 v2 CX string.
-     * @param purposesOfUse
-     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param serverSide            <code>true</code> for the Document Registry actor,
+     *                              <code>false</code> for the On-Demand Document Source actor.
+     * @param eventOutcome          event outcome code.
+     * @param userId                user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
+     * @param userName              user name on the Document Consumer side (for XUA).
+     * @param serviceEndpointUri    network endpoint URI of the Document Registry actor.
+     * @param clientIpAddress       IP address of the Document On-Demand Document Source actor.
+     * @param submissionSetUniqueId unique ID of the XDS submission set.
+     * @param patientId             patient ID as an HL7 v2 CX string.
+     * @param purposesOfUse         &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param userRoles             user role codes from XUA SAML assertion.
      */
     public void auditIti61(
             boolean serverSide,
@@ -238,7 +224,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String clientIpAddress,
             String submissionSetUniqueId,
             String patientId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -252,7 +239,7 @@ public class CustomXdsAuditor extends XDSAuditor {
                 new CustomIHETransactionEventTypeCodes.RegisterOnDemandDocumentEntry(),
                 purposesOfUse);
 
-        configureEvent(this, serverSide, event, userId, userName, serviceEndpointUri, serviceEndpointUri, clientIpAddress);
+        configureEvent(this, serverSide, event, userId, userName, serviceEndpointUri, serviceEndpointUri, clientIpAddress, userRoles);
         if (!EventUtils.isEmptyOrNull(patientId)) {
             event.addPatientParticipantObject(patientId);
         }
@@ -272,6 +259,7 @@ public class CustomXdsAuditor extends XDSAuditor {
      * @param patientId ID of the patient related to the deleted registry objects
      * @param objectUuids UUIDs of the registry objects being deleted
      * @param purposesOfUse &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param userRoles user role codes from XUA SAML assertion.
      */
     public void auditIti62(
             boolean serverSide,
@@ -282,7 +270,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String clientIpAddress,
             String patientId,
             String[] objectUuids,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -304,7 +293,7 @@ public class CustomXdsAuditor extends XDSAuditor {
                 true);
 
         if (!EventUtils.isEmptyOrNull(userName)) {
-            event.addHumanRequestorActiveParticipant(userName, null, userName, null);
+            event.addHumanRequestorActiveParticipant(userName, null, userName, userRoles);
         }
 
         event.addDestinationActiveParticipant(
@@ -332,29 +321,19 @@ public class CustomXdsAuditor extends XDSAuditor {
     /**
      * Audits an ITI-63 XCF Cross-Community Fetch event.
      *
-     * @param serverSide
-     *      <code>true</code> for the Responding Gateway actor,
-     *      <code>false</code> for the Initiating Gateway actor.
-     * @param eventOutcome
-     *      event outcome code.
-     * @param userId
-     *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
-     * @param userName
-     *      user name on the Document Consumer side (for XUA).
-     * @param serviceEndpointUri
-     *      network endpoint URI of the XCF Responding Gateway actor.
-     * @param clientIpAddress
-     *      IP address of the XCF Initiating Gateway actor.
-     * @param queryUuid
-     *      UUID of the XCF query.
-     * @param requestPayload
-     *      the whole XCF request as an XML String.
-     * @param homeCommunityId
-     *      home community ID.
-     * @param patientId
-     *      patient ID as an HL7 v2 CX string.
-     * @param purposesOfUse
-     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param serverSide         <code>true</code> for the Responding Gateway actor,
+     *                           <code>false</code> for the Initiating Gateway actor.
+     * @param eventOutcome       event outcome code.
+     * @param userId             user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
+     * @param userName           user name on the Document Consumer side (for XUA).
+     * @param serviceEndpointUri network endpoint URI of the XCF Responding Gateway actor.
+     * @param clientIpAddress    IP address of the XCF Initiating Gateway actor.
+     * @param queryUuid          UUID of the XCF query.
+     * @param requestPayload     the whole XCF request as an XML String.
+     * @param homeCommunityId    home community ID.
+     * @param patientId          patient ID as an HL7 v2 CX string.
+     * @param purposesOfUse      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param userRoles          user role codes from XUA SAML assertion.
      */
     public void auditIti63(
             boolean serverSide,
@@ -367,7 +346,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String requestPayload,
             String homeCommunityId,
             String patientId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -385,40 +365,79 @@ public class CustomXdsAuditor extends XDSAuditor {
                 requestPayload,
                 homeCommunityId,
                 patientId,
-                purposesOfUse);
+                purposesOfUse,
+                userRoles);
     }
 
+    public void auditIti86(
+            boolean serverSide,
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String userId,
+            String userName,
+            String clientIpAddress,
+            String serviceEndpointUri,
+            String patientId,
+            String[] documentUniqueIds,
+            String[] repositoryUniqueIds,
+            String[] homeCommunityIds,
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
+    {
+        if (! isAuditorEnabled()) {
+            return;
+        }
+
+        RemoveDocumentsEvent event = new RemoveDocumentsEvent(!serverSide, eventOutcome, purposesOfUse);
+
+        event.addSourceActiveParticipant(
+                userId,
+                serverSide ? null : getSystemAltUserId(),
+                null,
+                serverSide ? clientIpAddress : getSystemNetworkId(),
+                true);
+
+        if (!EventUtils.isEmptyOrNull(userName)) {
+            event.addHumanRequestorActiveParticipant(userName, null, userName, userRoles);
+        }
+
+        event.addDestinationActiveParticipant(
+                serviceEndpointUri,
+                serverSide ? getSystemAltUserId() : null,
+                null,
+                serverSide ? getSystemNetworkId() : EventUtils.getAddressForUrl(serviceEndpointUri, false),
+                false);
+
+        event.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
+
+        if (!EventUtils.isEmptyOrNull(patientId)) {
+            event.addPatientParticipantObject(patientId);
+        }
+
+        for (int i = 0; i < documentUniqueIds.length; ++i) {
+            event.addRemovedDocumentParticipantObject(documentUniqueIds[i], repositoryUniqueIds[i]);
+        }
+
+        audit(event);
+    }
 
     /**
      * Audits an RAD-69 Retrieve Imaging Document Set event.
      *
-     * @param serverSide
-     *      <code>true</code> for the Imaging Document source actor,
-     *      <code>false</code> for the Imaging Document Consumer actor.
-     * @param eventOutcome
-     *      event outcome code.
-     * @param userId
-     *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
-     * @param userName
-     *      user name on the Document Consumer side (for XUA).
-     * @param serviceEndpointUri
-     *      network endpoint URI of the Imaging Document Source actor.
-     * @param clientIpAddress
-     *      IP address of the Imaging Document Consumer actor.
-     * @param studyInstanceUniqueIds,
-     *      list of study instance unique IDs.
-     * @param seriesInstanceUniqueIds,
-     *      list of series instance unique IDs.
-     * @param documentUniqueIds,
-     *      list of document unique IDs.
-     * @param repositoryUniqueIds,
-     *      list of unique IDs of document repositories.
-     * @param homeCommunityIds,
-     *      list of home community IDs.
-     * @param patientId
-     *      patient ID as an HL7 v2 CX string (if known).
-     * @param purposesOfUse
-     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param serverSide               <code>true</code> for the Imaging Document source actor,
+     *                                 <code>false</code> for the Imaging Document Consumer actor.
+     * @param eventOutcome             event outcome code.
+     * @param userId                   user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
+     * @param userName                 user name on the Document Consumer side (for XUA).
+     * @param serviceEndpointUri       network endpoint URI of the Imaging Document Source actor.
+     * @param clientIpAddress          IP address of the Imaging Document Consumer actor.
+     * @param studyInstanceUniqueIds,  list of study instance unique IDs.
+     * @param seriesInstanceUniqueIds, list of series instance unique IDs.
+     * @param documentUniqueIds,       list of document unique IDs.
+     * @param repositoryUniqueIds,     list of unique IDs of document repositories.
+     * @param homeCommunityIds,        list of home community IDs.
+     * @param patientId                patient ID as an HL7 v2 CX string (if known).
+     * @param purposesOfUse            &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param userRoles                user role codes from XUA SAML assertion.
      */
     public void auditRad69(
             boolean serverSide,
@@ -433,7 +452,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String[] repositoryUniqueIds,
             String[] homeCommunityIds,
             String patientId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -453,40 +473,29 @@ public class CustomXdsAuditor extends XDSAuditor {
                 repositoryUniqueIds,
                 homeCommunityIds,
                 patientId,
-                purposesOfUse);
+                purposesOfUse,
+                userRoles);
     }
 
 
     /**
      * Audits an RAD-75 Cross-Gateway Retrieve Imaging Document Set event.
      *
-     * @param serverSide
-     *      <code>true</code> for the Document Registry actor,
-     *      <code>false</code> for the Document Consumer actor.
-     * @param eventOutcome
-     *      event outcome code.
-     * @param userId
-     *      user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
-     * @param userName
-     *      user name on the Document Consumer side (for XUA).
-     * @param serviceEndpointUri
-     *      network endpoint URI of the Responding Gateway actor.
-     * @param clientIpAddress
-     *      IP address of the Initiating Gateway actor.
-     * @param studyInstanceUniqueIds
-     *      list of study instance unique IDs.
-     * @param seriesInstanceUniqueIds
-     *      list of series instance unique IDs.
-     * @param documentUniqueIds
-     *      list of document unique IDs.
-     * @param repositoryUniqueIds
-     *      list of unique IDs of document repositories.
-     * @param homeCommunityIds
-     *      list of home community IDs.
-     * @param patientId
-     *      patient ID as an HL7 v2 CX string (if known).
-     * @param purposesOfUse
-     *      &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param serverSide              <code>true</code> for the Document Registry actor,
+     *                                <code>false</code> for the Document Consumer actor.
+     * @param eventOutcome            event outcome code.
+     * @param userId                  user ID (contents of the WS-Addressing &lt;ReplyTo&gt; header).
+     * @param userName                user name on the Document Consumer side (for XUA).
+     * @param serviceEndpointUri      network endpoint URI of the Responding Gateway actor.
+     * @param clientIpAddress         IP address of the Initiating Gateway actor.
+     * @param studyInstanceUniqueIds  list of study instance unique IDs.
+     * @param seriesInstanceUniqueIds list of series instance unique IDs.
+     * @param documentUniqueIds       list of document unique IDs.
+     * @param repositoryUniqueIds     list of unique IDs of document repositories.
+     * @param homeCommunityIds        list of home community IDs.
+     * @param patientId               patient ID as an HL7 v2 CX string (if known).
+     * @param purposesOfUse           &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
+     * @param userRoles               user role codes from XUA SAML assertion.
      */
     public void auditRad75(
             boolean serverSide,
@@ -501,7 +510,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String[] repositoryUniqueIds,
             String[] homeCommunityIds,
             String patientId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -521,7 +531,8 @@ public class CustomXdsAuditor extends XDSAuditor {
                 repositoryUniqueIds,
                 homeCommunityIds,
                 patientId,
-                purposesOfUse);
+                purposesOfUse,
+                userRoles);
     }
 
 
@@ -539,7 +550,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String[] repositoryUniqueIds,
             String[] homeCommunityIds,
             String patientId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         ImagingRetrieveEvent event = new ImagingRetrieveEvent(
                 ! serverSide,
@@ -562,7 +574,7 @@ public class CustomXdsAuditor extends XDSAuditor {
                 true);
 
         if (! EventUtils.isEmptyOrNull(userName)) {
-            event.addHumanRequestorActiveParticipant(userName, null, userName, null);
+            event.addHumanRequestorActiveParticipant(userName, null, userName, userRoles);
         }
 
         event.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
@@ -598,7 +610,8 @@ public class CustomXdsAuditor extends XDSAuditor {
             String requestPayload,
             String homeCommunityId,
             String patientId,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         auditQueryEvent(
                 ! serverSide,
@@ -619,56 +632,8 @@ public class CustomXdsAuditor extends XDSAuditor {
                 requestPayload,
                 homeCommunityId,
                 patientId,
-                purposesOfUse);
+                purposesOfUse,
+                userRoles);
     }
 
-    public void auditIti86(
-            boolean serverSide,
-            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
-            String userId,
-            String userName,
-            String clientIpAddress,
-            String serviceEndpointUri,
-            String patientId,
-            String[] documentUniqueIds,
-            String[] repositoryUniqueIds,
-            String[] homeCommunityIds,
-            List<CodedValueType> purposesOfUse)
-    {
-        if (! isAuditorEnabled()) {
-            return;
-        }
-
-        RemoveDocumentsEvent event = new RemoveDocumentsEvent(!serverSide, eventOutcome, purposesOfUse);
-
-        event.addSourceActiveParticipant(
-                userId,
-                serverSide ? null : getSystemAltUserId(),
-                null,
-                serverSide ? clientIpAddress : getSystemNetworkId(),
-                true);
-
-        if (!EventUtils.isEmptyOrNull(userName)) {
-            event.addHumanRequestorActiveParticipant(userName, null, userName, null);
-        }
-
-        event.addDestinationActiveParticipant(
-                serviceEndpointUri,
-                serverSide ? getSystemAltUserId() : null,
-                null,
-                serverSide ? getSystemNetworkId() : EventUtils.getAddressForUrl(serviceEndpointUri, false),
-                false);
-
-        event.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
-
-        if (!EventUtils.isEmptyOrNull(patientId)) {
-            event.addPatientParticipantObject(patientId);
-        }
-
-        for (int i = 0; i < documentUniqueIds.length; ++i) {
-            event.addRemovedDocumentParticipantObject(documentUniqueIds[i], repositoryUniqueIds[i]);
-        }
-
-        audit(event);
-    }
 }

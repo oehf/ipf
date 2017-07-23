@@ -30,6 +30,7 @@ import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 
@@ -163,7 +164,10 @@ class TestIti42 extends StandardTestContainer {
         
         checkEvent(message.EventIdentification, '110107', 'ITI-42', 'C', outcome)
         checkSource(message.ActiveParticipant[0], 'true')
-        checkHumanRequestor(message.ActiveParticipant[1], 'alias2<lipse@demo.com>')
+        checkHumanRequestor(message.ActiveParticipant[1], 'alias2<lipse@demo.com>', [
+                new CodedValueType(code: 'ELE', codeSystemName: 'EPD Codes 1', originalText: 'Electrician'),
+                new CodedValueType(code: 'GYN', codeSystemName: 'EPD Codes 2', originalText: 'Gynecologist'),
+        ])
         checkDestination(message.ActiveParticipant[2], SERVICE2_ADDR, 'false')
         checkAuditSource(message.AuditSourceIdentification, 'registryId')
         checkPatient(message.ParticipantObjectIdentification[0])
@@ -180,7 +184,10 @@ class TestIti42 extends StandardTestContainer {
         
         checkEvent(message.EventIdentification, '110106', 'ITI-42', 'R', outcome)
         checkSource(message.ActiveParticipant[0], 'true')
-        checkHumanRequestor(message.ActiveParticipant[1], 'alias2<lipse@demo.com>')
+        checkHumanRequestor(message.ActiveParticipant[1], 'alias2<lipse@demo.com>', [
+                new CodedValueType(code: 'ELE', codeSystemName: 'EPD Codes 1', originalText: 'Electrician'),
+                new CodedValueType(code: 'GYN', codeSystemName: 'EPD Codes 2', originalText: 'Gynecologist'),
+        ])
         checkDestination(message.ActiveParticipant[2], SERVICE2_ADDR, 'false')
         checkAuditSource(message.AuditSourceIdentification, 'repositoryId')
         checkPatient(message.ParticipantObjectIdentification[0])

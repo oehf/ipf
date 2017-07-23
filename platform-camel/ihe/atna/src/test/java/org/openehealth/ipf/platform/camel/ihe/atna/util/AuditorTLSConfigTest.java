@@ -21,6 +21,7 @@ import java.util.Properties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openhealthtools.ihe.atna.auditor.AuditorTLSConfig;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender;

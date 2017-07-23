@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti62
 
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
@@ -45,7 +45,7 @@ public class Iti62TestRouteBuilder extends SpringRouteBuilder {
     }
 
     void checkValue(exchange) {
-        RemoveDocumentSet value = exchange.in.getBody(RemoveDocumentSet.class)
+        RemoveMetadata value = exchange.in.getBody(RemoveMetadata.class)
         def doCheck = value.references.find {
             it.id == 'wrong-id'
         }

@@ -15,62 +15,22 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna;
 
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Dmytro Rud
  */
-public class XdsAuditorTest extends Assert {
+public class XdsAuditorTest extends AuditorTestBase {
 
-    private static final String REPLY_TO_URI         = "reply-to-uri";
-    private static final String USER_NAME            = "alias<user@issuer>";
-    private static final String SERVER_URI           = "server-uri";
-    private static final String CLIENT_IP_ADDRESS    = "141.44.162.126";
-    private static final String PATIENT_ID           = "patientId^^^&1.2.3&ISO";
     private static final String SUBMISSION_SET_ID    = "submission-set-id";
-    private static final String QUERY_UUID           = "query-uuid";
-    private static final String REQUEST_PAYLOAD      = "request-payload";
-    private static final String HOME_COMMUNITY_ID    = "home-community-id";
     private static final String[] OBJECT_UUIDS       = {"objectUuid1", "objectUuid2", "objectUuid3"};
     private static final String[] DOCUMENT_OIDS      = {"1.1.1", "1.1.2", "1.1.3"};
     private static final String[] REPOSITORY_OIDS    = {"2.1.1", "2.1.2", "2.1.3"};
     private static final String[] HOME_COMMUNITY_IDS = {"3.1.1", "3.1.2", "3.1.3"};
-
-    private static final List<CodedValueType> PURPOSES_OF_USE;
-    static {
-        PURPOSES_OF_USE = new ArrayList<>();
-
-        CodedValueType cvt1 = new CodedValueType();
-        cvt1.setCode("12");
-        cvt1.setCodeSystemName("1.0.14265.1");
-        cvt1.setOriginalText("Law Enforcement");
-        PURPOSES_OF_USE.add(cvt1);
-
-        CodedValueType cvt2 = new CodedValueType();
-        cvt2.setCode("13");
-        cvt2.setCodeSystemName("1.0.14265.1");
-        cvt2.setOriginalText("Something Else");
-        PURPOSES_OF_USE.add(cvt2);
-    }
-
-    private MockedSender sender;
-
-    @Before
-    public void setUp() throws Exception {
-        sender = new MockedSender();
-        AuditorModuleContext.getContext().setSender(sender);
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
-    }
 
     @Test
     public void testAuditors() {
@@ -78,75 +38,85 @@ public class XdsAuditorTest extends Assert {
 
         auditor.auditIti51(true,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
-                QUERY_UUID,
-                REQUEST_PAYLOAD,
+                QUERY_ID,
+                QUERY_PAYLOAD,
                 HOME_COMMUNITY_ID,
-                PATIENT_ID,
-                PURPOSES_OF_USE);
+                PATIENT_IDS[0],
+                PURPOSES_OF_USE,
+                USER_ROLES);
 
         auditor.auditIti51(false,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
-                QUERY_UUID,
-                REQUEST_PAYLOAD,
+                QUERY_ID,
+                QUERY_PAYLOAD,
                 HOME_COMMUNITY_ID,
-                PATIENT_ID,
-                PURPOSES_OF_USE);
+                PATIENT_IDS[0],
+                PURPOSES_OF_USE,
+                USER_ROLES);
 
         auditor.auditIti61(true,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
                 SUBMISSION_SET_ID,
-                PATIENT_ID,
-                PURPOSES_OF_USE);
+                PATIENT_IDS[0],
+                PURPOSES_OF_USE,
+                USER_ROLES);
 
         auditor.auditIti61(false,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
                 SUBMISSION_SET_ID,
-                PATIENT_ID,
-                PURPOSES_OF_USE);
+                PATIENT_IDS[0],
+                PURPOSES_OF_USE,
+                USER_ROLES);
 
         auditor.auditIti62(true,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
-                PATIENT_ID,
+                PATIENT_IDS[0],
                 OBJECT_UUIDS,
-                PURPOSES_OF_USE);
+                PURPOSES_OF_USE,
+                USER_ROLES);
 
         auditor.auditIti62(false,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
-                PATIENT_ID,
+                PATIENT_IDS[0],
                 OBJECT_UUIDS,
-                PURPOSES_OF_USE);
+                PURPOSES_OF_USE,
+                USER_ROLES);
 
         auditor.auditIti63(true,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
-                QUERY_UUID,
-                REQUEST_PAYLOAD,
+                QUERY_ID,
+                QUERY_PAYLOAD,
                 HOME_COMMUNITY_ID,
-                PATIENT_ID,
-                PURPOSES_OF_USE);
+                PATIENT_IDS[0],
+                PURPOSES_OF_USE,
+                USER_ROLES);
 
         auditor.auditIti63(false,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, null,
-                QUERY_UUID,
-                REQUEST_PAYLOAD,
+                QUERY_ID,
+                QUERY_PAYLOAD,
                 HOME_COMMUNITY_ID,
-                PATIENT_ID,
-                PURPOSES_OF_USE);
+                PATIENT_IDS[0],
+                PURPOSES_OF_USE,
+                USER_ROLES);
 
         auditor.auditIti86(true,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
-                PATIENT_ID,
+                PATIENT_IDS[0],
                 DOCUMENT_OIDS,
                 REPOSITORY_OIDS,
                 HOME_COMMUNITY_IDS,
-                PURPOSES_OF_USE);
+                PURPOSES_OF_USE,
+                USER_ROLES);
 
         auditor.auditIti86(false,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
-                PATIENT_ID,
+                PATIENT_IDS[0],
                 DOCUMENT_OIDS,
                 REPOSITORY_OIDS,
                 HOME_COMMUNITY_IDS,
-                PURPOSES_OF_USE);
+                PURPOSES_OF_USE,
+                USER_ROLES);
 
         assertEquals(10, sender.getMessages().size());
     }

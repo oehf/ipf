@@ -15,35 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Request object for the Remove Metadata transaction.
  * <p>
- * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Boris Stanojevic
+ * @deprecated use class {@link RemoveMetadata}
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RemoveMetadata", propOrder = {"references"})
-@XmlRootElement(name = "removeMetadata")
-@EqualsAndHashCode(doNotUseGetters = true)
-@ToString(doNotUseGetters = true)
-public class RemoveDocumentSet implements Serializable {
-    private static final long serialVersionUID = -737326382128159189L;
-
-    @XmlElement(name = "reference")
-    @Getter private final List<ObjectReference> references = new ArrayList<>();
-
+@Deprecated
+public class RemoveDocumentSet extends RemoveMetadata {
 }

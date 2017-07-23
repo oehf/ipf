@@ -44,7 +44,8 @@ public class Iti43ServerAuditStrategy extends XdsRetrieveAuditStrategy30 {
                         auditDataset.getDocumentIds(status),
                         auditDataset.getRepositoryIds(status),
                         auditDataset.getHomeCommunityIds(status),
-                        auditDataset.getPurposesOfUse());
+                        auditDataset.getPurposesOfUse(),
+                        auditDataset.getUserRoles());
             }
         }
     }

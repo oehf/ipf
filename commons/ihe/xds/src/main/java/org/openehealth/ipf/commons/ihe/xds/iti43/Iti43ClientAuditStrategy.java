@@ -43,7 +43,8 @@ public class Iti43ClientAuditStrategy extends XdsRetrieveAuditStrategy30 {
                         auditDataset.getRepositoryIds(status),
                         auditDataset.getHomeCommunityIds(status),
                         auditDataset.getPatientId(),
-                        auditDataset.getPurposesOfUse());
+                        auditDataset.getPurposesOfUse(),
+                        auditDataset.getUserRoles());
             }
         }
     }

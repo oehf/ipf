@@ -36,7 +36,8 @@ public class Iti38ClientAuditStrategy extends Iti18ClientAuditStrategy {
                 auditDataset.getRequestPayload(),
                 auditDataset.getHomeCommunityId(),
                 auditDataset.getPatientId(),
-                auditDataset.getPurposesOfUse());
+                auditDataset.getPurposesOfUse(),
+                auditDataset.getUserRoles());
     }
 
 }

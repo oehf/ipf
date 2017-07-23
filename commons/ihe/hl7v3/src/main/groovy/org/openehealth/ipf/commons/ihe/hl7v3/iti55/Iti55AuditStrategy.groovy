@@ -60,7 +60,8 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
                 auditDataset.queryId,
                 auditDataset.homeCommunityId,
                 auditDataset.patientIds,
-                auditDataset.purposesOfUse)
+                auditDataset.purposesOfUse,
+                auditDataset.userRoles)
     }
 
 

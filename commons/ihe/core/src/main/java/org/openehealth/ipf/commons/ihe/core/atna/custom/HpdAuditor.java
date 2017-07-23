@@ -50,7 +50,8 @@ public class HpdAuditor extends IHEAuditor {
             String directoryUri,
             String clientIpAddress,
             Collection<String> providerIds,
-            List<CodedValueType> purposesOfUse)
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
     {
         if (! isAuditorEnabled()) {
             return;
@@ -62,7 +63,8 @@ public class HpdAuditor extends IHEAuditor {
                 eventOutcome,
                 purposesOfUse);
 
-        configureEvent(this, serverSide, event, replyToUri, userName, directoryUri, directoryUri, clientIpAddress);
+        configureEvent(this, serverSide, event, replyToUri, userName, directoryUri,
+                directoryUri, clientIpAddress, userRoles);
         if (! EventUtils.isEmptyOrNull(providerIds)) {
             providerIds.forEach(event::addProviderParticipantObject);
         }

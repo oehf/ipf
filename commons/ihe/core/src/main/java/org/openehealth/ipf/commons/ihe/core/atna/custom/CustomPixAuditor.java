@@ -81,7 +81,8 @@ public class CustomPixAuditor extends PIXAuditor {
                 null,
                 receivingFacility + '|' + receivingApp,
                 documentRegistryUri,
-                pixManagerIpAddress);
+                pixManagerIpAddress,
+                null);
 
         TypeValuePairType messageIdVP           = event.getTypeValuePair("MSH-10", hl7MessageControlId);
         TypeValuePairType localPatientIdVP      = event.getTypeValuePair("urn:ihe:iti:xpid:2017:patientIdentifierType", "localPatientId");
