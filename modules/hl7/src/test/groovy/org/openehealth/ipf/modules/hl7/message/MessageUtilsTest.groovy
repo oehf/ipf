@@ -64,7 +64,7 @@ public class MessageUtilsTest {
     void testNak() {
         String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
         Message msg = parser.parse(msgText)
-        Message response = msg.generateACK(AcknowledgmentCode.AR, new HL7Exception('Some bad |&^\r\n mistake'))
+        Message response = msg.generateACK(AcknowledgmentCode.AR, new HL7Exception('Some bad |&^\n mistake'))
         assert response instanceof Message
         assert response.MSH.messageType.messageType.value == 'ACK'
         assert response.MSH.messageType.triggerEvent.value == 'A01'

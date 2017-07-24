@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory
  */
 public class GroovyCustomModelClassFactory extends CustomModelClassFactory {
 
-    private static Logger LOG = LoggerFactory.getLogger(CustomModelClassFactory.class)
+    private static Logger LOGGER = LoggerFactory.getLogger(CustomModelClassFactory.class)
 
     private GroovyClassLoader loader = new GroovyClassLoader(getClass().getClassLoader())
 
@@ -79,9 +79,9 @@ public class GroovyCustomModelClassFactory extends CustomModelClassFactory {
                 String script = getClass().getResourceAsStream(fullyQualifiedName)?.text
                 GroovyCodeSource gcs = new GroovyCodeSource(script, fullyQualifiedName, ".")
                 classLoaded = loader.parseClass(gcs, cacheSources)
-                LOG.debug("Found {} in custom HL7 model definitions", fullyQualifiedName)
+                LOGGER.debug("Found {} in custom HL7 model definitions", fullyQualifiedName)
             } catch (Exception e) {
-                LOG.debug("Did not find {} in custom HL7 model definitions", fullyQualifiedName)
+                LOGGER.debug("Did not find {} in custom HL7 model definitions", fullyQualifiedName)
             }
         }
         return classLoaded

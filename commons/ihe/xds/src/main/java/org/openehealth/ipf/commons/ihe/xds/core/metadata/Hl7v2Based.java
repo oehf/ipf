@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.Location;
 import ca.uhn.hl7v2.model.AbstractType;
@@ -27,6 +28,7 @@ import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.v25.datatype.HD;
 import ca.uhn.hl7v2.model.v25.message.ACK;
 import ca.uhn.hl7v2.parser.PipeParser;
+import ca.uhn.hl7v2.validation.impl.NoValidation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -47,7 +49,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
     protected static final Message MESSAGE;
     static {
         MESSAGE = new ACK();
-        MESSAGE.setValidationContext(null);
+        MESSAGE.getParser().getParserConfiguration().setValidating(false);
     }
 
 

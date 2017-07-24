@@ -11,9 +11,9 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
         <camel-version>2.19.1</camel-version>
-        <cxf-version>3.1.11</cxf-version>
+        <cxf-version>3.1.12</cxf-version>
         <groovy-version>2.4.12</groovy-version>
-        <hapi-version>2.2</hapi-version>
+        <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>2.4</hapi-fhir-version>
         <ipf-flow-manager-version>3.3.0</ipf-flow-manager-version>
         <ipf-gazelle-version>1.2.0</ipf-gazelle-version>
