@@ -14,7 +14,7 @@
         <cxf-version>3.1.12</cxf-version>
         <groovy-version>2.4.12</groovy-version>
         <hapi-version>2.3</hapi-version>
-        <hapi-fhir-version>2.4</hapi-fhir-version>
+        <hapi-fhir-version>2.5</hapi-fhir-version>
         <ipf-flow-manager-version>3.3.0</ipf-flow-manager-version>
         <ipf-gazelle-version>1.2.0</ipf-gazelle-version>
         <ipf-oht-atna-version>3.6-SNAPSHOT</ipf-oht-atna-version>
@@ -25,7 +25,7 @@
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
         <spring-version>4.3.9.RELEASE</spring-version>
-        <spring-boot-version>1.5.3.RELEASE</spring-boot-version>
+        <spring-boot-version>1.5.4.RELEASE</spring-boot-version>
         <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <xmlsec-version>2.0.8</xmlsec-version>

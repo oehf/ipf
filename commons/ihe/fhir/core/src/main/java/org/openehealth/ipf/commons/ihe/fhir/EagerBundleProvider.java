@@ -43,7 +43,7 @@ public class EagerBundleProvider extends AbstractBundleProvider {
     }
 
     @Override
-    public int size() {
+    public Integer size() {
         return fetchResources().size();
     }
 

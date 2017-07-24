@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.tutorials.ref;
 
-import org.apache.camel.main.Main;
+import org.apache.camel.spring.Main;
 
 /**
  * @author Martin Krasser
@@ -23,7 +23,7 @@ import org.apache.camel.main.Main;
 public class TutorialServer {
 
     public static void main(String... args) throws Exception {
-        Main.main("-ac", 
+        Main.main("-ac",
             "/context-camel.xml;" +
             "/context-tutorial.xml;" +
             "/context-flowmgr.xml;" + 

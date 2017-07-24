@@ -103,7 +103,7 @@ public class LazyBundleProvider extends AbstractBundleProvider {
     }
 
     @Override
-    public int size() {
+    public Integer size() {
         if (!cacheResults || size < 0) {
             Map<String, Object> headers = getHeaders();
             headers.put(FHIR_REQUEST_SIZE_ONLY, null);

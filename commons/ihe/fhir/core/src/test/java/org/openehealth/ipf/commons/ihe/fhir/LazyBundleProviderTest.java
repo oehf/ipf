@@ -59,7 +59,7 @@ public class LazyBundleProviderTest {
     public void testGetSize() {
         EasyMock.expect(requestConsumer.handleSizeRequest(eq(bundleProvider.getPayload()), hasRequestSizeParameter())).andReturn(MAX_SIZE);
         EasyMock.replay(requestConsumer);
-        assertEquals(response.size(), bundleProvider.size());
+        assertEquals(response.size(), bundleProvider.size().intValue());
         EasyMock.verify(requestConsumer);
     }
 

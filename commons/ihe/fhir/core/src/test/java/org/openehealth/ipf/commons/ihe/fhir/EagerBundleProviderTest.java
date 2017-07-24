@@ -57,7 +57,7 @@ public class EagerBundleProviderTest {
     public void testGetSize() {
         EasyMock.expect(requestConsumer.handleBundleRequest(bundleProvider.getPayload(), bundleProvider.getHeaders())).andReturn(response);
         EasyMock.replay(requestConsumer);
-        assertEquals(response.size(), bundleProvider.size());
+        assertEquals(response.size(), bundleProvider.size().intValue());
         EasyMock.verify(requestConsumer);
     }
 

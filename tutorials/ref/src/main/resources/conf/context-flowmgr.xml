@@ -127,12 +127,12 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
   <!--  Datasource Setup                                                 -->
   <!-- ================================================================= -->
 
-  <bean id="flowDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+  <bean id="flowDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
     <property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
     <property name="url" value="jdbc:derby://${flowmgr.database.host}:${flowmgr.database.port}/${flowmgr.database.name};create=true" />
     <property name="defaultAutoCommit" value="false" />
     <property name="initialSize" value="10" />
-    <property name="maxActive" value="50" />
+    <property name="maxTotal" value="50" />
   </bean>
 
   <!-- ================================================================== -->
