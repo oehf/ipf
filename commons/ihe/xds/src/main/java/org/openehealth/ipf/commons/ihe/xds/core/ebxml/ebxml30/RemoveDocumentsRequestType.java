@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @since 3.3
  */
-@XmlRootElement(name = "RemoveDocumentSetRequest", namespace="urn:ihe:iti:rmd:2017")
+@XmlRootElement(name = "RemoveDocumentsRequest", namespace="urn:ihe:iti:rmd:2017")
 public class RemoveDocumentsRequestType extends RetrieveDocumentSetRequestType {
     // differences only in JAXB annotations
 }
