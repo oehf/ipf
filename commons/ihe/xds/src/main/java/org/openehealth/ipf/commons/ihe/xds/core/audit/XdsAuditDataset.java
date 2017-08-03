@@ -46,9 +46,10 @@ abstract public class XdsAuditDataset extends WsAuditDataset {
 
     /**
      * @return the first present patient ID as HL7 CX string, e.g. "1234^^^&1.2.3.4&ISO",
+     *      or the patient ID extracted from XUA token,
      *      or <code>null</code> when no patient IDs have been collected.
      */
     public String getPatientId() {
-        return patientIds.isEmpty() ? null : patientIds.get(0);
+        return patientIds.isEmpty() ? getXuaPatientId() : patientIds.get(0);
     }
 }

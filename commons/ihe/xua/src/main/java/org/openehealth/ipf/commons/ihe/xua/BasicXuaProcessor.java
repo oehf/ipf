@@ -47,6 +47,9 @@ import javax.xml.namespace.QName;
 import java.util.*;
 
 /**
+ * @see <a href="http://docs.oasis-open.org/xacml/xspa/v1.0/xacml-xspa-1.0-os.html">Cross-Enterprise Security
+ * and Privacy Authorization (XSPA) Profile of XACML v2.0 for Healthcare Version 1.0</a>
+ *
  * @author Dmytro Rud
  */
 @Slf4j
@@ -67,6 +70,7 @@ public class BasicXuaProcessor implements XuaProcessor {
 
     public static final String PURPOSE_OF_USE_ATTRIBUTE_NAME = "urn:oasis:names:tc:xspa:1.0:subject:purposeofuse";
     public static final String SUBJECT_ROLE_ATTRIBUTE_NAME   = "urn:oasis:names:tc:xacml:2.0:subject:role";
+    public static final String PATIENT_ID_ATTRIBUTE_NAME     = "urn:oasis:names:tc:xacml:2.0:resource:resource-id";
 
     public static final QName PURPOSE_OF_USE_ELEMENT_NAME = new QName("urn:hl7-org:v3", "PurposeOfUse");
     public static final QName SUBJECT_ROLE_ELEMENT_NAME   = new QName("urn:hl7-org:v3", "Role");
@@ -161,13 +165,22 @@ public class BasicXuaProcessor implements XuaProcessor {
             auditDataset.setUserName(spProvidedId + '<' + userName + '@' + issuer + '>');
         }
 
-        // collect purposes of use and user role codes
+        // collect purposes of use, user role codes, and the patient ID
         for (AttributeStatement statement : assertion.getAttributeStatements()) {
             for (Attribute attribute : statement.getAttributes()) {
                 if (PURPOSE_OF_USE_ATTRIBUTE_NAME.equals(attribute.getName())) {
                     extractCodes(attribute, PURPOSE_OF_USE_ELEMENT_NAME, auditDataset.getPurposesOfUse());
                 } else if (SUBJECT_ROLE_ATTRIBUTE_NAME.equals(attribute.getName())) {
                     extractCodes(attribute, SUBJECT_ROLE_ELEMENT_NAME, auditDataset.getUserRoles());
+                } else if (PATIENT_ID_ATTRIBUTE_NAME.equals(attribute.getName())) {
+                    List<XMLObject> attributeValues = attribute.getAttributeValues();
+                    if ((attributeValues != null)
+                            && (!attributeValues.isEmpty())
+                            && (attributeValues.get(0) != null)
+                            && (attributeValues.get(0).getDOM() != null))
+                    {
+                        auditDataset.setXuaPatientId(attributeValues.get(0).getDOM().getTextContent());
+                    }
                 }
             }
         }
@@ -175,10 +188,12 @@ public class BasicXuaProcessor implements XuaProcessor {
 
     private static void extractCodes(Attribute attribute, QName valueElementName, List<CodedValueType> targetCollection) {
         for (XMLObject value : attribute.getAttributeValues()) {
-            NodeList nodeList = value.getDOM().getElementsByTagNameNS(valueElementName.getNamespaceURI(), valueElementName.getLocalPart());
-            for (int i = 0; i < nodeList.getLength(); ++i) {
-                Element elem = (Element) nodeList.item(i);
-                targetCollection.add(elementToCode(elem));
+            if (value.getDOM() != null) {
+                NodeList nodeList = value.getDOM().getElementsByTagNameNS(valueElementName.getNamespaceURI(), valueElementName.getLocalPart());
+                for (int i = 0; i < nodeList.getLength(); ++i) {
+                    Element elem = (Element) nodeList.item(i);
+                    targetCollection.add(elementToCode(elem));
+                }
             }
         }
     }

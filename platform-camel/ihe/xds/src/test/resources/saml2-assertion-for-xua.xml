@@ -149,6 +149,9 @@
                                   displayName="Law Enforcement"/>
                 </saml:AttributeValue>
             </saml:Attribute>
+            <saml:Attribute Name="urn:oasis:names:tc:xacml:2.0:resource:resource-id">
+                <saml:AttributeValue>543797436^^^&amp;1.2.840.113619.6.197&amp;ISO</saml:AttributeValue>
+            </saml:Attribute>
         </saml:AttributeStatement>
     </saml:Assertion>
 </wsse:Security>

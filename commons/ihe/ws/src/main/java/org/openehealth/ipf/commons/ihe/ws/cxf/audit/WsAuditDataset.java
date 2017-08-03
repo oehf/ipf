@@ -84,6 +84,10 @@ public class WsAuditDataset extends AuditDataset {
      */
     @Getter private final List<CodedValueType> purposesOfUse = new ArrayList<>();
 
+    /**
+     * Patient ID from XUA token, see ITI TF-2b Section 3.40.4.1.2.2.1.
+     */
+    @Getter @Setter private String xuaPatientId;
 
     /**
      * Constructor.
