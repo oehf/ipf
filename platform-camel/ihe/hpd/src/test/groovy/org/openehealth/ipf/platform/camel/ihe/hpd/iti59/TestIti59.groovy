@@ -16,11 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.hpd.iti59
 
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.AddRequest
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.DelRequest
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
@@ -44,6 +45,8 @@ class TestIti59 extends StandardTestContainer {
     @Test
     void testIti59() {
         BatchRequest request = new BatchRequest()
+        request.batchRequests.add(new AddRequest(requestID: '123'))
+        request.batchRequests.add(new DelRequest(requestID: '456'))
         BatchResponse response = sendIt(SERVICE1, request)
         assert response != null
     }

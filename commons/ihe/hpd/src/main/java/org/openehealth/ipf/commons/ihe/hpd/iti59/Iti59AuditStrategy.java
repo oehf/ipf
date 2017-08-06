@@ -105,7 +105,9 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
         // if there are no response fragments at all -- set outcome codes of all requests to failure
         if ((batchResponse == null) || (batchResponse.getBatchResponses() == null)) {
             for (Iti59AuditDataset.RequestItem requestItem : auditDataset.getRequestItems()) {
-                requestItem.setOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
+                if (requestItem != null) {
+                    requestItem.setOutcomeCode(RFC3881EventCodes.RFC3881EventOutcomeCodes.SERIOUS_FAILURE);
+                }
             }
             return false;
         }
@@ -138,18 +140,20 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
         for (int i = 0; i < auditDataset.getRequestItems().length; ++i) {
             Iti59AuditDataset.RequestItem requestItem = auditDataset.getRequestItems()[i];
 
-            if (isEmpty(requestItem.getRequestId())) {
-                setOutcomeCode(
-                        requestItem,
-                        (i < byNumber.length) ? byNumber[i] : null,
-                        "Could not find response for the ID-less ITI-59 request number {}: either too few responses, or wrong type, or has a request ID",
-                        i);
-            } else {
-                setOutcomeCode(
-                        requestItem,
-                        byRequestId.get(requestItem.getRequestId()),
-                        "Could not find response for the ITI-59 sub-request with ID '{}': either no ID match, or wrong type",
-                        requestItem.getRequestId());
+            if (requestItem != null) {
+                if (isEmpty(requestItem.getRequestId())) {
+                    setOutcomeCode(
+                            requestItem,
+                            (i < byNumber.length) ? byNumber[i] : null,
+                            "Could not find response for the ID-less ITI-59 request number {}: either too few responses, or wrong type, or has a request ID",
+                            i);
+                } else {
+                    setOutcomeCode(
+                            requestItem,
+                            byRequestId.get(requestItem.getRequestId()),
+                            "Could not find response for the ITI-59 sub-request with ID '{}': either no ID match, or wrong type",
+                            requestItem.getRequestId());
+                }
             }
         }
 
@@ -181,17 +185,19 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
     @Override
     public void doAudit(Iti59AuditDataset auditDataset) {
         for (Iti59AuditDataset.RequestItem requestItem : auditDataset.getRequestItems()) {
-            AuditorManager.getHpdAuditor().auditIti59(
-                    isServerSide(),
-                    requestItem.getActionCode(),
-                    requestItem.getOutcomeCode(),
-                    auditDataset.getUserId(),
-                    auditDataset.getUserName(),
-                    auditDataset.getServiceEndpointUrl(),
-                    auditDataset.getClientIpAddress(),
-                    requestItem.getProviderIds(),
-                    auditDataset.getPurposesOfUse(),
-                    auditDataset.getUserRoles());
+            if (requestItem != null) {
+                AuditorManager.getHpdAuditor().auditIti59(
+                        isServerSide(),
+                        requestItem.getActionCode(),
+                        requestItem.getOutcomeCode(),
+                        auditDataset.getUserId(),
+                        auditDataset.getUserName(),
+                        auditDataset.getServiceEndpointUrl(),
+                        auditDataset.getClientIpAddress(),
+                        requestItem.getProviderIds(),
+                        auditDataset.getPurposesOfUse(),
+                        auditDataset.getUserRoles());
+            }
         }
     }
 
