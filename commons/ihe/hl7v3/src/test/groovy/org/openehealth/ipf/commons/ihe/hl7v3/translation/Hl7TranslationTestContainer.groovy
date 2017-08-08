@@ -17,19 +17,19 @@ package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.validation.ValidationContext
 import org.apache.commons.io.IOUtils
 import org.custommonkey.xmlunit.DetailedDiff
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLUnit
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
-import org.openehealth.ipf.commons.core.modules.api.Validator
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
-import org.openehealth.ipf.modules.hl7.validation.ValidatorAdapter
+import org.openehealth.ipf.modules.hl7.validation.Validator
+
+import java.nio.charset.StandardCharsets
 
 import static org.easymock.EasyMock.*
 
@@ -43,7 +43,6 @@ class Hl7TranslationTestContainer {
     private static final boolean REQUEST  = true
     private static final boolean RESPONSE = false
 
-    protected static final Validator<Message, ValidationContext> V2_VALIDATOR = new ValidatorAdapter()
     protected static final CombinedXmlValidator V3_VALIDATOR = new CombinedXmlValidator()
     
     static String transactionName
@@ -99,7 +98,7 @@ class Hl7TranslationTestContainer {
             .append(v3 ? '.xml' : '.hl7')
             .toString()
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName)
-        return IOUtils.toString(inputStream)
+        return IOUtils.toString(inputStream, StandardCharsets.UTF_8)
     }
 
 
@@ -109,7 +108,7 @@ class Hl7TranslationTestContainer {
         
         String expectedV2request = getFileContent(fn, V2, REQUEST)
         Message translatedV2request = v3tov2Translator.translateV3toV2(v3request, null)
-        V2_VALIDATOR.validate(translatedV2request, null)
+        Validator.validate(translatedV2request, null)
         assert translatedV2request.toString().trim() == expectedV2request.trim()
     }
 
@@ -118,7 +117,7 @@ class Hl7TranslationTestContainer {
         String v3request = getFileContent(fn, V3, REQUEST)
         String v2response = getFileContent(fn, V2, RESPONSE)
         Message msg = context.pipeParser.parse(v2response)
-        V2_VALIDATOR.validate(msg, null)
+        Validator.validate(msg, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
         String translatedV3response = v2tov3Translator.translateV2toV3(msg, v3request, 'UTF-8')
@@ -134,7 +133,7 @@ class Hl7TranslationTestContainer {
     void doTestV2toV3RequestTranslation(String fn, int v2index, Hl7v3InteractionId v3Id) {
         String v2request = getFileContent(fn, V2, REQUEST)
         Message msg = context.pipeParser.parse(v2request)
-        V2_VALIDATOR.validate(msg, null)
+        Validator.validate(msg, null)
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
         String translatedV3response = v2tov3Translator.translateV2toV3(msg, null, 'UTF-8')

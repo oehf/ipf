@@ -36,7 +36,7 @@
             <id extension="142025" assigningAuthorityName="130" />
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
-              <name>
+              <name use="L">
                 <family>LENNON</family>
                 <given>JOHN</given>
               </name>

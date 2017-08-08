@@ -190,6 +190,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             pid5[3].value    = given[1].text()
             pid5[4].value    = name.suffix.text()
             pid5[5].value    = name.prefix.text()
+            pid5[7].value    = name.@use.text().map('hl7v2v3_nameTypeCode-nameUse')
 
             def birthName = family?.find { it.@qualifier.text() == 'BR' }?.text()
             if (birthName) {
@@ -197,17 +198,9 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
                     throw new Hl7TranslationException('A person can have only one birth name')
                 }
                 birthNameProcessed = true
-                if (this.birthNameCopyTo == 'PID-5') {
-                    pid5 = nextRepetition(grp.PID[5])
-                    pid5[1][1] = birthName
-                    pid5[7] = 'B'
-                } else if (this.birthNameCopyTo == 'PID-6') {
-                    grp.PID[6](0)[1] = birthName
-                }
-            } else {
-                if (pid5[1].value || pid5[2].value) {
-                    pid5[7].value = name.@use.text().map('hl7v2v3_nameTypeCode-nameUse')
-                }
+                def xpn = (this.birthNameCopyTo == 'PID-5') ? nextRepetition(grp.PID[5]) : grp.PID[6](0)
+                xpn[1][1].value = birthName
+                xpn[7].value = 'B'
             }
         }
 

@@ -20,7 +20,6 @@ import ca.uhn.hl7v2.*;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.GenericParser;
 import ca.uhn.hl7v2.parser.Parser;
-import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Predicate;
@@ -28,7 +27,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.ValueBuilder;
 import org.apache.camel.component.hl7.HL7;
 import org.apache.commons.lang3.Validate;
-import org.openehealth.ipf.commons.core.modules.api.ValidationException;
+import org.openehealth.ipf.modules.hl7.validation.Validator;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
@@ -127,15 +126,7 @@ public final class HL7v2 {
             }
 
             Message msg = bodyMessage(exchange);
-            HapiContext ctx = context == null ? msg.getParser().getHapiContext() : context;
-
-            // We could also write an exception handler on top of SimpleValidationExceptionHandler that
-            // encapsulates the behavior below, but that may restrict custom validation...
-            SimpleValidationExceptionHandler handler = new SimpleValidationExceptionHandler(ctx);
-            handler.setMinimumSeverityToCollect(Severity.ERROR);
-            if (ctx.<Boolean>getMessageValidator().validate(msg, handler)) {
-                throw new ValidationException("Message validation failed", handler.getExceptions());
-            }
+            Validator.validate(msg, context);
         };
     }
 

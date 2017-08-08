@@ -26,7 +26,9 @@ import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 /**
  * IPF Adapter that bridges HAPI Validators and ValidationContext to IPF's
  * {@link Validator} interface.
+ * @deprecated use {@link org.openehealth.ipf.modules.hl7.validation.Validator}
  */
+@Deprecated
 public class ValidatorAdapter implements Validator<Message, ValidationContext> {
 
     /**

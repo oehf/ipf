@@ -39,7 +39,7 @@
         <statusCode code="active" />
         <subject1 typeCode="SBJ">
           <patient classCode="PAT">
-            <id root="2.16.840.1.113883.3.37.4.1.1.2.2.1" extension="305013" />
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.2.1" extension="305013" assigningAuthorityName="ABCD" />
             <id root="2.16.840.1.113883.3.37.4.1.1.2.411.1" extension="234234243" assigningAuthorityName="HZLN" />
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
