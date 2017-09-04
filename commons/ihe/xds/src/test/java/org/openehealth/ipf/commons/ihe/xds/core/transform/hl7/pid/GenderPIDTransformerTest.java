@@ -17,54 +17,53 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 
+import java.util.ListIterator;
+
 /**
- * Tests for {@link GenderPIDTransformer}.
+ * Tests for administrative gender code transformation in SourcePatientInfo.
  * @author Jens Riemschneider
  */
 public class GenderPIDTransformerTest {
-    private GenderPIDTransformer transformer;
-    
-    @Before
-    public void setUp() {
-        transformer = new GenderPIDTransformer();
-    }
-    
+
     @Test
     public void testToHL7() {
         PatientInfo patientInfo = new PatientInfo();        
         patientInfo.setGender("M");
-        assertEquals("M", transformer.toHL7(patientInfo).get(0));
+        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-8");
+        assertEquals("M", iterator.next());
+        assertFalse(iterator.hasNext());
     }
     
     @Test
     public void testToHL7Null() {
-        PatientInfo patientInfo = new PatientInfo();        
-        assertNull(transformer.toHL7(patientInfo));
+        PatientInfo patientInfo = new PatientInfo();
+        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-8");
+        assertFalse(iterator.hasNext());
+        assertNull(patientInfo.getGender());
     }
     
     
     @Test
     public void testFromHL7() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7("F", patientInfo);
+        patientInfo.getHl7FieldIterator("PID-8").add("F");
         assertEquals("F", patientInfo.getGender());
     }
     
     @Test
     public void testFromHL7Null() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7(null, patientInfo);
+        patientInfo.getHl7FieldIterator("PID-8").add(null);
         assertNull(patientInfo.getGender());
     }
     
     @Test
     public void testFromHL7Empty() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7("", patientInfo);
+        patientInfo.getHl7FieldIterator("PID-8").add("");
         assertNull(patientInfo.getGender());
     }    
 }

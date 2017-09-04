@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -49,11 +50,11 @@ public class PatientInfoTransformerTest {
         
         Name name = new XcnName();
         name.setFamilyName("Joman");
-        patientInfo.setName(name);
+        patientInfo.getNames().add(name);
 
         Address address = new Address();
         address.setStreetAddress("Jo Str. 3");
-        patientInfo.setAddress(address);
+        patientInfo.getAddresses().add(address);
 
         patientInfo.setDateOfBirth("19800102");
         patientInfo.setGender("A");
@@ -81,11 +82,11 @@ public class PatientInfoTransformerTest {
 
         Name name = new XpnName();
         name.setFamilyName("Joman");
-        patientInfo.setName(name);
+        patientInfo.getNames().add(name);
 
         Address address = new Address();
         address.setStreetAddress("Jo Str. 3");
-        patientInfo.setAddress(address);
+        patientInfo.getAddresses().add(address);
 
         patientInfo.setDateOfBirth("19800102");
         patientInfo.setGender("A");
@@ -93,7 +94,7 @@ public class PatientInfoTransformerTest {
         List<String> hl7Data = transformer.toHL7(patientInfo);
         assertEquals(5, hl7Data.size());
 
-        assertEquals("PID-3|abcdef~ghijkl", hl7Data.get(0));
+        assertEquals("PID-3|ghijkl~abcdef", hl7Data.get(0));
         assertEquals("PID-5|Joman", hl7Data.get(1));
         assertEquals("PID-7|19800102", hl7Data.get(2));
         assertEquals("PID-8|A", hl7Data.get(3));
@@ -127,17 +128,27 @@ public class PatientInfoTransformerTest {
         
         PatientInfo patientInfo = transformer.fromHL7(hl7PID);
         assertNotNull(patientInfo);
-        assertEquals(4, patientInfo.getIds().size());
-        assertEquals("abcdef", patientInfo.getIds().get(0).getId());
-        assertEquals("fedcba", patientInfo.getIds().get(1).getId());
-        assertEquals("uvwxyz", patientInfo.getIds().get(2).getId());
-        assertEquals("zyxwvu", patientInfo.getIds().get(3).getId());
-        assertEquals("Joman", patientInfo.getName().getFamilyName());
+
+        ListIterator<Identifiable> ids = patientInfo.getIds();
+        assertEquals("abcdef", ids.next().getId());
+        assertEquals("fedcba", ids.next().getId());
+        assertEquals("uvwxyz", ids.next().getId());
+        assertEquals("zyxwvu", ids.next().getId());
+        assertFalse(ids.hasNext());
+
+        ListIterator<Name> names = patientInfo.getNames();
+        assertEquals("Joman", names.next().getFamilyName());
+        assertFalse(names.hasNext());
+
         assertEquals(
                 new Timestamp(new DateTime(1980, 1, 2, 0, 0, DateTimeZone.UTC), Timestamp.Precision.DAY),
                 patientInfo.getDateOfBirth());
+
         assertEquals("A", patientInfo.getGender());
-        assertEquals("Jo Str. 3", patientInfo.getAddress().getStreetAddress());
+
+        ListIterator<Address> addresses = patientInfo.getAddresses();
+        assertEquals("Jo Str. 3", addresses.next().getStreetAddress());
+        assertFalse(addresses.hasNext());
     }
     
     @Test
@@ -167,6 +178,10 @@ public class PatientInfoTransformerTest {
         }
 
         PatientInfo recoveredPatientInfo = transformer.fromHL7(hl7);
-        assertEquals(9, recoveredPatientInfo.getIds().size());
+        ListIterator<Identifiable> ids = recoveredPatientInfo.getIds();
+        for (int i = 0; i < 9; ++i) {
+            assertNotNull(ids.next());
+        }
+        assertFalse(ids.hasNext());
     }
 }

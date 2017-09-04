@@ -19,8 +19,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.PatientInfoAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.PatientInfoXml;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMap;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMapAdapter;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +69,8 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     @Getter private Timestamp serviceStopTime;
     @Getter @Setter private Long size;
     @Getter @Setter private Identifiable sourcePatientId;
+    @XmlJavaTypeAdapter(PatientInfoAdapter.class)
+    @XmlElement(name = "sourcePatientInfo", type = PatientInfoXml.class)
     @Getter @Setter private PatientInfo sourcePatientInfo;
     @Getter @Setter private Code typeCode;
     @Getter @Setter private String uri;

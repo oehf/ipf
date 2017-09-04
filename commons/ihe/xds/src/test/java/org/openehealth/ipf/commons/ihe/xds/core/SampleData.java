@@ -275,10 +275,10 @@ public abstract class SampleData {
         address.setStreetAddress("hier");
         
         PatientInfo patientInfo = new PatientInfo();
-        patientInfo.setAddress(address);
+        patientInfo.getAddresses().add(address);
         patientInfo.setDateOfBirth("1980");
         patientInfo.setGender("M");
-        patientInfo.setName(new XpnName("Susi", null, null, null, null, null));
+        patientInfo.getNames().add(new XpnName("Susi", null, null, null, null, null));
         
         DocumentEntry docEntry = new DocumentEntry();
         docEntry.getAuthors().add(author);

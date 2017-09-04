@@ -24,18 +24,18 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public class ExtraMetadataAdapter extends XmlAdapter<ExtraMetadata, Map<String, List<String>>> {
+public class StringMapAdapter extends XmlAdapter<StringMap, Map<String, List<String>>> {
 
     @Override
-    public ExtraMetadata marshal(Map<String, List<String>> v) throws Exception {
+    public StringMap marshal(Map<String, List<String>> v) throws Exception {
         if (v == null) {
             return null;
         }
 
-        ExtraMetadata result = new ExtraMetadata();
+        StringMap result = new StringMap();
         result.entries = new ArrayList<>();
         for (Map.Entry<String, List<String>> entry : v.entrySet()) {
-            ExtraMetadataEntry extra = new ExtraMetadataEntry();
+            StringMapEntry extra = new StringMapEntry();
             extra.setKey(entry.getKey());
             extra.setValues(new ArrayList<>());
             extra.getValues().addAll(entry.getValue());
@@ -47,13 +47,13 @@ public class ExtraMetadataAdapter extends XmlAdapter<ExtraMetadata, Map<String, 
 
 
     @Override
-    public Map<String, List<String>> unmarshal(ExtraMetadata v) throws Exception {
+    public Map<String, List<String>> unmarshal(StringMap v) throws Exception {
         if ((v == null) || (v.entries == null)) {
             return null;
         }
 
         HashMap<String, List<String>> result = new HashMap<>();
-        for (ExtraMetadataEntry extra : v.entries) {
+        for (StringMapEntry extra : v.entries) {
             result.put(extra.getKey(), extra.getValues());
         }
         return result;

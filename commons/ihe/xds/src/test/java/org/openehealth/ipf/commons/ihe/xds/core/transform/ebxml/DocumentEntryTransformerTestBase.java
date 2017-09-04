@@ -86,10 +86,10 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         address.setZipOrPostalCode("zipOrPostalCode");
         
         PatientInfo sourcePatientInfo = new PatientInfo();
-        sourcePatientInfo.setAddress(address);
+        sourcePatientInfo.getAddresses().add(address);
         sourcePatientInfo.setDateOfBirth("19800102");
         sourcePatientInfo.setGender("F");
-        sourcePatientInfo.setName(createName(3));
+        sourcePatientInfo.getNames().add(createName(3));
         sourcePatientInfo.getIds().add(createIdentifiable(5));
         sourcePatientInfo.getIds().add(createIdentifiable(6));
 
@@ -165,8 +165,8 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertSlot(SLOT_NAME_URI, slots, "1|uri");
         assertSlot(SLOT_NAME_LEGAL_AUTHENTICATOR, slots, "id 2^familyName 2^givenName 2^prefix 2^second 2^suffix 2^degree 2^^&uni 2&uniType 2");
         assertSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, slots, "repo1");
-        assertSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slots, 
-                "PID-3|id 5^^^&uni 5&uniType 5~id 6^^^&uni 6&uniType 6",
+        assertSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slots,
+                "PID-3|id 6^^^&uni 6&uniType 6~id 5^^^&uni 5&uniType 5",
                 "PID-5|familyName 3^givenName 3^prefix 3^second 3^suffix 3^degree 3",
                 "PID-7|19800102",
                 "PID-8|F",

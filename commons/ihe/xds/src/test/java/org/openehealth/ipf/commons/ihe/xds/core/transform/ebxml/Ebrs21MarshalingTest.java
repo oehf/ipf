@@ -166,10 +166,10 @@ public class Ebrs21MarshalingTest {
         
         PatientInfo sourcePatientInfo = new PatientInfo();
         sourcePatientInfo.getIds().add(new Identifiable("pid1", new AssigningAuthority(null, null)));
-        sourcePatientInfo.setAddress(address);
+        sourcePatientInfo.getAddresses().add(address);
         sourcePatientInfo.setDateOfBirth("19560527");
         sourcePatientInfo.setGender("M");
-        sourcePatientInfo.setName(new XcnName("Doe", "John", null, null, null, null));
+        sourcePatientInfo.getNames().add(new XcnName("Doe", "John", null, null, null, null));
         
         DocumentEntry docEntry = new DocumentEntry();
         docEntry.getAuthors().add(author1);

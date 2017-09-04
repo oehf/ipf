@@ -19,40 +19,39 @@ import static org.junit.Assert.*;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp;
 
+import java.util.ListIterator;
+
 /**
- * Tests for {@link DateOfBirthPIDTransformer}.
+ * Tests for date of birth transformation in SourcePatientInfo.
  * @author Jens Riemschneider
  */
 public class DateOfBirthPIDTransformerTest {
-    private DateOfBirthPIDTransformer transformer;
-    
-    @Before
-    public void setUp() {
-        transformer = new DateOfBirthPIDTransformer();
-    }
-    
     @Test
     public void testToHL7() {
         PatientInfo patientInfo = new PatientInfo();
         patientInfo.setDateOfBirth("19800102030405+0100");
-        assertEquals("19800102", transformer.toHL7(patientInfo).get(0));
+        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-7");
+        String s = iterator.next();
+        assertEquals("19800102", s);
+        assertFalse(iterator.hasNext());
     }
     
     @Test
     public void testToHL7WithNoDate() {
-        assertNull(transformer.toHL7(new PatientInfo()));
+        PatientInfo patientInfo = new PatientInfo();
+        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-7");
+        assertFalse(iterator.hasNext());
+        assertNull(patientInfo.getDateOfBirth());
     }
-    
-    
+
     @Test
     public void testFromHL7() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7("19800102030405-0100^sdf", patientInfo);
+        patientInfo.getHl7FieldIterator("PID-7").add("19800102030405-0100^sdf");
         DateTime expected = new DateTime(1980, 1, 2, 3, 4, 5, DateTimeZone.forOffsetHoursMinutes(-1, 0));
         assertEquals(
                 new Timestamp(expected, Timestamp.Precision.SECOND),
@@ -62,14 +61,14 @@ public class DateOfBirthPIDTransformerTest {
     @Test
     public void testFromHL7Null() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7(null, patientInfo);
+        patientInfo.getHl7FieldIterator("PID-7").add(null);
         assertNull(patientInfo.getDateOfBirth());
     }
 
     @Test
     public void testFromHL7Empty() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7("", patientInfo);
+        patientInfo.getHl7FieldIterator("PID-7").add("");
         assertNull(patientInfo.getDateOfBirth());
     }
 }

@@ -20,8 +20,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadata;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadataAdapter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMap;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMapAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -63,8 +63,8 @@ public class Association implements Serializable, ExtraMetadataHolder {
     private Boolean associationPropagation;
     private AvailabilityStatus availabilityStatus;
 
-    @XmlJavaTypeAdapter(ExtraMetadataAdapter.class)
-    @XmlElement(type = ExtraMetadata.class)
+    @XmlJavaTypeAdapter(StringMapAdapter.class)
+    @XmlElement(name = "extraMetadata", type = StringMap.class)
     @Getter @Setter private Map<String, List<String>> extraMetadata;
 
     /**

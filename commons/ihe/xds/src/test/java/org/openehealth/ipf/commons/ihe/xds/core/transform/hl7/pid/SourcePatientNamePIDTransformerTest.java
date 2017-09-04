@@ -17,25 +17,20 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XcnName;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.XpnName;
 
+import java.util.ListIterator;
+
 /**
- * Tests for {@link SourcePatientNamePIDTransformer}.
+ * Tests for patient name transformation in SourcePatientInfo.
  * @author Jens Riemschneider
  */
 public class SourcePatientNamePIDTransformerTest {
-    private SourcePatientNamePIDTransformer transformer;
-    
-    @Before
-    public void setUp() {
-        transformer = new SourcePatientNamePIDTransformer();        
-    }
-    
+
     @Test
     public void testToHL7() {
         PatientInfo patientInfo = new PatientInfo();
@@ -45,49 +40,61 @@ public class SourcePatientNamePIDTransformerTest {
         name.setSecondAndFurtherGivenNames("Jo|achim");
         name.setSuffix("von Jo|del");
         name.setPrefix("Jo|dler");
-        patientInfo.setName(name);
-        assertEquals("Jo\\F\\man^Jo\\F\\chen^Jo\\F\\achim^von Jo\\F\\del^Jo\\F\\dler", 
-                transformer.toHL7(patientInfo).get(0));
+        patientInfo.getNames().add(name);
+
+        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-5");
+        assertEquals("Jo\\F\\man^Jo\\F\\chen^Jo\\F\\achim^von Jo\\F\\del^Jo\\F\\dler", iterator.next());
+        assertFalse(iterator.hasNext());
     }
     
     @Test
     public void testToHL7EmptyName() {
         PatientInfo patientInfo = new PatientInfo();
-        patientInfo.setName(new XcnName());
-        assertNull(transformer.toHL7(patientInfo));        
+        patientInfo.getNames().add(new XcnName());
+        ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-5");
+        assertEquals("", iterator.next());
+        assertFalse(iterator.hasNext());
     }
     
     @Test
     public void testToHL7NoName() {
         PatientInfo patientInfo = new PatientInfo();
-        assertNull(transformer.toHL7(patientInfo));        
+        assertFalse(patientInfo.getHl7FieldIterator("PID-5").hasNext());
     }
 
     
     @Test
     public void testFromHL7() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7("Jo\\F\\man^Jo\\F\\chen^Jo\\F\\achim^von Jo\\F\\del^Jo\\F\\dler", patientInfo);
-        Name name = patientInfo.getName();
+        patientInfo.getHl7FieldIterator("PID-5").add("Jo\\F\\man^Jo\\F\\chen^Jo\\F\\achim^von Jo\\F\\del^Jo\\F\\dler");
+
+        ListIterator<Name> names = patientInfo.getNames();
+        Name name = names.next();
         assertNotNull(name);
         assertEquals("Jo|man", name.getFamilyName());
         assertEquals("Jo|chen", name.getGivenName());
         assertEquals("Jo|achim", name.getSecondAndFurtherGivenNames());
         assertEquals("von Jo|del", name.getSuffix());
         assertEquals("Jo|dler", name.getPrefix());
+
+        assertFalse(names.hasNext());
     }
 
     @Test
     public void testFromHL7Empty() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7("^^", patientInfo);
-        assertNull(patientInfo.getName());
+        patientInfo.getHl7FieldIterator("PID-5").add("^^");
+        ListIterator<Name> names = patientInfo.getNames();
+        assertNull(names.next());
+        assertFalse(names.hasNext());
     }
 
     @Test
     public void testFromHL7Null() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7(null, patientInfo);
-        assertNull(patientInfo.getName());
+        patientInfo.getHl7FieldIterator("PID-5").add(null);
+        ListIterator<Name> names = patientInfo.getNames();
+        assertNull(names.next());
+        assertFalse(names.hasNext());
     }
 }

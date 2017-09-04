@@ -26,7 +26,7 @@ import java.util.ArrayList;
  */
 @XmlType(name = "", propOrder = {"values"})
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ExtraMetadataEntry {
+public class StringMapEntry {
     @XmlAttribute(name = "key", required = true)
     @Getter @Setter private String key;
 

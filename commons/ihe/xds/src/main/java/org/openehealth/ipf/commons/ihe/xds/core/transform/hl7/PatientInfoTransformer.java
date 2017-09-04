@@ -17,9 +17,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
 import ca.uhn.hl7v2.parser.PipeParser;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.*;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Transformation logic for a {@link PatientInfo}.
@@ -29,18 +30,8 @@ import java.util.*;
  * @author Jens Riemschneider
  */
 public class PatientInfoTransformer {
-    private static final String PID_PREFIX = "PID-";
 
-    private static final Map<Integer, PIDTransformer> pidTransformers;
-    
-    static {
-        pidTransformers = new HashMap<>();
-        pidTransformers.put(3, new SourcePatientIdentifierPIDTransformer());
-        pidTransformers.put(5, new SourcePatientNamePIDTransformer());
-        pidTransformers.put(7, new DateOfBirthPIDTransformer());
-        pidTransformers.put(8, new GenderPIDTransformer());
-        pidTransformers.put(11, new PatientAddressPIDTransformer());
-    }
+    public static final Pattern FIELD_ID_PATTERN = Pattern.compile("([A-Z][A-Z][A-Z0-9])-(\\d\\d?)");
 
     /**
      * Creates a {@link PatientInfo} instance via an HL7 XCN string.
@@ -59,10 +50,13 @@ public class PatientInfoTransformer {
         for (String hl7PIDLine : hl7PID) {
             String[] fields = PipeParser.split(hl7PIDLine.trim(), "|");
             if (fields.length == 2) {
-                Integer pidNo = getPidNumber(fields[0]);
-                PIDTransformer transformer = pidTransformers.get(pidNo);
-                if (transformer != null) {            
-                    transformer.fromHL7(fields[1], patientInfo);
+                ListIterator<String> iterator = patientInfo.getHl7FieldIterator(fields[0]);
+                while (iterator.hasNext()) {
+                    iterator.next();
+                }
+                String[] strings = PipeParser.split(fields[1], "~");
+                for (String string : strings) {
+                    iterator.add(string);
                 }
             }
         }
@@ -81,46 +75,43 @@ public class PatientInfoTransformer {
         if (patientInfo == null) {
             return Collections.emptyList();
         }
-        
-        List<String> hl7Strings = new ArrayList<>();
-        for (Map.Entry<Integer, PIDTransformer> entry : pidTransformers.entrySet()) {
-            String prefix = PID_PREFIX + entry.getKey() + '|';
-            List<String> repetitions = entry.getValue().toHL7(patientInfo);
-            if (repetitions != null) {
-                if (entry.getKey() == 3) {
-                    StringBuilder sb = new StringBuilder(prefix);
-                    for (String repetition : repetitions) {
-                        if ((repetition.length() > 255 - sb.length()) && (sb.length() > prefix.length())) {
-                            sb.setLength(sb.length() - 1);
-                            hl7Strings.add(sb.toString());
-                            sb.setLength(prefix.length());
-                        }
-                        sb.append(repetition).append('~');
-                    }
-                    if (sb.length() > prefix.length()) {
+
+        List<String> result = new ArrayList<>();
+
+        patientInfo.getFieldIds().stream().sorted(new Hl7FieldIdComparator()).forEach(fieldId -> {
+            ListIterator<String> iterator = patientInfo.getHl7FieldIterator(fieldId);
+            String prefix = fieldId + '|';
+            StringBuilder sb = new StringBuilder(prefix);
+            while (iterator.hasNext()) {
+                String repetition = iterator.next();
+                if (repetition != null) {
+                    if ((repetition.length() > 255 - sb.length()) && (sb.length() > prefix.length())) {
                         sb.setLength(sb.length() - 1);
-                        hl7Strings.add(sb.toString());
+                        result.add(sb.toString());
+                        sb.setLength(prefix.length());
                     }
-                } else {
-                    // multiple list elements are possible for PID-3 only
-                    hl7Strings.add(prefix + repetitions.get(0));
+                    sb.append(repetition).append('~');
                 }
             }
-        }
-        
-        return hl7Strings;
+            if (sb.length() > prefix.length()) {
+                sb.setLength(sb.length() - 1);
+                result.add(sb.toString());
+            }
+        });
+
+        return result;
     }
 
-    private Integer getPidNumber(String pidNoStr) {
-        if (!pidNoStr.startsWith(PID_PREFIX)) {
-            return null;
-        }
-        
-        try {
-            return Integer.parseInt(pidNoStr.substring(PID_PREFIX.length()));                
-        }
-        catch (NumberFormatException e) {
-            return null;
+
+    private static class Hl7FieldIdComparator implements Comparator<String> {
+        @Override
+        public int compare(String o1, String o2) {
+            Matcher matcher1 = FIELD_ID_PATTERN.matcher(o1);
+            Matcher matcher2 = FIELD_ID_PATTERN.matcher(o2);
+            if (matcher1.matches() && matcher2.matches() && matcher1.group(1).equals(matcher2.group(1))) {
+                return Integer.parseInt(matcher1.group(2)) - Integer.parseInt(matcher2.group(2));
+            }
+            return o1.compareTo(o2);
         }
     }
 }

@@ -83,10 +83,10 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         address.setZipOrPostalCode("zipOrPostalCode");
         
         PatientInfo sourcePatientInfo = new PatientInfo();
-        sourcePatientInfo.setAddress(address);
+        sourcePatientInfo.getAddresses().add(address);
         sourcePatientInfo.setDateOfBirth("1980");
         sourcePatientInfo.setGender("F");
-        sourcePatientInfo.setName(createName(3));
+        sourcePatientInfo.getNames().add(createName(3));
         sourcePatientInfo.getIds().add(createIdentifiable(5));
         sourcePatientInfo.getIds().add(createIdentifiable(6));
 
