@@ -30,7 +30,7 @@ import static org.junit.Assert.assertNull;
  */
 public class CustomValidationSupportTest {
 
-    private static final FhirContext FHIR_CONTEXT = FhirContext.forDstu2Hl7Org();
+    private static final FhirContext FHIR_CONTEXT = FhirContext.forDstu3();
     @Test
     public void testFindStructureDefinition() {
         CustomValidationSupport customValidationSupport = new CustomValidationSupport();

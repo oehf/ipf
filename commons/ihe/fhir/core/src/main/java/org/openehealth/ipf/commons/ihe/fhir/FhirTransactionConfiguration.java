@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
@@ -29,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
  */
 public class FhirTransactionConfiguration extends TransactionConfiguration {
 
-    private final FhirVersionEnum fhirVersion;
+    private final FhirContext fhirContext;
     private final AbstractPlainProvider staticResourceProvider;
     private final ClientRequestFactory<?> staticClientRequestFactory;
     private final FhirTransactionValidator fhirValidator;
@@ -42,40 +41,13 @@ public class FhirTransactionConfiguration extends TransactionConfiguration {
             boolean isQuery,
             AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
             AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
-            AbstractPlainProvider resourceProvider,
-            ClientRequestFactory<?> clientRequestFactory)
-    {
-        this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
-                resourceProvider, clientRequestFactory, FhirTransactionValidator.NO_VALIDATION);
-    }
-
-    public FhirTransactionConfiguration(
-            String name,
-            String description,
-            boolean isQuery,
-            AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
-            AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
-            AbstractPlainProvider resourceProvider,
-            ClientRequestFactory<?> clientRequestFactory,
-            FhirTransactionValidator fhirValidator)
-    {
-        this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
-                FhirVersionEnum.DSTU2_HL7ORG, resourceProvider, clientRequestFactory, fhirValidator);
-    }
-
-    public FhirTransactionConfiguration(
-            String name,
-            String description,
-            boolean isQuery,
-            AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
-            AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
-            FhirVersionEnum fhirVersion,
+            FhirContext fhirContext,
             AbstractPlainProvider resourceProvider,
             ClientRequestFactory<?> clientRequestFactory,
             FhirTransactionValidator fhirValidator)
     {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
-        this.fhirVersion = fhirVersion;
+        this.fhirContext = fhirContext;
         this.staticResourceProvider = resourceProvider;
         this.staticClientRequestFactory = clientRequestFactory;
         this.fhirValidator = fhirValidator;
@@ -89,13 +61,12 @@ public class FhirTransactionConfiguration extends TransactionConfiguration {
         return staticClientRequestFactory;
     }
 
-    public FhirContext createFhirContext() {
-        FhirContext context = new FhirContext(fhirVersion);
-        context.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(context));
+    public FhirContext initializeFhirContext() {
+        fhirContext.setRestfulClientFactory(new SslAwareApacheRestfulClientFactory(fhirContext));
         if (deferModelScanning) {
-            context.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
+            fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
         }
-        return context;
+        return fhirContext;
     }
 
     public FhirTransactionValidator getFhirValidator() {

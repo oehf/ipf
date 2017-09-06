@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
-import ca.uhn.fhir.context.FhirContext;
 import org.easymock.EasyMock;
 import org.hl7.fhir.instance.model.Patient;
 import org.hl7.fhir.instance.model.api.IBaseResource;

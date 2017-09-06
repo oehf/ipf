@@ -33,7 +33,7 @@ import java.nio.charset.StandardCharsets;
  */
 abstract class FhirDataFormat implements DataFormat {
 
-    private FhirContext defaultFhirContext = FhirContext.forDstu2Hl7Org();
+    private FhirContext defaultFhirContext = FhirContext.forDstu3();
     private Charset defaultCharset = StandardCharsets.UTF_8;
 
     public void setDefaultFhirContext(FhirContext context) {

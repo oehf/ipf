@@ -33,7 +33,7 @@ abstract class AbstractSystemUriMapperTest {
 
     @Before
     public void setup() {
-        this.uriMapper = initMapper(new DefaultNamingSystemServiceImpl(FhirContext.forDstu2Hl7Org()));
+        this.uriMapper = initMapper(new DefaultNamingSystemServiceImpl(FhirContext.forDstu3()));
     }
 
     protected abstract UriMapper initMapper(DefaultNamingSystemServiceImpl namingSystemService);

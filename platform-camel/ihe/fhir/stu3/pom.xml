@@ -17,7 +17,19 @@
         <module>pixpdq</module>
         <module>mhd</module>
         <module>audit</module>
+		<module>test</module>		
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>ipf-platform-camel-ihe-fhir-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+    </dependencies>
 
     <distributionManagement>
         <site>

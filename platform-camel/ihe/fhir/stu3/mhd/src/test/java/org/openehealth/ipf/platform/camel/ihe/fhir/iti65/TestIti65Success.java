@@ -1,0 +1,136 @@
+/*
+ * Copyright 2016 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.openehealth.ipf.platform.camel.ihe.fhir.iti65;
+
+import ca.uhn.fhir.rest.api.MethodOutcome;
+import org.hl7.fhir.dstu3.model.CapabilityStatement;
+import org.hl7.fhir.dstu3.model.Bundle;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
+import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomIHETransactionEventTypeCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ActiveParticipantCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ActiveParticipantType;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditMessage;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ParticipantObjectIdentificationType;
+
+import javax.servlet.ServletException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+/**
+ *
+ */
+public class TestIti65Success extends AbstractTestIti65 {
+
+    private static final String CONTEXT_DESCRIPTOR = "iti-65.xml";
+
+    @BeforeClass
+    public static void setUpClass() throws ServletException {
+        startServer(CONTEXT_DESCRIPTOR);
+    }
+
+    @Test
+    public void testGetConformance() {
+        CapabilityStatement conf = client.fetchConformance().ofType(CapabilityStatement.class).execute();
+        CapabilityStatement.CapabilityStatementRestComponent component = conf.getRest().iterator().next();
+        assertEquals(CapabilityStatement.SystemRestfulInteraction.TRANSACTION, component.getInteraction().get(0).getCode());
+    }
+
+    @Test
+    public void testSendManualMhd() throws Exception {
+
+        Bundle result = sendManually(provideAndRegister());
+        printAsXML(result);
+
+        // Check ATNA Audit
+        MockedSender sender = getAuditSender();
+        assertEquals(1, sender.getMessages().size());
+        AuditMessage event = sender.getMessages().get(0).getAuditMessage();
+
+        // Event
+        assertEquals(
+                RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS.getCode().intValue(),
+                event.getEventIdentification().getEventOutcomeIndicator());
+        assertEquals(
+                RFC3881EventCodes.RFC3881EventActionCodes.CREATE.getCode(),
+                event.getEventIdentification().getEventActionCode());
+
+        CodedValueType eventId = event.getEventIdentification().getEventID();
+        CodedValueType expectedEventId = new DICOMEventIdCodes.Import();
+        assertEquals(expectedEventId.getCode(), eventId.getCode());
+        assertEquals(expectedEventId.getCodeSystemName(), eventId.getCodeSystemName());
+        assertEquals(expectedEventId.getOriginalText(), eventId.getOriginalText());
+
+        CodedValueType eventTypeCode = event.getEventIdentification().getEventTypeCode().get(0);
+        CodedValueType expectedEventTypeCode = new CustomIHETransactionEventTypeCodes.ProvideDocumentBundle();
+
+        assertEquals(expectedEventTypeCode.getCode(), eventTypeCode.getCode());
+        assertEquals(expectedEventTypeCode.getCodeSystemName(), eventTypeCode.getCodeSystemName());
+        assertEquals(expectedEventTypeCode.getOriginalText(), eventTypeCode.getOriginalText());
+
+        // ActiveParticipant Source
+        ActiveParticipantType source = event.getActiveParticipant().get(0);
+        assertTrue(source.isUserIsRequestor());
+        assertEquals("127.0.0.1", source.getNetworkAccessPointID());
+        assertEquals(RFC3881ActiveParticipantCodes.RFC3881NetworkAccessPointTypeCodes.IP_ADDRESS.getCode(), source.getNetworkAccessPointTypeCode());
+
+        // ActiveParticipant Destination
+        ActiveParticipantType destination = event.getActiveParticipant().get(1);
+        assertFalse(destination.isUserIsRequestor());
+        assertEquals("http://localhost:" + DEMO_APP_PORT + "/", destination.getUserID());
+        assertEquals("localhost", destination.getNetworkAccessPointID());
+
+        // Patient
+        ParticipantObjectIdentificationType patient = event.getParticipantObjectIdentification().get(0);
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON.getCode(), patient.getParticipantObjectTypeCode());
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT.getCode(), patient.getParticipantObjectTypeCodeRole());
+        assertEquals(new RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectIDTypeCodes.PatientNumber().getCode(), patient.getParticipantObjectIDTypeCode().getCode());
+        assertEquals("Patient/a2", new String(patient.getParticipantObjectID()));
+
+        // SubmissionSet
+        ParticipantObjectIdentificationType poit = event.getParticipantObjectIdentification().get(1);
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM.getCode(), poit.getParticipantObjectTypeCode());
+        assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.JOB.getCode(), poit.getParticipantObjectTypeCodeRole());
+
+        // No real instructions how this should look like, so fpr now we take the XDS stuff
+        CodedValueType poitTypeCode = poit.getParticipantObjectIDTypeCode();
+        assertEquals("urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd", poitTypeCode.getCode());
+        assertEquals("IHE XDS Metadata", poitTypeCode.getCodeSystemName());
+    }
+
+    @Ignore
+    public void testSendEndpointMhd() throws Exception {
+        MethodOutcome result = getProducerTemplate().requestBody("direct:input", provideAndRegister(), MethodOutcome.class);
+        // printAsXML(result);
+
+        // Check ATNA Audit
+        MockedSender sender = getAuditSender();
+        assertEquals(2, sender.getMessages().size());
+    }
+
+
+
+
+}

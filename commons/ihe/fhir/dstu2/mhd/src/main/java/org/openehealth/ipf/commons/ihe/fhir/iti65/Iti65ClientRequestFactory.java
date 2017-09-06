@@ -17,13 +17,10 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.rest.client.IGenericClient;
-import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.ITransactionTyped;
 import org.hl7.fhir.instance.model.Bundle;
-import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 
-import java.util.List;
 import java.util.Map;
 
 /**

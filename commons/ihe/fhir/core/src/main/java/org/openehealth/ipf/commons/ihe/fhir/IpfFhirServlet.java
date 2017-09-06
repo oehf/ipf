@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
 import ca.uhn.fhir.rest.server.IPagingProvider;
@@ -48,6 +49,7 @@ public class IpfFhirServlet extends RestfulServer {
 
     private static final Logger LOG = LoggerFactory.getLogger(IpfFhirServlet.class);
 
+    private static final String SERVLET_FHIR_VERSION_PARAMETER_NAME = "fhirVersion";
     private static final String SERVLET_LOGGING_PARAMETER_NAME = "logging";
     private static final String SERVLET_RESPONSE_HIGHLIGHTING_PARAMETER_NAME = "highlight";
     private static final String SERVLET_PRETTY_PRINT_PARAMETER_NAME = "pretty";
@@ -62,6 +64,8 @@ public class IpfFhirServlet extends RestfulServer {
     private String servletName = DEFAULT_SERVLET_NAME;
     @Getter @Setter
     private boolean logging;
+    @Getter @Setter
+    private FhirVersionEnum fhirVersion = FhirVersionEnum.DSTU3;
     @Getter @Setter
     private boolean responseHighlighting;
     @Getter @Setter
@@ -102,6 +106,9 @@ public class IpfFhirServlet extends RestfulServer {
 
         LOG.debug("Initializing IpfFhirServlet " + servletName);
 
+        if (config.getInitParameter(SERVLET_FHIR_VERSION_PARAMETER_NAME) != null) {
+            fhirVersion = FhirVersionEnum.valueOf(config.getInitParameter(SERVLET_FHIR_VERSION_PARAMETER_NAME));
+        }
         if (config.getInitParameter(SERVLET_LOGGING_PARAMETER_NAME) != null) {
             logging = Boolean.parseBoolean(config.getInitParameter(SERVLET_LOGGING_PARAMETER_NAME));
         }
@@ -186,7 +193,7 @@ public class IpfFhirServlet extends RestfulServer {
      */
     @Override
     protected void initialize() throws ServletException {
-        setFhirContext(FhirContext.forDstu2Hl7Org());
+        setFhirContext(fhirVersion != null ? new FhirContext(fhirVersion) : FhirContext.forDstu2Hl7Org());
 
         if (logging) {
             LoggingInterceptor loggingInterceptor = new LoggingInterceptor();

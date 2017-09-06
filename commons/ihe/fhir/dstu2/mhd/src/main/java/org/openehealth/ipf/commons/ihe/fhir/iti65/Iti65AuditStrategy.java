@@ -17,10 +17,8 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.DocumentManifest;
-import org.hl7.fhir.instance.model.OperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.fhir.AbstractFhirAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.FhirAuditStrategy;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 

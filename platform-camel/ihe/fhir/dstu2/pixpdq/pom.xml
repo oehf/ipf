@@ -30,7 +30,7 @@
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-ihe-fhir-core</artifactId>
+            <artifactId>ipf-platform-camel-ihe-fhir-dstu2-test</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>

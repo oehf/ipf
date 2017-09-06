@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
-import ca.uhn.fhir.context.FhirContext;
 import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 import org.hl7.fhir.instance.model.Patient;
@@ -30,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.eq;
 import static org.junit.Assert.assertEquals;
 
 /**

@@ -63,7 +63,7 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
         Identifier identifier = (Identifier) parameter.getValue()
         assertEquals('78912', identifier.value)
         assertEquals('http://org.openehealth/ipf/commons/ihe/fhir/1', identifier.system)
-        System.out.println(FhirContext.forDstu2Hl7Org().newXmlParser().setPrettyPrint(true).encodeResourceToString(parameters));
+        System.out.println(FhirContext.forDstu3().newXmlParser().setPrettyPrint(true).encodeResourceToString(parameters));
     }
 
     @Test

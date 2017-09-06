@@ -107,7 +107,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
         this.path = path;
-        this.context = component.createFhirContext();
+        this.context = component.initializeFhirContext();
         audit = component.getAndRemoveParameter(parameters, "audit", boolean.class, true);
         servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
         resourceProvider = component.getAndRemoveOrResolveReferenceParameter(

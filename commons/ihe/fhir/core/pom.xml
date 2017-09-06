@@ -56,6 +56,11 @@
             <groupId>net.java.quickcheck</groupId>
             <artifactId>quickcheck</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-structures-hl7org-dstu2</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

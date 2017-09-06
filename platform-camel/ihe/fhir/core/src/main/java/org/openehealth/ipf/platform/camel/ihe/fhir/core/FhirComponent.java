@@ -79,8 +79,8 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         DefaultFhirRegistry.getFhirRegistry(name).unregister(resourceProvider);
     }
 
-    public FhirContext createFhirContext() {
-        return getFhirTransactionConfiguration().createFhirContext();
+    public FhirContext initializeFhirContext() {
+        return getFhirTransactionConfiguration().initializeFhirContext();
     }
 
     protected FhirEndpointConfiguration<AuditDatasetType> createConfig(String remaining, Map<String, Object> parameters) throws Exception {

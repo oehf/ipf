@@ -1,0 +1,133 @@
+<!--
+  ~ Copyright 2016 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<Bundle xmlns="http://hl7.org/fhir">
+    <type value="searchset"/>
+    <total value="1"/>
+    <entry>
+        <resource>
+            <DocumentReference xmlns="http://hl7.org/fhir">
+                <id value="63ab1c29-4225-11e6-9b33-0050569b0094"/>
+                <contained>
+                    <Practitioner xmlns="http://hl7.org/fhir">
+                        <id value="1"/>
+                        <identifier>
+                            <system value="urn:oid:1.2.3"/>
+                            <value value="documentImportProcessor1"/>
+                        </identifier>
+                        <name>
+                            <use value="official"/>
+                            <family value="Riviera"/>
+                            <given value="Nick"/>
+                            <prefix value="Dr."/>
+                            <suffix value="M.D."/>
+                        </name>
+                        <practitionerRole>
+                            <role>
+                                <coding>
+                                    <code value="Primary Care Physician"/>
+                                </coding>
+                            </role>
+                        </practitionerRole>
+                    </Practitioner>
+                </contained>
+                <contained>
+                    <Patient xmlns="http://hl7.org/fhir">
+                        <id value="2"/>
+                        <identifier>
+                            <use value="usual"/>
+                            <system value="http://org.openehealth/ipf/commons/ihe/fhir/0"/>
+                            <value value="1"/>
+                        </identifier>
+                    </Patient>
+                </contained>
+                <masterIdentifier>
+                    <system value="urn:ietf:rfc:3986"/>
+                    <value value="111"/>
+                </masterIdentifier>
+                <identifier>
+                    <use value="official"/>
+                    <system value="urn:ietf:rfc:3986"/>
+                    <value value="urn:uuid:63ab1c29-4225-11e6-9b33-0050569b0094"/>
+                </identifier>
+                <subject>
+                    <reference value="Patient/1"/>
+                </subject>
+                <type>
+                    <coding>
+                        <system value="http://loinc.org"/>
+                        <code value="34133-9"/>
+                        <display value="Display value for: 34133-9"/>
+                    </coding>
+                </type>
+                <class>
+                    <coding>
+                        <system value="http://loinc.org"/>
+                        <code value="11111-4"/>
+                        <display value="Display value for: 11111-4"/>
+                    </coding>
+                </class>
+                <author>
+                    <reference value="#1"/>
+                </author>
+                <indexed value="1965-12-17T01:00:00.000+01:00"/>
+                <status value="current"/>
+                <description value="Document 01"/>
+                <securityLabel>
+                    <coding>
+                        <system value="http://hl7.org/fhir/v2/0177"/>
+                        <code value="R"/>
+                        <display value="Display value for: R"/>
+                    </coding>
+                </securityLabel>
+                <content>
+                    <attachment>
+                        <contentType value="image/jpeg"/>
+                        <language value="en-us"/>
+                        <url value="http://fhirserver.org:8080/binary?id=cmVwb0lkPTEuMi44NDAuMTEzNjE5LjIwLjIuMi4xJmRvY0lkPTExMSZoY0lkPXVybiUzQW9pZCUzQTEuMi44NDAuMTEzNjE5LjIwLjIuNi4x"/>
+                        <size value="34132"/>
+                        <hash value="A9vuy4Mmlx9pGS3mXKVOaItLikg="/>
+                        <title value="Document 01"/>
+                    </attachment>
+                    <format>
+                        <system value="urn:pin:General_Format_Codes"/>
+                        <code value="IMAGE"/>
+                        <display value="IMAGE"/>
+                    </format>
+                </content>
+                <context>
+                    <facilityType>
+                        <coding>
+                            <system value="urn:pin:EPD_XDS_healthcareFacilityTypeCode"/>
+                            <code value="190999"/>
+                            <display value="Display value for: 190999"/>
+                        </coding>
+                    </facilityType>
+                    <practiceSetting>
+                        <coding>
+                            <system value="urn:oid:2.16.840.1.113883.6.101"/>
+                            <code value="331L00000X"/>
+                            <display value="Display value for: 331L00000X"/>
+                        </coding>
+                    </practiceSetting>
+                    <sourcePatientInfo>
+                        <reference value="#2"/>
+                    </sourcePatientInfo>
+                </context>
+            </DocumentReference>
+        </resource>
+    </entry>
+</Bundle>
