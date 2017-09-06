@@ -113,6 +113,12 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
         }
     }
 
+    public static final class CrossGatewayUpdateDocumentSet extends IHETransactionEventTypeCodes {
+        public CrossGatewayUpdateDocumentSet() {
+            super("ITI-X1", "Cross-Gateway Update Document Set");
+        }
+    }
+
     public static final class RetrieveImagingDocumentSet extends IHETransactionEventTypeCodes {
         public RetrieveImagingDocumentSet() {
             super("RAD-69", "Retrieve Imaging Document Set");

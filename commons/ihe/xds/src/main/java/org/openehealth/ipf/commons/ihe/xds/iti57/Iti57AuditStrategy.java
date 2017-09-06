@@ -20,23 +20,26 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
 /**
- * Client audit strategy for ITI-57.
+ * Audit strategy for ITI-57.
  * @author Boris Stanojevic
  */
-public class Iti57ClientAuditStrategy extends XdsSubmitAuditStrategy30 {
+public class Iti57AuditStrategy extends XdsSubmitAuditStrategy30 {
 
-    public Iti57ClientAuditStrategy() {
-        super(false);
+    public Iti57AuditStrategy(boolean serverSide) {
+        super(serverSide);
     }
 
     @Override
     public void doAudit(XdsSubmitAuditDataset auditDataset) {
-        AuditorManager.getCustomXdsAuditor().auditClientIti57(
+        AuditorManager.getCustomXdsAuditor().auditIti57(
+                isServerSide(),
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getUserId(),
+                auditDataset.getClientIpAddress(),
                 auditDataset.getUserName(),
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getSubmissionSetUuid(),
+                auditDataset.getHomeCommunityId(),
                 auditDataset.getPatientId(),
                 auditDataset.getPurposesOfUse(),
                 auditDataset.getUserRoles());

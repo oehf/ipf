@@ -33,9 +33,8 @@ import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51PortType;
-import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57PortType;
-import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
@@ -174,8 +173,8 @@ public class XDS_B implements XdsIntegrationProfile {
             "xds-iti57",
             "XDS Metadata Update",
             false,
-            new Iti57ClientAuditStrategy(),
-            new Iti57ServerAuditStrategy(),
+            new Iti57AuditStrategy(false),
+            new Iti57AuditStrategy(true),
             new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_Service", "ihe"),
             Iti57PortType.class,
             new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_Binding_Soap12", "ihe"),

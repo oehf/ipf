@@ -30,8 +30,8 @@ import java.util.List;
 public class XdsSubmitAuditDataset extends XdsAuditDataset {
     private static final long serialVersionUID = -4043273663994079282L;
 
-    // submission set unique ID
     @Getter @Setter private String submissionSetUuid;
+    @Getter @Setter private String homeCommunityId;
 
     /**
      * @param serverSide

@@ -15,16 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openhealthtools.ihe.atna.auditor.XDSAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionParticipantObjectIDTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.TypeValuePairType;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtils.configureEvent;
@@ -35,8 +40,10 @@ import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtil
  *     <li>ITI-51 -- XDS.b Multi-Patient Stored Query</li>
  *     <li>ITI-57 -- XDS.b Update Document Set</li>
  *     <li>ITI-61 -- XDS.b Register On-Demand Document Entry</li>
- *     <li>ITI-62 -- XDS.b Delete Document Set</li>
+ *     <li>ITI-62 -- RMD Remove Metadata</li>
  *     <li>ITI-63 -- XCF Cross-Community Fetch</li>
+ *     <li>ITI-86 -- RMD Remove Documents</li>
+ *     <li>ITI-X1 -- XCMU Cross-Gateway Update Document Set</li>
  *     <li>RAD-69 -- XDS-I.b Retrieve Imaging Document Set</li>
  *     <li>RAD-75 -- XCA-I Cross-Gateway Retrieve Imaging Document Set</li>
  * </ul>
@@ -103,22 +110,30 @@ public class CustomXdsAuditor extends XDSAuditor {
     }
 
     /**
-     * Generically sends audit messages for XDS Document Administrator Update Document Set events
+     * Audits an intra-community (ITI-57) or cross-community (ITI_X1) Update Document Set events.
      *
-     * @param eventOutcome          The event outcome indicator
-     * @param repositoryUserId      The Active Participant UserID for the document repository (if using WS-Addressing)
-     * @param registryEndpointUri   The Web service endpoint URI for the document registry
-     * @param submissionSetUniqueId The UniqueID of the Submission Set registered
-     * @param patientId             The Patient Id that this submission pertains to
+     * @param serverSide            <code>true</code> for the Document Administrator / XCMU Initiating Gateway actor,
+     *                              <code>false</code> for the Document Registry / XCMU Responding Gateway actor.
+     * @param eventTypeCode         transaction code (ITI-57 ot ITI-X1)
+     * @param eventOutcome          event outcome indicator
+     * @param sourceUserId          ID of the user which triggered the transaction
+     * @param registryEndpointUri   Web service endpoint URI for the document registry
+     * @param submissionSetUniqueId UniqueID of the Submission Set registered
+     * @param homeCommunityId       home community ID (optional for ITI-57, required for ITI-X1).
+     * @param patientId             Patient Id that this submission pertains to
      * @param purposesOfUse         &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      * @param userRoles             user role codes from XUA SAML assertion.
      */
-    public void auditClientIti57(
+    private void auditUpdateDocumentSet(
+            boolean serverSide,
+            IHETransactionEventTypeCodes eventTypeCode,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
-            String repositoryUserId,
-            String userName,
+            String sourceUserId,
+            String sourceIpAddress,
+            String humanUserName,
             String registryEndpointUri,
             String submissionSetUniqueId,
+            String homeCommunityId,
             String patientId,
             List<CodedValueType> purposesOfUse,
             List<CodedValueType> userRoles)
@@ -127,78 +142,87 @@ public class CustomXdsAuditor extends XDSAuditor {
             return;
         }
 
-        GenericIHEAuditEventMessage iti57ExportEvent = new GenericIHEAuditEventMessage(
-                true,
+        GenericIHEAuditEventMessage event = new GenericIHEAuditEventMessage(
+                ! serverSide,
                 eventOutcome,
                 RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
-                new DICOMEventIdCodes.Export(),
-                new CustomIHETransactionEventTypeCodes.UpdateDocumentSet(),
+                serverSide ? new DICOMEventIdCodes.Import() : new DICOMEventIdCodes.Export(),
+                eventTypeCode,
                 purposesOfUse);
 
-        iti57ExportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
-        iti57ExportEvent.addSourceActiveParticipant(
-                repositoryUserId, getSystemAltUserId(), null, getSystemNetworkId(), true);
+        event.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
 
-        if (!EventUtils.isEmptyOrNull(userName)) {
-            iti57ExportEvent.addHumanRequestorActiveParticipant(userName, null, userName, userRoles);
+        event.addSourceActiveParticipant(
+                sourceUserId,
+                serverSide ? null : getSystemAltUserId(),
+                null,
+                serverSide ? sourceIpAddress : getSystemNetworkId(),
+                true);
+
+        if (!EventUtils.isEmptyOrNull(humanUserName)) {
+            event.addHumanRequestorActiveParticipant(humanUserName, null, humanUserName, userRoles);
         }
 
-        iti57ExportEvent.addDestinationActiveParticipant(
-                registryEndpointUri, null, null, EventUtils.getAddressForUrl(registryEndpointUri, false), false);
+        event.addDestinationActiveParticipant(
+                registryEndpointUri,
+                serverSide ? getSystemAltUserId() : null,
+                null,
+                EventUtils.getAddressForUrl(registryEndpointUri, false),
+                false);
+
         if (!EventUtils.isEmptyOrNull(patientId)) {
-            iti57ExportEvent.addPatientParticipantObject(patientId);
+            event.addPatientParticipantObject(patientId);
         }
-        iti57ExportEvent.addSubmissionSetParticipantObject(submissionSetUniqueId);
-        audit(iti57ExportEvent);
+
+        List<TypeValuePairType> pairs = new ArrayList<>();
+        if (StringUtils.isNotEmpty(homeCommunityId)) {
+            TypeValuePairType pair = new TypeValuePairType();
+            pair.setType("ihe:homeCommunityID");
+            pair.setValue(homeCommunityId.getBytes(StandardCharsets.UTF_8));
+            pairs.add(pair);
+        };
+
+        event.addParticipantObjectIdentification(
+                new IHETransactionParticipantObjectIDTypeCodes.SubmissionSet(),
+                null,
+                null,
+                pairs,
+                submissionSetUniqueId,
+                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.SYSTEM,
+                RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.JOB,
+                null,
+                null);
+
+        audit(event);
     }
 
-    /**
-     * Generically sends audit messages for XDS Update Document Set events
-     *
-     * @param eventOutcome          The event outcome indicator
-     * @param sourceUserId          The Active Participant UserID for the document consumer (if using WS-Addressing)
-     * @param sourceIpAddress       The IP address of the document source that initiated the transaction
-     * @param repositoryEndpointUri The Web service endpoint URI for this document repository
-     * @param submissionSetUniqueId The UniqueID of the Submission Set registered
-     * @param patientId             The Patient Id that this submission pertains to
-     * @param purposesOfUse         &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
-     * @param userRoles             user role codes from XUA SAML assertion.
-     */
-    public void auditServerIti57 (
+    public void auditIti57(
+            boolean serverSide,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String sourceUserId,
             String sourceIpAddress,
-            String userName,
-            String repositoryEndpointUri,
+            String humanUserName,
+            String registryEndpointUri,
             String submissionSetUniqueId,
+            String homeCommunityId,
             String patientId,
             List<CodedValueType> purposesOfUse,
             List<CodedValueType> userRoles)
     {
-        GenericIHEAuditEventMessage iti57ImportEvent = new GenericIHEAuditEventMessage(
-                false,
-                eventOutcome,
-                RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
-                new DICOMEventIdCodes.Import(),
+        auditUpdateDocumentSet(
+                serverSide,
                 new CustomIHETransactionEventTypeCodes.UpdateDocumentSet(),
-                purposesOfUse);
-
-        iti57ImportEvent.setAuditSourceId(getAuditSourceId(), getAuditEnterpriseSiteId());
-        iti57ImportEvent.addSourceActiveParticipant(sourceUserId, null, null, sourceIpAddress, true);
-        if (!EventUtils.isEmptyOrNull(userName)) {
-            iti57ImportEvent.addHumanRequestorActiveParticipant(userName, null, userName, userRoles);
-        }
-
-        iti57ImportEvent.addDestinationActiveParticipant(repositoryEndpointUri, getSystemAltUserId(), null,
-                EventUtils.getAddressForUrl(repositoryEndpointUri, false), false);
-        if (!EventUtils.isEmptyOrNull(patientId)) {
-            iti57ImportEvent.addPatientParticipantObject(patientId);
-        }
-
-        iti57ImportEvent.addSubmissionSetParticipantObject(submissionSetUniqueId);
-        audit(iti57ImportEvent);
+                eventOutcome,
+                sourceUserId,
+                sourceIpAddress,
+                humanUserName,
+                registryEndpointUri,
+                submissionSetUniqueId,
+                homeCommunityId,
+                patientId,
+                purposesOfUse,
+                userRoles);
     }
-
 
     /**
      * Audits an ITI-61 Register On-Demand Document Entry event.
@@ -418,6 +442,34 @@ public class CustomXdsAuditor extends XDSAuditor {
         }
 
         audit(event);
+    }
+
+    public void auditItiX1(
+            boolean serverSide,
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String sourceUserId,
+            String sourceIpAddress,
+            String humanUserName,
+            String registryEndpointUri,
+            String submissionSetUniqueId,
+            String homeCommunityId,
+            String patientId,
+            List<CodedValueType> purposesOfUse,
+            List<CodedValueType> userRoles)
+    {
+        auditUpdateDocumentSet(
+                serverSide,
+                new CustomIHETransactionEventTypeCodes.CrossGatewayUpdateDocumentSet(),
+                eventOutcome,
+                sourceUserId,
+                sourceIpAddress,
+                humanUserName,
+                registryEndpointUri,
+                submissionSetUniqueId,
+                homeCommunityId,
+                patientId,
+                purposesOfUse,
+                userRoles);
     }
 
     /**

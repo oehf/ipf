@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti57.Iti57AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti61.Iti61AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
@@ -69,7 +69,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_MultiPatientStoredQuery"),
                 new Iti51AuditStrategy(true));
         map.put(new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_UpdateDocumentSet"),
-                new Iti57ServerAuditStrategy());
+                new Iti57AuditStrategy(true));
         map.put(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_RegisterOnDemandDocumentEntry"),
                 new Iti61AuditStrategy(true));
         map.put(new QName("urn:ihe:iti:xds-b:2010", "DocumentRegistry_DeleteDocumentSet"),

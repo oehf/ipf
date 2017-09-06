@@ -1,43 +1,44 @@
 /*
- * Copyright 2013 the original author or authors.
- * 
+ * Copyright 2017 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.iti57;
+package org.openehealth.ipf.commons.ihe.xds.itiX1;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
 /**
- * Server audit strategy for ITI-57.
- * @author Boris Stanojevic
+ * Audit strategy for ITI-X1.
  */
-public class Iti57ServerAuditStrategy extends XdsSubmitAuditStrategy30 {
+public class ItiX1AuditStrategy extends XdsSubmitAuditStrategy30 {
 
-    public Iti57ServerAuditStrategy() {
-        super(true);
+    public ItiX1AuditStrategy(boolean serverSide) {
+        super(serverSide);
     }
 
     @Override
     public void doAudit(XdsSubmitAuditDataset auditDataset) {
-        AuditorManager.getCustomXdsAuditor().auditServerIti57(
+        AuditorManager.getCustomXdsAuditor().auditItiX1(
+                isServerSide(),
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getUserId(),
                 auditDataset.getClientIpAddress(),
                 auditDataset.getUserName(),
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getSubmissionSetUuid(),
+                auditDataset.getHomeCommunityId(),
                 auditDataset.getPatientId(),
                 auditDataset.getPurposesOfUse(),
                 auditDataset.getUserRoles());

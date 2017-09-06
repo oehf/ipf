@@ -142,7 +142,9 @@ public enum ValidationMessage {
     LIMITED_METADATA_REQUIRED("limitedMetadata classification must be provided in %s"),
     LIMITED_METADATA_PROHIBITED("limitedMetadata classification is not allowed in %s"),
     MISSING_FOLDER_NAME("Folder name not provided in %s"),
-    TIME_PRECISION_TOO_LOW("Precision of the timestamp is too low: %s");
+    TIME_PRECISION_TOO_LOW("Precision of the timestamp is too low: %s"),
+    ASSOCIATION_ID_MISSING("Attribute 'id' must be provided in the Association"),
+    ;
 
 
     private final String text;

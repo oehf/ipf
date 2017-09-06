@@ -347,6 +347,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         Set<String> associationIds = new HashSet<>();
         boolean hasSubmitAssociationType = false;
         for (EbXMLAssociation association : container.getAssociations()) {
+            //metaDataAssert(StringUtils.isNotEmpty(association.getId()), ASSOCIATION_ID_MISSING);
             associationIds.add(association.getId());
 
             AssociationType type = association.getAssociationType();

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2017 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<definitions
+        targetNamespace="urn:ihe:iti:xcmu:2017"
+        name="RespondingGateway"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:ihe="urn:ihe:iti:xcmu:2017"
+        xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0"
+        xmlns:rs="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0"
+        xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+        xmlns:wsaw="http://www.w3.org/2007/05/addressing/metadata">
+
+    <types>
+        <xsd:schema elementFormDefault="qualified">
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0"
+                        schemaLocation="schema/ebRS30/rs.xsd"/>
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0"
+                        schemaLocation="schema/ebRS30/lcm.xsd"/>
+        </xsd:schema>
+    </types>
+
+    <message name="CrossGatewayUpdateDocumentSet_Message">
+        <documentation>Cross-Gateway Update Document Set Request</documentation>
+        <part name="body" element="lcm:SubmitObjectsRequest"/>
+    </message>
+
+    <message name="CrossGatewayUpdateDocumentSetResponse_Message">
+        <documentation>Cross Gateway Update Document Set Response</documentation>
+        <part name="body" element="rs:RegistryResponse"/>
+    </message>
+
+    <portType name="RespondingGateway_PortType">
+        <operation name="RespondingGateway_CrossGatewayUpdateDocumentSet">
+            <input message="ihe:CrossGatewayUpdateDocumentSet_Message"
+                   wsaw:Action="urn:ihe:iti:2017:CrossGatewayUpdateDocumentSet"/>
+            <output message="ihe:CrossGatewayUpdateDocumentSetResponse_Message"
+                    wsaw:Action="urn:ihe:iti:2017:CrossGatewayUpdateDocumentSetResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="RespondingGateway_Binding_Soap12"
+             type="ihe:RespondingGateway_PortType">
+        <soap12:binding style="document"
+                        transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="RespondingGateway_CrossGatewayUpdateDocumentSet">
+            <soap12:operation soapActionRequired="false"/>
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="RespondingGateway_Service">
+        <port name="RespondingGateway_Port_Soap12"
+              binding="ihe:RespondingGateway_Binding_Soap12">
+            <soap12:address location="http://servicelocation/RespondingGateway_Service12"/>
+        </port>
+    </service>
+
+</definitions>
