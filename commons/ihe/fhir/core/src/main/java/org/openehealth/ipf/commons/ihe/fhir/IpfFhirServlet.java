@@ -100,7 +100,7 @@ public class IpfFhirServlet extends RestfulServer {
             throw new ServletException(e);
         }
 
-        LOG.debug("Initializing CamelFhirServlet " + servletName);
+        LOG.debug("Initializing IpfFhirServlet " + servletName);
 
         if (config.getInitParameter(SERVLET_LOGGING_PARAMETER_NAME) != null) {
             logging = Boolean.parseBoolean(config.getInitParameter(SERVLET_LOGGING_PARAMETER_NAME));

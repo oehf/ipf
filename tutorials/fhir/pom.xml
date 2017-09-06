@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-ihe-fhir-pixpdq</artifactId>
+            <artifactId>ipf-platform-camel-ihe-fhir-dstu2-pixpdq</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>

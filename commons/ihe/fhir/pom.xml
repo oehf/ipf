@@ -15,9 +15,8 @@
 
     <modules>
         <module>core</module>
-		<module>pixpdq</module>
-		<module>mhd</module>
-		<module>audit</module>
+        <module>dstu2</module>
+        <module>stu3</module>
     </modules>
 
 

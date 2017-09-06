@@ -19,9 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.IBundleProvider;
-import lombok.Getter;
-import lombok.Setter;
-import org.hl7.fhir.instance.model.Bundle;
+import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,17 +27,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.openehealth.ipf.commons.ihe.core.Constants.FLAGS;
-import static org.openehealth.ipf.commons.ihe.core.Constants.PARENT_SPAN_ID;
-import static org.openehealth.ipf.commons.ihe.core.Constants.SAMPLED;
-import static org.openehealth.ipf.commons.ihe.core.Constants.SPAN_ID;
-import static org.openehealth.ipf.commons.ihe.core.Constants.TRACE_ID;
+import java.util.*;
 
 /**
  * Abstract plain provider that allows subclasses to forward the received payload into the
@@ -98,7 +86,7 @@ public abstract class AbstractPlainProvider implements Serializable {
     }
 
     /**
-     * Requests a {@link Bundle} of resources
+     * Requests a list of resources
      *
      * @param payload             FHIR request resource
      * @param httpServletRequest  servlet request
@@ -112,7 +100,7 @@ public abstract class AbstractPlainProvider implements Serializable {
     }
 
     /**
-     * Requests a {@link Bundle} of resources with parameters
+     * Requests a list of resources with parameters
      *
      * @param payload             FHIR request resource (often null)
      * @param parameters          FHIR search parameters
@@ -198,15 +186,16 @@ public abstract class AbstractPlainProvider implements Serializable {
      * @param httpServletResponse servlet response
      * @return result of processing
      */
-    protected final Bundle requestTransaction(
+     protected final <T extends IBaseBundle> T requestTransaction(
             Object payload,
+            Class<T> bundleClass,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
         if (consumer == null) {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(null, httpServletRequest);
-        Bundle response = consumer.handleTransactionRequest(payload, headers);
+        T response = consumer.handleTransactionRequest(payload, headers, bundleClass);
         return response;
     }
 

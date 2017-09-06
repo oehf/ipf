@@ -29,19 +29,19 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.datamodel.XmlFhirDataFormat
  */
 class FhirExtensionModule {
 
-    public static ProcessorDefinition fhirJson(DataFormatClause self) {
+    static ProcessorDefinition fhirJson(DataFormatClause self) {
         fhirJson(self, null, null)
     }
 
-    public static ProcessorDefinition fhirJson(DataFormatClause self, FhirContext defaultContext, String defaultCharset) {
+    static ProcessorDefinition fhirJson(DataFormatClause self, FhirContext defaultContext, String defaultCharset) {
         registerDataFormat(new JsonFhirDataFormat(), self, defaultContext, defaultCharset)
     }
 
-    public static ProcessorDefinition fhirXml(DataFormatClause self) {
+    static ProcessorDefinition fhirXml(DataFormatClause self) {
         fhirXml(self, null, null)
     }
 
-    public static ProcessorDefinition fhirXml(DataFormatClause self, FhirContext defaultContext, String defaultCharset) {
+    static ProcessorDefinition fhirXml(DataFormatClause self, FhirContext defaultContext, String defaultCharset) {
         registerDataFormat(new XmlFhirDataFormat(), self, defaultContext, defaultCharset)
     }
 

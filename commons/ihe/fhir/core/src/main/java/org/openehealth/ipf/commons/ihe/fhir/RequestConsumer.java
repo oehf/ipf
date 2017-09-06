@@ -19,7 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.IBundleProvider;
-import org.hl7.fhir.instance.model.Bundle;
+import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.List;
@@ -89,12 +89,12 @@ public interface RequestConsumer {
 
     /**
      * Handles the request for a bundle provider, effectively constructing a list of resources. The returned
+     * IBundleProvider takes over the responsibility to fetch the required subset of the result, usually
+     * by indirectly calling {@link #handleBundleRequest(Object, Map)} as required.
      *
      * @param payload request payload
      * @param headers request parameters, e.g. search parameters
      * @return a bundle provider
-     * @{link IBundleProvider} takes over the responsibility to fetch the required subset of the result, usually
-     * by indirectly calling {@link #handleBundleRequest(Object, Map)} as required.
      */
     IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers);
 
@@ -105,7 +105,7 @@ public interface RequestConsumer {
      * @param headers request parameters
      * @return transaction response bundle
      */
-    Bundle handleTransactionRequest(Object payload, Map<String, Object> headers);
+    <T extends IBaseBundle> T handleTransactionRequest(Object payload, Map<String, Object> headers, Class<T> bundleClass);
 
     /**
      * Optional method that request the result size of a bundle request. Only used for lazy

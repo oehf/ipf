@@ -131,6 +131,16 @@
                 <version>${hapi-fhir-version}</version>
             </dependency>
             <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-structures-dstu3</artifactId>
+                <version>${hapi-fhir-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-validation-resources-dstu3</artifactId>
+                <version>${hapi-fhir-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-core</artifactId>
                 <version>${camel-version}</version>
@@ -691,22 +701,47 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-audit</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-fhir-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-mhd</artifactId>
+                <artifactId>ipf-commons-ihe-fhir-dstu2-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-pixpdq</artifactId>
+                <artifactId>ipf-commons-ihe-fhir-dstu2-audit</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-ihe-fhir-dstu2-mhd</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-ihe-fhir-dstu2-pixpdq</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-ihe-fhir-stu3-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-ihe-fhir-stu3-audit</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-ihe-fhir-stu3-mhd</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-ihe-fhir-stu3-pixpdq</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -816,22 +851,22 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-audit</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-fhir-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-mhd</artifactId>
+                <artifactId>ipf-platform-camel-ihe-fhir-dstu2-audit</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-pixpdq</artifactId>
+                <artifactId>ipf-platform-camel-ihe-fhir-dstu2-mhd</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.platform-camel</groupId>
+                <artifactId>ipf-platform-camel-ihe-fhir-dstu2-pixpdq</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

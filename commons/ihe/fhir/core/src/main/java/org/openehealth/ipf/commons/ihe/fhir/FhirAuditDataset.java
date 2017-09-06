@@ -19,9 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 

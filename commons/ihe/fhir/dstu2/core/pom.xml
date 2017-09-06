@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ipf-commons-ihe-fhir-dstu2</artifactId>
+        <groupId>org.openehealth.ipf.commons</groupId>
+        <version>3.4-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ipf-commons-ihe-fhir-dstu2-core</artifactId>
+    <name>ipf-commons-ihe-fhir-dstu2-core</name>
+    <description>FHIR IHE support, independent of FHIR version</description>
+    <url>${site.url}/${project.artifactId}</url>
+
+    <properties>
+        <osgi.export.pkg>
+            org.openehealth.ipf.commons.ihe.fhir.*;-split-package:=merge-first
+        </osgi.export.pkg>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-structures-hl7org-dstu2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-fhir-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.java.quickcheck</groupId>
+            <artifactId>quickcheck</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <distributionManagement>
+        <site>
+            <id>${site.deploy.id}</id>
+            <url>${site.deploy.url}${project.artifactId}</url>
+        </site>
+    </distributionManagement>
+
+</project>

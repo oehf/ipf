@@ -20,7 +20,7 @@ import ca.uhn.fhir.rest.client.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import ca.uhn.fhir.rest.gclient.IQuery;
-import org.hl7.fhir.instance.model.Bundle;
+import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.Map;
@@ -29,16 +29,18 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.2
  */
-public class QueryClientRequestFactory implements ClientRequestFactory<IQuery<Bundle>> {
+public class QueryClientRequestFactory<T extends IBaseBundle> implements ClientRequestFactory<IQuery<T>> {
 
     private final Class<? extends IBaseResource> type;
+    private final Class<T> bundleType;
 
-    public QueryClientRequestFactory(Class<? extends IBaseResource> type) {
+    public QueryClientRequestFactory(Class<? extends IBaseResource> type, Class<T> bundleType) {
         this.type = type;
+        this.bundleType = bundleType;
     }
 
     @Override
-    public IClientExecutable<IQuery<Bundle>, Bundle> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
+    public IClientExecutable<IQuery<T>, T> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
         IQuery<ca.uhn.fhir.model.api.Bundle> query;
         if (requestData instanceof ICriterion) {
             query = client.search()
@@ -51,6 +53,6 @@ public class QueryClientRequestFactory implements ClientRequestFactory<IQuery<Bu
         if (parameters.containsKey(Constants.FHIR_COUNT)) {
             query.count(Integer.parseInt(parameters.get(Constants.FHIR_COUNT).toString()));
         }
-        return query.returnBundle(Bundle.class);
+        return query.returnBundle(bundleType);
     }
 }

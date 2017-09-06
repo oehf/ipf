@@ -9,7 +9,7 @@
 
     <artifactId>ipf-commons-ihe-fhir-core</artifactId>
     <name>ipf-commons-ihe-fhir-core</name>
-    <description>FHIR-specific IHE support</description>
+    <description>FHIR IHE support, independent of FHIR version</description>
     <url>${site.url}/${project.artifactId}</url>
 
     <properties>
@@ -20,8 +20,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>ipf-modules-fhir</artifactId>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-base</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>

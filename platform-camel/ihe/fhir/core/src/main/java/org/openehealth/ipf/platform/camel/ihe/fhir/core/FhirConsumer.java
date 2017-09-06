@@ -26,7 +26,7 @@ import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.SuspendableService;
 import org.apache.camel.impl.DefaultConsumer;
-import org.hl7.fhir.instance.model.Bundle;
+import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.EagerBundleProvider;
@@ -124,8 +124,8 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
     }
 
     @Override
-    public Bundle handleTransactionRequest(Object payload, Map<String, Object> headers) {
-        return handleInRoute(payload, headers, Bundle.class);
+    public <T extends IBaseBundle> T handleTransactionRequest(Object payload, Map<String, Object> headers, Class<T> bundleClass) {
+        return handleInRoute(payload, headers, bundleClass);
     }
 
     @Override

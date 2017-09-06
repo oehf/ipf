@@ -28,7 +28,7 @@ Here is an example:
         <!-- Servlet for FHIR  -->
         <servlet>
             <servlet-name>FhirServlet</servlet-name>
-            <servlet-class>org.openehealth.ipf.commons.ihe.fhir.CamelFhirServlet</servlet-class>
+            <servlet-class>org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet</servlet-class>
             <init-param>
                 <param-name>logging</param-name>
                 <param-value>true</param-value>

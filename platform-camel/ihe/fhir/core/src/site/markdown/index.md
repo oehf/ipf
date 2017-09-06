@@ -7,20 +7,28 @@ IHE has had a set of profiles based on FHIR, but they are were on earlier versio
 IHE updated their profiles to this version. IPF adds support for a subset of them by providing Camel components (hiding the 
  implementation details on transport level) and translators between the FHIR and HL7 v2 message models.
 
-Current supported transactions are:
+While the FHIR transactions in IHE ITI revision 13 (2016/2017) was based on FHIR DSTU2,
+the transactions have been migrated to STU3 for IHE ITI revision 14 (2017/2018).
 
-* [ITI-65] Provide Document Bundle
-* [ITI-66] Find Document Manifests
-* [ITI-67] Find Document References
-* [ITI-68] Retrieve Document
-* [ITI-78] Patient Demographics Query for Mobile
-* [ITI-81] Retrieve ATNA Audit Event
-* [ITI-83] Patient Identifier Cross-reference for Mobile
+Currently supported transactions for DSTU2 are:
 
-[ITI-65]: ../ipf-platform-camel-ihe-fhir-mhd/iti65.html
-[ITI-66]: ../ipf-platform-camel-ihe-fhir-mhd/iti66.html
-[ITI-67]: ../ipf-platform-camel-ihe-fhir-mhd/iti67.html
-[ITI-68]: ../ipf-platform-camel-ihe-fhir-mhd/iti68.html
-[ITI-78]: ../ipf-platform-camel-ihe-fhir-pixpdq/iti78.html
-[ITI-81]: ../ipf-platform-camel-ihe-fhir-atna/iti81.html
-[ITI-83]: ../ipf-platform-camel-ihe-fhir-pixpdq/iti83.html
+* [ITI-65](../ipf-platform-camel-ihe-fhir-dstu2-mhd/iti65.html) Provide Document Bundle
+* [ITI-66](../ipf-platform-camel-ihe-fhir-dstu2-mhd/iti66.html) Find Document Manifests
+* [ITI-67](../ipf-platform-camel-ihe-fhir-dstu2-mhd/iti67.html) Find Document References
+* [ITI-68](../ipf-platform-camel-ihe-fhir-dstu2-mhd/iti68.html) Retrieve Document
+* [ITI-78](../ipf-platform-camel-ihe-fhir-dstu2-pixpdq/iti78.html) Patient Demographics Query for Mobile
+* [ITI-81](../ipf-platform-camel-ihe-fhir-dstu2-atna/iti81.html) Retrieve ATNA Audit Event
+* [ITI-83](../ipf-platform-camel-ihe-fhir-dstu2-pixpdq/iti83.html) Patient Identifier Cross-reference for Mobile
+
+Note that DSTU2 transactions are deprecated and support for them will be removed in one of the upcoming IPF versions.
+Bug fixes and changes will be done for STU3 only. 
+
+Currently supported transactions for STU3 are:
+
+* [ITI-65](../ipf-platform-camel-ihe-fhir-stu3-mhd/iti65.html) Provide Document Bundle
+* [ITI-66](../ipf-platform-camel-ihe-fhir-stu3-mhd/iti66.html) Find Document Manifests
+* [ITI-67](../ipf-platform-camel-ihe-fhir-stu3-mhd/iti67.html) Find Document References
+* [ITI-68](../ipf-platform-camel-ihe-fhir-stu3-mhd/iti68.html) Retrieve Document
+* [ITI-78](../ipf-platform-camel-ihe-fhir-stu3-pixpdq/iti78.html) Patient Demographics Query for Mobile
+* [ITI-81](../ipf-platform-camel-ihe-fhir-stu3-atna/iti81.html) Retrieve ATNA Audit Event
+* [ITI-83](../ipf-platform-camel-ihe-fhir-stu3-pixpdq/iti83.html) Patient Identifier Cross-reference for Mobile

@@ -19,7 +19,7 @@
         <module>ipf-hl7-spring-boot-starter</module>
         <module>ipf-hl7v3-spring-boot-starter</module>
         <module>ipf-xds-spring-boot-starter</module>
-        <module>ipf-fhir-spring-boot-starter</module>
+        <module>ipf-fhir-dstu2-spring-boot-starter</module>
         <module>ipf-atna-spring-boot-starter</module>
         <module>ipf-hpd-spring-boot-starter</module>
     </modules>

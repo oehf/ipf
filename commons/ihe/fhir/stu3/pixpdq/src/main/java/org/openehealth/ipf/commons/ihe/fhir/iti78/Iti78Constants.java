@@ -1,0 +1,50 @@
+/*
+ * Copyright 2016 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.openehealth.ipf.commons.ihe.fhir.iti78;
+
+import org.hl7.fhir.dstu3.model.Patient;
+import org.hl7.fhir.instance.model.api.IAnyResource;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * @author Christian Ohr
+ * @since 3.4
+ */
+public interface Iti78Constants {
+
+    String SP_MULTIPLE_BIRTH_ORDER_NUMBER = "multipleBirthInteger";
+    String SP_MOTHERS_MAIDEN_NAME_GIVEN = "mothersMaidenName.given";
+    String SP_MOTHERS_MAIDEN_NAME_FAMILY = "mothersMaidenName.family";
+
+    Set<String> ITI78_PARAMETERS = new HashSet<>(Arrays.asList(
+            IAnyResource.SP_RES_ID,
+            SP_MULTIPLE_BIRTH_ORDER_NUMBER,
+            SP_MOTHERS_MAIDEN_NAME_GIVEN,
+            SP_MOTHERS_MAIDEN_NAME_FAMILY,
+            Patient.SP_IDENTIFIER,
+            Patient.SP_FAMILY,
+            Patient.SP_GIVEN,
+            Patient.SP_BIRTHDATE,
+            Patient.SP_ADDRESS,
+            Patient.SP_GENDER,
+            Patient.SP_TELECOM
+    ));
+
+}
