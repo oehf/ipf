@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
+import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
@@ -35,7 +36,7 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti78.class);
 
     public static void startServer(String contextDescriptor, boolean secure) throws ServletException {
-        IpfFhirServlet servlet = new IpfFhirServlet();
+        IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU3);
         startServer(servlet, contextDescriptor, secure, FhirTestContainer.DEMO_APP_PORT, new MockedSender(), "FhirServlet");
 
     }

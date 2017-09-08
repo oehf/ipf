@@ -24,7 +24,7 @@ import org.hl7.fhir.instance.hapi.validation.FhirInstanceValidator;
 import org.hl7.fhir.instance.model.AuditEvent;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditSender;
-import org.openehealth.ipf.commons.ihe.fhir.AuditRecordTranslator;
+import org.openehealth.ipf.commons.ihe.fhir.translation.AuditRecordTranslator;
 import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage;
 
 /**

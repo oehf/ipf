@@ -58,7 +58,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         assertEquals(1, conf.getRest().size());
         CapabilityStatement.CapabilityStatementRestComponent component = conf.getRest().iterator().next();
         CapabilityStatement.CapabilityStatementRestOperationComponent operation = component.getOperation().iterator().next();
-        assertEquals(Iti83Constants.PIXM_OPERATION_NAME, operation.getName());
+        assertEquals(Iti83Constants.PIXM_OPERATION_NAME.substring(1), operation.getName());
 
         // printAsXML(conf);
     }

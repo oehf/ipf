@@ -109,7 +109,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
     }
 
     protected void addSearchScore(PdqPatient pdqPatient, response) {
-        ResourceMetadataKeyEnum.ENTRY_SEARCH_MODE.put(pdqPatient, BundleEntrySearchModeEnum.MATCH.name())
+        ResourceMetadataKeyEnum.ENTRY_SEARCH_MODE.put(pdqPatient, BundleEntrySearchModeEnum.MATCH.code)
         /* ??
         String searchScoreString = response.QRI[1]?.value
         if (searchScoreString != null) {

@@ -65,7 +65,7 @@ public class IpfFhirServlet extends RestfulServer {
     @Getter @Setter
     private boolean logging;
     @Getter @Setter
-    private FhirVersionEnum fhirVersion = FhirVersionEnum.DSTU3;
+    private FhirVersionEnum fhirVersion;
     @Getter @Setter
     private boolean responseHighlighting;
     @Getter @Setter
@@ -81,6 +81,11 @@ public class IpfFhirServlet extends RestfulServer {
 
     public IpfFhirServlet() {
         super();
+    }
+
+    public IpfFhirServlet(FhirVersionEnum fhirVersion) {
+        super();
+        this.fhirVersion = fhirVersion;
     }
 
     /**
@@ -193,7 +198,7 @@ public class IpfFhirServlet extends RestfulServer {
      */
     @Override
     protected void initialize() throws ServletException {
-        setFhirContext(fhirVersion != null ? new FhirContext(fhirVersion) : FhirContext.forDstu2Hl7Org());
+        setFhirContext(new FhirContext(fhirVersion));
 
         if (logging) {
             LoggingInterceptor loggingInterceptor = new LoggingInterceptor();

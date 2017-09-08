@@ -59,7 +59,7 @@ public class MHD implements IntegrationProfile {
             false,
             null,
             null,
-            (FhirContext) null,
+            null,
             null,
             null,
             null);

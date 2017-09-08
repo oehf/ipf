@@ -58,5 +58,7 @@ public class MHD implements IntegrationProfile {
             null,
             null,
             null,
+            null,
+            null,
             null);
 }

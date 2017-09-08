@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.boot.fhir;
 
+import ca.uhn.fhir.context.FhirVersionEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -35,6 +36,12 @@ import java.util.Map;
 @Validated
 @ConfigurationProperties(prefix = "ipf.fhir")
 public class IpfFhirConfigurationProperties {
+
+    /**
+     * Which FHIR version to use
+     */
+    @Getter @Setter
+    private FhirVersionEnum fhirVersion;
 
     @NestedConfigurationProperty
     @Getter
@@ -60,6 +67,8 @@ public class IpfFhirConfigurationProperties {
      */
     @Getter @Setter
     private boolean caching;
+
+
 
     String getFhirMapping() {
         String path = getPath();

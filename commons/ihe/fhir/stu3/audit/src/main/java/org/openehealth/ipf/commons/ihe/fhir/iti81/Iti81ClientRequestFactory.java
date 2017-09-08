@@ -17,8 +17,8 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
 import ca.uhn.fhir.rest.gclient.ICriterion;
-import org.hl7.fhir.instance.model.AuditEvent;
-import org.hl7.fhir.instance.model.Bundle;
+import org.hl7.fhir.dstu3.model.AuditEvent;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
 
 /**

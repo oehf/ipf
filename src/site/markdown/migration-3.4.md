@@ -14,6 +14,7 @@ The following deprecated classes have been removed:
 
 The following backwards-incompatible changes were done:
 
+* `org.openehealth.ipf.commons.ihe.fhir.CamelFhirServlet` needs to be initialized with a fhirVersion ('DSTU2_HL7ORG' or 'DSTU3')
 * `org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters` defined a new method `getIncludeSpec()` in order to store `_include` and `_revinclude` response modifiers
 
 While adding FHIR-based IHE transactions for the STU3 version of FHIR, it became necessary to split up modules into 

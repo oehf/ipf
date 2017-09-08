@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
+import ca.uhn.fhir.context.FhirVersionEnum;
 import org.hl7.fhir.instance.model.IdType;
 import org.hl7.fhir.instance.model.Parameters;
 import org.hl7.fhir.instance.model.Patient;
@@ -39,7 +40,7 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti83.class);
 
     public static void startServer(String contextDescriptor) throws ServletException {
-        IpfFhirServlet servlet = new IpfFhirServlet();
+        IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU2_HL7ORG);
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, new MockedSender(), "FhirServlet");
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }

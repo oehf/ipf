@@ -26,7 +26,7 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.server.IBundleProvider;
-import org.hl7.fhir.instance.model.AuditEvent;
+import org.hl7.fhir.dstu3.model.AuditEvent;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,12 +47,12 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
             @RequiredParam(name = AuditEvent.SP_DATE) DateRangeParam interval,
             @OptionalParam(name = AuditEvent.SP_ADDRESS) StringAndListParam address,
             @OptionalParam(name = Iti81Constants.SP_PATIENTID) TokenAndListParam patientId,
-            @OptionalParam(name = AuditEvent.SP_IDENTITY) TokenAndListParam identity,
-            @OptionalParam(name = AuditEvent.SP_OBJECTTYPE) TokenAndListParam objectType,
+            //@OptionalParam(name = AuditEvent.SP_IDENTITY) TokenAndListParam identity,
+            //@OptionalParam(name = AuditEvent.SP_OBJECT_TYPE) TokenAndListParam objectType,
             @OptionalParam(name = Iti81Constants.SP_ROLE) TokenAndListParam role,
             @OptionalParam(name = AuditEvent.SP_SOURCE) StringAndListParam source,
             @OptionalParam(name = AuditEvent.SP_TYPE) TokenAndListParam type,
-            @OptionalParam(name = AuditEvent.SP_PARTICIPANT) StringAndListParam participant,
+            @OptionalParam(name = AuditEvent.SP_AGENT) StringAndListParam participant,
             @OptionalParam(name = AuditEvent.SP_SUBTYPE) TokenAndListParam subtype,
             @OptionalParam(name = Iti81Constants.SP_OUTCOME) TokenAndListParam outcome,
             @Sort SortSpec sortSpec,
@@ -63,8 +63,8 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
                 .interval(interval)
                 .address(address)
                 .patientId(patientId)
-                .identity(identity)
-                .objectType(objectType)
+                //.identity(identity)
+                //.objectType(objectType)
                 .role(role)
                 .source(source)
                 .type(type)

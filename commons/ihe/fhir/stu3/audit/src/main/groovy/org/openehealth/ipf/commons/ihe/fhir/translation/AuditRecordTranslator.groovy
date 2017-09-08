@@ -91,9 +91,9 @@ class AuditRecordTranslator {
         fhir.altId = atna.alternativeUserID
         fhir.name = atna.userName
         if (atna.networkAccessPointID) {
-            fhir.network = new AuditEvent.AuditEventAgentNetworkType(
-                    address: atna.networkAccessPointID,
-                    type: new AuditEvent.AuditEventAgentNetworkTypeEnumFactory().fromCode(Short.toString(atna.networkAccessPointTypeCode)))
+            fhir.network = new AuditEvent.AuditEventAgentNetworkComponent()
+                .setAddress(atna.networkAccessPointID)
+                .setType(new AuditEvent.AuditEventAgentNetworkTypeEnumFactory().fromCode(Short.toString(atna.networkAccessPointTypeCode)))
         }
         return fhir
     }

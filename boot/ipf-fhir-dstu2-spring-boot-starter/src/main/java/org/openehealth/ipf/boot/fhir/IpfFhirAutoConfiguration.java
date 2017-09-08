@@ -17,6 +17,7 @@
 package org.openehealth.ipf.boot.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.rest.server.ApacheProxyAddressStrategy;
 import ca.uhn.fhir.rest.server.IPagingProvider;
@@ -66,7 +67,7 @@ public class IpfFhirAutoConfiguration {
 
     @Bean
     public FhirContext fhirContext() {
-        return FhirContext.forDstu2Hl7Org();
+        return new FhirContext(config.getFhirVersion());
     }
 
     @Bean
@@ -132,7 +133,7 @@ public class IpfFhirAutoConfiguration {
             IPagingProvider pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {
-        IpfFhirServlet fhirServlet = new IpfFhirServlet();
+        IpfFhirServlet fhirServlet = new IpfFhirServlet(config.getFhirVersion());
         IpfFhirConfigurationProperties.Servlet servletProperties = config.getServlet();
         fhirServlet.setPagingProvider(pagingProvider);
         fhirServlet.setLogging(servletProperties.isLogging());
