@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import org.apache.camel.Processor;
+import org.openehealth.ipf.commons.ihe.xds.XCMU;
 import org.openehealth.ipf.commons.ihe.xds.XDM;
 import org.openehealth.ipf.commons.ihe.xds.XDR;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.*;
@@ -280,6 +281,23 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         new RegistryResponseValidator().validate(message, ITI_86);
     };
 
+    private static final Processor CH_XCMU_REQUEST_VALIDATOR = exchange -> {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
+        EbXMLSubmitObjectsRequest30 message =
+                new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
+        new SubmitObjectsRequestValidator().validate(message, XCMU.Interactions.CH_XCMU);
+    };
+
+    private static final Processor CH_XCMU_RESPONSE_VALIDATOR = exchange -> {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
+        EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
+        new RegistryResponseValidator().validate(message, XCMU.Interactions.CH_XCMU);
+    };
+
     /**
      * Returns a validating processor for ITI-18 request messages.
      */
@@ -460,6 +478,20 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
      */
     public static Processor iti86ResponseValidator() {
         return ITI_86_RESPONSE_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for CH-XCMU request messages.
+     */
+    public static Processor chXcmuRequestValidator() {
+        return CH_XCMU_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for CH-XCMU response messages.
+     */
+    public static Processor chXcmuResponseValidator() {
+        return CH_XCMU_RESPONSE_VALIDATOR;
     }
 
     private static final Processor RAD_69_REQUEST_VALIDATOR = exchange -> {

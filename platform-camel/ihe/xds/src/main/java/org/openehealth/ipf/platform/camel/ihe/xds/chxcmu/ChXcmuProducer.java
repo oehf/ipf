@@ -13,33 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.itiX1;
+package org.openehealth.ipf.platform.camel.ihe.xds.chxcmu;
 
-import org.openehealth.ipf.commons.core.DomBuildersThreadLocal;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuPortType;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openehealth.ipf.commons.ihe.xds.itiX1.ItiX1PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer;
 
 /**
  * @author Dmytro Rud
  */
-public class ItiX1Producer extends XdsSubmissionProducer<SubmitObjectsRequest, RegistryResponseType> {
+public class ChXcmuProducer extends XdsSubmissionProducer<SubmitObjectsRequest, RegistryResponseType> {
 
-    private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal();
-
-    public ItiX1Producer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
+    public ChXcmuProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
         super(endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);
     }
 
     @Override
     protected RegistryResponseType callService(Object client, SubmitObjectsRequest request) throws Exception {
         injectTargetHomeCommunityId(client, request);
-        return ((ItiX1PortType) client).documentRegistryUpdateDocumentSet(request);
+        return ((ChXcmuPortType) client).documentRegistryUpdateDocumentSet(request);
     }
 
 }

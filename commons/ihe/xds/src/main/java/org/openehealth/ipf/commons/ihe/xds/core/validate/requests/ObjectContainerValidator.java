@@ -215,7 +215,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(limitedMetadata || ((name != null) && (name.getValue() != null)),
                     MISSING_FOLDER_NAME, folder.getId());
 
-            if (profile == XDS_B.Interactions.ITI_57){
+            if ((profile == XDS_B.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
                 validateUpdateObject(folder, container);
             }
         }
@@ -275,7 +275,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(profile.isQuery() || StringUtils.isBlank(docEntry.getLid()) || logicalIds.add(docEntry.getLid()),
                     LOGICAL_ID_SAME, docEntry.getLid());
 
-            if (profile.getInteractionId() == XDS_B.Interactions.ITI_57){
+            if ((profile == XDS_B.Interactions.ITI_57) || (profile == XCMU.Interactions.CH_XCMU)) {
                 validateUpdateObject(docEntry, container);
             }
         }

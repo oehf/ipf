@@ -46,7 +46,7 @@ abstract class Iti41AuditStrategy extends XdsSubmitAuditStrategy30 {
         SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
         if (submitObjectsRequest != null) {
             EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
-            auditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
+            enrichDatasetFromSubmitObjectsRequest(auditDataset, ebXML);
         }
         return auditDataset;
     }

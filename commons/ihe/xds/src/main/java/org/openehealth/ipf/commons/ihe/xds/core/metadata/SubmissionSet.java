@@ -49,6 +49,8 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
     @Getter private final List<Recipient> intendedRecipients = new ArrayList<>();
     @Getter @Setter private String sourceId;
     @Getter private Timestamp submissionTime;
+    @XmlAttribute
+    @Getter @Setter private String targetHomeCommunityId;
 
     /**
      * @param author
@@ -63,7 +65,9 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
      * @return the author of the submission. If the submission has multiple authors
      *          this method returns only the first in the list. If the submission
      *          has no authors, this method returns {@code null}.
+     * @deprecated please iterate over {@link #getAuthors()}.
      */
+    @Deprecated
     public Author getAuthor() {
         return authors.isEmpty() ? null : authors.get(0);
     }

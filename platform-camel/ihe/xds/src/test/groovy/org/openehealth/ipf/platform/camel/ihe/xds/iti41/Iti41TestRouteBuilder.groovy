@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 import org.apache.cxf.binding.soap.SoapFault
 import org.apache.cxf.headers.Header
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer
 
 import javax.xml.namespace.QName
 import javax.activation.DataHandler
@@ -102,7 +103,7 @@ public class Iti41TestRouteBuilder extends SpringRouteBuilder {
             status = PARTIAL_SUCCESS
         }
 
-        Header header = exchange.in.headers[AbstractWsEndpoint.INCOMING_SOAP_HEADERS][Iti41Component.TARGET_HCID_HEADER_NAME]
+        Header header = exchange.in.headers[AbstractWsEndpoint.INCOMING_SOAP_HEADERS][XdsSubmissionProducer.TARGET_HCID_HEADER_NAME]
         if (header.object.firstChild.textContent != expectedTargetHomeCommunityId) {
             status = PARTIAL_SUCCESS
         }

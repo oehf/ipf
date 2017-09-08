@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41;
 
-import org.openehealth.ipf.commons.core.DomBuildersThreadLocal;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
@@ -29,8 +28,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer;
  * @author Dmytro Rud
  */
 public class Iti41Producer extends XdsSubmissionProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponseType> {
-
-    private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal();
 
     public Iti41Producer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint, JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
         super(endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class, RegistryResponseType.class);

@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.SubmissionSetTra
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link SubmissionSet}.
@@ -52,13 +53,15 @@ public class SubmissionSetTest {
 
     @Test
     public void testGetAuthorOnEmptyAuthorList() {
-        assertEquals(null, submissionSet.getAuthor());
+        assertTrue(null, submissionSet.getAuthors().isEmpty());
     }
 
     @Test
     public void testGetAuthorOnAuthorListContainingMultipleAuthors() {
         submissionSet.getAuthors().add(author1);
         submissionSet.getAuthors().add(author2);
-        assertEquals(author1, submissionSet.getAuthor());
+        assertEquals(2, submissionSet.getAuthors().size());
+        assertEquals(author1, submissionSet.getAuthors().get(0));
+        assertEquals(author2, submissionSet.getAuthors().get(1));
     }
 }

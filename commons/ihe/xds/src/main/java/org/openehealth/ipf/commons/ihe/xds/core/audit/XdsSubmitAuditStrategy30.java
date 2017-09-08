@@ -31,7 +31,7 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-abstract public class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmitAuditDataset> {
+abstract public class XdsSubmitAuditStrategy30 extends XdsSubmitAuditStrategy {
 
     /**
      * Constructs an audit strategy for an XDS submission.
@@ -43,12 +43,11 @@ abstract public class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
         super(serverSide);
     }
 
-
     @Override
     public XdsSubmitAuditDataset enrichAuditDatasetFromRequest(XdsSubmitAuditDataset auditDataset, Object pojo, Map<String, Object> parameters) {
         SubmitObjectsRequest submitObjectsRequest = (SubmitObjectsRequest) pojo;
         EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
-        auditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
+        enrichDatasetFromSubmitObjectsRequest(auditDataset, ebXML);
         return auditDataset;
     }
 
@@ -59,8 +58,4 @@ abstract public class XdsSubmitAuditStrategy30 extends XdsAuditStrategy<XdsSubmi
         return getEventOutcomeCodeFromRegistryResponse(ebXML);
     }
 
-    @Override
-    public XdsSubmitAuditDataset createAuditDataset() {
-        return new XdsSubmitAuditDataset(isServerSide());
-    }
 }

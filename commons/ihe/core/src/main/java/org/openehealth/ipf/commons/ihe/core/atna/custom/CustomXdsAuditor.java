@@ -43,7 +43,7 @@ import static org.openehealth.ipf.commons.ihe.core.atna.custom.CustomAuditorUtil
  *     <li>ITI-62 -- RMD Remove Metadata</li>
  *     <li>ITI-63 -- XCF Cross-Community Fetch</li>
  *     <li>ITI-86 -- RMD Remove Documents</li>
- *     <li>ITI-X1 -- XCMU Cross-Gateway Update Document Set</li>
+ *     <li>CH-XCMU -- XCMU Cross-Gateway Update Document Set</li>
  *     <li>RAD-69 -- XDS-I.b Retrieve Imaging Document Set</li>
  *     <li>RAD-75 -- XCA-I Cross-Gateway Retrieve Imaging Document Set</li>
  * </ul>
@@ -114,12 +114,12 @@ public class CustomXdsAuditor extends XDSAuditor {
      *
      * @param serverSide            <code>true</code> for the Document Administrator / XCMU Initiating Gateway actor,
      *                              <code>false</code> for the Document Registry / XCMU Responding Gateway actor.
-     * @param eventTypeCode         transaction code (ITI-57 ot ITI-X1)
+     * @param eventTypeCode         transaction code (ITI-57 or CH-XCMU)
      * @param eventOutcome          event outcome indicator
      * @param sourceUserId          ID of the user which triggered the transaction
      * @param registryEndpointUri   Web service endpoint URI for the document registry
      * @param submissionSetUniqueId UniqueID of the Submission Set registered
-     * @param homeCommunityId       home community ID (optional for ITI-57, required for ITI-X1).
+     * @param homeCommunityId       home community ID (optional for ITI-57, required for CH-XCMU).
      * @param patientId             Patient Id that this submission pertains to
      * @param purposesOfUse         &lt;PurposeOfUse&gt; attributes from XUA SAML assertion.
      * @param userRoles             user role codes from XUA SAML assertion.
@@ -444,7 +444,7 @@ public class CustomXdsAuditor extends XDSAuditor {
         audit(event);
     }
 
-    public void auditItiX1(
+    public void auditChXcmu(
             boolean serverSide,
             RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
             String sourceUserId,

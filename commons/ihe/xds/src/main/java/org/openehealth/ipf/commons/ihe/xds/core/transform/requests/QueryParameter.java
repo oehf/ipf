@@ -110,7 +110,7 @@ public enum QueryParameter {
     SUBMISSION_SET_SUBMISSION_TIME_FROM("$XDSSubmissionSetSubmissionTimeFrom"),
     /** Used to filter {@link SubmissionSet#getSubmissionTime()}. */
     SUBMISSION_SET_SUBMISSION_TIME_TO("$XDSSubmissionSetSubmissionTimeTo"),
-    /** Used to filter {@link SubmissionSet#getAuthor()}. */
+    /** Used to filter {@link SubmissionSet#getAuthors()}. */
     SUBMISSION_SET_AUTHOR_PERSON("$XDSSubmissionSetAuthorPerson"),
     /** Used to filter {@link SubmissionSet#getContentTypeCode()}. */
     SUBMISSION_SET_CONTENT_TYPE_CODE("$XDSSubmissionSetContentType"),

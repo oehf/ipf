@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.itiX1;
+package org.openehealth.ipf.platform.camel.ihe.xds.chxcmu;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
@@ -26,15 +26,15 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.xds.XCMU.Interactions.ITI_X1;
+import static org.openehealth.ipf.commons.ihe.xds.XCMU.Interactions.CH_XCMU;
 
 /**
- * The Camel component for the ITI-X1 transaction.
+ * The Camel component for the CH-XCMU transaction.
  */
-public class ItiX1Component extends XdsComponent<XdsSubmitAuditDataset> {
+public class ChXcmuComponent extends XdsComponent<XdsSubmitAuditDataset> {
 
-    public ItiX1Component() {
-        super(ITI_X1);
+    public ChXcmuComponent() {
+        super(CH_XCMU);
     }
 
     @Override
@@ -44,13 +44,13 @@ public class ItiX1Component extends XdsComponent<XdsSubmitAuditDataset> {
                 getFeatures(parameters),
                 getSchemaLocations(parameters),
                 getProperties(parameters),
-                ItiX1Service.class) {
+                ChXcmuService.class) {
             @Override
             public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, ?, ?> getProducer(
                     AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
                     JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory)
             {
-                return new ItiX1Producer(endpoint, clientFactory);
+                return new ChXcmuProducer(endpoint, clientFactory);
             }
         };
     }

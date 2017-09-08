@@ -49,6 +49,7 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
         EbXMLSubmitObjectsRequest ebXML = transformer.toEbXML(request);
         assertEquals(1, ebXML.getExtrinsicObjects().size());
         assertEquals(2, ebXML.getRegistryPackages().size());
+        assertEquals(1, ebXML.getSlots().size());
 
         List<EbXMLAssociation> associations = ebXML.getAssociations();
         assertEquals(3, associations.size());
@@ -76,6 +77,8 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
         List<EbXMLRegistryPackage> submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         assertEquals(1, submissionSets.size());
         assertEquals("Submission Set 01", submissionSets.get(0).getName().getValue());
+
+        assertEquals("urn:oid:1.2.3.4.5.6.2333.23", ebXML.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
     }
     
     @Test
@@ -85,11 +88,9 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
         assertEquals(0, ebXML.getAssociations().size());
         assertEquals(0, ebXML.getExtrinsicObjects().size());
         assertEquals(0, ebXML.getRegistryPackages().size());
+        assertEquals(0, ebXML.getSlots().size());
     }
-    
 
-    
-    
     @Test
     public void testFromEbXML() {
         EbXMLSubmitObjectsRequest ebXML = transformer.toEbXML(request);

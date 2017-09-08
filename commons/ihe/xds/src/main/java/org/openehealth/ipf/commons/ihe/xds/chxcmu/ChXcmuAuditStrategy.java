@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.itiX1;
+package org.openehealth.ipf.commons.ihe.xds.chxcmu;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditStrategy30;
 
 /**
- * Audit strategy for ITI-X1.
+ * Audit strategy for CH-XCMU.
  */
-public class ItiX1AuditStrategy extends XdsSubmitAuditStrategy30 {
+public class ChXcmuAuditStrategy extends XdsSubmitAuditStrategy30 {
 
-    public ItiX1AuditStrategy(boolean serverSide) {
+    public ChXcmuAuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
     public void doAudit(XdsSubmitAuditDataset auditDataset) {
-        AuditorManager.getCustomXdsAuditor().auditItiX1(
+        AuditorManager.getCustomXdsAuditor().auditChXcmu(
                 isServerSide(),
                 auditDataset.getEventOutcomeCode(),
                 auditDataset.getUserId(),

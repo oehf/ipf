@@ -19,8 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.itiX1.ItiX1AuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.itiX1.ItiX1PortType;
+import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuPortType;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
@@ -36,7 +36,7 @@ public class XCMU implements XdsIntegrationProfile {
 
 	@AllArgsConstructor
 	public enum Interactions implements XdsInteractionId {
-		ITI_X1(ITI_X1_WS_CONFIG);
+		CH_XCMU(CH_XCMU_WS_CONFIG);
 
 		@Getter
 		private WsTransactionConfiguration wsTransactionConfiguration;
@@ -62,17 +62,17 @@ public class XCMU implements XdsIntegrationProfile {
 		return Arrays.asList(Interactions.values());
 	}
 
-	private final static WsTransactionConfiguration ITI_X1_WS_CONFIG = new WsTransactionConfiguration(
-		"xcmu-itiX1",
+	private final static WsTransactionConfiguration CH_XCMU_WS_CONFIG = new WsTransactionConfiguration(
+		"ch-xcmu",
 		"Cross Gateway Update Document Set",
 		false,
-		new ItiX1AuditStrategy(false),
-		new ItiX1AuditStrategy(true),
+		new ChXcmuAuditStrategy(false),
+		new ChXcmuAuditStrategy(true),
 		new QName("urn:ihe:iti:xcmu:2017", "RespondingGateway_Service", "ihe"),
-		ItiX1PortType.class,
+		ChXcmuPortType.class,
 		new QName("urn:ihe:iti:xcmu:2017", "RespondingGateway_Binding_Soap12", "ihe"),
 		false,
-		"wsdl/xcmu-itiX1.wsdl",
+		"wsdl/ch-xcmu.wsdl",
 		true,
 		false,
 		false,

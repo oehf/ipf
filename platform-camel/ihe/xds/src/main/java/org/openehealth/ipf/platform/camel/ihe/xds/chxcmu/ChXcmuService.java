@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.itiX1;
+package org.openehealth.ipf.platform.camel.ihe.xds.chxcmu;
 
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openehealth.ipf.commons.ihe.xds.itiX1.ItiX1PortType;
+import org.openehealth.ipf.commons.ihe.xds.chxcmu.ChXcmuPortType;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsRegistryRequestService;
 
 /**
- * Service implementation for the IHE ITI-X1 transaction (Cross-Gateway Update Document Set).
+ * Service implementation for the CH-XCMU transaction "Cross-Gateway Update Document Set".
  * <p>
  * This implementation delegates to a Camel consumer by creating an exchange.
  */
-public class ItiX1Service extends XdsRegistryRequestService<SubmitObjectsRequest> implements ItiX1PortType {
+public class ChXcmuService extends XdsRegistryRequestService<SubmitObjectsRequest> implements ChXcmuPortType {
 
     @Override
     public RegistryResponseType documentRegistryUpdateDocumentSet(SubmitObjectsRequest body) {

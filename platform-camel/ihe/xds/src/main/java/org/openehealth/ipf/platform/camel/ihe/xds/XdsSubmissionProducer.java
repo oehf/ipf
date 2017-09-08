@@ -22,17 +22,15 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSlotList30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti41.Iti41Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.BindingProvider;
 import java.util.ArrayList;
@@ -42,6 +40,12 @@ import java.util.Map;
 abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration, InType, OutType> {
 
     private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal();
+
+    public static final String TARGET_HCID_NS = "urn:ihe:iti:xdr:2014";
+    public static final String TARGET_HCID_NS_PREFIX = "xdr";
+    public static final String TARGET_HCID_BLOCK_LOCAL_PART = "homeCommunityBlock";
+    public static final String TARGET_HCID_LOCAL_PART = "homeCommunityId";
+    public static final QName  TARGET_HCID_HEADER_NAME = new QName(TARGET_HCID_NS, TARGET_HCID_BLOCK_LOCAL_PART, TARGET_HCID_NS_PREFIX);
 
     public XdsSubmissionProducer(
             AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration> endpoint,
@@ -68,12 +72,10 @@ abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsP
         if (targetHomeCommunityId != null) {
             Document document = DOM_BUILDERS.get().newDocument();
 
-            Element homeCommunityIdElement = document.createElementNS(Iti41Component.TARGET_HCID_NS, Iti41Component.TARGET_HCID_LOCAL_PART);
+            Element homeCommunityIdElement = document.createElementNS(TARGET_HCID_NS, TARGET_HCID_LOCAL_PART);
             homeCommunityIdElement.setTextContent(targetHomeCommunityId);
 
-            Element blockElement = document.createElementNS(
-                    Iti41Component.TARGET_HCID_NS,
-                    Iti41Component.TARGET_HCID_BLOCK_LOCAL_PART);
+            Element blockElement = document.createElementNS(TARGET_HCID_NS, TARGET_HCID_BLOCK_LOCAL_PART);
             //blockElement.setAttributeNS(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "role", "urn:ihe:iti:xd:id");
             //blockElement.setAttributeNS(SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE, "relay", "true");
             blockElement.appendChild(homeCommunityIdElement);
@@ -81,7 +83,7 @@ abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsP
             BindingProvider bindingProvider = (BindingProvider) client;
             Map<String, Object> requestContext = bindingProvider.getRequestContext();
             List<Header> soapHeaders = HeaderUtils.getHeaders(requestContext, Header.HEADER_LIST, true, true, ArrayList::new);
-            soapHeaders.add(new SoapHeader(Iti41Component.TARGET_HCID_HEADER_NAME, blockElement));
+            soapHeaders.add(new SoapHeader(TARGET_HCID_HEADER_NAME, blockElement));
         }
     }
 

@@ -17,11 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
-
-import java.util.List;
 
 /**
  * XDS audit dataset specific for submission-related transactions.
@@ -36,31 +31,11 @@ public class XdsSubmitAuditDataset extends XdsAuditDataset {
     /**
      * @param serverSide
      *            specifies whether this audit dataset will be used on the
-     *            server side (<code>true</code>) or on the client side (
-     *            <code>false</code>)
+     *            server side (<code>true</code>) or on the client side
+     *            (<code>false</code>)
      */
     public XdsSubmitAuditDataset(boolean serverSide) {
         super(serverSide);
     }
 
-    /**
-     * Enriches the set with fields extracted from a submit objects request POJO.
-     *
-     * @param ebXML
-     *      a {@link EbXMLSubmitObjectsRequest} as POJO
-     */
-    public void enrichDatasetFromSubmitObjectsRequest(EbXMLSubmitObjectsRequest ebXML) {
-        List<EbXMLRegistryPackage> submissionSets = 
-            ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
-        
-        for (EbXMLRegistryPackage submissionSet : submissionSets) {
-            String patientID = submissionSet.getExternalIdentifierValue(
-                    Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);            
-            getPatientIds().add(patientID);
-            
-            String uniqueID = submissionSet.getExternalIdentifierValue(
-                    Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
-            setSubmissionSetUuid(uniqueID);
-        }
-    }
 }

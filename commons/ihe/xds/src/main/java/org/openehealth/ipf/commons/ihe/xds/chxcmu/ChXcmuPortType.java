@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.itiX1;
+package org.openehealth.ipf.commons.ihe.xds.chxcmu;
 
 import org.apache.cxf.annotations.DataBinding;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
@@ -40,7 +40,7 @@ import javax.xml.ws.Action;
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory.class })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @DataBinding(XdsJaxbDataBinding.class)
-public interface ItiX1PortType {
+public interface ChXcmuPortType {
 
     @WebResult(name = "RegistryResponse",
             targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0",
