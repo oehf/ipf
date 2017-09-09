@@ -96,7 +96,8 @@ public abstract class AbstractWsEndpoint<
 
     /**
      * Name of Camel message header from where additional user-defined HTTP
-     * headers will be taken as a <code>List&lt;{@link Header}&gt;</code>.
+     * headers will be taken as a <code>List&lt;{@link Header}&gt;</code>
+     * or <code>Map&lt;{@link QName}, {@link Header}&gt;</code>.
      */
     public static final String OUTGOING_SOAP_HEADERS =
             AbstractWsEndpoint.class.getName() + ".OUTGOING_SOAP_HEADERS";

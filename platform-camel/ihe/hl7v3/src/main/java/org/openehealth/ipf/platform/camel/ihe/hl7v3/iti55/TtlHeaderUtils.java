@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -77,15 +77,18 @@ public class TtlHeaderUtils {
      * associated with the given message.
      */
     public static void setTtl(Duration dura, Message message) {
-        List<Header> soapHeaders = CastUtils.cast(message.getHeader(
-                AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, List.class));
+        Object soapHeaders = message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
         if (soapHeaders == null) {
             soapHeaders = new ArrayList<>();
             message.setHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, soapHeaders);
         }
         
         Header ttlHeader = new Header(TTL_HEADER_QNAME, dura.toString(), getStringDataBinding());
-        soapHeaders.add(ttlHeader);
+        if (soapHeaders instanceof Collection) {
+            ((Collection) soapHeaders).add(ttlHeader);
+        } else if (soapHeaders instanceof Map) {
+            ((Map) soapHeaders).put(TTL_HEADER_QNAME, ttlHeader);
+        }
     }
     
     
