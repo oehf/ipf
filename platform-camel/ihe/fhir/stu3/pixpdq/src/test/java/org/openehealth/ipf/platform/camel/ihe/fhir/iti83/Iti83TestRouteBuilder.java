@@ -16,14 +16,15 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.PixQueryResponseToPixmResponseTranslator;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.PixmRequestToPixQueryTranslator;
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 
-import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorFhirToHL7v2;
-import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorHL7v2ToFhir;
+import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelTranslators.translateFhir;
+import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelTranslators.translateToFhir;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.itiValidator;
 
 /**
@@ -56,13 +57,13 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
         from("pixm-iti83:translation?audit=true")
                 // Translate into ITI-9
                 .errorHandler(noErrorHandler())
-                .process(translatorFhirToHL7v2(requestTranslator))
+                .process(translateFhir(requestTranslator))
                 .process(itiValidator())
                 // Create some static response
                 .transform(new Iti9Responder(responseCase))
                 // Translate back into FHIR
                 .process(itiValidator())
-                .process(translatorHL7v2ToFhir(responseTranslator));
+                .process(translateToFhir(responseTranslator, Message.class));
     }
 
 

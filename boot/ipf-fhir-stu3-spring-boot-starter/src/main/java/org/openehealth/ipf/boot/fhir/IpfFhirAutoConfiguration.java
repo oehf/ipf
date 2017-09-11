@@ -22,8 +22,8 @@ import ca.uhn.fhir.rest.server.ApacheProxyAddressStrategy;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.IServerAddressStrategy;
 import ca.uhn.fhir.rest.server.IServerConformanceProvider;
-import org.hl7.fhir.instance.conf.ServerConformanceProvider;
-import org.hl7.fhir.instance.model.Conformance;
+import org.hl7.fhir.dstu3.hapi.rest.server.ServerCapabilityStatementProvider;
+import org.hl7.fhir.dstu3.model.CapabilityStatement;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.custom.FhirAuditor;
 import org.openehealth.ipf.commons.ihe.fhir.DefaultNamingSystemServiceImpl;
@@ -97,8 +97,8 @@ public class IpfFhirAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IServerConformanceProvider.class)
-    public IServerConformanceProvider<Conformance> serverConformanceProvider() {
-        return new ServerConformanceProvider();
+    public IServerConformanceProvider<CapabilityStatement> serverConformanceProvider() {
+        return new ServerCapabilityStatementProvider();
     }
 
     @Bean
@@ -129,7 +129,7 @@ public class IpfFhirAutoConfiguration {
     @ConditionalOnMissingBean(IpfFhirServlet.class)
     @ConditionalOnWebApplication
     public IpfFhirServlet fhirServlet(
-            IServerConformanceProvider<Conformance> serverConformanceProvider,
+            IServerConformanceProvider<CapabilityStatement> serverConformanceProvider,
             IPagingProvider pagingProvider,
             IServerAddressStrategy serverAddressStrategy,
             INarrativeGenerator narrativeGenerator) {

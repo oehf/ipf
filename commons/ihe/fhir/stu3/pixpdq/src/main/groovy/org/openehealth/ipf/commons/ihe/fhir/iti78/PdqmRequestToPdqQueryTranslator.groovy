@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti78
 
 import ca.uhn.fhir.rest.param.*
+import ca.uhn.hl7v2.model.Message
 import org.apache.commons.lang3.Validate
 import org.apache.commons.lang3.time.FastDateFormat
 import org.hl7.fhir.dstu3.model.Enumerations
@@ -24,7 +25,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslationException
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
+import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.PDQ
@@ -42,7 +43,7 @@ import org.openehealth.ipf.modules.hl7.dsl.Repeatable
  * @author Christian Ohr
  * @since 3.4
  */
-class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
+class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
 
     /**
      * Predefined fix value of QPD-1 (as String)
@@ -85,7 +86,7 @@ class PdqmRequestToPdqQueryTranslator implements TranslatorFhirToHL7v2 {
      * @return QBP^Q22 request message
      */
     @Override
-    QBP_Q21 translateFhirToHL7v2(Object request, Map<String, Object> parameters) {
+    QBP_Q21 translateFhir(Object request, Map<String, Object> parameters) {
         if (request == null && parameters != null && parameters.containsKey(Constants.FHIR_REQUEST_PARAMETERS)) {
             return translateFhirSearchToHL7v2(parameters.get(Constants.FHIR_REQUEST_PARAMETERS));
         } else if (request != null && request instanceof IdType) {

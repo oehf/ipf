@@ -22,15 +22,12 @@ import java.util.Map;
 /**
  * @author Christian Ohr
  * @since 3.1
+ *
+ * @deprecated
  */
-public interface TranslatorHL7v2ToFhir {
+public interface TranslatorHL7v2ToFhir extends ToFhirTranslator<Message> {
 
-    /**
-     * Translates a HL7v2 message into a FHIR resource
-     *
-     * @param message HL7v2 message
-     * @return FHIR resource
-     */
-    Object translateHL7v2ToFhir(Message message, Map<String, Object> parameters);
-
+    default Object translateHL7v2ToFhir(Message message, Map<String, Object> parameters) {
+        return translateToFhir(message, parameters);
+    }
 }

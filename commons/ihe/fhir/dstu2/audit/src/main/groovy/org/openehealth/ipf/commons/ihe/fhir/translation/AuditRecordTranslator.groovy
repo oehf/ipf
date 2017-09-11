@@ -30,7 +30,7 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.*
  * @author Dmytro Rud
  * @since 3.1
  */
-class AuditRecordTranslator {
+class AuditRecordTranslator implements ToFhirTranslator<AuditEventMessage> {
 
     static Coding coding(CodedValueType atna) {
         return new Coding(
@@ -100,15 +100,20 @@ class AuditRecordTranslator {
         atna.participantObjectDetail.each {
             fhir.addDetail(new AuditEvent.AuditEventObjectDetailComponent(type: it.type, value: it.value))
         }
-        return fhir
+        fhir
     }
 
     AuditEvent translate(AuditEventMessage atna) {
+        translateToFhir(atna, null)
+    }
+
+    @Override
+    AuditEvent translateToFhir(AuditEventMessage atna, Map<String, Object> parameters) {
         AuditEvent fhir = new AuditEvent(
                 eventIdentification(atna.auditMessage.eventIdentification),
                 auditSourceIdentification(atna.auditMessage.auditSourceIdentification[0]))
         atna.auditMessage.activeParticipant.each { fhir.addParticipant(participant(it)) }
         atna.auditMessage.participantObjectIdentification.each { fhir.addObject(participantObject(it)) }
-        return fhir
+        fhir
     }
 }

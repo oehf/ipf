@@ -220,19 +220,19 @@ Cross-Reference Manager (ITI-9), and does the same in reverse direction for resp
 ```java
 
 import org.apache.camel.builder.RouteBuilder;
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir;
+import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator;
+import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator;
 
-import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorFhirToHL7v2;
-import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorHL7v2ToFhir;
+import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelTranslators.translateFhir;
+import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelTranslators.translateToFhir;
 
 public class Iti83TestRouteBuilder extends RouteBuilder {
 
-    private final TranslatorFhirToHL7v2 requestTranslator;
-    private final TranslatorHL7v2ToFhir responseTranslator;
+    private final FhirTranslator<Message> requestTranslator;
+    private final ToFhirTranslator<Message> responseTranslator;
 
-    public Iti83TestRouteBuilder(TranslatorFhirToHL7v2 requestTranslator, 
-                                 TranslatorHL7v2ToFhir responseTranslator) {
+    public Iti83TestRouteBuilder(FhirTranslator<Message> requestTranslator, 
+                                 ToFhirTranslator<Message> responseTranslator) {
         super();
         this.requestTranslator = requestTranslator;
         this.responseTranslator = responseTranslator;
@@ -242,11 +242,11 @@ public class Iti83TestRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
         from("pixm-iti83:translation?audit=true")
                 // Translate into ITI-9
-                .process(translatorFhirToHL7v2(requestTranslator))
+                .process(translatorFhir(requestTranslator))
                         // Create some static response
                 .to("pix-iti9://${pixManagerUri}")
                         // Translate back into FHIR
-                .process(translatorHL7v2ToFhir(responseTranslator));
+                .process(translatorToFhir(responseTranslator, Message.class));
     }
 }
 

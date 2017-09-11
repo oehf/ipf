@@ -61,7 +61,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
         params.addParameter()
                 .setName(Constants.TARGET_SYSTEM_NAME)
                 .setValue(domainsReturned)
-        QBP_Q21 translated = translator.translateFhirToHL7v2(params, null)
+        QBP_Q21 translated = translator.translateFhir(params, null)
 
         assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
         assertEquals(URN.create(systemIdentifier.system).namespaceSpecificString, translated.QPD[3][4][2].value)
@@ -81,7 +81,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
         params.addParameter()
                 .setName(Constants.TARGET_SYSTEM_NAME)
                 .setValue(domainsReturned)
-        QBP_Q21 translated = translator.translateFhirToHL7v2(params, null)
+        QBP_Q21 translated = translator.translateFhir(params, null)
 
         assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
         assertEquals(mappingService.get('uriToOid', systemIdentifier.system), translated.QPD[3][4][2].value)
@@ -101,7 +101,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
         params.addParameter()
                 .setName(Constants.TARGET_SYSTEM_NAME)
                 .setValue(domainsReturned)
-        QBP_Q21 translated = translator.translateFhirToHL7v2(params, null)
+        QBP_Q21 translated = translator.translateFhir(params, null)
 
         assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
         assertEquals(mappingService.get('uriToOid', translator.pixSupplierResourceIdentifierUri), translated.QPD[3][4][2].value)
@@ -121,6 +121,6 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
         params.addParameter()
                 .setName(Constants.TARGET_SYSTEM_NAME)
                 .setValue(domainsReturned)
-        translator.translateFhirToHL7v2(params, null)
+        translator.translateFhir(params, null)
     }
 }

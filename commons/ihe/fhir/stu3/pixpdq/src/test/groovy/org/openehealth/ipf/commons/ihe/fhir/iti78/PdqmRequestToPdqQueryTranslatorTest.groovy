@@ -83,7 +83,7 @@ class PdqmRequestToPdqQueryTranslatorTest extends Assert {
                 .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4.5.6', '0815ABC')))
                 .addAnd(new TokenOrListParam().add(new TokenParam('urn:oid:1.2.3.4.5.6', null)))).build()
 
-        QBP_Q21 translated = translator.translateFhirToHL7v2(null, [(Constants.FHIR_REQUEST_PARAMETERS): query])
+        QBP_Q21 translated = translator.translateFhir(null, [(Constants.FHIR_REQUEST_PARAMETERS): query])
         String translatedString = translated.encode()
 
         assert (translatedString.contains('@PID.5.1^Surname1*'))
@@ -102,7 +102,7 @@ class PdqmRequestToPdqQueryTranslatorTest extends Assert {
     @Test
     public void testSuccessfulGetTranslateWithOids() {
         IdType resourceId = new IdType().setValue('Patient/4711')
-        QBP_Q21 translated = translator.translateFhirToHL7v2(resourceId, null)
+        QBP_Q21 translated = translator.translateFhir(resourceId, null)
         String translatedString = translated.encode()
         assert (translatedString.contains('@PID.3.1^4711'))
         assert (translatedString.contains('@PID.3.4.2^1.3.5.7'))

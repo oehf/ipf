@@ -68,14 +68,14 @@ class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
     @Test
     public void testTranslateRegularSearchResponse() {
         RSP_K21 message = loadMessage('ok-1_Response')
-        List<PdqPatient> patients = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        List<PdqPatient> patients = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(9, patients.size())
     }
 
     @Test
     public void testTranslateRegularGetResponse() {
         RSP_K21 message = loadMessage('ok-2_Response')
-        List<PdqPatient> patients = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        List<PdqPatient> patients = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(1, patients.size())
     }
 

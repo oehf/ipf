@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti78
 
 import ca.uhn.fhir.model.api.ResourceMetadataKeyEnum
-import ca.uhn.fhir.model.primitive.DecimalDt
 import ca.uhn.fhir.model.valueset.BundleEntrySearchModeEnum
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
@@ -30,7 +29,7 @@ import org.hl7.fhir.dstu3.model.HumanName.NameUse
 import org.hl7.fhir.dstu3.model.codesystems.V3MaritalStatus
 import org.hl7.fhir.dstu3.model.codesystems.V3NullFlavor
 import org.openehealth.ipf.commons.ihe.fhir.Utils
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
+import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_K21
@@ -49,7 +48,7 @@ import org.slf4j.LoggerFactory
  * @author Christian Ohr
  * @since 3.4
  */
-class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
+class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PdqResponseToPdqmResponseTranslator)
     private final UriMapper uriMapper
@@ -81,7 +80,7 @@ class PdqResponseToPdqmResponseTranslator implements TranslatorHL7v2ToFhir {
     }
 
     @Override
-    List<PdqPatient> translateHL7v2ToFhir(Message message, Map<String, Object> parameters) {
+    List<PdqPatient> translateToFhir(Message message, Map<String, Object> parameters) {
         String ackCode = message.QAK[2].value
         switch (ackCode) {
             case 'OK': return handleRegularSearchResponse(message.QUERY_RESPONSE()) // Case 1,2

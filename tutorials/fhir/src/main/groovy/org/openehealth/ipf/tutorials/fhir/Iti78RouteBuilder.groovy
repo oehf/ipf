@@ -16,23 +16,22 @@
 
 package org.openehealth.ipf.tutorials.fhir
 
+import ca.uhn.hl7v2.model.Message
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqResponseToPdqmResponseTranslator
 import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqmRequestToPdqQueryTranslator
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
+import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator
+import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
-
-import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorFhirToHL7v2
-import static org.openehealth.ipf.platform.camel.ihe.fhir.translation.FhirCamelTranslators.translatorHL7v2ToFhir
+import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelTranslators
 
 /**
  *
  */
 class Iti78RouteBuilder extends RouteBuilder {
 
-    private final TranslatorFhirToHL7v2 requestTranslator
-    private final TranslatorHL7v2ToFhir responseTranslator
+    private final FhirTranslator<Message> requestTranslator
+    private final ToFhirTranslator<Message> responseTranslator
     private final String host
     private final int port
 
@@ -56,14 +55,14 @@ class Iti78RouteBuilder extends RouteBuilder {
     }
 
     @Override
-    public void configure() throws Exception {
+    void configure() throws Exception {
         from("pdqm-iti78:translation?audit=true")
                 .routeId("pdqm-adapter")
         // pass back errors to the endpoint
                 .errorHandler(noErrorHandler())
         // translate, forward, translate back
-                .process(translatorFhirToHL7v2(requestTranslator))
+                .process(FhirCamelTranslators.translateFhir(requestTranslator))
                 .to("pdq-iti21:${host}:${port}?audit=false")
-                .process(translatorHL7v2ToFhir(responseTranslator))
+                .process(FhirCamelTranslators.translateToFhir(responseTranslator, Message.class))
     }
 }

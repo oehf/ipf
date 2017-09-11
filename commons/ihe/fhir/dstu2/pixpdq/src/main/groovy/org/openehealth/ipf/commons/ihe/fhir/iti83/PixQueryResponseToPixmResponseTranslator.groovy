@@ -21,7 +21,7 @@ import org.apache.commons.lang3.Validate
 import org.hl7.fhir.instance.model.Identifier
 import org.hl7.fhir.instance.model.Parameters
 import org.openehealth.ipf.commons.ihe.fhir.Utils
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir
+import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
 
@@ -33,7 +33,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
  * @author Christian Ohr
  * @since 3.1
  */
-class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir {
+class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Message> {
 
     private final UriMapper uriMapper
 
@@ -46,7 +46,7 @@ class PixQueryResponseToPixmResponseTranslator implements TranslatorHL7v2ToFhir 
     }
 
     @Override
-    Parameters translateHL7v2ToFhir(Message message, Map<String, Object> parameters) {
+    Parameters translateToFhir(Message message, Map<String, Object> parameters) {
         String ackCode = message.QAK[2].value
         switch (ackCode) {
             case 'OK': return handleRegularResponse(message.QUERY_RESPONSE.PID[3]()) // Case 1

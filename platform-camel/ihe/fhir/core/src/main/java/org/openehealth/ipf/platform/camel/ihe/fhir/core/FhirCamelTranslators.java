@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.fhir.translation;
+package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
-import ca.uhn.hl7v2.model.Message;
+import org.apache.camel.Exchange;
+import org.apache.camel.Expression;
 import org.apache.camel.Processor;
+import org.apache.camel.support.ExpressionAdapter;
+import org.hl7.fhir.instance.model.api.IIdType;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator;
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator;
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.Map;
 
 /**
- * Camel processors for translation of messages between FHIR and HL7v2
+ * Camel processors for translation of messages between FHIR and something else
  *
  * @author Christian Ohr
  * @since 3.1
- *
- * @deprecated use {@link org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelTranslators}
  */
 public final class FhirCamelTranslators {
 
@@ -43,33 +43,47 @@ public final class FhirCamelTranslators {
      * Returns a processor for translating FHIR messages to Hl7v2
      * using the given translator instance. 
      */
-    public static Processor translatorFhirToHL7v2(final FhirTranslator<Message> translator) {
+    /**
+     * Returns a processor for translating FHIR messages to XDS
+     * using the given translator instance.
+     */
+    public static Processor translateFhir(final FhirTranslator<?> translator) {
         return exchange -> {
-            // ca.uhn.hl7v2.model.Message initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
             Object fhir = exchange.getIn().getBody();
             Map<String, Object> parameters = exchange.getIn().getHeaders();
-            // exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
             org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);
-            resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
             resultMessage.setBody(translator.translateFhir(fhir, parameters));
+            resultMessage.getHeaders().putAll(parameters);
+            if (fhir instanceof IIdType) {
+                resultMessage.setHeader(Constants.FHIR_REQUEST_GET_ONLY, true);
+            }
         };
     }
-    
-    
+
+    public static Expression transformFhir(final FhirTranslator<?> translator) {
+        return new ExpressionAdapter() {
+            @Override
+            public Object evaluate(Exchange exchange) {
+                Object fhir = exchange.getIn().getBody();
+                Map<String, Object> parameters = exchange.getIn().getHeaders();
+                return translator.translateFhir(fhir, parameters);
+            }
+        };
+    }
+
+
     /**
      * Returns a processor for translating HL7v2 messages to FHIR
-     * using the given translator instance. 
+     * using the given translator instance.
      */
-    public static Processor translatorHL7v2ToFhir(final ToFhirTranslator<Message> translator) {
+    public static <T> Processor translateToFhir(final ToFhirTranslator<T> translator, Class<T> clazz) {
         return exchange -> {
-            // String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
-            ca.uhn.hl7v2.model.Message msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.class);
+            T msg = exchange.getIn().getMandatoryBody(clazz);
             Map<String, Object> parameters = exchange.getIn().getHeaders();
-            // exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
             org.apache.camel.Message resultMessage = Exchanges.resultMessage(exchange);
-            resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
             resultMessage.setBody(translator.translateToFhir(msg, parameters));
+            resultMessage.getHeaders().putAll(parameters);
         };
     }
-    
+
 }

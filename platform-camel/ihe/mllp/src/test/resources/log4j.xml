@@ -80,7 +80,7 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
 	</logger>
 
     <logger name="org.apache.camel.component.hl7">
-        <level value="DEBUG"/>
+        <level value="WARN"/>
     </logger>
 
     <logger name="org.openehealth.ipf.gazelle.validation.core">

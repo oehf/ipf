@@ -58,7 +58,7 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
     @Test
     public void testTranslateRegularResponse() {
         RSP_K23 message = loadMessage('ok-1_Response')
-        Parameters parameters = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        Parameters parameters = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(1, parameters.parameter.size())
         Parameters.ParametersParameterComponent parameter = parameters.parameter[0]
         Identifier identifier = (Identifier) parameter.getValue()
@@ -70,7 +70,7 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
     @Test
     public void testTranslateRegularResponseUnknownOid() {
         RSP_K23 message = loadMessage('ok-2_Response')
-        Parameters parameters = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        Parameters parameters = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(1, parameters.parameter.size())
         Parameters.ParametersParameterComponent parameter = parameters.parameter[0]
         Identifier identifier = (Identifier) parameter.getValue()
@@ -81,14 +81,14 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
     @Test
     public void testTranslateEmptyResponse() {
         RSP_K23 message = loadMessage('nf-1_Response')
-        Parameters parameters = translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        Parameters parameters = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(0, parameters.parameter.size())
     }
 
     @Test(expected = ResourceNotFoundException.class)
     public void testTranslateErrorResponseCase3() {
         RSP_K23 message = loadMessage('err-1_Response')
-        translator.translateHL7v2ToFhir(message, new HashMap<String, Object>())
+        translator.translateToFhir(message, new HashMap<String, Object>())
     }
 
     @Test

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti83
 
+import ca.uhn.hl7v2.model.Message
 import org.apache.commons.lang3.Validate
 import org.hl7.fhir.dstu3.model.Identifier
 import org.hl7.fhir.dstu3.model.Parameters
@@ -22,7 +23,7 @@ import org.hl7.fhir.dstu3.model.UriType
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.Utils
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2
+import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.PIX
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
@@ -33,7 +34,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
  * @author Christian Ohr
  * @since 3.4
  */
-class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
+class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
 
     /**
      * Predefined fix value of QPD-1 (as String)
@@ -65,7 +66,7 @@ class PixmRequestToPixQueryTranslator implements TranslatorFhirToHL7v2 {
     }
 
     @Override
-    QBP_Q21 translateFhirToHL7v2(Object request, Map<String, Object> parameters) {
+    QBP_Q21 translateFhir(Object request, Map<String, Object> parameters) {
         Parameters inParams = (Parameters) request;
         QBP_Q21 qry = PIX.Interactions.ITI_9.hl7v2TransactionConfiguration.request('Q23')
 
