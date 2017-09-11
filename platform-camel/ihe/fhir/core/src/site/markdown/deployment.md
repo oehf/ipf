@@ -29,6 +29,11 @@ Here is an example:
         <servlet>
             <servlet-name>FhirServlet</servlet-name>
             <servlet-class>org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet</servlet-class>
+            <!-- FHIR version to be used: DSTU2, DSTU3 -->
+            <init-param>
+                <param-name>fhirVersion</param-name>
+                <param-value>DSTU3</param-value>
+            </init-param>
             <init-param>
                 <param-name>logging</param-name>
                 <param-value>true</param-value>
@@ -52,14 +57,15 @@ Here is an example:
 
 The following servlet init parameters are supported:
 
-| Parameter name       | Type       | Default value | Short description                                                                    |
-|:---------------------|:-----------|:--------------|:-------------------------------------------------------------------------------------|
-| `logging`            | Boolean    | false         | writes incoming requests into the log
-| `highlight`          | Boolean    | false         | whether responses to requests from browsers are (syntax-)highlighted
-| `pretty`             | Boolean    | false         | whether responses are indented
-| `pagingProviderSize` | Integer    | 50            | amount of [paging requests] being maintained concurrently
-| `defaultPageSize`    | Integer    | 20            | default page size of returned resources
-| `maximumPageSize`    | Integer    | 100           | maximum page size of returned resources
+| Parameter name       | Type            | Default value | Short description                                                                    |
+|:---------------------|:----------------|:--------------|:-------------------------------------------------------------------------------------|
+| `fhirVersion`        | FhirVersionEnum | -             | which FHIR version to be used: DSTU2 or DSTU3
+| `logging`            | Boolean         | false         | writes incoming requests into the log
+| `highlight`          | Boolean         | false         | whether responses to requests from browsers are (syntax-)highlighted
+| `pretty`             | Boolean         | false         | whether responses are indented
+| `pagingProviderSize` | Integer         | 50            | amount of [paging requests] being maintained concurrently
+| `defaultPageSize`    | Integer         | 20            | default page size of returned resources
+| `maximumPageSize`    | Integer         | 100           | maximum page size of returned resources
 
 
 A special case is the [ITI-68](../ipf-platform-camel-ihe-fhir-mhd/iti68.html) transaction. This is no FHIR
@@ -93,7 +99,9 @@ The servlet definition above would match the following consumer endpoint:
 ### Embedded in Spring Boot
 
 Container deployments embedded in [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-embedded-servlet-containers.html)
-can be easily achieved by depending on [ipf-fhir-spring-boot-starter](../ipf-fhir-spring-boot-starter/index.html).
+can be easily achieved by depending on [ipf-fhir-dstu2-spring-boot-starter](../ipf-fhir-dstu2-spring-boot-starter/index.html) or
+[ipf-fhir-stu3-spring-boot-starter](../ipf-fhir-stu3-spring-boot-starter/index.html)
+
 This starter module along with `camel-servlet-starter` sets up the necessary servlets and the servlet init parameters are mapped to
 application properties.
 

@@ -1,8 +1,8 @@
 
-## `mhd-iti67` component
+## `mhd-iti67` component (DSTU2)
 
-The mhd-iti67 component provides interfaces for actors of the *Find Document References* IHE transaction (ITI-67),
-which is described in the [MHD Supplement](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_MHD.pdf).
+The mhd-iti67 component provides interfaces for actors of the *Find Document References* IHE transaction (ITI-67).
+Note that this component implements the 2016/2017 version of this profile.
 
 ### Actors
 

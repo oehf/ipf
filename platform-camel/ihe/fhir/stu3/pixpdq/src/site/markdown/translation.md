@@ -20,7 +20,7 @@ In a Maven-based environment, the following dependencies should be registered in
 </dependency>
 <dependency>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>ipf-platform-camel-ihe-fhir-pixpdq</artifactId>
+    <artifactId>ipf-platform-camel-ihe-fhir-stu3-pixpdq</artifactId>
     <version>${ipf-version}</version>
 </dependency>
 ```
@@ -30,7 +30,7 @@ This depends transitively on the required module:
 ```xml
 <dependency>
     <groupId>org.openehealth.ipf.commons</groupId>
-    <artifactId>ipf-commons-ihe-fhir-pixpdq</artifactId>
+    <artifactId>ipf-commons-ihe-fhir-stu3-pixpdq</artifactId>
     <version>${ipf-version}</version>
 </dependency>
 ```

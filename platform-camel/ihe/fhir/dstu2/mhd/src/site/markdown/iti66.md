@@ -1,8 +1,8 @@
 
-## `mhd-iti66` component
+## `mhd-iti66` component (DSTU2)
 
-The mhd-iti66 component provides interfaces for actors of the *Find Document Manifests* IHE transaction (ITI-66),
-which is described in the [MHD Supplement](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_MHD.pdf).
+The mhd-iti66 component provides interfaces for actors of the *Find Document Manifests* IHE transaction (ITI-66).
+Note that this component implements the 2016/2017 version of this profile.
 
 ### Actors
 

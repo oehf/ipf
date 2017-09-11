@@ -1,8 +1,8 @@
 
-## `pixm-iti83` component
+## `pixm-iti83` component (DSTU2)
 
-The pixm-iti83 component provides interfaces for actors of the *Patient Identifier Cross-reference for Mobile* IHE transaction (ITI-83),
-which is described in the [Patient Identifier Cross-reference for Mobile (PIXm) Supplement](https://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_PIXm.pdf).
+The pixm-iti83 component provides interfaces for actors of the *Patient Identifier Cross-reference for Mobile* IHE transaction (ITI-83).
+Note that this component implements the 2016/2017 version of this profile.
 
 ### Actors
 

@@ -10,7 +10,7 @@ IHE updated their profiles to this version. IPF adds support for a subset of the
 While the FHIR transactions in IHE ITI revision 13 (2016/2017) was based on FHIR DSTU2,
 the transactions have been migrated to STU3 for IHE ITI revision 14 (2017/2018).
 
-Currently supported transactions for DSTU2 are:
+Supported transactions for DSTU2 are:
 
 * [ITI-65](../ipf-platform-camel-ihe-fhir-dstu2-mhd/iti65.html) Provide Document Bundle
 * [ITI-66](../ipf-platform-camel-ihe-fhir-dstu2-mhd/iti66.html) Find Document Manifests

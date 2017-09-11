@@ -4,7 +4,6 @@
 The pdqm-iti78 component provides interfaces for actors of the *Patient Demographics Query for Mobile* IHE transaction (ITI-78),
 which is described in the [Patient Demographics Query for Mobile (PDQm) Supplement](https://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_PDQm.pdf).
 
-Note that this implementation is a *projection* of what PDQm could look like once it has been ported to FHIR DSTU2.
 ### Actors
 
 The transaction defines the following actors:
@@ -21,7 +20,7 @@ In a Maven-based environment, the following dependency must be registered in `po
 ```xml
     <dependency>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <artifactId>ipf-platform-camel-ihe-fhir-dstu2-pixpdq</artifactId>
+        <artifactId>ipf-platform-camel-ihe-fhir-stu3-pixpdq</artifactId>
         <version>${ipf-version}</version>
     </dependency>
 ```

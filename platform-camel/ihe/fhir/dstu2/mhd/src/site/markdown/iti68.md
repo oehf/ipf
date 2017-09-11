@@ -1,8 +1,8 @@
 
 ## `mhd-iti68` component
 
-The mhd-iti68 component provides interfaces for actors of the *Retrieve Document* IHE transaction (ITI-68),
-which is described in the [MHD Supplement](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_MHD.pdf).
+The mhd-iti68 component provides interfaces for actors of the *Retrieve Document* IHE transaction (ITI-68).
+Note that this component implements the 2016/2017 version of this profile.
 
 ### Actors
 

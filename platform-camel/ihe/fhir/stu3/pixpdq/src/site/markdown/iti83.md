@@ -20,7 +20,7 @@ In a Maven-based environment, the following dependency must be registered in `po
 ```xml
     <dependency>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <artifactId>ipf-platform-camel-ihe-fhir-dstu2-pixpdq</artifactId>
+        <artifactId>ipf-platform-camel-ihe-fhir-stu3-pixpdq</artifactId>
         <version>${ipf-version}</version>
     </dependency>
 ```
