@@ -16,21 +16,17 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.RequiredParam;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.annotation.Sort;
+import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.DateAndListParam;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.StringAndListParam;
-import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.*;
 import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.dstu3.model.AuditEvent;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /**
  * According to the Restful ATNA specification, this resource provider must handle requests in the form
@@ -46,16 +42,17 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
     public IBundleProvider auditSearch(
             @RequiredParam(name = AuditEvent.SP_DATE) DateRangeParam interval,
             @OptionalParam(name = AuditEvent.SP_ADDRESS) StringAndListParam address,
-            @OptionalParam(name = Iti81Constants.SP_PATIENTID) TokenAndListParam patientId,
-            //@OptionalParam(name = AuditEvent.SP_IDENTITY) TokenAndListParam identity,
-            //@OptionalParam(name = AuditEvent.SP_OBJECT_TYPE) TokenAndListParam objectType,
-            @OptionalParam(name = Iti81Constants.SP_ROLE) TokenAndListParam role,
+            @OptionalParam(name = AuditEvent.SP_PATIENT + ".identifier") TokenAndListParam patientId,
+            @OptionalParam(name = AuditEvent.SP_ENTITY_ID) TokenAndListParam entityId,
+            @OptionalParam(name = AuditEvent.SP_ENTITY_TYPE) TokenAndListParam entityType,
+            @OptionalParam(name = AuditEvent.SP_ENTITY_ROLE) TokenAndListParam entityRole,
             @OptionalParam(name = AuditEvent.SP_SOURCE) StringAndListParam source,
             @OptionalParam(name = AuditEvent.SP_TYPE) TokenAndListParam type,
-            @OptionalParam(name = AuditEvent.SP_AGENT) StringAndListParam participant,
+            @OptionalParam(name = AuditEvent.SP_USER) StringAndListParam user,
             @OptionalParam(name = AuditEvent.SP_SUBTYPE) TokenAndListParam subtype,
             @OptionalParam(name = Iti81Constants.SP_OUTCOME) TokenAndListParam outcome,
             @Sort SortSpec sortSpec,
+            @IncludeParam Set<Include> includeSpec,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -63,15 +60,16 @@ public class Iti81ResourceProvider extends AbstractPlainProvider {
                 .interval(interval)
                 .address(address)
                 .patientId(patientId)
-                //.identity(identity)
-                //.objectType(objectType)
-                .role(role)
+                .entityId(entityId)
+                .entityType(entityType)
+                .entityRole(entityRole)
                 .source(source)
                 .type(type)
-                .participant(participant)
+                .user(user)
                 .subtype(subtype)
                 .outcome(outcome)
                 .sortSpec(sortSpec)
+                .includeSpec(includeSpec)
                 .fhirContext(getFhirContext())
                 .build();
 

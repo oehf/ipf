@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateAndListParam;
@@ -33,6 +34,7 @@ import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /**
  * Resource Provider for PDQm (ITI-78) for DSTU2
@@ -45,25 +47,26 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
     /**
      * Handles the PDQm Query request
      *
-     * @param identifiers             patient identifier search parameter
-     * @param family                  family name search parameter(s)
-     * @param given                   family name search parameter(s)
-     * @param birthDate               birth date search parameter
-     * @param address                 address search parameter
-     * @param gender                  gender search parameter
-     * @param resourceId              _id search parameter
-     * @param telecom                 telecom search parameter
-     * @param multipleBirthNumber     multiple birth number search parameter (pediatric option)
-     * @param mothersMaidenNameGiven  mothers maiden given name search parameter(s) (pediatric option)
-     * @param mothersMaidenNameFamily mothers maiden family name search parameter(s) (pediatric option)
-     * @param httpServletRequest      servlet request
-     * @param httpServletResponse     servlet response
+     * @param identifiers         patient identifier search parameter
+     * @param active              the active state indicates whether the patient record is active
+     * @param family              family name search parameter(s)
+     * @param given               family name search parameter(s)
+     * @param birthDate           birth date search parameter
+     * @param address             address search parameter
+     * @param gender              gender search parameter
+     * @param resourceId          _id search parameter
+     * @param telecom             telecom search parameter
+     * @param httpServletRequest  servlet request
+     * @param httpServletResponse servlet response
+     * @param sortSpec            sort specification
+     * @param includeSpec         include specification
      * @return {@link IBundleProvider} instance that manages retrieving patients
      */
     @SuppressWarnings("unused")
     @Search(type = PdqPatient.class)
     public IBundleProvider pdqmSearch(
             @OptionalParam(name = Patient.SP_IDENTIFIER) TokenAndListParam identifiers,
+            @OptionalParam(name = Patient.SP_ACTIVE) TokenParam active,
             @OptionalParam(name = Patient.SP_FAMILY) StringAndListParam family,
             @OptionalParam(name = Patient.SP_GIVEN) StringAndListParam given,
             @OptionalParam(name = Patient.SP_BIRTHDATE) DateAndListParam birthDate,
@@ -74,18 +77,16 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = Patient.SP_ADDRESS_POSTALCODE) StringParam postalCode,
             @OptionalParam(name = Patient.SP_GENDER) TokenParam gender,
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
-            // below only relevant for pediatric option
             @OptionalParam(name = Patient.SP_TELECOM) StringParam telecom,
-            @OptionalParam(name = Iti78Constants.SP_MULTIPLE_BIRTH_ORDER_NUMBER) NumberParam multipleBirthNumber,
-            @OptionalParam(name = Iti78Constants.SP_MOTHERS_MAIDEN_NAME_GIVEN) StringAndListParam mothersMaidenNameGiven,
-            @OptionalParam(name = Iti78Constants.SP_MOTHERS_MAIDEN_NAME_FAMILY) StringAndListParam mothersMaidenNameFamily,
             @Sort SortSpec sortSpec,
+            @IncludeParam Set<Include> includeSpec,
 
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
         Iti78SearchParameters searchParameters = Iti78SearchParameters.builder()
                 .identifiers(identifiers)
+                .active(active)
                 .family(family)
                 .given(given)
                 .birthDate(birthDate)
@@ -97,11 +98,8 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
                 .gender(gender)
                 ._id(resourceId)
                 .telecom(telecom)
-                .multipleBirthNumber(multipleBirthNumber)
-                .mothersMaidenNameFamily(mothersMaidenNameFamily)
-                .mothersMaidenNameGiven(mothersMaidenNameGiven)
-
                 .sortSpec(sortSpec)
+                .includeSpec(includeSpec)
                 .fhirContext(getFhirContext())
                 .build();
 
@@ -113,8 +111,8 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
     /**
      * Handles the PDQm Retrieve
      *
-     * @param id resource ID
-     * @param httpServletRequest servlet request
+     * @param id                  resource ID
+     * @param httpServletRequest  servlet request
      * @param httpServletResponse servlet response
      * @return patient resource
      */

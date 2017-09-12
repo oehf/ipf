@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -33,6 +34,7 @@ import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /**
  * Resource Provider for MHD (ITI-66)
@@ -50,10 +52,12 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentManifest.SP_AUTHOR + "." + Practitioner.SP_FAMILY) StringParam authorFamilyName,
             @OptionalParam(name = DocumentManifest.SP_AUTHOR + "." + Practitioner.SP_GIVEN) StringParam authorGivenName,
             @OptionalParam(name = DocumentManifest.SP_TYPE) TokenOrListParam type,
+            @OptionalParam(name = DocumentManifest.SP_SOURCE) TokenOrListParam source,
             @OptionalParam(name = DocumentManifest.SP_STATUS) TokenOrListParam status,
             // Extension to ITI-66
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
+            @IncludeParam Set<Include> includeSpec,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
@@ -63,9 +67,11 @@ public class Iti66ResourceProvider extends AbstractPlainProvider {
                 .authorFamilyName(authorFamilyName)
                 .authorGivenName(authorGivenName)
                 .type(type)
+                .source(source)
                 .status(status)
                 ._id(resourceId)
                 .sortSpec(sortSpec)
+                .includeSpec(includeSpec)
                 .fhirContext(getFhirContext())
                 .build();
 

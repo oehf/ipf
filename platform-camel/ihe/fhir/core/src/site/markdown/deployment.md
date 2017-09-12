@@ -29,7 +29,7 @@ Here is an example:
         <servlet>
             <servlet-name>FhirServlet</servlet-name>
             <servlet-class>org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet</servlet-class>
-            <!-- FHIR version to be used: DSTU2, DSTU3 -->
+            <!-- FHIR version to be used: DSTU2_HL7ORG, DSTU3 -->
             <init-param>
                 <param-name>fhirVersion</param-name>
                 <param-value>DSTU3</param-value>
@@ -59,7 +59,7 @@ The following servlet init parameters are supported:
 
 | Parameter name       | Type            | Default value | Short description                                                                    |
 |:---------------------|:----------------|:--------------|:-------------------------------------------------------------------------------------|
-| `fhirVersion`        | FhirVersionEnum | -             | which FHIR version to be used: DSTU2 or DSTU3
+| `fhirVersion`        | FhirVersionEnum | -             | which FHIR version to be used: DSTU2_HL7ORG or DSTU3
 | `logging`            | Boolean         | false         | writes incoming requests into the log
 | `highlight`          | Boolean         | false         | whether responses to requests from browsers are (syntax-)highlighted
 | `pretty`             | Boolean         | false         | whether responses are indented

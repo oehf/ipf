@@ -29,16 +29,11 @@ import java.util.Set;
  */
 public interface Iti78Constants {
 
-    String SP_MULTIPLE_BIRTH_ORDER_NUMBER = "multipleBirthInteger";
-    String SP_MOTHERS_MAIDEN_NAME_GIVEN = "mothersMaidenName.given";
-    String SP_MOTHERS_MAIDEN_NAME_FAMILY = "mothersMaidenName.family";
 
     Set<String> ITI78_PARAMETERS = new HashSet<>(Arrays.asList(
             IAnyResource.SP_RES_ID,
-            SP_MULTIPLE_BIRTH_ORDER_NUMBER,
-            SP_MOTHERS_MAIDEN_NAME_GIVEN,
-            SP_MOTHERS_MAIDEN_NAME_FAMILY,
             Patient.SP_IDENTIFIER,
+            Patient.SP_ACTIVE,
             Patient.SP_FAMILY,
             Patient.SP_GIVEN,
             Patient.SP_BIRTHDATE,

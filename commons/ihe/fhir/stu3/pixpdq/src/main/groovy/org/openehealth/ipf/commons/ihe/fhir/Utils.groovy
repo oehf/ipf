@@ -72,7 +72,7 @@ class Utils {
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(OperationOutcome.IssueType.NOTFOUND)
-                .setDiagnostics('sourceIdentifier identity not found')
+                .setDiagnostics('sourceIdentifier Patient Identifier not found')
         return new ResourceNotFoundException('Unknown Patient ID', oo)
     }
 
@@ -82,8 +82,8 @@ class Utils {
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(OperationOutcome.IssueType.CODEINVALID)
-                .setDiagnostics("sourceIdentifier assigning authority ${domain ?: ''} not found")
-        return new InvalidRequestException("Unknown Identifier Domain ${domain ?: ''}", oo)
+                .setDiagnostics("sourceIdentifier Assigning Authority not found (${domain ?: ''})")
+        return new InvalidRequestException("Unknown Assigning Authority Domain ${domain ?: ''}", oo)
     }
 
     // PIXm, Error Case 5
@@ -92,7 +92,7 @@ class Utils {
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(OperationOutcome.IssueType.CODEINVALID)
-                .setDiagnostics("targetSystem ${domain ?: ''} not found")
+                .setDiagnostics("targetSystem not found (${domain ?: ''})")
         return new ForbiddenOperationException("Unknown Target Domain ${domain ?: ''}", oo)
     }
 
@@ -112,7 +112,7 @@ class Utils {
         oo.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(OperationOutcome.IssueType.VALUE)
-                .setDiagnostics("targetSystem ${domain ?: ''} not found")
+                .setDiagnostics("targetSystem not found (${domain ?: ''})")
         return new ResourceNotFoundException("Unknown Target Domain ${domain ?: ''}", oo)
     }
 

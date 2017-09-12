@@ -19,6 +19,7 @@ import ca.uhn.fhir.model.api.ResourceMetadataKeyEnum
 import ca.uhn.fhir.model.valueset.BundleEntrySearchModeEnum
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.model.v25.datatype.XAD
 import ca.uhn.hl7v2.model.v25.segment.PID
 import org.apache.commons.lang3.Validate
 import org.hl7.fhir.dstu3.model.*
@@ -28,6 +29,7 @@ import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse
 import org.hl7.fhir.dstu3.model.HumanName.NameUse
 import org.hl7.fhir.dstu3.model.codesystems.V3MaritalStatus
 import org.hl7.fhir.dstu3.model.codesystems.V3NullFlavor
+import org.hl7.fhir.dstu3.model.codesystems.V3ReligiousAffiliation
 import org.openehealth.ipf.commons.ihe.fhir.Utils
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
@@ -144,7 +146,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         if (pid[8]?.value) patient.setGender(
                 Enumerations.AdministrativeGender.fromCode(pid[8].value?.map('hl7v2fhir-patient-administrativeGender')))
 
-        // No race in the default FHIR patient resource (but in the DAF profile)
+        // No race (10) in the default FHIR patient resource (but in the US Core profile). Conversion not implemented yet.
 
         if (!pid[11].empty) {
             convertAddresses(pid[11](), patient.getAddress())
@@ -182,7 +184,21 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
             patient.setMaritalStatus(maritalStatus)
         }
 
-        // No religion in the default FHIR patient resource
+        if (pid[17].value) {
+            CodeableConcept religion = new CodeableConcept()
+            String mapped = pid[17].value.map('hl7v2fhir-patient-religion')
+            def mappedReligion
+            switch (mapped) {
+                case "UNK":
+                    mappedReligion = V3NullFlavor.UNK; break;
+                default: mappedReligion = V3ReligiousAffiliation.fromCode(mapped)
+            }
+            religion.addCoding()
+                    .setCode(mapped)
+                    .setSystem(mappedReligion.system)
+                    .setDisplay(mappedReligion.display)
+            patient.addReligion(religion)
+        }
 
         if (pid[18].value) {
             patient.addIdentifier(convertIdentifier(pid[18]))
@@ -194,15 +210,37 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                     .setValue(pid[19].value))
         }
 
-        // No ethnicity in the default FHIR patient resource (but in the DAF profile)
+        // No ethnicity (22) in the default FHIR patient resource (but in the US Core profile). Conversion not implemented yet
 
         // No birth place in the default FHIR patient resource
+        if (!pid[23].empty) {
+            XAD xad = new XAD(null)
+            xad[3] = pid[23].value
+            patient.setBirthPlace(convertAddress(xad))
+        }
 
         // Multiple Birth
         if (pid[25].value) {
             patient.setMultipleBirth(new IntegerType(pid[25].value))
         } else if (pid[24].value) {
             patient.setMultipleBirth(new BooleanType(pid[24].value == 'Y'))
+        }
+
+        // Nationality
+        if (pid[26].value) {
+            CodeableConcept citizenship = new CodeableConcept()
+            String mapped = pid[18].value.map('hl7v2fhir-patient-citizenship')
+            def mappedCitizenship
+            switch (mapped) {
+                case "UNK":
+                    mappedCitizenship = V3NullFlavor.UNK; break;
+                default: mappedCitizenship = V3ReligiousAffiliation.fromCode(mapped)
+            }
+            citizenship.addCoding()
+                    .setCode(mapped)
+                    .setSystem(mappedCitizenship.system)
+                    .setDisplay(mappedCitizenship.display)
+            patient.addCitizenship(citizenship)
         }
 
         // Death Indicators

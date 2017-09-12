@@ -21,6 +21,7 @@ import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.IBundleProvider;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
@@ -28,11 +29,8 @@ import org.apache.camel.SuspendableService;
 import org.apache.camel.impl.DefaultConsumer;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.commons.ihe.fhir.EagerBundleProvider;
-import org.openehealth.ipf.commons.ihe.fhir.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider;
-import org.openehealth.ipf.commons.ihe.fhir.RequestConsumer;
+import org.hl7.fhir.instance.model.api.IIdType;
+import org.openehealth.ipf.commons.ihe.fhir.*;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.List;
@@ -161,8 +159,11 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         Exchange exchange = runRoute(payload, headers);
         Message resultMessage = Exchanges.resultMessage(exchange);
         if (resultMessage.getBody() instanceof List && IBaseResource.class.isAssignableFrom(resultClass)) {
-            List<T> singleton = (List<T>)resultMessage.getBody();
-            resultMessage.setBody(singleton.isEmpty() ? null : singleton.get(0));
+            List<T> singletonList = (List<T>)resultMessage.getBody();
+            if (singletonList.isEmpty() && payload instanceof IIdType) {
+                throw new ResourceNotFoundException((IIdType)payload);
+            }
+            resultMessage.setBody(singletonList.isEmpty() ? null : singletonList.get(0));
         }
         return getEndpoint().getCamelContext().getTypeConverter().convertTo(resultClass, exchange, resultMessage.getBody());
     }

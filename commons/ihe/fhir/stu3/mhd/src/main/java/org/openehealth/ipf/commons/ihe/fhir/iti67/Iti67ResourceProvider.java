@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti67;
 
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -33,6 +34,7 @@ import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /**
  * Resource Provider for MHD (ITI-67).
@@ -56,10 +58,10 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
     @Search(type = DocumentReference.class)
     public IBundleProvider documentReferenceSearch(
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
+            @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_INDEXED) DateRangeParam indexed,
             @OptionalParam(name = DocumentReference.SP_AUTHOR + "." + Practitioner.SP_FAMILY) StringParam authorFamilyName,
             @OptionalParam(name = DocumentReference.SP_AUTHOR + "." + Practitioner.SP_GIVEN) StringParam authorGivenName,
-            @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_CLASS) TokenOrListParam class_,
             @OptionalParam(name = DocumentReference.SP_TYPE) TokenOrListParam type,
             @OptionalParam(name = DocumentReference.SP_SETTING) TokenOrListParam setting,
@@ -72,14 +74,15 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             // Extension to ITI-66
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
+            @IncludeParam Set<Include> includeSpec,
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
         Iti67SearchParameters searchParameters = Iti67SearchParameters.builder()
+                .status(status)
                 .indexed(indexed)
                 .authorFamilyName(authorFamilyName)
                 .authorGivenName(authorGivenName)
-                .status(status)
                 .class_(class_)
                 .type(type)
                 .setting(setting)
@@ -91,6 +94,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
                 .relatedId(relatedId)
                 ._id(resourceId)
                 .sortSpec(sortSpec)
+                .includeSpec(includeSpec)
                 .fhirContext(getFhirContext())
                 .build();
 

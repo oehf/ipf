@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 public class Iti78SearchParameters implements FhirSearchParameters {
 
     @Getter @Setter private TokenAndListParam identifiers;
+    @Getter @Setter private TokenParam active;
     @Getter @Setter private StringAndListParam family;
     @Getter @Setter private StringAndListParam given;
     @Getter @Setter private DateAndListParam birthDate;
@@ -47,12 +48,7 @@ public class Iti78SearchParameters implements FhirSearchParameters {
     @Getter @Setter private StringParam postalCode;
     @Getter @Setter private TokenParam gender;
     @Getter @Setter private TokenParam _id;
-
-    // below only relevant for pediatric option
     @Getter @Setter private StringParam telecom;
-    @Getter @Setter private NumberParam multipleBirthNumber;
-    @Getter @Setter private StringAndListParam mothersMaidenNameGiven;
-    @Getter @Setter private StringAndListParam mothersMaidenNameFamily;
 
     @Getter @Setter private SortSpec sortSpec;
     @Getter @Setter private Set<Include> includeSpec;

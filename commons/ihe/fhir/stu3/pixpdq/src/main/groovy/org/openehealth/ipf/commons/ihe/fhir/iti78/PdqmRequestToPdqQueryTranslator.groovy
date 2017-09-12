@@ -185,11 +185,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
                 '@PID.11.4' : searchString(searchParameters.state, true),
                 '@PID.11.5' : searchString(searchParameters.postalCode, true),
                 '@PID.11.6' : searchString(searchParameters.country, true),
-
-                '@PID.6.1'  : firstOrNull(searchStringList(searchParameters.mothersMaidenNameFamily, false)),
-                '@PID.6.2'  : firstOrNull(searchStringList(searchParameters.mothersMaidenNameGiven, false)),
                 '@PID.13.1' : searchString(searchParameters.telecom, true),
-                '@PID.25'   : searchNumber(searchParameters.multipleBirthNumber)
         ]
 
         fillSearchParameters(searchParams, qry.QPD[3])
