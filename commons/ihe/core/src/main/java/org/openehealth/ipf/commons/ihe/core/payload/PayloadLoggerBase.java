@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Base class for interceptors which store incoming and outgoing payload
  * into files with user-defined name patterns, or to the regular Java log.
  * <p>
- * File name patterns can contain absolute and relative paths and must correspond to
+ * File name patterns can contain absolute and relative paths and must correspond to the
  * <a href="http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/expressions.html">SpEL</a>
  * syntax, using square brackets for referencing placeholder parameters.
  * In the base version, the following parameters are supported
@@ -48,11 +48,11 @@ import java.util.concurrent.atomic.AtomicLong;
  * Example of a file name pattern:<br>
  * <tt>C:/IPF-LOGS/[processId]/[date('yyyyMMdd-HH00')]/[sequenceId]-server-output.txt</tt>
  * <br>
- * After a pre-configured could of failed trials to create a file, the logger will be switched off.
+ * After a pre-configured count of failed trials to create a file, the logger will be switched off.
  * <p>
  * As an alternative to SpEL, the user can provide another {@link ExpressionResolver expression resolver}.
  * <p>
- * The behavior of this class is further regulated application-wide by the following Boolean
+ * Furthermore, the behavior of this class is regulated application-widely by the following Boolean
  * system properties:
  * <ul>
  *     <li><tt>org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase.CONSOLE</tt>&nbsp;&mdash;
