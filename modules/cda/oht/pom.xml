@@ -71,9 +71,6 @@
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <archive>  
-                      <manifestFile>META-INF/MANIFEST.MF</manifestFile>
-                    </archive> 
                     <excludes>
                         <!-- Include only the /builder/**/*.groovy files, exclude the compiled ones --> 
                         <exclude>org/**/*.groovy</exclude>
