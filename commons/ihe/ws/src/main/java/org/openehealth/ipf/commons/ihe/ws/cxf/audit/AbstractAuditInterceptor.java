@@ -155,7 +155,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
                 auditDataset.setUserId(address.getValue());
             }
         } else {
-            LOG.error("Missing WS-Addressing headers");
+            LOG.warn("Missing WS-Addressing headers, userId is not contained in audit record");
         }
     }
 

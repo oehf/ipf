@@ -129,7 +129,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
 
     public boolean canProcess() {
         if ((!enabled) || Boolean.getBoolean(PROPERTY_DISABLED)) {
-            LOG.debug("Message payload logging is disabled");
+            LOG.trace("Message payload logging is disabled");
             return false;
         }
         return true;
