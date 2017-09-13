@@ -13,6 +13,7 @@
     </parent>
     
     <properties>
+        <!--
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.xds.*</osgi.export.pkg>
         <osgi.import.pkg>
             org.openehealth.ipf.commons.ihe.xds.core.validate.requests,
@@ -21,6 +22,7 @@
             org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
+        -->
     </properties>
     
     <dependencies>
@@ -168,7 +170,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <forkMode>always</forkMode>
+                    <reuseForks>false</reuseForks>
                     <argLine>-Xms64m -Xmx512m</argLine>
                 </configuration>
             </plugin>

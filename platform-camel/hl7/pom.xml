@@ -13,6 +13,7 @@
     </parent>
     
     <properties>
+        <!--
         <osgi.export.pkg>
             org.openehealth.ipf.platform.camel.hl7.*
         </osgi.export.pkg>
@@ -29,6 +30,7 @@
             *
         </osgi.import.pkg>
         <ipf.extension.classes>org.openehealth.ipf.platform.camel.hl7.extend.Hl7ModelExtension</ipf.extension.classes>
+        -->
     </properties>
     
     <dependencies>

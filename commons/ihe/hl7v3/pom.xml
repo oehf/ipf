@@ -13,6 +13,7 @@
     </parent>
 
     <properties>
+        <!--
         <osgi.import.pkg>
             groovy.util,
             groovy.xml,
@@ -31,6 +32,7 @@
             wsdl.*
         </osgi.export.pkg>
         <osgi.fragment.host>org.apache.cxf.cxf-core</osgi.fragment.host>
+        -->
     </properties>
     
     <dependencies>

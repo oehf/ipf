@@ -24,7 +24,9 @@
         <module>commons</module>
         <module>modules</module>
         <module>boot</module>
+        <!--
         <module>osgi</module>
+        -->
         <module>platform-camel</module>
         <module>tutorials</module>
     </modules>
@@ -51,6 +53,7 @@
         <site.deploy.url />
 
         <!-- Default Bundle Properties -->
+        <!--
         <osgi.export.pkg>*</osgi.export.pkg>
         <osgi.import.pkg>org.slf4j.*;version="[1.6,2)",*</osgi.import.pkg>
         <osgi.dynamic.import.pkg />
@@ -70,12 +73,13 @@
             foundation
         </osgi.bundle.license>
         <osgi.bundle.category>healthcare</osgi.bundle.category>
+        -->
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.6</assembly-plugin-version>
         <build-helper-version>1.11</build-helper-version>
         <bundle-plugin-version>3.2.0</bundle-plugin-version>
-        <compiler-plugin-version>3.6.1</compiler-plugin-version>
+        <compiler-plugin-version>3.7.0</compiler-plugin-version>
         <eclipse-plugin-version>2.10</eclipse-plugin-version>
         <enforcer-plugin-version>1.4.1</enforcer-plugin-version>
         <github-site-version>0.12</github-site-version>
@@ -85,7 +89,7 @@
         <jar-plugin-version>3.0.2</jar-plugin-version>
         <javadoc-plugin-version>2.10.4</javadoc-plugin-version>
         <jaxb-plugin-version>2.3.1</jaxb-plugin-version>
-        <lombok-plugin-version>1.16.16.0</lombok-plugin-version>
+        <lombok-plugin-version>1.16.18.1</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.3</nexus-staging-plugin-version>
         <pax-plugin-version>1.6.0</pax-plugin-version>
         <release-plugin-version>2.5.3</release-plugin-version>
@@ -105,38 +109,26 @@
         <commons-io-version>2.5</commons-io-version>
         <commons-lang3-version>3.5</commons-lang3-version>
         <commons-math3-version>3.6.1</commons-math3-version>
-        <derby-version>10.12.1.1</derby-version>
         <easymock-version>3.4</easymock-version>
         <ehcache-version>2.10.1</ehcache-version>
         <findbugs-version>3.0.1</findbugs-version>
-        <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-javamail-14-version>1.7.1</geronimo-spec-javamail-14-version>
-        <geronimo-spec-jta-version>1.1.1</geronimo-spec-jta-version>
         <geronimo-spec-jms-version>1.1.1</geronimo-spec-jms-version>
         <guava-version>19.0</guava-version>
-        <hibernate-version>4.3.9.Final</hibernate-version>
-        <hibernate-commons-annotations-version>4.0.5.Final</hibernate-commons-annotations-version>
-        <hibernate-jpa-2.1-api-version>1.0.0.Final</hibernate-jpa-2.1-api-version>
-        <hibernate-javassist-version>3.20.0-GA</hibernate-javassist-version>
-        <hibernate-search-version>5.0.1.Final</hibernate-search-version>
         <httpclient4-version>4.5.2</httpclient4-version>
         <jaspic-api-version>1.1</jaspic-api-version>
         <javax-validation-version>1.1.0.Final</javax-validation-version>
-        <jasypt-version>1.9.2</jasypt-version>
-        <jboss-logging-version>3.3.0.Final</jboss-logging-version>
-        <jboss-logging-annotations-version>2.0.1.Final</jboss-logging-annotations-version>
         <jdom-version>2.0.6</jdom-version>
         <jetty-version>9.4.6.v20170531</jetty-version>
         <joda-time-version>2.9.7</joda-time-version>
         <junit-version>4.12</junit-version>
         <log4j-version>1.2.17</log4j-version>
-        <lombok-version>1.16.16</lombok-version>
-        <lucene-version>4.10.4</lucene-version>
+        <lombok-version>1.16.18</lombok-version>
         <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>2.2.3</quartz-version>
         <quickcheck-version>0.6</quickcheck-version>
         <servlet-api-version>3.1.0</servlet-api-version>
-        <tomcat-version>8.5.4</tomcat-version>
+        <tomcat-version>8.5.20</tomcat-version>
         <xbean-spring-version>4.5</xbean-spring-version>
         <xmlunit-version>1.6</xmlunit-version>
     </properties>
@@ -543,29 +535,9 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.jboss.logging</groupId>
-                <artifactId>jboss-logging</artifactId>
-                <version>${jboss-logging-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.logging</groupId>
-                <artifactId>jboss-logging-annotations</artifactId>
-                <version>${jboss-logging-annotations-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-jms_1.1_spec</artifactId>
                 <version>${geronimo-spec-jms-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jta_1.1_spec</artifactId>
-                <version>${geronimo-spec-jta-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-activation_1.1_spec</artifactId>
-                <version>${geronimo-spec-activation-11-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.geronimo.specs</groupId>
@@ -583,82 +555,6 @@
                 <version>${javax-validation-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-search-engine</artifactId>
-                <version>${hibernate-search-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.lucene</groupId>
-                        <artifactId>lucene-facet</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-                <version>${hibernate-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.transaction</groupId>
-                        <artifactId>jta</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xml-apis</groupId>
-                        <artifactId>xml-apis</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-search-orm</artifactId>
-                <version>${hibernate-search-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate.common</groupId>
-                <artifactId>hibernate-commons-annotations</artifactId>
-                <version>${hibernate-commons-annotations-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-core</artifactId>
-                <version>${lucene-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-analyzers-common</artifactId>
-                <version>${lucene-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-queryparser</artifactId>
-                <version>${lucene-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-facet</artifactId>
-                <version>${lucene-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.derby</groupId>
-                <artifactId>derby</artifactId>
-                <version>${derby-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.derby</groupId>
-                <artifactId>derbynet</artifactId>
-                <version>${derby-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.derby</groupId>
-                <artifactId>derbyclient</artifactId>
-                <version>${derby-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jasypt</groupId>
-                <artifactId>jasypt</artifactId>
-                <version>${jasypt-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
                 <version>${quartz-version}</version>
@@ -668,11 +564,6 @@
                         <artifactId>c3p0</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>${hibernate-javassist-version}</version>
             </dependency>
             <dependency>
                 <groupId>joda-time</groupId>
@@ -980,6 +871,7 @@
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>${assembly-plugin-version}</version>
                 </plugin>
+                <!--
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
@@ -989,6 +881,7 @@
                     </configuration>
                     <extensions>true</extensions>
                 </plugin>
+                -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -1077,6 +970,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -1085,15 +979,7 @@
                     <unpackBundle>true</unpackBundle>
                     <manifestLocation>META-INF</manifestLocation>
                     <instructions>
-                        <!-- remove the qualifier from ANY versioning rule -->
                         <_versionpolicy>"$(version;===;$(@))"</_versionpolicy>
-
-                        <!-- This doesn't work with the 2.0.1 version of the plug-in, but probably later-->
-                        <!--_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl-->
-                        <!--_versionpolicy-uses>[$(version;=;$(@)),$(version;+;$(@)))</_versionpolicy-uses-->
-                        <!-- enable simple spring xml file analysis -->
-                        <!--<_plugin>aQute.lib.spring.SpringComponent</_plugin>-->
-                        <!-- Changed behavior in the > 2.0.0 bundle version forces us to do it this way -->
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                         <Export-Package>${osgi.export.pkg}</Export-Package>
                         <Import-Package>${osgi.import.pkg}</Import-Package>
@@ -1106,12 +992,10 @@
                         <Require-Bundle>${osgi.require.bundle}</Require-Bundle>
                         <Bundle-Category>${osgi.bundle.category}</Bundle-Category>
 
-                        <!-- project specifics -->
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Bundle-Vendor>${osgi.bundle.vendor}</Bundle-Vendor>
                         <Bundle-License>${osgi.bundle.license}</Bundle-License>
 
-                        <!-- custom headers (not according to OSGi-Spec standard) -->
                         <Spring-Context>${osgi.spring.context}</Spring-Context>
                         <Extension-Classes>${ipf.extension.classes}</Extension-Classes>
                         <Extension-Beans>${ipf.extension.beans}</Extension-Beans>
@@ -1144,6 +1028,7 @@
                     </execution>
                 </executions>
             </plugin>
+-->
             <plugin>
                 <groupId>org.openehealth.ipf.labs.maven</groupId>
                 <artifactId>maven-dsldoc-plugin</artifactId>

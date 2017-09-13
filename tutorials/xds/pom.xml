@@ -13,6 +13,7 @@
     </parent>
 
     <properties>
+        <!--
         <osgi.export.pkg>
             org.openehealth.ipf.tutorials.xds.*;version="${project.version}"
         </osgi.export.pkg>
@@ -33,6 +34,7 @@
             *
         </osgi.import.pkg>
         <ipf.extension.beans>regRepModelExtension</ipf.extension.beans>
+        -->
     </properties>
 
     <dependencies>

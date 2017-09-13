@@ -17,8 +17,10 @@
     <modules>
         <module>basic</module>
         <module>hl7</module>
+        <!--
         <module>ref</module>
         <module>osgi</module>
+        -->
         <module>xds</module>
         <module>config</module>
         <module>iheclient</module>

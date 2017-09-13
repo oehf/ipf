@@ -13,6 +13,7 @@
     </parent>
 
     <properties>
+        <!--
         <osgi.export.pkg>
             org.openehealth.ipf.platform.camel.ihe.hl7v3*
         </osgi.export.pkg>
@@ -22,6 +23,7 @@
             org.slf4j.*;version="[1.6,2)",
             *
         </osgi.import.pkg>
+        -->
     </properties>
 
     <dependencies>
@@ -86,11 +88,13 @@
             <artifactId>easymock</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jta_1.1_spec</artifactId>
             <scope>test</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>

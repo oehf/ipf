@@ -103,7 +103,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <forkMode>always</forkMode>
+                    <reuseForks>false</reuseForks>
                     <excludes>
                         <exclude>**/support/**/*.java</exclude>
                         <exclude>**/TestTransmogrifier.*</exclude>

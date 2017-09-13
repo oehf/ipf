@@ -10,7 +10,7 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
-        <camel-version>2.19.1</camel-version>
+        <camel-version>2.19.2</camel-version>
         <cxf-version>3.1.12</cxf-version>
         <groovy-version>2.4.12</groovy-version>
         <hapi-version>2.3</hapi-version>
@@ -24,10 +24,8 @@
         <opensaml-version>3.3.0</opensaml-version>
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
-        <spring-version>4.3.9.RELEASE</spring-version>
-        <spring-boot-version>1.5.4.RELEASE</spring-boot-version>
-        <spring-karaf-version>3.2.11.RELEASE_1</spring-karaf-version>
-        <spring-osgi-version>1.2.1</spring-osgi-version>
+        <spring-version>4.3.11.RELEASE</spring-version>
+        <spring-boot-version>1.5.6.RELEASE</spring-boot-version>
         <xmlsec-version>2.0.8</xmlsec-version>
 
         <github.global.server>github</github.global.server>
@@ -544,40 +542,6 @@
                 <version>${slf4j-version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework.osgi</groupId>
-                <artifactId>spring-osgi-core</artifactId>
-                <version>${spring-osgi-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>org.springframework.beans</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>org.springframework.core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>org.springframework.context</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>org.springframework.aop</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.osgi</groupId>
-                <artifactId>spring-osgi-extender</artifactId>
-                <version>${spring-osgi-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.osgi</groupId>
-                <artifactId>spring-osgi-mock</artifactId>
-                <version>${spring-osgi-version}</version>
-                <scope>test</scope>
-            </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-flow</artifactId>

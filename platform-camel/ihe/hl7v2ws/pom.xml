@@ -13,6 +13,7 @@
     </parent>
 
     <properties>
+        <!--
         <osgi.export.pkg>
             org.openehealth.ipf.platform.camel.ihe.hl7v2ws*
         </osgi.export.pkg>
@@ -20,6 +21,7 @@
               org.slf4j.*;version="[1.6,2)",
               *
         </osgi.import.pkg>
+        -->
     </properties>
 
     <dependencies>

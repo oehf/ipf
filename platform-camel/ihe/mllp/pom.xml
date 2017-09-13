@@ -7,12 +7,14 @@
     <url>${site.url}/${project.artifactId}</url>
 
     <properties>
+        <!--
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.mllp.*</osgi.export.pkg>
         <osgi.import.pkg>
             org.slf4j.*;version="[1.6,2)",
             org.apache.mina.*;version="[2,3)",
             *
         </osgi.import.pkg>
+        -->
     </properties>
 
     <parent>
@@ -70,11 +72,13 @@
         </dependency>
 
         <!-- dependencies for test -->
+        <!--
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jta_1.1_spec</artifactId>
             <scope>test</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
