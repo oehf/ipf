@@ -906,7 +906,12 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
-                <artifactId>ipf-fhir-spring-boot-starter</artifactId>
+                <artifactId>ipf-fhir-dstu2-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.boot</groupId>
+                <artifactId>ipf-fhir-stu3-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
