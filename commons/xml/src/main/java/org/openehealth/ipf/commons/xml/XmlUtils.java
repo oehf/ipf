@@ -17,9 +17,12 @@ package org.openehealth.ipf.commons.xml;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,6 +72,27 @@ abstract public class XmlUtils {
         }
         Matcher matcher = ROOT_ELEMENT_PATTERN.matcher(s);
         return (matcher.find() && (matcher.start() == 0)) ? matcher.group(1) : null;
+    }
+
+    /**
+     * Creates a String representation of a JAXB object.
+     *
+     * @param jaxbContext JAXB context corresponding to the object's type
+     * @param object      The JAXB object to be processed
+     * @param prettyPrint Whether the XML shall nbe pretty printed or not
+     * @return String representation of the given  JAXB object
+     */
+    public static String renderJaxb(JAXBContext jaxbContext, Object object, Boolean prettyPrint) {
+        try {
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, prettyPrint);
+            StringWriter writer = new StringWriter();
+            marshaller.marshal(object, writer);
+            return writer.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
