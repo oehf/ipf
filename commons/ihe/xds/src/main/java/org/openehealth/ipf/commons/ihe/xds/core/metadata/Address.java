@@ -183,7 +183,6 @@ public class Address extends Hl7v2Based<XAD> {
     @Override
     public String toString() {
         return "Address(" +
-                "super=" + super.toString() +
                 "streetAddress=" + getStreetAddress() +
                 ", otherDesignation=" + getOtherDesignation() +
                 ", city=" + getCity() +

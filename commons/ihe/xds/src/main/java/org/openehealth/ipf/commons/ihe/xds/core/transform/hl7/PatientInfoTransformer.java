@@ -16,11 +16,10 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
 import ca.uhn.hl7v2.parser.PipeParser;
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Transformation logic for a {@link PatientInfo}.
@@ -30,8 +29,6 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class PatientInfoTransformer {
-
-    public static final Pattern FIELD_ID_PATTERN = Pattern.compile("([A-Z][A-Z][A-Z0-9])-(\\d\\d?)");
 
     /**
      * Creates a {@link PatientInfo} instance via an HL7 XCN string.
@@ -78,22 +75,20 @@ public class PatientInfoTransformer {
 
         List<String> result = new ArrayList<>();
 
-        patientInfo.getFieldIds().stream().sorted(new Hl7FieldIdComparator()).forEach(fieldId -> {
+        patientInfo.getAllFieldIds().stream().sorted(new PatientInfo.Hl7FieldIdComparator()).forEach(fieldId -> {
             ListIterator<String> iterator = patientInfo.getHl7FieldIterator(fieldId);
             String prefix = fieldId + '|';
             StringBuilder sb = new StringBuilder(prefix);
             while (iterator.hasNext()) {
-                String repetition = iterator.next();
-                if (repetition != null) {
-                    if ((repetition.length() > 255 - sb.length()) && (sb.length() > prefix.length())) {
-                        sb.setLength(sb.length() - 1);
-                        result.add(sb.toString());
-                        sb.setLength(prefix.length());
-                    }
-                    sb.append(repetition).append('~');
+                String repetition = StringUtils.trimToEmpty(iterator.next());
+                if ((repetition.length() > 255 - sb.length()) && (sb.length() > prefix.length())) {
+                    sb.setLength(sb.length() - 1);
+                    result.add(sb.toString());
+                    sb.setLength(prefix.length());
                 }
+                sb.append(repetition).append('~');
             }
-            if (sb.length() > prefix.length()) {
+            if (sb.length() > prefix.length() + 1) {
                 sb.setLength(sb.length() - 1);
                 result.add(sb.toString());
             }
@@ -102,16 +97,4 @@ public class PatientInfoTransformer {
         return result;
     }
 
-
-    private static class Hl7FieldIdComparator implements Comparator<String> {
-        @Override
-        public int compare(String o1, String o2) {
-            Matcher matcher1 = FIELD_ID_PATTERN.matcher(o1);
-            Matcher matcher2 = FIELD_ID_PATTERN.matcher(o2);
-            if (matcher1.matches() && matcher2.matches() && matcher1.group(1).equals(matcher2.group(1))) {
-                return Integer.parseInt(matcher1.group(2)) - Integer.parseInt(matcher2.group(2));
-            }
-            return o1.compareTo(o2);
-        }
-    }
 }

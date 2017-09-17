@@ -35,8 +35,7 @@ public class DateOfBirthPIDTransformerTest {
         PatientInfo patientInfo = new PatientInfo();
         patientInfo.setDateOfBirth("19800102030405+0100");
         ListIterator<String> iterator = patientInfo.getHl7FieldIterator("PID-7");
-        String s = iterator.next();
-        assertEquals("19800102", s);
+        assertEquals("19800102030405+0100", iterator.next());
         assertFalse(iterator.hasNext());
     }
     

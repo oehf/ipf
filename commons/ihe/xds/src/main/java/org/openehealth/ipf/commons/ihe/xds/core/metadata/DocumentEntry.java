@@ -82,7 +82,9 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     /**
      * @param author
      *          the author of the document.
+     * @deprecated please add the author to the list returned by {@link #getAuthors()}
      */
+    @Deprecated
     public void setAuthor(Author author) {
         authors.clear();
         authors.add(author);
@@ -92,7 +94,9 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
      * @return the author of the document. If the document has multiple authors
      *          this method returns only the first in the list. If the document
      *          has no authors, this method returns {@code null}.
+     * @deprecated please iterate over the list returned by {@link #getAuthors()}
      */
+    @Deprecated
     public Author getAuthor() {
         return authors.isEmpty() ? null : authors.get(0);
     }

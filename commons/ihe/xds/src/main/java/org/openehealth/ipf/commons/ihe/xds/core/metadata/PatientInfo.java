@@ -18,36 +18,39 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Represents additional info about a patient.
- * <p>
- * This class contains a subset of the HL7v2 PID segment. The XDS profile prohibits
- * the use of PID-2, PID-4, PID-12 and PID-19.
- * <p>
- * All non-list members of this class are allowed to be <code>null</code>. When
- * transforming to HL7 this indicates that the values are empty. Trailing empty
- * values are removed from the HL7 string.
- * <p>
- * Lists are pre-created and can therefore never be <code>null</code>.
+ * Represents additional information about a patient, as an HL7v2 PID segment
+ * with the following specialities:
+ * <ul>
+ *     <li>Fields PID-3 (patient IDs), PID-5 (patient names), PID-7 (birth date), and
+ *     PID-8 (gender) can be manipulated both as HL7 strings and as XDS metadata objects.
+ *     <li>Fields PID-2, PID-4, PID-12 and PID-19 are prohibited by the XDS standard.</li>
+ * </ul>
+ * <b>IMPORTANT NOTE:</b> in-place modifications of the XDS metadata objects contained in the lists
+ * returned by {@link #getIds()}, {@link #getNames()}, and {@link #getAddresses()} will be <b>not</b>
+ * propagated to their HL7 string counterparts, therefore {@link ListIterator#set(Object)}
+ * shall be used to properly update the both representations.  For example,
+ * <pre>
+ * ListIterator&lt;Name&gt; iter = patientInfo.getNames();
+ * Name name = iter.next();
+ * name.setFamilyName("Krusenstern");
+ * iter.set(name);   // this statement is absolutely essential!
+ * </pre>
+ *
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
 @EqualsAndHashCode(doNotUseGetters = true)
-@ToString(doNotUseGetters = true, exclude = {"stringFields", "pojoFields"})
 public class PatientInfo implements Serializable {
     private static final long serialVersionUID = 7202574584233259959L;
-
-    private List<Identifiable> ids = new ArrayList<>();
-    private List<Name> names = new ArrayList<>();
-    private Timestamp dateOfBirth;
-    private String gender;
-    private List<Address> addresses = new ArrayList<>();
 
     /**
      * Map from HL7 field ID to a list of field repetitions.
@@ -55,18 +58,22 @@ public class PatientInfo implements Serializable {
     private final Map<String, List<String>> stringFields = new HashMap<>();
 
     /**
-     * Map from HL7 field ID to a list of XDS metadata objects (for a standardized subset of fields).
-     * This list of XDS metadata objects will be <code>null</code> when the field is not repeatable.
+     * A map covering a subset of fields with enhanced access mechanisms.
+     * The key is the field index (e.g. "PID-5"), and the value is
+     * <ul>
+     *     <li>for repeatable fields -- list of XDS metadata objects,</li>
+     *     <li>for non-repeatable fields -- always <code>null</code>.</li>
+     * </ul>
      */
     private final Map<String, List<? extends Hl7v2Based>> pojoFields;
 
     public PatientInfo() {
         this.pojoFields = new HashMap<>();
-        this.pojoFields.put("PID-3", ids);
-        this.pojoFields.put("PID-5", names);
+        this.pojoFields.put("PID-3", new ArrayList<Identifiable>());
+        this.pojoFields.put("PID-5", new ArrayList<Name>());
         this.pojoFields.put("PID-7", null);
         this.pojoFields.put("PID-8", null);
-        this.pojoFields.put("PID-11", addresses);
+        this.pojoFields.put("PID-11", new ArrayList<Address>());
     }
 
     private List<String> getStrings(String fieldId) {
@@ -77,8 +84,10 @@ public class PatientInfo implements Serializable {
      * @return IDs of HL7 fields which are currently present in this SourcePatientInfo instance
      *         (note: there can be present fields without any content)
      */
-    public Set<String> getFieldIds() {
-        return stringFields.keySet();
+    public Set<String> getAllFieldIds() {
+        Set<String> result = new HashSet<>();
+        result.addAll(stringFields.keySet());
+        return result;
     }
 
     /**
@@ -86,8 +95,8 @@ public class PatientInfo implements Serializable {
      *         and are not backed up by XDS metadata POJOs
      *         (note: there can be present fields without any content)
      */
-    public Set<String> getOtherFieldIds() {
-        Set<String> set = stringFields.keySet();
+    public Set<String> getCustomFieldIds() {
+        Set<String> set = getAllFieldIds();
         set.removeAll(pojoFields.keySet());
         return set;
     }
@@ -106,19 +115,6 @@ public class PatientInfo implements Serializable {
         ListIterator xdsIterator = (xdsFields != null) ? xdsFields.listIterator() : null;
 
         return new SynchronizingListIterator<String, Hl7v2Based>(stringsIterator, xdsIterator) {
-            private void handleDateOfBirth(String s) {
-                if (previousIndex() == 0) {
-                    int pos = s.indexOf('^');
-                    dateOfBirth = Timestamp.fromHL7((pos > 0) ? s.substring(0, pos) : s);
-                }
-            }
-
-            private void handleGender(String s) {
-                if (previousIndex() == 0) {
-                    gender = StringUtils.trimToNull(s);
-                }
-            }
-
             private void validateParameter(String s) {
                 if ((s != null) && s.contains("~")) {
                     throw new RuntimeException("Repetitions shall be handled by multiple calls to .add()/.set(), and not by the tilde in " + s);
@@ -127,7 +123,6 @@ public class PatientInfo implements Serializable {
 
             @Override
             public void set(String s) {
-                s = StringUtils.trimToEmpty(s);
                 validateParameter(s);
                 getIterator().set(s);
                 switch (fieldId) {
@@ -138,10 +133,8 @@ public class PatientInfo implements Serializable {
                         getOtherIterator().set(Hl7v2Based.parse(s, XpnName.class));
                         break;
                     case "PID-7":
-                        handleDateOfBirth(s);
                         break;
                     case "PID-8":
-                        handleGender(s);
                         break;
                     case "PID-11":
                         getOtherIterator().set(Hl7v2Based.parse(s, Address.class));
@@ -153,7 +146,6 @@ public class PatientInfo implements Serializable {
 
             @Override
             public void add(String s) {
-                s = StringUtils.trimToEmpty(s);
                 validateParameter(s);
                 getIterator().add(s);
                 switch (fieldId) {
@@ -164,10 +156,8 @@ public class PatientInfo implements Serializable {
                         getOtherIterator().add(Hl7v2Based.parse(s, XpnName.class));
                         break;
                     case "PID-7":
-                        handleDateOfBirth(s);
                         break;
                     case "PID-8":
-                        handleGender(s);
                         break;
                     case "PID-11":
                         getOtherIterator().add(Hl7v2Based.parse(s, Address.class));
@@ -189,11 +179,11 @@ public class PatientInfo implements Serializable {
 
         return new SynchronizingListIterator<T, String>(xdsIterator, stringsIterator) {
             private T prepareValue(T xdsObject) {
-                if ("PID-5".equals(fieldId) && (xdsObject != null) && (xdsObject instanceof XcnName)) {
-                    Name name = new XpnName();
+                if ("PID-5".equals(fieldId) && (xdsObject != null) && !(xdsObject instanceof XpnName)) {
+                    Name xpnName = new XpnName();
                     try {
-                        BeanUtils.copyProperties(name, xdsObject);
-                        return (T) name;
+                        BeanUtils.copyProperties(xpnName, xdsObject);
+                        return (T) xpnName;
                     } catch (Exception e) {
                         throw new RuntimeException("Could not copy properties");
                     }
@@ -218,6 +208,7 @@ public class PatientInfo implements Serializable {
     }
 
     /**
+     * Returns a snapshot of list of patient IDs.  See the note in the class javadoc.
      * @return iterator over the IDs of the patient (PID-3).
      */
     public ListIterator<Identifiable> getIds() {
@@ -225,24 +216,34 @@ public class PatientInfo implements Serializable {
     }
 
     /**
+     * Returns a snapshot of the list of patient names.  See the note in the class javadoc.
      * @return iterator over the names of the patient (PID-5).
      */
     public ListIterator<Name> getNames() {
         return getXdsFieldIterator("PID-5");
     }
 
+    private String getFirstStringValue(String fieldName) {
+        List<String> list = stringFields.get(fieldName);
+        return ((list != null) && !list.isEmpty()) ? list.get(0) : null;
+    }
+
     /**
      * @return the date of birth of the patient (PID-7).
      */
     public Timestamp getDateOfBirth() {
-        return dateOfBirth;
+        String s = getFirstStringValue("PID-7");
+        if (s != null) {
+            int pos = s.indexOf('^');
+            return Timestamp.fromHL7((pos > 0) ? s.substring(0, pos) : s);
+        }
+        return null;
     }
 
     /**
      * @param date the date of birth of the patient (PID-7).
      */
     public void setDateOfBirth(Timestamp date) {
-        this.dateOfBirth = date;
         setDateOfBirthString(Timestamp.toHL7(date));
     }
 
@@ -250,45 +251,44 @@ public class PatientInfo implements Serializable {
      * @param date the date of birth of the patient (PID-7).
      */
     public void setDateOfBirth(String date) {
-        this.dateOfBirth = Timestamp.fromHL7(date);
-        setDateOfBirthString(date);
+        setDateOfBirthString(StringUtils.stripToNull(date));
     }
 
     private void setDateOfBirthString(String date) {
         List<String> strings = getStrings("PID-7");
         strings.clear();
-        if ((date != null) && (date.length() > 8)) {
-            date = date.substring(0, 8);
+        if (date != null) {
+            strings.add(date);
         }
-        strings.add(date);
     }
 
     /**
      * @return the gender of the patient (PID-8).
      */
     public String getGender() {
-        return gender;
+        return StringUtils.stripToNull(getFirstStringValue("PID-8"));
     }
 
     /**
      * @param gender the gender of the patient (PID-8).
      */
     public void setGender(String gender) {
-        this.gender = gender;
         List<String> strings = getStrings("PID-8");
         strings.clear();
-        if (gender != null) {
-            strings.add(gender);
+        String s = StringUtils.stripToNull(gender);
+        if (s != null) {
+            strings.add(s);
         }
     }
-    
+
     /**
+     * Returns a snapshot of the list of patient addresses.  See the note in the class javadoc.
      * @return iterator over thr addresses of the patient (PID-11).
      */
     public ListIterator<Address> getAddresses() {
         return getXdsFieldIterator("PID-11");
     }
-    
+
     abstract private static class SynchronizingListIterator<T, OtherT> implements ListIterator<T> {
         @Getter(AccessLevel.PROTECTED) private final ListIterator<T> iterator;
         @Getter(AccessLevel.PROTECTED) private final ListIterator<OtherT> otherIterator;
@@ -343,4 +343,42 @@ public class PatientInfo implements Serializable {
         }
     }
 
+    public static class Hl7FieldIdComparator implements Comparator<String> {
+        public static final Pattern FIELD_ID_PATTERN = Pattern.compile("([A-Z][A-Z][A-Z0-9])-(\\d\\d?)");
+
+        @Override
+        public int compare(String o1, String o2) {
+            Matcher matcher1 = FIELD_ID_PATTERN.matcher(o1);
+            Matcher matcher2 = FIELD_ID_PATTERN.matcher(o2);
+            if (matcher1.matches() && matcher2.matches() && matcher1.group(1).equals(matcher2.group(1))) {
+                return Integer.parseInt(matcher1.group(2)) - Integer.parseInt(matcher2.group(2));
+            }
+            return o1.compareTo(o2);
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder()
+                .append("PatientInfo(")
+                .append("ids=")
+                .append(pojoFields.get("PID-3"))
+                .append(", names=")
+                .append(pojoFields.get("PID-5"))
+                .append(", birthDate=")
+                .append(getDateOfBirth())
+                .append(", gender=")
+                .append(getGender())
+                .append(", addresses=")
+                .append(pojoFields.get("PID-11"));
+
+        getCustomFieldIds().stream().sorted(new Hl7FieldIdComparator()).forEach(fieldId -> {
+            List<String> values = stringFields.get(fieldId);
+            if (!values.isEmpty()) {
+                sb.append(", ").append(fieldId).append('=').append(values);
+            }
+        });
+
+        return sb.append(')').toString();
+    }
 }
