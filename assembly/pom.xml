@@ -112,42 +112,6 @@
             <artifactId>ipf-modules-hl7dsl</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>ipf-osgi-commons</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>ipf-osgi-config-jms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>ipf-osgi-config-log</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>ipf-osgi-config-ihe-atna</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>ipf-osgi-config-ihe-hl7v2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>ipf-osgi-config-ihe-hl7v3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>ipf-osgi-config-ihe-xds</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>ipf-osgi-extender-basic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>ipf-osgi-extender-spring</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-cda</artifactId>
         </dependency>
