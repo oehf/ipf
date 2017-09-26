@@ -17,7 +17,7 @@
         <hapi-fhir-version>2.5</hapi-fhir-version>
         <ipf-flow-manager-version>3.3.0</ipf-flow-manager-version>
         <ipf-gazelle-version>1.2.0</ipf-gazelle-version>
-        <ipf-oht-atna-version>3.6-SNAPSHOT</ipf-oht-atna-version>
+        <ipf-oht-atna-version>3.6-20170926</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jaxb-version>2.2.11</jaxb-version>
         <mina2-version>2.0.16</mina2-version>
