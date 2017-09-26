@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.openehealth.ipf.boot</groupId>
         <artifactId>ipf-spring-boot</artifactId>
-        <version>3.4-20170926</version>
+        <version>3.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>ipf-hpd-spring-boot-starter</artifactId>
