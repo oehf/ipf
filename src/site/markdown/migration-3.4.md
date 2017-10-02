@@ -70,6 +70,15 @@ For further information and code samples, please take a look at the classes
 `org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.pid.PatientInfoTest`.
 
 
+### Simplified creation of ITI-43/ITI-86 requests from existing DocumentEntries
+
+In the simplified XDS data model, the new method `addReferenceTo(DocumentEntry entry)` in the classes 
+`org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet` and
+`org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments` 
+provides a convenient way to add a reference to the document, represented by the given document entry, 
+to an ITI-43 or an ITI-86 request.
+
+
 ### IHE Profile Updates
 
 IPF 3.4 is compatible with IHE ITI Revision 14 (published on July 21, 2017), including changes from the following Change Proposals:

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 
 import javax.xml.bind.annotation.XmlElementRef;
 import java.io.Serializable;
@@ -38,4 +39,15 @@ abstract public class NonconstructiveDocumentSetRequest implements Serializable 
 
     @XmlElementRef
     @Getter private final List<DocumentReference> documents = new ArrayList<>();
+
+    /**
+     * Adds the document, represented by the given document entry, to the list of referenced documents.
+     * @param documentEntry document entry.
+     */
+    public void addReferenceTo(DocumentEntry documentEntry) {
+        documents.add(new DocumentReference(
+                documentEntry.getRepositoryUniqueId(),
+                documentEntry.getUniqueId(),
+                documentEntry.getHomeCommunityId()));
+    }
 }
