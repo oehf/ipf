@@ -201,7 +201,7 @@ public class BasicXuaProcessor implements XuaProcessor {
     private static CodedValueType elementToCode(Element element) {
         CodedValueType cvt = new CodedValueType();
         cvt.setCode(element.getAttribute("code"));
-        cvt.setCodeSystemName(element.getAttribute("codeSystemName"));
+        cvt.setCodeSystemName(element.getAttribute("codeSystem"));
         cvt.setOriginalText(element.getAttribute("displayName"));
         return cvt;
     }
