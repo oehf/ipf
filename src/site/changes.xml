@@ -23,7 +23,21 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="3.3.0" date="TBD" description="IPF 3.3.0">
+        <release version="3.4.0" date="TBD" description="IPF 3.4.0">4
+            <action dev="unixoid" issue="164" type="update">
+                Support arbitrary PID fields in XDS SourcePatientInfo.
+            </action>
+            <action dev="unixoid" issue="163" type="fix">
+                Fixed translation of patient names between HL7v2 and HL7v3.
+            </action>
+            <action dev="unixoid" issue="162" type="add">
+                ATNA records are enriched with user roles and patient IDs extracted from XUA SAML tokens.
+            </action>
+            <action dev="unixoid" issue="161" type="fix">
+                Bouncycastle is excluded from IPF dependencies.
+            </action>
+        </release>
+        <release version="3.3.0" date="19 Jun 2017" description="IPF 3.3.0">
             <action dev="unixoid" issue="157" type="update">
                 Changes in SOAP/MLLP payload logging: application-wide behavior is controlled using system
                 properties instead of global variables, and it is possible to use regular Java logging
