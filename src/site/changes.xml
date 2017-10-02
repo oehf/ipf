@@ -24,6 +24,12 @@
     </properties>
     <body>
         <release version="3.4.0" date="TBD" description="IPF 3.4.0">4
+            <action dev="unixoid" issue="168" type="add">
+                Simplify creation of ITI-43/ITI-86 requests from existing DocumentEntries.
+            </action>
+            <action dev="unixoid" issue="167" type="add">
+                Support Cross-Community Metadata Update (XCMU) profile.
+            </action>
             <action dev="unixoid" issue="164" type="update">
                 Support arbitrary PID fields in XDS SourcePatientInfo.
             </action>
