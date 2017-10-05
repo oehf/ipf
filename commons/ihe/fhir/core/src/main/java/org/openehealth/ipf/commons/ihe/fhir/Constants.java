@@ -45,11 +45,11 @@ public interface Constants {
 
 
     // Paging stuff
-    String FHIR_COUNT = ca.uhn.fhir.rest.server.Constants.PARAM_COUNT;
-    String FHIR_FIRST = ca.uhn.fhir.rest.server.Constants.LINK_FIRST;
-    String FHIR_LAST= ca.uhn.fhir.rest.server.Constants.LINK_LAST;
-    String FHIR_PREVIOUS = ca.uhn.fhir.rest.server.Constants.LINK_PREVIOUS;
-    String FHIR_NEXT = ca.uhn.fhir.rest.server.Constants.LINK_NEXT;
+    String FHIR_COUNT = ca.uhn.fhir.rest.api.Constants.PARAM_COUNT;
+    String FHIR_FIRST = ca.uhn.fhir.rest.api.Constants.LINK_FIRST;
+    String FHIR_LAST= ca.uhn.fhir.rest.api.Constants.LINK_LAST;
+    String FHIR_PREVIOUS = ca.uhn.fhir.rest.api.Constants.LINK_PREVIOUS;
+    String FHIR_NEXT = ca.uhn.fhir.rest.api.Constants.LINK_NEXT;
 
     String FHIR_FROM_INDEX = "FhirFromIndex";
     String FHIR_TO_INDEX = "FhirToIndex";

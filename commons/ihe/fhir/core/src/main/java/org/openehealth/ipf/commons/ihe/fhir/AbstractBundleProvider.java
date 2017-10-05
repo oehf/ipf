@@ -17,7 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.model.primitive.InstantDt;
-import ca.uhn.fhir.rest.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.HashMap;

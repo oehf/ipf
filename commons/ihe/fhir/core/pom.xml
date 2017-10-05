@@ -21,7 +21,11 @@
     <dependencies>
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
-            <artifactId>hapi-fhir-base</artifactId>
+            <artifactId>hapi-fhir-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>hapi-fhir-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>

@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer;
 
-import ca.uhn.fhir.rest.client.IClientInterceptor;
+import ca.uhn.fhir.rest.client.api.IClientInterceptor;
 import ca.uhn.fhir.rest.client.api.IHttpRequest;
 import ca.uhn.fhir.rest.client.api.IHttpResponse;
 import org.apache.camel.Exchange;

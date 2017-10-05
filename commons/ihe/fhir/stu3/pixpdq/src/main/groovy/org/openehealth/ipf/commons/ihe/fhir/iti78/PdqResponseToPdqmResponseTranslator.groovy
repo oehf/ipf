@@ -27,10 +27,10 @@ import org.hl7.fhir.dstu3.model.Address.AddressUse
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointSystem
 import org.hl7.fhir.dstu3.model.ContactPoint.ContactPointUse
 import org.hl7.fhir.dstu3.model.HumanName.NameUse
-import org.hl7.fhir.dstu3.model.codesystems.V3MaritalStatus
-import org.hl7.fhir.dstu3.model.codesystems.V3NullFlavor
-import org.hl7.fhir.dstu3.model.codesystems.V3ReligiousAffiliation
 import org.openehealth.ipf.commons.ihe.fhir.Utils
+import org.openehealth.ipf.commons.ihe.fhir.V3MaritalStatus
+import org.openehealth.ipf.commons.ihe.fhir.V3NullFlavor
+import org.openehealth.ipf.commons.ihe.fhir.V3ReligiousAffiliation
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
@@ -169,7 +169,9 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
             def mappedMaritalStatus
             switch (mapped) {
                 case "UNK":
-                    mappedMaritalStatus = V3NullFlavor.UNK; break;
+                    mappedMaritalStatus = new Coding()
+                            .setSystem('http://hl7.org/fhir/v3/NullFlavor')
+                            V3NullFlavor.UNK; break;
                 case "U":
                     mappedMaritalStatus = new Coding()
                             .setSystem('http://hl7.org/fhir/marital-status')
@@ -226,7 +228,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
             patient.setMultipleBirth(new BooleanType(pid[24].value == 'Y'))
         }
 
-        // Nationality
+        // Citizenship
         if (pid[26].value) {
             CodeableConcept citizenship = new CodeableConcept()
             String mapped = pid[18].value.map('hl7v2fhir-patient-citizenship')
@@ -234,7 +236,10 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
             switch (mapped) {
                 case "UNK":
                     mappedCitizenship = V3NullFlavor.UNK; break;
-                default: mappedCitizenship = V3ReligiousAffiliation.fromCode(mapped)
+                default: mappedCitizenship = new Coding()
+                    .setCode(mapped)
+                    .setSystem("urn:iso:std:iso:3166")
+                    .setDisplay(mapped)
             }
             citizenship.addCoding()
                     .setCode(mapped)

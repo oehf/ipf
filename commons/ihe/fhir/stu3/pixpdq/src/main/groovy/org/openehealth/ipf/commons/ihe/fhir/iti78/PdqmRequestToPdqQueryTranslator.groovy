@@ -58,7 +58,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     String pdqSupplierResourceIdentifierUri
     private String pdqSupplierResourceIdentifierOid
 
-    private final UriMapper uriMapper;
+    private final UriMapper uriMapper
 
     /**
      * @param uriMapper mapping for translating FHIR URIs into OIDs

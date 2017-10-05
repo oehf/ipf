@@ -17,7 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.rest.client.IGenericClient;
+import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
 import org.hl7.fhir.dstu3.model.OperationOutcome;

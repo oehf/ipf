@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
 import org.hl7.fhir.instance.model.Bundle;
 import org.hl7.fhir.instance.model.DocumentManifest;
-import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
 
 /**

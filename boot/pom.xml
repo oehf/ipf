@@ -25,6 +25,7 @@
         <module>ipf-hpd-spring-boot-starter</module>
     </modules>
 
+    <!--
     <build>
         <plugins>
             <plugin>
@@ -52,6 +53,7 @@
 
         </plugins>
     </build>
+    -->
 
     <distributionManagement>
         <site>

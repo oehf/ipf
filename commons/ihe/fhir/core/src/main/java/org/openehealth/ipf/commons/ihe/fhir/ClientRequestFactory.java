@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
-import ca.uhn.fhir.rest.client.IGenericClient;
+import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 
 import java.util.Map;

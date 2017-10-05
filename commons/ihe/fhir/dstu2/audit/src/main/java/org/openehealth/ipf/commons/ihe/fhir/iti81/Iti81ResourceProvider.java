@@ -21,11 +21,10 @@ import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.param.DateAndListParam;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
-import ca.uhn.fhir.rest.server.IBundleProvider;
 import org.hl7.fhir.instance.model.AuditEvent;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 

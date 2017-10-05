@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
-import ca.uhn.fhir.rest.client.IGenericClient;
+import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import ca.uhn.fhir.rest.gclient.IQuery;
@@ -41,7 +41,7 @@ public class QueryClientRequestFactory<T extends IBaseBundle> implements ClientR
 
     @Override
     public IClientExecutable<IQuery<T>, T> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
-        IQuery<ca.uhn.fhir.model.api.Bundle> query;
+        IQuery<IBaseBundle> query;
         if (requestData instanceof ICriterion) {
             query = client.search()
                     .forResource(type)

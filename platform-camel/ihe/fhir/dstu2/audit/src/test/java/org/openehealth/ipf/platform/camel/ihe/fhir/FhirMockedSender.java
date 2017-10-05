@@ -20,7 +20,6 @@ import ca.uhn.fhir.validation.FhirValidator;
 import ca.uhn.fhir.validation.SingleValidationMessage;
 import ca.uhn.fhir.validation.ValidationResult;
 import lombok.extern.slf4j.Slf4j;
-import org.hl7.fhir.instance.hapi.validation.FhirInstanceValidator;
 import org.hl7.fhir.instance.model.AuditEvent;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.core.atna.AbstractMockedAuditSender;
@@ -49,8 +48,8 @@ public class FhirMockedSender extends AbstractMockedAuditSender<AuditEvent> {
             log.debug(fhirContext.newXmlParser().setPrettyPrint(true).encodeResourceToString(auditEventResource));
             if (needValidation) {
                 FhirValidator validator = fhirContext.newValidator();
-                FhirInstanceValidator instanceValidator = new FhirInstanceValidator();
-                validator.registerValidatorModule(instanceValidator);
+                // FhirInstanceValidator instanceValidator = new FhirInstanceValidator();
+                // validator.registerValidatorModule(instanceValidator);
                 ValidationResult result = validator.validateWithResult(auditEventResource);
                 if (!result.isSuccessful()) {
                     StringBuilder sb = new StringBuilder("Validation of FHIR AuditEvent failed:");

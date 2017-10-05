@@ -18,10 +18,10 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.RequestTypeEnum;
-import ca.uhn.fhir.rest.client.RestfulClientFactory;
 import ca.uhn.fhir.rest.client.apache.ApacheHttpClient;
 import ca.uhn.fhir.rest.client.api.Header;
 import ca.uhn.fhir.rest.client.api.IHttpClient;
+import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;

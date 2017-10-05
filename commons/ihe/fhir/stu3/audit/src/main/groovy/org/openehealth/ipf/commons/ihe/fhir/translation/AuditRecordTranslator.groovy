@@ -15,22 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.translation
 
-import org.hl7.fhir.dstu3.model.AuditEvent
-import org.hl7.fhir.dstu3.model.BooleanType
-import org.hl7.fhir.dstu3.model.CodeableConcept
-import org.hl7.fhir.dstu3.model.Coding
-import org.hl7.fhir.dstu3.model.Identifier
-import org.hl7.fhir.dstu3.model.InstantType
-import org.hl7.fhir.dstu3.model.codesystems.AuditSourceTypeEnumFactory
-import org.hl7.fhir.dstu3.model.codesystems.ObjectRoleEnumFactory
+import org.hl7.fhir.dstu3.model.*
 import org.joda.time.format.ISODateTimeFormat
+import org.openehealth.ipf.commons.ihe.fhir.AuditSourceTypeEnumFactory
+import org.openehealth.ipf.commons.ihe.fhir.ObjectRoleEnumFactory
+import org.openehealth.ipf.commons.ihe.fhir.ObjectTypeEnumFactory
 import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ActiveParticipantType
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.AuditSourceIdentificationType
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.EventIdentificationType
-import org.openhealthtools.ihe.atna.auditor.models.rfc3881.ParticipantObjectIdentificationType
-
+import org.openhealthtools.ihe.atna.auditor.models.rfc3881.*
 
 /**
  * Translates ATNA audit records into FHIR AuditEvent resources.

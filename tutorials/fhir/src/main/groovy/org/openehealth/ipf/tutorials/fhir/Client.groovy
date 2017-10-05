@@ -16,7 +16,7 @@
 package org.openehealth.ipf.tutorials.fhir
 
 import ca.uhn.fhir.context.FhirContext
-import ca.uhn.fhir.rest.client.IGenericClient
+import ca.uhn.fhir.rest.client.api.IGenericClient
 import org.hl7.fhir.instance.model.Parameters
 import org.hl7.fhir.instance.model.Patient
 import org.hl7.fhir.instance.model.StringType

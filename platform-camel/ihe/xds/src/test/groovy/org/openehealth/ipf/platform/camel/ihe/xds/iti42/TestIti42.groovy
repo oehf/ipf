@@ -60,7 +60,7 @@ class TestIti42 extends StandardTestContainer {
     RegisterDocumentSet request
     DocumentEntry docEntry
 
-    def static Map<String, ?> camelHeaders
+    static Map<String, ?> camelHeaders
 
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);

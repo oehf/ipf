@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
-import ca.uhn.fhir.rest.client.IGenericClient;
+import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import org.hl7.fhir.dstu3.model.Parameters;
