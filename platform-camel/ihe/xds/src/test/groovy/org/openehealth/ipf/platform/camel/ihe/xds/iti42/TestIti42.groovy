@@ -165,8 +165,8 @@ class TestIti42 extends StandardTestContainer {
         checkEvent(message.EventIdentification, '110107', 'ITI-42', 'C', outcome)
         checkSource(message.ActiveParticipant[0], 'true')
         checkHumanRequestor(message.ActiveParticipant[1], 'alias2<lipse@demo.com>', [
-                new CodedValueType(code: 'ELE', codeSystemName: 'EPD Codes 1', originalText: 'Electrician'),
-                new CodedValueType(code: 'GYN', codeSystemName: 'EPD Codes 2', originalText: 'Gynecologist'),
+                new CodedValueType(code: 'ELE', codeSystemName: '1.2.3.4.5.6.777.1', originalText: 'Electrician'),
+                new CodedValueType(code: 'GYN', codeSystemName: '1.2.3.4.5.6.777.2', originalText: 'Gynecologist'),
         ])
         checkDestination(message.ActiveParticipant[2], SERVICE2_ADDR, 'false')
         checkAuditSource(message.AuditSourceIdentification, 'registryId')
@@ -185,8 +185,8 @@ class TestIti42 extends StandardTestContainer {
         checkEvent(message.EventIdentification, '110106', 'ITI-42', 'R', outcome)
         checkSource(message.ActiveParticipant[0], 'true')
         checkHumanRequestor(message.ActiveParticipant[1], 'alias2<lipse@demo.com>', [
-                new CodedValueType(code: 'ELE', codeSystemName: 'EPD Codes 1', originalText: 'Electrician'),
-                new CodedValueType(code: 'GYN', codeSystemName: 'EPD Codes 2', originalText: 'Gynecologist'),
+                new CodedValueType(code: 'ELE', codeSystemName: '1.2.3.4.5.6.777.1', originalText: 'Electrician'),
+                new CodedValueType(code: 'GYN', codeSystemName: '1.2.3.4.5.6.777.2', originalText: 'Gynecologist'),
         ])
         checkDestination(message.ActiveParticipant[2], SERVICE2_ADDR, 'false')
         checkAuditSource(message.AuditSourceIdentification, 'repositoryId')
