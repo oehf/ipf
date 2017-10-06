@@ -18,13 +18,13 @@ package org.openehealth.ipf.platform.camel.ihe.hpd;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.hpd.HpdException;
-import org.openehealth.ipf.commons.ihe.hpd.stub.ErrorType;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse.ErrorType;
 
 @Slf4j
 abstract public class HpdService extends AbstractWebService {
@@ -46,7 +46,7 @@ abstract public class HpdService extends AbstractWebService {
         error.setMessage(exception.getMessage());
         error.setRequestID(request.getRequestID());
         ErrorType errorType = (exception instanceof HpdException) ? ((HpdException) exception).getType() : ErrorType.OTHER;
-        error.setType(errorType.getCode());
+        error.setType(errorType);
 
         BatchResponse response = factory.createBatchResponse();
         response.setRequestID(request.getRequestID());

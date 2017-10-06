@@ -1,13 +1,9 @@
 
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -50,7 +46,7 @@ public class DsmlModification {
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "operation", required = true)
-    protected String operation;
+    protected DsmlModification.ModificationOperationType operation;
 
     /**
      * Gets the value of the value property.
@@ -110,10 +106,10 @@ public class DsmlModification {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link DsmlModification.ModificationOperationType }
      *     
      */
-    public String getOperation() {
+    public DsmlModification.ModificationOperationType getOperation() {
         return operation;
     }
 
@@ -122,11 +118,59 @@ public class DsmlModification {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link DsmlModification.ModificationOperationType }
      *     
      */
-    public void setOperation(String value) {
+    public void setOperation(DsmlModification.ModificationOperationType value) {
         this.operation = value;
+    }
+
+
+    /**
+     * <p>Java class for null.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * <pre>
+     * &lt;simpleType>
+     *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+     *     &lt;enumeration value="add"/>
+     *     &lt;enumeration value="delete"/>
+     *     &lt;enumeration value="replace"/>
+     *   &lt;/restriction>
+     * &lt;/simpleType>
+     * </pre>
+     * 
+     */
+    @XmlType(name = "")
+    @XmlEnum
+    public enum ModificationOperationType {
+
+        @XmlEnumValue("add")
+        ADD("add"),
+        @XmlEnumValue("delete")
+        DELETE("delete"),
+        @XmlEnumValue("replace")
+        REPLACE("replace");
+        private final String value;
+
+        ModificationOperationType(String v) {
+            value = v;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        public static DsmlModification.ModificationOperationType fromValue(String v) {
+            for (DsmlModification.ModificationOperationType c: DsmlModification.ModificationOperationType.values()) {
+                if (c.value.equals(v)) {
+                    return c;
+                }
+            }
+            throw new IllegalArgumentException(v);
+        }
+
     }
 
 }

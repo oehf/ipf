@@ -1,0 +1,37 @@
+<jaxb:bindings
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+        xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+        jaxb:extensionBindingPrefixes="xjc"
+        version="2.1">
+
+    <!--
+    How to build:
+    xjc -extension -d <path> -b DSMLv2.xjb -p org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2 DSMLv2.xsd
+    -->
+
+    <jaxb:bindings schemaLocation="DSMLv2.xsd">
+        <jaxb:bindings node="//xs:complexType[@name='BatchRequest']/xs:attribute[@name='processing']/xs:simpleType">
+            <jaxb:typesafeEnumClass name="RequestProcessingType"/>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='BatchRequest']/xs:attribute[@name='responseOrder']/xs:simpleType">
+            <jaxb:typesafeEnumClass name="RequestResponseOrder"/>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='BatchRequest']/xs:attribute[@name='onError']/xs:simpleType">
+            <jaxb:typesafeEnumClass name="RequestErrorHandlingType"/>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='ErrorResponse']/xs:attribute[@name='type']/xs:simpleType">
+            <jaxb:typesafeEnumClass name="ErrorType"/>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='SearchRequest']/xs:complexContent/xs:extension/xs:attribute[@name='scope']/xs:simpleType">
+            <jaxb:typesafeEnumClass name="SearchScope"/>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='SearchRequest']/xs:complexContent/xs:extension/xs:attribute[@name='derefAliases']/xs:simpleType">
+            <jaxb:typesafeEnumClass name="DerefAliasesType"/>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='DsmlModification']/xs:attribute[@name='operation']/xs:simpleType">
+            <jaxb:typesafeEnumClass name="ModificationOperationType"/>
+        </jaxb:bindings>
+    </jaxb:bindings>
+
+</jaxb:bindings>

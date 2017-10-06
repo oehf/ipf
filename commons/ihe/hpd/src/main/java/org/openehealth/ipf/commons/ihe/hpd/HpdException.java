@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.hpd;
 
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
-import org.openehealth.ipf.commons.ihe.hpd.stub.ErrorType;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse.ErrorType;
 
 /**
  * @author Dmytro Rud
