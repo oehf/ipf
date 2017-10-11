@@ -1,11 +1,7 @@
 
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -66,9 +62,9 @@ public class SearchRequest
     @XmlAttribute(name = "dn", required = true)
     protected String dn;
     @XmlAttribute(name = "scope", required = true)
-    protected String scope;
+    protected SearchRequest.SearchScope scope;
     @XmlAttribute(name = "derefAliases", required = true)
-    protected String derefAliases;
+    protected SearchRequest.DerefAliasesType derefAliases;
     @XmlAttribute(name = "sizeLimit")
     protected Long sizeLimit;
     @XmlAttribute(name = "timeLimit")
@@ -153,10 +149,10 @@ public class SearchRequest
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link SearchRequest.SearchScope }
      *     
      */
-    public String getScope() {
+    public SearchRequest.SearchScope getScope() {
         return scope;
     }
 
@@ -165,10 +161,10 @@ public class SearchRequest
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link SearchRequest.SearchScope }
      *     
      */
-    public void setScope(String value) {
+    public void setScope(SearchRequest.SearchScope value) {
         this.scope = value;
     }
 
@@ -177,10 +173,10 @@ public class SearchRequest
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link SearchRequest.DerefAliasesType }
      *     
      */
-    public String getDerefAliases() {
+    public SearchRequest.DerefAliasesType getDerefAliases() {
         return derefAliases;
     }
 
@@ -189,10 +185,10 @@ public class SearchRequest
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link SearchRequest.DerefAliasesType }
      *     
      */
-    public void setDerefAliases(String value) {
+    public void setDerefAliases(SearchRequest.DerefAliasesType value) {
         this.derefAliases = value;
     }
 
@@ -278,6 +274,105 @@ public class SearchRequest
      */
     public void setTypesOnly(Boolean value) {
         this.typesOnly = value;
+    }
+
+
+    /**
+     * <p>Java class for null.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * <pre>
+     * &lt;simpleType>
+     *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+     *     &lt;enumeration value="neverDerefAliases"/>
+     *     &lt;enumeration value="derefInSearching"/>
+     *     &lt;enumeration value="derefFindingBaseObj"/>
+     *     &lt;enumeration value="derefAlways"/>
+     *   &lt;/restriction>
+     * &lt;/simpleType>
+     * </pre>
+     * 
+     */
+    @XmlType(name = "")
+    @XmlEnum
+    public enum DerefAliasesType {
+
+        @XmlEnumValue("neverDerefAliases")
+        NEVER_DEREF_ALIASES("neverDerefAliases"),
+        @XmlEnumValue("derefInSearching")
+        DEREF_IN_SEARCHING("derefInSearching"),
+        @XmlEnumValue("derefFindingBaseObj")
+        DEREF_FINDING_BASE_OBJ("derefFindingBaseObj"),
+        @XmlEnumValue("derefAlways")
+        DEREF_ALWAYS("derefAlways");
+        private final String value;
+
+        DerefAliasesType(String v) {
+            value = v;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        public static SearchRequest.DerefAliasesType fromValue(String v) {
+            for (SearchRequest.DerefAliasesType c: SearchRequest.DerefAliasesType.values()) {
+                if (c.value.equals(v)) {
+                    return c;
+                }
+            }
+            throw new IllegalArgumentException(v);
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for null.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * <pre>
+     * &lt;simpleType>
+     *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+     *     &lt;enumeration value="baseObject"/>
+     *     &lt;enumeration value="singleLevel"/>
+     *     &lt;enumeration value="wholeSubtree"/>
+     *   &lt;/restriction>
+     * &lt;/simpleType>
+     * </pre>
+     * 
+     */
+    @XmlType(name = "")
+    @XmlEnum
+    public enum SearchScope {
+
+        @XmlEnumValue("baseObject")
+        BASE_OBJECT("baseObject"),
+        @XmlEnumValue("singleLevel")
+        SINGLE_LEVEL("singleLevel"),
+        @XmlEnumValue("wholeSubtree")
+        WHOLE_SUBTREE("wholeSubtree");
+        private final String value;
+
+        SearchScope(String v) {
+            value = v;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        public static SearchRequest.SearchScope fromValue(String v) {
+            for (SearchRequest.SearchScope c: SearchRequest.SearchScope.values()) {
+                if (c.value.equals(v)) {
+                    return c;
+                }
+            }
+            throw new IllegalArgumentException(v);
+        }
+
     }
 
 }

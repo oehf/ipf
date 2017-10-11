@@ -1,11 +1,7 @@
 
 package org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -65,7 +61,7 @@ public class ErrorResponse {
     @XmlAttribute(name = "requestID")
     protected String requestID;
     @XmlAttribute(name = "type")
-    protected String type;
+    protected ErrorResponse.ErrorType type;
 
     /**
      * Gets the value of the message property.
@@ -144,10 +140,10 @@ public class ErrorResponse {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link ErrorResponse.ErrorType }
      *     
      */
-    public String getType() {
+    public ErrorResponse.ErrorType getType() {
         return type;
     }
 
@@ -156,10 +152,10 @@ public class ErrorResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link ErrorResponse.ErrorType }
      *     
      */
-    public void setType(String value) {
+    public void setType(ErrorResponse.ErrorType value) {
         this.type = value;
     }
 
@@ -214,6 +210,69 @@ public class ErrorResponse {
          */
         public void setAny(Object value) {
             this.any = value;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for null.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * <pre>
+     * &lt;simpleType>
+     *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+     *     &lt;enumeration value="notAttempted"/>
+     *     &lt;enumeration value="couldNotConnect"/>
+     *     &lt;enumeration value="connectionClosed"/>
+     *     &lt;enumeration value="malformedRequest"/>
+     *     &lt;enumeration value="gatewayInternalError"/>
+     *     &lt;enumeration value="authenticationFailed"/>
+     *     &lt;enumeration value="unresolvableURI"/>
+     *     &lt;enumeration value="other"/>
+     *   &lt;/restriction>
+     * &lt;/simpleType>
+     * </pre>
+     * 
+     */
+    @XmlType(name = "")
+    @XmlEnum
+    public enum ErrorType {
+
+        @XmlEnumValue("notAttempted")
+        NOT_ATTEMPTED("notAttempted"),
+        @XmlEnumValue("couldNotConnect")
+        COULD_NOT_CONNECT("couldNotConnect"),
+        @XmlEnumValue("connectionClosed")
+        CONNECTION_CLOSED("connectionClosed"),
+        @XmlEnumValue("malformedRequest")
+        MALFORMED_REQUEST("malformedRequest"),
+        @XmlEnumValue("gatewayInternalError")
+        GATEWAY_INTERNAL_ERROR("gatewayInternalError"),
+        @XmlEnumValue("authenticationFailed")
+        AUTHENTICATION_FAILED("authenticationFailed"),
+        @XmlEnumValue("unresolvableURI")
+        UNRESOLVABLE_URI("unresolvableURI"),
+        @XmlEnumValue("other")
+        OTHER("other");
+        private final String value;
+
+        ErrorType(String v) {
+            value = v;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        public static ErrorResponse.ErrorType fromValue(String v) {
+            for (ErrorResponse.ErrorType c: ErrorResponse.ErrorType.values()) {
+                if (c.value.equals(v)) {
+                    return c;
+                }
+            }
+            throw new IllegalArgumentException(v);
         }
 
     }

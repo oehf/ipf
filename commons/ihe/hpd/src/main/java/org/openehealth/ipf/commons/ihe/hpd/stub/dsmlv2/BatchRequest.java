@@ -74,11 +74,11 @@ public class BatchRequest {
     @XmlAttribute(name = "requestID")
     protected String requestID;
     @XmlAttribute(name = "processing")
-    protected String processing;
+    protected BatchRequest.RequestProcessingType processing;
     @XmlAttribute(name = "responseOrder")
-    protected String responseOrder;
+    protected BatchRequest.RequestResponseOrder responseOrder;
     @XmlAttribute(name = "onError")
-    protected String onError;
+    protected BatchRequest.RequestErrorHandlingType onError;
 
     /**
      * Gets the value of the authRequest property.
@@ -169,12 +169,12 @@ public class BatchRequest {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link BatchRequest.RequestProcessingType }
      *     
      */
-    public String getProcessing() {
+    public BatchRequest.RequestProcessingType getProcessing() {
         if (processing == null) {
-            return "sequential";
+            return BatchRequest.RequestProcessingType.SEQUENTIAL;
         } else {
             return processing;
         }
@@ -185,10 +185,10 @@ public class BatchRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link BatchRequest.RequestProcessingType }
      *     
      */
-    public void setProcessing(String value) {
+    public void setProcessing(BatchRequest.RequestProcessingType value) {
         this.processing = value;
     }
 
@@ -197,12 +197,12 @@ public class BatchRequest {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link BatchRequest.RequestResponseOrder }
      *     
      */
-    public String getResponseOrder() {
+    public BatchRequest.RequestResponseOrder getResponseOrder() {
         if (responseOrder == null) {
-            return "sequential";
+            return BatchRequest.RequestResponseOrder.SEQUENTIAL;
         } else {
             return responseOrder;
         }
@@ -213,10 +213,10 @@ public class BatchRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link BatchRequest.RequestResponseOrder }
      *     
      */
-    public void setResponseOrder(String value) {
+    public void setResponseOrder(BatchRequest.RequestResponseOrder value) {
         this.responseOrder = value;
     }
 
@@ -225,12 +225,12 @@ public class BatchRequest {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link BatchRequest.RequestErrorHandlingType }
      *     
      */
-    public String getOnError() {
+    public BatchRequest.RequestErrorHandlingType getOnError() {
         if (onError == null) {
-            return "exit";
+            return BatchRequest.RequestErrorHandlingType.EXIT;
         } else {
             return onError;
         }
@@ -241,11 +241,146 @@ public class BatchRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link BatchRequest.RequestErrorHandlingType }
      *     
      */
-    public void setOnError(String value) {
+    public void setOnError(BatchRequest.RequestErrorHandlingType value) {
         this.onError = value;
+    }
+
+
+    /**
+     * <p>Java class for null.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * <pre>
+     * &lt;simpleType>
+     *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+     *     &lt;enumeration value="resume"/>
+     *     &lt;enumeration value="exit"/>
+     *   &lt;/restriction>
+     * &lt;/simpleType>
+     * </pre>
+     * 
+     */
+    @XmlType(name = "")
+    @XmlEnum
+    public enum RequestErrorHandlingType {
+
+        @XmlEnumValue("resume")
+        RESUME("resume"),
+        @XmlEnumValue("exit")
+        EXIT("exit");
+        private final String value;
+
+        RequestErrorHandlingType(String v) {
+            value = v;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        public static BatchRequest.RequestErrorHandlingType fromValue(String v) {
+            for (BatchRequest.RequestErrorHandlingType c: BatchRequest.RequestErrorHandlingType.values()) {
+                if (c.value.equals(v)) {
+                    return c;
+                }
+            }
+            throw new IllegalArgumentException(v);
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for null.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * <pre>
+     * &lt;simpleType>
+     *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+     *     &lt;enumeration value="sequential"/>
+     *     &lt;enumeration value="parallel"/>
+     *   &lt;/restriction>
+     * &lt;/simpleType>
+     * </pre>
+     * 
+     */
+    @XmlType(name = "")
+    @XmlEnum
+    public enum RequestProcessingType {
+
+        @XmlEnumValue("sequential")
+        SEQUENTIAL("sequential"),
+        @XmlEnumValue("parallel")
+        PARALLEL("parallel");
+        private final String value;
+
+        RequestProcessingType(String v) {
+            value = v;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        public static BatchRequest.RequestProcessingType fromValue(String v) {
+            for (BatchRequest.RequestProcessingType c: BatchRequest.RequestProcessingType.values()) {
+                if (c.value.equals(v)) {
+                    return c;
+                }
+            }
+            throw new IllegalArgumentException(v);
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for null.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * <pre>
+     * &lt;simpleType>
+     *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+     *     &lt;enumeration value="sequential"/>
+     *     &lt;enumeration value="unordered"/>
+     *   &lt;/restriction>
+     * &lt;/simpleType>
+     * </pre>
+     * 
+     */
+    @XmlType(name = "")
+    @XmlEnum
+    public enum RequestResponseOrder {
+
+        @XmlEnumValue("sequential")
+        SEQUENTIAL("sequential"),
+        @XmlEnumValue("unordered")
+        UNORDERED("unordered");
+        private final String value;
+
+        RequestResponseOrder(String v) {
+            value = v;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        public static BatchRequest.RequestResponseOrder fromValue(String v) {
+            for (BatchRequest.RequestResponseOrder c: BatchRequest.RequestResponseOrder.values()) {
+                if (c.value.equals(v)) {
+                    return c;
+                }
+            }
+            throw new IllegalArgumentException(v);
+        }
+
     }
 
 }

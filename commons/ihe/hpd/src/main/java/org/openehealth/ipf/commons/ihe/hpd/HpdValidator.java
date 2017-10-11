@@ -16,12 +16,12 @@
 package org.openehealth.ipf.commons.ihe.hpd;
 
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import org.openehealth.ipf.commons.ihe.hpd.stub.ErrorType;
 import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.DsmlMessage;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ErrorResponse.ErrorType;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchRequest;
 import org.openehealth.ipf.commons.xml.XsdValidator;
 

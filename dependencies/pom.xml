@@ -11,7 +11,7 @@
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
         <camel-version>2.19.3</camel-version>
-        <cxf-version>3.1.12</cxf-version>
+        <cxf-version>3.2.0</cxf-version>
         <groovy-version>2.4.12</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>3.0.0</hapi-fhir-version>
@@ -19,14 +19,14 @@
         <ipf-gazelle-version>1.2.0</ipf-gazelle-version>
         <ipf-oht-atna-version>3.6-20170926</ipf-oht-atna-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
-        <jaxb-version>2.2.11</jaxb-version>
+        <jaxb-version>2.3.0</jaxb-version>
         <mina2-version>2.0.16</mina2-version>
         <opensaml-version>3.3.0</opensaml-version>
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
         <spring-version>4.3.11.RELEASE</spring-version>
-        <spring-boot-version>1.5.6.RELEASE</spring-boot-version>
-        <xmlsec-version>2.0.8</xmlsec-version>
+        <spring-boot-version>1.5.7.RELEASE</spring-boot-version>
+        <xmlsec-version>2.1.0</xmlsec-version>
 
         <github.global.server>github</github.global.server>
 

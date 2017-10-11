@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.hpd.iti58
 
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.AttributeValueAssertion
@@ -51,8 +50,8 @@ class TestIti58 extends StandardTestContainer {
                 batchRequests: [
                         new SearchRequest(
                                 dn: 'O=HPDTEST1,DC=HPD',
-                                scope: 'wholeSubtree',
-                                derefAliases: 'neverDerefAliases',
+                                scope: SearchRequest.SearchScope.WHOLE_SUBTREE,
+                                derefAliases: SearchRequest.DerefAliasesType.NEVER_DEREF_ALIASES,
                                 filter: new Filter(
                                         approxMatch: new AttributeValueAssertion(
                                                 name: 'displayName',
