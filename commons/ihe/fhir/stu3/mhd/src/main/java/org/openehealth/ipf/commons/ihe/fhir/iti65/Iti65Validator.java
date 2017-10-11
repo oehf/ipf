@@ -17,7 +17,15 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+import ca.uhn.fhir.validation.FhirValidator;
+import ca.uhn.fhir.validation.ValidationResult;
+import org.hl7.fhir.dstu3.hapi.ctx.IValidationSupport;
+import org.hl7.fhir.dstu3.hapi.validation.FhirInstanceValidator;
 import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
+import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.openehealth.ipf.commons.ihe.fhir.CustomValidationSupport;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.FhirUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
@@ -29,22 +37,22 @@ import java.util.function.Function;
  * Validator for ITI-65 transactions.
  *
  * @author Christian Ohr
- * @since 3.2
+ * @since 3.4
  */
 public class Iti65Validator extends FhirTransactionValidator.Support {
 
-    // private static final IValidationSupport VALIDATION_SUPPORT = new CustomValidationSupport("profiles/MHD");
+    private static final IValidationSupport VALIDATION_SUPPORT = new CustomValidationSupport("profiles/MHD");
 
     // Prepare the required validator instances so that the structure definitions are not reloaded each time
-    // private static Map<Class<?>, FhirInstanceValidator> VALIDATORS = new HashMap<>();
+    private static Map<Class<?>, FhirInstanceValidator> VALIDATORS = new HashMap<>();
 
-    /*
+
     static {
         VALIDATORS.put(DocumentManifest.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
         VALIDATORS.put(DocumentReference.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
         VALIDATORS.put(ListResource.class, new FhirInstanceValidator(VALIDATION_SUPPORT));
     }
-    */
+
 
     @Override
     public void validateRequest(FhirContext context, Object payload, Map<String, Object> parameters) {
@@ -52,11 +60,10 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         validateTransactionBundle(transactionBundle);
         validateBundleConsistency(transactionBundle);
 
-        /*
         for (Bundle.BundleEntryComponent entry : transactionBundle.getEntry()) {
             Class<? extends IBaseResource> clazz = entry.getResource().getClass();
             if (VALIDATORS.containsKey(clazz)) {
-                ca.uhn.fhir.validation.FhirValidator validator = context.newValidator();
+                FhirValidator validator = context.newValidator();
                 validator.registerValidatorModule(VALIDATORS.get(clazz));
                 ValidationResult validationResult = validator.validateWithResult(entry.getResource());
                 if (!validationResult.isSuccessful()) {
@@ -65,7 +72,6 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                 }
             }
         }
-        */
     }
 
 

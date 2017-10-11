@@ -17,6 +17,8 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import org.hl7.fhir.instance.hapi.validation.DefaultProfileValidationSupport;
+import org.hl7.fhir.instance.model.StructureDefinition;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.io.InputStream;
@@ -28,7 +30,7 @@ import java.util.Scanner;
  * default.
  *
  * @author Christian Ohr
- * @since 3.4
+ * @since 3.2
  */
 public class CustomValidationSupport extends DefaultProfileValidationSupport {
 

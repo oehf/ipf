@@ -10,7 +10,7 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
-        <camel-version>2.19.2</camel-version>
+        <camel-version>2.19.3</camel-version>
         <cxf-version>3.1.12</cxf-version>
         <groovy-version>2.4.12</groovy-version>
         <hapi-version>2.3</hapi-version>
@@ -131,6 +131,11 @@
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-structures-hl7org-dstu2</artifactId>
+                <version>${hapi-fhir-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ca.uhn.hapi.fhir</groupId>
+                <artifactId>hapi-fhir-validation</artifactId>
                 <version>${hapi-fhir-version}</version>
             </dependency>
             <dependency>
