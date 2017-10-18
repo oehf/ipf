@@ -2,7 +2,9 @@
 <Configuration>
     <Appenders>
         <Console name="CONSOLE" target="SYSTEM_OUT" follow="true">
-            <PatternLayout charset="UTF-8">    <Pattern>%d{ABSOLUTE} [%t] %-5p - %C{1}.%M(%L) | %m%n</Pattern></PatternLayout>
+            <PatternLayout charset="UTF-8">
+                <Pattern>%d{ABSOLUTE} [%t] %-5p - %C{1}.%M(%L) | %m%n</Pattern>
+            </PatternLayout>
         </Console>
     </Appenders>
     
@@ -13,6 +15,3 @@
     </Loggers>
 </Configuration>
 
-<PatternLayout charset="UTF-8">
-    <Pattern>%d{ABSOLUTE} [%t] %-5p - %C{1}.%M(%L) | %m%n</Pattern>
-</PatternLayout>
