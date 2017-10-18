@@ -6,6 +6,8 @@ import org.hl7.fhir.exceptions.FHIRException;
  * This has been dropped from STU3 due to the size of the code system, but we only
  * need a few values for the factory.
  *
+ * Replace once https://github.com/jamesagnew/hapi-fhir/issues/761 is released
+ *
  * @author Christian Ohr
  */
 public enum ObjectType {

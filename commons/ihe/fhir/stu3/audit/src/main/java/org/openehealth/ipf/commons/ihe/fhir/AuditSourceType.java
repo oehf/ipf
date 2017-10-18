@@ -3,6 +3,8 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import org.hl7.fhir.exceptions.FHIRException;
 
 /**
+ * Replace once https://github.com/jamesagnew/hapi-fhir/issues/761 is released
+ *
  * @author Christian Ohr
  */
 public enum AuditSourceType {
