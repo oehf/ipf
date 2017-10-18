@@ -36,16 +36,16 @@ class Iti9AuditStrategyTest {
     private String msg;
 
     @Before
-    public void setup() {
+    void setup() {
         msg = getClass().getResourceAsStream("/rsp.hl7").text
     }
 
     @Test
-    public void testEnrichResponse() {
+    void testEnrichResponse() {
         Iti9ClientAuditStrategy strategy = new Iti9ClientAuditStrategy()
         QueryAuditDataset dataset = new QueryAuditDataset(false)
         Message message = PARSER.parse(msg)
         strategy.enrichAuditDatasetFromResponse(dataset, message)
-        println dataset
+        // println dataset
     }
 }
