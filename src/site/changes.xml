@@ -23,12 +23,21 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="3.4.0" date="TBD" description="IPF 3.4.0">4
+        <release version="3.4.0" date="TBD" description="IPF 3.4.0">
+            <action dev="ohr" issue="170" type="update">
+                Upgraded Spring and Camel dependencies
+            </action>
+            <action dev="ohr" issue="169" type="update">
+                Changed test logging to use Log4J 2.9
+            </action>
             <action dev="unixoid" issue="168" type="add">
                 Simplify creation of ITI-43/ITI-86 requests from existing DocumentEntries.
             </action>
             <action dev="unixoid" issue="167" type="add">
                 Support Cross-Community Metadata Update (XCMU) profile.
+            </action>
+            <action dev="ohr" issue="165" type="add">
+                Support for FHIR STU3 transactions. Restructuring of FHIR modules.
             </action>
             <action dev="unixoid" issue="164" type="update">
                 Support arbitrary PID fields in XDS SourcePatientInfo.

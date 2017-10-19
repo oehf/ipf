@@ -82,3 +82,18 @@ to an ITI-43 or an ITI-86 request.
 ### IHE Profile Updates
 
 IPF 3.4 is compatible with IHE ITI Revision 14 (published on July 21, 2017), including changes from the following Change Proposals:
+
+
+### OSGi support
+
+OSGi support has been abandoned
+
+
+### Notice: Removal of deprecated functionality in IPF 3.5
+
+The following deprecated modules and classes will be eventually removed in IPF 3.5
+
+* `ipf-modules-hl7dsl`: the HL7 DSL has been included in `ipf-modules-hl7` in IPF 3.0
+* `ipf-platform-camel-core-legacy`: this has been moved into Camel (`camel-groovy-dsl`) in IPF 3.0
+* all deprecated classes in `ipf-modules-hl7`, particularly the old validation rule builders
+

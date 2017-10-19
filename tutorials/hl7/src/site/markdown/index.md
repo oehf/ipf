@@ -214,33 +214,33 @@ and segments for this message. The file must be added to the `src/main/groovy` d
 
 ```groovy
 
-    package org.openehealth.tutorial
+package org.openehealth.ipf.tutorials.hl7.validation
 
-    import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
-    import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
-    import org.openehealth.ipf.modules.hl7.validation.builder.ValidationContextBuilder
+import ca.uhn.hl7v2.validation.builder.support.NoValidationBuilder
 
-    class SampleRulesBuilder extends ValidationContextBuilder {
+class SampleRulesBuilder extends NoValidationBuilder{
 
-        // We define only a subset of the segments defined in the HL7 2.2 spec
+    // We define only a subset of the segments defined in the HL7 2.2 spec
+    @Override
+    protected void configure() {
+        super.configure()
 
-        public RuleBuilder forContext(DefaultValidationContext context) {
-            new RuleBuilder(context)
-              .forVersion('2.2')
-                .message('ADT', 'A01').abstractSyntax(
-                        'MSH',
-                        'EVN',
-                        'PID',
-                        [  {  'NK1'  }  ],
-                        'PV1',
-                        [  {  INSURANCE(
-                                  'IN1',
-                                  [  'IN2'  ] ,
-                                  [  'IN3'  ]
-                        )}]
-                )
-        }
+        forVersion('2.2')
+            .message('ADT', 'A01').abstractSyntax(
+                'MSH',
+                'EVN',
+                'PID',
+                [  {  'NK1'  }  ],
+                'PV1',
+                [  {  INSURANCE(
+                        'IN1',
+                        [  'IN2'  ] ,
+                        [  'IN3'  ]
+                )}]
+        )
     }
+    
+}
 
 ```
 

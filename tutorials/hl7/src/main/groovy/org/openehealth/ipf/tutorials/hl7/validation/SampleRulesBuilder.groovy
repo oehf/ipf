@@ -20,7 +20,7 @@ import ca.uhn.hl7v2.validation.builder.support.NoValidationBuilder
 /**
  * @author Christian Ohr
  */
-public class SampleRulesBuilder extends NoValidationBuilder{
+class SampleRulesBuilder extends NoValidationBuilder{
 
     // We define only a subset of the segments defined in the HL7 2.2 spec
     @Override
