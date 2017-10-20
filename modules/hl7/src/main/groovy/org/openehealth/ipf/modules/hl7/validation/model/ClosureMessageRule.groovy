@@ -27,11 +27,10 @@ import ca.uhn.hl7v2.validation.ValidationException
  *
  * @author Christian Ohr
  */
-public class ClosureMessageRule extends ClosureRuleSupport implements MessageRule {
+class ClosureMessageRule extends ClosureRuleSupport implements MessageRule {
 
     // Basically only for deserialization
     ClosureMessageRule() {
-        super()
     }
 
     ClosureMessageRule(Closure testClosure) {
@@ -45,12 +44,12 @@ public class ClosureMessageRule extends ClosureRuleSupport implements MessageRul
     /**
      * @see ca.uhn.hl7v2.validation.MessageRule#test(ca.uhn.hl7v2.model.Message)
      */
-    public ValidationException[] test(Message msg) {
+    ValidationException[] test(Message msg) {
         apply(msg)
     }
 
     @Override
     ValidationException[] apply(Message msg) {
-        return testClosure.call(msg);
+        return testClosure.call(msg)
     }
 }

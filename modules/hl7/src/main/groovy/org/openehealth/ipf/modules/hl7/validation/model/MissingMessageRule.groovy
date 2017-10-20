@@ -34,7 +34,7 @@ class MissingMessageRule extends AbstractMessageRule {
     /**
      * @see ca.uhn.hl7v2.validation.MessageRule#test(ca.uhn.hl7v2.model.Message)
      */
-    public ValidationException[] apply(Message msg){
+    ValidationException[] apply(Message msg){
          [ new ValidationException("Message rule required for ${msg.eventType}^${msg.triggerEvent} (${msg.version})" +
 		   'but none could be found. Probably the message type is not allowed in this context') ] as ValidationException[]
     }

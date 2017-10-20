@@ -35,28 +35,28 @@ class Hl7StaticExtensionModule {
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
-    public static Object $static_methodMissing(Message delegate, String name, Object args) {
+    static Object $static_methodMissing(Message delegate, String name, Object args) {
         MessageUtils.newMessage(ContextFacade.getBean(HapiContext), name, args[0])
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
-    public static Object $static_methodMissing(Message delegate, HapiContext context, String name, Object args) {
+    static Object $static_methodMissing(Message delegate, HapiContext context, String name, Object args) {
         MessageUtils.newMessage(context, name, args[0])
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
-    public static Object $static_methodMissing(Segment delegate, String name, Object args) {
+    static Object $static_methodMissing(Segment delegate, String name, Object args) {
         MessageUtils.newSegment(name, args[0])
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
-    public static Object $static_methodMissing(Composite delegate, String name, Object args) {
+    static Object $static_methodMissing(Composite delegate, String name, Object args) {
         if (args.size() > 1 && args[1] instanceof Map) {
             MessageUtils.newComposite(name, args[0], args[1])
         } else {
@@ -67,7 +67,7 @@ class Hl7StaticExtensionModule {
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
-    public static Object $static_methodMissing(Primitive delegate, String name, Object args) {
+    static Object $static_methodMissing(Primitive delegate, String name, Object args) {
         if (args.size() > 1 && args[1] instanceof String) {
             MessageUtils.newPrimitive(name, args[0], args[1])
         } else {
@@ -78,7 +78,7 @@ class Hl7StaticExtensionModule {
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-	public static Message defaultNak(Message delegate, HL7Exception e, AcknowledgmentCode ackTypeCode, String version) {
+	static Message defaultNak(Message delegate, HL7Exception e, AcknowledgmentCode ackTypeCode, String version) {
         MessageUtils.defaultNak(e, ackTypeCode, version)
     }
 

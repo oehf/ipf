@@ -58,6 +58,7 @@ class TypeTest extends groovy.test.GroovyAssert {
         assertEquals('200', obx1[5](1).value)
         assertEquals('300', obx1[5](2).value)
         assertFalse(obx1[5].empty)
+        assertTrue((boolean)obx1[5])
 
         assertFieldEquals('MG/DL', obx1, 6)
         assertFieldEquals('20-370', obx1, 7)
@@ -80,6 +81,7 @@ class TypeTest extends groovy.test.GroovyAssert {
         Repeatable field = obx2[5];
         assertEquals('400', field.elementAt(0).value)
         assertFalse(field.isEmpty())
+        assertTrue((boolean)field)
 
         assertFieldEquals('MG/DL', obx2, 6)
         assertFieldsEmpty(obx2, 7, 8, 9, 10)
@@ -97,9 +99,10 @@ class TypeTest extends groovy.test.GroovyAssert {
         assertFieldEquals('50061100^MICROALBUMIN/CREATININE RATIO, RANDOM URINE^^50061100^MICROALBUMIN/CREATININE RATIO, RANDOM URINE', obx3, 3)
         assertFieldsEmpty(obx3, 4)
 
-        Repeatable adapter = obx3[5];
-        assertEquals('4', adapter.elementAt(0).value)
-        assertFalse(adapter.isEmpty())
+        Repeatable field = obx3[5];
+        assertEquals('4', field.elementAt(0).value)
+        assertFalse(field.isEmpty())
+        assertTrue((boolean)field)
 
         assertFieldEquals('MCG/MG CREAT', obx3, 6)
         assertFieldEquals('<30', obx3, 7)
@@ -142,13 +145,17 @@ class TypeTest extends groovy.test.GroovyAssert {
     void assertFieldEquals(String expected, data, int field) {
         String simpleName = data.getClass().getSimpleName();
         assertEquals(expected, data[field].encode())
-        assertFalse("${simpleName}[${field}] must be not empty, but isEmpty() returns true", data[field].isEmpty())
+        assertFalse("${simpleName}[${field}] must be not empty, but isEmpty() returns true", data[field].empty)
+        assertTrue((boolean)data[field])
     }
 
     void assertFieldsEmpty(Segment segment, int... fields) {
         String simpleName = segment.getClass().getSimpleName();
         for (field in fields) {
-            assertTrue("${simpleName}[${field}] must be empty, but isEmpty() returns false", segment[field].isEmpty())
+            assertTrue("${simpleName}[${field}] must be empty, but isEmpty() returns false", segment[field].empty)
+            if (segment[field]) {
+                fail("${simpleName}[${field}] must be empty, but asBoolean() returns true")
+            }
         }
     }
 

@@ -38,7 +38,7 @@ import static org.openehealth.ipf.modules.hl7.extend.ExtensionUtils.normalizeCol
  * Adds HL7 extensions for Groovy
  * @DSL
  */
-public class Hl7ExtensionModule {
+class Hl7ExtensionModule {
 
     // ----------------------------------------------------------------
     //  Extensions to Collection for mapping values
@@ -48,36 +48,36 @@ public class Hl7ExtensionModule {
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static Object map(Collection delegate, Object key) {
-        mappingService()?.get(key, normalizeCollection(delegate));
+    static Object map(Collection delegate, Object key) {
+        mappingService()?.get(key, normalizeCollection(delegate))
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-	 public static Object map(Collection delegate, Object key, Object defaultValue) {
-        mappingService()?.get(key, normalizeCollection(delegate), defaultValue);
+	 static Object map(Collection delegate, Object key, Object defaultValue) {
+        mappingService()?.get(key, normalizeCollection(delegate), defaultValue)
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static Object mapReverse(Collection delegate, Object value) {
-        mappingService()?.getKey(value, normalizeCollection(delegate));
+    static Object mapReverse(Collection delegate, Object value) {
+        mappingService()?.getKey(value, normalizeCollection(delegate))
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static Object mapReverse(Collection delegate, Object value, Object defaultValue) {
-        mappingService()?.getKey(value, normalizeCollection(delegate), defaultValue);
+    static Object mapReverse(Collection delegate, Object value, Object defaultValue) {
+        mappingService()?.getKey(value, normalizeCollection(delegate), defaultValue)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     static Object methodMissing(Collection delegate, String name, Object args) {
-        MappingExtensionHelper.methodMissingLogic(mappingService(), normalizeCollection, name, args);
+        MappingExtensionHelper.methodMissingLogic(mappingService(), normalizeCollection, name, args)
     }
 
     // ----------------------------------------------------------------
@@ -88,33 +88,33 @@ public class Hl7ExtensionModule {
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static Object map(Type delegate, Object key) {
-        mappingService()?.get(key, delegate.encode());
+    static Object map(Type delegate, Object key) {
+        mappingService()?.get(key, delegate.encode())
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static Object map(Type delegate, Object key, Object defaultValue) {
-        mappingService()?.get(key, delegate.encode(), defaultValue);
+    static Object map(Type delegate, Object key, Object defaultValue) {
+        mappingService()?.get(key, delegate.encode(), defaultValue)
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static Object mapReverse(Type delegate, Object value) {
-        mappingService()?.getKey(value, delegate.encode());
+    static Object mapReverse(Type delegate, Object value) {
+        mappingService()?.getKey(value, delegate.encode())
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static Object mapReverse(Type delegate, Object value, Object defaultValue) {
-        mappingService()?.getKey(value, delegate.encode(), defaultValue);
+    static Object mapReverse(Type delegate, Object value, Object defaultValue) {
+        mappingService()?.getKey(value, delegate.encode(), defaultValue)
     }
 
     static Object methodMissing(Type delegate, String name, Object args) {
-        MappingExtensionHelper.methodMissingLogic(mappingService(), { delegate.encode() }, name, args);
+        MappingExtensionHelper.methodMissingLogic(mappingService(), { delegate.encode() }, name, args)
     }
         
     // ----------------------------------------------------------------
@@ -124,45 +124,45 @@ public class Hl7ExtensionModule {
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static boolean matches(Message delegate, String type, String event, String version) {
+    static boolean matches(Message delegate, String type, String event, String version) {
         (type == '*' || type == MessageUtils.eventType(delegate)) &&
         (event == '*' || event == MessageUtils.triggerEvent(delegate)) &&
-        (version == '*' || version == delegate.version);
+        (version == '*' || version == delegate.version)
     }
     
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static String getEventType(Message delegate) {
-        MessageUtils.eventType(delegate);
+    static String getEventType(Message delegate) {
+        MessageUtils.eventType(delegate)
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static String getTriggerEvent(Message delegate) {
-        MessageUtils.triggerEvent(delegate);
+    static String getTriggerEvent(Message delegate) {
+        MessageUtils.triggerEvent(delegate)
     }
     
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static String getMessageStructure(Message delegate) {
-        MessageUtils.messageStructure(delegate);
+    static String getMessageStructure(Message delegate) {
+        MessageUtils.messageStructure(delegate)
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static Message respond(AbstractMessage delegate, String eventType, String triggerEvent) {
-        MessageUtils.response(delegate, eventType, triggerEvent);
+    static Message respond(AbstractMessage delegate, String eventType, String triggerEvent) {
+        MessageUtils.response(delegate, eventType, triggerEvent)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      * @deprecated use {@link AbstractMessage#generateACK()}
      */
-    public static Message ack(AbstractMessage delegate) {
+    static Message ack(AbstractMessage delegate) {
         delegate.generateACK()
     }
 
@@ -170,7 +170,7 @@ public class Hl7ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      * @deprecated use {@link AbstractMessage#generateACK(java.lang.String, ca.uhn.hl7v2.HL7Exception)}
      */
-    public static Message nak(AbstractMessage delegate, String cause, AcknowledgmentCode ackTypeCode) {
+    static Message nak(AbstractMessage delegate, String cause, AcknowledgmentCode ackTypeCode) {
         delegate.generateACK(ackTypeCode, new HL7Exception(cause))
     }
 
@@ -178,7 +178,7 @@ public class Hl7ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      * @deprecated use {@link AbstractMessage#generateACK(java.lang.String, ca.uhn.hl7v2.HL7Exception)}
      */
-    public static Message nak(AbstractMessage delegate, HL7Exception e, AcknowledgmentCode ackTypeCode) {
+    static Message nak(AbstractMessage delegate, HL7Exception e, AcknowledgmentCode ackTypeCode) {
         delegate.generateACK(ackTypeCode, e)
     }
 
@@ -186,36 +186,36 @@ public class Hl7ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      * @deprecated use {@link Message#printStructure()}
      */
-    public static Message dump(Message delegate) {
+    static Message dump(Message delegate) {
         delegate.printStructure()
     }
     
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static String addSegment(AbstractMessage delegate, String name, boolean required, boolean repeating) {
-        delegate.add(delegate.modelClassFactory.getSegmentClass(name, delegate.getVersion()), required, repeating);
+    static String addSegment(AbstractMessage delegate, String name, boolean required, boolean repeating) {
+        delegate.add(delegate.modelClassFactory.getSegmentClass(name, delegate.getVersion()), required, repeating)
     }
     
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static String addSegment(AbstractMessage delegate, String name, boolean required, boolean repeating, int index) {
-        delegate.add(delegate.modelClassFactory.getSegmentClass(name, delegate.getVersion()), required, repeating, index);
+    static String addSegment(AbstractMessage delegate, String name, boolean required, boolean repeating, int index) {
+        delegate.add(delegate.modelClassFactory.getSegmentClass(name, delegate.getVersion()), required, repeating, index)
     }
     
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static String addGroup(AbstractMessage delegate, String name, boolean required, boolean repeating) {
-        delegate.add(delegate.modelClassFactory.getGroupClass(name, delegate.getVersion()), required, repeating);
+    static String addGroup(AbstractMessage delegate, String name, boolean required, boolean repeating) {
+        delegate.add(delegate.modelClassFactory.getGroupClass(name, delegate.getVersion()), required, repeating)
     }
     
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    public static String addGroup(AbstractMessage delegate, String name, boolean required, boolean repeating, int index) {
-        delegate.add(delegate.modelClassFactory.getGroupClass(name, delegate.getVersion()), required, repeating, index);
+    static String addGroup(AbstractMessage delegate, String name, boolean required, boolean repeating, int index) {
+        delegate.add(delegate.modelClassFactory.getGroupClass(name, delegate.getVersion()), required, repeating, index)
     }
 
     // ----------------------------------------------------------------
@@ -226,34 +226,34 @@ public class Hl7ExtensionModule {
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
-    public static MessageRuleBuilder abstractSyntax(MessageRuleBuilder delegate, Object... args) {
+    static MessageRuleBuilder abstractSyntax(MessageRuleBuilder delegate, Object... args) {
         delegate.test(new AbstractSyntaxRule(args))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
-    public static MessageRuleBuilder checkIf(MessageRuleBuilder delegate, Closure closure) {
+    static MessageRuleBuilder checkIf(MessageRuleBuilder delegate, Closure closure) {
         delegate.test(new ClosureMessageRule(closure))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
-    public static PrimitiveRuleBuilder checkIf(PrimitiveRuleBuilder delegate, Closure closure) {
+    static PrimitiveRuleBuilder checkIf(PrimitiveRuleBuilder delegate, Closure closure) {
         delegate.test(new ClosurePrimitiveTypeRule(closure))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
-    public static EncodingRuleBuilder checkIf(EncodingRuleBuilder delegate, Closure closure) {
+    static EncodingRuleBuilder checkIf(EncodingRuleBuilder delegate, Closure closure) {
         delegate.test(delegate, new ClosureEncodingRule(closure))
     }
 
 
     private static MappingService mappingService() {
-        ContextFacade.getBean(MappingService);
+        ContextFacade.getBean(MappingService)
     }           
 
 }

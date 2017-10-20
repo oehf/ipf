@@ -54,6 +54,13 @@ class CompositeTest extends groovy.test.GroovyAssert {
     }
 
     @Test
+    void testAsBoolean() {
+        assert (msg.PID[9](0)[1] ?: 'blorg') == 'blorg'
+        assert (msg.NK1(10)[4] ?: 'blorg') == 'blorg'
+        assert (msg.PV2[2][1] ?: 'blorg') == 'blorg'
+    }
+
+    @Test
     void testFrom() {
         def compositeCopy = composite.message.copy().NK1(0)[4]
         composite[4].value = 'XY'

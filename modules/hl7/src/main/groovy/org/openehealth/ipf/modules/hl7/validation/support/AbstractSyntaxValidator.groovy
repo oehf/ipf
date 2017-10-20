@@ -33,27 +33,27 @@ import ca.uhn.hl7v2.util.Terser
  * 
  * @author Christian Ohr
  */
-public class AbstractSyntaxValidator extends DefaultValidator {
+class AbstractSyntaxValidator extends DefaultValidator {
 
     /**
      * Omit the checks for correct version, trigger event and structure
      */
     @Override
-    public HL7Exception[] validate(Message message, StaticDef profile) throws ProfileException, HL7Exception {
-        List<HL7Exception> exList = new ArrayList<HL7Exception>();
-        exList.addAll(doTestGroup(message, profile, profile.getIdentifier(), true));
-        return exList.toArray(new HL7Exception[exList.size()]);
+    HL7Exception[] validate(Message message, StaticDef profile) throws ProfileException, HL7Exception {
+        List<HL7Exception> exList = new ArrayList<HL7Exception>()
+        exList.addAll(doTestGroup(message, profile, profile.getIdentifier(), true))
+        return exList.toArray(new HL7Exception[exList.size()])
     }
 
     @Override
-    public List<HL7Exception> testStructure(Structure s, ProfileStructure profile, String profileID) throws ProfileException {
+    List<HL7Exception> testStructure(Structure s, ProfileStructure profile, String profileID) throws ProfileException {
         List<HL7Exception> exList = []
         if (profile instanceof SegGroup) {
             if (s instanceof Group) {
                 exList.addAll(testGroup(s, profile, profileID))
             } else {
                 exList.add(new ProfileNotHL7CompliantException(
-                        "Mismatch between a group in the profile and the structure ${s.class.name} in the message"));
+                        "Mismatch between a group in the profile and the structure ${s.class.name} in the message"))
             }
         }
         // Skip testing of segments

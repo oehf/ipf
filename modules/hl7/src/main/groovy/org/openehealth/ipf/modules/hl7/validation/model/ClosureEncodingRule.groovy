@@ -26,7 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException
  *
  * @author Christian Ohr
  */
-public class ClosureEncodingRule extends ClosureRuleSupport implements EncodingRule {
+class ClosureEncodingRule extends ClosureRuleSupport implements EncodingRule {
 
     ClosureEncodingRule(Closure testClosure) {
         super(testClosure)
@@ -39,7 +39,7 @@ public class ClosureEncodingRule extends ClosureRuleSupport implements EncodingR
     /**
      * @see ca.uhn.hl7v2.validation.EncodingRule#test(java.lang.String)
      */
-    public ValidationException[] test(String msg) {
+    ValidationException[] test(String msg) {
         apply(msg)
     }
 

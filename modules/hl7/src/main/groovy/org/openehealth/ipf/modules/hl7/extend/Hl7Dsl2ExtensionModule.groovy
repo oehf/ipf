@@ -16,6 +16,7 @@
 package org.openehealth.ipf.modules.hl7.extend
 
 import ca.uhn.hl7v2.model.*
+import ca.uhn.hl7v2.parser.FixFieldDataType
 import ca.uhn.hl7v2.util.DeepCopy
 import ca.uhn.hl7v2.util.ReadOnlyMessageIterator
 import org.openehealth.ipf.modules.hl7.dsl.HL7DslException
@@ -31,7 +32,7 @@ import org.openehealth.ipf.modules.hl7.message.Visitors
  *
  * @DSL
  */
-public class Hl7Dsl2ExtensionModule {
+class Hl7Dsl2ExtensionModule {
 
 
     // ==========================================================================
@@ -47,8 +48,18 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void putAt(Visitable delegate, idx, value) {
+    static void putAt(Visitable delegate, idx, value) {
         delegate[idx].from(value)
+    }
+
+    /**
+     * Allows checks like 'if (PID[3])'
+     * @param delegate
+     * @return true if the structure of field is empty, false otherwise
+     */
+    static boolean asBoolean(Visitable delegate) {
+        boolean empty = delegate.empty
+        !empty
     }
 
     // ==========================================================================
@@ -59,7 +70,7 @@ public class Hl7Dsl2ExtensionModule {
      * Explicitly disallow calls on Type instances
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static def call(Type delegate, args) {
+    static def call(Type delegate, args) {
         throw new HL7DslException("The type ${delegate.class.simpleName} is not repeatable for this field")
     }
 
@@ -71,7 +82,7 @@ public class Hl7Dsl2ExtensionModule {
      * @return true if the value of the primitive is a so-called "active null"
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static boolean isNullValue(Primitive delegate) {
+    static boolean isNullValue(Primitive delegate) {
         delegate.value == '""'
     }
 
@@ -80,7 +91,7 @@ public class Hl7Dsl2ExtensionModule {
      * was true
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static String getValue2(Primitive delegate) {
+    static String getValue2(Primitive delegate) {
         isNullValue(delegate) ? '' : delegate.value
     }
 
@@ -92,7 +103,7 @@ public class Hl7Dsl2ExtensionModule {
      * @return the primitive value if idx is 1, otherwise a {@link Null} object
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static String getAt(Primitive delegate, int index) {
+    static String getAt(Primitive delegate, int index) {
         return (index == 1) ?
                 delegate :
                 new Null(delegate.message)
@@ -105,15 +116,26 @@ public class Hl7Dsl2ExtensionModule {
      * @return the non-empty value or the provided defaultValue
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static String getValueOr(Primitive delegate, String defaultValue) {
+    static String getValueOr(Primitive delegate, String defaultValue) {
         delegate.value ?: defaultValue
+    }
+
+    /**
+     * Returns the the non-empty value or the provided defaultValue. Equivalent with
+     * T.value ?: default, but much more readable.
+     *
+     * @return the non-empty value or the provided defaultValue
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
+     */
+    static String valueOr(Primitive delegate, String defaultValue) {
+        getValueOr(delegate, defaultValue)
     }
 
     /**
      * Use the new value as the delegate's value
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void from(Primitive delegate, Object newValue) {
+    static void from(Primitive delegate, Object newValue) {
         if (newValue instanceof Primitive) {
             delegate.value = newValue.value
         } else {
@@ -128,22 +150,44 @@ public class Hl7Dsl2ExtensionModule {
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    def getAt(ExtraComponents delegate, int idx) {
+    static def getAt(ExtraComponents delegate, int idx) {
         delegate.getComponent(idx)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    String getValue(ExtraComponents delegate) {
+    static String getValue(ExtraComponents delegate) {
         delegate.getComponent(1).getValue()
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    String getValue2(ExtraComponents delegate) {
+    static String getValue2(ExtraComponents delegate) {
         delegate.getComponent(1).getValue2()
+    }
+
+    /**
+     * Returns the the non-empty value or the provided defaultValue. Equivalent with
+     * T.value ?: default, but much more readable.
+     *
+     * @return the non-empty value or the provided defaultValue
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
+     */
+    static String getValueOr(ExtraComponents delegate, String defaultValue) {
+        delegate.value ?: defaultValue
+    }
+
+    /**
+     * Returns the the non-empty value or the provided defaultValue. Equivalent with
+     * T.value ?: default, but much more readable.
+     *
+     * @return the non-empty value or the provided defaultValue
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
+     */
+    static String valueOr(ExtraComponents delegate, String defaultValue) {
+        getValueOr(delegate, defaultValue)
     }
 
     // ==========================================================================
@@ -158,7 +202,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void from(Composite delegate, Composite value) {
+    static void from(Composite delegate, Composite value) {
         DeepCopy.copy(value, delegate)
     }
 
@@ -170,7 +214,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void from(Composite delegate, Primitive value) {
+    static void from(Composite delegate, Primitive value) {
         delegate[1].from(value)
     }
 
@@ -182,7 +226,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void from(Composite delegate, Repeatable value) {
+    static void from(Composite delegate, Repeatable value) {
         from(delegate, value(0))
     }
 
@@ -194,7 +238,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void from(Composite delegate, Object value) {
+    static void from(Composite delegate, Object value) {
         delegate[1].from(value.toString())
     }
 
@@ -207,7 +251,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Object getAt(Composite delegate, int idx) {
+    static Object getAt(Composite delegate, int idx) {
         delegate.getComponent(componentIndex(idx))
     }
 
@@ -219,7 +263,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Object getValue(Composite delegate) {
+    static String getValue(Composite delegate) {
         componentValue(delegate)
     }
 
@@ -232,17 +276,38 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Object getValue2(Composite delegate) {
+    static String getValue2(Composite delegate) {
         componentValue2(delegate)
     }
 
+    /**
+     * Returns the the non-empty value or the provided defaultValue. Equivalent with
+     * T.value ?: default, but much more readable.
+     *
+     * @return the non-empty value or the provided defaultValue
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
+     */
+    static String getValueOr(Composite delegate, String defaultValue) {
+        delegate.value ?: defaultValue
+    }
+
+    /**
+     * Returns the the non-empty value or the provided defaultValue. Equivalent with
+     * T.value ?: default, but much more readable.
+     *
+     * @return the non-empty value or the provided defaultValue
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
+     */
+    static String valueOr(Composite delegate, String defaultValue) {
+        getValueOr(delegate, defaultValue)
+    }
 
     /**
      * @return true if the value first component of the composite is a so-called "active null"
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static boolean isNullValue(Composite delegate) {
+    static boolean isNullValue(Composite delegate) {
         componentValue(delegate) == '""'
     }
 
@@ -257,14 +322,14 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void from(Varies delegate, Type newValue) {
+    static void from(Varies delegate, Type newValue) {
         delegate.data.from(newValue)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static def getAt(Varies delegate, int idx) {
+    static def getAt(Varies delegate, int idx) {
         if (delegate.data instanceof Composite) {
             return delegate.data[idx]
         }
@@ -278,28 +343,28 @@ public class Hl7Dsl2ExtensionModule {
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static String getValue(Varies delegate) {
+    static String getValue(Varies delegate) {
         delegate.data.value
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static String getValue2(Varies delegate) {
+    static String getValue2(Varies delegate) {
         delegate.data.value2
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static boolean isNullValue(Varies delegate) {
+    static boolean isNullValue(Varies delegate) {
         delegate.data.isNullValue()
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static String toString(Varies delegate) {
+    static String toString(Varies delegate) {
         delegate.data.value
     }
 
@@ -312,7 +377,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static String getPath(Structure delegate) {
+    static String getPath(Structure delegate) {
         findIndexOf(delegate.message) { it == delegate }
     }
 
@@ -330,7 +395,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static int count(Segment delegate, int idx) {
+    static int count(Segment delegate, int idx) {
         delegate.getField(idx).length
     }
 
@@ -344,7 +409,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Type nrp(Segment delegate, int idx) {
+    static Type nrp(Segment delegate, int idx) {
         delegate.getField(idx, count(delegate, idx))
     }
 
@@ -357,8 +422,8 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static def getAt(Segment delegate, int idx) {
-        def result;
+    static def getAt(Segment delegate, int idx) {
+        def result
         Type[] field = delegate.getField(idx)
         if (delegate.getMaxCardinality(idx) == 1) {
             // non-repeating field
@@ -382,21 +447,29 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void from(Segment delegate, Segment value) {
+    static void from(Segment delegate, Segment value) {
         DeepCopy.copy(value, delegate)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void from(Segment delegate, Repeatable value) {
+    static void from(Segment delegate, Repeatable value) {
         from(delegate, value(0))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static String getValue(Segment delegate) {
+    static String getValue(Segment delegate) {
+        throw new HL7DslException("Cannot obtain the value of a segment")
+    }
+
+    static String getValueOr(Segment delegate, String defaultValue) {
+        throw new HL7DslException("Cannot obtain the value of a segment")
+    }
+
+    static String valueOr(Segment delegate, String defaultValue) {
         throw new HL7DslException("Cannot obtain the value of a segment")
     }
 
@@ -407,7 +480,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Object call(Segment delegate, args) {
+    static Object call(Segment delegate, args) {
         throw new HL7DslException("The segment ${delegate.class.simpleName} is not repeatable in this group or message")
     }
 
@@ -425,7 +498,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      *  @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void setObx5Type(Segment delegate, String type, int desiredRepetitionsCount = 1) {
+    static void setObx5Type(Segment delegate, String type, int desiredRepetitionsCount = 1) {
         if (!delegate.getClass().name.endsWith('.OBX')) {
             throw new HL7DslException('only OBX segments can be served by this method')
         }
@@ -435,7 +508,7 @@ public class Hl7Dsl2ExtensionModule {
         }
 
         delegate[2] = type
-        Varies.fixOBX5(delegate, delegate.message.parser.factory)
+        FixFieldDataType.fixOBX5(delegate, delegate.message.parser.factory, delegate.message.parser.parserConfiguration)
     }
 
     // ==========================================================================
@@ -451,7 +524,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static int count(Group delegate, String name) {
+    static int count(Group delegate, String name) {
         delegate.getAll(name).length
     }
 
@@ -464,7 +537,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Structure nrp(Group delegate, String name) {
+    static Structure nrp(Group delegate, String name) {
         delegate.get(name, count(delegate, name))
     }
 
@@ -477,7 +550,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSLs
      */
-    public static List<String> findIndexValues(Group delegate, Closure<?> c) {
+    static List<String> findIndexValues(Group delegate, Closure<?> c) {
         Visitors.findIndexValues(delegate, c)
     }
 
@@ -490,7 +563,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static String findIndexOf(Group delegate, Closure<?> c) {
+    static String findIndexOf(Group delegate, Closure<?> c) {
         Visitors.findIndexOf(delegate, c)
     }
 
@@ -503,7 +576,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static String findLastIndexOf(Group delegate, Closure<?> c) {
+    static String findLastIndexOf(Group delegate, Closure<?> c) {
         Visitors.findLastIndexOf(delegate, c)
     }
 
@@ -521,7 +594,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Group eachWithIndex(Group delegate, Closure<?> c) {
+    static Group eachWithIndex(Group delegate, Closure<?> c) {
         Visitors.eachWithIndex(delegate, c)
     }
 
@@ -529,7 +602,7 @@ public class Hl7Dsl2ExtensionModule {
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static def methodMissing(Group delegate, String name, args) {
+    static def methodMissing(Group delegate, String name, args) {
         if (name.startsWith('findLastIndexOf')) {
             return findLastIndexOf(delegate) { it.name == name.substring(15) }
         } else if (name.startsWith('findIndexOf')) {
@@ -566,7 +639,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void set(Group delegate, String name, Object value) {
+    static void set(Group delegate, String name, Object value) {
         Structure structure = delegate.get(name)
         structure.from(value)
     }
@@ -581,7 +654,7 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static def getAt(Group delegate, String name) {
+    static def getAt(Group delegate, String name) {
         if (delegate.isRepeating(name)) {
             return getStructure(delegate, name, [0])
         } else {
@@ -592,7 +665,7 @@ public class Hl7Dsl2ExtensionModule {
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static void from(Group delegate, value) {
+    static void from(Group delegate, value) {
         throw new UnsupportedOperationException('group copying not implemented yet')
     }
 
@@ -601,14 +674,14 @@ public class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Iterator iterator(Group delegate) {
+    static Iterator iterator(Group delegate) {
         ReadOnlyMessageIterator.createPopulatedStructureIterator(delegate, Structure.class)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static def call(Group delegate, args) {
+    static def call(Group delegate, args) {
         throw new HL7DslException("The group ${delegate.class.simpleName} is not repeatable in this group or message")
     }
 
@@ -619,21 +692,21 @@ public class Hl7Dsl2ExtensionModule {
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Message empty(Message delegate) {
+    static Message empty(Message delegate) {
         MessageUtils.empty(delegate)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Message copy(Message delegate) {
+    static Message copy(Message delegate) {
         MessageUtils.copy(delegate)
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    public static Writer writeTo(Message delegate, Writer writer) {
+    static Writer writeTo(Message delegate, Writer writer) {
         String s = delegate.encode()
         writer.write(s)
         writer.flush()

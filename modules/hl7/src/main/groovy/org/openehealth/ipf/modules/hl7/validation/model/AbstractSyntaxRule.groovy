@@ -76,7 +76,7 @@ class AbstractSyntaxRule extends AbstractMessageRule {
     private static final Map<String, StaticDef> STATIC_DEF_CACHE = new LinkedHashMap<String, StaticDef>(10, 0.75f) {
         @Override
         protected boolean removeEldestEntry(Map.Entry<String, StaticDef> eldest) {
-            return size() > 100;
+            return size() > 100
         }
     }
 

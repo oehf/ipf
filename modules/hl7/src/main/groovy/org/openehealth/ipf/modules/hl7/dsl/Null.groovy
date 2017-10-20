@@ -47,14 +47,23 @@ class Null extends AbstractType {
     String getValueOr(String defaultValue) {
         defaultValue
     }
-	
-    public String toString() {
+
+    String valueOr(String defaultValue) {
+        defaultValue
+    }
+
+    String toString() {
         null
     }
 	
 	void setValue(String value) throws DataTypeException {
 		throw new DataTypeException("Cannot assign a value Null")
 	}
+
+    @Override
+    boolean isEmpty() throws HL7Exception {
+        true
+    }
 
     @Override
     boolean accept(MessageVisitor visitor, Location currentLocation) throws HL7Exception {

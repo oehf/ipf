@@ -24,9 +24,12 @@ import ca.uhn.hl7v2.validation.impl.AbstractMessageRule
  * 
  * @author Christian Ohr
  */
-public class ClosureRuleSupport {
+class ClosureRuleSupport {
 
-     ClosureRuleSupport(Closure<ValidationException[]> testClosure) {
+    ClosureRuleSupport() {
+    }
+
+    ClosureRuleSupport(Closure<ValidationException[]> testClosure) {
          this("", "", testClosure)
      }
      

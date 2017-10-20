@@ -52,7 +52,7 @@ class Repeatable extends Closure implements Iterable<Visitable> {
      * @param property
      * @return the named property of the first repetition
      */
-    public Object getProperty(String property) {
+    def getProperty(String property) {
         InvokerHelper.getProperty(elementAt(0), property)
     }
 
@@ -133,6 +133,10 @@ class Repeatable extends Closure implements Iterable<Visitable> {
             }
         }
         return result;
+    }
+
+    boolean asBoolean() {
+        !isEmpty()
     }
 
     String getPath() {
