@@ -30,7 +30,7 @@ HL7v2 [IHE][ihe] transactions:
 <dependency>
   <groupId>org.openehealth.ipf.platform-camel</groupId>
   <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
-  <version>3.2.0</version>
+  <version>3.4.0</version>
 </dependency>
 ```
 
@@ -42,7 +42,7 @@ version numbers for the major dependencies anymore.
     <dependency>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf-dependencies</artifactId>
-        <version>3.2.0</version>
+        <version>3.4.0</version>
         <type>pom</type>
         <scope>import</scope>
     </dependency>
@@ -94,25 +94,19 @@ Other IPF features provide part of the underlying foundation or supporting funct
 | [Dynamic Feature Registration]                  | Aids in building up modular integration solutions where each module contributes routes, services etc. to the overall application
 
 
-IPF is prepared to run in OSGi environments as well:
-
-| Feature                                         | Description
-|-------------------------------------------------|-----------------------------------------------
-| [OSGi Support]                                  | Enables the deployment of IPF modules (bundles) to OSGi platforms. IPF service bundles register platform services at the OSGi service registry for consumption by IPF applications
-
+IPF comes with some [Spring Boot Starters](../ipf-spring-boot-starter/index.html) that support running eHealth applications
+in the Spring Boot runtime environment.
 
 
 ## Deprecations
 
-IPF 3.2 deprecates the modules listed below. They will likely be removed from the main IPF project in the
- next major release.
+IPF 3.4 deprecates the modules listed below. They will likely be removed from the main IPF project in the
+ next release.
 
  * `ipf-archetypes`
  * `ipf-assembly`
- * `ipf-commons-flow` and `ipf-platform-camel-flow`
  * `ipf-modules-hl7-dsl` (note that the HL7 DSL is part of `ipf-modules-hl7`)
  * `ipf-platform-camel-core-legacy`
- * `ipf-osgi` (i.e. all OSGi support)
 
 ## Tutorials and Examples
 
@@ -122,7 +116,6 @@ IPF 3.2 deprecates the modules listed below. They will likely be removed from th
 | [XDS tutorial]                                  | A Groovy based implementation of an XDS repository
 | [Dynamic extension tutorial]                    | How to have IPF-based application modules contributing to an application
 | [IHE Client Example]                            | Some examples how to use IPF producer endpoints
-| [OSGi tutorial]                                 | OSGi Tutorial
 
 ## Non-functional aspects
 
@@ -136,6 +129,7 @@ IPF 3.2 deprecates the modules listed below. They will likely be removed from th
 
 If you are using previous versions of IPF and want to update:
 
+* IPF 3.4.x comes with some changes that must be considered when upgrading from IPF 3.2.x or IPF 3.3.x to  IPF 3.4.x Read the [3.4 Update Instructions] for how to update from IPF 3.1.x
 * IPF 3.2.x comes with some changes that must be considered when upgrading from IPF 3.1.x to IPF 3.2.x Read the [3.2 Update Instructions] for how to update from IPF 3.1.x
 * IPF 3.1.x introduces a few minor incompatibilities compared to IPF 3.0.x due to having less mandatory dependencies on the Spring framework. Read the [3.1 Update Instructions] for how to update from IPF 3.0.x
 * IPF 3.0.x is not backwards-compatible with IPF 2.x. Read the [Migration Instructions] for how to migrate a IPF 2.x-based integration solution.
@@ -166,10 +160,10 @@ IPF code is Open Source and licensed under [Apache license][apache-license].
 [Core Features]: ipf-platform-camel-core/index.html
 [Code System Mapping]: ipf-commons-map/index.html
 [Dynamic Feature Registration]: dynamic.html
-[OSGi Support]: osgi/index.html
 [Migration Instructions]: migration.html
 [3.1 Update Instructions]: migration-3.1.html
 [3.2 Update Instructions]: migration-3.2.html
+[3.4 Update Instructions]: migration-3.4.html
 [Recoverability]: recoverability.html
 [Performance Monitoring]: performance.html
 [HL7 Support tutorial]: ipf-tutorials-hl7/index.html

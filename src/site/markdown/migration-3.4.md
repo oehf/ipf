@@ -98,6 +98,8 @@ OSGi support has been abandoned
 
 The following deprecated modules and classes will be eventually removed in IPF 3.5
 
+* `ipf-archetypes`
+* `ipf-assembly`
 * `ipf-modules-hl7dsl`: the HL7 DSL has been included in `ipf-modules-hl7` in IPF 3.0
 * `ipf-platform-camel-core-legacy`: this has been moved into Camel (`camel-groovy-dsl`) in IPF 3.0
 * all deprecated classes in `ipf-modules-hl7`, particularly the old validation rule builders
