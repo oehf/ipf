@@ -168,6 +168,7 @@ class SegmentTest extends groovy.test.GroovyAssert {
     void testIsEmpty() {
         assert pv2.isEmpty() == true
         assert pv1.isEmpty() == false
+        if (pv2) fail()
     }
 
     @Test

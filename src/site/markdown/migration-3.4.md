@@ -38,6 +38,11 @@ instead of `ipf-platform-ihe-fhir-pixpdq` use either `ipf-platform-ihe-fhir-dstu
 Note that all DSTU2 code is effectively deprecated, i.e. no bugs or changes will be applied anymore, and related
 modules will be removed in one of the upcoming releases. STU3 modules are actively supported, until one day IHE moves to STU4, etc.
 
+### Boolean conversion for HL7 fields and structures
+
+The HL7 DSL now allows to check for empty fields or structures using 'Groovy truth', i.e.
+
+`if (!PID[3]) println('no identifiers')`
 
 ### XDS SourcePatientInfo
 
@@ -93,6 +98,8 @@ OSGi support has been abandoned
 
 The following deprecated modules and classes will be eventually removed in IPF 3.5
 
+* `ipf-archetypes`
+* `ipf-assembly`
 * `ipf-modules-hl7dsl`: the HL7 DSL has been included in `ipf-modules-hl7` in IPF 3.0
 * `ipf-platform-camel-core-legacy`: this has been moved into Camel (`camel-groovy-dsl`) in IPF 3.0
 * all deprecated classes in `ipf-modules-hl7`, particularly the old validation rule builders

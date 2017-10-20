@@ -19,7 +19,6 @@ import ca.uhn.hl7v2.ErrorCode
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.Version
 import ca.uhn.hl7v2.parser.ModelClassFactory
-import org.openehealth.ipf.commons.core.io.IOUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -39,7 +38,7 @@ import org.slf4j.LoggerFactory
  * @author Christian Ohr
  *
  */
-public class GroovyCustomModelClassFactory extends CustomModelClassFactory {
+class GroovyCustomModelClassFactory extends CustomModelClassFactory {
 
     private static Logger LOGGER = LoggerFactory.getLogger(CustomModelClassFactory.class)
 
@@ -67,11 +66,11 @@ public class GroovyCustomModelClassFactory extends CustomModelClassFactory {
     protected Class findClass(String subpackage, String name, String version) {
         if (!Version.supportsVersion(version)) {
             throw new HL7Exception("HL7 version $version is not supported",
-                    ErrorCode.UNSUPPORTED_VERSION_ID);
+                    ErrorCode.UNSUPPORTED_VERSION_ID)
         }
         def classLoaded = null
         def fullyQualifiedName = null
-        customModelClasses?.getAt(version)?.find {
+        customModelClasses[version]?.find {
             try {
                 def path = it.replaceAll('\\.', '/')
                 def sep = path.endsWith('/') ? '' : '/'

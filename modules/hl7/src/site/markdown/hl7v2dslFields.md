@@ -50,8 +50,11 @@ String hl7Event = message.MSH[9].encode()
 // Returns ADT
 String messageType = message.MSH[9][1].value
 
-// Also returns ADT, see Smart Navigation
-String messageType = message.MSH[9][1].value
+// Also returns ADT
+String messageType = message.MSH[9].value
+
+// Returns ADT_A01 if MSH[9][3] is empty
+String messageType = message.MSH[9][3].getValueOr('ADT_A01')
 
 // Returns the value of a subcomponent
 String street = message.PATIENT_RESULT.PATIENT.PID[11][1][1].value

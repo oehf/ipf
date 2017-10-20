@@ -27,25 +27,25 @@ import org.codehaus.groovy.runtime.InvokerInvocationException
 class DelegatingPredicate implements FilterIterator.Predicate {
 	
 	private Closure<Boolean> closure
-	
-	public DelegatingPredicate(Closure<Boolean> closure) {
-		super();
-		this.closure = closure;
+
+	DelegatingPredicate(Closure<Boolean> closure) {
+		super()
+		this.closure = closure
 	}
 
 	@Override
-	public boolean evaluate(Object args) {
+	boolean evaluate(Object args) {
 		(Boolean)callClosure(args)
 	}
 	
 	private Object callClosure(Object args) {
 		try {
-			return closure.call(args);
+			return closure.call(args)
 		} catch (InvokerInvocationException e) {
 			if (e.getCause() instanceof RuntimeException) {
-				throw (RuntimeException)e.getCause();
+				throw (RuntimeException)e.getCause()
 			} else {
-				throw e;
+				throw e
 			}
 		}
 	}	

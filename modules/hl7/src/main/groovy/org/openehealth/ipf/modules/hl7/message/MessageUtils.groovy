@@ -69,7 +69,7 @@ class MessageUtils {
         if (actualVersion == null || targetVersion == null) {
             throw new IllegalArgumentException('unknown HL7 version')
         }
-        return !(targetVersion == actualVersion || targetVersion.isGreaterThan(actualVersion));
+        return !(targetVersion == actualVersion || targetVersion.isGreaterThan(actualVersion))
     }
     
     /**
@@ -202,20 +202,20 @@ class MessageUtils {
         Segment mshOut = out.MSH
 
         // get MSH data from incoming message ...
-        String fieldSep = Terser.get(mshIn, 1, 0, 1, 1);
-        String encChars = Terser.get(mshIn, 2, 0, 1, 1);
-        String procID = Terser.get(mshIn, 11, 0, 1, 1);
+        String fieldSep = Terser.get(mshIn, 1, 0, 1, 1)
+        String encChars = Terser.get(mshIn, 2, 0, 1, 1)
+        String procID = Terser.get(mshIn, 11, 0, 1, 1)
 
         // populate outbound MSH using data from inbound message ...
-        Terser.set(mshOut, 1, 0, 1, 1, fieldSep);
-        Terser.set(mshOut, 2, 0, 1, 1, encChars);
-        Terser.set(mshOut, 11, 0, 1, 1, procID);
+        Terser.set(mshOut, 1, 0, 1, 1, fieldSep)
+        Terser.set(mshOut, 2, 0, 1, 1, encChars)
+        Terser.set(mshOut, 11, 0, 1, 1, procID)
 
         // revert sender and receiver
-        Terser.set(mshOut, 3, 0, 1, 1, Terser.get(mshIn, 5, 0, 1, 1));
-        Terser.set(mshOut, 4, 0, 1, 1, Terser.get(mshIn, 6, 0, 1, 1));
-        Terser.set(mshOut, 5, 0, 1, 1, Terser.get(mshIn, 3, 0, 1, 1));
-        Terser.set(mshOut, 6, 0, 1, 1, Terser.get(mshIn, 4, 0, 1, 1));
+        Terser.set(mshOut, 3, 0, 1, 1, Terser.get(mshIn, 5, 0, 1, 1))
+        Terser.set(mshOut, 4, 0, 1, 1, Terser.get(mshIn, 6, 0, 1, 1))
+        Terser.set(mshOut, 5, 0, 1, 1, Terser.get(mshIn, 3, 0, 1, 1))
+        Terser.set(mshOut, 6, 0, 1, 1, Terser.get(mshIn, 4, 0, 1, 1))
 
         if ('MSA' in out.names) {
             Terser.set(out.MSA, 2, 0, 1, 1, Terser.get(msg.MSH, 10, 0, 1, 1))
@@ -254,13 +254,13 @@ class MessageUtils {
      * @param version version, e.g. 2.3.1
      * @return new message
      */
-    public static Message makeMessage(HapiContext context, String eventType, String triggerEvent, String version) {
+    static Message makeMessage(HapiContext context, String eventType, String triggerEvent, String version) {
         ModelClassFactory factory = context.modelClassFactory
 
         def structName = (eventType == 'ACK') ? 'ACK' :
                 messageStructure(eventType, triggerEvent, version, factory)
 
-        Class<? extends Message> c = factory.getMessageClass(structName, version, true);
+        Class<? extends Message> c = factory.getMessageClass(structName, version, true)
         if (!c) {
             HL7Exception e = new HL7Exception("Can't instantiate message ${structName}", ErrorCode.UNSUPPORTED_MESSAGE_TYPE)
             throw new HL7v2Exception(e)
@@ -268,7 +268,7 @@ class MessageUtils {
         AbstractMessage msg = ReflectionUtil.instantiateMessage(c, factory)
         msg.setParser(context.getGenericParser())
         msg.initQuickstart(eventType, triggerEvent, 'P')
-        Terser.set(msg.MSH, 11, 0, 2, 1, 'T');
+        Terser.set(msg.MSH, 11, 0, 2, 1, 'T')
         msg
     }
 
@@ -281,7 +281,7 @@ class MessageUtils {
      */
     static Segment newSegment(String name, Message message) {
         HapiContext context = message.getParser().getHapiContext()
-        Class<? extends Segment> c = context.modelClassFactory.getSegmentClass(name, message?.version);
+        Class<? extends Segment> c = context.modelClassFactory.getSegmentClass(name, message?.version)
         if (!c) {
             throw new HL7Exception("Can't instantiate Segment $name")
         }
@@ -297,7 +297,7 @@ class MessageUtils {
      */
     static Group newGroup(String name, Message message) {
         HapiContext context = message.getParser().getHapiContext()
-        Class<? extends Group> c = context.modelClassFactory.getGroupClass(name, message?.version);
+        Class<? extends Group> c = context.modelClassFactory.getGroupClass(name, message?.version)
         if (!c) {
             throw new HL7Exception("Can't instantiate Group $name")
         }
@@ -314,7 +314,7 @@ class MessageUtils {
      */
     static Primitive newPrimitive(String name, Message message, String value) {
         HapiContext context = message.getParser().getHapiContext()
-        Class<? extends Type> c = context.modelClassFactory.getTypeClass(name, message?.version);
+        Class<? extends Type> c = context.modelClassFactory.getTypeClass(name, message?.version)
         if (!c) {
             throw new HL7Exception("Can't instantiate Type $name")
         }
@@ -337,7 +337,7 @@ class MessageUtils {
      */
     static Composite newComposite(String name, Message message, Map map) {
         HapiContext context = message.getParser().getHapiContext()
-        Class c = context.modelClassFactory.getTypeClass(name, message?.version);
+        Class c = context.modelClassFactory.getTypeClass(name, message?.version)
         if (!c) {
             throw new HL7Exception("Can't instantiate Type $name")
         }

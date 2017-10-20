@@ -111,13 +111,13 @@ final class Visitors {
         @Override
         boolean end(Group group, Location location) throws HL7Exception {
             closure.call(group, terserToDsl(location))
-            return super.end(group, location)
+            super.end(group, location)
         }
 
         @Override
         boolean end(Segment segment, Location location) throws HL7Exception {
             closure.call(segment, terserToDsl(location))
-            return super.end(segment, location)
+            super.end(segment, location)
         }
     }
 }

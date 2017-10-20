@@ -26,7 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException
  *
  * @author Christian Ohr
  */
-public class ClosurePrimitiveTypeRule extends ClosureRuleSupport implements PrimitiveTypeRule {
+class ClosurePrimitiveTypeRule extends ClosureRuleSupport implements PrimitiveTypeRule {
 
     boolean omitLeadingWhitespace
     boolean omitTrailingWhitespace
@@ -44,7 +44,7 @@ public class ClosurePrimitiveTypeRule extends ClosureRuleSupport implements Prim
     /**
      * @see ca.uhn.hl7v2.validation.PrimitiveTypeRule#correct(java.lang.String)
      */
-    public String correct(String s) {
+    String correct(String s) {
         if (omitLeadingWhitespace)
             s = (s =~ /^\s+/).replaceFirst('')
         if (omitTrailingWhitespace)
@@ -55,9 +55,9 @@ public class ClosurePrimitiveTypeRule extends ClosureRuleSupport implements Prim
     /**
      * @see ca.uhn.hl7v2.validation.PrimitiveTypeRule#test(java.lang.String)
      */
-    public boolean test(String s) {
-        ValidationException[] exceptions = apply(s);
-        return exceptions == null || exceptions.length == 0;
+    boolean test(String s) {
+        ValidationException[] exceptions = apply(s)
+        return exceptions == null || exceptions.length == 0
     }
 
     @Override

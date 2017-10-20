@@ -48,6 +48,18 @@ Subcomponents are accessed like a three-dimensional array.
 
 Details are described [here][hl7v2dslFields].
 
+#### Boolean conversion
+
+All fields and structures implement an `isEmpty()` method. For Groovy, this is used
+for boolean conversion so that checks become easier:
+
+```groovy
+    if (message.MSH[9][3]) {
+      println('Message structure is present')
+    }
+```
+
+
 #### Repetitions
 
 Groups, segments and fields may be repeatable. Parentheses like with regular method calls are used in order to obtain a
