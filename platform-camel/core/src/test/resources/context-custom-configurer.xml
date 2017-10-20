@@ -42,7 +42,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
   </bean>
   
   <bean id="configurerDSL" 
-        class="org.openehealth.ipf.commons.core.extend.config.ExtensionConfigurer">
+        class="org.openehealth.ipf.commons.core.extend.config.DynamicExtensionConfigurer">
   </bean>
   
   <bean id="postProcessor"
