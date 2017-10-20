@@ -18,7 +18,6 @@
         <module>hl7dsl</module>
         <module>hl7</module>
         <module>cda</module>
-        <module>fhir</module>
     </modules>
 
     <dependencies>
