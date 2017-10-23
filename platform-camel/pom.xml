@@ -16,7 +16,9 @@
 
     <modules>
         <module>core</module>
+        <!--
         <module>core-legacy</module>
+        -->
         <module>ihe</module>
         <module>hl7</module>
         <module>cda</module>

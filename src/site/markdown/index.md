@@ -98,15 +98,14 @@ IPF comes with some [Spring Boot Starters](../ipf-spring-boot-starter/index.html
 in the Spring Boot runtime environment.
 
 
-## Deprecations
+## Removed modules
 
-IPF 3.4 deprecates the modules listed below. They will likely be removed from the main IPF project in the
- next release.
+IPF 3.4 removed the modules listed below.
 
  * `ipf-archetypes`
  * `ipf-assembly`
  * `ipf-modules-hl7-dsl` (note that the HL7 DSL is part of `ipf-modules-hl7`)
- * `ipf-platform-camel-core-legacy`
+ * `ipf-platform-camel-core-legacy` (part of Camel Groovy module)
 
 ## Tutorials and Examples
 

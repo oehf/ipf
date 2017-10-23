@@ -19,8 +19,10 @@
 
     <modules>
         <module>dependencies</module>
+        <!--
         <module>archetypes</module>
         <module>assembly</module>
+        -->
         <module>commons</module>
         <module>modules</module>
         <module>boot</module>
