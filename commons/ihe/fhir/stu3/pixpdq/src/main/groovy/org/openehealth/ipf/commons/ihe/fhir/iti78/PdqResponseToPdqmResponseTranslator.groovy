@@ -230,21 +230,22 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
 
         // Citizenship
         if (pid[26].value) {
-            CodeableConcept citizenship = new CodeableConcept()
-            String mapped = pid[18].value.map('hl7v2fhir-patient-citizenship')
+            CodeableConcept citizenshipCode = new CodeableConcept()
+            String mapped = pid[26].value.map('hl7v2fhir-patient-citizenship')
             def mappedCitizenship
             switch (mapped) {
                 case "UNK":
-                    mappedCitizenship = V3NullFlavor.UNK; break;
+                    mappedCitizenship = V3NullFlavor.UNK; break
                 default: mappedCitizenship = new Coding()
                     .setCode(mapped)
                     .setSystem("urn:iso:std:iso:3166")
                     .setDisplay(mapped)
             }
-            citizenship.addCoding()
+            citizenshipCode.addCoding()
                     .setCode(mapped)
                     .setSystem(mappedCitizenship.system)
                     .setDisplay(mappedCitizenship.display)
+            PdqPatient.Citizenship citizenship = new PdqPatient.Citizenship().setCode(citizenshipCode)
             patient.addCitizenship(citizenship)
         }
 
