@@ -35,7 +35,6 @@ class SampleRouteBuilder extends CustomRouteBuilder {
 		from('jetty:http://0.0.0.0:8800/map')
             .convertBodyTo(String.class)
             .unmarshal().hl7()
-            .verify().hl7()
 			.to('direct:map')
 
         from('direct:map')
