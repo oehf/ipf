@@ -40,10 +40,6 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>ipf-modules-hl7dsl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>ipf-modules-hl7</artifactId>
         </dependency>
         <dependency>
