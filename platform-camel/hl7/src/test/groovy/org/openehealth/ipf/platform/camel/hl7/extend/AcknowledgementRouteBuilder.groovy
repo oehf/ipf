@@ -22,6 +22,7 @@ import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.parser.GenericParser
 import org.apache.camel.component.hl7.HL7DataFormat
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.hl7.HL7v2
 
 /**
  * @author Martin Krasser
@@ -34,16 +35,11 @@ class AcknowledgementRouteBuilder extends SpringRouteBuilder {
 
         onException(Exception.class)
                 .continued(true)
-                .ack().staticParams(AcknowledgmentCode.AR, "Don't like it", ErrorCode.UNSUPPORTED_VERSION_ID)
-
-        from("direct:input1")
-            .unmarshal().ghl7('UTF-8')
-            .ack()
-            .to('mock:output')
+                .transform(HL7v2.ack(AcknowledgmentCode.AR, "Don't like it", ErrorCode.UNSUPPORTED_VERSION_ID))
 
         from("direct:input2")
             .unmarshal(hl7)
-            .ack()
+            .transform(HL7v2.ack())
             .to('mock:output')
 
         from("direct:input3")
@@ -53,7 +49,7 @@ class AcknowledgementRouteBuilder extends SpringRouteBuilder {
 
         from("direct:input4")
                 .unmarshal(hl7)
-                .ack().staticParams(AcknowledgmentCode.AR)
+                .transform(HL7v2.ack(AcknowledgmentCode.AR))
                 .to('mock:output')
     }
     

@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.hl7.expression;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 
 /**
  * @author Martin Krasser
@@ -27,7 +26,6 @@ public class Hl7InputExpression implements Expression {
     @Override
     public <T> T evaluate(Exchange exchange, Class<T> type) {
         Object body = exchange.getIn().getBody();
-        if (body instanceof MessageAdapter) return type.cast(((MessageAdapter)body).getTarget());
         return type.cast(body);
     }
 

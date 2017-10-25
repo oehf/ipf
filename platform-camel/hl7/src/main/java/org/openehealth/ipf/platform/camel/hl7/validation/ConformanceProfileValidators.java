@@ -15,11 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.validation;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.JAXBException;
-
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
@@ -37,8 +32,12 @@ import org.openehealth.ipf.gazelle.validation.core.CachingGazelleProfileRule;
 import org.openehealth.ipf.gazelle.validation.profile.ConformanceProfile;
 import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
 import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
+
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Factory for manually triggering a validation of a message depending on a profile or a defined
@@ -128,6 +127,7 @@ public final class ConformanceProfileValidators {
     /**
      * Returns the HAPI Message from the message body. If the body is a string, it is parsed on the fly
      * using
+     *
      * @param exchange
      * @return HAPI message
      * @throws HL7Exception
@@ -136,14 +136,12 @@ public final class ConformanceProfileValidators {
         Object body = exchange.getIn().getBody();
         Message message;
 
-        if (body instanceof MessageAdapter) {
-            message = ((MessageAdapter)body).getHapiMessage();
-        } else if (body instanceof Message) {
-            message = (Message)body;
+        if (body instanceof Message) {
+            message = (Message) body;
         } else if (body instanceof String) {
             HapiContext context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
             context = context != null ? context : FALLBACK_HAPI_CONTEXT;
-            message = new GenericParser(context).parse((String)body);
+            message = new GenericParser(context).parse((String) body);
         } else {
             // try type conversion
             message = exchange.getIn().getBody(Message.class);

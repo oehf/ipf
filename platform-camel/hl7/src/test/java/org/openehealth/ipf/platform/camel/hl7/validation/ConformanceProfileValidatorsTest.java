@@ -16,9 +16,6 @@
 package org.openehealth.ipf.platform.camel.hl7.validation;
 
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
@@ -32,7 +29,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 import static org.junit.Assert.fail;
 
@@ -76,7 +75,7 @@ public class ConformanceProfileValidatorsTest {
 
     @Test
     public void testIti10Adapter() throws Exception {
-        template.sendBody("direct:iti10", new MessageAdapter(getParsedMessage("hl7/iti-10.hl7")));
+        template.sendBody("direct:iti10", getParsedMessage("hl7/iti-10.hl7"));
     }
 
     @Test

@@ -35,7 +35,7 @@ public class AcknowledgementExtensionTest extends AbstractExtensionTest {
 
     private static String MSH_EXPECTED = "||ACK^A01";
     private static String ERR1_EXPECTED = "ERR|^^^203&Unsupported version id&HL70357&&Don't like it";
-    private static String ERR2_EXPECTED = "ERR|^^^207&Application internal error&HL70357&&Error while processing HL7 message";
+    private static String ERR2_EXPECTED = "ERR|^^^207&Application internal error&HL70357&&Exception";
 
 
     @EndpointInject(uri = "mock:output")
@@ -46,15 +46,6 @@ public class AcknowledgementExtensionTest extends AbstractExtensionTest {
     @After
     public void myTearDown() throws Exception {
         mockOutput.reset();
-    }
-
-    @Test
-    public void testRoute1() throws Exception {
-        String message = inputMessage(resource);
-        mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input1", message);
-        mockOutput.assertIsSatisfied();
-        assertTrue(resultString(mockOutput).contains(MSH_EXPECTED));
     }
 
     @Test
@@ -81,7 +72,8 @@ public class AcknowledgementExtensionTest extends AbstractExtensionTest {
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input4", message);
         mockOutput.assertIsSatisfied();
-        assertTrue(resultString(mockOutput).contains(ERR2_EXPECTED));
+        String result = resultString(mockOutput);
+        assertTrue(result.contains(ERR2_EXPECTED));
     }
 
     private String resultString(MockEndpoint mock) {

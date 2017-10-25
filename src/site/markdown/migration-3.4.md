@@ -89,6 +89,13 @@ to an ITI-43 or an ITI-86 request.
 IPF 3.4 is compatible with IHE ITI Revision 14 (published on July 21, 2017), including changes from the following Change Proposals:
 
 
+### Camel DSL HL7 extensions deprecated
+
+Due to the removal of `ipf-modules-hl7-dsl`, the deprecated `ghl7()` Camel DSL extensions now
+operate on plain HAPI HL7 Message objects rather than the removed `MessageAdapter`. All HL7-
+related Camel DSL extensions are now deprecated and will be removed in a subsequent IPF version.
+
+
 ### OSGi support
 
 OSGi support has been abandoned

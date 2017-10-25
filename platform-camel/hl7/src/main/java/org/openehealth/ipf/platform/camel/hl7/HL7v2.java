@@ -16,7 +16,10 @@
 
 package org.openehealth.ipf.platform.camel.hl7;
 
-import ca.uhn.hl7v2.*;
+import ca.uhn.hl7v2.AcknowledgmentCode;
+import ca.uhn.hl7v2.ErrorCode;
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.GenericParser;
 import ca.uhn.hl7v2.parser.Parser;
@@ -28,7 +31,6 @@ import org.apache.camel.builder.ValueBuilder;
 import org.apache.camel.component.hl7.HL7;
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.modules.hl7.validation.Validator;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
 /**
@@ -159,13 +161,11 @@ public final class HL7v2 {
      * @return HAPI message
      * @throws ca.uhn.hl7v2.HL7Exception
      */
-    static Message bodyMessage(Exchange exchange) throws HL7Exception {
+    public static Message bodyMessage(Exchange exchange) throws HL7Exception {
         Object body = exchange.getIn().getBody();
         Message message;
 
-        if (body instanceof MessageAdapter) {
-            message = ((MessageAdapter) body).getHapiMessage();
-        } else if (body instanceof Message) {
+        if (body instanceof Message) {
             message = (Message) body;
         } else if (body instanceof String) {
             HapiContext context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);

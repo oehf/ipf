@@ -20,13 +20,13 @@ import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.Parser
 import ca.uhn.hl7v2.validation.impl.DefaultValidation
 import org.apache.camel.builder.DataFormatClause
+import org.apache.camel.component.hl7.HL7DataFormat
 import org.apache.camel.model.ProcessorDefinition
 import org.openehealth.ipf.modules.hl7.validation.support.HL7Validator
 import org.openehealth.ipf.platform.camel.core.extend.CoreExtensionModule
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 import org.openehealth.ipf.platform.camel.hl7.HL7v2
 import org.openehealth.ipf.platform.camel.hl7.adapter.AcknowledgementAdapter
-import org.openehealth.ipf.platform.camel.hl7.dataformat.Hl7DataFormat
 import org.openehealth.ipf.platform.camel.hl7.expression.Hl7InputExpression
 import org.openehealth.ipf.platform.camel.hl7.model.HapiAdapterDefinition
 
@@ -40,65 +40,32 @@ import org.openehealth.ipf.platform.camel.hl7.model.HapiAdapterDefinition
  * @author Jens Riemschneider
  * @author Christian Ohr
  */
-public class Hl7ExtensionModule {
+class Hl7ExtensionModule {
 
     /**
      * Returns acknowledgement message
      * FIXME cannot be used in local onException clauses!
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing
+     *
+     * @deprecated use {@link HL7v2#ack()}
      */
-    public static HapiAdapterDefinition ack(ProcessorDefinition self) {
-        HapiAdapterDefinition answer = new HapiAdapterDefinition(new AcknowledgementAdapter());
-        self.addOutput(answer);
-        return answer;
+    static HapiAdapterDefinition ack(ProcessorDefinition self) {
+        HapiAdapterDefinition answer = new HapiAdapterDefinition(new AcknowledgementAdapter())
+        self.addOutput(answer)
+        return answer
     }
 
     /**
      * Validates a message using {@link HL7v2#validatingProcessor()}
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing
+     *
+     * @deprecated use {@link HL7v2#validatingProcessor()}
      */
-    public static ProcessorDefinition validateMessage(ProcessorDefinition self) {
-        return self.process(HL7v2.validatingProcessor());
+    static ProcessorDefinition validateMessage(ProcessorDefinition self) {
+        return self.process(HL7v2.validatingProcessor())
     }
 
-    /**
-     * Defines marshaling between a standard HL7 message and a
-     * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
-     *
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
-     *
-     * @deprecated use Camel HL7DataModel
-     */
-    public static ProcessorDefinition ghl7(DataFormatClause self) {
-        return ghl7(self, (Parser)null, null);
-    }
-    
-    /**
-     * Defines marshaling between a standard HL7 message and a
-     * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
-     * via an HL7 parser
-     *
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
-     *
-     * @deprecated use Camel HL7DataModel
-     */
-    public static ProcessorDefinition ghl7(DataFormatClause self, Parser parser) {
-        return ghl7(self, parser, null);
-    }
-
-    /**
-     * Defines marshaling between a standard HL7 message and a
-     * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
-     * via an parser provided by the specified {@link HapiContext}.
-     *
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
-     *
-     * @deprecated use Camel HL7DataModel
-     */
-    public static ProcessorDefinition ghl7(DataFormatClause self, HapiContext context) {
-        return ghl7(self, context, null);
-    }
     
     /**
      * Defines marshaling between a standard HL7 message and a
@@ -109,10 +76,11 @@ public class Hl7ExtensionModule {
      *
      * @deprecated use Camel HL7DataModel
      */
-    public static ProcessorDefinition ghl7(DataFormatClause self, String charset) {
-        return ghl7(self, (HapiContext)null, charset);
+    static ProcessorDefinition ghl7(DataFormatClause self) {
+        return ghl7(self, (HapiContext)null)
     }
-    
+
+
     /**
      * Defines marshaling between a standard HL7 message and a
      * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
@@ -122,15 +90,12 @@ public class Hl7ExtensionModule {
      *
      * @deprecated use Camel HL7DataModel
      */
-    public static ProcessorDefinition ghl7(DataFormatClause self, HapiContext context, String charset) {
-        Hl7DataFormat hl7DataFormat = new Hl7DataFormat();
-        if (context) {
-            hl7DataFormat.context = context;
+    static ProcessorDefinition ghl7(DataFormatClause self, Parser parser) {
+        HL7DataFormat hl7DataFormat = new HL7DataFormat()
+        if (parser) {
+            hl7DataFormat.parser = parser
         }
-        if (charset) {
-            hl7DataFormat.charset = charset;
-        }
-        CoreExtensionModule.dataFormat(self, hl7DataFormat);
+        CoreExtensionModule.dataFormat(self, hl7DataFormat)
     }
 
     /**
@@ -142,15 +107,12 @@ public class Hl7ExtensionModule {
      *
      * @deprecated use Camel HL7DataModel
      */
-    public static ProcessorDefinition ghl7(DataFormatClause self, Parser parser, String charset) {
-        Hl7DataFormat hl7DataFormat = new Hl7DataFormat();
-        if (parser) {
-            hl7DataFormat.parser = parser;
+    static ProcessorDefinition ghl7(DataFormatClause self, HapiContext hapiContext) {
+        HL7DataFormat hl7DataFormat = new HL7DataFormat()
+        if (hapiContext) {
+            hl7DataFormat.hapiContext = hapiContext
         }
-        if (charset) {
-            hl7DataFormat.charset = charset;
-        }
-        CoreExtensionModule.dataFormat(self, hl7DataFormat);
+        CoreExtensionModule.dataFormat(self, hl7DataFormat)
     }
 
     /**
@@ -159,24 +121,26 @@ public class Hl7ExtensionModule {
      *
      * @deprecated use {@link #hl7(org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition)}
      */
-    public static ValidatorAdapterDefinition ghl7(ValidatorAdapterDefinition self) { 
-        self.setValidator(new HL7Validator());
-        self.staticProfile(new DefaultValidation());
-        return (ValidatorAdapterDefinition)self.input(new Hl7InputExpression());
+    static ValidatorAdapterDefinition ghl7(ValidatorAdapterDefinition self) {
+        self.setValidator(new HL7Validator())
+        self.staticProfile(new DefaultValidation())
+        return (ValidatorAdapterDefinition)self.input(new Hl7InputExpression())
     }
 
     /**
      * Configures a validator with HL7 support, executing a validation based on the {@link HapiContext}
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7messagevalidation
+     *
+     * @deprecated use {@link HL7v2#validatingProcessor()}
      */
-    public static ValidatorAdapterDefinition hl7(ValidatorAdapterDefinition self) {
-        self.setValidator(new HL7Validator());
+    static ValidatorAdapterDefinition hl7(ValidatorAdapterDefinition self) {
+        self.setValidator(new HL7Validator())
         self.profile { exchange ->
             Message msg = HL7v2.bodyMessage(exchange)
             msg.parser.hapiContext
         }
-        return (ValidatorAdapterDefinition)self.input(new Hl7InputExpression());
+        return (ValidatorAdapterDefinition)self.input(new Hl7InputExpression())
     }
 
 }

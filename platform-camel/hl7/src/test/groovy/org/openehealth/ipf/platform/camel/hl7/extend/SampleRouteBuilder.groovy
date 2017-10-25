@@ -16,7 +16,8 @@
 package org.openehealth.ipf.platform.camel.hl7.extend
 
 import org.apache.camel.spring.SpringRouteBuilder
-/**
+
+/**
  * @author Martin Krasser
  */
 class SampleRouteBuilder extends SpringRouteBuilder {
@@ -25,7 +26,7 @@ class SampleRouteBuilder extends SpringRouteBuilder {
         
         from("direct:input1")
             // create a message adapter from an HL7 string
-            .unmarshal().ghl7()
+            .unmarshal().hl7()
             // transmogrifiers are passed in-message bodies
             // and message headers by default.
             .transmogrify { msg, headers -> 
@@ -42,10 +43,10 @@ class SampleRouteBuilder extends SpringRouteBuilder {
                 // field value of the HL7 message (using
                 // the HAPI DSL)
                 .when { it.in.body.MSH[5].value == 'blah' }
-                    .marshal().ghl7() // adapter -> string
+                    .marshal().hl7() // adapter -> string
                     .to('mock:output1')
                 .when { it.in.body.MSH[5].value == 'blub' }
-                    .marshal().ghl7() // adapter -> string
+                    .marshal().hl7() // adapter -> string
                     .to('mock:output2')
     }
     

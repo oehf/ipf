@@ -107,6 +107,7 @@ IPF 3.4 removed the modules listed below.
  * `ipf-modules-hl7-dsl` (note that the HL7 DSL is part of `ipf-modules-hl7`)
  * `ipf-platform-camel-core-legacy` (part of Camel Groovy module)
 
+
 ## Tutorials and Examples
 
 | Tutorial                                        | Description

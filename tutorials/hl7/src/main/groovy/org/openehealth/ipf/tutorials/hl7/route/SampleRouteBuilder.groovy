@@ -21,14 +21,13 @@ import org.apache.camel.Exchange
 import org.apache.camel.Expression
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.hl7.HL7DataFormat
-import org.openehealth.ipf.tutorials.hl7.validation.SampleRulesBuilder
 
 import static org.apache.camel.component.hl7.HL7.messageConforms
 
 /**
  * @author Christian Ohr
  */
-public class SampleRouteBuilder extends RouteBuilder {
+class SampleRouteBuilder extends RouteBuilder {
 
     void configure() {
 
