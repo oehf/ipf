@@ -214,11 +214,11 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected List<String> searchStringList(StringAndListParam param, boolean forceExactSearch) {
-        param?.valuesAsQueryTokens?.collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
+        param?.valuesAsQueryTokens.collect { searchString(it.valuesAsQueryTokens.find(), forceExactSearch) }
     }
 
     protected List<String> searchDateList(DateAndListParam param) {
-        param?.valuesAsQueryTokens?.collect { searchDate(it.valuesAsQueryTokens.find()) }
+        param?.valuesAsQueryTokens.collect { searchDate(it.valuesAsQueryTokens.find()) }
     }
 
     protected String searchNumber(NumberParam param) {
@@ -243,7 +243,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected List<Optional<CompositeIdentifier>> searchTokenList(TokenAndListParam param) {
-        param?.valuesAsQueryTokens?.collect { searchToken(it?.valuesAsQueryTokens?.find()) }
+        param?.valuesAsQueryTokens.collect { searchToken(it?.valuesAsQueryTokens.find()) }
     }
 
     protected def firstOrNull(List<?> list) {

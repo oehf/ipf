@@ -19,6 +19,8 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78
 import ca.uhn.hl7v2.HapiContext
 import org.apache.commons.io.IOUtils
 import org.easymock.EasyMock
+import org.hl7.fhir.dstu3.model.ContactPoint
+import org.hl7.fhir.dstu3.model.HumanName
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -78,6 +80,23 @@ class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
         assertEquals(1, patients.size())
 
         PdqPatient patient = ++patients.iterator()
+
+        assertEquals('http://org.openehealth/ipf/commons/ihe/fhir/1', patient.identifier[0].system)
+        assertEquals('79007', patient.identifier[0].value)
+
+        assertEquals('Beckenbauer', patient.name[0].family)
+        assertEquals('Michael', patient.name[0].given[0].value)
+        assertEquals('Joachim', patient.name[0].given[1].value)
+        assertEquals(HumanName.NameUse.OFFICIAL, patient.name[0].use)
+
+        assertEquals('Muenchner Freiheit 1', patient.address[0].line[0].value)
+        assertEquals('Muenchen', patient.address[0].city)
+        assertEquals('89000', patient.address[0].postalCode)
+        assertEquals('DE', patient.address[0].country)
+
+        assertEquals(ContactPoint.ContactPointUse.HOME, patient.telecom[0].use)
+        assertEquals(ContactPoint.ContactPointSystem.PHONE, patient.telecom[0].system)
+        assertEquals('089/2356395', patient.telecom[0].value)
 
         assertEquals('Paukenbecker', patient.mothersMaidenName.family)
         assertEquals('Passau', patient.birthPlace.city)
