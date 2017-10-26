@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti78
 
 import ca.uhn.fhir.model.api.ResourceMetadataKeyEnum
+import ca.uhn.fhir.model.primitive.DecimalDt
 import ca.uhn.fhir.model.valueset.BundleEntrySearchModeEnum
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
@@ -98,7 +99,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
      * @return Patient resource list
      */
     protected List<PdqPatient> handleRegularSearchResponse(responseCollection) {
-        List<PdqPatient> resultList = new ArrayList<>();
+        List<PdqPatient> resultList = new ArrayList<>()
         if (responseCollection) {
             for (response in responseCollection) {
                 PdqPatient patient = pidToPatient(response)
@@ -111,13 +112,11 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
 
     protected void addSearchScore(PdqPatient pdqPatient, response) {
         ResourceMetadataKeyEnum.ENTRY_SEARCH_MODE.put(pdqPatient, BundleEntrySearchModeEnum.MATCH.code)
-        /* ??
         String searchScoreString = response.QRI[1]?.value
         if (searchScoreString != null) {
             double searchScore = Integer.valueOf(searchScoreString) / 100
             ResourceMetadataKeyEnum.ENTRY_SCORE.put(pdqPatient, new DecimalDt(searchScore))
         }
-        */
     }
 
     protected PdqPatient pidToPatient(response) {
@@ -171,12 +170,12 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                 case "UNK":
                     mappedMaritalStatus = new Coding()
                             .setSystem('http://hl7.org/fhir/v3/NullFlavor')
-                            V3NullFlavor.UNK; break;
+                            V3NullFlavor.UNK; break
                 case "U":
                     mappedMaritalStatus = new Coding()
                             .setSystem('http://hl7.org/fhir/marital-status')
                             .setCode('U')
-                            .setDisplay('Unmarried'); break;
+                            .setDisplay('Unmarried'); break
                 default: mappedMaritalStatus = V3MaritalStatus.fromCode(mapped)
             }
             maritalStatus.addCoding()
@@ -192,7 +191,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
             def mappedReligion
             switch (mapped) {
                 case "UNK":
-                    mappedReligion = V3NullFlavor.UNK; break;
+                    mappedReligion = V3NullFlavor.UNK; break
                 default: mappedReligion = V3ReligiousAffiliation.fromCode(mapped)
             }
             religion.addCoding()
@@ -245,7 +244,8 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                     .setCode(mapped)
                     .setSystem(mappedCitizenship.system)
                     .setDisplay(mappedCitizenship.display)
-            PdqPatient.Citizenship citizenship = new PdqPatient.Citizenship().setCode(citizenshipCode)
+            PdqPatient.Citizenship citizenship = new PdqPatient.Citizenship()
+            citizenship.setCode(citizenshipCode)
             patient.addCitizenship(citizenship)
         }
 

@@ -47,7 +47,7 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
 
     String pixSupplierResourceIdentifierUri
 
-    private final UriMapper uriMapper;
+    private final UriMapper uriMapper
 
     /**
      * @param uriMapper mapping for translating FHIR URIs into OIDs
@@ -67,7 +67,7 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
 
     @Override
     QBP_Q21 translateFhir(Object request, Map<String, Object> parameters) {
-        Parameters inParams = (Parameters) request;
+        Parameters inParams = (Parameters) request
         QBP_Q21 qry = PIX.Interactions.ITI_9.hl7v2TransactionConfiguration.request('Q23')
 
         qry.MSH[3] = senderDeviceName
@@ -93,7 +93,7 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
         if (requestedDomain) {
             if (!Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[4]), uriMapper, requestedDomain.value)) {
                 // UriMapper is not able to derive a PIX OID/Namespace for the target domain URI, Error Case 5
-                throw Utils.unknownTargetDomainCode(requestedDomain.value);
+                throw Utils.unknownTargetDomainCode(requestedDomain.value)
             }
         }
 
@@ -110,11 +110,11 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
         }
         if (!id.value) {
             // No value provided? Patient cannot be found, Error Case 3
-            throw Utils.unknownPatientId();
+            throw Utils.unknownPatientId()
         }
         if (!Utils.populateIdentifier(qry.QPD[3], uriMapper, id.system, id.value)) {
             // UriMapper is not able to derive a PIX OID/Namespace for the patient domain URI, Error Case 4
-            throw Utils.unknownSourceDomainCode(id.system);
+            throw Utils.unknownSourceDomainCode(id.system)
         }
 
         id

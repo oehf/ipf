@@ -36,12 +36,14 @@ import java.util.List;
  * <li>mothersMaidenName</li>
  * <li>citizenship</li>
  * <li>religion</li>
+ * <li>race</li>
+ * <li>ethnicity</li>
  * </ul>
  *
  * @author Christian Ohr
  * @since 3.4
  */
-@ResourceDef(name = "Patient", id = "pdqm", profile = "http://www.ihe.net/ITI-78/Profile/pdqm")
+@ResourceDef(name = "Patient", id = "pdqm")
 public class PdqPatient extends Patient {
 
     // Search Parameters
@@ -88,7 +90,7 @@ public class PdqPatient extends Patient {
 
     @Override
     public boolean isEmpty() {
-        return super.isEmpty() && ElementUtil.isEmpty(birthPlace, mothersMaidenName, citizenship, religion);
+        return super.isEmpty() && ElementUtil.isEmpty(birthPlace, mothersMaidenName, citizenship, religion, race, ethnicity);
     }
 
     public Address getBirthPlace() {

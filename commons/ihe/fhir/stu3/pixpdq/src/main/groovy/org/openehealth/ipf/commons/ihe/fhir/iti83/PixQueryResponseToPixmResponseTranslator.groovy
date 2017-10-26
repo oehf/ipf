@@ -95,7 +95,7 @@ class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Messa
             // Case 5: Unknown Target Domain
             throw Utils.unknownTargetDomainCode()
         } else {
-            throw Utils.unexpectedProblem();
+            throw Utils.unexpectedProblem()
         }
 
     }

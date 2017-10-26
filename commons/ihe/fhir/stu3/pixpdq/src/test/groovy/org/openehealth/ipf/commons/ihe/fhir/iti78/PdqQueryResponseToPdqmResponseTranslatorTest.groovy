@@ -48,7 +48,7 @@ class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
     MappingService mappingService
 
     @Before
-    public void setup() {
+    void setup() {
         mappingService = new BidiMappingService()
         mappingService.setMappingScripts(
                 [ getClass().getClassLoader().getResource('mapping.map'),
@@ -65,17 +65,26 @@ class PdqQueryResponseToPdqmResponseTranslatorTest extends Assert {
     }
 
     @Test
-    public void testTranslateRegularSearchResponse() {
+    void testTranslateRegularSearchResponse() {
         RSP_K21 message = loadMessage('ok-1_Response')
         List<PdqPatient> patients = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(9, patients.size())
     }
 
     @Test
-    public void testTranslateRegularGetResponse() {
+    void testTranslateRegularGetResponse() {
         RSP_K21 message = loadMessage('ok-2_Response')
         List<PdqPatient> patients = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(1, patients.size())
+
+        PdqPatient patient = ++patients.iterator()
+
+        assertEquals('Paukenbecker', patient.mothersMaidenName.family)
+        assertEquals('Passau', patient.birthPlace.city)
+        assertEquals('deu',patient.citizenship[0].code.codingFirstRep.code)
+        assertEquals('1041', patient.religion[0].codingFirstRep.code)
+        assertEquals('M', patient.maritalStatus.codingFirstRep.code)
+        assertEquals(2, patient.multipleBirthIntegerType.value)
     }
 
     RSP_K21 loadMessage(String name) {
