@@ -83,6 +83,16 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.phloc</groupId>
+            <artifactId>phloc-schematron</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.phloc</groupId>
+            <artifactId>phloc-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-http</artifactId>
             <scope>test</scope>

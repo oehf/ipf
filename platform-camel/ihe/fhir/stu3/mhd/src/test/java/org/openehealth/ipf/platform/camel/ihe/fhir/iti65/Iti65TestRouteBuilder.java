@@ -26,6 +26,7 @@ import org.hl7.fhir.dstu3.model.DocumentManifest;
 import org.hl7.fhir.dstu3.model.DocumentReference;
 import org.hl7.fhir.dstu3.model.ListResource;
 import org.hl7.fhir.dstu3.model.Resource;
+import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 
 import java.util.Date;
@@ -52,7 +53,8 @@ public class Iti65TestRouteBuilder extends RouteBuilder {
 
         from("mhd-iti65:stub?audit=true")
                 .errorHandler(noErrorHandler())
-                .setHeader(VALIDATION_MODE, constant(SCHEMA | MODEL))
+                .setHeader(ValidatorAdapter.NEED_VALIDATION_HEADER_NAME, constant(true))
+                .setHeader(VALIDATION_MODE, constant(SCHEMA | SCHEMATRON | MODEL))
                 .process(itiRequestValidator())
                 .transform(new Responder());
     }

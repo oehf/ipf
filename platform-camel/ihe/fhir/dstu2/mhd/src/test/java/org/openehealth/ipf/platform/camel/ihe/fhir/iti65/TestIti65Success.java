@@ -53,7 +53,7 @@ public class TestIti65Success extends AbstractTestIti65 {
 
     @Test
     public void testGetConformance() {
-        Conformance conf = client.fetchConformance().ofType(Conformance.class).execute();
+        Conformance conf = client.capabilities().ofType(Conformance.class).execute();
         Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
         assertEquals(Conformance.SystemRestfulInteraction.TRANSACTION, component.getInteraction().get(0).getCode());
     }
@@ -107,7 +107,7 @@ public class TestIti65Success extends AbstractTestIti65 {
         assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeCodes.PERSON.getCode(), patient.getParticipantObjectTypeCode());
         assertEquals(RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectTypeRoleCodes.PATIENT.getCode(), patient.getParticipantObjectTypeCodeRole());
         assertEquals(new RFC3881ParticipantObjectCodes.RFC3881ParticipantObjectIDTypeCodes.PatientNumber().getCode(), patient.getParticipantObjectIDTypeCode().getCode());
-        assertEquals("Patient/a2", new String(patient.getParticipantObjectID()));
+        assertEquals("Patient/a2", patient.getParticipantObjectID());
 
         // SubmissionSet
         ParticipantObjectIdentificationType poit = event.getParticipantObjectIdentification().get(1);

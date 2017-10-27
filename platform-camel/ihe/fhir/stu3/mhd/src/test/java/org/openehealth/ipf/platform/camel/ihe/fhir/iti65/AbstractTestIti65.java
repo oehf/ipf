@@ -40,7 +40,8 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti65.class);
 
     private static final String BINARY_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bb";
-    private static final String REFERENCE_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bb";
+    private static final String REFERENCE_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bc";
+    private static final String MANIFEST_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bd";
 
     public static void startServer(String contextDescriptor) throws ServletException {
         IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU3);
@@ -64,6 +65,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
         manifest.addContent()
                 .setP(new Reference(REFERENCE_FULL_URL));
         bundle.addEntry()
+                .setFullUrl(MANIFEST_FULL_URL)
                 .setRequest(
                         new Bundle.BundleEntryRequestComponent()
                                 .setMethod(Bundle.HTTPVerb.POST)

@@ -22,6 +22,9 @@
         <jaxb-version>2.3.0</jaxb-version>
         <mina2-version>2.0.16</mina2-version>
         <opensaml-version>3.3.0</opensaml-version>
+        <phloc-schematron-version>2.7.1</phloc-schematron-version>
+        <phloc-commons-version>4.4.1</phloc-commons-version>
+
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
         <spring-version>4.3.12.RELEASE</spring-version>
@@ -670,6 +673,16 @@
                 <artifactId>jaxb-runtime</artifactId>
                 <version>${jaxb-version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.phloc</groupId>
+                <artifactId>phloc-schematron</artifactId>
+                <version>${phloc-schematron-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.phloc</groupId>
+                <artifactId>phloc-commons</artifactId>
+                <version>${phloc-commons-version}</version>
+            </dependency>
 
             <!-- All IPF dependencies -->
 
@@ -950,12 +963,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- Goes away with CXF 3.1.7 -->
-            <dependency>
-                <groupId>org.openehealth.ipf.boot</groupId>
-                <artifactId>cxf-integration-spring-boot-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.openehealth.ipf.gazelle</groupId>

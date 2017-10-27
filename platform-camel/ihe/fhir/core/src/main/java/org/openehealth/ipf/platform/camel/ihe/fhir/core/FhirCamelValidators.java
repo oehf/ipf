@@ -103,7 +103,7 @@ public final class FhirCamelValidators {
     public static Processor itiRequestValidator() {
         return exchange -> {
             FhirContext context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
-            if (context != null) {
+            if (context != null && exchange.getIn().getBody() instanceof IBaseResource) {
                 if (ValidatorAdapter.validationEnabled(exchange)) {
                     Integer mode = exchange.getIn().getHeader(VALIDATION_MODE, Integer.class);
                     if (mode == null) mode = SCHEMA;
@@ -133,7 +133,7 @@ public final class FhirCamelValidators {
     public static Processor itiResponseValidator() {
         return exchange -> {
             FhirContext context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
-            if (context != null) {
+            if (context != null && exchange.getIn().getBody() instanceof IBaseResource) {
                 int mode = exchange.getIn().getHeader(VALIDATION_MODE, Integer.class);
                 if (isValidateSchema(mode) || isValidateSchematron(mode)) {
                     validate(exchange, context, isValidateSchema(mode), isValidateSchematron(mode));
