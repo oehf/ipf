@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="3.4.0" date="TBD" description="IPF 3.4.0">
+            <action dev="ohr" issue="174" type="add">
+                Add switch for strictly parsing FHIR resources
+            </action>
             <action dev="ohr" issue="172" type="add">
                 Define asBoolean() for HL7 fields and structures
             </action>
