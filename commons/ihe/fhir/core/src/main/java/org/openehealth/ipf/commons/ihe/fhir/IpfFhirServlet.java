@@ -19,6 +19,8 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
+import ca.uhn.fhir.parser.LenientErrorHandler;
+import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
 import ca.uhn.fhir.rest.server.IPagingProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
@@ -37,9 +39,10 @@ import javax.servlet.ServletException;
  * init parameters:
  * <ul>
  * <li>logging (boolean): add global logging interceptor</li>
- * <li>highlight (boolean)</li>: add response formatting if request was issued from a browser
- * <li>pretty (boolean)</li>: pretty-print the response
- * <li>pagingProviderSize (integer)</li>: maximum number of concurrent paging requests
+ * <li>highlight (boolean): add response formatting if request was issued from a browser</li>
+ * <li>pretty (boolean): pretty-print the response</li>
+ * <li>pagingProviderSize (integer): maximum number of concurrent paging requests</li>
+ * <li>strict (boolean): strict parsing, i.e. return error on invalid resources</li>
  * </ul>
  *
  * @author Christian Ohr
@@ -56,6 +59,7 @@ public class IpfFhirServlet extends RestfulServer {
     private static final String SERVLET_PAGING_PROVIDER_SIZE_PARAMETER_NAME = "pagingProviderSize";
     private static final String SERVLET_DEFAULT_PAGE_SIZE_PARAMETER_NAME = "defaultPageSize";
     private static final String SERVLET_MAX_PAGE_SIZE_PARAMETER_NAME = "maximumPageSize";
+    private static final String SERVLET_STRICT_PARSER_ERROR_HANDLER_PARAMETER_NAME = "strict";
 
     public static final String DEFAULT_SERVLET_NAME = "FhirServlet";
 
@@ -76,6 +80,8 @@ public class IpfFhirServlet extends RestfulServer {
     private int defaultPageSize = 25;
     @Getter @Setter
     private int maximumPageSize = 100;
+    @Getter @Setter
+    private boolean strictErrorHandler;
     @Getter @Setter
     private INarrativeGenerator narrativeGenerator = null;
 
@@ -123,7 +129,9 @@ public class IpfFhirServlet extends RestfulServer {
         if (config.getInitParameter(SERVLET_PRETTY_PRINT_PARAMETER_NAME) != null) {
             prettyPrint = Boolean.parseBoolean(config.getInitParameter(SERVLET_PRETTY_PRINT_PARAMETER_NAME));
         }
-
+        if (config.getInitParameter(SERVLET_STRICT_PARSER_ERROR_HANDLER_PARAMETER_NAME) != null) {
+            strictErrorHandler = Boolean.parseBoolean(config.getInitParameter(SERVLET_STRICT_PARSER_ERROR_HANDLER_PARAMETER_NAME));
+        }
         String pagingProviderSizeParameter = config.getInitParameter(SERVLET_PAGING_PROVIDER_SIZE_PARAMETER_NAME);
         if (pagingProviderSizeParameter != null && !pagingProviderSizeParameter.isEmpty()) {
             pagingProviderSize = Integer.parseInt(pagingProviderSizeParameter);
@@ -215,6 +223,8 @@ public class IpfFhirServlet extends RestfulServer {
             ResponseHighlighterInterceptor interceptor = new ResponseHighlighterInterceptor();
             registerInterceptor(interceptor);
         }
+
+        getFhirContext().setParserErrorHandler(strictErrorHandler ? new StrictErrorHandler() : new LenientErrorHandler());
 
         setPagingProvider(getDefaultPagingProvider(pagingProviderSize));
         setDefaultPrettyPrint(prettyPrint);

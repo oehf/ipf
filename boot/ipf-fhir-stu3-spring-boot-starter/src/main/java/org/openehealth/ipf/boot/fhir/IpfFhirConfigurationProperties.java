@@ -137,5 +137,11 @@ public class IpfFhirConfigurationProperties {
          */
         @Getter @Setter
         private boolean responseHighlighting = true;
+
+        /**
+         * Enable strict resource parsing
+         */
+        @Getter @Setter
+        private boolean strict = false;
     }
 }

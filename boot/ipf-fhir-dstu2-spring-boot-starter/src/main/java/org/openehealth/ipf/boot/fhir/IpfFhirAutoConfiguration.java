@@ -139,9 +139,11 @@ public class IpfFhirAutoConfiguration {
         fhirServlet.setLogging(servletProperties.isLogging());
         fhirServlet.setPrettyPrint(servletProperties.isPrettyPrint());
         fhirServlet.setResponseHighlighting(servletProperties.isResponseHighlighting());
+        fhirServlet.setStrictErrorHandler(servletProperties.isStrict());
         fhirServlet.setServerConformanceProvider(serverConformanceProvider);
         fhirServlet.setServerAddressStrategy(serverAddressStrategy);
         fhirServlet.setNarrativeGenerator(narrativeGenerator);
+
         return fhirServlet;
     }
 

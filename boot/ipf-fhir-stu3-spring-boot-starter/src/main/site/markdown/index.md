@@ -53,7 +53,8 @@ into your project descriptor.
 | `servlet.distributed-paging-provider` | false  | Whether the Paging Provider cache is expected to be distributed, so that serialization of result bundles is necessary. In this case, FHIR endpoints must not use lazy-loading of results.
 | `servlet.logging`          | false           | Whether server-side request logging is enabled
 | `servlet.pretty-print`     | true            | Whether pretty-printing responses is enabled
-| `servlet.response-highlighting`  | true      | Whether color-coding responses queried from a Web Browser is enabled
+| `servlet.response-highlighting`  | true      | Whether color-coding responses queried from a Web Browser is enabled |
+| `servlet.strict`           | false           | Whether FHIR resource parsing is strict |
 
 See [ipf-spring-boot-starter](../ipf-spring-boot-starter/index.html) and [ipf-atna-spring-boot-starter](../ipf-atna-spring-boot-starter/index.html) for
 additional properties.
