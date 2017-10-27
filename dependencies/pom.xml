@@ -23,7 +23,7 @@
         <mina2-version>2.0.16</mina2-version>
         <opensaml-version>3.3.0</opensaml-version>
         <phloc-schematron-version>2.7.1</phloc-schematron-version>
-        <phloc-commons-version>4.4.1</phloc-commons-version>
+        <phloc-commons-version>4.4.11</phloc-commons-version>
 
         <saxon-he-version>9.7.0-19</saxon-he-version>
         <slf4j-version>1.7.25</slf4j-version>
