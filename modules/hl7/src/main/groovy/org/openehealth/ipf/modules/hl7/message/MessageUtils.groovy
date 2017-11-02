@@ -360,7 +360,33 @@ class MessageUtils {
     static String dump(Message msg) {
         msg.printStructure()
     }
-    
+
+    // Some stuff rescued from MessageAdapters, creating HL7 messages from resources/streams
+
+    static Message load(HapiContext context, String resource) {
+        make(context, getClass().classLoader.getResource(resource)?.text)
+    }
+
+    static Message load(HapiContext context, String resource, String charset) {
+        make(context, getClass().classLoader.getResource(resource)?.getText(charset))
+    }
+
+    static Message make(HapiContext context, InputStream stream) {
+        make(context, stream?.text)
+    }
+
+    static Message make(HapiContext context, InputStream stream, String charset) {
+        make(context, stream?.getText(charset))
+    }
+
+    static Message make(HapiContext context, String message) {
+        if (!message) {
+            return null
+        }
+        context.genericParser.parse(message)
+    }
+
+
     private static EncodingCharacters encodingCharacters(Message msg) {
         if (msg != null) {
             return EncodingCharacters.getInstance(msg)
