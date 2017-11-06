@@ -27,9 +27,9 @@ import ca.uhn.hl7v2.util.idgenerator.IDGenerator;
 import ca.uhn.hl7v2.validation.builder.ValidationRuleBuilder;
 import ca.uhn.hl7v2.validation.builder.support.DefaultValidationWithoutTNBuilder;
 import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler;
-import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
 import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
+import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 
 /**
  * This factory creates HapiContext instances that are required to derive {@link ca.uhn.hl7v2.parser.ModelClassFactory}
@@ -61,7 +61,9 @@ public class HapiContextFactory {
      * @return default HapiContext
      */
     public static HapiContext createHapiContext() {
-        return new DefaultHapiContext();
+        HapiContext context = new DefaultHapiContext();
+        context.getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
+        return context;
     }
 
     /**
@@ -120,6 +122,7 @@ public class HapiContextFactory {
         context.setValidationRuleBuilder(validationRuleBuilder);
         context.getParserConfiguration().setValidating(false);
         context.getParserConfiguration().setIdGenerator(idGenerator);
+        context.getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
         context.setValidationExceptionHandlerFactory(new SimpleValidationExceptionHandler(context));
         return context;
     }

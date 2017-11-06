@@ -24,6 +24,7 @@ import org.apache.camel.component.mina2.Mina2Endpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 
 /**
  * MLLP dispatching Camel component.
@@ -52,6 +53,10 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
                     new DefaultHapiContext());
 
     private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
+
+    static {
+        CONFIGURATION.getHapiContext().getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
+    }
 
     @Override
     protected MllpDispatchEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {

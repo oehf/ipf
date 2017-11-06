@@ -23,7 +23,10 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="3.4.0" date="TBD" description="IPF 3.4.0">
+        <release version="3.4.0" date="24 Nov 2017" description="IPF 3.4.0">
+            <action dev="ohr" issue="175" type="fix">
+                Workaround for HAPI escaping bug
+            </action>
             <action dev="ohr" issue="174" type="add">
                 Add switch for strictly parsing FHIR resources
             </action>

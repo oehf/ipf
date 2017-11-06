@@ -32,6 +32,7 @@ import org.openehealth.ipf.gazelle.validation.core.CachingGazelleProfileRule;
 import org.openehealth.ipf.gazelle.validation.profile.ConformanceProfile;
 import org.openehealth.ipf.gazelle.validation.profile.HL7v2Transactions;
 import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
+import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
 import javax.xml.bind.JAXBException;
@@ -59,6 +60,7 @@ public final class ConformanceProfileValidators {
         FALLBACK_HAPI_CONTEXT = new DefaultHapiContext();
         FALLBACK_HAPI_CONTEXT.setProfileStore(new GazelleProfileStore());
         FALLBACK_HAPI_CONTEXT.setValidationContext((ValidationContext) ValidationContextFactory.noValidation());
+        FALLBACK_HAPI_CONTEXT.getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
     }
 
     private ConformanceProfileValidators() {

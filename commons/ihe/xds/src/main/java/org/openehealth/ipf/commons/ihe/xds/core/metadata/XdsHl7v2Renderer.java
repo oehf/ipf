@@ -22,6 +22,7 @@ import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.model.v25.datatype.*;
 import ca.uhn.hl7v2.parser.DefaultEscaping;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
+import ca.uhn.hl7v2.parser.Escaping;
 import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
@@ -38,7 +39,8 @@ public abstract class XdsHl7v2Renderer {
      * Encoding characters for HL7 v2 messages.
      */
     public static final EncodingCharacters ENCODING_CHARACTERS =
-            new EncodingCharacters('|', '^', '~', '\\', '&');
+            new EncodingCharacters('|', '^', '~', '\\', '&', '#');
+    public static final Escaping ESCAPING = new DefaultEscaping();
 
     /**
      * Map from HL7 class name to indices of fields allowed for rendering.
@@ -173,7 +175,7 @@ public abstract class XdsHl7v2Renderer {
 
     private static String encodePrimitive(Primitive p) {
         String value = p.getValue();
-        return (value == null) ? "" : new DefaultEscaping().escape(value, ENCODING_CHARACTERS);
+        return (value == null) ? "" : ESCAPING.escape(value, ENCODING_CHARACTERS);
     }
 
 }

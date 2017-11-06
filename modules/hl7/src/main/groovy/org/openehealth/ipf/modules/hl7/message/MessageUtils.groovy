@@ -41,7 +41,7 @@ import java.lang.reflect.Constructor
 class MessageUtils {
     
     private static DateTimeFormatter FMT = ISODateTimeFormat.basicDateTimeNoMillis()
-    private static final Escaping ESCAPE = new DefaultEscaping()
+    private static final Escaping ESCAPE = org.openehealth.ipf.modules.hl7.parser.DefaultEscaping.INSTANCE
 
 
     /**

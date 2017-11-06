@@ -36,6 +36,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomPixAuditor;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
+import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerDispatchingInterceptor;
 import org.openhealthtools.ihe.atna.auditor.PAMSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.PDQConsumerAuditor;
@@ -149,6 +150,7 @@ public class IpfHl7v2AutoConfiguration {
         context.setProfileStore(profileStore);
         context.setParserConfiguration(parserConfiguration);
         context.getParserConfiguration().setIdGenerator(idGenerator);
+        context.getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
         return context;
     }
 
