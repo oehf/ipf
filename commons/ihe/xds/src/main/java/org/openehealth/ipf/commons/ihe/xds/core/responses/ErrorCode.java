@@ -114,6 +114,9 @@ public enum ErrorCode {
      *  Specifically the parts not processed are Append semantics. */
     @XmlEnumValue("PartialAppendContentNotProcessed") PARTIAL_APPEND_CONTENT_NOT_PROCESSED("PartialAppendContentNotProcessed"),
     /** An XDR Document Recipient did not process some part of the content.
+     *  Specifically the parts not processed are Relationship Association semantics. */
+    @XmlEnumValue("PartialRelationshipContentNotProcessed") PARTIAL_RELATIONSHIP_CONTENT_NOT_PROCESSED("PartialRelationshipContentNotProcessed"),
+    /** An XDR Document Recipient did not process some part of the content.
      *  Specifically the parts not processed are Transform and Replace semantics. */
     @XmlEnumValue("PartialTransformReplaceNotProcessed") PARTIAL_TRANSFORM_REPLACE_NOT_PROCESSED("PartialTransformReplaceNotProcessed"),
     /** An XDR Recipient queued the document for future manual matching to a patient. */
