@@ -3,6 +3,7 @@
 ### Building
 
 As of version 3.2, IPF requires Java 8 for both compile time and runtime.
+IPF does not yet support Java 9.
 
 IPF builds using Maven 3.3.9. IPF is available over [Maven Central], so no custom repositories need to
 be added to the `settings.xml` configuration file.

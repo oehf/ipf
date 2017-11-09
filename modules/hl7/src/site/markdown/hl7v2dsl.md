@@ -48,10 +48,11 @@ Subcomponents are accessed like a three-dimensional array.
 
 Details are described [here][hl7v2dslFields].
 
+
 #### Boolean conversion
 
-All fields and structures implement an `isEmpty()` method. For Groovy, this is used
-for boolean conversion so that checks become easier:
+All fields and structures implement an `isEmpty()` method. For Groovy, this is also used
+for boolean conversion, so that checks for emptiness become even more concise:
 
 ```groovy
     if (message.MSH[9][3]) {
