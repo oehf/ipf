@@ -30,6 +30,12 @@
         <href>http://oehf.github.io/ipf</href>
     </bannerLeft>
 
+    <poweredBy>
+        <logo name="Hosted on GitHub" href="https://github.com/oehf/ipf" img="./images/github-logo-mini.png"/>
+        <logo name="Built with Maven 3" href="https://maven.apache.org" img="./images/maven-logo-mini.png" />
+        <logo name="Built using Travis" href="https://travis-ci.org/" img="./images/travis.png" />
+    </poweredBy>
+
     <publishDate position="bottom" format="yyyy-MM-dd" />
     <version position="bottom" />
 
@@ -185,7 +191,6 @@
             <item name="Camel CDA processing" href="ipf-platform-camel-cda/index.html" />
             <item name="Code System Mapping" href="ipf-commons-map/index.html" />
             <item name="Dynamic Registration of IPF Features" href="dynamic.html" />
-            <item name="OSGi Support" href="ipf-osgi-karaf/index.html" />
             <item name="Tutorials" href="ipf-tutorials/index.html" />
         </menu>
         <menu name="Development" inherit="bottom">

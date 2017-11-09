@@ -807,11 +807,6 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.openehealth.ipf.modules</groupId>
-                <artifactId>ipf-modules-hl7dsl</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-cda</artifactId>
                 <version>${project.version}</version>
@@ -868,7 +863,6 @@
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
-
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-fhir-stu3-audit</artifactId>
@@ -891,7 +885,6 @@
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
-
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-continua</artifactId>

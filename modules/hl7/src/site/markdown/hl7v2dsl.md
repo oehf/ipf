@@ -6,13 +6,13 @@ so that translation from the language of the "HL7 world" into the language of th
 
 ### How it works
 
-The ´ipf-modules-hl7` library is basically a [Groovy extension module] that adds the required methods to the [HAPI]
+The `ipf-modules-hl7` library is basically a [Groovy extension module] that adds the required methods to the [HAPI]
 model classes. These methods are used "under the hood" by the actual DSL.
 
 **Note**:
 IPF 2.x used a dedicated `ipf-modules-hl7dsl` library and achieved the same goal by using adapters
-wrapped around the [HAPI] model classes. With IPF 3, this library and all wrappers have been deprecated, and we
-strongly recommend to migrate your applications.
+wrapped around the [HAPI] model classes. With IPF 3.0, this library and all wrappers have been deprecated, and we
+strongly recommend to migrate your applications. With IPF 3.4, the library has finally been removed.
 
 ### Accessing HL7 messages
 
@@ -27,7 +27,7 @@ Groups and segments can be accessed by name like an object property.
 ```groovy
     import ca.uhn.hl7v2.model.Message
 
-    Message message = ...
+    def message = parser.parse(msgTxt)
     def msh   = message.MSH
     def group = message.PATIENT_RESULT
     def pid   = message.PATIENT_RESULT.PATIENT.PID
@@ -123,7 +123,7 @@ Details are described [here][hl7v2dslManipulation].
 
 ### Parsing and Rendering HL7 messages
 
-IPF does not change or extend the [HAPI] on how to parse or render HL7 message.
+IPF does not change or extend [HAPI] on how to parse or render HL7 message.
 
 
 [HAPI]: https://hapifhir.github.io/hapi-hl7v2/
@@ -135,5 +135,5 @@ IPF does not change or extend the [HAPI] on how to parse or render HL7 message.
 [hl7v2dslRepetitions]: hl7v2dslRepetitions.html
 [hl7v2dslSmart]: hl7v2dslSmartNavigation.html
 [hl7v2dslIteration]: hl7v2dslIteration.html
-[hl7v2dslcreating]: hl7v2dslCreation.html
+[hl7v2dslcreating]: hl7v2dslcreating.html
 [hl7v2dslManipulation]: hl7v2dslManipulation.html

@@ -58,4 +58,4 @@ of project-specific ones. For list of currently supported IHE transactions visit
 ![IHE Dependencies](images/dependencies-ihe.png)
 
 [Maven Central]: https://search.maven.org
-[eHealth support pages]: ../platform-camel-ihe/index.html
+[eHealth support pages]: ../ipf-platform-camel-ihe/index.html

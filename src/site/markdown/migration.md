@@ -51,7 +51,7 @@ requires the additional `jaxb-core` dependency. `jaxb-impl` is marked as "old", 
 With IPF 3, the `ipf-modules-hl7dsl` module and all contained classes have been **deprecated**.
 Instead of using the adapter classes around the regular [HAPI] model classes
 (e.g. `org.openehealth.ipf.modules.hl7dsl.MessageAdapter` around `ca.uhn.hl7v2.model.Message` ), the DSL can now be
-applied directly on the HAPI classes. This has been achieved by including the DSML into the Groovy
+applied directly on the HAPI classes. This has been achieved by including the DSL into the Groovy
 [extension module](https://www.groovy-lang.org/metaprogramming.html#_extension_modules) `ipf-modules-hl7`.
 
 Due to this change, the HL7v2 DSL has undergone some minor changes:
@@ -64,7 +64,7 @@ Due to this change, the HL7v2 DSL has undergone some minor changes:
 | Executing a parameter-less call on the result of an indexed access on a repeatable structure | `msg['PATIENT_RESULT']()` | equivalent with `msg.PATIENT_RESULT()` | throws `org.openehealth.ipf.modules.hl7.dsl.HL7DslException`
 | Accessing the first component of a primitive type | `msg.PID[1][1]` | throws `org.openehealth.ipf.modules.hl7dsl.AdapterException` | returns the primitive itself
 | Obtaining the 'value' of a segment | `msg.PID.value` | returns the value of the first field of the segment | throws `org.openehealth.ipf.modules.hl7.dsl.HL7DslException`
-| Obtaining the value of a field | | msg.PID[1].value | returns the value of the first primitive, treating the literal "" value as a empty string. Use `.originalValue` to return the value literally | returns the value of the first primitive literally. use `.value2` to treat the literal "" value as a empty string
+| Obtaining the value of a field | | msg.PID[1].value | returns the value of the first primitive, treating the literal "" value as a empty string. Use `.originalValue` to return the value literally. Use `.value2` to treat the literal "" value as a empty string
 
 For migration, replace all type references like `MessageAdapter`, `SegmentAdapter` etc. by their wrapped HAPI model classes
 `ca.uhn.hl7v2.model.Message`, `ca.uhn.hl7v2.model.Segment` etc. Obviously, all access to the properties `MessageAdapter.target`
