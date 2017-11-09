@@ -26,10 +26,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Objects;
 
 /**
- * Represents an ID.
- * <p>
- * This class is derived from an HL7v2 CX data type. The XDS profile
- * limits the data type to two of its components (CX.1 and CX.4).
+ * Represents a person ID (HL7v2 CX field where only CX.1, CX.4.2 and CX.4.3
+ * are allowed), or an XDS "Coded String".
  * <p>
  * All members of this class are allowed to be <code>null</code>. When transforming
  * to HL7 this indicates that the values are empty. Trailing empty values are 
@@ -61,9 +59,9 @@ public class Identifiable extends Hl7v2Based<CX> {
     /**
      * Constructs an identifiable.
      * @param id
-     *          the value of the id (CX.1).
+     *          person ID (CX.1) / Code.
      * @param assigningAuthority
-     *          the assigning authority (CX.4).
+     *          assigning authority (CX.4) / Code System.
      */
     public Identifiable(String id, AssigningAuthority assigningAuthority) {
         this();
@@ -72,7 +70,7 @@ public class Identifiable extends Hl7v2Based<CX> {
     }
 
     /**
-     * @return the value of the id (CX.1).
+     * @return person ID (CX.1) / Code.
      */
     @XmlAttribute(name = "extension")
     public String getId() {
@@ -81,14 +79,14 @@ public class Identifiable extends Hl7v2Based<CX> {
 
     /**
      * @param id
-     *          the value of the id (CX.1).
+     *          person ID (CX.1) / Code.
      */
     public void setId(String id) {
         setValue(getHapiObject().getCx1_IDNumber(), id);
     }
 
     /**
-     * @return the assigning authority (CX.4).
+     * @return assigning authority (CX.4) / Code System.
      */
     @XmlAttribute(name = "root")
     @XmlJavaTypeAdapter(value = AssigningAuthorityAdapter.class)
@@ -99,7 +97,7 @@ public class Identifiable extends Hl7v2Based<CX> {
 
     /**
      * @param assigningAuthority
-     *          the assigning authority (CX.4).
+     *          assigning authority (CX.4) / Code System.
      */
     public void setAssigningAuthority(AssigningAuthority assigningAuthority) {
         setAssigningAuthority(assigningAuthority, getHapiObject().getCx4_AssigningAuthority());
