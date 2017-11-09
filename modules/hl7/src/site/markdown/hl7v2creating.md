@@ -18,7 +18,7 @@ populated with the event type, trigger event, version, the current time as messa
 
 ```
 
-While [HAPI] already allows to create acknowledgements on [`Message`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/model/Message.html) objects,
+While [HAPI] already allows to create acknowledgements on [`Message`](https://hapifhir.github.io/hapi-hl7v2//base/apidocs/ca/uhn/hl7v2/model/Message.html) objects,
 IPF additionally provides a more generic `respond` method, e.g. for responding to queries.
 
 The response
@@ -32,7 +32,7 @@ The response
 ### New segments
 
 Just as creating a message, you can also create a segment by calling its respective name as static method on the
-[`ca.uhn.hl7v2.model.Structure`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/model/Message.html) interface.
+[`ca.uhn.hl7v2.model.Structure`](https://hapifhir.github.io/hapi-hl7v2//base/apidocs/ca/uhn/hl7v2/model/Message.html) interface.
 You need to pass the enclosing `Message` object as argument, which determines the HL7 version to be used.
 
 ```groovy
@@ -47,8 +47,8 @@ You need to pass the enclosing `Message` object as argument, which determines th
 ### New Types
 
 Just as creating a message or segment, you can also create a field by calling its respective name as static method on the
-[`ca.uhn.hl7v2.model.Composite`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/model/Composite.html) or
-[`ca.uhn.hl7v2.model.Primitive`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/model/Primitive.html) interface.
+[`ca.uhn.hl7v2.model.Composite`](https://hapifhir.github.io/hapi-hl7v2//base/apidocs/ca/uhn/hl7v2/model/Composite.html) or
+[`ca.uhn.hl7v2.model.Primitive`](https://hapifhir.github.io/hapi-hl7v2//base/apidocs/ca/uhn/hl7v2/model/Primitive.html) interface.
 
 You need to pass the enclosing `Message` object as argument, which determines the HL7 version to be used.
 
@@ -69,4 +69,4 @@ Primitives may be initialized with a literal string value.
 ```
 
 
-[HAPI]: http://hl7api.sourceforge.net
+[HAPI]: https://hapifhir.github.io/hapi-hl7v2/

@@ -14,7 +14,7 @@ as specified in the HL7 specs.
 In real world HL7 projects you frequently need to deal with non-standard HL7 "dialects" which are not covered by the specification
 and causes the parser to generate "generic" model classes when used out-of-the-box.
 
-Although [HAPI] already provides a [`CustomModelClassFactory`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/parser/CustomModelClassFactory.html)
+Although [HAPI] already provides a [`CustomModelClassFactory`](https://hapifhir.github.io/hapi-hl7v2//base/apidocs/ca/uhn/hl7v2/parser/CustomModelClassFactory.html)
 class to address this issue, IPF brings in some additional
 flexibility, e.g. by compiling a [Groovy]-based `CustomModelClassFactory` at runtime.
 
@@ -24,7 +24,7 @@ Details are described [here][hl7v2cmcf].
 ### Creating new instances of messages, structures, and types
 
 You can create a new message from scratch by specifying event type, trigger event and version.
-Just as creating a message, you can also create a segment, passing the enclosing [`Message`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/model/Message.html)
+Just as creating a message, you can also create a segment, passing the enclosing [`Message`](https://hapifhir.github.io/hapi-hl7v2//base/apidocs/ca/uhn/hl7v2/model/Message.html)
 object as argument, which determines the HL7 version to be used.
 Finally, just as creating a message or segment, you can also create a composite or primitive field, passing the enclosing `Message`
 object as argument.
@@ -42,7 +42,7 @@ What remains specific to IPF's HL7 v2 support, however, is that the mapping exte
 Details are described [here][hl7v2mapping].
 
 
-[HAPI]: http://hl7api.sourceforge.net
+[HAPI]: https://hapifhir.github.io/hapi-hl7v2/
 [Groovy]: https://www.groovy-lang.org
 [Groovy extension module]: https://www.groovy-lang.org/metaprogramming.html#_extension_modules
 [HL7v2 DSL]: hl7v2dsl.html

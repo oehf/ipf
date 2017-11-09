@@ -112,7 +112,7 @@ The components included in the previous section must also be configured in the S
 This file is located under `src/main/resources`. In addition to the default configuration created by the archetype we need to
 
 * configure a mapping service that we will use for code mappings
-* add a [ValidationRuleBuilder](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/validation/builder/ValidationRuleBuilder.html) bean for HL7 validation
+* add a [ValidationRuleBuilder](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/validation/builder/ValidationRuleBuilder.html) bean for HL7 validation
 
 ```xml
     <beans xmlns="http://www.springframework.org/schema/beans"

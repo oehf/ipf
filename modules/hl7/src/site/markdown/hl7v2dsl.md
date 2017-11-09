@@ -125,10 +125,10 @@ Details are described [here][hl7v2dslManipulation].
 IPF does not change or extend the [HAPI] on how to parse or render HL7 message.
 
 
-[HAPI]: http://hl7api.sourceforge.net
+[HAPI]: https://hapifhir.github.io/hapi-hl7v2/
 [Groovy]: https://www.groovy-lang.org
 [Groovy extension module]: https://www.groovy-lang.org/metaprogramming.html#_extension_modules
-[Terser]: http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/util/Terser.html
+[Terser]: https://hapifhir.github.io/hapi-hl7v2//base/apidocs/ca/uhn/hl7v2/util/Terser.html
 [hl7v2dslStructures]: hl7v2dslStructures.html
 [hl7v2dslFields]: hl7v2dslFields.html
 [hl7v2dslRepetitions]: hl7v2dslRepetitions.html

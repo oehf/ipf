@@ -65,9 +65,9 @@ An example of using validating processors is given below:
 ### Self-detecting message validation in MLLP consumer routes
 
 The consumer side of IPF MLLP transaction endpoints receiving HL7v2 messages from clients is aware of the
-IHE transaction context. The consumer endpoint can therefore initialize an [`HapiContext`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/HapiContext.html)
+IHE transaction context. The consumer endpoint can therefore initialize an [`HapiContext`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/HapiContext.html)
 that is passed into the route by the [HL7 Codec](codec.html). This context also contains the appropriate 
-[`ValidationContext`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/validation/ValidationContext.html) that is initialized with the HL7 conformance
+[`ValidationContext`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/validation/ValidationContext.html) that is initialized with the HL7 conformance
 profile matching the transaction.
 As a result, no explicit validation processor must be provided anymore:
 

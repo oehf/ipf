@@ -785,7 +785,8 @@
                     <configuration>
                         <links>
                             <link>http://docs.oracle.com/javase/8/docs/api/</link>
-                            <link>http://hl7api.sourceforge.net/apidocs/</link>
+                            <link>http://hapifhir.github.io/hapi-hl7v2/base/apidocs/</link>
+                            <link>http://hapifhir.io/apidocs/index.html</link>
                             <link>http://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
                             <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
                             <link>http://docs.spring.io/spring/docs/4.2.x/javadoc-api/</link>
@@ -800,15 +801,21 @@
                             commons/core/generated-stubs:
                             commons/flow/generated-stubs:
                             commons/ihe/core/generated-stubs:
-                            commons/ihe/fhir/audit/generated-stubs:
-                            commons/ihe/fhir/core/generated-stubs:
-                            commons/ihe/fhir/mhd/generated-stubs:
-                            commons/ihe/fhir/pixpdq/generated-stubs:
+                            commons/ihe/fhir/dstu2/core/generated-stubs:
+                            commons/ihe/fhir/dstu2/audit/generated-stubs:
+                            commons/ihe/fhir/dstu2/mhd/generated-stubs:
+                            commons/ihe/fhir/dstu2/pixpdq/generated-stubs:
+                            commons/ihe/fhir/stu3/core/generated-stubs:
+                            commons/ihe/fhir/stu3/audit/generated-stubs:
+                            commons/ihe/fhir/stu3/mhd/generated-stubs:
+                            commons/ihe/fhir/stu3/pixpdq/generated-stubs:
                             commons/ihe/hl7v2/generated-stubs:
                             commons/ihe/hl7v3/generated-stubs:
                             commons/ihe/ws/generated-stubs:
                             commons/ihe/xds/generated-stubs:
+                            commons/ihe/xua/generated-stubs:
                             commons/map/generated-stubs:
+                            commons/spring/generated-stubs:
                             commons/xml/generated-stubs:
                             modules/cda/core/generated-stubs:
                             modules/cda/mdht/generated-stubs:
@@ -816,18 +823,21 @@
                             modules/fhir/generated-stubs:
                             platform-camel/cda/generated-stubs:
                             platform-camel/core/generated-stubs:
-                            platform-camel/core-legacy/generated-stubs:
-                            platform-camel/flow/generated-stubs:
                             platform-camel/hl7/generated-stubs:
                             platform-camel/ihe/atna/generated-stubs:
                             platform-camel/ihe/continua/generated-stubs:
-                            platform-camel/ihe/fhir/audit/generated-stubs:
+                            platform-camel/ihe/core/generated-stubs:
                             platform-camel/ihe/fhir/core/generated-stubs:
-                            platform-camel/ihe/fhir/mhd/generated-stubs:
-                            platform-camel/ihe/fhir/pixpdq/generated-stubs:
+                            platform-camel/ihe/fhir/dstu2/audit/generated-stubs:
+                            platform-camel/ihe/fhir/dstu2/mhd/generated-stubs:
+                            platform-camel/ihe/fhir/dstu2/pixpdq/generated-stubs:
+                            platform-camel/ihe/fhir/stu3/audit/generated-stubs:
+                            platform-camel/ihe/fhir/stu3/mhd/generated-stubs:
+                            platform-camel/ihe/fhir/stu3/pixpdq/generated-stubs:
                             platform-camel/ihe/hl7v2/generated-stubs:
                             platform-camel/ihe/hl7v2ws/generated-stubs:
                             platform-camel/ihe/hl7v3/generated-stubs:
+                            platform-camel/ihe/hpd/generated-stubs:
                             platform-camel/ihe/mllp/generated-stubs:
                             platform-camel/ihe/ws/generated-stubs:
                             platform-camel/ihe/xds/generated-stubs:

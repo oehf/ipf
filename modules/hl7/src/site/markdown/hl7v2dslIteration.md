@@ -11,8 +11,8 @@ non-empty substructures, i.e. non-empty groups and segments.
     def allStructureNames = message*.name
 ```
 
-An `iterator()` method is defined for the [`Group`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/model/Group.html) and
-[`Message`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/model/Message.html) classes.
+An `iterator()` method is defined for the [`Group`](https://hapifhir.github.io/hapi-hl7v2//base/apidocs/ca/uhn/hl7v2/model/Group.html) and
+[`Message`](https://hapifhir.github.io/hapi-hl7v2//base/apidocs/ca/uhn/hl7v2/model/Message.html) classes.
 This method is seldomly used directly, however, a lot of Groovy's iterative
 functions rely on the existence of such an `iterator`. As a consequence, you can e.g. use the following [Groovy] functions on HL7 messages and groups:
 

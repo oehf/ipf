@@ -50,5 +50,5 @@ The mapping functions can be directly applied on composite or primitive field ob
 
 ```
 
-[HAPI]: http://hl7api.sourceforge.net
+[HAPI]: https://hapifhir.github.io/hapi-hl7v2/
 [Mapping Service]: ../ipf-commons-map/index.html

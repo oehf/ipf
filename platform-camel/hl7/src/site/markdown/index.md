@@ -2,7 +2,7 @@
 
 Working with HL7 messages is explained in the [HL7 Messaging] section.
 
-However, [HAPI] HL7 [`Message`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/model/Message.html) objects are
+However, [HAPI] HL7 [`Message`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/model/Message.html) objects are
 also transferred through Camel routes, and at times it is convenient
 to have access to these APIs directly in Camel's routing DSL, e.g. to generate an acknowledge that shall be returned to
 the client.
@@ -65,8 +65,8 @@ about the validation failure that was provided by the [HAPI] validator classes.
 
 ```
 
-The code above uses the [HAPI] [`ValidationContext`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/validation/ValidationContext.html)
-associated with the [`HapiContext`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/HapiContext.html) under which the message was
+The code above uses the [HAPI] [`ValidationContext`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/validation/ValidationContext.html)
+associated with the [`HapiContext`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/HapiContext.html) under which the message was
 parsed. A different validation context can be used by specifying the `.profile(Expression)` or `.staticProfile(Object)` modifiers:
 
 ```groovy
@@ -110,8 +110,8 @@ IPF also provides a number of expressions that can be used to extract values fro
 Camel exchanges are translate them into a different message. These expression do **not** require the
 Groovy programming language.
 
-* `get(String terserSpec)` : returns the value from the field specified with the HAPI [`Terser`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/util/Terser.html) spec
-* `set(String terserSpec, Expression value)` : sets the value of the field specified with the HAPI [`Terser`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/util/Terser.html) spec
+* `get(String terserSpec)` : returns the value from the field specified with the HAPI [`Terser`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/util/Terser.html) spec
+* `set(String terserSpec, Expression value)` : sets the value of the field specified with the HAPI [`Terser`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/util/Terser.html) spec
 * `ack(...)` : various methods to create an acknowledgement message
 * `response(String eventType, String triggerEvent)` : create a response message of the given event type
 
@@ -119,8 +119,8 @@ Groovy programming language.
 #### JMS Serialization
 
 Although HAPI messages as such are serializable, their associated
-[`Parser`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/parser/Parser.html) and
-[`HapiContext`](http://hl7api.sourceforge.net/base/apidocs/ca/uhn/hl7v2/HapiContext.html) objects are
+[`Parser`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/parser/Parser.html) and
+[`HapiContext`](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/HapiContext.html) objects are
 transient and get lost when a message is routes through a JMS message queue.
 
 The `org.openehealth.ipf.platform.camel.hl7.converter.HL7MessageConverter` can be used to transparently
@@ -146,5 +146,5 @@ You need to add dependencies to Spring and the JMS API in the `pom.xml` Maven pr
 
 
 
-[HAPI]: http://hl7api.sourceforge.net
+[HAPI]: https://hapifhir.github.io/hapi-hl7v2
 [camel-hl7]: https://camel.apache.org/hl7.html

@@ -82,7 +82,7 @@ The underlying [HAPI] library has been upgraded to version 2.2.
 ** `org.openehealth.ipf.modules.hl7.validation.builder`
 ** `org.openehealth.ipf.modules.hl7.validation.support`.
 
-Check the [HAPI documentation](http://hl7api.sourceforge.net/devbyexample.html) for examples how message validation has been implemented there.
+Check the [HAPI documentation](https://hapifhir.github.io/hapi-hl7v2/devbyexample.html) for examples how message validation has been implemented there.
 
 
 ### HL7 V2/V3 Translator API
@@ -165,5 +165,5 @@ so we strongly recommend to migrate the respective parts of your routes.
 
 
 
-[HAPI]: http://hl7api.sourceforge.net
+[HAPI]: https://hapifhir.github.io/hapi-hl7v2/
 [Gazelle]: http://gazelle.ihe.net/

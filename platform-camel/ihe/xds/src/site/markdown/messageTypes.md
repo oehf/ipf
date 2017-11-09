@@ -139,4 +139,4 @@ Although the route is written in Groovy, type conversion does not require the Gr
 
 ```
 
-[HAPI]: http://hl7api.sourceforge.net
+[HAPI]: https://hapifhir.github.io/hapi-hl7v2

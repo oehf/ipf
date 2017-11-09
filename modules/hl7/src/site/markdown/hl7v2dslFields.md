@@ -69,5 +69,5 @@ The HL7 DSL treats explicit HL7 null values (two double quotes "", cf. HL7 2.5, 
 * `isNullValue()` returns true, if the original value of the field is ""
 
 
-[HAPI]: http://hl7api.sourceforge.net
+[HAPI]: https://hapifhir.github.io/hapi-hl7v2/
 [hl7v2dslRepetitions]: hl7v2dslRepetitions.html

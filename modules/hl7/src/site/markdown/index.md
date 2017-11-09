@@ -49,7 +49,7 @@ In a Maven-based environment, the following dependency must be registered in `po
 In case you use the IHE MLLP components of IPF, the required HL7 libraries are transitively included.
 
 
-[HAPI]: http://hl7api.sourceforge.net
+[HAPI]: https://hapifhir.github.io/hapi-hl7v2/
 [HL7v2 DSL]: hl7v2dsl.html
 [HL7v2 API extensions]: hl7v2extensions.html
 [HL7v2 Validation extensions]: hl7v2validation.html
