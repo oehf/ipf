@@ -33,6 +33,9 @@
             <action dev="ohr" issue="172" type="add">
                 Define asBoolean() for HL7 fields and structures
             </action>
+            <action dev="unixoid" issue="171" type="update">
+                Implement changes from IHE ITI Ballots 43 and 44
+            </action>
             <action dev="ohr" issue="170" type="update">
                 Upgraded Spring and Camel dependencies
             </action>
