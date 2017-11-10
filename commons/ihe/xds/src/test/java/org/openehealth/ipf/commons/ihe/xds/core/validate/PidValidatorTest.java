@@ -30,7 +30,6 @@ public class PidValidatorTest {
     public void testValidateGoodCases() throws XDSMetaDataException {
         validator.validate("PID-3|");
         validator.validate("PID-3|something");
-        validator.validate("PID-44|something");
     }
     
     @Test 
@@ -46,6 +45,7 @@ public class PidValidatorTest {
         assertFails("PID-4|something");
         assertFails("PID-12|something");
         assertFails("PID-19|something");
+        assertFails("PID-44|something");
     }
 
     private static void assertFails(String value) {
