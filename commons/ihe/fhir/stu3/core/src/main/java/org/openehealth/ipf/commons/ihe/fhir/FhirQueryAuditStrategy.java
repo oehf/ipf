@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.rest.param.TokenParam;
-import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 
 import java.util.List;
 import java.util.Map;
