@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirAuditStrategy;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -70,7 +71,13 @@ public class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
     @Override
     public boolean enrichAuditDatasetFromResponse(Iti65AuditDataset auditDataset, Object response) {
         Bundle bundle = (Bundle) response;
-        // TODO need to extract DocumentManifest (UU)IDs from the response bundle for auditing
+        // Extract DocumentManifest (UU)IDs from the response bundle for auditing
+        bundle.getEntry().stream()
+                .map(b -> b.getResponse())
+                .filter(Objects::nonNull)
+                .filter(r -> r.getLocation() != null && r.getLocation().startsWith("DocumentManifest"))
+                .findFirst()
+                .ifPresent(r -> auditDataset.setDocumentManifestUuid(r.getLocation()));
         return super.enrichAuditDatasetFromResponse(auditDataset, response);
     }
 
