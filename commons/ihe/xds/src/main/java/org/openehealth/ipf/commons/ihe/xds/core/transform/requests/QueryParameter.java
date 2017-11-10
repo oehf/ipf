@@ -136,7 +136,7 @@ public enum QueryParameter {
     
     private final String slotName;
     
-    private QueryParameter(String slotName) {
+    QueryParameter(String slotName) {
         this.slotName = slotName;
     }
 

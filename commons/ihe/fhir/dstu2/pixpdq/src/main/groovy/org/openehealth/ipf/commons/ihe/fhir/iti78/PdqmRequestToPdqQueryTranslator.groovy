@@ -58,7 +58,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     String pdqSupplierResourceIdentifierUri
     private String pdqSupplierResourceIdentifierOid
 
-    private final UriMapper uriMapper;
+    private final UriMapper uriMapper
 
     /**
      * @param uriMapper mapping for translating FHIR URIs into OIDs
@@ -88,11 +88,11 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     @Override
     QBP_Q21 translateFhir(Object request, Map<String, Object> parameters) {
         if (request == null && parameters != null && parameters.containsKey(Constants.FHIR_REQUEST_PARAMETERS)) {
-            return translateFhirSearchToHL7v2(parameters.get(Constants.FHIR_REQUEST_PARAMETERS));
+            return translateFhirSearchToHL7v2(parameters.get(Constants.FHIR_REQUEST_PARAMETERS))
         } else if (request != null && request instanceof IdType) {
-            return translateFhirReadToHL7v2((IdType) request);
+            return translateFhirReadToHL7v2((IdType) request)
         } else {
-            throw new FhirTranslationException("Expected either PDQ parameters or an Patient ID");
+            throw new FhirTranslationException("Expected either PDQ parameters or an Patient ID")
         }
     }
 
@@ -107,7 +107,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     protected QBP_Q21 translateFhirReadToHL7v2(IdType resourceId) {
         Iti78SearchParameters parameters = Iti78SearchParameters.builder()
                 ._id(new TokenParam(pdqSupplierResourceIdentifierUri, resourceId.idPart))
-                .build();
+                .build()
         translateFhirSearchToHL7v2(parameters)
     }
 
@@ -137,7 +137,7 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
         List<String> requestedDomainOids
         Optional<CompositeIdentifier> searchIdentifier = Optional.empty()
 
-        TokenParam resourceIdParam = searchParameters._id;
+        TokenParam resourceIdParam = searchParameters._id
         if (resourceIdParam) {
             resourceIdParam.system = pdqSupplierResourceIdentifierUri
             searchIdentifier = searchToken(resourceIdParam)
@@ -208,12 +208,12 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected Date searchDate(DateParam param) {
-        if (param == null || param.empty) return null;
+        if (param == null || param.empty) return null
         param.value
     }
 
     protected String searchString(StringParam param, boolean forceExactSearch) {
-        if (param == null || param.empty) return null;
+        if (param == null || param.empty) return null
         forceExactSearch || param.exact ? param.value : param.value + "*"
     }
 
@@ -226,8 +226,8 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     protected String searchNumber(NumberParam param) {
-        if (param == null) return null;
-        param?.value.toString()
+        if (param == null) return null
+        param?.value?.toString()
     }
 
     protected Optional<CompositeIdentifier> searchToken(TokenParam identifierParam) {
@@ -274,9 +274,9 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     }
 
     static class CompositeIdentifier {
-        String id;
-        String namespace;
-        String oid;
+        String id
+        String namespace
+        String oid
 
         boolean hasSystem() {
             namespace || oid

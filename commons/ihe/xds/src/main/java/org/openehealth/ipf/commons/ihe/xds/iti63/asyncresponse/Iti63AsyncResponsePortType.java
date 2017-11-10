@@ -44,10 +44,10 @@ public interface Iti63AsyncResponsePortType {
     @Oneway
     @Action(input = "urn:ihe:iti:2011:CrossGatewayFetchResponse")
     @WebMethod(operationName = "InitiatingGateway_Async_CrossGatewayFetch")
-    public void crossGatewayFetchAsyncResponse(
+    void crossGatewayFetchAsyncResponse(
             @WebParam(partName = "Body",
                     name = "AdhocQueryResponse",
                     targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
-            AdhocQueryResponse body
+                    AdhocQueryResponse body
     );
 }

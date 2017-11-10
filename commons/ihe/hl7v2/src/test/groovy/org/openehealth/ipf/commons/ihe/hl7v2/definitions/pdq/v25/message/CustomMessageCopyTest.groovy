@@ -33,30 +33,30 @@ import static org.junit.Assert.assertTrue
  *
  * @author Boris Stanojevic
  */
-public class CustomMessageCopyTest {
+class CustomMessageCopyTest {
 
     private static final Parser PARSER = HapiContextFactory.createHapiContext(
             CustomModelClassUtils.createFactory("pdq", "2.5"),
             PixPdqTransactions.ITI21).pipeParser
-    private String msg;
+    private String msg
 
     @Before
-    public void setup() {
+    void setup() {
         msg = getClass().getResourceAsStream("/qbp.hl7").text
     }
 
     @Test
-    public void testCopyDefaultQBP() throws HL7Exception {
+    void testCopyDefaultQBP() throws HL7Exception {
         ca.uhn.hl7v2.model.v25.message.QBP_Q21 QBP_Q21_copy = new PipeParser().parse(msg).copy()
         assertTrue(QBP_Q21_copy.getQPD() instanceof ca.uhn.hl7v2.model.v25.segment.QPD)
     }
 
     @Test
-    public void testCopyCustomQBP(){
-        QBP_Q21 QBP_Q21_copy = PARSER.parse(msg).copy();
-        assertTrue(QBP_Q21_copy.getQPD() instanceof QPD);
-        assertEquals(PARSER, QBP_Q21_copy.getParser());
-        assertEquals(PARSER.getFactory(), QBP_Q21_copy.getParser().getFactory());
+    void testCopyCustomQBP(){
+        QBP_Q21 QBP_Q21_copy = PARSER.parse(msg).copy()
+        assertTrue(QBP_Q21_copy.getQPD() instanceof QPD)
+        assertEquals(PARSER, QBP_Q21_copy.getParser())
+        assertEquals(PARSER.getFactory(), QBP_Q21_copy.getParser().getFactory())
     }
 
 }

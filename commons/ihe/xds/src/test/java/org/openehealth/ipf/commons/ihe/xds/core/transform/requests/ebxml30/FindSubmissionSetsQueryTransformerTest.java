@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
@@ -62,18 +64,18 @@ public class FindSubmissionSetsQueryTransformerTest {
         assertEquals(QueryType.FIND_SUBMISSION_SETS.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
 
-        assertEquals(Arrays.asList("'id1^^^&uni1&uniType1'"),
+        assertEquals(Collections.singletonList("'id1^^^&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_PATIENT_ID.getSlotName()));
         
         assertEquals(Arrays.asList("('code1^^system1')", "('code2^^system2')"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_CONTENT_TYPE_CODE.getSlotName()));
 
-        assertEquals(Arrays.asList("20150102030405"),
+        assertEquals(Collections.singletonList("20150102030405"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_SUBMISSION_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("20150102030406"),
+        assertEquals(Collections.singletonList("20150102030406"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_SUBMISSION_TIME_TO.getSlotName()));
 
-        assertEquals(Arrays.asList("'per''son1'"),
+        assertEquals(Collections.singletonList("'per''son1'"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_AUTHOR_PERSON.getSlotName()));
 
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),

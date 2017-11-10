@@ -19,7 +19,6 @@ import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.commons.xml.XmlYielder
-import org.openehealth.ipf.modules.hl7.ErrorLocation
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
@@ -161,7 +160,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 case '4':
                     String elementIndexString = ''
                     if (err[4].value) {
-                        int index = Math.max(0, Integer.parseInt(err[4].value) - ErrorLocation.fieldRepetitionIndexingBase)
+                        int index = Math.max(0, Integer.parseInt(err[4].value))
                         elementIndexString += "[${index}]"
                     }
                     return rootPath + 'dataSource' + elementIndexString + '/value'

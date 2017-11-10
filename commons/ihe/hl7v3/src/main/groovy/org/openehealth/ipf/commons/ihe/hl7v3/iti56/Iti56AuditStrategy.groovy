@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v3.iti56;
+package org.openehealth.ipf.commons.ihe.hl7v3.iti56
 
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy

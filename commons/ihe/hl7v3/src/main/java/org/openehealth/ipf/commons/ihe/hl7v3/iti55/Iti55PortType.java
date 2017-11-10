@@ -30,13 +30,13 @@ import javax.xml.ws.Action;
 @WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "RespondingGateway_PortType", portName = "RespondingGateway_Port_Soap12")
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Iti55PortType {
-    public static final String REGULAR_REQUEST_INPUT_ACTION =
+    String REGULAR_REQUEST_INPUT_ACTION =
             "urn:hl7-org:v3:PRPA_IN201305UV02:CrossGatewayPatientDiscovery";
-    public static final String REGULAR_REQUEST_OUTPUT_ACTION =
+    String REGULAR_REQUEST_OUTPUT_ACTION =
             "urn:hl7-org:v3:PRPA_IN201306UV02:CrossGatewayPatientDiscovery";
-    public static final String DEFERRED_REQUEST_INPUT_ACTION =
+    String DEFERRED_REQUEST_INPUT_ACTION =
             "urn:hl7-org:v3:PRPA_IN201305UV02:Deferred:CrossGatewayPatientDiscovery";
-    public static final String DEFERRED_REQUEST_OUTPUT_ACTION =
+    String DEFERRED_REQUEST_OUTPUT_ACTION =
             "urn:hl7-org:v3:MCCI_IN000002UV01";
 
     @Action(input = REGULAR_REQUEST_INPUT_ACTION, output = REGULAR_REQUEST_OUTPUT_ACTION)

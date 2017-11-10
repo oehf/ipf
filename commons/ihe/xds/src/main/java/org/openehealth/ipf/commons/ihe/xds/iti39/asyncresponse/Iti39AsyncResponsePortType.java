@@ -43,10 +43,10 @@ public interface Iti39AsyncResponsePortType {
     @Oneway
     @Action(input = "urn:ihe:iti:2007:CrossGatewayRetrieveResponse")
     @WebMethod(operationName = "InitiatingGateway_Async_CrossGatewayRetrieve")
-    public void documentRepositoryRetrieveDocumentSet(
+    void documentRepositoryRetrieveDocumentSet(
             @WebParam(partName = "body",
                     name = "RetrieveDocumentSetResponse",
                     targetNamespace = "urn:ihe:iti:xds-b:2007")
-            RetrieveDocumentSetResponseType body
+                    RetrieveDocumentSetResponseType body
     );
 }

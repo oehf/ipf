@@ -21,8 +21,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.PatientInfoAdapter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.PatientInfoXml;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMap;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMapAdapter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;

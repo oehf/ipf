@@ -48,16 +48,10 @@ public class CorsAutoConfiguration {
 
         // A comma separated list of allowed origins. Note: An '*' cannot be used for an allowed origin when using credentials.
         config.addAllowedOrigin("*");
-        config.setAllowedMethods(Arrays.asList(new String[] {
-                "GET","POST","PUT","DELETE","OPTIONS"
-        }));
+        config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
         // A comma separated list of allowed headers when making a non simple CORS request.
-        config.setAllowedHeaders(Arrays.asList(new String[]{
-                "X-FHIR-Starter", "Origin", "Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Authorization"
-        }));
-        config.setExposedHeaders(Arrays.asList(new String[]{
-                "Location", "Content-Location"
-        }));
+        config.setAllowedHeaders(Arrays.asList("X-FHIR-Starter", "Origin", "Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers", "Authorization"));
+        config.setExposedHeaders(Arrays.asList("Location", "Content-Location"));
         config.setMaxAge(300L);
         return config;
     }

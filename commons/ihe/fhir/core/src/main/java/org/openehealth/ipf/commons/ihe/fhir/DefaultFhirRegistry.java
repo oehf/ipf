@@ -60,7 +60,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
     }
 
     @Override
-    public void register(Object resourceProvider) throws Exception {
+    public void register(Object resourceProvider) {
         resourceProviders.add(resourceProvider);
         for (RestfulServer servlet : servlets) {
             servlet.registerProvider(resourceProvider);
@@ -76,7 +76,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
     }
 
     @Override
-    public void register(RestfulServer servlet) throws Exception {
+    public void register(RestfulServer servlet) {
         LOG.debug("Registering FHIR servlet with name {}. Providers registered so far: {}",
                 servlet.getServletName(), resourceProviders.size());
         servlets.add(servlet);

@@ -38,7 +38,6 @@ public class Iti78ClientAuditStrategy extends Iti78AuditStrategy {
      */
     @Override
     public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response) {
-        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response);
         /* Pending https://github.com/oehf/ipf/issues/124
         if (result) {
             if (response instanceof Patient) {
@@ -54,6 +53,6 @@ public class Iti78ClientAuditStrategy extends Iti78AuditStrategy {
             }
         }
         */
-        return result;
+        return super.enrichAuditDatasetFromResponse(auditDataset, response);
     }
 }

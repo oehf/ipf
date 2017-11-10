@@ -35,8 +35,8 @@ public interface Iti59PortType {
     @WebMethod(operationName = "ProviderInformationFeedRequest")
     @Action(input = "urn:ihe:iti:hpd:2010:ProviderInformationFeed", output = "urn:ihe:iti:hpd:2010:ProviderInformationFeedResponse")
     @WebResult(name = "batchResponse", targetNamespace = "urn:oasis:names:tc:DSML:2:0:core", partName = "body")
-    public BatchResponse providerInformationFeedRequest(
-        @WebParam(partName = "body", name = "batchRequest", targetNamespace = "urn:oasis:names:tc:DSML:2:0:core")
-                BatchRequest body
+    BatchResponse providerInformationFeedRequest(
+            @WebParam(partName = "body", name = "batchRequest", targetNamespace = "urn:oasis:names:tc:DSML:2:0:core")
+                    BatchRequest body
     );
 }

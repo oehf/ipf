@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.camel.EndpointInject;
@@ -58,7 +57,7 @@ public class CDAModelExtensionTest extends AbstractExtensionTest {
         mockError.assertIsSatisfied();
     }
     
-    private static InputStream inputStream(String resource) throws IOException {
+    private static InputStream inputStream(String resource) {
         return CDAModelExtensionTest.class.getResourceAsStream(resource);
     }
     

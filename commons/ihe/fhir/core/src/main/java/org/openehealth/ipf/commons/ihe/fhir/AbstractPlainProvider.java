@@ -81,8 +81,7 @@ public abstract class AbstractPlainProvider implements Serializable {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
-        R response = consumer.handleResourceRequest(payload, headers, resultType);
-        return response;
+        return consumer.handleResourceRequest(payload, headers, resultType);
     }
 
     /**
@@ -116,8 +115,7 @@ public abstract class AbstractPlainProvider implements Serializable {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
-        List<R> response = consumer.handleBundleRequest(payload, headers);
-        return response;
+        return consumer.handleBundleRequest(payload, headers);
     }
 
     /**
@@ -174,8 +172,7 @@ public abstract class AbstractPlainProvider implements Serializable {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(parameters, httpServletRequest);
-        MethodOutcome response = consumer.handleAction(payload, headers);
-        return response;
+        return consumer.handleAction(payload, headers);
     }
 
     /**
@@ -195,8 +192,7 @@ public abstract class AbstractPlainProvider implements Serializable {
             throw new IllegalStateException("Consumer is not initialized");
         }
         Map<String, Object> headers = enrichParameters(null, httpServletRequest);
-        T response = consumer.handleTransactionRequest(payload, headers, bundleClass);
-        return response;
+         return consumer.handleTransactionRequest(payload, headers, bundleClass);
     }
 
     protected Map<String, Object> enrichParameters(FhirSearchParameters parameters, HttpServletRequest httpServletRequest) {

@@ -44,10 +44,10 @@ public interface Iti38AsyncResponsePortType {
     @Oneway
     @Action(input = "urn:ihe:iti:2007:CrossGatewayQueryResponse")
     @WebMethod(operationName = "InitiatingGateway_Async_CrossGatewayQuery")
-    public void documentRegistryRegistryStoredQuery(
+    void documentRegistryRegistryStoredQuery(
             @WebParam(partName = "Body",
                     name = "AdhocQueryResponse",
                     targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
-            AdhocQueryResponse body
+                    AdhocQueryResponse body
     );
 }

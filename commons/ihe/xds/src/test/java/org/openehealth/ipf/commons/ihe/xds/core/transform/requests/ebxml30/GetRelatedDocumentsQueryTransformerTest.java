@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
@@ -48,7 +50,7 @@ public class GetRelatedDocumentsQueryTransformerTest {
         query.setUniqueId("uniqueId1");
         query.setHomeCommunityId("home");
         query.setAssociationTypes(Arrays.asList(AssociationType.HAS_MEMBER, AssociationType.TRANSFORM_AND_REPLACE));
-        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -58,10 +60,10 @@ public class GetRelatedDocumentsQueryTransformerTest {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.GET_RELATED_DOCUMENTS.getId(), ebXML.getId());
         
-        assertEquals(Arrays.asList("'uuid1'"),
+        assertEquals(Collections.singletonList("'uuid1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UUID.getSlotName()));
         
-        assertEquals(Arrays.asList("'uniqueId1'"),
+        assertEquals(Collections.singletonList("'uniqueId1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UNIQUE_ID.getSlotName()));
 
         assertEquals("home", ebXML.getHome());
@@ -69,7 +71,7 @@ public class GetRelatedDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember')", "('urn:ihe:iti:2007:AssociationType:XFRM_RPLC')"),
                 ebXML.getSlotValues(QueryParameter.ASSOCIATION_TYPE.getSlotName()));
 
-        assertEquals(Arrays.asList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
+        assertEquals(Collections.singletonList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_TYPE.getSlotName()));
 
         assertEquals(4, ebXML.getSlots().size());

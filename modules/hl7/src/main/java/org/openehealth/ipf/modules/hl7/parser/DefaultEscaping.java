@@ -1,7 +1,5 @@
 package org.openehealth.ipf.modules.hl7.parser;
 
-import ca.uhn.hl7v2.DefaultHapiContext;
-import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
 
 /**

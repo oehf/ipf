@@ -63,6 +63,6 @@ public abstract class DelegateDefinition extends OutputDefinition<RouteDefinitio
      * @return a {@link Processor} instance.
      * @throws Exception
      */
-    protected abstract Processor doCreateDelegate(RouteContext routeContext) throws Exception;
+    protected abstract Processor doCreateDelegate(RouteContext routeContext);
     
 }

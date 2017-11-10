@@ -19,8 +19,6 @@ import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator;
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator;
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorHL7v2ToFhir;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.Map;

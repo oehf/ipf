@@ -20,6 +20,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -101,7 +102,7 @@ public class SlotLengthAndNameUniquenessValidator {
 
             // validate lengths of slot values
             slot.getValueList().stream()
-                    .filter(value -> value != null)
+                    .filter(Objects::nonNull)
                     .forEach(value -> metaDataAssert(value.length() <= slot.getValueLengthLimit(), SLOT_VALUE_TOO_LONG, name));
         }
     }

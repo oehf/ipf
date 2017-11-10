@@ -47,8 +47,8 @@ public interface Rad75PortType {
     @WebResult(name = "RetrieveDocumentSetResponse", targetNamespace = "urn:ihe:iti:xds-b:2007", partName = "body")
     @Action(input = "urn:ihe:rad:2011:CrossGatewayRetrieveImagingDocumentSet", output = "urn:ihe:rad:2011:CrossGatewayRetrieveImagingDocumentSetResponse")
     @WebMethod(operationName = "RespondingGateway_CrossGatewayRetrieveImagingDocumentSet")
-    public RetrieveDocumentSetResponseType documentRepositoryRetrieveImagingDocumentSet(
-        @WebParam(partName = "body", name = "RetrieveImagingDocumentSetRequest", targetNamespace = "urn:ihe:rad:xdsi-b:2009")
-        RetrieveImagingDocumentSetRequestType body
+    RetrieveDocumentSetResponseType documentRepositoryRetrieveImagingDocumentSet(
+            @WebParam(partName = "body", name = "RetrieveImagingDocumentSetRequest", targetNamespace = "urn:ihe:rad:xdsi-b:2009")
+                    RetrieveImagingDocumentSetRequestType body
     );
 }

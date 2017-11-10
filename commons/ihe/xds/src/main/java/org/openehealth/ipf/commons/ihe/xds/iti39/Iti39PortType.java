@@ -47,8 +47,8 @@ public interface Iti39PortType {
     @WebResult(name = "RetrieveDocumentSetResponse", targetNamespace = "urn:ihe:iti:xds-b:2007", partName = "body")
     @Action(input = "urn:ihe:iti:2007:CrossGatewayRetrieve", output = "urn:ihe:iti:2007:CrossGatewayRetrieveResponse")
     @WebMethod(operationName = "RespondingGateway_CrossGatewayRetrieve")
-    public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(
-        @WebParam(partName = "body", name = "RetrieveDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007")
-        RetrieveDocumentSetRequestType body
+    RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(
+            @WebParam(partName = "body", name = "RetrieveDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007")
+                    RetrieveDocumentSetRequestType body
     );
 }

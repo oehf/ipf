@@ -54,10 +54,10 @@ public interface Iti18PortType {
     @Action(input = "urn:ihe:iti:2007:RegistryStoredQuery",
             output = "urn:ihe:iti:2007:RegistryStoredQueryResponse")
     @WebMethod(operationName = "DocumentRegistry_RegistryStoredQuery")
-    public AdhocQueryResponse documentRegistryRegistryStoredQuery(
-        @WebParam(partName = "body",
-                name = "AdhocQueryRequest",
-                targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
-        AdhocQueryRequest body
+    AdhocQueryResponse documentRegistryRegistryStoredQuery(
+            @WebParam(partName = "body",
+                    name = "AdhocQueryRequest",
+                    targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
+                    AdhocQueryRequest body
     );
 }

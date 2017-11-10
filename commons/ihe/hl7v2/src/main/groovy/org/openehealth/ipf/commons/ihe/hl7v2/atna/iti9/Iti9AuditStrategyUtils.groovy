@@ -49,8 +49,8 @@ class Iti9AuditStrategyUtils  {
                     auditDataset.patientIds = patientIds
                 }
             }
-            true
         }
+        true
     }
 
 

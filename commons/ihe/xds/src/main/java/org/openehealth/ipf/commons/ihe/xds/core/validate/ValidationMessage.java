@@ -150,12 +150,12 @@ public enum ValidationMessage {
     private final String text;
     private final ErrorCode errorCode;
     
-    private ValidationMessage(String text, ErrorCode errorCode) {
+    ValidationMessage(String text, ErrorCode errorCode) {
         this.text = text;
         this.errorCode = errorCode;
     }
 
-    private ValidationMessage(String text) {
+    ValidationMessage(String text) {
         this.text = text;
         errorCode = null;
     }

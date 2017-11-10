@@ -35,6 +35,8 @@ import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
+import java.nio.charset.Charset
+
 /**
  *
  */
@@ -48,7 +50,7 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
     MappingService mappingService
 
     @Before
-    public void setup() {
+    void setup() {
         mappingService = new BidiMappingService()
         mappingService.setMappingScript(getClass().getClassLoader().getResource('mapping.map'))
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
@@ -56,7 +58,7 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
     }
 
     @Test
-    public void testTranslateRegularResponse() {
+    void testTranslateRegularResponse() {
         RSP_K23 message = loadMessage('ok-1_Response')
         Parameters parameters = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(1, parameters.parameter.size())
@@ -64,11 +66,11 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
         Identifier identifier = (Identifier) parameter.getValue()
         assertEquals('78912', identifier.value)
         assertEquals('http://org.openehealth/ipf/commons/ihe/fhir/1', identifier.system)
-        System.out.println(FhirContext.forDstu2Hl7Org().newXmlParser().setPrettyPrint(true).encodeResourceToString(parameters));
+        System.out.println(FhirContext.forDstu2Hl7Org().newXmlParser().setPrettyPrint(true).encodeResourceToString(parameters))
     }
 
     @Test
-    public void testTranslateRegularResponseUnknownOid() {
+    void testTranslateRegularResponseUnknownOid() {
         RSP_K23 message = loadMessage('ok-2_Response')
         Parameters parameters = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(1, parameters.parameter.size())
@@ -79,32 +81,32 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
     }
 
     @Test
-    public void testTranslateEmptyResponse() {
+    void testTranslateEmptyResponse() {
         RSP_K23 message = loadMessage('nf-1_Response')
         Parameters parameters = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(0, parameters.parameter.size())
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void testTranslateErrorResponseCase3() {
+    void testTranslateErrorResponseCase3() {
         RSP_K23 message = loadMessage('err-1_Response')
         translator.translateToFhir(message, new HashMap<String, Object>())
     }
 
     @Test
-    public void testTranslateErrorResponseCase4() {
+    void testTranslateErrorResponseCase4() {
         // not implemented yet
     }
 
     @Test
-    public void testTranslateErrorResponseCase5() {
+    void testTranslateErrorResponseCase5() {
         // not implemented yet
     }
 
     RSP_K23 loadMessage(String name) {
         String resourceName = "pixquery/v2/${name}.hl7"
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName)
-        String content = IOUtils.toString(inputStream)
+        String content = IOUtils.toString(inputStream, Charset.defaultCharset())
         return (RSP_K23) PIX_QUERY_CONTEXT.getPipeParser().parse(content)
     }
 }

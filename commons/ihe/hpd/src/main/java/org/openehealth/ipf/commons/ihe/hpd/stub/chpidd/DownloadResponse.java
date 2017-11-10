@@ -64,7 +64,7 @@ public class DownloadResponse {
      */
     public List<BatchRequest> getBatchRequest() {
         if (batchRequest == null) {
-            batchRequest = new ArrayList<BatchRequest>();
+            batchRequest = new ArrayList<>();
         }
         return this.batchRequest;
     }

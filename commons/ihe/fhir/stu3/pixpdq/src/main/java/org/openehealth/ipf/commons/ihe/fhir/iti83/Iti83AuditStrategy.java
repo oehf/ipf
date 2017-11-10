@@ -80,7 +80,6 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDat
 
     @Override
     public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response) {
-        boolean result = super.enrichAuditDatasetFromResponse(auditDataset, response);
         /* Pending https://github.com/oehf/ipf/issues/124
         if (result) {
             if (response instanceof Parameters) {
@@ -95,6 +94,6 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy<FhirQueryAuditDat
             }
         }
         */
-        return result;
+        return super.enrichAuditDatasetFromResponse(auditDataset, response);
     }
 }

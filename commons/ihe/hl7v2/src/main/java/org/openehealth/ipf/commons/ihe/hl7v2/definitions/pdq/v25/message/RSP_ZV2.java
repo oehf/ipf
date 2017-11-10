@@ -122,7 +122,7 @@ public class RSP_ZV2 extends AbstractMessage {
       * throws HL7Exception if the repetition requested is more than one
       * greater than the number of existing repetitions.
       */
-    public RSP_ZV2_QUERY_RESPONSE getQUERY_RESPONSE(int rep) throws HL7Exception {
+    public RSP_ZV2_QUERY_RESPONSE getQUERY_RESPONSE(int rep) {
         return getTyped("QUERY_RESPONSE", rep, RSP_ZV2_QUERY_RESPONSE.class);
     }
 

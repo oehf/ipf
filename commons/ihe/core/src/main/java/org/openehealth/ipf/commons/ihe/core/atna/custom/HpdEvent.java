@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
 import org.openhealthtools.ihe.atna.auditor.codes.dicom.DICOMEventIdCodes;
-import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881ParticipantObjectCodes;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;

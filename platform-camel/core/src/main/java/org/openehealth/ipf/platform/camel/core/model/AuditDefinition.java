@@ -54,7 +54,7 @@ public class AuditDefinition extends DelegateDefinition {
     }
     
     @Override
-    protected Processor doCreateDelegate(RouteContext routeContext) throws Exception {
+    protected Processor doCreateDelegate(RouteContext routeContext) {
         if (auditProcessorBeanName != null) {
             auditProcessor = routeContext.lookup(auditProcessorBeanName, Processor.class);
         }

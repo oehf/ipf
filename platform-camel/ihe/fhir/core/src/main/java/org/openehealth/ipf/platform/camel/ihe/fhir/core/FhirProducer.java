@@ -47,7 +47,7 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
         super(endpoint);
     }
 
-    protected synchronized IGenericClient getClient(Exchange exchange) throws Exception {
+    protected synchronized IGenericClient getClient(Exchange exchange) {
         if (client == null) {
             FhirContext context = getEndpoint().getContext();
             SslAwareApacheRestfulClientFactory clientFactory = (SslAwareApacheRestfulClientFactory)context.getRestfulClientFactory();

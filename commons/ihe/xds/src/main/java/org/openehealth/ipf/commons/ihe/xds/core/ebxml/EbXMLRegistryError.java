@@ -22,15 +22,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
  */
 public interface EbXMLRegistryError {
 
-    public String getCodeContext();
-    public void setCodeContext(String codeContext);
+    String getCodeContext();
+    void setCodeContext(String codeContext);
 
-    public String getErrorCode();
-    public void setErrorCode(String errorCode);
+    String getErrorCode();
+    void setErrorCode(String errorCode);
 
-    public Severity getSeverity();
-    public void setSeverity(Severity severity);
+    Severity getSeverity();
+    void setSeverity(Severity severity);
 
-    public String getLocation();
-    public void setLocation(String location);
+    String getLocation();
+    void setLocation(String location);
 }

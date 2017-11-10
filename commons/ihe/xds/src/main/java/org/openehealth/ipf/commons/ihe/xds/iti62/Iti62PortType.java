@@ -52,8 +52,8 @@ public interface Iti62PortType {
             partName = "body")
     @Action(input = "urn:ihe:iti:2010:DeleteDocumentSet", output = "urn:ihe:iti:2010:DeleteDocumentSetResponse")
     @WebMethod(operationName = "DocumentRegistry_DeleteDocumentSet")
-    public RegistryResponseType documentRegistryDeleteDocumentSet(
+    RegistryResponseType documentRegistryDeleteDocumentSet(
             @WebParam(partName = "body", name = "RemoveObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0")
-            RemoveObjectsRequest body
+                    RemoveObjectsRequest body
     );
 }

@@ -16,7 +16,6 @@ import org.openehealth.ipf.commons.core.config.SpringRegistry;
 import org.openehealth.ipf.commons.map.SpringBidiMappingService;
 import org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.ServerProperties;

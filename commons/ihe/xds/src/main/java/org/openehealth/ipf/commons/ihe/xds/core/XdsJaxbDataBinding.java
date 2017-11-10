@@ -50,12 +50,7 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
      * @return additional Camel headers as a map.
      */
     public static Map<String, Object> getCamelHeaders(Object ebXml) {
-        Map<String, Object> map = DATA.get(ebXml);
-        if (map == null) {
-            map = new HashMap<>();
-            DATA.put(ebXml, map);
-        }
-        return map;
+        return DATA.computeIfAbsent(ebXml, k -> new HashMap<>());
     }
 
 

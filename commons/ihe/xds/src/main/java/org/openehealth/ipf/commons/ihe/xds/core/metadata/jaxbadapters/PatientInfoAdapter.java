@@ -58,9 +58,7 @@ public class PatientInfoAdapter extends XmlAdapter<PatientInfoXml, PatientInfo> 
         patientInfo.setDateOfBirth(xml.getDateOfBirth());
         patientInfo.setGender(xml.getGender());
         unmarshalList(xml.getAddresses(), patientInfo.getAddresses());
-        xml.getOther().forEach((fieldId, repetitions) -> {
-            unmarshalList(repetitions, patientInfo.getHl7FieldIterator(fieldId));
-        });
+        xml.getOther().forEach((fieldId, repetitions) -> unmarshalList(repetitions, patientInfo.getHl7FieldIterator(fieldId)));
         return patientInfo;
     }
 

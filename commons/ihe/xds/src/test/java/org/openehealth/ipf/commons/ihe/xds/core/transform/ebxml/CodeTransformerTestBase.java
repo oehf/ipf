@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -68,7 +68,7 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
         
         EbXMLSlot slot = slots.get(0);
         assertEquals(Vocabulary.SLOT_NAME_CODING_SCHEME, slot.getName());        
-        assertEquals(Arrays.asList("schemeName"), slot.getValueList());
+        assertEquals(Collections.singletonList("schemeName"), slot.getValueList());
         
         List<LocalizedString> localizedStrings = ebXML.getNameAsInternationalString().getLocalizedStrings();
         assertEquals(1, localizedStrings.size());

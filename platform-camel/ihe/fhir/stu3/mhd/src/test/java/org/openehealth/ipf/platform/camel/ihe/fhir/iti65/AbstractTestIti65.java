@@ -28,7 +28,6 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
 import java.security.MessageDigest;
 import java.util.Date;
 
@@ -43,7 +42,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     private static final String REFERENCE_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bc";
     private static final String MANIFEST_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bd";
 
-    public static void startServer(String contextDescriptor) throws ServletException {
+    public static void startServer(String contextDescriptor) {
         IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU3);
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, new MockedSender(), "FhirServlet");
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));

@@ -121,7 +121,7 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
         svrFactory.setServiceBean(service);
         svrFactory.getFeatures().add(new WSAddressingFeature());
         if (wsTransactionConfiguration.isMtom()) {
-            svrFactory.setProperties(Collections.<String, Object>singletonMap("mtom-enabled", "true"));
+            svrFactory.setProperties(Collections.singletonMap("mtom-enabled", "true"));
         }
     }
 

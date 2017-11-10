@@ -33,7 +33,7 @@ class Iti9AuditStrategyTest {
     private static final Parser PARSER = HapiContextFactory.createHapiContext(
             CustomModelClassUtils.createFactory("pix", "2.5"),
             PixPdqTransactions.ITI9).pipeParser
-    private String msg;
+    private String msg
 
     @Before
     void setup() {

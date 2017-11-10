@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v3.iti55;
+package org.openehealth.ipf.commons.ihe.hl7v3.iti55
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
 

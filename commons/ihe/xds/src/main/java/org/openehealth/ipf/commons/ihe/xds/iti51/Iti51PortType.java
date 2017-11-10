@@ -54,10 +54,10 @@ public interface Iti51PortType {
     @Action(input = "urn:ihe:iti:2009:MultiPatientStoredQuery",
             output = "urn:ihe:iti:2009:MultiPatientStoredQueryResponse")
     @WebMethod(operationName = "DocumentRegistry_MultiPatientStoredQuery")
-    public AdhocQueryResponse documentRegistryMultiPatientStoredQuery(
+    AdhocQueryResponse documentRegistryMultiPatientStoredQuery(
             @WebParam(partName = "body",
                     name = "AdhocQueryRequest",
                     targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
-            AdhocQueryRequest body
+                    AdhocQueryRequest body
     );
 }

@@ -33,7 +33,7 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
 
 
     @Override
-    public Hl7v3AuditDataset createAuditDataset() {
+    Hl7v3AuditDataset createAuditDataset() {
         return new Hl7v3AuditDataset(serverSide)
     }
 

@@ -153,7 +153,7 @@ public final class FhirCamelValidators {
         };
     }
 
-    private static void validate(Exchange exchange, FhirContext context, boolean checkSchema, boolean checkSchematron) throws Exception {
+    private static void validate(Exchange exchange, FhirContext context, boolean checkSchema, boolean checkSchematron) {
         ValidationResult result = getValidator(context, checkSchema, checkSchematron)
                 .validateWithResult(exchange.getIn().getBody(IBaseResource.class));
         if (!result.isSuccessful()) {

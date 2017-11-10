@@ -44,10 +44,10 @@ public interface Rad75AsyncResponsePortType
     @Oneway
     @Action(input = "urn:ihe:rad:2011:CrossGatewayRetrieveImagingDocumentSetResponse")
     @WebMethod(operationName = "InitiatingGateway_Async_CrossGatewayRetrieveImagingDocumentSet")
-    public void documentRepositoryRetrieveImagingDocumentSet(
-        @WebParam(partName = "body",
-            name = "RetrieveDocumentSetResponse",
-            targetNamespace = "urn:ihe:iti:xds-b:2007")
-        RetrieveDocumentSetResponseType body
+    void documentRepositoryRetrieveImagingDocumentSet(
+            @WebParam(partName = "body",
+                    name = "RetrieveDocumentSetResponse",
+                    targetNamespace = "urn:ihe:iti:xds-b:2007")
+                    RetrieveDocumentSetResponseType body
     );
 }

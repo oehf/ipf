@@ -26,8 +26,6 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirTestContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
-
 /**
  *
  */
@@ -35,7 +33,7 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti78.class);
 
-    public static void startServer(String contextDescriptor, boolean secure) throws ServletException {
+    public static void startServer(String contextDescriptor, boolean secure) {
         IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.DSTU2_HL7ORG);
         startServer(servlet, contextDescriptor, secure, FhirTestContainer.DEMO_APP_PORT, new MockedSender(), "FhirServlet");
 

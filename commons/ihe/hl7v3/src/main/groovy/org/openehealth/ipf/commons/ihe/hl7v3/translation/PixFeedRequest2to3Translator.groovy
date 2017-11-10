@@ -105,7 +105,7 @@ class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
                             }
                         }
                         createCustodian(builder, this.mpiSystemIdRoot, this.mpiSystemIdExtension)
-                        if (interactId.equals(MERGE_MSG)){
+                        if (interactId == MERGE_MSG){
                             createReplacementOf(builder, adt)
                         }
                     }

@@ -53,8 +53,8 @@ public interface Iti61PortType {
     @Action(input = "urn:ihe:iti:2010:RegisterOnDemandDocumentEntry",
             output = "urn:ihe:iti:2010:RegisterOnDemandDocumentEntryResponse")
     @WebMethod(operationName = "DocumentRegistry_RegisterOnDemandDocumentEntry")
-    public RegistryResponseType documentRegistryRegisterOnDemandDocumentEntry(
+    RegistryResponseType documentRegistryRegisterOnDemandDocumentEntry(
             @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0")
-            SubmitObjectsRequest body
+                    SubmitObjectsRequest body
     );
 }

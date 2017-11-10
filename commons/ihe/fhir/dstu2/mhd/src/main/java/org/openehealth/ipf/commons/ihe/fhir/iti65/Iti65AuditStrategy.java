@@ -73,7 +73,7 @@ public class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
         Bundle bundle = (Bundle) response;
         // Extract DocumentManifest (UU)IDs from the response bundle for auditing
         bundle.getEntry().stream()
-                .map(b -> b.getResponse())
+                .map(Bundle.BundleEntryComponent::getResponse)
                 .filter(Objects::nonNull)
                 .filter(r -> r.getLocation() != null && r.getLocation().startsWith("DocumentManifest"))
                 .findFirst()
@@ -96,7 +96,7 @@ public class Iti65AuditStrategy extends FhirAuditStrategy<Iti65AuditDataset> {
 
         if (responseStatus.stream().anyMatch(s -> s.startsWith("4") || s.startsWith("5"))) {
             return RFC3881EventCodes.RFC3881EventOutcomeCodes.MAJOR_FAILURE;
-        };
+        }
         return RFC3881EventCodes.RFC3881EventOutcomeCodes.SUCCESS;
     }
 }

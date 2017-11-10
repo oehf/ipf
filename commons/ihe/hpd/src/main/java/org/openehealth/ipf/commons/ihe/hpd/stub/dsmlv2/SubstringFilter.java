@@ -99,7 +99,7 @@ public class SubstringFilter {
      */
     public List<String> getAny() {
         if (any == null) {
-            any = new ArrayList<String>();
+            any = new ArrayList<>();
         }
         return this.any;
     }

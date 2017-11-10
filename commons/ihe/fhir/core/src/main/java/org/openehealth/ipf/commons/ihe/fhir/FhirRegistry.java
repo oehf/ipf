@@ -32,7 +32,7 @@ public interface FhirRegistry {
      * @param resourceProvider resource provider
      * @throws Exception
      */
-    void register(Object resourceProvider) throws Exception;
+    void register(Object resourceProvider);
 
     /**
      * Unregisters the FHIR resource provider.
@@ -48,7 +48,7 @@ public interface FhirRegistry {
      * @param servlet FHIR servlet
      * @throws Exception
      */
-    void register(RestfulServer servlet) throws Exception;
+    void register(RestfulServer servlet);
 
     /**
      * Unregisters the FHIR servlet, usually during its destroy phase

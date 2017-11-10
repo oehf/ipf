@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 import ca.uhn.hl7v2.ErrorCode;
-import ca.uhn.hl7v2.HL7Exception;
 
 /**
  * An exception class for HL7v2 acceptance checks.

@@ -81,7 +81,7 @@ public class BatchResponse {
      */
     public List<JAXBElement<?>> getBatchResponses() {
         if (batchResponses == null) {
-            batchResponses = new ArrayList<JAXBElement<?>>();
+            batchResponses = new ArrayList<>();
         }
         return this.batchResponses;
     }

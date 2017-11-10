@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -55,10 +56,10 @@ public class GetFolderAndContentsQueryTransformerTest {
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
-                Arrays.asList(new Code("code12", null, "scheme12")));
+                Collections.singletonList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
-        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -68,10 +69,10 @@ public class GetFolderAndContentsQueryTransformerTest {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.GET_FOLDER_AND_CONTENTS.getId(), ebXML.getId());
         
-        assertEquals(Arrays.asList("'uuid1'"),
+        assertEquals(Collections.singletonList("'uuid1'"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_UUID.getSlotName()));
         
-        assertEquals(Arrays.asList("'uniqueId1'"),
+        assertEquals(Collections.singletonList("'uniqueId1'"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_UNIQUE_ID.getSlotName()));
 
         assertEquals("home", ebXML.getHome());
@@ -82,9 +83,9 @@ public class GetFolderAndContentsQueryTransformerTest {
         List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), slots.get(0).getValueList());
-        assertEquals(Arrays.asList("('code12^^scheme12')"), slots.get(1).getValueList());
+        assertEquals(Collections.singletonList("('code12^^scheme12')"), slots.get(1).getValueList());
 
-        assertEquals(Arrays.asList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
+        assertEquals(Collections.singletonList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_TYPE.getSlotName()));
 
         assertEquals(6, ebXML.getSlots().size());

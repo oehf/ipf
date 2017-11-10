@@ -124,7 +124,7 @@ public class XqjTransmogrifierTest {
         assertTrue(XMLUnit.compareXML(result("/xquery/r-q1.xml"), zapResult).similar());
     }
 
-    private Source source(String path) throws IOException {
+    private Source source(String path) {
         return new StreamSource(getClass().getResourceAsStream(path));
     }
 

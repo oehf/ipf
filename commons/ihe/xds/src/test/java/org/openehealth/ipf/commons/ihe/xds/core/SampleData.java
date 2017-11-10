@@ -423,8 +423,8 @@ public abstract class SampleData {
         populateDocumentsQuery(query);
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
-        query.setDocumentAvailability(Arrays.asList(DocumentAvailability.ONLINE));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
+        query.setDocumentAvailability(Collections.singletonList(DocumentAvailability.ONLINE));
         query.setMetadataLevel(1);
         return new QueryRegistry(query);
     }
@@ -437,7 +437,7 @@ public abstract class SampleData {
         populateDocumentsQuery(query);
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
         QueryList<ReferenceId> referenceIds = new QueryList<>();
         referenceIds.getOuterList().add(Arrays.asList(
@@ -472,13 +472,13 @@ public abstract class SampleData {
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         eventCodes.getOuterList().add(
-                Arrays.asList(new Code("code9", null, "scheme9")));
+                Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setEventCodes(eventCodes);
         QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
-                Arrays.asList(new Code("code12", null, "scheme12")));
+                Collections.singletonList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
         query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
@@ -494,7 +494,7 @@ public abstract class SampleData {
                 new Identifiable("id3", new AssigningAuthority("1.3")),
                 new Identifiable("id4", new AssigningAuthority("1.4"))));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
         return new QueryRegistry(query);
     }
 
@@ -513,7 +513,7 @@ public abstract class SampleData {
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
-                Arrays.asList(new Code("code9", null, "scheme9")));
+                Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setCodes(codes);
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         
@@ -535,7 +535,7 @@ public abstract class SampleData {
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
-                Arrays.asList(new Code("code9", null, "scheme9")));
+                Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setCodes(codes);
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
 
@@ -572,13 +572,13 @@ public abstract class SampleData {
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
-                Arrays.asList(new Code("code9", null, "scheme9")));
+                Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setConfidentialityCodes(codes);
         query.setFormatCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
         query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setStatusFolders(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
         return new QueryRegistry(query);
     }
@@ -621,10 +621,10 @@ public abstract class SampleData {
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
-                Arrays.asList(new Code("code12", null, "scheme12")));
+                Collections.singletonList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
-        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
         
         return new QueryRegistry(query);
     }
@@ -642,7 +642,7 @@ public abstract class SampleData {
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
-                Arrays.asList(new Code("code12", null, "scheme12")));
+                Collections.singletonList(new Code("code12", null, "scheme12")));
         
         return new QueryRegistry(query);
     }
@@ -670,7 +670,7 @@ public abstract class SampleData {
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
         query.setAssociationTypes(Arrays.asList(AssociationType.APPEND, AssociationType.TRANSFORM));
-        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
                 
         return new QueryRegistry(query);
     }
@@ -688,8 +688,8 @@ public abstract class SampleData {
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
-                Arrays.asList(new Code("code12", null, "scheme12")));
-        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+                Collections.singletonList(new Code("code12", null, "scheme12")));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
         return new QueryRegistry(query);
     }
@@ -728,13 +728,13 @@ public abstract class SampleData {
         eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         eventCodes.getOuterList().add(
-                Arrays.asList(new Code("code9", null, "scheme9")));
+                Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setEventCodes(eventCodes);
         QueryList<Code> confidentialityCodes = new QueryList<>();
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
-                Arrays.asList(new Code("code12", null, "scheme12")));
+                Collections.singletonList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
         query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));

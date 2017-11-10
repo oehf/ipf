@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
-import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 
 /**

@@ -44,7 +44,7 @@ public class AuditInRequestInterceptor<T extends WsAuditDataset> extends Abstrac
 
     
     @Override
-    protected void process(SoapMessage message) throws Exception {
+    protected void process(SoapMessage message) {
         if (isGET(message)) {
             return;
         }

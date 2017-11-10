@@ -46,7 +46,7 @@ class Hl7v3NakFactory {
         GPathResult xml
         try {
             xml = slurp(originalMessageString)
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             xml = slurp('<dummy/>')
         }
 

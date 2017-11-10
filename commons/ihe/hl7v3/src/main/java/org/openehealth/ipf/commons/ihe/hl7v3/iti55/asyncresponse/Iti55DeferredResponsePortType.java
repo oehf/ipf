@@ -30,9 +30,9 @@ import javax.xml.ws.Action;
 @WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "InitiatingGatewayDeferredResponse_PortType", portName = "InitiatingGateway_Response_Port_Soap12")
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Iti55DeferredResponsePortType {
-    public static final String DEFERRED_RESPONSE_INPUT_ACTION =
+    String DEFERRED_RESPONSE_INPUT_ACTION =
             "urn:hl7-org:v3:PRPA_IN201306UV02:Deferred:CrossGatewayPatientDiscovery";
-    public static final String DEFERRED_RESPONSE_OUTPUT_ACTION =
+    String DEFERRED_RESPONSE_OUTPUT_ACTION =
             "urn:hl7-org:v3:MCCI_IN000002UV01";
 
     @Action(input = DEFERRED_RESPONSE_INPUT_ACTION, output = DEFERRED_RESPONSE_OUTPUT_ACTION)

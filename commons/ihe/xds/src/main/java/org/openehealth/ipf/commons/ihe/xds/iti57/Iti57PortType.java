@@ -52,8 +52,8 @@ public interface Iti57PortType {
             partName = "body")
     @Action(input = "urn:ihe:iti:2010:UpdateDocumentSet", output = "urn:ihe:iti:2010:UpdateDocumentSetResponse")
     @WebMethod(operationName = "DocumentRegistry_UpdateDocumentSet")
-    public RegistryResponseType documentRegistryUpdateDocumentSet(
+    RegistryResponseType documentRegistryUpdateDocumentSet(
             @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0")
-            SubmitObjectsRequest body
+                    SubmitObjectsRequest body
     );
 }

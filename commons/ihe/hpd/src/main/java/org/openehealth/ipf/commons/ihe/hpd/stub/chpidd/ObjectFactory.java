@@ -56,7 +56,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:ehealth-suisse:names:tc:CS:1", name = "downloadRequest")
     public JAXBElement<DownloadRequest> createDownloadRequest(DownloadRequest value) {
-        return new JAXBElement<DownloadRequest>(_DownloadRequest_QNAME, DownloadRequest.class, null, value);
+        return new JAXBElement<>(_DownloadRequest_QNAME, DownloadRequest.class, null, value);
     }
 
     /**
@@ -65,7 +65,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:ehealth-suisse:names:tc:CS:1", name = "downloadResponse")
     public JAXBElement<DownloadResponse> createDownloadResponse(DownloadResponse value) {
-        return new JAXBElement<DownloadResponse>(_DownloadResponse_QNAME, DownloadResponse.class, null, value);
+        return new JAXBElement<>(_DownloadResponse_QNAME, DownloadResponse.class, null, value);
     }
 
 }

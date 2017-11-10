@@ -18,9 +18,9 @@ package org.openehealth.ipf.osgi.extender.basic
 /**
  * @author Martin Krasser
  */
-public class ExtensionsCount {
+class ExtensionsCount {
 
-    static int count;  
+    static int count
     
     static int getValue() {
         count

@@ -180,7 +180,7 @@ public class CustomXdsAuditor extends XDSAuditor {
             pair.setType("ihe:homeCommunityID");
             pair.setValue(homeCommunityId.getBytes(StandardCharsets.UTF_8));
             pairs.add(pair);
-        };
+        }
 
         event.addParticipantObjectIdentification(
                 new IHETransactionParticipantObjectIDTypeCodes.SubmissionSet(),

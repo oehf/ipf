@@ -16,10 +16,11 @@
 package org.openehealth.ipf.osgi.commons.bundle
 
 import org.osgi.framework.Bundle
-/**
+
+/**
  * @author Martin Krasser
  */
-public class BundleHeaders {
+class BundleHeaders {
 
      public static String EXTENSION_CLASSES_HEADER = 'Extension-Classes'
      

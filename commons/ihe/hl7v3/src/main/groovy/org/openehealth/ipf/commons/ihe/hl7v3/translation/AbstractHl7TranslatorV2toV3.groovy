@@ -100,18 +100,18 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
         if (pid[7][1].value)
             builder.birthTime(value: pid[7][1].value)
 
-        if ('Y'.equals(pid[30].value) || pid[29].value) {
+        if ('Y' == pid[30].value || pid[29].value) {
             builder.deceasedInd(value:true)
             if (pid[29].value)
                 builder.deceasedTime(value: pid[29][1].value)
-        } else if ('N'.equals(pid[30].value)) {
+        } else if ('N' == pid[30].value) {
             builder.deceasedInd(value: false)
         }
-        if ('Y'.equals(pid[24].value) || pid[25].value) {
+        if ('Y' == pid[24].value || pid[25].value) {
             builder.multipleBirthInd(value: true)
             if (pid[25].value)
                 builder.multipleBirthOrderNumber(value: pid[25].value)
-        } else if ('N'.equals(pid[24].value)) {
+        } else if ('N' == pid[24].value) {
             builder.multipleBirthInd(value: false)
         }
 

@@ -41,7 +41,7 @@ class PdqmRequestToPdqQueryTranslatorTest extends Assert {
     MappingService mappingService
 
     @Before
-    public void setup() {
+    void setup() {
         mappingService = new BidiMappingService()
         mappingService.setMappingScripts( [ getClass().getResource('/mapping.map'),
                                            getClass().getResource('/META-INF/map/fhir-hl7v2-translation.map') ] as URL[])
@@ -56,7 +56,7 @@ class PdqmRequestToPdqQueryTranslatorTest extends Assert {
     }
 
     @Test
-    public void testSuccessfulSearchTranslateWithOids() {
+    void testSuccessfulSearchTranslateWithOids() {
 
         // Ask for as much as possible
         Iti78SearchParameters query = Iti78SearchParameters.builder()
@@ -100,7 +100,7 @@ class PdqmRequestToPdqQueryTranslatorTest extends Assert {
     }
 
     @Test
-    public void testSuccessfulGetTranslateWithOids() {
+    void testSuccessfulGetTranslateWithOids() {
         IdType resourceId = new IdType().setValue('Patient/4711')
         QBP_Q21 translated = translator.translateFhir(resourceId, null)
         String translatedString = translated.encode()

@@ -51,7 +51,7 @@ public class ChainUtilsTest {
 
     @Test
     public void testHappyCase() {
-        List<Chainable> custom = Arrays.<Chainable> asList(
+        List<Chainable> custom = Arrays.asList(
                 new MyChainable("c1", "", ""),
                 new MyChainable("c1", "", ""),
                 new MyChainable("c2", "i5 i6 i7", "i3"),
@@ -62,7 +62,7 @@ public class ChainUtilsTest {
 
     @Test
     public void testAlreadyExistent() {
-        List<Chainable> custom = Arrays.<Chainable> asList(
+        List<Chainable> custom = Arrays.asList(
                 new MyChainable("i1", "", ""),
                 new MyChainable("i2", "", ""),
                 new MyChainable("i3", "i5 i6 i7", "i3"),
@@ -74,7 +74,7 @@ public class ChainUtilsTest {
 
     @Test(expected = ChainException.class)
     public void testBeforeEqualsToAfter() {
-        List<Chainable> custom = Arrays.<Chainable> asList(
+        List<Chainable> custom = Arrays.asList(
                 new MyChainable("c1", "", ""),
                 new MyChainable("c1", "", ""),
                 new MyChainable("c2", "i5 i6 i7", "i3"),
@@ -87,7 +87,7 @@ public class ChainUtilsTest {
 
     @Test(expected = ChainException.class)
     public void testBeforeGreaterThanAfter() {
-        List<Chainable> custom = Arrays.<Chainable> asList(
+        List<Chainable> custom = Arrays.asList(
                 new MyChainable("c1", "", ""),
                 new MyChainable("c1", "", ""),
                 new MyChainable("c2", "i5 i6 i7", "i3"),
@@ -100,7 +100,7 @@ public class ChainUtilsTest {
 
     @Test(expected = ChainException.class)
     public void testDependencyLoop() {
-        List<Chainable> custom = Arrays.<Chainable> asList(
+        List<Chainable> custom = Arrays.asList(
                 new MyChainable("c1", "c2", "c3"),
                 new MyChainable("c2", "c1", "c3"),
                 new MyChainable("c3", "c1", "c2")

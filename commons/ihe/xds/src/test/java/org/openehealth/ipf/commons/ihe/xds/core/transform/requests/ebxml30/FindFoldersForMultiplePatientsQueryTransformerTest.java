@@ -31,6 +31,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParamete
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindFoldersForMultiplePatientsQueryTransformer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -56,7 +57,7 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         codes.getOuterList().add(
-                Arrays.asList(new Code("code9", null, "scheme9")));
+                Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setCodes(codes);
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setHomeCommunityId("12.21.41");
@@ -73,15 +74,15 @@ public class FindFoldersForMultiplePatientsQueryTransformerTest {
         assertEquals(Arrays.asList("('id1^^^&uni1&uniType1')","('id2^^^&uni2&uniType2')"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_PATIENT_ID.getSlotName()));
         
-        assertEquals(Arrays.asList("20150102030405"),
+        assertEquals(Collections.singletonList("20150102030405"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_LAST_UPDATE_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("20150102030406"),
+        assertEquals(Collections.singletonList("20150102030406"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_LAST_UPDATE_TIME_TO.getSlotName()));
 
         List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.FOLDER_CODES.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code7^^scheme7')", "('code8^^scheme8')"), slots.get(0).getValueList());
-        assertEquals(Arrays.asList("('code9^^scheme9')"), slots.get(1).getValueList());
+        assertEquals(Collections.singletonList("('code9^^scheme9')"), slots.get(1).getValueList());
         
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_STATUS.getSlotName()));

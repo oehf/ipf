@@ -127,7 +127,7 @@ public class LDAPResult
      */
     public List<String> getReferral() {
         if (referral == null) {
-            referral = new ArrayList<String>();
+            referral = new ArrayList<>();
         }
         return this.referral;
     }

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.fail;
@@ -31,10 +32,10 @@ public class RecipientListValidatorTest {
 
     @Test
     public void testValidateGoodCases() throws XDSMetaDataException {
-        validator.validate(Arrays.asList("Some Hospital|^Welby"));
-        validator.validate(Arrays.asList("|^Welby"));
-        validator.validate(Arrays.asList("|ID^^^^^^^^&1.2.840.113619.6.197&ISO"));
-        validator.validate(Arrays.asList("Some Hospital"));
+        validator.validate(Collections.singletonList("Some Hospital|^Welby"));
+        validator.validate(Collections.singletonList("|^Welby"));
+        validator.validate(Collections.singletonList("|ID^^^^^^^^&1.2.840.113619.6.197&ISO"));
+        validator.validate(Collections.singletonList("Some Hospital"));
         validator.validate(Arrays.asList("Some Hospital", "|^Welby"));
     }
     
@@ -42,10 +43,10 @@ public class RecipientListValidatorTest {
     public void testValidateBadCases() throws XDSMetaDataException {
 //      This check is disabled for compatibility with older versions.
 //        assertFails(Arrays.<String>asList());
-        assertFails(Arrays.asList(""));
-        assertFails(Arrays.asList("^LOL"));
-        assertFails(Arrays.asList("Some Hospital|^Welby||"));
-        assertFails(Arrays.asList("|Some Hospital|^Welby|"));
+        assertFails(Collections.singletonList(""));
+        assertFails(Collections.singletonList("^LOL"));
+        assertFails(Collections.singletonList("Some Hospital|^Welby||"));
+        assertFails(Collections.singletonList("|Some Hospital|^Welby|"));
         assertFails(Arrays.asList("Some Hospital", ""));
     }
 

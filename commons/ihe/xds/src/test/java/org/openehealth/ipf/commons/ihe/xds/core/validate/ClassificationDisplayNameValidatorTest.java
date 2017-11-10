@@ -103,7 +103,7 @@ public class ClassificationDisplayNameValidatorTest {
     }
     
     
-    private EbXMLProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest() throws Exception {
+    private EbXMLProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest() {
         EbXMLFactory factory = new EbXMLFactory30();
         ProvideAndRegisterDocumentSet request = SampleData.createProvideAndRegisterDocumentSet();
         ProvideAndRegisterDocumentSetTransformer transformer = new ProvideAndRegisterDocumentSetTransformer(factory);

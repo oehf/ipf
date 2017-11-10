@@ -153,7 +153,7 @@ public class PatientInfoTransformerTest {
     
     @Test
     public void testFromHL7EmptyList() {
-        assertNull(transformer.fromHL7(Collections.<String>emptyList()));
+        assertNull(transformer.fromHL7(Collections.emptyList()));
     }
     
     @Test

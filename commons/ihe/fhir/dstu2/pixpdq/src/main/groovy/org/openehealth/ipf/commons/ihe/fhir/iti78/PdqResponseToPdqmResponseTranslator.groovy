@@ -96,7 +96,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
      * @return Patient resource list
      */
     protected List<PdqPatient> handleRegularSearchResponse(responseCollection) {
-        List<PdqPatient> resultList = new ArrayList<>();
+        List<PdqPatient> resultList = new ArrayList<>()
         if (responseCollection) {
             for (response in responseCollection) {
                 PdqPatient patient = pidToPatient(response)
@@ -167,12 +167,12 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
             def mappedMaritalStatus
             switch (mapped) {
                 case "UNK":
-                    mappedMaritalStatus = V3NullFlavor.UNK; break;
+                    mappedMaritalStatus = V3NullFlavor.UNK; break
                 case "U":
                     mappedMaritalStatus = new Coding()
                             .setSystem('http://hl7.org/fhir/marital-status')
                             .setCode('U')
-                            .setDisplay('Unmarried'); break;
+                            .setDisplay('Unmarried'); break
                 default: mappedMaritalStatus = V3MaritalStatus.fromCode(mapped)
             }
             maritalStatus.addCoding()

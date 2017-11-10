@@ -16,10 +16,11 @@
 package org.openehealth.ipf.osgi.commons.bundle
 
 import org.osgi.framework.Bundle
-/**
+
+/**
  * @author Martin Krasser
  */
-public class BundleHeader {
+class BundleHeader {
 
     static String DEFAULT_SEPARATOR = ','
      

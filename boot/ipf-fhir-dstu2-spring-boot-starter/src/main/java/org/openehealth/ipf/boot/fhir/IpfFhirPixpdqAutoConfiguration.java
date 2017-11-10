@@ -17,7 +17,7 @@
 package org.openehealth.ipf.boot.fhir;
 
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
+import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator;
 import org.openehealth.ipf.commons.map.config.CustomMappings;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 
-@ConditionalOnClass({TranslatorFhirToHL7v2.class})
+@ConditionalOnClass({FhirTranslator.class})
 @Configuration
 @AutoConfigureAfter(IpfAtnaAutoConfiguration.class)
 @EnableConfigurationProperties(IpfFhirConfigurationProperties.class)

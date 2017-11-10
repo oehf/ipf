@@ -33,7 +33,7 @@ public abstract class InterceptableEndpointConfiguration {
     @UriParam
     private List<InterceptorFactory> customInterceptorFactories;
 
-    protected InterceptableEndpointConfiguration(DefaultComponent component, Map<String, Object> parameters) throws Exception {
+    protected InterceptableEndpointConfiguration(DefaultComponent component, Map<String, Object> parameters) {
         customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
                 parameters, "interceptorFactories", InterceptorFactory.class);
     }

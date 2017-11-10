@@ -21,7 +21,6 @@ import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.conf.store.ClasspathProfileStore;
 import ca.uhn.hl7v2.conf.store.ProfileStore;
 import ca.uhn.hl7v2.parser.ParserConfiguration;
-import ca.uhn.hl7v2.util.idgenerator.FileBasedGenerator;
 import ca.uhn.hl7v2.util.idgenerator.IDGenerator;
 import ca.uhn.hl7v2.util.idgenerator.IpfHiLoIdGenerator;
 import ca.uhn.hl7v2.util.idgenerator.NanoTimeGenerator;
@@ -45,7 +44,6 @@ import org.openhealthtools.ihe.atna.auditor.PIXManagerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -55,7 +53,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 import java.util.HashMap;
 import java.util.Map;

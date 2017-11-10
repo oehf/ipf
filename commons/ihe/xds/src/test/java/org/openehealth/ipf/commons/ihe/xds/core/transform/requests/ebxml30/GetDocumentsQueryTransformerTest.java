@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -55,7 +56,7 @@ public class GetDocumentsQueryTransformerTest {
 
         QueryList<String> extraParams2 = new QueryList<>();
         extraParams2.getOuterList().add(Arrays.asList("dia-31", "dia-32", "dia-33"));
-        extraParams2.getOuterList().add(Arrays.asList("dia-41"));
+        extraParams2.getOuterList().add(Collections.singletonList("dia-41"));
 
         query.getExtraParameters().put("$PatientPerimeter", extraParams1);
         query.getExtraParameters().put("$PatientDiameter", extraParams2);
@@ -82,7 +83,7 @@ public class GetDocumentsQueryTransformerTest {
         List<EbXMLSlot> diameters = ebXML.getSlots("$PatientDiameter");
         assertEquals(2, diameters.size());
         assertEquals(Arrays.asList("('dia-31')", "('dia-32')", "('dia-33')"), diameters.get(0).getValueList());
-        assertEquals(Arrays.asList("('dia-41')"), diameters.get(1).getValueList());
+        assertEquals(Collections.singletonList("('dia-41')"), diameters.get(1).getValueList());
 
         assertEquals(Arrays.asList("('uniqueId1')", "('uniqueId2')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UNIQUE_ID.getSlotName()));

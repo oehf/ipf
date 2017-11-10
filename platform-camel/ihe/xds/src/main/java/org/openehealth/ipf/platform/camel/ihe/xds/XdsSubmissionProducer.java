@@ -31,7 +31,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.BindingProvider;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsP
      * According to the XDR option "Transmit Home Community Id": when the request POJO contains the target home
      * community ID, create a special SOAP header and copy the target home community ID into this header.
      */
-    protected static void injectTargetHomeCommunityId(Object client, SubmitObjectsRequest request) throws ParserConfigurationException {
+    protected static void injectTargetHomeCommunityId(Object client, SubmitObjectsRequest request) {
         String targetHomeCommunityId = null;
         try {
             EbXMLSlotList30 slotList = new EbXMLSlotList30(request.getRequestSlotList().getSlot());

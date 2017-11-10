@@ -18,14 +18,12 @@ package org.openehealth.ipf.commons.ihe.core.chain
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-
 /**
  * @author Dmytro Rud
  */
 @SuppressWarnings("GroovyVariableNotAssigned")
 class ChainUtils {
     private static final transient Logger LOG = LoggerFactory.getLogger(ChainUtils.class)
-
 
     /**
      * Extends an initial chain with elements from a custom collection.
@@ -36,15 +34,15 @@ class ChainUtils {
      *      collection of objects to be added to the initial chain,
      *      may be empty, but not <code>null</code>.
      * @return
-     *      merged chain.
+     * merged chain.
      * @throws ChainException.
      *      when chain extension fails, e.g. when cyclic dependencies are discovered.
      */
     static <T extends Chainable> List<T> createChain(List<T> initial, Collection<T> custom) {
-        ArrayList<T> chain = new ArrayList<T>(initial)
-        ArrayList<T> unprocessed = new ArrayList<T>(custom)
+        List<T> chain = new ArrayList<>(initial)
+        List<T> unprocessed = new ArrayList<>(custom)
 
-        ArrayList<String> chainIds = chain*.id
+        List<String> chainIds = chain*.id
 
         while (unprocessed) {
             boolean successful = false
@@ -58,14 +56,14 @@ class ChainUtils {
                 if (cid in chainIds) {
                     LOG.debug("Element '{}' is already in the chain, ignore it", cid)
                     iter.remove()
-                    successful = true;
+                    successful = true
                     continue
                 }
 
                 // check whether this element depends on some other unprocessed ones
                 def unprocessedDependencies = (unprocessed - c).findAll { other ->
-                    ((other.id in c.before) && ! (cid in other.after)) ||
-                    ((other.id in c.after) && ! (cid in other.before))
+                    ((other.id in c.before) && !(cid in other.after)) ||
+                            ((other.id in c.after) && !(cid in other.before))
                 }
 
                 if (unprocessedDependencies) {
@@ -79,7 +77,7 @@ class ChainUtils {
                 int position = chain.size()
 
                 List<Integer> beforeIndices = c.before.collect { chainIds.indexOf(it) }.findAll { it >= 0 }
-                List<Integer>  afterIndices =  c.after.collect { chainIds.indexOf(it) }.findAll { it >= 0 }
+                List<Integer> afterIndices = c.after.collect { chainIds.indexOf(it) }.findAll { it >= 0 }
 
                 int minBeforePosition = 0
                 int maxAfterPosition = 0

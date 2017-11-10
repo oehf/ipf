@@ -20,6 +20,7 @@ import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.hl7v2.atna.MllpAuditDataset;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,10 +39,10 @@ public class Iti31AuditDataset extends MllpAuditDataset {
                     "A15", "A16", "A25", "A26", "A27", "A32", "A33", "A38", "A44", "A52",
                     "A53", "A54", "A55", "Z99"));
     private static final Set<String> MERGES = new HashSet<>(
-            Arrays.asList(
+            Collections.singletonList(
                     "A40"));
     private static final Set<String> DELETES = new HashSet<>(
-            Arrays.asList(
+            Collections.singletonList(
                     "A11"));
 
     /** Patient ID list from PID-3. */

@@ -78,7 +78,7 @@ public class DsmlMessage {
      */
     public List<Control> getControl() {
         if (control == null) {
-            control = new ArrayList<Control>();
+            control = new ArrayList<>();
         }
         return this.control;
     }

@@ -54,10 +54,10 @@ public interface Iti38PortType {
     @Action(input = "urn:ihe:iti:2007:CrossGatewayQuery",
             output = "urn:ihe:iti:2007:CrossGatewayQueryResponse")
     @WebMethod(operationName = "RespondingGateway_CrossGatewayQuery")
-    public AdhocQueryResponse documentRegistryRegistryStoredQuery(
-        @WebParam(partName = "body",
-                name = "AdhocQueryRequest",
-                targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
-        AdhocQueryRequest body
+    AdhocQueryResponse documentRegistryRegistryStoredQuery(
+            @WebParam(partName = "body",
+                    name = "AdhocQueryRequest",
+                    targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
+                    AdhocQueryRequest body
     );
 }

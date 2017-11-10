@@ -58,7 +58,7 @@ public class CachingHl7v3ContinuationStorage implements Hl7v3ContinuationStorage
     @Override
     public int getLastResultNumber(String key) {
         Integer i = cache.get(key + LAST_RESULT_NUMBER_SUFFIX, Integer.class);
-        return (i != null) ? i.intValue() : -1;
+        return (i != null) ? i : -1;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CachingHl7v3ContinuationStorage implements Hl7v3ContinuationStorage
     @Override
     public int getContinuationQuantity(String key) {
         Integer i = cache.get(key + CONTINUATION_QUANTITY_SUFFIX, Integer.class);
-        return (i != null) ? i.intValue() : -1;
+        return (i != null) ? i : -1;
     }
 
     @Override

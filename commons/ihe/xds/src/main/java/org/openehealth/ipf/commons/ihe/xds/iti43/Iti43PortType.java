@@ -50,8 +50,8 @@ public interface Iti43PortType {
     @WebResult(name = "RetrieveDocumentSetResponse", targetNamespace = "urn:ihe:iti:xds-b:2007", partName = "body")
     @Action(input = "urn:ihe:iti:2007:RetrieveDocumentSet", output = "urn:ihe:iti:2007:RetrieveDocumentSetResponse")
     @WebMethod(operationName = "DocumentRepository_RetrieveDocumentSet")
-    public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(
-        @WebParam(partName = "body", name = "RetrieveDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007")
-        RetrieveDocumentSetRequestType body
+    RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(
+            @WebParam(partName = "body", name = "RetrieveDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007")
+                    RetrieveDocumentSetRequestType body
     );
 }

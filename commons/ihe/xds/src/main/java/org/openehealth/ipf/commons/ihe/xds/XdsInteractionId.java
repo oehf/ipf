@@ -33,7 +33,7 @@ public interface XdsInteractionId<ConfigType extends WsTransactionConfiguration>
     @Override
     default boolean isQuery() {
         return getWsTransactionConfiguration().isQuery();
-    };
+    }
 
     XdsIntegrationProfile getInteractionProfile();
 

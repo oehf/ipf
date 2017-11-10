@@ -34,6 +34,8 @@ import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
+import java.nio.charset.Charset
+
 /**
  *
  */
@@ -103,7 +105,7 @@ class PixQueryResponseToPixmResponseTranslatorTest extends Assert {
     RSP_K23 loadMessage(String name) {
         String resourceName = "pixquery/v2/${name}.hl7"
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName)
-        String content = IOUtils.toString(inputStream)
+        String content = IOUtils.toString(inputStream, Charset.defaultCharset())
         return (RSP_K23) PIX_QUERY_CONTEXT.getPipeParser().parse(content)
     }
 }

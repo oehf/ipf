@@ -42,9 +42,9 @@ public interface Iti15PortType {
      */
     @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1", partName = "body")
     @Action(input = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet", output = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSetResponse")
-    @WebMethod(operationName = "DocumentRepository_ProvideAndRegisterDocumentSet")    
-    public RegistryResponse documentRepositoryProvideAndRegisterDocumentSet(
-        @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1")
-        SubmitObjectsRequest body
+    @WebMethod(operationName = "DocumentRepository_ProvideAndRegisterDocumentSet")
+    RegistryResponse documentRepositoryProvideAndRegisterDocumentSet(
+            @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1")
+                    SubmitObjectsRequest body
     );
 }

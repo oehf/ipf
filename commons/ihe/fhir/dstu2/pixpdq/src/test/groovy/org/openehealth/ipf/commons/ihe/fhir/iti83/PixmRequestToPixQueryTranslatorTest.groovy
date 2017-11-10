@@ -40,7 +40,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
     MappingService mappingService
 
     @Before
-    public void setup() {
+    void setup() {
         mappingService = new BidiMappingService()
         mappingService.setMappingScript(getClass().getResource('/mapping.map'))
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
@@ -49,7 +49,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
     }
 
     @Test
-    public void testSuccessfulTranslateWithOids() {
+    void testSuccessfulTranslateWithOids() {
         Identifier systemIdentifier = new Identifier()
                 .setSystem('urn:oid:1.2.3.4')
                 .setValue('4711ABC')
@@ -69,7 +69,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
     }
 
     @Test
-    public void testSuccessfulTranslateWithUris() {
+    void testSuccessfulTranslateWithUris() {
         Identifier systemIdentifier = new Identifier()
                 .setSystem('http://org.openehealth/ipf/commons/ihe/fhir/1')
                 .setValue('4711ABC')
@@ -89,7 +89,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
     }
 
     @Test
-    public void testSuccessfulTranslateWithInstanceOperation() {
+    void testSuccessfulTranslateWithInstanceOperation() {
         // System is taken from pixSupplierResourceIdentifierUri
         Identifier systemIdentifier = new Identifier().setValue('4711ABC')
 
@@ -109,7 +109,7 @@ class PixmRequestToPixQueryTranslatorTest extends Assert {
     }
 
     @Test(expected = InvalidRequestException)
-    public void testUnknownURNScheme() {
+    void testUnknownURNScheme() {
         Identifier systemIdentifier = new Identifier()
                 .setSystem('urn:isbn:1.2.3.4')
                 .setValue('4711ABC')

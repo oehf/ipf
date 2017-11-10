@@ -61,8 +61,7 @@ public class QpdAwareNakFactory extends NakFactory {
 
 
     public Message createNak0(Message originalMessage, HL7Exception e, AcknowledgmentCode ackTypeCode)
-        throws HL7Exception, IllegalAccessException, NoSuchFieldException
-    {
+        throws HL7Exception {
         AbstractMessage ack = (AbstractMessage) MessageUtils.response(
                 originalMessage,
                 messageType,

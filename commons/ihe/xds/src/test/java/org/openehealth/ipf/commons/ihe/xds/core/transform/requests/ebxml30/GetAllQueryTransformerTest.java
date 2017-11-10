@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -51,14 +52,14 @@ public class GetAllQueryTransformerTest {
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
-                Arrays.asList(new Code("code12", null, "scheme12")));
+                Collections.singletonList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
         query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-        query.setStatusFolders(Arrays.asList(AvailabilityStatus.DEPRECATED));
-        query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.SUBMITTED));
+        query.setStatusFolders(Collections.singletonList(AvailabilityStatus.DEPRECATED));
+        query.setStatusSubmissionSets(Collections.singletonList(AvailabilityStatus.SUBMITTED));
         query.setHomeCommunityId("12.21.41");
-        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+        query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -69,13 +70,13 @@ public class GetAllQueryTransformerTest {
         assertEquals(QueryType.GET_ALL.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
 
-        assertEquals(Arrays.asList("'id1^^^&uni1&uniType1'"),
+        assertEquals(Collections.singletonList("'id1^^^&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.PATIENT_ID.getSlotName()));
         
         List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), slots.get(0).getValueList());
-        assertEquals(Arrays.asList("('code12^^scheme12')"), slots.get(1).getValueList());
+        assertEquals(Collections.singletonList("('code12^^scheme12')"), slots.get(1).getValueList());
         
         assertEquals(Arrays.asList("('code13^^scheme13')", "('code14^^scheme14')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()));
@@ -83,13 +84,13 @@ public class GetAllQueryTransformerTest {
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_STATUS.getSlotName()));
 
-        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')"),
+        assertEquals(Collections.singletonList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_STATUS.getSlotName()));
 
-        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
+        assertEquals(Collections.singletonList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_STATUS.getSlotName()));
 
-        assertEquals(Arrays.asList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
+        assertEquals(Collections.singletonList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_TYPE.getSlotName()));
 
         assertEquals(8, ebXML.getSlots().size());

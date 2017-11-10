@@ -33,6 +33,8 @@ import java.nio.charset.CharsetDecoder;
  * This decoder addresses a decoding error that might occur when start and/or end bytes
  * are transferred in a different frame. It also covers the case that requests are coming
  * in faster than they can be processed.
+ *
+ * FIXME check if this decoder is part of Camel 2.20
  */
 class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
 
@@ -116,7 +118,7 @@ class CustomHL7MLLPDecoder extends CumulativeProtocolDecoder {
     // Make a defensive byte copy (the buffer will be reused)
     // and omit the start and the two end bytes of the MLLP message
     // returning a byte array
-    private Object parseMessageToByteArray(IoBuffer buf) throws CharacterCodingException {
+    private Object parseMessageToByteArray(IoBuffer buf) {
         int len = buf.limit() - 3;
         LOG.debug("Making byte array of length {}", len);
         byte[] dst = new byte[len];

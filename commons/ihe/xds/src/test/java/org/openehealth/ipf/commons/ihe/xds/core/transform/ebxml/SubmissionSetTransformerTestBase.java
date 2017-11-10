@@ -70,7 +70,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         author2.getAuthorRole().add(new Identifiable("role4", null));
         author2.getAuthorSpecialty().add(new Identifiable("spec3", new AssigningAuthority("2.3.7", "ISO")));
         author2.getAuthorSpecialty().add(new Identifiable("spec4", null));
-        author2.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 2l));
+        author2.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 2L));
         author2.getAuthorTelecom().add(new Telecom(41L, 76L, 73901L, 3L));
 
         Address address = new Address();

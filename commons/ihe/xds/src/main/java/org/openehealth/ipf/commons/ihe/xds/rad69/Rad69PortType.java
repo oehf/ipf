@@ -51,8 +51,8 @@ public interface Rad69PortType {
     @WebResult(name = "RetrieveDocumentSetResponse", targetNamespace = "urn:ihe:iti:xds-b:2007", partName = "body")
     @Action(input = "urn:ihe:rad:2009:RetrieveImagingDocumentSet", output = "urn:ihe:iti:2007:RetrieveDocumentSetResponse")
     @WebMethod(operationName = "DocumentRepository_RetrieveImagingDocumentSet")
-    public RetrieveDocumentSetResponseType documentRepositoryRetrieveImagingDocumentSet(
-        @WebParam(partName = "body", name = "RetrieveImagingDocumentSetRequest", targetNamespace = "urn:ihe:rad:xdsi-b:2009")
-        RetrieveImagingDocumentSetRequestType body
+    RetrieveDocumentSetResponseType documentRepositoryRetrieveImagingDocumentSet(
+            @WebParam(partName = "body", name = "RetrieveImagingDocumentSetRequest", targetNamespace = "urn:ihe:rad:xdsi-b:2009")
+                    RetrieveImagingDocumentSetRequestType body
     );
 }

@@ -44,8 +44,8 @@ public interface Iti86PortType {
     @WebMethod(operationName = "DocumentRepository_RemoveDocuments")
     @Action(input = "urn:ihe:iti:2017:RemoveDocuments", output = "urn:ihe:iti:2017:RemoveDocumentsResponse")
     @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", partName = "body")
-    public RegistryResponseType documentRepositoryRemoveDocuments(
-        @WebParam(partName = "body", name = "RemoveDocumentsRequest", targetNamespace = "urn:ihe:iti:rmd:2017")
-                RemoveDocumentsRequestType body
+    RegistryResponseType documentRepositoryRemoveDocuments(
+            @WebParam(partName = "body", name = "RemoveDocumentsRequest", targetNamespace = "urn:ihe:iti:rmd:2017")
+                    RemoveDocumentsRequestType body
     );
 }

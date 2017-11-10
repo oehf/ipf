@@ -87,7 +87,7 @@ public class PHMRValidationTest {
     }
 
     @Ignore
-    public void validateHeaderWarnings() throws Exception {
+    public void validateHeaderWarnings() {
         Source testXml = new StreamSource(getClass().getResourceAsStream(sample_wrong));
         params.put("phase", "warnings");
         try {

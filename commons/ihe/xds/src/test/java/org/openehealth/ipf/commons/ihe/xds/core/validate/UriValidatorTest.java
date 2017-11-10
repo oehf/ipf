@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -31,19 +32,19 @@ public class UriValidatorTest {
 
     @Test
     public void testValidateGoodCases() throws XDSMetaDataException {
-        validator.validate(Arrays.asList("http://localhost:8080"));
-        validator.validate(Arrays.asList("1|http://localhost:8080"));
+        validator.validate(Collections.singletonList("http://localhost:8080"));
+        validator.validate(Collections.singletonList("1|http://localhost:8080"));
         validator.validate(Arrays.asList("1|http://localhost:8080", "2|/a", "3|/a", "4|/a", "5|/a", "6|/a", "7|/a", "8|/a", "9|/a"));
     }
     
     @Test 
     public void testValidateBadCases() throws XDSMetaDataException {
-        assertFails(Arrays.asList(""));
-        assertFails(Arrays.asList("://localhost:8080"));
-        assertFails(Arrays.asList("0|http://localhost"));
-        assertFails(Arrays.asList("10|http://localhost"));
-        assertFails(Arrays.asList("A|http://localhost"));
-        assertFails(Arrays.asList("2|http://localhost"));
+        assertFails(Collections.singletonList(""));
+        assertFails(Collections.singletonList("://localhost:8080"));
+        assertFails(Collections.singletonList("0|http://localhost"));
+        assertFails(Collections.singletonList("10|http://localhost"));
+        assertFails(Collections.singletonList("A|http://localhost"));
+        assertFails(Collections.singletonList("2|http://localhost"));
         assertFails(Arrays.asList("1|http://localhost", "3|/sub"));
     }
 

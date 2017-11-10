@@ -36,7 +36,7 @@ public interface ChPiddPortType {
     @WebMethod(operationName = "ProviderInformationDownloadRequest")
     @Action(input = "urn:ihe:iti:hpd:2010:ProviderInformationDownloadRequest", output = "urn:ihe:iti:hpd:2010:ProviderInformationDownloadResponse")
     @WebResult(name = "downloadResponse", targetNamespace = "urn:ehealth-suisse:names:tc:CS:1", partName = "body")
-    public org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse providerInformationDownloadRequest(
+    org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadResponse providerInformationDownloadRequest(
             @WebParam(partName = "body", name = "downloadRequest", targetNamespace = "urn:ehealth-suisse:names:tc:CS:1")
                     org.openehealth.ipf.commons.ihe.hpd.stub.chpidd.DownloadRequest body
     );

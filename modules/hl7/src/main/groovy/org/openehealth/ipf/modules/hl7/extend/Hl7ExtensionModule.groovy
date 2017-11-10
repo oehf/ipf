@@ -22,17 +22,16 @@ import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.Type
 import ca.uhn.hl7v2.validation.builder.EncodingRuleBuilder
 import ca.uhn.hl7v2.validation.builder.MessageRuleBuilder
-import ca.uhn.hl7v2.validation.builder.Predicate
 import ca.uhn.hl7v2.validation.builder.PrimitiveRuleBuilder
-import ca.uhn.hl7v2.validation.builder.RuleTypeBuilder
-import ca.uhn.hl7v2.validation.impl.RuleSupport
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.commons.map.extend.MappingExtensionHelper
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.openehealth.ipf.modules.hl7.validation.model.*
+import org.openehealth.ipf.modules.hl7.validation.model.AbstractSyntaxRule
+import org.openehealth.ipf.modules.hl7.validation.model.ClosureEncodingRule
+import org.openehealth.ipf.modules.hl7.validation.model.ClosureMessageRule
+import org.openehealth.ipf.modules.hl7.validation.model.ClosurePrimitiveTypeRule
 
-import static org.openehealth.ipf.modules.hl7.extend.ExtensionUtils.normalizeCollection
 
 /**
  * Adds HL7 extensions for Groovy
@@ -254,6 +253,10 @@ class Hl7ExtensionModule {
 
     private static MappingService mappingService() {
         ContextFacade.getBean(MappingService)
-    }           
+    }
+
+    private static def normalizeCollection = { Collection c ->
+        c.collect { it instanceof Type ? it.encode() : it.toString() };
+    }
 
 }

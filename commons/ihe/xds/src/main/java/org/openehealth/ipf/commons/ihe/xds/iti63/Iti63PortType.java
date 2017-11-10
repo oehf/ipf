@@ -54,10 +54,10 @@ public interface Iti63PortType {
     @Action(input = "urn:ihe:iti:2011:CrossGatewayFetch",
             output = "urn:ihe:iti:2011:CrossGatewayFetchResponse")
     @WebMethod(operationName = "RespondingGateway_CrossGatewayFetch")
-    public AdhocQueryResponse crossGatewayFetch(
+    AdhocQueryResponse crossGatewayFetch(
             @WebParam(partName = "body",
                     name = "AdhocQueryRequest",
                     targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")
-            AdhocQueryRequest body
+                    AdhocQueryRequest body
     );
 }

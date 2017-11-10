@@ -65,7 +65,7 @@ public class SearchResultReference
      */
     public List<String> getRef() {
         if (ref == null) {
-            ref = new ArrayList<String>();
+            ref = new ArrayList<>();
         }
         return this.ref;
     }

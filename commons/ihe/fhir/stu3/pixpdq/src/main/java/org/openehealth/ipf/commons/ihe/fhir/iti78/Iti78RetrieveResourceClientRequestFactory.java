@@ -35,10 +35,9 @@ public class Iti78RetrieveResourceClientRequestFactory implements ClientRequestF
 
     @Override
     public IClientExecutable<IReadExecutable<Patient>, Patient> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
-        IClientExecutable<IReadExecutable<Patient>, Patient> executable = client.read()
+        return client.read()
                     .resource(Patient.class)
                     .withId(requestData.toString());
-        return executable;
 
     }
 }

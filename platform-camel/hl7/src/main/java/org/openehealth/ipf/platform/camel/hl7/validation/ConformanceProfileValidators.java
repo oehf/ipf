@@ -35,8 +35,6 @@ import org.openehealth.ipf.gazelle.validation.profile.store.GazelleProfileStore;
 import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
-import javax.xml.bind.JAXBException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,8 +105,7 @@ public final class ConformanceProfileValidators {
         };
     }
 
-    private static void doValidate(Message message, final MessageRule validator)
-            throws IOException, JAXBException {
+    private static void doValidate(Message message, final MessageRule validator) {
         throwIPFValidationException(validator.apply(message));
     }
 

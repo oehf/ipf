@@ -66,7 +66,7 @@ public class MllpExceptionIoFilter extends IoFilterAdapter {
         }
     }
 
-    private void sendResponse(IoSession session, Exchange exchange) throws Exception {
+    private void sendResponse(IoSession session, Exchange exchange) {
         boolean disconnect = mina2Consumer.getEndpoint().getConfiguration().isDisconnect();
         Object response = exchange.hasOut()? getOut(mina2Consumer.getEndpoint(), exchange):
                                              getIn(mina2Consumer.getEndpoint(), exchange);

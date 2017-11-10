@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParamete
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDocumentsByReferenceIdQueryTransformer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -52,7 +53,7 @@ public class FindDocumentsByReferenceIdQueryTransformerTest {
 
         assertEquals(QueryType.FIND_DOCUMENTS_BY_REFERENCE_ID.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
-        assertEquals(Arrays.asList("'id3^^^&1.3&ISO'"),
+        assertEquals(Collections.singletonList("'id3^^^&1.3&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
 
         List<EbXMLSlot> referenceIdSlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_REFERENCE_IDS.getSlotName());

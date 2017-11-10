@@ -31,10 +31,10 @@ import org.slf4j.LoggerFactory
  * @author Dmytro Rud
  */
 class AuditUtils {
-    private static final transient Logger LOG = LoggerFactory.getLogger(AuditUtils.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(AuditUtils.class)
     
     private AuditUtils() {
-        throw new IllegalStateException('Helper class, do not instantiate');
+        throw new IllegalStateException('Helper class, do not instantiate')
     }
 
     
@@ -76,18 +76,18 @@ class AuditUtils {
             boolean fault)
     {
         if(auditDataset == null) {
-            LOG.warn('Audit dataset is not initialized');
-            return;
+            LOG.warn('Audit dataset is not initialized')
+            return
         }
         
         try {
             auditDataset.eventOutcomeCode = fault ?
                     RFC3881EventOutcomeCodes.MAJOR_FAILURE :
-                    RFC3881EventOutcomeCodes.SUCCESS;
-            auditStrategy.doAudit(auditDataset);
+                    RFC3881EventOutcomeCodes.SUCCESS
+            auditStrategy.doAudit(auditDataset)
 
         } catch (Exception e) {
-            LOG.error('ATNA auditing failed', e);
+            LOG.error('ATNA auditing failed', e)
         }
     }
     
@@ -102,7 +102,7 @@ class AuditUtils {
     static boolean isPositiveAck(Message msg) {
         try {
             return (msg.MSA[1].value in ['AA', 'CA'])
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return false
         }
     }

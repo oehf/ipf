@@ -109,7 +109,7 @@ public class PatientInfo implements Serializable {
         ListIterator<String> stringsIterator = getStrings(fieldId).listIterator();
         if (!pojoFields.containsKey(fieldId)) {
             return stringsIterator;
-        };
+        }
 
         List<? extends Hl7v2Based> xdsFields = pojoFields.get(fieldId);
         ListIterator xdsIterator = (xdsFields != null) ? xdsFields.listIterator() : null;

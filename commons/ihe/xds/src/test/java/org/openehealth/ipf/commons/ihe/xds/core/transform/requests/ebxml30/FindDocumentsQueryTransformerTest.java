@@ -29,6 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDoc
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDocumentsQueryTransformer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -60,7 +61,7 @@ public class FindDocumentsQueryTransformerTest {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.FIND_DOCUMENTS.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
-        assertEquals(Arrays.asList("'id3^^^&1.3&ISO'"),
+        assertEquals(Collections.singletonList("'id3^^^&1.3&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
         checkEbXML(ebXML, 21);
     }
@@ -86,19 +87,19 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('code3^^scheme3')", "('code4^^scheme4')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PRACTICE_SETTING_CODE.getSlotName()));
         
-        assertEquals(Arrays.asList("1980"),
+        assertEquals(Collections.singletonList("1980"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CREATION_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("1981"),
+        assertEquals(Collections.singletonList("1981"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CREATION_TIME_TO.getSlotName()));
 
-        assertEquals(Arrays.asList("1982"),
+        assertEquals(Collections.singletonList("1982"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_START_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("1983"),
+        assertEquals(Collections.singletonList("1983"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_START_TIME_TO.getSlotName()));
 
-        assertEquals(Arrays.asList("1984"),
+        assertEquals(Collections.singletonList("1984"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("1985"),
+        assertEquals(Collections.singletonList("1985"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_TO.getSlotName()));
         
         assertEquals(Arrays.asList("('code5^^scheme5')", "('code6^^scheme6')"),
@@ -107,12 +108,12 @@ public class FindDocumentsQueryTransformerTest {
         List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code7^^scheme7')", "('code8^^scheme8')"), slots.get(0).getValueList());
-        assertEquals(Arrays.asList("('code9^^scheme9')"), slots.get(1).getValueList());
+        assertEquals(Collections.singletonList("('code9^^scheme9')"), slots.get(1).getValueList());
         
         slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), slots.get(0).getValueList());
-        assertEquals(Arrays.asList("('code12^^scheme12')"), slots.get(1).getValueList());
+        assertEquals(Collections.singletonList("('code12^^scheme12')"), slots.get(1).getValueList());
         
         assertEquals(Arrays.asList("('per''son1')", "('person2')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_AUTHOR_PERSON.getSlotName()));
@@ -123,7 +124,7 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_STATUS.getSlotName()));
 
-        assertEquals(Arrays.asList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
+        assertEquals(Collections.singletonList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_TYPE.getSlotName()));
 
         assertEquals(expectedSlots, ebXML.getSlots().size());

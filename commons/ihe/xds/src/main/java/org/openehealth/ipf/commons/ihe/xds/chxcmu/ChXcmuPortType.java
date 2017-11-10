@@ -47,7 +47,7 @@ public interface ChXcmuPortType {
             partName = "body")
     @Action(input = "urn:ihe:iti:2017:CrossGatewayUpdateDocumentSet", output = "urn:ihe:iti:2017:CrossGatewayUpdateDocumentSetResponse")
     @WebMethod(operationName = "RespondingGateway_CrossGatewayUpdateDocumentSet")
-    public RegistryResponseType documentRegistryUpdateDocumentSet(
+    RegistryResponseType documentRegistryUpdateDocumentSet(
             @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0")
                     SubmitObjectsRequest body
     );

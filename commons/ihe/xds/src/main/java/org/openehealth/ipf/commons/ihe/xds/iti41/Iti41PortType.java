@@ -50,8 +50,8 @@ public interface Iti41PortType {
     @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", partName = "body")
     @Action(input = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b", output = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse")
     @WebMethod(operationName = "DocumentRepository_ProvideAndRegisterDocumentSet-b")
-    public RegistryResponseType documentRepositoryProvideAndRegisterDocumentSetB(
-        @WebParam(partName = "body", name = "ProvideAndRegisterDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007")
-        ProvideAndRegisterDocumentSetRequestType body
+    RegistryResponseType documentRepositoryProvideAndRegisterDocumentSetB(
+            @WebParam(partName = "body", name = "ProvideAndRegisterDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007")
+                    ProvideAndRegisterDocumentSetRequestType body
     );
 }

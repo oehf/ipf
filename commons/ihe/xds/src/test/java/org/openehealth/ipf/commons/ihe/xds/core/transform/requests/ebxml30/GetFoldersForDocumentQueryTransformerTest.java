@@ -17,7 +17,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
@@ -53,10 +54,10 @@ public class GetFoldersForDocumentQueryTransformerTest {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.GET_FOLDERS_FOR_DOCUMENT.getId(), ebXML.getId());
         
-        assertEquals(Arrays.asList("'uuid1'"),
+        assertEquals(Collections.singletonList("'uuid1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UUID.getSlotName()));
         
-        assertEquals(Arrays.asList("'uniqueId1'"),
+        assertEquals(Collections.singletonList("'uniqueId1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UNIQUE_ID.getSlotName()));
 
         assertEquals("home", ebXML.getHome());

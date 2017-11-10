@@ -32,5 +32,5 @@ public interface Interceptor {
      * @throws Exception
      *          any exception that occurred while processing the exchange.
      */
-    void process(Exchange exchange, Processor next) throws Exception;
+    void process(Exchange exchange, Processor next);
 }

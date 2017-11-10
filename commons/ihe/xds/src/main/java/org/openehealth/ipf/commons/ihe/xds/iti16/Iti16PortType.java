@@ -43,8 +43,8 @@ public interface Iti16PortType {
     @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1", partName = "body")
     @Action(input = "urn:ihe:iti:2007:QueryRegistry", output = "urn:ihe:iti:2007:QueryRegistryResponse")
     @WebMethod(operationName = "DocumentRegistry_QueryRegistry")
-    public RegistryResponse documentRegistryQueryRegistry(
-        @WebParam(partName = "body", name = "AdhocQueryRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1")
-        AdhocQueryRequest body
+    RegistryResponse documentRegistryQueryRegistry(
+            @WebParam(partName = "body", name = "AdhocQueryRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1")
+                    AdhocQueryRequest body
     );
 }

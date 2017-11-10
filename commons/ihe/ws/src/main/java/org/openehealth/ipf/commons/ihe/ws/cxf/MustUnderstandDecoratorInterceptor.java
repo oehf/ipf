@@ -18,9 +18,9 @@ package org.openehealth.ipf.commons.ihe.ws.cxf;
 import org.apache.cxf.binding.soap.SoapHeader;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
+import org.apache.cxf.ext.logging.LoggingOutInterceptor;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.Fault;
-import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.soap.MAPCodec;
 

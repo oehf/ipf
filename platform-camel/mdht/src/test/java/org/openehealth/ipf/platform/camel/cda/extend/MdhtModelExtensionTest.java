@@ -102,7 +102,7 @@ public class MdhtModelExtensionTest extends AbstractExtensionTest {
         return mockOutput.getExchanges().get(0).getIn();
     }   
     
-    private static InputStream inputStream(String resource) throws IOException {
+    private static InputStream inputStream(String resource) {
         return MdhtModelExtensionTest.class.getResourceAsStream(resource);
     }
 

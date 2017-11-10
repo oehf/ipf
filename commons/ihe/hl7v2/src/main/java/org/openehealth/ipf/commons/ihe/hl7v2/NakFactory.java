@@ -197,7 +197,7 @@ public class NakFactory {
      */
     private static <T extends Throwable> Optional<T> getException(Class<T> type, Throwable exception) {
         if (exception == null) {
-            return null;
+            return Optional.empty();
         }
 
         //check the suppressed exception first

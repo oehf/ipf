@@ -70,7 +70,7 @@ public enum QueryType {
     private final String id;
     private final Class<? extends Query> type; 
     
-    private QueryType(String id, Class<? extends Query> type) {
+    QueryType(String id, Class<? extends Query> type) {
         this.id = id;
         this.type = type;
     }

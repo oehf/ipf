@@ -221,7 +221,7 @@ public abstract class AbstractWsProducer<
     /**
      * Sets thread safety & timeout options of the given CXF client.
      */
-    protected void configureClient(Object o) throws Exception {
+    protected void configureClient(Object o) {
         ClientImpl client = (ClientImpl) ClientProxy.getClient(o);
         client.setThreadLocalRequestContext(true);
         client.setSynchronousTimeout(Integer.MAX_VALUE);

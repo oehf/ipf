@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
 import ca.uhn.hl7v2.model.Message
-import groovy.util.slurpersupport.GPathResult;
+import groovy.util.slurpersupport.GPathResult
 
 
 /**
