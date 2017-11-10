@@ -38,7 +38,7 @@ public class PidValidator implements ValueValidator {
         metaDataAssert(matcher.matches(), INVALID_PID, value);
                 
         int number = Integer.parseInt(matcher.group(1));
-        metaDataAssert(number != 2 && number != 4 && number != 12 && number != 19,
+        metaDataAssert(number != 2 && number != 4 && number != 12 && number != 19 && number <= 39,
                 UNSUPPORTED_PID, value);
-    }    
+    }
 }
