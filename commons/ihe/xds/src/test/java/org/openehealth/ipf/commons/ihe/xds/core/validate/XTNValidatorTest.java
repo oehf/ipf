@@ -37,6 +37,7 @@ public class XTNValidatorTest {
         validator.validate("^PRN^PH^^^^33^^");
         validator.validate("^^CP^^11^22^33^44^");
         validator.validate("^PRN^CP^^11^22^33^44^");
+        validator.validate("^PRN^CP^^^^^^^^^8 (0622) 90-66-83^^^");
     }
     
     @Test 
@@ -47,6 +48,7 @@ public class XTNValidatorTest {
         assertFails("^^Floppynet^blabla");
         assertFails("^^Internet^a@x.ua^12345");
         assertFails("^^Internet^^11^22^33^44");
+        assertFails("^^Internet^^^^^^^^^8 (0622) 90-66-83^^^");
         assertFails("^NET^PH^^11^22^33^44");
         assertFails("^^PH^^^^^^55^^^");
         assertFails("^^CP^^11^22^^44");

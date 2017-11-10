@@ -37,7 +37,7 @@ import java.util.Objects;
  */
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @XmlType(name = "Telecom", propOrder = {"use", "type", "email", "countryCode",
-        "areaCityCode", "localNumber", "extension"})
+        "areaCityCode", "localNumber", "extension", "unformattedPhoneNumber"})
 public class Telecom extends Hl7v2Based<XTN> {
     private static final long serialVersionUID = 526836203236101658L;
 
@@ -244,6 +244,21 @@ public class Telecom extends Hl7v2Based<XTN> {
         setValue(getHapiObject().getXtn8_Extension(), extension == null ? null : extension.toString());
     }
 
+    /**
+     * @return unformatted phone number (XTN-12).
+     */
+    @XmlElement(name = "unformattedPhoneNumber")
+    public String getUnformattedPhoneNumber() {
+        return getHapiObject().getXtn12_UnformattedTelephoneNumber().getValue();
+    }
+
+    /**
+     * @param unformattedPhoneNumber unformatted the phone number (XTN-12).
+     */
+    public void setUnformattedPhoneNumber(String unformattedPhoneNumber) {
+        setValue(getHapiObject().getXtn12_UnformattedTelephoneNumber(), unformattedPhoneNumber);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -255,13 +270,14 @@ public class Telecom extends Hl7v2Based<XTN> {
                 Objects.equals(getCountryCode(), that.getCountryCode()) &&
                 Objects.equals(getAreaCityCode(), that.getAreaCityCode()) &&
                 Objects.equals(getLocalNumber(), that.getLocalNumber()) &&
-                Objects.equals(getExtension(), that.getExtension());
+                Objects.equals(getExtension(), that.getExtension()) &&
+                Objects.equals(getUnformattedPhoneNumber(), that.getUnformattedPhoneNumber());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getUse(), getType(), getEmail(), getCountryCode(),
-                getAreaCityCode(), getLocalNumber(), getExtension());
+                getAreaCityCode(), getLocalNumber(), getExtension(), getUnformattedPhoneNumber());
     }
 
     @Override
@@ -274,6 +290,7 @@ public class Telecom extends Hl7v2Based<XTN> {
                 ", areaCityCode=" + getAreaCityCode() +
                 ", localNumber=" + getLocalNumber() +
                 ", extension=" + getExtension() +
+                ", unformattedPhoneNumber=" + getUnformattedPhoneNumber() +
                 ')';
     }
 }

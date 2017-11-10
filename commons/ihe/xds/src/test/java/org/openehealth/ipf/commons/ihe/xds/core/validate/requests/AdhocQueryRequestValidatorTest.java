@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
@@ -112,15 +113,6 @@ public class AdhocQueryRequestValidatorTest {
     }
 
     @Test
-    public void testCodeListOldStyleCorrect() {
-        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
-        ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(0, "('code1')");
-        ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(1, "('code2')");
-        ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE_SCHEME.getSlotName(), "('scheme1','scheme2')");
-        validator.validate(transformer.toEbXML(request), ITI_18);
-    }
-
-    @Test
     public void testCodeListOldStyleNotEnoughSchemes() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(0, "('code1')");
@@ -168,10 +160,9 @@ public class AdhocQueryRequestValidatorTest {
         valueList.clear();
         valueList.add("('')");
         expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
-
     }
     
-    @Test
+    @Test(expected = XdsRuntimeException.class)
     public void testQueryParametersCannotBeSetTogether() {
         request = SampleData.createGetDocumentsQuery();        
         ((GetDocumentsQuery)request.getQuery()).setUniqueIds(Collections.singletonList("1.2.3"));
@@ -226,7 +217,6 @@ public class AdhocQueryRequestValidatorTest {
     public void testMissingPatientIdFolderMPQ() {
         ((FindFoldersForMultiplePatientsQuery) folderRequestMpq.getQuery()).setPatientIds(null);
         validator.validate(transformer.toEbXML(folderRequestMpq), ITI_51);
-
     }
 
     @Test
@@ -293,7 +283,7 @@ public class AdhocQueryRequestValidatorTest {
         ebXML.addSlot(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName(), "('event-code-2^^event-code-scheme-2')");
 
         try {
-            validator.validate(ebXML,  ITI_18);
+            validator.validate(ebXML, ITI_18);
         }
         catch (XDSMetaDataException e) {
             fail("Test should succeed, but failed with exception: " + XDSMetaDataException.class);

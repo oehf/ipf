@@ -15,17 +15,23 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
-import static org.apache.commons.lang3.Validate.notNull;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import java.util.Arrays;
+import java.util.Objects;
+
+import static org.apache.commons.lang3.Validate.notNull;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER;
 
 /**
  * Query parameter validation to ensure that only one of the given parameters is specified.
- * Also has the "either ... or ... " check to avoid the case that all paramaters haven't a
+ * Also has the "either ... or ... " check to avoid the case that all parameters haven't a
  * value set.
  * @author Jens Riemschneider
  */
@@ -44,14 +50,20 @@ public class ChoiceValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        boolean defined = false;
-        for (QueryParameter param : params) {
-            String value = request.getSingleSlotValue(param.getSlotName());
-            metaDataAssert(value == null || !defined, QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, new Object[] {params});
-            defined |= value != null;
-        }
-        if (!defined){
+        long count = Arrays.stream(params)
+                .map(param -> request.getSingleSlotValue(param.getSlotName()))
+                .filter(Objects::nonNull)
+                .count();
+
+        if (count == 0L) {
             throw new XDSMetaDataException(MISSING_REQUIRED_QUERY_PARAMETER, new Object[] {params});
+        }
+        if (count > 1L) {
+            throw new XdsRuntimeException(
+                    ErrorCode.STORED_QUERY_PARAM_NUMBER,
+                    String.format(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER.getText(), new Object[] {params}),
+                    Severity.ERROR,
+                    null);
         }
     }
 }

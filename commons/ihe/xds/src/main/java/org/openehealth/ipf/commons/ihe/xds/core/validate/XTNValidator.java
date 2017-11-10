@@ -40,11 +40,12 @@ public class XTNValidator implements ValueValidator {
             metaDataAssert(telecom.getAreaCityCode() == null, INCONSISTENT_TELECOM_PARAM, hl7XTN);
             metaDataAssert(telecom.getLocalNumber() == null, INCONSISTENT_TELECOM_PARAM, hl7XTN);
             metaDataAssert(telecom.getExtension() == null, INCONSISTENT_TELECOM_PARAM, hl7XTN);
+            metaDataAssert(telecom.getUnformattedPhoneNumber() == null, INCONSISTENT_TELECOM_PARAM, hl7XTN);
 
         } else if ("PH".equals(telecom.getType()) || "CP".equals(telecom.getType())) {
             metaDataAssert(! "NET".equals(telecom.getUse()), WRONG_TELECOM_USE, hl7XTN);
             metaDataAssert(isEmpty(telecom.getEmail()), INCONSISTENT_TELECOM_PARAM, hl7XTN);
-            metaDataAssert(telecom.getLocalNumber() != null, MISSING_TELECOM_PARAM, hl7XTN);
+            metaDataAssert((telecom.getLocalNumber() != null) || (telecom.getUnformattedPhoneNumber() != null), MISSING_TELECOM_PARAM, hl7XTN);
 
         } else {
             throw new XDSMetaDataException(WRONG_TELECOM_TYPE, hl7XTN);
