@@ -1,8 +1,9 @@
 
-## `xds-iti62` component
+## `rmd-iti62` component
 
-The xds-iti62 component provides interfaces for actors of the *Delete Document Set* IHE transaction (ITI-62),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.62]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+The rmd-iti62 component provides interfaces for actors of the *Remove Metadata* IHE transaction (ITI-62),
+which is described in the [IHE IT Infrastructure Supplement "Remove Metadata and Documents" (RMD)](http://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_RMD.pdf),
+Section 3.62.
 
 ### Actors
 
@@ -29,10 +30,10 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 #### Producer
 
-The endpoint URI format of `xds-iti62` component producers is:
+The endpoint URI format of `rmd-iti62` component producers is:
 
 ```
-xds-iti62://hostname:port/path/to/service[?parameters]
+rmd-iti62://hostname:port/path/to/service[?parameters]
 ```
 
 where *hostname* is either an IP address or a domain name, *port* is a port number, and *path/to/service*
@@ -41,10 +42,10 @@ URI parameters are optional and control special features as described in the cor
 
 #### Consumer
 
-The endpoint URI format of `xds-iti62` component consumers is:
+The endpoint URI format of `rmd-iti62` component consumers is:
 
 ```
-xds-iti62:serviceName[?parameters]
+rmd-iti62:serviceName[?parameters]
 ```
 
 The resulting URL of the exposed IHE Web Service endpoint depends on both the configuration of the [deployment container]
@@ -55,11 +56,11 @@ For example, when a Tomcat container on the host `eHealth.server.org` is configu
 ```
 port = 8888
 contextPath = /IHE
-servletPath = /xds/*
+servletPath = /rmd/*
 ```
 
-and serviceName equals to `iti62Service`, then the xds-iti62 consumer will be available for external clients under the URL
-`http://eHealth.server.org:8888/IHE/xds/iti62Service`
+and serviceName equals to `iti62Service`, then the rmd-iti62 consumer will be available for external clients under the URL
+`http://eHealth.server.org:8888/IHE/rmd/iti62Service`
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
 
@@ -69,7 +70,7 @@ Additional URI parameters are optional and control special features as described
 This is an example on how to use the component on the consumer side:
 
 ```java
-    from("xds-iti62:iti62Service?audit=true")
+    from("rmd-iti62:iti62Service?audit=true")
       .process(myProcessor)
       // process the incoming request and create a response
 ```

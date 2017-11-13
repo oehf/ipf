@@ -2,7 +2,7 @@
 ## `xds-iti41` component
 
 The xds-iti41 component provides interfaces for actors of the *Provide and Register Document Set.b* IHE transaction (ITI-41),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.41]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.41](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

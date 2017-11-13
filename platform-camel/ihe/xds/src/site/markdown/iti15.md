@@ -2,7 +2,7 @@
 ## `xds-iti15` component
 
 The xds-iti15 component provides interfaces for actors of the *Provide and Register Document Set* IHE transaction (ITI-15),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.15]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2a , Section 3.15](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2a.pdf).
 
 ### Actors
 

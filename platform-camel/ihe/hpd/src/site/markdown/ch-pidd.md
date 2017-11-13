@@ -1,17 +1,18 @@
 
-## `xca-iti38` component
+## `ch-pidd` component
 
-The xca-iti38 component provides interfaces for actors of the *Cross-Gateway Query* IHE transaction (ITI-38),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.38](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+The ch-pidd component provides interfaces for actors of the *Provider Information Delta Download* transaction (CH-PIDD),
+which is described in the [National extensions to the IHE Technical Framework](https://www.bag.admin.ch/dam/bag/de/dokumente/nat-gesundheitsstrategien/strategie-ehealth/gesetzgebung-elektronisches-patientendossier/gesetze/SR%20816.111.1_ergaenzung-1-Anhang-5.pdf.download.pdf/SR%20816.111.1_Ergaenzung%201%20Anhang%205_DE.pdf),
+Section 1.10.
 
 ### Actors
 
 The transaction defines the following actors:
 
-![ITI-38 actors](images/iti38.png)
+![CH-PIDD actors](images/ch-pidd.png)
 
-Producer side corresponds to the *Initiating Gateway* actor.
-Consumer side corresponds to the *Responding Gateway* actor.
+Producer side corresponds to the *Provider Information Consumer* actor.
+Consumer side corresponds to the *Provider Information Directory* actor.
 
 ### Dependencies
 
@@ -20,7 +21,7 @@ In a Maven-based environment, the following dependency must be registered in `po
 ```xml
     <dependency>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <artifactId>ipf-platform-camel-ihe-xds</artifactId>
+        <artifactId>ipf-platform-camel-ihe-hpd</artifactId>
         <version>${ipf-version}</version>
     </dependency>
 ```
@@ -29,10 +30,10 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 #### Producer
 
-The endpoint URI format of `xca-iti38` component producers is:
+The endpoint URI format of `ch-pidd` component producers is:
 
 ```
-xca-iti38://hostname:port/path/to/service[?parameters]
+ch-pidd://hostname:port/path/to/service[?parameters]
 ```
 
 where *hostname* is either an IP address or a domain name, *port* is a port number, and *path/to/service*
@@ -41,10 +42,10 @@ URI parameters are optional and control special features as described in the cor
 
 #### Consumer
 
-The endpoint URI format of `xca-iti38` component consumers is:
+The endpoint URI format of `ch-pidd` component consumers is:
 
 ```
-xca-iti38:serviceName?homeCommunityId=<homeCommunityId>[&parameters]
+ch-pidd:serviceName[?parameters]
 ```
 
 The resulting URL of the exposed IHE Web Service endpoint depends on both the configuration of the [deployment container]
@@ -55,21 +56,27 @@ For example, when a Tomcat container on the host `eHealth.server.org` is configu
 ```
 port = 8888
 contextPath = /IHE
-servletPath = /xca/*
+servletPath = /hpd/*
 ```
 
-and serviceName equals to `iti38Service`, then the xca-iti38 consumer will be available for external clients under the URL
-`http://eHealth.server.org:8888/IHE/xca/iti38Service`
+and serviceName equals to `chPiddService`, then the ch-pidd consumer will be available for external clients under the URL
+`http://eHealth.server.org:8888/IHE/hpd/chPiddService`
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
 
+### Data Types
+
+The CH-PIDD component produces and consumes objects based on the [DSMLv2](https://www.oasis-open.org/standards#dsmlv2) data model:
+
+* Request message -- [`DownloadRequest`](../apidocs/org/openehealth/ipf/commons/ihe/hpd/stub/chpidd/DownloadRequest.html)
+* Response message -- [`DownloadResponse`](../apidocs/org/openehealth/ipf/commons/ihe/hpd/stub/chpidd/DownloadResponse.html)
 
 ### Example
 
 This is an example on how to use the component on the consumer side:
 
 ```java
-    from("xca-iti38:iti38Service?homeCommunityId=1.2.3.4.5&audit=true")
+    from("ch-pidd:chPiddService?audit=false")
       .process(myProcessor)
       // process the incoming request and create a response
 ```
@@ -77,7 +84,7 @@ This is an example on how to use the component on the consumer side:
 
 ### Basic Common Component Features
 
-* [ATNA auditing]
+* ATNA Auditing is not defined for CH-PIDD
 * [Message validation]
 
 ### Basic Web Service Component Features
@@ -85,37 +92,26 @@ This is an example on how to use the component on the consumer side:
 * [Secure transport]
 * [File-Based payload logging]
 
-### Basic XDS Component Features
-
-* [Message types]
-
 ### Advanced Web Service Component Features
 
 * [Handling Protocol Headers]
 * [Deploying custom CXF interceptors]
 * [Handling automatically rejected messages]
 * [Using CXF features]
-* [Asynchronous Web Service exchange option]
-
-### Advanced XDS Component Features
-
-* [Handling extra query parameters and extra metadata elements]
 
 
-[ATNA auditing]: ../ipf-platform-camel-ihe/atna.html
+
 [Message validation]: ../ipf-platform-camel-ihe/messageValidation.html
 
 [deployment container]: ../ipf-platform-camel-ihe-ws/deployment.html
 [Secure Transport]: ../ipf-platform-camel-ihe-ws/secureTransport.html
 [File-Based payload logging]: ../ipf-platform-camel-ihe-ws/payloadLogging.html
 
-[Message types]: messageTypes.html
-[Handling extra query parameters and extra metadata elements]: handlingExtra.html
-
 [Handling Protocol Headers]: ../ipf-platform-camel-ihe-ws/protocolHeaders.html
 [Deploying custom CXF interceptors]: ../ipf-platform-camel-ihe-ws/customInterceptors.html
 [Handling automatically rejected messages]: ../ipf-platform-camel-ihe-ws/handlingRejected.html
 [Using CXF features]: ../ipf-platform-camel-ihe-ws/cxfFeatures.html
-[Asynchronous Web Service exchange option]: ../ipf-platform-camel-ihe-ws/async.html
+
+
 
 

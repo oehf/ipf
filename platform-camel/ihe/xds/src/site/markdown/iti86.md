@@ -1,17 +1,18 @@
 
-## `xca-iti38` component
+## `rmd-iti86` component
 
-The xca-iti38 component provides interfaces for actors of the *Cross-Gateway Query* IHE transaction (ITI-38),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.38](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+The rmd-iti86 component provides interfaces for actors of the *Remove Documents* IHE transaction (ITI-86),
+which is described in the [IHE IT Infrastructure Supplement "Remove Metadata and Documents" (RMD)](http://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_RMD.pdf),
+Section 3.86.
 
 ### Actors
 
 The transaction defines the following actors:
 
-![ITI-38 actors](images/iti38.png)
+![ITI-86 actors](images/iti86.png)
 
-Producer side corresponds to the *Initiating Gateway* actor.
-Consumer side corresponds to the *Responding Gateway* actor.
+Producer side corresponds to the *Document Administrator* actor.
+Consumer side corresponds to the *Document Repository* actor.
 
 ### Dependencies
 
@@ -29,10 +30,10 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 #### Producer
 
-The endpoint URI format of `xca-iti38` component producers is:
+The endpoint URI format of `rmd-iti86` component producers is:
 
 ```
-xca-iti38://hostname:port/path/to/service[?parameters]
+rmd-iti86://hostname:port/path/to/service[?parameters]
 ```
 
 where *hostname* is either an IP address or a domain name, *port* is a port number, and *path/to/service*
@@ -41,10 +42,10 @@ URI parameters are optional and control special features as described in the cor
 
 #### Consumer
 
-The endpoint URI format of `xca-iti38` component consumers is:
+The endpoint URI format of `rmd-iti86` component consumers is:
 
 ```
-xca-iti38:serviceName?homeCommunityId=<homeCommunityId>[&parameters]
+rmd-iti86:serviceName[?parameters]
 ```
 
 The resulting URL of the exposed IHE Web Service endpoint depends on both the configuration of the [deployment container]
@@ -55,11 +56,11 @@ For example, when a Tomcat container on the host `eHealth.server.org` is configu
 ```
 port = 8888
 contextPath = /IHE
-servletPath = /xca/*
+servletPath = /rmd/*
 ```
 
-and serviceName equals to `iti38Service`, then the xca-iti38 consumer will be available for external clients under the URL
-`http://eHealth.server.org:8888/IHE/xca/iti38Service`
+and serviceName equals to `iti86Service`, then the rmd-iti86 consumer will be available for external clients under the URL
+`http://eHealth.server.org:8888/IHE/rmd/iti86Service`
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
 
@@ -69,7 +70,7 @@ Additional URI parameters are optional and control special features as described
 This is an example on how to use the component on the consumer side:
 
 ```java
-    from("xca-iti38:iti38Service?homeCommunityId=1.2.3.4.5&audit=true")
+    from("rmd-iti86:iti86Service?audit=true")
       .process(myProcessor)
       // process the incoming request and create a response
 ```
@@ -95,7 +96,6 @@ This is an example on how to use the component on the consumer side:
 * [Deploying custom CXF interceptors]
 * [Handling automatically rejected messages]
 * [Using CXF features]
-* [Asynchronous Web Service exchange option]
 
 ### Advanced XDS Component Features
 
@@ -116,6 +116,7 @@ This is an example on how to use the component on the consumer side:
 [Deploying custom CXF interceptors]: ../ipf-platform-camel-ihe-ws/customInterceptors.html
 [Handling automatically rejected messages]: ../ipf-platform-camel-ihe-ws/handlingRejected.html
 [Using CXF features]: ../ipf-platform-camel-ihe-ws/cxfFeatures.html
-[Asynchronous Web Service exchange option]: ../ipf-platform-camel-ihe-ws/async.html
+
+
 
 

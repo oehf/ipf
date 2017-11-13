@@ -2,7 +2,7 @@
 ## `xds-iti43` component
 
 The xds-iti43 component provides interfaces for actors of the *Retrieve Document Set.b* IHE transaction (ITI-43),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.43]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.43](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 This component also provides support for the On-Demand XDS Documents option described in the corresponding
 [IHE ITI Supplement](http://www.ihe.net/Technical_Framework/upload/IHE_ITI_Suppl_On_Demand_Documents_Rev1-2_TI_2011-08-19.pdf).

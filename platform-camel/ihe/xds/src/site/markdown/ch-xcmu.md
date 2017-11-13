@@ -1,14 +1,14 @@
 
-## `xca-iti38` component
+## `ch-xcmu` component
 
-The xca-iti38 component provides interfaces for actors of the *Cross-Gateway Query* IHE transaction (ITI-38),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.38](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+The ch-xcmu component provides interfaces for actors of the *Cross-Gateway Metadata Update* transaction (CH-XCMU),
+which is described in the [TODO Swiss EPD specification](todo://).
 
 ### Actors
 
 The transaction defines the following actors:
 
-![ITI-38 actors](images/iti38.png)
+![CH-XCMU actors](images/ch-xcmu.png)
 
 Producer side corresponds to the *Initiating Gateway* actor.
 Consumer side corresponds to the *Responding Gateway* actor.
@@ -29,10 +29,10 @@ In a Maven-based environment, the following dependency must be registered in `po
 
 #### Producer
 
-The endpoint URI format of `xca-iti38` component producers is:
+The endpoint URI format of `ch-xcmu` component producers is:
 
 ```
-xca-iti38://hostname:port/path/to/service[?parameters]
+ch-xcmu://hostname:port/path/to/service[?parameters]
 ```
 
 where *hostname* is either an IP address or a domain name, *port* is a port number, and *path/to/service*
@@ -41,10 +41,10 @@ URI parameters are optional and control special features as described in the cor
 
 #### Consumer
 
-The endpoint URI format of `xca-iti38` component consumers is:
+The endpoint URI format of `ch-xcmu` component consumers is:
 
 ```
-xca-iti38:serviceName?homeCommunityId=<homeCommunityId>[&parameters]
+ch-xcmu:serviceName?homeCommunityId=<homeCommunityId>[&parameters]
 ```
 
 The resulting URL of the exposed IHE Web Service endpoint depends on both the configuration of the [deployment container]
@@ -55,11 +55,11 @@ For example, when a Tomcat container on the host `eHealth.server.org` is configu
 ```
 port = 8888
 contextPath = /IHE
-servletPath = /xca/*
+servletPath = /epd/*
 ```
 
-and serviceName equals to `iti38Service`, then the xca-iti38 consumer will be available for external clients under the URL
-`http://eHealth.server.org:8888/IHE/xca/iti38Service`
+and serviceName equals to `chXcmuService`, then the ch-xcmu consumer will be available for external clients under the URL
+`http://eHealth.server.org:8888/IHE/epd/chXcmuService`
 
 Additional URI parameters are optional and control special features as described in the corresponding section below.
 
@@ -95,7 +95,6 @@ This is an example on how to use the component on the consumer side:
 * [Deploying custom CXF interceptors]
 * [Handling automatically rejected messages]
 * [Using CXF features]
-* [Asynchronous Web Service exchange option]
 
 ### Advanced XDS Component Features
 
@@ -116,6 +115,5 @@ This is an example on how to use the component on the consumer side:
 [Deploying custom CXF interceptors]: ../ipf-platform-camel-ihe-ws/customInterceptors.html
 [Handling automatically rejected messages]: ../ipf-platform-camel-ihe-ws/handlingRejected.html
 [Using CXF features]: ../ipf-platform-camel-ihe-ws/cxfFeatures.html
-[Asynchronous Web Service exchange option]: ../ipf-platform-camel-ihe-ws/async.html
 
 
