@@ -50,7 +50,7 @@ public class PipeParserTest {
       Parser parser = new DefaultHapiContext(customFactory).getPipeParser()
       try {
           Message hapiMessage = parser.parse(msgText)
-    	  println hapiMessage.ZBE.class.name
+    	  // println hapiMessage.ZBE.class.name
       } catch (Exception e) { 
     	  assert e.getMessage().contains('ZBE does not exist')
       }     
@@ -62,7 +62,7 @@ public class PipeParserTest {
       Parser parser = new DefaultHapiContext(customFactory).getPipeParser()
       try {
           Message hapiMessage = parser.parse(msgText)
-          println hapiMessage.ZBE.class.name
+          // println hapiMessage.ZBE.class.name
       } catch (Exception e) { 
     	  assert e.getMessage().contains('ZBE does not exist')
       }     
@@ -85,7 +85,7 @@ public class PipeParserTest {
       Parser parser = new DefaultHapiContext(customFactory).getPipeParser()
 	  try {
           Message hapiMessage = parser.parse(msgText)
-          println hapiMessage.ZBE.class.name
+          // println hapiMessage.ZBE.class.name
 	  } catch (Exception e) {
 		  assert e.getMessage().contains('ZBE does not exist')
 	  }

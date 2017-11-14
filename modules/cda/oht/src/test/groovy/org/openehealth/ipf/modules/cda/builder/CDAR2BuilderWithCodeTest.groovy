@@ -18,7 +18,8 @@ package org.openehealth.ipf.modules.cda.builder
 import org.openhealthtools.ihe.common.cdar2.*
 import org.junit.Test
 import org.junit.Assert
-import org.junit.Before
+import org.junit.Before
+
 /**
  * @author Christian Ohr
  */
@@ -80,7 +81,7 @@ public class CDAR2BuilderWithCodeTest extends AbstractCDAR2BuilderTest{
 			    // Iterate over all medications. Must assign a iteration variable!
 				data.each { m ->
 				    // Insert diagnostic output...
-					println "Creating medication " + m.medication
+					// println "Creating medication " + m.medication
 					entry {
 						substanceAdministration(classCode:'SBADM', moodCode:'EVN'){
 							id(m.id)

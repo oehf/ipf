@@ -122,7 +122,7 @@ public class ClassificationDisplayNameValidatorTest {
             ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType) ebXML.getInternal();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(request.getSubmitObjectsRequest(), outputStream);
-            System.out.println(new String(outputStream.toByteArray()));
+            // System.out.println(new String(outputStream.toByteArray()));
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }

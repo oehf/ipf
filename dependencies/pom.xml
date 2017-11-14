@@ -10,8 +10,8 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
 
-        <camel-version>2.20.0</camel-version>
-        <cxf-version>3.2.0</cxf-version>
+        <camel-version>2.20.1</camel-version>
+        <cxf-version>3.2.1</cxf-version>
         <groovy-version>2.4.12</groovy-version>
         <hapi-version>2.3</hapi-version>
         <hapi-fhir-version>3.0.0</hapi-fhir-version>

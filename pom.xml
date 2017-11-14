@@ -316,7 +316,6 @@
                 </plugins>
             </build>
         </profile>
-
     </profiles>
 
     <dependencyManagement>
