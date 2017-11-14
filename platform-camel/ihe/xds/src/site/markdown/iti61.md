@@ -2,7 +2,7 @@
 ## `xds-iti61` component
 
 The xds-iti61 component provides interfaces for actors of the *Register On-Demand Document Entry* IHE transaction (ITI-61),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.61]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.61](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

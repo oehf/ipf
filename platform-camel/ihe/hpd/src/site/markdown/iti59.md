@@ -1,8 +1,8 @@
 
 ## `hpd-iti59` component
 
-The hpd-iti59 component provides interfaces for actors of the *Patient Information Query* IHE transaction (ITI-59),
-which is described in the [IHE IT Infrastructure Technical Framework Supplement "Healthcare Provider Directory (HPD), Volume 2b, Section 3.59](https://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_HPD.pdf).
+The hpd-iti59 component provides interfaces for actors of the *Provider Information Feed* IHE transaction (ITI-59),
+which is described in the [IHE IT Infrastructure Technical Framework Supplement "Healthcare Provider Directory" (HPD), Volume 2b, Section 3.59](https://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_HPD.pdf).
 
 ### Actors
 

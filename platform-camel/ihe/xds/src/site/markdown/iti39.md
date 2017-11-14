@@ -2,7 +2,7 @@
 ## `xca-iti39` component
 
 The xca-iti39 component provides interfaces for actors of the *Cross-Gateway Retrieve* IHE transaction (ITI-39),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.39]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.39](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 

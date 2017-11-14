@@ -2,7 +2,7 @@
 ## `xds-iti42` component
 
 The xds-iti42 component provides interfaces for actors of the *Register Document Set.b* IHE transaction (ITI-42),
-which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.42]((https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
+which is described in the [IHE IT Infrastructure Technical Framework, Volume 2b , Section 3.42](https://ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_TF_Vol2b.pdf).
 
 ### Actors
 
