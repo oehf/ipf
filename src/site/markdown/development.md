@@ -15,6 +15,18 @@ Before building, adjust `MAVEN_OPTS` to assign Maven more heap space.
     mvn clean install
 ```
 
+### Documentation
+
+In order to generate the site documentation, Java stubs from Groovy and Lombok
+sources must be generated for proper Javadoc creation during the `site` phase.
+
+```
+    set MAVEN_OPTS=-Xmx1024m
+    mvn -Pgenerate-stubs generate-sources 
+    mvn site (-DskipTests)
+    mvn site:stage
+```
+
 ### Sources
 
 IPF uses [git](https://git-scm.com/) for source code management. The IPF git repository is located at

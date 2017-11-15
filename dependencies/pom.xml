@@ -36,7 +36,7 @@
         <site.path>${project.version}</site.path>
         <site.url>http://oehf.github.io/ipf</site.url>
         <site.deploy.id>gh-pages</site.deploy.id>
-        <site.deploy.url />
+        <site.deploy.url>scm:git:git@github.com:oehf/ipf.git</site.deploy.url>
     </properties>
 
     <url>${site.url}</url>
@@ -794,11 +794,6 @@
             <dependency>
                 <groupId>org.openehealth.ipf.modules</groupId>
                 <artifactId>ipf-modules-cda-mdht</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.modules</groupId>
-                <artifactId>ipf-modules-cda-oht</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
