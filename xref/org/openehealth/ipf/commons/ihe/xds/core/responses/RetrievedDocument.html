@@ -27,7 +27,7 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> lombok.Getter;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> lombok.Setter;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> lombok.ToString;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> javax.activation.DataHandler;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessType;
@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">transient</strong> DataHandler dataHandler;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      @XmlElementRef
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveDocument.html">RetrieveDocument</a> requestData;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/DocumentReference.html">DocumentReference</a> requestData;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> String mimeType;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> String newRepositoryUniqueId;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> String newDocumentUniqueId;
@@ -83,7 +83,7 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocument.html">RetrievedDocument</a>(
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>              DataHandler dataHandler,
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveDocument.html">RetrieveDocument</a> requestData,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>              <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/DocumentReference.html">DocumentReference</a> requestData,
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>              String newRepositoryUniqueId,
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>              String newDocumentUniqueId,
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>              String mimeType)

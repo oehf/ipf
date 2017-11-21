@@ -38,9 +38,9 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  @WebService(targetNamespace = <span class="jxr_string">"urn:ihe:iti:xcpd:2009"</span>, name = <span class="jxr_string">"InitiatingGatewayDeferredResponse_PortType"</span>, portName = <span class="jxr_string">"InitiatingGateway_Response_Port_Soap12"</span>)
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/iti55/asyncresponse/Iti55DeferredResponsePortType.html">Iti55DeferredResponsePortType</a> {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFERRED_RESPONSE_INPUT_ACTION =
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      String DEFERRED_RESPONSE_INPUT_ACTION =
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>              <span class="jxr_string">"urn:hl7-org:v3:PRPA_IN201306UV02:Deferred:CrossGatewayPatientDiscovery"</span>;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFERRED_RESPONSE_OUTPUT_ACTION =
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      String DEFERRED_RESPONSE_OUTPUT_ACTION =
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>              <span class="jxr_string">"urn:hl7-org:v3:MCCI_IN000002UV01"</span>;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>      @Action(input = DEFERRED_RESPONSE_INPUT_ACTION, output = DEFERRED_RESPONSE_OUTPUT_ACTION)

@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.*;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          EbXMLSlot slot = slots.get(0);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          assertEquals(Vocabulary.SLOT_NAME_CODING_SCHEME, slot.getName());        
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          assertEquals(Arrays.asList(<span class="jxr_string">"schemeName"</span>), slot.getValueList());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          assertEquals(Collections.singletonList(<span class="jxr_string">"schemeName"</span>), slot.getValueList());
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          List&lt;LocalizedString&gt; localizedStrings = ebXML.getNameAsInternationalString().getLocalizedStrings();
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          assertEquals(1, localizedStrings.size());

@@ -29,7 +29,7 @@
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveImagingDocumentSetRequestTransformer;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
@@ -65,10 +65,10 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>          assertEquals(2, ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().size());
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>          assertEquals(<span class="jxr_string">"urn:oid:1.2.1"</span>, ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getSeriesInstanceUID());
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          List&lt;RetrieveDocument&gt; documents = ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          List&lt;DocumentReference&gt; documents = ebXML.getRetrieveStudies().get(0).getRetrieveSerieses().get(0).getDocuments();
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>          assertEquals(2, documents.size());
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          RetrieveDocument doc = documents.get(0);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          DocumentReference doc = documents.get(0);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          assertEquals(<span class="jxr_string">"doc1"</span>, doc.getDocumentUniqueId());
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          assertEquals(<span class="jxr_string">"urn:oid:1.2.3"</span>, doc.getHomeCommunityId());
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          assertEquals(<span class="jxr_string">"repo1"</span>, doc.getRepositoryUniqueId());

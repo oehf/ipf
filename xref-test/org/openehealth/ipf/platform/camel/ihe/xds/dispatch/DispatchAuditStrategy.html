@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ServerAuditStrategy;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ServerAuditStrategy;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti51.Iti51AuditStrategy;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti57.Iti57ServerAuditStrategy;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti57.Iti57AuditStrategy;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti61.Iti61AuditStrategy;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti62.Iti62AuditStrategy;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.iti63.Iti63AuditStrategy;
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          map.put(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"urn:ihe:iti:xds-b:2007"</span>, <span class="jxr_string">"DocumentRegistry_MultiPatientStoredQuery"</span>),
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>                  <strong class="jxr_keyword">new</strong> Iti51AuditStrategy(<strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          map.put(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"urn:ihe:iti:xds-b:2010"</span>, <span class="jxr_string">"DocumentRegistry_UpdateDocumentSet"</span>),
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>                  <strong class="jxr_keyword">new</strong> Iti57ServerAuditStrategy());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>                  <strong class="jxr_keyword">new</strong> Iti57AuditStrategy(<strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          map.put(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"urn:ihe:iti:xds-b:2007"</span>, <span class="jxr_string">"DocumentRegistry_RegisterOnDemandDocumentEntry"</span>),
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>                  <strong class="jxr_keyword">new</strong> Iti61AuditStrategy(<strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          map.put(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"urn:ihe:iti:xds-b:2010"</span>, <span class="jxr_string">"DocumentRegistry_DeleteDocumentSet"</span>),

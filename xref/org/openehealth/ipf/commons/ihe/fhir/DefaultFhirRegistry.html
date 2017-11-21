@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      }
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      @Override
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> register(Object resourceProvider) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> register(Object resourceProvider) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          resourceProviders.add(resourceProvider);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">for</strong> (RestfulServer servlet : servlets) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>              servlet.registerProvider(resourceProvider);
@@ -84,7 +84,7 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      @Override
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> register(RestfulServer servlet) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> register(RestfulServer servlet) {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          LOG.debug(<span class="jxr_string">"Registering FHIR servlet with name {}. Providers registered so far: {}"</span>,
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>                  servlet.getServletName(), resourceProviders.size());
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>          servlets.add(servlet);

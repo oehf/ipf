@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> validationEnabled(Exchange exchange) {
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>         <strong class="jxr_keyword">if</strong> (Boolean.FALSE.equals(exchange.getIn().getHeader(NEED_VALIDATION_HEADER_NAME, Boolean.<strong class="jxr_keyword">class</strong>))) {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>             LOG.warn(<span class="jxr_string">"Validation disabled"</span>);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>             LOG.debug(<span class="jxr_string">"Validation disabled"</span>);
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>             <strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>         }
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;

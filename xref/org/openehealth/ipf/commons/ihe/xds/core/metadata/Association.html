@@ -28,8 +28,8 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> lombok.Setter;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> lombok.ToString;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ExtraMetadataHolder;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadata;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.ExtraMetadataAdapter;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMap;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.StringMapAdapter;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessType;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> javax.xml.bind.annotation.XmlAccessorType;
@@ -71,8 +71,8 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">private</strong> Boolean associationPropagation;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/metadata/AvailabilityStatus.html">AvailabilityStatus</a> availabilityStatus;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      @XmlJavaTypeAdapter(ExtraMetadataAdapter.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      @XmlElement(type = ExtraMetadata.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      @XmlJavaTypeAdapter(StringMapAdapter.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      @XmlElement(name = <span class="jxr_string">"extraMetadata"</span>, type = StringMap.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      @Getter @Setter <strong class="jxr_keyword">private</strong> Map&lt;String, List&lt;String&gt;&gt; extraMetadata;
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      <em class="jxr_javadoccomment">/**</em>

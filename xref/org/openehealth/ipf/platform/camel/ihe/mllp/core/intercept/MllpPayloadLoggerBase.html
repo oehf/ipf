@@ -36,7 +36,7 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../../../org/openehealth/ipf/platform/camel/ihe/mllp/core/intercept/MllpPayloadLoggerBase.html">MllpPayloadLoggerBase</a> <strong class="jxr_keyword">extends</strong> PayloadLoggerBase&lt;PayloadLoggingContext&gt; {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logPayload(Exchange exchange, <strong class="jxr_keyword">boolean</strong> useOutMessage) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logPayload(Exchange exchange, <strong class="jxr_keyword">boolean</strong> useOutMessage) {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>          Long sequenceId = exchange.getProperty(SEQUENCE_ID_PROPERTY_NAME, Long.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>          <strong class="jxr_keyword">if</strong> (sequenceId == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>              sequenceId = getNextSequenceId();

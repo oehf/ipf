@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          author2.getAuthorRole().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"role4"</span>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          author2.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec3"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<span class="jxr_string">"2.3.7"</span>, <span class="jxr_string">"ISO"</span>)));
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          author2.getAuthorSpecialty().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"spec4"</span>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(41L, 76L, 73901L, 2l));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(41L, 76L, 73901L, 2L));
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          author2.getAuthorTelecom().add(<strong class="jxr_keyword">new</strong> Telecom(41L, 76L, 73901L, 3L));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          Address address = <strong class="jxr_keyword">new</strong> Address();
@@ -91,10 +91,10 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>          address.setZipOrPostalCode(<span class="jxr_string">"zipOrPostalCode"</span>);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>          PatientInfo sourcePatientInfo = <strong class="jxr_keyword">new</strong> PatientInfo();
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>          sourcePatientInfo.setAddress(address);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          sourcePatientInfo.getAddresses().add(address);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          sourcePatientInfo.setDateOfBirth(<span class="jxr_string">"1980"</span>);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          sourcePatientInfo.setGender(<span class="jxr_string">"F"</span>);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>          sourcePatientInfo.setName(createName(3));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          sourcePatientInfo.getNames().add(createName(3));
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>          sourcePatientInfo.getIds().add(createIdentifiable(5));
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>          sourcePatientInfo.getIds().add(createIdentifiable(6));
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  

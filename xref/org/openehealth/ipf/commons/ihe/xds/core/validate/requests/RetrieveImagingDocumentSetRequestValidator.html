@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.core.modules.api.Validator;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveImagingDocumentSetRequest;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveSeries;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveStudy;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>                  String seriesInstanceUID = retrieveSeries.getSeriesInstanceUID();
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>                  metaDataAssert(isNotEmpty(seriesInstanceUID), SERIES_INSTANCE_UID_MUST_BE_SPECIFIED);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>                  <strong class="jxr_keyword">for</strong> (RetrieveDocument document : retrieveSeries.getDocuments()) {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>                  <strong class="jxr_keyword">for</strong> (DocumentReference document : retrieveSeries.getDocuments()) {
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>                      <em class="jxr_comment">//todo: Eliminate this duplicate code from DocumentRequest?</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>                      String repoId = document.getRepositoryUniqueId();
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>                      metaDataAssert(isNotEmpty(repoId), REPO_ID_MUST_BE_SPECIFIED);

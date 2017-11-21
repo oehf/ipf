@@ -174,10 +174,10 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>         
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>         PatientInfo sourcePatientInfo = <strong class="jxr_keyword">new</strong> PatientInfo();
 <a class="jxr_linenumber" name="L168" href="#L168">168</a>         sourcePatientInfo.getIds().add(<strong class="jxr_keyword">new</strong> Identifiable(<span class="jxr_string">"pid1"</span>, <strong class="jxr_keyword">new</strong> AssigningAuthority(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>)));
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>         sourcePatientInfo.setAddress(address);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>         sourcePatientInfo.getAddresses().add(address);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>         sourcePatientInfo.setDateOfBirth(<span class="jxr_string">"19560527"</span>);
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>         sourcePatientInfo.setGender(<span class="jxr_string">"M"</span>);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>         sourcePatientInfo.setName(<strong class="jxr_keyword">new</strong> XcnName(<span class="jxr_string">"Doe"</span>, <span class="jxr_string">"John"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>         sourcePatientInfo.getNames().add(<strong class="jxr_keyword">new</strong> XcnName(<span class="jxr_string">"Doe"</span>, <span class="jxr_string">"John"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>         
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>         DocumentEntry docEntry = <strong class="jxr_keyword">new</strong> DocumentEntry();
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>         docEntry.getAuthors().add(author1);

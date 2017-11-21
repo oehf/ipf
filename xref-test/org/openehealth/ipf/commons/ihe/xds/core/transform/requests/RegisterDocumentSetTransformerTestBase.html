@@ -57,61 +57,62 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>          EbXMLSubmitObjectsRequest ebXML = transformer.toEbXML(request);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>          assertEquals(1, ebXML.getExtrinsicObjects().size());
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>          assertEquals(2, ebXML.getRegistryPackages().size());
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          List&lt;EbXMLAssociation&gt; associations = ebXML.getAssociations();
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>          assertEquals(3, associations.size());
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>          assertEquals(AssociationType.HAS_MEMBER, associations.get(0).getAssociationType());
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          assertEquals(<span class="jxr_string">"submissionSet01"</span>, associations.get(0).getSource());
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          assertEquals(<span class="jxr_string">"document01"</span>, associations.get(0).getTarget());
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          assertEquals(AssociationType.HAS_MEMBER, associations.get(1).getAssociationType());
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          assertEquals(<span class="jxr_string">"submissionSet01"</span>, associations.get(1).getSource());
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          assertEquals(<span class="jxr_string">"folder01"</span>, associations.get(1).getTarget());
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          assertEquals(AssociationType.HAS_MEMBER, associations.get(2).getAssociationType());
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          assertEquals(<span class="jxr_string">"folder01"</span>, associations.get(2).getSource());
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          assertEquals(<span class="jxr_string">"document01"</span>, associations.get(2).getTarget());
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          List&lt;EbXMLExtrinsicObject&gt; docEntries = ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          assertEquals(1, docEntries.size());
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          assertEquals(<span class="jxr_string">"document01"</span>, docEntries.get(0).getId());
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          assertEquals(<span class="jxr_string">"Document 01"</span>, docEntries.get(0).getName().getValue());
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>          List&lt;EbXMLRegistryPackage&gt; folders = ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          assertEquals(1, folders.size());
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          assertEquals(<span class="jxr_string">"Folder 01"</span>, folders.get(0).getName().getValue());
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          List&lt;EbXMLRegistryPackage&gt; submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          assertEquals(1, submissionSets.size());
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>          assertEquals(<span class="jxr_string">"Submission Set 01"</span>, submissionSets.get(0).getName().getValue());
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      @Test
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testToEbXMLEmpty() {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          EbXMLSubmitObjectsRequest ebXML = transformer.toEbXML(<strong class="jxr_keyword">new</strong> RegisterDocumentSet());
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>          
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          assertEquals(0, ebXML.getAssociations().size());
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>          assertEquals(0, ebXML.getExtrinsicObjects().size());
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>          assertEquals(0, ebXML.getRegistryPackages().size());
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>      
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      @Test
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromEbXML() {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          EbXMLSubmitObjectsRequest ebXML = transformer.toEbXML(request);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>          RegisterDocumentSet result = transformer.fromEbXML(ebXML);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          assertEquals(request, result);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      }
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>      
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     @Test
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromEbXMLEmpty() {
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>         EbXMLSubmitObjectsRequest ebXML = transformer.toEbXML(<strong class="jxr_keyword">new</strong> RegisterDocumentSet());
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>         RegisterDocumentSet result = transformer.fromEbXML(ebXML);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>         assertEquals(<strong class="jxr_keyword">new</strong> RegisterDocumentSet(), result);      
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>     }
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> }
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          assertEquals(1, ebXML.getSlots().size());
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          List&lt;EbXMLAssociation&gt; associations = ebXML.getAssociations();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          assertEquals(3, associations.size());
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          assertEquals(AssociationType.HAS_MEMBER, associations.get(0).getAssociationType());
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>          assertEquals(<span class="jxr_string">"submissionSet01"</span>, associations.get(0).getSource());
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          assertEquals(<span class="jxr_string">"document01"</span>, associations.get(0).getTarget());
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          assertEquals(AssociationType.HAS_MEMBER, associations.get(1).getAssociationType());
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          assertEquals(<span class="jxr_string">"submissionSet01"</span>, associations.get(1).getSource());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          assertEquals(<span class="jxr_string">"folder01"</span>, associations.get(1).getTarget());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          assertEquals(AssociationType.HAS_MEMBER, associations.get(2).getAssociationType());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          assertEquals(<span class="jxr_string">"folder01"</span>, associations.get(2).getSource());
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          assertEquals(<span class="jxr_string">"document01"</span>, associations.get(2).getTarget());
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          List&lt;EbXMLExtrinsicObject&gt; docEntries = ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          assertEquals(1, docEntries.size());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          assertEquals(<span class="jxr_string">"document01"</span>, docEntries.get(0).getId());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          assertEquals(<span class="jxr_string">"Document 01"</span>, docEntries.get(0).getName().getValue());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          List&lt;EbXMLRegistryPackage&gt; folders = ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          assertEquals(1, folders.size());
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          assertEquals(<span class="jxr_string">"Folder 01"</span>, folders.get(0).getName().getValue());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          List&lt;EbXMLRegistryPackage&gt; submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          assertEquals(1, submissionSets.size());
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>          assertEquals(<span class="jxr_string">"Submission Set 01"</span>, submissionSets.get(0).getName().getValue());
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>          assertEquals(<span class="jxr_string">"urn:oid:1.2.3.4.5.6.2333.23"</span>, ebXML.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      }
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      @Test
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testToEbXMLEmpty() {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          EbXMLSubmitObjectsRequest ebXML = transformer.toEbXML(<strong class="jxr_keyword">new</strong> RegisterDocumentSet());
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          assertEquals(0, ebXML.getAssociations().size());
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          assertEquals(0, ebXML.getExtrinsicObjects().size());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          assertEquals(0, ebXML.getRegistryPackages().size());
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          assertEquals(0, ebXML.getSlots().size());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      }
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      @Test
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromEbXML() {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          EbXMLSubmitObjectsRequest ebXML = transformer.toEbXML(request);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          RegisterDocumentSet result = transformer.fromEbXML(ebXML);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          assertEquals(request, result);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      }
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     @Test
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFromEbXMLEmpty() {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>         EbXMLSubmitObjectsRequest ebXML = transformer.toEbXML(<strong class="jxr_keyword">new</strong> RegisterDocumentSet());
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>         RegisterDocumentSet result = transformer.fromEbXML(ebXML);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>         assertEquals(<strong class="jxr_keyword">new</strong> RegisterDocumentSet(), result);      
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>     }
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>

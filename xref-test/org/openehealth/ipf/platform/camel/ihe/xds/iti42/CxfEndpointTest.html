@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          server = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../org/openehealth/ipf/commons/ihe/ws/server/JettyServer.html">JettyServer</a>();
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          server.setContextResource(getClass().getResource(<span class="jxr_string">"/cxf-context.xml"</span>).toURI().toString());
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          server.setPort(port);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          server.setContextPath(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          server.setContextPath(<span class="jxr_string">"/"</span>);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>          server.setServletPath(<span class="jxr_string">"/*"</span>);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          server.setServlet(<strong class="jxr_keyword">new</strong> CXFServlet());
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  

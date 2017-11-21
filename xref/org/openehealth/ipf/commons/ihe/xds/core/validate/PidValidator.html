@@ -46,9 +46,9 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>          metaDataAssert(matcher.matches(), INVALID_PID, value);
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>                  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>          <strong class="jxr_keyword">int</strong> number = Integer.parseInt(matcher.group(1));
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>          metaDataAssert(number != 2 &amp;&amp; number != 4 &amp;&amp; number != 12 &amp;&amp; number != 19,
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>          metaDataAssert(number != 2 &amp;&amp; number != 4 &amp;&amp; number != 12 &amp;&amp; number != 19 &amp;&amp; number &lt;= 39,
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>                  UNSUPPORTED_PID, value);
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      }    
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      }
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  }
 </pre>
 <hr/>

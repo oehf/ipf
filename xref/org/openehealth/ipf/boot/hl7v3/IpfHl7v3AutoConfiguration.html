@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>      @Bean
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>      @ConditionalOnMissingBean(Hl7v3Auditor.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      @ConditionalOnSingleCandidate(AuditorModuleConfig.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor.enabled"</span>)
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor-enabled"</span>)
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../org/openehealth/ipf/commons/ihe/core/atna/custom/Hl7v3Auditor.html">Hl7v3Auditor</a> pdqConsumerAuditor(AuditorModuleConfig config) {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>          <a href="../../../../../org/openehealth/ipf/commons/ihe/core/atna/custom/Hl7v3Auditor.html">Hl7v3Auditor</a> auditor = Hl7v3Auditor.getAuditor();
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>          auditor.setConfig(config);

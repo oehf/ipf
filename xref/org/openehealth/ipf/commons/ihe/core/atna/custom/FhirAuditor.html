@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>              <strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          }
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>          ImportEvent importEvent = <strong class="jxr_keyword">new</strong> ImportEvent(false, eventOutcome, <strong class="jxr_keyword">new</strong> CustomIHETransactionEventTypeCodes.ProvideDocumentBundle(), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          configureEvent(<strong class="jxr_keyword">this</strong>, serverSide, importEvent, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, documentResponderUri, documentResponderUri, clientIpAddress);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          configureEvent(<strong class="jxr_keyword">this</strong>, serverSide, importEvent, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, documentResponderUri, documentResponderUri, clientIpAddress, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">if</strong> (!EventUtils.isEmptyOrNull(patientId)) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>              importEvent.addPatientParticipantObject(patientId);
@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>                  <strong class="jxr_keyword">new</strong> CustomIHETransactionEventTypeCodes.DocumentManifestQuery(),
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>                  Collections.emptyList());
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>          configureEvent(<strong class="jxr_keyword">this</strong>, serverSide, event, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, documentResponderUri, documentResponderUri, clientIpAddress);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          configureEvent(<strong class="jxr_keyword">this</strong>, serverSide, event, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, documentResponderUri, documentResponderUri, clientIpAddress, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">if</strong> (!EventUtils.isEmptyOrNull(patientIds)) {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>              patientIds.forEach(event::addPatientParticipantObject);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>          }
@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>                 <strong class="jxr_keyword">new</strong> CustomIHETransactionEventTypeCodes.DocumentReferenceQuery(),
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>                 Collections.emptyList());
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>         configureEvent(<strong class="jxr_keyword">this</strong>, serverSide, event, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, documentResponderUri, documentResponderUri, clientIpAddress);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>         configureEvent(<strong class="jxr_keyword">this</strong>, serverSide, event, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, documentResponderUri, documentResponderUri, clientIpAddress, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>         <strong class="jxr_keyword">if</strong> (!EventUtils.isEmptyOrNull(patientIds)) {
 <a class="jxr_linenumber" name="L118" href="#L118">118</a>             patientIds.forEach(event::addPatientParticipantObject);
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>         }
@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>                 <strong class="jxr_keyword">new</strong> CustomIHETransactionEventTypeCodes.PDQMQuery(),
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>                 Collections.emptyList());
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>         configureEvent(<strong class="jxr_keyword">this</strong>, serverSide, event, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, pdqSupplierUri, pdqSupplierUri, clientIpAddress);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>         configureEvent(<strong class="jxr_keyword">this</strong>, serverSide, event, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, pdqSupplierUri, pdqSupplierUri, clientIpAddress, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>         <strong class="jxr_keyword">if</strong> (!EventUtils.isEmptyOrNull(patientIds)) {
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>             patientIds.forEach(event::addPatientParticipantObject);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>         }
@@ -174,7 +174,7 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>                 <strong class="jxr_keyword">new</strong> CustomIHETransactionEventTypeCodes.PIXMQuery(),
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>                 Collections.emptyList());
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>         configureEvent(<strong class="jxr_keyword">this</strong>, serverSide, event, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, pixManagerUri, pixManagerUri, clientIpAddress);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>         configureEvent(<strong class="jxr_keyword">this</strong>, serverSide, event, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, pixManagerUri, pixManagerUri, clientIpAddress, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>         <strong class="jxr_keyword">if</strong> (!EventUtils.isEmptyOrNull(patientIds)) {
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>             patientIds.forEach(event::addPatientParticipantObject);
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>         }

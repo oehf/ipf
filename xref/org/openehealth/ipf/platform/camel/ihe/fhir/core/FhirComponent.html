@@ -87,8 +87,8 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          DefaultFhirRegistry.getFhirRegistry(name).unregister(resourceProvider);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      }
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">public</strong> FhirContext createFhirContext() {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">return</strong> getFhirTransactionConfiguration().createFhirContext();
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">public</strong> FhirContext initializeFhirContext() {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">return</strong> getFhirTransactionConfiguration().initializeFhirContext();
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>      <strong class="jxr_keyword">protected</strong> FhirEndpointConfiguration&lt;AuditDatasetType&gt; createConfig(String remaining, Map&lt;String, Object&gt; parameters) <strong class="jxr_keyword">throws</strong> Exception {

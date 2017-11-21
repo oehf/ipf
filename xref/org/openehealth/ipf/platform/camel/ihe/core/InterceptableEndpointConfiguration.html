@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>      @UriParam
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">private</strong> List&lt;InterceptorFactory&gt; customInterceptorFactories;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../../../org/openehealth/ipf/platform/camel/ihe/core/InterceptableEndpointConfiguration.html">InterceptableEndpointConfiguration</a>(DefaultComponent component, Map&lt;String, Object&gt; parameters) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">protected</strong> <a href="../../../../../../../org/openehealth/ipf/platform/camel/ihe/core/InterceptableEndpointConfiguration.html">InterceptableEndpointConfiguration</a>(DefaultComponent component, Map&lt;String, Object&gt; parameters) {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>          customInterceptorFactories = component.resolveAndRemoveReferenceListParameter(
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>                  parameters, <span class="jxr_string">"interceptorFactories"</span>, InterceptorFactory.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>      }

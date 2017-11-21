@@ -24,9 +24,9 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.Conformance;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.Identifier;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.instance.model.Parameters;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.dstu3.model.CapabilityStatement;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.dstu3.model.Identifier;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.hl7.fhir.dstu3.model.Parameters;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.junit.BeforeClass;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.core.atna.MockedSender;
@@ -61,12 +61,12 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>      @Test
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGetConformance() {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          Conformance conf = client.fetchConformance().ofType(Conformance.<strong class="jxr_keyword">class</strong>).execute();
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          CapabilityStatement conf = client.fetchConformance().ofType(CapabilityStatement.<strong class="jxr_keyword">class</strong>).execute();
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>          assertEquals(1, conf.getRest().size());
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          Conformance.ConformanceRestComponent component = conf.getRest().iterator().next();
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>          Conformance.ConformanceRestOperationComponent operation = component.getOperation().iterator().next();
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          assertEquals(Iti83Constants.PIXM_OPERATION_NAME, operation.getName());
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          CapabilityStatement.CapabilityStatementRestComponent component = conf.getRest().iterator().next();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          CapabilityStatement.CapabilityStatementRestOperationComponent operation = component.getOperation().iterator().next();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          assertEquals(Iti83Constants.PIXM_OPERATION_NAME.substring(1), operation.getName());
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          <em class="jxr_comment">// printAsXML(conf);</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      }

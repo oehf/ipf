@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">     * Sets thread safety &amp; timeout options of the given CXF client.</em>
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> configureClient(Object o) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> configureClient(Object o) {
 <a class="jxr_linenumber" name="L225" href="#L225">225</a>         ClientImpl client = (ClientImpl) ClientProxy.getClient(o);
 <a class="jxr_linenumber" name="L226" href="#L226">226</a>         client.setThreadLocalRequestContext(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L227" href="#L227">227</a>         client.setSynchronousTimeout(Integer.MAX_VALUE);
@@ -285,7 +285,7 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a>         <strong class="jxr_keyword">return</strong> clientFactory.getClient(() -&gt; {
 <a class="jxr_linenumber" name="L278" href="#L278">278</a>             <em class="jxr_comment">// Only supply SSLContext if client has not been configured yet</em>
 <a class="jxr_linenumber" name="L279" href="#L279">279</a>             SSLContextParameters sslContextParameters = getEndpoint().getSslContextParameters();
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>             <strong class="jxr_keyword">if</strong> (sslContextParameters == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>             <strong class="jxr_keyword">if</strong> (sslContextParameters == <strong class="jxr_keyword">null</strong> &amp;&amp; getEndpoint().isSecure()) {
 <a class="jxr_linenumber" name="L281" href="#L281">281</a>                 Map&lt;String, SSLContextParameters&gt; sslContextParameterMap = getEndpoint().getCamelContext().getRegistry().findByTypeWithName(SSLContextParameters.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L282" href="#L282">282</a>                 <strong class="jxr_keyword">if</strong> (sslContextParameterMap.size() == 1) {
 <a class="jxr_linenumber" name="L283" href="#L283">283</a>                     Map.Entry&lt;String, SSLContextParameters&gt; entry = sslContextParameterMap.entrySet().iterator().next();

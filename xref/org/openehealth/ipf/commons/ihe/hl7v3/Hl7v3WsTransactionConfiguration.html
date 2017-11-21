@@ -41,57 +41,67 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>      @Getter <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../org/openehealth/ipf/commons/xml/CombinedXmlValidationProfile.html">CombinedXmlValidationProfile</a> responseValidationProfile;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">     * Constructs the service info.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">     * Constructs the transaction configuration.</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     * @param serviceName</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     *      the qualified name of the service.</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     * @param sei</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     *      service endpoint interface.</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">     * @param bindingName</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">     *      the qualified name of the binding to use.</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">     * @param mtom</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">     *      {@code true} if this service requires MTOM.</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">     * @param wsdlLocation</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">     *      the location of the WSDL of this webservice.</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">     * @param nakRootElementName</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">     *      root element name of automatically generated NAKs.</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">     * @param controlActProcessCode</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">     *      when not {@code null}, the {@code &amp;lt;controlActProcess&amp;gt;}</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">     *      element with the given code ID will be created in the NAK.</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">     * @param auditRequestPayload</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">     *      whether request payload is needed for ATNA audit.</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">     * @param supportAsynchrony</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     *      whether producers can request asynchronous responses via WSA.</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/Hl7v3WsTransactionConfiguration.html">Hl7v3WsTransactionConfiguration</a>(
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>              String name,
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>              String description,
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>              <strong class="jxr_keyword">boolean</strong> isQuery,
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>              AuditStrategy&lt;? <strong class="jxr_keyword">extends</strong> Hl7v3AuditDataset&gt; clientAuditStrategy,
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>              AuditStrategy&lt;? <strong class="jxr_keyword">extends</strong> Hl7v3AuditDataset&gt; serverAuditStrategy,
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>              QName serviceName,
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>              Class&lt;?&gt; sei,
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>              QName bindingName,
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>              <strong class="jxr_keyword">boolean</strong> mtom,
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>              String wsdlLocation,
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>              String nakRootElementName,
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>              String controlActProcessCode,
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>              <strong class="jxr_keyword">boolean</strong> auditRequestPayload,
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>              <strong class="jxr_keyword">boolean</strong> supportAsynchrony,
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>              <a href="../../../../../../org/openehealth/ipf/commons/xml/CombinedXmlValidationProfile.html">CombinedXmlValidationProfile</a> requestValidationProfile,
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>              <a href="../../../../../../org/openehealth/ipf/commons/xml/CombinedXmlValidationProfile.html">CombinedXmlValidationProfile</a> responseValidationProfile)
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">super</strong>(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>                  serviceName, sei, bindingName, mtom, wsdlLocation,
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  <strong class="jxr_keyword">true</strong>, false, auditRequestPayload, supportAsynchrony);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">this</strong>.nakRootElementName = nakRootElementName;
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">this</strong>.controlActProcessCode = controlActProcessCode;
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">this</strong>.requestValidationProfile = requestValidationProfile;
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">this</strong>.responseValidationProfile = responseValidationProfile;
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  }
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     * @param name</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     *          name of the transaction.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     * @param description</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     *          human-readable description of the transaction.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">     * @param isQuery</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">     *          &lt;code&gt;true&lt;/code&gt; if this transaction describes a query, &lt;code&gt;false&lt;/code&gt; otherwise.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">     * @param clientAuditStrategy</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">     *          {@link AuditStrategy} to be used on client side to accomplish ATNA audit.</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">     * @param serverAuditStrategy</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">     *          {@link AuditStrategy} to be used on server side to accomplish ATNA audit.</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">     * @param serviceName</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">     *      the qualified name of the service.</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">     * @param sei</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">     *      service endpoint interface.</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">     * @param bindingName</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">     *      the qualified name of the binding to use.</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">     * @param mtom</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">     *      {@code true} if this service requires MTOM.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     * @param wsdlLocation</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">     *      the location of the WSDL of this webservice.</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     * @param nakRootElementName</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     *      root element name of automatically generated NAKs.</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * @param controlActProcessCode</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     *      when not {@code null}, the {@code &amp;lt;controlActProcess&amp;gt;}</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     *      element with the given code ID will be created in the NAK.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     * @param auditRequestPayload</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     *      whether request payload is needed for ATNA audit.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">     * @param supportAsynchrony</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     *      whether producers can request asynchronous responses via WSA.</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/hl7v3/Hl7v3WsTransactionConfiguration.html">Hl7v3WsTransactionConfiguration</a>(
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>              String name,
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>              String description,
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>              <strong class="jxr_keyword">boolean</strong> isQuery,
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>              AuditStrategy&lt;? <strong class="jxr_keyword">extends</strong> Hl7v3AuditDataset&gt; clientAuditStrategy,
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>              AuditStrategy&lt;? <strong class="jxr_keyword">extends</strong> Hl7v3AuditDataset&gt; serverAuditStrategy,
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>              QName serviceName,
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>              Class&lt;?&gt; sei,
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>              QName bindingName,
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>              <strong class="jxr_keyword">boolean</strong> mtom,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>              String wsdlLocation,
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>              String nakRootElementName,
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>              String controlActProcessCode,
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>              <strong class="jxr_keyword">boolean</strong> auditRequestPayload,
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>              <strong class="jxr_keyword">boolean</strong> supportAsynchrony,
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>              <a href="../../../../../../org/openehealth/ipf/commons/xml/CombinedXmlValidationProfile.html">CombinedXmlValidationProfile</a> requestValidationProfile,
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>              <a href="../../../../../../org/openehealth/ipf/commons/xml/CombinedXmlValidationProfile.html">CombinedXmlValidationProfile</a> responseValidationProfile)
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          <strong class="jxr_keyword">super</strong>(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>                  serviceName, sei, bindingName, mtom, wsdlLocation,
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>                  <strong class="jxr_keyword">true</strong>, false, auditRequestPayload, supportAsynchrony);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">this</strong>.nakRootElementName = nakRootElementName;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          <strong class="jxr_keyword">this</strong>.controlActProcessCode = controlActProcessCode;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          <strong class="jxr_keyword">this</strong>.requestValidationProfile = requestValidationProfile;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          <strong class="jxr_keyword">this</strong>.responseValidationProfile = responseValidationProfile;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>

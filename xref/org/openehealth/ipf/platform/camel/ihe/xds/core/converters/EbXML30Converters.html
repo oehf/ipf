@@ -194,79 +194,103 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>     @Converter
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveDocumentSet.html">RetrieveDocumentSet</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveDocumentSetRequestType.html">RetrieveDocumentSetRequestType</a> in) {
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RetrieveDocumentSetRequestTransformer.html">RetrieveDocumentSetRequestTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RetrieveDocumentSetRequestTransformer.html">RetrieveDocumentSetRequestTransformer</a>(factory);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>         <strong class="jxr_keyword">return</strong> transformer.fromEbXML(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/EbXMLRetrieveDocumentSetRequest30.html">EbXMLRetrieveDocumentSetRequest30</a>(in));
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>         <strong class="jxr_keyword">return</strong> transformer.fromEbXML(<strong class="jxr_keyword">new</strong> EbXMLNonconstructiveDocumentSetRequest30&lt;&gt;(in));
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>     }
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>     
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
 <a class="jxr_linenumber" name="L192" href="#L192">192</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Retrieve Document Set response.</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Remove Documents request.</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">     * @param in</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">     *          a version independent response object. </em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">     *          a version independent request object.</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">     * @return an ebXML 3.0 object.</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a>     @Converter
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveDocumentSetResponseType.html">RetrieveDocumentSetResponseType</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocumentSet.html">RetrievedDocumentSet</a> in) {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/responses/RetrieveDocumentSetResponseTransformer.html">RetrieveDocumentSetResponseTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/responses/RetrieveDocumentSetResponseTransformer.html">RetrieveDocumentSetResponseTransformer</a>(factory);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>         <strong class="jxr_keyword">return</strong> (RetrieveDocumentSetResponseType) transformer.toEbXML(in).getInternal();
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RemoveDocumentsRequestType.html">RemoveDocumentsRequestType</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RemoveDocuments.html">RemoveDocuments</a> in) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveDocumentsRequestTransformer.html">RemoveDocumentsRequestTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveDocumentsRequestTransformer.html">RemoveDocumentsRequestTransformer</a>(factory);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>         <strong class="jxr_keyword">return</strong> (RemoveDocumentsRequestType) transformer.toEbXML(in).getInternal();
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>     }
-<a class="jxr_linenumber" name="L203" href="#L203">203</a>     
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Retrieve Document Set response.</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Remove Documents request.</em>
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">     * @param in</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">     *          an ebXML 3.0 object. </em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">     * @return a version independent response object.</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">     *          an ebXML 3.0 object.</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">     * @return a version independent request object.</em>
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L210" href="#L210">210</a>     @Converter
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocumentSet.html">RetrievedDocumentSet</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveDocumentSetResponseType.html">RetrieveDocumentSetResponseType</a> in) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/responses/RetrieveDocumentSetResponseTransformer.html">RetrieveDocumentSetResponseTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/responses/RetrieveDocumentSetResponseTransformer.html">RetrieveDocumentSetResponseTransformer</a>(factory);
-<a class="jxr_linenumber" name="L213" href="#L213">213</a>         <strong class="jxr_keyword">return</strong> transformer.fromEbXML(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/EbXMLRetrieveDocumentSetResponse30.html">EbXMLRetrieveDocumentSetResponse30</a>(in));
+<a class="jxr_linenumber" name="L211" href="#L211">211</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RemoveDocuments.html">RemoveDocuments</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RemoveDocumentsRequestType.html">RemoveDocumentsRequestType</a> in) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveDocumentsRequestTransformer.html">RemoveDocumentsRequestTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveDocumentsRequestTransformer.html">RemoveDocumentsRequestTransformer</a>(factory);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a>         <strong class="jxr_keyword">return</strong> transformer.fromEbXML(<strong class="jxr_keyword">new</strong> EbXMLNonconstructiveDocumentSetRequest30&lt;&gt;(in));
 <a class="jxr_linenumber" name="L214" href="#L214">214</a>     }
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
 <a class="jxr_linenumber" name="L216" href="#L216">216</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Retrieve Imaging Document Set request.</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">     * @param in    A version independent request object</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">     * @return an ebXML 3.0 object.</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>     @Converter
-<a class="jxr_linenumber" name="L222" href="#L222">222</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveImagingDocumentSetRequestType.html">RetrieveImagingDocumentSetRequestType</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveImagingDocumentSet.html">RetrieveImagingDocumentSet</a> in) {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RetrieveImagingDocumentSetRequestTransformer.html">RetrieveImagingDocumentSetRequestTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RetrieveImagingDocumentSetRequestTransformer.html">RetrieveImagingDocumentSetRequestTransformer</a>(factory);
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>         <strong class="jxr_keyword">return</strong> (RetrieveImagingDocumentSetRequestType) transformer.toEbXML(in).getInternal();
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>     }
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Retrieve Imaging Document Set request.</em>
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">     * @param in    An ebXML 3.0 object.</em>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">     * @return a version independent request object.</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>     @Converter
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveImagingDocumentSet.html">RetrieveImagingDocumentSet</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveImagingDocumentSetRequestType.html">RetrieveImagingDocumentSetRequestType</a> in) {
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RetrieveImagingDocumentSetRequestTransformer.html">RetrieveImagingDocumentSetRequestTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RetrieveImagingDocumentSetRequestTransformer.html">RetrieveImagingDocumentSetRequestTransformer</a>(factory);
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>         <strong class="jxr_keyword">return</strong> transformer.fromEbXML(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/EbXMLRetrieveImagingDocumentSetRequest30.html">EbXMLRetrieveImagingDocumentSetRequest30</a>(in));
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>     }
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Remove Objects request.</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">     * @param in    A version independent request object</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">     * @return an ebXML 3.0 object.</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>     @Converter
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/lcm/RemoveObjectsRequest.html">RemoveObjectsRequest</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RemoveDocumentSet.html">RemoveDocumentSet</a> in) {
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveDocumentSetTransformer.html">RemoveDocumentSetTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveDocumentSetTransformer.html">RemoveDocumentSetTransformer</a>();
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>         <strong class="jxr_keyword">return</strong> (RemoveObjectsRequest) transformer.toEbXML(in).getInternal();
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>     }
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Remove Document Set request.</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">     * @param in    An ebXML 3.0 object.</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">     * @return a version independent request object.</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>     @Converter
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RemoveDocumentSet.html">RemoveDocumentSet</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/lcm/RemoveObjectsRequest.html">RemoveObjectsRequest</a> in) {
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveDocumentSetTransformer.html">RemoveDocumentSetTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveDocumentSetTransformer.html">RemoveDocumentSetTransformer</a>();
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>         <strong class="jxr_keyword">return</strong> transformer.fromEbXML(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/EbXMLRemoveObjectsRequest30.html">EbXMLRemoveObjectsRequest30</a>(in));
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>     }
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> }
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Retrieve Document Set response.</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">     * @param in</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">     *          a version independent response object. </em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">     * @return an ebXML 3.0 object.</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>     @Converter
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveDocumentSetResponseType.html">RetrieveDocumentSetResponseType</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocumentSet.html">RetrievedDocumentSet</a> in) {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/responses/RetrieveDocumentSetResponseTransformer.html">RetrieveDocumentSetResponseTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/responses/RetrieveDocumentSetResponseTransformer.html">RetrieveDocumentSetResponseTransformer</a>(factory);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>         <strong class="jxr_keyword">return</strong> (RetrieveDocumentSetResponseType) transformer.toEbXML(in).getInternal();
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>     }
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>     
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Retrieve Document Set response.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">     * @param in</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">     *          an ebXML 3.0 object. </em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">     * @return a version independent response object.</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>     @Converter
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/responses/RetrievedDocumentSet.html">RetrievedDocumentSet</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveDocumentSetResponseType.html">RetrieveDocumentSetResponseType</a> in) {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/responses/RetrieveDocumentSetResponseTransformer.html">RetrieveDocumentSetResponseTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/responses/RetrieveDocumentSetResponseTransformer.html">RetrieveDocumentSetResponseTransformer</a>(factory);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>         <strong class="jxr_keyword">return</strong> transformer.fromEbXML(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/EbXMLRetrieveDocumentSetResponse30.html">EbXMLRetrieveDocumentSetResponse30</a>(in));
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>     }
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Retrieve Imaging Document Set request.</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">     * @param in    A version independent request object</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">     * @return an ebXML 3.0 object.</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>     @Converter
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveImagingDocumentSetRequestType.html">RetrieveImagingDocumentSetRequestType</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveImagingDocumentSet.html">RetrieveImagingDocumentSet</a> in) {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RetrieveImagingDocumentSetRequestTransformer.html">RetrieveImagingDocumentSetRequestTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RetrieveImagingDocumentSetRequestTransformer.html">RetrieveImagingDocumentSetRequestTransformer</a>(factory);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>         <strong class="jxr_keyword">return</strong> (RetrieveImagingDocumentSetRequestType) transformer.toEbXML(in).getInternal();
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     }
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Retrieve Imaging Document Set request.</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">     * @param in    An ebXML 3.0 object.</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">     * @return a version independent request object.</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>     @Converter
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RetrieveImagingDocumentSet.html">RetrieveImagingDocumentSet</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/RetrieveImagingDocumentSetRequestType.html">RetrieveImagingDocumentSetRequestType</a> in) {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RetrieveImagingDocumentSetRequestTransformer.html">RetrieveImagingDocumentSetRequestTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RetrieveImagingDocumentSetRequestTransformer.html">RetrieveImagingDocumentSetRequestTransformer</a>(factory);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>         <strong class="jxr_keyword">return</strong> transformer.fromEbXML(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/EbXMLRetrieveImagingDocumentSetRequest30.html">EbXMLRetrieveImagingDocumentSetRequest30</a>(in));
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>     }
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Remove Objects request.</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">     * @param in    A version independent request object</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">     * @return an ebXML 3.0 object.</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>     @Converter
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/lcm/RemoveObjectsRequest.html">RemoveObjectsRequest</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RemoveMetadata.html">RemoveMetadata</a> in) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveMetadataRequestTransformer.html">RemoveMetadataRequestTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveMetadataRequestTransformer.html">RemoveMetadataRequestTransformer</a>();
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>         <strong class="jxr_keyword">return</strong> (RemoveObjectsRequest) transformer.toEbXML(in).getInternal();
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     }
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">     * Standard Camel converter for the Remove Document Set request.</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">     * @param in    An ebXML 3.0 object.</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">     * @return a version independent request object.</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     @Converter
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/requests/RemoveMetadata.html">RemoveMetadata</a> convert(<a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/stub/ebrs30/lcm/RemoveObjectsRequest.html">RemoveObjectsRequest</a> in) {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>         <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveMetadataRequestTransformer.html">RemoveMetadataRequestTransformer</a> transformer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/transform/requests/RemoveMetadataRequestTransformer.html">RemoveMetadataRequestTransformer</a>();
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>         <strong class="jxr_keyword">return</strong> transformer.fromEbXML(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../../../org/openehealth/ipf/commons/ihe/xds/core/ebxml/ebxml30/EbXMLRemoveMetadataRequest30.html">EbXMLRemoveMetadataRequest30</a>(in));
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>     }
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> }
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>

@@ -94,10 +94,10 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          address.setZipOrPostalCode(<span class="jxr_string">"zipOrPostalCode"</span>);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          PatientInfo sourcePatientInfo = <strong class="jxr_keyword">new</strong> PatientInfo();
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>          sourcePatientInfo.setAddress(address);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          sourcePatientInfo.getAddresses().add(address);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>          sourcePatientInfo.setDateOfBirth(<span class="jxr_string">"19800102"</span>);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>          sourcePatientInfo.setGender(<span class="jxr_string">"F"</span>);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>          sourcePatientInfo.setName(createName(3));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          sourcePatientInfo.getNames().add(createName(3));
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>          sourcePatientInfo.getIds().add(createIdentifiable(5));
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>          sourcePatientInfo.getIds().add(createIdentifiable(6));
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
@@ -173,8 +173,8 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>         assertSlot(SLOT_NAME_URI, slots, <span class="jxr_string">"1|uri"</span>);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>         assertSlot(SLOT_NAME_LEGAL_AUTHENTICATOR, slots, <span class="jxr_string">"id 2^familyName 2^givenName 2^prefix 2^second 2^suffix 2^degree 2^^&amp;uni 2&amp;uniType 2"</span>);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>         assertSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, slots, <span class="jxr_string">"repo1"</span>);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>         assertSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slots, 
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>                 <span class="jxr_string">"PID-3|id 5^^^&amp;uni 5&amp;uniType 5~id 6^^^&amp;uni 6&amp;uniType 6"</span>,
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>         assertSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slots,
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>                 <span class="jxr_string">"PID-3|id 6^^^&amp;uni 6&amp;uniType 6~id 5^^^&amp;uni 5&amp;uniType 5"</span>,
 <a class="jxr_linenumber" name="L170" href="#L170">170</a>                 <span class="jxr_string">"PID-5|familyName 3^givenName 3^prefix 3^second 3^suffix 3^degree 3"</span>,
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>                 <span class="jxr_string">"PID-7|19800102"</span>,
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>                 <span class="jxr_string">"PID-8|F"</span>,

@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.openehealth.ipf.boot.fhir;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.fhir.translation.TranslatorFhirToHL7v2;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.ihe.fhir.PDQM;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.openehealth.ipf.commons.map.config.CustomMappings;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.autoconfigure.AutoConfigureAfter;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.springframework.core.io.ClassPathResource;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  @ConditionalOnClass({TranslatorFhirToHL7v2.<strong class="jxr_keyword">class</strong>})
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  @ConditionalOnClass({PDQM.<strong class="jxr_keyword">class</strong>})
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  @Configuration
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  @AutoConfigureAfter(IpfAtnaAutoConfiguration.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  @EnableConfigurationProperties(IpfFhirConfigurationProperties.<strong class="jxr_keyword">class</strong>)

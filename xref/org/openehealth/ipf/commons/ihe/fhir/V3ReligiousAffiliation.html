@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>V3ReligiousAffiliation xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/org/openehealth/ipf/commons/ihe/fhir/V3ReligiousAffiliation.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.openehealth.ipf.commons.ihe.fhir;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> org.hl7.fhir.exceptions.FHIRException;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_javadoccomment"> * This has been dropped from STU3 due to the size of the code system.</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment"> * Replace once https://github.com/jamesagnew/hapi-fhir/issues/761 is released</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> * @author Christian Ohr</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">public</strong> enum <a href="../../../../../../org/openehealth/ipf/commons/ihe/fhir/V3ReligiousAffiliation.html">V3ReligiousAffiliation</a> {
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>      _1001(<span class="jxr_string">"1001"</span>, <span class="jxr_string">"Adventist"</span>, <span class="jxr_string">"Adventist"</span>),
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>      _1002(<span class="jxr_string">"1002"</span>, <span class="jxr_string">"African Religions"</span>, <span class="jxr_string">"African Religions"</span>),
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>      _1003(<span class="jxr_string">"1003"</span>, <span class="jxr_string">"Afro-Caribbean Religions"</span>, <span class="jxr_string">"Afro-Caribbean Religions"</span>),
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>      _1004(<span class="jxr_string">"1004"</span>, <span class="jxr_string">"Agnosticism"</span>, <span class="jxr_string">"Agnosticism"</span>),
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>      _1005(<span class="jxr_string">"1005"</span>, <span class="jxr_string">"Anglican"</span>, <span class="jxr_string">"Anglican"</span>),
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>      _1006(<span class="jxr_string">"1006"</span>, <span class="jxr_string">"Animism"</span>, <span class="jxr_string">"Animism"</span>),
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>      _1007(<span class="jxr_string">"1007"</span>, <span class="jxr_string">"Atheism"</span>, <span class="jxr_string">"Atheism"</span>),
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>      _1008(<span class="jxr_string">"1008"</span>, <span class="jxr_string">"Babi &amp; Baha'I faiths"</span>, <span class="jxr_string">"Babi &amp; Baha'I faiths"</span>),
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>      _1009(<span class="jxr_string">"1009"</span>, <span class="jxr_string">"Baptist"</span>, <span class="jxr_string">"Baptist"</span>),
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>      _1010(<span class="jxr_string">"1010"</span>, <span class="jxr_string">"Bon"</span>, <span class="jxr_string">"Bon"</span>),
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>      _1011(<span class="jxr_string">"1011"</span>, <span class="jxr_string">"Cao Dai"</span>, <span class="jxr_string">"Cao Dai"</span>),
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      _1012(<span class="jxr_string">"1012"</span>, <span class="jxr_string">"Celticism"</span>, <span class="jxr_string">"Celticism"</span>),
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      _1013(<span class="jxr_string">"1013"</span>, <span class="jxr_string">"Christian (non-Catholic, non-spec)"</span>, <span class="jxr_string">"Christian (non-Catholic, non-specific)"</span>),
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      _1014(<span class="jxr_string">"1014"</span>, <span class="jxr_string">"Confucianism"</span>, <span class="jxr_string">"Confucianism"</span>),
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      _1015(<span class="jxr_string">"1015"</span>, <span class="jxr_string">"Cyberculture Religions"</span>, <span class="jxr_string">"Cyberculture Religions"</span>),
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      _1016(<span class="jxr_string">"1016"</span>, <span class="jxr_string">"Divination"</span>, <span class="jxr_string">"Divination"</span>),
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      _1017(<span class="jxr_string">"1017"</span>, <span class="jxr_string">"Fourth Way"</span>, <span class="jxr_string">"Fourth Way"</span>),
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      _1018(<span class="jxr_string">"1018"</span>, <span class="jxr_string">"Free Daism"</span>, <span class="jxr_string">"Free Daism"</span>),
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      _1019(<span class="jxr_string">"1019"</span>, <span class="jxr_string">"Gnosis"</span>, <span class="jxr_string">"Gnosis"</span>),
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      _1020(<span class="jxr_string">"1020"</span>, <span class="jxr_string">"Hinduism"</span>, <span class="jxr_string">"Hinduism"</span>),
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      _1021(<span class="jxr_string">"1021"</span>, <span class="jxr_string">"Humanism"</span>, <span class="jxr_string">"Humanism"</span>),
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      _1022(<span class="jxr_string">"1022"</span>, <span class="jxr_string">"Independent"</span>, <span class="jxr_string">"Independent"</span>),
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      _1023(<span class="jxr_string">"1023"</span>, <span class="jxr_string">"Islam"</span>, <span class="jxr_string">"Islam"</span>),
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      _1024(<span class="jxr_string">"1024"</span>, <span class="jxr_string">"Jainism"</span>, <span class="jxr_string">"Jainism"</span>),
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      _1025(<span class="jxr_string">"1025"</span>, <span class="jxr_string">"Jehovah's Witnesses"</span>, <span class="jxr_string">"Jehovah's Witnesses"</span>),
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      _1026(<span class="jxr_string">"1026"</span>, <span class="jxr_string">"Judaism"</span>, <span class="jxr_string">"Judaism"</span>),
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      _1027(<span class="jxr_string">"1027"</span>, <span class="jxr_string">"Latter Day Saints"</span>, <span class="jxr_string">"Latter Day Saints"</span>),
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      _1028(<span class="jxr_string">"1028"</span>, <span class="jxr_string">"Lutheran"</span>, <span class="jxr_string">"Lutheran"</span>),
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      _1029(<span class="jxr_string">"1029"</span>, <span class="jxr_string">"Mahayana"</span>, <span class="jxr_string">"Mahayana"</span>),
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      _1030(<span class="jxr_string">"1030"</span>, <span class="jxr_string">"Meditation"</span>, <span class="jxr_string">"Meditation"</span>),
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      _1031(<span class="jxr_string">"1031"</span>, <span class="jxr_string">"Messianic Judaism"</span>, <span class="jxr_string">"Messianic Judaism"</span>),
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      _1032(<span class="jxr_string">"1032"</span>, <span class="jxr_string">"Mitraism"</span>, <span class="jxr_string">"Mitraism"</span>),
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      _1033(<span class="jxr_string">"1033"</span>, <span class="jxr_string">"New Age"</span>, <span class="jxr_string">"New Age"</span>),
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      _1034(<span class="jxr_string">"1034"</span>, <span class="jxr_string">"non-Roman Catholic"</span>, <span class="jxr_string">"non-Roman Catholic"</span>),
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      _1035(<span class="jxr_string">"1035"</span>, <span class="jxr_string">"Occult"</span>, <span class="jxr_string">"Occult"</span>),
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      _1036(<span class="jxr_string">"1036"</span>, <span class="jxr_string">"Orthodox"</span>, <span class="jxr_string">"Orthodox"</span>),
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      _1037(<span class="jxr_string">"1037"</span>, <span class="jxr_string">"Paganism"</span>, <span class="jxr_string">"Paganism"</span>),
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      _1038(<span class="jxr_string">"1038"</span>, <span class="jxr_string">"Pentecostal"</span>, <span class="jxr_string">"Pentecostal"</span>),
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      _1039(<span class="jxr_string">"1039"</span>, <span class="jxr_string">"Process, The"</span>, <span class="jxr_string">"Process, The"</span>),
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      _1040(<span class="jxr_string">"1040"</span>, <span class="jxr_string">"Reformed/Presbyterian"</span>, <span class="jxr_string">"Reformed/Presbyterian"</span>),
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      _1041(<span class="jxr_string">"1041"</span>, <span class="jxr_string">"Roman Catholic Church"</span>, <span class="jxr_string">"Roman Catholic Church"</span>),
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      _1042(<span class="jxr_string">"1042"</span>, <span class="jxr_string">"Satanism"</span>, <span class="jxr_string">"Satanism"</span>),
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      _1043(<span class="jxr_string">"1043"</span>, <span class="jxr_string">"Scientology"</span>, <span class="jxr_string">"Scientology"</span>),
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      _1044(<span class="jxr_string">"1044"</span>, <span class="jxr_string">"Shamanism"</span>, <span class="jxr_string">"Shamanism"</span>),
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      _1045(<span class="jxr_string">"1045"</span>, <span class="jxr_string">"Shiite (Islam)"</span>, <span class="jxr_string">"Shiite (Islam)"</span>),
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      _1046(<span class="jxr_string">"1046"</span>, <span class="jxr_string">"Shinto"</span>, <span class="jxr_string">"Shinto"</span>),
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      _1047(<span class="jxr_string">"1047"</span>, <span class="jxr_string">"Sikism"</span>, <span class="jxr_string">"Sikism"</span>),
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      _1048(<span class="jxr_string">"1048"</span>, <span class="jxr_string">"Spiritualism"</span>, <span class="jxr_string">"Spiritualism"</span>),
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      _1049(<span class="jxr_string">"1049"</span>, <span class="jxr_string">"Sunni (Islam)"</span>, <span class="jxr_string">"Sunni (Islam)"</span>),
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      _1050(<span class="jxr_string">"1050"</span>, <span class="jxr_string">"Taoism"</span>, <span class="jxr_string">"Taoism"</span>),
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      _1051(<span class="jxr_string">"1051"</span>, <span class="jxr_string">"Theravada"</span>, <span class="jxr_string">"Theravada"</span>),
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      _1052(<span class="jxr_string">"1052"</span>, <span class="jxr_string">"Unitarian-Universalism"</span>, <span class="jxr_string">"Unitarian-Universalism"</span>),
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      _1053(<span class="jxr_string">"1053"</span>, <span class="jxr_string">"Universal Life Church"</span>, <span class="jxr_string">"Universal Life Church"</span>),
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      _1054(<span class="jxr_string">"1054"</span>, <span class="jxr_string">"Vajrayana (Tibetan)"</span>, <span class="jxr_string">"Vajrayana (Tibetan)"</span>),
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      _1055(<span class="jxr_string">"1055"</span>, <span class="jxr_string">"Veda"</span>, <span class="jxr_string">"Veda"</span>),
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      _1056(<span class="jxr_string">"1056"</span>, <span class="jxr_string">"Voodoo"</span>, <span class="jxr_string">"Voodoo"</span>),
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      _1057(<span class="jxr_string">"1057"</span>, <span class="jxr_string">"Wicca"</span>, <span class="jxr_string">"Wicca"</span>),
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      _1058(<span class="jxr_string">"1058"</span>, <span class="jxr_string">"Yaohushua"</span>, <span class="jxr_string">"Yaohushua"</span>),
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      _1059(<span class="jxr_string">"1059"</span>, <span class="jxr_string">"Zen Buddhism"</span>, <span class="jxr_string">"Zen Buddhism"</span>),
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      _1060(<span class="jxr_string">"1060"</span>, <span class="jxr_string">"Zoroastrianism"</span>, <span class="jxr_string">"Zoroastrianism"</span>),
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      _1061(<span class="jxr_string">"1061"</span>, <span class="jxr_string">"Assembly of God"</span>, <span class="jxr_string">"Assembly of God"</span>),
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>      _1062(<span class="jxr_string">"1062"</span>, <span class="jxr_string">"Brethren"</span>, <span class="jxr_string">"Brethren"</span>),
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      _1063(<span class="jxr_string">"1063"</span>, <span class="jxr_string">"Christian Scientist"</span>, <span class="jxr_string">"Christian Scientist"</span>),
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      _1064(<span class="jxr_string">"1064"</span>, <span class="jxr_string">"Church of Christ"</span>, <span class="jxr_string">"Church of Christ"</span>),
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      _1065(<span class="jxr_string">"1065"</span>, <span class="jxr_string">"Church of God"</span>, <span class="jxr_string">"Church of God"</span>),
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      _1066(<span class="jxr_string">"1066"</span>, <span class="jxr_string">"Congregational"</span>, <span class="jxr_string">"Congregational"</span>),
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      _1067(<span class="jxr_string">"1067"</span>, <span class="jxr_string">"Disciples of Christ"</span>, <span class="jxr_string">"Disciples of Christ"</span>),
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      _1068(<span class="jxr_string">"1068"</span>, <span class="jxr_string">"Eastern Orthodox"</span>, <span class="jxr_string">"Eastern Orthodox"</span>),
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      _1069(<span class="jxr_string">"1069"</span>, <span class="jxr_string">"Episcopalian"</span>, <span class="jxr_string">"Episcopalian"</span>),
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      _1070(<span class="jxr_string">"1070"</span>, <span class="jxr_string">"Evangelical Covenant"</span>, <span class="jxr_string">"Evangelical Covenant"</span>),
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      _1071(<span class="jxr_string">"1071"</span>, <span class="jxr_string">"Friends"</span>, <span class="jxr_string">"Friends"</span>),
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      _1072(<span class="jxr_string">"1072"</span>, <span class="jxr_string">"Full Gospel"</span>, <span class="jxr_string">"Full Gospel"</span>),
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      _1073(<span class="jxr_string">"1073"</span>, <span class="jxr_string">"Methodist"</span>, <span class="jxr_string">"Methodist"</span>),
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      _1074(<span class="jxr_string">"1074"</span>, <span class="jxr_string">"Native American"</span>, <span class="jxr_string">"Native American"</span>),
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      _1075(<span class="jxr_string">"1075"</span>, <span class="jxr_string">"Nazarene"</span>, <span class="jxr_string">"Nazarene"</span>),
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      _1076(<span class="jxr_string">"1076"</span>, <span class="jxr_string">"Presbyterian"</span>, <span class="jxr_string">"Presbyterian"</span>),
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      _1077(<span class="jxr_string">"1077"</span>, <span class="jxr_string">"Protestant"</span>, <span class="jxr_string">"Protestant"</span>),
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      _1078(<span class="jxr_string">"1078"</span>, <span class="jxr_string">"Protestant, No Denomination"</span>, <span class="jxr_string">"Protestant, No Denomination"</span>),
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      _1079(<span class="jxr_string">"1079"</span>, <span class="jxr_string">"Reformed"</span>, <span class="jxr_string">"Reformed"</span>),
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      _1080(<span class="jxr_string">"1080"</span>, <span class="jxr_string">"Salvation Army"</span>, <span class="jxr_string">"Salvation Army"</span>),
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      _1081(<span class="jxr_string">"1081"</span>, <span class="jxr_string">"Unitarian Universalist"</span>, <span class="jxr_string">"Unitarian Universalist"</span>),
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      _1082(<span class="jxr_string">"1082"</span>, <span class="jxr_string">"United Church of Christ"</span>, <span class="jxr_string">"United Church of Christ"</span>),
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      NULL(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"?"</span>, <span class="jxr_string">"?"</span>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">private</strong> String code;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">private</strong> String definition;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>     <strong class="jxr_keyword">private</strong> String display;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     <a href="../../../../../../org/openehealth/ipf/commons/ihe/fhir/V3ReligiousAffiliation.html">V3ReligiousAffiliation</a>(String code, String definition, String display) {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>         <strong class="jxr_keyword">this</strong>.code = code;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>         <strong class="jxr_keyword">this</strong>.definition = definition;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>         <strong class="jxr_keyword">this</strong>.display = display;
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>     }
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../org/openehealth/ipf/commons/ihe/fhir/V3ReligiousAffiliation.html">V3ReligiousAffiliation</a> fromCode(String codeString) <strong class="jxr_keyword">throws</strong> FHIRException {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>         <strong class="jxr_keyword">if</strong> (codeString == <strong class="jxr_keyword">null</strong> || <span class="jxr_string">""</span>.equals(codeString))
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>         <strong class="jxr_keyword">for</strong> (V3ReligiousAffiliation v3ReligiousAffiliation : V3ReligiousAffiliation.values()) {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>             <strong class="jxr_keyword">if</strong> (v3ReligiousAffiliation.code.equals(codeString)) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>                 <strong class="jxr_keyword">return</strong> v3ReligiousAffiliation;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>             }
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>         }
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> FHIRException(<span class="jxr_string">"Unknown V3ReligiousAffiliation code '"</span> + codeString + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>     }
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>     <strong class="jxr_keyword">public</strong> String toCode() {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>         <strong class="jxr_keyword">return</strong> code;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>     }
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     <strong class="jxr_keyword">public</strong> String getDefinition() {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>         <strong class="jxr_keyword">return</strong> definition;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>     }
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>     <strong class="jxr_keyword">public</strong> String getDisplay() {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>         <strong class="jxr_keyword">return</strong> display;
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>     <strong class="jxr_keyword">public</strong> String getSystem() {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>         <strong class="jxr_keyword">return</strong> <span class="jxr_string">"http://hl7.org/fhir/v3/ReligiousAffiliation"</span>;
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     }
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> }
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2017 <a href="http://www.openehealth.org/">Open eHealth Foundation</a>. All rights reserved.</div>
+</body>
+</html>

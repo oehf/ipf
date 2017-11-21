@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      @Bean
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      @ConditionalOnMissingBean(XDSSourceAuditor.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      @ConditionalOnSingleCandidate(AuditorModuleConfig.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor.enabled"</span>)
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor-enabled"</span>)
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">public</strong> XDSSourceAuditor xdsSourceAuditor(AuditorModuleConfig config) {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>          XDSSourceAuditor auditor = XDSSourceAuditor.getAuditor();
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>          auditor.setConfig(config);
@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      @Bean
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      @ConditionalOnMissingBean(XDSConsumerAuditor.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      @ConditionalOnSingleCandidate(AuditorModuleConfig.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor.enabled"</span>)
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor-enabled"</span>)
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> XDSConsumerAuditor xdsConsumerAuditor(AuditorModuleConfig config) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          XDSConsumerAuditor auditor = XDSConsumerAuditor.getAuditor();
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          auditor.setConfig(config);
@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      @Bean
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>      @ConditionalOnMissingBean(XDSConsumerAuditor.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      @ConditionalOnSingleCandidate(AuditorModuleConfig.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor.enabled"</span>)
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor-enabled"</span>)
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">public</strong> XDSRepositoryAuditor xdsRepositoryAuditor(AuditorModuleConfig config) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          XDSRepositoryAuditor auditor = XDSRepositoryAuditor.getAuditor();
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          auditor.setConfig(config);
@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      @Bean
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>      @ConditionalOnMissingBean(XDSConsumerAuditor.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      @ConditionalOnSingleCandidate(AuditorModuleConfig.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor.enabled"</span>)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor-enabled"</span>)
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">public</strong> XDSRegistryAuditor xdsRegistryAuditor(AuditorModuleConfig config) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          XDSRegistryAuditor auditor = XDSRegistryAuditor.getAuditor();
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          auditor.setConfig(config);
@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>      @Bean
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>      @ConditionalOnMissingBean(CustomXdsAuditor.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>      @ConditionalOnSingleCandidate(AuditorModuleConfig.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor.enabled"</span>)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor-enabled"</span>)
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../org/openehealth/ipf/commons/ihe/core/atna/custom/CustomXdsAuditor.html">CustomXdsAuditor</a> customXdsAuditor(AuditorModuleConfig config) {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>          <a href="../../../../../org/openehealth/ipf/commons/ihe/core/atna/custom/CustomXdsAuditor.html">CustomXdsAuditor</a> auditor = CustomXdsAuditor.getAuditor();
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>          auditor.setConfig(config);
@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a>     @Bean
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>     @ConditionalOnMissingBean(XCAInitiatingGatewayAuditor.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>     @ConditionalOnSingleCandidate(AuditorModuleConfig.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor.enabled"</span>)
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor-enabled"</span>)
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>     <strong class="jxr_keyword">public</strong> XCAInitiatingGatewayAuditor xcaInitiatingGatewayAuditor(AuditorModuleConfig config) {
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>         XCAInitiatingGatewayAuditor auditor = XCAInitiatingGatewayAuditor.getAuditor();
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>         auditor.setConfig(config);
@@ -119,7 +119,7 @@
 <a class="jxr_linenumber" name="L111" href="#L111">111</a>     @Bean
 <a class="jxr_linenumber" name="L112" href="#L112">112</a>     @ConditionalOnMissingBean(XCARespondingGatewayAuditor.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>     @ConditionalOnSingleCandidate(AuditorModuleConfig.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>     @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor.enabled"</span>)
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor-enabled"</span>)
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>     <strong class="jxr_keyword">public</strong> XCARespondingGatewayAuditor xcaRespondingGatewayAuditor(AuditorModuleConfig config) {
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>         XCARespondingGatewayAuditor auditor = XCARespondingGatewayAuditor.getAuditor();
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>         auditor.setConfig(config);
@@ -129,7 +129,7 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>     @Bean
 <a class="jxr_linenumber" name="L122" href="#L122">122</a>     @ConditionalOnMissingBean(XDMAuditor.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>     @ConditionalOnSingleCandidate(AuditorModuleConfig.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor.enabled"</span>)
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>     @ConditionalOnProperty(<span class="jxr_string">"ipf.atna.auditor-enabled"</span>)
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>     <strong class="jxr_keyword">public</strong> XDMAuditor xdmAuditor(AuditorModuleConfig config) {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a>         XDMAuditor auditor = XDMAuditor.getAuditor();
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>         auditor.setConfig(config);
