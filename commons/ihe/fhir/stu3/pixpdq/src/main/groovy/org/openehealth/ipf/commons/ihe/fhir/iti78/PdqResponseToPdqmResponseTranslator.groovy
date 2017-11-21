@@ -112,11 +112,13 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
 
     protected void addSearchScore(PdqPatient pdqPatient, response) {
         ResourceMetadataKeyEnum.ENTRY_SEARCH_MODE.put(pdqPatient, BundleEntrySearchModeEnum.MATCH.code)
+        /*
         String searchScoreString = response.QRI[1]?.value
         if (searchScoreString != null) {
             double searchScore = Integer.valueOf(searchScoreString) / 100
-            ResourceMetadataKeyEnum.ENTRY_SCORE.put(pdqPatient, new DecimalDt(searchScore))
+            pdqPatient.setUserData(ResourceMetadataKeyEnum.ENTRY_SCORE.name(), new DecimalDt(searchScore) )
         }
+        */
     }
 
     protected PdqPatient pidToPatient(response) {
