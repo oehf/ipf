@@ -53,6 +53,7 @@ public class XTNValidatorTest {
         assertFails("^^PH^^^^^^55^^^");
         assertFails("^^CP^^11^22^^44");
         assertFails("^^PH^abc@de.com^11^22^33^44");
+        assertFails("^PRN^CP^^^^111^^^^^222^^^");
     }
 
     private static void assertFails(String value) {
