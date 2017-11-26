@@ -185,7 +185,7 @@ public class PatientInfo implements Serializable {
                         BeanUtils.copyProperties(xpnName, xdsObject);
                         return (T) xpnName;
                     } catch (Exception e) {
-                        throw new RuntimeException("Could not copy properties");
+                        throw new RuntimeException("Could not copy properties", e);
                     }
                 }
                 return xdsObject;
