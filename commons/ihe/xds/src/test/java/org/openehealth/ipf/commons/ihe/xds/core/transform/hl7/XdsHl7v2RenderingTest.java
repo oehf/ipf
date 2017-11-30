@@ -45,10 +45,10 @@ public class XdsHl7v2RenderingTest {
 
     @Test
     public void testTelecomRendering() {
-        String xtn = "1^2^3^4^5^6^7^8^9^0^a^b^c^d^^^";
+        String xtn = "1^2^3^4^5^6^7^8^9^10^11^12^13^14^^^";
         Telecom telecom = Hl7v2Based.parse(xtn, Telecom.class);
-        assertEquals("^2^3^4^5^6^7^8", Hl7v2Based.render(telecom));
-        assertEquals("1^2^3^4^5^6^7^8^9^0^a^b^c^d", Hl7v2Based.rawRender(telecom));
+        assertEquals("^2^3^4^5^6^7^8^^^^12", Hl7v2Based.render(telecom));
+        assertEquals("1^2^3^4^5^6^7^8^9^10^11^12^13^14", Hl7v2Based.rawRender(telecom));
     }
 
     @Test
