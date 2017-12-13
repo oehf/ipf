@@ -27,8 +27,8 @@
 
     <portType name="ProviderInformationDirectory_PortType">
         <operation name="ProviderInformationDownloadRequest">
-            <input message="tns:ProviderInformationDownloadRequestMessage" wsam:Action="urn:ihe:iti:hpd:2010:ProviderInformationDownloadRequest"/>
-            <output message="tns:ProviderInformationDownloadResponseMessage" wsam:Action="urn:ihe:iti:hpd:2010:ProviderInformationDownloadResponse"/>
+            <input message="tns:ProviderInformationDownloadRequestMessage" wsam:Action="urn:ihe:iti:2010:ProviderInformationDownloadRequest"/>
+            <output message="tns:ProviderInformationDownloadResponseMessage" wsam:Action="urn:ihe:iti:2010:ProviderInformationDownloadResponse"/>
         </operation>
     </portType>
 
