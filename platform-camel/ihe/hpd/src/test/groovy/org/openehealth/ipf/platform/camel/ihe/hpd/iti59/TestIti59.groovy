@@ -18,11 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.hpd.iti59
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.AddRequest
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse
-import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.DelRequest
+import org.openehealth.ipf.commons.ihe.core.atna.custom.HpdAuditor
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig
 
 /**
  * @author Dmytro Rud
@@ -39,16 +38,28 @@ class TestIti59 extends StandardTestContainer {
 
     @BeforeClass
     static void classSetUp() {
+        HpdAuditor.auditor.config = new AuditorModuleConfig()
+        HpdAuditor.auditor.config.setAuditRepositoryHost('localhost')
+        HpdAuditor.auditor.config.setAuditRepositoryPort(514)
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
 
     @Test
     void testIti59() {
-        BatchRequest request = new BatchRequest()
-        request.batchRequests.add(new AddRequest(requestID: '123'))
-        request.batchRequests.add(new DelRequest(requestID: '456'))
+        BatchRequest request = new BatchRequest(
+                batchRequests: [
+                        new AddRequest(requestID: 'id-1', attr: [
+                                new DsmlAttr(name: 'hcIdentifier', value: ['hcid-1', 'hcid-2']),
+                                new DsmlAttr(name: 'foo', value: ['bar', 'spar', 'antiquar']),
+                                new DsmlAttr(name: 'hcIdentifier', value: ['hcid-3', 'hcid-4', 'hcid-5']),
+                        ]),
+                        new DelRequest(requestID: 'id-2', dn: 'dn-2'),
+                        new ModifyDNRequest(requestID: 'id-3', dn: 'dn-3', newrdn: 'newrdn-3'),
+                ],
+        )
         BatchResponse response = sendIt(SERVICE1, request)
         assert response != null
+        assert auditSender.messages.size() == 6
     }
 
     BatchResponse sendIt(String endpoint, BatchRequest request) {
