@@ -39,10 +39,12 @@ public class HpdAuditorTest extends AuditorTestBase {
     public void testAuditors() {
         final HpdAuditor auditor = AuditorManager.getHpdAuditor();
 
+        // operation ADD
         auditor.auditIti59(true,
                 RFC3881EventCodes.RFC3881EventActionCodes.CREATE,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
                 PROVIDER_IDS,
+                null, null,
                 PURPOSES_OF_USE,
                 USER_ROLES);
 
@@ -50,10 +52,31 @@ public class HpdAuditorTest extends AuditorTestBase {
                 RFC3881EventCodes.RFC3881EventActionCodes.CREATE,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
                 PROVIDER_IDS,
+                null, null,
                 PURPOSES_OF_USE,
                 USER_ROLES);
 
-        assertEquals(2, sender.getMessages().size());
+        // operation DELETE
+        auditor.auditIti59(true,
+                RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
+                null,
+                "uid=john.doe,ou=People,dc=example,dc=com",
+                null,
+                PURPOSES_OF_USE,
+                USER_ROLES);
+
+        // operation MODIFY DN
+        auditor.auditIti59(true,
+                RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
+                null,
+                "uid=john.doe,ou=People,dc=example,dc=com",
+                "cn=John Doe+telephoneNumber=+1 123-456-7890",
+                PURPOSES_OF_USE,
+                USER_ROLES);
+
+        assertEquals(4, sender.getMessages().size());
     }
 
 }
