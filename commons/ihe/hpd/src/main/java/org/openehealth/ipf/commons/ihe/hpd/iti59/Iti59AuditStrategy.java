@@ -23,6 +23,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.ClassUtils.getShortCanonicalName;
@@ -61,28 +62,47 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
 
             if (dsmlMessage instanceof AddRequest) {
                 AddRequest addRequest = (AddRequest) dsmlMessage;
+                Set<String> providerIds = addRequest.getAttr().stream()
+                        .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
+                        .flatMap(x -> x.getValue().stream())
+                        .collect(Collectors.toSet());
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(addRequest.getRequestID()),
                         RFC3881EventCodes.RFC3881EventActionCodes.CREATE,
-                        addRequest.getAttr().stream()
-                                .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
-                                .flatMap(x -> x.getValue().stream())
-                                .collect(Collectors.toSet()));
+                        providerIds,
+                        null,
+                        null);
 
             } else if (dsmlMessage instanceof ModifyRequest) {
                 ModifyRequest modifyRequest = (ModifyRequest) dsmlMessage;
+                Set<String> providerIds = modifyRequest.getModification().stream()
+                        .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
+                        .flatMap(x -> x.getValue().stream())
+                        .collect(Collectors.toSet());
                 requestItems[i] = new Iti59AuditDataset.RequestItem(
                         trimToNull(modifyRequest.getRequestID()),
                         RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
-                        modifyRequest.getModification().stream()
-                                .filter(x -> ATTR_NAME.equalsIgnoreCase(x.getName()))
-                                .flatMap(x -> x.getValue().stream())
-                                .collect(Collectors.toSet()));
+                        providerIds,
+                        null,
+                        null);
 
             } else if (dsmlMessage instanceof ModifyDNRequest) {
-                // TODO ?
+                ModifyDNRequest modifyDNRequest = (ModifyDNRequest) dsmlMessage;
+                requestItems[i] = new Iti59AuditDataset.RequestItem(
+                        trimToNull(modifyDNRequest.getRequestID()),
+                        RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
+                        null,
+                        modifyDNRequest.getDn(),
+                        modifyDNRequest.getNewrdn());
+
             } else if (dsmlMessage instanceof DelRequest) {
-                // TODO ?
+                DelRequest delRequest = (DelRequest) dsmlMessage;
+                requestItems[i] = new Iti59AuditDataset.RequestItem(
+                        trimToNull(delRequest.getRequestID()),
+                        RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
+                        null,
+                        delRequest.getDn(),
+                        null);
             } else {
                 log.debug("Cannot handle ITI-59 request of type {}", getShortCanonicalName(dsmlMessage, "<null>"));
             }
@@ -195,6 +215,8 @@ public class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset> 
                         auditDataset.getServiceEndpointUrl(),
                         auditDataset.getClientIpAddress(),
                         requestItem.getProviderIds(),
+                        requestItem.getDn(),
+                        requestItem.getNewRdn(),
                         auditDataset.getPurposesOfUse(),
                         auditDataset.getUserRoles());
             }

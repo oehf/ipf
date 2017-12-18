@@ -7,8 +7,10 @@
             </PatternLayout>
         </Console>
     </Appenders>
-    
+
     <Loggers>
+        <Logger name="org.openhealthtools.ihe.atna.auditor.sender" level="WARN"/>
+        <Logger name="org.openehealth.ipf.commons.ihe.core.atna" level="WARN"/>
         <Root level="WARN">
             <AppenderRef ref="CONSOLE"/>
         </Root>

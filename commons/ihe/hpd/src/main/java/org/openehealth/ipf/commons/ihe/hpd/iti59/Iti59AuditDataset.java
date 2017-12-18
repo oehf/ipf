@@ -35,6 +35,10 @@ public class Iti59AuditDataset extends WsAuditDataset {
         @Getter private final RFC3881EventCodes.RFC3881EventActionCodes actionCode;
         @Getter private final Set<String> providerIds;
 
+        // proprietary extensions for Delete and ModifyDN
+        @Getter private final String dn;
+        @Getter private final String newRdn;
+
         @Getter @Setter private RFC3881EventCodes.RFC3881EventOutcomeCodes outcomeCode;
     }
 
