@@ -424,10 +424,11 @@ public class SubmitObjectsRequestValidatorTest {
     }
 
     @Test    
-    public void testNullUri() {
+    public void testMultipleUriValues() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().set(0, null);
-        expectFailure(NULL_URI, ebXML);
+        ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().add("second value");
+        assertEquals(2, ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().size());
+        expectFailure(WRONG_NUMBER_OF_SLOT_VALUES, ebXML);
     }
     
     @Test    
@@ -442,27 +443,6 @@ public class SubmitObjectsRequestValidatorTest {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().set(0, ":lol:");
         expectFailure(INVALID_URI, ebXML);
-    }
-    
-    @Test    
-    public void testNullUriPart() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().add(null);
-        expectFailure(NULL_URI_PART, ebXML);
-    }
-    
-    @Test    
-    public void testInvalidUriPart() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().add("lol|");
-        expectFailure(INVALID_URI_PART, ebXML);
-    }
-    
-    @Test    
-    public void testMissingUriPart() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getExtrinsicObjects().get(0).getSlots(Vocabulary.SLOT_NAME_URI).get(0).getValueList().set(0, "2|lol");
-        expectFailure(MISSING_URI_PART, ebXML);
     }
     
     @Test    
