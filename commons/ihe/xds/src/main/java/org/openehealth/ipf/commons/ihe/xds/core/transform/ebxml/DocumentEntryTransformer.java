@@ -41,8 +41,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     private final CodeTransformer codeTransformer;
     
     private final PatientInfoTransformer patientInfoTransformer = new PatientInfoTransformer();
-    private final UriTransformer uriTransformer = new UriTransformer();   
-    
+
     /**
      * Constructs the transformer
      * @param factory
@@ -99,7 +98,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         docEntry.setServiceStartTime(extrinsic.getSingleSlotValue(SLOT_NAME_SERVICE_START_TIME));
         docEntry.setServiceStopTime(extrinsic.getSingleSlotValue(SLOT_NAME_SERVICE_STOP_TIME));
         docEntry.setRepositoryUniqueId(extrinsic.getSingleSlotValue(SLOT_NAME_REPOSITORY_UNIQUE_ID));
-        docEntry.setUri(uriTransformer.fromEbXML(extrinsic.getSlotValues(SLOT_NAME_URI)));
+        docEntry.setUri(extrinsic.getSingleSlotValue(SLOT_NAME_URI));
         docEntry.setDocumentAvailability(DocumentAvailability.valueOfOpcode(
                 extrinsic.getSingleSlotValue(SLOT_NAME_DOCUMENT_AVAILABILITY)));
         
@@ -130,7 +129,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         extrinsic.addSlot(SLOT_NAME_SERVICE_START_TIME, toHL7(docEntry.getServiceStartTime()));
         extrinsic.addSlot(SLOT_NAME_SERVICE_STOP_TIME, toHL7(docEntry.getServiceStopTime()));
         extrinsic.addSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, docEntry.getRepositoryUniqueId());
-        extrinsic.addSlot(SLOT_NAME_URI, uriTransformer.toEbXML(docEntry.getUri()));
+        extrinsic.addSlot(SLOT_NAME_URI, docEntry.getUri());
         extrinsic.addSlot(SLOT_NAME_DOCUMENT_AVAILABILITY,
                 DocumentAvailability.toFullQualifiedOpcode(docEntry.getDocumentAvailability()));
         
