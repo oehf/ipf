@@ -68,7 +68,7 @@ public class HpdAuditorTest extends AuditorTestBase {
 
         // operation MODIFY DN
         auditor.auditIti59(true,
-                RFC3881EventCodes.RFC3881EventActionCodes.DELETE,
+                RFC3881EventCodes.RFC3881EventActionCodes.UPDATE,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
                 null,
                 "uid=john.doe,ou=People,dc=example,dc=com",
